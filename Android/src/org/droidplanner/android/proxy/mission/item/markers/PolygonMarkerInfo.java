@@ -1,6 +1,12 @@
 package org.droidplanner.android.proxy.mission.item.markers;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import org.droidplanner.R;
 import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 /**
@@ -37,4 +43,10 @@ public class PolygonMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
 	public boolean isFlat() {
 		return true;
 	}
+
+    @Override
+    public Bitmap getIcon(Resources res){
+        //TODO: replace with google's default marker icon.
+        return BitmapFactory.decodeResource(res, R.drawable.ic_action_location);
+    }
 }

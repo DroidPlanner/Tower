@@ -50,6 +50,35 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
     private final HashBiMap<MarkerInfo, Marker> mMarkers = HashBiMap.create();
 
+    private final ItemizedDraggableIconOverlay.OnMarkerDragListener mMarkerDragHandler = new ItemizedDraggableIconOverlay.OnMarkerDragListener() {
+        @Override
+        public void onMarkerDrag(Marker marker) {
+            if(mMarkerDragListener != null){
+                final MarkerInfo markerInfo = getMarkerInfo(marker);
+                markerInfo.setPosition(DroneHelper.ILatLngToCoord(marker.getPoint()));
+                mMarkerDragListener.onMarkerDrag(markerInfo);
+            }
+        }
+
+        @Override
+        public void onMarkerDragEnd(Marker marker) {
+            if(mMarkerDragListener != null){
+                final MarkerInfo markerInfo = getMarkerInfo(marker);
+                markerInfo.setPosition(DroneHelper.ILatLngToCoord(marker.getPoint()));
+                mMarkerDragListener.onMarkerDragEnd(markerInfo);
+            }
+        }
+
+        @Override
+        public void onMarkerDragStart(Marker marker) {
+            if(mMarkerDragListener != null){
+                final MarkerInfo markerInfo = getMarkerInfo(marker);
+                markerInfo.setPosition(DroneHelper.ILatLngToCoord(marker.getPoint()));
+                mMarkerDragListener.onMarkerDragStart(markerInfo);
+            }
+        }
+    };
+
     private final MapViewListener mMapViewListener = new MapViewListener() {
         @Override
         public void onShowMarker(MapView pMapView, Marker pMarker) {
@@ -67,9 +96,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
         }
 
         @Override
-        public void onLongPressMarker(MapView pMapView, Marker pMarker) {
-
-        }
+        public void onLongPressMarker(MapView pMapView, Marker pMarker) {}
 
         @Override
         public void onTapMap(MapView pMapView, final ILatLng pPosition) {
@@ -97,7 +124,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
      */
     private MapView mMapView;
     private TrackingMode mUserLocationTrackingMode = TrackingMode.NONE;
-    private ItemizedIconOverlay mMarkersOverlay;
+    private ItemizedDraggableIconOverlay mMarkersOverlay;
 
     private PathOverlay mFlightPath;
     private PathOverlay mMissionPath;
@@ -157,7 +184,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
             mMapView.removeOverlay(mMarkersOverlay);
         }
 
-        mMarkersOverlay = new ItemizedIconOverlay(getActivity().getApplicationContext(),
+        mMarkersOverlay = new ItemizedDraggableIconOverlay(getActivity().getApplicationContext(),
                 new ArrayList<Marker>(), new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
             @Override
             public boolean onItemSingleTapUp(int index, Marker item) {
@@ -171,6 +198,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
                 return true;
             }
         });
+        mMarkersOverlay.setMarkerDragListener(mMarkerDragHandler);
         mMapView.addItemizedOverlay(mMarkersOverlay);
     }
 
