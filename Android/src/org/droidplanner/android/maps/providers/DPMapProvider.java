@@ -5,8 +5,6 @@ import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapProviderPreferences;
 import org.droidplanner.android.maps.providers.mapbox.MapBoxFragment;
 import org.droidplanner.android.maps.providers.mapbox.MapBoxProviderPreferences;
-import org.droidplanner.android.maps.providers.osm.OSMapFragment;
-import org.droidplanner.android.maps.providers.osm.OSMapProviderPreferences;
 
 /**
  * Contains a listing of the various map providers supported, and implemented in
@@ -28,22 +26,6 @@ public enum DPMapProvider {
 		}
 	},
 
-	/**
-	 * Provides access to open street map. TODO: enable open street map when
-	 * implementation is complete
-	 */
-	OPEN_STREET_MAP {
-		@Override
-		public DPMap getMapFragment() {
-			return new OSMapFragment();
-		}
-
-        @Override
-        public MapProviderPreferences getMapProviderPreferences() {
-            return new OSMapProviderPreferences();
-        }
-    },
-
     /**
      * Provides access to mapbox map.
      */
@@ -57,7 +39,6 @@ public enum DPMapProvider {
     public MapProviderPreferences getMapProviderPreferences(){
             return new MapBoxProviderPreferences();
         }
-
     };
 
 	/**

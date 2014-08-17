@@ -176,6 +176,11 @@ public class MapBoxFragment extends Fragment implements DPMap {
     private void setupMap() {
         //TODO complete
         mMapView.setMapViewListener(mMapViewListener);
+
+        final RotationGestureOverlay rotationOverlay = new RotationGestureOverlay(mMapView);
+        rotationOverlay.setEnabled(false);
+
+        mMapView.getOverlays().add(rotationOverlay);
         resetMarkersOverlay();
     }
 

@@ -1,6 +1,9 @@
 package org.droidplanner.android.maps.providers.mapbox;
 
 import android.content.Context;
+import android.graphics.Point;
+import android.graphics.PointF;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -8,8 +11,6 @@ import com.mapbox.mapboxsdk.overlay.ItemizedIconOverlay;
 import com.mapbox.mapboxsdk.overlay.Marker;
 import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.views.util.Projection;
-
-import org.droidplanner.android.maps.DPMap;
 
 import java.util.List;
 
@@ -102,5 +103,26 @@ public class ItemizedDraggableIconOverlay extends ItemizedIconOverlay {
             }
         }
         return false;
+    }
+
+    @Override
+    protected boolean markerHitTest(final Marker pMarker, final Projection pProjection,
+                                    final float pX, final float pY) {
+        RectF rect = getMarkerDrawingBounds(pProjection, null, pMarker);
+        return rect.contains(pX, pY);
+    }
+
+    private static RectF getMarkerDrawingBounds(final Projection projection, RectF reuse, Marker marker) {
+        if (reuse == null) {
+            reuse = new RectF();
+        }
+        final PointF position = marker.getPositionOnScreen(projection, null);
+        final int w = marker.getWidth();
+        final int h = marker.getHeight();
+        final Point anchor = marker.getAnchor();
+        final float x = position.x + anchor.x;
+        final float y = position.y + anchor.y;
+        reuse.set(x, y, x + w, y + h * 2);
+        return reuse;
     }
 }
