@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -441,10 +442,12 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
         //Update the marker
         final Resources res = getResources();
-        final Bitmap markerIcon = markerInfo.getIcon(res);
-        if (markerIcon != null) {
-            marker.setIcon(new Icon(new BitmapDrawable(res, markerIcon)));
+        Bitmap markerIcon = markerInfo.getIcon(res);
+        if (markerIcon == null) {
+            markerIcon = BitmapFactory.decodeResource(res, R.drawable.ic_action_location);
         }
+
+        marker.setIcon(new Icon(new BitmapDrawable(res, markerIcon)));
 
         marker.setAnchor(new PointF(markerInfo.getAnchorU(), markerInfo.getAnchorV()));
         marker.invalidate();
