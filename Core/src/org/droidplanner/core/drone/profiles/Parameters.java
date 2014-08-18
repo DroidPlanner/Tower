@@ -2,6 +2,7 @@ package org.droidplanner.core.drone.profiles;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.droidplanner.core.MAVLink.MavLinkParameters;
 import org.droidplanner.core.drone.Drone;
@@ -81,20 +82,20 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 		parameters.put((int) m_value.param_index, param);
 
 		expectedParams = m_value.param_count;
-		
+
 		// update listener
 		if (parameterListener != null)
-			parameterListener.onParameterReceived(param, m_value.param_index,
-					m_value.param_count);
+			parameterListener.onParameterReceived(param, m_value.param_index, m_value.param_count);
 
 		// Are all parameters here? Notify the listener with the parameters
 		if (parameters.size() >= m_value.param_count) {
-			parameterList = new ArrayList<Parameter>();
+			List<Parameter> parameterList = new ArrayList<Parameter>();
 			for (int key : parameters.keySet()) {
 				parameterList.add(parameters.get(key));
 			}
 			killWatchdog();
 			myDrone.events.notifyDroneEvent(DroneEventsType.PARAMETERS_DOWNLOADED);
+
 			if (parameterListener != null) {
 				parameterListener.onEndReceivingParameters(parameterList);
 			}
@@ -152,6 +153,11 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch(event){
+		case HEARTBEAT_FIRST:
+			if (drone.state.isFlying() == false) {
+				getAllParameters();				
+			}
+			break;		
 		case DISCONNECTED:
 		case HEARTBEAT_TIMEOUT:
 			killWatchdog();

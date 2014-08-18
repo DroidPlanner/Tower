@@ -1,6 +1,9 @@
 package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.widgets.button.RadioButtonCenter;
 
 import android.app.Activity;
@@ -12,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 /**
  * This fragment implements and displays the 'tools' used in the editor window
@@ -42,7 +46,8 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 
 	private OnEditorToolSelected listener;
 	private RadioGroup mEditorRadioGroup;
-	private EditorTools tool;
+	private EditorTools tool = EditorTools.NONE;
+	private MissionProxy mMissionProxy;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,6 +67,7 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 				.findViewById(R.id.editor_tools_poly);
 		final RadioButtonCenter buttonTrash = (RadioButtonCenter) view
 				.findViewById(R.id.editor_tools_trash);
+		
 
 		for (View vv : new View[] { buttonDraw, buttonMarker, buttonPoly, buttonTrash }) {
 			vv.setOnClickListener(this);
@@ -87,6 +93,8 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 			throw new IllegalStateException("Parent activity must be an instance of "
 					+ OnEditorToolSelected.class.getName());
 		}
+		
+		mMissionProxy = ((DroidPlannerApp)activity.getApplication()).missionProxy;
 
 		listener = (OnEditorToolSelected) activity;
 	}
@@ -150,6 +158,23 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 	 *            true to notify listeners, false otherwise.
 	 */
 	private void setTool(EditorTools tool, boolean notifyListeners) {
+		if (mMissionProxy.getItems().size() > 0 && tool != EditorTools.TRASH
+				&& tool != EditorTools.NONE) {
+			MissionItemProxy lastMissionItem = mMissionProxy.getItems().get(
+					mMissionProxy.getItems().size() - 1);
+			switch (lastMissionItem.getMissionItem().getType()) {
+			case LAND:
+			case RTL:
+				tool = EditorTools.NONE;
+				mEditorRadioGroup.clearCheck();
+				Toast.makeText(getActivity(),
+						getString(R.string.editor_err_land_rtl_added),
+						Toast.LENGTH_SHORT).show();
+				return;
+			default:
+				break;
+			}
+		}
 		this.tool = tool;
 		if (tool == EditorTools.NONE) {
 			mEditorRadioGroup.clearCheck();

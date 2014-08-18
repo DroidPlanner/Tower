@@ -125,6 +125,7 @@
 					custom:min="0"
 					custom:title="@string/waypoint_altitude"
 					custom:unit="m" >
+
 				</org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
 
 				<org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText
@@ -132,12 +133,11 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_margin="2dp"
-					custom:inc="0.1"
-					custom:max="20"
+					custom:inc="1"
+					custom:max="50"
 					custom:min="0"
 					custom:title="@string/loiter_radius"
-					custom:unit="m"
-					android:visibility="gone" >
+					custom:unit="m">
 				</org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
 
 				<FrameLayout

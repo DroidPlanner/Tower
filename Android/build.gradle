@@ -14,6 +14,7 @@ dependencies {
     compile 'org.osmdroid:osmdroid-android:4.1'
 
     compile files('libs/usbseriallibrary.jar')
+    compile files('libs/j2xx.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
     compile files('libs/osmbonuspack_v4.4.jar')
     compile files('libs/jeromq-0.3.4.jar')
