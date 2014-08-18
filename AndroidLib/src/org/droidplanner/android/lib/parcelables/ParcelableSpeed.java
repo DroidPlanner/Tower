@@ -16,10 +16,10 @@ public class ParcelableSpeed implements Parcelable {
     private double targetSpeed = 0;
 
     public ParcelableSpeed(Speed speed) {
-        this.verticalSpeed = speed.getVerticalSpeed();
-        this.groundSpeed = speed.getGroundSpeed();
-        this.airSpeed = speed.getAirSpeed();
-        this.targetSpeed = speed.getTargetSpeed();
+        this.verticalSpeed = speed.getVerticalSpeed().valueInMetersPerSecond();
+        this.groundSpeed = speed.getGroundSpeed().valueInMetersPerSecond();
+        this.airSpeed = speed.getAirSpeed().valueInMetersPerSecond();
+        this.targetSpeed = speed.getTargetSpeed().valueInMetersPerSecond();
     }
 
     public double getVerticalSpeed() {
