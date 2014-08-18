@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "20.0.0"
+    buildToolsVersion '20.0.0'
 
     defaultConfig {
         applicationId "org.droidplanner.android.lib"
@@ -51,10 +51,10 @@ android {
 }
 
 dependencies {
-    compile 'com.google.android.gms:play-services:5.0.+'
-    compile 'com.android.support:support-v4:20.+'
+    compile 'com.android.support:support-v4:20.0.0'
+    provided 'com.google.android.gms:play-services:5.0.+'
 
     compile project(':Core')
     compile project(':Mavlink')
-    compile project(':HorizontalVariableListView:HorizontalVariableListView')
+    compile project(':Libraries:HorizontalVariableListView:HorizontalVariableListView')
 }

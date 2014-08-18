@@ -43,7 +43,9 @@ android {
 }
 
 dependencies {
-    compile 'com.google.android.support:wearable:+'
-
     compile project(':AndroidLib')
+
+    compile 'com.google.android.support:wearable:1.0.0'
+    compile 'com.google.android.gms:play-services-wearable:5.0.77'
+
 }
