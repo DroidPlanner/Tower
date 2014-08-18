@@ -255,4 +255,7 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	public String getMapProviderName() {
 		return prefs.getString(context.getString(R.string.pref_maps_providers_key), null);
 	}
+	public boolean shouldOfferExtraParameters() {
+		return prefs.getBoolean(context.getString(R.string.pref_more_parameters_key), false);
+	}
 }

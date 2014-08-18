@@ -12,6 +12,8 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 
 public class Land extends SpatialCoordItem {
+	
+	private double yawAngle;
 
 	public Land(MissionItem item) {
 		super(item);
@@ -43,6 +45,14 @@ public class Land extends SpatialCoordItem {
 	@Override
 	public MissionItemType getType() {
 		return MissionItemType.LAND;
+	}
+	
+	public double getYawAngle() {
+		return yawAngle;
+	}
+
+	public void setYawAngle(double yawAngle) {
+		this.yawAngle = yawAngle;
 	}
 
 }

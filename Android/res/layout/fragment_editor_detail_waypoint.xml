@@ -136,8 +136,19 @@
 					custom:min="0"
 					custom:title="@string/waypoint_delay"
 					custom:unit="s" >
-				</org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
-			</LinearLayout>
+                </org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
+                <org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText
+                    android:id="@+id/waypointAngle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    custom:inc="5"
+                    custom:max="360"
+                    custom:min="0"
+                    custom:title="@string/waypoint_angle"
+                    custom:unit="°" >
+                </org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
