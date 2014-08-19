@@ -35,7 +35,7 @@ public class CalParameters {
 		if (myDrone == null) {
 			return;
 		}
-		Parameter param = myDrone.parameters.getLastParameter();
+		Parameter param = myDrone.getParameters().getLastParameter();
 		if (isUpdating) {
 			compareCalibrationParameter(param);
 		} else {
@@ -69,7 +69,7 @@ public class CalParameters {
 		}
 
 		if (myDrone != null)
-			myDrone.parameters.ReadParameter(calParameterNames.get(seq));
+			myDrone.getParameters().ReadParameter(calParameterNames.get(seq));
 
 		if (this.listener != null) {
 			this.listener.onCalibrationData(seq, calParameterNames.size(), isUpdating);
@@ -83,7 +83,7 @@ public class CalParameters {
 				this.listener.onCalibrationData(uploadIndex, paramCount, isUpdating);
 			}
 			if (myDrone != null) {
-				myDrone.parameters.sendParameter(calParameterItems.get(uploadIndex));
+				myDrone.getParameters().sendParameter(calParameterItems.get(uploadIndex));
 			}
 		} else {
 			isUpdating = false;

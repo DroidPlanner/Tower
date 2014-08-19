@@ -221,7 +221,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		if (mInboxBuilder == null)
 			return;
 
-		long timeInSeconds = drone.state.getFlightTime();
+		long timeInSeconds = drone.getState().getFlightTime();
 		long minutes = timeInSeconds / 60;
 		long seconds = timeInSeconds % 60;
 
@@ -236,7 +236,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 			return;
 
 		final CharSequence modeSummary = TextUtils.normal("Flight Mode:   ",
-				TextUtils.bold(drone.state.getMode().getName()));
+				TextUtils.bold(drone.getState().getMode().getName()));
 		mNotificationBuilder.setContentTitle(modeSummary);
 	}
 

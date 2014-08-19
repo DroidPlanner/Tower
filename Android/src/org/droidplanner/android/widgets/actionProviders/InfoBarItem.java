@@ -202,7 +202,7 @@ public abstract class InfoBarItem {
 						return;
 
 					if (mItemView != null) {
-						long timeInSeconds = mDrone.state.getFlightTime();
+						long timeInSeconds = mDrone.getState().getFlightTime();
 						long minutes = timeInSeconds / 60;
 						long seconds = timeInSeconds % 60;
 
@@ -220,7 +220,7 @@ public abstract class InfoBarItem {
 				@Override
 				public void onClick(View v) {
 					if (mDrone != null) {
-						mDrone.state.resetFlightTimer();
+						mDrone.getState().resetFlightTimer();
 					}
 					mPopup.dismiss();
 				}
@@ -409,7 +409,7 @@ public abstract class InfoBarItem {
 							if (mDrone != null) {
 								final ApmModes newMode = (ApmModes) parent
 										.getItemAtPosition(position);
-								mDrone.state.changeFlightMode(newMode);
+								mDrone.getState().changeFlightMode(newMode);
 							}
 						}
 					});
@@ -425,7 +425,7 @@ public abstract class InfoBarItem {
 				return;
 
 			final SpinnerSelfSelect modesSpinner = (SpinnerSelfSelect) mItemView;
-			final int droneType = drone == null ? -1 : drone.type.getType();
+			final int droneType = drone == null ? -1 : drone.getType();
 			if (droneType != mLastDroneType) {
 				final List<ApmModes> flightModes = droneType == -1 ? Collections
 						.<ApmModes> emptyList() : ApmModes.getModeList(droneType);
@@ -438,7 +438,7 @@ public abstract class InfoBarItem {
 			}
 
 			if (mDrone != null)
-				modesSpinner.forcedSetSelection(mModeAdapter.getPosition(mDrone.state.getMode()));
+				modesSpinner.forcedSetSelection(mModeAdapter.getPosition(mDrone.getState().getMode()));
 		}
 	}
 

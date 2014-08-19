@@ -29,7 +29,7 @@ public class MavLinkMsgHandler {
 	}
 
 	public void receiveData(MAVLinkMessage msg) {
-		if (drone.parameters.processMessage(msg)) {
+		if (drone.getParameters().processMessage(msg)) {
 			return;
 		}
 
@@ -59,10 +59,10 @@ public class MavLinkMsgHandler {
 
 		case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
 			msg_heartbeat msg_heart = (msg_heartbeat) msg;
-			drone.type.setType(msg_heart.type);
+			drone.setType(msg_heart.type);
 			processState(msg_heart);
-			ApmModes newMode = ApmModes.getMode(msg_heart.custom_mode, drone.type.getType());
-			drone.state.setMode(newMode);
+			ApmModes newMode = ApmModes.getMode(msg_heart.custom_mode, drone.getType());
+			drone.getState().setMode(newMode);
 			drone.onHeartbeat(msg_heart);
 			break;
 
@@ -95,7 +95,7 @@ public class MavLinkMsgHandler {
 			String message = msg_statustext.getText();
 			if(message.length()>7){
 				if(message.substring(0,7).equals("PreArm:")||message.substring(0,4).equals("Arm:")){
-					drone.state.setFailsafe(message);
+					drone.getState().setFailsafe(message);
 				}
 			}
 			break;
@@ -108,18 +108,18 @@ public class MavLinkMsgHandler {
 	}
 
 	public void checkIsFlying(msg_vfr_hud m_hud) {
-		drone.state.setIsFlying(m_hud.throttle > 0);
+		drone.getState().setIsFlying(m_hud.throttle > 0);
 	}
 
 	private void checkFailsafe(msg_heartbeat msg_heart) {
 		boolean failsafe2 = msg_heart.system_status == (byte) MAV_STATE.MAV_STATE_CRITICAL;
 		if(failsafe2){
-			drone.state.setFailsafe("Failsafe");
+			drone.getState().setFailsafe("Failsafe");
 		}
 	}
 
 	private void checkArmState(msg_heartbeat msg_heart) {
-		drone.state
+		drone.getState()
 				.setArmed((msg_heart.base_mode & (byte) MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED) == (byte) MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED);
 	}
 }

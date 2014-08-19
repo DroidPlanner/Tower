@@ -29,7 +29,7 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case MODE:
-			if ((myDrone.state.getMode() == ApmModes.ROTOR_GUIDED)) {
+			if ((myDrone.getState().getMode() == ApmModes.ROTOR_GUIDED)) {
 				initialize();
 			} else {
 				disable();

@@ -35,7 +35,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 	@SuppressLint("UseSparseArrays")
 	private HashMap<Integer, Parameter> parameters = new HashMap<Integer, Parameter>();
 
-	public DroneInterfaces.OnParameterManagerListener parameterListener;
+	private DroneInterfaces.OnParameterManagerListener parameterListener;
 
 	public Handler watchdog;
 	public Runnable watchdogCallback = new Runnable() {
@@ -154,7 +154,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch(event){
 		case HEARTBEAT_FIRST:
-			if (drone.state.isFlying() == false) {
+			if (drone.getState().isFlying() == false) {
 				getAllParameters();				
 			}
 			break;		
@@ -167,4 +167,8 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 		
 		}
 	}
+
+    public void setParameterListener(DroneInterfaces.OnParameterManagerListener parameterListener) {
+        this.parameterListener = parameterListener;
+    }
 }

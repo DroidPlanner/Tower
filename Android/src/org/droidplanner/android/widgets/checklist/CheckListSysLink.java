@@ -27,9 +27,9 @@ public class CheckListSysLink {
 		} else if (mSysTag.equalsIgnoreCase("SYS_DEF_ALT")) {
 			mListItem.setSys_value(drone.mission.getDefaultAlt().valueInMeters());
 		} else if (mSysTag.equalsIgnoreCase("SYS_ARM_STATE")) {
-			mListItem.setSys_activated(drone.state.isArmed());
+			mListItem.setSys_activated(drone.getState().isArmed());
 		} else if (mSysTag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
-			mListItem.setSys_activated(drone.state.isFailsafe());
+			mListItem.setSys_activated(drone.getState().isFailsafe());
 		} else if (mSysTag.equalsIgnoreCase("SYS_CONNECTION_STATE")) {
 			mListItem.setSys_activated(drone.MavClient.isConnected());
 		}
@@ -58,7 +58,7 @@ public class CheckListSysLink {
 
 	private void doSysArm(CheckListItem checkListItem) {
 		if (drone.MavClient.isConnected()) {
-			if (checkListItem.isSys_activated() && !drone.state.isArmed()) {
+			if (checkListItem.isSys_activated() && !drone.getState().isArmed()) {
 				drone.notifyDroneEvent(DroneEventsType.ARMING_STARTED);
 				MavLinkArm.sendArmMessage(drone, true);
 			} else {

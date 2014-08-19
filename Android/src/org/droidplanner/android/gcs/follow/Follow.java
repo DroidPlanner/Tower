@@ -40,11 +40,11 @@ public class Follow implements OnDroneListener, LocationReceiver {
 	public void toggleFollowMeState() {
 		if (isEnabled()) {
 			disableFollowMe();
-			drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
+			drone.getState().changeFlightMode(ApmModes.ROTOR_LOITER);
 		} else {
 			if (drone.MavClient.isConnected()) {
-				if (drone.state.isArmed()) {
-					drone.state.changeFlightMode(ApmModes.ROTOR_GUIDED);
+				if (drone.getState().isArmed()) {
+					drone.getState().changeFlightMode(ApmModes.ROTOR_GUIDED);
 					enableFollowMe();
 				} else {
 					Toast.makeText(context, "Drone Not Armed", Toast.LENGTH_SHORT).show();
@@ -83,7 +83,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case MODE:
-			if ((drone.state.getMode() != ApmModes.ROTOR_GUIDED)) {
+			if ((drone.getState().getMode() != ApmModes.ROTOR_GUIDED)) {
 				disableFollowMe();
 			}
 			break;

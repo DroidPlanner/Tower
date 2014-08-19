@@ -91,7 +91,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 			break;
 
 		case R.id.mc_land:
-			drone.state.changeFlightMode(ApmModes.ROTOR_LAND);
+			drone.getState().changeFlightMode(ApmModes.ROTOR_LAND);
 			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_LAND.getName());
 			break;
 
@@ -103,12 +103,12 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 			break;
 
 		case R.id.mc_homeBtn:
-			drone.state.changeFlightMode(ApmModes.ROTOR_RTL);
+			drone.getState().changeFlightMode(ApmModes.ROTOR_RTL);
 			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_RTL.getName());
 			break;
 
 		case R.id.mc_loiter:
-			drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
+			drone.getState().changeFlightMode(ApmModes.ROTOR_LOITER);
 			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_LOITER.getName());
 			break;
 

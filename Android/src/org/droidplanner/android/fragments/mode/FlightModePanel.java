@@ -54,7 +54,7 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 		super.onActivityCreated(savedInstanceState);
 
 		// Update the mode info panel based on the current mode.
-		onModeUpdate(mParentActivity.drone.state.getMode());
+		onModeUpdate(mParentActivity.drone.getState().getMode());
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 		case MODE:
 		case TYPE:
 			// Update the mode info panel
-			onModeUpdate(drone.state.getMode());
+			onModeUpdate(drone.getState().getMode());
 			break;
 		default:
 			break;

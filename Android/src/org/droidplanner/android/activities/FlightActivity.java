@@ -1,7 +1,6 @@
 package org.droidplanner.android.activities;
 
 import org.droidplanner.R;
-import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.dialogs.DroneshareDialog;
 import org.droidplanner.android.fragments.FlightActionsFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
@@ -341,8 +340,8 @@ public class FlightActivity extends DrawerNavigationUI implements
 	}
 
 	public void onFailsafeChanged(Drone drone) {
-		if (drone.state.isFailsafe()) {
-			failsafeView.setText(drone.state.getFailsafe());
+		if (drone.getState().isFailsafe()) {
+			failsafeView.setText(drone.getState().getFailsafe());
 			failsafeView.setVisibility(View.VISIBLE);
 		} else {
 			failsafeView.setVisibility(View.GONE);

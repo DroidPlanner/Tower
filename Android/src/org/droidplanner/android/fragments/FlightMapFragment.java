@@ -131,7 +131,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 		switch (event) {
 		case ARMING:
 			// Clear the previous flight path when arming.
-			if (drone.state.isArmed()) {
+			if (drone.getState().isArmed()) {
 				mMapFragment.clearFlightPath();
 			}
 			break;

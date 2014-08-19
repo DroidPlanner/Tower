@@ -100,7 +100,7 @@ public class TTSNotificationProvider implements OnInitListener,
 				Toast.makeText(context, R.string.exception_draw_polygon, Toast.LENGTH_SHORT).show();
 				break;
 			case ARMING:
-				speakArmedState(drone.state.isArmed());
+				speakArmedState(drone.getState().isArmed());
 				break;
 			case ARMING_STARTED:
 				speak("Arming the vehicle, please standby");
@@ -109,7 +109,7 @@ public class TTSNotificationProvider implements OnInitListener,
 				batteryDischargeNotification(drone.battery.getBattRemain());
 				break;
 			case MODE:
-				speakMode(drone.state.getMode());
+				speakMode(drone.getState().getMode());
 				break;
 			case MISSION_SENT:
 				Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT).show();
@@ -140,8 +140,8 @@ public class TTSNotificationProvider implements OnInitListener,
 				speak("Following");
 				break;
 			case FAILSAFE:
-				String failsafe = drone.state.getFailsafe();
-				if(drone.state.isFailsafe()){
+				String failsafe = drone.getState().getFailsafe();
+				if(drone.getState().isFailsafe()){
 					speak(failsafe);
 				}
 			default:

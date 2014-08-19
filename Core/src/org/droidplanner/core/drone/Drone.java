@@ -25,6 +25,7 @@ import org.droidplanner.core.drone.variables.Speed;
 import org.droidplanner.core.drone.variables.State;
 import org.droidplanner.core.drone.variables.StreamRates;
 import org.droidplanner.core.drone.variables.Type;
+import org.droidplanner.core.firmware.FirmwareType;
 import org.droidplanner.core.mission.Mission;
 
 public class Drone implements AbstractDrone {
@@ -47,9 +48,9 @@ public class Drone implements AbstractDrone {
 	public final GuidedPoint guidedPoint = new GuidedPoint(this);
 	public final Calibration calibrationSetup = new Calibration(this);
 	public final WaypointManager waypointManager = new WaypointManager(this);
-	public final State state;
+	private final State state;
 	private final HeartBeat heartbeat;
-	public final Parameters parameters;
+	private final Parameters parameters;
 
 	public final MAVLinkOutputStream MavClient;
 	public final Preferences preferences;
@@ -105,5 +106,30 @@ public class Drone implements AbstractDrone {
     @Override
     public void onHeartbeat(msg_heartbeat msg) {
         heartbeat.onHeartbeat(msg);
+    }
+
+    @Override
+    public State getState() {
+        return state;
+    }
+
+    @Override
+    public Parameters getParameters() {
+        return parameters;
+    }
+
+    @Override
+    public void setType(int type) {
+        this.type.setType(type);
+    }
+
+    @Override
+    public int getType() {
+        return type.getType();
+    }
+
+    @Override
+    public FirmwareType getFirmwareType() {
+        return type.getFirmwareType();
     }
 }
