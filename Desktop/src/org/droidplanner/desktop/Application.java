@@ -13,7 +13,7 @@ public class Application {
 		logic = new Logic();
 		map = new Map();
 		map.setVisible(true);
-		map.setJMenuBar(new Menu(logic.drone));
+		map.setJMenuBar(new Menu(logic.drone,logic.follow));
 
 		new Thread(logic).start();
 

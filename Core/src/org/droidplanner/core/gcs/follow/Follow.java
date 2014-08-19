@@ -94,6 +94,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 
 	@Override
 	public void onLocationChanged(Location location) {
+		notify.shortText("new location"+ location.getCoord());
 		followAlgorithm.processNewLocation(location);
 		roiEstimator.onLocationChanged(location);
 	}
