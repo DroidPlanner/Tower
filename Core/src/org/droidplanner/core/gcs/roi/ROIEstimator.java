@@ -1,9 +1,9 @@
-package org.droidplanner.android.gcs.roi;
+package org.droidplanner.core.gcs.roi;
 
-import org.droidplanner.android.gcs.location.LocationReceiver;
 import org.droidplanner.core.MAVLink.MavLinkROI;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
+import org.droidplanner.core.gcs.location.LocationReceiver;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.helpers.units.Altitude;

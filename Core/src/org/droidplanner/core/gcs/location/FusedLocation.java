@@ -1,13 +1,8 @@
-package org.droidplanner.android.gcs.location;
+package org.droidplanner.core.gcs.location;
 
 import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.location.LocationClient;
-import com.google.android.gms.location.LocationRequest;
 
 /**
  * Feeds Location Data from Android's FusedLocation LocationProvider

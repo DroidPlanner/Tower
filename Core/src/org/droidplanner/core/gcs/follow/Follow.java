@@ -1,14 +1,14 @@
-package org.droidplanner.android.gcs.follow;
+package org.droidplanner.core.gcs.follow;
 
-import org.droidplanner.android.gcs.follow.FollowAlgorithm.FollowModes;
-import org.droidplanner.android.gcs.location.FusedLocation;
-import org.droidplanner.android.gcs.location.LocationFinder;
-import org.droidplanner.android.gcs.location.LocationReceiver;
-import org.droidplanner.android.gcs.roi.ROIEstimator;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.gcs.follow.FollowAlgorithm.FollowModes;
+import org.droidplanner.core.gcs.location.FusedLocation;
+import org.droidplanner.core.gcs.location.LocationFinder;
+import org.droidplanner.core.gcs.location.LocationReceiver;
+import org.droidplanner.core.gcs.roi.ROIEstimator;
 import org.droidplanner.core.helpers.units.Length;
 
 import android.content.Context;

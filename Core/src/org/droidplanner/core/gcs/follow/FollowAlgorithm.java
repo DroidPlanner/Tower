@@ -1,4 +1,4 @@
-package org.droidplanner.android.gcs.follow;
+package org.droidplanner.core.gcs.follow;
 
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.helpers.units.Length;

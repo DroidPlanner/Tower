@@ -1,4 +1,4 @@
-package org.droidplanner.android.gcs.location;
+package org.droidplanner.core.gcs.location;
 
 import android.location.Location;
 

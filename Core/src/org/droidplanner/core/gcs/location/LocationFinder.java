@@ -1,4 +1,4 @@
-package org.droidplanner.android.gcs.location;
+package org.droidplanner.core.gcs.location;
 
 public interface LocationFinder {
 	public void enableLocationUpdates();
