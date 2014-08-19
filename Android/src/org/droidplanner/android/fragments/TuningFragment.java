@@ -72,12 +72,12 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 	public void onStop() {
 		super.onStop();
 		drone.removeDroneListener(this);
-		drone.streamRates.setupStreamRatesFromPref();
+		drone.getStreamRates().setupStreamRatesFromPref();
 	}
 
 	private void setupDataStreamingForTuning() {
 		// Sets the nav messages at 50Hz and other messages at a low rate 1Hz
-		MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1, 0, 0, NAV_MSG_RATE);
+		MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 1, 0, 1, 1, 1, 0, 0, NAV_MSG_RATE);
 	}
 
 	private void setupLocalViews(View view) {
@@ -130,10 +130,10 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 	}
 
 	public void onNewOrientationData(Drone drone) {
-		bottomDataValue.newData(drone.orientation.getPitch());
-		topDataValue.newData(drone.orientation.getRoll());
-		bottomDataReference.newData(drone.navigation.getNavPitch());
-		topDataReference.newData(drone.navigation.getNavRoll());
+		bottomDataValue.newData(drone.getOrientation().getPitch());
+		topDataValue.newData(drone.getOrientation().getRoll());
+		bottomDataReference.newData(drone.getNavigation().getNavPitch());
+		topDataReference.newData(drone.getNavigation().getNavRoll());
 		bottomChart.update();
 		topChart.update();
 	}

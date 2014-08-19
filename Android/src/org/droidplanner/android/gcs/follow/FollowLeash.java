@@ -27,7 +27,7 @@ public class FollowLeash extends FollowAlgorithm {
 					drone.getGps().getPosition());
 			Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord, headingGCStoDrone,
 					radius.valueInMeters());
-			drone.guidedPoint.newGuidedCoord(goCoord);
+			drone.getGuidedPoint().newGuidedCoord(goCoord);
 		}
 	}
 

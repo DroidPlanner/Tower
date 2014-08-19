@@ -1,10 +1,21 @@
-package org.droidplanner.core.drone;
+package org.droidplanner.core.model;
 
 import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
 
+import org.droidplanner.core.MAVLink.MAVLinkStreams;
+import org.droidplanner.core.MAVLink.WaypointManager;
+import org.droidplanner.core.drone.DroneInterfaces;
+import org.droidplanner.core.drone.Preferences;
 import org.droidplanner.core.drone.profiles.Parameters;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
+import org.droidplanner.core.drone.variables.Altitude;
+import org.droidplanner.core.drone.variables.Battery;
 import org.droidplanner.core.drone.variables.GPS;
+import org.droidplanner.core.drone.variables.Home;
+import org.droidplanner.core.drone.variables.Navigation;
+import org.droidplanner.core.drone.variables.Orientation;
+import org.droidplanner.core.drone.variables.Radio;
+import org.droidplanner.core.drone.variables.Speed;
 import org.droidplanner.core.drone.variables.State;
 import org.droidplanner.core.firmware.FirmwareType;
 
@@ -38,4 +49,24 @@ public interface AbstractDrone {
     public void loadVehicleProfile();
 
     public VehicleProfile getVehicleProfile();
+
+    public MAVLinkStreams.MAVLinkOutputStream getMavClient();
+
+    public Preferences getPreferences();
+
+    public WaypointManager getWaypointManager();
+
+    public Speed getSpeed();
+
+    public Battery getBattery();
+
+    public Radio getRadio();
+
+    public Home getHome();
+
+    public Altitude getAltitude();
+
+    public Orientation getOrientation();
+
+    public Navigation getNavigation();
 }

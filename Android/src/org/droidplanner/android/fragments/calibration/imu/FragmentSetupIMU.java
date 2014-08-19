@@ -89,20 +89,20 @@ public class FragmentSetupIMU extends SetupMainPanel implements OnDroneListener 
 
 	private void sendAck(int step) {
 		if (parentActivity.drone != null) {
-			parentActivity.drone.calibrationSetup.sendAckk(step);
+			parentActivity.drone.getCalibrationSetup().sendAckk(step);
 		}
 	}
 
 	private void startCalibration() {
 		if (parentActivity.drone != null) {
-			parentActivity.drone.calibrationSetup.startCalibration();
+			parentActivity.drone.getCalibrationSetup().startCalibration();
 		}
 	}
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		if (event == DroneEventsType.CALIBRATION_IMU) {
-			processMAVMessage(drone.calibrationSetup.getMessage());
+			processMAVMessage(drone.getCalibrationSetup().getMessage());
 		} else if (event == DroneEventsType.HEARTBEAT_TIMEOUT) {
 			if (parentActivity.drone != null) {
 				/*

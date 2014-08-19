@@ -180,7 +180,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		mInboxBuilder.setLine(
 				4,
 				TextUtils.normal("Signal:   ",
-						TextUtils.bold(String.format("%d%%", drone.radio.getSignalStrength()))));
+						TextUtils.bold(String.format("%d%%", drone.getRadio().getSignalStrength()))));
 	}
 
 	private void updateHome(Drone drone) {
@@ -190,7 +190,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		mInboxBuilder.setLine(
 				0,
 				TextUtils.normal("Home:   ",
-						TextUtils.bold(drone.home.getDroneDistanceToHome().toString())));
+						TextUtils.bold(drone.getHome().getDroneDistanceToHome().toString())));
 	}
 
 	private void updateGps(Drone drone) {
@@ -214,7 +214,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 				TextUtils.normal(
 						"Battery:   ",
 						TextUtils.bold(String.format("%2.1fv (%2.0f%%)",
-								drone.battery.getBattVolt(), drone.battery.getBattRemain()))));
+								drone.getBattery().getBattVolt(), drone.getBattery().getBattRemain()))));
 	}
 
 	private void updateDroneState(Drone drone) {

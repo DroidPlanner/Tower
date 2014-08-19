@@ -84,9 +84,9 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 
 	@Override
 	public void onMapLongClick(Coord2D coord) {
-		if (drone.MavClient.isConnected()) {
-			if (drone.guidedPoint.isInitialized()) {
-				drone.guidedPoint.newGuidedCoord(coord);
+		if (drone.getMavClient().isConnected()) {
+			if (drone.getGuidedPoint().isInitialized()) {
+				drone.getGuidedPoint().newGuidedCoord(coord);
 			} else {
 				if (guidedModeOnLongPress) {
 					GuidedDialog dialog = new GuidedDialog();
@@ -101,7 +101,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	@Override
 	public void onForcedGuidedPoint(LatLng coord) {
 		try {
-			drone.guidedPoint.forcedGuidedCoordinate(DroneHelper.LatLngToCoord(coord));
+			drone.getGuidedPoint().forcedGuidedCoordinate(DroneHelper.LatLngToCoord(coord));
 		} catch (Exception e) {
 			Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
 		}
@@ -117,12 +117,12 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 
 	@Override
 	public void onMarkerDragEnd(MarkerInfo markerInfo) {
-		drone.guidedPoint.newGuidedCoord(markerInfo.getPosition());
+		drone.getGuidedPoint().newGuidedCoord(markerInfo.getPosition());
 	}
 
 	@Override
 	public boolean onMarkerClick(MarkerInfo markerInfo) {
-		drone.guidedPoint.newGuidedCoord(markerInfo.getPosition());
+		drone.getGuidedPoint().newGuidedCoord(markerInfo.getPosition());
 		return true;
 	}
 

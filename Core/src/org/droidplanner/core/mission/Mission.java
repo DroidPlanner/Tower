@@ -191,7 +191,7 @@ public class Mission extends DroneVariable {
 
 	public void onMissionReceived(List<msg_mission_item> msgs) {
 		if (msgs != null) {
-			myDrone.home.setHome(msgs.get(0));
+			myDrone.getHome().setHome(msgs.get(0));
 			msgs.remove(0); // Remove Home waypoint
 			items.clear();
 			items.addAll(processMavLinkMessages(msgs));
@@ -202,7 +202,7 @@ public class Mission extends DroneVariable {
 
     public void onMissionLoaded(List<msg_mission_item> msgs) {
         if (msgs != null) {
-            myDrone.home.setHome(msgs.get(0));
+            myDrone.getHome().setHome(msgs.get(0));
             msgs.remove(0); // Remove Home waypoint
             items.clear();
             items.addAll(processMavLinkMessages(msgs));
@@ -249,12 +249,12 @@ public class Mission extends DroneVariable {
 	 * Sends the mission to the drone using the mavlink protocol.
 	 */
 	public void sendMissionToAPM() {
-        myDrone.waypointManager.writeWaypoints(getMsgMissionItems());
+        myDrone.getWaypointManager().writeWaypoints(getMsgMissionItems());
 	}
 
     public List<msg_mission_item> getMsgMissionItems() {
         final List<msg_mission_item> data = new ArrayList<msg_mission_item>();
-        data.add(myDrone.home.packMavlink());
+        data.add(myDrone.getHome().packMavlink());
         for (MissionItem item : items) {
             data.addAll(item.packMissionItem());
         }

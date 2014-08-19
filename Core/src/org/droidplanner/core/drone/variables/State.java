@@ -84,7 +84,7 @@ public class State extends DroneVariable {
 			this.armed = newState;
 			myDrone.notifyDroneEvent(DroneEventsType.ARMING);
 			if (newState) {
-				myDrone.waypointManager.getWaypoints();
+				myDrone.getWaypointManager().getWaypoints();
 			}
 		}
 	}

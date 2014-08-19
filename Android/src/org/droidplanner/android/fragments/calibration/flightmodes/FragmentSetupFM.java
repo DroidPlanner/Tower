@@ -171,7 +171,7 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 	}
 
 	private void updatePWMPanels() {
-		int pwmIn = drone.RC.in[4];
+		int pwmIn = drone.getRC().in[4];
 		int pwmId = getPWMRangeIndex(pwmIn);
 
 		textPWMCurrent.setText(String.format("PWM in : %d", pwmIn));

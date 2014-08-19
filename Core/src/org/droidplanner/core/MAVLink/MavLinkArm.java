@@ -22,7 +22,7 @@ public class MavLinkArm {
 		msg.param6 = 0;
 		msg.param7 = 0;
 		msg.confirmation = 0;
-		drone.MavClient.sendMavPacket(msg.pack());
+		drone.getMavClient().sendMavPacket(msg.pack());
 	}
 
 }

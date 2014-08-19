@@ -28,7 +28,7 @@ public class Type extends DroneVariable {
 	}
 
     public FirmwareType getFirmwareType() {
-        if (myDrone.MavClient.isConnected()) {
+        if (myDrone.getMavClient().isConnected()) {
             switch (this.type) {
 
                 case MAV_TYPE.MAV_TYPE_FIXED_WING:
@@ -51,7 +51,7 @@ public class Type extends DroneVariable {
                     // unsupported - fall thru to offline condition
             }
         }
-        return myDrone.preferences.getVehicleType(); // offline or unsupported
+        return myDrone.getPreferences().getVehicleType(); // offline or unsupported
     }
 
 }

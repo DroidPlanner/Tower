@@ -83,9 +83,9 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	}
 
 	public void onOrientationUpdate(Drone drone) {
-		float r = (float) drone.orientation.getRoll();
-		float p = (float) drone.orientation.getPitch();
-		float y = (float) drone.orientation.getYaw();
+		float r = (float) drone.getOrientation().getRoll();
+		float p = (float) drone.getOrientation().getPitch();
+		float y = (float) drone.getOrientation().getYaw();
 
 		if (!headingModeFPV & y < 0) {
 			y = 360 + y;
@@ -100,11 +100,11 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	}
 
 	public void onSpeedAltitudeAndClimbRateUpdate(Drone drone) {
-		airSpeed.setText(String.format("%3.1f", drone.speed.getAirSpeed().valueInMetersPerSecond()));
-		groundSpeed.setText(String.format("%3.1f", drone.speed.getGroundSpeed().valueInMetersPerSecond()));
-		climbRate.setText(String.format("%3.1f", drone.speed.getVerticalSpeed().valueInMetersPerSecond()));
-		double alt = drone.altitude.getAltitude();
-		double targetAlt = drone.altitude.getTargetAltitude();
+		airSpeed.setText(String.format("%3.1f", drone.getSpeed().getAirSpeed().valueInMetersPerSecond()));
+		groundSpeed.setText(String.format("%3.1f", drone.getSpeed().getGroundSpeed().valueInMetersPerSecond()));
+		climbRate.setText(String.format("%3.1f", drone.getSpeed().getVerticalSpeed().valueInMetersPerSecond()));
+		double alt = drone.getAltitude().getAltitude();
+		double targetAlt = drone.getAltitude().getTargetAltitude();
 		altitude.setText(String.format("%3.1f", alt));
 		targetAltitude.setText(String.format("%3.1f", targetAlt));
 

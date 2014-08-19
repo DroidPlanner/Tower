@@ -106,7 +106,7 @@ public class TTSNotificationProvider implements OnInitListener,
 				speak("Arming the vehicle, please standby");
 				break;
 			case BATTERY:
-				batteryDischargeNotification(drone.battery.getBattRemain());
+				batteryDischargeNotification(drone.getBattery().getBattRemain());
 				break;
 			case MODE:
 				speakMode(drone.getState().getMode());
@@ -134,7 +134,7 @@ public class TTSNotificationProvider implements OnInitListener,
 				speak("Data link restored");
 				break;
 			case MISSION_WP_UPDATE:
-				speak("Going for waypoint " + drone.missionStats.getCurrentWP());
+				speak("Going for waypoint " + drone.getMissionStats().getCurrentWP());
 				break;
 			case FOLLOW_START:
 				speak("Following");

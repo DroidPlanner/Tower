@@ -49,6 +49,6 @@ public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
 	@Override
 	public float getRotation() {
-		return (float) drone.orientation.getYaw();
+		return (float) drone.getOrientation().getYaw();
 	}
 }

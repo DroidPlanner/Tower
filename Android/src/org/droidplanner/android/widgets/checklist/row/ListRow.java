@@ -64,21 +64,21 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 		String sys_tag = mListItem.getSys_tag();
 
 		if (sys_tag.equalsIgnoreCase("SYS_BATTREM_LVL")) {
-			mListItem.setSys_value(mDrone.battery.getBattRemain());
+			mListItem.setSys_value(mDrone.getBattery().getBattRemain());
 		} else if (sys_tag.equalsIgnoreCase("SYS_BATTVOL_LVL")) {
-			mListItem.setSys_value(mDrone.battery.getBattVolt());
+			mListItem.setSys_value(mDrone.getBattery().getBattVolt());
 		} else if (sys_tag.equalsIgnoreCase("SYS_BATTCUR_LVL")) {
-			mListItem.setSys_value(mDrone.battery.getBattCurrent());
+			mListItem.setSys_value(mDrone.getBattery().getBattCurrent());
 		} else if (sys_tag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
 			mListItem.setSys_value(mDrone.getGps().getSatCount());
 		} else if (sys_tag.equalsIgnoreCase("SYS_DEF_ALT")) {
-			mListItem.setSys_value(mDrone.mission.getDefaultAlt().valueInMeters());
+			mListItem.setSys_value(mDrone.getMission().getDefaultAlt().valueInMeters());
 		} else if (sys_tag.equalsIgnoreCase("SYS_ARM_STATE")) {
 			mListItem.setSys_activated(mDrone.getState().isArmed());
 		} else if (sys_tag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
 			mListItem.setSys_activated(mDrone.getState().isFailsafe());
 		} else if (sys_tag.equalsIgnoreCase("SYS_CONNECTION_STATE")) {
-			mListItem.setSys_activated(mDrone.MavClient.isConnected());
+			mListItem.setSys_activated(mDrone.getMavClient().isConnected());
 		}
 	}
 

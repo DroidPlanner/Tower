@@ -42,7 +42,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 			disableFollowMe();
 			drone.getState().changeFlightMode(ApmModes.ROTOR_LOITER);
 		} else {
-			if (drone.MavClient.isConnected()) {
+			if (drone.getMavClient().isConnected()) {
 				if (drone.getState().isArmed()) {
 					drone.getState().changeFlightMode(ApmModes.ROTOR_GUIDED);
 					enableFollowMe();

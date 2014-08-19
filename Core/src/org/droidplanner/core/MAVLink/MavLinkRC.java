@@ -17,6 +17,6 @@ public class MavLinkRC {
 		msg.chan8_raw = (short) rcOutputs[7];
 		msg.target_system = 1;
 		msg.target_component = 1;
-		drone.MavClient.sendMavPacket(msg.pack());
+		drone.getMavClient().sendMavPacket(msg.pack());
 	}
 }

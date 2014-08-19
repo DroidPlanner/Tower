@@ -16,7 +16,7 @@ public class MavLinkWaypoint {
 		msg.target_system = 1;
 		msg.target_component = 1;
 		msg.type = MAV_MISSION_RESULT.MAV_MISSION_ACCEPTED;
-		drone.MavClient.sendMavPacket(msg.pack());
+		drone.getMavClient().sendMavPacket(msg.pack());
 
 	}
 
@@ -25,14 +25,14 @@ public class MavLinkWaypoint {
 		msg.target_system = 1;
 		msg.target_component = 1;
 		msg.seq = (short) index;
-		drone.MavClient.sendMavPacket(msg.pack());
+		drone.getMavClient().sendMavPacket(msg.pack());
 	}
 
 	public static void requestWaypointsList(Drone drone) {
 		msg_mission_request_list msg = new msg_mission_request_list();
 		msg.target_system = 1;
 		msg.target_component = 1;
-		drone.MavClient.sendMavPacket(msg.pack());
+		drone.getMavClient().sendMavPacket(msg.pack());
 	}
 
 	public static void sendWaypointCount(Drone drone, int count) {
@@ -40,7 +40,7 @@ public class MavLinkWaypoint {
 		msg.target_system = 1;
 		msg.target_component = 1;
 		msg.count = (short) count;
-		drone.MavClient.sendMavPacket(msg.pack());
+		drone.getMavClient().sendMavPacket(msg.pack());
 	}
 
 	public static void sendSetCurrentWaypoint(Drone drone, short i) {
@@ -48,7 +48,7 @@ public class MavLinkWaypoint {
 		msg.target_system = 1;
 		msg.target_component = 1;
 		msg.seq = i;
-		drone.MavClient.sendMavPacket(msg.pack());
+		drone.getMavClient().sendMavPacket(msg.pack());
 	}
 
 }

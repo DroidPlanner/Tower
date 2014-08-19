@@ -109,7 +109,7 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements OnCa
 	protected SetupSidePanel getInitialPanel() {
 
 		if (parameters != null && !parameters.isParameterDownloaded()
-				&& drone.MavClient.isConnected()) {
+				&& drone.getMavClient().isConnected()) {
 			downloadCalibrationData();
 		} else {
 			sidePanel = getDefaultPanel();
@@ -135,7 +135,7 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements OnCa
 	}
 
 	private void uploadCalibrationData() {
-		if (parameters == null || !drone.MavClient.isConnected())
+		if (parameters == null || !drone.getMavClient().isConnected())
 			return;
 
 		sidePanel = getProgressPanel(true);
@@ -145,7 +145,7 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements OnCa
 	}
 
 	private void downloadCalibrationData() {
-		if (parameters == null || !drone.MavClient.isConnected())
+		if (parameters == null || !drone.getMavClient().isConnected())
 			return;
 		sidePanel = getProgressPanel(false);
 		parameters.getCalibrationParameters(drone);

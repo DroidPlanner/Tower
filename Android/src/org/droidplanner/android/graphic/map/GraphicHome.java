@@ -15,7 +15,7 @@ public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 	private Home home;
 
 	public GraphicHome(Drone drone) {
-		home = drone.home;
+		home = drone.getHome();
 	}
 
 	public boolean isValid() {

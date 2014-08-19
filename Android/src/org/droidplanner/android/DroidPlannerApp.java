@@ -1,7 +1,6 @@
 package org.droidplanner.android;
 
 import org.droidplanner.android.communication.service.MAVLinkClient;
-import org.droidplanner.android.communication.service.NetworkConnectivityReceiver;
 import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.gcs.follow.Follow;
 import org.droidplanner.android.notifications.NotificationHandler;
@@ -66,7 +65,7 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 		drone = new Drone(MAVClient, clock, handler, pref);
 		getDrone().addDroneListener(this);
 
-		missionProxy = new MissionProxy(getDrone().mission);
+		missionProxy = new MissionProxy(getDrone().getMission());
 		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(getDrone());
 
 		followMe = new Follow(this, getDrone(), handler);

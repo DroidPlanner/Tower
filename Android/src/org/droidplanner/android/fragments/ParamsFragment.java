@@ -166,7 +166,7 @@ public class ParamsFragment extends ListFragment implements
 	}
 
 	private void refreshParameters() {
-		if (drone.MavClient.isConnected()) {
+		if (drone.getMavClient().isConnected()) {
 			drone.getParameters().getAllParameters();
 		} else {
 			Toast.makeText(getActivity(), R.string.msg_connect_first, Toast.LENGTH_SHORT).show();

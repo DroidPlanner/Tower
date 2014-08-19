@@ -93,7 +93,7 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 	private void onModeUpdate(ApmModes mode) {
 		// Update the info panel fragment
 		Fragment infoPanel;
-		if (mParentActivity == null || !mParentActivity.drone.MavClient.isConnected()) {
+		if (mParentActivity == null || !mParentActivity.drone.getMavClient().isConnected()) {
 			infoPanel = new ModeDisconnectedFragment();
 		} else {
 			switch (mode) {

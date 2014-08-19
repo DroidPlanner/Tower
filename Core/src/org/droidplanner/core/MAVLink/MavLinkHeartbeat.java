@@ -38,7 +38,7 @@ public class MavLinkHeartbeat {
 	 */
 	public static void sendMavHeartbeat(Drone drone) {
 		if (drone != null)
-			drone.MavClient.sendMavPacket(sMsgPacket);
+			drone.getMavClient().sendMavPacket(sMsgPacket);
 	}
 
 }

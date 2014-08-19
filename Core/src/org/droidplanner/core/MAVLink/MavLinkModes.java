@@ -25,7 +25,7 @@ public class MavLinkModes {
 		msg.autocontinue = 1; // TODO use correct parameter
 		msg.target_system = 1;
 		msg.target_component = 1;
-		drone.MavClient.sendMavPacket(msg.pack());
+		drone.getMavClient().sendMavPacket(msg.pack());
 	}
 
 	public static void changeFlightMode(Drone drone, ApmModes mode) {
@@ -33,6 +33,6 @@ public class MavLinkModes {
 		msg.target_system = 1;
 		msg.base_mode = 1; // TODO use meaningful constant
 		msg.custom_mode = mode.getNumber();
-		drone.MavClient.sendMavPacket(msg.pack());
+		drone.getMavClient().sendMavPacket(msg.pack());
 	}
 }

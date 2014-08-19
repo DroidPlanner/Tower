@@ -17,21 +17,21 @@ public class CheckListSysLink {
 			return;
 
 		if (mSysTag.equalsIgnoreCase("SYS_BATTREM_LVL")) {
-			mListItem.setSys_value(drone.battery.getBattRemain());
+			mListItem.setSys_value(drone.getBattery().getBattRemain());
 		} else if (mSysTag.equalsIgnoreCase("SYS_BATTVOL_LVL")) {
-			mListItem.setSys_value(drone.battery.getBattVolt());
+			mListItem.setSys_value(drone.getBattery().getBattVolt());
 		} else if (mSysTag.equalsIgnoreCase("SYS_BATTCUR_LVL")) {
-			mListItem.setSys_value(drone.battery.getBattCurrent());
+			mListItem.setSys_value(drone.getBattery().getBattCurrent());
 		} else if (mSysTag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
 			mListItem.setSys_value(drone.getGps().getSatCount());
 		} else if (mSysTag.equalsIgnoreCase("SYS_DEF_ALT")) {
-			mListItem.setSys_value(drone.mission.getDefaultAlt().valueInMeters());
+			mListItem.setSys_value(drone.getMission().getDefaultAlt().valueInMeters());
 		} else if (mSysTag.equalsIgnoreCase("SYS_ARM_STATE")) {
 			mListItem.setSys_activated(drone.getState().isArmed());
 		} else if (mSysTag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
 			mListItem.setSys_activated(drone.getState().isFailsafe());
 		} else if (mSysTag.equalsIgnoreCase("SYS_CONNECTION_STATE")) {
-			mListItem.setSys_activated(drone.MavClient.isConnected());
+			mListItem.setSys_activated(drone.getMavClient().isConnected());
 		}
 	}
 
@@ -53,11 +53,11 @@ public class CheckListSysLink {
 	}
 
 	private void doDefAlt(CheckListItem checkListItem) {
-		drone.mission.setDefaultAlt(new Altitude(checkListItem.getFloatValue()));
+		drone.getMission().setDefaultAlt(new Altitude(checkListItem.getFloatValue()));
 	}
 
 	private void doSysArm(CheckListItem checkListItem) {
-		if (drone.MavClient.isConnected()) {
+		if (drone.getMavClient().isConnected()) {
 			if (checkListItem.isSys_activated() && !drone.getState().isArmed()) {
 				drone.notifyDroneEvent(DroneEventsType.ARMING_STARTED);
 				MavLinkArm.sendArmMessage(drone, true);
@@ -69,9 +69,9 @@ public class CheckListSysLink {
 
 	private void doSysConnect(CheckListItem checkListItem) {
 		boolean activated = checkListItem.isSys_activated();
-		boolean connected = drone.MavClient.isConnected();
+		boolean connected = drone.getMavClient().isConnected();
 		if (activated != connected) {
-			drone.MavClient.toggleConnectionState();
+			drone.getMavClient().toggleConnectionState();
 		}
 	}
 

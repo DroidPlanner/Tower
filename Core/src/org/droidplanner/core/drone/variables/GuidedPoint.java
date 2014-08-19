@@ -120,7 +120,7 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 	}
 
 	private double getDroneAltConstained() {
-		double alt = Math.floor(myDrone.altitude.getAltitude());
+		double alt = Math.floor(myDrone.getAltitude().getAltitude());
 		return Math.max(alt, 2.0);
 	}
 

@@ -96,7 +96,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		super.onStart();
 		maxVolumeIfEnabled();
 		drone.addDroneListener(this);
-		drone.MavClient.queryConnectionState();
+		drone.getMavClient().queryConnectionState();
 		drone.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
 	}
 
@@ -157,7 +157,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 			infoBar = (InfoBarActionProvider) infoBarItem.getActionProvider();
 
 		// Configure the info bar action provider if we're connected
-		if (drone.MavClient.isConnected()) {
+		if (drone.getMavClient().isConnected()) {
 			menu.setGroupEnabled(R.id.menu_group_connected, true);
 			menu.setGroupVisible(R.id.menu_group_connected, true);
 
@@ -186,11 +186,11 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_send_mission:
-			drone.mission.sendMissionToAPM();
+			drone.getMission().sendMissionToAPM();
 			return true;
 
 		case R.id.menu_load_mission:
-			drone.waypointManager.getWaypoints();
+			drone.getWaypointManager().getWaypoints();
 			return true;
 
 		case android.R.id.home:
@@ -222,7 +222,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	}
 
 	protected void toggleDroneConnection() {
-		if (!drone.MavClient.isConnected()) {
+		if (!drone.getMavClient().isConnected()) {
 			final String connectionType = mAppPrefs.getMavLinkConnectionType();
 
 			if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
@@ -235,7 +235,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 				}
 			}
 		}
-		drone.MavClient.toggleConnectionState();
+		drone.getMavClient().toggleConnectionState();
 	}
 
 	private void setMapTypeFromItemId(int itemId) {

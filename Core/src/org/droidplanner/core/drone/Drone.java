@@ -2,6 +2,7 @@ package org.droidplanner.core.drone;
 
 import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
 
+import org.droidplanner.core.MAVLink.MAVLinkStreams;
 import org.droidplanner.core.MAVLink.MAVLinkStreams.MAVLinkOutputStream;
 import org.droidplanner.core.MAVLink.WaypointManager;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
@@ -27,6 +28,7 @@ import org.droidplanner.core.drone.variables.StreamRates;
 import org.droidplanner.core.drone.variables.Type;
 import org.droidplanner.core.firmware.FirmwareType;
 import org.droidplanner.core.mission.Mission;
+import org.droidplanner.core.model.AbstractDrone;
 
 public class Drone implements AbstractDrone {
 
@@ -34,26 +36,28 @@ public class Drone implements AbstractDrone {
 	private final Type type = new Type(this);
     private VehicleProfile profile;
 	private final GPS GPS = new GPS(this);
-	public final RC RC = new RC(this);
-	public final Speed speed = new Speed(this);
-	public final Battery battery = new Battery(this);
-	public final Radio radio = new Radio(this);
-	public final Home home = new Home(this);
-	public final Mission mission = new Mission(this);
-	public final MissionStats missionStats = new MissionStats(this);
-	public final StreamRates streamRates = new StreamRates(this);
-	public final Altitude altitude = new Altitude(this);
-	public final Orientation orientation = new Orientation(this);
-	public final Navigation navigation = new Navigation(this);
-	public final GuidedPoint guidedPoint = new GuidedPoint(this);
-	public final Calibration calibrationSetup = new Calibration(this);
-	public final WaypointManager waypointManager = new WaypointManager(this);
-	private final State state;
+
+	private final RC RC = new RC(this);
+	private final Speed speed = new Speed(this);
+	private final Battery battery = new Battery(this);
+	private final Radio radio = new Radio(this);
+	private final Home home = new Home(this);
+	private final Mission mission = new Mission(this);
+	private final MissionStats missionStats = new MissionStats(this);
+	private final StreamRates streamRates = new StreamRates(this);
+	private final Altitude altitude = new Altitude(this);
+	private final Orientation orientation = new Orientation(this);
+	private final Navigation navigation = new Navigation(this);
+	private final GuidedPoint guidedPoint = new GuidedPoint(this);
+	private final Calibration calibrationSetup = new Calibration(this);
+	private final WaypointManager waypointManager = new WaypointManager(this);
+
+    private final State state;
 	private final HeartBeat heartbeat;
 	private final Parameters parameters;
 
-	public final MAVLinkOutputStream MavClient;
-	public final Preferences preferences;
+	private final MAVLinkOutputStream MavClient;
+	private final Preferences preferences;
 
 	public Drone(MAVLinkOutputStream mavClient, Clock clock, Handler handler, Preferences pref) {
 		this.MavClient = mavClient;
@@ -141,5 +145,79 @@ public class Drone implements AbstractDrone {
     @Override
     public VehicleProfile getVehicleProfile() {
         return profile;
+    }
+
+    @Override
+    public MAVLinkOutputStream getMavClient() {
+        return MavClient;
+    }
+
+    @Override
+    public Preferences getPreferences() {
+        return preferences;
+    }
+
+    @Override
+    public WaypointManager getWaypointManager() {
+        return waypointManager;
+    }
+
+    public RC getRC() {
+        return RC;
+    }
+
+    @Override
+    public Speed getSpeed() {
+        return speed;
+    }
+
+    @Override
+    public Battery getBattery() {
+        return battery;
+    }
+
+    @Override
+    public Radio getRadio() {
+        return radio;
+    }
+
+    @Override
+    public Home getHome() {
+        return home;
+    }
+
+    public Mission getMission() {
+        return mission;
+    }
+
+    public MissionStats getMissionStats() {
+        return missionStats;
+    }
+
+    public StreamRates getStreamRates() {
+        return streamRates;
+    }
+
+    @Override
+    public Altitude getAltitude() {
+        return altitude;
+    }
+
+    @Override
+    public Orientation getOrientation() {
+        return orientation;
+    }
+
+    @Override
+    public Navigation getNavigation() {
+        return navigation;
+    }
+
+    public GuidedPoint getGuidedPoint() {
+        return guidedPoint;
+    }
+
+    public Calibration getCalibrationSetup() {
+        return calibrationSetup;
     }
 }
