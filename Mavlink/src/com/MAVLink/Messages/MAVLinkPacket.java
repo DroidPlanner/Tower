@@ -76,7 +76,6 @@ public class MAVLinkPacket implements Serializable {
 	 */
 	public boolean payloadIsFilled() {
 		if (payload.size() >= MAVLinkPayload.MAX_PAYLOAD_SIZE-1) {
-			Log.d("MAV","Buffer overflow");
 			return true;
 		}
 		return (payload.size() == len);
