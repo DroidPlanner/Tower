@@ -201,8 +201,8 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 				1,
 				TextUtils.normal(
 						"Satellite:   ",
-						TextUtils.bold(String.format("%d, %s", drone.GPS.getSatCount(),
-								drone.GPS.getFixType()))));
+						TextUtils.bold(String.format("%d, %s", drone.getGps().getSatCount(),
+								drone.getGps().getFixType()))));
 	}
 
 	private void updateBattery(Drone drone) {

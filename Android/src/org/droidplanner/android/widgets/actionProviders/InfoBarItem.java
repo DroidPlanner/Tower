@@ -134,10 +134,10 @@ public abstract class InfoBarItem {
 					update = "--";
 				} else if (mAppPrefs.shouldGpsHdopBeDisplayed()) {
 					update = String.format(Locale.ENGLISH, "Satellite\n%d, %.1f",
-							drone.GPS.getSatCount(), drone.GPS.getGpsEPH());
+							drone.getGps().getSatCount(), drone.getGps().getGpsEPH());
 				} else {
 					update = String.format(Locale.ENGLISH, "Satellite\n%d, %s",
-							drone.GPS.getSatCount(), drone.GPS.getFixType());
+							drone.getGps().getSatCount(), drone.getGps().getFixType());
 				}
 
 				((TextView) mItemView).setText(update);

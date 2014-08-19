@@ -23,7 +23,7 @@ public class CheckListSysLink {
 		} else if (mSysTag.equalsIgnoreCase("SYS_BATTCUR_LVL")) {
 			mListItem.setSys_value(drone.battery.getBattCurrent());
 		} else if (mSysTag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
-			mListItem.setSys_value(drone.GPS.getSatCount());
+			mListItem.setSys_value(drone.getGps().getSatCount());
 		} else if (mSysTag.equalsIgnoreCase("SYS_DEF_ALT")) {
 			mListItem.setSys_value(drone.mission.getDefaultAlt().valueInMeters());
 		} else if (mSysTag.equalsIgnoreCase("SYS_ARM_STATE")) {

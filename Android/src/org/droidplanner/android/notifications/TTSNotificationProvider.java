@@ -116,7 +116,7 @@ public class TTSNotificationProvider implements OnInitListener,
 				speak("Waypoints saved to Drone");
 				break;
 			case GPS_FIX:
-				speakGpsMode(drone.GPS.getFixTypeNumeric());
+				speakGpsMode(drone.getGps().getFixTypeNumeric());
 				break;
 			case MISSION_RECEIVED:
 				Toast.makeText(context, "Waypoints received from Drone", Toast.LENGTH_SHORT).show();

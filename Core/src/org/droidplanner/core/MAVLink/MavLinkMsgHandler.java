@@ -67,8 +67,8 @@ public class MavLinkMsgHandler {
 			break;
 
 		case msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
-			drone.GPS.setPosition(new Coord2D(((msg_global_position_int) msg).lat / 1E7,
-					((msg_global_position_int) msg).lon / 1E7));
+			drone.getGps().setPosition(new Coord2D(((msg_global_position_int) msg).lat / 1E7,
+                    ((msg_global_position_int) msg).lon / 1E7));
 			break;
 		case msg_sys_status.MAVLINK_MSG_ID_SYS_STATUS:
 			msg_sys_status m_sys = (msg_sys_status) msg;
@@ -81,8 +81,8 @@ public class MavLinkMsgHandler {
 					m_radio.remrssi, m_radio.txbuf, m_radio.noise, m_radio.remnoise);
 			break;
 		case msg_gps_raw_int.MAVLINK_MSG_ID_GPS_RAW_INT:
-			drone.GPS.setGpsState(((msg_gps_raw_int) msg).fix_type,
-					((msg_gps_raw_int) msg).satellites_visible, ((msg_gps_raw_int) msg).eph);
+			drone.getGps().setGpsState(((msg_gps_raw_int) msg).fix_type,
+                    ((msg_gps_raw_int) msg).satellites_visible, ((msg_gps_raw_int) msg).eph);
 			break;
 		case msg_rc_channels_raw.MAVLINK_MSG_ID_RC_CHANNELS_RAW:
 			drone.RC.setRcInputValues((msg_rc_channels_raw) msg);

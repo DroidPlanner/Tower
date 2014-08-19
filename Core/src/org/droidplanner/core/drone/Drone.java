@@ -30,7 +30,7 @@ public class Drone implements AbstractDrone {
 	private final DroneEvents events = new DroneEvents(this);
 	public final Type type = new Type(this);
 	public final Profile profile = new Profile(this);
-	public final GPS GPS = new GPS(this);
+	private final GPS GPS = new GPS(this);
 	public final RC RC = new RC(this);
 	public final Speed speed = new Speed(this);
 	public final Battery battery = new Battery(this);
@@ -88,5 +88,10 @@ public class Drone implements AbstractDrone {
     @Override
     public void notifyDroneEvent(DroneEventsType event) {
         events.notifyDroneEvent(event);
+    }
+
+    @Override
+    public GPS getGps() {
+        return GPS;
     }
 }

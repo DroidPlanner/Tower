@@ -290,7 +290,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 	@Override
 	public void goToDroneLocation() {
 		final int currentZoomLevel = mMapView.getZoomLevel();
-		final Coord2D droneLocation = mDrone.GPS.getPosition();
+		final Coord2D droneLocation = mDrone.getGps().getPosition();
 		updateCamera(droneLocation, currentZoomLevel);
 	}
 

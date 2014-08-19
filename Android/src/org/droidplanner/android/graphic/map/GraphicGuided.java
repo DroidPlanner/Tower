@@ -25,7 +25,7 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSo
 
 	public GraphicGuided(Drone drone) {
 		guidedPoint = drone.guidedPoint;
-		GPS = drone.GPS;
+		GPS = drone.getGps();
 	}
 
 	@Override
