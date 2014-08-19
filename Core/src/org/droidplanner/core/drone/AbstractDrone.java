@@ -3,6 +3,7 @@ package org.droidplanner.core.drone;
 import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
 
 import org.droidplanner.core.drone.profiles.Parameters;
+import org.droidplanner.core.drone.profiles.VehicleProfile;
 import org.droidplanner.core.drone.variables.GPS;
 import org.droidplanner.core.drone.variables.State;
 import org.droidplanner.core.firmware.FirmwareType;
@@ -33,4 +34,8 @@ public interface AbstractDrone {
     public int getType();
 
     public FirmwareType getFirmwareType();
+
+    public void loadVehicleProfile();
+
+    public VehicleProfile getVehicleProfile();
 }

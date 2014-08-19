@@ -8,7 +8,7 @@ import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.profiles.Parameters;
-import org.droidplanner.core.drone.profiles.Profile;
+import org.droidplanner.core.drone.profiles.VehicleProfile;
 import org.droidplanner.core.drone.variables.Altitude;
 import org.droidplanner.core.drone.variables.Battery;
 import org.droidplanner.core.drone.variables.Calibration;
@@ -31,8 +31,8 @@ import org.droidplanner.core.mission.Mission;
 public class Drone implements AbstractDrone {
 
 	private final DroneEvents events = new DroneEvents(this);
-	public final Type type = new Type(this);
-	public final Profile profile = new Profile(this);
+	private final Type type = new Type(this);
+    private VehicleProfile profile;
 	private final GPS GPS = new GPS(this);
 	public final RC RC = new RC(this);
 	public final Speed speed = new Speed(this);
@@ -61,7 +61,7 @@ public class Drone implements AbstractDrone {
 		state = new State(this, clock, handler);
 		heartbeat = new HeartBeat(this, handler);
 		parameters = new Parameters(this, handler);
-		profile.load();
+		loadVehicleProfile();
 	}
 
 	public void setAltitudeGroundAndAirSpeeds(double altitude, double groundSpeed, double airSpeed,
@@ -131,5 +131,15 @@ public class Drone implements AbstractDrone {
     @Override
     public FirmwareType getFirmwareType() {
         return type.getFirmwareType();
+    }
+
+    @Override
+    public void loadVehicleProfile() {
+        preferences.loadVehicleProfile(getFirmwareType());
+    }
+
+    @Override
+    public VehicleProfile getVehicleProfile() {
+        return profile;
     }
 }

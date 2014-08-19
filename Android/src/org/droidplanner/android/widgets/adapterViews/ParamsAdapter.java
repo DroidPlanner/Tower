@@ -170,7 +170,7 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 
 		// get metadata type from profile, bail if none
 		final String metadataType;
-		final VehicleProfile profile = drone.profile.getProfile();
+		final VehicleProfile profile = drone.getVehicleProfile();
 		if (profile == null || (metadataType = profile.getParameterMetadataType()) == null)
 			return;
 
