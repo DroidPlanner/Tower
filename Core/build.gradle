@@ -21,7 +21,7 @@ dependencies {
     //FIXME: hackish implementation
     unitTestCompile files("$project.buildDir/intermediates/classes/release")
     unitTestCompile files("${project(':Mavlink').buildDir}/intermediates/classes/release")
-    unitTestCompile 'junit:junit:3.+'
+    unitTestCompile 'junit:junit:3.8.1'
 }
 
 android {
