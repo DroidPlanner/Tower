@@ -31,7 +31,7 @@ public class Battery extends DroneVariable {
 			this.battVolt = battVolt;
 			this.battRemain = battRemain;
 			this.battCurrent = battCurrent;
-			myDrone.events.notifyDroneEvent(DroneEventsType.BATTERY);
+			myDrone.notifyDroneEvent(DroneEventsType.BATTERY);
 		}
 	}
 }

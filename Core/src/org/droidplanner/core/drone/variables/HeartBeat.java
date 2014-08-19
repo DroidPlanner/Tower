@@ -38,7 +38,7 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 	public HeartBeat(Drone myDrone, Handler handler) {
 		super(myDrone);
 		this.watchdog = handler;
-		myDrone.events.addDroneListener(this);
+		myDrone.addDroneListener(this);
 	}
 
 	/**
@@ -54,10 +54,10 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 
 		switch (heartbeatState) {
 		case FIRST_HEARTBEAT:
-			myDrone.events.notifyDroneEvent(DroneEventsType.HEARTBEAT_FIRST);
+			myDrone.notifyDroneEvent(DroneEventsType.HEARTBEAT_FIRST);
 			break;
 		case LOST_HEARTBEAT:
-			myDrone.events.notifyDroneEvent(DroneEventsType.HEARTBEAT_RESTORED);
+			myDrone.notifyDroneEvent(DroneEventsType.HEARTBEAT_RESTORED);
 			break;
 		case NORMAL_HEARTBEAT:
 			break;
@@ -94,7 +94,7 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 	private void onHeartbeatTimeout() {
 		heartbeatState = HeartbeatState.LOST_HEARTBEAT;
 		restartWatchdog(HEARTBEAT_LOST_TIMEOUT);
-		myDrone.events.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
+		myDrone.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
 	}
 
 	private void restartWatchdog(long timeout) {

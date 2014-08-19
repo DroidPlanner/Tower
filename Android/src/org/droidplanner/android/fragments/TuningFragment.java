@@ -64,14 +64,14 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 	@Override
 	public void onStart() {
 		super.onStart();
-		drone.events.addDroneListener(this);
+		drone.addDroneListener(this);
 		setupDataStreamingForTuning();
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		drone.events.removeDroneListener(this);
+		drone.removeDroneListener(this);
 		drone.streamRates.setupStreamRatesFromPref();
 	}
 

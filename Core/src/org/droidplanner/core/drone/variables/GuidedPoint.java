@@ -22,7 +22,7 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 
     public GuidedPoint(Drone myDrone) {
 		super(myDrone);
-		myDrone.events.addDroneListener(this);
+		myDrone.addDroneListener(this);
 	}
 
 	@Override
@@ -64,13 +64,13 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 			coord = myDrone.GPS.getPosition();
 			altitude.set(getDroneAltConstained());
 			state = GuidedStates.IDLE;
-			myDrone.events.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
+			myDrone.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
 		}
 	}
 
 	private void disable() {
 		state = GuidedStates.UNINITIALIZED;
-		myDrone.events.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
+		myDrone.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
 	}
 
 	private void changeAlt(double altChange) {
@@ -113,7 +113,7 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 
 	private void sendGuidedPoint() {
 		if (state == GuidedStates.ACTIVE) {
-			myDrone.events.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
+			myDrone.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
 			MavLinkModes.setGuidedMode(myDrone, coord.getLat(), coord.getLng(),
 					altitude.valueInMeters());
 		}

@@ -52,14 +52,13 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 	@Override
 	public void onStart() {
 		super.onStart();
-		((DroidPlannerApp) getActivity().getApplication()).getDrone().events.addDroneListener(this);
+		((DroidPlannerApp) getActivity().getApplication()).getDrone().addDroneListener(this);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		((DroidPlannerApp) getActivity().getApplication()).getDrone().events
-				.removeDroneListener(this);
+		((DroidPlannerApp) getActivity().getApplication()).getDrone().removeDroneListener(this);
 	}
 
 	@Override

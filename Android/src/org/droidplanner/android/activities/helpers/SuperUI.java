@@ -95,9 +95,9 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	protected void onStart() {
 		super.onStart();
 		maxVolumeIfEnabled();
-		drone.events.addDroneListener(this);
+		drone.addDroneListener(this);
 		drone.MavClient.queryConnectionState();
-		drone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
+		drone.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
 	}
 
 	private void maxVolumeIfEnabled() {
@@ -111,7 +111,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	@Override
 	protected void onStop() {
 		super.onStop();
-		drone.events.removeDroneListener(this);
+		drone.removeDroneListener(this);
 
 		if (infoBar != null) {
 			infoBar.setDrone(null);

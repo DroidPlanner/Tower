@@ -62,18 +62,18 @@ public class GPS extends DroneVariable {
 		if (satCount != satellites_visible) {
 			satCount = satellites_visible;
 			gps_eph = (double) eph / 100; // convert from eph(cm) to gps_eph(m)
-			myDrone.events.notifyDroneEvent(DroneEventsType.GPS_COUNT);
+			myDrone.notifyDroneEvent(DroneEventsType.GPS_COUNT);
 		}
 		if (fixType != fix) {
 			fixType = fix;
-			myDrone.events.notifyDroneEvent(DroneEventsType.GPS_FIX);
+			myDrone.notifyDroneEvent(DroneEventsType.GPS_FIX);
 		}
 	}
 
 	public void setPosition(Coord2D position) {
 		if (this.position != position) {
 			this.position = position;
-			myDrone.events.notifyDroneEvent(DroneEventsType.GPS);
+			myDrone.notifyDroneEvent(DroneEventsType.GPS);
 		}
 	}
 }

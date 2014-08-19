@@ -11,7 +11,7 @@ public class StreamRates extends DroneVariable implements OnDroneListener {
 
 	public StreamRates(Drone myDrone) {
 		super(myDrone);
-		myDrone.events.addDroneListener(this);
+		myDrone.addDroneListener(this);
 	}
 
 	@Override

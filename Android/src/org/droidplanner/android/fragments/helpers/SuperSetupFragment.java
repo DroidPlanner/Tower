@@ -98,13 +98,13 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 
 	@Override
 	public void onStart() {
-		drone.events.addDroneListener(this);
+		drone.addDroneListener(this);
 		super.onStart();
 	}
 
 	@Override
 	public void onStop() {
-		drone.events.removeDroneListener(this);
+		drone.removeDroneListener(this);
 		super.onStop();
 	}
 

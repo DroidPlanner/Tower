@@ -40,7 +40,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnClickLis
 		setupListener();
 		updateLabel();
 
-		drone.events.addDroneListener(this);
+		drone.addDroneListener(this);
 		return view;
 	}
 

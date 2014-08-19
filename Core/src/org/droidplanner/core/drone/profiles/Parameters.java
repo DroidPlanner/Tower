@@ -50,7 +50,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 	public Parameters(Drone myDrone, Handler handler) {
 		super(myDrone);
 		this.watchdog = handler;
-		myDrone.events.addDroneListener(this);
+		myDrone.addDroneListener(this);
 	}
 
 	public void getAllParameters() {
@@ -94,7 +94,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 				parameterList.add(parameters.get(key));
 			}
 			killWatchdog();
-			myDrone.events.notifyDroneEvent(DroneEventsType.PARAMETERS_DOWNLOADED);
+			myDrone.notifyDroneEvent(DroneEventsType.PARAMETERS_DOWNLOADED);
 
 			if (parameterListener != null) {
 				parameterListener.onEndReceivingParameters(parameterList);
@@ -102,7 +102,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 		} else {
 			resetWatchdog();
 		}
-		myDrone.events.notifyDroneEvent(DroneEventsType.PARAMETER);
+		myDrone.notifyDroneEvent(DroneEventsType.PARAMETER);
 	}
 
 	private void reRequestMissingParams(int howManyParams) {

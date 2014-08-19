@@ -35,7 +35,7 @@ public class Calibration extends DroneVariable {
 			if (mavMsg.contains("Calibration"))
 				Calibration.calibrating = false;
 
-			myDrone.events.notifyDroneEvent(DroneEventsType.CALIBRATION_IMU);
+			myDrone.notifyDroneEvent(DroneEventsType.CALIBRATION_IMU);
 		}
 	}
 

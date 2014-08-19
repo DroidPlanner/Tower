@@ -48,13 +48,13 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements OnCa
 	@Override
 	public void onResume() {
 		super.onResume();
-		drone.events.addDroneListener(this);
+		drone.addDroneListener(this);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		drone.events.removeDroneListener(this);
+		drone.removeDroneListener(this);
 	}
 
 	@Override

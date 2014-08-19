@@ -24,7 +24,7 @@ public class RC extends DroneVariable {
 		in[5] = msg.chan6_raw;
 		in[6] = msg.chan7_raw;
 		in[7] = msg.chan8_raw;
-		myDrone.events.notifyDroneEvent(DroneEventsType.RC_IN);
+		myDrone.notifyDroneEvent(DroneEventsType.RC_IN);
 	}
 
 	public void setRcOutputValues(msg_servo_output_raw msg) {
@@ -36,7 +36,7 @@ public class RC extends DroneVariable {
 		out[5] = msg.servo6_raw;
 		out[6] = msg.servo7_raw;
 		out[7] = msg.servo8_raw;
-		myDrone.events.notifyDroneEvent(DroneEventsType.RC_OUT);
+		myDrone.notifyDroneEvent(DroneEventsType.RC_OUT);
 	}
 
 }

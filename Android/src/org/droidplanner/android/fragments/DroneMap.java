@@ -80,14 +80,14 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 	@Override
 	public void onPause() {
 		super.onPause();
-		drone.events.removeDroneListener(this);
+		drone.removeDroneListener(this);
 		mMapFragment.saveCameraPosition();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		drone.events.addDroneListener(this);
+		drone.addDroneListener(this);
 		mMapFragment.loadCameraPosition();
 		update();
 	}

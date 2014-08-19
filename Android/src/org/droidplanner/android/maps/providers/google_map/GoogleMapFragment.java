@@ -201,7 +201,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 		if (mPanMode.compareAndSet(current, update)) {
 			switch (current) {
 			case DRONE:
-				mDrone.events.removeDroneListener(this);
+				mDrone.removeDroneListener(this);
 				break;
 
 			case USER:
@@ -219,7 +219,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
 			switch (update) {
 			case DRONE:
-				mDrone.events.addDroneListener(this);
+				mDrone.addDroneListener(this);
 				break;
 
 			case USER:

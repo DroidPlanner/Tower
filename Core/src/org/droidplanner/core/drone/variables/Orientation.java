@@ -29,7 +29,7 @@ public class Orientation extends DroneVariable {
 		this.roll = roll;
 		this.pitch = pitch;
 		this.yaw = yaw;
-		myDrone.events.notifyDroneEvent(DroneEventsType.ATTITUDE);
+		myDrone.notifyDroneEvent(DroneEventsType.ATTITUDE);
 	}
 
 }

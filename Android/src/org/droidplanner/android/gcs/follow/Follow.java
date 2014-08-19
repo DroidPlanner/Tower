@@ -34,7 +34,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 		followAlgorithm = new FollowLeash(drone, new Length(5.0));
 		locationFinder = new FusedLocation(context, this);
 		roiEstimator = new ROIEstimator(handler,drone);
-		drone.events.addDroneListener(this);
+		drone.addDroneListener(this);
 	}
 
 	public void toggleFollowMeState() {
@@ -56,7 +56,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 	}
 
 	private void enableFollowMe() {
-		drone.events.notifyDroneEvent(DroneEventsType.FOLLOW_START);
+		drone.notifyDroneEvent(DroneEventsType.FOLLOW_START);
 		Log.d("follow", "enable");
 		Toast.makeText(context, "FollowMe Enabled", Toast.LENGTH_SHORT).show();
 		
@@ -106,7 +106,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 
 	public void setType(FollowModes item) {
 		followAlgorithm = item.getAlgorithmType(drone);
-		drone.events.notifyDroneEvent(DroneEventsType.FOLLOW_CHANGE_TYPE);
+		drone.notifyDroneEvent(DroneEventsType.FOLLOW_CHANGE_TYPE);
 	}
 
 	public void changeRadius(double increment) {

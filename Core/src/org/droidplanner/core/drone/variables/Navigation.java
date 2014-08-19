@@ -18,7 +18,7 @@ public class Navigation extends DroneVariable {
 		this.nav_pitch = nav_pitch;
 		this.nav_roll = nav_roll;
 		this.nav_bearing = nav_bearing;
-		myDrone.events.notifyDroneEvent(DroneEventsType.NAVIGATION);
+		myDrone.notifyDroneEvent(DroneEventsType.NAVIGATION);
 	}
 
 	public double getNavPitch() {

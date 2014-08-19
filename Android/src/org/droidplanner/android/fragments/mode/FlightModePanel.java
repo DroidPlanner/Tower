@@ -62,7 +62,7 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 		super.onStart();
 
 		if (mParentActivity != null) {
-			mParentActivity.drone.events.addDroneListener(this);
+			mParentActivity.drone.addDroneListener(this);
 		}
 	}
 
@@ -71,7 +71,7 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 		super.onStop();
 
 		if (mParentActivity != null) {
-			mParentActivity.drone.events.removeDroneListener(this);
+			mParentActivity.drone.removeDroneListener(this);
 		}
 	}
 

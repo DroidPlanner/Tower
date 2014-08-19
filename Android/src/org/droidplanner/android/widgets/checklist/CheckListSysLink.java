@@ -59,7 +59,7 @@ public class CheckListSysLink {
 	private void doSysArm(CheckListItem checkListItem) {
 		if (drone.MavClient.isConnected()) {
 			if (checkListItem.isSys_activated() && !drone.state.isArmed()) {
-				drone.events.notifyDroneEvent(DroneEventsType.ARMING_STARTED);
+				drone.notifyDroneEvent(DroneEventsType.ARMING_STARTED);
 				MavLinkArm.sendArmMessage(drone, true);
 			} else {
 				MavLinkArm.sendArmMessage(drone, false);

@@ -106,7 +106,7 @@ public class Mission extends DroneVariable {
 	 * of this class
 	 */
 	public void notifyMissionUpdate() {
-		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
+		myDrone.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
 	}
 
 	/**
@@ -147,7 +147,7 @@ public class Mission extends DroneVariable {
 	}
 
 	public void onWriteWaypoints(msg_mission_ack msg) {
-		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_SENT);
+		myDrone.notifyDroneEvent(DroneEventsType.MISSION_SENT);
 	}
 
 	public List<MissionItem> getItems() {
@@ -195,7 +195,7 @@ public class Mission extends DroneVariable {
 			msgs.remove(0); // Remove Home waypoint
 			items.clear();
 			items.addAll(processMavLinkMessages(msgs));
-			myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
+			myDrone.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
 			notifyMissionUpdate();
 		}
 	}
@@ -206,7 +206,7 @@ public class Mission extends DroneVariable {
             msgs.remove(0); // Remove Home waypoint
             items.clear();
             items.addAll(processMavLinkMessages(msgs));
-            myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
+            myDrone.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
             notifyMissionUpdate();
         }
     }

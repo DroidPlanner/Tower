@@ -52,7 +52,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	@Override
 	public void onStart() {
 		super.onStart();
-		drone.events.addDroneListener(this);
+		drone.addDroneListener(this);
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity()
 				.getApplicationContext());
@@ -62,7 +62,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	@Override
 	public void onStop() {
 		super.onStop();
-		drone.events.removeDroneListener(this);
+		drone.removeDroneListener(this);
 	}
 
 	@Override

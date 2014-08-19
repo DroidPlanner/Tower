@@ -20,7 +20,7 @@ public class MissionStats extends DroneVariable {
 	public void setWpno(short seq) {
 		if (seq != currentWP) {
 			this.currentWP = seq;
-			myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_WP_UPDATE);
+			myDrone.notifyDroneEvent(DroneEventsType.MISSION_WP_UPDATE);
 		}
 	}
 

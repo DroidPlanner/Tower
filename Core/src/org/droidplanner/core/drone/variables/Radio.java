@@ -81,7 +81,7 @@ public class Radio extends DroneVariable {
 			this.remnoise = SikValueToDB(remnoise & 0xFF);
 			this.txbuf = txbuf & 0xFF;
 
-			myDrone.events.notifyDroneEvent(DroneEventsType.RADIO);
+			myDrone.notifyDroneEvent(DroneEventsType.RADIO);
 		}
 
 	}

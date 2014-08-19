@@ -47,7 +47,7 @@ public class Home extends DroneVariable {
 	public void setHome(msg_mission_item msg) {
 		this.coordinate = new Coord2D(msg.x, msg.y);
 		this.altitude = new Altitude(msg.z);
-		myDrone.events.notifyDroneEvent(DroneEventsType.HOME);
+		myDrone.notifyDroneEvent(DroneEventsType.HOME);
 	}
 
 	public msg_mission_item packMavlink() {
