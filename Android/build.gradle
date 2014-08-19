@@ -69,6 +69,11 @@ android {
 
 def getGitVersion(){
     def cmd = "git describe --tag --dirty"
-    def proc = cmd.execute()
-    return proc.text.trim()
+    try {
+        def proc = cmd.execute()
+        return proc.text.trim()
+    }catch(IOException e){
+        //Unable to find 'git'
+        return "please update version name manually"
+    }
 }
