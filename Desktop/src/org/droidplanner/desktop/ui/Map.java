@@ -26,6 +26,7 @@ public class Map extends JFrame implements OnDroneListener {
 	private MapMarkerIcon marker;
 	private JMapViewer map;
 	private TelemetryPanel telemetryData;
+	private MapMarkerDot guidedMarker;
 
 	public Map() {
 		super("Map");
@@ -42,6 +43,10 @@ public class Map extends JFrame implements OnDroneListener {
 		}
 		marker = new MapMarkerIcon(new Coordinate(-29, -51));
 		map.addMapMarker(marker);
+		
+		guidedMarker = new MapMarkerDot(new Coordinate(0, 0));
+		guidedMarker.setVisible(false);
+		map.addMapMarker(guidedMarker);
 
 		telemetryData = new TelemetryPanel();
 		telemetryData.setPreferredSize(new Dimension(200, 0));
@@ -81,6 +86,13 @@ public class Map extends JFrame implements OnDroneListener {
 			break;
 		case PARAMETERS_DOWNLOADED:
 			new ParametersDialog(drone.parameters.parameterList);
+			break;
+			
+		case GUIDEDPOINT:
+			guidedMarker.setVisible(true);
+			guidedMarker.setLat(drone.guidedPoint.getCoord().getLat());
+			guidedMarker.setLon(drone.guidedPoint.getCoord().getLng());
+			map.repaint();
 			break;
 		default:
 			break;
