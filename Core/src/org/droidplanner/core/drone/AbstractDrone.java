@@ -1,5 +1,7 @@
 package org.droidplanner.core.drone;
 
+import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
+
 import org.droidplanner.core.drone.variables.GPS;
 
 /**
@@ -14,4 +16,8 @@ public interface AbstractDrone {
     public void notifyDroneEvent(DroneInterfaces.DroneEventsType event);
 
     public GPS getGps();
+
+    public int getMavlinkVersion();
+
+    public void onHeartbeat(msg_heartbeat msg);
 }

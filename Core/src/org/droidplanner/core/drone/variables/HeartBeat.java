@@ -13,7 +13,7 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 	private static final long HEARTBEAT_NORMAL_TIMEOUT = 5000;
 	private static final long HEARTBEAT_LOST_TIMEOUT = 15000;
 
-	public static final byte INVALID_MAVLINK_VERSION = -1;
+	public static final int INVALID_MAVLINK_VERSION = -1;
 
 	public HeartbeatState heartbeatState = HeartbeatState.FIRST_HEARTBEAT;
     public int droneID = 1;

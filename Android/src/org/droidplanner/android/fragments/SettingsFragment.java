@@ -390,7 +390,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		super.onStart();
 
 		final Drone drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
-		final byte mavlinkVersion = drone.heartbeat.getMavlinkVersion();
+		final int mavlinkVersion = drone.getMavlinkVersion();
 		if (mavlinkVersion != HeartBeat.INVALID_MAVLINK_VERSION) {
 			updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
 		} else {
@@ -430,7 +430,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
 
 		case HEARTBEAT_FIRST:
 		case HEARTBEAT_RESTORED:
-			updateMavlinkVersionPreference(String.valueOf(drone.heartbeat.getMavlinkVersion()));
+			updateMavlinkVersionPreference(String.valueOf(drone.getMavlinkVersion()));
 			break;
 		default:
 			break;

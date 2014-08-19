@@ -1,5 +1,7 @@
 package org.droidplanner.core.drone;
 
+import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
+
 import org.droidplanner.core.MAVLink.MAVLinkStreams.MAVLinkOutputStream;
 import org.droidplanner.core.MAVLink.WaypointManager;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
@@ -46,7 +48,7 @@ public class Drone implements AbstractDrone {
 	public final Calibration calibrationSetup = new Calibration(this);
 	public final WaypointManager waypointManager = new WaypointManager(this);
 	public final State state;
-	public final HeartBeat heartbeat;
+	private final HeartBeat heartbeat;
 	public final Parameters parameters;
 
 	public final MAVLinkOutputStream MavClient;
@@ -93,5 +95,15 @@ public class Drone implements AbstractDrone {
     @Override
     public GPS getGps() {
         return GPS;
+    }
+
+    @Override
+    public int getMavlinkVersion() {
+        return heartbeat.getMavlinkVersion();
+    }
+
+    @Override
+    public void onHeartbeat(msg_heartbeat msg) {
+        heartbeat.onHeartbeat(msg);
     }
 }
