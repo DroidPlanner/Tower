@@ -1,15 +1,23 @@
-package org.droidplanner.core.gcs.location;
+package org.droidplanner.android.gcs.location;
+
+import org.droidplanner.core.gcs.location.Location.LocationFinder;
+import org.droidplanner.core.gcs.location.Location.LocationReceiver;
+import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationRequest;
+
 /**
  * Feeds Location Data from Android's FusedLocation LocationProvider
- *
+ * 
  */
-public class FusedLocation implements LocationFinder,
-		GooglePlayServicesClient.ConnectionCallbacks,
+public class FusedLocation implements LocationFinder, GooglePlayServicesClient.ConnectionCallbacks,
 		GooglePlayServicesClient.OnConnectionFailedListener,
 		com.google.android.gms.location.LocationListener {
 
@@ -18,10 +26,9 @@ public class FusedLocation implements LocationFinder,
 	private LocationClient mLocationClient;
 	private LocationReceiver receiver;
 
-	public FusedLocation(Context context, LocationReceiver receiver) {
+	public FusedLocation(Context context) {
 		mLocationClient = new LocationClient(context, this, this);
 		mLocationClient.connect();
-		this.receiver = receiver;
 	}
 
 	@Override
@@ -37,7 +44,7 @@ public class FusedLocation implements LocationFinder,
 
 	@Override
 	public void disableLocationUpdates() {
-		if(mLocationClient.isConnected()){
+		if (mLocationClient.isConnected()) {
 			mLocationClient.removeLocationUpdates(this);
 		}
 	}
@@ -58,7 +65,17 @@ public class FusedLocation implements LocationFinder,
 	}
 
 	@Override
-	public void onLocationChanged(Location location) {
-		receiver.onLocationChanged(location);
+	public void onLocationChanged(Location androidLocation) {
+		if (receiver != null) {
+			org.droidplanner.core.gcs.location.Location location = new org.droidplanner.core.gcs.location.Location(
+					new Coord2D(androidLocation.getLatitude(), androidLocation.getLongitude()));
+			receiver.onLocationChanged(location);
+		}
+	}
+
+	@Override
+	public void setLocationListner(LocationReceiver receiver) {
+		this.receiver = receiver;
+
 	}
 }

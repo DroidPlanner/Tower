@@ -1,9 +1,8 @@
 package org.droidplanner.core.gcs.follow;
 
 import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.gcs.location.Location;
 import org.droidplanner.core.helpers.units.Length;
-
-import android.location.Location;
 
 public abstract class FollowAlgorithm {
 	public abstract void processNewLocation(Location location);
