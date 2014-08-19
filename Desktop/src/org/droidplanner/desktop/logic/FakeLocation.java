@@ -10,50 +10,35 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
 
 class FakeLocation implements LocationFinder {
+	private static final int UPDATE_INTERVAL = 500;
+	private static final double SPEED = 3;
 	private LocationReceiver receiver;
 
 	@Override
 	public void setLocationListner(LocationReceiver receiver) {
-		this.receiver = receiver;				
+		this.receiver = receiver;
 	}
 
 	@Override
 	public void enableLocationUpdates() {
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
-			Coord2D start = new Coord2D(-35.363154,149.165067);
-			Location[] locations = {
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 00)),
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 10)),
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 20)),
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 30)),
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 40)),
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 50)),
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 60)),
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 70)),
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 80)),
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 90)),
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 80)), 
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 70)),
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 60)),
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 50)),
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 40)),
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 30)),
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 20)),
-					new Location(GeoTools.newCoordFromBearingAndDistance(start, 90, 10)),
-					};
-			int index = 0;
+			Coord2D loc = new Coord2D(-35.363154, 149.165067);
+			long lastTime = System.currentTimeMillis();
 
 			@Override
 			public void run() {
-				receiver.onLocationChanged(locations[index]);
-				index++;
-				if (index >= locations.length) {
-					index = 0;
+				long now = System.currentTimeMillis();
+				double dt = (now - lastTime)/1000.0;
+				lastTime = now;
+				if (((now/(90*1000))%2)==0) {
+					loc = GeoTools.newCoordFromBearingAndDistance(loc, 90, SPEED * dt);
+				}else{
+					loc = GeoTools.newCoordFromBearingAndDistance(loc, 90, -SPEED * dt);
 				}
-
+				receiver.onLocationChanged(new Location(loc));
 			}
-		}, 0, 5*1000);
+		}, 0, UPDATE_INTERVAL);
 
 	}
 
