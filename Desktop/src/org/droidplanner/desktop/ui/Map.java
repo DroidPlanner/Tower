@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 
@@ -14,6 +16,7 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.desktop.ui.widgets.GraphPanel;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
@@ -28,6 +31,10 @@ public class Map extends JFrame implements OnDroneListener {
 	private TelemetryPanel telemetryData;
 	private MapMarkerDot guidedMarker;
 
+
+	private static List<Double> data = new ArrayList<Double>();
+	private static GraphPanel graph;
+	
 	public Map() {
 		super("Map");
 		setSize(800, 600);
@@ -53,6 +60,13 @@ public class Map extends JFrame implements OnDroneListener {
 
 		add(telemetryData, BorderLayout.WEST);
 		add(map);
+		
+		JFrame graphFrame = new JFrame("Graph");
+		graph = new GraphPanel(data);
+		graphFrame.setPreferredSize(new Dimension(600, 300));
+		graphFrame.getContentPane().add(graph);
+		graphFrame.pack();
+		graphFrame.setVisible(true);
 	}
 
 	@Override
@@ -93,6 +107,11 @@ public class Map extends JFrame implements OnDroneListener {
 			guidedMarker.setLat(drone.guidedPoint.getCoord().getLat());
 			guidedMarker.setLon(drone.guidedPoint.getCoord().getLng());
 			map.repaint();
+			break;
+			
+		case SPEED:
+			data.add(drone.speed.getGroundSpeed().valueInMetersPerSecond());
+			graph.repaint();
 			break;
 		default:
 			break;
