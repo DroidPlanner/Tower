@@ -36,8 +36,34 @@ public class FollowMe implements LocationListener, ModeChangedListener {
 		if (isEnabledInPreferences()) {
 			if (isEnabled()) {
 				disableFollowMe();
+				
+				// For safety set the vehicle to Loiter mode specifically
+				drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
+				
 			} else {
-				enableFollowMe();
+				
+				// Vehicle has to be connected for our commands to reach it
+				if (drone.MavClient.isConnected()) {
+					
+					// Vehicle has to be armed for our commands to alter the flight
+					if (drone.state.isArmed()) {
+						
+						// Guided mode so our waypoints change the flight 
+						drone.state.changeFlightMode(ApmModes.ROTOR_GUIDED);
+						
+						// Turn on follow me using existing method
+						enableFollowMe();
+						
+					} else {
+						
+						// The vehicle is not armed, give an error
+						Toast.makeText(context, "Drone Not Armed", Toast.LENGTH_SHORT).show();
+					}
+				} else {
+					
+					// MAVLink is not connected, give an error
+					Toast.makeText(context, "Drone Not Connected", Toast.LENGTH_SHORT).show();
+				}
 			}
 		} else {
 			disableFollowMe();
@@ -67,6 +93,8 @@ public class FollowMe implements LocationListener, ModeChangedListener {
 
 	@Override
 	public void onLocationChanged(Location location) {
+		
+		// Make a new guided waypoint from our current location as given by GPS, altitude from planning value
 		waypoint guidedWP = new waypoint(location.getLatitude(),
 				location.getLongitude(), drone.mission.getDefaultAlt());
 		// TODO find a better way to do the GUIDED altitude
@@ -75,6 +103,16 @@ public class FollowMe implements LocationListener, ModeChangedListener {
 
 	@Override
 	public void onProviderDisabled(String provider) {
+		
+		// Check if follow me is enabled as the app has lost GPS from the device
+		if (isEnabled())
+		{
+			
+			// Since we don't have GPS coming in, turn off follow me
+			disableFollowMe();
+			
+		}
+		
 	}
 
 	@Override
