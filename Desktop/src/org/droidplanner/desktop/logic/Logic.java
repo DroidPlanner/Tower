@@ -13,7 +13,8 @@ import org.droidplanner.core.drone.profiles.VehicleProfile;
 import org.droidplanner.core.drone.variables.Type.FirmwareType;
 import org.droidplanner.core.gcs.follow.Follow;
 import org.droidplanner.core.gcs.follow.Follow.TextNotificationReceiver;
-import org.droidplanner.desktop.Communication.Connection;
+import org.droidplanner.desktop.communication.Connection;
+import org.droidplanner.desktop.location.FakeLocation;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;

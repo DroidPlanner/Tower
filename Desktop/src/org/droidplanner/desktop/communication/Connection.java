@@ -1,4 +1,4 @@
-package org.droidplanner.desktop.Communication;
+package org.droidplanner.desktop.communication;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

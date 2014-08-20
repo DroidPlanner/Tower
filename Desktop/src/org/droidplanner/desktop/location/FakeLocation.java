@@ -1,4 +1,4 @@
-package org.droidplanner.desktop.logic;
+package org.droidplanner.desktop.location;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -9,7 +9,7 @@ import org.droidplanner.core.gcs.location.Location.LocationReceiver;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
 
-class FakeLocation implements LocationFinder {
+public class FakeLocation implements LocationFinder {
 	private static final int UPDATE_INTERVAL = 500;
 	private static final double SPEED = 3;
 	private LocationReceiver receiver;
