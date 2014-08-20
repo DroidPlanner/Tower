@@ -13,48 +13,48 @@ import org.droidplanner.core.gcs.follow.Follow;
 public class Menu extends JMenuBar implements ActionListener {
 	private static final long serialVersionUID = 3070514693880578004L;
 
-	private static final String LOAD_MISSION = "Load Mission";
-	private static final String LOAD_PARAMETERS = "Load Parameters";
-	private static final String FOLLOW = "Follow";
-	private static final String GRAPH = "Graph";
+	public enum DroneMenu {
+		LOAD_MISSION("Load Mission"), LOAD_PARAMETERS("Load Parameters"), FOLLOW("Follow"), GRAPH(
+				"Graph");
+		private String text;
+
+		private DroneMenu(String text) {
+			this.text = text;
+		}
+
+		@Override
+		public String toString() {
+			return text;
+		}
+	}
 
 	private Drone drone;
-
 	private Follow follow;
 
 	public Menu(Drone drone, Follow follow) {
 		super();
 		this.drone = drone;
 		this.follow = follow;
-		
+
 		JMenu droneMenu = new JMenu("Drone");
-		JMenuItem loadMission = new JMenuItem(LOAD_MISSION);
-		JMenuItem loadParameters = new JMenuItem(LOAD_PARAMETERS);
-		JMenuItem followM = new JMenuItem(FOLLOW);
-		JMenuItem graphM = new JMenuItem(GRAPH);
-		
 
-		loadMission.addActionListener(this);
-		loadParameters.addActionListener(this);
-		followM.addActionListener(this);
-		graphM.addActionListener(this);
-
-		droneMenu.add(loadMission);
-		droneMenu.add(loadParameters);
-		droneMenu.add(followM);
-		droneMenu.add(graphM);
+		for (DroneMenu menu : DroneMenu.values()) {
+			JMenuItem jMenu = new JMenuItem(menu.toString());
+			jMenu.addActionListener(this);
+			droneMenu.add(jMenu);
+		}
 		add(droneMenu);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equalsIgnoreCase(LOAD_MISSION)) {
+		if (e.getActionCommand().equalsIgnoreCase(DroneMenu.LOAD_MISSION.toString())) {
 			drone.waypointManager.getWaypoints();
-		} else if (e.getActionCommand().equalsIgnoreCase(LOAD_PARAMETERS)) {
+		} else if (e.getActionCommand().equalsIgnoreCase(DroneMenu.LOAD_PARAMETERS.toString())) {
 			drone.parameters.getAllParameters();
-		} else if (e.getActionCommand().equalsIgnoreCase(FOLLOW)) {
+		} else if (e.getActionCommand().equalsIgnoreCase(DroneMenu.FOLLOW.toString())) {
 			follow.toggleFollowMeState();
-		} else if (e.getActionCommand().equalsIgnoreCase(GRAPH)) {
+		} else if (e.getActionCommand().equalsIgnoreCase(DroneMenu.GRAPH.toString())) {
 			Graph.createGraph(drone.events);
 		}
 	}
