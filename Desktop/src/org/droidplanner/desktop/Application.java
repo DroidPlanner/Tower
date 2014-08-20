@@ -11,13 +11,11 @@ public class Application {
 
 	public static void main(String[] args) {
 		logic = new Logic();
-		map = new Map();
+		map = new Map(logic.drone.events);
 		map.setVisible(true);
 		map.setJMenuBar(new Menu(logic.drone,logic.follow));
 
 		new Thread(logic).start();
-
-		logic.drone.events.addDroneListener(map);
 	}
 
 }

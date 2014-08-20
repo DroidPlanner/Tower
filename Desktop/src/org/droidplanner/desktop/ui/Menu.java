@@ -16,6 +16,7 @@ public class Menu extends JMenuBar implements ActionListener {
 	private static final String LOAD_MISSION = "Load Mission";
 	private static final String LOAD_PARAMETERS = "Load Parameters";
 	private static final String FOLLOW = "Follow";
+	private static final String GRAPH = "Graph";
 
 	private Drone drone;
 
@@ -30,14 +31,18 @@ public class Menu extends JMenuBar implements ActionListener {
 		JMenuItem loadMission = new JMenuItem(LOAD_MISSION);
 		JMenuItem loadParameters = new JMenuItem(LOAD_PARAMETERS);
 		JMenuItem followM = new JMenuItem(FOLLOW);
+		JMenuItem graphM = new JMenuItem(GRAPH);
+		
 
 		loadMission.addActionListener(this);
 		loadParameters.addActionListener(this);
 		followM.addActionListener(this);
+		graphM.addActionListener(this);
 
 		droneMenu.add(loadMission);
 		droneMenu.add(loadParameters);
 		droneMenu.add(followM);
+		droneMenu.add(graphM);
 		add(droneMenu);
 	}
 
@@ -49,6 +54,8 @@ public class Menu extends JMenuBar implements ActionListener {
 			drone.parameters.getAllParameters();
 		} else if (e.getActionCommand().equalsIgnoreCase(FOLLOW)) {
 			follow.toggleFollowMeState();
+		} else if (e.getActionCommand().equalsIgnoreCase(GRAPH)) {
+			Graph.createGraph(drone.events);
 		}
 	}
 
