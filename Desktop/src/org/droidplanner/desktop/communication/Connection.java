@@ -6,9 +6,12 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
-import com.MAVLink.Parser;
+import org.droidplanner.core.MAVLink.MAVLinkStreams.MAVLinkOutputStream;
 
-public class Connection {
+import com.MAVLink.Parser;
+import com.MAVLink.Messages.MAVLinkPacket;
+
+public class Connection implements MAVLinkOutputStream {
 	public int localPort = 14550;
 	public InetAddress hostAdd = null;
 	public int hostPort;
@@ -48,5 +51,26 @@ public class Connection {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	
+	@Override
+	public void toggleConnectionState() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void sendMavPacket(MAVLinkPacket packet) {
+		sendBuffer(packet.encodePacket());
+	}
+
+	@Override
+	public void queryConnectionState() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public boolean isConnected() {
+		return hostAdd!=null;
 	}
 }

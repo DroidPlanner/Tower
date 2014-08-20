@@ -3,16 +3,9 @@ package org.droidplanner.desktop.logic;
 import java.io.IOException;
 import java.net.InetAddress;
 
-import org.droidplanner.core.MAVLink.MAVLinkStreams.MAVLinkOutputStream;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
 import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces.Clock;
-import org.droidplanner.core.drone.DroneInterfaces.Handler;
-import org.droidplanner.core.drone.Preferences;
-import org.droidplanner.core.drone.profiles.VehicleProfile;
-import org.droidplanner.core.drone.variables.Type.FirmwareType;
 import org.droidplanner.core.gcs.follow.Follow;
-import org.droidplanner.core.gcs.follow.Follow.TextNotificationReceiver;
 import org.droidplanner.desktop.communication.Connection;
 import org.droidplanner.desktop.location.FakeLocation;
 
@@ -26,106 +19,11 @@ public class Logic implements Runnable {
 	public Follow follow;
 
 	public Logic() {
-		setup();
-	}
-
-	private void setup() {
-		drone = droneFactory();
+		drone = new Drone(link, FakeFactory.fakeClock(), FakeFactory.fakeHandler(),
+				FakeFactory.fakePreferences());
 		mavlinkHandler = new MavLinkMsgHandler(drone);
-
-		follow = new Follow(drone, new Handler() {
-
-			@Override
-			public void removeCallbacks(Runnable thread) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void postDelayed(Runnable thread, long timeout) {
-				// TODO Auto-generated method stub
-
-			}
-		}, new FakeLocation(), new TextNotificationReceiver() {
-
-			@Override
-			public void shortText(String notification) {
-				System.out.println(notification);
-
-			}
-		});
-
-	}
-
-	private Drone droneFactory() {
-		MAVLinkOutputStream MAVClient = new MAVLinkOutputStream() {
-
-			@Override
-			public void toggleConnectionState() {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void sendMavPacket(MAVLinkPacket packet) {
-				link.sendBuffer(packet.encodePacket());
-			}
-
-			@Override
-			public void queryConnectionState() {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public boolean isConnected() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-		};
-		Clock clock = new Clock() {
-
-			@Override
-			public long elapsedRealtime() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-		};
-		Preferences pref = new Preferences() {
-
-			@Override
-			public VehicleProfile loadVehicleProfile(FirmwareType firmwareType) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public FirmwareType getVehicleType() {
-				// TODO Auto-generated method stub
-				return FirmwareType.ARDU_COPTER;
-			}
-
-			@Override
-			public Rates getRates() {
-				return new Rates();
-			}
-		};
-		Handler handler = new Handler() {
-
-			@Override
-			public void removeCallbacks(Runnable thread) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void postDelayed(Runnable thread, long timeout) {
-				// TODO Auto-generated method stub
-
-			}
-		};
-
-		return new Drone(MAVClient, clock, handler, pref);
+		follow = new Follow(drone, FakeFactory.fakeHandler(), new FakeLocation(),
+				FakeFactory.notificationReceiver());
 	}
 
 	@Override
@@ -141,13 +39,11 @@ public class Logic implements Runnable {
 					MAVLinkPacket mavPacket = link.parser.mavlink_parse_char(data[i] & 0x00ff);
 					if (mavPacket != null) {
 						MAVLinkMessage msg = mavPacket.unpack();
-						// System.out.println("decoded:" + msg.toString());
 						mavlinkHandler.receiveData(msg);
 					}
 				}
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("Closing socket");
