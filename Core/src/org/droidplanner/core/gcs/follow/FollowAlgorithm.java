@@ -25,7 +25,7 @@ public abstract class FollowAlgorithm {
 	}
 
 	public enum FollowModes {
-		LEASH("Leash");
+		LEASH("Leash"), ABOVE("Above");
 
 		private String name;
 
@@ -46,6 +46,8 @@ public abstract class FollowAlgorithm {
 			switch (this) {
 			case LEASH:
 				return new FollowLeash(drone, new Length(8.0));
+			case ABOVE:
+				return new FollowAbove(drone, new Length(0.0));
 			}
 			return null; // Should never reach this
 		}

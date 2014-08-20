@@ -27,7 +27,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 			TextNotificationReceiver notify) {
 		this.drone = drone;
 		this.notify = notify;
-		followAlgorithm = new FollowLeash(drone, new Length(5.0));
+		followAlgorithm = new FollowAbove(drone, new Length(0.0));
 		this.locationFinder = locationFinder;
 		locationFinder.setLocationListner(this);
 		roiEstimator = new ROIEstimator(handler, drone);
