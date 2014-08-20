@@ -49,9 +49,8 @@ public class Map extends JFrame implements OnDroneListener {
 		guidedMarker.setVisible(false);
 		map.addMapMarker(guidedMarker);
 
-		telemetryData = new TelemetryPanel();
+		telemetryData = TelemetryPanel.createTelemetryPanel(events);
 		telemetryData.setPreferredSize(new Dimension(200, 0));
-
 		add(telemetryData, BorderLayout.WEST);
 		add(map);
 		
@@ -60,8 +59,6 @@ public class Map extends JFrame implements OnDroneListener {
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		telemetryData.onDroneEvent(event, drone);
-
 		Coord2D position = drone.GPS.getPosition();
 		switch (event) {
 		case GPS:
