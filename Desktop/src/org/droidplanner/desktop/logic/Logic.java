@@ -14,9 +14,9 @@ import com.MAVLink.Messages.MAVLinkPacket;
 
 public class Logic implements Runnable {
 	public Drone drone;
+	public Follow follow;
 	private MavLinkMsgHandler mavlinkHandler;
 	protected Connection link = new Connection(14550);
-	public Follow follow;
 
 	public Logic() {
 		drone = new Drone(link, FakeFactory.fakeClock(), FakeFactory.fakeHandler(),
