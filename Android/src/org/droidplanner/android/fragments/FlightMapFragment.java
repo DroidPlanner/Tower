@@ -78,11 +78,6 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	}
 
 	@Override
-	public void update() {
-		super.update();
-	}
-
-	@Override
 	public void onMapLongClick(Coord2D coord) {
 		if (drone.MavClient.isConnected()) {
 			if (drone.guidedPoint.isInitialized()) {

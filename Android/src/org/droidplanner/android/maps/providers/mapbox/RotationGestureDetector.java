@@ -1,4 +1,4 @@
-package org.droidplanner.android.maps.providers.osm;
+package org.droidplanner.android.maps.providers.mapbox;
 
 import android.view.MotionEvent;
 
@@ -22,9 +22,9 @@ public class RotationGestureDetector {
 		return (float) Math.toDegrees(radians);
 	}
 
-	public void onTouch(MotionEvent e) {
+	public boolean onTouch(MotionEvent e) {
 		if (e.getPointerCount() != 2)
-			return;
+			return false;
 
 		if (e.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
 			mRotation = rotation(e);
@@ -34,6 +34,7 @@ public class RotationGestureDetector {
 		float delta = rotation - mRotation;
 		mRotation += delta;
 		mListener.onRotate(delta);
+        return true;
 	}
 
 }
