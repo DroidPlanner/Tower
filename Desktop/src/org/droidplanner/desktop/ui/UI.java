@@ -22,14 +22,14 @@ import org.openstreetmap.gui.jmapviewer.MapMarkerIcon;
 import org.openstreetmap.gui.jmapviewer.OsmFileCacheTileLoader;
 import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
 
-public class Map extends JFrame implements OnDroneListener {
+public class UI extends JFrame implements OnDroneListener {
 	private static final long serialVersionUID = 1L;
 	private MapMarkerIcon marker;
 	private JMapViewer map;
 	private TelemetryPanel telemetryData;
 	private MapMarkerDot guidedMarker;
 
-	public Map(DroneEvents events) {
+	public UI(DroneEvents events) {
 		super("Map");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
