@@ -6,7 +6,7 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.proxy.mission.item.adapters.CamerasAdapter;
 import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.MissionItemType;

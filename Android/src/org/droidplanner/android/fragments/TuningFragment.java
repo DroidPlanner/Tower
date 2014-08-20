@@ -5,7 +5,7 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.widgets.graph.Chart;
 import org.droidplanner.android.widgets.graph.ChartSeries;
 import org.droidplanner.core.MAVLink.MavLinkStreamRates;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 

@@ -5,7 +5,7 @@ import org.droidplanner.android.gcs.location.FusedLocation;
 import org.droidplanner.android.gcs.location.LocationFinder;
 import org.droidplanner.android.gcs.location.LocationReceiver;
 import org.droidplanner.android.gcs.roi.ROIEstimator;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;

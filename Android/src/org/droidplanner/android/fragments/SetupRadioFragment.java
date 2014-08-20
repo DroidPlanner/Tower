@@ -8,7 +8,7 @@ import org.droidplanner.android.fragments.calibration.rc.FragmentSetupRC;
 import org.droidplanner.android.fragments.calibration.sf.FragmentSetupSF;
 import org.droidplanner.android.fragments.helpers.SuperSetupFragment;
 import org.droidplanner.core.MAVLink.MavLinkStreamRates;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 
 import android.os.Bundle;
 

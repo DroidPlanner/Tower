@@ -3,7 +3,7 @@ package org.droidplanner.android.helpers.calibration;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.parameters.Parameter;
 
 public class CalParameters {

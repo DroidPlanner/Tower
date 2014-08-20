@@ -2,7 +2,7 @@ package org.droidplanner.android.fragments.mode;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

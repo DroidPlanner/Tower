@@ -1,6 +1,6 @@
 package org.droidplanner.core.MAVLink;
 
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;

@@ -8,7 +8,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.spinners.ModeAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 
 import android.content.Context;
 import android.os.Handler;

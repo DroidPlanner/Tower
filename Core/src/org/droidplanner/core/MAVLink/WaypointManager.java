@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.OnTimeout;
 import org.droidplanner.core.drone.DroneInterfaces.OnWaypointManagerListener;
 import org.droidplanner.core.drone.DroneVariable;

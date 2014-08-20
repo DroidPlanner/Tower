@@ -12,7 +12,7 @@ import org.droidplanner.android.helpers.calibration.CalParameters;
 import org.droidplanner.android.helpers.calibration.RC_CalParameters;
 import org.droidplanner.android.widgets.FillBar.FillBar;
 import org.droidplanner.android.widgets.RcStick.RcStick;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 
 import android.os.Bundle;

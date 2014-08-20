@@ -1,7 +1,7 @@
 package org.droidplanner.android.widgets.checklist.row;
 
 import org.droidplanner.android.widgets.checklist.CheckListItem;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 
 import android.view.LayoutInflater;
 import android.view.View;

@@ -4,7 +4,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.fragments.SetupSensorFragment;
 import org.droidplanner.android.fragments.calibration.SetupMainPanel;
 import org.droidplanner.android.fragments.calibration.SetupSidePanel;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.variables.Calibration;

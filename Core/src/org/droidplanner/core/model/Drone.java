@@ -10,19 +10,22 @@ import org.droidplanner.core.drone.profiles.Parameters;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
 import org.droidplanner.core.drone.variables.Altitude;
 import org.droidplanner.core.drone.variables.Battery;
+import org.droidplanner.core.drone.variables.Calibration;
 import org.droidplanner.core.drone.variables.GPS;
+import org.droidplanner.core.drone.variables.GuidedPoint;
 import org.droidplanner.core.drone.variables.Home;
+import org.droidplanner.core.drone.variables.MissionStats;
 import org.droidplanner.core.drone.variables.Navigation;
 import org.droidplanner.core.drone.variables.Orientation;
+import org.droidplanner.core.drone.variables.RC;
 import org.droidplanner.core.drone.variables.Radio;
 import org.droidplanner.core.drone.variables.Speed;
 import org.droidplanner.core.drone.variables.State;
+import org.droidplanner.core.drone.variables.StreamRates;
 import org.droidplanner.core.firmware.FirmwareType;
+import org.droidplanner.core.mission.Mission;
 
-/**
- * Defines the set of methods that drone implementations must support.
- */
-public interface AbstractDrone {
+public interface Drone {
 
     public void addDroneListener(DroneInterfaces.OnDroneListener listener);
 
@@ -69,4 +72,21 @@ public interface AbstractDrone {
     public Orientation getOrientation();
 
     public Navigation getNavigation();
+
+    public Mission getMission();
+
+    public StreamRates getStreamRates();
+
+    public MissionStats getMissionStats();
+
+    public GuidedPoint getGuidedPoint();
+
+    public Calibration getCalibrationSetup();
+
+    public RC getRC();
+
+    public void setAltitudeGroundAndAirSpeeds(double altitude, double groundSpeed, double airSpeed,
+                                              double climb);
+
+    public void setDisttowpAndSpeedAltErrors(double disttowp, double alt_error, double aspd_error);
 }
