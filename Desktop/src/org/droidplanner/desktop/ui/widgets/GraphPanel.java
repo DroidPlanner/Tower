@@ -26,9 +26,8 @@ import javax.swing.SwingUtilities;
  * @author Rodrigo
  */
 public class GraphPanel extends JPanel {
-
-    private int width = 800;
-    private int heigth = 400;
+	private static final long serialVersionUID = -1482667735083881060L;
+	
     private int padding = 25;
     private int labelPadding = 25;
     private Color lineColor = new Color(44, 102, 230, 180);
