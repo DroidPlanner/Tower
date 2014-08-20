@@ -184,7 +184,7 @@ public class DroneInterfaces {
 	}
 
 	public interface OnDroneListener<T extends Drone> {
-		public void onDroneEvent(DroneEventsType event, Drone drone);
+		public void onDroneEvent(DroneEventsType event, T drone);
 	}
 
 	public interface OnParameterManagerListener {
