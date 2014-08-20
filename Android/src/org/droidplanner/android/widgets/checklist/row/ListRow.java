@@ -76,7 +76,7 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 		} else if (sys_tag.equalsIgnoreCase("SYS_ARM_STATE")) {
 			mListItem.setSys_activated(mDrone.state.isArmed());
 		} else if (sys_tag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
-			mListItem.setSys_activated(mDrone.state.isFailsafe());
+			mListItem.setSys_activated(mDrone.state.isWarning());
 		} else if (sys_tag.equalsIgnoreCase("SYS_CONNECTION_STATE")) {
 			mListItem.setSys_activated(mDrone.MavClient.isConnected());
 		}
