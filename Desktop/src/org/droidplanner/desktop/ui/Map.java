@@ -44,7 +44,7 @@ public class Map extends JFrame implements OnDroneListener {
 		}
 		marker = new MapMarkerIcon(new Coordinate(-29, -51));
 		map.addMapMarker(marker);
-		
+
 		guidedMarker = new MapMarkerDot(new Coordinate(0, 0));
 		guidedMarker.setVisible(false);
 		map.addMapMarker(guidedMarker);
@@ -53,7 +53,7 @@ public class Map extends JFrame implements OnDroneListener {
 		telemetryData.setPreferredSize(new Dimension(200, 0));
 		add(telemetryData, BorderLayout.WEST);
 		add(map);
-		
+
 		events.addDroneListener(this);
 	}
 
@@ -68,17 +68,15 @@ public class Map extends JFrame implements OnDroneListener {
 			map.repaint();
 			break;
 		case HEARTBEAT_FIRST:
-			map.setDisplayPosition(
-					new Coordinate(position.getLat(), position.getLng()), 17);
+			map.setDisplayPosition(new Coordinate(position.getLat(), position.getLng()), 17);
 			break;
 
 		case MISSION_RECEIVED:
 			for (MissionItem item : drone.mission.getItems()) {
 				if (item instanceof SpatialCoordItem) {
-					Coord3D coordinate = ((SpatialCoordItem) item)
-							.getCoordinate();
-					MapMarkerDot missionMarker = new MapMarkerDot(
-							coordinate.getLat(), coordinate.getLng());
+					Coord3D coordinate = ((SpatialCoordItem) item).getCoordinate();
+					MapMarkerDot missionMarker = new MapMarkerDot(coordinate.getLat(),
+							coordinate.getLng());
 					missionMarker.setBackColor(Color.BLACK);
 					map.addMapMarker(missionMarker);
 				}
@@ -87,7 +85,6 @@ public class Map extends JFrame implements OnDroneListener {
 		case PARAMETERS_DOWNLOADED:
 			new ParametersDialog(drone.parameters.parameterList);
 			break;
-			
 		case GUIDEDPOINT:
 			guidedMarker.setVisible(true);
 			guidedMarker.setLat(drone.guidedPoint.getCoord().getLat());
