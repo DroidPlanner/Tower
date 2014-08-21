@@ -209,6 +209,13 @@
         <item>45 sec.</item>
         <item>60 sec.</item>
     </string-array>
+    <string-array name="tts_periodic_period_values">
+        <item>0</item>
+        <item>15</item>
+        <item>30</item>
+        <item>45</item>
+        <item>60</item>
+    </string-array>
     <!-- This string is just used to help in the layout editor -->
     <string-array name="ExampleCameraArray">
         <item>No cameras Available</item>

@@ -14,7 +14,9 @@ import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
 import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.notifications.TTSNotificationProvider;
 import org.droidplanner.android.utils.file.DirectoryPath;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -378,6 +380,14 @@ public class SettingsFragment extends DpPreferenceFragment implements
 			} else {
 				preference.setSummary(R.string.mode2_throttle_on_left_stick);
 			}
+		}
+
+		if(key.equals(getString(R.string.pref_tts_periodic_period_key))){
+			((DroidPlannerApp) getActivity().getApplication()).getDrone().events
+					.notifyDroneEvent(DroneEventsType.PERIODIC_SPEECH);
+			String val = sharedPreferences.getString(getString(R.string.pref_tts_periodic_period_key),null);
+			Toast toast = Toast.makeText(this.getActivity().getApplicationContext(), val, Toast.LENGTH_SHORT);
+			toast.show();
 		}
 	}
 

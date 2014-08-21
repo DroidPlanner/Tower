@@ -77,7 +77,7 @@
                 <ListPreference
                     android:title="@string/pref_tts_periodic_period"
                     android:entries="@array/tts_periodic_period"
-                    android:entryValues="@array/tts_periodic_period"
+                    android:entryValues="@array/tts_periodic_period_values"
                     android:key="@string/pref_tts_periodic_period_key"
                     android:summary="@string/pref_tts_periodic_period_summary"
                     android:defaultValue="30 sec."/>
