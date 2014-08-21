@@ -81,12 +81,12 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 	}
 
 	/**
-	 * @param previusPoint
-	 *            Previous point on the path, null if there wasn't a previus
+	 * @param previousPoint
+	 *            Previous point on the path, null if there wasn't a previous
 	 *            point
 	 * @return the set of points/coords making up this mission item.
 	 */
-	public List<Coord2D> getPath(Coord2D previusPoint) {
+	public List<Coord2D> getPath(Coord2D previousPoint) {
 		List<Coord2D> pathPoints = new ArrayList<Coord2D>();
 		switch (mMissionItem.getType()) {
 		case LAND:
@@ -102,9 +102,9 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 			for (int i = 0; i <= 360; i += 10) {
 				Circle circle = (Circle) mMissionItem;
 				double startHeading = 0;
-				if (previusPoint != null) {
+				if (previousPoint != null) {
 					startHeading = GeoTools.getHeadingFromCoordinates(circle.getCoordinate(),
-							previusPoint);
+							previousPoint);
 				}
 				pathPoints.add(GeoTools.newCoordFromBearingAndDistance(circle.getCoordinate(),
 						startHeading + i, circle.getRadius()));

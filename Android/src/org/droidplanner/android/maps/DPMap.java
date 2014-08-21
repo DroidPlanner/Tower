@@ -140,13 +140,25 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 */
 	public void clearFlightPath();
 
-	/**
-	 * Enable map auto panning on the passed target type.
-	 * 
-	 * @param mode
-	 *            auto pan target (user / drone / disabled).
-	 */
-	public void selectAutoPanMode(AutoPanMode mode);
+    /**
+     * @return the map center coordinates.
+     */
+    public Coord2D getMapCenter();
+
+    /**
+     * @return the map current zoom level.
+     */
+    public float getMapZoomLevel();
+
+    /**
+     * @return the map maximum zoom level.
+     */
+    public float getMaxZoomLevel();
+
+    /**
+     * @return the map minimum zoom level.
+     */
+    public float getMinZoomLevel();
 
 	/**
 	 * @return this map's provider.
@@ -174,6 +186,14 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 * Stores the map camera settings.
 	 */
 	public void saveCameraPosition();
+
+    /**
+     * Enable map auto panning on the passed target type.
+     *
+     * @param mode
+     *            auto pan target (user / drone / disabled).
+     */
+    public void selectAutoPanMode(AutoPanMode mode);
 
 	/**
 	 * Adds padding around the edges of the map.
@@ -237,7 +257,7 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 * @param zoomLevel
 	 *            zoom level for the map
 	 */
-	public void updateCamera(Coord2D coord, int zoomLevel);
+	public void updateCamera(Coord2D coord, float zoomLevel);
 
 	/**
 	 * Updates the drone leash path on the map.

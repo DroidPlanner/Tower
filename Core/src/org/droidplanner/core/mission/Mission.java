@@ -10,6 +10,7 @@ import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
+import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.Land;
@@ -162,10 +163,10 @@ public class Mission extends DroneVariable {
 			throws IllegalArgumentException {
 		int i = items.indexOf(waypoint);
 		if (i > 0) {
-			MissionItem previus = items.get(i - 1);
-			if (previus instanceof SpatialCoordItem) {
+			MissionItem previous = items.get(i - 1);
+			if (previous instanceof SpatialCoordItem) {
 				return waypoint.getCoordinate().getAltitude()
-						.subtract(((SpatialCoordItem) previus).getCoordinate().getAltitude());
+						.subtract(((SpatialCoordItem) previous).getCoordinate().getAltitude());
 			}
 		}
 		throw new IllegalArgumentException("Last waypoint doesn't have an altitude");
@@ -234,6 +235,9 @@ public class Mission extends DroneVariable {
 				break;
 			case MAV_CMD.MAV_CMD_NAV_LOITER_TURNS:
 				received.add(new Circle(msg, this));
+				break;
+			case MAV_CMD.MAV_CMD_NAV_RETURN_TO_LAUNCH:
+				received.add(new ReturnToHome(msg, this));
 			default:
 				break;
 			}

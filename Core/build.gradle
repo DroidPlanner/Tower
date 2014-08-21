@@ -25,7 +25,7 @@ dependencies {
     //FIXME: hackish implementation
     unitTestCompile files("$project.buildDir/classes/main")
     unitTestCompile files("${project(':Mavlink').buildDir}/classes/main")
-    unitTestCompile 'junit:junit:3.+'
+    unitTestCompile 'junit:junit:3.8.1'
 }
 
 task unitTest(type: Test, dependsOn: assemble){

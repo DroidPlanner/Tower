@@ -1,39 +1,36 @@
-package org.droidplanner.android.gcs.follow;
+package org.droidplanner.core.gcs.follow;
 
-import org.droidplanner.android.gcs.follow.FollowAlgorithm.FollowModes;
-import org.droidplanner.android.gcs.location.FusedLocation;
-import org.droidplanner.android.gcs.location.LocationFinder;
-import org.droidplanner.android.gcs.location.LocationReceiver;
-import org.droidplanner.android.gcs.roi.ROIEstimator;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.gcs.follow.FollowAlgorithm.FollowModes;
+import org.droidplanner.core.gcs.location.Location;
+import org.droidplanner.core.gcs.location.Location.LocationFinder;
+import org.droidplanner.core.gcs.location.Location.LocationReceiver;
+import org.droidplanner.core.gcs.roi.ROIEstimator;
 import org.droidplanner.core.helpers.units.Length;
-
-import android.content.Context;
-import android.location.Location;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.MAVLink.Messages.ApmModes;
 
 public class Follow implements OnDroneListener, LocationReceiver {
 
-	private Context context;
 	private boolean followMeEnabled = false;
 	private Drone drone;
 
 	private ROIEstimator roiEstimator;
 	private LocationFinder locationFinder;
 	private FollowAlgorithm followAlgorithm;
+	private TextNotificationReceiver notify;
 
-	public Follow(Context context, Drone drone, Handler handler) {
-		this.context = context;
+	public Follow(Drone drone, Handler handler, LocationFinder locationFinder,
+			TextNotificationReceiver notify) {
 		this.drone = drone;
-		followAlgorithm = new FollowLeash(drone, new Length(5.0));
-		locationFinder = new FusedLocation(context, this);
-		roiEstimator = new ROIEstimator(handler,drone);
+		this.notify = notify;
+		followAlgorithm = new FollowAbove(drone, new Length(0.0));
+		this.locationFinder = locationFinder;
+		locationFinder.setLocationListner(this);
+		roiEstimator = new ROIEstimator(handler, drone);
 		drone.events.addDroneListener(this);
 	}
 
@@ -47,19 +44,18 @@ public class Follow implements OnDroneListener, LocationReceiver {
 					drone.state.changeFlightMode(ApmModes.ROTOR_GUIDED);
 					enableFollowMe();
 				} else {
-					Toast.makeText(context, "Drone Not Armed", Toast.LENGTH_SHORT).show();
+					notify.shortText("Drone Not Armed");
 				}
 			} else {
-				Toast.makeText(context, "Drone Not Connected", Toast.LENGTH_SHORT).show();
+				notify.shortText("Drone Not Connected");
 			}
 		}
 	}
 
 	private void enableFollowMe() {
 		drone.events.notifyDroneEvent(DroneEventsType.FOLLOW_START);
-		Log.d("follow", "enable");
-		Toast.makeText(context, "FollowMe Enabled", Toast.LENGTH_SHORT).show();
-		
+		notify.shortText("FollowMe Enabled");
+
 		locationFinder.enableLocationUpdates();
 
 		followMeEnabled = true;
@@ -67,12 +63,10 @@ public class Follow implements OnDroneListener, LocationReceiver {
 
 	private void disableFollowMe() {
 		if (followMeEnabled) {
-			Toast.makeText(context, "FollowMe Disabled", Toast.LENGTH_SHORT).show();
+			notify.shortText("FollowMe Disabled");
 			followMeEnabled = false;
-			Log.d("follow", "disable");
 		}
 		locationFinder.disableLocationUpdates();
-		roiEstimator.disableLocationUpdates();
 	}
 
 	public boolean isEnabled() {
@@ -119,5 +113,9 @@ public class Follow implements OnDroneListener, LocationReceiver {
 
 	public FollowModes getType() {
 		return followAlgorithm.getType();
+	}
+
+	public interface TextNotificationReceiver {
+		public void shortText(String notification);
 	}
 }

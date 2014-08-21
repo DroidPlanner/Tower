@@ -95,7 +95,7 @@ public class MavLinkMsgHandler {
 			String message = msg_statustext.getText();
 			if(message.length()>7){
 				if(message.substring(0,7).equals("PreArm:")||message.substring(0,4).equals("Arm:")){
-					drone.state.setFailsafe(message);
+					drone.state.setWarning(message);
 				}
 			}
 			break;
@@ -114,7 +114,7 @@ public class MavLinkMsgHandler {
 	private void checkFailsafe(msg_heartbeat msg_heart) {
 		boolean failsafe2 = msg_heart.system_status == (byte) MAV_STATE.MAV_STATE_CRITICAL;
 		if(failsafe2){
-			drone.state.setFailsafe("RC Failsafe");
+			drone.state.setWarning("Failsafe");
 		}
 	}
 

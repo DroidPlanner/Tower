@@ -2,11 +2,11 @@ package org.droidplanner.android.fragments.mode;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.gcs.follow.Follow;
-import org.droidplanner.android.gcs.follow.FollowAlgorithm.FollowModes;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.gcs.follow.Follow;
+import org.droidplanner.core.gcs.follow.FollowAlgorithm.FollowModes;
 import org.droidplanner.core.helpers.units.Length;
 
 import android.os.Bundle;
