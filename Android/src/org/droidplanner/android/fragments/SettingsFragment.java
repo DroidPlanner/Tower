@@ -37,6 +37,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -98,6 +99,8 @@ public class SettingsFragment extends DpPreferenceFragment implements
 				dronePrefs.addPreference(configPref);
 			}
 		}
+
+		setupPeriodicControls();
 
 		// Populate the map preference category
 		final String mapsProvidersPrefKey = getString(R.string.pref_maps_providers_key);
@@ -386,8 +389,17 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		if(key.equals(getString(R.string.pref_tts_periodic_period_key))){
 			droidPlannerApp.getDrone().events
 					.notifyDroneEvent(DroneEventsType.PERIODIC_SPEECH);
+			setupPeriodicControls();
 			int val = Integer.parseInt(sharedPreferences.getString(getString(R.string.pref_tts_periodic_period_key), null));
 			droidPlannerApp.mNotificationHandler.getTtsNotification().setupPeriodicSpeechOutput(val, droidPlannerApp.getDrone());
+		}
+	}
+
+	private void setupPeriodicControls(){
+		final PreferenceCategory periodicSpeechPrefs = (PreferenceCategory) findPreference(getActivity().getApplicationContext().getString(R.string.pref_tts_periodic_key));
+		int val = Integer.parseInt(((ListPreference) periodicSpeechPrefs.getPreference(0)).getValue());
+		for(int i = 1; i < periodicSpeechPrefs.getPreferenceCount(); i ++) {
+			periodicSpeechPrefs.getPreference(i).setEnabled(val != 0);
 		}
 	}
 

@@ -156,6 +156,9 @@ public class TTSNotificationProvider implements OnInitListener,
 				setupPeriodicSpeechOutput(statusInterval, drone);
 				speak("Data link restored");
 				break;
+			case DISCONNECTED:
+				handler.removeCallbacks(watchdogCallback);
+				break;
 			case MISSION_WP_UPDATE:
 				speak("Going for waypoint " + drone.missionStats.getCurrentWP());
 				break;
@@ -252,7 +255,11 @@ public class TTSNotificationProvider implements OnInitListener,
 			message.append("r s s i, " + drone.radio.getRssi() + " decibels");
 		}
 		speak(message.toString());
-		handler.postDelayed(watchdogCallback, statusInterval * 1000);
+		if(preferences.getSpokenStatusInterval() != 0) {
+			handler.postDelayed(watchdogCallback, statusInterval * 1000);
+		}else{
+			handler.removeCallbacks(watchdogCallback);
+		}
 	}
 
 	public void setupPeriodicSpeechOutput(int interval, Drone drone){
