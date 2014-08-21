@@ -12,7 +12,7 @@ import org.droidplanner.android.helpers.calibration.CalParameters;
 import org.droidplanner.android.helpers.calibration.RC_CalParameters;
 import org.droidplanner.android.widgets.FillBar.FillBar;
 import org.droidplanner.android.widgets.RcStick.RcStick;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 
 import android.os.Bundle;
@@ -165,7 +165,7 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 
 		switch (calibrationStep) {
 		case 0:
-			if (!parameters.isParameterDownloaded() && drone.MavClient.isConnected()) {
+			if (!parameters.isParameterDownloaded() && drone.getMavClient().isConnected()) {
 				getProgressPanel(true);
 				parameters.getCalibrationParameters(drone);
 				return sidePanel;
@@ -204,7 +204,7 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 
 	@Override
 	protected void updatePanelInfo() {
-		data = drone.RC.in;
+		data = drone.getRC().in;
 		bar1.setValue(data[0]);
 		bar2.setValue(data[1]);
 		bar3.setValue(data[2]);

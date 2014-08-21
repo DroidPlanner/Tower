@@ -5,36 +5,35 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneEvents;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.model.Drone;
 
 public class UI extends JFrame implements OnDroneListener {
 	private static final long serialVersionUID = 1L;
 	private TelemetryPanel telemetryData;
 
-	public UI(DroneEvents events) {
+	public UI(org.droidplanner.core.model.Drone drone) {
 		super("Map");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());		
 		
-		telemetryData = TelemetryPanel.createTelemetryPanel(events);
+		telemetryData = TelemetryPanel.createTelemetryPanel(drone);
 		telemetryData.setPreferredSize(new Dimension(200, 0));
 		add(telemetryData, BorderLayout.WEST);
 
-		Map map = Map.createMap(events);
+		Map map = Map.createMap(drone);
 		add(map.map);
 
-		events.addDroneListener(this);
+		drone.addDroneListener(this);
 	}
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case PARAMETERS_DOWNLOADED:
-			new ParametersDialog(drone.parameters.parameterList);
+			new ParametersDialog(drone.getParameters().parameterList);
 			break;
 		default:
 			break;

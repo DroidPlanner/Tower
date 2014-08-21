@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.model.Drone;
 
 public class DroneEvents extends DroneVariable {
 

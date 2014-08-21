@@ -1,6 +1,6 @@
 package org.droidplanner.core.MAVLink;
 
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
@@ -9,7 +9,7 @@ import com.MAVLink.Messages.enums.MAV_TYPE;
 
 /**
  * This class contains logic used to send an heartbeat to a
- * {@link org.droidplanner.core.drone.Drone}.
+ * {@link org.droidplanner.core.model.Drone}.
  */
 public class MavLinkHeartbeat {
 
@@ -30,7 +30,7 @@ public class MavLinkHeartbeat {
 	private static final MAVLinkPacket sMsgPacket = sMsg.pack();
 
 	/**
-	 * Sends the heartbeat to the {@link org.droidplanner.core.drone.Drone}
+	 * Sends the heartbeat to the {@link org.droidplanner.core.model.Drone}
 	 * object.
 	 * 
 	 * @param drone
@@ -38,7 +38,7 @@ public class MavLinkHeartbeat {
 	 */
 	public static void sendMavHeartbeat(Drone drone) {
 		if (drone != null)
-			drone.MavClient.sendMavPacket(sMsgPacket);
+			drone.getMavClient().sendMavPacket(sMsgPacket);
 	}
 
 }

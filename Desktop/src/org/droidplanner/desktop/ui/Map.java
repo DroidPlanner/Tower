@@ -3,8 +3,6 @@ package org.droidplanner.desktop.ui;
 import java.awt.Color;
 import java.io.IOException;
 
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneEvents;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
@@ -40,20 +38,20 @@ public class Map implements OnDroneListener {
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		Coord2D position = drone.GPS.getPosition();
+	public void onDroneEvent(DroneEventsType event, org.droidplanner.core.model.Drone  drone) {
+		Coord2D position = drone.getGps().getPosition();
 		switch (event) {
 		case GPS:
 			marker.setLat(position.getLat());
 			marker.setLon(position.getLng());
-			marker.setRotation(drone.orientation.getYaw());
+			marker.setRotation(drone.getOrientation().getYaw());
 			map.repaint();
 			break;
 		case HEARTBEAT_FIRST:
 			map.setDisplayPosition(new Coordinate(position.getLat(), position.getLng()), 17);
 			break;
 		case MISSION_RECEIVED:
-			for (MissionItem item : drone.mission.getItems()) {
+			for (MissionItem item : drone.getMission().getItems()) {
 				if (item instanceof SpatialCoordItem) {
 					Coord3D coordinate = ((SpatialCoordItem) item).getCoordinate();
 					MapMarkerDot missionMarker = new MapMarkerDot(coordinate.getLat(),
@@ -65,8 +63,8 @@ public class Map implements OnDroneListener {
 			break;
 		case GUIDEDPOINT:
 			guidedMarker.setVisible(true);
-			guidedMarker.setLat(drone.guidedPoint.getCoord().getLat());
-			guidedMarker.setLon(drone.guidedPoint.getCoord().getLng());
+			guidedMarker.setLat(drone.getGuidedPoint().getCoord().getLat());
+			guidedMarker.setLon(drone.getGuidedPoint().getCoord().getLng());
 			map.repaint();
 			break;
 		default:
@@ -74,9 +72,9 @@ public class Map implements OnDroneListener {
 		}	
 	}
 	
-	static Map createMap(DroneEvents events) {
+	static Map createMap(org.droidplanner.core.model.Drone drone) {
 		Map mMap = new Map();
-		events.addDroneListener(mMap);
+		drone.addDroneListener(mMap);
 		return mMap;
 	}
 

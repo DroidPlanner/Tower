@@ -9,7 +9,7 @@ import java.io.InputStream;
 import org.droidplanner.android.utils.file.AssetUtil;
 import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
-import org.droidplanner.core.drone.variables.Type.FirmwareType;
+import org.droidplanner.core.firmware.FirmwareType;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 

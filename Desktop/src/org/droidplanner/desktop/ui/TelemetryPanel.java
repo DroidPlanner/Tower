@@ -4,8 +4,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneEvents;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
@@ -47,20 +45,20 @@ public class TelemetryPanel extends JPanel implements OnDroneListener {
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
+	public void onDroneEvent(DroneEventsType event, org.droidplanner.core.model.Drone drone) {
 		switch (event) {
 		case GPS:
-			Coord2D position = drone.GPS.getPosition();
+			Coord2D position = drone.getGps().getPosition();
 			labelLatitude.setText(LATITUDE + position.getLat());
 			labelLongitude.setText(LONGITUDE + position.getLng());
 			break;
 		case SPEED:
-			labelSpeed.setText(SPEED + drone.speed.getGroundSpeed().toStringInMetersPerSecond());
+			labelSpeed.setText(SPEED + drone.getSpeed().getGroundSpeed().toStringInMetersPerSecond());
 			labelAltitude.setText(ALTITUDE
-					+ new Length(drone.altitude.getAltitude()));
+					+ new Length(drone.getAltitude().getAltitude()));
 			break;
 		case MODE:
-			labelMode.setText(MODE + drone.state.getMode().toString());
+			labelMode.setText(MODE + drone.getState().getMode().toString());
 			break;
 		default:
 			break;
@@ -68,9 +66,9 @@ public class TelemetryPanel extends JPanel implements OnDroneListener {
 		this.repaint();
 	}
 
-	static TelemetryPanel createTelemetryPanel(DroneEvents events) {
+	static TelemetryPanel createTelemetryPanel(org.droidplanner.core.model.Drone drone) {
 		TelemetryPanel panel = new TelemetryPanel();
-		events.addDroneListener(panel);
+		drone.addDroneListener(panel);
 		return panel;
 	}
 }

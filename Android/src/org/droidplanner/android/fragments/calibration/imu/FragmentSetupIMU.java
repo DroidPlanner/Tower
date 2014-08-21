@@ -4,7 +4,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.fragments.SetupSensorFragment;
 import org.droidplanner.android.fragments.calibration.SetupMainPanel;
 import org.droidplanner.android.fragments.calibration.SetupSidePanel;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.variables.Calibration;
@@ -89,20 +89,20 @@ public class FragmentSetupIMU extends SetupMainPanel implements OnDroneListener 
 
 	private void sendAck(int step) {
 		if (parentActivity.drone != null) {
-			parentActivity.drone.calibrationSetup.sendAckk(step);
+			parentActivity.drone.getCalibrationSetup().sendAckk(step);
 		}
 	}
 
 	private void startCalibration() {
 		if (parentActivity.drone != null) {
-			parentActivity.drone.calibrationSetup.startCalibration();
+			parentActivity.drone.getCalibrationSetup().startCalibration();
 		}
 	}
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		if (event == DroneEventsType.CALIBRATION_IMU) {
-			processMAVMessage(drone.calibrationSetup.getMessage());
+			processMAVMessage(drone.getCalibrationSetup().getMessage());
 		} else if (event == DroneEventsType.HEARTBEAT_TIMEOUT) {
 			if (parentActivity.drone != null) {
 				/*
@@ -114,7 +114,7 @@ public class FragmentSetupIMU extends SetupMainPanel implements OnDroneListener 
 				 */
 				if (Calibration.isCalibrating() && msg.isEmpty()) {
 					Calibration.setClibrating(false);
-					parentActivity.drone.events.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
+					parentActivity.drone.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
 				} else {
 					parentActivity.app.mNotificationHandler.quickNotify(msg);
 				}
@@ -207,7 +207,7 @@ public class FragmentSetupIMU extends SetupMainPanel implements OnDroneListener 
 	public void onPause() {
 		super.onPause();
 		if (parentActivity != null) {
-			parentActivity.drone.events.removeDroneListener(this);
+			parentActivity.drone.removeDroneListener(this);
 		}
 	}
 
@@ -216,7 +216,7 @@ public class FragmentSetupIMU extends SetupMainPanel implements OnDroneListener 
 		super.onResume();
 
 		if (parentActivity != null) {
-			parentActivity.drone.events.addDroneListener(this);
+			parentActivity.drone.addDroneListener(this);
 		}
 	}
 }

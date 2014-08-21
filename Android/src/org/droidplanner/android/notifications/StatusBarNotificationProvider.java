@@ -5,7 +5,7 @@ import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.utils.TextUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 
 import android.app.PendingIntent;
@@ -91,7 +91,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 				FlightActivity.class), 0);
 
 		mToggleConnectionIntent = PendingIntent.getActivity(mContext, 0, new Intent(mContext,
-				FlightActivity.class).setAction(SuperUI.ACTION_TOGGLE_DRONE_CONNECTION), 0);
+                FlightActivity.class).setAction(SuperUI.ACTION_TOGGLE_DRONE_CONNECTION), 0);
 	}
 
     @Override
@@ -181,7 +181,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		mInboxBuilder.setLine(
 				4,
 				TextUtils.normal("Signal:   ",
-						TextUtils.bold(String.format("%d%%", drone.radio.getSignalStrength()))));
+						TextUtils.bold(String.format("%d%%", drone.getRadio().getSignalStrength()))));
 	}
 
 	private void updateHome(Drone drone) {
@@ -191,7 +191,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		mInboxBuilder.setLine(
 				0,
 				TextUtils.normal("Home:   ",
-						TextUtils.bold(drone.home.getDroneDistanceToHome().toString())));
+						TextUtils.bold(drone.getHome().getDroneDistanceToHome().toString())));
 	}
 
 	private void updateGps(Drone drone) {
@@ -202,8 +202,8 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 				1,
 				TextUtils.normal(
 						"Satellite:   ",
-						TextUtils.bold(String.format("%d, %s", drone.GPS.getSatCount(),
-								drone.GPS.getFixType()))));
+						TextUtils.bold(String.format("%d, %s", drone.getGps().getSatCount(),
+								drone.getGps().getFixType()))));
 	}
 
 	private void updateBattery(Drone drone) {
@@ -215,14 +215,14 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 				TextUtils.normal(
 						"Battery:   ",
 						TextUtils.bold(String.format("%2.1fv (%2.0f%%)",
-								drone.battery.getBattVolt(), drone.battery.getBattRemain()))));
+								drone.getBattery().getBattVolt(), drone.getBattery().getBattRemain()))));
 	}
 
 	private void updateDroneState(Drone drone) {
 		if (mInboxBuilder == null)
 			return;
 
-		long timeInSeconds = drone.state.getFlightTime();
+		long timeInSeconds = drone.getState().getFlightTime();
 		long minutes = timeInSeconds / 60;
 		long seconds = timeInSeconds % 60;
 
@@ -237,7 +237,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 			return;
 
 		final CharSequence modeSummary = TextUtils.normal("Flight Mode:   ",
-				TextUtils.bold(drone.state.getMode().getName()));
+				TextUtils.bold(drone.getState().getMode().getName()));
 		mNotificationBuilder.setContentTitle(modeSummary);
 	}
 

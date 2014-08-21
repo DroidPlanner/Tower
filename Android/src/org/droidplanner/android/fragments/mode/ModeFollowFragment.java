@@ -2,7 +2,7 @@ package org.droidplanner.android.fragments.mode;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.gcs.follow.Follow;
@@ -40,7 +40,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnClickLis
 		setupListener();
 		updateLabel();
 
-		drone.events.addDroneListener(this);
+		drone.addDroneListener(this);
 		return view;
 	}
 

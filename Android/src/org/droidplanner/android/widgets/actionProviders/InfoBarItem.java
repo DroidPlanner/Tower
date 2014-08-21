@@ -8,7 +8,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.spinners.ModeAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 
 import android.content.Context;
 import android.os.Handler;
@@ -106,9 +106,8 @@ public abstract class InfoBarItem {
 		@Override
 		public void updateItemView(final Context context, final Drone drone) {
 			if (mItemView != null) {
-				String update = drone == null
-                        ? "--"
-                        : String.format("Home\n%s", drone.home.getDroneDistanceToHome().toString());
+				String update = drone == null ? "--" : String.format("Home\n%s", drone.getHome()
+						.getDroneDistanceToHome().toString());
 				((TextView) mItemView).setText(update);
 			}
 		}
@@ -135,10 +134,10 @@ public abstract class InfoBarItem {
 					update = "--";
 				} else if (mAppPrefs.shouldGpsHdopBeDisplayed()) {
 					update = String.format(Locale.ENGLISH, "Satellite\n%d, %.1f",
-							drone.GPS.getSatCount(), drone.GPS.getGpsEPH());
+							drone.getGps().getSatCount(), drone.getGps().getGpsEPH());
 				} else {
 					update = String.format(Locale.ENGLISH, "Satellite\n%d, %s",
-							drone.GPS.getSatCount(), drone.GPS.getFixType());
+							drone.getGps().getSatCount(), drone.getGps().getFixType());
 				}
 
 				((TextView) mItemView).setText(update);
@@ -203,7 +202,7 @@ public abstract class InfoBarItem {
 						return;
 
 					if (mItemView != null) {
-						long timeInSeconds = mDrone.state.getFlightTime();
+						long timeInSeconds = mDrone.getState().getFlightTime();
 						long minutes = timeInSeconds / 60;
 						long seconds = timeInSeconds % 60;
 
@@ -221,7 +220,7 @@ public abstract class InfoBarItem {
 				@Override
 				public void onClick(View v) {
 					if (mDrone != null) {
-						mDrone.state.resetFlightTimer();
+						mDrone.getState().resetFlightTimer();
 					}
 					mPopup.dismiss();
 				}
@@ -268,8 +267,8 @@ public abstract class InfoBarItem {
 		public void updateItemView(Context context, Drone drone) {
 			if (mItemView != null) {
 				String update = drone == null ? "--" : String.format(Locale.ENGLISH,
-						"%2.1fv\n%2.0f%%", drone.battery.getBattVolt(),
-						drone.battery.getBattRemain());
+						"%2.1fv\n%2.0f%%", drone.getBattery().getBattVolt(),
+						drone.getBattery().getBattRemain());
 
 				((TextView) mItemView).setText(update);
 			}
@@ -350,16 +349,16 @@ public abstract class InfoBarItem {
 				mFadeView.setText(sDefaultValue);
 				mRemFadeView.setText(sDefaultValue);
 			} else {
-				infoUpdate = String.format("%d%%", drone.radio.getSignalStrength());
+				infoUpdate = String.format("%d%%", drone.getRadio().getSignalStrength());
 
-				mRssiView.setText(String.format("RSSI %2.0f dB", drone.radio.getRssi()));
-				mRemRssiView.setText(String.format("RemRSSI %2.0f dB", drone.radio.getRemRssi()));
-				mNoiseView.setText(String.format("Noise %2.0f dB", drone.radio.getNoise()));
+				mRssiView.setText(String.format("RSSI %2.0f dB", drone.getRadio().getRssi()));
+				mRemRssiView.setText(String.format("RemRSSI %2.0f dB", drone.getRadio().getRemRssi()));
+				mNoiseView.setText(String.format("Noise %2.0f dB", drone.getRadio().getNoise()));
 				mRemNoiseView
-						.setText(String.format("RemNoise %2.0f dB", drone.radio.getRemNoise()));
-				mFadeView.setText(String.format("Fade %2.0f dB", drone.radio.getFadeMargin()));
+						.setText(String.format("RemNoise %2.0f dB", drone.getRadio().getRemNoise()));
+				mFadeView.setText(String.format("Fade %2.0f dB", drone.getRadio().getFadeMargin()));
 				mRemFadeView.setText(String.format("RemFade %2.0f dB",
-						drone.radio.getRemFadeMargin()));
+						drone.getRadio().getRemFadeMargin()));
 			}
 
 			mPopup.update();
@@ -410,7 +409,7 @@ public abstract class InfoBarItem {
 							if (mDrone != null) {
 								final ApmModes newMode = (ApmModes) parent
 										.getItemAtPosition(position);
-								mDrone.state.changeFlightMode(newMode);
+								mDrone.getState().changeFlightMode(newMode);
 							}
 						}
 					});
@@ -426,7 +425,7 @@ public abstract class InfoBarItem {
 				return;
 
 			final SpinnerSelfSelect modesSpinner = (SpinnerSelfSelect) mItemView;
-			final int droneType = drone == null ? -1 : drone.type.getType();
+			final int droneType = drone == null ? -1 : drone.getType();
 			if (droneType != mLastDroneType) {
 				final List<ApmModes> flightModes = droneType == -1 ? Collections
 						.<ApmModes> emptyList() : ApmModes.getModeList(droneType);
@@ -439,7 +438,7 @@ public abstract class InfoBarItem {
 			}
 
 			if (mDrone != null)
-				modesSpinner.forcedSetSelection(mModeAdapter.getPosition(mDrone.state.getMode()));
+				modesSpinner.forcedSetSelection(mModeAdapter.getPosition(mDrone.getState().getMode()));
 		}
 	}
 

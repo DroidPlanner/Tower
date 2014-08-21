@@ -1,6 +1,6 @@
 package org.droidplanner.core.gcs.follow;
 
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.gcs.location.Location;
 import org.droidplanner.core.helpers.units.Length;
 

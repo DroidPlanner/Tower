@@ -1,6 +1,6 @@
 package org.droidplanner.core.gcs.follow;
 
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.gcs.location.Location;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
@@ -19,13 +19,14 @@ public class FollowLeash extends FollowAlgorithm {
 
 	@Override
 	public void processNewLocation(Location location) {
-		if (GeoTools.getDistance(location.getCoord(), drone.GPS.getPosition()).valueInMeters() > radius
+		if (GeoTools.getDistance(location.getCoord(), drone.getGps().getPosition()).valueInMeters() >
+                radius
 				.valueInMeters()) {
 			double headingGCStoDrone = GeoTools.getHeadingFromCoordinates(location.getCoord(),
-					drone.GPS.getPosition());
+					drone.getGps().getPosition());
 			Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(location.getCoord(), headingGCStoDrone,
 					radius.valueInMeters());
-			drone.guidedPoint.newGuidedCoord(goCoord);
+			drone.getGuidedPoint().newGuidedCoord(goCoord);
 		}
 	}
 
