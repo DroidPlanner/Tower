@@ -3,6 +3,7 @@ package org.droidplanner.core.drone;
 import java.util.List;
 
 import org.droidplanner.core.MAVLink.WaypointManager;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.parameters.Parameter;
 
 public class DroneInterfaces {
@@ -172,12 +173,12 @@ public class DroneInterfaces {
 		MISSION_WP_UPDATE,
 
 		/**
-         * Signals that FollowMe mode has been enabled.
+         * 'Follow' mode has been enabled.
          */
 		FOLLOW_START,
 
         /**
-         * Signals that FollowMe mode has been disabled.
+         * 'Follow' mode has been disabled.
          */
         FOLLOW_STOP,
 
@@ -187,8 +188,8 @@ public class DroneInterfaces {
 		FOLLOW_CHANGE_TYPE, PARAMETERS_DOWNLOADED,
 	}
 
-	public interface OnDroneListener {
-		public void onDroneEvent(DroneEventsType event, Drone drone);
+	public interface OnDroneListener<T extends Drone> {
+		public void onDroneEvent(DroneEventsType event, T drone);
 	}
 
 	public interface OnParameterManagerListener {

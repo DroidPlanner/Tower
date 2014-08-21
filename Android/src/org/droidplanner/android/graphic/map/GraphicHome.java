@@ -2,7 +2,7 @@ package org.droidplanner.android.graphic.map;
 
 import org.droidplanner.R;
 import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.variables.Home;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
@@ -15,7 +15,7 @@ public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 	private Home home;
 
 	public GraphicHome(Drone drone) {
-		home = drone.home;
+		home = drone.getHome();
 	}
 
 	public boolean isValid() {

@@ -2,7 +2,7 @@ package org.droidplanner.android.fragments.mode;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -51,22 +51,22 @@ public class ModeGuidedFragment extends Fragment implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.button_altitude_plus_1:
-			drone.guidedPoint.changeGuidedAltitude(1);
+			drone.getGuidedPoint().changeGuidedAltitude(1);
 			break;
 		case R.id.button_altitude_plus_10:
-			drone.guidedPoint.changeGuidedAltitude(10);
+			drone.getGuidedPoint().changeGuidedAltitude(10);
 			break;
 		case R.id.button_altitude_minus_1:
-			drone.guidedPoint.changeGuidedAltitude(-1);
+			drone.getGuidedPoint().changeGuidedAltitude(-1);
 			break;
 		case R.id.button_altitude_minus_10:
-			drone.guidedPoint.changeGuidedAltitude(-10);
+			drone.getGuidedPoint().changeGuidedAltitude(-10);
 			break;
 		}
 		updateLabel();
 	}
 
 	protected void updateLabel() {
-		this.altTextView.setText("Target Altitude: (" + drone.guidedPoint.getAltitude() + ")");
+		this.altTextView.setText("Target Altitude: (" + drone.getGuidedPoint().getAltitude() + ")");
 	}
 }

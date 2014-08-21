@@ -23,7 +23,7 @@ import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragme
 import org.droidplanner.android.utils.file.IO.MissionReader;
 import org.droidplanner.android.utils.file.IO.MissionWriter;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
@@ -215,7 +215,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		OpenFileDialog missionDialog = new OpenMissionDialog(drone) {
 			@Override
 			public void waypointFileLoaded(MissionReader reader) {
-				drone.mission.onMissionLoaded(reader.getMsgMissionItems());
+				drone.getMission().onMissionLoaded(reader.getMsgMissionItems());
 				planningMapFragment.zoomToFit();
 			}
 		};
@@ -224,7 +224,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	private void saveMissionFile() {
 
-		if (MissionWriter.write(drone.mission.getMsgMissionItems())) {
+		if (MissionWriter.write(drone.getMission().getMsgMissionItems())) {
 			Toast.makeText(this, "File saved", Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT).show();

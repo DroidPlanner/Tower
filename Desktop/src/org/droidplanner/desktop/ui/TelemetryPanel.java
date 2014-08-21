@@ -5,6 +5,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneEvents;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
@@ -25,9 +26,7 @@ public class TelemetryPanel extends JPanel implements OnDroneListener {
 	private JLabel labelLatitude;
 	private JLabel labelLongitude;
 	private JLabel labelAltitude;
-
 	private JLabel labelSpeed;
-
 	private JLabel labelMode;
 
 	public TelemetryPanel() {
@@ -67,5 +66,11 @@ public class TelemetryPanel extends JPanel implements OnDroneListener {
 			break;
 		}
 		this.repaint();
+	}
+
+	static TelemetryPanel createTelemetryPanel(DroneEvents events) {
+		TelemetryPanel panel = new TelemetryPanel();
+		events.addDroneListener(panel);
+		return panel;
 	}
 }

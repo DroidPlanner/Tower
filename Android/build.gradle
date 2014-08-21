@@ -8,14 +8,17 @@ dependencies {
     compile files('libs/droneapi-java.jar')
     compile 'com.google.android.gms:play-services:5.0.89'
     compile 'com.google.guava:guava:17.0'
-    compile 'org.slf4j:slf4j-api:1.7.7'
-    compile 'org.slf4j:slf4j-nop:1.7.7'
-    compile 'org.osmdroid:osmdroid-android:4.1'
+
+    compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:0.4.0@aar'){
+        transitive=true
+    }
+    compile ('com.cocoahero.android:geojson:1.0.0@aar'){
+        transitive=true
+    }
 
     compile files('libs/usbseriallibrary.jar')
     compile files('libs/j2xx.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
-    compile files('libs/osmbonuspack_v4.4.jar')
     compile files('libs/jeromq-0.3.4.jar')
 
     compile project(':AndroidLib')

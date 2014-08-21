@@ -1,18 +1,20 @@
 package org.droidplanner.android;
 
 import org.droidplanner.android.communication.MAVLinkClient;
-import org.droidplanner.android.gcs.follow.Follow;
+import org.droidplanner.android.gcs.location.FusedLocation;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.services.UploaderService;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
+import org.droidplanner.core.drone.DroneImpl;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
+import org.droidplanner.core.gcs.follow.Follow;
 
 import android.content.Context;
 import android.os.SystemClock;
@@ -55,19 +57,20 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 		};
 
 		DroidPlannerPrefs pref = new DroidPlannerPrefs(context);
-		drone = new Drone(MAVClient, clock, handler, pref);
-		drone.events.addDroneListener(this);
+		drone = new DroneImpl(MAVClient, clock, handler, pref);
+		getDrone().addDroneListener(this);
 
-		missionProxy = new MissionProxy(getDrone().mission);
+		missionProxy = new MissionProxy(getDrone().getMission());
 		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(getDrone());
 
-		followMe = new Follow(this, getDrone(), handler);
+		followMe = new Follow(getDrone(), handler, new FusedLocation(context));
 
 		GAUtils.initGATracker(this);
 		GAUtils.startNewSession(context);
 
-        // Any time the application is started, do a quick scan to see if we need any uploads
-        startService(UploaderService.createIntent(this));
+		// Any time the application is started, do a quick scan to see if we
+		// need any uploads
+		startService(UploaderService.createIntent(this));
 	}
 
 	@Override
@@ -77,12 +80,12 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 
 	@Override
 	public void notifyConnected() {
-		getDrone().events.notifyDroneEvent(DroneEventsType.CONNECTED);
+		getDrone().notifyDroneEvent(DroneEventsType.CONNECTED);
 	}
 
 	@Override
 	public void notifyDisconnected() {
-		getDrone().events.notifyDroneEvent(DroneEventsType.DISCONNECTED);
+		getDrone().notifyDroneEvent(DroneEventsType.DISCONNECTED);
 	}
 
 	@Override

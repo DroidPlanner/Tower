@@ -1,7 +1,7 @@
 package org.droidplanner.core.drone.variables;
 
 import org.droidplanner.core.MAVLink.MavLinkModes;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
@@ -11,7 +11,7 @@ import com.MAVLink.Messages.ApmModes;
 
 public class State extends DroneVariable {
 	private static final long failsafeOnScreenTimeout = 5000;
-	private String failsafe = "";
+	private String warning = "";
 	private boolean armed = false;
 	private boolean isFlying = false;
 	private ApmModes mode = ApmModes.UNKNOWN;
@@ -26,7 +26,7 @@ public class State extends DroneVariable {
 	public Runnable watchdogCallback = new Runnable() {
 		@Override
 		public void run() {
-			removeFailsafe();
+			removeWarning();
 		}
 	};
 
@@ -38,8 +38,8 @@ public class State extends DroneVariable {
 	}
 
 
-	public boolean isFailsafe() {
-		return !failsafe.equals("");
+	public boolean isWarning() {
+		return !warning.equals("");
 	}
 
 	public boolean isArmed() {
@@ -54,14 +54,14 @@ public class State extends DroneVariable {
 		return mode;
 	}
 	
-	public String getFailsafe(){
-		return failsafe;
+	public String getWarning(){
+		return warning;
 	}
 
 	public void setIsFlying(boolean newState) {
 		if (newState != isFlying) {
 			isFlying = newState;
-			myDrone.events.notifyDroneEvent(DroneEventsType.STATE);
+			myDrone.notifyDroneEvent(DroneEventsType.STATE);
 			if (isFlying) {
 				startTimer();
 			} else {
@@ -70,10 +70,10 @@ public class State extends DroneVariable {
 		}
 	}
 
-	public void setFailsafe(String newFailsafe) {
-		if (!this.failsafe.equals(newFailsafe)) {
-			this.failsafe = newFailsafe;
-			myDrone.events.notifyDroneEvent(DroneEventsType.FAILSAFE);
+	public void setWarning(String newFailsafe) {
+		if (!this.warning.equals(newFailsafe)) {
+			this.warning = newFailsafe;
+			myDrone.notifyDroneEvent(DroneEventsType.FAILSAFE);
 		}
 		watchdog.removeCallbacks(watchdogCallback);
 		this.watchdog.postDelayed(watchdogCallback, failsafeOnScreenTimeout);
@@ -82,9 +82,9 @@ public class State extends DroneVariable {
 	public void setArmed(boolean newState) {
 		if (this.armed != newState) {
 			this.armed = newState;
-			myDrone.events.notifyDroneEvent(DroneEventsType.ARMING);
+			myDrone.notifyDroneEvent(DroneEventsType.ARMING);
 			if (newState) {
-				myDrone.waypointManager.getWaypoints();
+				myDrone.getWaypointManager().getWaypoints();
 			}
 		}
 	}
@@ -92,7 +92,7 @@ public class State extends DroneVariable {
 	public void setMode(ApmModes mode) {
 		if (this.mode != mode) {
 			this.mode = mode;
-			myDrone.events.notifyDroneEvent(DroneEventsType.MODE);
+			myDrone.notifyDroneEvent(DroneEventsType.MODE);
 		}
 	}
 
@@ -102,8 +102,8 @@ public class State extends DroneVariable {
 		}
 	}
 	
-	protected void removeFailsafe() {
-		setFailsafe("");
+	protected void removeWarning() {
+		setWarning("");
 	}
 
 	// flightTimer

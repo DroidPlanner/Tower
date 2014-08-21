@@ -1,7 +1,7 @@
 package org.droidplanner.core.drone.variables;
 
 import org.droidplanner.core.MAVLink.MavLinkModes;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.DroneVariable;
@@ -22,14 +22,14 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 
     public GuidedPoint(Drone myDrone) {
 		super(myDrone);
-		myDrone.events.addDroneListener(this);
+		myDrone.addDroneListener(this);
 	}
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case MODE:
-			if ((myDrone.state.getMode() == ApmModes.ROTOR_GUIDED)) {
+			if ((myDrone.getState().getMode() == ApmModes.ROTOR_GUIDED)) {
 				initialize();
 			} else {
 				disable();
@@ -52,7 +52,7 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 	}
 
 	public void forcedGuidedCoordinate(Coord2D coord) throws Exception {
-		if ((myDrone.GPS.getFixTypeNumeric() != GPS.LOCK_3D)) {
+		if ((myDrone.getGps().getFixTypeNumeric() != GPS.LOCK_3D)) {
 			throw new Exception("Bad GPS for guided");
 		}
 		initialize();
@@ -61,16 +61,16 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 
 	private void initialize() {
 		if (state == GuidedStates.UNINITIALIZED) {
-			coord = myDrone.GPS.getPosition();
+			coord = myDrone.getGps().getPosition();
 			altitude.set(getDroneAltConstained());
 			state = GuidedStates.IDLE;
-			myDrone.events.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
+			myDrone.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
 		}
 	}
 
 	private void disable() {
 		state = GuidedStates.UNINITIALIZED;
-		myDrone.events.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
+		myDrone.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
 	}
 
 	private void changeAlt(double altChange) {
@@ -113,14 +113,14 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 
 	private void sendGuidedPoint() {
 		if (state == GuidedStates.ACTIVE) {
-			myDrone.events.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
+			myDrone.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
 			MavLinkModes.setGuidedMode(myDrone, coord.getLat(), coord.getLng(),
 					altitude.valueInMeters());
 		}
 	}
 
 	private double getDroneAltConstained() {
-		double alt = Math.floor(myDrone.altitude.getAltitude());
+		double alt = Math.floor(myDrone.getAltitude().getAltitude());
 		return Math.max(alt, 2.0);
 	}
 

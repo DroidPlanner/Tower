@@ -1,8 +1,8 @@
 package org.droidplanner.android.notifications;
 
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
+import org.droidplanner.core.model.Drone;
 
 import android.content.Context;
 
@@ -57,7 +57,7 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 		mPebbleNotification = new PebbleNotificationProvider(context);
         mWearNotification = new WearNotificationProvider(context, dpApp.followMe);
 
-        mDrone.events.addDroneListener(this);
+        mDrone.addDroneListener(this);
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
      * After calling this method, this object should no longer be used.
      */
     public void terminate(){
-        mDrone.events.removeDroneListener(this);
+        mDrone.removeDroneListener(this);
         mTtsNotification.onTerminate();
         mStatusBarNotification.onTerminate();
         mPebbleNotification.onTerminate();

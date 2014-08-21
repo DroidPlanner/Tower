@@ -137,7 +137,7 @@ public class BluetoothDevicesActivity extends FragmentActivity {
 			
 
 			// Toggle the drone connection
-			((DroidPlannerApp) getApplication()).getDrone().MavClient.toggleConnectionState();
+			((DroidPlannerApp) getApplication()).getDrone().getMavClient().toggleConnectionState();
 
 			// Finish the activity
 			finish();

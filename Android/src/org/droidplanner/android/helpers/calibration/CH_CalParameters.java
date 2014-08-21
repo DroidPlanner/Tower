@@ -1,6 +1,6 @@
 package org.droidplanner.android.helpers.calibration;
 
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 
 public class CH_CalParameters extends CalParameters {
 

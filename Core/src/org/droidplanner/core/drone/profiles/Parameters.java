@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.droidplanner.core.MAVLink.MavLinkParameters;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
@@ -35,7 +35,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 	@SuppressLint("UseSparseArrays")
 	private HashMap<Integer, Parameter> parameters = new HashMap<Integer, Parameter>();
 
-	public DroneInterfaces.OnParameterManagerListener parameterListener;
+	private DroneInterfaces.OnParameterManagerListener parameterListener;
 
 	public Handler watchdog;
 	public Runnable watchdogCallback = new Runnable() {
@@ -50,7 +50,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 	public Parameters(Drone myDrone, Handler handler) {
 		super(myDrone);
 		this.watchdog = handler;
-		myDrone.events.addDroneListener(this);
+		myDrone.addDroneListener(this);
 	}
 
 	public void getAllParameters() {
@@ -94,7 +94,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 				parameterList.add(parameters.get(key));
 			}
 			killWatchdog();
-			myDrone.events.notifyDroneEvent(DroneEventsType.PARAMETERS_DOWNLOADED);
+			myDrone.notifyDroneEvent(DroneEventsType.PARAMETERS_DOWNLOADED);
 
 			if (parameterListener != null) {
 				parameterListener.onEndReceivingParameters(parameterList);
@@ -102,7 +102,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 		} else {
 			resetWatchdog();
 		}
-		myDrone.events.notifyDroneEvent(DroneEventsType.PARAMETER);
+		myDrone.notifyDroneEvent(DroneEventsType.PARAMETER);
 	}
 
 	private void reRequestMissingParams(int howManyParams) {
@@ -154,7 +154,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch(event){
 		case HEARTBEAT_FIRST:
-			if (drone.state.isFlying() == false) {
+			if (drone.getState().isFlying() == false) {
 				getAllParameters();				
 			}
 			break;		
@@ -167,4 +167,8 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 		
 		}
 	}
+
+    public void setParameterListener(DroneInterfaces.OnParameterManagerListener parameterListener) {
+        this.parameterListener = parameterListener;
+    }
 }

@@ -3,7 +3,7 @@ package org.droidplanner.android.notifications;
 import java.util.Locale;
 
 import org.droidplanner.R;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.variables.Calibration;
 
@@ -107,23 +107,23 @@ public class TTSNotificationProvider implements OnInitListener,
 				Toast.makeText(context, R.string.exception_draw_polygon, Toast.LENGTH_SHORT).show();
 				break;
 			case ARMING:
-				speakArmedState(drone.state.isArmed());
+				speakArmedState(drone.getState().isArmed());
 				break;
 			case ARMING_STARTED:
 				speak("Arming the vehicle, please standby");
 				break;
 			case BATTERY:
-				batteryDischargeNotification(drone.battery.getBattRemain());
+				batteryDischargeNotification(drone.getBattery().getBattRemain());
 				break;
 			case MODE:
-				speakMode(drone.state.getMode());
+				speakMode(drone.getState().getMode());
 				break;
 			case MISSION_SENT:
 				Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT).show();
 				speak("Waypoints saved to Drone");
 				break;
 			case GPS_FIX:
-				speakGpsMode(drone.GPS.getFixTypeNumeric());
+				speakGpsMode(drone.getGps().getFixTypeNumeric());
 				break;
 			case MISSION_RECEIVED:
 				Toast.makeText(context, "Waypoints received from Drone", Toast.LENGTH_SHORT).show();
@@ -141,14 +141,14 @@ public class TTSNotificationProvider implements OnInitListener,
 				speak("Data link restored");
 				break;
 			case MISSION_WP_UPDATE:
-				speak("Going for waypoint " + drone.missionStats.getCurrentWP());
+				speak("Going for waypoint " + drone.getMissionStats().getCurrentWP());
 				break;
 			case FOLLOW_START:
 				speak("Following");
 				break;
 			case FAILSAFE:
-				String failsafe = drone.state.getFailsafe();
-				if(drone.state.isFailsafe()){
+				String failsafe = drone.getState().getWarning();
+				if(drone.getState().isWarning()){
 					speak(failsafe);
 				}
 			default:
