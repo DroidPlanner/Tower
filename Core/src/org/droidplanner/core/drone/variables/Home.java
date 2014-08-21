@@ -1,6 +1,6 @@
 package org.droidplanner.core.drone.variables;
 
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
@@ -30,7 +30,7 @@ public class Home extends DroneVariable {
 
 	public Length getDroneDistanceToHome() {
 		if (isValid()) {
-			return GeoTools.getDistance(coordinate, myDrone.GPS.getPosition());
+			return GeoTools.getDistance(coordinate, myDrone.getGps().getPosition());
 		} else {
 			return new Length(0); // TODO fix this
 		}
@@ -47,7 +47,7 @@ public class Home extends DroneVariable {
 	public void setHome(msg_mission_item msg) {
 		this.coordinate = new Coord2D(msg.x, msg.y);
 		this.altitude = new Altitude(msg.z);
-		myDrone.events.notifyDroneEvent(DroneEventsType.HOME);
+		myDrone.notifyDroneEvent(DroneEventsType.HOME);
 	}
 
 	public msg_mission_item packMavlink() {

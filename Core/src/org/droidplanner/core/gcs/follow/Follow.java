@@ -1,6 +1,7 @@
 package org.droidplanner.core.gcs.follow;
 
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.variables.State;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
@@ -15,58 +16,69 @@ import com.MAVLink.Messages.ApmModes;
 
 public class Follow implements OnDroneListener, LocationReceiver {
 
+    //Set of return value for the 'toggleFollowMeState' method.
+    public static final int FOLLOW_INVALID_STATE = -1;
+    public static final int FOLLOW_DRONE_NOT_ARMED = -2;
+    public static final int FOLLOW_DRONE_DISCONNECTED = -3;
+    public static final int FOLLOW_START = 0;
+    public static final int FOLLOW_END = 1;
+
 	private boolean followMeEnabled = false;
 	private Drone drone;
 
 	private ROIEstimator roiEstimator;
 	private LocationFinder locationFinder;
 	private FollowAlgorithm followAlgorithm;
-	private TextNotificationReceiver notify;
 
-	public Follow(Drone drone, Handler handler, LocationFinder locationFinder,
-			TextNotificationReceiver notify) {
+	public Follow(Drone drone, Handler handler, LocationFinder locationFinder) {
 		this.drone = drone;
-		this.notify = notify;
 		followAlgorithm = new FollowAbove(drone, new Length(0.0));
 		this.locationFinder = locationFinder;
 		locationFinder.setLocationListner(this);
 		roiEstimator = new ROIEstimator(handler, drone);
-		drone.events.addDroneListener(this);
+		drone.addDroneListener(this);
 	}
 
-	public void toggleFollowMeState() {
+	public int toggleFollowMeState() {
+        final State droneState = drone.getState();
+        if(droneState == null){
+            return FOLLOW_INVALID_STATE;
+        }
+
 		if (isEnabled()) {
 			disableFollowMe();
-			drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
-		} else {
-			if (drone.MavClient.isConnected()) {
-				if (drone.state.isArmed()) {
-					drone.state.changeFlightMode(ApmModes.ROTOR_GUIDED);
+			drone.getState().changeFlightMode(ApmModes.ROTOR_LOITER);
+            return FOLLOW_END;
+		}
+        else {
+			if (drone.getMavClient().isConnected()) {
+				if (drone.getState().isArmed()) {
+					drone.getState().changeFlightMode(ApmModes.ROTOR_GUIDED);
 					enableFollowMe();
-				} else {
-					notify.shortText("Drone Not Armed");
+                    return FOLLOW_START;
 				}
-			} else {
-				notify.shortText("Drone Not Connected");
+                else {
+                    return FOLLOW_DRONE_NOT_ARMED;
+				}
+			}
+            else {
+                return FOLLOW_DRONE_DISCONNECTED;
 			}
 		}
 	}
 
 	private void enableFollowMe() {
-		drone.events.notifyDroneEvent(DroneEventsType.FOLLOW_START);
-		notify.shortText("FollowMe Enabled");
-
 		locationFinder.enableLocationUpdates();
-
 		followMeEnabled = true;
+        drone.notifyDroneEvent(DroneEventsType.FOLLOW_START);
 	}
 
 	private void disableFollowMe() {
+        locationFinder.disableLocationUpdates();
 		if (followMeEnabled) {
-			notify.shortText("FollowMe Disabled");
 			followMeEnabled = false;
+            drone.notifyDroneEvent(DroneEventsType.FOLLOW_STOP);
 		}
-		locationFinder.disableLocationUpdates();
 	}
 
 	public boolean isEnabled() {
@@ -77,7 +89,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case MODE:
-			if ((drone.state.getMode() != ApmModes.ROTOR_GUIDED)) {
+			if ((drone.getState().getMode() != ApmModes.ROTOR_GUIDED)) {
 				disableFollowMe();
 			}
 			break;
@@ -102,7 +114,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 
 	public void setType(FollowModes item) {
 		followAlgorithm = item.getAlgorithmType(drone);
-		drone.events.notifyDroneEvent(DroneEventsType.FOLLOW_CHANGE_TYPE);
+		drone.notifyDroneEvent(DroneEventsType.FOLLOW_CHANGE_TYPE);
 	}
 
 	public void changeRadius(double increment) {
@@ -115,9 +127,5 @@ public class Follow implements OnDroneListener, LocationReceiver {
 
 	public FollowModes getType() {
 		return followAlgorithm.getType();
-	}
-
-	public interface TextNotificationReceiver {
-		public void shortText(String notification);
 	}
 }

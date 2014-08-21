@@ -3,7 +3,7 @@ package org.droidplanner.android.fragments.mode;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 
@@ -54,7 +54,7 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 		super.onActivityCreated(savedInstanceState);
 
 		// Update the mode info panel based on the current mode.
-		onModeUpdate(mParentActivity.drone.state.getMode());
+		onModeUpdate(mParentActivity.drone.getState().getMode());
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 		super.onStart();
 
 		if (mParentActivity != null) {
-			mParentActivity.drone.events.addDroneListener(this);
+			mParentActivity.drone.addDroneListener(this);
 		}
 	}
 
@@ -71,7 +71,7 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 		super.onStop();
 
 		if (mParentActivity != null) {
-			mParentActivity.drone.events.removeDroneListener(this);
+			mParentActivity.drone.removeDroneListener(this);
 		}
 	}
 
@@ -83,7 +83,7 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 		case MODE:
 		case TYPE:
 			// Update the mode info panel
-			onModeUpdate(drone.state.getMode());
+			onModeUpdate(drone.getState().getMode());
 			break;
 		default:
 			break;
@@ -93,7 +93,7 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 	private void onModeUpdate(ApmModes mode) {
 		// Update the info panel fragment
 		Fragment infoPanel;
-		if (mParentActivity == null || !mParentActivity.drone.MavClient.isConnected()) {
+		if (mParentActivity == null || !mParentActivity.drone.getMavClient().isConnected()) {
 			infoPanel = new ModeDisconnectedFragment();
 		} else {
 			switch (mode) {

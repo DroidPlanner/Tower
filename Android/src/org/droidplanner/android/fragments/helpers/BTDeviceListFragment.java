@@ -125,7 +125,7 @@ public class BTDeviceListFragment extends DialogFragment {
 			final Activity activity = getActivity();
 
 			// Toggle the drone connection
-			((DroidPlannerApp) activity.getApplication()).getDrone().MavClient
+			((DroidPlannerApp) activity.getApplication()).getDrone().getMavClient()
 					.toggleConnectionState();
 
 			// Dismiss the dialog

@@ -9,17 +9,16 @@ import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
+import org.droidplanner.core.drone.DroneImpl;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.gcs.follow.Follow;
-import org.droidplanner.core.gcs.follow.Follow.TextNotificationReceiver;
 
 import android.content.Context;
 import android.os.SystemClock;
-import android.widget.Toast;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 
@@ -65,20 +64,13 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 		};
 
 		DroidPlannerPrefs pref = new DroidPlannerPrefs(context);
-		drone = new Drone(MAVClient, clock, handler, pref);
-		getDrone().events.addDroneListener(this);
+		drone = new DroneImpl(MAVClient, clock, handler, pref);
+		getDrone().addDroneListener(this);
 
-		missionProxy = new MissionProxy(getDrone().mission);
+		missionProxy = new MissionProxy(getDrone().getMission());
 		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(getDrone());
 
-		followMe = new Follow(getDrone(), handler, new FusedLocation(context),
-				new TextNotificationReceiver() {
-					@Override
-					public void shortText(String notification) {
-						Toast.makeText(context, notification, Toast.LENGTH_SHORT).show();
-
-					}
-				});
+		followMe = new Follow(getDrone(), handler, new FusedLocation(context));
 
 		GAUtils.initGATracker(this);
 		GAUtils.startNewSession(context);
@@ -95,12 +87,12 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 
 	@Override
 	public void notifyConnected() {
-		getDrone().events.notifyDroneEvent(DroneEventsType.CONNECTED);
+		getDrone().notifyDroneEvent(DroneEventsType.CONNECTED);
 	}
 
 	@Override
 	public void notifyDisconnected() {
-		getDrone().events.notifyDroneEvent(DroneEventsType.DISCONNECTED);
+		getDrone().notifyDroneEvent(DroneEventsType.DISCONNECTED);
 	}
 
 	@Override

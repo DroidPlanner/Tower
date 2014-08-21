@@ -1,6 +1,6 @@
 package org.droidplanner.core.drone.variables;
 
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneVariable;
 
@@ -18,7 +18,7 @@ public class Navigation extends DroneVariable {
 		this.nav_pitch = nav_pitch;
 		this.nav_roll = nav_roll;
 		this.nav_bearing = nav_bearing;
-		myDrone.events.notifyDroneEvent(DroneEventsType.NAVIGATION);
+		myDrone.notifyDroneEvent(DroneEventsType.NAVIGATION);
 	}
 
 	public double getNavPitch() {

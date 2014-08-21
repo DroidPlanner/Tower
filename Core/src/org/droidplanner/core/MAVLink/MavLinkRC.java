@@ -1,6 +1,6 @@
 package org.droidplanner.core.MAVLink;
 
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ardupilotmega.msg_rc_channels_override;
 
@@ -17,6 +17,6 @@ public class MavLinkRC {
 		msg.chan8_raw = (short) rcOutputs[7];
 		msg.target_system = 1;
 		msg.target_component = 1;
-		drone.MavClient.sendMavPacket(msg.pack());
+		drone.getMavClient().sendMavPacket(msg.pack());
 	}
 }

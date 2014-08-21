@@ -1,7 +1,6 @@
 package org.droidplanner.android.activities;
 
 import org.droidplanner.R;
-import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.dialogs.DroneshareDialog;
 import org.droidplanner.android.fragments.FlightActionsFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
@@ -11,7 +10,7 @@ import org.droidplanner.android.fragments.helpers.FlightSlidingDrawerContent;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 
@@ -341,8 +340,8 @@ public class FlightActivity extends DrawerNavigationUI implements
 	}
 
 	public void onWarningChanged(Drone drone) {
-		if (drone.state.isWarning()) {
-			warningView.setText(drone.state.getWarning());
+		if (drone.getState().isWarning()) {
+			warningView.setText(drone.getState().getWarning());
 			warningView.setVisibility(View.VISIBLE);
 		} else {
 			warningView.setVisibility(View.GONE);

@@ -14,7 +14,7 @@ import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
@@ -221,7 +221,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 		if (mPanMode.compareAndSet(current, update)) {
 			switch (current) {
 			case DRONE:
-				mDrone.events.removeDroneListener(this);
+				mDrone.removeDroneListener(this);
 				break;
 
 			case USER:
@@ -239,7 +239,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
 			switch (update) {
 			case DRONE:
-				mDrone.events.addDroneListener(this);
+				mDrone.addDroneListener(this);
 				break;
 
 			case USER:
@@ -507,7 +507,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 	@Override
 	public void goToDroneLocation() {
 		final float currentZoomLevel = mMap.getCameraPosition().zoom;
-		final Coord2D droneLocation = mDrone.GPS.getPosition();
+		final Coord2D droneLocation = mDrone.getGps().getPosition();
 		updateCamera(droneLocation, (int) currentZoomLevel);
 	}
 
@@ -683,7 +683,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 		case GPS:
 			if (mPanMode.get() == AutoPanMode.DRONE) {
 				final float currentZoomLevel = mMap.getCameraPosition().zoom;
-				final Coord2D droneLocation = drone.GPS.getPosition();
+				final Coord2D droneLocation = drone.getGps().getPosition();
 				updateCamera(droneLocation, currentZoomLevel);
 			}
 			break;
