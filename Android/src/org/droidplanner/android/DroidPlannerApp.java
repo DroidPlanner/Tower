@@ -30,7 +30,7 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 	public Follow followMe;
 	public MissionProxy missionProxy;
 	private MavLinkMsgHandler mavLinkMsgHandler;
-
+	private DroidPlannerPrefs prefs;
 	/**
 	 * Handles dispatching of status bar, and audible notification.
 	 */
@@ -41,7 +41,6 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 		super.onCreate();
 
 		final Context context = getApplicationContext();
-		mNotificationHandler = new NotificationHandler(context);
 
 		MAVLinkClient MAVClient = new MAVLinkClient(this, this);
 		Clock clock = new Clock() {
@@ -63,9 +62,10 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 				handler.postDelayed(thread, timeout);
 			}
 		};
+		mNotificationHandler = new NotificationHandler(context, handler);
 
-		DroidPlannerPrefs pref = new DroidPlannerPrefs(context);
-		drone = new Drone(MAVClient, clock, handler, pref);
+		prefs = new DroidPlannerPrefs(context);
+		drone = new Drone(MAVClient, clock, handler, prefs);
 		getDrone().events.addDroneListener(this);
 
 		missionProxy = new MissionProxy(getDrone().mission);
@@ -115,6 +115,10 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 		default:
 			break;
 		}
+	}
+
+	public DroidPlannerPrefs getPreferences(){
+		return prefs;
 	}
 
 	public Drone getDrone() {

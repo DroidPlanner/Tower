@@ -369,8 +369,9 @@ public class SettingsFragment extends DpPreferenceFragment implements
 					+ getString(R.string.set_to_zero_to_disable));
 		}
 
+		DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
 		if (key.equals(getString(R.string.pref_vehicle_type_key))) {
-			((DroidPlannerApp) getActivity().getApplication()).getDrone().events
+			droidPlannerApp.getDrone().events
 					.notifyDroneEvent(DroneEventsType.TYPE);
 		}
 
@@ -383,11 +384,10 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		}
 
 		if(key.equals(getString(R.string.pref_tts_periodic_period_key))){
-			((DroidPlannerApp) getActivity().getApplication()).getDrone().events
+			droidPlannerApp.getDrone().events
 					.notifyDroneEvent(DroneEventsType.PERIODIC_SPEECH);
-			String val = sharedPreferences.getString(getString(R.string.pref_tts_periodic_period_key),null);
-			Toast toast = Toast.makeText(this.getActivity().getApplicationContext(), val, Toast.LENGTH_SHORT);
-			toast.show();
+			int val = Integer.parseInt(sharedPreferences.getString(getString(R.string.pref_tts_periodic_period_key), null));
+			droidPlannerApp.mNotificationHandler.getTtsNotification().setupPeriodicSpeechOutput(val, droidPlannerApp.getDrone());
 		}
 	}
 
