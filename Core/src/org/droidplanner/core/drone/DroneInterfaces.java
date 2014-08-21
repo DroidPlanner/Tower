@@ -180,7 +180,7 @@ public class DroneInterfaces {
         /**
          * 'Follow' mode has been disabled.
          */
-        FOLLOW_END,
+        FOLLOW_STOP,
 
 		/**
          * 

@@ -77,7 +77,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
         locationFinder.disableLocationUpdates();
 		if (followMeEnabled) {
 			followMeEnabled = false;
-            drone.notifyDroneEvent(DroneEventsType.FOLLOW_END);
+            drone.notifyDroneEvent(DroneEventsType.FOLLOW_STOP);
 		}
 	}
 
