@@ -104,6 +104,7 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 		mDrawerLayout = activity.getDrawerLayout();
 		mNavHubView = activity.getNavHubView();
 		mNavHubView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition,
 					long id) {
@@ -112,6 +113,7 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 			}
 		});
 		mNavHubView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
 					int childPosition, long id) {

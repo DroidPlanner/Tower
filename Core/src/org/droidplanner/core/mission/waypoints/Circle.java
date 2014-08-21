@@ -17,7 +17,7 @@ import com.MAVLink.Messages.enums.MAV_FRAME;
 
 public class Circle extends SpatialCoordItem {
 
-	private double radius = 7.0;
+	private double radius = 10.0;
 	private int turns = 1;
 	private int numberOfSteps = 1;
 	private double altitudeStep = 2;
@@ -37,6 +37,11 @@ public class Circle extends SpatialCoordItem {
 
 	public void setTurns(int turns) {
 		this.turns = Math.abs(turns);
+	}
+	
+
+	public void setRadius(double radius) {
+		this.radius = Math.abs(radius);
 	}
 
 	public int getNumeberOfTurns() {
@@ -90,13 +95,14 @@ public class Circle extends SpatialCoordItem {
 		mavMsg.z = (float) (coordinate.getAltitude().valueInMeters() + extraHeight.valueInMeters());
 		mavMsg.command = MAV_CMD.MAV_CMD_NAV_LOITER_TURNS;
 		mavMsg.param1 = Math.abs(turns);
-		mavMsg.param3 = (turns > 0) ? 1 : -1;
+		mavMsg.param3 = (float) radius;
 	}
 
 	@Override
 	public void unpackMAVMessage(msg_mission_item mavMsg) {
 		super.unpackMAVMessage(mavMsg);
 		setTurns((int) mavMsg.param1);
+		setRadius(mavMsg.param3);
 	}
 
 	@Override

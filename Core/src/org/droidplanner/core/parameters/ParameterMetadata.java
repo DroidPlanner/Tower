@@ -1,12 +1,11 @@
 package org.droidplanner.core.parameters;
 
-import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class ParameterMetadata implements Serializable {
+public class ParameterMetadata{
 	public static final int RANGE_LOW = 0;
 	public static final int RANGE_HIGH = 1;
 

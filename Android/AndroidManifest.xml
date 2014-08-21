@@ -135,15 +135,23 @@
                   android:launchMode="singleTop"
                   android:label="@string/settings"/>
 
-        <activity android:name=".android.activities.helpers.MapPreferencesActivity"
+        <activity
+            android:name=".android.activities.helpers.MapPreferencesActivity"
             android:launchMode="singleTop"
             android:label="@string/activity_title_map_provider_preferences"
             android:parentActivityName=".android.activities.SettingsActivity">
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".android.activities.SettingsActivity" />
-            </activity>
+                android:value=".android.activities.SettingsActivity"/>
+        </activity>
+
+        <receiver android:name=".android.communication.service.NetworkConnectivityReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+            </receiver>
     </application>
 
 </manifest>
