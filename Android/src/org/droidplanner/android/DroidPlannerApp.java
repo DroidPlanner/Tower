@@ -16,11 +16,9 @@ import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.gcs.follow.Follow;
-import org.droidplanner.core.gcs.follow.Follow.TextNotificationReceiver;
 
 import android.content.Context;
 import android.os.SystemClock;
-import android.widget.Toast;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 
@@ -72,14 +70,7 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 		missionProxy = new MissionProxy(getDrone().getMission());
 		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(getDrone());
 
-		followMe = new Follow(getDrone(), handler, new FusedLocation(context),
-				new TextNotificationReceiver() {
-					@Override
-					public void shortText(String notification) {
-						Toast.makeText(context, notification, Toast.LENGTH_SHORT).show();
-
-					}
-				});
+		followMe = new Follow(getDrone(), handler, new FusedLocation(context));
 
 		GAUtils.initGATracker(this);
 		GAUtils.startNewSession(context);

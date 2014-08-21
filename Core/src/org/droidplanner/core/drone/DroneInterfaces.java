@@ -173,9 +173,14 @@ public class DroneInterfaces {
 		MISSION_WP_UPDATE,
 
 		/**
-         * 
+         * 'Follow' mode has been enabled.
          */
 		FOLLOW_START,
+
+        /**
+         * 'Follow' mode has been disabled.
+         */
+        FOLLOW_END,
 
 		/**
          * 
