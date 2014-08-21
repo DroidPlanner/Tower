@@ -9,6 +9,7 @@ import org.droidplanner.core.gcs.follow.Follow;
 import org.droidplanner.core.gcs.follow.FollowAlgorithm.FollowModes;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.MAVLink.Messages.ApmModes;
 import com.getpebble.android.kit.PebbleKit;
@@ -143,24 +144,54 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 			Follow followMe = ((DroidPlannerApp) applicationContext).followMe;
 			PebbleKit.sendAckToPebble(applicationContext, transactionId);
 			int request = (data.getInteger(KEY_PEBBLE_REQUEST).intValue());
-			switch (request) {
-			case KEY_REQUEST_MODE_FOLLOW:
-				followMe.toggleFollowMeState();
-				break;
-			case KEY_REQUEST_CYCLE_FOLLOW_TYPE:
-				followMe.cycleType();
-				break;
-			case KEY_REQUEST_MODE_LOITER:
-				((DroidPlannerApp) applicationContext).getDrone().getState()
-						.changeFlightMode(ApmModes.ROTOR_LOITER);
-				break;
-			case KEY_REQUEST_MODE_RTL:
-				((DroidPlannerApp) applicationContext).getDrone().getState()
-						.changeFlightMode(ApmModes.ROTOR_RTL);
-				break;
-			}
-		}
-	}
+            switch (request) {
+
+                case KEY_REQUEST_MODE_FOLLOW:
+                    final int result = followMe.toggleFollowMeState();
+                    String eventLabel = null;
+                    switch (result) {
+                        case Follow.FOLLOW_START:
+                            eventLabel = "FollowMe enabled";
+                            break;
+
+                        case Follow.FOLLOW_END:
+                            eventLabel = "FollowMe disabled";
+                            break;
+
+                        case Follow.FOLLOW_INVALID_STATE:
+                            eventLabel = "FollowMe error: invalid state";
+                            break;
+
+                        case Follow.FOLLOW_DRONE_DISCONNECTED:
+                            eventLabel = "FollowMe error: drone not connected";
+                            break;
+
+                        case Follow.FOLLOW_DRONE_NOT_ARMED:
+                            eventLabel = "FollowMe error: drone not armed";
+                            break;
+                    }
+
+                    if (eventLabel != null) {
+                        Toast.makeText(applicationContext, eventLabel, Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+
+                case KEY_REQUEST_CYCLE_FOLLOW_TYPE:
+                    followMe.cycleType();
+                    break;
+
+                case KEY_REQUEST_MODE_LOITER:
+                    ((DroidPlannerApp) applicationContext).getDrone().getState()
+                            .changeFlightMode(ApmModes.ROTOR_LOITER);
+                    break;
+
+                case KEY_REQUEST_MODE_RTL:
+                    ((DroidPlannerApp) applicationContext).getDrone().getState()
+                            .changeFlightMode(ApmModes.ROTOR_RTL);
+                    break;
+            }
+        }
+    }
 
 	@Override
 	public void quickNotify(String feedback) {
