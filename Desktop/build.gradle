@@ -1,0 +1,12 @@
+apply plugin: 'java'
+
+dependencies {
+    compile project(':Core')
+    compile project(':Libraries:jmapviewer')
+}
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+    }
+}

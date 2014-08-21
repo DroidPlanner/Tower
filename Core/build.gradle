@@ -1,12 +1,16 @@
-apply plugin: 'com.android.library'
+apply plugin: 'java'
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 sourceSets {
+    main {
+        java.srcDirs = ['src']
+    }
+
     unitTest {
-        java.srcDir file('test')
+        java.srcDirs = ['test']
     }
 }
 
@@ -19,30 +23,9 @@ dependencies {
     compile project(':Mavlink')
 
     //FIXME: hackish implementation
-    unitTestCompile files("$project.buildDir/intermediates/classes/release")
-    unitTestCompile files("${project(':Mavlink').buildDir}/intermediates/classes/release")
+    unitTestCompile files("$project.buildDir/classes/main")
+    unitTestCompile files("${project(':Mavlink').buildDir}/classes/main")
     unitTestCompile 'junit:junit:3.8.1'
-}
-
-android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1.0"
-
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            resources.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
-            res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
-        }
-
-        androidTest {
-            java.srcDirs = ['test']
-        }
-    }
 }
 
 task unitTest(type: Test, dependsOn: assemble){
