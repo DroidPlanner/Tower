@@ -106,8 +106,9 @@ public abstract class InfoBarItem {
 		@Override
 		public void updateItemView(final Context context, final Drone drone) {
 			if (mItemView != null) {
-				String update = drone == null ? "--" : String.format("Home\n%s", drone.home
-						.getDroneDistanceToHome().toString());
+				String update = drone == null
+                        ? "--"
+                        : String.format("Home\n%s", drone.home.getDroneDistanceToHome().toString());
 				((TextView) mItemView).setText(update);
 			}
 		}
