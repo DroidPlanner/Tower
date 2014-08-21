@@ -11,7 +11,7 @@ public class Application {
 
 	public static void main(String[] args) {
 		logic = new Logic();
-		ui = new UI(logic.drone.events);
+		ui = new UI(logic.drone);
 		ui.setJMenuBar(new Menu(logic));
 		ui.setVisible(true);
 
