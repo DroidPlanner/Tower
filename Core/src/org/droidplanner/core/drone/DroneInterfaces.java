@@ -98,7 +98,7 @@ public class DroneInterfaces {
 		HOME,
 
 		/**
-         *
+         * Broadcast to notify of updates to the drone's gps location.
          */
 		GPS,
 
