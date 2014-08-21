@@ -52,6 +52,8 @@ public abstract class MAVLinkConnection extends Thread {
 
 	private File logFile = null;
 	private BufferedOutputStream logWriter = null;
+	
+	private int msg_seq_number;
 
 	protected MAVLinkPacket receivedPacket;
 	protected Parser parser = new Parser();
@@ -180,6 +182,11 @@ public abstract class MAVLinkConnection extends Thread {
 	 *            MavLink packet to be transmitted
 	 */
 	public void sendMavPacket(MAVLinkPacket packet) {
+		msg_seq_number++;
+		if (msg_seq_number > 255){
+			msg_seq_number = 0;
+		}
+		packet.seq = msg_seq_number;
 		byte[] buffer = packet.encodePacket();
 		try {
 			sendBuffer(buffer);
