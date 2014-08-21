@@ -202,7 +202,13 @@
         <item>20;ElevatorWithInput</item>
         <item>21;Rudder</item>
     </string-array>
-
+    <string-array name="tts_periodic_period">
+        <item>off</item>
+        <item>15 sec.</item>
+        <item>30 sec.</item>
+        <item>45 sec.</item>
+        <item>60 sec.</item>
+    </string-array>
     <!-- This string is just used to help in the layout editor -->
     <string-array name="ExampleCameraArray">
         <item>No cameras Available</item>
