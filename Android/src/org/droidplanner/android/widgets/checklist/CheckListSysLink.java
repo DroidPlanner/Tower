@@ -29,7 +29,7 @@ public class CheckListSysLink {
 		} else if (mSysTag.equalsIgnoreCase("SYS_ARM_STATE")) {
 			mListItem.setSys_activated(drone.getState().isArmed());
 		} else if (mSysTag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
-			mListItem.setSys_activated(drone.getState().isFailsafe());
+			mListItem.setSys_activated(drone.getState().isWarning());
 		} else if (mSysTag.equalsIgnoreCase("SYS_CONNECTION_STATE")) {
 			mListItem.setSys_activated(drone.getMavClient().isConnected());
 		}

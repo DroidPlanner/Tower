@@ -1,9 +1,8 @@
-package org.droidplanner.android.gcs.follow;
+package org.droidplanner.core.gcs.follow;
 
 import org.droidplanner.core.model.Drone;
+import org.droidplanner.core.gcs.location.Location;
 import org.droidplanner.core.helpers.units.Length;
-
-import android.location.Location;
 
 public abstract class FollowAlgorithm {
 	public abstract void processNewLocation(Location location);
@@ -26,7 +25,7 @@ public abstract class FollowAlgorithm {
 	}
 
 	public enum FollowModes {
-		LEASH("Leash");
+		LEASH("Leash"), ABOVE("Above");
 
 		private String name;
 
@@ -47,6 +46,8 @@ public abstract class FollowAlgorithm {
 			switch (this) {
 			case LEASH:
 				return new FollowLeash(drone, new Length(8.0));
+			case ABOVE:
+				return new FollowAbove(drone, new Length(0.0));
 			}
 			return null; // Should never reach this
 		}

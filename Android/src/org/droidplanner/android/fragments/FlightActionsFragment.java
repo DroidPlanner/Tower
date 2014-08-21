@@ -2,9 +2,9 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.gcs.follow.Follow;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.model.Drone;
+import org.droidplanner.core.gcs.follow.Follow;
 
 import android.app.Activity;
 import android.os.Bundle;

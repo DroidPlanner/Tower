@@ -2,7 +2,7 @@ package org.droidplanner.android;
 
 import org.droidplanner.android.communication.service.MAVLinkClient;
 import org.droidplanner.android.communication.service.UploaderService;
-import org.droidplanner.android.gcs.follow.Follow;
+import org.droidplanner.android.gcs.location.FusedLocation;
 import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.analytics.GAUtils;
@@ -15,9 +15,12 @@ import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
+import org.droidplanner.core.gcs.follow.Follow;
+import org.droidplanner.core.gcs.follow.Follow.TextNotificationReceiver;
 
 import android.content.Context;
 import android.os.SystemClock;
+import android.widget.Toast;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 
@@ -69,13 +72,21 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 		missionProxy = new MissionProxy(getDrone().getMission());
 		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(getDrone());
 
-		followMe = new Follow(this, getDrone(), handler);
+		followMe = new Follow(getDrone(), handler, new FusedLocation(context),
+				new TextNotificationReceiver() {
+					@Override
+					public void shortText(String notification) {
+						Toast.makeText(context, notification, Toast.LENGTH_SHORT).show();
+
+					}
+				});
 
 		GAUtils.initGATracker(this);
 		GAUtils.startNewSession(context);
 
-        // Any time the application is started, do a quick scan to see if we need any uploads
-        startService(UploaderService.createIntent(this));
+		// Any time the application is started, do a quick scan to see if we
+		// need any uploads
+		startService(UploaderService.createIntent(this));
 	}
 
 	@Override

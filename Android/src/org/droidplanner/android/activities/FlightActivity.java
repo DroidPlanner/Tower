@@ -39,7 +39,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
-	private TextView failsafeView;
+	private TextView warningView;
 
 	private FlightMapFragment mapFragment;
 
@@ -57,7 +57,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 		setContentView(R.layout.activity_flight);
 
 		fragmentManager = getSupportFragmentManager();
-		failsafeView = (TextView) findViewById(R.id.failsafeTextView);
+		warningView = (TextView) findViewById(R.id.failsafeTextView);
 
 		mSlidingDrawer = (SlidingDrawer) findViewById(R.id.SlidingDrawerRight);
 		mSlidingDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
@@ -261,8 +261,8 @@ public class FlightActivity extends DrawerNavigationUI implements
 		int bottomPadding = 0;
 		int leftPadding = 0;
 		int topPadding = mLocationButtonsContainer.getTop();
-		if (failsafeView != null && failsafeView.getVisibility() != View.GONE) {
-			topPadding += failsafeView.getHeight();
+		if (warningView != null && warningView.getVisibility() != View.GONE) {
+			topPadding += warningView.getHeight();
 		}
 
 		final View editorToolsView = editorTools.getView();
@@ -331,7 +331,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 		super.onDroneEvent(event, drone);
 		switch (event) {
 		case FAILSAFE:
-			onFailsafeChanged(drone);
+			onWarningChanged(drone);
 			break;
 
 		default:
@@ -339,12 +339,12 @@ public class FlightActivity extends DrawerNavigationUI implements
 		}
 	}
 
-	public void onFailsafeChanged(Drone drone) {
-		if (drone.getState().isFailsafe()) {
-			failsafeView.setText(drone.getState().getFailsafe());
-			failsafeView.setVisibility(View.VISIBLE);
+	public void onWarningChanged(Drone drone) {
+		if (drone.getState().isWarning()) {
+			warningView.setText(drone.getState().getWarning());
+			warningView.setVisibility(View.VISIBLE);
 		} else {
-			failsafeView.setVisibility(View.GONE);
+			warningView.setVisibility(View.GONE);
 		}
 	}
 
