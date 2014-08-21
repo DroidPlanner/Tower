@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
-import android.util.Log;
-
 /**
  * This class contains functions used to generate a spline path.
  */
@@ -25,14 +23,13 @@ public class SplinePath {
 	 * 
 	 * @param points
 	 *            map coordinates
-	 * @param n
 	 *            decimation factor
 	 * @return set of coordinates describing the spline path
 	 */
 	public static List<Coord2D> process(List<Coord2D> points) {
 		final int pointsCount = points.size();
 		if (pointsCount < 4) {
-			Log.w(TAG, "Not enough points!");
+			System.err.println("Not enough points!");
 			return points;
 		}
 
