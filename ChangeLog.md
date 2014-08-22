@@ -9,6 +9,19 @@ All the changes are logged below (preferable with the pull request numbers in pa
 
 # Releases
 
+## Droidplanner v2.7.0
+* Development of a desktop App (#982)
+* Periodic voice notifications (#996)
+* Follow-me safety/performance improvements (#992)
+* Fix Failsafe message text (#981)
+* Fix home info display (#993)
+* Mapbox integration (#985)
+* Small typo fixes on the code(#990)
+* Implement follow-me on Desktop app (#989)
+* Making follow-me code more generic (#988)
+* Encapsulate Drone model on CORE project (#994)
+* Fix on the build system (#984,#979,#991,#996)
+
 ## Droidplanner v2.6.2
 * Parameter download on start-up (#976)
 * Use FTDI usb library for FTDI devices (#975)
