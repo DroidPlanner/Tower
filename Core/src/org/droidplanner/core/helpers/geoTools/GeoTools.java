@@ -10,7 +10,7 @@ import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.polygon.Polygon;
 
 public class GeoTools {
-	private static final double RADIUS_OF_EARTH = 6372797.560856d;
+	private static final double RADIUS_OF_EARTH = 6378137.0;//In meters.  Source: WGS84
 	public List<Coord2D> waypoints;
 
 	public GeoTools() {
@@ -26,13 +26,11 @@ public class GeoTools {
 	}
 
 	public static Double metersTolat(double meters) {
-		double radius_of_earth = 6378100.0;// # in meters
-		return Math.toDegrees(meters / radius_of_earth);
+		return Math.toDegrees(meters / RADIUS_OF_EARTH);
 	}
 
 	public static Double latToMeters(double lat) {
-		double radius_of_earth = 6378100.0;// # in meters
-		return Math.toRadians(lat) * radius_of_earth;
+		return Math.toRadians(lat) * RADIUS_OF_EARTH;
 	}
 
 	/**
