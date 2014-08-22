@@ -165,9 +165,6 @@ public class TTSNotificationProvider implements OnInitListener,
 			case FOLLOW_START:
 				speak("Following");
 				break;
-			case PERIODIC_SPEECH:
-
-				break;
 			case FAILSAFE:
 				String failsafe = drone.state.getFailsafe();
 				if(drone.state.isFailsafe()){
