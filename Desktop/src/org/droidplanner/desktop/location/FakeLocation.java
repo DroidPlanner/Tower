@@ -29,11 +29,11 @@ public class FakeLocation implements LocationFinder {
 			@Override
 			public void run() {
 				long now = System.currentTimeMillis();
-				double dt = (now - lastTime)/1000.0;
+				double dt = (now - lastTime) / 1000.0;
 				lastTime = now;
-				if (((now/(90*1000))%2)==0) {
+				if (((now / (90 * 1000)) % 2) == 0) {
 					loc = GeoTools.newCoordFromBearingAndDistance(loc, 90, SPEED * dt);
-				}else{
+				} else {
 					loc = GeoTools.newCoordFromBearingAndDistance(loc, 90, -SPEED * dt);
 				}
 				receiver.onLocationChanged(new Location(loc));

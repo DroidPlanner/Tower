@@ -5,7 +5,7 @@ import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class ParameterMetadata{
+public class ParameterMetadata {
 	public static final int RANGE_LOW = 0;
 	public static final int RANGE_HIGH = 1;
 

@@ -98,8 +98,8 @@ public class DroneInterfaces {
 		HOME,
 
 		/**
-         * Broadcast to notify of updates to the drone's gps location.
-         */
+		 * Broadcast to notify of updates to the drone's gps location.
+		 */
 		GPS,
 
 		/**
@@ -173,14 +173,14 @@ public class DroneInterfaces {
 		MISSION_WP_UPDATE,
 
 		/**
-         * 'Follow' mode has been enabled.
-         */
+		 * 'Follow' mode has been enabled.
+		 */
 		FOLLOW_START,
 
-        /**
-         * 'Follow' mode has been disabled.
-         */
-        FOLLOW_STOP,
+		/**
+		 * 'Follow' mode has been disabled.
+		 */
+		FOLLOW_STOP,
 
 		/**
          * 

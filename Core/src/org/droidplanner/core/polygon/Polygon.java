@@ -58,7 +58,7 @@ public class Polygon {
 		if (points.size() < 3) {
 			throw new InvalidPolygon(points.size());
 		} else {
-        }
+		}
 	}
 
 	public class InvalidPolygon extends Exception {

@@ -109,7 +109,6 @@ public class GeoTools {
 		return MathUtil.hypot(horizontalDistance, altitudeDiff);
 	}
 
-
 	/**
 	 * Computes the heading between two coordinates
 	 * 

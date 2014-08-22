@@ -20,7 +20,7 @@ public class GeoToolsTest extends TestCase {
 		assertEquals(dist2DP1toP2, GeoTools.getDistance(p1, p2).valueInMeters(), tolerance);
 		assertEquals(dist2DP1toP2, GeoTools.getDistance(p2, p1).valueInMeters(), tolerance);
 	}
-	
+
 	public void testGet3DDistance() {
 		double tolerance = dist2DP1toP2 * 0.0005;
 		assertEquals(dist3DP1toP2, GeoTools.get3DDistance(p1, p2).valueInMeters(), tolerance);

@@ -1,7 +1,7 @@
 package org.droidplanner.core.drone.variables;
 
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneVariable;
+import org.droidplanner.core.model.Drone;
 
 public class Altitude extends DroneVariable {
 	private double altitude = 0;

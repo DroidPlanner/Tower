@@ -26,20 +26,20 @@ public enum DPMapProvider {
 		}
 	},
 
-    /**
-     * Provides access to mapbox map.
-     */
-    MAPBOX{
-        @Override
-    public DPMap getMapFragment(){
-            return new MapBoxFragment();
-        }
+	/**
+	 * Provides access to mapbox map.
+	 */
+	MAPBOX {
+		@Override
+		public DPMap getMapFragment() {
+			return new MapBoxFragment();
+		}
 
-        @Override
-    public MapProviderPreferences getMapProviderPreferences(){
-            return new MapBoxProviderPreferences();
-        }
-    };
+		@Override
+		public MapProviderPreferences getMapProviderPreferences() {
+			return new MapBoxProviderPreferences();
+		}
+	};
 
 	/**
 	 * @return the fragment implementing the map.

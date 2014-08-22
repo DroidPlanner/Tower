@@ -60,7 +60,7 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 
 	public void setDroneshareLogin(String b) {
 		prefs.edit().putString(context.getString(R.string.pref_dshare_username_key), b.trim())
-                .apply();
+				.apply();
 	}
 
 	public String getDroneshareEmail() {
@@ -77,7 +77,7 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 
 	public void setDronesharePassword(String b) {
 		prefs.edit().putString(context.getString(R.string.pref_dshare_password_key), b.trim())
-                .apply();
+				.apply();
 	}
 
 	public boolean getDroneshareEnabled() {
@@ -258,18 +258,22 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 		return prefs.getString(context.getString(R.string.pref_maps_providers_key), null);
 	}
 
-	public Map<String,Boolean> getPeriodicSpeechPrefs(){
-		Map<String,Boolean> speechPrefs = new HashMap<String, Boolean>();
-		speechPrefs.put("battery voltage", prefs.getBoolean(context.getString(R.string.pref_tts_periodic_bat_volt_key),true));
-		speechPrefs.put("altitude", prefs.getBoolean(context.getString(R.string.pref_tts_periodic_alt_key),true));
-		speechPrefs.put("airspeed", prefs.getBoolean(context.getString(R.string.pref_tts_periodic_airspeed_key),true));
-		speechPrefs.put("rssi", prefs.getBoolean(context.getString(R.string.pref_tts_periodic_rssi_key),true));
+	public Map<String, Boolean> getPeriodicSpeechPrefs() {
+		Map<String, Boolean> speechPrefs = new HashMap<String, Boolean>();
+		speechPrefs.put("battery voltage",
+				prefs.getBoolean(context.getString(R.string.pref_tts_periodic_bat_volt_key), true));
+		speechPrefs.put("altitude",
+				prefs.getBoolean(context.getString(R.string.pref_tts_periodic_alt_key), true));
+		speechPrefs.put("airspeed",
+				prefs.getBoolean(context.getString(R.string.pref_tts_periodic_airspeed_key), true));
+		speechPrefs.put("rssi",
+				prefs.getBoolean(context.getString(R.string.pref_tts_periodic_rssi_key), true));
 		return speechPrefs;
 	}
 
-	public int getSpokenStatusInterval(){
-		return Integer.parseInt(prefs.getString(context.getString(R.string.pref_tts_periodic_period_key), null));
+	public int getSpokenStatusInterval() {
+		return Integer.parseInt(prefs.getString(
+				context.getString(R.string.pref_tts_periodic_period_key), null));
 	}
-
 
 }

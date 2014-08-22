@@ -1,9 +1,9 @@
 package org.droidplanner.core.drone.variables;
 
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.math.MathUtil;
+import org.droidplanner.core.model.Drone;
 
 public class Radio extends DroneVariable {
 	private static final int MAX_FADE_MARGIN = 50;

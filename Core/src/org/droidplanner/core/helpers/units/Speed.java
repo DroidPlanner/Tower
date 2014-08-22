@@ -18,7 +18,7 @@ public class Speed {
 	}
 
 	public String toStringInMetersPerSecond() {
-		return String.format(Locale.US, "%2.1f m/s", speedInMetersPerSecond);		
+		return String.format(Locale.US, "%2.1f m/s", speedInMetersPerSecond);
 	}
 
 	@Override
@@ -39,6 +39,5 @@ public class Speed {
 		}
 		return false;
 	}
-
 
 }

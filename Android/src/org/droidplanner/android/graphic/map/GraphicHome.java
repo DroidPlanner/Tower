@@ -2,9 +2,9 @@ package org.droidplanner.android.graphic.map;
 
 import org.droidplanner.R;
 import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.variables.Home;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.model.Drone;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

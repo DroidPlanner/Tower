@@ -14,9 +14,9 @@ import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.model.Drone;
 
 import android.content.Context;
 import android.content.IntentSender;
@@ -188,27 +188,27 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 		}
 	}
 
-    @Override
-    public Coord2D getMapCenter() {
-        return DroneHelper.LatLngToCoord(mMap.getCameraPosition().target);
-    }
+	@Override
+	public Coord2D getMapCenter() {
+		return DroneHelper.LatLngToCoord(mMap.getCameraPosition().target);
+	}
 
-    @Override
-    public float getMapZoomLevel() {
-        return mMap.getCameraPosition().zoom;
-    }
+	@Override
+	public float getMapZoomLevel() {
+		return mMap.getCameraPosition().zoom;
+	}
 
-    @Override
-    public float getMaxZoomLevel() {
-        return mMap.getMaxZoomLevel();
-    }
+	@Override
+	public float getMaxZoomLevel() {
+		return mMap.getMaxZoomLevel();
+	}
 
-    @Override
-    public float getMinZoomLevel() {
-        return mMap.getMinZoomLevel();
-    }
+	@Override
+	public float getMinZoomLevel() {
+		return mMap.getMinZoomLevel();
+	}
 
-    @Override
+	@Override
 	public void selectAutoPanMode(AutoPanMode target) {
 		final AutoPanMode currentMode = mPanMode.get();
 		if (currentMode == target)

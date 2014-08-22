@@ -1,11 +1,11 @@
 package org.droidplanner.core.drone.variables;
 
 import org.droidplanner.core.MAVLink.MavLinkModes;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.DroneVariable;
+import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ApmModes;
 
@@ -21,7 +21,7 @@ public class State extends DroneVariable {
 	private long startTime = 0;
 	private long elapsedFlightTime = 0;
 	private Clock clock;
-	
+
 	public Handler watchdog;
 	public Runnable watchdogCallback = new Runnable() {
 		@Override
@@ -33,10 +33,9 @@ public class State extends DroneVariable {
 	public State(Drone myDrone, Clock clock, Handler handler) {
 		super(myDrone);
 		this.clock = clock;
-		this.watchdog=handler;
+		this.watchdog = handler;
 		resetFlightTimer();
 	}
-
 
 	public boolean isWarning() {
 		return !warning.equals("");
@@ -53,8 +52,8 @@ public class State extends DroneVariable {
 	public ApmModes getMode() {
 		return mode;
 	}
-	
-	public String getWarning(){
+
+	public String getWarning() {
 		return warning;
 	}
 
@@ -101,7 +100,7 @@ public class State extends DroneVariable {
 			MavLinkModes.changeFlightMode(myDrone, mode);
 		}
 	}
-	
+
 	protected void removeWarning() {
 		setWarning("");
 	}
