@@ -6,10 +6,9 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneEvents;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.desktop.ui.widgets.GraphPanel;
 
 public class Graph implements OnDroneListener{
@@ -29,7 +28,7 @@ public class Graph implements OnDroneListener{
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {		
 		case SPEED:
-			data.add(drone.speed.getGroundSpeed().valueInMetersPerSecond());
+			data.add(drone.getSpeed().getGroundSpeed().valueInMetersPerSecond());
 			graph.repaint();
 			break;
 		default:
@@ -37,9 +36,9 @@ public class Graph implements OnDroneListener{
 		}	
 	}
 
-	static void createGraph(DroneEvents events) {
+	static void createGraph(org.droidplanner.core.model.Drone drone) {
 		OnDroneListener mGraph = new Graph("Graph");
-		events.addDroneListener(mGraph);
+		drone.addDroneListener(mGraph);
 	}
 
 	

@@ -68,7 +68,8 @@ public class FusedLocation implements LocationFinder, GooglePlayServicesClient.C
 	public void onLocationChanged(Location androidLocation) {
 		if (receiver != null) {
 			org.droidplanner.core.gcs.location.Location location = new org.droidplanner.core.gcs.location.Location(
-					new Coord2D(androidLocation.getLatitude(), androidLocation.getLongitude()));
+					new Coord2D(androidLocation.getLatitude(), androidLocation.getLongitude()),
+					androidLocation.getAccuracy());
 			receiver.onLocationChanged(location);
 		}
 	}

@@ -1,7 +1,7 @@
 package org.droidplanner.core.gcs.roi;
 
 import org.droidplanner.core.MAVLink.MavLinkROI;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.gcs.location.Location;
 import org.droidplanner.core.gcs.location.Location.LocationReceiver;
@@ -18,6 +18,6 @@ public class ROIEstimator implements LocationReceiver {
 
 	@Override
 	public void onLocationChanged(Location location) {
-		MavLinkROI.setROI(drone, new Coord3D(location.getCoord(), new Altitude(0.0)));		
+		MavLinkROI.setROI(drone, new Coord3D(location.getCoord(), new Altitude(1.0)));
 	}
 }

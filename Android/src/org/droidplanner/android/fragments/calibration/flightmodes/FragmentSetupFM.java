@@ -6,7 +6,7 @@ import org.droidplanner.android.fragments.calibration.SetupSidePanel;
 import org.droidplanner.android.fragments.helpers.SuperSetupMainPanel;
 import org.droidplanner.android.helpers.calibration.CalParameters;
 import org.droidplanner.android.helpers.calibration.FM_CalParameters;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 
 import android.view.View;
@@ -171,7 +171,7 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 	}
 
 	private void updatePWMPanels() {
-		int pwmIn = drone.RC.in[4];
+		int pwmIn = drone.getRC().in[4];
 		int pwmId = getPWMRangeIndex(pwmIn);
 
 		textPWMCurrent.setText(String.format("PWM in : %d", pwmIn));

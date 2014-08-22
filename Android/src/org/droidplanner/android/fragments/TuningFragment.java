@@ -5,7 +5,7 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.widgets.graph.Chart;
 import org.droidplanner.android.widgets.graph.ChartSeries;
 import org.droidplanner.core.MAVLink.MavLinkStreamRates;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 
@@ -64,20 +64,20 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 	@Override
 	public void onStart() {
 		super.onStart();
-		drone.events.addDroneListener(this);
+		drone.addDroneListener(this);
 		setupDataStreamingForTuning();
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		drone.events.removeDroneListener(this);
-		drone.streamRates.setupStreamRatesFromPref();
+		drone.removeDroneListener(this);
+		drone.getStreamRates().setupStreamRatesFromPref();
 	}
 
 	private void setupDataStreamingForTuning() {
 		// Sets the nav messages at 50Hz and other messages at a low rate 1Hz
-		MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1, 0, 0, NAV_MSG_RATE);
+		MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 1, 0, 1, 1, 1, 0, 0, NAV_MSG_RATE);
 	}
 
 	private void setupLocalViews(View view) {
@@ -130,10 +130,10 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 	}
 
 	public void onNewOrientationData(Drone drone) {
-		bottomDataValue.newData(drone.orientation.getPitch());
-		topDataValue.newData(drone.orientation.getRoll());
-		bottomDataReference.newData(drone.navigation.getNavPitch());
-		topDataReference.newData(drone.navigation.getNavRoll());
+		bottomDataValue.newData(drone.getOrientation().getPitch());
+		topDataValue.newData(drone.getOrientation().getRoll());
+		bottomDataReference.newData(drone.getNavigation().getNavPitch());
+		topDataReference.newData(drone.getNavigation().getNavRoll());
 		bottomChart.update();
 		topChart.update();
 	}

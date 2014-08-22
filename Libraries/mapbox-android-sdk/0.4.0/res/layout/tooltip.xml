@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <LinearLayout
+            android:background="@color/white"
+            android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/tooltip_title"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:maxEms="17"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:text="@string/toolTipTitle"/>
+
+        <TextView
+                android:id="@+id/tooltip_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:maxEms="17"
+                android:text="@string/toolTipDescription"/>
+
+        <TextView
+                android:id="@+id/tooltip_subdescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:maxEms="17"
+                android:text="@string/toolTipAddress"
+                android:visibility="gone"/>
+    </LinearLayout>
+
+    <com.mapbox.mapboxsdk.views.TipView
+            android:layout_width="fill_parent"
+            android:layout_height="10dp"/>
+
+</LinearLayout>
+
+<!-- From: file:/Users/bleege/development/MapboxAndroidSDK/MapboxAndroidSDK/src/main/res/layout/tooltip.xml -->

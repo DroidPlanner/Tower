@@ -14,7 +14,7 @@ import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.widgets.adapterViews.MissionItemProxyView;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 
@@ -67,14 +67,14 @@ public class EditorListFragment extends Fragment implements OnItemLongClickListe
 	public void onStart() {
 		super.onStart();
 		updateViewVisibility();
-		drone.events.addDroneListener(this);
+		drone.addDroneListener(this);
 		missionProxy.selection.addSelectionUpdateListener(this);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		drone.events.removeDroneListener(this);
+		drone.removeDroneListener(this);
 		missionProxy.selection.removeSelectionUpdateListener(this);
 	}
 

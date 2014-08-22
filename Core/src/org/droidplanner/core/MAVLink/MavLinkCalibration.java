@@ -1,6 +1,6 @@
 package org.droidplanner.core.MAVLink;
 
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ardupilotmega.msg_command_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_command_long;
@@ -13,7 +13,7 @@ public class MavLinkCalibration {
 		msg_command_ack msg = new msg_command_ack();
 		msg.command = (short) count;
 		msg.result = MAV_CMD_ACK.MAV_CMD_ACK_OK;
-		drone.MavClient.sendMavPacket(msg.pack());
+		drone.getMavClient().sendMavPacket(msg.pack());
 	}
 
 	public static void sendStartCalibrationMessage(Drone drone) {
@@ -30,7 +30,7 @@ public class MavLinkCalibration {
 		msg.param6 = 0;
 		msg.param7 = 0;
 		msg.confirmation = 0;
-		drone.MavClient.sendMavPacket(msg.pack());
+		drone.getMavClient().sendMavPacket(msg.pack());
 	}
 
 }

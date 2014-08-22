@@ -7,7 +7,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.maps.DPMap.PathSource;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.MarkerWithText;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.variables.GPS;
 import org.droidplanner.core.drone.variables.GuidedPoint;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
@@ -24,8 +24,8 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSo
 	private GPS GPS;
 
 	public GraphicGuided(Drone drone) {
-		guidedPoint = drone.guidedPoint;
-		GPS = drone.GPS;
+		guidedPoint = drone.getGuidedPoint();
+		GPS = drone.getGps();
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import org.droidplanner.android.fragments.calibration.SetupMainPanel;
 import org.droidplanner.android.fragments.calibration.SetupSidePanel;
 import org.droidplanner.android.helpers.calibration.CalParameters;
 import org.droidplanner.android.helpers.calibration.CalParameters.OnCalibrationEvent;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 
@@ -48,13 +48,13 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements OnCa
 	@Override
 	public void onResume() {
 		super.onResume();
-		drone.events.addDroneListener(this);
+		drone.addDroneListener(this);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		drone.events.removeDroneListener(this);
+		drone.removeDroneListener(this);
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements OnCa
 	protected SetupSidePanel getInitialPanel() {
 
 		if (parameters != null && !parameters.isParameterDownloaded()
-				&& drone.MavClient.isConnected()) {
+				&& drone.getMavClient().isConnected()) {
 			downloadCalibrationData();
 		} else {
 			sidePanel = getDefaultPanel();
@@ -135,7 +135,7 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements OnCa
 	}
 
 	private void uploadCalibrationData() {
-		if (parameters == null || !drone.MavClient.isConnected())
+		if (parameters == null || !drone.getMavClient().isConnected())
 			return;
 
 		sidePanel = getProgressPanel(true);
@@ -145,7 +145,7 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements OnCa
 	}
 
 	private void downloadCalibrationData() {
-		if (parameters == null || !drone.MavClient.isConnected())
+		if (parameters == null || !drone.getMavClient().isConnected())
 			return;
 		sidePanel = getProgressPanel(false);
 		parameters.getCalibrationParameters(drone);

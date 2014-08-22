@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.OnTimeout;
 import org.droidplanner.core.drone.DroneInterfaces.OnWaypointManagerListener;
 import org.droidplanner.core.drone.DroneVariable;
@@ -187,7 +187,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 					timeOut.resetTimeOut();
 					state = WaypointStates.IDLE;
 					MavLinkWaypoint.sendAck(myDrone);
-					myDrone.mission.onMissionReceived(mission);
+					myDrone.getMission().onMissionReceived(mission);
 					doEndWaypointEvent(WaypointEvent_Type.WP_DOWNLOAD);
 				}
 				return true;
@@ -206,7 +206,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 		case WAITING_WRITE_ACK:
 			if (msg.msgid == msg_mission_ack.MAVLINK_MSG_ID_MISSION_ACK) {
 				timeOut.resetTimeOut();
-				myDrone.mission.onWriteWaypoints((msg_mission_ack) msg);
+				myDrone.getMission().onWriteWaypoints((msg_mission_ack) msg);
 				state = WaypointStates.IDLE;
 				doEndWaypointEvent(WaypointEvent_Type.WP_UPLOAD);
 				return true;
@@ -262,11 +262,11 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 		case WRITING_WP:
 			// Log.d("TIMEOUT", "re Write Msg: " + String.valueOf(writeIndex));
 			if (writeIndex < mission.size()) {
-				myDrone.MavClient.sendMavPacket(mission.get(writeIndex).pack());
+				myDrone.getMavClient().sendMavPacket(mission.get(writeIndex).pack());
 			}
 			break;
 		case WAITING_WRITE_ACK:
-			myDrone.MavClient.sendMavPacket(mission.get(mission.size() - 1).pack());
+			myDrone.getMavClient().sendMavPacket(mission.get(mission.size() - 1).pack());
 			break;
 		}
 
@@ -278,7 +278,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 		 * Log.d("TIMEOUT", "Write Msg: " + String.valueOf(msg.seq));
 		 */
 		writeIndex = msg.seq;
-		myDrone.MavClient.sendMavPacket(mission.get(writeIndex).pack());
+		myDrone.getMavClient().sendMavPacket(mission.get(writeIndex).pack());
 
 		if (writeIndex + 1 >= mission.size()) {
 			state = WaypointStates.WAITING_WRITE_ACK;

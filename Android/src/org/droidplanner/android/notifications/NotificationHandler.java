@@ -1,6 +1,6 @@
 package org.droidplanner.android.notifications;
 
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import android.content.Context;

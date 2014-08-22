@@ -16,8 +16,7 @@ import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.notifications.TTSNotificationProvider;
 import org.droidplanner.android.utils.file.DirectoryPath;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.variables.HeartBeat;
@@ -374,8 +373,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
 
 		DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
 		if (key.equals(getString(R.string.pref_vehicle_type_key))) {
-			droidPlannerApp.getDrone().events
-					.notifyDroneEvent(DroneEventsType.TYPE);
+			droidPlannerApp.getDrone().notifyDroneEvent(DroneEventsType.TYPE);
 		}
 
 		if (key.equals(getString(R.string.pref_rc_mode_key))) {
@@ -389,7 +387,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		if(key.equals(getString(R.string.pref_tts_periodic_period_key))){
 			setupPeriodicControls();
 			int val = Integer.parseInt(sharedPreferences.getString(getString(R.string.pref_tts_periodic_period_key), null));
-			if(droidPlannerApp.getDrone().MavClient.isConnected()) {
+			if(droidPlannerApp.getDrone().getMavClient().isConnected()) {
 				droidPlannerApp.mNotificationHandler.getTtsNotification().setupPeriodicSpeechOutput(val, droidPlannerApp.getDrone());
 			}
 		}
@@ -414,14 +412,14 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		super.onStart();
 
 		final Drone drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
-		final byte mavlinkVersion = drone.heartbeat.getMavlinkVersion();
+		final int mavlinkVersion = drone.getMavlinkVersion();
 		if (mavlinkVersion != HeartBeat.INVALID_MAVLINK_VERSION) {
 			updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
 		} else {
 			updateMavlinkVersionPreference(null);
 		}
 
-		drone.events.addDroneListener(this);
+		drone.addDroneListener(this);
 	}
 
 	@Override
@@ -429,7 +427,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		super.onStop();
 
 		final Drone drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
-		drone.events.removeDroneListener(this);
+		drone.removeDroneListener(this);
 	}
 
 	@Override
@@ -454,7 +452,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
 
 		case HEARTBEAT_FIRST:
 		case HEARTBEAT_RESTORED:
-			updateMavlinkVersionPreference(String.valueOf(drone.heartbeat.getMavlinkVersion()));
+			updateMavlinkVersionPreference(String.valueOf(drone.getMavlinkVersion()));
 			break;
 		default:
 			break;

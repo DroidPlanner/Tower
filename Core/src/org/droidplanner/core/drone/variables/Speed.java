@@ -1,6 +1,6 @@
 package org.droidplanner.core.drone.variables;
 
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneVariable;
 
 public class Speed extends DroneVariable {
