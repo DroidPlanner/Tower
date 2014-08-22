@@ -17,7 +17,7 @@ public class FollowAbove extends FollowAlgorithm {
 
 	@Override
 	public void processNewLocation(Location location) {
-			drone.getGuidedPoint().newGuidedCoord(location.getCoord());
+		drone.getGuidedPoint().newGuidedCoord(location.getCoord());
 	}
 
 }

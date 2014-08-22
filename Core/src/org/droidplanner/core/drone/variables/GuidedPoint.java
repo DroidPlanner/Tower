@@ -1,12 +1,12 @@
 package org.droidplanner.core.drone.variables;
 
 import org.droidplanner.core.MAVLink.MavLinkModes;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Altitude;
+import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ApmModes;
 
@@ -20,7 +20,7 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 		UNINITIALIZED, IDLE, ACTIVE
 	}
 
-    public GuidedPoint(Drone myDrone) {
+	public GuidedPoint(Drone myDrone) {
 		super(myDrone);
 		myDrone.addDroneListener(this);
 	}

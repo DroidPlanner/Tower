@@ -11,7 +11,7 @@ import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.desktop.ui.widgets.GraphPanel;
 
-public class Graph implements OnDroneListener{
+public class Graph implements OnDroneListener {
 	public List<Double> data = new ArrayList<Double>();
 	public GraphPanel graph;
 
@@ -26,14 +26,14 @@ public class Graph implements OnDroneListener{
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		switch (event) {		
+		switch (event) {
 		case SPEED:
 			data.add(drone.getSpeed().getGroundSpeed().valueInMetersPerSecond());
 			graph.repaint();
 			break;
 		default:
 			break;
-		}	
+		}
 	}
 
 	static void createGraph(org.droidplanner.core.model.Drone drone) {
@@ -41,5 +41,4 @@ public class Graph implements OnDroneListener{
 		drone.addDroneListener(mGraph);
 	}
 
-	
 }

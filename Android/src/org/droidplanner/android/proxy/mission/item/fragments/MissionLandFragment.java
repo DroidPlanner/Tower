@@ -6,7 +6,7 @@ import org.droidplanner.core.mission.MissionItemType;
 import android.os.Bundle;
 import android.view.View;
 
-public class MissionLandFragment extends MissionDetailFragment{
+public class MissionLandFragment extends MissionDetailFragment {
 
 	@Override
 	protected int getResource() {
@@ -18,7 +18,5 @@ public class MissionLandFragment extends MissionDetailFragment{
 		super.onViewCreated(view, savedInstanceState);
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.LAND));
 	}
-
-	
 
 }

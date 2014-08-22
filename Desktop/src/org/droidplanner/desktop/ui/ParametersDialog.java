@@ -37,12 +37,11 @@ public class ParametersDialog extends JDialog {
 		frame.pack();
 		frame.setVisible(true);
 
-		if (parameterList!=null) {
-			
-		for (Parameter parameter : parameterList) {
-			tableModel.addRow(new String[] { parameter.name,
-					parameter.getValue() });
-		}
+		if (parameterList != null) {
+
+			for (Parameter parameter : parameterList) {
+				tableModel.addRow(new String[] { parameter.name, parameter.getValue() });
+			}
 		}
 	}
 }

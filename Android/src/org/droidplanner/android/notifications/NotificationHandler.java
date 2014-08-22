@@ -1,8 +1,9 @@
 package org.droidplanner.android.notifications;
 
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
+import org.droidplanner.core.model.Drone;
+
 import android.content.Context;
 
 /**
@@ -18,7 +19,6 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	interface NotificationProvider extends DroneInterfaces.OnDroneListener {
 		void quickNotify(String feedback);
 	}
-
 
 	/**
 	 * Handles Droidplanner's audible notifications.
@@ -51,7 +51,7 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	/**
 	 * Sends a quick notification to the user. Uses toasts for written
 	 * notification, and speech if voice notification is enabled.
-	 *
+	 * 
 	 * @param feedback
 	 *            short message to show the user.
 	 */

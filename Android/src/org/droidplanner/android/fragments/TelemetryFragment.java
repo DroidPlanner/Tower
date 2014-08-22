@@ -3,9 +3,9 @@ package org.droidplanner.android.fragments;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.widgets.AttitudeIndicator;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.model.Drone;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -100,9 +100,12 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	}
 
 	public void onSpeedAltitudeAndClimbRateUpdate(Drone drone) {
-		airSpeed.setText(String.format("%3.1f", drone.getSpeed().getAirSpeed().valueInMetersPerSecond()));
-		groundSpeed.setText(String.format("%3.1f", drone.getSpeed().getGroundSpeed().valueInMetersPerSecond()));
-		climbRate.setText(String.format("%3.1f", drone.getSpeed().getVerticalSpeed().valueInMetersPerSecond()));
+		airSpeed.setText(String.format("%3.1f", drone.getSpeed().getAirSpeed()
+				.valueInMetersPerSecond()));
+		groundSpeed.setText(String.format("%3.1f", drone.getSpeed().getGroundSpeed()
+				.valueInMetersPerSecond()));
+		climbRate.setText(String.format("%3.1f", drone.getSpeed().getVerticalSpeed()
+				.valueInMetersPerSecond()));
 		double alt = drone.getAltitude().getAltitude();
 		double targetAlt = drone.getAltitude().getTargetAltitude();
 		altitude.setText(String.format("%3.1f", alt));

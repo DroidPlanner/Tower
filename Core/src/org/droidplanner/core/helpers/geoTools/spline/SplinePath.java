@@ -22,8 +22,7 @@ public class SplinePath {
 	 * describing the spline path.
 	 * 
 	 * @param points
-	 *            map coordinates
-	 *            decimation factor
+	 *            map coordinates decimation factor
 	 * @return set of coordinates describing the spline path
 	 */
 	public static List<Coord2D> process(List<Coord2D> points) {

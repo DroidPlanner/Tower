@@ -9,17 +9,16 @@ import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneImpl;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.gcs.follow.Follow;
+import org.droidplanner.core.model.Drone;
 
 import android.content.Context;
 import android.os.SystemClock;
-import android.widget.Toast;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 
@@ -110,7 +109,7 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 		}
 	}
 
-	public DroidPlannerPrefs getPreferences(){
+	public DroidPlannerPrefs getPreferences() {
 		return prefs;
 	}
 

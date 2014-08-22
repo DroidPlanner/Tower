@@ -26,8 +26,7 @@ public class Connection implements MAVLinkOutputStream {
 	}
 
 	public byte[] readDataBlock() throws IOException {
-		DatagramPacket receivePacket = new DatagramPacket(receiveData,
-				receiveData.length);
+		DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 		socket.receive(receivePacket);
 		length = receivePacket.getLength();
 		hostAdd = receivePacket.getAddress();
@@ -44,8 +43,8 @@ public class Connection implements MAVLinkOutputStream {
 	public void sendBuffer(byte[] buffer) {
 		try {
 			if (hostAdd != null) {
-				DatagramPacket udpPacket = new DatagramPacket(buffer,
-						buffer.length, hostAdd, hostPort);
+				DatagramPacket udpPacket = new DatagramPacket(buffer, buffer.length, hostAdd,
+						hostPort);
 				socket.send(udpPacket);
 			}
 		} catch (IOException e) {
@@ -53,7 +52,6 @@ public class Connection implements MAVLinkOutputStream {
 		}
 	}
 
-	
 	@Override
 	public void toggleConnectionState() {
 		// TODO Auto-generated method stub
@@ -71,6 +69,6 @@ public class Connection implements MAVLinkOutputStream {
 
 	@Override
 	public boolean isConnected() {
-		return hostAdd!=null;
+		return hostAdd != null;
 	}
 }

@@ -1,14 +1,14 @@
 package org.droidplanner.android.utils.file.IO;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-
-import org.droidplanner.android.utils.file.FileManager;
-import org.droidplanner.android.utils.file.FileStream;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+
+import org.droidplanner.android.utils.file.FileManager;
+import org.droidplanner.android.utils.file.FileStream;
+
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 
 /**
  * Write msg_mission_item list as...
@@ -54,7 +54,8 @@ public class MissionWriter {
 
 			// write msg (TAB delimited)
 			out.write(String.format(Locale.ENGLISH,
-					"%d\t%d\t%d\t%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%d\n", i,
+					"%d\t%d\t%d\t%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%d\n",
+					i,
 					i == 0 ? 1 : 0, // set CURRENT_WP = 1 for 'home' - msg[0], 0
 									// for all others
 					msg.frame, msg.command, msg.param1, msg.param2, msg.param3, msg.param4, msg.x,

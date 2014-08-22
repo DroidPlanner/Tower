@@ -167,9 +167,10 @@ public abstract class MAVLinkConnection extends Thread {
 				Log.e(TAG, "Ignoring Buffer Overflow in saveToLog: " + e);
 			} catch (NullPointerException e) {
 				Log.e(TAG, "Ignoring NPE in " + e);
-				// There was a null pointer error for some users on
-				// logBuffer.clear();
-			}
+			} catch (ArrayIndexOutOfBoundsException e){
+				//TODO fix this exception in a proper manner
+				Log.e(TAG, "Ignoring Buffer overflow " + e);
+			}			
 		}
 	}
 

@@ -9,6 +9,10 @@ All the changes are logged below (preferable with the pull request numbers in pa
 
 # Releases
 
+## Droidplanner v2.7.1
+* Fix sporadic bug on logging code (#1000)
+* Fix problem on settings screen (#998)
+
 ## Droidplanner v2.7.0
 * Development of a desktop App (#982)
 * Periodic voice notifications (#996)

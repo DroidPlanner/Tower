@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
@@ -18,6 +17,7 @@ import org.droidplanner.core.mission.waypoints.RegionOfInterest;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.Waypoint;
+import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
@@ -200,16 +200,16 @@ public class Mission extends DroneVariable {
 		}
 	}
 
-    public void onMissionLoaded(List<msg_mission_item> msgs) {
-        if (msgs != null) {
-            myDrone.getHome().setHome(msgs.get(0));
-            msgs.remove(0); // Remove Home waypoint
-            items.clear();
-            items.addAll(processMavLinkMessages(msgs));
-            myDrone.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
-            notifyMissionUpdate();
-        }
-    }
+	public void onMissionLoaded(List<msg_mission_item> msgs) {
+		if (msgs != null) {
+			myDrone.getHome().setHome(msgs.get(0));
+			msgs.remove(0); // Remove Home waypoint
+			items.clear();
+			items.addAll(processMavLinkMessages(msgs));
+			myDrone.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
+			notifyMissionUpdate();
+		}
+	}
 
 	private List<MissionItem> processMavLinkMessages(List<msg_mission_item> msgs) {
 		List<MissionItem> received = new ArrayList<MissionItem>();
@@ -249,15 +249,15 @@ public class Mission extends DroneVariable {
 	 * Sends the mission to the drone using the mavlink protocol.
 	 */
 	public void sendMissionToAPM() {
-        myDrone.getWaypointManager().writeWaypoints(getMsgMissionItems());
+		myDrone.getWaypointManager().writeWaypoints(getMsgMissionItems());
 	}
 
-    public List<msg_mission_item> getMsgMissionItems() {
-        final List<msg_mission_item> data = new ArrayList<msg_mission_item>();
-        data.add(myDrone.getHome().packMavlink());
-        for (MissionItem item : items) {
-            data.addAll(item.packMissionItem());
-        }
-        return data;
-    }
+	public List<msg_mission_item> getMsgMissionItems() {
+		final List<msg_mission_item> data = new ArrayList<msg_mission_item>();
+		data.add(myDrone.getHome().packMavlink());
+		for (MissionItem item : items) {
+			data.addAll(item.packMissionItem());
+		}
+		return data;
+	}
 }
