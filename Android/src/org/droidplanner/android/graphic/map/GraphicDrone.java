@@ -12,7 +12,7 @@ import android.graphics.BitmapFactory;
 public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
 	private Drone drone;
-
+	private boolean isConnectionAlive;
 	public GraphicDrone(Drone drone) {
 		this.drone = drone;
 	}
@@ -34,7 +34,19 @@ public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
 	@Override
 	public Bitmap getIcon(Resources res) {
-		return BitmapFactory.decodeResource(res, R.drawable.quad);
+		if(isConnectionAlive) {
+			return BitmapFactory.decodeResource(res, R.drawable.quad);
+		}
+		return BitmapFactory.decodeResource(res, R.drawable.quad_disconnect);
+
+	}
+
+	public boolean getConnectionAlive(){
+		return isConnectionAlive;
+	}
+
+	public void setConnectionAlive(boolean connectionAlive){
+		isConnectionAlive = connectionAlive;
 	}
 
 	@Override
