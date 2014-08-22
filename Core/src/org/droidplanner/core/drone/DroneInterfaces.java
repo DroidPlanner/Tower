@@ -98,7 +98,7 @@ public class DroneInterfaces {
 		HOME,
 
 		/**
-         *
+         * Broadcast to notify of updates to the drone's gps location.
          */
 		GPS,
 
@@ -188,8 +188,8 @@ public class DroneInterfaces {
 		FOLLOW_CHANGE_TYPE, PARAMETERS_DOWNLOADED,
 	}
 
-	public interface OnDroneListener<T extends Drone> {
-		public void onDroneEvent(DroneEventsType event, T drone);
+	public interface OnDroneListener {
+		public void onDroneEvent(DroneEventsType event, Drone drone);
 	}
 
 	public interface OnParameterManagerListener {

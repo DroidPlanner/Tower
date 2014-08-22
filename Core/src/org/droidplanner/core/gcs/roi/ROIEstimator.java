@@ -18,6 +18,6 @@ public class ROIEstimator implements LocationReceiver {
 
 	@Override
 	public void onLocationChanged(Location location) {
-		MavLinkROI.setROI(drone, new Coord3D(location.getCoord(), new Altitude(0.0)));		
+		MavLinkROI.setROI(drone, new Coord3D(location.getCoord(), new Altitude(1.0)));
 	}
 }

@@ -1,10 +1,5 @@
 package org.droidplanner.core.firmware;
 
-import org.droidplanner.core.drone.variables.Type;
-
-/**
-* Created by fhuya on 8/19/14.
-*/
 public enum FirmwareType {
     ARDU_PLANE("ArduPlane"),
     ARDU_COPTER("ArduCopter"),

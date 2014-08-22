@@ -4,8 +4,7 @@ import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.Preferences;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
-import org.droidplanner.core.drone.variables.Type.FirmwareType;
-import org.droidplanner.core.gcs.follow.Follow.TextNotificationReceiver;
+import org.droidplanner.core.firmware.FirmwareType;
 
 public class FakeFactory {
 
@@ -53,17 +52,6 @@ public class FakeFactory {
 			@Override
 			public long elapsedRealtime() {
 				return System.currentTimeMillis();
-			}
-		};
-	}
-
-	static TextNotificationReceiver notificationReceiver() {
-		return new TextNotificationReceiver() {
-
-			@Override
-			public void shortText(String notification) {
-				System.out.println(notification);
-
 			}
 		};
 	}

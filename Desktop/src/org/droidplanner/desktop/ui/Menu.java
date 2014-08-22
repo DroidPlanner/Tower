@@ -7,8 +7,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.gcs.follow.Follow;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.desktop.logic.Logic;
 
 public class Menu extends JMenuBar implements ActionListener {
@@ -50,13 +50,13 @@ public class Menu extends JMenuBar implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equalsIgnoreCase(DroneMenu.LOAD_MISSION.toString())) {
-			drone.waypointManager.getWaypoints();
+			drone.getWaypointManager().getWaypoints();
 		} else if (e.getActionCommand().equalsIgnoreCase(DroneMenu.LOAD_PARAMETERS.toString())) {
-			drone.parameters.getAllParameters();
+			drone.getParameters().getAllParameters();
 		} else if (e.getActionCommand().equalsIgnoreCase(DroneMenu.FOLLOW.toString())) {
 			follow.toggleFollowMeState();
 		} else if (e.getActionCommand().equalsIgnoreCase(DroneMenu.GRAPH.toString())) {
-			Graph.createGraph(drone.events);
+			Graph.createGraph(drone);
 		}
 	}
 

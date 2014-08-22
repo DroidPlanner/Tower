@@ -4,8 +4,9 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneImpl;
 import org.droidplanner.core.gcs.follow.Follow;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.desktop.communication.Connection;
 import org.droidplanner.desktop.location.FakeLocation;
 
@@ -19,11 +20,10 @@ public class Logic implements Runnable {
 	protected Connection link = new Connection(14550);
 
 	public Logic() {
-		drone = new Drone(link, FakeFactory.fakeClock(), FakeFactory.fakeHandler(),
+		drone = new DroneImpl(link, FakeFactory.fakeClock(), FakeFactory.fakeHandler(),
 				FakeFactory.fakePreferences());
 		mavlinkHandler = new MavLinkMsgHandler(drone);
-		follow = new Follow(drone, FakeFactory.fakeHandler(), new FakeLocation(),
-				FakeFactory.notificationReceiver());
+		follow = new Follow(drone, FakeFactory.fakeHandler(), new FakeLocation());
 	}
 
 	@Override
