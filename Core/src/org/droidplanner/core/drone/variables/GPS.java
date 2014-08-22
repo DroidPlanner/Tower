@@ -23,11 +23,7 @@ public class GPS extends DroneVariable {
 	}
 
 	public Coord2D getPosition() {
-		if (isPositionValid()) {
-			return position;
-		} else {
-			return new Coord2D(0, 0);
-		}
+		return position;
 	}
 
 	public double getGpsEPH() {
