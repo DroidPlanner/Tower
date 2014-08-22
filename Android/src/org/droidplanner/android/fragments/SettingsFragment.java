@@ -387,17 +387,23 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		}
 
 		if(key.equals(getString(R.string.pref_tts_periodic_period_key))){
-			droidPlannerApp.getDrone().events
-					.notifyDroneEvent(DroneEventsType.PERIODIC_SPEECH);
 			setupPeriodicControls();
 			int val = Integer.parseInt(sharedPreferences.getString(getString(R.string.pref_tts_periodic_period_key), null));
-			droidPlannerApp.mNotificationHandler.getTtsNotification().setupPeriodicSpeechOutput(val, droidPlannerApp.getDrone());
+			if(droidPlannerApp.getDrone().MavClient.isConnected()) {
+				droidPlannerApp.mNotificationHandler.getTtsNotification().setupPeriodicSpeechOutput(val, droidPlannerApp.getDrone());
+			}
 		}
 	}
 
 	private void setupPeriodicControls(){
 		final PreferenceCategory periodicSpeechPrefs = (PreferenceCategory) findPreference(getActivity().getApplicationContext().getString(R.string.pref_tts_periodic_key));
-		int val = Integer.parseInt(((ListPreference) periodicSpeechPrefs.getPreference(0)).getValue());
+		ListPreference periodic = ((ListPreference) periodicSpeechPrefs.getPreference(0));
+		int val = Integer.parseInt(periodic.getValue());
+		if(val != 0) {
+			periodic.setSummary("Status every " + val + " seconds");
+		}else{
+			periodic.setSummary("Status disabled");
+		}
 		for(int i = 1; i < periodicSpeechPrefs.getPreferenceCount(); i ++) {
 			periodicSpeechPrefs.getPreference(i).setEnabled(val != 0);
 		}
