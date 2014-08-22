@@ -14,6 +14,7 @@ import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
 import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.notifications.TTSNotificationProvider;
 import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
@@ -35,6 +36,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -96,6 +98,8 @@ public class SettingsFragment extends DpPreferenceFragment implements
 				dronePrefs.addPreference(configPref);
 			}
 		}
+
+		setupPeriodicControls();
 
 		// Populate the map preference category
 		final String mapsProvidersPrefKey = getString(R.string.pref_maps_providers_key);
@@ -367,8 +371,9 @@ public class SettingsFragment extends DpPreferenceFragment implements
 					+ getString(R.string.set_to_zero_to_disable));
 		}
 
+		DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
 		if (key.equals(getString(R.string.pref_vehicle_type_key))) {
-			((DroidPlannerApp) getActivity().getApplication()).getDrone().notifyDroneEvent(DroneEventsType.TYPE);
+			droidPlannerApp.getDrone().notifyDroneEvent(DroneEventsType.TYPE);
 		}
 
 		if (key.equals(getString(R.string.pref_rc_mode_key))) {
@@ -377,6 +382,28 @@ public class SettingsFragment extends DpPreferenceFragment implements
 			} else {
 				preference.setSummary(R.string.mode2_throttle_on_left_stick);
 			}
+		}
+
+		if(key.equals(getString(R.string.pref_tts_periodic_period_key))){
+			setupPeriodicControls();
+			int val = Integer.parseInt(sharedPreferences.getString(getString(R.string.pref_tts_periodic_period_key), null));
+			if(droidPlannerApp.getDrone().getMavClient().isConnected()) {
+				droidPlannerApp.mNotificationHandler.getTtsNotification().setupPeriodicSpeechOutput(val, droidPlannerApp.getDrone());
+			}
+		}
+	}
+
+	private void setupPeriodicControls(){
+		final PreferenceCategory periodicSpeechPrefs = (PreferenceCategory) findPreference(getActivity().getApplicationContext().getString(R.string.pref_tts_periodic_key));
+		ListPreference periodic = ((ListPreference) periodicSpeechPrefs.getPreference(0));
+		int val = Integer.parseInt(periodic.getValue());
+		if(val != 0) {
+			periodic.setSummary("Status every " + val + " seconds");
+		}else{
+			periodic.setSummary("Status disabled");
+		}
+		for(int i = 1; i < periodicSpeechPrefs.getPreferenceCount(); i ++) {
+			periodicSpeechPrefs.getPreference(i).setEnabled(val != 0);
 		}
 	}
 

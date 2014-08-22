@@ -361,6 +361,21 @@
     <string name="ga_mode_details_open_panel">Panel Open Time</string>
     <string name="ga_mode_details_close_panel">Panel Close Time</string>
 
+    <!-- Text To Speach -->
+    <string name="pref_title_tts">Speech Output</string>
+    <string name="pref_title_tts_periodic">Periodic</string>
+    <string name="pref_tts_periodic_summary">What is included in the periodic status.</string>
+    <string name="pref_tts_periodic_period">Period</string>
+    <string name="pref_tts_periodic_period_summary">How often periodic status is read.</string>
+    <string name="pref_tts_periodic_bat_volt">Battery Voltage</string>
+    <string name="pref_tts_periodic_bat_volt_summary">Read battery voltage.</string>
+    <string name="pref_tts_periodic_alt">Altitude</string>
+    <string name="pref_tts_periodic_alt_summary">Read altitude.</string>
+    <string name="pref_tts_periodic_rssi">Signal Strength (RSSI)</string>
+    <string name="pref_tts_periodic_rssi_summary">Read recieved signal strength indication.</string>
+    <string name="pref_tts_periodic_airspeed">Airspeed</string>
+    <string name="pref_tts_periodic_airspeed_summary">Read airspeed.</string>
+
     <!-- Others (when possible move to a grouping above) -->
     <string name="tune_roll">Manual adjustment of roll and pitch tuning. Rate_P is the primary value to adjust.</string>
     <string name="dialog_box_title_altitude">Altitude</string>
