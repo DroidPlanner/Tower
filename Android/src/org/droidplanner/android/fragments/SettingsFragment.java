@@ -387,8 +387,6 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		}
 
 		if(key.equals(getString(R.string.pref_tts_periodic_period_key))){
-			droidPlannerApp.getDrone().events
-					.notifyDroneEvent(DroneEventsType.PERIODIC_SPEECH);
 			setupPeriodicControls();
 			int val = Integer.parseInt(sharedPreferences.getString(getString(R.string.pref_tts_periodic_period_key), null));
 			droidPlannerApp.mNotificationHandler.getTtsNotification().setupPeriodicSpeechOutput(val, droidPlannerApp.getDrone());
