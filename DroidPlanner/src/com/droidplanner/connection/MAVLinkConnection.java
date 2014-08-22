@@ -39,6 +39,9 @@ public abstract class MAVLinkConnection extends Thread {
 	private MavLinkConnectionListner listner;
 	private boolean logEnabled;
 	private BufferedOutputStream logWriter;
+	
+	// Maintain MAVLink sequence number for all packets we send here
+	private int msg_seq_number;
 
 	protected MAVLinkPacket receivedPacket;
 	protected Parser parser = new Parser();
@@ -114,12 +117,29 @@ public abstract class MAVLinkConnection extends Thread {
 	}
 
 	/**
-	 * Format and send a Mavlink packet via the MAVlink stream
+	 * Format and send a MAVLink packet via the MAVLink stream
 	 * 
 	 * @param packet
 	 *            MavLink packet to be transmitted
 	 */
 	public void sendMavPacket(MAVLinkPacket packet) {
+		
+		/* Set the correct sequence number in the packet before we send it
+		 * 
+		 * This will send 1 as the sequence number for the first packet instead of 0
+		 * Despite this, it will wrap correctly to 0 once it reaches 255
+		 */
+		
+		msg_seq_number++;
+		
+		// Check if we will overflow the max value in a byte, if so set to 0
+		if (msg_seq_number > 255){
+			
+			// Set to 0 to prevent overflowing maximum value of a byte
+			msg_seq_number = 0;
+		}
+		packet.seq = msg_seq_number;
+		
 		byte[] buffer = packet.encodePacket();
 		try {
 			sendBuffer(buffer);
