@@ -180,10 +180,6 @@ public class DroneInterfaces {
          * 
          */
 		FOLLOW_CHANGE_TYPE, PARAMETERS_DOWNLOADED,
-		/**
-		 *
-		 */
-		PERIODIC_SPEECH,
 	}
 
 	public interface OnDroneListener {
