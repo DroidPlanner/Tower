@@ -1,9 +1,9 @@
 package org.droidplanner.android.widgets.checklist;
 
 import org.droidplanner.core.MAVLink.MavLinkArm;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.helpers.units.Altitude;
+import org.droidplanner.core.model.Drone;
 
 public class CheckListSysLink {
 	private Drone drone;

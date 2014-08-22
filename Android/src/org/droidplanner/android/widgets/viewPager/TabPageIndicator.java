@@ -85,7 +85,8 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
 		setHorizontalScrollBarEnabled(false);
 
 		mTabLayout = new LinearLayout(getContext());
-		addView(mTabLayout, new ViewGroup.LayoutParams(WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+		addView(mTabLayout, new ViewGroup.LayoutParams(WRAP_CONTENT,
+				ViewGroup.LayoutParams.MATCH_PARENT));
 	}
 
 	public void setOnTabReselectedListener(OnTabReselectedListener listener) {
@@ -160,7 +161,8 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
 		tabView.setOnClickListener(mTabClickListener);
 		tabView.setText(text);
 
-		mTabLayout.addView(tabView, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1));
+		mTabLayout.addView(tabView, new LinearLayout.LayoutParams(0,
+				ViewGroup.LayoutParams.MATCH_PARENT, 1));
 	}
 
 	@Override

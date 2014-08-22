@@ -4,12 +4,11 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.variables.Calibration;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
+import org.droidplanner.core.drone.variables.Calibration;
+import org.droidplanner.core.model.Drone;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -28,7 +27,7 @@ import com.MAVLink.Messages.ApmModes;
 public class TTSNotificationProvider implements OnInitListener,
 		NotificationHandler.NotificationProvider {
 
-    private static final String TAG = TTSNotificationProvider.class.getSimpleName();
+	private static final String TAG = TTSNotificationProvider.class.getSimpleName();
 
 	private static final double BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT = 10;
 
@@ -39,16 +38,19 @@ public class TTSNotificationProvider implements OnInitListener,
 	private Context context;
 	private Handler handler;
 	private int statusInterval;
-	private class Watchdog implements Runnable{
+
+	private class Watchdog implements Runnable {
 		private Drone drone;
+
 		public void run() {
 			speakPeriodic(drone);
 		}
 
-		public void setDrone(Drone drone){
+		public void setDrone(Drone drone) {
 			this.drone = drone;
 		}
 	}
+
 	public Watchdog watchdogCallback = new Watchdog();
 
 	TTSNotificationProvider(Context context, Handler handler) {
@@ -60,39 +62,39 @@ public class TTSNotificationProvider implements OnInitListener,
 
 	@Override
 	public void onInit(int status) {
-        if(status == TextToSpeech.SUCCESS) {
-            //TODO: check if the language is available
-            Locale ttsLanguage;
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                ttsLanguage = tts.getDefaultLanguage();
-            }
-            else{
-                ttsLanguage = tts.getLanguage();
-            }
+		if (status == TextToSpeech.SUCCESS) {
+			// TODO: check if the language is available
+			Locale ttsLanguage;
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+				ttsLanguage = tts.getDefaultLanguage();
+			} else {
+				ttsLanguage = tts.getLanguage();
+			}
 
-            if(ttsLanguage == null){
-                ttsLanguage = Locale.US;
-            }
+			if (ttsLanguage == null) {
+				ttsLanguage = Locale.US;
+			}
 
-            int supportStatus = tts.setLanguage(ttsLanguage);
-            switch(supportStatus){
-                case TextToSpeech.LANG_MISSING_DATA:
-                case TextToSpeech.LANG_NOT_SUPPORTED:
-                    tts.shutdown();
-                    tts = null;
+			int supportStatus = tts.setLanguage(ttsLanguage);
+			switch (supportStatus) {
+			case TextToSpeech.LANG_MISSING_DATA:
+			case TextToSpeech.LANG_NOT_SUPPORTED:
+				tts.shutdown();
+				tts = null;
 
-                    Log.e(TAG, "TTS Language data is not available.");
-                    Toast.makeText(context, "Unable to set 'Text to Speech' language!",
-                            Toast.LENGTH_LONG).show();
-                    break;
-            }
-        }
-        else{
-            //Notify the user that the tts engine is not available.
-            Log.e(TAG, "TextToSpeech initialization failed.");
-            Toast.makeText(context, "Please make sure 'Text to Speech' is enabled in the " +
-                            "system accessibility settings.", Toast.LENGTH_LONG).show();
-        }
+				Log.e(TAG, "TTS Language data is not available.");
+				Toast.makeText(context, "Unable to set 'Text to Speech' language!",
+						Toast.LENGTH_LONG).show();
+				break;
+			}
+		} else {
+			// Notify the user that the tts engine is not available.
+			Log.e(TAG, "TextToSpeech initialization failed.");
+			Toast.makeText(
+					context,
+					"Please make sure 'Text to Speech' is enabled in the "
+							+ "system accessibility settings.", Toast.LENGTH_LONG).show();
+		}
 	}
 
 	private void speak(String string) {
@@ -167,7 +169,7 @@ public class TTSNotificationProvider implements OnInitListener,
 				break;
 			case FAILSAFE:
 				String failsafe = drone.getState().getWarning();
-				if(drone.getState().isWarning()){
+				if (drone.getState().isWarning()) {
 					speak(failsafe);
 				}
 			default:
@@ -235,38 +237,41 @@ public class TTSNotificationProvider implements OnInitListener,
 		}
 	}
 
-	private void speakPeriodic(Drone drone){
+	private void speakPeriodic(Drone drone) {
 		DroidPlannerPrefs preferences = new DroidPlannerPrefs(context);
-		Map<String,Boolean> speechPrefs = preferences.getPeriodicSpeechPrefs();
+		Map<String, Boolean> speechPrefs = preferences.getPeriodicSpeechPrefs();
 		StringBuilder message = new StringBuilder();
-		if(speechPrefs.get("battery voltage")){
+		if (speechPrefs.get("battery voltage")) {
 			message.append("battery " + drone.getBattery().getBattVolt() + " volts. ");
 		}
-		if(speechPrefs.get("altitude")){
-			message.append("altitude, " + (int)(drone.getAltitude().getAltitude()*10.0)/10.0 + " meters. ");
+		if (speechPrefs.get("altitude")) {
+			message.append("altitude, " + (int) (drone.getAltitude().getAltitude() * 10.0) / 10.0
+					+ " meters. ");
 		}
-		if(speechPrefs.get("airspeed")){
-			message.append("airspeed, " + (int)(drone.getSpeed().getAirSpeed().valueInMetersPerSecond()*10.0)/10.0 + " meters per second. ");
+		if (speechPrefs.get("airspeed")) {
+			message.append("airspeed, "
+					+ (int) (drone.getSpeed().getAirSpeed().valueInMetersPerSecond() * 10.0) / 10.0
+					+ " meters per second. ");
 		}
-		if(speechPrefs.get("rssi")){
+		if (speechPrefs.get("rssi")) {
 			message.append("r s s i, " + drone.getRadio().getRssi() + " decibels");
 		}
 		speak(message.toString());
-		if(preferences.getSpokenStatusInterval() != 0) {
+		if (preferences.getSpokenStatusInterval() != 0) {
 			handler.postDelayed(watchdogCallback, statusInterval * 1000);
-		}else{
+		} else {
 			handler.removeCallbacks(watchdogCallback);
 		}
 	}
 
-	public void setupPeriodicSpeechOutput(int interval, Drone drone){
+	public void setupPeriodicSpeechOutput(int interval, Drone drone) {
 		watchdogCallback.setDrone(drone);
-		if(interval == 0){
+		if (interval == 0) {
 			handler.removeCallbacks(watchdogCallback);
-		}else{
+		} else {
 			statusInterval = interval;
 			handler.removeCallbacks(watchdogCallback);
-			handler.postDelayed(watchdogCallback,interval*1000);
+			handler.postDelayed(watchdogCallback, interval * 1000);
 		}
 	}
 

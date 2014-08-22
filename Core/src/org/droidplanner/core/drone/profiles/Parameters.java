@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.droidplanner.core.MAVLink.MavLinkParameters;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.DroneVariable;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.parameters.Parameter;
 
 import com.MAVLink.Messages.MAVLinkMessage;
@@ -149,23 +149,23 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		switch(event){
+		switch (event) {
 		case HEARTBEAT_FIRST:
 			if (drone.getState().isFlying() == false) {
-				getAllParameters();				
+				getAllParameters();
 			}
-			break;		
+			break;
 		case DISCONNECTED:
 		case HEARTBEAT_TIMEOUT:
 			killWatchdog();
 			break;
 		default:
 			break;
-		
+
 		}
 	}
 
-    public void setParameterListener(DroneInterfaces.OnParameterManagerListener parameterListener) {
-        this.parameterListener = parameterListener;
-    }
+	public void setParameterListener(DroneInterfaces.OnParameterManagerListener parameterListener) {
+		this.parameterListener = parameterListener;
+	}
 }

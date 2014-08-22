@@ -133,11 +133,11 @@ public abstract class InfoBarItem {
 				if (drone == null) {
 					update = "--";
 				} else if (mAppPrefs.shouldGpsHdopBeDisplayed()) {
-					update = String.format(Locale.ENGLISH, "Satellite\n%d, %.1f",
-							drone.getGps().getSatCount(), drone.getGps().getGpsEPH());
+					update = String.format(Locale.ENGLISH, "Satellite\n%d, %.1f", drone.getGps()
+							.getSatCount(), drone.getGps().getGpsEPH());
 				} else {
-					update = String.format(Locale.ENGLISH, "Satellite\n%d, %s",
-							drone.getGps().getSatCount(), drone.getGps().getFixType());
+					update = String.format(Locale.ENGLISH, "Satellite\n%d, %s", drone.getGps()
+							.getSatCount(), drone.getGps().getFixType());
 				}
 
 				((TextView) mItemView).setText(update);
@@ -267,8 +267,8 @@ public abstract class InfoBarItem {
 		public void updateItemView(Context context, Drone drone) {
 			if (mItemView != null) {
 				String update = drone == null ? "--" : String.format(Locale.ENGLISH,
-						"%2.1fv\n%2.0f%%", drone.getBattery().getBattVolt(),
-						drone.getBattery().getBattRemain());
+						"%2.1fv\n%2.0f%%", drone.getBattery().getBattVolt(), drone.getBattery()
+								.getBattRemain());
 
 				((TextView) mItemView).setText(update);
 			}
@@ -352,13 +352,14 @@ public abstract class InfoBarItem {
 				infoUpdate = String.format("%d%%", drone.getRadio().getSignalStrength());
 
 				mRssiView.setText(String.format("RSSI %2.0f dB", drone.getRadio().getRssi()));
-				mRemRssiView.setText(String.format("RemRSSI %2.0f dB", drone.getRadio().getRemRssi()));
+				mRemRssiView.setText(String.format("RemRSSI %2.0f dB", drone.getRadio()
+						.getRemRssi()));
 				mNoiseView.setText(String.format("Noise %2.0f dB", drone.getRadio().getNoise()));
-				mRemNoiseView
-						.setText(String.format("RemNoise %2.0f dB", drone.getRadio().getRemNoise()));
+				mRemNoiseView.setText(String.format("RemNoise %2.0f dB", drone.getRadio()
+						.getRemNoise()));
 				mFadeView.setText(String.format("Fade %2.0f dB", drone.getRadio().getFadeMargin()));
-				mRemFadeView.setText(String.format("RemFade %2.0f dB",
-						drone.getRadio().getRemFadeMargin()));
+				mRemFadeView.setText(String.format("RemFade %2.0f dB", drone.getRadio()
+						.getRemFadeMargin()));
 			}
 
 			mPopup.update();
@@ -438,7 +439,8 @@ public abstract class InfoBarItem {
 			}
 
 			if (mDrone != null)
-				modesSpinner.forcedSetSelection(mModeAdapter.getPosition(mDrone.getState().getMode()));
+				modesSpinner.forcedSetSelection(mModeAdapter.getPosition(mDrone.getState()
+						.getMode()));
 		}
 	}
 

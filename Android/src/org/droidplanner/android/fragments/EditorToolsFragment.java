@@ -67,7 +67,6 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 				.findViewById(R.id.editor_tools_poly);
 		final RadioButtonCenter buttonTrash = (RadioButtonCenter) view
 				.findViewById(R.id.editor_tools_trash);
-		
 
 		for (View vv : new View[] { buttonDraw, buttonMarker, buttonPoly, buttonTrash }) {
 			vv.setOnClickListener(this);
@@ -93,8 +92,8 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 			throw new IllegalStateException("Parent activity must be an instance of "
 					+ OnEditorToolSelected.class.getName());
 		}
-		
-		mMissionProxy = ((DroidPlannerApp)activity.getApplication()).missionProxy;
+
+		mMissionProxy = ((DroidPlannerApp) activity.getApplication()).missionProxy;
 
 		listener = (OnEditorToolSelected) activity;
 	}
@@ -167,8 +166,7 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 			case RTL:
 				tool = EditorTools.NONE;
 				mEditorRadioGroup.clearCheck();
-				Toast.makeText(getActivity(),
-						getString(R.string.editor_err_land_rtl_added),
+				Toast.makeText(getActivity(), getString(R.string.editor_err_land_rtl_added),
 						Toast.LENGTH_SHORT).show();
 				return;
 			default:

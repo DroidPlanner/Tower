@@ -35,6 +35,6 @@ public class MathUtil {
 	}
 
 	public static Length hypot(Length altDelta, Length distDelta) {
-		return new Length(Math.hypot(altDelta.valueInMeters(),distDelta.valueInMeters()));
+		return new Length(Math.hypot(altDelta.valueInMeters(), distDelta.valueInMeters()));
 	}
 }

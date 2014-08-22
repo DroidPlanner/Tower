@@ -38,12 +38,9 @@ public class DroneshareDialog extends DialogFragment {
 		final EditText username = (EditText) root.findViewById(R.id.username);
 		final EditText password = (EditText) root.findViewById(R.id.password);
 		final EditText email = (EditText) root.findViewById(R.id.email);
-		final RadioButton createNew = (RadioButton) root
-				.findViewById(R.id.radioCreateNew);
-		final RadioButton loginExisting = (RadioButton) root
-				.findViewById(R.id.radioLoginExisting);
-		final RadioButton noDroneshare = (RadioButton) root
-				.findViewById(R.id.radioNoDroneshare);
+		final RadioButton createNew = (RadioButton) root.findViewById(R.id.radioCreateNew);
+		final RadioButton loginExisting = (RadioButton) root.findViewById(R.id.radioLoginExisting);
+		final RadioButton noDroneshare = (RadioButton) root.findViewById(R.id.radioNoDroneshare);
 
 		username.setText(prefs.getDroneshareLogin());
 		password.setText(prefs.getDronesharePassword());
@@ -51,8 +48,7 @@ public class DroneshareDialog extends DialogFragment {
 		username.requestFocus();
 
 		if (prefs.getDroneshareEnabled()) {
-			if (!prefs.getDroneshareLogin().isEmpty()
-					&& !prefs.getDronesharePassword().isEmpty())
+			if (!prefs.getDroneshareLogin().isEmpty() && !prefs.getDronesharePassword().isEmpty())
 				loginExisting.setSelected(true);
 			else
 				createNew.setSelected(true);
@@ -69,10 +65,8 @@ public class DroneshareDialog extends DialogFragment {
 							prefs.setDroneshareEnabled(false);
 						else {
 							prefs.setDroneshareEnabled(true);
-							prefs.setDroneshareLogin(username.getText()
-									.toString());
-							prefs.setDronesharePassword(password.getText()
-									.toString());
+							prefs.setDroneshareLogin(username.getText().toString());
+							prefs.setDronesharePassword(password.getText().toString());
 							prefs.setDroneshareEmail(email.getText().toString());
 						}
 					}
@@ -88,8 +82,7 @@ public class DroneshareDialog extends DialogFragment {
 							// the app some...
 		if (prefs.getNumberOfRuns() > numRuns
 				&& prefs.getDroneshareEnabled()
-				&& (prefs.getDroneshareLogin().isEmpty() || prefs
-						.getDronesharePassword().isEmpty())) {
+				&& (prefs.getDroneshareLogin().isEmpty() || prefs.getDronesharePassword().isEmpty())) {
 			// Create an instance of the dialog fragment and show it
 			DialogFragment dialog = new DroneshareDialog();
 			dialog.show(parent.getSupportFragmentManager(), "DroneshareDialog");

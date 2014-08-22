@@ -10,9 +10,9 @@ import org.droidplanner.android.fragments.helpers.FlightSlidingDrawerContent;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.model.Drone;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -31,7 +31,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 //TODO find some newer class to use instead of the SlidingDrawer
-@SuppressWarnings("deprecation") 
+@SuppressWarnings("deprecation")
 public class FlightActivity extends DrawerNavigationUI implements
 		FlightActionsFragment.OnMissionControlInteraction, OnDroneListener {
 

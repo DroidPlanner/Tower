@@ -1,13 +1,17 @@
 package org.droidplanner.core.drone.variables;
 
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneVariable;
+import org.droidplanner.core.model.Drone;
 
 public class Speed extends DroneVariable {
-	private org.droidplanner.core.helpers.units.Speed verticalSpeed = new org.droidplanner.core.helpers.units.Speed(0);;
-	private org.droidplanner.core.helpers.units.Speed groundSpeed = new org.droidplanner.core.helpers.units.Speed(0);;
-	private org.droidplanner.core.helpers.units.Speed airSpeed = new org.droidplanner.core.helpers.units.Speed(0);;
-	private org.droidplanner.core.helpers.units.Speed targetSpeed = new org.droidplanner.core.helpers.units.Speed(0);
+	private org.droidplanner.core.helpers.units.Speed verticalSpeed = new org.droidplanner.core.helpers.units.Speed(
+			0);;
+	private org.droidplanner.core.helpers.units.Speed groundSpeed = new org.droidplanner.core.helpers.units.Speed(
+			0);;
+	private org.droidplanner.core.helpers.units.Speed airSpeed = new org.droidplanner.core.helpers.units.Speed(
+			0);;
+	private org.droidplanner.core.helpers.units.Speed targetSpeed = new org.droidplanner.core.helpers.units.Speed(
+			0);
 
 	public Speed(Drone myDrone) {
 		super(myDrone);
@@ -30,7 +34,8 @@ public class Speed extends DroneVariable {
 	}
 
 	public void setSpeedError(double aspd_error) {
-		targetSpeed = new org.droidplanner.core.helpers.units.Speed(aspd_error + airSpeed.valueInMetersPerSecond());
+		targetSpeed = new org.droidplanner.core.helpers.units.Speed(aspd_error
+				+ airSpeed.valueInMetersPerSecond());
 	}
 
 	public void setGroundAndAirSpeeds(double groundSpeed, double airSpeed, double climb) {

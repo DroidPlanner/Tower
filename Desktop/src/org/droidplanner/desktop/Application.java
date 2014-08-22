@@ -1,8 +1,8 @@
 package org.droidplanner.desktop;
 
 import org.droidplanner.desktop.logic.Logic;
-import org.droidplanner.desktop.ui.UI;
 import org.droidplanner.desktop.ui.Menu;
+import org.droidplanner.desktop.ui.UI;
 
 public class Application {
 

@@ -1,9 +1,9 @@
 package org.droidplanner.core.drone.variables;
 
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.model.Drone;
 
 public class GPS extends DroneVariable {
 	public final static int LOCK_2D = 2;

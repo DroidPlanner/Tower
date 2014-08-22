@@ -13,17 +13,17 @@ public class DroneHelper {
 		return new LatLng(coord.getLat(), coord.getLng());
 	}
 
-    public static com.mapbox.mapboxsdk.geometry.LatLng CoordToLatLng(Coord2D coord){
-        return new com.mapbox.mapboxsdk.geometry.LatLng(coord.getLat(), coord.getLng());
-    }
+	public static com.mapbox.mapboxsdk.geometry.LatLng CoordToLatLng(Coord2D coord) {
+		return new com.mapbox.mapboxsdk.geometry.LatLng(coord.getLat(), coord.getLng());
+	}
 
 	public static Coord2D LatLngToCoord(LatLng point) {
 		return new Coord2D(point.latitude, point.longitude);
 	}
 
-    public static Coord2D ILatLngToCoord(ILatLng point){
-        return new Coord2D(point.getLatitude(), point.getLongitude());
-    }
+	public static Coord2D ILatLngToCoord(ILatLng point) {
+		return new Coord2D(point.getLatitude(), point.getLongitude());
+	}
 
 	public static Coord2D LocationToCoord(Location location) {
 		return new Coord2D(location.getLatitude(), location.getLongitude());

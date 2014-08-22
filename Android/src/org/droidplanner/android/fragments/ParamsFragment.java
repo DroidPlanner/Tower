@@ -13,10 +13,10 @@ import org.droidplanner.android.dialogs.parameters.DialogParameterInfo;
 import org.droidplanner.android.utils.file.IO.ParameterWriter;
 import org.droidplanner.android.widgets.adapterViews.ParamsAdapter;
 import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.parameters.Parameter;
 import org.droidplanner.core.parameters.ParameterMetadata;
 
