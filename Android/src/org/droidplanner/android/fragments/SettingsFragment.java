@@ -396,7 +396,13 @@ public class SettingsFragment extends DpPreferenceFragment implements
 	private void setupPeriodicControls(){
 		final PreferenceCategory periodicSpeechPrefs = (PreferenceCategory) findPreference(getActivity().getApplicationContext().getString(R.string.pref_tts_periodic_key));
 		ListPreference periodic = ((ListPreference) periodicSpeechPrefs.getPreference(0));
-		int val = Integer.parseInt(periodic.getValue());
+		int val;
+		try{
+			val = Integer.parseInt(periodic.getValue());
+		}catch (NumberFormatException e){
+			val = 0;
+		}
+		
 		if(val != 0) {
 			periodic.setSummary("Status every " + val + " seconds");
 		}else{
