@@ -21,18 +21,20 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSo
 	private final static String TAG = GraphicGuided.class.getSimpleName();
 
 	private GuidedPoint guidedPoint;
-	private GPS GPS;
+	private GPS gps;
 
 	public GraphicGuided(Drone drone) {
 		guidedPoint = drone.getGuidedPoint();
-		GPS = drone.getGps();
+		gps = drone.getGps();
 	}
 
 	@Override
 	public List<Coord2D> getPathPoints() {
 		List<Coord2D> path = new ArrayList<Coord2D>();
 		if (guidedPoint.isActive()) {
-			path.add(GPS.getPosition());
+			if(gps.isPositionValid()) {
+				path.add(gps.getPosition());
+			}
 			path.add(guidedPoint.getCoord());
 		}
 		return path;
