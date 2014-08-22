@@ -8,7 +8,7 @@ import org.droidplanner.android.fragments.calibration.rc.FragmentSetupRC;
 import org.droidplanner.android.fragments.calibration.sf.FragmentSetupSF;
 import org.droidplanner.android.fragments.helpers.SuperSetupFragment;
 import org.droidplanner.core.MAVLink.MavLinkStreamRates;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 
 import android.os.Bundle;
 
@@ -36,7 +36,7 @@ public class SetupRadioFragment extends SuperSetupFragment {
 	@Override
 	public void onStop() {
 		super.onStop();
-		drone.streamRates.setupStreamRatesFromPref();
+		drone.getStreamRates().setupStreamRatesFromPref();
 	}
 
 	@Override
@@ -77,6 +77,6 @@ public class SetupRadioFragment extends SuperSetupFragment {
 	}
 
 	public void setupDataStreamingForRcSetup() {
-		MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1, RC_MSG_RATE, 0, 0);
+		MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 1, 0, 1, 1, 1, RC_MSG_RATE, 0, 0);
 	}
 }

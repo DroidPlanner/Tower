@@ -1,41 +1,41 @@
 package org.droidplanner.core.drone.variables;
 
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneVariable;
 
 public class Speed extends DroneVariable {
-	private double verticalSpeed = 0;
-	private double groundSpeed = 0;
-	private double airSpeed = 0;
-	private double targetSpeed = 0;
+	private org.droidplanner.core.helpers.units.Speed verticalSpeed = new org.droidplanner.core.helpers.units.Speed(0);;
+	private org.droidplanner.core.helpers.units.Speed groundSpeed = new org.droidplanner.core.helpers.units.Speed(0);;
+	private org.droidplanner.core.helpers.units.Speed airSpeed = new org.droidplanner.core.helpers.units.Speed(0);;
+	private org.droidplanner.core.helpers.units.Speed targetSpeed = new org.droidplanner.core.helpers.units.Speed(0);
 
 	public Speed(Drone myDrone) {
 		super(myDrone);
 	}
 
-	public double getVerticalSpeed() {
+	public org.droidplanner.core.helpers.units.Speed getVerticalSpeed() {
 		return verticalSpeed;
 	}
 
-	public double getGroundSpeed() {
+	public org.droidplanner.core.helpers.units.Speed getGroundSpeed() {
 		return groundSpeed;
 	}
 
-	public double getAirSpeed() {
+	public org.droidplanner.core.helpers.units.Speed getAirSpeed() {
 		return airSpeed;
 	}
 
-	public double getTargetSpeed() {
+	public org.droidplanner.core.helpers.units.Speed getTargetSpeed() {
 		return targetSpeed;
 	}
 
 	public void setSpeedError(double aspd_error) {
-		targetSpeed = aspd_error + airSpeed;
+		targetSpeed = new org.droidplanner.core.helpers.units.Speed(aspd_error + airSpeed.valueInMetersPerSecond());
 	}
 
 	public void setGroundAndAirSpeeds(double groundSpeed, double airSpeed, double climb) {
-		this.groundSpeed = groundSpeed;
-		this.airSpeed = airSpeed;
-		this.verticalSpeed = climb;
+		this.groundSpeed = new org.droidplanner.core.helpers.units.Speed(groundSpeed);
+		this.airSpeed = new org.droidplanner.core.helpers.units.Speed(airSpeed);
+		this.verticalSpeed = new org.droidplanner.core.helpers.units.Speed(climb);
 	}
 }

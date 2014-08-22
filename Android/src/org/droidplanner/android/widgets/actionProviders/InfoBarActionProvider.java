@@ -8,7 +8,7 @@ import org.droidplanner.android.widgets.actionProviders.InfoBarItem.GpsInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.HomeInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.PhoneExtraInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.SignalInfo;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 
@@ -77,64 +77,65 @@ public class InfoBarActionProvider extends ActionProvider implements OnDroneList
 		mDrone = drone;
 	}
 
-	@Override
-	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
-		setDrone(drone);
+    @Override
+    public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
+        setDrone(drone);
 
-		boolean updateExtra = true;
-		switch (event) {
-		case BATTERY:
-			if (mBatteryInfo != null)
-				mBatteryInfo.updateItemView(mContext, mDrone);
-			break;
+        boolean updateExtra = true;
+        switch (event) {
+            case BATTERY:
+                if (mBatteryInfo != null)
+                    mBatteryInfo.updateItemView(mContext, mDrone);
+                break;
 
-		case CONNECTED:
-			updateInfoBar();
-			updateExtra = false;
-			break;
+            case CONNECTED:
+                updateInfoBar();
+                updateExtra = false;
+                break;
 
-		case DISCONNECTED:
-			setDrone(null);
-			updateInfoBar();
-			updateExtra = false;
-			break;
+            case DISCONNECTED:
+                setDrone(null);
+                updateInfoBar();
+                updateExtra = false;
+                break;
 
-		case GPS_FIX:
-		case GPS_COUNT:
-			if (mGpsInfo != null)
-				mGpsInfo.updateItemView(mContext, mDrone);
-			break;
+            case GPS_FIX:
+            case GPS_COUNT:
+                if (mGpsInfo != null)
+                    mGpsInfo.updateItemView(mContext, mDrone);
+                break;
 
-		case HOME:
-			if (mHomeInfo != null)
-				mHomeInfo.updateItemView(mContext, mDrone);
-			break;
+            case GPS:
+            case HOME:
+                if (mHomeInfo != null)
+                    mHomeInfo.updateItemView(mContext, mDrone);
+                break;
 
-		case RADIO:
-			if (mSignalInfo != null)
-				mSignalInfo.updateItemView(mContext, mDrone);
-			break;
+            case RADIO:
+                if (mSignalInfo != null)
+                    mSignalInfo.updateItemView(mContext, mDrone);
+                break;
 
-		case STATE:
-			if (mFlightTimeInfo != null)
-				mFlightTimeInfo.updateItemView(mContext, mDrone);
-			break;
+            case STATE:
+                if (mFlightTimeInfo != null)
+                    mFlightTimeInfo.updateItemView(mContext, mDrone);
+                break;
 
-		case MODE:
-		case TYPE:
-			if (mFlightModesInfo != null)
-				mFlightModesInfo.updateItemView(mContext, mDrone);
-			break;
+            case MODE:
+            case TYPE:
+                if (mFlightModesInfo != null)
+                    mFlightModesInfo.updateItemView(mContext, mDrone);
+                break;
 
-		default:
-			updateExtra = false;
-			break;
-		}
+            default:
+                updateExtra = false;
+                break;
+        }
 
-		if (mPhoneExtraInfo != null && updateExtra) {
-			mPhoneExtraInfo.updateItemView(mContext, mDrone);
-		}
-	}
+        if (mPhoneExtraInfo != null && updateExtra) {
+            mPhoneExtraInfo.updateItemView(mContext, mDrone);
+        }
+    }
 
 	/**
 	 * Go through the list of action bar item, and initialize their view.

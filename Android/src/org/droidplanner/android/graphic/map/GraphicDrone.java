@@ -2,7 +2,7 @@ package org.droidplanner.android.graphic.map;
 
 import org.droidplanner.R;
 import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.content.res.Resources;
@@ -29,7 +29,7 @@ public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
 	@Override
 	public Coord2D getPosition() {
-		return drone.GPS.getPosition();
+		return drone.getGps().getPosition();
 	}
 
 	@Override
@@ -49,6 +49,6 @@ public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
 	@Override
 	public float getRotation() {
-		return (float) drone.orientation.getYaw();
+		return (float) drone.getOrientation().getYaw();
 	}
 }

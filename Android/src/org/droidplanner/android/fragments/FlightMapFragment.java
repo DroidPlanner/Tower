@@ -7,7 +7,7 @@ import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
@@ -78,15 +78,10 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	}
 
 	@Override
-	public void update() {
-		super.update();
-	}
-
-	@Override
 	public void onMapLongClick(Coord2D coord) {
-		if (drone.MavClient.isConnected()) {
-			if (drone.guidedPoint.isInitialized()) {
-				drone.guidedPoint.newGuidedCoord(coord);
+		if (drone.getMavClient().isConnected()) {
+			if (drone.getGuidedPoint().isInitialized()) {
+				drone.getGuidedPoint().newGuidedCoord(coord);
 			} else {
 				if (guidedModeOnLongPress) {
 					GuidedDialog dialog = new GuidedDialog();
@@ -101,7 +96,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	@Override
 	public void onForcedGuidedPoint(LatLng coord) {
 		try {
-			drone.guidedPoint.forcedGuidedCoordinate(DroneHelper.LatLngToCoord(coord));
+			drone.getGuidedPoint().forcedGuidedCoordinate(DroneHelper.LatLngToCoord(coord));
 		} catch (Exception e) {
 			Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
 		}
@@ -117,12 +112,12 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 
 	@Override
 	public void onMarkerDragEnd(MarkerInfo markerInfo) {
-		drone.guidedPoint.newGuidedCoord(markerInfo.getPosition());
+		drone.getGuidedPoint().newGuidedCoord(markerInfo.getPosition());
 	}
 
 	@Override
 	public boolean onMarkerClick(MarkerInfo markerInfo) {
-		drone.guidedPoint.newGuidedCoord(markerInfo.getPosition());
+		drone.getGuidedPoint().newGuidedCoord(markerInfo.getPosition());
 		return true;
 	}
 
@@ -131,7 +126,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 		switch (event) {
 		case ARMING:
 			// Clear the previous flight path when arming.
-			if (drone.state.isArmed()) {
+			if (drone.getState().isArmed()) {
 				mMapFragment.clearFlightPath();
 			}
 			break;

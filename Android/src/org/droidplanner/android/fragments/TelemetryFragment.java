@@ -3,7 +3,7 @@ package org.droidplanner.android.fragments;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.widgets.AttitudeIndicator;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 
@@ -52,7 +52,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	@Override
 	public void onStart() {
 		super.onStart();
-		drone.events.addDroneListener(this);
+		drone.addDroneListener(this);
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity()
 				.getApplicationContext());
@@ -62,7 +62,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	@Override
 	public void onStop() {
 		super.onStop();
-		drone.events.removeDroneListener(this);
+		drone.removeDroneListener(this);
 	}
 
 	@Override
@@ -83,9 +83,9 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	}
 
 	public void onOrientationUpdate(Drone drone) {
-		float r = (float) drone.orientation.getRoll();
-		float p = (float) drone.orientation.getPitch();
-		float y = (float) drone.orientation.getYaw();
+		float r = (float) drone.getOrientation().getRoll();
+		float p = (float) drone.getOrientation().getPitch();
+		float y = (float) drone.getOrientation().getYaw();
 
 		if (!headingModeFPV & y < 0) {
 			y = 360 + y;
@@ -100,11 +100,11 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	}
 
 	public void onSpeedAltitudeAndClimbRateUpdate(Drone drone) {
-		airSpeed.setText(String.format("%3.1f", drone.speed.getAirSpeed()));
-		groundSpeed.setText(String.format("%3.1f", drone.speed.getGroundSpeed()));
-		climbRate.setText(String.format("%3.1f", drone.speed.getVerticalSpeed()));
-		double alt = drone.altitude.getAltitude();
-		double targetAlt = drone.altitude.getTargetAltitude();
+		airSpeed.setText(String.format("%3.1f", drone.getSpeed().getAirSpeed().valueInMetersPerSecond()));
+		groundSpeed.setText(String.format("%3.1f", drone.getSpeed().getGroundSpeed().valueInMetersPerSecond()));
+		climbRate.setText(String.format("%3.1f", drone.getSpeed().getVerticalSpeed().valueInMetersPerSecond()));
+		double alt = drone.getAltitude().getAltitude();
+		double targetAlt = drone.getAltitude().getTargetAltitude();
 		altitude.setText(String.format("%3.1f", alt));
 		targetAltitude.setText(String.format("%3.1f", targetAlt));
 

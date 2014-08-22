@@ -13,7 +13,7 @@ import org.droidplanner.android.dialogs.parameters.DialogParameterInfo;
 import org.droidplanner.android.utils.file.IO.ParameterWriter;
 import org.droidplanner.android.widgets.adapterViews.ParamsAdapter;
 import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
-import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
@@ -93,15 +93,15 @@ public class ParamsFragment extends ListFragment implements
 	public void onStart() {
 		super.onStart();
 		drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
-		drone.events.addDroneListener(this);
-		drone.parameters.parameterListener = this;
+		drone.addDroneListener(this);
+		drone.getParameters().setParameterListener(this);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		drone.events.removeDroneListener(this);
-		drone.parameters.parameterListener = null;
+		drone.removeDroneListener(this);
+		drone.getParameters().setParameterListener(null);
 	}
 
 	@Override
@@ -166,8 +166,8 @@ public class ParamsFragment extends ListFragment implements
 	}
 
 	private void refreshParameters() {
-		if (drone.MavClient.isConnected()) {
-			drone.parameters.getAllParameters();
+		if (drone.getMavClient().isConnected()) {
+			drone.getParameters().getAllParameters();
 		} else {
 			Toast.makeText(getActivity(), R.string.msg_connect_first, Toast.LENGTH_SHORT).show();
 		}
@@ -180,7 +180,7 @@ public class ParamsFragment extends ListFragment implements
 			if (!item.isDirty())
 				continue;
 
-			drone.parameters.sendParameter(item.getParameter());
+			drone.getParameters().sendParameter(item.getParameter());
 			item.commit();
 
 			written++;

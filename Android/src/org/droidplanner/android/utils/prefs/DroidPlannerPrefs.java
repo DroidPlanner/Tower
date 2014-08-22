@@ -1,12 +1,14 @@
 package org.droidplanner.android.utils.prefs;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.droidplanner.R;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.file.IO.VehicleProfileReader;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
-import org.droidplanner.core.drone.variables.Type.FirmwareType;
+import org.droidplanner.core.firmware.FirmwareType;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -255,4 +257,19 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	public String getMapProviderName() {
 		return prefs.getString(context.getString(R.string.pref_maps_providers_key), null);
 	}
+
+	public Map<String,Boolean> getPeriodicSpeechPrefs(){
+		Map<String,Boolean> speechPrefs = new HashMap<String, Boolean>();
+		speechPrefs.put("battery voltage", prefs.getBoolean(context.getString(R.string.pref_tts_periodic_bat_volt_key),true));
+		speechPrefs.put("altitude", prefs.getBoolean(context.getString(R.string.pref_tts_periodic_alt_key),true));
+		speechPrefs.put("airspeed", prefs.getBoolean(context.getString(R.string.pref_tts_periodic_airspeed_key),true));
+		speechPrefs.put("rssi", prefs.getBoolean(context.getString(R.string.pref_tts_periodic_rssi_key),true));
+		return speechPrefs;
+	}
+
+	public int getSpokenStatusInterval(){
+		return Integer.parseInt(prefs.getString(context.getString(R.string.pref_tts_periodic_period_key), null));
+	}
+
+
 }

@@ -3,6 +3,7 @@ package org.droidplanner.core.drone;
 import java.util.List;
 
 import org.droidplanner.core.MAVLink.WaypointManager;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.parameters.Parameter;
 
 public class DroneInterfaces {
@@ -97,7 +98,7 @@ public class DroneInterfaces {
 		HOME,
 
 		/**
-         *
+         * Broadcast to notify of updates to the drone's gps location.
          */
 		GPS,
 
@@ -172,14 +173,19 @@ public class DroneInterfaces {
 		MISSION_WP_UPDATE,
 
 		/**
-         * 
+         * 'Follow' mode has been enabled.
          */
 		FOLLOW_START,
+
+        /**
+         * 'Follow' mode has been disabled.
+         */
+        FOLLOW_STOP,
 
 		/**
          * 
          */
-		FOLLOW_CHANGE_TYPE,
+		FOLLOW_CHANGE_TYPE, PARAMETERS_DOWNLOADED,
 	}
 
 	public interface OnDroneListener {

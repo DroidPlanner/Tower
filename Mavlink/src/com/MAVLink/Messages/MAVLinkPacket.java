@@ -2,8 +2,6 @@ package com.MAVLink.Messages;
 
 import java.io.Serializable;
 
-import android.util.Log;
-
 import com.MAVLink.Messages.ardupilotmega.*;
 
 /**
@@ -76,7 +74,6 @@ public class MAVLinkPacket implements Serializable {
 	 */
 	public boolean payloadIsFilled() {
 		if (payload.size() >= MAVLinkPayload.MAX_PAYLOAD_SIZE-1) {
-			Log.d("MAV","Buffer overflow");
 			return true;
 		}
 		return (payload.size() == len);
@@ -384,7 +381,7 @@ public class MAVLinkPacket implements Serializable {
 		case msg_debug.MAVLINK_MSG_ID_DEBUG:
 			return  new msg_debug(this);
 		default:
-			Log.d("MAVLink", "UNKNOW MESSAGE - " + msgid);
+			System.err.println("UNKNOW MESSAGE - " + msgid);
 			return null;
 		}
 	}
