@@ -242,11 +242,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	 * remains 'visible'.
 	 */
 	private void updateMapPadding() {
-		int topPadding = mLocationButtonsContainer.getBottom()
-				+ mLocationButtonsContainer.getPaddingBottom();
-		int leftPadding = mLocationButtonsContainer.getLeft()
-				- mLocationButtonsContainer.getPaddingLeft();
-		planningMapFragment.setMapPadding(leftPadding, topPadding, 0, 0);
+		//adding non-uniform padding to either side (right or left) gives the map a bad feel but a little on the top or the bottom is just fine
+		int topPadding = missionListFragment.getView().getBottom();
+		int bottomPadding = 100;
+		int leftPadding = editorToolsFragment.getView().getRight();
+		int rightPadding = leftPadding;
+		planningMapFragment.setMapPadding(leftPadding, topPadding, rightPadding, bottomPadding);
 	}
 
 	@Override
