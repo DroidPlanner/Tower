@@ -5,11 +5,11 @@ import org.droidplanner.core.model.Drone;
 
 public class Speed extends DroneVariable {
 	private org.droidplanner.core.helpers.units.Speed verticalSpeed = new org.droidplanner.core.helpers.units.Speed(
-			0);;
+			0);
 	private org.droidplanner.core.helpers.units.Speed groundSpeed = new org.droidplanner.core.helpers.units.Speed(
-			0);;
+			0);
 	private org.droidplanner.core.helpers.units.Speed airSpeed = new org.droidplanner.core.helpers.units.Speed(
-			0);;
+			0);
 	private org.droidplanner.core.helpers.units.Speed targetSpeed = new org.droidplanner.core.helpers.units.Speed(
 			0);
 
@@ -42,5 +42,12 @@ public class Speed extends DroneVariable {
 		this.groundSpeed = new org.droidplanner.core.helpers.units.Speed(groundSpeed);
 		this.airSpeed = new org.droidplanner.core.helpers.units.Speed(airSpeed);
 		this.verticalSpeed = new org.droidplanner.core.helpers.units.Speed(climb);
+		//if drone will crash in 2 seconds at constant climb rate and climb rate < -3 m/s and altitude > 1 meter
+		double altitude = myDrone.getAltitude().getAltitude();
+		if(altitude + climb*2 < 0 && climb < -3.0 && altitude > 1.0){
+			myDrone.getState().setCollisionImminent(true);
+		}else{
+			myDrone.getState().setCollisionImminent(false);
+		}
 	}
 }
