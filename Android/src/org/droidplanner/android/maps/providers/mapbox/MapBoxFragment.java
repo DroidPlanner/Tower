@@ -438,11 +438,13 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
 	@Override
 	public void updateMarker(MarkerInfo markerInfo, boolean isDraggable) {
-		//if the drone hasn't recieved a gps signal yet
-		if(markerInfo.getPosition() == null){
-			return;
-		}
-		final LatLng position = DroneHelper.CoordToLatLng(markerInfo.getPosition());
+        //if the drone hasn't received a gps signal yet
+        final Coord2D coord = markerInfo.getPosition();
+        if(coord == null){
+            return;
+        }
+
+		final LatLng position = DroneHelper.CoordToLatLng(coord);
 		Marker marker = mMarkers.get(markerInfo);
 		if (marker == null) {
 			marker = new Marker(mMapView, markerInfo.getTitle(), markerInfo.getSnippet(), position);

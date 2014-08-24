@@ -61,7 +61,7 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 				handler.postDelayed(thread, timeout);
 			}
 		};
-		mNotificationHandler = new NotificationHandler(context, handler);
+		mNotificationHandler = new NotificationHandler(context);
 
 		prefs = new DroidPlannerPrefs(context);
 		drone = new DroneImpl(MAVClient, clock, handler, prefs);
