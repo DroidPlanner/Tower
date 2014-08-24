@@ -127,13 +127,19 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		case HEARTBEAT_RESTORED:
 		case HEARTBEAT_FIRST:
 			graphicDrone.setConnectionAlive(true);
-			mMapFragment.updateMarker(graphicDrone);
+
+            if(graphicDrone.isValid()) {
+                mMapFragment.updateMarker(graphicDrone);
+            }
 			break;
 
 		case DISCONNECTED:
 		case HEARTBEAT_TIMEOUT:
 			graphicDrone.setConnectionAlive(false);
-			mMapFragment.updateMarker(graphicDrone);
+
+            if(graphicDrone.isValid()) {
+                mMapFragment.updateMarker(graphicDrone);
+            }
 			break;
 		default:
 			break;

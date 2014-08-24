@@ -301,7 +301,12 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
 	@Override
 	public void updateMarker(MarkerInfo markerInfo, boolean isDraggable) {
-		final LatLng position = DroneHelper.CoordToLatLang(markerInfo.getPosition());
+        final Coord2D coord = markerInfo.getPosition();
+        if(coord == null){
+            return;
+        }
+
+		final LatLng position = DroneHelper.CoordToLatLang(coord);
 		Marker marker = mMarkers.get(markerInfo);
 		if (marker == null) {
 			// Generate the marker

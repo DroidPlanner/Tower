@@ -24,7 +24,8 @@ public abstract class UdpConnection extends MavLinkConnection{
 
     @Override
     protected final void closeConnection() throws IOException {
-        socket.close();
+        if(socket != null)
+            socket.close();
     }
 
     @Override

@@ -48,7 +48,8 @@ public abstract class TcpConnection extends MavLinkConnection {
 
     @Override
     protected final void closeConnection() throws IOException {
-        socket.close();
+        if(socket != null)
+            socket.close();
     }
 
     private void getTCPStream() throws IOException {
