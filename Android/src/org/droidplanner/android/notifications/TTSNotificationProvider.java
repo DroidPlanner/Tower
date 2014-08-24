@@ -235,11 +235,18 @@ public class TTSNotificationProvider implements OnInitListener,
 				speak("Following");
 				break;
 
+			case WARNING_400FT_EXCEEDED:
+				if(mAppPrefs.prefs.getBoolean("pref_tts_warning_400ft_ceiling_exceeded",true)){
+					speak("warning, 400 feet exceeded");
+				}
+				break;
+
 			case FAILSAFE:
 				String failsafe = drone.getState().getWarning();
 				if (drone.getState().isWarning()) {
 					speak(failsafe);
 				}
+				break;
 
 			default:
 				break;
