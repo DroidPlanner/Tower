@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 
-public abstract class UsbConnection extends MAVLinkConnection {
+import org.droidplanner.core.MAVLink.connection.MavLinkConnectionTypes;
+
+public abstract class UsbConnection extends AndroidMavLinkConnection {
 	protected static int baud_rate = 57600;
 
 	protected UsbConnection(Context parentContext) {
@@ -15,7 +17,7 @@ public abstract class UsbConnection extends MAVLinkConnection {
 	}
 
 	@Override
-	protected void getPreferences(SharedPreferences prefs) {
+	protected void loadPreferences(SharedPreferences prefs) {
 		String baud_type = prefs.getString("pref_baud_type", "57600");
 		if (baud_type.equals("38400"))
 			baud_rate = 38400;
@@ -25,7 +27,7 @@ public abstract class UsbConnection extends MAVLinkConnection {
 			baud_rate = 115200;
 	}
 
-	public static MAVLinkConnection getUSBConnection(Context context) {
+	public static UsbConnection getUSBConnection(Context context) {
 		if (isFTDIdevice(context)) {
 			return new UsbFTDIConnection(context);
 		} else {
@@ -42,4 +44,9 @@ public abstract class UsbConnection extends MAVLinkConnection {
 		}
 		return false;
 	}
+
+    @Override
+    public int getConnectionType(){
+        return MavLinkConnectionTypes.MAVLINK_CONNECTION_USB;
+    }
 }

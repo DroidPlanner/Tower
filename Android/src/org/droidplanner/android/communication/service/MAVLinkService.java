@@ -1,11 +1,11 @@
 package org.droidplanner.android.communication.service;
 
 import org.droidplanner.R;
-import org.droidplanner.android.communication.connection.MAVLinkConnection;
-import org.droidplanner.android.communication.connection.MAVLinkConnection.MavLinkConnectionListener;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.core.MAVLink.connection.MavLinkConnection;
+import org.droidplanner.core.MAVLink.connection.MavLinkConnectionListener;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
@@ -25,10 +25,10 @@ import com.MAVLink.Messages.MAVLinkPacket;
 import com.google.android.gms.analytics.HitBuilders;
 
 /**
- * http://developer.android.com/guide/components/bound-services.html#Messenger
+ * Connects to the drone through a mavlink connection, and takes care of sending and/or receiving
+ * messages to/from the drone.
  * 
  */
-
 public class MAVLinkService extends Service implements MavLinkConnectionListener {
 
 	private static final String LOG_TAG = MAVLinkService.class.getSimpleName();
@@ -42,7 +42,8 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
 	 */
 	private DroidPlannerPrefs mAppPrefs;
 
-	private MAVLinkConnection mavConnection;
+	private MavLinkConnection mavConnection;
+
 	Messenger msgCenter = null;
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 	private boolean couldNotOpenConnection = false;
@@ -73,15 +74,18 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
 					selfDestroyService();
 				}
 				break;
+
 			case MSG_UNREGISTER_CLIENT:
 				msgCenter = null;
 				break;
+
 			case MSG_SEND_DATA:
 				Bundle b = msg.getData();
 				MAVLinkPacket packet = (MAVLinkPacket) b.getSerializable("msg");
-				if (mavConnection != null) {
+				if (mavConnection != null && mavConnection.getConnectionStatus() != MavLinkConnection.MAVLINK_DISCONNECTED) {
 					mavConnection.sendMavPacket(packet);
 				}
+
 			default:
 				super.handleMessage(msg);
 			}
@@ -110,6 +114,11 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
 		}
 	}
 
+    @Override
+    public void onConnect(){
+
+    }
+
 	@Override
 	public void onReceiveMessage(MAVLinkMessage msg) {
 		notifyNewMessage(msg);
@@ -128,11 +137,10 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
 				msgCenter.send(msg);
 			}
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			Log.e(LOG_TAG, e.getMessage(), e);
 		}
 	}
 
-	@SuppressLint("HandlerLeak")
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -183,22 +191,27 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
 	 */
 	private void connectMAVConnection() {
 		String connectionType = mAppPrefs.getMavLinkConnectionType();
-
 		Utils.ConnectionType connType = Utils.ConnectionType.valueOf(connectionType);
-		mavConnection = connType.getConnection(this);
-		mavConnection.start();
+
+        if(mavConnection == null || mavConnection.getConnectionType() != connType.getConnectionType()) {
+            mavConnection = connType.getConnection(this);
+        }
+
+        if(mavConnection.getConnectionStatus() == MavLinkConnection.MAVLINK_DISCONNECTED) {
+            mavConnection.connect();
+        }
 
 		// Record which connection type is used.
 		GAUtils.sendEvent(new HitBuilders.EventBuilder().setCategory(
-				GAUtils.Category.MAVLINK_CONNECTION.toString()).setAction(
-				"Mavlink connecting using " + connectionType));
+				GAUtils.Category.MAVLINK_CONNECTION.toString())
+                .setAction("Mavlink connecting using " + connectionType));
 	}
 
 	private void disconnectMAVConnection() {
 		Log.d(LOG_TAG, "Pre disconnect");
-		if (mavConnection != null) {
+
+		if (mavConnection != null && mavConnection.getConnectionStatus() != MavLinkConnection.MAVLINK_DISCONNECTED) {
 			mavConnection.disconnect();
-			mavConnection = null;
 		}
 
 		GAUtils.sendEvent(new HitBuilders.EventBuilder().setCategory(
