@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -46,8 +47,8 @@ public abstract class MavLinkConnection {
      * We're using a ConcurrentSkipListSet because the object will be accessed from multiple
      * threads concurrently.
      */
-    private final ConcurrentSkipListSet<MavLinkConnectionListener> mListeners = new
-            ConcurrentSkipListSet<MavLinkConnectionListener>();
+    private final ConcurrentHashMap<String, MavLinkConnectionListener> mListeners = new
+            ConcurrentHashMap<String, MavLinkConnectionListener>();
 
     /**
      * Queue the set of packets to log. A thread will be blocking on it until there's element(s)
@@ -260,18 +261,19 @@ public abstract class MavLinkConnection {
      * Adds a listener to the mavlink connection.
      *
      * @param listener
+     * @param tag Listener tag
      */
-    public void addMavLinkConnectionListener(MavLinkConnectionListener listener) {
-        mListeners.add(listener);
+    public void addMavLinkConnectionListener(String tag, MavLinkConnectionListener listener) {
+        mListeners.put(tag, listener);
     }
 
     /**
      * Removes the specified listener.
      *
-     * @param listener
+     * @param tag Listener tag
      */
-    public void removeMavLinkConnectionListener(MavLinkConnectionListener listener) {
-        mListeners.remove(listener);
+    public void removeMavLinkConnectionListener(String tag) {
+        mListeners.remove(tag);
     }
 
     protected abstract Logger initLogger();
@@ -301,8 +303,7 @@ public abstract class MavLinkConnection {
      *
      * @param packet MAVLinkPacket saved to log.
      */
-    protected void onLogSaved(MAVLinkPacket packet) throws IOException {
-    }
+    protected void onLogSaved(MAVLinkPacket packet) throws IOException {    }
 
     protected Logger getLogger(){
         return mLogger;
@@ -324,7 +325,10 @@ public abstract class MavLinkConnection {
      * @param errMsg
      */
     private void reportComError(String errMsg) {
-        for (MavLinkConnectionListener listener : mListeners) {
+        if(mListeners.isEmpty())
+            return;
+
+        for (MavLinkConnectionListener listener : mListeners.values()) {
             listener.onComError(errMsg);
         }
     }
@@ -333,7 +337,7 @@ public abstract class MavLinkConnection {
      * Utility method to notify the mavlink listeners about a successful connection.
      */
     private void reportConnect() {
-        for (MavLinkConnectionListener listener : mListeners) {
+        for (MavLinkConnectionListener listener : mListeners.values()) {
             listener.onConnect();
         }
     }
@@ -342,7 +346,10 @@ public abstract class MavLinkConnection {
      * Utility method to notify the mavlink listeners about a connection disconnect.
      */
     private void reportDisconnect() {
-        for (MavLinkConnectionListener listener : mListeners) {
+        if(mListeners.isEmpty())
+            return;
+
+        for (MavLinkConnectionListener listener : mListeners.values()) {
             listener.onDisconnect();
         }
     }
@@ -353,7 +360,10 @@ public abstract class MavLinkConnection {
      * @param msg received mavlink message
      */
     private void reportReceivedMessage(MAVLinkMessage msg) {
-        for (MavLinkConnectionListener listener : mListeners) {
+        if(mListeners.isEmpty())
+            return;
+
+        for (MavLinkConnectionListener listener : mListeners.values()) {
             listener.onReceiveMessage(msg);
         }
     }

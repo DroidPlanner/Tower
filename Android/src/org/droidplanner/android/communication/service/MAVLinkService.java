@@ -195,6 +195,7 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
 
         if(mavConnection == null || mavConnection.getConnectionType() != connType.getConnectionType()) {
             mavConnection = connType.getConnection(this);
+            mavConnection.addMavLinkConnectionListener(LOG_TAG, this);
         }
 
         if(mavConnection.getConnectionStatus() == MavLinkConnection.MAVLINK_DISCONNECTED) {

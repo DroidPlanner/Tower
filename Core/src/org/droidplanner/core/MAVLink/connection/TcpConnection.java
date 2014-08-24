@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 /**
@@ -54,7 +55,8 @@ public abstract class TcpConnection extends MavLinkConnection {
 
     private void getTCPStream() throws IOException {
         InetAddress serverAddr = InetAddress.getByName(serverIP);
-        socket = new Socket(serverAddr, serverPort);
+        socket = new Socket();
+        socket.connect(new InetSocketAddress(serverAddr, serverPort), 5000);
         mavOut = new BufferedOutputStream((socket.getOutputStream()));
         mavIn = new BufferedInputStream(socket.getInputStream());
     }
