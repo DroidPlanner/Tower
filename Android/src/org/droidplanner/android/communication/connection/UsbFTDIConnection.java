@@ -28,6 +28,10 @@ public class UsbFTDIConnection extends UsbConnection {
 			mLogger.logErr(TAG, ex);
 		}
 
+        if(ftD2xx == null){
+            throw new IOException("Unable to retrieve D2xxManager instance.");
+        }
+
 		int DevCount = ftD2xx.createDeviceInfoList(mContext);
 		if (DevCount < 1) {
 			throw new IOException("No Devices found");
@@ -57,6 +61,10 @@ public class UsbFTDIConnection extends UsbConnection {
 
 	@Override
 	protected int readDataBlock(byte[] readData) throws IOException {
+        if(ftDev == null){
+            throw new IOException("Device is unavailable.");
+        }
+
 		int iavailable = ftDev.getQueueStatus();
 		if (iavailable > 0) {
 			if (iavailable > 4096)

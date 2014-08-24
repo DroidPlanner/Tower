@@ -102,7 +102,7 @@ public abstract class MavLinkConnection {
                 }
             } catch (IOException e) {
                 //Ignore errors while shutting down
-                if (mConnectionStatus.get() == MAVLINK_CONNECTED) {
+                if (mConnectionStatus.get() != MAVLINK_DISCONNECTED) {
                     reportComError(e.getMessage());
                     mLogger.logErr(TAG, e);
                 }
@@ -237,9 +237,12 @@ public abstract class MavLinkConnection {
         }
 
         try {
-            closeConnection();
             mConnectionStatus.set(MAVLINK_DISCONNECTED);
-            mTaskThread.interrupt();
+            if(mTaskThread.isAlive() && !mTaskThread.isInterrupted()){
+                mTaskThread.interrupt();
+            }
+
+            closeConnection();
             reportDisconnect();
         } catch (IOException e) {
             mLogger.logErr(TAG, e);
@@ -265,6 +268,10 @@ public abstract class MavLinkConnection {
      */
     public void addMavLinkConnectionListener(String tag, MavLinkConnectionListener listener) {
         mListeners.put(tag, listener);
+
+        if(getConnectionStatus() == MAVLINK_CONNECTED){
+            listener.onConnect();
+        }
     }
 
     /**

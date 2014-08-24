@@ -441,4 +441,6 @@
 
     <string name="pref_ui_gps_hdop_summary">Display HDOP instead of FIX in satellite info bar item</string>
     <string name="pref_ui_gps_hdop_title">Display Satellite HDOP</string>
+    <string name="status_disconnecting">Disconnecting...</string>
+    <string name="status_connecting">Connecting...</string>
 </resources>

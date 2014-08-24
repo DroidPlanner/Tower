@@ -12,6 +12,8 @@ import java.net.Socket;
  */
 public abstract class TcpConnection extends MavLinkConnection {
 
+    private static final int CONNECTION_TIMEOUT = 20 * 1000; //20 secs in ms
+
     private Socket socket;
     private BufferedOutputStream mavOut;
     private BufferedInputStream mavIn;
@@ -56,7 +58,7 @@ public abstract class TcpConnection extends MavLinkConnection {
     private void getTCPStream() throws IOException {
         InetAddress serverAddr = InetAddress.getByName(serverIP);
         socket = new Socket();
-        socket.connect(new InetSocketAddress(serverAddr, serverPort), 5000);
+        socket.connect(new InetSocketAddress(serverAddr, serverPort), CONNECTION_TIMEOUT);
         mavOut = new BufferedOutputStream((socket.getOutputStream()));
         mavIn = new BufferedInputStream(socket.getInputStream());
     }
