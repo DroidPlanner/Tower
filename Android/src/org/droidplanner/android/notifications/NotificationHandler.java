@@ -1,7 +1,6 @@
 package org.droidplanner.android.notifications;
 
 import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.model.Drone;
 
 import android.content.Context;
@@ -35,8 +34,8 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	 */
 	private final PebbleNotificationProvider mPebbleNotification;
 
-	public NotificationHandler(Context context, Handler handler) {
-		mTtsNotification = new TTSNotificationProvider(context, handler);
+	public NotificationHandler(Context context) {
+		mTtsNotification = new TTSNotificationProvider(context);
 		mStatusBarNotification = new StatusBarNotificationProvider(context);
 		mPebbleNotification = new PebbleNotificationProvider(context);
 	}
@@ -58,9 +57,5 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	public void quickNotify(String feedback) {
 		mTtsNotification.quickNotify(feedback);
 		mStatusBarNotification.quickNotify(feedback);
-	}
-
-	public TTSNotificationProvider getTtsNotification() {
-		return mTtsNotification;
 	}
 }

@@ -40,8 +40,9 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_dshare_enabled_key">dshare_enabled</string>
     <string name="pref_live_upload_enabled_key">pref_live_upload_enabled</string>
 
+    <string name="pref_enable_tts_key">pref_enable_tts</string>
     <string name="pref_tts_periodic_key">tts_periodic</string>
-    <string name="pref_tts_periodic_period_key">tts_periodic_period</string>
+    <string name="pref_tts_periodic_period_key">tts_periodic_status_period</string>
     <string name="pref_tts_periodic_bat_volt_key">tts_periodic_bat_volt</string>
     <string name="pref_tts_periodic_alt_key">tts_periodic_alt</string>
     <string name="pref_tts_periodic_rssi_key">tts_periodic_rssi</string>

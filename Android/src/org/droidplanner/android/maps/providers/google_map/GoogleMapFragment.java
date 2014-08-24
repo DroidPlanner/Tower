@@ -301,6 +301,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
 	@Override
 	public void updateMarker(MarkerInfo markerInfo, boolean isDraggable) {
+        //if the drone hasn't received a gps signal yet
         final Coord2D coord = markerInfo.getPosition();
         if(coord == null){
             return;
