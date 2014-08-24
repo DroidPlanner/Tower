@@ -376,6 +376,21 @@
     <string name="pref_tts_periodic_rssi_summary">Read Received Signal Strength Indication.</string>
     <string name="pref_tts_periodic_airspeed">Airspeed</string>
     <string name="pref_tts_periodic_airspeed_summary">Read airspeed.</string>
+    <string name="pref_title_tts_warnings">Warnings</string>
+    <string name="pref_tts_warning_solar_activity">Solar Activity</string>
+    <string name="pref_tts_warning_solar_activity_summary">Warns about high solar activity which can decrease gps accuracy.</string>
+    <string name="pref_tts_warning_wind_speed">Wind Speed</string>
+    <string name="pref_tts_warning_wind_speed_summary">Warns about high wind speeds which may make flight difficult.</string>
+    <string name="pref_tts_warning_400ft_ceiling_exceeded">400ft. Exceeded</string>
+    <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">In many situations it is illegal to fly above 400ft.</string>
+    <string name="pref_tts_warning_arming_failure">Arming Failures</string>
+    <string name="pref_tts_warning_arming_failure_summary">Reads arming failures and failsafes.</string>
+    <string name="pref_tts_warning_low_signal_strength">Low Signal Strength</string>
+    <string name="pref_tts_warning_low_signal_strength_summary">Warns when connection to drone is bad.</string>
+    <string name="pref_tts_warning_lost_signal">Lost Signal</string>
+    <string name="pref_tts_warning_lost_signal_summary">Warns when connection to drone is severed.</string>
+    <string name="pref_tts_warning_low_battery">Low Battery</string>
+    <string name="pref_tts_warning_low_battery_summary">Warns if the autopilot detects a low battery.</string>
 
     <!-- Droneshare -->
     <string name="dsheader">Would you be interested in using the free www.Droneshare.com service?</string>
