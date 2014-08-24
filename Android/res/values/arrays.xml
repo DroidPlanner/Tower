@@ -202,6 +202,8 @@
         <item>20;ElevatorWithInput</item>
         <item>21;Rudder</item>
     </string-array>
+
+    <!-- Selectable values for the period of the speech output. -->
     <string-array name="tts_periodic_period">
         <item>off</item>
         <item>15 sec.</item>

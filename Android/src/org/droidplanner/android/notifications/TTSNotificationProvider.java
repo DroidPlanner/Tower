@@ -4,19 +4,25 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.droidplanner.R;
+import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.variables.Calibration;
 import org.droidplanner.core.model.Drone;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.ApmModes;
@@ -31,33 +37,78 @@ public class TTSNotificationProvider implements OnInitListener,
 
 	private static final double BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT = 10;
 
-	TextToSpeech tts;
-	private SharedPreferences prefs;
+    private final BroadcastReceiver mSpeechIntervalUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+
+            if(SettingsFragment.ACTION_UPDATED_STATUS_PERIOD.equals(action)) {
+                statusInterval = mAppPrefs.getSpokenStatusInterval();
+                handler.removeCallbacks(watchdogCallback);
+                if (statusInterval != 0) {
+                    handler.postDelayed(watchdogCallback, statusInterval * 1000);
+                }
+            }
+        }
+    };
+
+	private TextToSpeech tts;
 	private int lastBatteryDischargeNotification;
 
-	private Context context;
-	private Handler handler;
+	private final Context context;
+    private final DroidPlannerPrefs mAppPrefs;
+	private final Handler handler = new Handler();
 	private int statusInterval;
 
 	private class Watchdog implements Runnable {
 		private Drone drone;
 
 		public void run() {
+            handler.removeCallbacks(watchdogCallback);
+
 			speakPeriodic(drone);
+
+            if (statusInterval != 0) {
+                handler.postDelayed(watchdogCallback, statusInterval * 1000);
+            }
 		}
+
+        private void speakPeriodic(Drone drone) {
+            final SparseBooleanArray speechPrefs = mAppPrefs.getPeriodicSpeechPrefs();
+
+            final StringBuilder message = new StringBuilder();
+            if (speechPrefs.get(R.string.pref_tts_periodic_bat_volt_key)) {
+                message.append("battery " + drone.getBattery().getBattVolt() + " volts. ");
+            }
+
+            if (speechPrefs.get(R.string.pref_tts_periodic_alt_key)) {
+                message.append("altitude, " + (int) (drone.getAltitude().getAltitude()) + " meters. ");
+            }
+
+            if (speechPrefs.get(R.string.pref_tts_periodic_airspeed_key)) {
+                message.append("airspeed, "
+                        + (int) (drone.getSpeed().getAirSpeed().valueInMetersPerSecond())
+                        + " meters per second. ");
+            }
+
+            if (speechPrefs.get(R.string.pref_tts_periodic_rssi_key)) {
+                message.append("r s s i, " + (int) drone.getRadio().getRssi() + " decibels");
+            }
+
+            speak(message.toString());
+        }
 
 		public void setDrone(Drone drone) {
 			this.drone = drone;
 		}
 	}
 
-	public Watchdog watchdogCallback = new Watchdog();
+	public final Watchdog watchdogCallback = new Watchdog();
 
-	TTSNotificationProvider(Context context, Handler handler) {
+	TTSNotificationProvider(Context context) {
 		this.context = context;
 		tts = new TextToSpeech(context, this);
-		this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		this.handler = handler;
+        mAppPrefs = new DroidPlannerPrefs(context);
 	}
 
 	@Override
@@ -87,12 +138,16 @@ public class TTSNotificationProvider implements OnInitListener,
 						Toast.LENGTH_LONG).show();
 				break;
 			}
+
+            if(tts != null){
+                //Register the broadcast receiver for the speech output period updates
+                LocalBroadcastManager.getInstance(context).registerReceiver
+                        (mSpeechIntervalUpdateReceiver, new IntentFilter(SettingsFragment.ACTION_UPDATED_STATUS_PERIOD));
+            }
 		} else {
 			// Notify the user that the tts engine is not available.
 			Log.e(TAG, "TextToSpeech initialization failed.");
-			Toast.makeText(
-					context,
-					"Please make sure 'Text to Speech' is enabled in the "
+			Toast.makeText(context,	"Please make sure 'Text to Speech' is enabled in the "
 							+ "system accessibility settings.", Toast.LENGTH_LONG).show();
 		}
 	}
@@ -106,7 +161,7 @@ public class TTSNotificationProvider implements OnInitListener,
 	}
 
 	private boolean shouldEnableTTS() {
-		return prefs.getBoolean("pref_enable_tts", false);
+		return mAppPrefs.prefs.getBoolean("pref_enable_tts", false);
 	}
 
 	/**
@@ -119,59 +174,72 @@ public class TTSNotificationProvider implements OnInitListener,
 			case INVALID_POLYGON:
 				Toast.makeText(context, R.string.exception_draw_polygon, Toast.LENGTH_SHORT).show();
 				break;
+
 			case ARMING:
 				speakArmedState(drone.getState().isArmed());
 				break;
+
 			case ARMING_STARTED:
 				speak("Arming the vehicle, please standby");
 				break;
+
 			case BATTERY:
 				batteryDischargeNotification(drone.getBattery().getBattRemain());
 				break;
+
 			case MODE:
 				speakMode(drone.getState().getMode());
 				break;
+
 			case MISSION_SENT:
 				Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT).show();
 				speak("Waypoints saved to Drone");
 				break;
+
 			case GPS_FIX:
 				speakGpsMode(drone.getGps().getFixTypeNumeric());
 				break;
+
 			case MISSION_RECEIVED:
 				Toast.makeText(context, "Waypoints received from Drone", Toast.LENGTH_SHORT).show();
 				speak("Waypoints received");
 				break;
+
 			case HEARTBEAT_FIRST:
-				statusInterval = new DroidPlannerPrefs(context).getSpokenStatusInterval();
-				setupPeriodicSpeechOutput(statusInterval, drone);
+				watchdogCallback.setDrone(drone);
 				speak("Connected");
 				break;
+
 			case HEARTBEAT_TIMEOUT:
 				if (!Calibration.isCalibrating()) {
 					speak("Data link lost, check connection.");
 					handler.removeCallbacks(watchdogCallback);
 				}
 				break;
+
 			case HEARTBEAT_RESTORED:
-				statusInterval = new DroidPlannerPrefs(context).getSpokenStatusInterval();
-				setupPeriodicSpeechOutput(statusInterval, drone);
+                watchdogCallback.setDrone(drone);
 				speak("Data link restored");
 				break;
+
 			case DISCONNECTED:
 				handler.removeCallbacks(watchdogCallback);
 				break;
+
 			case MISSION_WP_UPDATE:
 				speak("Going for waypoint " + drone.getMissionStats().getCurrentWP());
 				break;
+
 			case FOLLOW_START:
 				speak("Following");
 				break;
+
 			case FAILSAFE:
 				String failsafe = drone.getState().getWarning();
 				if (drone.getState().isWarning()) {
 					speak(failsafe);
 				}
+
 			default:
 				break;
 			}
@@ -234,44 +302,6 @@ public class TTSNotificationProvider implements OnInitListener,
 		default:
 			speak("Lost GPS Lock");
 			break;
-		}
-	}
-
-	private void speakPeriodic(Drone drone) {
-		DroidPlannerPrefs preferences = new DroidPlannerPrefs(context);
-		Map<String, Boolean> speechPrefs = preferences.getPeriodicSpeechPrefs();
-		StringBuilder message = new StringBuilder();
-		if (speechPrefs.get("battery voltage")) {
-			message.append("battery " + drone.getBattery().getBattVolt() + " volts. ");
-		}
-		if (speechPrefs.get("altitude")) {
-			message.append("altitude, " + (int) (drone.getAltitude().getAltitude() * 10.0) / 10.0
-					+ " meters. ");
-		}
-		if (speechPrefs.get("airspeed")) {
-			message.append("airspeed, "
-					+ (int) (drone.getSpeed().getAirSpeed().valueInMetersPerSecond() * 10.0) / 10.0
-					+ " meters per second. ");
-		}
-		if (speechPrefs.get("rssi")) {
-			message.append("r s s i, " + drone.getRadio().getRssi() + " decibels");
-		}
-		speak(message.toString());
-		if (preferences.getSpokenStatusInterval() != 0) {
-			handler.postDelayed(watchdogCallback, statusInterval * 1000);
-		} else {
-			handler.removeCallbacks(watchdogCallback);
-		}
-	}
-
-	public void setupPeriodicSpeechOutput(int interval, Drone drone) {
-		watchdogCallback.setDrone(drone);
-		if (interval == 0) {
-			handler.removeCallbacks(watchdogCallback);
-		} else {
-			statusInterval = interval;
-			handler.removeCallbacks(watchdogCallback);
-			handler.postDelayed(watchdogCallback, interval * 1000);
 		}
 	}
 
