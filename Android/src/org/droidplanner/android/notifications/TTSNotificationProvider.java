@@ -252,6 +252,11 @@ public class TTSNotificationProvider implements OnInitListener,
 					speak("Warning, weak signal");
 				}
 
+			case WARNING_BATTERY_LOW:
+				if(mAppPrefs.getWarningOnLowBattery()){
+					speak("Warning, low battery");
+				}
+
 			default:
 				break;
 			}
