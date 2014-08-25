@@ -1,7 +1,6 @@
 package org.droidplanner.android.notifications;
 
 import java.util.Locale;
-import java.util.Map;
 
 import org.droidplanner.R;
 import org.droidplanner.android.fragments.SettingsFragment;
@@ -14,10 +13,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.support.v4.content.LocalBroadcastManager;
@@ -236,15 +233,15 @@ public class TTSNotificationProvider implements OnInitListener,
 				break;
 
 			case WARNING_400FT_EXCEEDED:
-				if(mAppPrefs.prefs.getBoolean("pref_tts_warning_400ft_ceiling_exceeded",true)){
+				if(mAppPrefs.prefs.getBoolean("tts_ceiling_exceeded",true)){
 					speak("warning, 400 feet exceeded");
 				}
 				break;
 
-			case FAILSAFE:
-				String failsafe = drone.getState().getWarning();
-				if (drone.getState().isWarning()) {
-					speak(failsafe);
+			case WARNING:
+				String warning = drone.getState().getWarning();
+				if (mAppPrefs.prefs.getBoolean("tts_arming_failure", true) && drone.getState().isWarning()) {
+					speak(warning);
 				}
 				break;
 

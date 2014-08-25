@@ -65,7 +65,7 @@ public class DroneInterfaces {
 		/**
          *
          */
-		FAILSAFE,
+		WARNING,
 
 		/**
          *

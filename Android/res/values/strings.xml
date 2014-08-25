@@ -69,7 +69,7 @@
     <string name="pref_map_type">Map Type</string>
     <string name="pref_map_type_default">Satellite</string>
     <string name="pref_map_type_summary">Which type of map to use</string>
-    <string name="pref_enable_tts">Important Events</string>
+    <string name="pref_enable_tts">Enable Speech output</string>
     <string name="pref_enable_tts_summary">Audible messages for important events</string>
     <string name="pref_request_max_volume">Set Volume To Max On Start</string>
     <string name="pref_vehicle_type">Default Vehicle Type</string>
@@ -383,7 +383,7 @@
     <string name="pref_tts_warning_wind_speed_summary">Warns about high wind speeds which may make flight difficult.</string>
     <string name="pref_tts_warning_400ft_ceiling_exceeded">400ft. Exceeded</string>
     <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">In many situations it is illegal to fly above 400ft.</string>
-    <string name="pref_tts_warning_arming_failure">Arming Failures</string>
+    <string name="pref_tts_warning_arming_failure">Arming Failures and Failsafes</string>
     <string name="pref_tts_warning_arming_failure_summary">Reads arming failures and failsafes.</string>
     <string name="pref_tts_warning_low_signal_strength">Low Signal Strength</string>
     <string name="pref_tts_warning_low_signal_strength_summary">Warns when connection to drone is bad.</string>
