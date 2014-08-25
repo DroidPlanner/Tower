@@ -29,7 +29,7 @@ public class Home extends DroneVariable {
 	}
 
 	public Length getDroneDistanceToHome() {
-		if (isValid()) {
+		if (isValid() && myDrone.getGps().isPositionValid()) {
 			return GeoTools.getDistance(coordinate, myDrone.getGps().getPosition());
 		} else {
 			return new Length(0); // TODO fix this
