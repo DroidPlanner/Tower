@@ -247,6 +247,11 @@ public class TTSNotificationProvider implements OnInitListener,
 				}
 				break;
 
+			case WARNING_SIGNAL_WEAK:
+				if(mAppPrefs.getWarningOnLowSignalStrength()){
+					speak("Warning, weak signal");
+				}
+
 			default:
 				break;
 			}

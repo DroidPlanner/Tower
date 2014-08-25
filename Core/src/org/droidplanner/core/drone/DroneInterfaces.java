@@ -196,6 +196,11 @@ public class DroneInterfaces {
 		 *
 		 */
 		WARNING_400FT_EXCEEDED,
+
+		/**
+		 *
+		 */
+		WARNING_SIGNAL_WEAK,
 	}
 
 	public interface OnDroneListener {
