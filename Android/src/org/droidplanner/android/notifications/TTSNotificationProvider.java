@@ -209,7 +209,7 @@ public class TTSNotificationProvider implements OnInitListener,
 				break;
 
 			case HEARTBEAT_TIMEOUT:
-				if (!Calibration.isCalibrating()) {
+				if (!Calibration.isCalibrating() && mAppPrefs.prefs.getBoolean("tts_lost_signal",true)) {
 					speak("Data link lost, check connection.");
 					handler.removeCallbacks(watchdogCallback);
 				}
@@ -217,7 +217,9 @@ public class TTSNotificationProvider implements OnInitListener,
 
 			case HEARTBEAT_RESTORED:
                 watchdogCallback.setDrone(drone);
-				speak("Data link restored");
+				if(mAppPrefs.prefs.getBoolean("tts_lost_signal",true)){
+					speak("Data link restored");
+				}
 				break;
 
 			case DISCONNECTED:

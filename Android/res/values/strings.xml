@@ -387,8 +387,8 @@
     <string name="pref_tts_warning_arming_failure_summary">Reads arming failures and failsafes.</string>
     <string name="pref_tts_warning_low_signal_strength">Low Signal Strength</string>
     <string name="pref_tts_warning_low_signal_strength_summary">Warns when connection to drone is bad.</string>
-    <string name="pref_tts_warning_lost_signal">Lost Signal</string>
-    <string name="pref_tts_warning_lost_signal_summary">Warns when connection to drone is severed.</string>
+    <string name="pref_tts_warning_lost_signal">Connection Status</string>
+    <string name="pref_tts_warning_lost_signal_summary">Warns when connection to drone is severed or restored.</string>
     <string name="pref_tts_warning_low_battery">Low Battery</string>
     <string name="pref_tts_warning_low_battery_summary">Warns if the autopilot detects a low battery.</string>
 
