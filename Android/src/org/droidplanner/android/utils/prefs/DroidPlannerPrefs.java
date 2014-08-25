@@ -42,6 +42,8 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	private static final boolean DEFAULT_GUIDED_MODE_ON_LONG_PRESS = true;
 	public static final boolean DEFAULT_PREF_UI_LANGUAGE = false;
     public static final String DEFAULT_SPEECH_PERIOD = "0";
+	public static final boolean DEFAULT_TTS_CEILING_EXCEEDED = true;
+	public static final boolean DEFAULT_TTS_WARN_LOST_SIGNAL = true;
 
 	// Public for legacy usage
 	public SharedPreferences prefs;
@@ -279,4 +281,11 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
                 .pref_tts_periodic_period_key), DEFAULT_SPEECH_PERIOD));
 	}
 
+	public boolean getWarningOn400ftExceeded(){
+		return prefs.getBoolean("tts_ceiling_exceeded", DEFAULT_TTS_CEILING_EXCEEDED);
+	}
+
+	public boolean getWarningOnLostOrRestoredSignal(){
+		return prefs.getBoolean("tts_lost_signal", DEFAULT_TTS_WARN_LOST_SIGNAL);
+	}
 }

@@ -209,7 +209,7 @@ public class TTSNotificationProvider implements OnInitListener,
 				break;
 
 			case HEARTBEAT_TIMEOUT:
-				if (!Calibration.isCalibrating() && mAppPrefs.prefs.getBoolean("tts_lost_signal",true)) {
+				if (!Calibration.isCalibrating() && mAppPrefs.getWarningOnLostOrRestoredSignal()) {
 					speak("Data link lost, check connection.");
 					handler.removeCallbacks(watchdogCallback);
 				}
@@ -217,7 +217,7 @@ public class TTSNotificationProvider implements OnInitListener,
 
 			case HEARTBEAT_RESTORED:
                 watchdogCallback.setDrone(drone);
-				if(mAppPrefs.prefs.getBoolean("tts_lost_signal",true)){
+				if(mAppPrefs.getWarningOnLostOrRestoredSignal()){
 					speak("Data link restored");
 				}
 				break;
@@ -235,14 +235,14 @@ public class TTSNotificationProvider implements OnInitListener,
 				break;
 
 			case WARNING_400FT_EXCEEDED:
-				if(mAppPrefs.prefs.getBoolean("tts_ceiling_exceeded",true)){
+				if(mAppPrefs.getWarningOn400ftExceeded()){
 					speak("warning, 400 feet exceeded");
 				}
 				break;
 
 			case WARNING:
 				String warning = drone.getState().getWarning();
-				if (mAppPrefs.prefs.getBoolean("tts_arming_failure", true) && drone.getState().isWarning()) {
+				if (drone.getState().isWarning()) {
 					speak(warning);
 				}
 				break;

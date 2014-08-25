@@ -383,8 +383,6 @@
     <string name="pref_tts_warning_wind_speed_summary">Warns about high wind speeds which may make flight difficult.</string>
     <string name="pref_tts_warning_400ft_ceiling_exceeded">400ft. Exceeded</string>
     <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">In many situations it is illegal to fly above 400ft.</string>
-    <string name="pref_tts_warning_arming_failure">Arming Failures and Failsafes</string>
-    <string name="pref_tts_warning_arming_failure_summary">Reads arming failures and failsafes.</string>
     <string name="pref_tts_warning_low_signal_strength">Low Signal Strength</string>
     <string name="pref_tts_warning_low_signal_strength_summary">Warns when connection to drone is bad.</string>
     <string name="pref_tts_warning_lost_signal">Connection Status</string>
