@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Android" />
+            <option value="$PROJECT_DIR$/Core" />
+            <option value="$PROJECT_DIR$/Libraries" />
+            <option value="$PROJECT_DIR$/Libraries/HorizontalVariableListView" />
+            <option value="$PROJECT_DIR$/Libraries/HorizontalVariableListView/HorizontalVariableListView" />
+            <option value="$PROJECT_DIR$/Libraries/PebbleKit" />
+            <option value="$PROJECT_DIR$/Libraries/usb-serial-for-android" />
+            <option value="$PROJECT_DIR$/Libraries/usb-serial-for-android/UsbSerialLibrary" />
+            <option value="$PROJECT_DIR$/Mavlink" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
+

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="droneapi-java">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Android/libs/droneapi-java.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
