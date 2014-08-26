@@ -29,7 +29,7 @@ public class EmergencyBeepNotificationProvider implements NotificationHandler.No
 
 	@Override
 	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
-		if(event.equals(DroneInterfaces.DroneEventsType.STATE)){
+		if(event == DroneInterfaces.DroneEventsType.STATE){
 			if(drone.getState().isCollisionImminent()){
 				mPool.play(beepBeep,1f,1f,1,1,1f);
 			}else{
