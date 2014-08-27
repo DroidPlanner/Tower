@@ -31,11 +31,7 @@ public class FollowMe implements LocationListener {
 	public void toogleFollowMeState() {
 		if (isEnabledInPreferences()) {
 			if (isEnabled()) {
-				disableFollowMe();
-				
-				// For safety set the vehicle to Loiter mode specifically
-				drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
-				
+				disableFollowMe();				
 			} else {
 				
 				// Vehicle has to be connected for our commands to reach it
@@ -43,10 +39,7 @@ public class FollowMe implements LocationListener {
 					
 					// Vehicle has to be armed for our commands to alter the flight
 					if (drone.state.isArmed()) {
-						
-						// Guided mode so our waypoints change the flight 
-						drone.state.changeFlightMode(ApmModes.ROTOR_GUIDED);
-						
+												
 						// Turn on follow me using existing method
 						enableFollowMe();
 						
@@ -68,18 +61,26 @@ public class FollowMe implements LocationListener {
 
 	private void enableFollowMe() {
 		Toast.makeText(context, "FollowMe Enabled", Toast.LENGTH_SHORT).show();
-
+		
 		// Register the listener with the Location Manager to receive location
 		// updates
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 				MIN_TIME_MS, MIN_DISTANCE_M, this);
+		
+		// Guided mode so our waypoints change the flight 
+		drone.state.changeFlightMode(ApmModes.ROTOR_GUIDED);
 
 		followMeEnabled = true;
+		
 	}
 
 	private void disableFollowMe() {
 		Toast.makeText(context, "FollowMe Disabled", Toast.LENGTH_SHORT).show();
 		locationManager.removeUpdates(this);
+		
+		// For safety set the vehicle to Loiter mode specifically
+		drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
+		
 		followMeEnabled = false;
 	}
 
