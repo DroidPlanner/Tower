@@ -19,7 +19,7 @@
 
     <!-- Drone Setup tabs -->
     <string name="screen_tuning">調整參數</string>
-    <string name="screen_cal">校準</string>
+    <string name="screen_cal">校正</string>
     <string name="screen_checklist">檢查清單</string>
     <string name="screen_rc">遙控</string>
     <string name="screen_parameters">參數</string>
@@ -112,7 +112,7 @@
     <string name="disconnected">已斷線</string>
 
     <!-- Common Setup Buttons Resource Strings -->
-    <string name="button_setup_calibrate">校準</string>
+    <string name="button_setup_calibrate">校正</string>
     <string name="button_setup_cancel">取消</string>
     <string name="button_setup_send">發送</string>
     <string name="button_setup_next">下一步</string>
@@ -161,7 +161,7 @@
     <string name="mode_loiter">Loiter 停懸模式 - 無人載具完全依 GPS 位置航行。</string>
     <string name="mode_ofloiter">Optical Flow 光流模式 - 將啟用停懸模式保持位置，以光流感測器數據來保持目前高度。</string>
     <string name="mode_position">Position 定位模式 - 無人載具完全依 GPS 位置航行，並全手動操控油門。</string>
-    <string name="mode_rtl">RTL 返回起飛點 - 飛行至高低高度，返回 Home 位置並且降落。此模式需要 GPS 鎖定。</string>
+    <string name="mode_rtl">RTL 返回起飛點 - 飛行至高低高度，返回 家 的位置並且降落。此模式需要 GPS 鎖定。</string>
     <string name="mode_sport">Sport 運動模式 - 飛友可在自動平衡的狀態下，直接控制旋轉速率、飛行姿態。</string>
     <string name="mode_stabilize">Stabilize 自穩模式 - 讓無人載具保持水平飛行。</string>
     <string name="mode_hybrid">Hybrid 混合模式 - 混合飄移模式及定高模式讓飛行有如"DJI-GPS"的飛行模式。此模式需要 GPS 鎖定。</string>
@@ -183,13 +183,13 @@
     <string name="waypointInfo_Loiter">未使用。</string>
     <string name="waypointInfo_LoiterN">盤旋在目前位置的圈數。</string>
     <string name="waypointInfo_LoiterT">停懸在目前位置的秒數，或結束任務並不限時間停懸。</string>
-    <string name="waypointInfo_RTL">解鎖時，將會傳送 Home 的位置給無人載具。如果高度參數為0，返回時會依目前高度或是 DroidPlanner 所定義的高度飛行。</string>
+    <string name="waypointInfo_RTL">解鎖時，將會傳送 家 的位置給無人載具。如果高度參數為 0，返回時會依目前高度或是 DroidPlanner 所定義的高度飛行。</string>
     <string name="waypointInfo_TakeOff">在執行下一個航點前，無人載具會先從地面升高至預定的高度。</string>
-    <string name="waypointInfo_Waypoint">航行至三維空間的一個位置。可設定時間(以秒為單位)保持位置，再達行下一個任務。</string>
+    <string name="waypointInfo_Waypoint">航行至三維空間的一個位置。可設定時間(以秒為單位)保持位置，再執行下一個任務。</string>
     <string name="waypointInfo_CondAlt">以預定速率爬昇/下降。延遲任務狀態直到達到預定高度。</string>
     <string name="waypointInfo_CondYaw">設定達到目標角度的條件。</string>
     <string name="waypointInfo_CondDistance">延遲任務狀態直到在下一個航點的預定距離內。</string>
-    <string name="waypointInfo_SetHome">Home 的位置可設定成目前位置，或是指定位置。</string>
+    <string name="waypointInfo_SetHome">家 的位置可設定成目前位置，或是指定位置。</string>
     <string name="waypointInfo_SetSpeed">改變速度和(或)油門設定點。如果不需改變速度和油門，請設-1。</string>
     <string name="waypointInfo_ROI">設定特定的位置及高度為無人載具的目的地，若有裝置相機則會指定目標朝向。</string>
     <string name="waypointInfo_SetJump">重覆航點</string>
@@ -197,9 +197,9 @@
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">航點無法加在降落或返回出發點的任務之後。</string>
     <string name="editor_info_window">距離: 200公尺, 飛行時間: 3分30秒</string>
-    <string name="distance_to_home">到 Home 的距離</string>
+    <string name="distance_to_home">到 家 的距離</string>
     <string name="loiter_time">停懸時間</string>
-    <string name="waypoint_delay">下一個航點前的延遲Delay before next waypoint</string>
+    <string name="waypoint_delay">往下一個航點前的延遲時間</string>
     <string name="loiter_radius">停懸半徑</string>
     <string name="loiter_ccw">逆時針</string>
     <string name="waypoint_altitude">高度</string>
@@ -210,7 +210,7 @@
     <string name="waypoint_yawdir">設定逆時針的偏航(yaw)方向</string>
     <string name="waypoint_yawoffset">使用相對偏移</string>
     <string name="waypoint_distance">距離</string>
-    <string name="waypoint_homecurrent">以目前位置設為 Home 的位置</string>
+    <string name="waypoint_homecurrent">以目前位置設為 家 的位置</string>
     <string name="waypoint_longitude">經度:</string>
     <string name="waypoint_latitude">緯度:</string>
     <string name="waypoint_speed">目標速度</string>
@@ -245,7 +245,7 @@
     <string name="metadata_units">單位:</string>
     <string name="metadata_range">範圍:</string>
     <string name="lst_note_hint">按 Enter 鍵增加更多行</string>
-    <string name="set_to_zero_to_disable">(設為 0 以關閉)。</string>
+    <string name="set_to_zero_to_disable">(若要關閉請設為 0 )。</string>
 
     <!-- Calibration data progress -->
     <string name="progress_title_uploading">上傳校正數據</string>
@@ -256,7 +256,7 @@
     <!-- Radio Setup Resource Strings -->
     <string name="setup_radio_title">遙控頻道校正</string>
     <string name="setup_radio_cal_title">開始校正</string>
-    <string name="setup_radio_cal_desc">按下校正開始遙控器的校正程序。請確認遙控發射機已 \'開\' 且正在發送數據。</string>
+    <string name="setup_radio_cal_desc">按下校正開始遙控器的校正程序。請確認遙控發射機已 \'開啟\' 且正在發送數據。</string>
     <string name="setup_radio_title_minmax">設定最小&amp;最大數值</string>
     <string name="setup_radio_title_middle">設定中間值</string>
     <string name="setup_radio_title_complete">校正完成</string>
@@ -332,7 +332,7 @@
     <string name="default_angle_value">--°</string>
     <string name="mission_control_control">控制</string>
     <string name="mission_control_edit">編輯</string>
-    <string name="mission_control_home">回家</string>
+    <string name="mission_control_home">回 家</string>
     <string name="mission_control_land">降落</string>
     <string name="mission_control_takeoff">起飛</string>
     <string name="mission_control_loiter">停懸</string>
@@ -363,7 +363,7 @@
     <!-- Text To Speech -->
     <string name="pref_title_tts">語音輸出</string>
     <string name="pref_title_tts_periodic">定期</string>
-    <string name="pref_title_tts_periodic_status">定期報告</string>
+    <string name="pref_title_tts_periodic_status">定期報告設定</string>
     <string name="pref_tts_periodic_summary">有哪些包含在定期報告中。</string>
     <string name="pref_tts_periodic_period">週期</string>
     <string name="pref_tts_periodic_period_summary">多久報告一次。</string>
@@ -387,7 +387,7 @@
     <string name="email_address">電子郵件</string>
     <string name="droneshare_password">Droneshare 密碼</string>
     <string name="enter_or_pick_a_password">輸入密碼</string>
-    <string name="if_that_user_does_not_exist_it_will_be_created">帳號名稱無法被重複創建。</string>
+    <string name="if_that_user_does_not_exist_it_will_be_created">當帳號不存在時，則會產生新的帳號。</string>
     <string name="droneshare_username">Droneshare 使用者名稱</string>
     <string name="droneshare_enabled">啟用 Droneshare</string>
     <string name="do_you_want_to_use_droneshare_">你想要使用 Droneshare 嗎？</string>
