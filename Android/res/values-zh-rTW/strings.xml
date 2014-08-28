@@ -374,13 +374,13 @@
     <string name="pref_tts_periodic_period">週期</string>
     <string name="pref_tts_periodic_period_summary">多久報告一次。</string>
     <string name="pref_tts_periodic_bat_volt">電池伏特數</string>
-    <string name="pref_tts_periodic_bat_volt_summary">念出電池伏特數值。</string>
+    <string name="pref_tts_periodic_bat_volt_summary">回報電池伏特數值。</string>
     <string name="pref_tts_periodic_alt">高度</string>
-    <string name="pref_tts_periodic_alt_summary">念出高度值。</string>
+    <string name="pref_tts_periodic_alt_summary">回報高度值。</string>
     <string name="pref_tts_periodic_rssi">信號強度(RSSI)</string>
-    <string name="pref_tts_periodic_rssi_summary">念出接收的信號強度指數。</string>
+    <string name="pref_tts_periodic_rssi_summary">回報接收的信號強度指數。</string>
     <string name="pref_tts_periodic_airspeed">空速</string>
-    <string name="pref_tts_periodic_airspeed_summary">念出空速數值。</string>
+    <string name="pref_tts_periodic_airspeed_summary">回報空速數值。</string>
 
     <!-- Droneshare -->
     <string name="dsheader">你有興趣使用免費的服務平台 www.Droneshare.com 嗎？</string>
