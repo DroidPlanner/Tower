@@ -104,7 +104,12 @@
     <string name="storage_folder">儲存路徑</string>
     <string name="pref_live_upload">啟用實況上傳(ALPHA 測試中)</string>
     <string name="pref_live_upload_summary">上傳無人載具的數據到 Droneshare</string>
-    
+
+    <!-- Toast Message -->
+    <string name="user_autopan_long_press">長按圖示可啟動地圖中使用者位置置中。</string>
+    <string name="drone_autopan_long_press">長按圖示可啟動地圖中無人機位置自動置中。</string>
+    <string name="drone_no_location">沒有無人機的位置資料</string>
+
     <!-- Connection State -->
     <string name="menu_connect">連線</string>
     <string name="menu_disconnect">中斷連線</string>
@@ -115,6 +120,7 @@
     <string name="button_setup_calibrate">校正</string>
     <string name="button_setup_cancel">取消</string>
     <string name="button_setup_send">發送</string>
+    <string name="button_setup_reset">重置</string>
     <string name="button_setup_next">下一步</string>
     <string name="button_setup_done">完成</string>
     <string name="Pause">暫停</string>
@@ -168,7 +174,7 @@
 
     <!-- Waypoint types -->
     <string name="waypointType_Waypoint">航點</string>
-    <string name="waypointType_SplineWaypoint">樣條函數航點</string>
+    <string name="waypointType_SplineWaypoint">Spline航點</string>
     <string name="waypointType_TakeOff">起飛</string>
     <string name="waypointType_RTL">返回起飛點</string>
     <string name="waypointType_Land">降落</string>
@@ -424,7 +430,7 @@
     <string name="pref_title_screen">畫面</string>
     <string name="pref_title_notifications">通知</string>
     <string name="normal_waypoint_toggle">一般</string>
-    <string name="spline_waypoint_toggle">樣條函數</string>
+    <string name="spline_waypoint_toggle">Spline</string>
     <string name="mavlink_version">Mavlink 版本</string>
     <string name="empty_content">--</string>
     <string name="usage_statistics">統計使用習慣</string>
@@ -440,4 +446,8 @@
 
     <string name="pref_ui_gps_hdop_summary">在訊息列上顯示衛星的 HDOP 值代替 FIX 值</string>
     <string name="pref_ui_gps_hdop_title">顯示衛星的 HDOP 值</string>
+
+    <!-- Help -->
+    <string name="help_item_description">如何設定和實際操作任務，請點我看影片</string>
+
 </resources>

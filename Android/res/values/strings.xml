@@ -105,7 +105,12 @@
     <string name="storage_folder">Storage Folder</string>
     <string name="pref_live_upload">Enable live upload (ALPHA TEST)</string>
     <string name="pref_live_upload_summary">Live vehicle monitoring on Droneshare</string>
-    
+
+    <!-- Toast Message -->
+    <string name="user_autopan_long_press">Long press to activate user auto panning.</string>
+    <string name="drone_autopan_long_press">Long press to activate drone auto panning.</string>
+    <string name="drone_no_location">No drone location available</string>
+
     <!-- Connection State -->
     <string name="menu_connect">Connect</string>
     <string name="menu_disconnect">Disconnect</string>
@@ -117,6 +122,7 @@
     <string name="button_setup_cancel">Cancel</string>
     <string name="button_setup_send">Send</string>
     <string name="button_setup_next">Next</string>
+    <string name="button_setup_reset">Reset</string>
     <string name="button_setup_done">Done</string>
     <string name="Pause">Pause</string>
     <string name="dialog_box_btn_txt_ok">OK</string>
@@ -441,4 +447,8 @@
 
     <string name="pref_ui_gps_hdop_summary">Display HDOP instead of FIX in satellite info bar item</string>
     <string name="pref_ui_gps_hdop_title">Display Satellite HDOP</string>
+
+    <!-- Help -->
+    <string name="help_item_description">How to plan and fly a mission</string>
+
 </resources>
