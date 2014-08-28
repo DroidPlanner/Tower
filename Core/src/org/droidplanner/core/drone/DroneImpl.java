@@ -84,6 +84,11 @@ public class DroneImpl implements Drone {
 		events.notifyDroneEvent(DroneInterfaces.DroneEventsType.ORIENTATION);
 	}
 
+    @Override
+    public boolean isConnectionAlive(){
+        return heartbeat.isConnectionAlive();
+    }
+
 	@Override
 	public void addDroneListener(DroneInterfaces.OnDroneListener listener) {
 		events.addDroneListener(listener);

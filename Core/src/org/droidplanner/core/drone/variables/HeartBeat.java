@@ -67,6 +67,10 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 		restartWatchdog(HEARTBEAT_NORMAL_TIMEOUT);
 	}
 
+    public boolean isConnectionAlive(){
+        return heartbeatState != HeartbeatState.LOST_HEARTBEAT;
+    }
+
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
