@@ -36,7 +36,7 @@
     <string name="pref_mavlink_stream_rate_ext_stat">航點, GPS 原始資料, fence 資料, 目前航點等</string>
     <string name="pref_mavlink_stream_rate_extra1">姿態</string>
     <string name="pref_mavlink_stream_rate_extra2">VFR_Hud 資料</string>
-    <string name="pref_mavlink_stream_rate_extra3">AHRS, 硬體狀況, 風</string>
+    <string name="pref_mavlink_stream_rate_extra3">航姿系統(AHRS), 硬體狀況, 風</string>
     <string name="pref_mavlink_stream_rate_position">位置資料</string>
     <string name="pref_mavlink_stream_rate_RC_override">遙控頻道覆蓋</string>
     <string name="pref_mavlink_stream_rate_rc_channels">遙控頻道資料</string>
@@ -61,7 +61,7 @@
     <string name="pref_heading_mode">啟用 FPV 朝向模式</string>
     <string name="pref_heading_mode_summary">改變以 FPV 的朝向模式(-180º至180º)</string>
     <string name="pref_pebble">PEBBLE</string>
-    <string name="pref_pebble_install_watchapp">更新Pebble</string>
+    <string name="pref_pebble_install_watchapp">更新 Pebble</string>
     <string name="pref_advanced">進階</string>
     <string name="pref_advanced_use_offline_maps">使用離線地圖</string>
     <string name="pref_advanced_use_offline_maps_summary">使用本機儲存的地圖區塊當作離線地圖的資料</string>
@@ -85,11 +85,11 @@
     <string name="pref_rc_throttle_returntocenter">回到中心</string>
     <string name="pref_rc_throttle_returntocenter_summary">放開油門觸控後，油門回到中心</string>
     <string name="pref_rc_rudder">方向舵(Rudder)</string>
-    <string name="pref_rc_rudder_reverse_summary">反轉方向舵(Yaw)的方向</string>
+    <string name="pref_rc_rudder_reverse_summary">反轉方向軸(Yaw)的方向</string>
     <string name="pref_rc_aileron">副翼(Aileron)</string>
-    <string name="pref_rc_aileron_reverse_summary">反轉副翼(Roll)的方向</string>
+    <string name="pref_rc_aileron_reverse_summary">反轉橫滾軸(Roll)的方向</string>
     <string name="pref_rc_elevator">升降舵(Elevator)</string>
-    <string name="pref_rc_elevator_reverse_summary">反轉升降舵(Pitch)的方向</string>
+    <string name="pref_rc_elevator_reverse_summary">反轉俯仰軸(Pitch)的方向</string>
     <string name="pref_connection">連接偏好設定</string>
     <string name="pref_usb">USB 連接</string>
     <string name="pref_baud_type">數傳連結速度</string>
@@ -136,21 +136,21 @@
     <string name="refresh">刷新</string>
 
     <!-- Survey/Mapping related strings -->
-    <string name="distance_between_lines">橫向(Lateral)</string>
-    <string name="footprint">涵蓋面(Footprint)</string>
-    <string name="ground_resolution">地面解析度(GSD)</string>
-    <string name="distance_between_pictures">縱向(Longitudinal)</string>
+    <string name="distance_between_lines">橫向距離</string>
+    <string name="footprint">涵蓋面積</string>
+    <string name="ground_resolution">地面解析度</string>
+    <string name="distance_between_pictures">縱向距離</string>
     <string name="area">區域</string>
     <string name="camera_">相機:</string>
     <string name="inner_wps">內航點</string>
-    <string name="hatch_angle">Hatch angle:</string>
+    <string name="hatch_angle">方位角:</string>
     <string name="flight_altitude">飛行高度:</string>
     <string name="overlap">重疊:</string>
     <string name="sidelap">左右重疊:</string>
-    <string name="mission_length">Grid Length</string>
-    <string name="pictures">Pictures</string>
-    <string name="number_of_strips">帶線數</string>
-    <string name="exception_draw_polygon">繪製多邊形/WPTs</string>
+    <string name="mission_length">任務長度</string>
+    <string name="pictures">圖片</string>
+    <string name="number_of_strips">條數</string>
+    <string name="exception_draw_polygon">繪製多邊形/航點</string>
     <string name="exception_draw_2_more_polygon_points">繪製至少兩個多邊形的頂點</string>
     <string name="exception_draw_1_more_polygon_points">繪製至少一個多邊形的頂點</string>
     <string name="draw_the_survey_region">繪製探勘區域</string>
@@ -161,22 +161,22 @@
     <string name="mode_althold">Alt Hold 定高模式 - 系統自動油門控制並保持飛行高度。此模式不需要GPS參與</string>
     <string name="mode_auto">Auto 自動模式 - 執行已儲存在無人載具上的任務</string>
     <string name="mode_circle">Circle 盤旋模式 - 無人載具以盤旋在興趣點上並朝向盤旋的中心點。此模式需要 GPS 鎖定。</string>
-    <string name="mode_drift">Drift 飄移模式 - 結合副翼滾轉(roll)及方向舵偏航(yaw)的控制來提供更自然、更直覺的飛行。此模式需要 GPS 鎖定。</string>
+    <string name="mode_drift">Drift 飄移模式 - 結合橫滾軸(roll)及方向軸(yaw)的控制來提供更自然、更直覺的飛行。此模式需要 GPS 鎖定。</string>
     <string name="mode_guided">Guided 導引模式 - 從地面站進行位置控制。此模式需要 GPS 鎖定。</string>
     <string name="mode_land">Land 降落模式 - 降落在目前的位置。此模式需要 GPS 鎖定。</string>
     <string name="mode_loiter">Loiter 停懸模式 - 無人載具完全依 GPS 位置航行。</string>
     <string name="mode_ofloiter">Optical Flow 光流模式 - 將啟用停懸模式保持位置，以光流感測器數據來保持目前高度。</string>
     <string name="mode_position">Position 定位模式 - 無人載具完全依 GPS 位置航行，並全手動操控油門。</string>
-    <string name="mode_rtl">RTL 返回起飛點 - 飛行至高低高度，返回 家 的位置並且降落。此模式需要 GPS 鎖定。</string>
+    <string name="mode_rtl">RTL 返航 - 飛行至高低高度，返回 家 的位置並且降落。此模式需要 GPS 鎖定。</string>
     <string name="mode_sport">Sport 運動模式 - 飛友可在自動平衡的狀態下，直接控制旋轉速率、飛行姿態。</string>
     <string name="mode_stabilize">Stabilize 自穩模式 - 讓無人載具保持水平飛行。</string>
     <string name="mode_hybrid">Hybrid 混合模式 - 混合飄移模式及定高模式讓飛行有如"DJI-GPS"的飛行模式。此模式需要 GPS 鎖定。</string>
 
     <!-- Waypoint types -->
     <string name="waypointType_Waypoint">航點</string>
-    <string name="waypointType_SplineWaypoint">Spline航點</string>
+    <string name="waypointType_SplineWaypoint">非線性航點</string>
     <string name="waypointType_TakeOff">起飛</string>
-    <string name="waypointType_RTL">返回起飛點</string>
+    <string name="waypointType_RTL">返航</string>
     <string name="waypointType_Land">降落</string>
     <string name="waypointType_Circle">盤旋</string>
     <string name="waypointType_Loiter">停懸</string>
@@ -184,7 +184,7 @@
     <string name="waypointType_Survey">探勘多邊形</string>
 
     <!-- Waypoint info -->
-    <string name="waypointInfo_Land">在目前位置降落無人載具。您必須手動退出自動模式並鎖定馬達。</string>
+    <string name="waypointInfo_Land">在目前位置降落無人載具。您必須手動退出自動模式並上鎖馬達。</string>
     <string name="waypointInfo_Generic">一般航點</string>
     <string name="waypointInfo_Loiter">未使用。</string>
     <string name="waypointInfo_LoiterN">盤旋在目前位置的圈數。</string>
@@ -201,7 +201,7 @@
     <string name="waypointInfo_SetJump">重覆航點</string>
 
     <!-- Waypoint editor -->
-    <string name="editor_err_land_rtl_added">航點無法加在降落或返回出發點的任務之後。</string>
+    <string name="editor_err_land_rtl_added">航點無法加在降落或返航的任務之後。</string>
     <string name="editor_info_window">距離: 200公尺, 飛行時間: 3分30秒</string>
     <string name="distance_to_home">到 家 的距離</string>
     <string name="loiter_time">停懸時間</string>
@@ -209,11 +209,11 @@
     <string name="loiter_radius">停懸半徑</string>
     <string name="loiter_ccw">逆時針</string>
     <string name="waypoint_altitude">高度</string>
-    <string name="waypoint_angle">偏航(Yaw)角度</string>
+    <string name="waypoint_angle">方向軸(Yaw)角度</string>
     <string name="waypoint_finalaltitude">目標高度</string>
     <string name="waypoint_altrate">爬昇/下降速率</string>
-    <string name="waypoint_yawrate">偏航(Yaw)速率</string>
-    <string name="waypoint_yawdir">設定逆時針的偏航(yaw)方向</string>
+    <string name="waypoint_yawrate">方向軸速率</string>
+    <string name="waypoint_yawdir">設定方向軸為逆時針方向</string>
     <string name="waypoint_yawoffset">使用相對偏移</string>
     <string name="waypoint_distance">距離</string>
     <string name="waypoint_homecurrent">以目前位置設為 家 的位置</string>
@@ -430,7 +430,7 @@
     <string name="pref_title_screen">畫面</string>
     <string name="pref_title_notifications">通知</string>
     <string name="normal_waypoint_toggle">一般</string>
-    <string name="spline_waypoint_toggle">Spline</string>
+    <string name="spline_waypoint_toggle">非線性</string>
     <string name="mavlink_version">Mavlink 版本</string>
     <string name="empty_content">--</string>
     <string name="usage_statistics">統計使用習慣</string>

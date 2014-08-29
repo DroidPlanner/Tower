@@ -102,19 +102,19 @@
         <item>ArduRover</item>
     </string-array>
     <string-array name="FligthMode_CopterV3_1">
-        <item>0;Stabilize</item>
-        <item>1;Acro</item>
-        <item>2;AltHold</item>
-        <item>3;Auto</item>
-        <item>4;Guided</item>
-        <item>5;Loiter</item>
-        <item>6;RTL</item>
-        <item>7;Circle</item>
-        <item>8;Position</item>
-        <item>9;Land</item>
-        <item>10;OF_Loiter</item>
-        <item>11;Drift</item>
-        <item>13;Sport</item>
+        <item>0;自穩</item>
+        <item>1;特技</item>
+        <item>2;定高</item>
+        <item>3;自動</item>
+        <item>4;導引</item>
+        <item>5;停懸</item>
+        <item>6;返航</item>
+        <item>7;盤旋</item>
+        <item>8;定位</item>
+        <item>9;降落</item>
+        <item>10;光流停懸</item>
+        <item>11;飄移</item>
+        <item>13;運動</item>
     </string-array>
     <string-array name="FligthMode_PWM_Range">
         <item>&lt; 1230</item>
@@ -160,22 +160,22 @@
         <item>41;Sonar Gain</item>
     </string-array>
     <string-array name="CH_Options">
-        <item>0;Do Nothing</item>
-        <item>2;Flip</item>
-        <item>3;Simple Mode</item>
-        <item>4;RTL</item>
-        <item>5;Save Trim</item>
-        <item>7;Save WP</item>
-        <item>8;Multi Mode</item>
-        <item>9;Camera Trigger</item>
-        <item>10;Sonar</item>
-        <item>11;Fence</item>
-        <item>12;ResetToArmedYaw</item>
-        <item>13;Super Simple Mode</item>
-        <item>14;Acro Trainer</item>
-        <item>16;Auto</item>
-        <item>17;AutoTune</item>
-        <item>18;Land</item>
+        <item>0;不做任何事</item>
+        <item>2;空翻</item>
+        <item>3;簡單模式</item>
+        <item>4;返航</item>
+        <item>5;儲存修飾值</item>
+        <item>7;儲存航點</item>
+        <item>8;多模式</item>
+        <item>9;相機快門</item>
+        <item>10;聲納</item>
+        <item>11;護欄</item>
+        <item>12;重設解鎖時的方向</item>
+        <item>13;超簡單模式</item>
+        <item>14;特技模式訓練員</item>
+        <item>16;自動模式</item>
+        <item>17;自動調參</item>
+        <item>18;降落</item>
         <item>19;EPM</item>
     </string-array>
     <string-array name="Servo_Functions">
