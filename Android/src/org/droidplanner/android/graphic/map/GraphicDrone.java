@@ -3,6 +3,8 @@ package org.droidplanner.android.graphic.map;
 import org.droidplanner.R;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.geoTools.GeoTools;
+import org.droidplanner.core.helpers.units.Speed;
 import org.droidplanner.core.model.Drone;
 
 import android.content.res.Resources;
@@ -29,6 +31,19 @@ public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 	@Override
 	public Coord2D getPosition() {
 		return drone.getGps().getPosition();
+	}
+
+	public Coord2D getInterpolatedPosition(){
+		Coord2D realPosition = getPosition();
+		if(drone.getMavClient().isConnected()){
+			int timeDelta = drone.getGps().getPositionAgeInMillis();
+			Speed groundSpeed = drone.getSpeed().getGroundSpeed();
+			double course = drone.getGps().getCourse();
+			return GeoTools.newCoordFromBearingAndDistance(realPosition,course,
+					timeDelta/1000.0* groundSpeed.valueInMetersPerSecond());
+		}else{
+			return realPosition;
+		}
 	}
 
 	@Override
