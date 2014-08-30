@@ -240,9 +240,9 @@ public class TTSNotificationProvider implements OnInitListener,
 				}
 				break;
 
-			case WARNING:
+			case AUTOPILOT_WARNING:
 				String warning = drone.getState().getWarning();
-				if (drone.getState().isWarning()) {
+				if (drone.getState().isWarning() && mAppPrefs.getWarningOnAutopilotWarning()) {
 					speak(warning);
 				}
 				break;
@@ -250,11 +250,6 @@ public class TTSNotificationProvider implements OnInitListener,
 			case WARNING_SIGNAL_WEAK:
 				if(mAppPrefs.getWarningOnLowSignalStrength()){
 					speak("Warning, weak signal");
-				}
-
-			case WARNING_BATTERY_LOW:
-				if(mAppPrefs.getWarningOnLowBattery()){
-					speak("Warning, low battery");
 				}
 
 			default:

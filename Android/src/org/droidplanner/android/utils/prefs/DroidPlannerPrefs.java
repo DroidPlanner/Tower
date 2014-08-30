@@ -43,7 +43,7 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	public static final boolean DEFAULT_TTS_CEILING_EXCEEDED = true;
 	public static final boolean DEFAULT_TTS_WARNING_LOST_SIGNAL = true;
 	public static final boolean DEFAULT_TTS_WARNING_LOW_SIGNAL = true;
-	public static final boolean DEFAULT_TTS_WARNING_LOW_BATTERY = true;
+	public static final boolean DEFAULT_TTS_WARNING_AUTOPILOT_WARNING = true;
 
 	// Public for legacy usage
 	public SharedPreferences prefs;
@@ -297,8 +297,8 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 				DEFAULT_TTS_WARNING_LOW_SIGNAL);
 	}
 
-	public boolean getWarningOnLowBattery(){
-		return prefs.getBoolean(context.getString(R.string.pref_tts_warning_low_battery_key),
-				DEFAULT_TTS_WARNING_LOW_BATTERY);
+	public boolean getWarningOnAutopilotWarning(){
+		return prefs.getBoolean(context.getString(R.string.pref_tts_warning_autopilot_warnings_key),
+				DEFAULT_TTS_WARNING_AUTOPILOT_WARNING);
 	}
 }

@@ -330,7 +330,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		super.onDroneEvent(event, drone);
 		switch (event) {
-		case WARNING:
+		case AUTOPILOT_WARNING:
 			onWarningChanged(drone);
 			break;
 

@@ -387,8 +387,9 @@
     <string name="pref_tts_warning_low_signal_strength_summary">Warns when connection to drone is bad.</string>
     <string name="pref_tts_warning_lost_signal">Connection Status</string>
     <string name="pref_tts_warning_lost_signal_summary">Warns when connection to drone is severed or restored.</string>
-    <string name="pref_tts_warning_low_battery">Low Battery</string>
-    <string name="pref_tts_warning_low_battery_summary">Warns if the autopilot detects a low battery.</string>
+    <string name="pref_tts_warning_autopilot_warnings">Autopilot-Reported Warnings</string>
+    <string name="pref_tts_warning_autopilot_warnings_summary">Warns about arm failures,
+        low battery, etc.</string>
 
     <!-- Droneshare -->
     <string name="dsheader">Would you be interested in using the free www.Droneshare.com service?</string>

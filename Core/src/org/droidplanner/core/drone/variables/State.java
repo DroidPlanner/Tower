@@ -72,7 +72,7 @@ public class State extends DroneVariable {
 	public void setWarning(String newFailsafe) {
 		if (!this.warning.equals(newFailsafe)) {
 			this.warning = newFailsafe;
-			myDrone.notifyDroneEvent(DroneEventsType.WARNING);
+			myDrone.notifyDroneEvent(DroneEventsType.AUTOPILOT_WARNING);
 		}
 		watchdog.removeCallbacks(watchdogCallback);
 		this.watchdog.postDelayed(watchdogCallback, failsafeOnScreenTimeout);

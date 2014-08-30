@@ -129,9 +129,9 @@
                             android:summary="@string/pref_tts_warning_lost_signal_summary"
                             android:defaultValue="true"/>
                         <CheckBoxPreference
-                            android:title="@string/pref_tts_warning_low_battery"
-                            android:key="@string/pref_tts_warning_low_battery_key"
-                            android:summary="@string/pref_tts_warning_low_battery_summary"
+                            android:title="@string/pref_tts_warning_autopilot_warnings"
+                            android:key="@string/pref_tts_warning_autopilot_warnings_key"
+                            android:summary="@string/pref_tts_warning_autopilot_warnings_summary"
                             android:defaultValue="true"/>
                     </PreferenceCategory>
 

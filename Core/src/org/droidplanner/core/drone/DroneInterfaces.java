@@ -65,7 +65,7 @@ public class DroneInterfaces {
 		/**
          *
          */
-		WARNING,
+		AUTOPILOT_WARNING,
 
 		/**
          *
@@ -201,11 +201,6 @@ public class DroneInterfaces {
 		 *
 		 */
 		WARNING_SIGNAL_WEAK,
-
-		/**
-		 *
-		 */
-		WARNING_BATTERY_LOW,
 	}
 
 	public interface OnDroneListener {

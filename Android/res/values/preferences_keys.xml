@@ -52,6 +52,6 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_tts_warning_400ft_ceiling_exceeded_key">tts_ceiling_exceeded</string>
     <string name="pref_tts_warning_low_signal_key">tts_low_signal</string>
     <string name="pref_tts_warning_lost_signal_key">tts_lost_signal</string>
-    <string name="pref_tts_warning_low_battery_key">tts_low_battery</string>
+    <string name="pref_tts_warning_autopilot_warnings_key">tts_autopilot_warning</string>
 
 </resources>
