@@ -103,6 +103,7 @@
                 </PreferenceScreen>
                 <PreferenceScreen android:title="@string/pref_title_tts_warnings">
                     <PreferenceCategory android:title="@string/pref_title_tts_warnings">
+                        <!--
                         <CheckBoxPreference
                             android:title="@string/pref_tts_warning_solar_activity"
                             android:key="@string/pref_tts_warning_solar_activity_key"
@@ -113,6 +114,7 @@
                             android:key="@string/pref_tts_warning_wind_speed_key"
                             android:summary="@string/pref_tts_warning_wind_speed_summary"
                             android:defaultValue="true"/>
+                            -->
                         <CheckBoxPreference
                             android:title="@string/pref_tts_warning_400ft_ceiling_exceeded"
                             android:key="@string/pref_tts_warning_400ft_ceiling_exceeded_key"
