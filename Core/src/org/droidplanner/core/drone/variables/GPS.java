@@ -3,6 +3,7 @@ package org.droidplanner.core.drone.variables;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.model.Drone;
 
 public class GPS extends DroneVariable {
@@ -13,6 +14,8 @@ public class GPS extends DroneVariable {
 	private int satCount = -1;
 	private int fixType = -1;
 	private Coord2D position;
+	private long timeOfPosition = System.currentTimeMillis();
+	private double course = 0;
 
 	public GPS(Drone myDrone) {
 		super(myDrone);
@@ -54,6 +57,14 @@ public class GPS extends DroneVariable {
 		return fixType;
 	}
 
+	public double getCourse(){
+		return course;
+	}
+
+	public int getPositionAgeInMillis(){
+		return (int) (System.currentTimeMillis()-timeOfPosition);
+	}
+
 	public void setGpsState(int fix, int satellites_visible, int eph) {
 		if (satCount != satellites_visible) {
 			satCount = satellites_visible;
@@ -67,9 +78,15 @@ public class GPS extends DroneVariable {
 	}
 
 	public void setPosition(Coord2D position) {
+		this.timeOfPosition = System.currentTimeMillis();
+		recalculateCourse(position);
 		if (this.position != position) {
 			this.position = position;
 			myDrone.notifyDroneEvent(DroneEventsType.GPS);
 		}
+	}
+
+	private void recalculateCourse(Coord2D position) {
+		course = GeoTools.getHeadingFromCoordinates(this.position, position);
 	}
 }
