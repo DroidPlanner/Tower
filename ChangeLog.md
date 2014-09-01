@@ -9,6 +9,19 @@ All the changes are logged below (preferable with the pull request numbers in pa
 
 # Releases
 
+## Droidplanner v2.7.2
+* Extra speech warnings (#1012,#835)
+* Gray drone on heartbeat loss (#1002,#497,#1018)
+* Crash alert. beep beep (#1010,#1031)
+* Gopro specs (#1029)
+* Correct Area calculation method (#1001,#842)
+* MavLink Connection restructuring (#1009)
+* Set sequence number in msg_heartbeat (#956)
+* Fix problem on settings screen (#998,#1008)
+* Fix .gitignore for android studio files (#1016)
+* Fix German translation (#1004)
+* Catch possible NullPointerException (#1014,#1013)
+
 ## Droidplanner v2.7.1
 * Fix sporadic bug on logging code (#1000)
 * Fix problem on settings screen (#998)
