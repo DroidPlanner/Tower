@@ -94,8 +94,15 @@ public class MavLinkMsgHandler {
 			drone.getRC().setRcOutputValues((msg_servo_output_raw) msg);
 			break;
 		case msg_statustext.MAVLINK_MSG_ID_STATUSTEXT:
+			//These are any warnings sent from APM:Copter with gcs_send_text_P()
+			//This includes important thing like arm fails, prearm fails, low battery, etc.
+			//also less important things like "erasing logs" and "calibrating barometer"
 			msg_statustext msg_statustext = (msg_statustext) msg;
 			String message = msg_statustext.getText();
+			//TODO read anything that is "SEVERITY_HIGH", but only read certain "SEVERITY_LOW"s
+			if(message.equals("Low Battery!")){
+				drone.getState().setWarning(message);
+			}
 			if (message.length() > 7) {
 				if (message.substring(0, 7).equals("PreArm:")
 						|| message.substring(0, 4).equals("Arm:")) {

@@ -9,6 +9,8 @@ public class Radio extends DroneVariable {
 	public static final int MAX_FADE_MARGIN = 50;
 	public static final int MIN_FADE_MARGIN = 6;
 
+	private double previousSignalStrength = 100;
+
 	private int rxerrors = -1;
 	private int fixed = -1;
 	private int txbuf = -1;
@@ -80,6 +82,14 @@ public class Radio extends DroneVariable {
 			this.noise = SikValueToDB(noise & 0xFF);
 			this.remnoise = SikValueToDB(remnoise & 0xFF);
 			this.txbuf = txbuf & 0xFF;
+
+
+			int currentSignalStrength = getSignalStrength();
+			//if signal strength dips below 10%
+			if(currentSignalStrength < 10.0 && previousSignalStrength >=10.0){
+				myDrone.notifyDroneEvent(DroneEventsType.WARNING_SIGNAL_WEAK);
+			}
+			previousSignalStrength = currentSignalStrength;
 
 			myDrone.notifyDroneEvent(DroneEventsType.RADIO);
 		}
