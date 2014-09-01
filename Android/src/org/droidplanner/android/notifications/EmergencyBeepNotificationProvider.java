@@ -10,8 +10,10 @@ import org.droidplanner.core.model.Drone;
 
 
 public class EmergencyBeepNotificationProvider implements NotificationHandler.NotificationProvider {
+
 	private SoundPool mPool;
 	private int beepBeep;
+
 	public EmergencyBeepNotificationProvider(Context context){
 		mPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 		beepBeep = mPool.load(context, R.raw.beep_beep, 1);
@@ -26,10 +28,10 @@ public class EmergencyBeepNotificationProvider implements NotificationHandler.No
         mPool.release();
     }
 
-    @Override
+	@Override
 	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
 		if(event == DroneInterfaces.DroneEventsType.STATE){
-			if(drone.getState().isCollisionImminent()){
+			if(drone.getAltitude().isCollisionImminent()){
 				mPool.play(beepBeep,1f,1f,1,1,1f);
 			}else{
 				mPool.stop(beepBeep);

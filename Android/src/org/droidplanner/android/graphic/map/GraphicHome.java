@@ -18,14 +18,14 @@ public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 		home = drone.getHome();
 	}
 
-	public boolean isValid() {
-		return home.isValid();
-	}
-
 	@Override
 	public float getAnchorU() {
 		return 0.5f;
 	}
+
+    public boolean isValid() {
+        return home.isValid();
+    }
 
 	@Override
 	public float getAnchorV() {

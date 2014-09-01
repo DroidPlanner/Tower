@@ -7,7 +7,8 @@ import java.net.UnknownHostException;
 import java.util.Set;
 import java.util.UUID;
 
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.android.utils.Utils;
+import org.droidplanner.core.MAVLink.connection.MavLinkConnectionTypes;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -18,7 +19,7 @@ import android.content.SharedPreferences;
 import android.os.ParcelUuid;
 import android.util.Log;
 
-public class BluetoothConnection extends MAVLinkConnection {
+public class BluetoothConnection extends AndroidMavLinkConnection {
 	private static final String BLUE = "BLUETOOTH";
 	private static final String UUID_SPP_DEVICE = "00001101-0000-1000-8000-00805F9B34FB";
 	private BluetoothAdapter mBluetoothAdapter;
@@ -26,19 +27,17 @@ public class BluetoothConnection extends MAVLinkConnection {
 	private InputStream in;
 	private BluetoothSocket bluetoothSocket;
 
-	protected DroidPlannerPrefs mAppPrefs;
-
 	public BluetoothConnection(Context parentContext) {
 		super(parentContext);
+
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (mBluetoothAdapter == null) {
 			Log.d(BLUE, "Null adapters");
 		}
-		mAppPrefs = new DroidPlannerPrefs(parentContext.getApplicationContext());
 	}
 
 	@Override
-	protected void openConnection() throws IOException {
+	protected void openAndroidConnection() throws IOException {
 		Log.d(BLUE, "Connect");
 
 		// Reset the bluetooth connection
@@ -46,7 +45,7 @@ public class BluetoothConnection extends MAVLinkConnection {
 
 		// Retrieve the stored device
 		BluetoothDevice device = null;
-		final String addressName = mAppPrefs.getBluetoothDeviceAddress();
+		final String addressName = prefs.getBluetoothDeviceAddress();
 
 		if (addressName != null) {
 			// strip name, use address part - stored as <address>;<name>
@@ -103,8 +102,8 @@ public class BluetoothConnection extends MAVLinkConnection {
 	}
 
 	@Override
-	protected void readDataBlock() throws IOException {
-		iavailable = in.read(readData);
+	protected int readDataBlock(byte[] buffer) throws IOException {
+		return in.read(buffer);
 
 	}
 
@@ -115,13 +114,18 @@ public class BluetoothConnection extends MAVLinkConnection {
 		}
 	}
 
-	@Override
-	protected void closeConnection() throws IOException {
+    @Override
+    public int getConnectionType() {
+        return MavLinkConnectionTypes.MAVLINK_CONNECTION_BLUETOOTH;
+    }
+
+    @Override
+	protected void closeAndroidConnection() throws IOException {
 		resetConnection();
 		Log.d(BLUE, "## BT Closed ##");
 	}
 
-	private void resetConnection() throws IOException {
+    private void resetConnection() throws IOException {
 		if (in != null) {
 			in.close();
 			in = null;
@@ -140,7 +144,7 @@ public class BluetoothConnection extends MAVLinkConnection {
 	}
 
 	@Override
-	protected void getPreferences(SharedPreferences prefs) {
+	protected void loadPreferences(SharedPreferences prefs) {
 		// TODO Auto-generated method stub
 	}
 }

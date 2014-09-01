@@ -17,9 +17,9 @@ public class UsbCDCConnection extends UsbConnection {
 	}
 
 	@Override
-	protected void openConnection() throws IOException {
+	protected void openAndroidConnection() throws IOException {
 		// Get UsbManager from Android.
-		UsbManager manager = (UsbManager) parentContext.getSystemService(Context.USB_SERVICE);
+		UsbManager manager = (UsbManager) mContext.getSystemService(Context.USB_SERVICE);
 
 		// Find the first available driver.
 		sDriver = UsbSerialProber.findFirstDevice(manager);
@@ -46,11 +46,12 @@ public class UsbCDCConnection extends UsbConnection {
 	}
 
 	@Override
-	protected void readDataBlock() throws IOException {
+	protected int readDataBlock(byte[] readData) throws IOException {
 		// Read data from driver. This call will return upto readData.length
 		// bytes.
 		// If no data is received it will timeout after 200ms (as set by
 		// parameter 2)
+        int iavailable = 0;
 		try {
 			iavailable = sDriver.read(readData, 200);
 		} catch (NullPointerException e) {
@@ -60,7 +61,7 @@ public class UsbCDCConnection extends UsbConnection {
 		}
 		if (iavailable == 0)
 			iavailable = -1;
-		// Log.d("USB", "Bytes read" + iavailable);
+        return iavailable;
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public class UsbCDCConnection extends UsbConnection {
 		// Write data to driver. This call should write buffer.length bytes
 		// if data cant be sent , then it will timeout in 500ms (as set by
 		// parameter 2)
-		if (connected && sDriver != null) {
+		if (sDriver != null) {
 			try {
 				sDriver.write(buffer, 500);
 			} catch (IOException e) {
@@ -78,7 +79,7 @@ public class UsbCDCConnection extends UsbConnection {
 	}
 
 	@Override
-	protected void closeConnection() throws IOException {
+	protected void closeAndroidConnection() throws IOException {
 		if (sDriver != null) {
 			try {
 				sDriver.close();
