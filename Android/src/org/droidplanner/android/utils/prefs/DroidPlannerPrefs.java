@@ -1,7 +1,5 @@
 package org.droidplanner.android.utils.prefs;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import org.droidplanner.R;
@@ -29,8 +27,8 @@ import android.util.SparseBooleanArray;
 public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preferences {
 
 	/*
-	 * Default preference value
-	 */
+		 * Default preference value
+		 */
 	public static final boolean DEFAULT_USAGE_STATISTICS = true;
 	public static final String DEFAULT_CONNECTION_TYPE = Utils.ConnectionType.USB.name();
 	private static final boolean DEFAULT_KEEP_SCREEN_ON = false;
@@ -42,6 +40,10 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	private static final boolean DEFAULT_GUIDED_MODE_ON_LONG_PRESS = true;
 	public static final boolean DEFAULT_PREF_UI_LANGUAGE = false;
     public static final String DEFAULT_SPEECH_PERIOD = "0";
+	public static final boolean DEFAULT_TTS_CEILING_EXCEEDED = true;
+	public static final boolean DEFAULT_TTS_WARNING_LOST_SIGNAL = true;
+	public static final boolean DEFAULT_TTS_WARNING_LOW_SIGNAL = true;
+	public static final boolean DEFAULT_TTS_WARNING_AUTOPILOT_WARNING = true;
 
 	// Public for legacy usage
 	public SharedPreferences prefs;
@@ -279,4 +281,24 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
                 .pref_tts_periodic_period_key), DEFAULT_SPEECH_PERIOD));
 	}
 
+	public boolean getWarningOn400ftExceeded(){
+		return prefs.getBoolean(context.getString(R.string
+						.pref_tts_warning_400ft_ceiling_exceeded_key),
+				DEFAULT_TTS_CEILING_EXCEEDED);
+	}
+
+	public boolean getWarningOnLostOrRestoredSignal(){
+		return prefs.getBoolean(context.getString(R.string.pref_tts_warning_lost_signal_key),
+				DEFAULT_TTS_WARNING_LOST_SIGNAL);
+	}
+
+	public boolean getWarningOnLowSignalStrength(){
+		return prefs.getBoolean(context.getString(R.string.pref_tts_warning_low_signal_key),
+				DEFAULT_TTS_WARNING_LOW_SIGNAL);
+	}
+
+	public boolean getWarningOnAutopilotWarning(){
+		return prefs.getBoolean(context.getString(R.string.pref_tts_warning_autopilot_warnings_key),
+				DEFAULT_TTS_WARNING_AUTOPILOT_WARNING);
+	}
 }

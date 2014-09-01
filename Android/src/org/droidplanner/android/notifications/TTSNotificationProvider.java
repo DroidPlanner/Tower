@@ -1,7 +1,6 @@
 package org.droidplanner.android.notifications;
 
 import java.util.Locale;
-import java.util.Map;
 
 import org.droidplanner.R;
 import org.droidplanner.android.fragments.SettingsFragment;
@@ -14,10 +13,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.support.v4.content.LocalBroadcastManager;
@@ -65,8 +62,9 @@ public class TTSNotificationProvider implements OnInitListener,
 
 		public void run() {
             handler.removeCallbacks(watchdogCallback);
-
-			speakPeriodic(drone);
+			if(drone != null && drone.getMavClient().isConnected()) {
+				speakPeriodic(drone);
+			}
 
             if (statusInterval != 0) {
                 handler.postDelayed(watchdogCallback, statusInterval * 1000);
@@ -211,7 +209,7 @@ public class TTSNotificationProvider implements OnInitListener,
 				break;
 
 			case HEARTBEAT_TIMEOUT:
-				if (!Calibration.isCalibrating()) {
+				if (!Calibration.isCalibrating() && mAppPrefs.getWarningOnLostOrRestoredSignal()) {
 					speak("Data link lost, check connection.");
 					handler.removeCallbacks(watchdogCallback);
 				}
@@ -219,7 +217,9 @@ public class TTSNotificationProvider implements OnInitListener,
 
 			case HEARTBEAT_RESTORED:
                 watchdogCallback.setDrone(drone);
-				speak("Data link restored");
+				if(mAppPrefs.getWarningOnLostOrRestoredSignal()){
+					speak("Data link restored");
+				}
 				break;
 
 			case DISCONNECTED:
@@ -234,10 +234,22 @@ public class TTSNotificationProvider implements OnInitListener,
 				speak("Following");
 				break;
 
-			case FAILSAFE:
-				String failsafe = drone.getState().getWarning();
-				if (drone.getState().isWarning()) {
-					speak(failsafe);
+			case WARNING_400FT_EXCEEDED:
+				if(mAppPrefs.getWarningOn400ftExceeded()){
+					speak("warning, 400 feet exceeded");
+				}
+				break;
+
+			case AUTOPILOT_WARNING:
+				String warning = drone.getState().getWarning();
+				if (drone.getState().isWarning() && mAppPrefs.getWarningOnAutopilotWarning()) {
+					speak(warning);
+				}
+				break;
+
+			case WARNING_SIGNAL_WEAK:
+				if(mAppPrefs.getWarningOnLowSignalStrength()){
+					speak("Warning, weak signal");
 				}
 
 			default:

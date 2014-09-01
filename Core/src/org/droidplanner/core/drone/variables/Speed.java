@@ -4,12 +4,15 @@ import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.model.Drone;
 
 public class Speed extends DroneVariable {
+	public static final int COLLISION_SECONDS_BEFORE_COLLISION = 2;
+	public static final double COLLISION_DANGEROUS_SPEED_METERS_PER_SECOND = -3.0;
+	public static final double COLLISION_SAFE_ALTITUDE_METERS = 1.0;
 	private org.droidplanner.core.helpers.units.Speed verticalSpeed = new org.droidplanner.core.helpers.units.Speed(
-			0);;
+			0);
 	private org.droidplanner.core.helpers.units.Speed groundSpeed = new org.droidplanner.core.helpers.units.Speed(
-			0);;
+			0);
 	private org.droidplanner.core.helpers.units.Speed airSpeed = new org.droidplanner.core.helpers.units.Speed(
-			0);;
+			0);
 	private org.droidplanner.core.helpers.units.Speed targetSpeed = new org.droidplanner.core.helpers.units.Speed(
 			0);
 
@@ -42,5 +45,21 @@ public class Speed extends DroneVariable {
 		this.groundSpeed = new org.droidplanner.core.helpers.units.Speed(groundSpeed);
 		this.airSpeed = new org.droidplanner.core.helpers.units.Speed(airSpeed);
 		this.verticalSpeed = new org.droidplanner.core.helpers.units.Speed(climb);
+		checkCollisionIsImminent();
 	}
+
+	/**
+	 * if drone will crash in 2 seconds at constant climb rate and climb rate < -3 m/s and altitude > 1 meter
+	 */
+	private void checkCollisionIsImminent() {
+
+		double altitude = myDrone.getAltitude().getAltitude();
+		if(altitude + verticalSpeed.valueInMetersPerSecond()* COLLISION_SECONDS_BEFORE_COLLISION < 0 && verticalSpeed.valueInMetersPerSecond() < COLLISION_DANGEROUS_SPEED_METERS_PER_SECOND && altitude > COLLISION_SAFE_ALTITUDE_METERS){
+			myDrone.getState().setCollisionImminent(true);
+		}else{
+			myDrone.getState().setCollisionImminent(false);
+		}
+	}
+
+
 }
