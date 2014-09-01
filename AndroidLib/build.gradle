@@ -1,0 +1,47 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion '20.0.0'
+
+    defaultConfig {
+        applicationId 'org.droidplanner.android.lib'
+        minSdkVersion 14
+        targetSdkVersion 19
+        versionCode 1
+        versionName '1.0'
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+
+        androidTest {
+            java.srcDirs = ['test']
+        }
+
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
+    }
+
+    //FIXME: remove this after lint errors have been taken care of
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:20.0.0'
+    provided 'com.google.android.gms:play-services:5.0.+'
+
+    compile project(':Core')
+    compile project(':Mavlink')
+    compile project(':Libraries:HorizontalVariableListView:HorizontalVariableListView')
+}
