@@ -1,15 +1,21 @@
 package org.droidplanner.core.drone.variables;
 
+import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
-import org.droidplanner.core.helpers.units.*;
 import org.droidplanner.core.model.Drone;
 
-public class GPS extends DroneVariable {
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
+public class GPS extends DroneVariable implements DroneInterfaces.OnDroneListener{
 	public final static int LOCK_2D = 2;
 	public final static int LOCK_3D = 3;
+	public static final int INTERPOLATOR_NOTIFY_RATE = 33;
 
 	private Drone myDrone;
 	private double gps_eph = -1;
@@ -18,6 +24,10 @@ public class GPS extends DroneVariable {
 	private Coord2D position;
 	private long timeOfPosition = System.currentTimeMillis();
 	private double course = 0;
+
+	private final ScheduledExecutorService scheduler =
+			Executors.newScheduledThreadPool(1);
+	private final ScheduledFuture interpolatorNotifier = null;
 
 	public GPS(Drone myDrone) {
 		super(myDrone);
@@ -70,7 +80,7 @@ public class GPS extends DroneVariable {
 
 	public Coord2D getInterpolatedPosition(){
 		Coord2D realPosition = getPosition();
-		if(myDrone.getMavClient().isConnected()){
+		if(myDrone.isConnectionAlive()){
 			int timeDelta = myDrone.getGps().getPositionAgeInMillis();
 			org.droidplanner.core.helpers.units.Speed groundSpeed = myDrone.getSpeed()
 					.getGroundSpeed();
@@ -101,11 +111,43 @@ public class GPS extends DroneVariable {
 			this.position = position;
 			myDrone.notifyDroneEvent(DroneEventsType.GPS);
 		}
+		resetInterpolatorNotifierScheduler();
 	}
 
 	private void recalculateCourse(Coord2D position) {
 		if(this.position!=null){
 			course = GeoTools.getHeadingFromCoordinates(this.position, position);
 		}
+	}
+
+
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		switch (event) {
+			case HEARTBEAT_FIRST:
+			case HEARTBEAT_RESTORED:
+				resetInterpolatorNotifierScheduler();
+			case HEARTBEAT_TIMEOUT:
+				cancelInterpolatorNotifier();
+		}
+	}
+
+	private void resetInterpolatorNotifierScheduler(){
+		if(interpolatorNotifier == null || interpolatorNotifier.isDone() || interpolatorNotifier
+				.isCancelled()){
+			Runnable periodicInterpolatorNotifier = new Runnable(){
+				public void run(){
+					if(myDrone.isConnectionAlive()){
+						myDrone.notifyDroneEvent(DroneEventsType.GPS_INTERPOLATED);
+					}
+				}
+			};
+			scheduler.scheduleAtFixedRate(periodicInterpolatorNotifier, INTERPOLATOR_NOTIFY_RATE, INTERPOLATOR_NOTIFY_RATE,
+					TimeUnit.MILLISECONDS);
+		}
+	}
+
+	private void cancelInterpolatorNotifier(){
+		interpolatorNotifier.cancel(true);
 	}
 }
