@@ -17,6 +17,11 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	 */
 	interface NotificationProvider extends DroneInterfaces.OnDroneListener {
 		void quickNotify(String feedback);
+
+        /**
+         * Release resources used by the provider.
+         */
+        void onTerminate();
 	}
 
 	/**
