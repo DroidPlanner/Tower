@@ -28,6 +28,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.common.collect.HashBiMap;
 import com.mapbox.mapboxsdk.api.ILatLng;
@@ -282,6 +283,10 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
 	@Override
 	public void goToDroneLocation() {
+		if(!mDrone.getGps().isPositionValid()){
+			Toast.makeText(getActivity().getApplicationContext(), "No drone location available", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		final float currentZoomLevel = getMapZoomLevel();
 		final Coord2D droneLocation = mDrone.getGps().getPosition();
 		updateCamera(droneLocation, currentZoomLevel);
@@ -433,7 +438,13 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
 	@Override
 	public void updateMarker(MarkerInfo markerInfo, boolean isDraggable) {
-		final LatLng position = DroneHelper.CoordToLatLng(markerInfo.getPosition());
+        //if the drone hasn't received a gps signal yet
+        final Coord2D coord = markerInfo.getPosition();
+        if(coord == null){
+            return;
+        }
+
+		final LatLng position = DroneHelper.CoordToLatLng(coord);
 		Marker marker = mMarkers.get(markerInfo);
 		if (marker == null) {
 			marker = new Marker(mMapView, markerInfo.getTitle(), markerInfo.getSnippet(), position);
@@ -507,7 +518,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
 	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
 		switch (event) {
 		case GPS:
-			if (mPanMode.get() == AutoPanMode.DRONE) {
+			if (mPanMode.get() == AutoPanMode.DRONE && drone.getGps().isPositionValid()) {
 				final float currentZoomLevel = getMapZoomLevel();
 				final Coord2D droneLocation = drone.getGps().getPosition();
 				updateCamera(droneLocation, currentZoomLevel);

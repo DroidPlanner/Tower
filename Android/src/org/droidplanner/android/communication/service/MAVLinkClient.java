@@ -1,139 +1,153 @@
 package org.droidplanner.android.communication.service;
 
+import org.droidplanner.R;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
+import org.droidplanner.core.MAVLink.connection.MavLinkConnection;
+import org.droidplanner.core.MAVLink.connection.MavLinkConnectionListener;
 
-import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
-import android.util.Log;
+import android.widget.Toast;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 
-// provide a common class for some ease of use functionality
+/**
+ * Provide a common class for some ease of use functionality
+  */
 public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 
-	/**
-	 * This is used as tag for logging.
-	 */
 	private static final String TAG = MAVLinkClient.class.getSimpleName();
 
-	public static final int MSG_RECEIVED_DATA = 0;
-	public static final int MSG_SELF_DESTRY_SERVICE = 1;
-	public static final int MSG_TIMEOUT = 2;
+    /**
+     * Used to post updates to the main thread.
+     */
+    private final Handler mHandler = new Handler();
 
-	Context parent;
-	private MAVLinkStreams.MavlinkInputStream listener;
-	Messenger mService = null;
-	final Messenger mMessenger = new Messenger(new IncomingHandler());
+    private final MavLinkConnectionListener mConnectionListener = new MavLinkConnectionListener() {
+        private final Runnable mConnectedNotification = new Runnable() {
+            @Override
+            public void run() {
+                listener.notifyConnected();
+            }
+        };
+
+        private final Runnable mDisconnectedNotification = new Runnable() {
+            @Override
+            public void run() {
+                listener.notifyDisconnected();
+                closeConnection();
+            }
+        };
+
+        @Override
+        public void onConnect() {
+            mHandler.post(mConnectedNotification);
+        }
+
+        @Override
+        public void onReceiveMessage(final MAVLinkMessage msg) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    listener.notifyReceivedData(msg);
+                }
+            });
+        }
+
+        @Override
+        public void onDisconnect() {
+            mHandler.post(mDisconnectedNotification);
+        }
+
+        @Override
+        public void onComError(final String errMsg) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(parent, mMavLinkErrorPrefix + " " + errMsg, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    };
+
+    /**
+     *  Defines callbacks for service binding, passed to bindService()
+     *  */
+    private final ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            mService = (MAVLinkService.MavLinkServiceApi)service;
+            onConnectedService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            onDisconnectService();
+        }
+    };
+
+	private final Context parent;
+	private final MAVLinkStreams.MavlinkInputStream listener;
+    private final String mMavLinkErrorPrefix;
+
+    private MAVLinkService.MavLinkServiceApi mService;
 	private boolean mIsBound;
 
 	public MAVLinkClient(Context context, MAVLinkStreams.MavlinkInputStream listener) {
 		parent = context;
 		this.listener = listener;
+        mMavLinkErrorPrefix = context.getString(R.string.MAVLinkError);
 	}
 
-	private void init() {
-		parent.bindService(new Intent(parent, MAVLinkService.class), mConnection,
-				Context.BIND_AUTO_CREATE);
-		mIsBound = true;
+	private void openConnection() {
+        if(mIsBound) {
+            connectMavLink();
+        }
+        else{
+            parent.bindService(new Intent(parent, MAVLinkService.class), mConnection,
+                    Context.BIND_AUTO_CREATE);
+        }
 	}
 
-	private void close() {
-		if (isConnected()) {
-			// If we have received the service, and hence registered with
-			// it, then now is the time to unregister.
-			if (mService != null) {
-				try {
-					Message msg = Message.obtain(null, MAVLinkService.MSG_UNREGISTER_CLIENT);
-					msg.replyTo = mMessenger;
-					mService.send(msg);
+	private void closeConnection() {
+		if (mIsBound) {
+            if(mService.getConnectionStatus() == MavLinkConnection.MAVLINK_CONNECTED){
+                Toast.makeText(parent, R.string.status_disconnecting, Toast.LENGTH_SHORT).show();
+                mService.disconnectMavLink();
+            }
 
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				}
-				// Unbinding the service.
-				parent.unbindService(mConnection);
-				onDisconnectService();
-			}
+            mService.removeMavLinkConnectionListener(TAG);
+
+            // Unbinding the service.
+            parent.unbindService(mConnection);
+            onDisconnectService();
 		}
 	}
-
-	/**
-	 * Handler of incoming messages from service.
-	 */
-	@SuppressLint("HandlerLeak")
-	// TODO fix this error message
-	class IncomingHandler extends Handler {
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			// Received data from... somewhere
-			case MSG_RECEIVED_DATA:
-				Bundle b = msg.getData();
-				MAVLinkMessage m = (MAVLinkMessage) b.getSerializable("msg");
-				listener.notifyReceivedData(m);
-				break;
-			case MSG_SELF_DESTRY_SERVICE:
-				close();
-				break;
-			default:
-				super.handleMessage(msg);
-			}
-		}
-	}
-
-	/** Defines callbacks for service binding, passed to bindService() */
-	private ServiceConnection mConnection = new ServiceConnection() {
-
-		@Override
-		public void onServiceConnected(ComponentName className, IBinder service) {
-			mService = new Messenger(service);
-			try {
-				Message msg = Message.obtain(null, MAVLinkService.MSG_REGISTER_CLIENT);
-				msg.replyTo = mMessenger;
-				mService.send(msg);
-				onConnectedService();
-			} catch (RemoteException e) {
-				e.printStackTrace();
-			}
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName arg0) {
-			onDisconnectService();
-		}
-	};
 
 	@Override
 	public void sendMavPacket(MAVLinkPacket pack) {
-		if (mService == null) {
+		if (!isConnected()) {
 			return;
 		}
 
-		Message msg = Message.obtain(null, MAVLinkService.MSG_SEND_DATA);
-		Bundle data = new Bundle();
-		data.putSerializable("msg", pack);
-		msg.setData(data);
-		try {
-			mService.send(msg);
-		} catch (RemoteException e) {
-			Log.e(TAG, e.getMessage(), e);
-		}
+        mService.sendData(pack);
 	}
 
+    private void connectMavLink(){
+        Toast.makeText(parent, R.string.status_connecting, Toast.LENGTH_SHORT).show();
+        mService.connectMavLink();
+        mService.addMavLinkConnectionListener(TAG, mConnectionListener);
+    }
+
 	private void onConnectedService() {
-		listener.notifyConnected();
+        mIsBound = true;
+        connectMavLink();
 	}
 
 	private void onDisconnectService() {
@@ -143,25 +157,24 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 
 	@Override
 	public void queryConnectionState() {
-		if (mIsBound) {
+		if (isConnected()) {
 			listener.notifyConnected();
 		} else {
 			listener.notifyDisconnected();
 		}
-
 	}
 
 	@Override
 	public boolean isConnected() {
-		return mIsBound;
+		return mIsBound && mService.getConnectionStatus() == MavLinkConnection.MAVLINK_CONNECTED;
 	}
 
 	@Override
 	public void toggleConnectionState() {
 		if (isConnected()) {
-			close();
+			closeConnection();
 		} else {
-			init();
+			openConnection();
 		}
 	}
 }

@@ -28,6 +28,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -35,6 +36,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -52,10 +54,25 @@ public class SettingsFragment extends DpPreferenceFragment implements
 	 */
 	private final static String TAG = SettingsFragment.class.getSimpleName();
 
+    private static final String PACKAGE_NAME = SettingsFragment.class.getPackage().getName();
+
+    /**
+     * Action used to broadcast updates to the period for the spoken status summary.
+     */
+    public static final String ACTION_UPDATED_STATUS_PERIOD = PACKAGE_NAME + "" +
+            ".ACTION_UPDATED_STATUS_PERIOD";
+
+    /**
+     * Used to retrieve the new period for the spoken status summary.
+     */
+    public static final String EXTRA_UPDATED_STATUS_PERIOD = "extra_updated_status_period";
+
 	/**
 	 * Keep track of which preferences' summary need to be updated.
 	 */
 	private final HashSet<String> mDefaultSummaryPrefs = new HashSet<String>();
+
+    private final Handler mHandler = new Handler();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -379,36 +396,42 @@ public class SettingsFragment extends DpPreferenceFragment implements
 				preference.setSummary(R.string.mode2_throttle_on_left_stick);
 			}
 		}
-
-		if (key.equals(getString(R.string.pref_tts_periodic_period_key))) {
-			setupPeriodicControls();
-			int val = Integer.parseInt(sharedPreferences.getString(
-					getString(R.string.pref_tts_periodic_period_key), null));
-			if (droidPlannerApp.getDrone().getMavClient().isConnected()) {
-				droidPlannerApp.mNotificationHandler.getTtsNotification()
-						.setupPeriodicSpeechOutput(val, droidPlannerApp.getDrone());
-			}
-		}
 	}
 
 	private void setupPeriodicControls() {
-		final PreferenceCategory periodicSpeechPrefs = (PreferenceCategory) findPreference(getActivity()
-				.getApplicationContext().getString(R.string.pref_tts_periodic_key));
+		final PreferenceCategory periodicSpeechPrefs = (PreferenceCategory) findPreference(getString(R.string.pref_tts_periodic_key));
 		ListPreference periodic = ((ListPreference) periodicSpeechPrefs.getPreference(0));
-		int val;
-		try {
-			val = Integer.parseInt(periodic.getValue());
-		} catch (NumberFormatException e) {
-			val = 0;
-		}
+        periodic.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, final Object newValue) {
+                //Broadcast the event locally on update.
+                //A handler is used to that the current action has the time to return,
+                // and store the value in the preferences.
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        LocalBroadcastManager.getInstance(getActivity())
+                                .sendBroadcast(new Intent(ACTION_UPDATED_STATUS_PERIOD)
+                                        .putExtra(EXTRA_UPDATED_STATUS_PERIOD, (String) newValue));
 
-		if (val != 0) {
+                        setupPeriodicControls();
+                    }
+                });
+                return true;
+            }
+        });
+
+		int val = Integer.parseInt(periodic.getValue());
+
+        final boolean isEnabled = val != 0;
+		if (isEnabled) {
 			periodic.setSummary("Status every " + val + " seconds");
 		} else {
 			periodic.setSummary("Status disabled");
 		}
+
 		for (int i = 1; i < periodicSpeechPrefs.getPreferenceCount(); i++) {
-			periodicSpeechPrefs.getPreference(i).setEnabled(val != 0);
+			periodicSpeechPrefs.getPreference(i).setEnabled(isEnabled);
 		}
 	}
 

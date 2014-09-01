@@ -27,8 +27,8 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 		FIRST_HEARTBEAT, LOST_HEARTBEAT, NORMAL_HEARTBEAT
 	}
 
-	public Handler watchdog;
-	public Runnable watchdogCallback = new Runnable() {
+	public final Handler watchdog;
+	public final Runnable watchdogCallback = new Runnable() {
 		@Override
 		public void run() {
 			onHeartbeatTimeout();
@@ -66,6 +66,10 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 		heartbeatState = HeartbeatState.NORMAL_HEARTBEAT;
 		restartWatchdog(HEARTBEAT_NORMAL_TIMEOUT);
 	}
+
+    public boolean isConnectionAlive(){
+        return heartbeatState != HeartbeatState.LOST_HEARTBEAT;
+    }
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
