@@ -104,6 +104,8 @@ public class GPS extends DroneVariable {
 	}
 
 	private void recalculateCourse(Coord2D position) {
-		course = GeoTools.getHeadingFromCoordinates(this.position, position);
+		if(this.position!=null){
+			course = GeoTools.getHeadingFromCoordinates(this.position, position);
+		}
 	}
 }
