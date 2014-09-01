@@ -15,7 +15,7 @@ public class State extends DroneVariable {
 	private boolean armed = false;
 	private boolean isFlying = false;
 	private ApmModes mode = ApmModes.UNKNOWN;
-
+	private boolean isCollisionImminent;
 	// flightTimer
 	// ----------------
 	private long startTime = 0;
@@ -49,6 +49,10 @@ public class State extends DroneVariable {
 		return isFlying;
 	}
 
+	public boolean isCollisionImminent() {
+		return isCollisionImminent;
+	}
+
 	public ApmModes getMode() {
 		return mode;
 	}
@@ -68,6 +72,14 @@ public class State extends DroneVariable {
 			}
 		}
 	}
+
+	public void setCollisionImminent(boolean isCollisionImminent) {
+		if(this.isCollisionImminent != isCollisionImminent) {
+			this.isCollisionImminent = isCollisionImminent;
+			myDrone.notifyDroneEvent(DroneEventsType.STATE);
+		}
+	}
+
 
 	public void setWarning(String newFailsafe) {
 		if (!this.warning.equals(newFailsafe)) {
