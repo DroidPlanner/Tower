@@ -48,8 +48,7 @@ public class ParcelableBattery implements Parcelable {
         this.battCurrent = in.readDouble();
     }
 
-    public static final Parcelable.Creator<ParcelableBattery> CREATOR = new Parcelable
-            .Creator<ParcelableBattery>() {
+    public static final Creator<ParcelableBattery> CREATOR = new Creator<ParcelableBattery>() {
         public ParcelableBattery createFromParcel(Parcel source) {return new ParcelableBattery(source);}
 
         public ParcelableBattery[] newArray(int size) {return new ParcelableBattery[size];}

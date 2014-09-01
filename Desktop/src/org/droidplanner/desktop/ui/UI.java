@@ -17,8 +17,8 @@ public class UI extends JFrame implements OnDroneListener {
 		super("Map");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLayout(new BorderLayout());		
-		
+		setLayout(new BorderLayout());
+
 		telemetryData = TelemetryPanel.createTelemetryPanel(drone);
 		telemetryData.setPreferredSize(new Dimension(200, 0));
 		add(telemetryData, BorderLayout.WEST);

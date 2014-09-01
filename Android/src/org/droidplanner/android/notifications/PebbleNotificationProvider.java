@@ -3,10 +3,10 @@ package org.droidplanner.android.notifications;
 import java.util.UUID;
 
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.gcs.follow.Follow;
 import org.droidplanner.core.gcs.follow.FollowAlgorithm.FollowModes;
+import org.droidplanner.core.model.Drone;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -111,8 +111,11 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 		} else
 			data.addString(KEY_FOLLOW_TYPE, "none");
 
-		String bat = "Bat:" + Double.toString(roundToOneDecimal(drone.getBattery().getBattVolt())) + "V";
-		String speed = "Speed: " + Double.toString(roundToOneDecimal(drone.getSpeed().getAirSpeed().valueInMetersPerSecond()));
+		String bat = "Bat:" + Double.toString(roundToOneDecimal(drone.getBattery().getBattVolt()))
+				+ "V";
+		String speed = "Speed: "
+				+ Double.toString(roundToOneDecimal(drone.getSpeed().getAirSpeed()
+						.valueInMetersPerSecond()));
 		String altitude = "Alt: "
 				+ Double.toString(roundToOneDecimal(drone.getAltitude().getAltitude()));
 		String telem = bat + "\n" + altitude + "\n" + speed;
@@ -144,54 +147,54 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 			Follow followMe = ((DroidPlannerApp) applicationContext).followMe;
 			PebbleKit.sendAckToPebble(applicationContext, transactionId);
 			int request = (data.getInteger(KEY_PEBBLE_REQUEST).intValue());
-            switch (request) {
+			switch (request) {
 
-                case KEY_REQUEST_MODE_FOLLOW:
-                    final int result = followMe.toggleFollowMeState();
-                    String eventLabel = null;
-                    switch (result) {
-                        case Follow.FOLLOW_START:
-                            eventLabel = "FollowMe enabled";
-                            break;
+			case KEY_REQUEST_MODE_FOLLOW:
+				final int result = followMe.toggleFollowMeState();
+				String eventLabel = null;
+				switch (result) {
+				case Follow.FOLLOW_START:
+					eventLabel = "FollowMe enabled";
+					break;
 
-                        case Follow.FOLLOW_END:
-                            eventLabel = "FollowMe disabled";
-                            break;
+				case Follow.FOLLOW_END:
+					eventLabel = "FollowMe disabled";
+					break;
 
-                        case Follow.FOLLOW_INVALID_STATE:
-                            eventLabel = "FollowMe error: invalid state";
-                            break;
+				case Follow.FOLLOW_INVALID_STATE:
+					eventLabel = "FollowMe error: invalid state";
+					break;
 
-                        case Follow.FOLLOW_DRONE_DISCONNECTED:
-                            eventLabel = "FollowMe error: drone not connected";
-                            break;
+				case Follow.FOLLOW_DRONE_DISCONNECTED:
+					eventLabel = "FollowMe error: drone not connected";
+					break;
 
-                        case Follow.FOLLOW_DRONE_NOT_ARMED:
-                            eventLabel = "FollowMe error: drone not armed";
-                            break;
-                    }
+				case Follow.FOLLOW_DRONE_NOT_ARMED:
+					eventLabel = "FollowMe error: drone not armed";
+					break;
+				}
 
-                    if (eventLabel != null) {
-                        Toast.makeText(applicationContext, eventLabel, Toast.LENGTH_SHORT).show();
-                    }
-                    break;
+				if (eventLabel != null) {
+					Toast.makeText(applicationContext, eventLabel, Toast.LENGTH_SHORT).show();
+				}
+				break;
 
-                case KEY_REQUEST_CYCLE_FOLLOW_TYPE:
-                    followMe.cycleType();
-                    break;
+			case KEY_REQUEST_CYCLE_FOLLOW_TYPE:
+				followMe.cycleType();
+				break;
 
-                case KEY_REQUEST_MODE_LOITER:
-                    ((DroidPlannerApp) applicationContext).getDrone().getState()
-                            .changeFlightMode(ApmModes.ROTOR_LOITER);
-                    break;
+			case KEY_REQUEST_MODE_LOITER:
+				((DroidPlannerApp) applicationContext).getDrone().getState()
+						.changeFlightMode(ApmModes.ROTOR_LOITER);
+				break;
 
-                case KEY_REQUEST_MODE_RTL:
-                    ((DroidPlannerApp) applicationContext).getDrone().getState()
-                            .changeFlightMode(ApmModes.ROTOR_RTL);
-                    break;
-            }
-        }
-    }
+			case KEY_REQUEST_MODE_RTL:
+				((DroidPlannerApp) applicationContext).getDrone().getState()
+						.changeFlightMode(ApmModes.ROTOR_RTL);
+				break;
+			}
+		}
+	}
 
 	@Override
 	public void quickNotify(String feedback) {

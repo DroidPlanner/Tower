@@ -47,8 +47,8 @@ public class ParcelableOrientation implements Parcelable {
         this.yaw = in.readDouble();
     }
 
-    public static final Parcelable.Creator<ParcelableOrientation> CREATOR = new Parcelable
-            .Creator<ParcelableOrientation>() {
+    public static final Creator<ParcelableOrientation> CREATOR = new
+            Creator<ParcelableOrientation>() {
         public ParcelableOrientation createFromParcel(Parcel source) {return new ParcelableOrientation(source);}
 
         public ParcelableOrientation[] newArray(int size) {return new ParcelableOrientation[size];}

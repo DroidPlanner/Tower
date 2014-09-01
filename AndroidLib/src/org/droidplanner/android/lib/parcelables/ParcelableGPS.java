@@ -81,8 +81,7 @@ public class ParcelableGPS implements Parcelable {
         this.position = in.readParcelable(ParcelableCoord2D.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<ParcelableGPS> CREATOR = new Parcelable
-            .Creator<ParcelableGPS>() {
+    public static final Creator<ParcelableGPS> CREATOR = new Creator<ParcelableGPS>() {
         public ParcelableGPS createFromParcel(Parcel source) {return new ParcelableGPS(source);}
 
         public ParcelableGPS[] newArray(int size) {return new ParcelableGPS[size];}

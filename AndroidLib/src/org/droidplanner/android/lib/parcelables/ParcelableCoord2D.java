@@ -35,8 +35,7 @@ public class ParcelableCoord2D implements Parcelable {
         mCoord = new Coord2D(latitude, longitude);
     }
 
-    public static final Parcelable.Creator<ParcelableCoord2D> CREATOR = new Parcelable
-            .Creator<ParcelableCoord2D>() {
+    public static final Creator<ParcelableCoord2D> CREATOR = new Creator<ParcelableCoord2D>() {
         public ParcelableCoord2D createFromParcel(Parcel source) {return new ParcelableCoord2D(source);}
 
         public ParcelableCoord2D[] newArray(int size) {return new ParcelableCoord2D[size];}

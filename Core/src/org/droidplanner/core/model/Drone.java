@@ -1,7 +1,5 @@
 package org.droidplanner.core.model;
 
-import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
-
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
 import org.droidplanner.core.MAVLink.WaypointManager;
 import org.droidplanner.core.drone.DroneInterfaces;
@@ -25,68 +23,72 @@ import org.droidplanner.core.drone.variables.StreamRates;
 import org.droidplanner.core.firmware.FirmwareType;
 import org.droidplanner.core.mission.Mission;
 
+import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
+
 public interface Drone {
 
-    public void addDroneListener(DroneInterfaces.OnDroneListener listener);
+	public void addDroneListener(DroneInterfaces.OnDroneListener listener);
 
-    public void removeDroneListener(DroneInterfaces.OnDroneListener listener);
+	public void removeDroneListener(DroneInterfaces.OnDroneListener listener);
 
-    public void notifyDroneEvent(DroneInterfaces.DroneEventsType event);
+	public void notifyDroneEvent(DroneInterfaces.DroneEventsType event);
 
-    public GPS getGps();
+	public GPS getGps();
 
-    public int getMavlinkVersion();
+	public int getMavlinkVersion();
 
-    public void onHeartbeat(msg_heartbeat msg);
+    public boolean isConnectionAlive();
 
-    public State getState();
+	public void onHeartbeat(msg_heartbeat msg);
 
-    public Parameters getParameters();
+	public State getState();
 
-    public void setType(int type);
+	public Parameters getParameters();
 
-    public int getType();
+	public void setType(int type);
 
-    public FirmwareType getFirmwareType();
+	public int getType();
 
-    public void loadVehicleProfile();
+	public FirmwareType getFirmwareType();
 
-    public VehicleProfile getVehicleProfile();
+	public void loadVehicleProfile();
 
-    public MAVLinkStreams.MAVLinkOutputStream getMavClient();
+	public VehicleProfile getVehicleProfile();
 
-    public Preferences getPreferences();
+	public MAVLinkStreams.MAVLinkOutputStream getMavClient();
 
-    public WaypointManager getWaypointManager();
+	public Preferences getPreferences();
 
-    public Speed getSpeed();
+	public WaypointManager getWaypointManager();
 
-    public Battery getBattery();
+	public Speed getSpeed();
 
-    public Radio getRadio();
+	public Battery getBattery();
 
-    public Home getHome();
+	public Radio getRadio();
 
-    public Altitude getAltitude();
+	public Home getHome();
 
-    public Orientation getOrientation();
+	public Altitude getAltitude();
 
-    public Navigation getNavigation();
+	public Orientation getOrientation();
 
-    public Mission getMission();
+	public Navigation getNavigation();
 
-    public StreamRates getStreamRates();
+	public Mission getMission();
 
-    public MissionStats getMissionStats();
+	public StreamRates getStreamRates();
 
-    public GuidedPoint getGuidedPoint();
+	public MissionStats getMissionStats();
 
-    public Calibration getCalibrationSetup();
+	public GuidedPoint getGuidedPoint();
 
-    public RC getRC();
+	public Calibration getCalibrationSetup();
 
-    public void setAltitudeGroundAndAirSpeeds(double altitude, double groundSpeed, double airSpeed,
-                                              double climb);
+	public RC getRC();
 
-    public void setDisttowpAndSpeedAltErrors(double disttowp, double alt_error, double aspd_error);
+	public void setAltitudeGroundAndAirSpeeds(double altitude, double groundSpeed, double airSpeed,
+			double climb);
+
+	public void setDisttowpAndSpeedAltErrors(double disttowp, double alt_error, double aspd_error);
 }

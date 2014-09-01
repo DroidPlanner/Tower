@@ -1,27 +1,27 @@
 package org.droidplanner.core.gcs.follow;
 
-import org.droidplanner.core.drone.variables.State;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.drone.variables.State;
 import org.droidplanner.core.gcs.follow.FollowAlgorithm.FollowModes;
 import org.droidplanner.core.gcs.location.Location;
 import org.droidplanner.core.gcs.location.Location.LocationFinder;
 import org.droidplanner.core.gcs.location.Location.LocationReceiver;
 import org.droidplanner.core.gcs.roi.ROIEstimator;
 import org.droidplanner.core.helpers.units.Length;
+import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ApmModes;
 
 public class Follow implements OnDroneListener, LocationReceiver {
 
-    //Set of return value for the 'toggleFollowMeState' method.
-    public static final int FOLLOW_INVALID_STATE = -1;
-    public static final int FOLLOW_DRONE_NOT_ARMED = -2;
-    public static final int FOLLOW_DRONE_DISCONNECTED = -3;
-    public static final int FOLLOW_START = 0;
-    public static final int FOLLOW_END = 1;
+	// Set of return value for the 'toggleFollowMeState' method.
+	public static final int FOLLOW_INVALID_STATE = -1;
+	public static final int FOLLOW_DRONE_NOT_ARMED = -2;
+	public static final int FOLLOW_DRONE_DISCONNECTED = -3;
+	public static final int FOLLOW_START = 0;
+	public static final int FOLLOW_END = 1;
 
 	private boolean followMeEnabled = false;
 	private Drone drone;
@@ -40,29 +40,26 @@ public class Follow implements OnDroneListener, LocationReceiver {
 	}
 
 	public int toggleFollowMeState() {
-        final State droneState = drone.getState();
-        if(droneState == null){
-            return FOLLOW_INVALID_STATE;
-        }
+		final State droneState = drone.getState();
+		if (droneState == null) {
+			return FOLLOW_INVALID_STATE;
+		}
 
 		if (isEnabled()) {
 			disableFollowMe();
 			drone.getState().changeFlightMode(ApmModes.ROTOR_LOITER);
-            return FOLLOW_END;
-		}
-        else {
+			return FOLLOW_END;
+		} else {
 			if (drone.getMavClient().isConnected()) {
 				if (drone.getState().isArmed()) {
 					drone.getState().changeFlightMode(ApmModes.ROTOR_GUIDED);
 					enableFollowMe();
-                    return FOLLOW_START;
+					return FOLLOW_START;
+				} else {
+					return FOLLOW_DRONE_NOT_ARMED;
 				}
-                else {
-                    return FOLLOW_DRONE_NOT_ARMED;
-				}
-			}
-            else {
-                return FOLLOW_DRONE_DISCONNECTED;
+			} else {
+				return FOLLOW_DRONE_DISCONNECTED;
 			}
 		}
 	}
@@ -70,14 +67,14 @@ public class Follow implements OnDroneListener, LocationReceiver {
 	private void enableFollowMe() {
 		locationFinder.enableLocationUpdates();
 		followMeEnabled = true;
-        drone.notifyDroneEvent(DroneEventsType.FOLLOW_START);
+		drone.notifyDroneEvent(DroneEventsType.FOLLOW_START);
 	}
 
 	private void disableFollowMe() {
-        locationFinder.disableLocationUpdates();
+		locationFinder.disableLocationUpdates();
 		if (followMeEnabled) {
 			followMeEnabled = false;
-            drone.notifyDroneEvent(DroneEventsType.FOLLOW_STOP);
+			drone.notifyDroneEvent(DroneEventsType.FOLLOW_STOP);
 		}
 	}
 
@@ -106,7 +103,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 
 	@Override
 	public void onLocationChanged(Location location) {
-		if(location.getAccuracy()<10.0){
+		if (location.getAccuracy() < 10.0) {
 			followAlgorithm.processNewLocation(location);
 		}
 		roiEstimator.onLocationChanged(location);

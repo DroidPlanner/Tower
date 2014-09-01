@@ -34,7 +34,7 @@ public class RotationGestureDetector {
 		float delta = rotation - mRotation;
 		mRotation += delta;
 		mListener.onRotate(delta);
-        return true;
+		return true;
 	}
 
 }

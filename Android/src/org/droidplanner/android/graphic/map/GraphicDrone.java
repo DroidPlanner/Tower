@@ -2,8 +2,8 @@ package org.droidplanner.android.graphic.map;
 
 import org.droidplanner.R;
 import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.model.Drone;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -12,7 +12,6 @@ import android.graphics.BitmapFactory;
 public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
 	private Drone drone;
-
 	public GraphicDrone(Drone drone) {
 		this.drone = drone;
 	}
@@ -34,7 +33,11 @@ public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
 	@Override
 	public Bitmap getIcon(Resources res) {
-		return BitmapFactory.decodeResource(res, R.drawable.quad);
+		if(drone.isConnectionAlive()) {
+			return BitmapFactory.decodeResource(res, R.drawable.quad);
+		}
+		return BitmapFactory.decodeResource(res, R.drawable.quad_disconnect);
+
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 package org.droidplanner.core.drone.variables;
 
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneVariable;
+import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ardupilotmega.msg_rc_channels_raw;
 import com.MAVLink.Messages.ardupilotmega.msg_servo_output_raw;

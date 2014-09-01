@@ -99,8 +99,7 @@ public class ParcelableRadio implements Parcelable {
         this.remnoise = in.readDouble();
     }
 
-    public static final Parcelable.Creator<ParcelableRadio> CREATOR = new Parcelable
-            .Creator<ParcelableRadio>() {
+    public static final Creator<ParcelableRadio> CREATOR = new Creator<ParcelableRadio>() {
         public ParcelableRadio createFromParcel(Parcel source) {return new ParcelableRadio(source);}
 
         public ParcelableRadio[] newArray(int size) {return new ParcelableRadio[size];}

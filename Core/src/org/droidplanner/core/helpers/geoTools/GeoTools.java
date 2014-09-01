@@ -9,8 +9,10 @@ import org.droidplanner.core.helpers.units.Area;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.polygon.Polygon;
 
+import static java.lang.Math.*;
+
 public class GeoTools {
-	private static final double RADIUS_OF_EARTH = 6372797.560856d;
+	private static final double RADIUS_OF_EARTH = 6378137.0;//In meters.  Source: WGS84
 	public List<Coord2D> waypoints;
 
 	public GeoTools() {
@@ -26,13 +28,11 @@ public class GeoTools {
 	}
 
 	public static Double metersTolat(double meters) {
-		double radius_of_earth = 6378100.0;// # in meters
-		return Math.toDegrees(meters / radius_of_earth);
+		return Math.toDegrees(meters / RADIUS_OF_EARTH);
 	}
 
 	public static Double latToMeters(double lat) {
-		double radius_of_earth = 6378100.0;// # in meters
-		return Math.toRadians(lat) * radius_of_earth;
+		return Math.toRadians(lat) * RADIUS_OF_EARTH;
 	}
 
 	/**
@@ -109,7 +109,6 @@ public class GeoTools {
 		return MathUtil.hypot(horizontalDistance, altitudeDiff);
 	}
 
-
 	/**
 	 * Computes the heading between two coordinates
 	 * 
@@ -134,27 +133,43 @@ public class GeoTools {
 	}
 
 	/**
-	 * Experimental Function, needs testing! Calculate the area of the polygon
+	 * Copied from android-map-utils (licensed under Apache v2)
+	 * com.google.maps.android.SphericalUtil.java
 	 * 
 	 * @return area in m�
 	 */
-	// TODO test and fix this function
 	public static Area getArea(Polygon poly) {
-		double sum = 0.0;
-		int length = poly.getPoints().size();
-		for (int i = 0; i < length - 1; i++) {
-			sum = sum
-					+ (latToMeters(poly.getPoints().get(i).getX()) * latToMeters(poly.getPoints()
-							.get(i + 1).getY()))
-					- (latToMeters(poly.getPoints().get(i).getY()) * latToMeters(poly.getPoints()
-							.get(i + 1).getX()));
+		List<Coord2D> path = poly.getPoints();
+		int size =  path.size();
+		if (size < 3) { return new Area(0); }
+		double total = 0;
+		Coord2D prev =  path.get(size - 1);
+		double prevTanLat = tan((PI / 2 - toRadians(prev.getLat())) / 2);
+		double prevLng = toRadians(prev.getLng());
+		// For each edge, accumulate the signed area of the triangle formed by the North Pole
+		// and that edge ("polar triangle").
+		for (Coord2D point : path) {
+			double tanLat = tan((PI / 2 - toRadians(point.getLat())) / 2);
+			double lng = toRadians(point.getLng());
+			total += polarTriangleArea(tanLat, lng, prevTanLat, prevLng);
+			prevTanLat = tanLat;
+			prevLng = lng;
 		}
-		sum = sum
-				+ (latToMeters(poly.getPoints().get(length - 1).getX()) * latToMeters(poly
-						.getPoints().get(0).getY()))
-				- (latToMeters(poly.getPoints().get(length - 1).getY()) * latToMeters(poly
-						.getPoints().get(0).getX()));
-		return new Area(Math.abs(0.5 * sum));
-		// return new Area(0);
+		return new Area(abs(total * (RADIUS_OF_EARTH * RADIUS_OF_EARTH)));
+	}
+	/**
+	 * Copied from android-map-utils  (licensed under Apache v2)
+	 * com.google.maps.android.SphericalUtil.java
+	 *
+	 * Returns the signed area of a triangle which has North Pole as a vertex.
+	 * Formula derived from "Area of a spherical triangle given two edges and the included angle"
+	 * as per "Spherical Trigonometry" by Todhunter, page 71, section 103, point 2.
+	 * See http://books.google.com/books?id=3uBHAAAAIAAJ&pg=PA71
+	 * The arguments named "tan" are tan((pi/2 - latitude)/2).
+	 */
+	private static double polarTriangleArea(double tan1, double lng1, double tan2, double lng2) {
+		double deltaLng = lng1 - lng2;
+		double t = tan1 * tan2;
+		return 2 * atan2(t * sin(deltaLng), 1 + t * cos(deltaLng));
 	}
 }

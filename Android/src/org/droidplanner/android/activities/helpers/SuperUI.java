@@ -8,10 +8,10 @@ import org.droidplanner.android.services.DroidPlannerService.DroidPlannerApi;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.gcs.GCSHeartbeat;
+import org.droidplanner.core.model.Drone;
 
 import android.app.ActionBar;
 import android.content.ComponentName;

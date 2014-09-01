@@ -8,8 +8,8 @@ import java.util.Map;
 
 import org.droidplanner.R;
 import org.droidplanner.android.utils.file.IO.ParameterMetadataMapReader;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.parameters.Parameter;
 import org.droidplanner.core.parameters.ParameterMetadata;
 
@@ -134,13 +134,13 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 
 	private void addParameter(Parameter parameter) {
 		try {
-            Parameter.checkParameterName(parameter.name);
+			Parameter.checkParameterName(parameter.name);
 
-            // paramters from AC 3.2 may contain duplicates - add only if unique
-            if(!containsParameterWithName(parameter.name))
-                add(new ParamsAdapterItem(parameter, getMetadata(parameter.name)));
+			// paramters from AC 3.2 may contain duplicates - add only if unique
+			if (!containsParameterWithName(parameter.name))
+				add(new ParamsAdapterItem(parameter, getMetadata(parameter.name)));
 
-        } catch (Exception ex) {
+		} catch (Exception ex) {
 			// eat it
 		}
 	}
@@ -155,15 +155,14 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 		notifyDataSetChanged();
 	}
 
-    private boolean containsParameterWithName(String name)
-    {
-        final int count = getCount();
-        for(int i = 0; i < count; i++) {
-            if (name.equals(getItem(i).getParameter().name))
-                return true;
-        }
-        return false;
-    }
+	private boolean containsParameterWithName(String name) {
+		final int count = getCount();
+		for (int i = 0; i < count; i++) {
+			if (name.equals(getItem(i).getParameter().name))
+				return true;
+		}
+		return false;
+	}
 
 	private void loadMetadataInternal(Drone drone) {
 		metadataMap = null;

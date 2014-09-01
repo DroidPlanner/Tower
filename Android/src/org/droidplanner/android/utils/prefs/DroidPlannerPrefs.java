@@ -11,6 +11,7 @@ import org.droidplanner.core.firmware.FirmwareType;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.SparseBooleanArray;
 
 /**
  * Provides structured access to Droidplanner preferences
@@ -26,8 +27,8 @@ import android.preference.PreferenceManager;
 public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preferences {
 
 	/*
-	 * Default preference value
-	 */
+		 * Default preference value
+		 */
 	public static final boolean DEFAULT_USAGE_STATISTICS = true;
 	public static final String DEFAULT_CONNECTION_TYPE = Utils.ConnectionType.USB.name();
 	private static final boolean DEFAULT_KEEP_SCREEN_ON = false;
@@ -38,6 +39,11 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	private static final AutoPanMode DEFAULT_AUTO_PAN_MODE = AutoPanMode.DISABLED;
 	private static final boolean DEFAULT_GUIDED_MODE_ON_LONG_PRESS = true;
 	public static final boolean DEFAULT_PREF_UI_LANGUAGE = false;
+    public static final String DEFAULT_SPEECH_PERIOD = "0";
+	public static final boolean DEFAULT_TTS_CEILING_EXCEEDED = true;
+	public static final boolean DEFAULT_TTS_WARNING_LOST_SIGNAL = true;
+	public static final boolean DEFAULT_TTS_WARNING_LOW_SIGNAL = true;
+	public static final boolean DEFAULT_TTS_WARNING_AUTOPILOT_WARNING = true;
 
 	// Public for legacy usage
 	public SharedPreferences prefs;
@@ -58,7 +64,7 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 
 	public void setDroneshareLogin(String b) {
 		prefs.edit().putString(context.getString(R.string.pref_dshare_username_key), b.trim())
-                .apply();
+				.apply();
 	}
 
 	public String getDroneshareEmail() {
@@ -75,7 +81,7 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 
 	public void setDronesharePassword(String b) {
 		prefs.edit().putString(context.getString(R.string.pref_dshare_password_key), b.trim())
-                .apply();
+				.apply();
 	}
 
 	public boolean getDroneshareEnabled() {
@@ -254,5 +260,45 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 
 	public String getMapProviderName() {
 		return prefs.getString(context.getString(R.string.pref_maps_providers_key), null);
+	}
+
+	public SparseBooleanArray getPeriodicSpeechPrefs() {
+        final SparseBooleanArray speechPrefs = new SparseBooleanArray(4);
+		speechPrefs.put(R.string.pref_tts_periodic_bat_volt_key,
+				prefs.getBoolean(context.getString(R.string.pref_tts_periodic_bat_volt_key), true));
+		speechPrefs.put(R.string.pref_tts_periodic_alt_key,
+				prefs.getBoolean(context.getString(R.string.pref_tts_periodic_alt_key), true));
+		speechPrefs.put(R.string.pref_tts_periodic_airspeed_key,
+				prefs.getBoolean(context.getString(R.string.pref_tts_periodic_airspeed_key), true));
+		speechPrefs.put(R.string.pref_tts_periodic_rssi_key,
+				prefs.getBoolean(context.getString(R.string.pref_tts_periodic_rssi_key), true));
+
+		return speechPrefs;
+	}
+
+	public int getSpokenStatusInterval() {
+		return Integer.parseInt(prefs.getString(context.getString(R.string
+                .pref_tts_periodic_period_key), DEFAULT_SPEECH_PERIOD));
+	}
+
+	public boolean getWarningOn400ftExceeded(){
+		return prefs.getBoolean(context.getString(R.string
+						.pref_tts_warning_400ft_ceiling_exceeded_key),
+				DEFAULT_TTS_CEILING_EXCEEDED);
+	}
+
+	public boolean getWarningOnLostOrRestoredSignal(){
+		return prefs.getBoolean(context.getString(R.string.pref_tts_warning_lost_signal_key),
+				DEFAULT_TTS_WARNING_LOST_SIGNAL);
+	}
+
+	public boolean getWarningOnLowSignalStrength(){
+		return prefs.getBoolean(context.getString(R.string.pref_tts_warning_low_signal_key),
+				DEFAULT_TTS_WARNING_LOW_SIGNAL);
+	}
+
+	public boolean getWarningOnAutopilotWarning(){
+		return prefs.getBoolean(context.getString(R.string.pref_tts_warning_autopilot_warnings_key),
+				DEFAULT_TTS_WARNING_AUTOPILOT_WARNING);
 	}
 }

@@ -66,8 +66,7 @@ public class ParcelableSpeed implements Parcelable {
         this.targetSpeed = in.readDouble();
     }
 
-    public static final Parcelable.Creator<ParcelableSpeed> CREATOR = new Parcelable
-            .Creator<ParcelableSpeed>() {
+    public static final Creator<ParcelableSpeed> CREATOR = new Creator<ParcelableSpeed>() {
         public ParcelableSpeed createFromParcel(Parcel source) {return new ParcelableSpeed(source);}
 
         public ParcelableSpeed[] newArray(int size) {return new ParcelableSpeed[size];}

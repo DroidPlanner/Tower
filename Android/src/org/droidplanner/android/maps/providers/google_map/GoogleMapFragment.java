@@ -282,8 +282,13 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
 	@Override
 	public void updateMarker(MarkerInfo markerInfo, boolean isDraggable) {
-		final LatLng position = DroneHelper.CoordToLatLang(markerInfo
-				.getPosition());
+        //if the drone hasn't received a gps signal yet
+        final Coord2D coord = markerInfo.getPosition();
+        if(coord == null){
+            return;
+        }
+
+		final LatLng position = DroneHelper.CoordToLatLang(coord);
 		Marker marker = mMarkers.get(markerInfo);
 		if (marker == null) {
 			// Generate the marker
@@ -492,6 +497,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
 	@Override
 	public void goToDroneLocation() {
+		if(!mDrone.getGps().isPositionValid()){
+			Toast.makeText(getActivity().getApplicationContext(), "No drone location available", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		final float currentZoomLevel = mMap.getCameraPosition().zoom;
 		final Coord2D droneLocation = mDrone.getGps().getPosition();
 		updateCamera(droneLocation, (int) currentZoomLevel);
@@ -662,7 +671,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
 		switch (event) {
 		case GPS:
-			if (mPanMode.get() == AutoPanMode.DRONE) {
+			if (mPanMode.get() == AutoPanMode.DRONE && drone.getGps().isPositionValid()) {
 				final float currentZoomLevel = mMap.getCameraPosition().zoom;
 				final Coord2D droneLocation = drone.getGps().getPosition();
 				updateCamera(droneLocation, currentZoomLevel);

@@ -60,15 +60,89 @@
                     android:key="@string/pref_permanent_notification_key"
                     android:title="@string/pref_permanent_notification_title"
                     android:summary="@string/pref_permanent_notification_summary"/>
+            </PreferenceCategory>
+            <PreferenceCategory android:title="@string/pref_title_tts">
                 <CheckBoxPreference
                     android:defaultValue="true"
-                    android:key="pref_enable_tts"
+                    android:key="@string/pref_enable_tts_key"
                     android:summary="@string/pref_enable_tts_summary"
                     android:title="@string/pref_enable_tts" />
+                <PreferenceScreen android:title="@string/pref_title_tts_periodic_status" >
+                    <PreferenceCategory android:title="@string/pref_title_tts_periodic_status"
+                                        android:summary="@string/pref_tts_periodic_summary"
+                                        android:key="@string/pref_tts_periodic_key">
+                        <ListPreference
+                            android:title="@string/pref_tts_periodic_period"
+                            android:entries="@array/tts_periodic_period"
+                            android:entryValues="@array/tts_periodic_period_values"
+                            android:key="@string/pref_tts_periodic_period_key"
+                            android:summary="@string/pref_tts_periodic_period_summary"
+                            android:defaultValue="0"/>
+                        <CheckBoxPreference
+                            android:title="@string/pref_tts_periodic_bat_volt"
+                            android:key="@string/pref_tts_periodic_bat_volt_key"
+                            android:summary="@string/pref_tts_periodic_bat_volt_summary"
+                            android:defaultValue="true"/>
+                        <CheckBoxPreference
+                            android:title="@string/pref_tts_periodic_alt"
+                            android:key="@string/pref_tts_periodic_alt_key"
+                            android:summary="@string/pref_tts_periodic_alt_summary"
+                            android:defaultValue="true"/>
+                        <CheckBoxPreference
+                            android:title="@string/pref_tts_periodic_airspeed"
+                            android:key="@string/pref_tts_periodic_airspeed_key"
+                            android:summary="@string/pref_tts_periodic_airspeed_summary"
+                            android:defaultValue="true"/>
+                        <CheckBoxPreference
+                            android:title="@string/pref_tts_periodic_rssi"
+                            android:key="@string/pref_tts_periodic_rssi_key"
+                            android:summary="@string/pref_tts_periodic_rssi_summary"
+                            android:defaultValue="true"/>
+
+                    </PreferenceCategory>
+                </PreferenceScreen>
+                <PreferenceScreen android:title="@string/pref_title_tts_warnings">
+                    <PreferenceCategory android:title="@string/pref_title_tts_warnings">
+                        <!--
+                        <CheckBoxPreference
+                            android:title="@string/pref_tts_warning_solar_activity"
+                            android:key="@string/pref_tts_warning_solar_activity_key"
+                            android:summary="@string/pref_tts_warning_solar_activity_summary"
+                            android:defaultValue="true"/>
+                        <CheckBoxPreference
+                            android:title="@string/pref_tts_warning_wind_speed"
+                            android:key="@string/pref_tts_warning_wind_speed_key"
+                            android:summary="@string/pref_tts_warning_wind_speed_summary"
+                            android:defaultValue="true"/>
+                            -->
+                        <CheckBoxPreference
+                            android:title="@string/pref_tts_warning_400ft_ceiling_exceeded"
+                            android:key="@string/pref_tts_warning_400ft_ceiling_exceeded_key"
+                            android:summary="@string/pref_tts_warning_400ft_ceiling_exceeded_summary"
+                            android:defaultValue="true"/>
+                        <CheckBoxPreference
+                            android:title="@string/pref_tts_warning_low_signal_strength"
+                            android:key="@string/pref_tts_warning_low_signal_key"
+                            android:summary="@string/pref_tts_warning_low_signal_strength_summary"
+                            android:defaultValue="true"/>
+                        <CheckBoxPreference
+                            android:title="@string/pref_tts_warning_lost_signal"
+                            android:key="@string/pref_tts_warning_lost_signal_key"
+                            android:summary="@string/pref_tts_warning_lost_signal_summary"
+                            android:defaultValue="true"/>
+                        <CheckBoxPreference
+                            android:title="@string/pref_tts_warning_autopilot_warnings"
+                            android:key="@string/pref_tts_warning_autopilot_warnings_key"
+                            android:summary="@string/pref_tts_warning_autopilot_warnings_summary"
+                            android:defaultValue="true"/>
+                    </PreferenceCategory>
+
+                </PreferenceScreen>
                 <CheckBoxPreference
                     android:defaultValue="false"
                     android:key="@string/pref_request_max_volume_key"
                     android:title="@string/pref_request_max_volume" />
+
             </PreferenceCategory>
         </PreferenceScreen>
 

@@ -42,6 +42,12 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	 */
 	private final PebbleNotificationProvider mPebbleNotification;
 
+	/**
+	 * Handles emergency beep notification.
+	 */
+	private final EmergencyBeepNotificationProvider mBeepNotification;
+
+	
     /**
      * Handles notifications, and data relays for connected wear nodes.
      */
@@ -55,6 +61,7 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 		mTtsNotification = new TTSNotificationProvider(context);
 		mStatusBarNotification = new StatusBarNotificationProvider(context);
 		mPebbleNotification = new PebbleNotificationProvider(context);
+		mBeepNotification = new EmergencyBeepNotificationProvider(context);
         mWearNotification = new WearNotificationProvider(context, dpApp.followMe);
 
         mDrone.addDroneListener(this);
@@ -65,6 +72,7 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 		mTtsNotification.onDroneEvent(event, drone);
 		mStatusBarNotification.onDroneEvent(event, drone);
 		mPebbleNotification.onDroneEvent(event, drone);
+		mBeepNotification.onDroneEvent(event, drone);
         mWearNotification.onDroneEvent(event, drone);
 	}
 

@@ -11,8 +11,9 @@ public class GeoToolsTest extends TestCase {
 
 	Coord3D p1 = new Coord3D(37.85363485683941, -122.4204097390123, new Altitude(250.0));
 	Coord3D p2 = new Coord3D(37.85130335221235, -122.4142645673542, new Altitude(0.0));
-	double dist2DP1toP2 = 598.6;
-	double dist3DP1toP2 = 648.7;
+	double polygonArea = 502915;
+	double dist2DP1toP2 = 599.26;
+	double dist3DP1toP2 = 649.32;
 	double headingP1toP2 = 115.7;
 
 	public void testGetDistance() {
@@ -20,7 +21,7 @@ public class GeoToolsTest extends TestCase {
 		assertEquals(dist2DP1toP2, GeoTools.getDistance(p1, p2).valueInMeters(), tolerance);
 		assertEquals(dist2DP1toP2, GeoTools.getDistance(p2, p1).valueInMeters(), tolerance);
 	}
-	
+
 	public void testGet3DDistance() {
 		double tolerance = dist2DP1toP2 * 0.0005;
 		assertEquals(dist3DP1toP2, GeoTools.get3DDistance(p1, p2).valueInMeters(), tolerance);
@@ -33,6 +34,7 @@ public class GeoToolsTest extends TestCase {
 	}
 
 	public void testGetArea() {
+		double tolerance = polygonArea * 0.001;
 		Polygon poly = new Polygon();
 		poly.addPoint(new Coord2D(51.0282781100882, 2.16705322265625));
 		poly.addPoint(new Coord2D(51.0317878663996, 2.16293267905712));
@@ -43,9 +45,9 @@ public class GeoToolsTest extends TestCase {
 		poly.addPoint(new Coord2D(51.0285218722540, 2.18014307320118));
 
 		// FIXME: commented out to pass the build test. should be fixed ASAP
-		// assertEquals( 502915, GeoTools.getArea(poly).valueInSqMeters(),0.1);
-		// poly.reversePoints();
-		// assertEquals( 502915, GeoTools.getArea(poly).valueInSqMeters(),0.1);
+		assertEquals(polygonArea, GeoTools.getArea(poly).valueInSqMeters(),tolerance);
+		poly.reversePoints();
+		assertEquals(polygonArea, GeoTools.getArea(poly).valueInSqMeters(),tolerance);
 	}
 
 }

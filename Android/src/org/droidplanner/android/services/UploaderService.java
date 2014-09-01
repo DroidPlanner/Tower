@@ -32,15 +32,15 @@ public class UploaderService extends IntentService {
 	private static final String TAG = UploaderService.class.getSimpleName();
 	static final String apiKey = "2d38fb2e.72afe7b3761d5ee6346c178fdd6b680f";
 
-    private static final int ONGOING_UPLOAD_NOTIFICATION_ID = 123;
-    private static final int UPLOAD_STATUS_NOTIFICATION_ID = 124;
+	private static final int ONGOING_UPLOAD_NOTIFICATION_ID = 123;
+	private static final int UPLOAD_STATUS_NOTIFICATION_ID = 124;
 
 	private DroidPlannerPrefs prefs;
 
 	private final IUploadListener callback = new IUploadListener() {
 
-        private int numUploaded = 0;
-        private Notification failedUploadNotification;
+		private int numUploaded = 0;
+		private Notification failedUploadNotification;
 
 		@Override
 		public void onUploadStart(File f) {
@@ -55,27 +55,26 @@ public class UploaderService extends IntentService {
 			} else {
 				Log.i(TAG, "Upload success: " + f + " url=" + viewURL);
 
-                // Attach the view URL
-                final PendingIntent pIntent = PendingIntent.getActivity(UploaderService.this, 0,
-                        new Intent(Intent.ACTION_VIEW, Uri.parse(viewURL)),
-                        PendingIntent.FLAG_UPDATE_CURRENT);
+				// Attach the view URL
+				final PendingIntent pIntent = PendingIntent.getActivity(UploaderService.this, 0,
+						new Intent(Intent.ACTION_VIEW, Uri.parse(viewURL)),
+						PendingIntent.FLAG_UPDATE_CURRENT);
 
-                final Intent sendIntent = new Intent(Intent.ACTION_SEND)
-                        .putExtra(Intent.EXTRA_TEXT, viewURL)
-                        .setType("text/plain");
+				final Intent sendIntent = new Intent(Intent.ACTION_SEND).putExtra(
+						Intent.EXTRA_TEXT, viewURL).setType("text/plain");
 
-                final PendingIntent sendPIntent = PendingIntent.getActivity(UploaderService.this, 0,
-                        sendIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+				final PendingIntent sendPIntent = PendingIntent.getActivity(UploaderService.this,
+						0, sendIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 				numUploaded++;
 
-                final NotificationCompat.Builder notifBuilder = generateNotificationBuilder()
-                        .setContentText(getString(R.string.uploader_success_message))
-                        .setContentIntent(pIntent)
-                        // Attach a web link
-                        .addAction(android.R.drawable.ic_menu_set_as, "Web", pIntent)
-                        // Add a share link
-                        .addAction(android.R.drawable.ic_menu_share, "Share", sendPIntent);
+				final NotificationCompat.Builder notifBuilder = generateNotificationBuilder()
+						.setContentText(getString(R.string.uploader_success_message))
+						.setContentIntent(pIntent)
+						// Attach a web link
+						.addAction(android.R.drawable.ic_menu_set_as, "Web", pIntent)
+						// Add a share link
+						.addAction(android.R.drawable.ic_menu_share, "Share", sendPIntent);
 
 				if (numUploaded > 1)
 					notifBuilder.setNumber(numUploaded);
@@ -92,21 +91,20 @@ public class UploaderService extends IntentService {
 			if (ex instanceof HttpResponseException)
 				msg = ex.getMessage();
 
-            if(failedUploadNotification == null) {
-                failedUploadNotification = generateNotificationBuilder()
-                        .setContentText(msg)
-                        .setSubText(getString(R.string.uploader_fail_retry_message))
-                        .build();
-            }
-            updateUploadStatusNotification(failedUploadNotification);
+			if (failedUploadNotification == null) {
+				failedUploadNotification = generateNotificationBuilder().setContentText(msg)
+						.setSubText(getString(R.string.uploader_fail_retry_message)).build();
+			}
+			updateUploadStatusNotification(failedUploadNotification);
 
-            if(!NetworkConnectivityReceiver.isNetworkAvailable(getApplicationContext())){
-                //Activating the network connectivity receiver so we can be restarted when
-                // connectivity is restored.
-                Log.d(TAG, "Activating connectivity receiver");
-                NetworkConnectivityReceiver.enableConnectivityReceiver(getApplicationContext(),
-                        true);
-            }
+			if (!NetworkConnectivityReceiver.isNetworkAvailable(getApplicationContext())) {
+				// Activating the network connectivity receiver so we can be
+				// restarted when
+				// connectivity is restored.
+				Log.d(TAG, "Activating connectivity receiver");
+				NetworkConnectivityReceiver.enableConnectivityReceiver(getApplicationContext(),
+						true);
+			}
 		}
 	};
 
@@ -120,45 +118,45 @@ public class UploaderService extends IntentService {
 	public void onCreate() {
 		super.onCreate();
 
-        prefs = new DroidPlannerPrefs(this);
-        notifyManager = NotificationManagerCompat.from(getApplicationContext());
+		prefs = new DroidPlannerPrefs(this);
+		notifyManager = NotificationManagerCompat.from(getApplicationContext());
 	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-        //Check if droneshare is enabled, and the login credentials set before trying to do
-        // anything.
-        if(prefs.getDroneshareEnabled() && areLoginCredentialsSet()) {
+		// Check if droneshare is enabled, and the login credentials set before
+		// trying to do
+		// anything.
+		if (prefs.getDroneshareEnabled() && areLoginCredentialsSet()) {
 
-            // Any time we receive an intent - rescan the directory
-            if (NetworkConnectivityReceiver.isNetworkAvailable(this)) {
-                Log.i(TAG, "Scanning for new uploads");
-                doUploads();
-            }
-            else {
-                Log.v(TAG, "Not scanning - network offline");
+			// Any time we receive an intent - rescan the directory
+			if (NetworkConnectivityReceiver.isNetworkAvailable(this)) {
+				Log.i(TAG, "Scanning for new uploads");
+				doUploads();
+			} else {
+				Log.v(TAG, "Not scanning - network offline");
 
-                //Activating the network connectivity receiver so we can be restarted when
-                // connectivity is restored.
-                Log.d(TAG, "Activating connectivity receiver");
-                NetworkConnectivityReceiver.enableConnectivityReceiver(getApplicationContext(),
-                        true);
-            }
-        }
+				// Activating the network connectivity receiver so we can be
+				// restarted when
+				// connectivity is restored.
+				Log.d(TAG, "Activating connectivity receiver");
+				NetworkConnectivityReceiver.enableConnectivityReceiver(getApplicationContext(),
+						true);
+			}
+		}
 	}
 
-    private NotificationCompat.Builder generateNotificationBuilder(){
-        return new NotificationCompat.Builder(getApplicationContext())
-                .setContentTitle(getString(R.string.uploader_notification_title))
-                .setSmallIcon(R.drawable.ic_launcher)
-                        // .setProgress(fileSize, 0, false)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
-    }
+	private NotificationCompat.Builder generateNotificationBuilder() {
+		return new NotificationCompat.Builder(getApplicationContext())
+				.setContentTitle(getString(R.string.uploader_notification_title))
+				.setSmallIcon(R.drawable.ic_launcher)
+				// .setProgress(fileSize, 0, false)
+				.setAutoCancel(true).setPriority(NotificationCompat.PRIORITY_HIGH);
+	}
 
-    private boolean areLoginCredentialsSet(){
-        return !prefs.getDroneshareLogin().isEmpty() && !prefs.getDronesharePassword().isEmpty();
-    }
+	private boolean areLoginCredentialsSet() {
+		return !prefs.getDroneshareLogin().isEmpty() && !prefs.getDronesharePassword().isEmpty();
+	}
 
 	private void doUploads() {
 		File srcDir = DirectoryPath.getTLogPath();
@@ -168,26 +166,25 @@ public class UploaderService extends IntentService {
 		String password = prefs.getDronesharePassword();
 
 		if (!login.isEmpty() && !password.isEmpty()) {
-			DirectoryUploader up = new DirectoryUploader(srcDir, destDir,
-					callback, login, password, prefs.getVehicleId(), apiKey, "DEFAULT");
+			DirectoryUploader up = new DirectoryUploader(srcDir, destDir, callback, login,
+					password, prefs.getVehicleId(), apiKey, "DEFAULT");
 
-            final Notification notification = generateNotificationBuilder()
-                    .setContentText("Uploading log file")
-                    .build();
-            startForeground(ONGOING_UPLOAD_NOTIFICATION_ID, notification);
+			final Notification notification = generateNotificationBuilder().setContentText(
+					"Uploading log file").build();
+			startForeground(ONGOING_UPLOAD_NOTIFICATION_ID, notification);
 			up.run();
-            stopForeground(true);
+			stopForeground(true);
 		}
 	}
 
-    private void updateUploadStatusNotification(Notification notification) {
-        notifyManager.notify(UPLOAD_STATUS_NOTIFICATION_ID, notification);
-    }
+	private void updateUploadStatusNotification(Notification notification) {
+		notifyManager.notify(UPLOAD_STATUS_NOTIFICATION_ID, notification);
+	}
 
-    /**
-     * Create an Intent that will start this service
-     */
-    static public Intent createIntent(Context context) {
+	/**
+	 * Create an Intent that will start this service
+	 */
+	static public Intent createIntent(Context context) {
 		return new Intent(context, UploaderService.class);
 	}
 }

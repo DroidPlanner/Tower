@@ -7,10 +7,10 @@ import org.droidplanner.R;
 import org.droidplanner.android.maps.DPMap.PathSource;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.MarkerWithText;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.variables.GPS;
 import org.droidplanner.core.drone.variables.GuidedPoint;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.model.Drone;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -21,18 +21,20 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSo
 	private final static String TAG = GraphicGuided.class.getSimpleName();
 
 	private GuidedPoint guidedPoint;
-	private GPS GPS;
+	private GPS gps;
 
 	public GraphicGuided(Drone drone) {
 		guidedPoint = drone.getGuidedPoint();
-		GPS = drone.getGps();
+		gps = drone.getGps();
 	}
 
 	@Override
 	public List<Coord2D> getPathPoints() {
 		List<Coord2D> path = new ArrayList<Coord2D>();
 		if (guidedPoint.isActive()) {
-			path.add(GPS.getPosition());
+			if(gps.isPositionValid()) {
+				path.add(gps.getPosition());
+			}
 			path.add(guidedPoint.getCoord());
 		}
 		return path;

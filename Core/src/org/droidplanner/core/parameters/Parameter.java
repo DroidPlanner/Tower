@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 
-public class Parameter{
+public class Parameter {
 
 	public String name;
 	public double value;
@@ -61,7 +61,7 @@ public class Parameter{
 		} else if (name.contains("FORMAT_VERSION")) {
 			throw new Exception("ExludedName");
 		} else {
-        }
+		}
 	}
 
 	public static DecimalFormat getFormat() {

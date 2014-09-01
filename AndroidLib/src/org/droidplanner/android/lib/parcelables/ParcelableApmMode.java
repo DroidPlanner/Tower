@@ -35,8 +35,7 @@ public class ParcelableApmMode implements Parcelable {
         mApmMode = ApmModes.getMode(number, type);
     }
 
-    public static final Parcelable.Creator<ParcelableApmMode> CREATOR = new Parcelable
-            .Creator<ParcelableApmMode>() {
+    public static final Creator<ParcelableApmMode> CREATOR = new Creator<ParcelableApmMode>() {
         public ParcelableApmMode createFromParcel(Parcel source) {return new ParcelableApmMode(source);}
 
         public ParcelableApmMode[] newArray(int size) {return new ParcelableApmMode[size];}
