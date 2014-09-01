@@ -49,7 +49,26 @@ public class GeoTools {
 	 */
 	public static Coord2D newCoordFromBearingAndDistance(Coord2D origin, double bearing,
 			double distance) {
+		return newCoordFromBearingAndDistance(origin, bearing, distance, new Coord2D(0,0));
+	}
 
+	/**
+	 * Extrapolate latitude/longitude given a heading and distance thanks to
+	 * http://www.movable-type.co.uk/scripts/latlong.html
+	 *
+	 * @param origin
+	 *            Point of origin
+	 * @param bearing
+	 *            bearing to navigate
+	 * @param distance
+	 *            distance to be added
+	 * @param reuse
+	 * 			  A Coord2D object that will be reused in order to prevent lots of garbage object
+	 * 			  from being created
+	 * @return New point with the added distance
+	 */
+	public static Coord2D newCoordFromBearingAndDistance(Coord2D origin, double bearing,
+														 double distance, Coord2D reuse) {
 		double lat = origin.getLat();
 		double lon = origin.getLng();
 		double lat1 = Math.toRadians(lat);
@@ -63,7 +82,7 @@ public class GeoTools {
 				+ Math.atan2(Math.sin(brng) * Math.sin(dr) * Math.cos(lat1),
 						Math.cos(dr) - Math.sin(lat1) * Math.sin(lat2));
 
-		return (new Coord2D(Math.toDegrees(lat2), Math.toDegrees(lon2)));
+		return reuse.set(Math.toDegrees(lat2), Math.toDegrees(lon2));
 	}
 
 	/**
