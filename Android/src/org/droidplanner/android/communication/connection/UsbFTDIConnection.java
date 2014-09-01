@@ -9,6 +9,8 @@ import com.ftdi.j2xx.D2xxManager;
 import com.ftdi.j2xx.FT_Device;
 
 public class UsbFTDIConnection extends UsbConnection {
+    private static final String TAG = UsbFTDIConnection.class.getSimpleName();
+
 	private static final byte LATENCY_TIMER = 32;
 
 	private FT_Device ftDev;
@@ -18,20 +20,24 @@ public class UsbFTDIConnection extends UsbConnection {
 	}
 
 	@Override
-	protected void openConnection() throws IOException {
+	protected void openAndroidConnection() throws IOException {
 		D2xxManager ftD2xx = null;
 		try {
-			ftD2xx = D2xxManager.getInstance(parentContext);
+			ftD2xx = D2xxManager.getInstance(mContext);
 		} catch (D2xxManager.D2xxException ex) {
-			ex.printStackTrace();
+			mLogger.logErr(TAG, ex);
 		}
 
-		int DevCount = ftD2xx.createDeviceInfoList(parentContext);
+        if(ftD2xx == null){
+            throw new IOException("Unable to retrieve D2xxManager instance.");
+        }
+
+		int DevCount = ftD2xx.createDeviceInfoList(mContext);
 		if (DevCount < 1) {
 			throw new IOException("No Devices found");
 		}
 
-		ftDev = ftD2xx.openByIndex(parentContext, 0);
+		ftDev = ftD2xx.openByIndex(mContext, 0);
 
 		if (ftDev == null) {
 			throw new IOException("No Devices found");
@@ -54,8 +60,12 @@ public class UsbFTDIConnection extends UsbConnection {
 	}
 
 	@Override
-	protected void readDataBlock() throws IOException {
-		iavailable = ftDev.getQueueStatus();
+	protected int readDataBlock(byte[] readData) throws IOException {
+        if(ftDev == null){
+            throw new IOException("Device is unavailable.");
+        }
+
+		int iavailable = ftDev.getQueueStatus();
 		if (iavailable > 0) {
 			if (iavailable > 4096)
 				iavailable = 4096;
@@ -72,11 +82,12 @@ public class UsbFTDIConnection extends UsbConnection {
 		if (iavailable == 0) {
 			iavailable = -1;
 		}
+        return iavailable;
 	}
 
 	@Override
 	protected void sendBuffer(byte[] buffer) {
-		if (connected & ftDev != null) {
+		if (ftDev != null) {
 			try {
 				ftDev.write(buffer);
 			} catch (Exception e) {
@@ -86,7 +97,7 @@ public class UsbFTDIConnection extends UsbConnection {
 	}
 
 	@Override
-	protected void closeConnection() throws IOException {
+	protected void closeAndroidConnection() throws IOException {
 		if (ftDev != null) {
 			try {
 				ftDev.close();
