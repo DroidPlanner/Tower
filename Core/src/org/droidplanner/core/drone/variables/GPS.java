@@ -4,12 +4,14 @@ import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
+import org.droidplanner.core.helpers.units.*;
 import org.droidplanner.core.model.Drone;
 
 public class GPS extends DroneVariable {
 	public final static int LOCK_2D = 2;
 	public final static int LOCK_3D = 3;
 
+	private Drone myDrone;
 	private double gps_eph = -1;
 	private int satCount = -1;
 	private int fixType = -1;
@@ -19,6 +21,7 @@ public class GPS extends DroneVariable {
 
 	public GPS(Drone myDrone) {
 		super(myDrone);
+		this.myDrone = myDrone;
 	}
 
 	public boolean isPositionValid() {
@@ -63,6 +66,20 @@ public class GPS extends DroneVariable {
 
 	public int getPositionAgeInMillis(){
 		return (int) (System.currentTimeMillis()-timeOfPosition);
+	}
+
+	public Coord2D getInterpolatedPosition(){
+		Coord2D realPosition = getPosition();
+		if(myDrone.getMavClient().isConnected()){
+			int timeDelta = myDrone.getGps().getPositionAgeInMillis();
+			org.droidplanner.core.helpers.units.Speed groundSpeed = myDrone.getSpeed()
+					.getGroundSpeed();
+			double course = myDrone.getGps().getCourse();
+			return GeoTools.newCoordFromBearingAndDistance(realPosition,course,
+					timeDelta/1000.0* groundSpeed.valueInMetersPerSecond());
+		}else{
+			return realPosition;
+		}
 	}
 
 	public void setGpsState(int fix, int satellites_visible, int eph) {
