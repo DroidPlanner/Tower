@@ -65,7 +65,7 @@ public class DroneInterfaces {
 		/**
          *
          */
-		FAILSAFE,
+		AUTOPILOT_WARNING,
 
 		/**
          *
@@ -185,7 +185,22 @@ public class DroneInterfaces {
 		/**
          * 
          */
-		FOLLOW_CHANGE_TYPE, PARAMETERS_DOWNLOADED,
+		FOLLOW_CHANGE_TYPE,
+
+		/**
+		 *
+		 */
+		PARAMETERS_DOWNLOADED,
+
+		/**
+		 *
+		 */
+		WARNING_400FT_EXCEEDED,
+
+		/**
+		 *
+		 */
+		WARNING_SIGNAL_WEAK,
 	}
 
 	public interface OnDroneListener {

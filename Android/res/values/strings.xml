@@ -69,7 +69,7 @@
     <string name="pref_map_type">Map Type</string>
     <string name="pref_map_type_default">Satellite</string>
     <string name="pref_map_type_summary">Which type of map to use</string>
-    <string name="pref_enable_tts">Important Events</string>
+    <string name="pref_enable_tts">Enable Speech output</string>
     <string name="pref_enable_tts_summary">Audible messages for important events</string>
     <string name="pref_request_max_volume">Set Volume To Max On Start</string>
     <string name="pref_vehicle_type">Default Vehicle Type</string>
@@ -376,6 +376,20 @@
     <string name="pref_tts_periodic_rssi_summary">Read Received Signal Strength Indication.</string>
     <string name="pref_tts_periodic_airspeed">Airspeed</string>
     <string name="pref_tts_periodic_airspeed_summary">Read airspeed.</string>
+    <string name="pref_title_tts_warnings">Warnings</string>
+    <string name="pref_tts_warning_solar_activity">Solar Activity</string>
+    <string name="pref_tts_warning_solar_activity_summary">Warns about high solar activity which can decrease gps accuracy.</string>
+    <string name="pref_tts_warning_wind_speed">Wind Speed</string>
+    <string name="pref_tts_warning_wind_speed_summary">Warns about high wind speeds which may make flight difficult.</string>
+    <string name="pref_tts_warning_400ft_ceiling_exceeded">400ft. Exceeded</string>
+    <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">In many situations it is illegal to fly above 400ft.</string>
+    <string name="pref_tts_warning_low_signal_strength">Low Signal Strength</string>
+    <string name="pref_tts_warning_low_signal_strength_summary">Warns when connection to drone is bad.</string>
+    <string name="pref_tts_warning_lost_signal">Connection Status</string>
+    <string name="pref_tts_warning_lost_signal_summary">Warns when connection to drone is severed or restored.</string>
+    <string name="pref_tts_warning_autopilot_warnings">Autopilot-Reported Warnings</string>
+    <string name="pref_tts_warning_autopilot_warnings_summary">Warns about arm failures,
+        low battery, etc.</string>
 
     <!-- Droneshare -->
     <string name="dsheader">Would you be interested in using the free www.Droneshare.com service?</string>
