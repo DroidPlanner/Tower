@@ -10,6 +10,8 @@ public class Altitude extends DroneVariable {
 	private double targetAltitude = 0;
 	private double previousAltitude = 0;
 
+    private boolean isCollisionImminent;
+
 	public Altitude(Drone myDrone) {
 		super(myDrone);
 	}
@@ -22,6 +24,10 @@ public class Altitude extends DroneVariable {
 		return targetAltitude;
 	}
 
+    public boolean isCollisionImminent() {
+        return isCollisionImminent;
+    }
+
 	public void setAltitude(double altitude) {
 		this.altitude = altitude;
 		if(altitude > FOUR_HUNDRED_FEET_IN_METERS &&  previousAltitude <= FOUR_HUNDRED_FEET_IN_METERS){
@@ -33,5 +39,12 @@ public class Altitude extends DroneVariable {
 	public void setAltitudeError(double alt_error) {
 		targetAltitude = alt_error + altitude;
 	}
+
+    public void setCollisionImminent(boolean isCollisionImminent) {
+        if(this.isCollisionImminent != isCollisionImminent) {
+            this.isCollisionImminent = isCollisionImminent;
+            myDrone.notifyDroneEvent(DroneInterfaces.DroneEventsType.STATE);
+        }
+    }
 
 }
