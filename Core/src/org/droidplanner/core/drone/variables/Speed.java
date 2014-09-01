@@ -55,9 +55,9 @@ public class Speed extends DroneVariable {
 
 		double altitude = myDrone.getAltitude().getAltitude();
 		if(altitude + verticalSpeed.valueInMetersPerSecond()* COLLISION_SECONDS_BEFORE_COLLISION < 0 && verticalSpeed.valueInMetersPerSecond() < COLLISION_DANGEROUS_SPEED_METERS_PER_SECOND && altitude > COLLISION_SAFE_ALTITUDE_METERS){
-			myDrone.getState().setCollisionImminent(true);
+			myDrone.getAltitude().setCollisionImminent(true);
 		}else{
-			myDrone.getState().setCollisionImminent(false);
+			myDrone.getAltitude().setCollisionImminent(false);
 		}
 	}
 
