@@ -54,4 +54,8 @@ public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 	public float getRotation() {
 		return (float) drone.getOrientation().getYaw();
 	}
+
+    public boolean isValid() {
+        return drone.getGps().isPositionValid();
+    }
 }

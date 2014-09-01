@@ -2,13 +2,14 @@ package org.droidplanner.android.utils;
 
 import java.util.Locale;
 
+import org.droidplanner.android.communication.connection.AndroidTcpConnection;
+import org.droidplanner.android.communication.connection.AndroidUdpConnection;
 import org.droidplanner.android.communication.connection.BluetoothConnection;
-import org.droidplanner.android.communication.connection.MAVLinkConnection;
-import org.droidplanner.android.communication.connection.TcpConnection;
-import org.droidplanner.android.communication.connection.UdpConnection;
 import org.droidplanner.android.communication.connection.UsbConnection;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.core.MAVLink.connection.MavLinkConnection;
+import org.droidplanner.core.MAVLink.connection.MavLinkConnectionTypes;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -25,40 +26,50 @@ public class Utils {
 	 */
 	public enum ConnectionType {
 
-		BLUETOOTH {
+		BLUETOOTH(MavLinkConnectionTypes.MAVLINK_CONNECTION_BLUETOOTH) {
 			@Override
-			public MAVLinkConnection getConnection(Context context) {
+			public BluetoothConnection getConnection(Context context) {
 				return new BluetoothConnection(context);
 			}
 		},
-		UDP {
+		UDP(MavLinkConnectionTypes.MAVLINK_CONNECTION_UDP) {
 			@Override
-			public MAVLinkConnection getConnection(Context context) {
-				return new UdpConnection(context);
+			public AndroidUdpConnection getConnection(Context context) {
+				return new AndroidUdpConnection(context);
 			}
 		},
-		USB {
+		USB(MavLinkConnectionTypes.MAVLINK_CONNECTION_USB) {
 			@Override
-			public MAVLinkConnection getConnection(Context context) {
+			public UsbConnection getConnection(Context context) {
 				return UsbConnection.getUSBConnection(context);
 			}
 		},
-		TCP {
+		TCP(MavLinkConnectionTypes.MAVLINK_CONNECTION_TCP) {
 			@Override
-			public MAVLinkConnection getConnection(Context context) {
-				return new TcpConnection(context);
+			public AndroidTcpConnection getConnection(Context context) {
+				return new AndroidTcpConnection(context);
 			}
 		};
 
+        private final int mMavLinkConnectionType;
+
+        private ConnectionType(int mavLinkConnectionType){
+            mMavLinkConnectionType = mavLinkConnectionType;
+        }
+
 		/**
-		 * This returns the implementation of MAVLinkConnection for this
+		 * This returns the implementation of AndroidMavLinkConnection for this
 		 * connection type.
 		 * 
 		 * @param context
 		 *            application context
 		 * @return mavlink connection
 		 */
-		public abstract MAVLinkConnection getConnection(Context context);
+		public abstract MavLinkConnection getConnection(Context context);
+
+        public int getConnectionType(){
+            return mMavLinkConnectionType;
+        }
 	}
 
 	/**
