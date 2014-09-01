@@ -1,3 +1,42 @@
+## QuadForge GCS v10 - April 16th 2014
+* Auto launch was not working as throttle PWM value had changed in a calibration. We adjusted the number we send in the spoof to match calibration range
+* Increase throttle spoof to 1 second from half a second
+
+## QuadForge GCS v9 - April 7th 2014
+* Use ArmListener to flip ArmDisarm button state, disarm when the vehicle is armed and arm when the vehicle is disarmed
+* Color of arm/dismar button changes depending what state it is in
+
+## QuadForge GCS v8 - April 1st 2014
+* ROI was being done using the wrong waypoint type, changed to the correct type, now uses MAV_CMD_DO_SET_ROI
+
+## QuadForge GCS v7 - March 28th 2014
+* Flight Data: Space buttons apart to make it harder to hit the wrong button
+* Upgrade to API 19/Android 4.4.2
+
+## QuadForge GCS v6 - March 20th 2014
+* Flight Data: Left align buttons 
+
+## QuadForge GCS v5 - March 20th 2014
+* Flight Data: Split buttons so ones that end the flight are on the left side of the map
+
+## QuadForge GCS v4 - March 19th 2014
+* Flight Data: Color of text on launch button is white for visibility, all other buttons are black text
+
+## QuadForge GCS v3 - March 17th 2014
+* Flight Data: Color of text on buttons is black again for visibility
+
+## QuadForge GCS v2 - March 16th 2014
+* Flight Data: Add buttons over on map fragment for Arm, Launch, Stabilize, Land, RTL
+* Flight Data: Color of text on buttons is now white for better visbility
+* Flight Data: Buttons only work with a long press, holding down for 0.5 seconds is required for activation
+
+## QuadForge GCS v1 - March 14th 2014
+* Waypoint safety checks: Make sure first waypoint is a takeoff, last is a land, and waypoint path consists of three or more waypoints
+* Waypoint safety checks: Prevent arming from the Arm map fragment button without a valid Send to APM being done
+* Waypoint safety checks: Clear waypoint lockout flag on disconnect, disconnect and connect for each flight to reset lockout and split log files
+* Add auto takeoff via RCOverride throttle spoof
+* Planning: Add apply to all button in altitude change dialog, applies altitude to all waypoints, waypoints lose their type, example Land, RTL are set to waypoint
+
 ## Droidplanner v1.2.0
 * Planning: renamed column header - #348
 * Planning: Markers - additional UI + zooming fixes, distance while dragging marker - #324
