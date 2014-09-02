@@ -37,11 +37,17 @@ public class UsbFTDIConnection extends UsbConnection {
 			throw new IOException("No Devices found");
 		}
 
-		ftDev = ftD2xx.openByIndex(mContext, 0);
-
-		if (ftDev == null) {
-			throw new IOException("No Devices found");
-		}
+        try {
+            //FIXME: The NPE is coming from the library. Investigate if it's possible to fix there.
+            ftDev = ftD2xx.openByIndex(mContext, 0);
+        }catch(NullPointerException e){
+            Log.e(TAG, e.getMessage(), e);
+        }
+        finally {
+            if (ftDev == null) {
+                throw new IOException("No Devices found");
+            }
+        }
 
 		Log.d("USB", "Opening using Baud rate " + baud_rate);
 		ftDev.setBitMode((byte) 0, D2xxManager.FT_BITMODE_RESET);
