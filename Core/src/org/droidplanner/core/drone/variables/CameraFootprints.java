@@ -25,8 +25,8 @@ public class CameraFootprints extends DroneVariable {
 		myDrone.notifyDroneEvent(DroneEventsType.FOOTPRINT);
 	}
 
-	public Coord2D getLastFootprint() {
-		return footprints.get(footprints.size()-1).getCenter();
+	public Footprint getLastFootprint() {
+		return footprints.get(footprints.size()-1);
 	}
 
 }
