@@ -160,8 +160,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	public void goToDroneLocation() {
 		super.goToDroneLocation();
 
-        Drone drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
-        if(!drone.getGps().isPositionValid())
+        if(!this.drone.getGps().isPositionValid())
             return;
 		final int pressCount = mAppPrefs.prefs.getInt(PREF_DRONE_LOCATION_FIRST_PRESS,
 				DEFAULT_DRONE_LOCATION_FIRST_PRESS);
