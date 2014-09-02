@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Do not translate the following strings -->
-    <string name="app_title">DroidPlanner</string>
-
     <!-- Generic strings -->
     <string name="settings">設定</string>
     <string name="help">輔助說明</string>
@@ -13,10 +10,7 @@
     <string name="editor">編輯器</string>
     <string name="send_mission">發送任務</string>
     <string name="load_mission">載入任務</string>
-
-    <!-- Map related strings -->
-    <string name="mapbox_id">ne0fhyk.ighceofk</string>
-
+    
     <!-- Drone Setup tabs -->
     <string name="screen_tuning">調整參數</string>
     <string name="screen_cal">校正</string>
@@ -381,7 +375,20 @@
     <string name="pref_tts_periodic_rssi_summary">回報接收的信號強度指數。</string>
     <string name="pref_tts_periodic_airspeed">空速</string>
     <string name="pref_tts_periodic_airspeed_summary">回報空速數值。</string>
-
+    <string name="pref_title_tts_warnings">警告</string>
+    <string name="pref_tts_warning_solar_activity">日冕活躍中</string>
+    <string name="pref_tts_warning_solar_activity_summary">這個警訊是關於目前太陽日冕正發生大爆發，有影響 gps 準確度的可能。</string>
+    <string name="pref_tts_warning_wind_speed">風速</string>
+    <string name="pref_tts_warning_wind_speed_summary">這個警訊是關於過高的風速可以會造成難以飛行。</string>
+    <string name="pref_tts_warning_400ft_ceiling_exceeded">超過 400 英呎</string>
+    <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">在許多的情況下飛行高度超過 400 英呎是非法行為。</string>
+    <string name="pref_tts_warning_low_signal_strength">訊號強度偏弱</string>
+    <string name="pref_tts_warning_low_signal_strength_summary">當與無人機連線困難時會發出的警告。</string>
+    <string name="pref_tts_warning_lost_signal">連線狀態</string>
+    <string name="pref_tts_warning_lost_signal_summary">當與無人機連線中斷或恢復時所發生的提醒。</string>
+    <string name="pref_tts_warning_autopilot_warnings">飛控回報的警訊</string>
+    <string name="pref_tts_warning_autopilot_warnings_summary">有關解鎖失敗、低電量、等等。</string>
+    
     <!-- Droneshare -->
     <string name="dsheader">你有興趣使用免費的服務平台 www.Droneshare.com 嗎？</string>
     <string name="dsinfo">Droneshare 是一個免費的平台，你可以在平台上分析或者是分享飛行數據。</string>
@@ -399,7 +406,7 @@
     <string name="do_you_want_to_use_droneshare_">你想要使用 Droneshare 嗎？</string>
     <string name="pref_dshare_username_title">使用者名稱</string>
     <string name="pref_dshare_password_title">密碼</string>
-    <string name="uploader_success_message">上傳成功！若要檢視，請點選..。</string>
+    <string name="uploader_success_message">上傳成功！若要檢視，請點選...</string>
     <string name="uploader_fail_retry_message">待會再試試</string>
     <string name="uploader_notification_title">上傳至 Droneshare</string>
 
@@ -447,6 +454,9 @@
     <string name="pref_ui_gps_hdop_summary">在訊息列上顯示衛星的 HDOP 值代替 FIX 值</string>
     <string name="pref_ui_gps_hdop_title">顯示衛星的 HDOP 值</string>
 
+    <string name="status_disconnecting">斷線中...</string>
+    <string name="status_connecting">連線中...</string>
+    
     <!-- Help -->
     <string name="help_item_description">如何設定和實際操作任務，請點我看影片</string>
 
