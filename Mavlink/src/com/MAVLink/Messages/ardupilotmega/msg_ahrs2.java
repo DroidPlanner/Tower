@@ -1,4 +1,4 @@
-// MESSAGE SIMSTATE PACKING
+// MESSAGE AHRS2 PACKING
 package com.MAVLink.Messages.ardupilotmega;
 
 import com.MAVLink.Messages.MAVLinkMessage;
@@ -7,13 +7,13 @@ import com.MAVLink.Messages.MAVLinkPayload;
 //import android.util.Log;
 
 /**
-* Status of simulation environment, if used
+* Status of secondary AHRS filter if available
 */
-public class msg_simstate extends MAVLinkMessage{
+public class msg_ahrs2 extends MAVLinkMessage{
 
-	public static final int MAVLINK_MSG_ID_SIMSTATE = 164;
-	public static final int MAVLINK_MSG_LENGTH = 44;
-	private static final long serialVersionUID = MAVLINK_MSG_ID_SIMSTATE;
+	public static final int MAVLINK_MSG_ID_AHRS2 = 178;
+	public static final int MAVLINK_MSG_LENGTH = 24;
+	private static final long serialVersionUID = MAVLINK_MSG_ID_AHRS2;
 	
 
  	/**
@@ -29,29 +29,9 @@ public class msg_simstate extends MAVLinkMessage{
 	*/
 	public float yaw; 
  	/**
-	* X acceleration m/s/s
+	* Altitude (MSL)
 	*/
-	public float xacc; 
- 	/**
-	* Y acceleration m/s/s
-	*/
-	public float yacc; 
- 	/**
-	* Z acceleration m/s/s
-	*/
-	public float zacc; 
- 	/**
-	* Angular speed around X axis rad/s
-	*/
-	public float xgyro; 
- 	/**
-	* Angular speed around Y axis rad/s
-	*/
-	public float ygyro; 
- 	/**
-	* Angular speed around Z axis rad/s
-	*/
-	public float zgyro; 
+	public float altitude; 
  	/**
 	* Latitude in degrees * 1E7
 	*/
@@ -70,23 +50,18 @@ public class msg_simstate extends MAVLinkMessage{
 		packet.len = MAVLINK_MSG_LENGTH;
 		packet.sysid = 255;
 		packet.compid = 190;
-		packet.msgid = MAVLINK_MSG_ID_SIMSTATE;
+		packet.msgid = MAVLINK_MSG_ID_AHRS2;
 		packet.payload.putFloat(roll);
 		packet.payload.putFloat(pitch);
 		packet.payload.putFloat(yaw);
-		packet.payload.putFloat(xacc);
-		packet.payload.putFloat(yacc);
-		packet.payload.putFloat(zacc);
-		packet.payload.putFloat(xgyro);
-		packet.payload.putFloat(ygyro);
-		packet.payload.putFloat(zgyro);
+		packet.payload.putFloat(altitude);
 		packet.payload.putInt(lat);
 		packet.payload.putInt(lng);
 		return packet;		
 	}
 
     /**
-     * Decode a simstate message into this class fields
+     * Decode a ahrs2 message into this class fields
      *
      * @param payload The message to decode
      */
@@ -95,12 +70,7 @@ public class msg_simstate extends MAVLinkMessage{
 	    roll = payload.getFloat();
 	    pitch = payload.getFloat();
 	    yaw = payload.getFloat();
-	    xacc = payload.getFloat();
-	    yacc = payload.getFloat();
-	    zacc = payload.getFloat();
-	    xgyro = payload.getFloat();
-	    ygyro = payload.getFloat();
-	    zgyro = payload.getFloat();
+	    altitude = payload.getFloat();
 	    lat = payload.getInt();
 	    lng = payload.getInt();    
     }
@@ -108,8 +78,8 @@ public class msg_simstate extends MAVLinkMessage{
      /**
      * Constructor for a new message, just initializes the msgid
      */
-    public msg_simstate(){
-    	msgid = MAVLINK_MSG_ID_SIMSTATE;
+    public msg_ahrs2(){
+    	msgid = MAVLINK_MSG_ID_AHRS2;
     }
 
     /**
@@ -117,20 +87,20 @@ public class msg_simstate extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_simstate(MAVLinkPacket mavLinkPacket){
+    public msg_ahrs2(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = MAVLINK_MSG_ID_SIMSTATE;
+        this.msgid = MAVLINK_MSG_ID_AHRS2;
         unpack(mavLinkPacket.payload);
-        //Log.d("MAVLink", "SIMSTATE");
-        //Log.d("MAVLINK_MSG_ID_SIMSTATE", toString());
+        //Log.d("MAVLink", "AHRS2");
+        //Log.d("MAVLINK_MSG_ID_AHRS2", toString());
     }
     
-                      
+            
     /**
      * Returns a string with the MSG name and data
      */
     public String toString(){
-    	return "MAVLINK_MSG_ID_SIMSTATE -"+" roll:"+roll+" pitch:"+pitch+" yaw:"+yaw+" xacc:"+xacc+" yacc:"+yacc+" zacc:"+zacc+" xgyro:"+xgyro+" ygyro:"+ygyro+" zgyro:"+zgyro+" lat:"+lat+" lng:"+lng+"";
+    	return "MAVLINK_MSG_ID_AHRS2 -"+" roll:"+roll+" pitch:"+pitch+" yaw:"+yaw+" altitude:"+altitude+" lat:"+lat+" lng:"+lng+"";
     }
 }

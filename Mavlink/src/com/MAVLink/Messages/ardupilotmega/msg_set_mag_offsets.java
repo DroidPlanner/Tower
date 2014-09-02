@@ -7,7 +7,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
 //import android.util.Log;
 
 /**
-* set the magnetometer offsets
+* Deprecated. Use MAV_CMD_PREFLIGHT_SET_SENSOR_OFFSETS instead. Set the magnetometer offsets
 */
 public class msg_set_mag_offsets extends MAVLinkMessage{
 
