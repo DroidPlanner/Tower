@@ -71,6 +71,10 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 		mStatusBarNotification.quickNotify(feedback);
 	}
 
+    /**
+     * Release resources used by the notification handler.
+     * After calling this method, this object should no longer be used.
+     */
     public void terminate(){
         mTtsNotification.onTerminate();
         mStatusBarNotification.onTerminate();
