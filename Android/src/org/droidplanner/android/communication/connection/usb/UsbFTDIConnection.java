@@ -34,6 +34,7 @@ class UsbFTDIConnection extends UsbConnection.UsbConnectionImpl {
         }
 
 		int DevCount = ftD2xx.createDeviceInfoList(mContext);
+        Log.d(TAG, "Found " + DevCount + " ftdi devices.");
 		if (DevCount < 1) {
 			throw new IOException("No Devices found");
 		}
