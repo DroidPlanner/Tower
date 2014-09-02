@@ -40,6 +40,7 @@ public class Map implements OnDroneListener {
 	@Override
 	public void onDroneEvent(DroneEventsType event, org.droidplanner.core.model.Drone drone) {
 		Coord2D position = drone.getGps().getPosition();
+		try{
 		switch (event) {
 		case GPS:
 			marker.setLat(position.getLat());
@@ -71,6 +72,9 @@ public class Map implements OnDroneListener {
 			break;
 		default:
 			break;
+		}
+		}catch(NullPointerException e){
+			
 		}
 	}
 
