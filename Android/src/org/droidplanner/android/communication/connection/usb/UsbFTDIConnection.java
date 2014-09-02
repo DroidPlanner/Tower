@@ -1,4 +1,4 @@
-package org.droidplanner.android.communication.connection;
+package org.droidplanner.android.communication.connection.usb;
 
 import java.io.IOException;
 
@@ -8,19 +8,20 @@ import android.util.Log;
 import com.ftdi.j2xx.D2xxManager;
 import com.ftdi.j2xx.FT_Device;
 
-public class UsbFTDIConnection extends UsbConnection {
+class UsbFTDIConnection extends UsbConnection.UsbConnectionImpl {
+
     private static final String TAG = UsbFTDIConnection.class.getSimpleName();
 
 	private static final byte LATENCY_TIMER = 32;
 
 	private FT_Device ftDev;
 
-	protected UsbFTDIConnection(Context parentContext) {
-		super(parentContext);
-	}
+    protected UsbFTDIConnection(Context context, int baudRate) {
+        super(context, baudRate);
+    }
 
-	@Override
-	protected void openAndroidConnection() throws IOException {
+    @Override
+	protected void openUsbConnection() throws IOException {
 		D2xxManager ftD2xx = null;
 		try {
 			ftD2xx = D2xxManager.getInstance(mContext);
@@ -49,9 +50,9 @@ public class UsbFTDIConnection extends UsbConnection {
             }
         }
 
-		Log.d("USB", "Opening using Baud rate " + baud_rate);
+		Log.d("USB", "Opening using Baud rate " + mBaudRate);
 		ftDev.setBitMode((byte) 0, D2xxManager.FT_BITMODE_RESET);
-		ftDev.setBaudRate(baud_rate);
+		ftDev.setBaudRate(mBaudRate);
 		ftDev.setDataCharacteristics(D2xxManager.FT_DATA_BITS_8, D2xxManager.FT_STOP_BITS_1,
 				D2xxManager.FT_PARITY_NONE);
 		ftDev.setFlowControl(D2xxManager.FT_FLOW_NONE, (byte) 0x00, (byte) 0x00);
@@ -79,9 +80,10 @@ public class UsbFTDIConnection extends UsbConnection {
 				ftDev.read(readData, iavailable);
 
 			} catch (NullPointerException e) {
-				Log.e("USB", "Error Reading: " + e.getMessage()
-						+ "\nAssuming inaccessible USB device.  Closing connection.", e);
-				closeConnection();
+                final String errorMsg = "Error Reading: " + e.getMessage()
+                        + "\nAssuming inaccessible USB device.  Closing connection.";
+				Log.e(TAG, errorMsg, e);
+                throw new IOException(errorMsg, e);
 			}
 		}
 
@@ -103,7 +105,7 @@ public class UsbFTDIConnection extends UsbConnection {
 	}
 
 	@Override
-	protected void closeAndroidConnection() throws IOException {
+	protected void closeUsbConnection() throws IOException {
 		if (ftDev != null) {
 			try {
 				ftDev.close();

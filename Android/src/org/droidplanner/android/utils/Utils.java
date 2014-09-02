@@ -5,7 +5,7 @@ import java.util.Locale;
 import org.droidplanner.android.communication.connection.AndroidTcpConnection;
 import org.droidplanner.android.communication.connection.AndroidUdpConnection;
 import org.droidplanner.android.communication.connection.BluetoothConnection;
-import org.droidplanner.android.communication.connection.UsbConnection;
+import org.droidplanner.android.communication.connection.usb.UsbConnection;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.MAVLink.connection.MavLinkConnection;
@@ -41,7 +41,7 @@ public class Utils {
 		USB(MavLinkConnectionTypes.MAVLINK_CONNECTION_USB) {
 			@Override
 			public UsbConnection getConnection(Context context) {
-				return UsbConnection.getUSBConnection(context);
+				return new UsbConnection(context);
 			}
 		},
 		TCP(MavLinkConnectionTypes.MAVLINK_CONNECTION_TCP) {

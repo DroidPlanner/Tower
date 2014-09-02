@@ -1,4 +1,4 @@
-package org.droidplanner.android.communication.connection;
+package org.droidplanner.android.communication.connection.usb;
 
 import java.io.IOException;
 
@@ -9,15 +9,17 @@ import android.util.Log;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 
-public class UsbCDCConnection extends UsbConnection {
+class UsbCDCConnection extends UsbConnection.UsbConnectionImpl {
+    private static final String TAG = UsbCDCConnection.class.getSimpleName();
+
 	private static UsbSerialDriver sDriver = null;
 
-	protected UsbCDCConnection(Context parentContext) {
-		super(parentContext);
-	}
+    protected UsbCDCConnection(Context context, int baudRate) {
+        super(context, baudRate);
+    }
 
-	@Override
-	protected void openAndroidConnection() throws IOException {
+    @Override
+	protected void openUsbConnection() throws IOException {
 		// Get UsbManager from Android.
 		UsbManager manager = (UsbManager) mContext.getSystemService(Context.USB_SERVICE);
 
@@ -28,10 +30,10 @@ public class UsbCDCConnection extends UsbConnection {
 			Log.d("USB", "No Devices found");
 			throw new IOException("No Devices found");
 		} else {
-			Log.d("USB", "Opening using Baud rate " + baud_rate);
+			Log.d("USB", "Opening using Baud rate " + mBaudRate);
 			try {
 				sDriver.open();
-				sDriver.setParameters(baud_rate, 8, UsbSerialDriver.STOPBITS_1,
+				sDriver.setParameters(mBaudRate, 8, UsbSerialDriver.STOPBITS_1,
 						UsbSerialDriver.PARITY_NONE);
 			} catch (IOException e) {
 				Log.e("USB", "Error setting up device: " + e.getMessage(), e);
@@ -55,10 +57,12 @@ public class UsbCDCConnection extends UsbConnection {
 		try {
 			iavailable = sDriver.read(readData, 200);
 		} catch (NullPointerException e) {
-			Log.e("USB", "Error Reading: " + e.getMessage()
-					+ "\nAssuming inaccessible USB device.  Closing connection.", e);
-			closeConnection();
+            final String errorMsg = "Error Reading: " + e.getMessage()
+                    + "\nAssuming inaccessible USB device.  Closing connection.";
+            Log.e(TAG, errorMsg, e);
+            throw new IOException(errorMsg, e);
 		}
+
 		if (iavailable == 0)
 			iavailable = -1;
         return iavailable;
@@ -79,7 +83,7 @@ public class UsbCDCConnection extends UsbConnection {
 	}
 
 	@Override
-	protected void closeAndroidConnection() throws IOException {
+	protected void closeUsbConnection() throws IOException {
 		if (sDriver != null) {
 			try {
 				sDriver.close();
