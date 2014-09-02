@@ -99,6 +99,7 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
         mTtsNotification.onTerminate();
         mStatusBarNotification.onTerminate();
         mPebbleNotification.onTerminate();
+        mBeepNotification.onTerminate();
         mWearNotification.onTerminate();
     }
 }
