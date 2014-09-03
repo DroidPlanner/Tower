@@ -288,7 +288,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
 			return;
 		}
 		final float currentZoomLevel = getMapZoomLevel();
-		final Coord2D droneLocation = mDrone.getGps().getPosition();
+		final Coord2D droneLocation = mDrone.getGps().getInterpolatedPosition();
 		updateCamera(droneLocation, currentZoomLevel);
 	}
 
@@ -520,7 +520,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		case GPS:
 			if (mPanMode.get() == AutoPanMode.DRONE && drone.getGps().isPositionValid()) {
 				final float currentZoomLevel = getMapZoomLevel();
-				final Coord2D droneLocation = drone.getGps().getPosition();
+				final Coord2D droneLocation = drone.getGps().getInterpolatedPosition();
 				updateCamera(droneLocation, currentZoomLevel);
 			}
 			break;

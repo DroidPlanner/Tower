@@ -22,16 +22,18 @@ public class GPS extends DroneVariable implements DroneInterfaces.OnDroneListene
 	private int satCount = -1;
 	private int fixType = -1;
 	private Coord2D position;
+	private Coord2D reusablePosition = new Coord2D(0,0);//used in calculating interpolated position
 	private long timeOfPosition = System.currentTimeMillis();
 	private double course = 0;
 
 	private final ScheduledExecutorService scheduler =
 			Executors.newScheduledThreadPool(1);
-	private final ScheduledFuture interpolatorNotifier = null;
+	private ScheduledFuture interpolatorNotifier = null;
 
 	public GPS(Drone myDrone) {
 		super(myDrone);
 		this.myDrone = myDrone;
+		myDrone.addDroneListener(this);
 	}
 
 	public boolean isPositionValid() {
@@ -79,16 +81,16 @@ public class GPS extends DroneVariable implements DroneInterfaces.OnDroneListene
 	}
 
 	public Coord2D getInterpolatedPosition(){
-		Coord2D realPosition = getPosition();
-		if(myDrone.isConnectionAlive()){
-			int timeDelta = myDrone.getGps().getPositionAgeInMillis();
+		if(position != null && myDrone.isConnectionAlive()){
+			int timeDelta = getPositionAgeInMillis();
 			org.droidplanner.core.helpers.units.Speed groundSpeed = myDrone.getSpeed()
 					.getGroundSpeed();
-			double course = myDrone.getGps().getCourse();
-			return GeoTools.newCoordFromBearingAndDistance(realPosition,course,
-					timeDelta/1000.0* groundSpeed.valueInMetersPerSecond());
+			double course = getCourse();
+			return GeoTools.newCoordFromBearingAndDistance(position,course,
+					timeDelta/1000.0* groundSpeed.valueInMetersPerSecond(),
+					reusablePosition);
 		}else{
-			return realPosition;
+			return position;
 		}
 	}
 
@@ -128,6 +130,7 @@ public class GPS extends DroneVariable implements DroneInterfaces.OnDroneListene
 			case HEARTBEAT_RESTORED:
 				resetInterpolatorNotifierScheduler();
 			case HEARTBEAT_TIMEOUT:
+			case DISCONNECTED:
 				cancelInterpolatorNotifier();
 		}
 	}
@@ -142,12 +145,15 @@ public class GPS extends DroneVariable implements DroneInterfaces.OnDroneListene
 					}
 				}
 			};
-			scheduler.scheduleAtFixedRate(periodicInterpolatorNotifier, INTERPOLATOR_NOTIFY_RATE, INTERPOLATOR_NOTIFY_RATE,
+			interpolatorNotifier = scheduler.scheduleAtFixedRate(periodicInterpolatorNotifier,
+					INTERPOLATOR_NOTIFY_RATE, INTERPOLATOR_NOTIFY_RATE,
 					TimeUnit.MILLISECONDS);
 		}
 	}
 
 	private void cancelInterpolatorNotifier(){
-		interpolatorNotifier.cancel(true);
+		if(interpolatorNotifier!=null){
+			interpolatorNotifier.cancel(false);
+		}
 	}
 }

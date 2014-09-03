@@ -111,11 +111,12 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 			update();
 			break;
 
+		case GPS_INTERPOLATED:
 		case GPS:
 			mMapFragment.updateMarker(graphicDrone);
 			mMapFragment.updateDroneLeashPath(guided);
 			if(drone.getGps().isPositionValid()) {
-				mMapFragment.addFlightPathPoint(drone.getGps().getPosition());
+				mMapFragment.addFlightPathPoint(drone.getGps().getInterpolatedPosition());
 			}
 			break;
 
