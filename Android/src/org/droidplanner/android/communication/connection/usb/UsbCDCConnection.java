@@ -93,4 +93,9 @@ class UsbCDCConnection extends UsbConnection.UsbConnectionImpl {
 			sDriver = null;
 		}
 	}
+
+    @Override
+    public String toString(){
+        return TAG;
+    }
 }

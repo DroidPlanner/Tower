@@ -49,6 +49,7 @@ public class UsbConnection extends AndroidMavLinkConnection {
         if(mUsbConnection != null){
             try{
                 mUsbConnection.openUsbConnection();
+                Log.d(TAG, "Reusing previous usb connection.");
                 return;
             }catch(IOException e){
                 Log.e(TAG, "Previous usb connection is not usable.", e);
@@ -63,6 +64,7 @@ public class UsbConnection extends AndroidMavLinkConnection {
 
                 //If the call above is successful, 'mUsbConnection' will be set.
                 mUsbConnection = tmp;
+                Log.d(TAG, "Using FTDI usb connection.");
             }catch(IOException e){
                 Log.d(TAG, "Unable to open a ftdi usb connection. Falling back to the open " +
                         "usb-library.", e);
@@ -77,6 +79,7 @@ public class UsbConnection extends AndroidMavLinkConnection {
             // fallback.
             tmp.openUsbConnection();
             mUsbConnection = tmp;
+            Log.d(TAG, "Using open-source usb connection.");
         }
     }
 
@@ -109,6 +112,15 @@ public class UsbConnection extends AndroidMavLinkConnection {
     @Override
     public int getConnectionType(){
         return MavLinkConnectionTypes.MAVLINK_CONNECTION_USB;
+    }
+
+    @Override
+    public String toString(){
+        if(mUsbConnection == null){
+            return TAG;
+        }
+
+        return mUsbConnection.toString();
     }
 
     static abstract class UsbConnectionImpl {

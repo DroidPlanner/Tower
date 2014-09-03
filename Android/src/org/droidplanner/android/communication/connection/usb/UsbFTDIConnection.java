@@ -116,4 +116,9 @@ class UsbFTDIConnection extends UsbConnection.UsbConnectionImpl {
 			ftDev = null;
 		}
 	}
+
+    @Override
+    public String toString(){
+        return TAG;
+    }
 }
