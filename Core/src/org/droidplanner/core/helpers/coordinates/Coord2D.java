@@ -12,13 +12,15 @@ public class Coord2D {
 		set(point);
 	}
 
-	public void set(double lat, double lon) {
+	public Coord2D set(double lat, double lon) {
 		this.latitude = lat;
 		this.longitude = lon;
+		return this;
 	}
 
-	public void set(Coord2D coord) {
+	public Coord2D set(Coord2D coord) {
 		set(coord.latitude, coord.longitude);
+		return this;
 	}
 
 	public double getX() {

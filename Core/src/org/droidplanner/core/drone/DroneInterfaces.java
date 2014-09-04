@@ -98,9 +98,14 @@ public class DroneInterfaces {
 		HOME,
 
 		/**
-		 * Broadcast to notify of updates to the drone's gps location.
+		 * Broadcast to notify of updates to the drone's actual location.
 		 */
 		GPS,
+
+		/**
+		 * Broadcast to notify of updates to the drone's estimated location.
+		 */
+		GPS_INTERPOLATED,
 
 		/**
          *

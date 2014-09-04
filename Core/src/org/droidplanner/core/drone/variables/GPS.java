@@ -1,21 +1,39 @@
 package org.droidplanner.core.drone.variables;
 
+import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.model.Drone;
 
-public class GPS extends DroneVariable {
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
+public class GPS extends DroneVariable implements DroneInterfaces.OnDroneListener{
 	public final static int LOCK_2D = 2;
 	public final static int LOCK_3D = 3;
+	public static final int INTERPOLATOR_NOTIFY_RATE = 33;
 
+	private Drone myDrone;
 	private double gps_eph = -1;
 	private int satCount = -1;
 	private int fixType = -1;
 	private Coord2D position;
+	private Coord2D reusablePosition = new Coord2D(0,0);//used in calculating interpolated position
+	private long timeOfPosition = System.currentTimeMillis();
+	private double course = 0;
+
+	private final ScheduledExecutorService scheduler =
+			Executors.newScheduledThreadPool(1);
+	private ScheduledFuture interpolatorNotifier = null;
 
 	public GPS(Drone myDrone) {
 		super(myDrone);
+		this.myDrone = myDrone;
+		myDrone.addDroneListener(this);
 	}
 
 	public boolean isPositionValid() {
@@ -54,6 +72,28 @@ public class GPS extends DroneVariable {
 		return fixType;
 	}
 
+	public double getCourse(){
+		return course;
+	}
+
+	public int getPositionAgeInMillis(){
+		return (int) (System.currentTimeMillis()-timeOfPosition);
+	}
+
+	public Coord2D getInterpolatedPosition(){
+		if(position != null && myDrone.isConnectionAlive()){
+			int timeDelta = getPositionAgeInMillis();
+			org.droidplanner.core.helpers.units.Speed groundSpeed = myDrone.getSpeed()
+					.getGroundSpeed();
+			double course = getCourse();
+			return GeoTools.newCoordFromBearingAndDistance(position,course,
+					timeDelta/1000.0* groundSpeed.valueInMetersPerSecond(),
+					reusablePosition);
+		}else{
+			return position;
+		}
+	}
+
 	public void setGpsState(int fix, int satellites_visible, int eph) {
 		if (satCount != satellites_visible) {
 			satCount = satellites_visible;
@@ -67,9 +107,53 @@ public class GPS extends DroneVariable {
 	}
 
 	public void setPosition(Coord2D position) {
+		this.timeOfPosition = System.currentTimeMillis();
+		recalculateCourse(position);
 		if (this.position != position) {
 			this.position = position;
 			myDrone.notifyDroneEvent(DroneEventsType.GPS);
+		}
+		resetInterpolatorNotifierScheduler();
+	}
+
+	private void recalculateCourse(Coord2D position) {
+		if(this.position!=null){
+			course = GeoTools.getHeadingFromCoordinates(this.position, position);
+		}
+	}
+
+
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		switch (event) {
+			case HEARTBEAT_FIRST:
+			case HEARTBEAT_RESTORED:
+				resetInterpolatorNotifierScheduler();
+			case HEARTBEAT_TIMEOUT:
+			case DISCONNECTED:
+				cancelInterpolatorNotifier();
+		}
+	}
+
+	private void resetInterpolatorNotifierScheduler(){
+		if(interpolatorNotifier == null || interpolatorNotifier.isDone() || interpolatorNotifier
+				.isCancelled()){
+			Runnable periodicInterpolatorNotifier = new Runnable(){
+				public void run(){
+					if(myDrone.isConnectionAlive()){
+						myDrone.notifyDroneEvent(DroneEventsType.GPS_INTERPOLATED);
+					}
+				}
+			};
+			interpolatorNotifier = scheduler.scheduleAtFixedRate(periodicInterpolatorNotifier,
+					INTERPOLATOR_NOTIFY_RATE, INTERPOLATOR_NOTIFY_RATE,
+					TimeUnit.MILLISECONDS);
+		}
+	}
+
+	private void cancelInterpolatorNotifier(){
+		if(interpolatorNotifier!=null){
+			interpolatorNotifier.cancel(false);
 		}
 	}
 }

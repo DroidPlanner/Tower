@@ -28,7 +28,7 @@ public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
 	@Override
 	public Coord2D getPosition() {
-		return drone.getGps().getPosition();
+		return drone.getGps().getInterpolatedPosition();
 	}
 
 	@Override
