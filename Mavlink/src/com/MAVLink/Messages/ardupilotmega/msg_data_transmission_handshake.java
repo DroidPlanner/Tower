@@ -77,7 +77,7 @@ public class msg_data_transmission_handshake extends MAVLinkMessage{
 	    height = payload.getShort();
 	    packets = payload.getShort();
 	    type = payload.getByte();
-	    //payload = payload.getByte();	//TODO make MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE message work
+	    //payload = payload.getByte(); TODO fix this message
 	    jpg_quality = payload.getByte();    
     }
 

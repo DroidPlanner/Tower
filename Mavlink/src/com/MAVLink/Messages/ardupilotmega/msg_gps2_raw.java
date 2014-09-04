@@ -53,7 +53,7 @@ public class msg_gps2_raw extends MAVLinkMessage{
 	*/
 	public short cog; 
  	/**
-	* 0-1: no fix, 2: 2D fix, 3: 3D fix. Some applications will not use the value of this field unless it is at least two, so always correctly fill in the fix.
+	* 0-1: no fix, 2: 2D fix, 3: 3D fix, 4: DGPS fix, 5: RTK Fix. Some applications will not use the value of this field unless it is at least two, so always correctly fill in the fix.
 	*/
 	public byte fix_type; 
  	/**

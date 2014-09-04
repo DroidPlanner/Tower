@@ -1,4 +1,4 @@
-// MESSAGE ATTITUDE_QUATERNION PACKING
+// MESSAGE ATTITUDE_QUATERNION_COV PACKING
 package com.MAVLink.Messages.ardupilotmega;
 
 import com.MAVLink.Messages.MAVLinkMessage;
@@ -9,11 +9,11 @@ import com.MAVLink.Messages.MAVLinkPayload;
 /**
 * The attitude in the aeronautical frame (right-handed, Z-down, X-front, Y-right), expressed as quaternion. Quaternion order is w, x, y, z and a zero rotation would be expressed as (1 0 0 0).
 */
-public class msg_attitude_quaternion extends MAVLinkMessage{
+public class msg_attitude_quaternion_cov extends MAVLinkMessage{
 
-	public static final int MAVLINK_MSG_ID_ATTITUDE_QUATERNION = 31;
-	public static final int MAVLINK_MSG_LENGTH = 32;
-	private static final long serialVersionUID = MAVLINK_MSG_ID_ATTITUDE_QUATERNION;
+	public static final int MAVLINK_MSG_ID_ATTITUDE_QUATERNION_COV = 61;
+	public static final int MAVLINK_MSG_LENGTH = 68;
+	private static final long serialVersionUID = MAVLINK_MSG_ID_ATTITUDE_QUATERNION_COV;
 	
 
  	/**
@@ -21,21 +21,9 @@ public class msg_attitude_quaternion extends MAVLinkMessage{
 	*/
 	public int time_boot_ms; 
  	/**
-	* Quaternion component 1, w (1 in null-rotation)
+	* Quaternion components, w, x, y, z (1 0 0 0 is the null-rotation)
 	*/
-	public float q1; 
- 	/**
-	* Quaternion component 2, x (0 in null-rotation)
-	*/
-	public float q2; 
- 	/**
-	* Quaternion component 3, y (0 in null-rotation)
-	*/
-	public float q3; 
- 	/**
-	* Quaternion component 4, z (0 in null-rotation)
-	*/
-	public float q4; 
+	public float q[] = new float[4]; 
  	/**
 	* Roll angular speed (rad/s)
 	*/
@@ -48,6 +36,10 @@ public class msg_attitude_quaternion extends MAVLinkMessage{
 	* Yaw angular speed (rad/s)
 	*/
 	public float yawspeed; 
+ 	/**
+	* Attitude covariance
+	*/
+	public float covariance[] = new float[9]; 
 
 	/**
 	 * Generates the payload for a mavlink message for a message of this type
@@ -58,40 +50,44 @@ public class msg_attitude_quaternion extends MAVLinkMessage{
 		packet.len = MAVLINK_MSG_LENGTH;
 		packet.sysid = 255;
 		packet.compid = 190;
-		packet.msgid = MAVLINK_MSG_ID_ATTITUDE_QUATERNION;
+		packet.msgid = MAVLINK_MSG_ID_ATTITUDE_QUATERNION_COV;
 		packet.payload.putInt(time_boot_ms);
-		packet.payload.putFloat(q1);
-		packet.payload.putFloat(q2);
-		packet.payload.putFloat(q3);
-		packet.payload.putFloat(q4);
+		 for (int i = 0; i < q.length; i++) {
+                        packet.payload.putFloat(q[i]);
+            }
 		packet.payload.putFloat(rollspeed);
 		packet.payload.putFloat(pitchspeed);
 		packet.payload.putFloat(yawspeed);
+		 for (int i = 0; i < covariance.length; i++) {
+                        packet.payload.putFloat(covariance[i]);
+            }
 		return packet;		
 	}
 
     /**
-     * Decode a attitude_quaternion message into this class fields
+     * Decode a attitude_quaternion_cov message into this class fields
      *
      * @param payload The message to decode
      */
     public void unpack(MAVLinkPayload payload) {
         payload.resetIndex();
 	    time_boot_ms = payload.getInt();
-	    q1 = payload.getFloat();
-	    q2 = payload.getFloat();
-	    q3 = payload.getFloat();
-	    q4 = payload.getFloat();
+	     for (int i = 0; i < q.length; i++) {
+			q[i] = payload.getFloat();
+		}
 	    rollspeed = payload.getFloat();
 	    pitchspeed = payload.getFloat();
-	    yawspeed = payload.getFloat();    
+	    yawspeed = payload.getFloat();
+	     for (int i = 0; i < covariance.length; i++) {
+			covariance[i] = payload.getFloat();
+		}    
     }
 
      /**
      * Constructor for a new message, just initializes the msgid
      */
-    public msg_attitude_quaternion(){
-    	msgid = MAVLINK_MSG_ID_ATTITUDE_QUATERNION;
+    public msg_attitude_quaternion_cov(){
+    	msgid = MAVLINK_MSG_ID_ATTITUDE_QUATERNION_COV;
     }
 
     /**
@@ -99,20 +95,20 @@ public class msg_attitude_quaternion extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_attitude_quaternion(MAVLinkPacket mavLinkPacket){
+    public msg_attitude_quaternion_cov(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = MAVLINK_MSG_ID_ATTITUDE_QUATERNION;
+        this.msgid = MAVLINK_MSG_ID_ATTITUDE_QUATERNION_COV;
         unpack(mavLinkPacket.payload);
-        //Log.d("MAVLink", "ATTITUDE_QUATERNION");
-        //Log.d("MAVLINK_MSG_ID_ATTITUDE_QUATERNION", toString());
+        //Log.d("MAVLink", "ATTITUDE_QUATERNION_COV");
+        //Log.d("MAVLINK_MSG_ID_ATTITUDE_QUATERNION_COV", toString());
     }
     
-                
+            
     /**
      * Returns a string with the MSG name and data
      */
     public String toString(){
-    	return "MAVLINK_MSG_ID_ATTITUDE_QUATERNION -"+" time_boot_ms:"+time_boot_ms+" q1:"+q1+" q2:"+q2+" q3:"+q3+" q4:"+q4+" rollspeed:"+rollspeed+" pitchspeed:"+pitchspeed+" yawspeed:"+yawspeed+"";
+    	return "MAVLINK_MSG_ID_ATTITUDE_QUATERNION_COV -"+" time_boot_ms:"+time_boot_ms+" q:"+q+" rollspeed:"+rollspeed+" pitchspeed:"+pitchspeed+" yawspeed:"+yawspeed+" covariance:"+covariance+"";
     }
 }
