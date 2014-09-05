@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.WindowManager.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
@@ -91,34 +92,50 @@ public abstract class SuperActivity extends Activity implements
 		if (itemPosition == getNavigationItem()) {
 			return false;
 		}
-		Intent navigationIntent;
+		Intent navigationIntent = new Intent(this, FlightDataActivity.class);
+		boolean failSafe ;
 		switch (itemPosition) {
 		case 0: // Planning
-			navigationIntent = new Intent(this, PlanningActivity.class);
-			break;
+				navigationIntent = new Intent(this, PlanningActivity.class);
+				failSafe = false;
+				break;
 		default:
 		case 1: // Flight Data
-			navigationIntent = new Intent(this, FlightDataActivity.class);
-			navigationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			break;
+				navigationIntent = new Intent(this, FlightDataActivity.class);
+				navigationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				failSafe = true;
+				break;
 		case 2: // RC
-			navigationIntent = new Intent(this, RCActivity.class);
-			break;
+				navigationIntent = new Intent(this, RCActivity.class);
+				failSafe = false;
+				break;
 		case 3: // Parameters
-			navigationIntent = new Intent(this, ParametersActivity.class);
-			break;
+				navigationIntent = new Intent(this, ParametersActivity.class);
+				failSafe = false;
+				break;
 		case 4: // Camera
 			navigationIntent = new Intent(this, CameraActivity.class);
+			failSafe = true;
 			break;
 		case 5: // GCP
 			navigationIntent = new Intent(this, GCPActivity.class);
+			failSafe = true;
 			break;
 		case 6: // Chart
+			failSafe = true;
 			navigationIntent = new Intent(this, ChartActivity.class);
 			break;
 		}
-		startActivity(navigationIntent);
-		return false;
+			if( drone.state.isArmed() && failSafe == false){
+				return false;
+		}
+		else if(failSafe == true){
+			startActivity(navigationIntent);
+			return false;
+		}
+		else{
+			return false;
+		}
 	}
 
 	@Override
@@ -162,7 +179,7 @@ public abstract class SuperActivity extends Activity implements
 	private void showCheckList() {
 		PreflightDialog dialog = new PreflightDialog();
 		dialog.build(this, drone, false);
-		
+
 	}
 
 	private void setMapTypeFromItemId(int itemId) {
@@ -198,10 +215,10 @@ public abstract class SuperActivity extends Activity implements
 		if(armButton != null){
 			armButton.setEnabled(false);
 		}
-		
+
 		// Reset launch failsafe on disconnect
 		drone.waypointsSynced = false;
-		
+
 		screenOrientation.unlock();
 	}
 
@@ -217,7 +234,7 @@ public abstract class SuperActivity extends Activity implements
 	}
 
 	public void notifyArmed() {
-		
+
 		// Change menu button
 		if (armButton != null) {
 			armButton.setTitle("Disarm");
@@ -225,7 +242,7 @@ public abstract class SuperActivity extends Activity implements
 	}
 
 	public void notifyDisarmed() {
-		
+
 		// Change menu button
 		if (armButton != null) {
 			armButton.setTitle("Arm");
@@ -248,12 +265,12 @@ public abstract class SuperActivity extends Activity implements
 	@Override
 	public void onAltitudeChanged(double newAltitude,boolean applyToAll) {
 		drone.mission.setDefaultAlt(newAltitude);
-		
+
 		if(applyToAll){
 			changeAllAltitudes(newAltitude);
 		}
 	}
-	
+
 	public void changeAllAltitudes(double newAltitude){
 		List<LatLng> pathPoints = drone.mission.getPathPoints();
 		drone.mission.clearWaypoints();
@@ -261,6 +278,6 @@ public abstract class SuperActivity extends Activity implements
 			drone.mission.addWaypoint(wPoint.latitude,
 					wPoint.longitude, newAltitude);
 		}
-		
+
 	}
 }
