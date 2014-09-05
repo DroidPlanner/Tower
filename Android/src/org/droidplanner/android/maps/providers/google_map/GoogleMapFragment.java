@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.helpers.LocalMapTileProvider;
 import org.droidplanner.android.maps.DPMap;
@@ -514,7 +515,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 	@Override
 	public void goToDroneLocation() {
 		if(!mDrone.getGps().isPositionValid()){
-			Toast.makeText(getActivity().getApplicationContext(), "No drone location available", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity().getApplicationContext(), R.string.drone_no_location, Toast.LENGTH_SHORT).show();
 			return;
 		}
 		final float currentZoomLevel = mMap.getCameraPosition().zoom;

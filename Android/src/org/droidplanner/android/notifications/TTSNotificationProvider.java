@@ -1,6 +1,9 @@
 package org.droidplanner.android.notifications;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.droidplanner.R;
 import org.droidplanner.android.fragments.SettingsFragment;
@@ -28,26 +31,48 @@ import com.MAVLink.Messages.ApmModes;
  * Implements DroidPlanner audible notifications.
  */
 public class TTSNotificationProvider implements OnInitListener,
-		NotificationHandler.NotificationProvider {
+        NotificationHandler.NotificationProvider {
 
 	private static final String TAG = TTSNotificationProvider.class.getSimpleName();
 
 	private static final double BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT = 10;
 
+    /**
+     * Utterance id for the periodic status speech.
+     */
+    private static final String PERIODIC_STATUS_UTTERANCE_ID = "periodic_status_utterance";
+
+    private final AtomicBoolean mIsPeriodicStatusStarted = new AtomicBoolean(false);
+    /**
+     * Listens for updates to the status interval.
+     */
     private final BroadcastReceiver mSpeechIntervalUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
 
             if(SettingsFragment.ACTION_UPDATED_STATUS_PERIOD.equals(action)) {
-                statusInterval = mAppPrefs.getSpokenStatusInterval();
-                handler.removeCallbacks(watchdogCallback);
-                if (statusInterval != 0) {
-                    handler.postDelayed(watchdogCallback, statusInterval * 1000);
-                }
+                scheduleWatchdog();
             }
         }
     };
+
+    /**
+     * Monitors speech completion.
+     */
+    private final TextToSpeech.OnUtteranceCompletedListener mSpeechCompleteListener = new TextToSpeech.OnUtteranceCompletedListener() {
+        @Override
+        public void onUtteranceCompleted(String utteranceId) {
+            if(PERIODIC_STATUS_UTTERANCE_ID.equals(utteranceId)){
+                mIsPeriodicStatusStarted.set(false);
+            }
+        }
+    };
+
+    /**
+     * Stored the parameters to be passed to the tts `speak(...)` method.
+     */
+    private final HashMap<String, String> mTtsParams = new HashMap<String, String>();
 
 	private TextToSpeech tts;
 	private int lastBatteryDischargeNotification;
@@ -58,6 +83,8 @@ public class TTSNotificationProvider implements OnInitListener,
 	private int statusInterval;
 
 	private class Watchdog implements Runnable {
+
+        private final StringBuilder mMessageBuilder = new StringBuilder();
 		private Drone drone;
 
 		public void run() {
@@ -72,28 +99,32 @@ public class TTSNotificationProvider implements OnInitListener,
 		}
 
         private void speakPeriodic(Drone drone) {
-            final SparseBooleanArray speechPrefs = mAppPrefs.getPeriodicSpeechPrefs();
+            //Drop the message if the previous one is not done yet.
+            if(mIsPeriodicStatusStarted.compareAndSet(false, true)) {
+                final SparseBooleanArray speechPrefs = mAppPrefs.getPeriodicSpeechPrefs();
 
-            final StringBuilder message = new StringBuilder();
-            if (speechPrefs.get(R.string.pref_tts_periodic_bat_volt_key)) {
-                message.append("battery " + drone.getBattery().getBattVolt() + " volts. ");
+                mMessageBuilder.setLength(0);
+                if (speechPrefs.get(R.string.pref_tts_periodic_bat_volt_key)) {
+                    mMessageBuilder.append(String.format("battery %2.1f volts. ", drone.getBattery()
+                            .getBattVolt()));
+                }
+
+                if (speechPrefs.get(R.string.pref_tts_periodic_alt_key)) {
+                    mMessageBuilder.append("altitude, " + (int) (drone.getAltitude().getAltitude()) + " meters. ");
+                }
+
+                if (speechPrefs.get(R.string.pref_tts_periodic_airspeed_key)) {
+                    mMessageBuilder.append("airspeed, "
+                            + (int) (drone.getSpeed().getAirSpeed().valueInMetersPerSecond())
+                            + " meters per second. ");
+                }
+
+                if (speechPrefs.get(R.string.pref_tts_periodic_rssi_key)) {
+                    mMessageBuilder.append("r s s i, " + (int) drone.getRadio().getRssi() + " decibels");
+                }
+
+                speak(mMessageBuilder.toString(), true, PERIODIC_STATUS_UTTERANCE_ID);
             }
-
-            if (speechPrefs.get(R.string.pref_tts_periodic_alt_key)) {
-                message.append("altitude, " + (int) (drone.getAltitude().getAltitude()) + " meters. ");
-            }
-
-            if (speechPrefs.get(R.string.pref_tts_periodic_airspeed_key)) {
-                message.append("airspeed, "
-                        + (int) (drone.getSpeed().getAirSpeed().valueInMetersPerSecond())
-                        + " meters per second. ");
-            }
-
-            if (speechPrefs.get(R.string.pref_tts_periodic_rssi_key)) {
-                message.append("r s s i, " + (int) drone.getRadio().getRssi() + " decibels");
-            }
-
-            speak(message.toString());
         }
 
 		public void setDrone(Drone drone) {
@@ -108,6 +139,14 @@ public class TTSNotificationProvider implements OnInitListener,
 		tts = new TextToSpeech(context, this);
         mAppPrefs = new DroidPlannerPrefs(context);
 	}
+
+    private void scheduleWatchdog(){
+        handler.removeCallbacks(watchdogCallback);
+        statusInterval = mAppPrefs.getSpokenStatusInterval();
+        if (statusInterval != 0) {
+            handler.postDelayed(watchdogCallback, statusInterval * 1000);
+        }
+    }
 
 	@Override
 	public void onInit(int status) {
@@ -138,6 +177,7 @@ public class TTSNotificationProvider implements OnInitListener,
 			}
 
             if(tts != null){
+                tts.setOnUtteranceCompletedListener(mSpeechCompleteListener);
                 //Register the broadcast receiver for the speech output period updates
                 LocalBroadcastManager.getInstance(context).registerReceiver
                         (mSpeechIntervalUpdateReceiver, new IntentFilter(SettingsFragment.ACTION_UPDATED_STATUS_PERIOD));
@@ -151,12 +191,23 @@ public class TTSNotificationProvider implements OnInitListener,
 	}
 
 	private void speak(String string) {
-		if (tts != null) {
-			if (shouldEnableTTS()) {
-				tts.speak(string, TextToSpeech.QUEUE_FLUSH, null);
-			}
-		}
+        speak(string, false, null);
 	}
+
+    private void speak(String string, boolean append, String utteranceId){
+        if (tts != null) {
+            if (shouldEnableTTS()) {
+                final int queueType = append ? TextToSpeech.QUEUE_ADD : TextToSpeech.QUEUE_FLUSH;
+
+                mTtsParams.clear();
+                if(utteranceId != null){
+                    mTtsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceId);
+                }
+
+                tts.speak(string, queueType, mTtsParams);
+            }
+        }
+    }
 
 	private boolean shouldEnableTTS() {
 		return mAppPrefs.prefs.getBoolean("pref_enable_tts", false);
@@ -205,6 +256,7 @@ public class TTSNotificationProvider implements OnInitListener,
 
 			case HEARTBEAT_FIRST:
 				watchdogCallback.setDrone(drone);
+                scheduleWatchdog();
 				speak("Connected");
 				break;
 
@@ -217,6 +269,7 @@ public class TTSNotificationProvider implements OnInitListener,
 
 			case HEARTBEAT_RESTORED:
                 watchdogCallback.setDrone(drone);
+                scheduleWatchdog();
 				if(mAppPrefs.getWarningOnLostOrRestoredSignal()){
 					speak("Data link restored");
 				}

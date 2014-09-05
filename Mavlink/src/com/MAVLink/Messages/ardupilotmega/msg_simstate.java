@@ -53,13 +53,13 @@ public class msg_simstate extends MAVLinkMessage{
 	*/
 	public float zgyro; 
  	/**
-	* Latitude in degrees
+	* Latitude in degrees * 1E7
 	*/
-	public float lat; 
+	public int lat; 
  	/**
-	* Longitude in degrees
+	* Longitude in degrees * 1E7
 	*/
-	public float lng; 
+	public int lng; 
 
 	/**
 	 * Generates the payload for a mavlink message for a message of this type
@@ -80,8 +80,8 @@ public class msg_simstate extends MAVLinkMessage{
 		packet.payload.putFloat(xgyro);
 		packet.payload.putFloat(ygyro);
 		packet.payload.putFloat(zgyro);
-		packet.payload.putFloat(lat);
-		packet.payload.putFloat(lng);
+		packet.payload.putInt(lat);
+		packet.payload.putInt(lng);
 		return packet;		
 	}
 
@@ -101,8 +101,8 @@ public class msg_simstate extends MAVLinkMessage{
 	    xgyro = payload.getFloat();
 	    ygyro = payload.getFloat();
 	    zgyro = payload.getFloat();
-	    lat = payload.getFloat();
-	    lng = payload.getFloat();    
+	    lat = payload.getInt();
+	    lng = payload.getInt();    
     }
 
      /**

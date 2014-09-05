@@ -67,9 +67,10 @@ public class MAVLinkService extends Service {
         }
 
 		// Record which connection type is used.
-		GAUtils.sendEvent(new HitBuilders.EventBuilder().setCategory(
-				GAUtils.Category.MAVLINK_CONNECTION.toString())
-                .setAction("Mavlink connecting using " + connectionType));
+		GAUtils.sendEvent(new HitBuilders.EventBuilder()
+                .setCategory(GAUtils.Category.MAVLINK_CONNECTION.toString())
+                .setAction("MavLink connecting using " + connectionType + " (" + mavConnection
+                        .toString() + ") "));
 	}
 
 	private void disconnectMAVConnection() {
@@ -79,8 +80,9 @@ public class MAVLinkService extends Service {
 			mavConnection.disconnect();
 		}
 
-		GAUtils.sendEvent(new HitBuilders.EventBuilder().setCategory(
-				GAUtils.Category.MAVLINK_CONNECTION.toString()).setAction("Mavlink disconnecting"));
+		GAUtils.sendEvent(new HitBuilders.EventBuilder()
+                .setCategory(GAUtils.Category.MAVLINK_CONNECTION.toString())
+                .setAction("MavLink disconnecting"));
 	}
 
     /**

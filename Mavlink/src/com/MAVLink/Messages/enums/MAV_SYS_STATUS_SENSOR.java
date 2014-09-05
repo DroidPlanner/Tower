@@ -24,5 +24,7 @@ public class MAV_SYS_STATUS_SENSOR {
 	public static final int MAV_SYS_STATUS_SENSOR_3D_ACCEL2 = 262144; /* 0x40000 2nd 3D accelerometer | */
 	public static final int MAV_SYS_STATUS_SENSOR_3D_MAG2 = 524288; /* 0x80000 2nd 3D magnetometer | */
 	public static final int MAV_SYS_STATUS_GEOFENCE = 1048576; /* 0x100000 geofence | */
-	public static final int MAV_SYS_STATUS_SENSOR_ENUM_END = 1048577; /*  | */
+	public static final int MAV_SYS_STATUS_AHRS = 2097152; /* 0x200000 AHRS subsystem health | */
+	public static final int MAV_SYS_STATUS_TERRAIN = 4194304; /* 0x400000 Terrain subsystem health | */
+	public static final int MAV_SYS_STATUS_SENSOR_ENUM_END = 4194305; /*  | */
 }

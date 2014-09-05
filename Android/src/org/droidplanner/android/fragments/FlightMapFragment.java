@@ -1,5 +1,7 @@
 package org.droidplanner.android.fragments;
 
+import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.dialogs.GuidedDialog;
 import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
 import org.droidplanner.android.maps.DPMap;
@@ -148,7 +150,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 		int pressCount = mAppPrefs.prefs.getInt(PREF_USER_LOCATION_FIRST_PRESS,
 				DEFAULT_USER_LOCATION_FIRST_PRESS);
 		if (pressCount < MAX_TOASTS_FOR_LOCATION_PRESS) {
-			Toast.makeText(context, "Long press to activate user auto panning.", Toast.LENGTH_LONG)
+			Toast.makeText(context, R.string.user_autopan_long_press, Toast.LENGTH_LONG)
 					.show();
 			mAppPrefs.prefs.edit().putInt(PREF_USER_LOCATION_FIRST_PRESS, pressCount + 1).apply();
 		}
@@ -157,10 +159,13 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	@Override
 	public void goToDroneLocation() {
 		super.goToDroneLocation();
+
+        if(!this.drone.getGps().isPositionValid())
+            return;
 		final int pressCount = mAppPrefs.prefs.getInt(PREF_DRONE_LOCATION_FIRST_PRESS,
 				DEFAULT_DRONE_LOCATION_FIRST_PRESS);
 		if (pressCount < MAX_TOASTS_FOR_LOCATION_PRESS) {
-			Toast.makeText(context, "Long press to activate drone auto panning.", Toast.LENGTH_LONG)
+			Toast.makeText(context, R.string.drone_autopan_long_press, Toast.LENGTH_LONG)
 					.show();
 			mAppPrefs.prefs.edit().putInt(PREF_DRONE_LOCATION_FIRST_PRESS, pressCount + 1).apply();
 		}
