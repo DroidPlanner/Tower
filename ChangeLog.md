@@ -9,6 +9,14 @@ All the changes are logged below (preferable with the pull request numbers in pa
 
 # Releases
 
+## Droidplanner v2.7.3
+* German translation improvements (#1034,#1045)
+* Chinise translation (#1021)
+* Fix erros on speech output (#1043,#1046)
+* Fix possible NPE (#1036,#1037)
+* Improvement to Handling of USB libraries (#1033,#1035,#1042)
+* Mavlink library update (#1038)
+
 ## Droidplanner v2.7.2
 * Extra speech warnings (#1012,#835)
 * Gray drone on heartbeat loss (#1002,#497,#1018)
