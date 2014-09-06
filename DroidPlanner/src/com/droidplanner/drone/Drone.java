@@ -49,6 +49,9 @@ public class Drone {
 	private MapConfigListener mapConfigListener;
 	private DroneTypeListner typeListner;
 	private ModeChangedListener modeChangedListener;
+	
+	// A second mode change listener for Follow Me mode failsafe
+	private ModeChangedListener followMeListener;
 
 	public Drone(TTS tts, MAVLinkClient mavClient, Context context) {
 		this.tts = tts;
@@ -76,6 +79,11 @@ public class Drone {
 	public void setModeChangedListener(ModeChangedListener listener)
 	{
 		this.modeChangedListener = listener;
+	}
+	
+	public void setFollowMeListener(ModeChangedListener listener)
+	{
+		this.followMeListener = listener;
 	}
 
 	public void setAltitudeGroundAndAirSpeeds(double altitude,
