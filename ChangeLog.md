@@ -1,3 +1,12 @@
+## QuadForge v11 - September 5th 2014
+* Give errors if drone is not connected or armed if trying to turn on follow me
+* Turn off follow me if GPS service on the Android device is turned off
+* Remove magic numbers for USB connection timeouts and change to constants
+* Send correct sequence number for transmitted MAVLink packets to the vehicle
+* Set guided mode when Follow Me is enabled
+* Set loiter mode when Follow Me is disabled
+* Declare and register a second mode change listener for the follow me mode failsafe to function
+
 ## QuadForge GCS v10 - April 16th 2014
 * Auto launch was not working as throttle PWM value had changed in a calibration. We adjusted the number we send in the spoof to match calibration range
 * Increase throttle spoof to 1 second from half a second
