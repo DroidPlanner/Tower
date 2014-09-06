@@ -13,7 +13,10 @@ import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.waypoint;
 
-public class FollowMe implements LocationListener {
+// Mode change failsafe listener
+import com.droidplanner.drone.DroneInterfaces.ModeChangedListener;
+
+public class FollowMe implements LocationListener, ModeChangedListener {
 	private static final long MIN_TIME_MS = 2000;
 	private static final float MIN_DISTANCE_M = 0;
 	private Context context;
@@ -26,6 +29,9 @@ public class FollowMe implements LocationListener {
 		this.drone = drone;
 		this.locationManager = (LocationManager) context
 				.getSystemService(Context.LOCATION_SERVICE);
+		
+		// Register ourselves with the modeChangedListener so we get mode updates
+		drone.setFollowMeListener(this);
 	}
 
 	public void toogleFollowMeState() {
@@ -125,6 +131,28 @@ public class FollowMe implements LocationListener {
 				.getDefaultSharedPreferences(context);
 
 		return prefs.getBoolean("pref_follow_me_mode_enabled", false);
+	}
+	
+	/* For all modes other than guided turn off follow me as only guided should be used for follow me
+	 * 
+	 * Without this the tablet will keep sending a new waypoint and setting guided mode using
+	 * follow me. This will cause the vehicle to be uncontrollable via RC radio,
+	 * failsafe, or ground control station.
+	 * 
+	 */
+	@Override
+	public void onModeChanged()
+	{
+
+		// Guided mode is correct, don't do anything, for other modes cancel follow me
+		if (drone.state.getMode() != ApmModes.ROTOR_GUIDED && followMeEnabled)
+		{
+
+			// Vehicle is not in guided mode, disable follow me using existing method
+			disableFollowMe();
+
+		}
+
 	}
 
 }
