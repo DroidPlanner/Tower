@@ -467,5 +467,8 @@
 
     <!-- Help -->
     <string name="help_item_description">How to plan and fly a mission</string>
+    <string name="takeoff">Take Off</string>
+    <string name="loiter">Loiter</string>
+    <string name="three_pv">3PV</string>
 
 </resources>

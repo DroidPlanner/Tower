@@ -1,46 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/flyoutPanelLayout"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:ignore="HardcodedText" >
+    android:orientation="vertical">
 
-    <!-- Description -->
-
-    <View
-        android:id="@+id/desc_rect"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="96dp"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/mode_desc_rectangle" />
-
-    <TextView
-        android:id="@+id/ModeDetail"
-        style="@style/ModeDetailText"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/desc_rect"
-        android:layout_alignTop="@id/desc_rect"
-        android:text="@string/mode_guided" />
+        android:layout_gravity="center_horizontal"
+        android:paddingLeft="40dip"
+        android:paddingRight="40dip"
+        android:paddingTop="20dip"
+        android:paddingBottom="20dip">
 
-    <!-- Controls -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Drone: not ready\nDroidPlanner: not ready"
+            android:layout_marginTop="60dip"
+            android:id="@+id/three_p_v_status"
+            android:layout_gravity="center_horizontal|bottom"
+            android:singleLine="false"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/takeoff"
+            android:id="@+id/mc_takeoff_land"
+            android:background="@drawable/button_blue"
+            style="@style/modeControl"
+            android:layout_gravity="left|top"
+            android:singleLine="false"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/loiter"
+            android:id="@+id/mc_follow_loiter"
+            android:background="@drawable/button_green"
+            android:enabled="false"
+            style="@style/modeControl"
+            android:layout_gravity="right|top"
+            android:singleLine="false"/>
+    </FrameLayout>
+    <View
+    android:layout_width="fill_parent"
+    android:layout_height="1dp"
+    android:background="@android:color/darker_gray"/>
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/desc_rect"
         android:orientation="vertical"
-        android:padding="3dp" >
-        
-		<!-- Follow Type Spinner -->
-		
-		<Spinner
-    		android:id="@+id/follow_type_spinner"
-    		android:layout_width="fill_parent"
-    		android:layout_height="wrap_content" />
-		
+        android:padding="3dp"
+        android:gravity="center_horizontal">
+
+        <!-- Follow Type Spinner -->
+
+        <Spinner
+            android:id="@+id/follow_type_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+
         <!-- Altitude buttons -->
 
         <TextView
@@ -53,7 +77,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
 
             <Button
                 android:id="@+id/button_altitude_plus_1"
@@ -78,7 +103,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
 
             <Button
                 android:id="@+id/button_altitude_plus_10"
@@ -97,7 +123,6 @@
                 android:background="@drawable/button_mode_options"
                 android:text="-10" />
         </LinearLayout>
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -105,7 +130,8 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/linearLayout1"
         android:orientation="vertical"
-        android:padding="3dp" >
+        android:padding="3dp"
+        android:gravity="center_horizontal">
 
         <TextView
             android:id="@+id/follow_radius"
@@ -117,7 +143,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
 
             <Button
                 android:id="@+id/button_radius_plus_1"
@@ -136,8 +163,9 @@
                 android:layout_marginBottom="3dp"
                 android:layout_marginRight="3dp"
                 android:background="@drawable/button_mode_options"
-                android:text="-" />
+                android:text="-"
+                />
         </LinearLayout>
     </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>
+</LinearLayout>

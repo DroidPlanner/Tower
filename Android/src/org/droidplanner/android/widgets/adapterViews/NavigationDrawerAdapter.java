@@ -12,6 +12,7 @@ import org.droidplanner.android.activities.DrawerNavigationUI;
 import org.droidplanner.android.activities.EditorActivity;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.SettingsActivity;
+import org.droidplanner.android.activities.ThreePVActivity;
 import org.droidplanner.android.fragments.helpers.HelpDialogFragment;
 
 import android.content.Context;
@@ -46,11 +47,12 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 	private final static Map<Class<? extends DrawerNavigationUI>, Integer> sActivityGroupIndexMap = new HashMap<Class<? extends DrawerNavigationUI>, Integer>();
 
 	static {
-		sActivityGroupIndexMap.put(FlightActivity.class, 0);
-		sActivityGroupIndexMap.put(SettingsActivity.class, 1);
+		sActivityGroupIndexMap.put(ThreePVActivity.class, 0);
+		sActivityGroupIndexMap.put(FlightActivity.class, 1);
+		sActivityGroupIndexMap.put(SettingsActivity.class, 2);
 	}
 
-	private final static boolean[] sIsGroupExpanded = { false, false, false };
+	private final static boolean[] sIsGroupExpanded = { false, false, false, false };
 
 	/**
 	 * Delay used to run the callback on selection in the drawer layout. This
@@ -178,6 +180,11 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 
 	private void initChildData(final DrawerNavigationUI activity) {
 		/*
+		 * 3PV section
+		 */
+		mChildData.add(Collections.<Map<String, ? extends Object>> emptyList());
+
+		/*
 		 * Flight section
 		 */
 		// Editor activity
@@ -231,6 +238,18 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 	}
 
 	private void initGroupData(final DrawerNavigationUI activity) {
+		// 3PV Section
+		final Map<String, Object> threePVData = new HashMap<String, Object>();
+		threePVData.put(KEY_SECTION_NAME, R.string.three_pv);
+		threePVData.put(KEY_SECTION_ICON, R.drawable.ic_follow_active);
+		threePVData.put(KEY_SECTION_CALLBACK, new Runnable() {
+			@Override
+			public void run() {
+				activity.startActivity(new Intent(activity, ThreePVActivity.class));
+			}
+		});
+		mGroupData.add(threePVData);
+
 		// Flight section
 		final Map<String, Object> flightData = new HashMap<String, Object>();
 		flightData.put(KEY_SECTION_NAME, R.string.flight_data);
