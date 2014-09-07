@@ -29,6 +29,6 @@ public class ThreePVActivity extends DrawerNavigationUI{
 
 	@Override
 	public CharSequence[][] getHelpItems() {
-		return new CharSequence[0][];
+		return new CharSequence[][] { {}, {} };
 	}
 }
