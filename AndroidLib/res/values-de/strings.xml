@@ -331,6 +331,7 @@
     <!-- Text To Speech -->
     <string name="pref_title_tts">Sprachausgabe</string>
     <string name="pref_title_tts_periodic">Periodisch</string>
+    <string name="pref_title_tts_periodic_status">Intervall Meldungen</string>
     <string name="pref_tts_periodic_summary">Was ist in dem periodischen Status enthalten?</string>
     <string name="pref_tts_periodic_period">Periode</string>
     <string name="pref_tts_periodic_period_summary">Wie oft der periodische Status gelesen wird.</string>
@@ -342,6 +343,19 @@
     <string name="pref_tts_periodic_rssi_summary">"Received Signal Strength Indication" lesen.</string>
     <string name="pref_tts_periodic_airspeed">Fluggeschwindigkeit</string>
     <string name="pref_tts_periodic_airspeed_summary">Fluggeschwindigkeit lesen.</string>
+    <string name="pref_title_tts_warnings">Warnungen</string>
+    <string name="pref_tts_warning_solar_activity">Sonnenaktivität</string>
+    <string name="pref_tts_warning_solar_activity_summary">Warnt vor hoher Sonnenaktivität, die GPS-Genauigkeit verringern könnte.</string>
+    <string name="pref_tts_warning_wind_speed">Windgeschwindigkeit</string>
+    <string name="pref_tts_warning_wind_speed_summary">Warnt vor hoher Windgeschwindigkeit, die Flug schwer machen könnte.</string>
+    <string name="pref_tts_warning_400ft_ceiling_exceeded">400 fuss überschritten</string>
+    <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">In den Vereinigten Staaten ist es oft illegal höher als 400 fuss zu fliegen.</string>
+    <string name="pref_tts_warning_low_signal_strength">Schwaches Signal</string>
+    <string name="pref_tts_warning_low_signal_strength_summary">Warnt wenn die verbindung zur Drohne schlecht ist.</string>
+    <string name="pref_tts_warning_lost_signal">Verbindungsstatus</string>
+    <string name="pref_tts_warning_lost_signal_summary">Warnt wenn die Verbindung zur Drohne getrennt oder wiederhergestellt wird.</string>
+    <string name="pref_tts_warning_autopilot_warnings">Warnungen vom Autopilot</string>
+    <string name="pref_tts_warning_autopilot_warnings_summary">Warnt vor Scharfstellfehler, leere Batterien, usw.</string>
 
     <!-- Droneshare -->
     <string name="dsheader">Wären Sie daran interessiert die kostenlose www.Droneshare.com Service zu benutzen?</string>

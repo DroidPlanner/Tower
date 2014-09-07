@@ -182,7 +182,7 @@
                 style="@style/modeControl"
                 android:layout_width="@dimen/setup_action_button_width"
                 android:layout_height="wrap_content"
-                android:text="Reset"
+                android:text="@string/button_setup_reset"
                 android:layout_marginRight="16dp"
                 android:background="@drawable/button_blue"
                 />
@@ -193,7 +193,7 @@
                 android:layout_width="@dimen/setup_action_button_width"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_green"
-                android:text="Send"/>
+                android:text="@string/button_setup_send"/>
         </LinearLayout>
 
     </RelativeLayout>

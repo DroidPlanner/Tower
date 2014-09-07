@@ -17,19 +17,19 @@ public class msg_sim_state extends MAVLinkMessage{
 	
 
  	/**
-	* True attitude quaternion component 1
+	* True attitude quaternion component 1, w (1 in null-rotation)
 	*/
 	public float q1; 
  	/**
-	* True attitude quaternion component 2
+	* True attitude quaternion component 2, x (0 in null-rotation)
 	*/
 	public float q2; 
  	/**
-	* True attitude quaternion component 3
+	* True attitude quaternion component 3, y (0 in null-rotation)
 	*/
 	public float q3; 
  	/**
-	* True attitude quaternion component 4
+	* True attitude quaternion component 4, z (0 in null-rotation)
 	*/
 	public float q4; 
  	/**

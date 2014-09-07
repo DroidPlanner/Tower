@@ -21,7 +21,7 @@ public class msg_hil_state_quaternion extends MAVLinkMessage{
 	*/
 	public long time_usec; 
  	/**
-	* Vehicle attitude expressed as normalized quaternion
+	* Vehicle attitude expressed as normalized quaternion in w, x, y, z order (with 1 0 0 0 being the null-rotation)
 	*/
 	public float attitude_quaternion[] = new float[4]; 
  	/**
