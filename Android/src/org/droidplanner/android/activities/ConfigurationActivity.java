@@ -50,7 +50,7 @@ public class ConfigurationActivity extends SuperUI {
 			R.string.screen_parameters };
 
 	public static final int[] sConfigurationFragmentIconRes = {
-			android.R.drawable.ic_menu_preferences, R.drawable.ic_status_rssi,
+			android.R.drawable.ic_menu_preferences, R.drawable.ic_action_radio,
 			R.drawable.ic_action_circles, R.drawable.ic_action_paste, R.drawable.ic_action_database };
 
 	private ViewPager mViewPager;

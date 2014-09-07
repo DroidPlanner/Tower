@@ -174,7 +174,9 @@ public class FlightActivity extends DrawerNavigationUI implements
 		mGoToMyLocation.setActivated(false);
 		mGoToDroneLocation.setActivated(false);
 
-		mapFragment.setAutoPanMode(mode);
+        if(mapFragment != null) {
+            mapFragment.setAutoPanMode(mode);
+        }
 
 		switch (mode) {
 		case DRONE:
@@ -239,14 +241,9 @@ public class FlightActivity extends DrawerNavigationUI implements
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
-		updateMapLocationButtons(mAppPrefs.getAutoPanMode());
-	}
-
-	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
+        updateMapLocationButtons(mAppPrefs.getAutoPanMode());
 		updateMapPadding();
 	}
 
@@ -255,6 +252,10 @@ public class FlightActivity extends DrawerNavigationUI implements
 	 * remains 'visible'.
 	 */
 	private void updateMapPadding() {
+        if(mapFragment == null){
+            return;
+        }
+
 		final int slidingDrawerWidth = mSlidingDrawer.getContent().getWidth();
 		final boolean isSlidingDrawerOpened = mSlidingDrawer.isOpened();
 
@@ -351,7 +352,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 	@Override
 	public CharSequence[][] getHelpItems() {
-		return new CharSequence[][] { { "How to plan and fly a mission" },
+		return new CharSequence[][] { { getString(R.string.help_item_description) },
 				{ "https://www.youtube.com/watch?v=btsk7bzn-9Q" } };
 	}
 }
