@@ -19,7 +19,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Drone: not ready\nDroidPlanner: not ready"
         android:layout_marginTop="60dip"
-        android:id="@+id/three_p_v_status"
+        android:id="@+id/three_pv_status"
         android:layout_gravity="center_horizontal|bottom"
         android:singleLine="false"/>
 
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/takeoff"
-        android:id="@+id/mc_takeoff_land"
+        android:id="@+id/button_takeoff_land"
         android:background="@drawable/button_blue"
         style="@style/modeControl"
         android:layout_gravity="left|top"
@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/loiter"
-        android:id="@+id/mc_follow_loiter"
+        android:id="@+id/button_follow_loiter"
         android:background="@drawable/button_green"
         android:enabled="false"
         style="@style/modeControl"
