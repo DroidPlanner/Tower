@@ -25,8 +25,7 @@ public abstract class FollowAlgorithm {
 	}
 
 	public enum FollowModes {
-		LEASH("Leash"), LEAD("Lead"), WAKEBOARD("Wakeboard"), CIRCLE("Circle"), RIGHT("Right"), LEFT(
-				"Left"), ABOVE("Above");
+		LEASH("Leash"), LEAD("Lead"), RIGHT("Right"), LEFT("Left"), CIRCLE("Orbit"), ABOVE("Above");
 
 		private String name;
 
@@ -47,16 +46,14 @@ public abstract class FollowAlgorithm {
 			switch (this) {
 			case LEASH:
 				return new FollowLeash(drone, new Length(8.0));
-			case WAKEBOARD:
-				return new FollowWakeboard(drone, new Length(10.0));
+			case LEAD:
+				return new FollowLead(drone, new Length(15.0));
 			case RIGHT:
 				return new FollowRight(drone, new Length(10.0));
 			case LEFT:
 				return new FollowLeft(drone, new Length(10.0));
 			case CIRCLE:
 				return new FollowCircle(drone, new Length(15.0), 10.0);
-			case LEAD:
-				return new FollowLead(drone, new Length(15.0));
 			case ABOVE:
 				return new FollowAbove(drone, new Length(0.0));
 			}
