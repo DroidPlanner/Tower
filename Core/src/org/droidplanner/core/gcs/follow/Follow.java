@@ -32,7 +32,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 
 	public Follow(Drone drone, Handler handler, LocationFinder locationFinder) {
 		this.drone = drone;
-		followAlgorithm = new FollowAbove(drone, new Length(0.0));
+		followAlgorithm = new FollowLeash(drone, new Length(8.0));
 		this.locationFinder = locationFinder;
 		locationFinder.setLocationListner(this);
 		roiEstimator = new ROIEstimator(handler, drone);
