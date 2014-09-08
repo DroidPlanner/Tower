@@ -92,6 +92,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnClickLis
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 		followMe.setType(adapter.getItem(position));
+		updateLabel();
 	}
 
 	@Override
