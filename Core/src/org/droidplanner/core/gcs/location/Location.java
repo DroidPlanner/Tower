@@ -18,6 +18,8 @@ public class Location {
 
 	private Coord2D coordinate;
 	private double accuracy = 0.0;
+	private double heading = 0.0;
+	private double speed = 0.0;
 
 	public Location(Coord2D coord2d) {
 		coordinate = coord2d;
@@ -34,6 +36,14 @@ public class Location {
 
 	public double getAccuracy() {
 		return accuracy;
+	}
+
+	public double getBearing() {
+		return heading;
+	}
+
+	public double getSpeed() {
+		return speed;
 	}
 
 }

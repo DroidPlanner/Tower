@@ -8,6 +8,9 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.7.4
+* Added extra follow-modes (#1057)
+* Fix error on Mavlink message handling (#1056,#1050)
 
 ## Droidplanner v2.7.3
 * German translation improvements (#1034,#1045)
