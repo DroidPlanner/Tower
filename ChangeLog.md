@@ -1,4 +1,4 @@
-## QuadForge v11 - September 5th 2014
+## QuadForge GCS v11 - September 5th 2014
 * Give errors if drone is not connected or armed if trying to turn on follow me
 * Turn off follow me if GPS service on the Android device is turned off
 * Remove magic numbers for USB connection timeouts and change to constants
