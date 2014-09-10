@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/opaque_white"
-	tools:ignore="HardcodedText"
     >
     <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
@@ -109,16 +108,11 @@
 				android:background="@drawable/mode_desc_rectangle"
 				android:text="@string/waypointInfo_Waypoint" />
 
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-		        android:padding="12dp"
-				android:orientation="vertical" >
 				<org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText
 					android:id="@+id/altitudeView"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:layout_margin="2dp"
+					android:layout_margin="14dp"
 					custom:inc="1"
 					custom:max="200"
 					custom:min="0"
@@ -130,14 +124,13 @@
 					android:id="@+id/waypointDelay"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:layout_margin="2dp"
+					android:layout_margin="14dp"
 					custom:inc="1"
 					custom:max="60"
 					custom:min="0"
 					custom:title="@string/waypoint_delay"
 					custom:unit="s" >
 				</org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
-			</LinearLayout>
         </LinearLayout>
     </ScrollView>
 
