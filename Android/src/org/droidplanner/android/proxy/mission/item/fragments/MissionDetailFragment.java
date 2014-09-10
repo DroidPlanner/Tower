@@ -30,6 +30,9 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
     private static final String TAG = MissionDetailFragment.class.getSimpleName();
 
+    protected static final int MIN_ALTITUDE = 0; //meter
+    protected static final int MAX_ALTITUDE = 200; //meters
+
 	public interface OnMissionDetailListener {
 		/**
 		 * Only fired when the mission detail is shown as a dialog. Notifies the

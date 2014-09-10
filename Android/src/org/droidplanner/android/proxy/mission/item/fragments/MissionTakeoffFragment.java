@@ -1,7 +1,10 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
-import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
+import org.droidplanner.android.widgets.spinnerWheel.AbstractWheel;
+import org.droidplanner.android.widgets.spinnerWheel.OnWheelChangedListener;
+import org.droidplanner.android.widgets.spinnerWheel.WheelHorizontalView;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.commands.Takeoff;
@@ -9,9 +12,7 @@ import org.droidplanner.core.mission.commands.Takeoff;
 import android.os.Bundle;
 import android.view.View;
 
-public class MissionTakeoffFragment extends MissionDetailFragment implements
-		SeekBarWithText.OnTextSeekBarChangedListener {
-	private SeekBarWithText altitudeSeekBar;
+public class MissionTakeoffFragment extends MissionDetailFragment implements OnWheelChangedListener {
 
 	@Override
 	protected int getResource() {
@@ -25,16 +26,23 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
 
 		Takeoff item = (Takeoff) this.itemRender.getMissionItem();
 
-		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
-		altitudeSeekBar.setValue(item.getFinishedAlt().valueInMeters());
-		altitudeSeekBar.setOnChangedListener(this);
-
+        final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(getActivity().getApplicationContext(),
+                MIN_ALTITUDE, MAX_ALTITUDE, "%d m");
+        altitudeAdapter.setItemResource(R.layout.wheel_text_centered);
+        final WheelHorizontalView altitudePicker = (WheelHorizontalView) view.findViewById(R.id
+                .altitudePicker);
+        altitudePicker.setViewAdapter(altitudeAdapter);
+        altitudePicker.setCurrentItem(altitudeAdapter.getItemIndex((int)item.getFinishedAlt().valueInMeters()));
+        altitudePicker.addChangingListener(this);
 	}
 
-	@Override
-	public void onSeekBarChanged() {
-		Takeoff item = (Takeoff) this.itemRender.getMissionItem();
-		item.setFinishedAlt(new Altitude(altitudeSeekBar.getValue()));
-	}
-
+    @Override
+    public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+        switch(wheel.getId()){
+            case R.id.altitudePicker:
+                Takeoff item = (Takeoff) this.itemRender.getMissionItem();
+                item.setFinishedAlt(new Altitude(newValue));
+                break;
+        }
+    }
 }

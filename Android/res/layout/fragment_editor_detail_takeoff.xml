@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -54,7 +53,7 @@
 				android:layout_marginLeft="12dp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="TAKEOFF" />
+				android:text="@string/mission_item_title_takeoff" />
 
 			<TextView
 				android:id="@+id/DistanceLabel"
@@ -63,7 +62,7 @@
 				android:layout_below="@id/WaypointType"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text=" " />
+				 />
 
 		</RelativeLayout>
 	</RelativeLayout>
@@ -80,7 +79,6 @@
 		/>
 
     <ScrollView
-        android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title_rect">
@@ -91,7 +89,6 @@
             android:orientation="vertical" >
 
 			<TextView
-				android:id="@+id/textView1"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				style="@style/ModeDetailText"
@@ -99,25 +96,19 @@
 				android:background="@drawable/mode_desc_rectangle"
 				android:text="@string/waypointInfo_TakeOff" />
 
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-		        android:padding="12dp"
-				android:orientation="vertical" >
+            <TextView
+                android:text="@string/waypoint_altitude"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                style="@style/missionItemNumberPickerTitle"/>
 
-            <org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText
-                android:id="@+id/altitudeView"
+            <org.droidplanner.android.widgets.spinnerWheel.WheelHorizontalView
+                android:id="@+id/altitudePicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                custom:inc="1"
-                custom:max="200"
-                custom:min="0"
-                custom:title="@string/waypoint_altitude"
-                custom:unit="m" >
-            </org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
-
-			</LinearLayout>
+                tools:layout_width="100dp"
+                tools:layout_height="match_parent"
+                style="@style/missionItemNumberPicker"/>
         </LinearLayout>
     </ScrollView>
 

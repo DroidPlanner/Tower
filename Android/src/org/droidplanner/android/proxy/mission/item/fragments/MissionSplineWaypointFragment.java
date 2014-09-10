@@ -45,8 +45,8 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment impleme
         delayPicker.setCurrentItem(delayAdapter.getItemIndex((int) item.getDelay()));
         delayPicker.addChangingListener(this);
 
-        final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(context, 0, 200,
-                "%d m");
+        final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(context,
+                MIN_ALTITUDE, MAX_ALTITUDE, "%d m");
         altitudeAdapter.setItemResource(R.layout.wheel_text_centered);
         final WheelHorizontalView altitudePicker = (WheelHorizontalView) view.findViewById(R.id
                 .altitudePicker);
