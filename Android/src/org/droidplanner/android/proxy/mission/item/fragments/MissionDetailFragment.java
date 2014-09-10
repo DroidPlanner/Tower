@@ -110,12 +110,14 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(getResource(), container, false);
-
 		final MissionProxy missionProxy = ((DroidPlannerApp) getActivity().getApplication()).missionProxy;
-		itemRender = missionProxy.selection.getSelected().get(0);
+        final List<MissionItemProxy> selections = missionProxy.selection.getSelected();
+        if(selections.isEmpty()){
+            return null;
+        }
 
-		return view;
+		itemRender = selections.get(0);
+        return inflater.inflate(getResource(), container, false);
 	}
 
 	@Override
