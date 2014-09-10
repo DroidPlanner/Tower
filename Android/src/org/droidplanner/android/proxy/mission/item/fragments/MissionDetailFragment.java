@@ -28,6 +28,8 @@ import android.widget.TextView;
 public abstract class MissionDetailFragment extends DialogFragment implements
 		OnItemSelectedListener {
 
+    private static final String TAG = MissionDetailFragment.class.getSimpleName();
+
 	public interface OnMissionDetailListener {
 		/**
 		 * Only fired when the mission detail is shown as a dialog. Notifies the
@@ -149,19 +151,18 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		}
 
 		final TextView distanceView = (TextView) view.findViewById(R.id.DistanceValue);
+        if(distanceView != null){
+            try {
+                distanceView.setText(mMissionProxy.getDistanceFromLastWaypoint(itemRender).toString());
+            }catch(IllegalArgumentException e){
+               Log.e(TAG, e.getMessage(), e);
+            }
+        }
 
 		final TextView distanceLabelView = (TextView) view.findViewById(R.id.DistanceLabel);
-
-		try {
-			distanceLabelView.setVisibility(View.VISIBLE);
-			distanceView.setText(mMissionProxy.getDistanceFromLastWaypoint(itemRender).toString());
-		} catch (NullPointerException e) {
-			// Can fail if distanceView doesn't exists
-		} catch (Exception e) {
-			// Or if the last item doesn't have a coordinate
-			// distanceView.setText("");
-			// distanceLabelView.setVisibility(View.INVISIBLE);
-		}
+        if(distanceLabelView != null){
+            distanceLabelView.setVisibility(View.VISIBLE);
+        }
 	}
 
 	@Override
