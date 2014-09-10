@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/opaque_white"
-	tools:ignore="HardcodedText"
     >
     <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
@@ -30,7 +29,7 @@
 			android:layout_width="64dp"
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
-			android:text="22" />
+			tools:text="22" />
 
 		<View
 			android:id="@+id/title_div"
@@ -75,7 +74,7 @@
                 android:layout_marginLeft="12dp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="20m" />
+				tools:text="20m" />
 		</RelativeLayout>
 	</RelativeLayout>
 
@@ -91,7 +90,6 @@
 		/>
 
     <ScrollView
-        android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title_rect">
@@ -102,7 +100,6 @@
             android:orientation="vertical" >
 
 			<TextView
-				android:id="@+id/textView1"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				style="@style/ModeDetailText"

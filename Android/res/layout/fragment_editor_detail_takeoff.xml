@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/opaque_white"
-	tools:ignore="HardcodedText"
     >
     <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
@@ -30,7 +29,7 @@
 			android:layout_width="64dp"
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
-			android:text="22" />
+			tools:text="22" />
 
 		<View
 			android:id="@+id/title_div"

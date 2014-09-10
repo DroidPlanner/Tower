@@ -155,7 +155,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
             try {
                 distanceView.setText(mMissionProxy.getDistanceFromLastWaypoint(itemRender).toString());
             }catch(IllegalArgumentException e){
-               Log.e(TAG, e.getMessage(), e);
+               Log.w(TAG, e.getMessage(), e);
             }
         }
 
