@@ -176,9 +176,6 @@ public class WheelHorizontalView extends AbstractWheelView {
 
     @Override
     public void setSelectorPaintCoeff(float coeff) {
-        if (mItemsDimmedAlpha >= 100)
-            return;
-
         LinearGradient shader;
 
         int w = getMeasuredWidth();
@@ -273,7 +270,7 @@ public class WheelHorizontalView extends AbstractWheelView {
     protected void notifyClickListenersAboutClick(int item, boolean isCurrent){
         super.notifyClickListenersAboutClick(item, isCurrent);
         if (isCurrent) {
-            final CharSequence currentValue = getViewAdapter().getItemText(item);
+            final String currentValue = String.valueOf(getViewAdapter().getItem(item));
             mNumberPickerUpdater.setText(currentValue);
             mNumberPickerUpdater.selectAll();
             mDialogUpdater.show();

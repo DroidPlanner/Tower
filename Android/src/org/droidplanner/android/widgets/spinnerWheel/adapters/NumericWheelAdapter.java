@@ -96,6 +96,13 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
         return null;
     }
 
+    public int getItem(int index){
+        if(index >= 0 && index < getItemsCount()){
+            return minValue + index;
+        }
+        throw new IllegalArgumentException("Index is out of range.");
+    }
+
     public int getItemIndex(int value){
         if(value < this.minValue || value > this.maxValue){
             return -1;
