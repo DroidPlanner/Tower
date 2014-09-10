@@ -1,21 +1,18 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
-import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
+import org.droidplanner.android.widgets.spinnerWheel.AbstractWheel;
+import org.droidplanner.android.widgets.spinnerWheel.OnWheelChangedListener;
+import org.droidplanner.android.widgets.spinnerWheel.WheelHorizontalView;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.waypoints.Loiter;
 import org.droidplanner.core.mission.waypoints.LoiterTime;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
-public class MissionLoiterTFragment extends MissionDetailFragment implements
-		SeekBarWithText.OnTextSeekBarChangedListener, OnCheckedChangeListener {
-
-	private SeekBarWithText altitudeSeekBar;
-	private SeekBarWithText loiterTimeSeekBar;
+public class MissionLoiterTFragment extends MissionDetailFragment implements OnWheelChangedListener {
 
 	@Override
 	protected int getResource() {
@@ -25,33 +22,44 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+        final Context context = getActivity().getApplicationContext();
+
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.LOITERT));
 
-		LoiterTime item = (LoiterTime) this.itemRender.getMissionItem();
+		final LoiterTime item = (LoiterTime) this.itemRender.getMissionItem();
 
-		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
-		altitudeSeekBar.setValue(item.getCoordinate().getAltitude().valueInMeters());
-		altitudeSeekBar.setOnChangedListener(this);
+        final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(context,
+                MIN_ALTITUDE, MAX_ALTITUDE, "%d m");
+        altitudeAdapter.setItemResource(R.layout.wheel_text_centered);
+        final WheelHorizontalView altitudePicker = (WheelHorizontalView) view.findViewById(R.id
+                .altitudePicker);
+        altitudePicker.setViewAdapter(altitudeAdapter);
+        altitudePicker.setCurrentItem(altitudeAdapter.getItemIndex((int)item.getCoordinate()
+                .getAltitude().valueInMeters()));
+        altitudePicker.addChangingListener(this);
 
-		loiterTimeSeekBar = (SeekBarWithText) view.findViewById(R.id.loiterTime);
-		loiterTimeSeekBar.setOnChangedListener(this);
-		loiterTimeSeekBar.setValue(item.getTime());
+        final NumericWheelAdapter loiterTimeAdapter = new NumericWheelAdapter(context, 0, 600, "%d s");
+        loiterTimeAdapter.setItemResource(R.layout.wheel_text_centered);
+        final WheelHorizontalView loiterTimePicker = (WheelHorizontalView) view.findViewById(R.id
+                .loiterTimePicker);
+        loiterTimePicker.setViewAdapter(loiterTimeAdapter);
+        loiterTimePicker.setCurrentItem(loiterTimeAdapter.getItemIndex((int) item.getTime()));
+        loiterTimePicker.addChangingListener(this);
 
 	}
 
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		((Loiter) itemRender.getMissionItem()).setOrbitCCW(isChecked);
-	}
+    @Override
+    public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+        final LoiterTime item = (LoiterTime) this.itemRender.getMissionItem();
 
-	@Override
-	public void onSeekBarChanged() {
-		LoiterTime item = (LoiterTime) this.itemRender.getMissionItem();
+        switch(wheel.getId()){
+            case R.id.altitudePicker:
+                item.getCoordinate().getAltitude().set(newValue);
+                break;
 
-		item.getCoordinate().getAltitude().set(altitudeSeekBar.getValue());
-		item.setTime(loiterTimeSeekBar.getValue());
-		// item.setOrbitalRadius(loiterRadiusSeekBar.getValue());
-		// item.setYawAngle(yawSeekBar.getValue());
-	}
-
+            case R.id.loiterTimePicker:
+                item.setTime(newValue);
+                break;
+        }
+    }
 }
