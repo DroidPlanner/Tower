@@ -35,8 +35,8 @@ import android.view.View;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 
-import com.ne0fhyklabs.horizontalnumpicker.R;
-import com.ne0fhyklabs.horizontalnumpicker.widgets.adapters.WheelViewAdapter;
+import org.droidplanner.R;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.WheelViewAdapter;
 
 import java.util.LinkedList;
 import java.util.List;

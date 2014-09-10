@@ -45,8 +45,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ne0fhyklabs.horizontalnumpicker.R;
-import com.ne0fhyklabs.horizontalnumpicker.widgets.adapters.NumericWheelAdapter;
+import org.droidplanner.R;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
+
 
 /**
  * Spinner wheel horizontal view.
@@ -94,7 +95,7 @@ public class WheelHorizontalView extends AbstractWheelView {
      * @param attrs A collection of attributes.
      */
     public WheelHorizontalView(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.abstractWheelViewStyle);
+        this(context, attrs, 0);
     }
 
     /**
@@ -107,41 +108,42 @@ public class WheelHorizontalView extends AbstractWheelView {
     public WheelHorizontalView(final Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mNumberPickerUpdater = (EditText) LayoutInflater.from(context).inflate(R.layout
-                .dialog_number_picker_update, null);
-        mNumberPickerUpdater.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
-                    final CharSequence input = v.getText();
-                    if(input != null) {
-                        final int updatedValue = Integer.parseInt(input.toString());
-                        final int valueIndex = getViewAdapter().getItemIndex(updatedValue);
-                        if(valueIndex == -1 ){
-                            Toast.makeText(context, "Entered value is outside the range.",
-                                    Toast.LENGTH_LONG).show();
+        if(!isInEditMode()) {
+            mNumberPickerUpdater = (EditText) LayoutInflater.from(context).inflate(R.layout
+                    .dialog_number_picker_update, null);
+            mNumberPickerUpdater.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        final CharSequence input = v.getText();
+                        if (input != null) {
+                            final int updatedValue = Integer.parseInt(input.toString());
+                            final int valueIndex = getViewAdapter().getItemIndex(updatedValue);
+                            if (valueIndex == -1) {
+                                Toast.makeText(context, "Entered value is outside the range.",
+                                        Toast.LENGTH_LONG).show();
+                            } else {
+                                setCurrentItem(valueIndex, true);
+                            }
                         }
-                        else {
-                            setCurrentItem(valueIndex, true);
-                        }
-                    }
 
-                    if (mDialogUpdater.isShowing()) {
-                        mDialogUpdater.dismiss();
+                        if (mDialogUpdater.isShowing()) {
+                            mDialogUpdater.dismiss();
+                        }
+                        return true;
                     }
-                    return true;
+                    return false;
                 }
-                return false;
-            }
-        });
+            });
 
-        mDialogUpdater = new AlertDialog.Builder(context)
-                .setView(mNumberPickerUpdater)
-                .create();
+            mDialogUpdater = new AlertDialog.Builder(context)
+                    .setView(mNumberPickerUpdater)
+                    .create();
 
-        final Resources res = getResources();
-        mDialogWidth = res.getDimensionPixelSize(R.dimen.width_number_picker_dialog);
-        mDialogHeight = res.getDimensionPixelSize(R.dimen.height_number_picker_dialog);
+            final Resources res = getResources();
+            mDialogWidth = res.getDimensionPixelSize(R.dimen.width_number_picker_dialog);
+            mDialogHeight = res.getDimensionPixelSize(R.dimen.height_number_picker_dialog);
+        }
     }
 
     @Override

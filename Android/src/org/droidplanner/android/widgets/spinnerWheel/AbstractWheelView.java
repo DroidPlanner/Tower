@@ -36,8 +36,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 
-import com.ne0fhyklabs.horizontalnumpicker.R;
-
+import org.droidplanner.R;
 
 /**
  * Abstract spinner spinnerwheel view.
