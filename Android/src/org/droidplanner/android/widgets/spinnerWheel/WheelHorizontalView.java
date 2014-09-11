@@ -102,6 +102,14 @@ public class WheelHorizontalView extends AbstractWheelView {
      */
     public WheelHorizontalView(final Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+
+        //Create a dummy view adapter if we're in edit mode.
+        if(isInEditMode()){
+            final NumericWheelAdapter adapter = new NumericWheelAdapter(context, 0, 100);
+            adapter.setItemResource(R.layout.wheel_text_centered);
+            setViewAdapter(adapter);
+            setCurrentItem(50);
+        }
     }
 
     @Override

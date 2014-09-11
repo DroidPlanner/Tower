@@ -192,7 +192,7 @@ public class CardWheelHorizontalView extends LinearLayout implements OnWheelChan
             mNumberInputText.setText(currentValue);
             mNumberInputText.setVisibility(VISIBLE);
             mNumberInputText.requestFocus();
-            imm.showSoftInput(mNumberInputText, InputMethodManager.SHOW_FORCED);
+            imm.showSoftInput(mNumberInputText, 0);
         }
     }
 
