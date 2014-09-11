@@ -59,4 +59,8 @@
         <attr name="selectionDividerWidth" format="dimension"/>
     </declare-styleable>
 
+    <declare-styleable name="CardWheelHorizontalView">
+        <attr name="android:text" />
+    </declare-styleable>
+
 </resources>

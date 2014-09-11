@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/opaque_white"
     >
 
@@ -89,18 +89,12 @@
         tools:ignore="ContentDescription"
         />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_below="@id/title_rect">
-
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/title_rect"
             style="@style/ModeDetailText"
             android:background="@drawable/mode_desc_rectangle"
             android:text="@string/waypointInfo_Land"/>
-    </LinearLayout>
 
 </RelativeLayout>

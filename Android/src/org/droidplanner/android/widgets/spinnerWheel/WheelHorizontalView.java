@@ -68,11 +68,6 @@ public class WheelHorizontalView extends AbstractWheelView {
     // Item width
     private int itemWidth = 0;
 
-    private EditText mNumberPickerUpdater;
-    private AlertDialog mDialogUpdater;
-    private int mDialogWidth;
-    private int mDialogHeight;
-
     //--------------------------------------------------------------------------
     //
     //  Constructors
@@ -107,51 +102,11 @@ public class WheelHorizontalView extends AbstractWheelView {
      */
     public WheelHorizontalView(final Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
-        if(!isInEditMode()) {
-            mNumberPickerUpdater = (EditText) LayoutInflater.from(context).inflate(R.layout
-                    .dialog_number_picker_update, null);
-            mNumberPickerUpdater.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        final CharSequence input = v.getText();
-                        if (input != null) {
-                            final int updatedValue = Integer.parseInt(input.toString());
-                            final int valueIndex = getViewAdapter().getItemIndex(updatedValue);
-                            if (valueIndex == -1) {
-                                Toast.makeText(context, "Entered value is outside the range.",
-                                        Toast.LENGTH_LONG).show();
-                            } else {
-                                setCurrentItem(valueIndex, true);
-                            }
-                        }
-
-                        if (mDialogUpdater.isShowing()) {
-                            mDialogUpdater.dismiss();
-                        }
-                        return true;
-                    }
-                    return false;
-                }
-            });
-
-            mDialogUpdater = new AlertDialog.Builder(context)
-                    .setView(mNumberPickerUpdater)
-                    .create();
-
-            final Resources res = getResources();
-            mDialogWidth = res.getDimensionPixelSize(R.dimen.width_number_picker_dialog);
-            mDialogHeight = res.getDimensionPixelSize(R.dimen.height_number_picker_dialog);
-        }
     }
 
     @Override
     public void onDetachedFromWindow(){
         super.onDetachedFromWindow();
-        if(mDialogUpdater.isShowing()){
-            mDialogUpdater.dismiss();
-        }
     }
 
 
@@ -264,28 +219,6 @@ public class WheelHorizontalView extends AbstractWheelView {
 
     public NumericWheelAdapter getViewAdapter() {
         return (NumericWheelAdapter) mViewAdapter;
-    }
-
-    @Override
-    protected void notifyClickListenersAboutClick(int item, boolean isCurrent){
-        super.notifyClickListenersAboutClick(item, isCurrent);
-        if (isCurrent) {
-            final String currentValue = String.valueOf(getViewAdapter().getItem(item));
-            mNumberPickerUpdater.setText(currentValue);
-            mNumberPickerUpdater.selectAll();
-            mDialogUpdater.show();
-
-            final Window dialogWindow = mDialogUpdater.getWindow();
-            dialogWindow.setLayout(mDialogWidth, mDialogHeight);
-            dialogWindow.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager
-                    .LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-            dialogWindow.setSoftInputMode(WindowManager.LayoutParams
-                    .SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-
-        }
-        else{
-            setCurrentItem(item, true);
-        }
     }
 
     //--------------------------------------------------------------------------

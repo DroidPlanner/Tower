@@ -2,13 +2,5 @@
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/light_title_bg"
-    android:layout_width="72dp"
-    android:layout_height="wrap_content"
-    android:padding="5dp"
-    android:textSize="20sp"
-    android:lines="1"
-    android:textStyle="bold"
-    android:textColor="#777"
-    tools:text="22"
-    android:gravity="center"/>
+    style="@style/missionItemNumberPickerView"
+    tools:text="22"/>
