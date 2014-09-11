@@ -205,7 +205,7 @@
 
     <!-- Selectable values for the period of the speech output. -->
     <string-array name="tts_periodic_period">
-        <item>off</item>
+        <item>@string/pref_tts_off</item>
         <item>15 sec.</item>
         <item>30 sec.</item>
         <item>45 sec.</item>
