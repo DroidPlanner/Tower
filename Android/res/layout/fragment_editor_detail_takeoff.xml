@@ -94,6 +94,7 @@
 
         <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
             android:id="@+id/altitudePicker"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/missionItemDetailCard"

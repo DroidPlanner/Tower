@@ -61,6 +61,7 @@
 
     <declare-styleable name="CardWheelHorizontalView">
         <attr name="android:text" />
+        <attr name="android:orientation" />
     </declare-styleable>
 
 </resources>

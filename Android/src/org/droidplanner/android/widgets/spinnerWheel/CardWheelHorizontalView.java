@@ -1,7 +1,6 @@
 package org.droidplanner.android.widgets.spinnerWheel;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -33,6 +32,9 @@ public class CardWheelHorizontalView extends LinearLayout implements OnWheelChan
     private final List<OnCardWheelChangedListener> mChangingListeners = new
             LinkedList<OnCardWheelChangedListener>();
 
+    private View mVerticalDivider;
+    private View mHorizontalDivider;
+
     private TextView mTitleView;
     private EditText mNumberInputText;
     private WheelHorizontalView mSpinnerWheel;
@@ -55,24 +57,32 @@ public class CardWheelHorizontalView extends LinearLayout implements OnWheelChan
                 R.styleable.CardWheelHorizontalView, 0, 0);
 
         try {
-            final Resources res = getResources();
-
             //Setup the container view.
-            setOrientation(VERTICAL);
             setBackgroundResource(R.drawable.bg_cell_white);
 
             //Setup the children views
             final LayoutInflater inflater = LayoutInflater.from(context);
 
+            //Setup the divider view
+            mVerticalDivider = inflater.inflate(R.layout.card_title_vertical_divider, this, false);
+            mHorizontalDivider = inflater.inflate(R.layout.card_title_horizontal_divider, this,
+                    false);
+
             //Setup the title view
             mTitleView = (TextView) inflater.inflate(R.layout.card_wheel_horizontal_view_title, this,
                     false);
             mTitleView.setText(a.getString(R.styleable.CardWheelHorizontalView_android_text));
-            addView(mTitleView);
 
-            //Setup the divider view
-            final View divider = inflater.inflate(R.layout.card_title_divider, this, false);
-            addView(divider);
+            final int orientation = a.getInt(
+                    R.styleable.CardWheelHorizontalView_android_orientation, VERTICAL);
+            if(orientation == HORIZONTAL) {
+                setOrientation(HORIZONTAL);
+            }
+            else{
+                setOrientation(VERTICAL);
+            }
+
+            updateTitleLayout();
 
             //Setup the spinnerwheel view
             final View spinnerWheelFrame = inflater.inflate(R.layout.card_wheel_horizontal_view,
@@ -125,6 +135,42 @@ public class CardWheelHorizontalView extends LinearLayout implements OnWheelChan
         }
     }
 
+    /**
+     * Called after the orientation, and/or title is set in order to update the view layout.
+     */
+    private void updateTitleLayout(){
+        if(mTitleView == null || mVerticalDivider == null || mHorizontalDivider == null ){
+            return;
+        }
+
+        final int childCount = getChildCount();
+        if(mTitleView.length() > 0){
+            final View divider = getOrientation() == VERTICAL ? mVerticalDivider :
+                    mHorizontalDivider;
+
+            if(childCount <= 1){
+                addView(mTitleView, 0);
+                addView(divider, 1);
+            }
+            else{
+                if(getChildAt(1) != divider){
+                    removeViewAt(1);
+                    addView(divider, 1);
+                }
+            }
+        }
+        else if(childCount > 1){
+            removeViewAt(0);
+            removeViewAt(1);
+        }
+    }
+
+    @Override
+    public void setOrientation(int orientation){
+        super.setOrientation(orientation);
+        updateTitleLayout();
+    }
+
     public void setViewAdapter(NumericWheelAdapter adapter) {
         mSpinnerWheel.setViewAdapter(adapter);
     }
@@ -151,10 +197,12 @@ public class CardWheelHorizontalView extends LinearLayout implements OnWheelChan
 
     public void setText(CharSequence title) {
         mTitleView.setText(title);
+        updateTitleLayout();
     }
 
     public void setText(int titleRes) {
         mTitleView.setText(titleRes);
+        updateTitleLayout();
     }
 
     public CharSequence getText() {
