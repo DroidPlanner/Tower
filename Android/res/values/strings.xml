@@ -394,8 +394,11 @@
     <string name="pref_tts_warning_lost_signal">Connection Status</string>
     <string name="pref_tts_warning_lost_signal_summary">Warns when connection to drone is severed or restored.</string>
     <string name="pref_tts_warning_autopilot_warnings">Autopilot-Reported Warnings</string>
-    <string name="pref_tts_warning_autopilot_warnings_summary">Warns about arm failures,
-        low battery, etc.</string>
+    <string name="pref_tts_warning_autopilot_warnings_summary">Warns about arm failures, low battery, etc.</string>
+    <string name="pref_tts_periodic_status_disabled">Status disabled</string>
+    <string name="pref_tts_status_every">Status every </string>
+    <string name="pref_tts_seconds">seconds</string>
+    <string name="pref_tts_off">off</string>
 
     <!-- Droneshare -->
     <string name="dsheader">Would you be interested in using the free www.Droneshare.com service?</string>
