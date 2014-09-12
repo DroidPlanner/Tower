@@ -49,9 +49,14 @@ public class WheelHorizontalScroller extends WheelScroller {
     }
 
     @Override
-    protected float getMotionEventPosition(MotionEvent event) {
-        // should be overriden
-        return event.getX();
+    protected float getMotionDistance(MotionEvent event, float previousX, float previousY) {
+        float distanceX = event.getX() - previousX;
+        float distanceY = event.getY() - previousY;
+        if(Math.abs(distanceX) > Math.abs(distanceY)){
+            return distanceX;
+        }
+
+        return 0;
     }
 
     @Override

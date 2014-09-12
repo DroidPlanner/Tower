@@ -30,6 +30,7 @@ import android.os.Message;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
+import android.view.ViewParent;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
@@ -89,7 +90,10 @@ public abstract class WheelScroller {
     private GestureDetector gestureDetector;
     protected Scroller scroller;
     private int lastScrollPosition;
-    private float lastTouchedPosition;
+
+    private float lastTouchedPositionX;
+    private float lastTouchedPositionY;
+
     private boolean isScrollingPerformed;
 
     /**
@@ -157,11 +161,18 @@ public abstract class WheelScroller {
      * @param event the motion event
      * @return
      */
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(ViewParent parent, MotionEvent event) {
+        boolean handled = true;
         switch (event.getAction()) {
 
             case MotionEvent.ACTION_DOWN:
-                lastTouchedPosition = getMotionEventPosition(event);
+                if(parent != null){
+                    parent.requestDisallowInterceptTouchEvent(true);
+                }
+
+                lastTouchedPositionX = event.getX();
+                lastTouchedPositionY = event.getY();
+
                 scroller.forceFinished(true);
                 clearMessages();
                 listener.onTouch();
@@ -175,20 +186,35 @@ public abstract class WheelScroller {
 
             case MotionEvent.ACTION_MOVE:
                 // perform scrolling
-                int distance = (int)(getMotionEventPosition(event) - lastTouchedPosition);
+                int distance = (int)getMotionDistance(event, lastTouchedPositionX,
+                        lastTouchedPositionY);
+
                 if (distance != 0) {
+                    if(parent != null){
+                        parent.requestDisallowInterceptTouchEvent(true);
+                    }
+
                     startScrolling();
                     listener.onScroll(distance);
-                    lastTouchedPosition = getMotionEventPosition(event);
+
+                    lastTouchedPositionX = event.getX();
+                    lastTouchedPositionY = event.getY();
+                }
+                else{
+                    if(parent != null){
+                        parent.requestDisallowInterceptTouchEvent(false);
+                    }
+                    handled = false;
                 }
                 break;
         }
 
-        if (!gestureDetector.onTouchEvent(event) && event.getAction() == MotionEvent.ACTION_UP) {
+        if (handled && !gestureDetector.onTouchEvent(event) && event.getAction() == MotionEvent
+                .ACTION_UP) {
             justify();
         }
 
-        return true;
+        return handled;
     }
 
 
@@ -273,7 +299,7 @@ public abstract class WheelScroller {
 
     protected abstract int getFinalScrollerPosition();
 
-    protected abstract float getMotionEventPosition(MotionEvent event);
+    protected abstract float getMotionDistance(MotionEvent event, float previousX, float previousY);
 
     protected abstract void scrollerStartScroll(int distance, int time);
 

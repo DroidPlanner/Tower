@@ -885,9 +885,9 @@ public abstract class AbstractWheel extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
-                if (getParent() != null) {
-                    getParent().requestDisallowInterceptTouchEvent(true);
-                }
+//                if (getParent() != null) {
+//                    getParent().requestDisallowInterceptTouchEvent(true);
+//                }
                 break;
 
             case MotionEvent.ACTION_UP:
@@ -905,7 +905,7 @@ public abstract class AbstractWheel extends View {
                 }
                 break;
         }
-        return mScroller.onTouchEvent(event);
+        return mScroller.onTouchEvent(getParent(), event);
     }
 
 }
