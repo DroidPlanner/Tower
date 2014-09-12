@@ -108,14 +108,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/altitude_label"
-                style="@style/missionItemCardNumberPicker"/>
+                style="@style/missionItemDetailCard"/>
 
             <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
                 android:id="@+id/waypointDelayPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/waypoint_delay"
-                style="@style/missionItemCardNumberPicker"/>
+                style="@style/missionItemDetailCard"/>
         </LinearLayout>
     </ScrollView>
 

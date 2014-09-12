@@ -96,7 +96,7 @@
             android:id="@+id/altitudePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/missionItemCardNumberPicker"
+            style="@style/missionItemDetailCard"
             android:text="@string/altitude_label"
             />
 

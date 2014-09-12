@@ -64,7 +64,7 @@ public class MissionCircleFragment extends MissionDetailFragment implements
         altitudePicker.addChangingListener(this);
 
         final NumericWheelAdapter loiterTurnAdapter = new NumericWheelAdapter(context,
-                R.layout.wheel_text_centered, 0, 10, "%d turns");
+                R.layout.wheel_text_centered, 0, 10, "%d");
         final CardWheelHorizontalView loiterTurnPicker = (CardWheelHorizontalView) view
                 .findViewById(R.id.loiterTurnPicker);
         loiterTurnPicker.setViewAdapter(loiterTurnAdapter);
