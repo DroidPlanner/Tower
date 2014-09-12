@@ -87,56 +87,47 @@ public abstract class SuperActivity extends Activity implements
 		actionBar.setSelectedNavigationItem(getNavigationItem());
 	}
 
-	@Override
-	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		if (itemPosition == getNavigationItem()) {
-			return false;
-		}
-		Intent navigationIntent = new Intent(this, FlightDataActivity.class);
-		boolean failSafe ;
-		switch (itemPosition) {
-		case 0: // Planning
-				navigationIntent = new Intent(this, PlanningActivity.class);
-				failSafe = false;
-				break;
-		default:
-		case 1: // Flight Data
-				navigationIntent = new Intent(this, FlightDataActivity.class);
-				navigationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				failSafe = true;
-				break;
-		case 2: // RC
-				navigationIntent = new Intent(this, RCActivity.class);
-				failSafe = false;
-				break;
-		case 3: // Parameters
-				navigationIntent = new Intent(this, ParametersActivity.class);
-				failSafe = false;
-				break;
-		case 4: // Camera
-			navigationIntent = new Intent(this, CameraActivity.class);
-			failSafe = true;
-			break;
-		case 5: // GCP
-			navigationIntent = new Intent(this, GCPActivity.class);
-			failSafe = true;
-			break;
-		case 6: // Chart
-			failSafe = true;
-			navigationIntent = new Intent(this, ChartActivity.class);
-			break;
-		}
-			if( drone.state.isArmed() && failSafe == false){
-				return false;
-		}
-		else if(failSafe == true){
-			startActivity(navigationIntent);
-			return false;
-		}
-		else{
-			return false;
-		}
+    @Override
+    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+	if (itemPosition == getNavigationItem()) {
+	    return false;
 	}
+	Intent navigationIntent = new Intent(this, FlightDataActivity.class);
+	boolean failSafe  = false;
+	switch (itemPosition) {
+	case 0: // Planning
+	    navigationIntent = new Intent(this, PlanningActivity.class);
+	    break;
+	default:
+	case 1: // Flight Data
+	    navigationIntent = new Intent(this, FlightDataActivity.class);
+	    navigationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	    failSafe = true;
+	    break;
+	case 2: // RC
+	    navigationIntent = new Intent(this, RCActivity.class);
+	    break;
+	case 3: // Parameters
+	    navigationIntent = new Intent(this, ParametersActivity.class);
+	    break;
+	case 4: // Camera
+	    navigationIntent = new Intent(this, CameraActivity.class);
+	    failSafe = true;
+	    break;
+	case 5: // GCP
+	    navigationIntent = new Intent(this, GCPActivity.class);
+	    failSafe = true;
+	    break;
+	case 6: // Chart
+	    failSafe = true;
+	    navigationIntent = new Intent(this, ChartActivity.class);
+	    break;
+	}
+	if( !drone.state.isArmed() ||  failSafe ){
+	    startActivity(navigationIntent);
+	}
+	return false;
+    }
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
