@@ -87,13 +87,13 @@
 		tools:ignore="ContentDescription"
 		/>
 
-			<TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/title_rect"
-				style="@style/ModeDetailText"
-				android:background="@drawable/mode_desc_rectangle"
-				android:text="@string/waypointInfo_RTL" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_rect"
+        style="@style/ModeDetailText"
+        android:background="@drawable/mode_desc_rectangle"
+        android:text="@string/waypointInfo_RTL"/>
 
 
 </RelativeLayout>

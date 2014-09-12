@@ -3,6 +3,7 @@ package org.droidplanner.android.proxy.mission.item.fragments;
 import org.droidplanner.R;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
+import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 
@@ -53,7 +54,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 
         switch(wheel.getId()){
             case R.id.altitudePicker:
-                item.getCoordinate().getAltitude().set(newValue);
+                item.setAltitude(new Altitude(newValue));
                 break;
 
             case R.id.waypointDelayPicker:

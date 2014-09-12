@@ -129,8 +129,20 @@ public class CardWheelHorizontalView extends LinearLayout implements OnWheelChan
         mSpinnerWheel.setViewAdapter(adapter);
     }
 
+    public void setCurrentValue(int value){
+        mSpinnerWheel.setCurrentItem(mSpinnerWheel.getViewAdapter().getItemIndex(value));
+    }
+
     public void setCurrentItem(int index) {
         mSpinnerWheel.setCurrentItem(index);
+    }
+
+    public int getCurrentItemIndex(){
+        return mSpinnerWheel.getCurrentItem();
+    }
+
+    public int getCurrentValue(){
+        return mSpinnerWheel.getViewAdapter().getItem(mSpinnerWheel.getCurrentItem());
     }
 
     public void setCurrentItem(int index, boolean animated) {

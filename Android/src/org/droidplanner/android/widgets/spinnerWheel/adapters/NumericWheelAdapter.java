@@ -70,8 +70,12 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
      * @param format the format string
      */
     public NumericWheelAdapter(Context context, int minValue, int maxValue, String format) {
-        super(context);
-        
+        this(context, TEXT_VIEW_ITEM_RESOURCE, minValue, maxValue, format);
+    }
+
+    public NumericWheelAdapter(Context context, int itemResource, int minValue, int maxValue,
+                               String format){
+        super(context, itemResource);
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.format = format;
