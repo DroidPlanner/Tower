@@ -1,9 +1,7 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
-import org.droidplanner.android.widgets.spinnerWheel.AbstractWheel;
-import org.droidplanner.android.widgets.spinnerWheel.OnWheelChangedListener;
-import org.droidplanner.android.widgets.spinnerWheel.WheelHorizontalView;
+import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.waypoints.Waypoint;
@@ -13,7 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 
 public class MissionWaypointFragment extends MissionDetailFragment implements
-        OnWheelChangedListener {
+        CardWheelHorizontalView.OnCardWheelChangedListener {
 
 	@Override
 	protected int getResource() {
@@ -31,7 +29,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 
         final NumericWheelAdapter delayAdapter = new NumericWheelAdapter(context, 0, 60, "%d s");
         delayAdapter.setItemResource(R.layout.wheel_text_centered);
-        final WheelHorizontalView delayPicker = (WheelHorizontalView) view.findViewById(R.id
+        final CardWheelHorizontalView delayPicker = (CardWheelHorizontalView) view.findViewById(R.id
                 .waypointDelayPicker);
         delayPicker.setViewAdapter(delayAdapter);
         delayPicker.setCurrentItem(delayAdapter.getItemIndex((int)item.getDelay()));
@@ -40,8 +38,8 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
         final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(context,
                 MIN_ALTITUDE, MAX_ALTITUDE, "%d m");
         altitudeAdapter.setItemResource(R.layout.wheel_text_centered);
-        final WheelHorizontalView altitudePicker = (WheelHorizontalView) view.findViewById(R.id
-                .altitudePicker);
+        final CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view.findViewById
+                (R.id.altitudePicker);
         altitudePicker.setViewAdapter(altitudeAdapter);
         altitudePicker.setCurrentItem(altitudeAdapter.getItemIndex((int)item.getCoordinate()
                 .getAltitude().valueInMeters()));
@@ -50,7 +48,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 	}
 
     @Override
-    public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+    public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
         final Waypoint item = (Waypoint) this.itemRender.getMissionItem();
 
         switch(wheel.getId()){

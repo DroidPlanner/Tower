@@ -29,7 +29,7 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
                 MIN_ALTITUDE, MAX_ALTITUDE, "%d m");
         altitudeAdapter.setItemResource(R.layout.wheel_text_centered);
         final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view
-                .findViewById(R.id.cardAltitudePicker);
+                .findViewById(R.id.altitudePicker);
         cardAltitudePicker.setViewAdapter(altitudeAdapter);
         cardAltitudePicker.setCurrentItem(altitudeAdapter.getItemIndex((int) item.getFinishedAlt().valueInMeters()));
         cardAltitudePicker.addChangingListener(this);
@@ -38,7 +38,7 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
     @Override
     public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
         switch(wheel.getId()){
-            case R.id.cardAltitudePicker:
+            case R.id.altitudePicker:
                 Takeoff item = (Takeoff) this.itemRender.getMissionItem();
                 item.setFinishedAlt(new Altitude(newValue));
                 break;

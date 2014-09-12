@@ -2,9 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/grey_white"
+    style="@style/missionItemDetailLayout"
     >
 
     <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
@@ -95,13 +93,10 @@
             android:text="@string/waypointInfo_TakeOff"/>
 
         <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
-            android:id="@+id/cardAltitudePicker"
+            android:id="@+id/altitudePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_left_right_card_wheel_horizontal_view"
-            android:layout_marginRight="@dimen/margin_left_right_card_wheel_horizontal_view"
-            android:layout_marginTop="@dimen/margin_top_bottom_card_wheel_horizontal_view"
-            android:layout_marginBottom="@dimen/margin_top_bottom_card_wheel_horizontal_view"
+            style="@style/missionItemCardNumberPicker"
             android:text="@string/altitude_label"
             />
 

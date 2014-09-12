@@ -2,9 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/opaque_white"
+    style="@style/missionItemDetailLayout"
     >
     <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
@@ -97,7 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="5dp">
+            >
 
 			<TextView
 				android:layout_width="wrap_content"
@@ -106,40 +104,19 @@
 				android:background="@drawable/mode_desc_rectangle"
 				android:text="@string/waypointInfo_LoiterT" />
 
-            <TextView
-                android:text="@string/waypoint_altitude"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                style="@style/missionItemNumberPickerTitle"/>
-
-            <org.droidplanner.android.widgets.spinnerWheel.WheelHorizontalView
+            <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
                 android:id="@+id/altitudePicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:layout_width="100dp"
-                tools:layout_height="match_parent"
-                style="@style/missionItemNumberPicker"/>
+                android:text="@string/altitude_label"
+                style="@style/missionItemCardNumberPicker"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/light_title_bg"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"/>
-
-            <TextView
-                android:text="@string/loiter_time"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                style="@style/missionItemNumberPickerTitle"/>
-
-            <org.droidplanner.android.widgets.spinnerWheel.WheelHorizontalView
+            <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
                 android:id="@+id/loiterTimePicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:layout_width="100dp"
-                tools:layout_height="match_parent"
-                style="@style/missionItemNumberPicker"/>
+                android:text="@string/loiter_time"
+                style="@style/missionItemCardNumberPicker"/>
 
         </LinearLayout>
     </ScrollView>

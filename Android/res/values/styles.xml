@@ -406,6 +406,19 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
+    <style name="missionItemCardNumberPicker">
+        <item name="android:layout_marginLeft">@dimen/margin_left_right_card_wheel_horizontal_view</item>
+        <item name="android:layout_marginRight">@dimen/margin_left_right_card_wheel_horizontal_view</item>
+        <item name="android:layout_marginTop">@dimen/margin_top_bottom_card_wheel_horizontal_view</item>
+        <item name="android:layout_marginBottom">@dimen/margin_top_bottom_card_wheel_horizontal_view</item>
+    </style>
+
+    <style name="missionItemDetailLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/grey_white</item>
+    </style>
+
     <style name="missionItemNumberPickerTitle">
         <item name="android:gravity">center_vertical|start</item>
         <item name="android:textSize">20sp</item>

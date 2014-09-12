@@ -1,8 +1,7 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
-import org.droidplanner.android.widgets.spinnerWheel.AbstractWheel;
-import org.droidplanner.android.widgets.spinnerWheel.OnWheelChangedListener;
+import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.WheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.core.mission.MissionItemType;
@@ -12,7 +11,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
-public class MissionLoiterTFragment extends MissionDetailFragment implements OnWheelChangedListener {
+public class MissionLoiterTFragment extends MissionDetailFragment implements
+        CardWheelHorizontalView.OnCardWheelChangedListener {
 
 	@Override
 	protected int getResource() {
@@ -31,17 +31,17 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements OnW
         final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(context,
                 MIN_ALTITUDE, MAX_ALTITUDE, "%d m");
         altitudeAdapter.setItemResource(R.layout.wheel_text_centered);
-        final WheelHorizontalView altitudePicker = (WheelHorizontalView) view.findViewById(R.id
-                .altitudePicker);
-        altitudePicker.setViewAdapter(altitudeAdapter);
-        altitudePicker.setCurrentItem(altitudeAdapter.getItemIndex((int)item.getCoordinate()
+        final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view.findViewById
+                (R.id.altitudePicker);
+        cardAltitudePicker.setViewAdapter(altitudeAdapter);
+        cardAltitudePicker.setCurrentItem(altitudeAdapter.getItemIndex((int) item.getCoordinate()
                 .getAltitude().valueInMeters()));
-        altitudePicker.addChangingListener(this);
+        cardAltitudePicker.addChangingListener(this);
 
         final NumericWheelAdapter loiterTimeAdapter = new NumericWheelAdapter(context, 0, 600, "%d s");
         loiterTimeAdapter.setItemResource(R.layout.wheel_text_centered);
-        final WheelHorizontalView loiterTimePicker = (WheelHorizontalView) view.findViewById(R.id
-                .loiterTimePicker);
+        final CardWheelHorizontalView loiterTimePicker = (CardWheelHorizontalView) view.findViewById
+                (R.id.loiterTimePicker);
         loiterTimePicker.setViewAdapter(loiterTimeAdapter);
         loiterTimePicker.setCurrentItem(loiterTimeAdapter.getItemIndex((int) item.getTime()));
         loiterTimePicker.addChangingListener(this);
@@ -49,7 +49,7 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements OnW
 	}
 
     @Override
-    public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+    public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
         final LoiterTime item = (LoiterTime) this.itemRender.getMissionItem();
 
         switch(wheel.getId()){
