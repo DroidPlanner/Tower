@@ -80,22 +80,18 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
         mAnglePicker = (CardWheelHorizontalView) view.findViewById(id.anglePicker);
         mAnglePicker.setViewAdapter(new NumericWheelAdapter(context,
                 R.layout.wheel_text_centered, 0, 180, "%dº"));
-        mAnglePicker.addChangingListener(this);
 
         mOverlapPicker =(CardWheelHorizontalView) view.findViewById(id.overlapPicker);
         mOverlapPicker.setViewAdapter(new NumericWheelAdapter(context,
                 R.layout.wheel_text_centered, 0, 99, "%d %%"));
-        mOverlapPicker.addChangingListener(this);
 
         mSidelapPicker = (CardWheelHorizontalView) view.findViewById(R.id.sidelapPicker);
         mSidelapPicker.setViewAdapter(new NumericWheelAdapter(context,
                 R.layout.wheel_text_centered, 0, 99, "%d %%"));
-        mSidelapPicker.addChangingListener(this);
 
         mAltitudePicker = (CardWheelHorizontalView) view.findViewById(R.id.altitudePicker);
         mAltitudePicker.setViewAdapter(new NumericWheelAdapter(context,
                 R.layout.wheel_text_centered, 5, 200, "%d m"));
-        mAltitudePicker.addChangingListener(this);
 
         innerWPsCheckbox = (CheckBox) view.findViewById(id.checkBoxInnerWPs);
 
@@ -118,6 +114,11 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
         cameraSpinner.setOnSpinnerItemSelectedListener(this);
 
 		updateViews();
+
+        mAnglePicker.addChangingListener(this);
+        mOverlapPicker.addChangingListener(this);
+        mSidelapPicker.addChangingListener(this);
+        mAltitudePicker.addChangingListener(this);
 	}
 
 	@Override
