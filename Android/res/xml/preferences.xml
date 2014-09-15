@@ -417,6 +417,13 @@
             android:title="@string/version" />
         <Preference
             android:enabled="false"
+            android:key="@string/pref_firmware_version_key"
+            android:persistent="false"
+            android:selectable="false"
+            android:shouldDisableView="false"
+            android:title="@string/firmware_version" />
+        <Preference
+            android:enabled="false"
             android:key="@string/pref_mavlink_version_key"
             android:persistent="false"
             android:selectable="false"
