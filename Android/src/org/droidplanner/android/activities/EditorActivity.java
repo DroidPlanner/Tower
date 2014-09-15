@@ -102,7 +102,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				.findFragmentById(R.id.missionFragment1);
 
 		mSplineToggleContainer = findViewById(R.id.editorSplineToggleContainer);
-		mSplineToggleContainer.setVisibility(View.GONE);
+		mSplineToggleContainer.setVisibility(View.VISIBLE);
 
 		mLocationButtonsContainer = findViewById(R.id.location_button_container);
 		ImageButton mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
@@ -363,7 +363,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	private void enableSplineToggle(boolean isEnabled) {
 		if (mSplineToggleContainer != null) {
-			isEnabled=false;
 			mSplineToggleContainer.setVisibility(isEnabled ? View.VISIBLE : View.INVISIBLE);
 		}
 	}
