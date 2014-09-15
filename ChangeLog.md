@@ -8,6 +8,13 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.7.6
+* Warn user about all HIGH_SEVERITY messages from the drone (#1066)
+
+## Droidplanner v2.7.5
+* Fix follow-me for "heading" related follow modes (#1065)
+* Complementing German translation (#1059)
+
 ## Droidplanner v2.7.4
 * Added extra follow-modes (#1057)
 * Fix error on Mavlink message handling (#1056,#1050)
