@@ -425,9 +425,10 @@ public class SettingsFragment extends DpPreferenceFragment implements
 
         final boolean isEnabled = val != 0;
 		if (isEnabled) {
-			periodic.setSummary("Status every " + val + " seconds");
+			periodic.setSummary(getString(R.string.pref_tts_status_every) + " "  + 	val + " " +
+					getString(R.string.pref_tts_seconds));
 		} else {
-			periodic.setSummary("Status disabled");
+			periodic.setSummary(R.string.pref_tts_periodic_status_disabled);
 		}
 
 		for (int i = 1; i < periodicSpeechPrefs.getPreferenceCount(); i++) {
