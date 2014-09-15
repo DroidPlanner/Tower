@@ -107,6 +107,9 @@ public class MavLinkMsgHandler {
 			} else if (message.equals("Low Battery!")) {
 				drone.getState().setWarning(message);
 				break;
+			} else if (message.contains("ArduCopter")){
+				drone.setFirmwareVersion(message);
+				break;
 			}
 			break;
 		}
