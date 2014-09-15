@@ -64,6 +64,5 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment impleme
                 break;
         }
 
-        item.getMission().notifyMissionUpdate();
     }
 }

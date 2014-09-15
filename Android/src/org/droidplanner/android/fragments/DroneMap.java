@@ -1,6 +1,8 @@
 package org.droidplanner.android.fragments;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
@@ -8,6 +10,7 @@ import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
 import org.droidplanner.android.graphic.map.GraphicHome;
 import org.droidplanner.android.maps.DPMap;
+import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
@@ -20,13 +23,56 @@ import org.droidplanner.core.model.Drone;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 public abstract class DroneMap extends Fragment implements OnDroneListener {
+
+    private final static String TAG = DroneMap.class.getSimpleName();
+
+    private final Handler mHandler = new Handler();
+
+    private final Runnable mUpdateMap = new Runnable() {
+        @Override
+        public void run() {
+            final List<MarkerInfo> missionMarkerInfos = missionProxy.getMarkersInfos();
+
+            final boolean isThereMissionMarkers = !missionMarkerInfos.isEmpty();
+            final boolean isHomeValid = home.isValid();
+
+            //Get the list of markers currently on the map.
+            final Set<MarkerInfo> markersOnTheMap = mMapFragment.getMarkerInfoList();
+
+            if(!markersOnTheMap.isEmpty()){
+                if(isHomeValid) {
+                    markersOnTheMap.remove(home);
+                }
+
+                if(isThereMissionMarkers) {
+                    markersOnTheMap.removeAll(missionMarkerInfos);
+                }
+
+                mMapFragment.removeMarkers(markersOnTheMap);
+            }
+
+            if (isHomeValid) {
+                mMapFragment.updateMarker(home);
+            }
+
+            if(isThereMissionMarkers) {
+                mMapFragment.updateMarkers(missionMarkerInfos, isMissionDraggable());
+            }
+
+            mMapFragment.updateMissionPath(missionProxy);
+
+            mHandler.removeCallbacks(this);
+        }
+    };
 
 	protected DPMap mMapFragment;
 
@@ -89,7 +135,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		super.onResume();
 		drone.addDroneListener(this);
 		mMapFragment.loadCameraPosition();
-		update();
+		postUpdate();
 	}
 
 	@Override
@@ -108,7 +154,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case MISSION_UPDATE:
-			update();
+			postUpdate();
 			break;
 
 		case GPS:
@@ -138,15 +184,8 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		}
 	}
 
-	public void update() {
-		mMapFragment.cleanMarkers();
-
-		if (home.isValid()) {
-			mMapFragment.updateMarker(home);
-		}
-
-		mMapFragment.updateMarkers(missionProxy.getMarkersInfos(), isMissionDraggable());
-		mMapFragment.updateMissionPath(missionProxy);
+	public final void postUpdate() {
+		mHandler.post(mUpdateMap);
 	}
 
 	protected int getMaxFlightPathSize() {

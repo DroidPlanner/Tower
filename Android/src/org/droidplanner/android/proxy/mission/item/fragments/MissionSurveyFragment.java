@@ -146,8 +146,6 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
                     Log.e(TAG, "Error while building the survey.", e);
                     mAltitudePicker.setBackgroundColor(Color.RED);
                 }
-
-                survey.getMission().notifyMissionUpdate();
                 break;
         }
     }

@@ -1,9 +1,11 @@
 package org.droidplanner.android.maps.providers.google_map;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.droidplanner.R;
@@ -13,6 +15,7 @@ import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.DroneHelper;
+import org.droidplanner.android.utils.collection.HashBiMap;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.drone.DroneInterfaces;
@@ -55,7 +58,6 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
-import com.google.common.collect.HashBiMap;
 
 public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 		GoogleApiClient.OnConnectionFailedListener, LocationListener,
@@ -75,7 +77,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 	private static final long USER_LOCATION_UPDATE_FASTEST_INTERVAL = 1000; // ms
 	private static final float USER_LOCATION_UPDATE_MIN_DISPLACEMENT = 5; // m
 
-	private final HashBiMap<MarkerInfo, Marker> mMarkers = HashBiMap.create();
+    private final HashBiMap<MarkerInfo, Marker> mBiMarkersMap = new HashBiMap<MarkerInfo, Marker>();
 
 	private Drone mDrone;
 	private DroidPlannerPrefs mAppPrefs;
@@ -286,13 +288,12 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 	}
 
 	@Override
-	public void cleanMarkers() {
-		for (Map.Entry<MarkerInfo, Marker> entry : mMarkers.entrySet()) {
-			Marker marker = entry.getValue();
+	public void clearMarkers() {
+		for (Marker marker : mBiMarkersMap.valueSet()) {
 			marker.remove();
 		}
 
-		mMarkers.clear();
+		mBiMarkersMap.clear();
 	}
 
 	@Override
@@ -309,31 +310,58 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
         }
 
 		final LatLng position = DroneHelper.CoordToLatLang(coord);
-		Marker marker = mMarkers.get(markerInfo);
+		Marker marker = mBiMarkersMap.getValue(markerInfo);
 		if (marker == null) {
 			// Generate the marker
-			marker = mMap.addMarker(new MarkerOptions().position(position));
-			mMarkers.put(markerInfo, marker);
+            generateMarker(markerInfo, position, isDraggable);
 		}
-
-		// Update the marker
-		final Bitmap markerIcon = markerInfo.getIcon(getResources());
-		if (markerIcon != null) {
-			marker.setIcon(BitmapDescriptorFactory.fromBitmap(markerIcon));
-		}
-
-		marker.setAlpha(markerInfo.getAlpha());
-		marker.setAnchor(markerInfo.getAnchorU(), markerInfo.getAnchorV());
-		marker.setInfoWindowAnchor(markerInfo.getInfoWindowAnchorU(),
-				markerInfo.getInfoWindowAnchorV());
-		marker.setPosition(position);
-		marker.setRotation(markerInfo.getRotation());
-		marker.setSnippet(markerInfo.getSnippet());
-		marker.setTitle(markerInfo.getTitle());
-		marker.setDraggable(isDraggable);
-		marker.setFlat(markerInfo.isFlat());
-		marker.setVisible(markerInfo.isVisible());
+        else{
+            // Update the marker
+            updateMarker(marker, markerInfo, position, isDraggable);
+        }
 	}
+
+    private void generateMarker(MarkerInfo markerInfo, LatLng position, boolean isDraggable){
+        final MarkerOptions markerOptions = new MarkerOptions()
+                .position(position)
+                .draggable(isDraggable)
+                .alpha(markerInfo.getAlpha())
+                .anchor(markerInfo.getAnchorU(), markerInfo.getAnchorV())
+                .infoWindowAnchor(markerInfo.getInfoWindowAnchorU(),
+                        markerInfo.getInfoWindowAnchorV())
+                .rotation(markerInfo.getRotation())
+                .snippet(markerInfo.getSnippet())
+                .title(markerInfo.getTitle())
+                .flat(markerInfo.isFlat())
+                .visible(markerInfo.isVisible());
+
+        final Bitmap markerIcon = markerInfo.getIcon(getResources());
+        if (markerIcon != null) {
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerIcon));
+        }
+
+        Marker marker = mMap.addMarker(markerOptions);
+        mBiMarkersMap.put(markerInfo, marker);
+    }
+
+    private void updateMarker(Marker marker, MarkerInfo markerInfo, LatLng position, boolean isDraggable){
+        final Bitmap markerIcon = markerInfo.getIcon(getResources());
+        if (markerIcon != null) {
+            marker.setIcon(BitmapDescriptorFactory.fromBitmap(markerIcon));
+        }
+
+        marker.setAlpha(markerInfo.getAlpha());
+        marker.setAnchor(markerInfo.getAnchorU(), markerInfo.getAnchorV());
+        marker.setInfoWindowAnchor(markerInfo.getInfoWindowAnchorU(),
+                markerInfo.getInfoWindowAnchorV());
+        marker.setPosition(position);
+        marker.setRotation(markerInfo.getRotation());
+        marker.setSnippet(markerInfo.getSnippet());
+        marker.setTitle(markerInfo.getTitle());
+        marker.setDraggable(isDraggable);
+        marker.setFlat(markerInfo.isFlat());
+        marker.setVisible(markerInfo.isVisible());
+    }
 
 	@Override
 	public void updateMarkers(List<MarkerInfo> markersInfos) {
@@ -349,16 +377,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 		}
 	}
 
-	/**
-	 * Used to retrieve the info for the given marker.
-	 * 
-	 * @param marker
-	 *            marker whose info to retrieve
-	 * @return marker's info
-	 */
-	private MarkerInfo getMarkerInfo(Marker marker) {
-		return mMarkers.inverse().get(marker);
-	}
+    @Override
+    public Set<MarkerInfo> getMarkerInfoList(){
+        return new HashSet<MarkerInfo>(mBiMarkersMap.keySet());
+    }
 
 	@Override
 	public List<Coord2D> projectPathIntoMap(List<Coord2D> path) {
@@ -374,7 +396,22 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 		return coords;
 	}
 
-	@Override
+    @Override
+    public void removeMarkers(Collection<MarkerInfo> markerInfoList) {
+        if(markerInfoList == null || markerInfoList.isEmpty()){
+            return;
+        }
+
+        for(MarkerInfo markerInfo: markerInfoList){
+            Marker marker = mBiMarkersMap.getValue(markerInfo);
+            if(marker != null){
+                marker.remove();
+                mBiMarkersMap.removeKey(markerInfo);
+            }
+        }
+    }
+
+    @Override
 	public void setMapPadding(int left, int top, int right, int bottom) {
 		mMap.setPadding(left, top, right, bottom);
 	}
@@ -546,7 +583,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 			@Override
 			public void onMarkerDragStart(Marker marker) {
 				if (mMarkerDragListener != null) {
-					final MarkerInfo markerInfo = getMarkerInfo(marker);
+					final MarkerInfo markerInfo = mBiMarkersMap.getKey(marker);
 					markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
 					mMarkerDragListener.onMarkerDragStart(markerInfo);
 				}
@@ -555,7 +592,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 			@Override
 			public void onMarkerDrag(Marker marker) {
 				if (mMarkerDragListener != null) {
-					final MarkerInfo markerInfo = getMarkerInfo(marker);
+					final MarkerInfo markerInfo = mBiMarkersMap.getKey(marker);
 					markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
 					mMarkerDragListener.onMarkerDrag(markerInfo);
 				}
@@ -564,7 +601,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 			@Override
 			public void onMarkerDragEnd(Marker marker) {
 				if (mMarkerDragListener != null) {
-					final MarkerInfo markerInfo = getMarkerInfo(marker);
+					final MarkerInfo markerInfo = mBiMarkersMap.getKey(marker);
 					markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
 					mMarkerDragListener.onMarkerDragEnd(markerInfo);
 				}
@@ -575,7 +612,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 			@Override
 			public boolean onMarkerClick(Marker marker) {
 				if (mMarkerClickListener != null) {
-					return mMarkerClickListener.onMarkerClick(getMarkerInfo(marker));
+					return mMarkerClickListener.onMarkerClick(mBiMarkersMap.getKey(marker));
 				}
 				return false;
 			}

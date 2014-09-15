@@ -62,6 +62,5 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
                 break;
         }
 
-        item.getMission().notifyMissionUpdate();
     }
 }
