@@ -68,14 +68,4 @@
         android:layout_weight="1"
 	    tools:ignore="ContentDescription" />
 
-	<Button
-	    android:id="@+id/mc_follow"
-	    style="@style/flightControlButton"
-	    android:layout_width="75dp"
-	    android:layout_height="match_parent"
-	    android:drawableTop="@drawable/ic_follow"
-	    android:text="@string/mission_control_follow"
-        android:layout_weight="1"
-	    tools:ignore="ContentDescription" />
-
 </LinearLayout>

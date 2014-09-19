@@ -62,9 +62,6 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 
 		final Button loiterBtn = (Button) view.findViewById(R.id.mc_loiter);
 		loiterBtn.setOnClickListener(this);
-
-		final Button followBtn = (Button) view.findViewById(R.id.mc_follow);
-		followBtn.setOnClickListener(this);
 	}
 
 	@Override
@@ -111,37 +108,6 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 		case R.id.mc_loiter:
 			drone.getState().changeFlightMode(ApmModes.ROTOR_LOITER);
 			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_LOITER.getName());
-			break;
-
-		case R.id.mc_follow:
-			final int result = followMe.toggleFollowMeState();
-			String eventLabel = null;
-			switch (result) {
-			case Follow.FOLLOW_START:
-				eventLabel = "FollowMe enabled";
-				break;
-
-			case Follow.FOLLOW_END:
-				eventLabel = "FollowMe disabled";
-				break;
-
-			case Follow.FOLLOW_INVALID_STATE:
-				eventLabel = "FollowMe error: invalid state";
-				break;
-
-			case Follow.FOLLOW_DRONE_DISCONNECTED:
-				eventLabel = "FollowMe error: drone not connected";
-				break;
-
-			case Follow.FOLLOW_DRONE_NOT_ARMED:
-				eventLabel = "FollowMe error: drone not armed";
-				break;
-			}
-
-			if (eventLabel != null) {
-				eventBuilder.setAction("FollowMe selected").setLabel(eventLabel);
-				Toast.makeText(getActivity(), eventLabel, Toast.LENGTH_SHORT).show();
-			}
 			break;
 
 		default:

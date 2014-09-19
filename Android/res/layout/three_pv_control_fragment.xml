@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:paddingLeft="40dip"
+    android:paddingRight="40dip"
+    android:paddingTop="20dip"
+    android:paddingBottom="20dip"
+    tools:showIn="@layout/fragment_three_pv">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Drone: not ready\nDroidPlanner: not ready"
+        android:layout_marginTop="60dip"
+        android:id="@+id/three_pv_status"
+        android:layout_gravity="center_horizontal|bottom"
+        android:singleLine="false"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/takeoff"
+        android:id="@+id/button_takeoff_land"
+        android:background="@drawable/button_blue"
+        style="@style/modeControl"
+        android:layout_gravity="left|top"
+        android:singleLine="false"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/loiter"
+        android:id="@+id/button_follow_loiter"
+        android:background="@drawable/button_green"
+        android:enabled="false"
+        style="@style/modeControl"
+        android:layout_gravity="right|top"
+        android:singleLine="false"/>
+</FrameLayout>
