@@ -60,7 +60,7 @@
     <string name="pref_map_type_summary">Kartentyp wählen</string>
     <string name="pref_enable_tts">Sprachausgabe aktivieren</string>
     <string name="pref_enable_tts_summary">Sprachausgabe für wichtige Ereignisse</string>
-    <string name="pref_request_max_volume">Höchste lautstärke am start einstellen</string>
+    <string name="pref_request_max_volume">Höchste lautstärke beim start einstellen</string>
     <string name="pref_vehicle_type">Standard Fahrzeugtyp</string>
     <string name="pref_vehicle_type_summary">Fahrzeugtyp, wenn Verbindung getrennt</string>
     <string name="pref_rc">RC Bildschirm</string>
@@ -330,11 +330,11 @@
 
     <!-- Text To Speech -->
     <string name="pref_title_tts">Sprachausgabe</string>
-    <string name="pref_title_tts_periodic">Periodisch</string>
+    <string name="pref_title_tts_periodic">Intervall</string>
     <string name="pref_title_tts_periodic_status">Intervall Meldungen</string>
-    <string name="pref_tts_periodic_summary">Was ist in dem periodischen Status enthalten?</string>
-    <string name="pref_tts_periodic_period">Periode</string>
-    <string name="pref_tts_periodic_period_summary">Wie oft der periodische Status gelesen wird.</string>
+    <string name="pref_tts_periodic_summary">Was ist in der Intervallmeldung enthalten?</string>
+    <string name="pref_tts_periodic_period">Intervall</string>
+    <string name="pref_tts_periodic_period_summary">Wie oft die Intervallmeldung gelesen wird.</string>
     <string name="pref_tts_periodic_bat_volt">Batteriespannung</string>
     <string name="pref_tts_periodic_bat_volt_summary">Batteriespannung lesen.</string>
     <string name="pref_tts_periodic_alt">Höhe</string>
@@ -356,6 +356,10 @@
     <string name="pref_tts_warning_lost_signal_summary">Warnt wenn die Verbindung zur Drohne getrennt oder wiederhergestellt wird.</string>
     <string name="pref_tts_warning_autopilot_warnings">Warnungen vom Autopilot</string>
     <string name="pref_tts_warning_autopilot_warnings_summary">Warnt vor Scharfstellfehler, leere Batterien, usw.</string>
+    <string name="pref_tts_periodic_status_disabled">Status deaktiviert</string>
+    <string name="pref_tts_status_every">Status alle </string>
+    <string name="pref_tts_seconds">sekunden</string>
+    <string name="pref_tts_off">aus</string>
 
     <!-- Droneshare -->
     <string name="dsheader">Wären Sie daran interessiert die kostenlose www.Droneshare.com Service zu benutzen?</string>

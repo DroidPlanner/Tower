@@ -113,6 +113,7 @@ public class ThreePVTuningFragment extends Fragment implements View.OnClickListe
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 		followMe.setType(adapter.getItem(position));
+		updateLabel();
 	}
 
 	@Override
