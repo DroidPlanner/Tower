@@ -91,4 +91,8 @@ public interface Drone {
 			double climb);
 
 	public void setDisttowpAndSpeedAltErrors(double disttowp, double alt_error, double aspd_error);
+
+	public String getFirmwareVersion();
+
+	public void setFirmwareVersion(String message);
 }

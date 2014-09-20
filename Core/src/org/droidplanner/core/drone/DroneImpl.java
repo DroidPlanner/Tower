@@ -233,4 +233,14 @@ public class DroneImpl implements Drone {
 	public Calibration getCalibrationSetup() {
 		return calibrationSetup;
 	}
+
+	@Override
+	public String getFirmwareVersion() {
+		return type.getFirmwareVersion();
+	}
+
+	@Override
+	public void setFirmwareVersion(String message) {
+		type.setFirmwareVersion(message);		
+	}
 }
