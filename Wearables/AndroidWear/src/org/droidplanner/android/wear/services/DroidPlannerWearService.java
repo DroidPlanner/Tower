@@ -177,6 +177,7 @@ public class DroidPlannerWearService extends WearableListenerService {
 
                                 task.run();
                                 dataItems.release();
+                                dataItems.close();
                             }
                         });
             }
@@ -225,6 +226,8 @@ public class DroidPlannerWearService extends WearableListenerService {
         if(dataUpdated){
             broadcastDroneDataUpdate(dataBundle);
         }
+
+        dataEvents.close();
     }
 
     private void broadcastDroneDataUpdate(Bundle dataBundle){
