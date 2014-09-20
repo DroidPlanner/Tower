@@ -17,6 +17,8 @@ import android.view.View.OnClickListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.MAVLink.MavLinkArm;
@@ -31,7 +33,7 @@ import com.droidplanner.helpers.units.Length;
 import com.google.android.gms.maps.model.LatLng;
 
 public class FlightDataActivity extends SuperFlightActivity implements
-		OnWaypointUpdateListner, ModeChangedListener, GuidePointListener, OnLongClickListener {
+		OnWaypointUpdateListner, ModeChangedListener, GuidePointListener, OnLongClickListener, OnClickListener {
 	private TextView distanceView;
 
 	@Override
@@ -73,6 +75,12 @@ public class FlightDataActivity extends SuperFlightActivity implements
 			landButton.setOnLongClickListener(this);
 			stabilizeButton.setOnLongClickListener(this);
 			RTLButton.setOnLongClickListener(this);
+			
+			launchButton.setOnClickListener(this); // All normal click to inform user of correct use
+			armDisarmButton.setOnClickListener(this);
+			landButton.setOnClickListener(this);
+			stabilizeButton.setOnClickListener(this);
+			RTLButton.setOnClickListener(this);
 		}
 		
 	}
@@ -137,9 +145,32 @@ public class FlightDataActivity extends SuperFlightActivity implements
 	private void checkDistanceVisible() {
 		distanceView.setVisibility(drone.guidedPoint.isCoordValid() && distanceView.getText().length() > 0 ? View.VISIBLE : View.INVISIBLE);
 	}
+	
+	/**
+	 * To inform users of the proper use of the flight data GUI buttons catch when a normal press is used.
+	 * A long press should be used and a normal press is not used.
+	 * @param view The button that is pressed which is causing the listener to be triggered
+	 */
+	@Override
+	public void onClick(View view) {
+		
+		// If statement is not strictly needed as nothing else uses click listeners but include it for modification later
+		if (view == launchButton || view == landButton || view == armDisarmButton || view == stabilizeButton || view == RTLButton)
+		{
+			
+			// Since we don't use a normal click on any of these buttons give an error message on correct usage of a long press
+			drone.tts.speak("Hold down button for a few seconds for activation");
+			
+			// Also give a toast error to make sure people see the message
+			Toast.makeText(this, "Hold down button for a few seconds to activate", Toast.LENGTH_LONG)
+			.show();
+			
+		}
+		
+	}
 
 	/**
-	 * 
+	 * The buttons should be activated by a long press. The logic for that goes here.
 	 * @param view
 	 * @return True if we have handled the long click, false otherwise
 	 */
@@ -255,12 +286,17 @@ public class FlightDataActivity extends SuperFlightActivity implements
 		return false;
 	}
 	
+	/**
+	 * Used to flip the armDisarmButton to say Disarmed after the vehicle has been armed.
+	 * This keeps the button text in sync with the result of using the button
+	 */
 	@Override
 	public void notifyArmed()
 	{
 		// Call the superclass method
 		super.notifyArmed();
 		
+		// Make sure the button exists to prevent null pointers
 		if (armDisarmButton != null)
 		{
 			// Armed
@@ -270,12 +306,17 @@ public class FlightDataActivity extends SuperFlightActivity implements
 		}
 	}
 	
+	/**
+	 * Used to flip the armDisarmButton to say Armed after the vehicle has been disarmed.
+	 * This keeps the button text in sync with the result of using the button
+	 */
 	@Override
 	public void notifyDisarmed()
 	{
 		// Call the superclass method
 		super.notifyDisarmed();
 		
+		// Make sure the button exists to prevent null pointers
 		if (armDisarmButton != null)
 		{
 			// Disarmed
