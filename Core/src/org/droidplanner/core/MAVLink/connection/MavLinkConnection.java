@@ -127,9 +127,9 @@ public abstract class MavLinkConnection {
             for (int i = 0; i < bufferSize; i++) {
                 MAVLinkPacket receivedPacket = parser.mavlink_parse_char(buffer[i] & 0x00ff);
                 if (receivedPacket != null) {
-                    queueToLog(receivedPacket);
                     MAVLinkMessage msg = receivedPacket.unpack();
                     reportReceivedMessage(msg);
+                    queueToLog(receivedPacket);
                 }
             }
         }

@@ -22,6 +22,7 @@ import com.MAVLink.Messages.enums.MAV_STATE;
 
 public class MavLinkMsgHandler {
 
+	private static final byte SEVERITY_HIGH = 3;
 	private Drone drone;
 
 	public MavLinkMsgHandler(Drone drone) {
@@ -99,15 +100,16 @@ public class MavLinkMsgHandler {
 			//also less important things like "erasing logs" and "calibrating barometer"
 			msg_statustext msg_statustext = (msg_statustext) msg;
 			String message = msg_statustext.getText();
-			//TODO read anything that is "SEVERITY_HIGH", but only read certain "SEVERITY_LOW"s
-			if(message.equals("Low Battery!")){
+
+			if (msg_statustext.severity >= SEVERITY_HIGH) {
 				drone.getState().setWarning(message);
-			}
-			if (message.length() > 7) {
-				if (message.substring(0, 7).equals("PreArm:")
-						|| message.substring(0, 4).equals("Arm:")) {
-					drone.getState().setWarning(message);
-				}
+				break;
+			} else if (message.equals("Low Battery!")) {
+				drone.getState().setWarning(message);
+				break;
+			} else if (message.contains("ArduCopter")){
+				drone.setFirmwareVersion(message);
+				break;
 			}
 			break;
 		}

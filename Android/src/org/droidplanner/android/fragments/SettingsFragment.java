@@ -349,6 +349,17 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		}
 	}
 
+	private void updateFirmwareVersionPreference(String firmwareVersion) {
+		final Preference firmwareVersionPref = findPreference(getString(R.string.pref_firmware_version_key));
+		if (firmwareVersionPref != null) {
+			if (firmwareVersion == null) {
+				firmwareVersionPref.setSummary(getString(R.string.empty_content));
+			} else {
+				firmwareVersionPref.setSummary(firmwareVersion);
+			}
+		}
+	}
+
 	private boolean updateMapSettingsPreference(final String mapProviderName) {
 		final DPMapProvider mapProvider = DPMapProvider.getMapProvider(mapProviderName);
 		if (mapProvider == null)
@@ -425,9 +436,10 @@ public class SettingsFragment extends DpPreferenceFragment implements
 
         final boolean isEnabled = val != 0;
 		if (isEnabled) {
-			periodic.setSummary("Status every " + val + " seconds");
+			periodic.setSummary(getString(R.string.pref_tts_status_every) + " "  + 	val + " " +
+					getString(R.string.pref_tts_seconds));
 		} else {
-			periodic.setSummary("Status disabled");
+			periodic.setSummary(R.string.pref_tts_periodic_status_disabled);
 		}
 
 		for (int i = 1; i < periodicSpeechPrefs.getPreferenceCount(); i++) {
@@ -446,6 +458,8 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		} else {
 			updateMavlinkVersionPreference(null);
 		}
+		
+		updateFirmwareVersionPreference(drone.getFirmwareVersion());
 
 		drone.addDroneListener(this);
 	}
@@ -476,11 +490,15 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		switch (event) {
 		case DISCONNECTED:
 			updateMavlinkVersionPreference(null);
+			updateFirmwareVersionPreference(null);
 			break;
 
 		case HEARTBEAT_FIRST:
 		case HEARTBEAT_RESTORED:
 			updateMavlinkVersionPreference(String.valueOf(drone.getMavlinkVersion()));
+			break;
+		case FIRMWARE:
+			updateFirmwareVersionPreference(drone.getFirmwareVersion());
 			break;
 		default:
 			break;
