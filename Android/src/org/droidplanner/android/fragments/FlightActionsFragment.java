@@ -76,7 +76,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-				.setCategory(GAUtils.Category.FLIGHT_DATA_ACTION_BUTTON.toString());
+				.setCategory(GAUtils.Category.FLIGHT_DATA_ACTION_BUTTON);
 
 		switch (v.getId()) {
 		case R.id.mc_planningBtn:

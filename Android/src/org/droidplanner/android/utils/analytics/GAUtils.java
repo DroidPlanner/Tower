@@ -29,60 +29,39 @@ public class GAUtils {
 	/**
 	 * List the analytics categories used in the app.
 	 */
-	public static enum Category {
+	public static class Category {
 		/**
 		 * Category for analytics data related to the details panel on the
 		 * flight data screen.
 		 */
-		FLIGHT_DATA_DETAILS_PANEL,
+		public static final String FLIGHT_DATA_DETAILS_PANEL = "flight_data_details_panel";
 
 		/**
 		 * Category for analytics data related to the action buttons on the
 		 * flight data screen.
 		 */
-		FLIGHT_DATA_ACTION_BUTTON,
+		public static final String FLIGHT_DATA_ACTION_BUTTON = "flight_data_action_button";
 
 		/**
 		 * Category for analytics related to mavlink connection events.
 		 */
-		MAVLINK_CONNECTION;
-
-		@Override
-		public String toString() {
-			return name().toLowerCase();
-		}
+		public static final String MAVLINK_CONNECTION = "mavlink_connection";
 	}
 
 	/**
 	 * List the custom dimension used in the app.
 	 */
-	public static enum CustomDimension {
+	public static class CustomDimension {
 		/**
 		 * Custom dimension used to report the used mavlink connection type.
 		 */
-		MAVLINK_CONNECTION_TYPE(1),
+		public static final int MAVLINK_CONNECTION_TYPE = 1;
 
 		/**
 		 * Custom dimension used to report whether the user has a droneshare
 		 * account.
 		 */
-		DRONESHARE_ACTIVE(2);
-
-		/**
-		 * Custom dimension index.
-		 */
-		private int mIndex;
-
-		private CustomDimension(int dimenIndex) {
-			mIndex = dimenIndex;
-		}
-
-		/**
-		 * @return the custom dimension index.
-		 */
-		public int getIndex() {
-			return mIndex;
-		}
+		public static final int DRONESHARE_ACTIVE = 2;
 	}
 
 	/**
@@ -123,10 +102,10 @@ public class GAUtils {
 
 		sendHit(new HitBuilders.AppViewBuilder()
 				.setNewSession()
-				.setCustomDimension(CustomDimension.MAVLINK_CONNECTION_TYPE.getIndex(),
-						connectionType)
-				.setCustomDimension(CustomDimension.DRONESHARE_ACTIVE.getIndex(),
-						String.valueOf(isDroneShareUser)).build());
+				.setCustomDimension(CustomDimension.MAVLINK_CONNECTION_TYPE, connectionType)
+				.setCustomDimension(CustomDimension.DRONESHARE_ACTIVE,
+                        String.valueOf(isDroneShareUser))
+                .build());
 	}
 
 	public static void sendEvent(HitBuilders.EventBuilder eventBuilder) {

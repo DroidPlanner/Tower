@@ -14,6 +14,7 @@ import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
 import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -42,6 +43,7 @@ import android.widget.Toast;
 
 import com.getpebble.android.kit.PebbleKit;
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
 
 /**
  * Implements the application settings screen.
@@ -341,22 +343,38 @@ public class SettingsFragment extends DpPreferenceFragment implements
 	private void updateMavlinkVersionPreference(String version) {
 		final Preference mavlinkVersionPref = findPreference(getString(R.string.pref_mavlink_version_key));
 		if (mavlinkVersionPref != null) {
+            final HitBuilders.EventBuilder mavlinkEvent = new HitBuilders.EventBuilder()
+                    .setCategory(GAUtils.Category.MAVLINK_CONNECTION);
+
 			if (version == null) {
 				mavlinkVersionPref.setSummary(getString(R.string.empty_content));
+                mavlinkEvent.setAction("Mavlink version unset");
 			} else {
 				mavlinkVersionPref.setSummary('v' + version);
+                mavlinkEvent.setAction("Mavlink version set").setLabel(version);
 			}
+
+            //Record the mavlink version
+            GAUtils.sendEvent(mavlinkEvent);
 		}
 	}
 
 	private void updateFirmwareVersionPreference(String firmwareVersion) {
 		final Preference firmwareVersionPref = findPreference(getString(R.string.pref_firmware_version_key));
 		if (firmwareVersionPref != null) {
+            final HitBuilders.EventBuilder firmwareEvent = new HitBuilders.EventBuilder()
+                    .setCategory(GAUtils.Category.MAVLINK_CONNECTION);
+
 			if (firmwareVersion == null) {
 				firmwareVersionPref.setSummary(getString(R.string.empty_content));
+                firmwareEvent.setAction("Firmware version unset");
 			} else {
 				firmwareVersionPref.setSummary(firmwareVersion);
+                firmwareEvent.setAction("Firmware version set").setLabel(firmwareVersion);
 			}
+
+            // Record the firmware version.
+            GAUtils.sendEvent(firmwareEvent);
 		}
 	}
 
