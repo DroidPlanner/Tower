@@ -80,19 +80,19 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements OnCa
 		doCalibrationStep(0);
 	}
 
-	@Override
-	public void onCalibrationData(int index, int count, boolean isSending) {
-		if (sidePanel != null && parameters != null) {
-			String title;
-			if (isSending) {
-				title = getResources().getString(R.string.setup_sf_desc_uploading);
-			} else {
-				title = getResources().getString(R.string.setup_sf_desc_downloading);
-			}
+    @Override
+    public void onCalibrationData(int index, int count, boolean isSending) {
+        if (sidePanel instanceof FragmentSetupProgress && parameters != null) {
+            String title;
+            if (isSending) {
+                title = getResources().getString(R.string.setup_sf_desc_uploading);
+            } else {
+                title = getResources().getString(R.string.setup_sf_desc_downloading);
+            }
 
-			((FragmentSetupProgress) sidePanel).updateProgress(index + 1, count, title);
-		}
-	}
+            ((FragmentSetupProgress) sidePanel).updateProgress(index + 1, count, title);
+        }
+    }
 
 	@Override
 	public void doCalibrationStep(int step) {
