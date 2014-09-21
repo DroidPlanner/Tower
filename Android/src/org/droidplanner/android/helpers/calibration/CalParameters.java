@@ -102,6 +102,10 @@ public class CalParameters {
 		if (paramIndex >= calParameterItems.size())
 			return -1;
 		Parameter param = calParameterItems.get(paramIndex);
+        if(param == null){
+            return -1;
+        }
+
 		return param.value;
 	}
 
