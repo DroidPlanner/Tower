@@ -1,7 +1,10 @@
 package org.droidplanner.android.maps.providers.mapbox;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.droidplanner.R;
@@ -10,6 +13,7 @@ import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.DroneHelper;
+import org.droidplanner.android.utils.collection.HashBiMap;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.drone.DroneInterfaces;
@@ -30,7 +34,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.common.collect.HashBiMap;
 import com.mapbox.mapboxsdk.api.ILatLng;
 import com.mapbox.mapboxsdk.geometry.BoundingBox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -50,13 +53,13 @@ import com.mapbox.mapboxsdk.views.util.Projection;
  */
 public class MapBoxFragment extends Fragment implements DPMap {
 
-	private final HashBiMap<MarkerInfo, Marker> mMarkers = HashBiMap.create();
+	private final HashBiMap<MarkerInfo, Marker> mBiMarkersMap = new HashBiMap<MarkerInfo, Marker>();
 
 	private final ItemizedDraggableIconOverlay.OnMarkerDragListener mMarkerDragHandler = new ItemizedDraggableIconOverlay.OnMarkerDragListener() {
 		@Override
 		public void onMarkerDrag(Marker marker) {
 			if (mMarkerDragListener != null) {
-				final MarkerInfo markerInfo = getMarkerInfo(marker);
+				final MarkerInfo markerInfo = mBiMarkersMap.getKey(marker);
 				markerInfo.setPosition(DroneHelper.ILatLngToCoord(marker.getPoint()));
 				mMarkerDragListener.onMarkerDrag(markerInfo);
 			}
@@ -65,7 +68,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		@Override
 		public void onMarkerDragEnd(Marker marker) {
 			if (mMarkerDragListener != null) {
-				final MarkerInfo markerInfo = getMarkerInfo(marker);
+				final MarkerInfo markerInfo = mBiMarkersMap.getKey(marker);
 				markerInfo.setPosition(DroneHelper.ILatLngToCoord(marker.getPoint()));
 				mMarkerDragListener.onMarkerDragEnd(markerInfo);
 			}
@@ -74,7 +77,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		@Override
 		public void onMarkerDragStart(Marker marker) {
 			if (mMarkerDragListener != null) {
-				final MarkerInfo markerInfo = getMarkerInfo(marker);
+				final MarkerInfo markerInfo = mBiMarkersMap.getKey(marker);
 				markerInfo.setPosition(DroneHelper.ILatLngToCoord(marker.getPoint()));
 				mMarkerDragListener.onMarkerDragStart(markerInfo);
 			}
@@ -93,7 +96,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		@Override
 		public void onTapMarker(MapView pMapView, final Marker pMarker) {
 			if (mMarkerClickListener != null) {
-				mMarkerClickListener.onMarkerClick(getMarkerInfo(pMarker));
+				mMarkerClickListener.onMarkerClick(mBiMarkersMap.getKey(pMarker));
 			}
 		}
 
@@ -185,6 +188,12 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		resetMarkersOverlay();
 	}
 
+    private void removeMarkersOverlay(List<Marker> markers){
+        if(mMarkersOverlay != null){
+            mMarkersOverlay.removeItems(markers);
+        }
+    }
+
 	private void resetMarkersOverlay() {
 		if (mMarkersOverlay != null) {
 			mMarkersOverlay.removeAllItems();
@@ -221,17 +230,6 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		mMapView.setUserLocationEnabled(false);
 	}
 
-	/**
-	 * Used to retrieve the info for the given marker.
-	 * 
-	 * @param marker
-	 *            marker whose info to retrieve
-	 * @return marker's info
-	 */
-	private MarkerInfo getMarkerInfo(Marker marker) {
-		return mMarkers.inverse().get(marker);
-	}
-
 	@Override
 	public void addFlightPathPoint(Coord2D coord) {
 		if (mFlightPath == null) {
@@ -243,9 +241,9 @@ public class MapBoxFragment extends Fragment implements DPMap {
 	}
 
 	@Override
-	public void cleanMarkers() {
+	public void clearMarkers() {
 		resetMarkersOverlay();
-		mMarkers.clear();
+		mBiMarkersMap.clear();
 		mMapView.invalidate();
 	}
 
@@ -266,7 +264,12 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		return mMapView.getZoomLevel();
 	}
 
-	@Override
+    @Override
+    public Set<MarkerInfo> getMarkerInfoList() {
+        return new HashSet<MarkerInfo>(mBiMarkersMap.keySet());
+    }
+
+    @Override
 	public float getMaxZoomLevel() {
 		return mMapView.getMaxZoomLevel();
 	}
@@ -325,7 +328,26 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		return coords;
 	}
 
-	@Override
+    @Override
+    public void removeMarkers(Collection<MarkerInfo> markerInfoList) {
+        if(markerInfoList == null || markerInfoList.isEmpty()){
+            return;
+        }
+
+        final List<Marker> markersToRemove = new ArrayList<Marker>(markerInfoList.size());
+        for(MarkerInfo markerInfo: markerInfoList){
+            final Marker marker = mBiMarkersMap.getValue(markerInfo);
+            if(marker != null){
+                markersToRemove.add(marker);
+                mBiMarkersMap.removeKey(markerInfo);
+            }
+        }
+
+        removeMarkersOverlay(markersToRemove);
+        mMapView.invalidate();
+    }
+
+    @Override
 	public void saveCameraPosition() {
 		SharedPreferences.Editor editor = mPrefs.prefs.edit();
 		final ILatLng mapCenter = mMapView.getCenter();
@@ -445,11 +467,11 @@ public class MapBoxFragment extends Fragment implements DPMap {
         }
 
 		final LatLng position = DroneHelper.CoordToLatLng(coord);
-		Marker marker = mMarkers.get(markerInfo);
+		Marker marker = mBiMarkersMap.getValue(markerInfo);
 		if (marker == null) {
 			marker = new Marker(mMapView, markerInfo.getTitle(), markerInfo.getSnippet(), position);
 			mMarkersOverlay.addItem(marker);
-			mMarkers.put(markerInfo, marker);
+			mBiMarkersMap.put(markerInfo, marker);
 		} else {
 			marker.setTitle(markerInfo.getTitle());
 			marker.setDescription(markerInfo.getSnippet());

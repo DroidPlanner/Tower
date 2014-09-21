@@ -28,6 +28,11 @@ import android.widget.TextView;
 public abstract class MissionDetailFragment extends DialogFragment implements
 		OnItemSelectedListener {
 
+    private static final String TAG = MissionDetailFragment.class.getSimpleName();
+
+    protected static final int MIN_ALTITUDE = 0; //meter
+    protected static final int MAX_ALTITUDE = 200; //meters
+
 	public interface OnMissionDetailListener {
 		/**
 		 * Only fired when the mission detail is shown as a dialog. Notifies the
@@ -110,12 +115,14 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(getResource(), container, false);
-
 		final MissionProxy missionProxy = ((DroidPlannerApp) getActivity().getApplication()).missionProxy;
-		itemRender = missionProxy.selection.getSelected().get(0);
+        final List<MissionItemProxy> selections = missionProxy.selection.getSelected();
+        if(selections.isEmpty()){
+            return null;
+        }
 
-		return view;
+		itemRender = selections.get(0);
+        return inflater.inflate(getResource(), container, false);
 	}
 
 	@Override
@@ -147,19 +154,18 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		}
 
 		final TextView distanceView = (TextView) view.findViewById(R.id.DistanceValue);
+        if(distanceView != null){
+            try {
+                distanceView.setText(mMissionProxy.getDistanceFromLastWaypoint(itemRender).toString());
+            }catch(IllegalArgumentException e){
+               Log.w(TAG, e.getMessage(), e);
+            }
+        }
 
 		final TextView distanceLabelView = (TextView) view.findViewById(R.id.DistanceLabel);
-
-		try {
-			distanceLabelView.setVisibility(View.VISIBLE);
-			distanceView.setText(mMissionProxy.getDistanceFromLastWaypoint(itemRender).toString());
-		} catch (NullPointerException e) {
-			// Can fail if distanceView doesn't exists
-		} catch (Exception e) {
-			// Or if the last item doesn't have a coordinate
-			// distanceView.setText("");
-			// distanceLabelView.setVisibility(View.INVISIBLE);
-		}
+        if(distanceLabelView != null){
+            distanceLabelView.setVisibility(View.VISIBLE);
+        }
 	}
 
 	@Override

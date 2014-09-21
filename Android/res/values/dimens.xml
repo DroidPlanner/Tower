@@ -47,4 +47,10 @@
     <dimen name="info_bar_drawable_padding">0dp</dimen>
     <dimen name="info_bar_flight_mode_width">90dp</dimen>
 
+    <!-- Dimensions for the number picker dialog -->
+    <dimen name="width_number_picker_dialog">192dp</dimen>
+    <dimen name="height_number_picker_dialog">96dp</dimen>
+    <dimen name="margin_left_right_card_wheel_horizontal_view">8dp</dimen>
+    <dimen name="margin_top_bottom_card_wheel_horizontal_view">4dp</dimen>
+
 </resources>

@@ -102,7 +102,8 @@
             android:label="@string/editor"
             android:launchMode="singleTop"
             android:theme="@style/CustomActionBarTheme.Transparent"
-            android:parentActivityName=".android.activities.FlightActivity" >
+            android:parentActivityName=".android.activities.FlightActivity"
+            android:windowSoftInputMode="adjustNothing">
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data

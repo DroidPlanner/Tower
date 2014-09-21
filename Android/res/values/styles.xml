@@ -392,5 +392,54 @@
         <item name="android:layout_margin">5dp</item>
     </style>
 
+    <!-- Number picker widget styles -->
+    <style name="missionItemNumberPicker">
+        <item name="visibleItems">3</item>
+        <item name="isAllVisible">false</item>
+        <item name="isCyclic">false</item>
+        <item name="itemsDimmedAlpha">150</item>
+        <item name="selectionDivider">@android:color/holo_blue_dark</item>
+        <item name="selectionDividerWidth">2dp</item>
+        <item name="selectionDividerActiveAlpha">100</item>
+        <item name="selectionDividerDimmedAlpha">255</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="missionItemDetailCard">
+        <item name="android:background">@drawable/bg_cell_white</item>
+        <item name="android:layout_marginLeft">@dimen/margin_left_right_card_wheel_horizontal_view</item>
+        <item name="android:layout_marginRight">@dimen/margin_left_right_card_wheel_horizontal_view</item>
+        <item name="android:layout_marginTop">@dimen/margin_top_bottom_card_wheel_horizontal_view</item>
+        <item name="android:layout_marginBottom">@dimen/margin_top_bottom_card_wheel_horizontal_view</item>
+    </style>
+
+    <style name="missionItemDetailLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/grey_white</item>
+    </style>
+
+    <style name="missionItemNumberPickerTitle">
+        <item name="android:gravity">center_vertical|start</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textColor">@color/grey_dark</item>
+    </style>
+
+    <style name="missionItemNumberPickerView">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/light_title_bg</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:lines">1</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#777</item>
+        <item name="android:gravity">center</item>
+    </style>
+
 </resources>
 

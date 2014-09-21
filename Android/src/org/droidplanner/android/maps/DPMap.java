@@ -1,6 +1,8 @@
 package org.droidplanner.android.maps;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
@@ -133,7 +135,7 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	/**
 	 * Remove all markers from the map.
 	 */
-	public void cleanMarkers();
+	public void clearMarkers();
 
 	/**
 	 * Clears the drone's flight path.
@@ -149,6 +151,11 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 * @return the map current zoom level.
 	 */
 	public float getMapZoomLevel();
+
+    /**
+     * @return a list of marker info currently on the map.
+     */
+    public Set<MarkerInfo> getMarkerInfoList();
 
 	/**
 	 * @return the map maximum zoom level.
@@ -181,6 +188,12 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	public void loadCameraPosition();
 
 	public List<Coord2D> projectPathIntoMap(List<Coord2D> pathPoints);
+
+    /**
+     * Remove the markers whose info is in the list from the map.
+     * @param markerInfoList list of markers to remove.
+     */
+    public void removeMarkers(Collection<MarkerInfo> markerInfoList);
 
 	/**
 	 * Stores the map camera settings.
