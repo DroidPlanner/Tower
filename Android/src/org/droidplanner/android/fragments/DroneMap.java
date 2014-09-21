@@ -105,6 +105,12 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		return view;
 	}
 
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        mHandler.removeCallbacksAndMessages(null);
+    }
+
 	private void updateMapFragment() {
 		// Add the map fragment instance (based on user preference)
 		final DPMapProvider mapProvider = Utils.getMapProvider(getActivity()
@@ -127,6 +133,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 	public void onPause() {
 		super.onPause();
 		drone.removeDroneListener(this);
+        mHandler.removeCallbacksAndMessages(null);
 		mMapFragment.saveCameraPosition();
 	}
 
