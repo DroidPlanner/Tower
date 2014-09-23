@@ -4,6 +4,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.gcs.follow.Follow;
+import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.model.Drone;
 
 import android.app.Activity;
@@ -97,10 +98,8 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 			break;
 
 		case R.id.mc_takeoff:
-			// drone.state.changeFlightMode(ApmModes.ROTOR_TAKEOFF); //TODO
-			// there isn`t a takeoff mode on ArduCopter
-			// eventBuilder.setAction("Changed flight mode")
-			// .setLabel(ApmModes.ROTOR_TAKEOFF.getName());
+			drone.getState().doTakeoff(new Altitude(10.0));			
+			eventBuilder.setAction("Changed flight mode").setLabel("Takeoff");
 			break;
 
 		case R.id.mc_homeBtn:

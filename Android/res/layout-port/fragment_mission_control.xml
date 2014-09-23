@@ -55,7 +55,6 @@
         android:layout_height="wrap_content"
 	    android:drawableTop="@drawable/ic_takeoff"
 	    android:text="@string/mission_control_takeoff"
-		android:visibility="gone"
         android:layout_weight="1"
 	    tools:ignore="ContentDescription" />
 
