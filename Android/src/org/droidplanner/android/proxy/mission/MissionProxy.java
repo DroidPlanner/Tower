@@ -9,7 +9,6 @@ import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
-import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.geoTools.spline.SplinePath;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
@@ -17,8 +16,6 @@ import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.survey.Survey;
-import org.droidplanner.core.mission.waypoints.Land;
-import org.droidplanner.core.mission.waypoints.RegionOfInterest;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.Waypoint;
@@ -224,14 +221,7 @@ public class MissionProxy implements DPMap.PathSource {
 	public void addDronie(Coord2D start, Coord2D end) {
 		clear();
 		
-		final int startAltitude = 4;
-		
-		List<MissionItem> dronieItems = new ArrayList<MissionItem>();
-		dronieItems.add(new Takeoff(mMission, new Altitude(startAltitude)));
-		dronieItems.add(new RegionOfInterest(mMission,new Coord3D(GeoTools.pointAlongTheLine(start, end, -8), new Altitude(1.0))));
-		dronieItems.add(new Waypoint(mMission, new Coord3D(end, new Altitude(startAltitude+GeoTools.getDistance(start, end).valueInMeters()/2.0))));
-		dronieItems.add(new Waypoint(mMission, new Coord3D(start, new Altitude(startAltitude))));
-		dronieItems.add(new Land(mMission,start));		
+		List<MissionItem> dronieItems = Mission.createDronie(mMission,start, end);		
 	
 		addMissionItems(dronieItems);	
 	}

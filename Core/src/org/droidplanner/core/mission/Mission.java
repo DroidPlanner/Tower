@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneVariable;
+import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
@@ -259,5 +261,26 @@ public class Mission extends DroneVariable {
 			data.addAll(item.packMissionItem());
 		}
 		return data;
+	}
+
+	public void makeAndUploadDronie() {
+		items.clear();
+		Coord2D currentPosition = myDrone.getGps().getPosition();
+		items.addAll(createDronie(this, currentPosition, GeoTools.newCoordFromBearingAndDistance(
+				currentPosition, 180 + myDrone.getOrientation().getYaw(), 50.0)));
+		sendMissionToAPM();
+		notifyMissionUpdate();
+	}
+
+	public static List<MissionItem> createDronie(Mission mMission,Coord2D start, Coord2D end) {
+		final int startAltitude = 4;
+		
+		List<MissionItem> dronieItems = new ArrayList<MissionItem>();
+		dronieItems.add(new Takeoff(mMission, new Altitude(startAltitude)));
+		dronieItems.add(new RegionOfInterest(mMission,new Coord3D(GeoTools.pointAlongTheLine(start, end, -8), new Altitude(1.0))));
+		dronieItems.add(new Waypoint(mMission, new Coord3D(end, new Altitude(startAltitude+GeoTools.getDistance(start, end).valueInMeters()/2.0))));
+		dronieItems.add(new Waypoint(mMission, new Coord3D(start, new Altitude(startAltitude))));
+		dronieItems.add(new Land(mMission,start));
+		return dronieItems;
 	}
 }
