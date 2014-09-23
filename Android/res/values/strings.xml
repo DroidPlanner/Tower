@@ -340,6 +340,7 @@
     <string name="mission_control_control">Control</string>
     <string name="mission_control_edit">Edit</string>
     <string name="mission_control_home">Home</string>
+    <string name="mission_control_arm">Arm</string>
     <string name="mission_control_land">Land</string>
     <string name="mission_control_takeoff">Take</string>
     <string name="mission_control_loiter">Loiter</string>

@@ -3,6 +3,7 @@ package org.droidplanner.android.fragments;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.utils.analytics.GAUtils;
+import org.droidplanner.core.MAVLink.MavLinkArm;
 import org.droidplanner.core.gcs.follow.Follow;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.model.Drone;
@@ -54,6 +55,9 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 
 		final Button homeBtn = (Button) view.findViewById(R.id.mc_homeBtn);
 		homeBtn.setOnClickListener(this);
+		
+		final Button armBtn = (Button) view.findViewById(R.id.mc_armBtn);
+		armBtn.setOnClickListener(this);
 
 		final Button landBtn = (Button) view.findViewById(R.id.mc_land);
 		landBtn.setOnClickListener(this);
@@ -90,6 +94,11 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 			listener.onJoystickSelected();
 			eventBuilder.setAction("Joystick selected").setLabel(
 					getString(R.string.mission_control_control));
+			break;
+			
+		case R.id.mc_armBtn:
+			MavLinkArm.sendArmMessage(drone, true);
+			eventBuilder.setAction("Changed flight mode").setLabel("Arm");
 			break;
 
 		case R.id.mc_land:
