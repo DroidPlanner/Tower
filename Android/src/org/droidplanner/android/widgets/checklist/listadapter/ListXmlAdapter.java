@@ -91,16 +91,19 @@ public abstract class ListXmlAdapter extends BaseExpandableListAdapter {
 			ViewGroup parent) {
 		String headerTitle = (String) getGroup(groupPosition);
 		if (convertView == null) {
-			LayoutInflater infalInflater = this.inflater;
-			convertView = infalInflater.inflate(layoutId, null);
+			convertView = this.inflater.inflate(layoutId, parent, false);
 		}
 
 		TextView lblListHeader = (TextView) convertView.findViewById(R.id.lblListHeader);
-		lblListHeader.setTypeface(null, Typeface.BOLD);
-		lblListHeader.setText(headerTitle);
+        if(lblListHeader != null) {
+            lblListHeader.setTypeface(null, Typeface.BOLD);
+            lblListHeader.setText(headerTitle);
+        }
 
 		TextView lblChkRatio = (TextView) convertView.findViewById(R.id.lblChkRatio);
-		updateRatioValue(lblChkRatio, groupPosition);
+        if(lblChkRatio != null) {
+            updateRatioValue(lblChkRatio, groupPosition);
+        }
 
 		return convertView;
 	}
