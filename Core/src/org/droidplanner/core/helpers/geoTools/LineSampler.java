@@ -23,10 +23,18 @@ public class LineSampler {
 	public List<Coord2D> sample(double sampleDistance) {
 		for (int i = 1; i < points.size(); i++) {
 			Coord2D from = points.get(i - 1);
-			Coord2D to = points.get(i);
-			sampledPoints.addAll(sampleLine(from, to, sampleDistance));
-		}
-		sampledPoints.add(getLast(points));
+            if(from == null){
+                continue;
+            }
+
+            Coord2D to = points.get(i);
+            sampledPoints.addAll(sampleLine(from, to, sampleDistance));
+        }
+
+        final Coord2D lastPoint = getLast(points);
+        if(lastPoint != null) {
+            sampledPoints.add(lastPoint);
+        }
 		return sampledPoints;
 	}
 
