@@ -23,18 +23,18 @@ public abstract class UdpConnection extends MavLinkConnection{
     }
 
     @Override
-    protected final void closeConnection() throws IOException {
+    public final void closeConnection() throws IOException {
         if(socket != null)
             socket.close();
     }
 
     @Override
-    protected final void openConnection() throws IOException {
+    public final void openConnection() throws IOException {
         getUdpStream();
     }
 
     @Override
-    protected final void sendBuffer(byte[] buffer) throws IOException {
+    public final void sendBuffer(byte[] buffer) throws IOException {
         try {
             if (hostAdd != null) { // We can't send to our sister until they
                 // have connected to us
@@ -48,7 +48,7 @@ public abstract class UdpConnection extends MavLinkConnection{
     }
 
     @Override
-    protected final int readDataBlock(byte[] readData) throws IOException {
+    public final int readDataBlock(byte[] readData) throws IOException {
         DatagramPacket packet = new DatagramPacket(readData, readData.length);
         socket.receive(packet);
         hostAdd = packet.getAddress();
@@ -57,7 +57,7 @@ public abstract class UdpConnection extends MavLinkConnection{
     }
 
     @Override
-    protected final void loadPreferences() {
+    public final void loadPreferences() {
         serverPort = loadServerPort();
     }
 

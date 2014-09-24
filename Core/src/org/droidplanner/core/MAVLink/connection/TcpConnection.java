@@ -22,17 +22,17 @@ public abstract class TcpConnection extends MavLinkConnection {
     private int serverPort;
 
     @Override
-    protected final void openConnection() throws IOException {
+    public final void openConnection() throws IOException {
         getTCPStream();
     }
 
     @Override
-    protected final int readDataBlock(byte[] buffer) throws IOException {
+    public final int readDataBlock(byte[] buffer) throws IOException {
         return mavIn.read(buffer);
     }
 
     @Override
-    protected final void sendBuffer(byte[] buffer) throws IOException {
+    public final void sendBuffer(byte[] buffer) throws IOException {
         if (mavOut != null) {
             mavOut.write(buffer);
             mavOut.flush();
@@ -40,7 +40,7 @@ public abstract class TcpConnection extends MavLinkConnection {
     }
 
     @Override
-    protected final void loadPreferences(){
+    public final void loadPreferences(){
         serverIP = loadServerIP();
         serverPort = loadServerPort();
     }
@@ -50,7 +50,7 @@ public abstract class TcpConnection extends MavLinkConnection {
     protected abstract String loadServerIP();
 
     @Override
-    protected final void closeConnection() throws IOException {
+    public final void closeConnection() throws IOException {
         if(socket != null)
             socket.close();
     }
