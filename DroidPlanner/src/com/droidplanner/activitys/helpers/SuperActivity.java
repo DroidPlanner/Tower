@@ -147,8 +147,9 @@ public abstract class SuperActivity extends Activity implements
 		
 		// Screen switching is locked out for the above screen that do not have failSafe set to true
 		
-		// Speak error to user so they know why screen switching is locked
-		drone.tts.speak("Unable to access selected screen when vehicle is armed");
+		// Put error on screen so users know why screen switching is locked
+		Toast.makeText(this, "Unable to access selected screen when vehicle is armed", Toast.LENGTH_LONG)
+		.show();
 		
 	}
 	

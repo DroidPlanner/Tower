@@ -157,10 +157,7 @@ public class FlightDataActivity extends SuperFlightActivity implements
 		// If statement is not strictly needed as nothing else uses click listeners but include it for modification later
 		if (view == launchButton || view == landButton || view == armDisarmButton || view == stabilizeButton || view == RTLButton)
 		{
-			
-			// Since we don't use a normal click on any of these buttons give an error message on correct usage of a long press
-			drone.tts.speak("Hold down button for a few seconds for activation");
-			
+						
 			// Also give a toast error to make sure people see the message
 			Toast.makeText(this, "Hold down button for a few seconds to activate", Toast.LENGTH_LONG)
 			.show();
