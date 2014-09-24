@@ -1,5 +1,6 @@
 package org.droidplanner.android.communication.service;
 
+import org.droidplanner.android.communication.connection.AndroidMavLinkConnection;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -29,7 +30,7 @@ public class MAVLinkService extends Service {
     private final MavLinkServiceApi mServiceApi = new MavLinkServiceApi(this);
 
 	private DroidPlannerPrefs mAppPrefs;
-	private MavLinkConnection mavConnection;
+	private AndroidMavLinkConnection mavConnection;
 
 	@Override
 	public IBinder onBind(Intent intent) {

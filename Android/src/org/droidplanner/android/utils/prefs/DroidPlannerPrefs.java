@@ -55,7 +55,9 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	}
 
 	public boolean getLiveUploadEnabled() {
-		return prefs.getBoolean(context.getString(R.string.pref_live_upload_enabled_key), false);
+        //FIXME: Disabling live upload as it often causes the app to freeze on disconnect.
+//		return prefs.getBoolean(context.getString(R.string.pref_live_upload_enabled_key), false);
+        return false;
 	}
 
 	public String getDroneshareLogin() {

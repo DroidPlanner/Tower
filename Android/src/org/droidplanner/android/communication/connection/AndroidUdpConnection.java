@@ -1,42 +1,72 @@
 package org.droidplanner.android.communication.connection;
 
 import java.io.File;
+import java.io.IOException;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import org.droidplanner.android.utils.AndroidLogger;
-import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.core.MAVLink.connection.UdpConnection;
 import org.droidplanner.core.model.Logger;
 
-public class AndroidUdpConnection extends UdpConnection {
+public class AndroidUdpConnection extends AndroidMavLinkConnection {
 
-    private final Context mContext;
+    private final UdpConnection mConnectionImpl;
 
-	public AndroidUdpConnection(Context context) {
-		mContext = context;
-	}
+    public AndroidUdpConnection(Context context) {
+        super(context);
 
-    @Override
-    protected int loadServerPort(){
-        return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mContext).getString
-                ("pref_udp_server_port", "14550"));
+        mConnectionImpl = new UdpConnection() {
+            @Override
+            protected int loadServerPort(){
+                return Integer.parseInt(prefs.prefs.getString("pref_udp_server_port", "14550"));
+            }
+
+            @Override
+            protected Logger initLogger() {
+                return AndroidUdpConnection.this.initLogger();
+            }
+
+            @Override
+            protected File getTempTLogFile() {
+                return AndroidUdpConnection.this.getTempTLogFile();
+            }
+
+            @Override
+            protected void commitTempTLogFile(File tlogFile) {
+                AndroidUdpConnection.this.commitTempTLogFile(tlogFile);
+            }
+        };
     }
 
     @Override
-    protected Logger initLogger() {
-        return AndroidLogger.getLogger();
+    protected void closeAndroidConnection() throws IOException {
+        mConnectionImpl.closeConnection();
     }
 
     @Override
-    protected File getTempTLogFile() {
-        return FileStream.getTLogFile();
+    protected void loadPreferences(SharedPreferences prefs) {
+        mConnectionImpl.loadPreferences();
     }
 
     @Override
-    protected void commitTempTLogFile(File tlogFile) {
-        FileStream.commitFile(tlogFile);
+    protected void openAndroidConnection() throws IOException {
+        mConnectionImpl.openConnection();
     }
 
+    @Override
+    protected int readDataBlock(byte[] buffer) throws IOException {
+        return mConnectionImpl.readDataBlock(buffer);
+    }
+
+    @Override
+    protected void sendBuffer(byte[] buffer) throws IOException {
+         mConnectionImpl.sendBuffer(buffer);
+    }
+
+    @Override
+    public int getConnectionType() {
+        return mConnectionImpl.getConnectionType();
+    }
 }
