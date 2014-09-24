@@ -1,5 +1,6 @@
 package org.droidplanner.core.gcs.follow;
 
+import org.droidplanner.core.MAVLink.MavLinkROI;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
@@ -74,6 +75,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 		locationFinder.disableLocationUpdates();
 		if (followMeEnabled) {
 			followMeEnabled = false;
+			MavLinkROI.resetROI(drone);
 			drone.notifyDroneEvent(DroneEventsType.FOLLOW_STOP);
 		}
 	}
