@@ -344,6 +344,7 @@
     <string name="mission_control_land">Land</string>
     <string name="mission_control_takeoff">Take</string>
     <string name="mission_control_loiter">Loiter</string>
+    <string name="mission_control_auto">Auto</string>
     <string name="mission_control_follow">Follow</string>
     <string name="telemetry_label">Telemetry</string>
     <string name="flight_modes_label">Flight modes</string>
