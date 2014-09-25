@@ -145,7 +145,6 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		list.remove(MissionItemType.LOITER);
 		list.remove(MissionItemType.LOITER_INF);
 		list.remove(MissionItemType.LOITERT);
-		list.remove(MissionItemType.SPLINE_WAYPOINT);
 		
 		commandAdapter = new AdapterMissionItems(this.getActivity(),
 				android.R.layout.simple_list_item_1, list.toArray(new MissionItemType[0]));
