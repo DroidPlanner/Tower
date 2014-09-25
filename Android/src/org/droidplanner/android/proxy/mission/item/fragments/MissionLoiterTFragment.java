@@ -2,7 +2,6 @@ package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.WheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.waypoints.LoiterTime;
@@ -34,8 +33,7 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements
         final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view.findViewById
                 (R.id.altitudePicker);
         cardAltitudePicker.setViewAdapter(altitudeAdapter);
-        cardAltitudePicker.setCurrentItem(altitudeAdapter.getItemIndex((int) item.getCoordinate()
-                .getAltitude().valueInMeters()));
+        cardAltitudePicker.setCurrentValue((int) item.getCoordinate().getAltitude().valueInMeters());
         cardAltitudePicker.addChangingListener(this);
 
         final NumericWheelAdapter loiterTimeAdapter = new NumericWheelAdapter(context, 0, 600, "%d s");
@@ -43,7 +41,7 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements
         final CardWheelHorizontalView loiterTimePicker = (CardWheelHorizontalView) view.findViewById
                 (R.id.loiterTimePicker);
         loiterTimePicker.setViewAdapter(loiterTimeAdapter);
-        loiterTimePicker.setCurrentItem(loiterTimeAdapter.getItemIndex((int) item.getTime()));
+        loiterTimePicker.setCurrentValue((int) item.getTime());
         loiterTimePicker.addChangingListener(this);
 
 	}

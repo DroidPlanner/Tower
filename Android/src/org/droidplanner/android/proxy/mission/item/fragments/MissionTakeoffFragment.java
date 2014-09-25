@@ -31,7 +31,7 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
         final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view
                 .findViewById(R.id.altitudePicker);
         cardAltitudePicker.setViewAdapter(altitudeAdapter);
-        cardAltitudePicker.setCurrentItem(altitudeAdapter.getItemIndex((int) item.getFinishedAlt().valueInMeters()));
+        cardAltitudePicker.setCurrentValue((int) item.getFinishedAlt().valueInMeters());
         cardAltitudePicker.addChangingListener(this);
 	}
 

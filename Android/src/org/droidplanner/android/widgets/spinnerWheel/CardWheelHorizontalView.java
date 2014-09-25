@@ -121,7 +121,7 @@ public class CardWheelHorizontalView extends LinearLayout implements OnWheelChan
                                 Toast.makeText(context, "Entered value is outside of the allowed " +
                                         "range.", Toast.LENGTH_LONG).show();
                             } else {
-                                setCurrentItem(updateIndex, true);
+                                setCurrentItemIndex(updateIndex, true);
                             }
                         }
 
@@ -179,19 +179,15 @@ public class CardWheelHorizontalView extends LinearLayout implements OnWheelChan
         mSpinnerWheel.setCurrentItem(mSpinnerWheel.getViewAdapter().getItemIndex(value));
     }
 
-    public void setCurrentItem(int index) {
-        mSpinnerWheel.setCurrentItem(index);
-    }
-
-    public int getCurrentItemIndex(){
-        return mSpinnerWheel.getCurrentItem();
-    }
-
     public int getCurrentValue(){
         return mSpinnerWheel.getViewAdapter().getItem(mSpinnerWheel.getCurrentItem());
     }
 
-    public void setCurrentItem(int index, boolean animated) {
+    private int getValue(int valueIndex){
+        return mSpinnerWheel.getViewAdapter().getItem(valueIndex);
+    }
+
+    private void setCurrentItemIndex(int index, boolean animated) {
         mSpinnerWheel.setCurrentItem(index, animated);
     }
 
@@ -218,7 +214,10 @@ public class CardWheelHorizontalView extends LinearLayout implements OnWheelChan
     }
 
     @Override
-    public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+    public void onChanged(AbstractWheel wheel, int oldIndex, int newIndex) {
+        final int oldValue = getValue(oldIndex);
+        final int newValue = getValue(newIndex);
+
         for (OnCardWheelChangedListener listener : mChangingListeners) {
             listener.onChanged(this, oldValue, newValue);
         }
@@ -232,7 +231,7 @@ public class CardWheelHorizontalView extends LinearLayout implements OnWheelChan
             showSoftInput(currentValue);
         } else {
             hideSoftInput();
-            setCurrentItem(itemIndex, true);
+            setCurrentItemIndex(itemIndex, true);
         }
     }
 
