@@ -44,6 +44,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 	private Button takeoffBtn;
 	private Button loiterBtn;
 	private Button followBtn;
+	private Button autoBtn;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,7 +83,10 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 
 		loiterBtn = (Button) view.findViewById(R.id.mc_loiter);
 		loiterBtn.setOnClickListener(this);
-
+		
+		autoBtn = (Button) view.findViewById(R.id.mc_autoBtn);
+		autoBtn.setOnClickListener(this);
+		
 		followBtn = (Button) view.findViewById(R.id.mc_follow);
 		followBtn.setOnClickListener(this);
 
@@ -141,6 +145,11 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 		case R.id.mc_loiter:
 			drone.getState().changeFlightMode(ApmModes.ROTOR_LOITER);
 			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_LOITER.getName());
+			break;
+			
+		case R.id.mc_autoBtn:
+			drone.getState().changeFlightMode(ApmModes.ROTOR_AUTO);
+			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_AUTO.getName());
 			break;
 
 		case R.id.mc_follow:
@@ -224,6 +233,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 		landBtn.setVisibility(View.GONE);
 		takeoffBtn.setVisibility(View.GONE);
 		loiterBtn.setVisibility(View.GONE);
+		autoBtn.setVisibility(View.GONE);
 		followBtn.setVisibility(View.GONE);
 	}
 
@@ -236,6 +246,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 		landBtn.setVisibility(View.GONE);
 		takeoffBtn.setVisibility(View.GONE);
 		loiterBtn.setVisibility(View.GONE);
+		autoBtn.setVisibility(View.GONE);
 		followBtn.setVisibility(View.GONE);
 	}
 
@@ -248,6 +259,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 		landBtn.setVisibility(View.GONE);
 		takeoffBtn.setVisibility(View.VISIBLE);
 		loiterBtn.setVisibility(View.GONE);
+		autoBtn.setVisibility(View.GONE);
 		followBtn.setVisibility(View.GONE);
 	}
 
@@ -260,6 +272,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 		landBtn.setVisibility(View.VISIBLE);
 		takeoffBtn.setVisibility(View.GONE);
 		loiterBtn.setVisibility(View.VISIBLE);
+		autoBtn.setVisibility(View.VISIBLE);
 		followBtn.setVisibility(View.VISIBLE);
 	}
 
