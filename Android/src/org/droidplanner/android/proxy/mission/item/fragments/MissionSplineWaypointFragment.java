@@ -36,7 +36,7 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment impleme
         final CardWheelHorizontalView delayPicker = (CardWheelHorizontalView) view.findViewById(R.id
                 .waypointDelayPicker);
         delayPicker.setViewAdapter(delayAdapter);
-        delayPicker.setCurrentItem(delayAdapter.getItemIndex((int) item.getDelay()));
+        delayPicker.setCurrentValue((int) item.getDelay());
         delayPicker.addChangingListener(this);
 
         final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(context,
@@ -45,8 +45,7 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment impleme
         final CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view.findViewById
                 (R.id.altitudePicker);
         altitudePicker.setViewAdapter(altitudeAdapter);
-        altitudePicker.setCurrentItem(altitudeAdapter.getItemIndex((int)item.getCoordinate()
-                .getAltitude().valueInMeters()));
+        altitudePicker.setCurrentValue((int)item.getCoordinate().getAltitude().valueInMeters());
         altitudePicker.addChangingListener(this);
 	}
 
