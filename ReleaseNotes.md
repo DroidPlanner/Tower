@@ -1,6 +1,12 @@
 # Releases Notes
 These notes document what was removed from a Release Candidate (RC), which is build from a corresponding version of the program. These are not comulative between program versions (they can be between RCs), and express the diff from the master branch.
 
+## Droidplanner v2.7.7 RC1
+* On the DroneSetup pane removed the Tuning and Calibration Fragments
+* Removed unfinished/untested missionItems (Only Waypoint, Takeoff, ROI, RTL, Circle and Land are allowed)
+* Removed distance/time view at the editor screen
+* Removed un-finished buttons on the Circle mode fragment
+
 ## Droidplanner v2.7.6 RC2
 * On the DroneSetup pane removed the Tuning and Calibration Fragments
 * Removed unfinished/untested missionItems (Only Waypoint, Takeoff, ROI, RTL, Circle and Land are allowed)
