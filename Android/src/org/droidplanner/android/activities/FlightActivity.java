@@ -67,7 +67,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 				// Stop tracking how long this was opened for.
 				GAUtils.sendTiming(new HitBuilders.TimingBuilder()
-						.setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL.toString())
+						.setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL)
 						.setVariable(getString(R.string.ga_mode_details_close_panel))
 						.setValue(System.currentTimeMillis()));
 			}
@@ -80,7 +80,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 				// Track how long this is opened for.
 				GAUtils.sendTiming(new HitBuilders.TimingBuilder()
-						.setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL.toString())
+						.setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL)
 						.setVariable(getString(R.string.ga_mode_details_open_panel))
 						.setValue(System.currentTimeMillis()));
 			}
@@ -95,32 +95,42 @@ public class FlightActivity extends DrawerNavigationUI implements
 		mGoToMyLocation.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mapFragment.goToMyLocation();
-				updateMapLocationButtons(AutoPanMode.DISABLED);
+                if(mapFragment != null) {
+                    mapFragment.goToMyLocation();
+                    updateMapLocationButtons(AutoPanMode.DISABLED);
+                }
 			}
 		});
 		mGoToMyLocation.setOnLongClickListener(new View.OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-				mapFragment.goToMyLocation();
-				updateMapLocationButtons(AutoPanMode.USER);
-				return true;
+                if(mapFragment != null) {
+                    mapFragment.goToMyLocation();
+                    updateMapLocationButtons(AutoPanMode.USER);
+                    return true;
+                }
+                return false;
 			}
 		});
 
 		mGoToDroneLocation.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mapFragment.goToDroneLocation();
-				updateMapLocationButtons(AutoPanMode.DISABLED);
+                if(mapFragment != null) {
+                    mapFragment.goToDroneLocation();
+                    updateMapLocationButtons(AutoPanMode.DISABLED);
+                }
 			}
 		});
 		mGoToDroneLocation.setOnLongClickListener(new View.OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-				mapFragment.goToDroneLocation();
-				updateMapLocationButtons(AutoPanMode.DRONE);
-				return true;
+                if(mapFragment != null) {
+                    mapFragment.goToDroneLocation();
+                    updateMapLocationButtons(AutoPanMode.DRONE);
+                    return true;
+                }
+                return false;
 			}
 		});
 

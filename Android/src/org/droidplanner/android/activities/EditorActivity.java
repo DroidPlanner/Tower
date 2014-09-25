@@ -551,7 +551,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			}
 		}
 
-		planningMapFragment.update();
+		planningMapFragment.postUpdate();
 	}
 
 	private void doClearMissionConfirmation() {

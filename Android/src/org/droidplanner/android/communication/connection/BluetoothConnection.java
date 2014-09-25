@@ -85,19 +85,23 @@ public class BluetoothConnection extends AndroidMavLinkConnection {
 		if (pairedDevices.size() > 0) {
 			// Loop through paired devices
 			for (BluetoothDevice device : pairedDevices) {
-				// Add the name and address to an array adapter to show in a
-				// ListView
+				// Add the name and address to an array adapter to show in a ListView
 				Log.d(BLUE, device.getName() + " #" + device.getAddress() + "#");
-				for (ParcelUuid id : device.getUuids()) {
-					// TODO maybe this will not work on newer devices
-					Log.d(BLUE, "id:" + id.toString());
-					if (id.toString().equalsIgnoreCase(UUID_SPP_DEVICE)) {
-						Log.d(BLUE, ">> Selected: " + device.getName() + " Using: " + id.toString());
-						return device;
-					}
-				}
+
+                final ParcelUuid[] deviceUuids = device.getUuids();
+                if(deviceUuids != null && deviceUuids.length > 0) {
+                    for (ParcelUuid id : device.getUuids()) {
+                        // TODO maybe this will not work on newer devices
+                        Log.d(BLUE, "id:" + id.toString());
+                        if (id.toString().equalsIgnoreCase(UUID_SPP_DEVICE)) {
+                            Log.d(BLUE, ">> Selected: " + device.getName() + " Using: " + id.toString());
+                            return device;
+                        }
+                    }
+                }
 			}
 		}
+
 		throw new UnknownHostException("No Bluetooth Device found");
 	}
 

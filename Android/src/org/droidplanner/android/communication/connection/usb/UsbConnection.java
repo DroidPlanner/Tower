@@ -1,6 +1,7 @@
 package org.droidplanner.android.communication.connection.usb;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map.Entry;
 
 import android.content.Context;
@@ -17,6 +18,8 @@ import org.droidplanner.core.model.Logger;
 public class UsbConnection extends AndroidMavLinkConnection {
 
     private static final String TAG = UsbConnection.class.getSimpleName();
+
+    private static final int FTDI_DEVICE_VENDOR_ID = 0x0403;
 
     protected int mBaudRate = 57600;
 
@@ -85,8 +88,13 @@ public class UsbConnection extends AndroidMavLinkConnection {
 
 	private static boolean isFTDIdevice(Context context) {
 		UsbManager manager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
-		for (Entry<String, UsbDevice> device : manager.getDeviceList().entrySet()) {
-			if (device.getValue().getVendorId() == 0x0403) {
+        final HashMap<String, UsbDevice> deviceList = manager.getDeviceList();
+        if(deviceList == null || deviceList.isEmpty()){
+            return false;
+        }
+
+		for (Entry<String, UsbDevice> device : deviceList.entrySet()) {
+			if (device.getValue().getVendorId() == FTDI_DEVICE_VENDOR_ID) {
 				return true;
 			}
 		}

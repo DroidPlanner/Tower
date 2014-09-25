@@ -26,6 +26,23 @@
         android:layout_weight="1"
 	    android:text="@string/mission_control_edit" />
 
+	<Button
+	    android:id="@+id/mc_connectBtn"
+	    style="@style/flightControlButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:layout_weight="1"
+	    android:drawableTop="@drawable/ic_connect"
+	    android:text="@string/menu_connect" />
+
+	<Button
+	    android:id="@+id/mc_armBtn"
+	    style="@style/flightControlButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:drawableTop="@drawable/ic_arm"
+        android:layout_weight="1"
+	    android:text="@string/mission_control_arm" />
 
 	<Button
 	    android:id="@+id/mc_homeBtn"
@@ -35,7 +52,6 @@
 	    android:drawableTop="@drawable/ic_home"
         android:layout_weight="1"
 	    android:text="@string/mission_control_home" />
-
 
 	<Button
 	    android:id="@+id/mc_land"
@@ -54,7 +70,6 @@
 	    android:layout_height="match_parent"
 	    android:drawableTop="@drawable/ic_takeoff"
 	    android:text="@string/mission_control_takeoff"
-		android:visibility="gone"
         android:layout_weight="1"
 	    tools:ignore="ContentDescription" />
 
@@ -67,6 +82,16 @@
 	    android:text="@string/mission_control_loiter"
         android:layout_weight="1"
 	    tools:ignore="ContentDescription" />
+
+    <Button
+        android:id="@+id/mc_autoBtn"
+        style="@style/flightControlButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:drawableTop="@drawable/ic_auto"
+        android:text="@string/mission_control_auto"
+        tools:ignore="ContentDescription" />
 
 	<Button
 	    android:id="@+id/mc_follow"

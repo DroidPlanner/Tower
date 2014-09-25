@@ -340,9 +340,11 @@
     <string name="mission_control_control">Control</string>
     <string name="mission_control_edit">Edit</string>
     <string name="mission_control_home">Home</string>
+    <string name="mission_control_arm">Arm</string>
     <string name="mission_control_land">Land</string>
     <string name="mission_control_takeoff">Take</string>
     <string name="mission_control_loiter">Loiter</string>
+    <string name="mission_control_auto">Auto</string>
     <string name="mission_control_follow">Follow</string>
     <string name="telemetry_label">Telemetry</string>
     <string name="flight_modes_label">Flight modes</string>
@@ -471,5 +473,9 @@
 
     <!-- Help -->
     <string name="help_item_description">How to plan and fly a mission</string>
+    <string name="mission_item_title_takeoff">TAKEOFF</string>
+    <string name="label_advaned">Advanced</string>
+    <string name="label_steps_count">Number of Steps</string>
+    <string name="label_altitude_step">Altitude Step</string>
 
 </resources>

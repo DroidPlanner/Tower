@@ -2,6 +2,7 @@ package org.droidplanner.android.utils;
 
 import java.util.Locale;
 
+import org.droidplanner.android.communication.connection.AndroidMavLinkConnection;
 import org.droidplanner.android.communication.connection.AndroidTcpConnection;
 import org.droidplanner.android.communication.connection.AndroidUdpConnection;
 import org.droidplanner.android.communication.connection.BluetoothConnection;
@@ -65,7 +66,7 @@ public class Utils {
 		 *            application context
 		 * @return mavlink connection
 		 */
-		public abstract MavLinkConnection getConnection(Context context);
+		public abstract AndroidMavLinkConnection getConnection(Context context);
 
         public int getConnectionType(){
             return mMavLinkConnectionType;

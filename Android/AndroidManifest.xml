@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
           package="org.droidplanner"
-          android:versionCode="98"
+          android:versionCode="99"
           android:versionName="please run version.sh to get the version name">
 
     <uses-sdk
@@ -102,7 +102,8 @@
             android:label="@string/editor"
             android:launchMode="singleTop"
             android:theme="@style/CustomActionBarTheme.Transparent"
-            android:parentActivityName=".android.activities.FlightActivity" >
+            android:parentActivityName=".android.activities.FlightActivity"
+            android:windowSoftInputMode="adjustNothing">
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
