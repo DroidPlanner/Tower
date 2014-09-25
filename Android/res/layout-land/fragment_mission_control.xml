@@ -115,4 +115,16 @@
         android:layout_weight="1"
 	    tools:ignore="ContentDescription" />
 
+	<Button
+	    android:id="@+id/mc_dronieBtn"
+	    style="@style/flightControlButton"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="1"
+	    android:drawableTop="@drawable/ic_follow"
+	    android:text="@string/mission_control_dronie"
+	    tools:ignore="ContentDescription" />
+	
+	
+
 </LinearLayout>
