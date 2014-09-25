@@ -2,6 +2,7 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.MAVLink.MavLinkArm;
 import org.droidplanner.core.gcs.follow.Follow;
@@ -53,6 +54,9 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 		final Button joystickBtn = (Button) view.findViewById(R.id.mc_joystickBtn);
 		joystickBtn.setOnClickListener(this);
 
+		final Button connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
+		connectBtn.setOnClickListener(this);
+
 		final Button homeBtn = (Button) view.findViewById(R.id.mc_homeBtn);
 		homeBtn.setOnClickListener(this);
 		
@@ -88,6 +92,10 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 			listener.onPlanningSelected();
 			eventBuilder.setAction("Planning selected").setLabel(
 					getString(R.string.mission_control_edit));
+			break;
+			
+		case R.id.mc_connectBtn:
+			((SuperUI)getActivity()).toggleDroneConnection();
 			break;
 
 		case R.id.mc_joystickBtn:
