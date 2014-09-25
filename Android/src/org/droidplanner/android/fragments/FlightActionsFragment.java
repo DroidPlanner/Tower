@@ -5,6 +5,8 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.MAVLink.MavLinkArm;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.gcs.follow.Follow;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.model.Drone;
@@ -22,7 +24,7 @@ import android.widget.Toast;
 import com.MAVLink.Messages.ApmModes;
 import com.google.android.gms.analytics.HitBuilders;
 
-public class FlightActionsFragment extends Fragment implements OnClickListener {
+public class FlightActionsFragment extends Fragment implements OnClickListener, OnDroneListener {
 
 	public interface OnMissionControlInteraction {
 		public void onJoystickSelected();
@@ -33,6 +35,15 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 	private Drone drone;
 	private OnMissionControlInteraction listener;
 	private Follow followMe;
+	private Button missionBtn;
+	private Button joystickBtn;
+	private Button connectBtn;
+	private Button homeBtn;
+	private Button armBtn;
+	private Button landBtn;
+	private Button takeoffBtn;
+	private Button loiterBtn;
+	private Button followBtn;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,32 +59,35 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		final Button missionBtn = (Button) view.findViewById(R.id.mc_planningBtn);
+		missionBtn = (Button) view.findViewById(R.id.mc_planningBtn);
 		missionBtn.setOnClickListener(this);
 
-		final Button joystickBtn = (Button) view.findViewById(R.id.mc_joystickBtn);
+		joystickBtn = (Button) view.findViewById(R.id.mc_joystickBtn);
 		joystickBtn.setOnClickListener(this);
 
-		final Button connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
+		connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
 		connectBtn.setOnClickListener(this);
 
-		final Button homeBtn = (Button) view.findViewById(R.id.mc_homeBtn);
+		homeBtn = (Button) view.findViewById(R.id.mc_homeBtn);
 		homeBtn.setOnClickListener(this);
-		
-		final Button armBtn = (Button) view.findViewById(R.id.mc_armBtn);
+
+		armBtn = (Button) view.findViewById(R.id.mc_armBtn);
 		armBtn.setOnClickListener(this);
 
-		final Button landBtn = (Button) view.findViewById(R.id.mc_land);
+		landBtn = (Button) view.findViewById(R.id.mc_land);
 		landBtn.setOnClickListener(this);
 
-		final Button takeoffBtn = (Button) view.findViewById(R.id.mc_takeoff);
+		takeoffBtn = (Button) view.findViewById(R.id.mc_takeoff);
 		takeoffBtn.setOnClickListener(this);
 
-		final Button loiterBtn = (Button) view.findViewById(R.id.mc_loiter);
+		loiterBtn = (Button) view.findViewById(R.id.mc_loiter);
 		loiterBtn.setOnClickListener(this);
 
-		final Button followBtn = (Button) view.findViewById(R.id.mc_follow);
+		followBtn = (Button) view.findViewById(R.id.mc_follow);
 		followBtn.setOnClickListener(this);
+
+		drone.addDroneListener(this);
+		setupButtonsByFlightState();
 	}
 
 	@Override
@@ -93,9 +107,9 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 			eventBuilder.setAction("Planning selected").setLabel(
 					getString(R.string.mission_control_edit));
 			break;
-			
+
 		case R.id.mc_connectBtn:
-			((SuperUI)getActivity()).toggleDroneConnection();
+			((SuperUI) getActivity()).toggleDroneConnection();
 			break;
 
 		case R.id.mc_joystickBtn:
@@ -103,7 +117,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 			eventBuilder.setAction("Joystick selected").setLabel(
 					getString(R.string.mission_control_control));
 			break;
-			
+
 		case R.id.mc_armBtn:
 			MavLinkArm.sendArmMessage(drone, true);
 			eventBuilder.setAction("Changed flight mode").setLabel("Arm");
@@ -115,7 +129,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 			break;
 
 		case R.id.mc_takeoff:
-			drone.getState().doTakeoff(new Altitude(10.0));			
+			drone.getState().doTakeoff(new Altitude(10.0));
 			eventBuilder.setAction("Changed flight mode").setLabel("Takeoff");
 			break;
 
@@ -169,6 +183,84 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 			GAUtils.sendEvent(eventBuilder);
 		}
 
+	}
+
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		switch (event) {
+		case ARMING:
+		case CONNECTED:
+		case DISCONNECTED:
+		case STATE:
+			setupButtonsByFlightState();
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void setupButtonsByFlightState() {
+		if (drone.getMavClient().isConnected()) {
+			if (drone.getState().isArmed()) {
+				if (drone.getState().isFlying()) {
+					setupButtonsForFlying();
+				} else {
+					setupButtonsForArmed();
+				}
+			} else {
+				setupButtonsForDisarmed();
+			}
+		} else {
+			setupButtonsForDisconnected();
+		}
+	}
+
+	private void setupButtonsForDisconnected() {
+		missionBtn.setVisibility(View.VISIBLE);
+		joystickBtn.setVisibility(View.GONE);
+		connectBtn.setVisibility(View.VISIBLE);
+		homeBtn.setVisibility(View.GONE);
+		armBtn.setVisibility(View.GONE);
+		landBtn.setVisibility(View.GONE);
+		takeoffBtn.setVisibility(View.GONE);
+		loiterBtn.setVisibility(View.GONE);
+		followBtn.setVisibility(View.GONE);
+	}
+
+	private void setupButtonsForDisarmed() {
+		missionBtn.setVisibility(View.VISIBLE);
+		joystickBtn.setVisibility(View.GONE);
+		connectBtn.setVisibility(View.GONE);
+		homeBtn.setVisibility(View.GONE);
+		armBtn.setVisibility(View.VISIBLE);
+		landBtn.setVisibility(View.GONE);
+		takeoffBtn.setVisibility(View.GONE);
+		loiterBtn.setVisibility(View.GONE);
+		followBtn.setVisibility(View.GONE);
+	}
+
+	private void setupButtonsForArmed() {
+		missionBtn.setVisibility(View.VISIBLE);
+		joystickBtn.setVisibility(View.GONE);
+		connectBtn.setVisibility(View.GONE);
+		homeBtn.setVisibility(View.GONE);
+		armBtn.setVisibility(View.GONE);
+		landBtn.setVisibility(View.GONE);
+		takeoffBtn.setVisibility(View.VISIBLE);
+		loiterBtn.setVisibility(View.GONE);
+		followBtn.setVisibility(View.GONE);
+	}
+
+	private void setupButtonsForFlying() {
+		missionBtn.setVisibility(View.VISIBLE);
+		joystickBtn.setVisibility(View.GONE);
+		connectBtn.setVisibility(View.GONE);
+		homeBtn.setVisibility(View.VISIBLE);
+		armBtn.setVisibility(View.GONE);
+		landBtn.setVisibility(View.VISIBLE);
+		takeoffBtn.setVisibility(View.GONE);
+		loiterBtn.setVisibility(View.VISIBLE);
+		followBtn.setVisibility(View.VISIBLE);
 	}
 
 }
