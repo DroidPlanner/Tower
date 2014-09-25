@@ -221,7 +221,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		}
 	}
 
-	protected void toggleDroneConnection() {
+	public void toggleDroneConnection() {
 		if (!drone.getMavClient().isConnected()) {
 			final String connectionType = mAppPrefs.getMavLinkConnectionType();
 

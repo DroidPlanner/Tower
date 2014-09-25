@@ -1,10 +1,12 @@
 package org.droidplanner.core.drone.variables;
 
 import org.droidplanner.core.MAVLink.MavLinkModes;
+import org.droidplanner.core.MAVLink.MavLinkTakeoff;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.DroneVariable;
+import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ApmModes;
@@ -86,6 +88,11 @@ public class State extends DroneVariable {
 				myDrone.getWaypointManager().getWaypoints();
 			}
 		}
+	}
+	
+	public void doTakeoff(Altitude alt){
+		changeFlightMode(ApmModes.ROTOR_GUIDED);
+		MavLinkTakeoff.sendTakeoff(myDrone,alt);	
 	}
 
 	public void setMode(ApmModes mode) {
