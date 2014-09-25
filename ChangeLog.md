@@ -8,6 +8,14 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.7.7
+* Context aware flight actions, takeoff and connect buttons (#1090)
+* New number entry widget (#1062,#1051,#1087,#1091)
+* Display firmware version on settings screen, and report to GA (#1067,#1073)
+* Release ROI after follow-me is disabled (#1085,#1078)
+* Bug fixes (#1073,#1077,#1088)
+* Build setup fix (#1072)
+
 ## Droidplanner v2.7.6
 * Warn user about all HIGH_SEVERITY messages from the drone (#1066)
 
