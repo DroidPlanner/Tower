@@ -3,7 +3,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp">
 
     <ProgressBar
         android:id="@+id/reload_progress"
@@ -13,15 +15,15 @@
         android:visibility="gone"
         style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"/>
 
-    <SearchView
+    <EditText
         android:id="@+id/parameter_filter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:iconifiedByDefault="false"
-        android:queryHint="description"
+        android:imeOptions="actionSearch"
         android:background="@drawable/bg_cell_white"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:drawableLeft="@android:drawable/ic_menu_search"
+        android:drawableStart="@android:drawable/ic_menu_search"
+        android:textIsSelectable="true"
         />
 
     <ListView

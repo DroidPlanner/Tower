@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.droidplanner.R;
 import org.droidplanner.android.utils.file.IO.ParameterMetadataMapReader;
@@ -125,22 +126,19 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 		return view;
 	}
 
-	public void loadParameters(Drone drone, List<Parameter> parameters) {
+	public void loadParameters(Drone drone, Set<Parameter> parameters) {
 		loadMetadataInternal(drone);
 
 		clear();
-		for (Parameter parameter : parameters)
-			addParameter(parameter);
+		for (Parameter parameter : parameters) {
+            addParameter(parameter);
+        }
 	}
 
 	private void addParameter(Parameter parameter) {
 		try {
 			Parameter.checkParameterName(parameter.name);
-
-			// paramters from AC 3.2 may contain duplicates - add only if unique
-			if (!containsParameterWithName(parameter.name))
-				add(new ParamsAdapterItem(parameter, getMetadata(parameter.name)));
-
+            add(new ParamsAdapterItem(parameter, getMetadata(parameter.name)));
 		} catch (Exception ex) {
 			// eat it
 		}
@@ -154,15 +152,6 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 			item.setMetadata(getMetadata(item.getParameter().name));
 		}
 		notifyDataSetChanged();
-	}
-
-	private boolean containsParameterWithName(String name) {
-		final int count = getCount();
-		for (int i = 0; i < count; i++) {
-			if (name.equals(getItem(i).getParameter().name))
-				return true;
-		}
-		return false;
 	}
 
 	private void loadMetadataInternal(Drone drone) {

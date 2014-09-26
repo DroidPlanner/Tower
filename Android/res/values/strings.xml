@@ -477,5 +477,6 @@
     <string name="label_advaned">Advanced</string>
     <string name="label_steps_count">Number of Steps</string>
     <string name="label_altitude_step">Altitude Step</string>
+    <string name="menu_search_toggle">Toggle Search</string>
 
 </resources>

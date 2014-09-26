@@ -1,9 +1,9 @@
 package org.droidplanner.android.fragments;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
@@ -11,6 +11,7 @@ import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenParameterDialog;
 import org.droidplanner.android.dialogs.parameters.DialogParameterInfo;
 import org.droidplanner.android.utils.file.IO.ParameterWriter;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.adapterViews.ParamsAdapter;
 import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
 import org.droidplanner.core.drone.DroneInterfaces;
@@ -21,35 +22,43 @@ import org.droidplanner.core.parameters.Parameter;
 import org.droidplanner.core.parameters.ParameterMetadata;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ParamsFragment extends ListFragment implements
-		DroneInterfaces.OnParameterManagerListener, OnDroneListener, SearchView.OnCloseListener,
-        SearchView.OnQueryTextListener {
+		DroneInterfaces.OnParameterManagerListener, OnDroneListener {
 
 	static final String TAG = ParamsFragment.class.getSimpleName();
 
 	public static final String ADAPTER_ITEMS = ParamsFragment.class.getName() + ".adapter.items";
+    private static final String PREF_PARAMS_FILTER_ON = "pref_params_filter_on";
+    private static final boolean DEFAULT_PARAMS_FILTER_ON = true;
 
-	private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
     private ProgressBar mLoadingProgress;
-    private SearchView mParamsFilter;
+    private EditText mParamsFilter;
 
 	private Drone drone;
+    private DroidPlannerPrefs mPrefs;
 	private ParamsAdapter adapter;
 
 	@Override
@@ -58,7 +67,9 @@ public class ParamsFragment extends ListFragment implements
 
         setHasOptionsMenu(true);
 
-        drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
+        final DroidPlannerApp dpApp = (DroidPlannerApp) getActivity().getApplication();
+        drone = dpApp.getDrone();
+        mPrefs = dpApp.getPreferences();
 
 		// create adapter
 		if (savedInstanceState != null) {
@@ -74,7 +85,7 @@ public class ParamsFragment extends ListFragment implements
 
             final List<Parameter> parametersList = drone.getParameters().getParametersList();
             if(!parametersList.isEmpty()) {
-                adapter.loadParameters(drone, parametersList);
+                loadAdapter(parametersList);
             }
 		}
 		setListAdapter(adapter);
@@ -101,11 +112,45 @@ public class ParamsFragment extends ListFragment implements
         mLoadingProgress = (ProgressBar) view.findViewById(R.id.reload_progress);
         mLoadingProgress.setVisibility(View.GONE);
 
-        mParamsFilter = (SearchView) view.findViewById(R.id.parameter_filter);
-        mParamsFilter.setOnQueryTextListener(this);
-        mParamsFilter.setIconifiedByDefault(false);
-        mParamsFilter.setSubmitButtonEnabled(false);
-        mParamsFilter.setOnCloseListener(this);
+        mParamsFilter = (EditText) view.findViewById(R.id.parameter_filter);
+        mParamsFilter.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    disableParameterFilter();
+                }
+            }
+        });
+        mParamsFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enableParameterFilter();
+            }
+        });
+        mParamsFilter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                filterInput(s.toString());
+            }
+        });
+        mParamsFilter.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                filterInput(v.getText());
+
+                if(actionId == EditorInfo.IME_NULL || actionId == EditorInfo.IME_ACTION_SEARCH){
+                    mParamsFilter.clearFocus();
+                }
+                return true;
+            }
+        });
+
 
         // listen for clicks on empty
         view.findViewById(android.R.id.empty).setOnClickListener(new View.OnClickListener() {
@@ -117,7 +162,51 @@ public class ParamsFragment extends ListFragment implements
 
     }
 
-	@Override
+    private void enableParameterFilter() {
+        mParamsFilter.setInputType(InputType.TYPE_CLASS_TEXT);
+        mParamsFilter.requestFocus();
+
+        final Context context = getActivity();
+        final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context
+                .INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.showSoftInput(mParamsFilter, InputMethodManager.SHOW_IMPLICIT);
+        }
+    }
+
+    private void disableParameterFilter() {
+        mParamsFilter.setInputType(InputType.TYPE_NULL);
+
+        final Context context = getActivity();
+        final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context
+                .INPUT_METHOD_SERVICE);
+        if(imm != null) {
+            imm.hideSoftInputFromWindow(mParamsFilter.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+        }
+    }
+
+    private void filterInput(CharSequence input){
+        if(TextUtils.isEmpty(input)){
+            adapter.getFilter().filter("");
+        }
+        else{
+            adapter.getFilter().filter(input);
+        }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        disableParameterFilter();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        disableParameterFilter();
+    }
+
+    @Override
 	public void onStart() {
 		super.onStart();
 		drone.addDroneListener(this);
@@ -133,9 +222,15 @@ public class ParamsFragment extends ListFragment implements
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		if (event == DroneEventsType.TYPE) {
-			adapter.loadMetadata(drone);
-		}
+        switch(event){
+            case TYPE:
+                adapter.loadMetadata(drone);
+                break;
+
+            case DISCONNECTED:
+                stopProgress();
+                break;
+        }
 	}
 
 	@Override
@@ -177,11 +272,33 @@ public class ParamsFragment extends ListFragment implements
 			saveParametersToFile();
 			break;
 
+        case R.id.menu_filter_params:
+            toggleParameterFilter();
+            break;
+
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 		return true;
 	}
+
+    private void toggleParameterFilter(){
+        final boolean isEnabled = mPrefs.prefs.getBoolean(PREF_PARAMS_FILTER_ON,
+                DEFAULT_PARAMS_FILTER_ON);
+
+        if(isEnabled){
+            //Hide the parameter filter
+            disableParameterFilter();
+            mParamsFilter.setVisibility(View.GONE);
+        }
+        else{
+            //Show the parameter filter
+            mParamsFilter.setVisibility(View.VISIBLE);
+            enableParameterFilter();
+        }
+
+        mPrefs.prefs.edit().putBoolean(PREF_PARAMS_FILTER_ON, !isEnabled).apply();
+    }
 
 	private void showInfo(int position, EditText valueView) {
 		final ParamsAdapterItem item = adapter.getItem(position);
@@ -223,14 +340,7 @@ public class ParamsFragment extends ListFragment implements
 		OpenFileDialog dialog = new OpenParameterDialog() {
 			@Override
 			public void parameterFileLoaded(List<Parameter> parameters) {
-				Collections.sort(parameters, new Comparator<Parameter>() {
-					@Override
-					public int compare(Parameter p1, Parameter p2) {
-						return p1.name.compareTo(p2.name);
-					}
-				});
-				// load parameters from file
-				adapter.loadParameters(drone, parameters);
+				loadAdapter(parameters);
 			}
 		};
 		dialog.openDialog(getActivity());
@@ -261,16 +371,18 @@ public class ParamsFragment extends ListFragment implements
 
 	@Override
 	public void onEndReceivingParameters(List<Parameter> parameters) {
-		Collections.sort(parameters, new Comparator<Parameter>() {
-			@Override
-			public int compare(Parameter p1, Parameter p2) {
-				return p1.name.compareTo(p2.name);
-			}
-		});
-		adapter.loadParameters(drone, parameters);
-
+        loadAdapter(parameters);
 		stopProgress();
 	}
+
+    private void loadAdapter(List<Parameter> parameters){
+        if(parameters == null || parameters.isEmpty()){
+            return;
+        }
+
+        Set<Parameter> prunedParameters = new TreeSet<Parameter>(parameters);
+        adapter.loadParameters(drone, prunedParameters);
+    }
 
     private void startProgress(){
         progressDialog = new ProgressDialog(getActivity());
@@ -311,27 +423,5 @@ public class ParamsFragment extends ListFragment implements
         }
 
         mLoadingProgress.setVisibility(View.GONE);
-    }
-
-    @Override
-    public boolean onClose() {
-        adapter.getFilter().filter("");
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        if(TextUtils.isEmpty(newText)){
-            adapter.getFilter().filter("");
-        }
-        else{
-            adapter.getFilter().filter(newText);
-        }
-        return true;
     }
 }

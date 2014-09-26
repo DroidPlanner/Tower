@@ -5,7 +5,7 @@ import java.text.DecimalFormat;
 
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 
-public class Parameter implements Serializable {
+public class Parameter implements Comparable<Parameter>, Serializable {
 
 	public String name;
 	public double value;
@@ -68,4 +68,24 @@ public class Parameter implements Serializable {
 	public static DecimalFormat getFormat() {
 		return format;
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Parameter)) return false;
+
+        Parameter parameter = (Parameter) o;
+
+        return (name == null ? parameter.name == null : name.equals(parameter.name));
+    }
+
+    @Override
+    public int hashCode() {
+        return name != null ? name.hashCode() : 0;
+    }
+
+    @Override
+    public int compareTo(Parameter another) {
+        return name.compareTo(another.name);
+    }
 }
