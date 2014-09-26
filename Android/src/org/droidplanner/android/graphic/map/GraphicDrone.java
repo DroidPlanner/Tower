@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
 	private Drone drone;
+
 	public GraphicDrone(Drone drone) {
 		this.drone = drone;
 	}
@@ -33,7 +34,7 @@ public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
 	@Override
 	public Bitmap getIcon(Resources res) {
-		if(drone.isConnectionAlive()) {
+		if (drone.isConnectionAlive()) {
 			return BitmapFactory.decodeResource(res, R.drawable.quad);
 		}
 		return BitmapFactory.decodeResource(res, R.drawable.quad_disconnect);
@@ -55,7 +56,7 @@ public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 		return (float) drone.getOrientation().getYaw();
 	}
 
-    public boolean isValid() {
-        return drone.getGps().isPositionValid();
-    }
+	public boolean isValid() {
+		return drone.getGps().isPositionValid();
+	}
 }

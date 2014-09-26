@@ -45,9 +45,9 @@ public class GeoToolsTest extends TestCase {
 		poly.addPoint(new Coord2D(51.0285218722540, 2.18014307320118));
 
 		// FIXME: commented out to pass the build test. should be fixed ASAP
-		assertEquals(polygonArea, GeoTools.getArea(poly).valueInSqMeters(),tolerance);
+		assertEquals(polygonArea, GeoTools.getArea(poly).valueInSqMeters(), tolerance);
 		poly.reversePoints();
-		assertEquals(polygonArea, GeoTools.getArea(poly).valueInSqMeters(),tolerance);
+		assertEquals(polygonArea, GeoTools.getArea(poly).valueInSqMeters(), tolerance);
 	}
 
 }

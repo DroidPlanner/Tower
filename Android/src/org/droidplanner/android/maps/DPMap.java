@@ -152,10 +152,10 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 */
 	public float getMapZoomLevel();
 
-    /**
-     * @return a list of marker info currently on the map.
-     */
-    public Set<MarkerInfo> getMarkerInfoList();
+	/**
+	 * @return a list of marker info currently on the map.
+	 */
+	public Set<MarkerInfo> getMarkerInfoList();
 
 	/**
 	 * @return the map maximum zoom level.
@@ -189,11 +189,13 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 
 	public List<Coord2D> projectPathIntoMap(List<Coord2D> pathPoints);
 
-    /**
-     * Remove the markers whose info is in the list from the map.
-     * @param markerInfoList list of markers to remove.
-     */
-    public void removeMarkers(Collection<MarkerInfo> markerInfoList);
+	/**
+	 * Remove the markers whose info is in the list from the map.
+	 * 
+	 * @param markerInfoList
+	 *            list of markers to remove.
+	 */
+	public void removeMarkers(Collection<MarkerInfo> markerInfoList);
 
 	/**
 	 * Stores the map camera settings.

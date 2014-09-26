@@ -83,10 +83,10 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 
 		loiterBtn = (Button) view.findViewById(R.id.mc_loiter);
 		loiterBtn.setOnClickListener(this);
-		
+
 		autoBtn = (Button) view.findViewById(R.id.mc_autoBtn);
 		autoBtn.setOnClickListener(this);
-		
+
 		followBtn = (Button) view.findViewById(R.id.mc_follow);
 		followBtn.setOnClickListener(this);
 
@@ -146,7 +146,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 			drone.getState().changeFlightMode(ApmModes.ROTOR_LOITER);
 			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_LOITER.getName());
 			break;
-			
+
 		case R.id.mc_autoBtn:
 			drone.getState().changeFlightMode(ApmModes.ROTOR_AUTO);
 			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_AUTO.getName());

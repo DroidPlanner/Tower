@@ -26,16 +26,21 @@ package org.droidplanner.android.widgets.spinnerWheel;
 
 /**
  * Wheel clicked listener interface.
- * <p>The onItemClicked() method is called whenever a spinnerwheel item is clicked
- * <li> New Wheel position is set
- * <li> Wheel view is scrolled
+ * <p>
+ * The onItemClicked() method is called whenever a spinnerwheel item is clicked
+ * <li>New Wheel position is set
+ * <li>Wheel view is scrolled
  */
 public interface OnWheelClickedListener {
-    /**
-     * Callback method to be invoked when current item clicked
-     * @param wheel the spinnerwheel view
-     * @param itemIndex the index of clicked item
-    * @param isCurrentItem true if the clicked item is currently selected.
-     */
-    void onItemClicked(AbstractWheel wheel, int itemIndex, boolean isCurrentItem);
+	/**
+	 * Callback method to be invoked when current item clicked
+	 * 
+	 * @param wheel
+	 *            the spinnerwheel view
+	 * @param itemIndex
+	 *            the index of clicked item
+	 * @param isCurrentItem
+	 *            true if the clicked item is currently selected.
+	 */
+	void onItemClicked(AbstractWheel wheel, int itemIndex, boolean isCurrentItem);
 }

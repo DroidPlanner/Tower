@@ -5,7 +5,6 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.model.Drone;
 
-
 public class FollowAbove extends FollowAlgorithm {
 
 	public FollowAbove(Drone drone, Length radius) {

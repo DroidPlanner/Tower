@@ -37,7 +37,7 @@ public interface Drone {
 
 	public int getMavlinkVersion();
 
-    public boolean isConnectionAlive();
+	public boolean isConnectionAlive();
 
 	public void onHeartbeat(msg_heartbeat msg);
 

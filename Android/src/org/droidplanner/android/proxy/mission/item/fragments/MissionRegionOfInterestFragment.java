@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 
 public class MissionRegionOfInterestFragment extends MissionDetailFragment implements
-        CardWheelHorizontalView.OnCardWheelChangedListener {
+		CardWheelHorizontalView.OnCardWheelChangedListener {
 
 	@Override
 	protected int getResource() {
@@ -23,27 +23,23 @@ public class MissionRegionOfInterestFragment extends MissionDetailFragment imple
 		super.onViewCreated(view, savedInstanceState);
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.ROI));
 
-        final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(getActivity().getApplicationContext(),
-                MIN_ALTITUDE, MAX_ALTITUDE, "%d m");
-        altitudeAdapter.setItemResource(R.layout.wheel_text_centered);
-        final CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view.findViewById
-                (R.id.altitudePicker);
-        altitudePicker.setViewAdapter(altitudeAdapter);
-        altitudePicker.setCurrentValue((int)
-                ((RegionOfInterest) itemRender.getMissionItem())
-                        .getCoordinate()
-                        .getAltitude()
-                        .valueInMeters());
-        altitudePicker.addChangingListener(this);
+		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(getActivity()
+				.getApplicationContext(), MIN_ALTITUDE, MAX_ALTITUDE, "%d m");
+		altitudeAdapter.setItemResource(R.layout.wheel_text_centered);
+		final CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view
+				.findViewById(R.id.altitudePicker);
+		altitudePicker.setViewAdapter(altitudeAdapter);
+		altitudePicker.setCurrentValue((int) ((RegionOfInterest) itemRender.getMissionItem())
+				.getCoordinate().getAltitude().valueInMeters());
+		altitudePicker.addChangingListener(this);
 	}
 
-    @Override
-    public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
-        switch(wheel.getId()){
-            case R.id.altitudePicker:
-                ((RegionOfInterest) itemRender.getMissionItem()).setAltitude(new Altitude
-                        (newValue));
-                break;
-        }
-    }
+	@Override
+	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
+		switch (wheel.getId()) {
+		case R.id.altitudePicker:
+			((RegionOfInterest) itemRender.getMissionItem()).setAltitude(new Altitude(newValue));
+			break;
+		}
+	}
 }
