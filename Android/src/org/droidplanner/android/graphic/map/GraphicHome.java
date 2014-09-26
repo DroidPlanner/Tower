@@ -23,9 +23,9 @@ public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 		return 0.5f;
 	}
 
-    public boolean isValid() {
-        return home.isValid();
-    }
+	public boolean isValid() {
+		return home.isValid();
+	}
 
 	@Override
 	public float getAnchorV() {

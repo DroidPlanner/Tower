@@ -17,7 +17,7 @@ public class State extends DroneVariable {
 	private boolean armed = false;
 	private boolean isFlying = false;
 	private ApmModes mode = ApmModes.UNKNOWN;
-    
+
 	// flightTimer
 	// ----------------
 	private long startTime = 0;
@@ -89,10 +89,10 @@ public class State extends DroneVariable {
 			}
 		}
 	}
-	
-	public void doTakeoff(Altitude alt){
+
+	public void doTakeoff(Altitude alt) {
 		changeFlightMode(ApmModes.ROTOR_GUIDED);
-		MavLinkTakeoff.sendTakeoff(myDrone,alt);	
+		MavLinkTakeoff.sendTakeoff(myDrone, alt);
 	}
 
 	public void setMode(ApmModes mode) {

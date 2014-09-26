@@ -104,8 +104,7 @@ public class GAUtils {
 				.setNewSession()
 				.setCustomDimension(CustomDimension.MAVLINK_CONNECTION_TYPE, connectionType)
 				.setCustomDimension(CustomDimension.DRONESHARE_ACTIVE,
-                        String.valueOf(isDroneShareUser))
-                .build());
+						String.valueOf(isDroneShareUser)).build());
 	}
 
 	public static void sendEvent(HitBuilders.EventBuilder eventBuilder) {
