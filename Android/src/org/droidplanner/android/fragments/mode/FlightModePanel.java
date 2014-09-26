@@ -128,9 +128,6 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 					infoPanel = new ModeGuidedFragment();
 				}
 				break;
-			case ROTOR_POSITION:
-				infoPanel = new ModePositionFragment();
-				break;
 			case ROTOR_TOY:
 				infoPanel = new ModeDriftFragment();
 				break;
