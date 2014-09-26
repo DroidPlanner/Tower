@@ -1,5 +1,7 @@
 package org.droidplanner.android.communication.service;
 
+import java.lang.ref.WeakReference;
+
 import org.droidplanner.android.communication.connection.AndroidMavLinkConnection;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
@@ -15,8 +17,6 @@ import android.util.Log;
 
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.google.android.gms.analytics.HitBuilders;
-
-import java.lang.ref.WeakReference;
 
 /**
  * Connects to the drone through a mavlink connection, and takes care of sending and/or receiving

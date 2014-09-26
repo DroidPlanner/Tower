@@ -1,14 +1,13 @@
 package org.droidplanner.android.notifications;
 
+import org.droidplanner.R;
+import org.droidplanner.core.drone.DroneInterfaces;
+import org.droidplanner.core.model.Drone;
+
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
-import android.widget.Toast;
-
-import org.droidplanner.R;
-import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.model.Drone;
 
 
 public class EmergencyBeepNotificationProvider implements NotificationHandler.NotificationProvider {

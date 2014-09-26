@@ -1,5 +1,11 @@
 package org.droidplanner.android.widgets.spinnerWheel;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.droidplanner.R;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -12,12 +18,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.droidplanner.R;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Wraps the horizontal spinner wheel, and its title within a view.

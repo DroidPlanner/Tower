@@ -3,14 +3,11 @@ package org.droidplanner.android.communication.connection;
 import java.io.File;
 import java.io.IOException;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-
-import org.droidplanner.android.utils.AndroidLogger;
-import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.core.MAVLink.connection.TcpConnection;
 import org.droidplanner.core.model.Logger;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 
 public class AndroidTcpConnection extends AndroidMavLinkConnection {
 

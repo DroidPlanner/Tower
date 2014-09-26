@@ -9,7 +9,6 @@ import org.droidplanner.android.communication.connection.BluetoothConnection;
 import org.droidplanner.android.communication.connection.usb.UsbConnection;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.core.MAVLink.connection.MavLinkConnection;
 import org.droidplanner.core.MAVLink.connection.MavLinkConnectionTypes;
 
 import android.content.Context;

@@ -24,6 +24,12 @@
 
 package org.droidplanner.android.widgets.spinnerWheel;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.droidplanner.R;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.WheelViewAdapter;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
@@ -34,12 +40,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
-
-import org.droidplanner.R;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.WheelViewAdapter;
-
-import java.util.LinkedList;
-import java.util.List;
 
 
 /**

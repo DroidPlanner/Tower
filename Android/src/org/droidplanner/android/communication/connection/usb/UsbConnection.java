@@ -4,16 +4,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.droidplanner.android.communication.connection.AndroidMavLinkConnection;
+import org.droidplanner.android.utils.AndroidLogger;
+import org.droidplanner.core.MAVLink.connection.MavLinkConnectionTypes;
+import org.droidplanner.core.model.Logger;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.util.Log;
-
-import org.droidplanner.android.communication.connection.AndroidMavLinkConnection;
-import org.droidplanner.android.utils.AndroidLogger;
-import org.droidplanner.core.MAVLink.connection.MavLinkConnectionTypes;
-import org.droidplanner.core.model.Logger;
 
 public class UsbConnection extends AndroidMavLinkConnection {
 

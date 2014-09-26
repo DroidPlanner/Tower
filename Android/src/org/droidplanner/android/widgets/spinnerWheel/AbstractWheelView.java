@@ -24,6 +24,8 @@
 
 package org.droidplanner.android.widgets.spinnerWheel;
 
+import org.droidplanner.R;
+
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -35,8 +37,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-
-import org.droidplanner.R;
 
 /**
  * Abstract spinner spinnerwheel view.

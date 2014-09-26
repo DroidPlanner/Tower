@@ -1,8 +1,8 @@
 package org.droidplanner.android.utils;
 
-import android.util.Log;
-
 import org.droidplanner.core.model.Logger;
+
+import android.util.Log;
 
 /**
  * Android specific implementation for the {org.droidplanner.core.model.Logger} interface.

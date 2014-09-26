@@ -1,5 +1,13 @@
 package org.droidplanner.core.helpers.geoTools;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.abs;
+import static java.lang.Math.atan2;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.tan;
+import static java.lang.Math.toRadians;
+
 import java.util.List;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
@@ -8,8 +16,6 @@ import org.droidplanner.core.helpers.math.MathUtil;
 import org.droidplanner.core.helpers.units.Area;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.polygon.Polygon;
-
-import static java.lang.Math.*;
 
 public class GeoTools {
 	private static final double RADIUS_OF_EARTH = 6378137.0;//In meters.  Source: WGS84

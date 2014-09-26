@@ -1,11 +1,5 @@
 package org.droidplanner.core.MAVLink.connection;
 
-import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.MAVLinkPacket;
-import com.MAVLink.Parser;
-
-import org.droidplanner.core.model.Logger;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,9 +8,14 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.droidplanner.core.model.Logger;
+
+import com.MAVLink.Parser;
+import com.MAVLink.Messages.MAVLinkMessage;
+import com.MAVLink.Messages.MAVLinkPacket;
 
 /**
  * Base for mavlink connection implementations.

@@ -7,7 +7,6 @@ import java.net.UnknownHostException;
 import java.util.Set;
 import java.util.UUID;
 
-import org.droidplanner.android.utils.Utils;
 import org.droidplanner.core.MAVLink.connection.MavLinkConnectionTypes;
 
 import android.annotation.SuppressLint;

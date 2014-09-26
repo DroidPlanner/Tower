@@ -24,20 +24,19 @@
 
 package org.droidplanner.android.widgets.spinnerWheel;
 
+import org.droidplanner.R;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
-
-import org.droidplanner.R;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 
 
 /**
