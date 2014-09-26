@@ -146,7 +146,7 @@ public class DroneImpl implements Drone {
 
 	@Override
 	public void loadVehicleProfile() {
-		preferences.loadVehicleProfile(getFirmwareType());
+		profile = preferences.loadVehicleProfile(getFirmwareType());
 	}
 
 	@Override
