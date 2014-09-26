@@ -23,6 +23,7 @@ import org.droidplanner.core.parameters.ParameterMetadata;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,7 +37,8 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 public class ParamsFragment extends ListFragment implements
-		DroneInterfaces.OnParameterManagerListener, OnDroneListener {
+		DroneInterfaces.OnParameterManagerListener, OnDroneListener, SearchView.OnCloseListener,
+        SearchView.OnQueryTextListener {
 
 	static final String TAG = ParamsFragment.class.getSimpleName();
 
@@ -51,10 +53,12 @@ public class ParamsFragment extends ListFragment implements
 	private ParamsAdapter adapter;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 
         setHasOptionsMenu(true);
+
+        drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 
 		// create adapter
 		if (savedInstanceState != null) {
@@ -67,6 +71,11 @@ public class ParamsFragment extends ListFragment implements
 		} else {
 			// empty adapter
 			adapter = new ParamsAdapter(getActivity(), R.layout.row_params);
+
+            final List<Parameter> parametersList = drone.getParameters().getParametersList();
+            if(!parametersList.isEmpty()) {
+                adapter.loadParameters(drone, parametersList);
+            }
 		}
 		setListAdapter(adapter);
 
@@ -93,6 +102,10 @@ public class ParamsFragment extends ListFragment implements
         mLoadingProgress.setVisibility(View.GONE);
 
         mParamsFilter = (SearchView) view.findViewById(R.id.parameter_filter);
+        mParamsFilter.setOnQueryTextListener(this);
+        mParamsFilter.setIconifiedByDefault(false);
+        mParamsFilter.setSubmitButtonEnabled(false);
+        mParamsFilter.setOnCloseListener(this);
 
         // listen for clicks on empty
         view.findViewById(android.R.id.empty).setOnClickListener(new View.OnClickListener() {
@@ -107,7 +120,6 @@ public class ParamsFragment extends ListFragment implements
 	@Override
 	public void onStart() {
 		super.onStart();
-		drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 		drone.addDroneListener(this);
 		drone.getParameters().setParameterListener(this);
 	}
@@ -182,7 +194,7 @@ public class ParamsFragment extends ListFragment implements
 
 	private void refreshParameters() {
 		if (drone.getMavClient().isConnected()) {
-			drone.getParameters().getAllParameters();
+			drone.getParameters().refreshParameters();
 		} else {
 			Toast.makeText(getActivity(), R.string.msg_connect_first, Toast.LENGTH_SHORT).show();
 		}
@@ -240,25 +252,15 @@ public class ParamsFragment extends ListFragment implements
 	@Override
 	public void onBeginReceivingParameters() {
 		startProgress();
-
-		mReceived = 0;
-		mTotal = 0;
 	}
-
-	private int mReceived = 0, mTotal = 0;
 
 	@Override
 	public void onParameterReceived(Parameter parameter, int index, int count) {
-		++mReceived;
-        updateProgress(mReceived, count);
+        updateProgress(index, count);
 	}
 
 	@Override
 	public void onEndReceivingParameters(List<Parameter> parameters) {
-		if (mReceived < mTotal) {
-			Log.w(TAG, "Total of " + mTotal + " params, but only got " + mReceived);
-		}
-
 		Collections.sort(parameters, new Comparator<Parameter>() {
 			@Override
 			public int compare(Parameter p1, Parameter p2) {
@@ -283,19 +285,19 @@ public class ParamsFragment extends ListFragment implements
         mLoadingProgress.setVisibility(View.VISIBLE);
     }
 
-    private void updateProgress(int progress, int max){
-        if (progressDialog != null) {
-            if (progressDialog.isIndeterminate()) {
-                progressDialog.setIndeterminate(false);
-                mTotal = max;
-                progressDialog.setMax(max);
-            }
-            progressDialog.setProgress(progress);
+    private void updateProgress(int progress, int max) {
+        if (progressDialog == null) {
+            startProgress();
         }
 
-        if(mLoadingProgress.isIndeterminate()) {
+        if (progressDialog.isIndeterminate()) {
+            progressDialog.setIndeterminate(false);
+            progressDialog.setMax(max);
+        }
+        progressDialog.setProgress(progress);
+
+        if (mLoadingProgress.isIndeterminate()) {
             mLoadingProgress.setIndeterminate(false);
-            mTotal = max;
             mLoadingProgress.setMax(max);
         }
         mLoadingProgress.setProgress(progress);
@@ -309,5 +311,27 @@ public class ParamsFragment extends ListFragment implements
         }
 
         mLoadingProgress.setVisibility(View.GONE);
+    }
+
+    @Override
+    public boolean onClose() {
+        adapter.getFilter().filter("");
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if(TextUtils.isEmpty(newText)){
+            adapter.getFilter().filter("");
+        }
+        else{
+            adapter.getFilter().filter(newText);
+        }
+        return true;
     }
 }

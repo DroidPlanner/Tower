@@ -113,4 +113,23 @@ public class ParamsAdapterItem implements Serializable {
 			return Validation.NA;
 		}
 	}
+
+    @Override
+    public String toString(){
+        String toString = "";
+
+        final ParameterMetadata metadata = getMetadata();
+        if(metadata != null){
+            toString = metadata.getDisplayName();
+        }
+
+        if(toString == null) {
+            final Parameter param = getParameter();
+            if (param != null) {
+                toString = param.name;
+            }
+        }
+
+        return toString;
+    }
 }
