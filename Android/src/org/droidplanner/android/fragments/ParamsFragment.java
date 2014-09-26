@@ -62,8 +62,8 @@ public class ParamsFragment extends ListFragment implements
 	private ParamsAdapter adapter;
 
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
 
@@ -195,22 +195,11 @@ public class ParamsFragment extends ListFragment implements
     }
 
     @Override
-    public void onResume(){
-        super.onResume();
-        disableParameterFilter();
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        disableParameterFilter();
-    }
-
-    @Override
 	public void onStart() {
 		super.onStart();
 		drone.addDroneListener(this);
 		drone.getParameters().setParameterListener(this);
+        toggleParameterFilter(isParameterFilterVisible(), false);
 	}
 
 	@Override
@@ -238,9 +227,8 @@ public class ParamsFragment extends ListFragment implements
 		super.onSaveInstanceState(outState);
 
 		// save adapter items
-		final ArrayList<ParamsAdapterItem> pwms = new ArrayList<ParamsAdapterItem>();
-		for (int i = 0; i < adapter.getCount(); i++)
-			pwms.add(adapter.getItem(i));
+		final ArrayList<ParamsAdapterItem> pwms = new ArrayList<ParamsAdapterItem>(adapter
+                .getOriginalValues());
 		outState.putSerializable(ADAPTER_ITEMS, pwms);
 	}
 
@@ -273,7 +261,8 @@ public class ParamsFragment extends ListFragment implements
 			break;
 
         case R.id.menu_filter_params:
-            toggleParameterFilter();
+            final boolean isEnabled = !isParameterFilterVisible();
+            toggleParameterFilter(isEnabled, isEnabled);
             break;
 
 		default:
@@ -282,22 +271,32 @@ public class ParamsFragment extends ListFragment implements
 		return true;
 	}
 
-    private void toggleParameterFilter(){
-        final boolean isEnabled = mPrefs.prefs.getBoolean(PREF_PARAMS_FILTER_ON,
-                DEFAULT_PARAMS_FILTER_ON);
+    private void toggleParameterFilter(boolean isVisible, boolean enableInput){
+        if(isVisible){
+            //Show the parameter filter
+            mParamsFilter.setVisibility(View.VISIBLE);
+            filterInput(mParamsFilter.getText());
 
-        if(isEnabled){
+            if(enableInput) {
+                enableParameterFilter();
+            }
+            else{
+                disableParameterFilter();
+            }
+        }
+        else{
             //Hide the parameter filter
             disableParameterFilter();
             mParamsFilter.setVisibility(View.GONE);
-        }
-        else{
-            //Show the parameter filter
-            mParamsFilter.setVisibility(View.VISIBLE);
-            enableParameterFilter();
+            filterInput(null);
         }
 
-        mPrefs.prefs.edit().putBoolean(PREF_PARAMS_FILTER_ON, !isEnabled).apply();
+        mPrefs.prefs.edit().putBoolean(PREF_PARAMS_FILTER_ON, isVisible).apply();
+    }
+
+    private boolean isParameterFilterVisible(){
+        return mPrefs.prefs.getBoolean(PREF_PARAMS_FILTER_ON,
+                DEFAULT_PARAMS_FILTER_ON);
     }
 
 	private void showInfo(int position, EditText valueView) {
@@ -382,6 +381,13 @@ public class ParamsFragment extends ListFragment implements
 
         Set<Parameter> prunedParameters = new TreeSet<Parameter>(parameters);
         adapter.loadParameters(drone, prunedParameters);
+
+        if(mParamsFilter != null && mParamsFilter.getVisibility() == View.VISIBLE){
+            mParamsFilter.setText("");
+        }
+        else{
+            filterInput(null);
+        }
     }
 
     private void startProgress(){

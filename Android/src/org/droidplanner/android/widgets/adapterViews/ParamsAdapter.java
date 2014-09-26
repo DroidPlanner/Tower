@@ -14,7 +14,6 @@ import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.parameters.Parameter;
 import org.droidplanner.core.parameters.ParameterMetadata;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;
@@ -23,14 +22,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
 /**
  * Date: 2013-12-08 Time: 11:00 PM
  */
-public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
+public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 
 	public interface OnInfoListener {
 		void onHelp(int position, EditText valueView);
