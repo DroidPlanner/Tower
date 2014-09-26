@@ -347,7 +347,7 @@ public class TTSNotificationProvider implements OnInitListener,
 			break;
 		case FIXED_WING_RTL:
 		case ROTOR_RTL:
-			modeString += "Return to home";
+			modeString += "Return to launch";
 			break;
 		default:
 			modeString += mode.getName();
