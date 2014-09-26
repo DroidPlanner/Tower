@@ -51,11 +51,11 @@ public class Utils {
 			}
 		};
 
-        private final int mMavLinkConnectionType;
+		private final int mMavLinkConnectionType;
 
-        private ConnectionType(int mavLinkConnectionType){
-            mMavLinkConnectionType = mavLinkConnectionType;
-        }
+		private ConnectionType(int mavLinkConnectionType) {
+			mMavLinkConnectionType = mavLinkConnectionType;
+		}
 
 		/**
 		 * This returns the implementation of AndroidMavLinkConnection for this
@@ -67,9 +67,9 @@ public class Utils {
 		 */
 		public abstract AndroidMavLinkConnection getConnection(Context context);
 
-        public int getConnectionType(){
-            return mMavLinkConnectionType;
-        }
+		public int getConnectionType() {
+			return mMavLinkConnectionType;
+		}
 	}
 
 	/**

@@ -31,46 +31,46 @@ import android.view.ViewGroup;
 
 public abstract class DroneMap extends Fragment implements OnDroneListener {
 
-    private final static String TAG = DroneMap.class.getSimpleName();
+	private final static String TAG = DroneMap.class.getSimpleName();
 
-    private final Handler mHandler = new Handler();
+	private final Handler mHandler = new Handler();
 
-    private final Runnable mUpdateMap = new Runnable() {
-        @Override
-        public void run() {
-            final List<MarkerInfo> missionMarkerInfos = missionProxy.getMarkersInfos();
+	private final Runnable mUpdateMap = new Runnable() {
+		@Override
+		public void run() {
+			final List<MarkerInfo> missionMarkerInfos = missionProxy.getMarkersInfos();
 
-            final boolean isThereMissionMarkers = !missionMarkerInfos.isEmpty();
-            final boolean isHomeValid = home.isValid();
+			final boolean isThereMissionMarkers = !missionMarkerInfos.isEmpty();
+			final boolean isHomeValid = home.isValid();
 
-            //Get the list of markers currently on the map.
-            final Set<MarkerInfo> markersOnTheMap = mMapFragment.getMarkerInfoList();
+			// Get the list of markers currently on the map.
+			final Set<MarkerInfo> markersOnTheMap = mMapFragment.getMarkerInfoList();
 
-            if(!markersOnTheMap.isEmpty()){
-                if(isHomeValid) {
-                    markersOnTheMap.remove(home);
-                }
+			if (!markersOnTheMap.isEmpty()) {
+				if (isHomeValid) {
+					markersOnTheMap.remove(home);
+				}
 
-                if(isThereMissionMarkers) {
-                    markersOnTheMap.removeAll(missionMarkerInfos);
-                }
+				if (isThereMissionMarkers) {
+					markersOnTheMap.removeAll(missionMarkerInfos);
+				}
 
-                mMapFragment.removeMarkers(markersOnTheMap);
-            }
+				mMapFragment.removeMarkers(markersOnTheMap);
+			}
 
-            if (isHomeValid) {
-                mMapFragment.updateMarker(home);
-            }
+			if (isHomeValid) {
+				mMapFragment.updateMarker(home);
+			}
 
-            if(isThereMissionMarkers) {
-                mMapFragment.updateMarkers(missionMarkerInfos, isMissionDraggable());
-            }
+			if (isThereMissionMarkers) {
+				mMapFragment.updateMarkers(missionMarkerInfos, isMissionDraggable());
+			}
 
-            mMapFragment.updateMissionPath(missionProxy);
+			mMapFragment.updateMissionPath(missionProxy);
 
-            mHandler.removeCallbacks(this);
-        }
-    };
+			mHandler.removeCallbacks(this);
+		}
+	};
 
 	protected DPMap mMapFragment;
 
@@ -103,11 +103,11 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		return view;
 	}
 
-    @Override
-    public void onDetach(){
-        super.onDetach();
-        mHandler.removeCallbacksAndMessages(null);
-    }
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mHandler.removeCallbacksAndMessages(null);
+	}
 
 	private void updateMapFragment() {
 		// Add the map fragment instance (based on user preference)
@@ -131,7 +131,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 	public void onPause() {
 		super.onPause();
 		drone.removeDroneListener(this);
-        mHandler.removeCallbacksAndMessages(null);
+		mHandler.removeCallbacksAndMessages(null);
 		mMapFragment.saveCameraPosition();
 	}
 
@@ -165,7 +165,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		case GPS:
 			mMapFragment.updateMarker(graphicDrone);
 			mMapFragment.updateDroneLeashPath(guided);
-			if(drone.getGps().isPositionValid()) {
+			if (drone.getGps().isPositionValid()) {
 				mMapFragment.addFlightPathPoint(drone.getGps().getPosition());
 			}
 			break;

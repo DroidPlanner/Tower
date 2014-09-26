@@ -188,11 +188,11 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		resetMarkersOverlay();
 	}
 
-    private void removeMarkersOverlay(List<Marker> markers){
-        if(mMarkersOverlay != null){
-            mMarkersOverlay.removeItems(markers);
-        }
-    }
+	private void removeMarkersOverlay(List<Marker> markers) {
+		if (mMarkersOverlay != null) {
+			mMarkersOverlay.removeItems(markers);
+		}
+	}
 
 	private void resetMarkersOverlay() {
 		if (mMarkersOverlay != null) {
@@ -264,12 +264,12 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		return mMapView.getZoomLevel();
 	}
 
-    @Override
-    public Set<MarkerInfo> getMarkerInfoList() {
-        return new HashSet<MarkerInfo>(mBiMarkersMap.keySet());
-    }
+	@Override
+	public Set<MarkerInfo> getMarkerInfoList() {
+		return new HashSet<MarkerInfo>(mBiMarkersMap.keySet());
+	}
 
-    @Override
+	@Override
 	public float getMaxZoomLevel() {
 		return mMapView.getMaxZoomLevel();
 	}
@@ -286,8 +286,9 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
 	@Override
 	public void goToDroneLocation() {
-		if(!mDrone.getGps().isPositionValid()){
-			Toast.makeText(getActivity().getApplicationContext(), "No drone location available", Toast.LENGTH_SHORT).show();
+		if (!mDrone.getGps().isPositionValid()) {
+			Toast.makeText(getActivity().getApplicationContext(), "No drone location available",
+					Toast.LENGTH_SHORT).show();
 			return;
 		}
 		final float currentZoomLevel = getMapZoomLevel();
@@ -328,26 +329,26 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		return coords;
 	}
 
-    @Override
-    public void removeMarkers(Collection<MarkerInfo> markerInfoList) {
-        if(markerInfoList == null || markerInfoList.isEmpty()){
-            return;
-        }
+	@Override
+	public void removeMarkers(Collection<MarkerInfo> markerInfoList) {
+		if (markerInfoList == null || markerInfoList.isEmpty()) {
+			return;
+		}
 
-        final List<Marker> markersToRemove = new ArrayList<Marker>(markerInfoList.size());
-        for(MarkerInfo markerInfo: markerInfoList){
-            final Marker marker = mBiMarkersMap.getValue(markerInfo);
-            if(marker != null){
-                markersToRemove.add(marker);
-                mBiMarkersMap.removeKey(markerInfo);
-            }
-        }
+		final List<Marker> markersToRemove = new ArrayList<Marker>(markerInfoList.size());
+		for (MarkerInfo markerInfo : markerInfoList) {
+			final Marker marker = mBiMarkersMap.getValue(markerInfo);
+			if (marker != null) {
+				markersToRemove.add(marker);
+				mBiMarkersMap.removeKey(markerInfo);
+			}
+		}
 
-        removeMarkersOverlay(markersToRemove);
-        mMapView.invalidate();
-    }
+		removeMarkersOverlay(markersToRemove);
+		mMapView.invalidate();
+	}
 
-    @Override
+	@Override
 	public void saveCameraPosition() {
 		SharedPreferences.Editor editor = mPrefs.prefs.edit();
 		final ILatLng mapCenter = mMapView.getCenter();
@@ -460,11 +461,11 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
 	@Override
 	public void updateMarker(MarkerInfo markerInfo, boolean isDraggable) {
-        //if the drone hasn't received a gps signal yet
-        final Coord2D coord = markerInfo.getPosition();
-        if(coord == null){
-            return;
-        }
+		// if the drone hasn't received a gps signal yet
+		final Coord2D coord = markerInfo.getPosition();
+		if (coord == null) {
+			return;
+		}
 
 		final LatLng position = DroneHelper.CoordToLatLng(coord);
 		Marker marker = mBiMarkersMap.getValue(markerInfo);

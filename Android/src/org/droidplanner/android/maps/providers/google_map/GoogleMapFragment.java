@@ -77,7 +77,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 	private static final long USER_LOCATION_UPDATE_FASTEST_INTERVAL = 1000; // ms
 	private static final float USER_LOCATION_UPDATE_MIN_DISPLACEMENT = 5; // m
 
-    private final HashBiMap<MarkerInfo, Marker> mBiMarkersMap = new HashBiMap<MarkerInfo, Marker>();
+	private final HashBiMap<MarkerInfo, Marker> mBiMarkersMap = new HashBiMap<MarkerInfo, Marker>();
 
 	private Drone mDrone;
 	private DroidPlannerPrefs mAppPrefs;
@@ -303,65 +303,62 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
 	@Override
 	public void updateMarker(MarkerInfo markerInfo, boolean isDraggable) {
-        //if the drone hasn't received a gps signal yet
-        final Coord2D coord = markerInfo.getPosition();
-        if(coord == null){
-            return;
-        }
+		// if the drone hasn't received a gps signal yet
+		final Coord2D coord = markerInfo.getPosition();
+		if (coord == null) {
+			return;
+		}
 
 		final LatLng position = DroneHelper.CoordToLatLang(coord);
 		Marker marker = mBiMarkersMap.getValue(markerInfo);
 		if (marker == null) {
 			// Generate the marker
-            generateMarker(markerInfo, position, isDraggable);
+			generateMarker(markerInfo, position, isDraggable);
+		} else {
+			// Update the marker
+			updateMarker(marker, markerInfo, position, isDraggable);
 		}
-        else{
-            // Update the marker
-            updateMarker(marker, markerInfo, position, isDraggable);
-        }
 	}
 
-    private void generateMarker(MarkerInfo markerInfo, LatLng position, boolean isDraggable){
-        final MarkerOptions markerOptions = new MarkerOptions()
-                .position(position)
-                .draggable(isDraggable)
-                .alpha(markerInfo.getAlpha())
-                .anchor(markerInfo.getAnchorU(), markerInfo.getAnchorV())
-                .infoWindowAnchor(markerInfo.getInfoWindowAnchorU(),
-                        markerInfo.getInfoWindowAnchorV())
-                .rotation(markerInfo.getRotation())
-                .snippet(markerInfo.getSnippet())
-                .title(markerInfo.getTitle())
-                .flat(markerInfo.isFlat())
-                .visible(markerInfo.isVisible());
+	private void generateMarker(MarkerInfo markerInfo, LatLng position, boolean isDraggable) {
+		final MarkerOptions markerOptions = new MarkerOptions()
+				.position(position)
+				.draggable(isDraggable)
+				.alpha(markerInfo.getAlpha())
+				.anchor(markerInfo.getAnchorU(), markerInfo.getAnchorV())
+				.infoWindowAnchor(markerInfo.getInfoWindowAnchorU(),
+						markerInfo.getInfoWindowAnchorV()).rotation(markerInfo.getRotation())
+				.snippet(markerInfo.getSnippet()).title(markerInfo.getTitle())
+				.flat(markerInfo.isFlat()).visible(markerInfo.isVisible());
 
-        final Bitmap markerIcon = markerInfo.getIcon(getResources());
-        if (markerIcon != null) {
-            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerIcon));
-        }
+		final Bitmap markerIcon = markerInfo.getIcon(getResources());
+		if (markerIcon != null) {
+			markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerIcon));
+		}
 
-        Marker marker = mMap.addMarker(markerOptions);
-        mBiMarkersMap.put(markerInfo, marker);
-    }
+		Marker marker = mMap.addMarker(markerOptions);
+		mBiMarkersMap.put(markerInfo, marker);
+	}
 
-    private void updateMarker(Marker marker, MarkerInfo markerInfo, LatLng position, boolean isDraggable){
-        final Bitmap markerIcon = markerInfo.getIcon(getResources());
-        if (markerIcon != null) {
-            marker.setIcon(BitmapDescriptorFactory.fromBitmap(markerIcon));
-        }
+	private void updateMarker(Marker marker, MarkerInfo markerInfo, LatLng position,
+			boolean isDraggable) {
+		final Bitmap markerIcon = markerInfo.getIcon(getResources());
+		if (markerIcon != null) {
+			marker.setIcon(BitmapDescriptorFactory.fromBitmap(markerIcon));
+		}
 
-        marker.setAlpha(markerInfo.getAlpha());
-        marker.setAnchor(markerInfo.getAnchorU(), markerInfo.getAnchorV());
-        marker.setInfoWindowAnchor(markerInfo.getInfoWindowAnchorU(),
-                markerInfo.getInfoWindowAnchorV());
-        marker.setPosition(position);
-        marker.setRotation(markerInfo.getRotation());
-        marker.setSnippet(markerInfo.getSnippet());
-        marker.setTitle(markerInfo.getTitle());
-        marker.setDraggable(isDraggable);
-        marker.setFlat(markerInfo.isFlat());
-        marker.setVisible(markerInfo.isVisible());
-    }
+		marker.setAlpha(markerInfo.getAlpha());
+		marker.setAnchor(markerInfo.getAnchorU(), markerInfo.getAnchorV());
+		marker.setInfoWindowAnchor(markerInfo.getInfoWindowAnchorU(),
+				markerInfo.getInfoWindowAnchorV());
+		marker.setPosition(position);
+		marker.setRotation(markerInfo.getRotation());
+		marker.setSnippet(markerInfo.getSnippet());
+		marker.setTitle(markerInfo.getTitle());
+		marker.setDraggable(isDraggable);
+		marker.setFlat(markerInfo.isFlat());
+		marker.setVisible(markerInfo.isVisible());
+	}
 
 	@Override
 	public void updateMarkers(List<MarkerInfo> markersInfos) {
@@ -377,10 +374,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 		}
 	}
 
-    @Override
-    public Set<MarkerInfo> getMarkerInfoList(){
-        return new HashSet<MarkerInfo>(mBiMarkersMap.keySet());
-    }
+	@Override
+	public Set<MarkerInfo> getMarkerInfoList() {
+		return new HashSet<MarkerInfo>(mBiMarkersMap.keySet());
+	}
 
 	@Override
 	public List<Coord2D> projectPathIntoMap(List<Coord2D> path) {
@@ -396,22 +393,22 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 		return coords;
 	}
 
-    @Override
-    public void removeMarkers(Collection<MarkerInfo> markerInfoList) {
-        if(markerInfoList == null || markerInfoList.isEmpty()){
-            return;
-        }
+	@Override
+	public void removeMarkers(Collection<MarkerInfo> markerInfoList) {
+		if (markerInfoList == null || markerInfoList.isEmpty()) {
+			return;
+		}
 
-        for(MarkerInfo markerInfo: markerInfoList){
-            Marker marker = mBiMarkersMap.getValue(markerInfo);
-            if(marker != null){
-                marker.remove();
-                mBiMarkersMap.removeKey(markerInfo);
-            }
-        }
-    }
+		for (MarkerInfo markerInfo : markerInfoList) {
+			Marker marker = mBiMarkersMap.getValue(markerInfo);
+			if (marker != null) {
+				marker.remove();
+				mBiMarkersMap.removeKey(markerInfo);
+			}
+		}
+	}
 
-    @Override
+	@Override
 	public void setMapPadding(int left, int top, int right, int bottom) {
 		mMap.setPadding(left, top, right, bottom);
 	}
@@ -551,8 +548,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
 	@Override
 	public void goToDroneLocation() {
-		if(!mDrone.getGps().isPositionValid()){
-			Toast.makeText(getActivity().getApplicationContext(), R.string.drone_no_location, Toast.LENGTH_SHORT).show();
+		if (!mDrone.getGps().isPositionValid()) {
+			Toast.makeText(getActivity().getApplicationContext(), R.string.drone_no_location,
+					Toast.LENGTH_SHORT).show();
 			return;
 		}
 		final float currentZoomLevel = mMap.getCameraPosition().zoom;

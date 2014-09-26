@@ -200,7 +200,7 @@ public class DroneInterfaces {
 		/**
 		 *
 		 */
-		WARNING_SIGNAL_WEAK, 
+		WARNING_SIGNAL_WEAK,
 		/**
 		 * Announces that a new version for the firmware has been received
 		 */

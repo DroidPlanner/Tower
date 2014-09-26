@@ -28,10 +28,10 @@ import android.widget.TextView;
 public abstract class MissionDetailFragment extends DialogFragment implements
 		OnItemSelectedListener {
 
-    private static final String TAG = MissionDetailFragment.class.getSimpleName();
+	private static final String TAG = MissionDetailFragment.class.getSimpleName();
 
-    protected static final int MIN_ALTITUDE = 0; //meter
-    protected static final int MAX_ALTITUDE = 200; //meters
+	protected static final int MIN_ALTITUDE = 0; // meter
+	protected static final int MAX_ALTITUDE = 200; // meters
 
 	public interface OnMissionDetailListener {
 		/**
@@ -116,13 +116,13 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final MissionProxy missionProxy = ((DroidPlannerApp) getActivity().getApplication()).missionProxy;
-        final List<MissionItemProxy> selections = missionProxy.selection.getSelected();
-        if(selections.isEmpty()){
-            return null;
-        }
+		final List<MissionItemProxy> selections = missionProxy.selection.getSelected();
+		if (selections.isEmpty()) {
+			return null;
+		}
 
 		itemRender = selections.get(0);
-        return inflater.inflate(getResource(), container, false);
+		return inflater.inflate(getResource(), container, false);
 	}
 
 	@Override
@@ -154,18 +154,19 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		}
 
 		final TextView distanceView = (TextView) view.findViewById(R.id.DistanceValue);
-        if(distanceView != null){
-            try {
-                distanceView.setText(mMissionProxy.getDistanceFromLastWaypoint(itemRender).toString());
-            }catch(IllegalArgumentException e){
-               Log.w(TAG, e.getMessage(), e);
-            }
-        }
+		if (distanceView != null) {
+			try {
+				distanceView.setText(mMissionProxy.getDistanceFromLastWaypoint(itemRender)
+						.toString());
+			} catch (IllegalArgumentException e) {
+				Log.w(TAG, e.getMessage(), e);
+			}
+		}
 
 		final TextView distanceLabelView = (TextView) view.findViewById(R.id.DistanceLabel);
-        if(distanceLabelView != null){
-            distanceLabelView.setVisibility(View.VISIBLE);
-        }
+		if (distanceLabelView != null) {
+			distanceLabelView.setVisibility(View.VISIBLE);
+		}
 	}
 
 	@Override

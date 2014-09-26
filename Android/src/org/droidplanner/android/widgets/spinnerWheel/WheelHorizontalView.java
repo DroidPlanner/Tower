@@ -38,339 +38,345 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
-
 /**
  * Spinner wheel horizontal view.
- *
+ * 
  * @author Yuri Kanivets
  * @author Dimitri Fedorov
  */
 public class WheelHorizontalView extends AbstractWheelView {
 
-    @SuppressWarnings("unused")
-    private final String LOG_TAG = WheelHorizontalView.class.getSimpleName();
+	@SuppressWarnings("unused")
+	private final String LOG_TAG = WheelHorizontalView.class.getSimpleName();
 
-    /**
-     * The width of the selection divider.
-     */
-    protected int mSelectionDividerWidth;
+	/**
+	 * The width of the selection divider.
+	 */
+	protected int mSelectionDividerWidth;
 
-    // Item width
-    private int itemWidth = 0;
+	// Item width
+	private int itemWidth = 0;
 
-    //--------------------------------------------------------------------------
-    //
-    //  Constructors
-    //
-    //--------------------------------------------------------------------------
+	// --------------------------------------------------------------------------
+	//
+	// Constructors
+	//
+	// --------------------------------------------------------------------------
 
-    /**
-     * Create a new wheel horizontal view.
-     *
-     * @param context The application environment.
-     */
-    public WheelHorizontalView(Context context) {
-        this(context, null);
-    }
+	/**
+	 * Create a new wheel horizontal view.
+	 * 
+	 * @param context
+	 *            The application environment.
+	 */
+	public WheelHorizontalView(Context context) {
+		this(context, null);
+	}
 
-    /**
-     * Create a new wheel horizontal view.
-     *
-     * @param context The application environment.
-     * @param attrs A collection of attributes.
-     */
-    public WheelHorizontalView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
+	/**
+	 * Create a new wheel horizontal view.
+	 * 
+	 * @param context
+	 *            The application environment.
+	 * @param attrs
+	 *            A collection of attributes.
+	 */
+	public WheelHorizontalView(Context context, AttributeSet attrs) {
+		this(context, attrs, 0);
+	}
 
-    /**
-     * Create a new wheel horizontal view.
-     *
-     * @param context the application environment.
-     * @param attrs a collection of attributes.
-     * @param defStyle The default style to apply to this view.
-     */
-    public WheelHorizontalView(final Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+	/**
+	 * Create a new wheel horizontal view.
+	 * 
+	 * @param context
+	 *            the application environment.
+	 * @param attrs
+	 *            a collection of attributes.
+	 * @param defStyle
+	 *            The default style to apply to this view.
+	 */
+	public WheelHorizontalView(final Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
 
-        //Create a dummy view adapter if we're in edit mode.
-        if(isInEditMode()){
-            final NumericWheelAdapter adapter = new NumericWheelAdapter(context, 0, 100);
-            adapter.setItemResource(R.layout.wheel_text_centered);
-            setViewAdapter(adapter);
-            setCurrentItem(50);
-        }
-    }
+		// Create a dummy view adapter if we're in edit mode.
+		if (isInEditMode()) {
+			final NumericWheelAdapter adapter = new NumericWheelAdapter(context, 0, 100);
+			adapter.setItemResource(R.layout.wheel_text_centered);
+			setViewAdapter(adapter);
+			setCurrentItem(50);
+		}
+	}
 
-    @Override
-    public void onDetachedFromWindow(){
-        super.onDetachedFromWindow();
-    }
+	@Override
+	public void onDetachedFromWindow() {
+		super.onDetachedFromWindow();
+	}
 
+	// --------------------------------------------------------------------------
+	//
+	// Initiating assets and setter for selector paint
+	//
+	// --------------------------------------------------------------------------
 
-    //--------------------------------------------------------------------------
-    //
-    //  Initiating assets and setter for selector paint
-    //
-    //--------------------------------------------------------------------------
+	@Override
+	protected void initAttributes(AttributeSet attrs, int defStyle) {
+		super.initAttributes(attrs, defStyle);
 
-    @Override
-    protected void initAttributes(AttributeSet attrs, int defStyle) {
-        super.initAttributes(attrs, defStyle);
+		TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.WheelHorizontalView,
+				defStyle, 0);
+		mSelectionDividerWidth = a.getDimensionPixelSize(
+				R.styleable.WheelHorizontalView_selectionDividerWidth, DEF_SELECTION_DIVIDER_SIZE);
+		a.recycle();
+	}
 
-        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.WheelHorizontalView, defStyle, 0);
-        mSelectionDividerWidth = a.getDimensionPixelSize(R.styleable.WheelHorizontalView_selectionDividerWidth, DEF_SELECTION_DIVIDER_SIZE);
-        a.recycle();
-    }
+	public void setSelectionDividerWidth(int selectionDividerWidth) {
+		this.mSelectionDividerWidth = selectionDividerWidth;
+	}
 
-    public void setSelectionDividerWidth(int selectionDividerWidth) {
-        this.mSelectionDividerWidth = selectionDividerWidth;
-    }
+	@Override
+	public void setSelectorPaintCoeff(float coeff) {
+		LinearGradient shader;
 
-    @Override
-    public void setSelectorPaintCoeff(float coeff) {
-        LinearGradient shader;
+		int w = getMeasuredWidth();
+		int iw = getItemDimension();
+		float p1 = (1 - iw / (float) w) / 2;
+		float p2 = (1 + iw / (float) w) / 2;
+		float z = mItemsDimmedAlpha * (1 - coeff);
+		float c1f = z + 255 * coeff;
 
-        int w = getMeasuredWidth();
-        int iw = getItemDimension();
-        float p1 = (1 - iw/(float) w)/2;
-        float p2 = (1 + iw/(float) w)/2;
-        float z = mItemsDimmedAlpha * (1 - coeff);
-        float c1f = z + 255 * coeff;
+		if (mVisibleItems == 2) {
+			int c1 = Math.round(c1f) << 24;
+			int c2 = Math.round(z) << 24;
+			int[] colors = { c2, c1, 0xff000000, 0xff000000, c1, c2 };
+			float[] positions = { 0, p1, p1, p2, p2, 1 };
+			shader = new LinearGradient(0, 0, w, 0, colors, positions, Shader.TileMode.CLAMP);
+		} else {
+			float p3 = (1 - iw * 3 / (float) w) / 2;
+			float p4 = (1 + iw * 3 / (float) w) / 2;
 
-        if (mVisibleItems == 2) {
-            int c1 = Math.round(c1f) << 24;
-            int c2 = Math.round(z) << 24;
-            int[] colors =      {c2, c1, 0xff000000, 0xff000000, c1, c2};
-            float[] positions = { 0, p1,     p1,         p2,     p2,  1};
-            shader = new LinearGradient(0, 0, w, 0, colors, positions, Shader.TileMode.CLAMP);
-        } else {
-            float p3 = (1 - iw*3/(float) w)/2;
-            float p4 = (1 + iw*3/(float) w)/2;
+			float s = 255 * p3 / p1;
+			float c3f = s * coeff; // here goes some optimized stuff
+			float c2f = z + c3f;
 
-            float s = 255 * p3/p1;
-            float c3f = s * coeff ; // here goes some optimized stuff
-            float c2f = z + c3f;
+			int c1 = Math.round(c1f) << 24;
+			int c2 = Math.round(c2f) << 24;
+			int c3 = Math.round(c3f) << 24;
 
-            int c1 = Math.round(c1f) << 24;
-            int c2 = Math.round(c2f) << 24;
-            int c3 = Math.round(c3f) << 24;
+			int[] colors = { c2, c2, c2, c2, 0xff000000, 0xff000000, c2, c2, c2, c2 };
+			float[] positions = { 0, p3, p3, p1, p1, p2, p2, p4, p4, 1 };
+			shader = new LinearGradient(0, 0, w, 0, colors, positions, Shader.TileMode.CLAMP);
+		}
+		mSelectorWheelPaint.setShader(shader);
+		invalidate();
+	}
 
-            int[] colors = { c2, c2, c2, c2, 0xff000000, 0xff000000, c2, c2, c2, c2 };
-            float[] positions = { 0, p3, p3, p1, p1, p2, p2, p4, p4, 1 };
-            shader = new LinearGradient(0, 0, w, 0, colors, positions, Shader.TileMode.CLAMP);
-        }
-        mSelectorWheelPaint.setShader(shader);
-        invalidate();
-    }
+	// --------------------------------------------------------------------------
+	//
+	// Scroller-specific methods
+	//
+	// --------------------------------------------------------------------------
 
+	@Override
+	protected WheelScroller createScroller(WheelScroller.ScrollingListener scrollingListener) {
+		return new WheelHorizontalScroller(getContext(), scrollingListener);
+	}
 
-    //--------------------------------------------------------------------------
-    //
-    //  Scroller-specific methods
-    //
-    //--------------------------------------------------------------------------
+	@Override
+	protected float getMotionEventPosition(MotionEvent event) {
+		return event.getX();
+	}
 
-    @Override
-    protected WheelScroller createScroller(WheelScroller.ScrollingListener scrollingListener) {
-        return new WheelHorizontalScroller(getContext(), scrollingListener);
-    }
+	// --------------------------------------------------------------------------
+	//
+	// Base measurements
+	//
+	// --------------------------------------------------------------------------
 
-    @Override
-    protected float getMotionEventPosition(MotionEvent event) {
-        return event.getX();
-    }
+	@Override
+	protected int getBaseDimension() {
+		return getWidth();
+	}
 
+	/**
+	 * Returns height of spinnerwheel item
+	 * 
+	 * @return the item width
+	 */
+	@Override
+	protected int getItemDimension() {
+		if (itemWidth != 0) {
+			return itemWidth;
+		}
 
-    //--------------------------------------------------------------------------
-    //
-    //  Base measurements
-    //
-    //--------------------------------------------------------------------------
+		if (mItemsLayout != null && mItemsLayout.getChildAt(0) != null) {
+			itemWidth = mItemsLayout.getChildAt(0).getMeasuredWidth();
+			return itemWidth;
+		}
 
-    @Override
-    protected int getBaseDimension() {
-        return getWidth();
-    }
+		return getBaseDimension() / mVisibleItems;
+	}
 
-    /**
-     * Returns height of spinnerwheel item
-     * @return the item width
-     */
-    @Override
-    protected int getItemDimension() {
-        if (itemWidth != 0) {
-            return itemWidth;
-        }
+	public void setViewAdapter(NumericWheelAdapter viewAdapter) {
+		super.setViewAdapter(viewAdapter);
+	}
 
-        if (mItemsLayout != null && mItemsLayout.getChildAt(0) != null) {
-            itemWidth = mItemsLayout.getChildAt(0).getMeasuredWidth();
-            return itemWidth;
-        }
+	public NumericWheelAdapter getViewAdapter() {
+		return (NumericWheelAdapter) mViewAdapter;
+	}
 
-        return getBaseDimension() / mVisibleItems;
-    }
+	// --------------------------------------------------------------------------
+	//
+	// Layout creation and measurement operations
+	//
+	// --------------------------------------------------------------------------
 
-    public void setViewAdapter(NumericWheelAdapter viewAdapter) {
-        super.setViewAdapter(viewAdapter);
-    }
+	/**
+	 * Creates item layouts if necessary
+	 */
+	@Override
+	protected void createItemsLayout() {
+		if (mItemsLayout == null) {
+			mItemsLayout = new LinearLayout(getContext());
+			mItemsLayout.setOrientation(LinearLayout.HORIZONTAL);
+		}
+	}
 
-    public NumericWheelAdapter getViewAdapter() {
-        return (NumericWheelAdapter) mViewAdapter;
-    }
+	@Override
+	protected void doItemsLayout() {
+		mItemsLayout.layout(0, 0, getMeasuredWidth(), getMeasuredHeight() - 2 * mItemsPadding);
+	}
 
-    //--------------------------------------------------------------------------
-    //
-    //  Layout creation and measurement operations
-    //
-    //--------------------------------------------------------------------------
+	@Override
+	protected void measureLayout() {
+		mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT));
+		// XXX: Locating bug
+		mItemsLayout.measure(View.MeasureSpec.makeMeasureSpec(getWidth() + getItemDimension(),
+				View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(getHeight(),
+				View.MeasureSpec.AT_MOST));
+	}
 
-    /**
-     * Creates item layouts if necessary
-     */
-    @Override
-    protected void createItemsLayout() {
-        if (mItemsLayout == null) {
-            mItemsLayout = new LinearLayout(getContext());
-            mItemsLayout.setOrientation(LinearLayout.HORIZONTAL);
-        }
-    }
+	// XXX: Most likely, measurements of mItemsLayout or/and its children are
+	// done inconrrectly.
+	// Investigate and fix it
 
-    @Override
-    protected void doItemsLayout() {
-        mItemsLayout.layout(0, 0, getMeasuredWidth(), getMeasuredHeight() - 2 * mItemsPadding);
-    }
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		int widthMode = View.MeasureSpec.getMode(widthMeasureSpec);
+		int heightMode = View.MeasureSpec.getMode(heightMeasureSpec);
+		int widthSize = View.MeasureSpec.getSize(widthMeasureSpec);
+		int heightSize = View.MeasureSpec.getSize(heightMeasureSpec);
 
-    @Override
-    protected void measureLayout() {
-        mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        // XXX: Locating bug
-        mItemsLayout.measure(
-                View.MeasureSpec.makeMeasureSpec(getWidth() + getItemDimension(), View.MeasureSpec.UNSPECIFIED),
-                View.MeasureSpec.makeMeasureSpec(getHeight(), View.MeasureSpec.AT_MOST));
-    }
+		rebuildItems(); // rebuilding before measuring
 
-    //XXX: Most likely, measurements of mItemsLayout or/and its children are done inconrrectly.
-    // Investigate and fix it
+		int height = calculateLayoutHeight(heightSize, heightMode);
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int widthMode = View.MeasureSpec.getMode(widthMeasureSpec);
-        int heightMode = View.MeasureSpec.getMode(heightMeasureSpec);
-        int widthSize = View.MeasureSpec.getSize(widthMeasureSpec);
-        int heightSize = View.MeasureSpec.getSize(heightMeasureSpec);
+		int width;
+		if (widthMode == View.MeasureSpec.EXACTLY) {
+			width = widthSize;
+		} else {
+			width = Math.max(getItemDimension() * (mVisibleItems - mItemOffsetPercent / 100),
+					getSuggestedMinimumWidth());
 
-        rebuildItems(); // rebuilding before measuring
+			if (widthMode == View.MeasureSpec.AT_MOST) {
+				width = Math.min(width, widthSize);
+			}
+		}
+		setMeasuredDimension(width, height);
+	}
 
-        int height = calculateLayoutHeight(heightSize, heightMode);
+	/**
+	 * Calculates control height and creates text layouts
+	 * 
+	 * @param heightSize
+	 *            the input layout height
+	 * @param mode
+	 *            the layout mode
+	 * @return the calculated control height
+	 */
+	private int calculateLayoutHeight(int heightSize, int mode) {
+		mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT));
+		mItemsLayout.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+				View.MeasureSpec.makeMeasureSpec(heightSize, View.MeasureSpec.UNSPECIFIED));
+		int height = mItemsLayout.getMeasuredHeight();
 
-        int width;
-        if (widthMode == View.MeasureSpec.EXACTLY) {
-            width = widthSize;
-        } else {
-            width = Math.max(
-                    getItemDimension() * (mVisibleItems - mItemOffsetPercent / 100),
-                    getSuggestedMinimumWidth()
-            );
+		if (mode == View.MeasureSpec.EXACTLY) {
+			height = heightSize;
+		} else {
+			height += 2 * mItemsPadding;
 
-            if (widthMode == View.MeasureSpec.AT_MOST) {
-                width = Math.min(width, widthSize);
-            }
-        }
-        setMeasuredDimension(width, height);
-    }
+			// Check against our minimum width
+			height = Math.max(height, getSuggestedMinimumHeight());
 
+			if (mode == View.MeasureSpec.AT_MOST && heightSize < height) {
+				height = heightSize;
+			}
+		}
+		// forcing recalculating
+		mItemsLayout.measure(
+		// MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+				View.MeasureSpec.makeMeasureSpec(400, View.MeasureSpec.EXACTLY), View.MeasureSpec
+						.makeMeasureSpec(height - 2 * mItemsPadding, View.MeasureSpec.EXACTLY));
 
-    /**
-     * Calculates control height and creates text layouts
-     * @param heightSize the input layout height
-     * @param mode the layout mode
-     * @return the calculated control height
-     */
-    private int calculateLayoutHeight(int heightSize, int mode) {
-        mItemsLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        mItemsLayout.measure(
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                View.MeasureSpec.makeMeasureSpec(heightSize, View.MeasureSpec.UNSPECIFIED)
-                );
-        int height = mItemsLayout.getMeasuredHeight();
+		return height;
+	}
 
-        if (mode == View.MeasureSpec.EXACTLY) {
-            height = heightSize;
-        } else {
-            height += 2 * mItemsPadding;
+	// --------------------------------------------------------------------------
+	//
+	// Drawing items
+	//
+	// --------------------------------------------------------------------------
 
-            // Check against our minimum width
-            height = Math.max(height, getSuggestedMinimumHeight());
+	@Override
+	protected void drawItems(Canvas canvas) {
+		canvas.save();
+		int w = getMeasuredWidth();
+		int h = getMeasuredHeight();
+		int iw = getItemDimension();
 
-            if (mode == View.MeasureSpec.AT_MOST && heightSize < height) {
-                height = heightSize;
-            }
-        }
-        // forcing recalculating
-        mItemsLayout.measure(
-                // MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                View.MeasureSpec.makeMeasureSpec(400, View.MeasureSpec.EXACTLY),
-                View.MeasureSpec.makeMeasureSpec(height - 2 * mItemsPadding, View.MeasureSpec.EXACTLY)
-        );
+		// resetting intermediate bitmap and recreating canvases
+		mSpinBitmap.eraseColor(0);
+		Canvas c = new Canvas(mSpinBitmap);
+		Canvas cSpin = new Canvas(mSpinBitmap);
 
-        return height;
-    }
+		int left = (mCurrentItemIdx - mFirstItemIdx) * iw + (iw - getWidth()) / 2;
+		c.translate(-left + mScrollingOffset, mItemsPadding);
+		mItemsLayout.draw(c);
 
+		mSeparatorsBitmap.eraseColor(0);
+		Canvas cSeparators = new Canvas(mSeparatorsBitmap);
 
-    //--------------------------------------------------------------------------
-    //
-    //  Drawing items
-    //
-    //--------------------------------------------------------------------------
+		if (mSelectionDivider != null) {
+			// draw the top divider
+			int leftOfLeftDivider = (getWidth() - iw - mSelectionDividerWidth) / 2;
+			int rightOfLeftDivider = leftOfLeftDivider + mSelectionDividerWidth;
+			cSeparators.save();
+			// On Gingerbread setBounds() is ignored resulting in an ugly visual
+			// bug.
+			cSeparators.clipRect(leftOfLeftDivider, 0, rightOfLeftDivider, h);
+			mSelectionDivider.setBounds(leftOfLeftDivider, 0, rightOfLeftDivider, h);
+			mSelectionDivider.draw(cSeparators);
+			cSeparators.restore();
 
-    @Override
-    protected void drawItems(Canvas canvas) {
-        canvas.save();
-        int w = getMeasuredWidth();
-        int h = getMeasuredHeight();
-        int iw = getItemDimension();
+			cSeparators.save();
+			// draw the bottom divider
+			int leftOfRightDivider = leftOfLeftDivider + iw;
+			int rightOfRightDivider = rightOfLeftDivider + iw;
+			// On Gingerbread setBounds() is ignored resulting in an ugly visual
+			// bug.
+			cSeparators.clipRect(leftOfRightDivider, 0, rightOfRightDivider, h);
+			mSelectionDivider.setBounds(leftOfRightDivider, 0, rightOfRightDivider, h);
+			mSelectionDivider.draw(cSeparators);
+			cSeparators.restore();
+		}
 
-        // resetting intermediate bitmap and recreating canvases
-        mSpinBitmap.eraseColor(0);
-        Canvas c = new Canvas(mSpinBitmap);
-        Canvas cSpin = new Canvas(mSpinBitmap);
+		cSpin.drawRect(0, 0, w, h, mSelectorWheelPaint);
+		cSeparators.drawRect(0, 0, w, h, mSeparatorsPaint);
 
-        int left = (mCurrentItemIdx - mFirstItemIdx) * iw + (iw - getWidth()) / 2;
-        c.translate(- left + mScrollingOffset, mItemsPadding);
-        mItemsLayout.draw(c);
-
-        mSeparatorsBitmap.eraseColor(0);
-        Canvas cSeparators = new Canvas(mSeparatorsBitmap);
-
-        if (mSelectionDivider != null) {
-            // draw the top divider
-            int leftOfLeftDivider = (getWidth() - iw - mSelectionDividerWidth) / 2;
-            int rightOfLeftDivider = leftOfLeftDivider + mSelectionDividerWidth;
-            cSeparators.save();
-            // On Gingerbread setBounds() is ignored resulting in an ugly visual bug.
-            cSeparators.clipRect(leftOfLeftDivider, 0, rightOfLeftDivider, h);
-            mSelectionDivider.setBounds(leftOfLeftDivider, 0, rightOfLeftDivider, h);
-            mSelectionDivider.draw(cSeparators);
-            cSeparators.restore();
-
-            cSeparators.save();
-            // draw the bottom divider
-            int leftOfRightDivider =  leftOfLeftDivider + iw;
-            int rightOfRightDivider = rightOfLeftDivider + iw;
-            // On Gingerbread setBounds() is ignored resulting in an ugly visual bug.
-            cSeparators.clipRect(leftOfRightDivider, 0, rightOfRightDivider, h);
-            mSelectionDivider.setBounds(leftOfRightDivider, 0, rightOfRightDivider, h);
-            mSelectionDivider.draw(cSeparators);
-            cSeparators.restore();
-        }
-
-        cSpin.drawRect(0, 0, w, h, mSelectorWheelPaint);
-        cSeparators.drawRect(0, 0, w, h, mSeparatorsPaint);
-
-        canvas.drawBitmap(mSpinBitmap, 0, 0, null);
-        canvas.drawBitmap(mSeparatorsBitmap, 0, 0, null);
-        canvas.restore();
-    }
+		canvas.drawBitmap(mSpinBitmap, 0, 0, null);
+		canvas.drawBitmap(mSeparatorsBitmap, 0, 0, null);
+		canvas.restore();
+	}
 
 }

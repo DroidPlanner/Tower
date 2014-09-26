@@ -95,15 +95,15 @@ public abstract class ListXmlAdapter extends BaseExpandableListAdapter {
 		}
 
 		TextView lblListHeader = (TextView) convertView.findViewById(R.id.lblListHeader);
-        if(lblListHeader != null) {
-            lblListHeader.setTypeface(null, Typeface.BOLD);
-            lblListHeader.setText(headerTitle);
-        }
+		if (lblListHeader != null) {
+			lblListHeader.setTypeface(null, Typeface.BOLD);
+			lblListHeader.setText(headerTitle);
+		}
 
 		TextView lblChkRatio = (TextView) convertView.findViewById(R.id.lblChkRatio);
-        if(lblChkRatio != null) {
-            updateRatioValue(lblChkRatio, groupPosition);
-        }
+		if (lblChkRatio != null) {
+			updateRatioValue(lblChkRatio, groupPosition);
+		}
 
 		return convertView;
 	}

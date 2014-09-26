@@ -18,7 +18,8 @@ import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.polygon.Polygon;
 
 public class GeoTools {
-	private static final double RADIUS_OF_EARTH = 6378137.0;//In meters.  Source: WGS84
+	private static final double RADIUS_OF_EARTH = 6378137.0;// In meters.
+															// Source: WGS84
 	public List<Coord2D> waypoints;
 
 	public GeoTools() {
@@ -146,13 +147,16 @@ public class GeoTools {
 	 */
 	public static Area getArea(Polygon poly) {
 		List<Coord2D> path = poly.getPoints();
-		int size =  path.size();
-		if (size < 3) { return new Area(0); }
+		int size = path.size();
+		if (size < 3) {
+			return new Area(0);
+		}
 		double total = 0;
-		Coord2D prev =  path.get(size - 1);
+		Coord2D prev = path.get(size - 1);
 		double prevTanLat = tan((PI / 2 - toRadians(prev.getLat())) / 2);
 		double prevLng = toRadians(prev.getLng());
-		// For each edge, accumulate the signed area of the triangle formed by the North Pole
+		// For each edge, accumulate the signed area of the triangle formed by
+		// the North Pole
 		// and that edge ("polar triangle").
 		for (Coord2D point : path) {
 			double tanLat = tan((PI / 2 - toRadians(point.getLat())) / 2);
@@ -163,15 +167,17 @@ public class GeoTools {
 		}
 		return new Area(abs(total * (RADIUS_OF_EARTH * RADIUS_OF_EARTH)));
 	}
+
 	/**
-	 * Copied from android-map-utils  (licensed under Apache v2)
+	 * Copied from android-map-utils (licensed under Apache v2)
 	 * com.google.maps.android.SphericalUtil.java
-	 *
+	 * 
 	 * Returns the signed area of a triangle which has North Pole as a vertex.
-	 * Formula derived from "Area of a spherical triangle given two edges and the included angle"
-	 * as per "Spherical Trigonometry" by Todhunter, page 71, section 103, point 2.
-	 * See http://books.google.com/books?id=3uBHAAAAIAAJ&pg=PA71
-	 * The arguments named "tan" are tan((pi/2 - latitude)/2).
+	 * Formula derived from
+	 * "Area of a spherical triangle given two edges and the included angle" as
+	 * per "Spherical Trigonometry" by Todhunter, page 71, section 103, point 2.
+	 * See http://books.google.com/books?id=3uBHAAAAIAAJ&pg=PA71 The arguments
+	 * named "tan" are tan((pi/2 - latitude)/2).
 	 */
 	private static double polarTriangleArea(double tan1, double lng1, double tan2, double lng2) {
 		double deltaLng = lng1 - lng2;

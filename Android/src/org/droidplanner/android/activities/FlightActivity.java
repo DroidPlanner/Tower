@@ -95,42 +95,42 @@ public class FlightActivity extends DrawerNavigationUI implements
 		mGoToMyLocation.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-                if(mapFragment != null) {
-                    mapFragment.goToMyLocation();
-                    updateMapLocationButtons(AutoPanMode.DISABLED);
-                }
+				if (mapFragment != null) {
+					mapFragment.goToMyLocation();
+					updateMapLocationButtons(AutoPanMode.DISABLED);
+				}
 			}
 		});
 		mGoToMyLocation.setOnLongClickListener(new View.OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-                if(mapFragment != null) {
-                    mapFragment.goToMyLocation();
-                    updateMapLocationButtons(AutoPanMode.USER);
-                    return true;
-                }
-                return false;
+				if (mapFragment != null) {
+					mapFragment.goToMyLocation();
+					updateMapLocationButtons(AutoPanMode.USER);
+					return true;
+				}
+				return false;
 			}
 		});
 
 		mGoToDroneLocation.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-                if(mapFragment != null) {
-                    mapFragment.goToDroneLocation();
-                    updateMapLocationButtons(AutoPanMode.DISABLED);
-                }
+				if (mapFragment != null) {
+					mapFragment.goToDroneLocation();
+					updateMapLocationButtons(AutoPanMode.DISABLED);
+				}
 			}
 		});
 		mGoToDroneLocation.setOnLongClickListener(new View.OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-                if(mapFragment != null) {
-                    mapFragment.goToDroneLocation();
-                    updateMapLocationButtons(AutoPanMode.DRONE);
-                    return true;
-                }
-                return false;
+				if (mapFragment != null) {
+					mapFragment.goToDroneLocation();
+					updateMapLocationButtons(AutoPanMode.DRONE);
+					return true;
+				}
+				return false;
 			}
 		});
 
@@ -183,9 +183,9 @@ public class FlightActivity extends DrawerNavigationUI implements
 		mGoToMyLocation.setActivated(false);
 		mGoToDroneLocation.setActivated(false);
 
-        if(mapFragment != null) {
-            mapFragment.setAutoPanMode(mode);
-        }
+		if (mapFragment != null) {
+			mapFragment.setAutoPanMode(mode);
+		}
 
 		switch (mode) {
 		case DRONE:
@@ -252,7 +252,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
-        updateMapLocationButtons(mAppPrefs.getAutoPanMode());
+		updateMapLocationButtons(mAppPrefs.getAutoPanMode());
 		updateMapPadding();
 	}
 
@@ -261,9 +261,9 @@ public class FlightActivity extends DrawerNavigationUI implements
 	 * remains 'visible'.
 	 */
 	private void updateMapPadding() {
-        if(mapFragment == null){
-            return;
-        }
+		if (mapFragment == null) {
+			return;
+		}
 
 		final int slidingDrawerWidth = mSlidingDrawer.getContent().getWidth();
 		final boolean isSlidingDrawerOpened = mSlidingDrawer.isOpened();
