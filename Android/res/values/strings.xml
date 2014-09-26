@@ -171,7 +171,7 @@
     <string name="mode_rtl">RTL rises to the minimum altitude, returns to the home location and lands. Requires GPS lock.</string>
     <string name="mode_sport">Sport allows a pilot to control rate of rotation directly with the addition of self-leveling.</string>
     <string name="mode_stabilize">Stabilize levels the vehicle in flight.</string>
-    <string name="mode_hybrid">Hybrid allows position hold (GPS) with direct response to pilot input.</string>
+    <string name="mode_poshold">PosHold allows position hold (GPS) with direct response to pilot input.</string>
 
     <!-- Waypoint types -->
     <string name="waypointType_Waypoint">Waypoint</string>

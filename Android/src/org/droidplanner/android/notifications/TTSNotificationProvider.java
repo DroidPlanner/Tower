@@ -347,12 +347,12 @@ public class TTSNotificationProvider implements OnInitListener,
 		case ROTOR_ALT_HOLD:
 			modeString += "Altitude hold";
 			break;
-		case ROTOR_POSITION:
+		case ROTOR_POSHOLD:
 			modeString += "Position hold";
 			break;
 		case FIXED_WING_RTL:
 		case ROTOR_RTL:
-			modeString += "Return to home";
+			modeString += "Return to launch";
 			break;
 		default:
 			modeString += mode.getName();

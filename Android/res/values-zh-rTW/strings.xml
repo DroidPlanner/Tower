@@ -164,7 +164,7 @@
     <string name="mode_rtl">RTL 返航 - 飛行至高低高度，返回 家 的位置並且降落。此模式需要 GPS 鎖定。</string>
     <string name="mode_sport">Sport 運動模式 - 飛友可在自動平衡的狀態下，直接控制旋轉速率、飛行姿態。</string>
     <string name="mode_stabilize">Stabilize 自穩模式 - 讓無人載具保持水平飛行。</string>
-    <string name="mode_hybrid">Hybrid 混合模式 - 混合飄移模式及定高模式讓飛行有如"DJI-GPS"的飛行模式。此模式需要 GPS 鎖定。</string>
+    <string name="mode_poshold">Hybrid 混合模式 - 混合飄移模式及定高模式讓飛行有如"DJI-GPS"的飛行模式。此模式需要 GPS 鎖定。</string>
 
     <!-- Waypoint types -->
     <string name="waypointType_Waypoint">航點</string>
