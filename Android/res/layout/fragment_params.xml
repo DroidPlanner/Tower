@@ -5,41 +5,24 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <LinearLayout
+    <ProgressBar
+        android:id="@+id/reload_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:indeterminate="true"
+        android:visibility="gone"
+        style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"/>
+
+    <SearchView
+        android:id="@+id/parameter_filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:iconifiedByDefault="false"
+        android:queryHint="description"
         android:background="@drawable/bg_cell_white"
         android:paddingLeft="10dp"
-        android:paddingRight="15dp"
-        >
-
-        <SearchView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:iconifiedByDefault="false"
-            android:queryHint="name / description"
-            />
-
-        <View
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:background="@color/grey_subtle"
-            android:layout_margin="10dp"/>
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?android:attr/selectableItemBackground"
-            android:src="@drawable/ic_action_reload"/>
-        </FrameLayout>
-
-    </LinearLayout>
+        android:paddingRight="10dp"
+        />
 
     <ListView
         android:id="@android:id/list"

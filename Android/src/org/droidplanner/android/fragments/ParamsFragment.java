@@ -31,6 +31,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 public class ParamsFragment extends ListFragment implements
@@ -42,12 +44,17 @@ public class ParamsFragment extends ListFragment implements
 
 	private ProgressDialog progressDialog;
 
+    private ProgressBar mLoadingProgress;
+    private SearchView mParamsFilter;
+
 	private Drone drone;
 	private ParamsAdapter adapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
 
 		// create adapter
 		if (savedInstanceState != null) {
@@ -75,19 +82,27 @@ public class ParamsFragment extends ListFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// bind & initialize UI
-		final View view = inflater.inflate(R.layout.fragment_params, container, false);
-
-		// listen for clicks on empty
-		view.findViewById(android.R.id.empty).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				refreshParameters();
-			}
-		});
-
-		setHasOptionsMenu(true);
-		return view;
+		return inflater.inflate(R.layout.fragment_params, container, false);
 	}
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
+
+        mLoadingProgress = (ProgressBar) view.findViewById(R.id.reload_progress);
+        mLoadingProgress.setVisibility(View.GONE);
+
+        mParamsFilter = (SearchView) view.findViewById(R.id.parameter_filter);
+
+        // listen for clicks on empty
+        view.findViewById(android.R.id.empty).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshParameters();
+            }
+        });
+
+    }
 
 	@Override
 	public void onStart() {
@@ -188,7 +203,7 @@ public class ParamsFragment extends ListFragment implements
 		if (written > 0)
 			adapter.notifyDataSetChanged();
 		Toast.makeText(getActivity(),
-				written + " " + getResources().getString(R.string.msg_parameters_written_to_drone),
+				written + " " + getString(R.string.msg_parameters_written_to_drone),
 				Toast.LENGTH_SHORT).show();
 	}
 
@@ -224,14 +239,7 @@ public class ParamsFragment extends ListFragment implements
 
 	@Override
 	public void onBeginReceivingParameters() {
-		progressDialog = new ProgressDialog(getActivity());
-		progressDialog.setTitle(R.string.refreshing_parameters);
-		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		progressDialog.setIndeterminate(true);
-		progressDialog.setCancelable(false);
-		progressDialog.setCanceledOnTouchOutside(true);
-
-		progressDialog.show();
+		startProgress();
 
 		mReceived = 0;
 		mTotal = 0;
@@ -242,15 +250,7 @@ public class ParamsFragment extends ListFragment implements
 	@Override
 	public void onParameterReceived(Parameter parameter, int index, int count) {
 		++mReceived;
-
-		if (progressDialog != null) {
-			if (progressDialog.isIndeterminate()) {
-				progressDialog.setIndeterminate(false);
-				mTotal = count;
-				progressDialog.setMax(count);
-			}
-			progressDialog.setProgress(mReceived);
-		}
+        updateProgress(mReceived, count);
 	}
 
 	@Override
@@ -267,10 +267,47 @@ public class ParamsFragment extends ListFragment implements
 		});
 		adapter.loadParameters(drone, parameters);
 
-		// dismiss progress dialog
-		if (progressDialog != null) {
-			progressDialog.dismiss();
-			progressDialog = null;
-		}
+		stopProgress();
 	}
+
+    private void startProgress(){
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle(R.string.refreshing_parameters);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(true);
+        progressDialog.show();
+
+        mLoadingProgress.setIndeterminate(true);
+        mLoadingProgress.setVisibility(View.VISIBLE);
+    }
+
+    private void updateProgress(int progress, int max){
+        if (progressDialog != null) {
+            if (progressDialog.isIndeterminate()) {
+                progressDialog.setIndeterminate(false);
+                mTotal = max;
+                progressDialog.setMax(max);
+            }
+            progressDialog.setProgress(progress);
+        }
+
+        if(mLoadingProgress.isIndeterminate()) {
+            mLoadingProgress.setIndeterminate(false);
+            mTotal = max;
+            mLoadingProgress.setMax(max);
+        }
+        mLoadingProgress.setProgress(progress);
+    }
+
+    private void stopProgress() {
+        // dismiss progress dialog
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+
+        mLoadingProgress.setVisibility(View.GONE);
+    }
 }

@@ -1,10 +1,11 @@
 package org.droidplanner.core.parameters;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 
-public class Parameter {
+public class Parameter implements Serializable {
 
 	public String name;
 	public double value;

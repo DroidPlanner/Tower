@@ -40,6 +40,8 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 	private final int resource;
 	private final int colorAltRow;
 
+    private final LayoutInflater mInflater;
+
 	private Map<String, ParameterMetadata> metadataMap;
 
 	private View focusView;
@@ -53,8 +55,8 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 		super(context, resource, objects);
 
 		this.resource = resource;
-
 		colorAltRow = context.getResources().getColor(R.color.paramAltRow);
+        mInflater = LayoutInflater.from(context);
 	}
 
 	public void clearFocus() {
@@ -75,8 +77,7 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 
 		if (convertView == null) {
 			// create new view
-			final LayoutInflater inflater = ((Activity) getContext()).getLayoutInflater();
-			view = inflater.inflate(resource, parent, false);
+			view = mInflater.inflate(resource, parent, false);
 
 			paramTag = new ParamTag();
 			paramTag.setNameView((TextView) view.findViewById(R.id.params_row_name));
