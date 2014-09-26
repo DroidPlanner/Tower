@@ -87,47 +87,75 @@ public abstract class SuperActivity extends Activity implements
 		actionBar.setSelectedNavigationItem(getNavigationItem());
 	}
 
-    @Override
+    /**
+     * Used to lock the user into 
+     */
+	@Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+		
 	if (itemPosition == getNavigationItem()) {
 	    return false;
 	}
+	
 	Intent navigationIntent = new Intent(this, FlightDataActivity.class);
+	
 	boolean failSafe  = false;
+	
 	switch (itemPosition) {
+	
 	case 0: // Planning
 	    navigationIntent = new Intent(this, PlanningActivity.class);
 	    break;
 	default:
+	
 	case 1: // Flight Data
 	    navigationIntent = new Intent(this, FlightDataActivity.class);
 	    navigationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	    failSafe = true;
 	    break;
+	
 	case 2: // RC
 	    navigationIntent = new Intent(this, RCActivity.class);
 	    break;
+	
 	case 3: // Parameters
 	    navigationIntent = new Intent(this, ParametersActivity.class);
 	    break;
+	
 	case 4: // Camera
 	    navigationIntent = new Intent(this, CameraActivity.class);
 	    failSafe = true;
 	    break;
+	
 	case 5: // GCP
 	    navigationIntent = new Intent(this, GCPActivity.class);
 	    failSafe = true;
 	    break;
+	
 	case 6: // Chart
 	    failSafe = true;
 	    navigationIntent = new Intent(this, ChartActivity.class);
 	    break;
 	}
+	
+	// Allow changes to any screen when the vehicle is disarmed, or to the above screens that have failSafe set to true
 	if( !drone.state.isArmed() ||  failSafe ){
 	    startActivity(navigationIntent);
 	}
+	else
+	{
+		
+		// Screen switching is locked out for the above screen that do not have failSafe set to true
+		
+		// Put error on screen so users know why screen switching is locked
+		Toast.makeText(this, "Unable to access selected screen when vehicle is armed", Toast.LENGTH_LONG)
+		.show();
+		
+	}
+	
 	return false;
-    }
+    
+	}
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
