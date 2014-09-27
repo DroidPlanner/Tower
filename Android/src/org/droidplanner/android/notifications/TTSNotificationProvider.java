@@ -88,7 +88,7 @@ public class TTSNotificationProvider implements OnInitListener,
 
 		public void run() {
 			handler.removeCallbacks(watchdogCallback);
-			if (drone != null && drone.getMavClient().isConnected()) {
+			if (drone != null && drone.getMavClient().isConnected() && drone.getState().isArmed()) {
 				speakPeriodic(drone);
 			}
 
