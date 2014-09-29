@@ -45,6 +45,15 @@
         android:drawableTop="@drawable/ic_arm"
         android:text="@string/mission_control_arm" />
 
+	<Button
+	    android:id="@+id/mc_disarmBtn"
+	    style="@style/flightControlButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:drawableTop="@drawable/ic_arm"
+        android:layout_weight="1"
+	    android:text="@string/mission_control_disarm" />
+
     <Button
         android:id="@+id/mc_homeBtn"
         style="@style/flightControlButton"
@@ -103,5 +112,15 @@
         android:drawableTop="@drawable/ic_follow"
         android:text="@string/mission_control_follow"
         tools:ignore="ContentDescription" />
+
+	<Button
+	    android:id="@+id/mc_dronieBtn"
+	    style="@style/flightControlButton"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="1"
+	    android:drawableTop="@drawable/ic_follow"
+	    android:text="@string/mission_control_dronie"
+	    tools:ignore="ContentDescription" />
 
 </LinearLayout>

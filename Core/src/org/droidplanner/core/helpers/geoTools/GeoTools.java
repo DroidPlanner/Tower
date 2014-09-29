@@ -184,4 +184,8 @@ public class GeoTools {
 		double t = tan1 * tan2;
 		return 2 * atan2(t * sin(deltaLng), 1 + t * cos(deltaLng));
 	}
+
+	public static Coord2D pointAlongTheLine(Coord2D start, Coord2D end, int distance) {
+		return newCoordFromBearingAndDistance(start, getHeadingFromCoordinates(start, end), distance);
+	}
 }

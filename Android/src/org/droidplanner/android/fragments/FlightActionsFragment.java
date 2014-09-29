@@ -45,6 +45,8 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 	private Button loiterBtn;
 	private Button followBtn;
 	private Button autoBtn;
+	private Button disarmBtn;
+	private Button dronieBtn;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,6 +76,9 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 
 		armBtn = (Button) view.findViewById(R.id.mc_armBtn);
 		armBtn.setOnClickListener(this);
+		
+		disarmBtn = (Button) view.findViewById(R.id.mc_disarmBtn);
+		disarmBtn.setOnClickListener(this);
 
 		landBtn = (Button) view.findViewById(R.id.mc_land);
 		landBtn.setOnClickListener(this);
@@ -89,6 +94,9 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 
 		followBtn = (Button) view.findViewById(R.id.mc_follow);
 		followBtn.setOnClickListener(this);
+		
+		dronieBtn = (Button) view.findViewById(R.id.mc_dronieBtn);
+		dronieBtn.setOnClickListener(this);
 
 		drone.addDroneListener(this);
 		setupButtonsByFlightState();
@@ -125,6 +133,11 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 		case R.id.mc_armBtn:
 			MavLinkArm.sendArmMessage(drone, true);
 			eventBuilder.setAction("Changed flight mode").setLabel("Arm");
+			break;
+
+		case R.id.mc_disarmBtn:
+			MavLinkArm.sendArmMessage(drone, false);
+			eventBuilder.setAction("Changed flight mode").setLabel("Disarm");
 			break;
 
 		case R.id.mc_land:
@@ -182,7 +195,11 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 				Toast.makeText(getActivity(), eventLabel, Toast.LENGTH_SHORT).show();
 			}
 			break;
-
+			
+		case R.id.mc_dronieBtn:
+			drone.getMission().makeAndUploadDronie();
+			eventBuilder.setAction("Dronie").setLabel("Dronie");
+			break;
 		default:
 			eventBuilder = null;
 			break;
@@ -230,11 +247,13 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 		connectBtn.setVisibility(View.VISIBLE);
 		homeBtn.setVisibility(View.GONE);
 		armBtn.setVisibility(View.GONE);
+		disarmBtn.setVisibility(View.GONE);
 		landBtn.setVisibility(View.GONE);
 		takeoffBtn.setVisibility(View.GONE);
 		loiterBtn.setVisibility(View.GONE);
 		autoBtn.setVisibility(View.GONE);
 		followBtn.setVisibility(View.GONE);
+		dronieBtn.setVisibility(View.GONE);
 	}
 
 	private void setupButtonsForDisarmed() {
@@ -243,11 +262,13 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 		connectBtn.setVisibility(View.GONE);
 		homeBtn.setVisibility(View.GONE);
 		armBtn.setVisibility(View.VISIBLE);
+		disarmBtn.setVisibility(View.GONE);
 		landBtn.setVisibility(View.GONE);
 		takeoffBtn.setVisibility(View.GONE);
 		loiterBtn.setVisibility(View.GONE);
 		autoBtn.setVisibility(View.GONE);
 		followBtn.setVisibility(View.GONE);
+		dronieBtn.setVisibility(View.VISIBLE);
 	}
 
 	private void setupButtonsForArmed() {
@@ -256,11 +277,13 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 		connectBtn.setVisibility(View.GONE);
 		homeBtn.setVisibility(View.GONE);
 		armBtn.setVisibility(View.GONE);
+		disarmBtn.setVisibility(View.VISIBLE);
 		landBtn.setVisibility(View.GONE);
 		takeoffBtn.setVisibility(View.VISIBLE);
 		loiterBtn.setVisibility(View.GONE);
 		autoBtn.setVisibility(View.GONE);
 		followBtn.setVisibility(View.GONE);
+		dronieBtn.setVisibility(View.GONE);
 	}
 
 	private void setupButtonsForFlying() {
@@ -269,11 +292,13 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 		connectBtn.setVisibility(View.GONE);
 		homeBtn.setVisibility(View.VISIBLE);
 		armBtn.setVisibility(View.GONE);
+		disarmBtn.setVisibility(View.GONE);
 		landBtn.setVisibility(View.VISIBLE);
 		takeoffBtn.setVisibility(View.GONE);
 		loiterBtn.setVisibility(View.VISIBLE);
 		autoBtn.setVisibility(View.VISIBLE);
 		followBtn.setVisibility(View.VISIBLE);
+		dronieBtn.setVisibility(View.GONE);
 	}
 
 }
