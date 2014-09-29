@@ -218,6 +218,14 @@ public class MissionProxy implements DPMap.PathSource {
 		mMission.addMissionItem(takeoff);
 	}
 
+	public void addDronie(Coord2D start, Coord2D end) {
+		clear();
+		
+		List<MissionItem> dronieItems = Mission.createDronie(mMission,start, end);		
+	
+		addMissionItems(dronieItems);	
+	}
+
 	/**
 	 * Returns the order for the given argument in the mission set.
 	 * 

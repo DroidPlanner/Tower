@@ -346,7 +346,8 @@
     <string name="mission_control_takeoff">Takeoff</string>
     <string name="mission_control_loiter">Loiter</string>
     <string name="mission_control_auto">Auto</string>
-    <string name="mission_control_follow">Follow</string>
+    <string name="mission_control_follow">Follow</string>    
+    <string name="mission_control_dronie">Dronie</string>
     <string name="telemetry_label">Telemetry</string>
     <string name="flight_modes_label">Flight modes</string>
     <string name="menu_info_bar">Info Bar</string>
