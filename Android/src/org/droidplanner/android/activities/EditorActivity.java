@@ -44,7 +44,7 @@ import android.widget.Toast;
  * This implements the map editor activity. The map editor activity allows the
  * user to create and/or modify autonomous missions for the drone.
  */
-public class EditorActivity extends SuperUI implements OnPathFinishedListener,
+public class EditorActivity extends DrawerNavigationUI implements OnPathFinishedListener,
 		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener, OnEditorInteraction,
 		Callback, MissionSelection.OnSelectionUpdateListener {
 
@@ -171,7 +171,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		setupTool(getTool());
 	}
 
-	@Override
+    @Override
+    protected int getNavigationDrawerEntryId() {
+        return R.id.navigation_editor;
+    }
+
+    @Override
 	public void onStart() {
 		super.onStart();
 		missionProxy.selection.addSelectionUpdateListener(this);
@@ -272,17 +277,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		default:
 			break;
 		}
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			planningMapFragment.saveCameraPosition();
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -570,4 +564,9 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 		ynd.show(getSupportFragmentManager(), "clearMission");
 	}
+
+    @Override
+    public CharSequence[][] getHelpItems() {
+        return new CharSequence[][] { {}, {} };
+    }
 }

@@ -179,7 +179,12 @@ public class FlightActivity extends DrawerNavigationUI implements
 		DroneshareDialog.perhapsShow(this);
 	}
 
-	private void updateMapLocationButtons(AutoPanMode mode) {
+    @Override
+    protected int getNavigationDrawerEntryId() {
+        return R.id.navigation_flight_data;
+    }
+
+    private void updateMapLocationButtons(AutoPanMode mode) {
 		mGoToMyLocation.setActivated(false);
 		mGoToDroneLocation.setActivated(false);
 
