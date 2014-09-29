@@ -10,17 +10,17 @@ import com.ftdi.j2xx.FT_Device;
 
 class UsbFTDIConnection extends UsbConnection.UsbConnectionImpl {
 
-    private static final String TAG = UsbFTDIConnection.class.getSimpleName();
+	private static final String TAG = UsbFTDIConnection.class.getSimpleName();
 
 	private static final byte LATENCY_TIMER = 32;
 
 	private FT_Device ftDev;
 
-    protected UsbFTDIConnection(Context context, int baudRate) {
-        super(context, baudRate);
-    }
+	protected UsbFTDIConnection(Context context, int baudRate) {
+		super(context, baudRate);
+	}
 
-    @Override
+	@Override
 	protected void openUsbConnection() throws IOException {
 		D2xxManager ftD2xx = null;
 		try {
@@ -29,27 +29,27 @@ class UsbFTDIConnection extends UsbConnection.UsbConnectionImpl {
 			mLogger.logErr(TAG, ex);
 		}
 
-        if(ftD2xx == null){
-            throw new IOException("Unable to retrieve D2xxManager instance.");
-        }
+		if (ftD2xx == null) {
+			throw new IOException("Unable to retrieve D2xxManager instance.");
+		}
 
 		int DevCount = ftD2xx.createDeviceInfoList(mContext);
-        Log.d(TAG, "Found " + DevCount + " ftdi devices.");
+		Log.d(TAG, "Found " + DevCount + " ftdi devices.");
 		if (DevCount < 1) {
 			throw new IOException("No Devices found");
 		}
 
-        try {
-            //FIXME: The NPE is coming from the library. Investigate if it's possible to fix there.
-            ftDev = ftD2xx.openByIndex(mContext, 0);
-        }catch(NullPointerException e){
-            Log.e(TAG, e.getMessage(), e);
-        }
-        finally {
-            if (ftDev == null) {
-                throw new IOException("No Devices found");
-            }
-        }
+		try {
+			// FIXME: The NPE is coming from the library. Investigate if it's
+			// possible to fix there.
+			ftDev = ftD2xx.openByIndex(mContext, 0);
+		} catch (NullPointerException e) {
+			Log.e(TAG, e.getMessage(), e);
+		} finally {
+			if (ftDev == null) {
+				throw new IOException("No Devices found");
+			}
+		}
 
 		Log.d("USB", "Opening using Baud rate " + mBaudRate);
 		ftDev.setBitMode((byte) 0, D2xxManager.FT_BITMODE_RESET);
@@ -69,9 +69,9 @@ class UsbFTDIConnection extends UsbConnection.UsbConnectionImpl {
 
 	@Override
 	protected int readDataBlock(byte[] readData) throws IOException {
-        if(ftDev == null){
-            throw new IOException("Device is unavailable.");
-        }
+		if (ftDev == null) {
+			throw new IOException("Device is unavailable.");
+		}
 
 		int iavailable = ftDev.getQueueStatus();
 		if (iavailable > 0) {
@@ -81,17 +81,17 @@ class UsbFTDIConnection extends UsbConnection.UsbConnectionImpl {
 				ftDev.read(readData, iavailable);
 
 			} catch (NullPointerException e) {
-                final String errorMsg = "Error Reading: " + e.getMessage()
-                        + "\nAssuming inaccessible USB device.  Closing connection.";
+				final String errorMsg = "Error Reading: " + e.getMessage()
+						+ "\nAssuming inaccessible USB device.  Closing connection.";
 				Log.e(TAG, errorMsg, e);
-                throw new IOException(errorMsg, e);
+				throw new IOException(errorMsg, e);
 			}
 		}
 
 		if (iavailable == 0) {
 			iavailable = -1;
 		}
-        return iavailable;
+		return iavailable;
 	}
 
 	@Override
@@ -117,8 +117,8 @@ class UsbFTDIConnection extends UsbConnection.UsbConnectionImpl {
 		}
 	}
 
-    @Override
-    public String toString(){
-        return TAG;
-    }
+	@Override
+	public String toString() {
+		return TAG;
+	}
 }

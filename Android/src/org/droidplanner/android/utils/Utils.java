@@ -9,7 +9,6 @@ import org.droidplanner.android.communication.connection.BluetoothConnection;
 import org.droidplanner.android.communication.connection.usb.UsbConnection;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.core.MAVLink.connection.MavLinkConnection;
 import org.droidplanner.core.MAVLink.connection.MavLinkConnectionTypes;
 
 import android.content.Context;
@@ -52,11 +51,11 @@ public class Utils {
 			}
 		};
 
-        private final int mMavLinkConnectionType;
+		private final int mMavLinkConnectionType;
 
-        private ConnectionType(int mavLinkConnectionType){
-            mMavLinkConnectionType = mavLinkConnectionType;
-        }
+		private ConnectionType(int mavLinkConnectionType) {
+			mMavLinkConnectionType = mavLinkConnectionType;
+		}
 
 		/**
 		 * This returns the implementation of AndroidMavLinkConnection for this
@@ -68,9 +67,9 @@ public class Utils {
 		 */
 		public abstract AndroidMavLinkConnection getConnection(Context context);
 
-        public int getConnectionType(){
-            return mMavLinkConnectionType;
-        }
+		public int getConnectionType() {
+			return mMavLinkConnectionType;
+		}
 	}
 
 	/**

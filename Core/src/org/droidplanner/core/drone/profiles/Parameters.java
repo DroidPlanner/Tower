@@ -30,7 +30,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 
 	private int expectedParams;
 
-	private HashMap<Integer, Parameter> parameters = new HashMap<Integer, Parameter>();
+	private final HashMap<Integer, Parameter> parameters = new HashMap<Integer, Parameter>();
 
 	private DroneInterfaces.OnParameterManagerListener parameterListener;
 
@@ -42,7 +42,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 		}
 	};
 
-	public ArrayList<Parameter> parameterList;
+	public final ArrayList<Parameter> parameterList = new ArrayList<Parameter>();
 
 	public Parameters(Drone myDrone, Handler handler) {
 		super(myDrone);
@@ -50,13 +50,19 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 		myDrone.addDroneListener(this);
 	}
 
-	public void getAllParameters() {
+	public void refreshParameters() {
 		parameters.clear();
+        parameterList.clear();
+
 		if (parameterListener != null)
 			parameterListener.onBeginReceivingParameters();
 		MavLinkParameters.requestParametersList(myDrone);
 		resetWatchdog();
 	}
+
+    public List<Parameter> getParametersList(){
+        return parameterList;
+    }
 
 	/**
 	 * Try to process a Mavlink message if it is a parameter related message
@@ -86,7 +92,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 
 		// Are all parameters here? Notify the listener with the parameters
 		if (parameters.size() >= m_value.param_count) {
-			List<Parameter> parameterList = new ArrayList<Parameter>();
+            parameterList.clear();
 			for (int key : parameters.keySet()) {
 				parameterList.add(parameters.get(key));
 			}
@@ -151,8 +157,8 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case HEARTBEAT_FIRST:
-			if (drone.getState().isFlying() == false) {
-				getAllParameters();
+			if (!drone.getState().isFlying()) {
+				refreshParameters();
 			}
 			break;
 		case DISCONNECTED:

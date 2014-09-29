@@ -171,7 +171,7 @@
     <string name="mode_rtl">RTL rises to the minimum altitude, returns to the home location and lands. Requires GPS lock.</string>
     <string name="mode_sport">Sport allows a pilot to control rate of rotation directly with the addition of self-leveling.</string>
     <string name="mode_stabilize">Stabilize levels the vehicle in flight.</string>
-    <string name="mode_hybrid">Hybrid allows position hold (GPS) with direct response to pilot input.</string>
+    <string name="mode_poshold">PosHold allows position hold (GPS) with direct response to pilot input.</string>
 
     <!-- Waypoint types -->
     <string name="waypointType_Waypoint">Waypoint</string>
@@ -341,11 +341,13 @@
     <string name="mission_control_edit">Edit</string>
     <string name="mission_control_home">Home</string>
     <string name="mission_control_arm">Arm</string>
+    <string name="mission_control_disarm">Disarm</string>
     <string name="mission_control_land">Land</string>
-    <string name="mission_control_takeoff">Take</string>
+    <string name="mission_control_takeoff">Takeoff</string>
     <string name="mission_control_loiter">Loiter</string>
     <string name="mission_control_auto">Auto</string>
-    <string name="mission_control_follow">Follow</string>
+    <string name="mission_control_follow">Follow</string>    
+    <string name="mission_control_dronie">Dronie</string>
     <string name="telemetry_label">Telemetry</string>
     <string name="flight_modes_label">Flight modes</string>
     <string name="menu_info_bar">Info Bar</string>
@@ -477,5 +479,6 @@
     <string name="label_advaned">Advanced</string>
     <string name="label_steps_count">Number of Steps</string>
     <string name="label_altitude_step">Altitude Step</string>
+    <string name="menu_search_toggle">Toggle Search</string>
 
 </resources>

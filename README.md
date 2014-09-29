@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/DroidPlanner/droidplanner.svg?branch=master)](https://travis-ci.org/DroidPlanner/droidplanner)
+[![Issue Stats](http://issuestats.com/github/DroidPlanner/droidplanner/badge/pr)](http://issuestats.com/github/DroidPlanner/droidplanner)
+[![Issue Stats](http://issuestats.com/github/DroidPlanner/droidplanner/badge/issue)](http://issuestats.com/github/DroidPlanner/droidplanner)
 
 # DroidPlanner
 

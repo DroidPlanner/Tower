@@ -7,7 +7,6 @@ import java.net.UnknownHostException;
 import java.util.Set;
 import java.util.UUID;
 
-import org.droidplanner.android.utils.Utils;
 import org.droidplanner.core.MAVLink.connection.MavLinkConnectionTypes;
 
 import android.annotation.SuppressLint;
@@ -85,20 +84,22 @@ public class BluetoothConnection extends AndroidMavLinkConnection {
 		if (pairedDevices.size() > 0) {
 			// Loop through paired devices
 			for (BluetoothDevice device : pairedDevices) {
-				// Add the name and address to an array adapter to show in a ListView
+				// Add the name and address to an array adapter to show in a
+				// ListView
 				Log.d(BLUE, device.getName() + " #" + device.getAddress() + "#");
 
-                final ParcelUuid[] deviceUuids = device.getUuids();
-                if(deviceUuids != null && deviceUuids.length > 0) {
-                    for (ParcelUuid id : device.getUuids()) {
-                        // TODO maybe this will not work on newer devices
-                        Log.d(BLUE, "id:" + id.toString());
-                        if (id.toString().equalsIgnoreCase(UUID_SPP_DEVICE)) {
-                            Log.d(BLUE, ">> Selected: " + device.getName() + " Using: " + id.toString());
-                            return device;
-                        }
-                    }
-                }
+				final ParcelUuid[] deviceUuids = device.getUuids();
+				if (deviceUuids != null && deviceUuids.length > 0) {
+					for (ParcelUuid id : device.getUuids()) {
+						// TODO maybe this will not work on newer devices
+						Log.d(BLUE, "id:" + id.toString());
+						if (id.toString().equalsIgnoreCase(UUID_SPP_DEVICE)) {
+							Log.d(BLUE,
+									">> Selected: " + device.getName() + " Using: " + id.toString());
+							return device;
+						}
+					}
+				}
 			}
 		}
 
@@ -118,18 +119,18 @@ public class BluetoothConnection extends AndroidMavLinkConnection {
 		}
 	}
 
-    @Override
-    public int getConnectionType() {
-        return MavLinkConnectionTypes.MAVLINK_CONNECTION_BLUETOOTH;
-    }
+	@Override
+	public int getConnectionType() {
+		return MavLinkConnectionTypes.MAVLINK_CONNECTION_BLUETOOTH;
+	}
 
-    @Override
+	@Override
 	protected void closeAndroidConnection() throws IOException {
 		resetConnection();
 		Log.d(BLUE, "## BT Closed ##");
 	}
 
-    private void resetConnection() throws IOException {
+	private void resetConnection() throws IOException {
 		if (in != null) {
 			in.close();
 			in = null;

@@ -49,17 +49,19 @@ public class Speed extends DroneVariable {
 	}
 
 	/**
-	 * if drone will crash in 2 seconds at constant climb rate and climb rate < -3 m/s and altitude > 1 meter
+	 * if drone will crash in 2 seconds at constant climb rate and climb rate <
+	 * -3 m/s and altitude > 1 meter
 	 */
 	private void checkCollisionIsImminent() {
 
 		double altitude = myDrone.getAltitude().getAltitude();
-		if(altitude + verticalSpeed.valueInMetersPerSecond()* COLLISION_SECONDS_BEFORE_COLLISION < 0 && verticalSpeed.valueInMetersPerSecond() < COLLISION_DANGEROUS_SPEED_METERS_PER_SECOND && altitude > COLLISION_SAFE_ALTITUDE_METERS){
+		if (altitude + verticalSpeed.valueInMetersPerSecond() * COLLISION_SECONDS_BEFORE_COLLISION < 0
+				&& verticalSpeed.valueInMetersPerSecond() < COLLISION_DANGEROUS_SPEED_METERS_PER_SECOND
+				&& altitude > COLLISION_SAFE_ALTITUDE_METERS) {
 			myDrone.getAltitude().setCollisionImminent(true);
-		}else{
+		} else {
 			myDrone.getAltitude().setCollisionImminent(false);
 		}
 	}
-
 
 }

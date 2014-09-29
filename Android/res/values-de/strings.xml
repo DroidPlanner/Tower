@@ -430,7 +430,7 @@
     <string name="ga_mode_details_close_panel">Panel geschlossen um</string>
     <string name="ga_mode_details_open_panel">Panel geöffnet um</string>
     <string name="guided_mode_warning">OK drücken, um Guided Modus zu starten. Um Position zu ändern, Karte drücken und halten.</string>
-    <string name="mode_hybrid">Hybrid erlaubt das Halten der Position (GPS) mit Reaktion auf Eingaben des Piloten.</string>
+    <string name="mode_poshold">PosHold erlaubt das Halten der Position (GPS) mit Reaktion auf Eingaben des Piloten.</string>
     <string name="pref_live_upload">Live Upload aktivieren (Alpha-Test)</string>
     <string name="pref_live_upload_summary">Live-Verfolgung der Drohne auf Droneshare</string>
     <string name="pref_maps_providers_summary">Welcher Karten-Provider verwendet werden soll.</string>

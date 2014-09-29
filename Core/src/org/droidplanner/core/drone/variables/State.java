@@ -1,7 +1,6 @@
 package org.droidplanner.core.drone.variables;
 
 import org.droidplanner.core.MAVLink.MavLinkModes;
-import org.droidplanner.core.MAVLink.MavLinkTakeoff;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
@@ -17,7 +16,7 @@ public class State extends DroneVariable {
 	private boolean armed = false;
 	private boolean isFlying = false;
 	private ApmModes mode = ApmModes.UNKNOWN;
-    
+
 	// flightTimer
 	// ----------------
 	private long startTime = 0;
@@ -86,13 +85,14 @@ public class State extends DroneVariable {
 			myDrone.notifyDroneEvent(DroneEventsType.ARMING);
 			if (newState) {
 				myDrone.getWaypointManager().getWaypoints();
+			}else{
+				changeFlightMode(ApmModes.ROTOR_LOITER);  // When disarming set the mode back to loiter so we can do a takeoff in the future.
 			}
 		}
 	}
-	
-	public void doTakeoff(Altitude alt){
-		changeFlightMode(ApmModes.ROTOR_GUIDED);
-		MavLinkTakeoff.sendTakeoff(myDrone,alt);	
+
+	public void doTakeoff(Altitude alt) {
+		myDrone.getGuidedPoint().doGuidedTakeoff(alt);
 	}
 
 	public void setMode(ApmModes mode) {
