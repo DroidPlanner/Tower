@@ -45,8 +45,12 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 	}
 
 	public void doGuidedTakeoff(Altitude alt) {
+		coord = myDrone.getGps().getPosition();
+		altitude.set(alt.valueInMeters());
+		state = GuidedStates.IDLE;		
 		myDrone.getState().changeFlightMode(ApmModes.ROTOR_GUIDED);
 		MavLinkTakeoff.sendTakeoff(myDrone, alt);
+		myDrone.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
 		
 	}
 
