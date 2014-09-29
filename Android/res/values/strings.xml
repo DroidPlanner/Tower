@@ -341,6 +341,7 @@
     <string name="mission_control_edit">Edit</string>
     <string name="mission_control_home">Home</string>
     <string name="mission_control_arm">Arm</string>
+    <string name="mission_control_disarm">Disarm</string>
     <string name="mission_control_land">Land</string>
     <string name="mission_control_takeoff">Takeoff</string>
     <string name="mission_control_loiter">Loiter</string>
