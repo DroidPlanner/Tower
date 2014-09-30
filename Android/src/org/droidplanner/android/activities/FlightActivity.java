@@ -321,17 +321,6 @@ public class FlightActivity extends DrawerNavigationUI implements
 		toggleRCFragment();
 	}
 
-	@Override
-	public void onPlanningSelected() {
-		if (mapFragment != null) {
-			mapFragment.saveCameraPosition();
-		}
-
-		Intent navigationIntent;
-		navigationIntent = new Intent(this, EditorActivity.class);
-		startActivity(navigationIntent);
-	}
-
 	private void toggleRCFragment() {
 		if (rcFragment == null) {
 			rcFragment = new RCFragment();

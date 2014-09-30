@@ -35,6 +35,8 @@ public abstract class DrawerNavigationUI extends SuperUI implements HelpProvider
 	 */
 	private DrawerLayout mDrawerLayout;
 
+    private NavDrawerViewHolder mNavViewsHolder;
+
     /**
      * Clicking on an entry in the open navigation drawer updates this intent.
      * When the navigation drawer closes, the intent is used to navigate to the desired location.
@@ -85,10 +87,10 @@ public abstract class DrawerNavigationUI extends SuperUI implements HelpProvider
 		mDrawerLayout.addView(contentView, 0);
 		setContentView(mDrawerLayout);
 
-        setupNavigationDrawer();
+        initNavigationDrawer();
 	}
 
-	@Override
+    @Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 
@@ -131,9 +133,9 @@ public abstract class DrawerNavigationUI extends SuperUI implements HelpProvider
 	}
 
 	@Override
-    public void onNewIntent(Intent intent){
-        super.onNewIntent(intent);
-        setupNavigationDrawer();
+    public void onResume(){
+        super.onResume();
+        updateNavigationDrawer();
     }
 
 	public DrawerLayout getDrawerLayout() {
@@ -143,51 +145,62 @@ public abstract class DrawerNavigationUI extends SuperUI implements HelpProvider
     /**
      * Initializes the navigation drawer.
      */
-    public void setupNavigationDrawer(){
+    private void initNavigationDrawer() {
+        final View containerView = findViewById(R.id.nav_drawer_container);
+        if(containerView != null){
+            mNavViewsHolder = new NavDrawerViewHolder(containerView);
+        }
+    }
+
+    private void updateNavigationDrawer(){
+        if(mNavViewsHolder == null){
+            return;
+        }
+
         final Context context = getApplicationContext();
         final int navDrawerEntryId = getNavigationDrawerEntryId();
 
-        setupNavigationEntry(navDrawerEntryId, R.id.navigation_flight_data, new Intent(context,
+        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mFlightData, new Intent(context,
                 FlightActivity.class));
 
-        setupNavigationEntry(navDrawerEntryId, R.id.navigation_editor, new Intent(context,
+        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mEditor, new Intent(context,
                 EditorActivity.class));
 
-        setupNavigationEntry(navDrawerEntryId, R.id.navigation_settings, new Intent(context,
+        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mSettings, new Intent(context,
                 SettingsActivity.class));
 
-        setupNavigationEntry(navDrawerEntryId, R.id.navigation_tuning, new Intent(context,
+        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mTuning, new Intent(context,
                 ConfigurationActivity.class).putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_ID,
                 R.id.navigation_tuning));
 
-        setupNavigationEntry(navDrawerEntryId, R.id.navigation_radio, new Intent(context,
+        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mRadio, new Intent(context,
                 ConfigurationActivity.class).putExtra(ConfigurationActivity
                 .EXTRA_CONFIG_SCREEN_ID, R.id.navigation_radio));
 
-        setupNavigationEntry(navDrawerEntryId, R.id.navigation_calibration, new Intent(context,
+        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mCalibration, new Intent(context,
                 ConfigurationActivity.class).putExtra(ConfigurationActivity
                 .EXTRA_CONFIG_SCREEN_ID, R.id.navigation_calibration));
 
-        setupNavigationEntry(navDrawerEntryId, R.id.navigation_checklist, new Intent(context,
+        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mChecklist, new Intent(context,
                 ConfigurationActivity.class).putExtra(ConfigurationActivity
                 .EXTRA_CONFIG_SCREEN_ID, R.id.navigation_checklist));
 
-        setupNavigationEntry(navDrawerEntryId, R.id.navigation_params, new Intent(context,
+        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mParams, new Intent(context,
                 ConfigurationActivity.class).putExtra(ConfigurationActivity
                 .EXTRA_CONFIG_SCREEN_ID, R.id.navigation_params));
 
     }
 
-    private void setupNavigationEntry(int currentEntryId, int targetEntryId, final Intent clickIntent){
-        final TextView navigationView = (TextView) findViewById(targetEntryId);
-        if(navigationView == null){
+    private void setupNavigationEntry(int currentEntryId, TextView navView,
+                                      final Intent clickIntent){
+        if(navView == null){
             return;
         }
 
-        if(currentEntryId == targetEntryId){
+        if(currentEntryId == navView.getId()){
             //Bold the entry label
-            navigationView.setTypeface(null, Typeface.BOLD);
-            navigationView.setOnClickListener(new View.OnClickListener() {
+            navView.setTypeface(null, Typeface.BOLD);
+            navView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mDrawerLayout.closeDrawer(Gravity.START);
@@ -195,11 +208,11 @@ public abstract class DrawerNavigationUI extends SuperUI implements HelpProvider
             });
         }
         else{
-            navigationView.setTypeface(null, Typeface.NORMAL);
-            navigationView.setOnClickListener(new View.OnClickListener() {
+            navView.setTypeface(null, Typeface.NORMAL);
+            navView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(clickIntent != null) {
+                    if (clickIntent != null) {
                         mNavigationIntent = clickIntent;
                     }
                     mDrawerLayout.closeDrawer(Gravity.START);
@@ -209,4 +222,35 @@ public abstract class DrawerNavigationUI extends SuperUI implements HelpProvider
     }
 
     protected abstract int getNavigationDrawerEntryId();
+
+    /**
+     * Holder class for the navigation entry views in the navigation drawer.
+     * They are stored here to avoid re-instantiating through 'findViewById' which can be a bit
+     * costly.
+     */
+    private static class NavDrawerViewHolder {
+        final TextView mFlightData;
+        final TextView mEditor;
+
+        final TextView mSettings;
+
+        final TextView mParams;
+        final TextView mChecklist;
+        final TextView mTuning;
+        final TextView mRadio;
+        final TextView mCalibration;
+
+        private NavDrawerViewHolder(View containerView){
+            mFlightData = (TextView) containerView.findViewById(R.id.navigation_flight_data);
+            mEditor = (TextView) containerView.findViewById(R.id.navigation_editor);
+
+            mSettings = (TextView) containerView.findViewById(R.id.navigation_settings);
+
+            mParams = (TextView) containerView.findViewById(R.id.navigation_params);
+            mChecklist = (TextView) containerView.findViewById(R.id.navigation_checklist);
+            mTuning = (TextView) containerView.findViewById(R.id.navigation_tuning);
+            mRadio = (TextView) containerView.findViewById(R.id.navigation_radio);
+            mCalibration = (TextView) containerView.findViewById(R.id.navigation_calibration);
+        }
+    }
 }

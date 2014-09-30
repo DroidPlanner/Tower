@@ -18,15 +18,6 @@
 	    android:text="@string/mission_control_control" />
 
 	<Button
-	    android:id="@+id/mc_planningBtn"
-	    style="@style/flightControlButton"
-	    android:layout_width="75dp"
-	    android:layout_height="match_parent"
-	    android:drawableTop="@drawable/ic_edit"
-        android:layout_weight="1"
-	    android:text="@string/mission_control_edit" />
-
-	<Button
 	    android:id="@+id/mc_connectBtn"
 	    style="@style/flightControlButton"
 	    android:layout_width="75dp"

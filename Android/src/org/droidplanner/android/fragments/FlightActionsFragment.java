@@ -28,14 +28,11 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 
 	public interface OnMissionControlInteraction {
 		public void onJoystickSelected();
-
-		public void onPlanningSelected();
 	}
 
 	private Drone drone;
 	private OnMissionControlInteraction listener;
 	private Follow followMe;
-	private Button missionBtn;
 	private Button joystickBtn;
 	private Button connectBtn;
 	private Button homeBtn;
@@ -61,9 +58,6 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-
-		missionBtn = (Button) view.findViewById(R.id.mc_planningBtn);
-		missionBtn.setOnClickListener(this);
 
 		joystickBtn = (Button) view.findViewById(R.id.mc_joystickBtn);
 		joystickBtn.setOnClickListener(this);
@@ -114,12 +108,6 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 				.setCategory(GAUtils.Category.FLIGHT_DATA_ACTION_BUTTON);
 
 		switch (v.getId()) {
-		case R.id.mc_planningBtn:
-			listener.onPlanningSelected();
-			eventBuilder.setAction("Planning selected").setLabel(
-					getString(R.string.mission_control_edit));
-			break;
-
 		case R.id.mc_connectBtn:
 			((SuperUI) getActivity()).toggleDroneConnection();
 			break;
@@ -242,7 +230,6 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 	}
 
 	private void setupButtonsForDisconnected() {
-		missionBtn.setVisibility(View.VISIBLE);
 		joystickBtn.setVisibility(View.GONE);
 		connectBtn.setVisibility(View.VISIBLE);
 		homeBtn.setVisibility(View.GONE);
@@ -257,7 +244,6 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 	}
 
 	private void setupButtonsForDisarmed() {
-		missionBtn.setVisibility(View.VISIBLE);
 		joystickBtn.setVisibility(View.GONE);
 		connectBtn.setVisibility(View.GONE);
 		homeBtn.setVisibility(View.GONE);
@@ -272,7 +258,6 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 	}
 
 	private void setupButtonsForArmed() {
-		missionBtn.setVisibility(View.VISIBLE);
 		joystickBtn.setVisibility(View.GONE);
 		connectBtn.setVisibility(View.GONE);
 		homeBtn.setVisibility(View.GONE);
@@ -287,7 +272,6 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 	}
 
 	private void setupButtonsForFlying() {
-		missionBtn.setVisibility(View.VISIBLE);
 		joystickBtn.setVisibility(View.GONE);
 		connectBtn.setVisibility(View.GONE);
 		homeBtn.setVisibility(View.VISIBLE);

@@ -32,6 +32,10 @@ public class ConfigurationActivity extends DrawerNavigationUI {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_configuration);
 
+        if(savedInstanceState != null){
+            mConfigScreenId = savedInstanceState.getInt(EXTRA_CONFIG_SCREEN_ID, mConfigScreenId);
+        }
+
 		handleIntent(getIntent());
 	}
 
@@ -42,12 +46,19 @@ public class ConfigurationActivity extends DrawerNavigationUI {
 
     @Override
 	public void onNewIntent(Intent intent) {
-        handleIntent(intent);
 		super.onNewIntent(intent);
+        setIntent(intent);
+        handleIntent(intent);
 	}
 
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putInt(EXTRA_CONFIG_SCREEN_ID, mConfigScreenId);
+    }
+
 	private void handleIntent(Intent intent) {
-		final int configScreenId = intent.getIntExtra(EXTRA_CONFIG_SCREEN_ID, R.id.navigation_params);
+		final int configScreenId = intent.getIntExtra(EXTRA_CONFIG_SCREEN_ID, mConfigScreenId);
         final Fragment currentFragment = getCurrentFragment();
         if(currentFragment == null || getIdForFragment(currentFragment) != configScreenId){
             mConfigScreenId = configScreenId;
