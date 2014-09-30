@@ -105,6 +105,17 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		mSplineToggleContainer.setVisibility(View.VISIBLE);
 
 		mLocationButtonsContainer = findViewById(R.id.location_button_container);
+
+        final ImageButton resetMapBearing = (ImageButton) findViewById(R.id.map_orientation_button);
+        resetMapBearing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(planningMapFragment != null) {
+                    planningMapFragment.updateMapBearing(0);
+                }
+            }
+        });
+
 		ImageButton mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
 		mGoToMyLocation.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -234,24 +245,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		} else {
 			Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT).show();
 		}
-	}
-
-	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		updateMapPadding();
-	}
-
-	/**
-	 * Account for the various ui elements and update the map padding so that it
-	 * remains 'visible'.
-	 */
-	private void updateMapPadding() {
-		int topPadding = mLocationButtonsContainer.getBottom()
-				+ mLocationButtonsContainer.getPaddingBottom();
-		int leftPadding = mLocationButtonsContainer.getLeft()
-				- mLocationButtonsContainer.getPaddingLeft();
-		planningMapFragment.setMapPadding(leftPadding, topPadding, 0, 0);
 	}
 
 	@Override
@@ -525,9 +518,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	@Override
-	public void onListVisibilityChanged() {
-		updateMapPadding();
-	}
+	public void onListVisibilityChanged() {}
 
 	@Override
 	public void onSelectionUpdate(List<MissionItemProxy> selected) {

@@ -246,4 +246,12 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		mMapFragment.goToDroneLocation();
 	}
 
+    /**
+     * Update the map rotation.
+     * @param bearing
+     */
+    public void updateMapBearing(float bearing){
+        mMapFragment.updateCameraBearing(bearing);
+    }
+
 }
