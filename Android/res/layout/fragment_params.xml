@@ -19,6 +19,7 @@
         android:id="@+id/parameter_filter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="48dp"
         android:imeOptions="actionSearch"
         android:background="@drawable/bg_cell_white"
         android:drawableLeft="@android:drawable/ic_menu_search"

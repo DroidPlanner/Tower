@@ -32,6 +32,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 
 	private Drone drone;
 	private OnMissionControlInteraction listener;
+
 	private Follow followMe;
 	private Button joystickBtn;
 	private Button connectBtn;
