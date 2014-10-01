@@ -172,8 +172,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 			menu.setGroupVisible(R.id.menu_group_connected, false);
 
 			toggleConnectionItem.setTitle(R.string.menu_connect);
-			toggleConnectionItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS
-					| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+			toggleConnectionItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
 			if (infoBar != null) {
 				infoBar.setDrone(null);
