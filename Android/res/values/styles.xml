@@ -20,6 +20,7 @@
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textColor">#808080</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif</item>
         </style>
 
 	<style name="RPYtextLabels">
@@ -126,9 +127,12 @@
         <item name="android:layout_margin">@dimen/editor_button_margin</item>
         <item name="android:layout_width">@dimen/editor_button_width</item>
         <item name="android:layout_height">@dimen/editor_button_height</item>
+        <item name="android:background">@drawable/editor_button_bg</item>
     </style>
 
-
+    <style name="editorButton.Trash">
+        <item name="android:background">@drawable/editor_trash_button_bg</item>
+    </style>
 
     <style name="transparentLayout">
         <item name="android:background">#66848484</item>
@@ -402,8 +406,8 @@
         <item name="android:background">@drawable/button_editor</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:padding">10dp</item>
-        <item name="android:layout_margin">5dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_margin">4dp</item>
     </style>
 
     <!-- Number picker widget styles -->
@@ -458,7 +462,7 @@
     <style name="navigationDrawerEntry">
         <item name="android:textColor">@color/navigation_entry_color</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:minHeight">48dp</item>

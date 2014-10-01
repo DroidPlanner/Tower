@@ -12,15 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
-        android:id="@+id/editorToolsFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        tools:layout="@layout/fragment_mission_control"
-        android:fitsSystemWindows="true"/>
-
     <SlidingDrawer
         android:id="@+id/SlidingDrawerRight"
         android:layout_width="210dp"
@@ -28,7 +19,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/editorToolsFragment"
         android:content="@+id/sliding_drawer_content"
         android:handle="@+id/slideButtonLeft"
         android:orientation="horizontal"
@@ -40,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:scaleType="fitEnd"
+            android:paddingBottom="100dp"
             android:src="@drawable/drawer_tab"
             tools:ignore="ContentDescription"/>
 
@@ -51,6 +42,15 @@
 			tools:layout="@layout/fragment_flight_sliding_drawer_content" />
 
     </SlidingDrawer>
+
+    <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
+        android:id="@+id/editorToolsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        tools:layout="@layout/fragment_mission_control"
+        android:fitsSystemWindows="true"/>
 
     <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
         android:layout_width="match_parent"

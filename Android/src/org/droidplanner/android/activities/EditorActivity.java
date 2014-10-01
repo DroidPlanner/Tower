@@ -53,8 +53,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	 * and recreated.
 	 */
 	private static final String ITEM_DETAIL_TAG = "Item Detail Window";
+    private static final String EXTRA_IS_SPLINE_ENABLED = "extra_is_spline_enabled";
 
-	/**
+    /**
 	 * Used to provide access and interact with the
 	 * {@link org.droidplanner.core.mission.Mission} object on the Android
 	 * layer.
@@ -162,9 +163,13 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 			}
 		});
 
+        if(savedInstanceState != null){
+            mIsSplineEnabled = savedInstanceState.getBoolean(EXTRA_IS_SPLINE_ENABLED);
+        }
+
 		// Retrieve the item detail fragment using its tag
 		itemDetailFragment = (MissionDetailFragment) fragmentManager
-				.findFragmentByTag(ITEM_DETAIL_TAG);
+                .findFragmentByTag(ITEM_DETAIL_TAG);
 
 		/*
 		 * On phone, this view will be null causing the item detail to be shown
@@ -181,6 +186,12 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		super.onResume();
 		setupTool(getTool());
 	}
+
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(EXTRA_IS_SPLINE_ENABLED, mIsSplineEnabled);
+    }
 
     @Override
     protected int getNavigationDrawerEntryId() {
