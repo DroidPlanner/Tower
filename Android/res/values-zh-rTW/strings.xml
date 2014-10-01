@@ -471,7 +471,7 @@
     <string name="mission_item_title_takeoff">起飛</string>
     <string name="label_advaned">進階設定</string>
     <string name="label_steps_count">階層數</string>
-    <string name="label_altitude_step">階層高段</string>
+    <string name="label_altitude_step">階層高度</string>
     <string name="menu_search_toggle">切換搜尋</string>
     
 </resources>
