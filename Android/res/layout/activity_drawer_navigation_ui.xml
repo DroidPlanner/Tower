@@ -7,16 +7,111 @@
     android:id="@+id/drawer_layout"
     >
 
-    <ExpandableListView
-        android:id="@+id/nav_drawer_container"
+    <ScrollView
         android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:background="#ffededed"
-        android:choiceMode="singleChoice"
-        android:childIndicator="@null"
-        android:groupIndicator="@null"
+        android:id="@+id/nav_drawer_container"
+        android:background="@android:color/white"
         android:layout_gravity="start"
-        android:orientation="vertical"
-        android:fitsSystemWindows="true"/>
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/navigation_flight_data"
+                style="@style/navigationDrawerEntry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_action_plane"
+                android:drawableStart="@drawable/ic_action_location"
+                android:text="@string/flight_data"
+                />
+
+            <TextView
+                android:id="@+id/navigation_editor"
+                style="@style/navigationDrawerEntry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_action_location"
+                android:drawableStart="@drawable/ic_action_location"
+                android:text="@string/editor"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/light_grey"/>
+
+            <TextView
+                style="@style/navigationDrawerEntry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/navigation_settings"
+                android:drawableLeft="@drawable/ic_action_settings"
+                android:drawableStart="@drawable/ic_action_settings"
+                android:text="@string/settings"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/light_grey"/>
+
+            <TextView
+                style="@style/navigationDrawerEntry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/navigation_params"
+                android:drawableLeft="@drawable/ic_action_database"
+                android:drawableStart="@drawable/ic_action_database"
+                android:text="@string/screen_parameters"/>
+
+            <TextView
+                style="@style/navigationDrawerEntry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/navigation_checklist"
+                android:drawableLeft="@drawable/ic_action_paste"
+                android:drawableStart="@drawable/ic_action_paste"
+                android:text="@string/screen_checklist"
+                />
+
+            <TextView
+                android:id="@+id/navigation_tuning"
+                style="@style/navigationDrawerEntry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:drawableLeft="@android:drawable/ic_menu_preferences"
+                android:drawableStart="@android:drawable/ic_menu_preferences"
+                android:text="@string/screen_tuning"/>
+
+            <TextView
+                android:id="@+id/navigation_radio"
+                style="@style/navigationDrawerEntry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_action_radio"
+                android:drawableStart="@drawable/ic_action_radio"
+                android:text="@string/screen_rc"/>
+
+            <TextView
+                style="@style/navigationDrawerEntry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/navigation_calibration"
+                android:drawableLeft="@drawable/ic_action_circles"
+                android:drawableStart="@drawable/ic_action_circles"
+                android:text="@string/screen_cal"
+                />
+
+        </LinearLayout>
+    </ScrollView>
 
 </android.support.v4.widget.DrawerLayout>

@@ -87,36 +87,6 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		final Context context = getActivity().getApplicationContext();
 		final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
-		// Populate the drone settings category
-		final PreferenceCategory dronePrefs = (PreferenceCategory) findPreference(context
-				.getString(R.string.pref_drone_settings_key));
-		if (dronePrefs != null) {
-			dronePrefs.removeAll();
-
-			final int configSectionsCount = ConfigurationActivity.sConfigurationFragments.length;
-			for (int i = 0; i < configSectionsCount; i++) {
-				final int index = i;
-				Preference configPref = new Preference(context);
-				configPref.setLayoutResource(R.layout.preference_config_screen);
-				configPref.setTitle(ConfigurationActivity.sConfigurationFragmentTitlesRes[i]);
-				configPref.setIcon(ConfigurationActivity.sConfigurationFragmentIconRes[i]);
-				configPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-					@Override
-					public boolean onPreferenceClick(Preference preference) {
-						// Launch the configuration activity to show the
-						// current config screen
-						final Intent configIntent = new Intent(context, ConfigurationActivity.class)
-								.putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_INDEX, index);
-
-						startActivity(configIntent);
-						return true;
-					}
-				});
-
-				dronePrefs.addPreference(configPref);
-			}
-		}
-
 		setupPeriodicControls();
 
 		// Populate the map preference category

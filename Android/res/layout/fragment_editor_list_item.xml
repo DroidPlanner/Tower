@@ -9,11 +9,11 @@ Used to Style the horizontal list of mission items.
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dragHandler"
     android:layout_width="wrap_content"
-    android:minWidth="70dp"
+    android:minWidth="60dp"
     android:minHeight="60dp"
     android:layout_height="wrap_content"
     android:background="@drawable/ic_mission_button"
-    android:padding="5dp"
+    android:padding="4dp"
     >
 
     <TextView
