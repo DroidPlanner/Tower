@@ -8,6 +8,11 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.7.9
+* UI clean-up (#1106,#1093,#1092,#891,#1110,#1101)
+* Display consumed mAh in status bar (#1111,#1069)
+* Fix small bug in Guided mode (#1101,#1110)
+
 ## Droidplanner v2.7.8
 * Parameters fix. Added parameter detail, search function (#1098,#1064,#1083,#1011)
 * Fixes to make tablet only flights pratical (#1099)
