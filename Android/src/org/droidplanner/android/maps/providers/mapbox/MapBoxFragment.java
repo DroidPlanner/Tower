@@ -439,6 +439,11 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		}
 	}
 
+    @Override
+    public void updateCameraBearing(float bearing){
+        mMapView.setMapOrientation(bearing);
+    }
+
 	@Override
 	public void updateDroneLeashPath(PathSource pathSource) {
 		final List<Coord2D> pathCoords = pathSource.getPathPoints();

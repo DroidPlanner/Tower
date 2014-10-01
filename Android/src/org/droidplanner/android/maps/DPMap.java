@@ -274,6 +274,12 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 */
 	public void updateCamera(Coord2D coord, float zoomLevel);
 
+    /**
+     * Updates the map's bearing.
+     * @param bearing direction that the camera is pointing in.
+     */
+    public void updateCameraBearing(float bearing);
+
 	/**
 	 * Updates the drone leash path on the map.
 	 * 

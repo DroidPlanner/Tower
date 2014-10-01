@@ -16,7 +16,6 @@ import org.droidplanner.core.model.Drone;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -63,7 +62,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 		mSlidingDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
 			@Override
 			public void onDrawerClosed() {
-				updateMapPadding();
+				updateLocationButtonsMargin();
 
 				// Stop tracking how long this was opened for.
 				GAUtils.sendTiming(new HitBuilders.TimingBuilder()
@@ -76,7 +75,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 		mSlidingDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
 			@Override
 			public void onDrawerOpened() {
-				updateMapPadding();
+				updateLocationButtonsMargin();
 
 				// Track how long this is opened for.
 				GAUtils.sendTiming(new HitBuilders.TimingBuilder()
@@ -91,6 +90,16 @@ public class FlightActivity extends DrawerNavigationUI implements
 		mLocationButtonsContainer = findViewById(R.id.location_button_container);
 		mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
 		mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
+
+        final ImageButton resetMapBearing = (ImageButton) findViewById(R.id.map_orientation_button);
+        resetMapBearing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mapFragment != null) {
+                    mapFragment.updateMapBearing(0);
+                }
+            }
+        });
 
 		mGoToMyLocation.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -179,7 +188,12 @@ public class FlightActivity extends DrawerNavigationUI implements
 		DroneshareDialog.perhapsShow(this);
 	}
 
-	private void updateMapLocationButtons(AutoPanMode mode) {
+    @Override
+    protected int getNavigationDrawerEntryId() {
+        return R.id.navigation_flight_data;
+    }
+
+    private void updateMapLocationButtons(AutoPanMode mode) {
 		mGoToMyLocation.setActivated(false);
 		mGoToDroneLocation.setActivated(false);
 
@@ -253,54 +267,15 @@ public class FlightActivity extends DrawerNavigationUI implements
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 		updateMapLocationButtons(mAppPrefs.getAutoPanMode());
-		updateMapPadding();
 	}
 
 	/**
 	 * Account for the various ui elements and update the map padding so that it
 	 * remains 'visible'.
 	 */
-	private void updateMapPadding() {
-		if (mapFragment == null) {
-			return;
-		}
-
+	private void updateLocationButtonsMargin() {
 		final int slidingDrawerWidth = mSlidingDrawer.getContent().getWidth();
 		final boolean isSlidingDrawerOpened = mSlidingDrawer.isOpened();
-
-		int rightPadding = isSlidingDrawerOpened ? slidingDrawerWidth : 0;
-		int bottomPadding = 0;
-		int leftPadding = 0;
-		int topPadding = mLocationButtonsContainer.getTop();
-		if (warningView != null && warningView.getVisibility() != View.GONE) {
-			topPadding += warningView.getHeight();
-		}
-
-		final View editorToolsView = editorTools.getView();
-		final View mapView = mapFragment.getView();
-
-		int[] posOnScreen = new int[2];
-		editorToolsView.getLocationOnScreen(posOnScreen);
-		final int toolsHeight = editorToolsView.getHeight();
-		final int toolsBottom = posOnScreen[1] + toolsHeight;
-
-		ViewGroup.LayoutParams lp = editorToolsView.getLayoutParams();
-		if (lp.height == ViewGroup.LayoutParams.MATCH_PARENT) {
-			leftPadding = editorToolsView.getRight();
-		} else {
-			if (mTelemetryView != null) {
-				// Account for the telemetry view on tablet.
-				leftPadding = mTelemetryView.getRight();
-			}
-
-			if (lp.width == ViewGroup.LayoutParams.MATCH_PARENT) {
-				mapView.getLocationOnScreen(posOnScreen);
-				final int mapTop = posOnScreen[1];
-				final int mapBottom = mapTop + mapView.getHeight();
-				bottomPadding = (mapBottom - toolsBottom) + toolsHeight;
-			}
-		}
-		mapFragment.setMapPadding(leftPadding, topPadding, rightPadding, bottomPadding);
 
 		// Update the right margin for the my location button
 		final ViewGroup.MarginLayoutParams marginLp = (ViewGroup.MarginLayoutParams) mLocationButtonsContainer
@@ -309,22 +284,12 @@ public class FlightActivity extends DrawerNavigationUI implements
 				: marginLp.leftMargin;
 		marginLp.setMargins(marginLp.leftMargin, marginLp.topMargin, rightMargin,
 				marginLp.bottomMargin);
+        mLocationButtonsContainer.requestLayout();
 	}
 
 	@Override
 	public void onJoystickSelected() {
 		toggleRCFragment();
-	}
-
-	@Override
-	public void onPlanningSelected() {
-		if (mapFragment != null) {
-			mapFragment.saveCameraPosition();
-		}
-
-		Intent navigationIntent;
-		navigationIntent = new Intent(this, EditorActivity.class);
-		startActivity(navigationIntent);
 	}
 
 	private void toggleRCFragment() {

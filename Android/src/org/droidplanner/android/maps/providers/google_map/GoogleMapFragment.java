@@ -441,6 +441,13 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 		}
 	}
 
+    @Override
+    public void updateCameraBearing(float bearing){
+        final CameraPosition cameraPosition = new CameraPosition(DroneHelper.CoordToLatLang
+                (getMapCenter()), getMapZoomLevel(), 0, bearing);
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
 	@Override
 	public void updateDroneLeashPath(PathSource pathSource) {
 		List<Coord2D> pathCoords = pathSource.getPathPoints();
@@ -621,7 +628,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 		mMap.setMyLocationEnabled(true);
 		UiSettings mUiSettings = mMap.getUiSettings();
 		mUiSettings.setMyLocationButtonEnabled(false);
-		mUiSettings.setCompassEnabled(true);
+		mUiSettings.setCompassEnabled(false);
 		mUiSettings.setTiltGesturesEnabled(false);
 		mUiSettings.setZoomControlsEnabled(false);
 	}
