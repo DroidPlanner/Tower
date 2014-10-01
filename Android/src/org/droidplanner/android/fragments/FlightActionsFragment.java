@@ -3,6 +3,7 @@ package org.droidplanner.android.fragments;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.MAVLink.MavLinkArm;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -125,8 +126,8 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 			break;
 
 		case R.id.mc_armBtn:
-			MavLinkArm.sendArmMessage(drone, true);
-			eventBuilder.setAction("Changed flight mode").setLabel("Arm");
+            getArmingConfirmation();
+            eventBuilder.setAction("Changed flight mode").setLabel("Arm");
 			break;
 
 		case R.id.mc_disarmBtn:
@@ -205,7 +206,24 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 
 	}
 
-	@Override
+    private void getArmingConfirmation() {
+        YesNoDialog ynd = YesNoDialog.newInstance(getString(R.string.dialog_confirm_arming_title),
+                getString(R.string.dialog_confirm_arming_msg),
+                new YesNoDialog.Listener() {
+                    @Override
+                    public void onYes() {
+                        MavLinkArm.sendArmMessage(drone, true);
+                    }
+
+                    @Override
+                    public void onNo() {
+                    }
+                });
+
+        ynd.show(getChildFragmentManager(), "Confirm arming");
+    }
+
+    @Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case ARMING:
