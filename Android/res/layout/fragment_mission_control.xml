@@ -3,9 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/fragment_mission_control_padding_left"
-    android:paddingRight="@dimen/fragment_mission_control_padding_right">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/mc_disconnected_buttons"
@@ -15,7 +13,7 @@
         android:visibility="visible"
         android:background="@drawable/flight_action_buttons_container_bg"
         android:layout_gravity="center_horizontal"
-        style="@style/flightControlContainer">
+        >
 
         <Button
             android:id="@+id/mc_connectBtn"
@@ -31,7 +29,6 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:background="@drawable/flight_action_buttons_container_bg"
-        style="@style/flightControlContainer"
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal">
 
@@ -57,7 +54,6 @@
         android:layout_gravity="center_horizontal"
         android:visibility="gone"
         android:background="@drawable/flight_action_buttons_container_bg"
-        style="@style/flightControlContainer"
         android:id="@+id/mc_armed_buttons">
 
         <Button
