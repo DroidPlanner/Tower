@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-
     <style name="tinyText">
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textColor">#808080</item>
@@ -96,17 +95,8 @@
     </style>
 
     <style name="flightControlButton.Row">
+        <item name="android:layout_margin">5dp</item>
         <item name="android:background">@drawable/flight_action_row_bg_selector</item>
-    </style>
-
-    <style name="flightControlButton.Single">
-        <item name="android:background">@drawable/flight_action_bg_selector</item>
-        <item name="android:layout_margin">@dimen/flightControlMargin</item>
-    </style>
-
-    <style name="flightControlContainer">
-        <item name="android:layout_marginBottom">25dp</item>
-        <item name="android:layout_gravity">start</item>
     </style>
 
     <style name="telemButton">

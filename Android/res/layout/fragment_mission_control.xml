@@ -3,9 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/fragment_mission_control_padding_left"
-    android:paddingRight="@dimen/fragment_mission_control_padding_right">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/mc_disconnected_buttons"
@@ -13,11 +11,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:visibility="visible"
-        style="@style/flightControlContainer">
+        android:background="@drawable/flight_action_buttons_container_bg"
+        android:layout_gravity="center_horizontal"
+        >
 
         <Button
             android:id="@+id/mc_connectBtn"
-            style="@style/flightControlButton.Single"
+            style="@style/flightControlButton.Row"
             android:drawableTop="@drawable/ic_connect"
             android:text="@string/menu_connect"/>
 
@@ -28,18 +28,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        style="@style/flightControlContainer"
+        android:background="@drawable/flight_action_buttons_container_bg"
+        android:layout_gravity="center_horizontal"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/mc_armBtn"
-            style="@style/flightControlButton.Single"
+            style="@style/flightControlButton.Row"
             android:drawableTop="@drawable/ic_arm"
             android:text="@string/mission_control_arm"/>
 
         <Button
             android:id="@+id/mc_dronieBtn"
-            style="@style/flightControlButton.Single"
+            style="@style/flightControlButton.Row"
             android:drawableTop="@drawable/ic_follow"
             android:text="@string/mission_control_dronie"
             />
@@ -50,19 +51,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
         android:visibility="gone"
-        style="@style/flightControlContainer"
+        android:background="@drawable/flight_action_buttons_container_bg"
         android:id="@+id/mc_armed_buttons">
 
         <Button
             android:id="@+id/mc_disarmBtn"
-            style="@style/flightControlButton.Single"
+            style="@style/flightControlButton.Row"
             android:drawableTop="@drawable/ic_arm"
             android:text="@string/mission_control_disarm"/>
 
         <Button
             android:id="@+id/mc_takeoff"
-            style="@style/flightControlButton.Single"
+            style="@style/flightControlButton.Row"
             android:drawableTop="@drawable/ic_takeoff"
             android:text="@string/mission_control_takeoff"
             />

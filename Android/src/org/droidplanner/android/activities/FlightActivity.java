@@ -42,8 +42,6 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 	private FlightMapFragment mapFragment;
 
-	private Fragment editorTools;
-	private View mTelemetryView;
 	private SlidingDrawer mSlidingDrawer;
 
 	private View mLocationButtonsContainer;
@@ -143,7 +141,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 			}
 		});
 
-		editorTools = fragmentManager.findFragmentById(R.id.editorToolsFragment);
+		Fragment editorTools = fragmentManager.findFragmentById(R.id.editorToolsFragment);
 		if (editorTools == null) {
 			editorTools = new FlightActionsFragment();
 			fragmentManager.beginTransaction().add(R.id.editorToolsFragment, editorTools).commit();
@@ -155,8 +153,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 		 * layout, as it was merged with the right sliding drawer because of
 		 * space constraints.
 		 */
-		mTelemetryView = findViewById(R.id.telemetryFragment);
-		boolean mIsPhone = mTelemetryView == null;
+		boolean mIsPhone = findViewById(R.id.telemetryFragment) == null;
 
 		if (mIsPhone) {
 			Fragment slidingDrawerContent = fragmentManager

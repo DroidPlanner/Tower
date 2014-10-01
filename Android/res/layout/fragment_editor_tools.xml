@@ -4,7 +4,7 @@
     android:id="@+id/editor_tools_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/flight_action_buttons_container_bg"
+    android:background="@drawable/flight_action_buttons_container_bg_1"
     android:gravity="center">
 
     <org.droidplanner.android.widgets.button.RadioButtonCenter
