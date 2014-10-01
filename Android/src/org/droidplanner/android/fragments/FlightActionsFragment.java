@@ -40,6 +40,12 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
     private View mArmedButtons;
     private View mInFlightButtons;
 
+    private Button followBtn;
+    private Button homeBtn;
+    private Button landBtn;
+    private Button loiterBtn;
+    private Button autoBtn;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_mission_control, container, false);
@@ -65,7 +71,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
         final Button connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
 		connectBtn.setOnClickListener(this);
 
-        final Button homeBtn = (Button) view.findViewById(R.id.mc_homeBtn);
+        homeBtn = (Button) view.findViewById(R.id.mc_homeBtn);
 		homeBtn.setOnClickListener(this);
 
         final Button armBtn = (Button) view.findViewById(R.id.mc_armBtn);
@@ -74,19 +80,19 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
         final Button disarmBtn = (Button) view.findViewById(R.id.mc_disarmBtn);
 		disarmBtn.setOnClickListener(this);
 
-        final Button landBtn = (Button) view.findViewById(R.id.mc_land);
+        landBtn = (Button) view.findViewById(R.id.mc_land);
 		landBtn.setOnClickListener(this);
 
         final Button takeoffBtn = (Button) view.findViewById(R.id.mc_takeoff);
 		takeoffBtn.setOnClickListener(this);
 
-        final Button loiterBtn = (Button) view.findViewById(R.id.mc_loiter);
+        loiterBtn = (Button) view.findViewById(R.id.mc_loiter);
 		loiterBtn.setOnClickListener(this);
 
-        final Button autoBtn = (Button) view.findViewById(R.id.mc_autoBtn);
+        autoBtn = (Button) view.findViewById(R.id.mc_autoBtn);
 		autoBtn.setOnClickListener(this);
 
-        final Button followBtn = (Button) view.findViewById(R.id.mc_follow);
+        followBtn = (Button) view.findViewById(R.id.mc_follow);
 		followBtn.setOnClickListener(this);
 
         final Button dronieBtn = (Button) view.findViewById(R.id.mc_dronieBtn);
@@ -208,12 +214,63 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 		case STATE:
 			setupButtonsByFlightState();
 			break;
+
+            case MODE:
+                updateFlightModeButtons();
+                break;
+
+            case FOLLOW_START:
+            case FOLLOW_STOP:
+                updateFollowButton();
+                break;
+
 		default:
 			break;
 		}
 	}
 
-	private void setupButtonsByFlightState() {
+    private void updateFlightModeButtons() {
+        resetFlightModeButtons();
+
+        final ApmModes flightMode = drone.getState().getMode();
+        switch(flightMode){
+            case ROTOR_AUTO:
+                autoBtn.setActivated(true);
+                break;
+
+            case ROTOR_LOITER:
+                loiterBtn.setActivated(true);
+                break;
+
+            case ROTOR_RTL:
+                homeBtn.setActivated(true);
+                break;
+
+            case ROTOR_LAND:
+                landBtn.setActivated(true);
+                break;
+        }
+    }
+
+    private void resetFlightModeButtons() {
+        homeBtn.setActivated(false);
+        landBtn.setActivated(false);
+        loiterBtn.setActivated(false);
+        autoBtn.setActivated(false);
+    }
+
+    private void updateFollowButton() {
+        followBtn.setActivated(followMe.isEnabled());
+    }
+
+    private void resetButtonsContainerVisibility(){
+        mDisconnectedButtons.setVisibility(View.GONE);
+        mDisarmedButtons.setVisibility(View.GONE);
+        mArmedButtons.setVisibility(View.GONE);
+        mInFlightButtons.setVisibility(View.GONE);
+    }
+
+    private void setupButtonsByFlightState() {
 		if (drone.getMavClient().isConnected()) {
 			if (drone.getState().isArmed()) {
 				if (drone.getState().isFlying()) {
@@ -230,30 +287,22 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 	}
 
 	private void setupButtonsForDisconnected() {
+        resetButtonsContainerVisibility();
         mDisconnectedButtons.setVisibility(View.VISIBLE);
-        mDisarmedButtons.setVisibility(View.GONE);
-        mArmedButtons.setVisibility(View.GONE);
-        mInFlightButtons.setVisibility(View.GONE);
 	}
 
 	private void setupButtonsForDisarmed() {
-        mDisconnectedButtons.setVisibility(View.GONE);
+        resetButtonsContainerVisibility();
         mDisarmedButtons.setVisibility(View.VISIBLE);
-        mArmedButtons.setVisibility(View.GONE);
-        mInFlightButtons.setVisibility(View.GONE);
 	}
 
 	private void setupButtonsForArmed() {
-        mDisconnectedButtons.setVisibility(View.GONE);
-        mDisarmedButtons.setVisibility(View.GONE);
+        resetButtonsContainerVisibility();
         mArmedButtons.setVisibility(View.VISIBLE);
-        mInFlightButtons.setVisibility(View.GONE);
 	}
 
 	private void setupButtonsForFlying() {
-        mDisconnectedButtons.setVisibility(View.GONE);
-        mDisarmedButtons.setVisibility(View.GONE);
-        mArmedButtons.setVisibility(View.GONE);
+        resetButtonsContainerVisibility();
         mInFlightButtons.setVisibility(View.VISIBLE);
 	}
 

@@ -64,13 +64,6 @@ public abstract class DrawerNavigationUI extends SuperUI implements HelpProvider
         };
 
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-
-        //TODO: check if needed.
-		ActionBar actionBar = getActionBar();
-		if (actionBar != null) {
-			actionBar.setHomeButtonEnabled(true);
-		}
 	}
 
 	/**
