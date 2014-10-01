@@ -34,17 +34,11 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 	private OnMissionControlInteraction listener;
 
 	private Follow followMe;
-	private Button joystickBtn;
-	private Button connectBtn;
-	private Button homeBtn;
-	private Button armBtn;
-	private Button landBtn;
-	private Button takeoffBtn;
-	private Button loiterBtn;
-	private Button followBtn;
-	private Button autoBtn;
-	private Button disarmBtn;
-	private Button dronieBtn;
+
+    private View mDisconnectedButtons;
+    private View mDisarmedButtons;
+    private View mArmedButtons;
+    private View mInFlightButtons;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,37 +54,42 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		joystickBtn = (Button) view.findViewById(R.id.mc_joystickBtn);
+        mDisconnectedButtons = view.findViewById(R.id.mc_disconnected_buttons);
+        mDisarmedButtons = view.findViewById(R.id.mc_disarmed_buttons);
+        mArmedButtons = view.findViewById(R.id.mc_armed_buttons);
+        mInFlightButtons = view.findViewById(R.id.mc_in_flight_buttons);
+
+		final Button joystickBtn = (Button) view.findViewById(R.id.mc_joystickBtn);
 		joystickBtn.setOnClickListener(this);
 
-		connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
+        final Button connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
 		connectBtn.setOnClickListener(this);
 
-		homeBtn = (Button) view.findViewById(R.id.mc_homeBtn);
+        final Button homeBtn = (Button) view.findViewById(R.id.mc_homeBtn);
 		homeBtn.setOnClickListener(this);
 
-		armBtn = (Button) view.findViewById(R.id.mc_armBtn);
+        final Button armBtn = (Button) view.findViewById(R.id.mc_armBtn);
 		armBtn.setOnClickListener(this);
-		
-		disarmBtn = (Button) view.findViewById(R.id.mc_disarmBtn);
+
+        final Button disarmBtn = (Button) view.findViewById(R.id.mc_disarmBtn);
 		disarmBtn.setOnClickListener(this);
 
-		landBtn = (Button) view.findViewById(R.id.mc_land);
+        final Button landBtn = (Button) view.findViewById(R.id.mc_land);
 		landBtn.setOnClickListener(this);
 
-		takeoffBtn = (Button) view.findViewById(R.id.mc_takeoff);
+        final Button takeoffBtn = (Button) view.findViewById(R.id.mc_takeoff);
 		takeoffBtn.setOnClickListener(this);
 
-		loiterBtn = (Button) view.findViewById(R.id.mc_loiter);
+        final Button loiterBtn = (Button) view.findViewById(R.id.mc_loiter);
 		loiterBtn.setOnClickListener(this);
 
-		autoBtn = (Button) view.findViewById(R.id.mc_autoBtn);
+        final Button autoBtn = (Button) view.findViewById(R.id.mc_autoBtn);
 		autoBtn.setOnClickListener(this);
 
-		followBtn = (Button) view.findViewById(R.id.mc_follow);
+        final Button followBtn = (Button) view.findViewById(R.id.mc_follow);
 		followBtn.setOnClickListener(this);
-		
-		dronieBtn = (Button) view.findViewById(R.id.mc_dronieBtn);
+
+        final Button dronieBtn = (Button) view.findViewById(R.id.mc_dronieBtn);
 		dronieBtn.setOnClickListener(this);
 
 		drone.addDroneListener(this);
@@ -231,59 +230,31 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 	}
 
 	private void setupButtonsForDisconnected() {
-		joystickBtn.setVisibility(View.GONE);
-		connectBtn.setVisibility(View.VISIBLE);
-		homeBtn.setVisibility(View.GONE);
-		armBtn.setVisibility(View.GONE);
-		disarmBtn.setVisibility(View.GONE);
-		landBtn.setVisibility(View.GONE);
-		takeoffBtn.setVisibility(View.GONE);
-		loiterBtn.setVisibility(View.GONE);
-		autoBtn.setVisibility(View.GONE);
-		followBtn.setVisibility(View.GONE);
-		dronieBtn.setVisibility(View.GONE);
+        mDisconnectedButtons.setVisibility(View.VISIBLE);
+        mDisarmedButtons.setVisibility(View.GONE);
+        mArmedButtons.setVisibility(View.GONE);
+        mInFlightButtons.setVisibility(View.GONE);
 	}
 
 	private void setupButtonsForDisarmed() {
-		joystickBtn.setVisibility(View.GONE);
-		connectBtn.setVisibility(View.GONE);
-		homeBtn.setVisibility(View.GONE);
-		armBtn.setVisibility(View.VISIBLE);
-		disarmBtn.setVisibility(View.GONE);
-		landBtn.setVisibility(View.GONE);
-		takeoffBtn.setVisibility(View.GONE);
-		loiterBtn.setVisibility(View.GONE);
-		autoBtn.setVisibility(View.GONE);
-		followBtn.setVisibility(View.GONE);
-		dronieBtn.setVisibility(View.VISIBLE);
+        mDisconnectedButtons.setVisibility(View.GONE);
+        mDisarmedButtons.setVisibility(View.VISIBLE);
+        mArmedButtons.setVisibility(View.GONE);
+        mInFlightButtons.setVisibility(View.GONE);
 	}
 
 	private void setupButtonsForArmed() {
-		joystickBtn.setVisibility(View.GONE);
-		connectBtn.setVisibility(View.GONE);
-		homeBtn.setVisibility(View.GONE);
-		armBtn.setVisibility(View.GONE);
-		disarmBtn.setVisibility(View.VISIBLE);
-		landBtn.setVisibility(View.GONE);
-		takeoffBtn.setVisibility(View.VISIBLE);
-		loiterBtn.setVisibility(View.GONE);
-		autoBtn.setVisibility(View.GONE);
-		followBtn.setVisibility(View.GONE);
-		dronieBtn.setVisibility(View.GONE);
+        mDisconnectedButtons.setVisibility(View.GONE);
+        mDisarmedButtons.setVisibility(View.GONE);
+        mArmedButtons.setVisibility(View.VISIBLE);
+        mInFlightButtons.setVisibility(View.GONE);
 	}
 
 	private void setupButtonsForFlying() {
-		joystickBtn.setVisibility(View.GONE);
-		connectBtn.setVisibility(View.GONE);
-		homeBtn.setVisibility(View.VISIBLE);
-		armBtn.setVisibility(View.GONE);
-		disarmBtn.setVisibility(View.GONE);
-		landBtn.setVisibility(View.VISIBLE);
-		takeoffBtn.setVisibility(View.GONE);
-		loiterBtn.setVisibility(View.VISIBLE);
-		autoBtn.setVisibility(View.VISIBLE);
-		followBtn.setVisibility(View.VISIBLE);
-		dronieBtn.setVisibility(View.GONE);
+        mDisconnectedButtons.setVisibility(View.GONE);
+        mDisarmedButtons.setVisibility(View.GONE);
+        mArmedButtons.setVisibility(View.GONE);
+        mInFlightButtons.setVisibility(View.VISIBLE);
 	}
 
 }
