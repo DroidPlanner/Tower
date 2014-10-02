@@ -2,13 +2,15 @@
 <resources>
 
     <color name="transparent_dark">#B0000000</color>
-    <color name="transparent_light">#ddffffff</color>
+    <color name="transparent_light">#d0ffffff</color>
     <color name="opaque_black">#000</color>
     <color name="opaque_white">#fff</color>
     <color name="greyText">#4d4d4d</color>
-    <color name="grey_dark">#9E9E9E</color>
-    <color name="grey_subtle">#EFEFEF</color>
-    <color name="grey_white">#f7f6f6</color>
+    <color name="dark_grey">#9E9E9E</color>
+    <color name="transparent_dark_grey">#d09E9E9E</color>
+    <color name="light_grey">#EFEFEF</color>
+    <color name="white_grey">#f7f6f6</color>
+    <color name="navigation_entry_color">#212121</color>
 
     <color name="ground_speed_units">#57eccd</color>
     <color name="ground_speed_label">#0a5242</color>

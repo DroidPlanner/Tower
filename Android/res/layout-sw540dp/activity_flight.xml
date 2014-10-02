@@ -20,34 +20,8 @@
         android:fitsSystemWindows="true"/>
 
     <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:fitsSystemWindows="true"
-        >
-
-        <TextView
-            android:id="@+id/failsafeTextView"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:background="#D8ee2d3e"
-            android:visibility="gone"
-            android:gravity="left|center_vertical"
-            style="@style/editorMissionOverviewText"
-            />
-
-        <include
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            layout="@layout/button_my_location"
-            android:layout_margin="8dp"
-            android:layout_gravity="center_vertical|right" />
-
-    </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
-
-    <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
         android:id="@+id/editorToolsFragment"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
@@ -59,6 +33,7 @@
         android:layout_width="210dp"
         android:layout_height="540dp"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:content="@+id/sliding_drawer_content"
         android:handle="@+id/slideButtonLeft"
@@ -69,7 +44,9 @@
         <ImageView
             android:id="@+id/slideButtonLeft"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingBottom="100dp"
+            android:scaleType="fitEnd"
             android:src="@drawable/drawer_tab"
             tools:ignore="ContentDescription"/>
 
@@ -81,5 +58,29 @@
 			tools:layout="@layout/fragment_flight_mode_panel" />
 
     </SlidingDrawer>
+
+    <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:fitsSystemWindows="true"
+        >
+
+        <TextView
+            android:id="@+id/failsafeTextView"
+            style="@style/editorMissionOverviewText"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:background="#D8ee2d3e"
+            android:gravity="start|center_vertical"
+            android:visibility="gone" />
+
+        <include
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/button_my_location"
+            android:layout_margin="8dp"
+            android:layout_gravity="center_vertical|end" />
+    </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
 
 </RelativeLayout>

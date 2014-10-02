@@ -83,10 +83,9 @@ public class Radio extends DroneVariable {
 			this.remnoise = SikValueToDB(remnoise & 0xFF);
 			this.txbuf = txbuf & 0xFF;
 
-
 			int currentSignalStrength = getSignalStrength();
-			//if signal strength dips below 10%
-			if(currentSignalStrength < 10.0 && previousSignalStrength >=10.0){
+			// if signal strength dips below 10%
+			if (currentSignalStrength < 10.0 && previousSignalStrength >= 10.0) {
 				myDrone.notifyDroneEvent(DroneEventsType.WARNING_SIGNAL_WEAK);
 			}
 			previousSignalStrength = currentSignalStrength;

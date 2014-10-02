@@ -14,6 +14,7 @@ import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
 import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -42,6 +43,7 @@ import android.widget.Toast;
 
 import com.getpebble.android.kit.PebbleKit;
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
 
 /**
  * Implements the application settings screen.
@@ -54,25 +56,26 @@ public class SettingsFragment extends DpPreferenceFragment implements
 	 */
 	private final static String TAG = SettingsFragment.class.getSimpleName();
 
-    private static final String PACKAGE_NAME = SettingsFragment.class.getPackage().getName();
+	private static final String PACKAGE_NAME = SettingsFragment.class.getPackage().getName();
 
-    /**
-     * Action used to broadcast updates to the period for the spoken status summary.
-     */
-    public static final String ACTION_UPDATED_STATUS_PERIOD = PACKAGE_NAME + "" +
-            ".ACTION_UPDATED_STATUS_PERIOD";
+	/**
+	 * Action used to broadcast updates to the period for the spoken status
+	 * summary.
+	 */
+	public static final String ACTION_UPDATED_STATUS_PERIOD = PACKAGE_NAME + ""
+			+ ".ACTION_UPDATED_STATUS_PERIOD";
 
-    /**
-     * Used to retrieve the new period for the spoken status summary.
-     */
-    public static final String EXTRA_UPDATED_STATUS_PERIOD = "extra_updated_status_period";
+	/**
+	 * Used to retrieve the new period for the spoken status summary.
+	 */
+	public static final String EXTRA_UPDATED_STATUS_PERIOD = "extra_updated_status_period";
 
 	/**
 	 * Keep track of which preferences' summary need to be updated.
 	 */
 	private final HashSet<String> mDefaultSummaryPrefs = new HashSet<String>();
 
-    private final Handler mHandler = new Handler();
+	private final Handler mHandler = new Handler();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -84,43 +87,14 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		final Context context = getActivity().getApplicationContext();
 		final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
-		// Populate the drone settings category
-		final PreferenceCategory dronePrefs = (PreferenceCategory) findPreference(context
-				.getString(R.string.pref_drone_settings_key));
-		if (dronePrefs != null) {
-			dronePrefs.removeAll();
-
-			final int configSectionsCount = ConfigurationActivity.sConfigurationFragments.length;
-			for (int i = 0; i < configSectionsCount; i++) {
-				final int index = i;
-				Preference configPref = new Preference(context);
-				configPref.setLayoutResource(R.layout.preference_config_screen);
-				configPref.setTitle(ConfigurationActivity.sConfigurationFragmentTitlesRes[i]);
-				configPref.setIcon(ConfigurationActivity.sConfigurationFragmentIconRes[i]);
-				configPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-					@Override
-					public boolean onPreferenceClick(Preference preference) {
-						// Launch the configuration activity to show the
-						// current config screen
-						final Intent configIntent = new Intent(context, ConfigurationActivity.class)
-								.putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_INDEX, index);
-
-						startActivity(configIntent);
-						return true;
-					}
-				});
-
-				dronePrefs.addPreference(configPref);
-			}
-		}
-
 		setupPeriodicControls();
 
 		// Populate the map preference category
 		final String mapsProvidersPrefKey = getString(R.string.pref_maps_providers_key);
 		final ListPreference mapsProvidersPref = (ListPreference) findPreference(mapsProvidersPrefKey);
 		if (mapsProvidersPref != null) {
-			final DPMapProvider[] providers = DPMapProvider.values();
+			// FIXME: Restore Mapbox map provider when feature complete.
+			final DPMapProvider[] providers = { DPMapProvider.GOOGLE_MAP };// DPMapProvider.values();
 			final int providersCount = providers.length;
 			final CharSequence[] providersNames = new CharSequence[providersCount];
 			final CharSequence[] providersNamesValues = new CharSequence[providersCount];
@@ -130,8 +104,10 @@ public class SettingsFragment extends DpPreferenceFragment implements
 				providersNames[i] = providerName.toLowerCase(Locale.ENGLISH).replace('_', ' ');
 			}
 
-			final String defaultProviderName = sharedPref.getString(mapsProvidersPrefKey,
-					DPMapProvider.DEFAULT_MAP_PROVIDER.name());
+			// final String defaultProviderName =
+			// sharedPref.getString(mapsProvidersPrefKey,
+			// DPMapProvider.DEFAULT_MAP_PROVIDER.name());
+			final String defaultProviderName = DPMapProvider.DEFAULT_MAP_PROVIDER.name();
 
 			mapsProvidersPref.setEntries(providersNames);
 			mapsProvidersPref.setEntryValues(providersNamesValues);
@@ -341,11 +317,38 @@ public class SettingsFragment extends DpPreferenceFragment implements
 	private void updateMavlinkVersionPreference(String version) {
 		final Preference mavlinkVersionPref = findPreference(getString(R.string.pref_mavlink_version_key));
 		if (mavlinkVersionPref != null) {
+			final HitBuilders.EventBuilder mavlinkEvent = new HitBuilders.EventBuilder()
+					.setCategory(GAUtils.Category.MAVLINK_CONNECTION);
+
 			if (version == null) {
 				mavlinkVersionPref.setSummary(getString(R.string.empty_content));
+				mavlinkEvent.setAction("Mavlink version unset");
 			} else {
 				mavlinkVersionPref.setSummary('v' + version);
+				mavlinkEvent.setAction("Mavlink version set").setLabel(version);
 			}
+
+			// Record the mavlink version
+			GAUtils.sendEvent(mavlinkEvent);
+		}
+	}
+
+	private void updateFirmwareVersionPreference(String firmwareVersion) {
+		final Preference firmwareVersionPref = findPreference(getString(R.string.pref_firmware_version_key));
+		if (firmwareVersionPref != null) {
+			final HitBuilders.EventBuilder firmwareEvent = new HitBuilders.EventBuilder()
+					.setCategory(GAUtils.Category.MAVLINK_CONNECTION);
+
+			if (firmwareVersion == null) {
+				firmwareVersionPref.setSummary(getString(R.string.empty_content));
+				firmwareEvent.setAction("Firmware version unset");
+			} else {
+				firmwareVersionPref.setSummary(firmwareVersion);
+				firmwareEvent.setAction("Firmware version set").setLabel(firmwareVersion);
+			}
+
+			// Record the firmware version.
+			GAUtils.sendEvent(firmwareEvent);
 		}
 	}
 
@@ -401,32 +404,33 @@ public class SettingsFragment extends DpPreferenceFragment implements
 	private void setupPeriodicControls() {
 		final PreferenceCategory periodicSpeechPrefs = (PreferenceCategory) findPreference(getString(R.string.pref_tts_periodic_key));
 		ListPreference periodic = ((ListPreference) periodicSpeechPrefs.getPreference(0));
-        periodic.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, final Object newValue) {
-                //Broadcast the event locally on update.
-                //A handler is used to that the current action has the time to return,
-                // and store the value in the preferences.
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        LocalBroadcastManager.getInstance(getActivity())
-                                .sendBroadcast(new Intent(ACTION_UPDATED_STATUS_PERIOD)
-                                        .putExtra(EXTRA_UPDATED_STATUS_PERIOD, (String) newValue));
+		periodic.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, final Object newValue) {
+				// Broadcast the event locally on update.
+				// A handler is used to that the current action has the time to
+				// return,
+				// and store the value in the preferences.
+				mHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
+								new Intent(ACTION_UPDATED_STATUS_PERIOD).putExtra(
+										EXTRA_UPDATED_STATUS_PERIOD, (String) newValue));
 
-                        setupPeriodicControls();
-                    }
-                });
-                return true;
-            }
-        });
+						setupPeriodicControls();
+					}
+				});
+				return true;
+			}
+		});
 
 		int val = Integer.parseInt(periodic.getValue());
 
-        final boolean isEnabled = val != 0;
+		final boolean isEnabled = val != 0;
 		if (isEnabled) {
-			periodic.setSummary(getString(R.string.pref_tts_status_every) + " "  + 	val + " " +
-					getString(R.string.pref_tts_seconds));
+			periodic.setSummary(getString(R.string.pref_tts_status_every) + " " + val + " "
+					+ getString(R.string.pref_tts_seconds));
 		} else {
 			periodic.setSummary(R.string.pref_tts_periodic_status_disabled);
 		}
@@ -447,6 +451,8 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		} else {
 			updateMavlinkVersionPreference(null);
 		}
+
+		updateFirmwareVersionPreference(drone.getFirmwareVersion());
 
 		drone.addDroneListener(this);
 	}
@@ -477,11 +483,15 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		switch (event) {
 		case DISCONNECTED:
 			updateMavlinkVersionPreference(null);
+			updateFirmwareVersionPreference(null);
 			break;
 
 		case HEARTBEAT_FIRST:
 		case HEARTBEAT_RESTORED:
 			updateMavlinkVersionPreference(String.valueOf(drone.getMavlinkVersion()));
+			break;
+		case FIRMWARE:
+			updateFirmwareVersionPreference(drone.getFirmwareVersion());
 			break;
 		default:
 			break;

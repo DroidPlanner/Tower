@@ -1,9 +1,9 @@
 package org.droidplanner.android.fragments;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
@@ -11,6 +11,7 @@ import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenParameterDialog;
 import org.droidplanner.android.dialogs.parameters.DialogParameterInfo;
 import org.droidplanner.android.utils.file.IO.ParameterWriter;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.adapterViews.ParamsAdapter;
 import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
 import org.droidplanner.core.drone.DroneInterfaces;
@@ -21,16 +22,26 @@ import org.droidplanner.core.parameters.Parameter;
 import org.droidplanner.core.parameters.ParameterMetadata;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ParamsFragment extends ListFragment implements
@@ -39,15 +50,27 @@ public class ParamsFragment extends ListFragment implements
 	static final String TAG = ParamsFragment.class.getSimpleName();
 
 	public static final String ADAPTER_ITEMS = ParamsFragment.class.getName() + ".adapter.items";
+    private static final String PREF_PARAMS_FILTER_ON = "pref_params_filter_on";
+    private static final boolean DEFAULT_PARAMS_FILTER_ON = true;
 
-	private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
+
+    private ProgressBar mLoadingProgress;
+    private EditText mParamsFilter;
 
 	private Drone drone;
+    private DroidPlannerPrefs mPrefs;
 	private ParamsAdapter adapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
+
+        final DroidPlannerApp dpApp = (DroidPlannerApp) getActivity().getApplication();
+        drone = dpApp.getDrone();
+        mPrefs = dpApp.getPreferences();
 
 		// create adapter
 		if (savedInstanceState != null) {
@@ -60,6 +83,11 @@ public class ParamsFragment extends ListFragment implements
 		} else {
 			// empty adapter
 			adapter = new ParamsAdapter(getActivity(), R.layout.row_params);
+
+            final List<Parameter> parametersList = drone.getParameters().getParametersList();
+            if(!parametersList.isEmpty()) {
+                loadAdapter(parametersList);
+            }
 		}
 		setListAdapter(adapter);
 
@@ -75,26 +103,109 @@ public class ParamsFragment extends ListFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// bind & initialize UI
-		final View view = inflater.inflate(R.layout.fragment_params, container, false);
-
-		// listen for clicks on empty
-		view.findViewById(android.R.id.empty).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				refreshParameters();
-			}
-		});
-
-		setHasOptionsMenu(true);
-		return view;
+		return inflater.inflate(R.layout.fragment_params, container, false);
 	}
 
-	@Override
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
+
+        mLoadingProgress = (ProgressBar) view.findViewById(R.id.reload_progress);
+        mLoadingProgress.setVisibility(View.GONE);
+
+        mParamsFilter = (EditText) view.findViewById(R.id.parameter_filter);
+        mParamsFilter.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    disableParameterFilter();
+                }
+            }
+        });
+        mParamsFilter.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        enableParameterFilter();
+                        break;
+                }
+                return false;
+            }
+        });
+        mParamsFilter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                filterInput(s.toString());
+            }
+        });
+        mParamsFilter.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                filterInput(v.getText());
+
+                if(actionId == EditorInfo.IME_NULL || actionId == EditorInfo.IME_ACTION_SEARCH){
+                    mParamsFilter.clearFocus();
+                }
+                return true;
+            }
+        });
+
+
+        // listen for clicks on empty
+        view.findViewById(android.R.id.empty).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshParameters();
+            }
+        });
+
+    }
+
+    private void enableParameterFilter() {
+        mParamsFilter.setInputType(InputType.TYPE_CLASS_TEXT);
+        mParamsFilter.requestFocus();
+
+        final Context context = getActivity();
+        final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context
+                .INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.showSoftInput(mParamsFilter, InputMethodManager.SHOW_IMPLICIT);
+        }
+    }
+
+    private void disableParameterFilter() {
+        mParamsFilter.setInputType(InputType.TYPE_NULL);
+
+        final Context context = getActivity();
+        final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context
+                .INPUT_METHOD_SERVICE);
+        if(imm != null) {
+            imm.hideSoftInputFromWindow(mParamsFilter.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+        }
+    }
+
+    private void filterInput(CharSequence input){
+        if(TextUtils.isEmpty(input)){
+            adapter.getFilter().filter("");
+        }
+        else{
+            adapter.getFilter().filter(input);
+        }
+    }
+
+    @Override
 	public void onStart() {
 		super.onStart();
-		drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 		drone.addDroneListener(this);
 		drone.getParameters().setParameterListener(this);
+        toggleParameterFilter(isParameterFilterVisible(), false);
 	}
 
 	@Override
@@ -106,9 +217,15 @@ public class ParamsFragment extends ListFragment implements
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		if (event == DroneEventsType.TYPE) {
-			adapter.loadMetadata(drone);
-		}
+        switch(event){
+            case TYPE:
+                adapter.loadMetadata(drone);
+                break;
+
+            case DISCONNECTED:
+                stopProgress();
+                break;
+        }
 	}
 
 	@Override
@@ -116,9 +233,8 @@ public class ParamsFragment extends ListFragment implements
 		super.onSaveInstanceState(outState);
 
 		// save adapter items
-		final ArrayList<ParamsAdapterItem> pwms = new ArrayList<ParamsAdapterItem>();
-		for (int i = 0; i < adapter.getCount(); i++)
-			pwms.add(adapter.getItem(i));
+		final ArrayList<ParamsAdapterItem> pwms = new ArrayList<ParamsAdapterItem>(adapter
+                .getOriginalValues());
 		outState.putSerializable(ADAPTER_ITEMS, pwms);
 	}
 
@@ -150,11 +266,44 @@ public class ParamsFragment extends ListFragment implements
 			saveParametersToFile();
 			break;
 
+        case R.id.menu_filter_params:
+            final boolean isEnabled = !isParameterFilterVisible();
+            toggleParameterFilter(isEnabled, isEnabled);
+            break;
+
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 		return true;
 	}
+
+    private void toggleParameterFilter(boolean isVisible, boolean enableInput){
+        if(isVisible){
+            //Show the parameter filter
+            mParamsFilter.setVisibility(View.VISIBLE);
+            filterInput(mParamsFilter.getText());
+
+            if(enableInput) {
+                enableParameterFilter();
+            }
+            else{
+                disableParameterFilter();
+            }
+        }
+        else{
+            //Hide the parameter filter
+            disableParameterFilter();
+            mParamsFilter.setVisibility(View.GONE);
+            filterInput(null);
+        }
+
+        mPrefs.prefs.edit().putBoolean(PREF_PARAMS_FILTER_ON, isVisible).apply();
+    }
+
+    private boolean isParameterFilterVisible(){
+        return mPrefs.prefs.getBoolean(PREF_PARAMS_FILTER_ON,
+                DEFAULT_PARAMS_FILTER_ON);
+    }
 
 	private void showInfo(int position, EditText valueView) {
 		final ParamsAdapterItem item = adapter.getItem(position);
@@ -167,7 +316,7 @@ public class ParamsFragment extends ListFragment implements
 
 	private void refreshParameters() {
 		if (drone.getMavClient().isConnected()) {
-			drone.getParameters().getAllParameters();
+			drone.getParameters().refreshParameters();
 		} else {
 			Toast.makeText(getActivity(), R.string.msg_connect_first, Toast.LENGTH_SHORT).show();
 		}
@@ -188,7 +337,7 @@ public class ParamsFragment extends ListFragment implements
 		if (written > 0)
 			adapter.notifyDataSetChanged();
 		Toast.makeText(getActivity(),
-				written + " " + getResources().getString(R.string.msg_parameters_written_to_drone),
+				written + " " + getString(R.string.msg_parameters_written_to_drone),
 				Toast.LENGTH_SHORT).show();
 	}
 
@@ -196,14 +345,7 @@ public class ParamsFragment extends ListFragment implements
 		OpenFileDialog dialog = new OpenParameterDialog() {
 			@Override
 			public void parameterFileLoaded(List<Parameter> parameters) {
-				Collections.sort(parameters, new Comparator<Parameter>() {
-					@Override
-					public int compare(Parameter p1, Parameter p2) {
-						return p1.name.compareTo(p2.name);
-					}
-				});
-				// load parameters from file
-				adapter.loadParameters(drone, parameters);
+				loadAdapter(parameters);
 			}
 		};
 		dialog.openDialog(getActivity());
@@ -224,53 +366,74 @@ public class ParamsFragment extends ListFragment implements
 
 	@Override
 	public void onBeginReceivingParameters() {
-		progressDialog = new ProgressDialog(getActivity());
-		progressDialog.setTitle(R.string.refreshing_parameters);
-		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		progressDialog.setIndeterminate(true);
-		progressDialog.setCancelable(false);
-		progressDialog.setCanceledOnTouchOutside(true);
-
-		progressDialog.show();
-
-		mReceived = 0;
-		mTotal = 0;
+		startProgress();
 	}
-
-	private int mReceived = 0, mTotal = 0;
 
 	@Override
 	public void onParameterReceived(Parameter parameter, int index, int count) {
-		++mReceived;
-
-		if (progressDialog != null) {
-			if (progressDialog.isIndeterminate()) {
-				progressDialog.setIndeterminate(false);
-				mTotal = count;
-				progressDialog.setMax(count);
-			}
-			progressDialog.setProgress(mReceived);
-		}
+        updateProgress(index, count);
 	}
 
 	@Override
 	public void onEndReceivingParameters(List<Parameter> parameters) {
-		if (mReceived < mTotal) {
-			Log.w(TAG, "Total of " + mTotal + " params, but only got " + mReceived);
-		}
-
-		Collections.sort(parameters, new Comparator<Parameter>() {
-			@Override
-			public int compare(Parameter p1, Parameter p2) {
-				return p1.name.compareTo(p2.name);
-			}
-		});
-		adapter.loadParameters(drone, parameters);
-
-		// dismiss progress dialog
-		if (progressDialog != null) {
-			progressDialog.dismiss();
-			progressDialog = null;
-		}
+        loadAdapter(parameters);
+		stopProgress();
 	}
+
+    private void loadAdapter(List<Parameter> parameters){
+        if(parameters == null || parameters.isEmpty()){
+            return;
+        }
+
+        Set<Parameter> prunedParameters = new TreeSet<Parameter>(parameters);
+        adapter.loadParameters(drone, prunedParameters);
+
+        if(mParamsFilter != null && mParamsFilter.getVisibility() == View.VISIBLE){
+            mParamsFilter.setText("");
+        }
+        else{
+            filterInput(null);
+        }
+    }
+
+    private void startProgress(){
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle(R.string.refreshing_parameters);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(true);
+        progressDialog.show();
+
+        mLoadingProgress.setIndeterminate(true);
+        mLoadingProgress.setVisibility(View.VISIBLE);
+    }
+
+    private void updateProgress(int progress, int max) {
+        if (progressDialog == null) {
+            startProgress();
+        }
+
+        if (progressDialog.isIndeterminate()) {
+            progressDialog.setIndeterminate(false);
+            progressDialog.setMax(max);
+        }
+        progressDialog.setProgress(progress);
+
+        if (mLoadingProgress.isIndeterminate()) {
+            mLoadingProgress.setIndeterminate(false);
+            mLoadingProgress.setMax(max);
+        }
+        mLoadingProgress.setProgress(progress);
+    }
+
+    private void stopProgress() {
+        // dismiss progress dialog
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+
+        mLoadingProgress.setVisibility(View.GONE);
+    }
 }

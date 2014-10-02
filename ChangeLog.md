@@ -8,6 +8,34 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.7.9
+* UI clean-up (#1106,#1093,#1092,#891,#1110,#1101)
+* Display consumed mAh in status bar (#1111,#1069)
+* Fix small bug in Guided mode (#1101,#1110)
+
+## Droidplanner v2.7.8
+* Parameters fix. Added parameter detail, search function (#1098,#1064,#1083,#1011)
+* Fixes to make tablet only flights pratical (#1099)
+* Added a "dronie" function (#1084)
+* Make modes names and spoken text consisntent with ArduCopter (#1097,#1068)
+* Fix circle mission item UI (#1100)
+* Repository maintance (#1094,#1096)
+
+## Droidplanner v2.7.7
+* Context aware flight actions, takeoff and connect buttons (#1090)
+* New number entry widget (#1062,#1051,#1087,#1091)
+* Display firmware version on settings screen, and report to GA (#1067,#1073)
+* Release ROI after follow-me is disabled (#1085,#1078)
+* Bug fixes (#1073,#1077,#1088)
+* Build setup fix (#1072)
+
+## Droidplanner v2.7.6
+* Warn user about all HIGH_SEVERITY messages from the drone (#1066)
+
+## Droidplanner v2.7.5
+* Fix follow-me for "heading" related follow modes (#1065)
+* Complementing German translation (#1059)
+
 ## Droidplanner v2.7.4
 * Added extra follow-modes (#1057)
 * Fix error on Mavlink message handling (#1056,#1050)

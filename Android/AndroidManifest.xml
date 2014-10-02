@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
           package="org.droidplanner"
-          android:versionCode="95"
+          android:versionCode="101"
           android:versionName="please run version.sh to get the version name">
 
     <uses-sdk
@@ -102,14 +102,7 @@
             android:label="@string/editor"
             android:launchMode="singleTop"
             android:theme="@style/CustomActionBarTheme.Transparent"
-            android:parentActivityName=".android.activities.FlightActivity"
             android:windowSoftInputMode="adjustNothing">
-
-            <!-- Parent activity meta-data to support API level 7+ -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".android.activities.FlightActivity" />
-
             <!-- Intent for opening mission files -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -124,14 +117,8 @@
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop"
             android:theme="@style/Theme.PageIndicatorDefaults"
-            android:label="@string/menu_drone_setup"
-            android:parentActivityName=".android.activities.SettingsActivity" >
+            android:label="@string/menu_drone_setup" />
 
-            <!-- Parent activity meta-data to support API level 7+ -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".android.activities.SettingsActivity" />
-        </activity>
         <activity android:name=".android.activities.SettingsActivity"
                   android:launchMode="singleTop"
                   android:label="@string/settings"/>

@@ -44,7 +44,7 @@ import android.widget.Toast;
  * This implements the map editor activity. The map editor activity allows the
  * user to create and/or modify autonomous missions for the drone.
  */
-public class EditorActivity extends SuperUI implements OnPathFinishedListener,
+public class EditorActivity extends DrawerNavigationUI implements OnPathFinishedListener,
 		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener, OnEditorInteraction,
 		Callback, MissionSelection.OnSelectionUpdateListener {
 
@@ -53,8 +53,9 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	 * and recreated.
 	 */
 	private static final String ITEM_DETAIL_TAG = "Item Detail Window";
+    private static final String EXTRA_IS_SPLINE_ENABLED = "extra_is_spline_enabled";
 
-	/**
+    /**
 	 * Used to provide access and interact with the
 	 * {@link org.droidplanner.core.mission.Mission} object on the Android
 	 * layer.
@@ -105,6 +106,17 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		mSplineToggleContainer.setVisibility(View.VISIBLE);
 
 		mLocationButtonsContainer = findViewById(R.id.location_button_container);
+
+        final ImageButton resetMapBearing = (ImageButton) findViewById(R.id.map_orientation_button);
+        resetMapBearing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(planningMapFragment != null) {
+                    planningMapFragment.updateMapBearing(0);
+                }
+            }
+        });
+
 		ImageButton mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
 		mGoToMyLocation.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -151,9 +163,13 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			}
 		});
 
+        if(savedInstanceState != null){
+            mIsSplineEnabled = savedInstanceState.getBoolean(EXTRA_IS_SPLINE_ENABLED);
+        }
+
 		// Retrieve the item detail fragment using its tag
 		itemDetailFragment = (MissionDetailFragment) fragmentManager
-				.findFragmentByTag(ITEM_DETAIL_TAG);
+                .findFragmentByTag(ITEM_DETAIL_TAG);
 
 		/*
 		 * On phone, this view will be null causing the item detail to be shown
@@ -171,7 +187,18 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		setupTool(getTool());
 	}
 
-	@Override
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(EXTRA_IS_SPLINE_ENABLED, mIsSplineEnabled);
+    }
+
+    @Override
+    protected int getNavigationDrawerEntryId() {
+        return R.id.navigation_editor;
+    }
+
+    @Override
 	public void onStart() {
 		super.onStart();
 		missionProxy.selection.addSelectionUpdateListener(this);
@@ -232,24 +259,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		updateMapPadding();
-	}
-
-	/**
-	 * Account for the various ui elements and update the map padding so that it
-	 * remains 'visible'.
-	 */
-	private void updateMapPadding() {
-		int topPadding = mLocationButtonsContainer.getBottom()
-				+ mLocationButtonsContainer.getPaddingBottom();
-		int leftPadding = mLocationButtonsContainer.getLeft()
-				- mLocationButtonsContainer.getPaddingLeft();
-		planningMapFragment.setMapPadding(leftPadding, topPadding, 0, 0);
-	}
-
-	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
 		planningMapFragment.saveCameraPosition();
@@ -272,17 +281,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		default:
 			break;
 		}
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			planningMapFragment.saveCameraPosition();
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -531,9 +529,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-	public void onListVisibilityChanged() {
-		updateMapPadding();
-	}
+	public void onListVisibilityChanged() {}
 
 	@Override
 	public void onSelectionUpdate(List<MissionItemProxy> selected) {
@@ -551,7 +547,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			}
 		}
 
-		planningMapFragment.update();
+		planningMapFragment.postUpdate();
 	}
 
 	private void doClearMissionConfirmation() {
@@ -570,4 +566,9 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 		ynd.show(getSupportFragmentManager(), "clearMission");
 	}
+
+    @Override
+    public CharSequence[][] getHelpItems() {
+        return new CharSequence[][] { {}, {} };
+    }
 }

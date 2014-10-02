@@ -10,6 +10,7 @@ import com.MAVLink.Messages.enums.MAV_TYPE;
 public class Type extends DroneVariable {
 
 	private int type = MAV_TYPE.MAV_TYPE_GENERIC;
+	private String firmwareVersion = null;
 
 	public Type(Drone myDrone) {
 		super(myDrone);
@@ -53,6 +54,15 @@ public class Type extends DroneVariable {
 		}
 		return myDrone.getPreferences().getVehicleType(); // offline or
 															// unsupported
+	}
+
+	public String getFirmwareVersion() {
+		return firmwareVersion;
+	}
+
+	public void setFirmwareVersion(String message) {
+		firmwareVersion = message;
+		myDrone.notifyDroneEvent(DroneEventsType.FIRMWARE);
 	}
 
 }

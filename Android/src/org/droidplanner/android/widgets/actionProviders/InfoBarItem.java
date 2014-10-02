@@ -259,19 +259,78 @@ public abstract class InfoBarItem {
 	 * ratio of remaining to full voltage.
 	 */
 	public static class BatteryInfo extends InfoBarItem {
+
+		/**
+		 * This is the layout resource id for the popup window.
+		 */
+		protected static final int sPopupWindowLayoutId = R.layout.popup_info_power;
+		
+		
+		/**
+		 * This popup is used to show additional signal info.
+		 */
+		private PopupWindow mPopup;
+
+
+		private TextView currentView;
+
+
+		private TextView mAhView;
+		
 		public BatteryInfo(Context context, View parentView, Drone drone) {
 			super(context, parentView, drone, R.id.bar_battery);
 		}
 
 		@Override
-		public void updateItemView(Context context, Drone drone) {
-			if (mItemView != null) {
-				String update = drone == null ? "--" : String.format(Locale.ENGLISH,
-						"%2.1fv\n%2.0f%%", drone.getBattery().getBattVolt(), drone.getBattery()
-								.getBattRemain());
+		protected void initItemView(Context context, View parentView, Drone drone) {
+			super.initItemView(context, parentView, drone);
+			if (mItemView == null)
+				return;
 
-				((TextView) mItemView).setText(update);
+			mPopup = initPopupWindow(context, sPopupWindowLayoutId);
+
+			final View popupView = mPopup.getContentView();
+			currentView = (TextView) popupView.findViewById(R.id.bar_power_current);
+			mAhView = (TextView) popupView.findViewById(R.id.bar_power_mAh);
+
+			mItemView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (mPopup == null)
+						return;
+
+					mPopup.showAsDropDown(mItemView);
+				}
+			});
+
+			updateItemView(context, drone);
+		}
+		
+		@Override
+		public void updateItemView(Context context, Drone drone) {
+
+			if (mItemView == null)
+				return;
+
+			String infoUpdate;
+			if (drone == null) {
+				infoUpdate = sDefaultValue;
+				currentView.setText(sDefaultValue);
+				mAhView.setText(sDefaultValue);
+			} else {
+				infoUpdate = String.format(Locale.ENGLISH,"%2.1fv\n%2.0f%%", drone.getBattery().getBattVolt(), drone.getBattery().getBattRemain());
+
+				currentView.setText(String.format("Current %2.1f A", drone.getBattery().getBattCurrent()));
+				Double discharge = drone.getBattery().getBattDischarge();
+				if (discharge == null) {
+					mAhView.setText("Discharge "+sDefaultValue+" mAh");
+				}else{
+					mAhView.setText(String.format("Discharge %2.0f mAh", discharge));					
+				}
 			}
+
+			mPopup.update();
+			((TextView) mItemView).setText(infoUpdate);
 		}
 	}
 
@@ -349,7 +408,7 @@ public abstract class InfoBarItem {
 				mFadeView.setText(sDefaultValue);
 				mRemFadeView.setText(sDefaultValue);
 			} else {
-				infoUpdate = String.format("%d%%", drone.getRadio().getSignalStrength());
+				infoUpdate = String.format(Locale.ENGLISH,"%d%%", drone.getRadio().getSignalStrength());
 
 				mRssiView.setText(String.format("RSSI %2.0f dB", drone.getRadio().getRssi()));
 				mRemRssiView.setText(String.format("RemRSSI %2.0f dB", drone.getRadio()

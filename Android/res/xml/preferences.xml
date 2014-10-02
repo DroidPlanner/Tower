@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <!-- Contains drone related preferences, and tuning. -->
-    <PreferenceCategory
-        android:key="@string/pref_drone_settings_key"
-        android:title="@string/menu_drone_setup" />
-
     <!-- Contains preferences related to the app. -->
     <PreferenceCategory android:title="@string/app_settings" >
         <ListPreference
@@ -170,12 +165,13 @@
                 android:key="@string/pref_dshare_enabled_key"
                 android:summary="@string/do_you_want_to_use_droneshare_"
                 android:title="@string/droneshare_enabled" />
-                        
-            <CheckBoxPreference
+
+            <!-- FIXME: Live upload is disabled because it often causes the app to crash on disconnect -->
+            <!--<CheckBoxPreference
                 android:defaultValue="false"
                 android:key="@string/pref_live_upload_enabled_key"
                 android:summary="@string/pref_live_upload_summary"
-                android:title="@string/pref_live_upload" />
+                android:title="@string/pref_live_upload" />-->
             
         </PreferenceScreen>
 
@@ -415,6 +411,13 @@
             android:selectable="false"
             android:shouldDisableView="false"
             android:title="@string/version" />
+        <Preference
+            android:enabled="false"
+            android:key="@string/pref_firmware_version_key"
+            android:persistent="false"
+            android:selectable="false"
+            android:shouldDisableView="false"
+            android:title="@string/firmware_version" />
         <Preference
             android:enabled="false"
             android:key="@string/pref_mavlink_version_key"

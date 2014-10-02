@@ -201,6 +201,10 @@ public class DroneInterfaces {
 		 *
 		 */
 		WARNING_SIGNAL_WEAK,
+		/**
+		 * Announces that a new version for the firmware has been received
+		 */
+		FIRMWARE,
 	}
 
 	public interface OnDroneListener {
@@ -238,6 +242,8 @@ public class DroneInterfaces {
 	public interface Handler {
 
 		void removeCallbacks(Runnable thread);
+
+        void post(Runnable thread);
 
 		void postDelayed(Runnable thread, long timeout);
 

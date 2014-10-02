@@ -8,17 +8,25 @@
 
     <ImageButton
         android:id="@+id/my_location_button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:src="@drawable/ic_location"
         android:background="@drawable/btn_explore"
         android:layout_marginBottom="4dp"/>
 
     <ImageButton
         android:id="@+id/drone_location_button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="4dp"
-        android:src="@drawable/ic_action_quad"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="4dp"
+        android:src="@drawable/ic_navigate"
+        android:scaleType="centerInside"
+        android:background="@drawable/btn_explore"/>
+
+    <ImageButton
+        android:id="@+id/map_orientation_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_compass"
         android:background="@drawable/btn_explore"/>
 </LinearLayout>

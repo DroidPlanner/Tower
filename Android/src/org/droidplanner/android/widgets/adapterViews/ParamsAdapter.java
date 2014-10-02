@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.droidplanner.R;
 import org.droidplanner.android.utils.file.IO.ParameterMetadataMapReader;
@@ -13,7 +14,6 @@ import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.parameters.Parameter;
 import org.droidplanner.core.parameters.ParameterMetadata;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;
@@ -22,14 +22,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
 /**
  * Date: 2013-12-08 Time: 11:00 PM
  */
-public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
+public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 
 	public interface OnInfoListener {
 		void onHelp(int position, EditText valueView);
@@ -39,6 +38,8 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 
 	private final int resource;
 	private final int colorAltRow;
+
+    private final LayoutInflater mInflater;
 
 	private Map<String, ParameterMetadata> metadataMap;
 
@@ -53,8 +54,8 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 		super(context, resource, objects);
 
 		this.resource = resource;
-
 		colorAltRow = context.getResources().getColor(R.color.paramAltRow);
+        mInflater = LayoutInflater.from(context);
 	}
 
 	public void clearFocus() {
@@ -75,8 +76,7 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 
 		if (convertView == null) {
 			// create new view
-			final LayoutInflater inflater = ((Activity) getContext()).getLayoutInflater();
-			view = inflater.inflate(resource, parent, false);
+			view = mInflater.inflate(resource, parent, false);
 
 			paramTag = new ParamTag();
 			paramTag.setNameView((TextView) view.findViewById(R.id.params_row_name));
@@ -124,22 +124,19 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 		return view;
 	}
 
-	public void loadParameters(Drone drone, List<Parameter> parameters) {
+	public void loadParameters(Drone drone, Set<Parameter> parameters) {
 		loadMetadataInternal(drone);
 
 		clear();
-		for (Parameter parameter : parameters)
-			addParameter(parameter);
+		for (Parameter parameter : parameters) {
+            addParameter(parameter);
+        }
 	}
 
 	private void addParameter(Parameter parameter) {
 		try {
 			Parameter.checkParameterName(parameter.name);
-
-			// paramters from AC 3.2 may contain duplicates - add only if unique
-			if (!containsParameterWithName(parameter.name))
-				add(new ParamsAdapterItem(parameter, getMetadata(parameter.name)));
-
+            add(new ParamsAdapterItem(parameter, getMetadata(parameter.name)));
 		} catch (Exception ex) {
 			// eat it
 		}
@@ -153,15 +150,6 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 			item.setMetadata(getMetadata(item.getParameter().name));
 		}
 		notifyDataSetChanged();
-	}
-
-	private boolean containsParameterWithName(String name) {
-		final int count = getCount();
-		for (int i = 0; i < count; i++) {
-			if (name.equals(getItem(i).getParameter().name))
-				return true;
-		}
-		return false;
 	}
 
 	private void loadMetadataInternal(Drone drone) {

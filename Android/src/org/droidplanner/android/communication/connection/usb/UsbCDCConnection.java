@@ -10,15 +10,15 @@ import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 
 class UsbCDCConnection extends UsbConnection.UsbConnectionImpl {
-    private static final String TAG = UsbCDCConnection.class.getSimpleName();
+	private static final String TAG = UsbCDCConnection.class.getSimpleName();
 
 	private static UsbSerialDriver sDriver = null;
 
-    protected UsbCDCConnection(Context context, int baudRate) {
-        super(context, baudRate);
-    }
+	protected UsbCDCConnection(Context context, int baudRate) {
+		super(context, baudRate);
+	}
 
-    @Override
+	@Override
 	protected void openUsbConnection() throws IOException {
 		// Get UsbManager from Android.
 		UsbManager manager = (UsbManager) mContext.getSystemService(Context.USB_SERVICE);
@@ -53,19 +53,19 @@ class UsbCDCConnection extends UsbConnection.UsbConnectionImpl {
 		// bytes.
 		// If no data is received it will timeout after 200ms (as set by
 		// parameter 2)
-        int iavailable = 0;
+		int iavailable = 0;
 		try {
 			iavailable = sDriver.read(readData, 200);
 		} catch (NullPointerException e) {
-            final String errorMsg = "Error Reading: " + e.getMessage()
-                    + "\nAssuming inaccessible USB device.  Closing connection.";
-            Log.e(TAG, errorMsg, e);
-            throw new IOException(errorMsg, e);
+			final String errorMsg = "Error Reading: " + e.getMessage()
+					+ "\nAssuming inaccessible USB device.  Closing connection.";
+			Log.e(TAG, errorMsg, e);
+			throw new IOException(errorMsg, e);
 		}
 
 		if (iavailable == 0)
 			iavailable = -1;
-        return iavailable;
+		return iavailable;
 	}
 
 	@Override
@@ -94,8 +94,8 @@ class UsbCDCConnection extends UsbConnection.UsbConnectionImpl {
 		}
 	}
 
-    @Override
-    public String toString(){
-        return TAG;
-    }
+	@Override
+	public String toString() {
+		return TAG;
+	}
 }

@@ -32,7 +32,7 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSo
 	public List<Coord2D> getPathPoints() {
 		List<Coord2D> path = new ArrayList<Coord2D>();
 		if (guidedPoint.isActive()) {
-			if(gps.isPositionValid()) {
+			if (gps.isPositionValid()) {
 				path.add(gps.getPosition());
 			}
 			path.add(guidedPoint.getCoord());

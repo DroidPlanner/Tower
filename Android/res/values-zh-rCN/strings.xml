@@ -319,7 +319,6 @@
     <string name="mission_control_home">回家</string>
     <string name="mission_control_land">降落</string>
     <string name="mission_control_takeoff">起飞</string>
-    <string name="mission_control_loiter">悬停</string>
     <string name="mission_control_follow">跟随</string>
     <string name="telemetry_label">遥测</string>
     <string name="flight_modes_label">飞行模式</string>

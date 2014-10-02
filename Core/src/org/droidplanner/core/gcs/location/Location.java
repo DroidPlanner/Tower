@@ -25,9 +25,11 @@ public class Location {
 		coordinate = coord2d;
 	}
 
-	public Location(Coord2D coord2d, double accuracy) {
+	public Location(Coord2D coord2d, double accuracy, float heading, float speed) {
 		coordinate = coord2d;
 		this.accuracy = accuracy;
+		this.heading = heading;
+		this.speed = speed;
 	}
 
 	public Coord2D getCoord() {

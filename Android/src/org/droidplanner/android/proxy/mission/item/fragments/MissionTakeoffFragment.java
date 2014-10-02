@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 
 public class MissionTakeoffFragment extends MissionDetailFragment implements
-        CardWheelHorizontalView.OnCardWheelChangedListener {
+		CardWheelHorizontalView.OnCardWheelChangedListener {
 
 	@Override
 	protected int getResource() {
@@ -25,23 +25,23 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
 
 		Takeoff item = (Takeoff) this.itemRender.getMissionItem();
 
-        final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(getActivity().getApplicationContext(),
-                MIN_ALTITUDE, MAX_ALTITUDE, "%d m");
-        altitudeAdapter.setItemResource(R.layout.wheel_text_centered);
-        final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view
-                .findViewById(R.id.altitudePicker);
-        cardAltitudePicker.setViewAdapter(altitudeAdapter);
-        cardAltitudePicker.setCurrentItem(altitudeAdapter.getItemIndex((int) item.getFinishedAlt().valueInMeters()));
-        cardAltitudePicker.addChangingListener(this);
+		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(getActivity()
+				.getApplicationContext(), MIN_ALTITUDE, MAX_ALTITUDE, "%d m");
+		altitudeAdapter.setItemResource(R.layout.wheel_text_centered);
+		final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view
+				.findViewById(R.id.altitudePicker);
+		cardAltitudePicker.setViewAdapter(altitudeAdapter);
+		cardAltitudePicker.setCurrentValue((int) item.getFinishedAlt().valueInMeters());
+		cardAltitudePicker.addChangingListener(this);
 	}
 
-    @Override
-    public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
-        switch(wheel.getId()){
-            case R.id.altitudePicker:
-                Takeoff item = (Takeoff) this.itemRender.getMissionItem();
-                item.setFinishedAlt(new Altitude(newValue));
-                break;
-        }
-    }
+	@Override
+	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
+		switch (wheel.getId()) {
+		case R.id.altitudePicker:
+			Takeoff item = (Takeoff) this.itemRender.getMissionItem();
+			item.setFinishedAlt(new Altitude(newValue));
+			break;
+		}
+	}
 }

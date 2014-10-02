@@ -82,7 +82,7 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements OnCa
 
 	@Override
 	public void onCalibrationData(int index, int count, boolean isSending) {
-		if (sidePanel != null && parameters != null) {
+		if (sidePanel instanceof FragmentSetupProgress && parameters != null) {
 			String title;
 			if (isSending) {
 				title = getResources().getString(R.string.setup_sf_desc_uploading);

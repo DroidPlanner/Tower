@@ -16,8 +16,12 @@ public class PolylineTools {
 	public static Length getPolylineLength(List<Coord2D> gridPoints) {
 		double lenght = 0;
 		for (int i = 1; i < gridPoints.size(); i++) {
-			lenght += GeoTools.getDistance(gridPoints.get(i), gridPoints.get(i - 1))
-					.valueInMeters();
+			final Coord2D to = gridPoints.get(i - 1);
+			if (to == null) {
+				continue;
+			}
+
+			lenght += GeoTools.getDistance(gridPoints.get(i), to).valueInMeters();
 		}
 		return new Length(lenght);
 	}
