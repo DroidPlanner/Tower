@@ -151,8 +151,8 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 			break;
 
 		case R.id.mc_pause:
-			drone.getState().changeFlightMode(ApmModes.ROTOR_LOITER);
-			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_LOITER.getName());
+			drone.getGuidedPoint().pauseAtCurrentLocation();
+			eventBuilder.setAction("Changed flight mode").setLabel("Pause");
 			break;
 
 		case R.id.mc_autoBtn:
@@ -256,9 +256,11 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
                 autoBtn.setActivated(true);
                 break;
 
-            case ROTOR_LOITER:
-                loiterBtn.setActivated(true);
-                break;
+		case ROTOR_GUIDED:
+			if (drone.getGuidedPoint().isIdle()) {
+				pauseBtn.setActivated(true);				
+			}
+			break;
 
             case ROTOR_RTL:
                 homeBtn.setActivated(true);
