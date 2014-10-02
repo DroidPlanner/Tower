@@ -367,19 +367,19 @@
     <!-- Text To Speech -->
     <string name="pref_title_tts">語音輸出</string>
     <string name="pref_title_tts_periodic">定期</string>
-    <string name="pref_title_tts_periodic_status">定期廣播設定</string>
+    <string name="pref_title_tts_periodic_status">語音廣播設定</string>
     <string name="pref_tts_periodic_summary">有哪些包含在定期報告中。</string>
     <string name="pref_tts_periodic_period">週期</string>
     <string name="pref_tts_periodic_period_summary">多久廣播一次。</string>
     <string name="pref_tts_periodic_bat_volt">電池伏特數</string>
-    <string name="pref_tts_periodic_bat_volt_summary">回報電池伏特數值。</string>
+    <string name="pref_tts_periodic_bat_volt_summary">廣播電池伏特數值。</string>
     <string name="pref_tts_periodic_alt">高度</string>
-    <string name="pref_tts_periodic_alt_summary">回報高度值。</string>
+    <string name="pref_tts_periodic_alt_summary">廣播高度值。</string>
     <string name="pref_tts_periodic_rssi">信號強度(RSSI)</string>
-    <string name="pref_tts_periodic_rssi_summary">回報接收的信號強度指數。</string>
+    <string name="pref_tts_periodic_rssi_summary">廣播接收的信號強度指數。</string>
     <string name="pref_tts_periodic_airspeed">空速</string>
-    <string name="pref_tts_periodic_airspeed_summary">回報空速數值。</string>
-    <string name="pref_title_tts_warnings">警訊設定</string>
+    <string name="pref_tts_periodic_airspeed_summary">廣播空速數值。</string>
+    <string name="pref_title_tts_warnings">警訊廣播設定</string>
     <string name="pref_tts_warning_solar_activity">日冕活躍中</string>
     <string name="pref_tts_warning_solar_activity_summary">這個警訊是關於目前太陽日冕正發生大爆發，有影響 gps 準確度的可能。</string>
     <string name="pref_tts_warning_wind_speed">風速</string>
@@ -393,8 +393,8 @@
     <string name="pref_tts_warning_autopilot_warnings">飛控回報的警訊</string>
     <string name="pref_tts_warning_autopilot_warnings_summary">有關解鎖失敗、低電量、等等。</string>
     <string name="pref_tts_periodic_status_disabled">廣播已關閉</string>
-    <string name="pref_tts_status_every">每幾秒廣播數據</string>
-    <string name="pref_tts_seconds">秒</string>
+    <string name="pref_tts_status_every">每</string>
+    <string name="pref_tts_seconds">秒廣播</string>
     <string name="pref_tts_off">關閉</string>
     
     <!-- Droneshare -->
@@ -473,7 +473,7 @@
     <string name="label_steps_count">階層數</string>
     <string name="label_altitude_step">階層高度</string>
     <string name="menu_search_toggle">切換搜尋</string>
-    <string name="dialog_confirm_arming_title">馬達解鎖嗎？</string>
+    <string name="dialog_confirm_arming_title">解鎖馬達嗎？</string>
     <string name="dialog_confirm_arming_msg">注意！螺旋槳將會開始轉動，無人機也會開始起飛程序。</string>
     
 </resources>
