@@ -337,7 +337,6 @@
     <string name="mission_control_disarm">上鎖</string>
     <string name="mission_control_land">降落</string>
     <string name="mission_control_takeoff">起飛</string>
-    <string name="mission_control_loiter">停懸</string>
     <string name="mission_control_auto">自動</string>
     <string name="mission_control_follow">跟隨</string>
     <string name="mission_control_dronie">自拍</string>

@@ -116,12 +116,12 @@
             tools:ignore="ContentDescription"/>
 
         <Button
-            android:id="@+id/mc_loiter"
+            android:id="@+id/mc_pause"
             style="@style/flightControlButton.Row"
             android:layout_width="75dp"
             android:layout_height="match_parent"
-            android:drawableTop="@drawable/ic_loiter"
-            android:text="@string/mission_control_loiter"
+            android:drawableTop="@drawable/ic_pause"
+            android:text="@string/mission_control_pause"
             android:layout_weight="1"
             tools:ignore="ContentDescription"/>
 
