@@ -68,6 +68,12 @@
             android:drawableTop="@drawable/ic_takeoff"
             android:text="@string/mission_control_takeoff"
             />
+        
+        <Button
+            android:id="@+id/mc_TakeoffInAutoBtn"
+            style="@style/flightControlButton.Row"
+            android:drawableTop="@drawable/ic_auto"
+            android:text="@string/mission_control_auto"/>
 
     </LinearLayout>
 

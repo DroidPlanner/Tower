@@ -27,6 +27,8 @@ import com.google.android.gms.analytics.HitBuilders;
 
 public class FlightActionsFragment extends Fragment implements OnClickListener, OnDroneListener {
 
+	private static final double TAKEOFF_ALTITUDE = 10.0;
+
 	public interface OnMissionControlInteraction {
 		public void onJoystickSelected();
 	}
@@ -90,8 +92,11 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
         loiterBtn = (Button) view.findViewById(R.id.mc_loiter);
 		loiterBtn.setOnClickListener(this);
 
-        autoBtn = (Button) view.findViewById(R.id.mc_autoBtn);
+		autoBtn = (Button) view.findViewById(R.id.mc_autoBtn);
 		autoBtn.setOnClickListener(this);
+		
+		final Button takeoffInAuto = (Button) view.findViewById(R.id.mc_TakeoffInAutoBtn);
+		takeoffInAuto.setOnClickListener(this);
 
         followBtn = (Button) view.findViewById(R.id.mc_follow);
 		followBtn.setOnClickListener(this);
@@ -141,7 +146,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 			break;
 
 		case R.id.mc_takeoff:
-			drone.getState().doTakeoff(new Altitude(10.0));
+			drone.getState().doTakeoff(new Altitude(TAKEOFF_ALTITUDE));
 			eventBuilder.setAction("Changed flight mode").setLabel("Takeoff");
 			break;
 
@@ -156,6 +161,12 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 			break;
 
 		case R.id.mc_autoBtn:
+			drone.getState().changeFlightMode(ApmModes.ROTOR_AUTO);
+			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_AUTO.getName());
+			break;
+			
+		case R.id.mc_TakeoffInAutoBtn:
+			drone.getState().doTakeoff(new Altitude(TAKEOFF_ALTITUDE));
 			drone.getState().changeFlightMode(ApmModes.ROTOR_AUTO);
 			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_AUTO.getName());
 			break;
