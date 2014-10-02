@@ -473,5 +473,7 @@
     <string name="label_steps_count">階層數</string>
     <string name="label_altitude_step">階層高度</string>
     <string name="menu_search_toggle">切換搜尋</string>
+    <string name="dialog_confirm_arming_title">馬達解鎖嗎？</string>
+    <string name="dialog_confirm_arming_msg">注意！螺旋槳將會開始轉動，無人機也會開始起飛程序。</string>
     
 </resources>
