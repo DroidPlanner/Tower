@@ -48,6 +48,14 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 		}
 	}
 
+	public void pauseAtCurrentLocation() {
+		if (state !=GuidedStates.ACTIVE) {
+			myDrone.getState().changeFlightMode(ApmModes.ROTOR_GUIDED);
+		}else{
+			newGuidedCoord(myDrone.getGps().getPosition());
+		}
+	}
+
 	public void doGuidedTakeoff(Altitude alt) {
 		coord = myDrone.getGps().getPosition();
 		altitude.set(alt.valueInMeters());
@@ -165,6 +173,10 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 
 	public boolean isActive() {
 		return (state == GuidedStates.ACTIVE);
+	}
+	
+	public boolean isIdle() {
+		return (state == GuidedStates.IDLE);
 	}
 
 	public boolean isInitialized() {
