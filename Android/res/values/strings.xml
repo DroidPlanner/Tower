@@ -344,7 +344,7 @@
     <string name="mission_control_disarm">Disarm</string>
     <string name="mission_control_land">Land</string>
     <string name="mission_control_takeoff">Takeoff</string>
-    <string name="mission_control_loiter">Loiter</string>
+    <string name="mission_control_pause">Pause</string>
     <string name="mission_control_auto">Auto</string>
     <string name="mission_control_follow">Follow</string>    
     <string name="mission_control_dronie">Dronie</string>

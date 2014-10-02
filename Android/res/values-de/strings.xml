@@ -316,7 +316,6 @@
     <string name="mission_control_home">Start</string>
     <string name="mission_control_land">Landen</string>
     <string name="mission_control_takeoff">Abheben</string>
-    <string name="mission_control_loiter">Loiter</string>
     <string name="mission_control_follow">Folgen</string>
 
     <!-- Bluetooth device selection strings -->

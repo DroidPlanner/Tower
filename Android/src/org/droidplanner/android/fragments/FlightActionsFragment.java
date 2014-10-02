@@ -44,7 +44,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
     private Button followBtn;
     private Button homeBtn;
     private Button landBtn;
-    private Button loiterBtn;
+    private Button pauseBtn;
     private Button autoBtn;
 
 	@Override
@@ -87,8 +87,8 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
         final Button takeoffBtn = (Button) view.findViewById(R.id.mc_takeoff);
 		takeoffBtn.setOnClickListener(this);
 
-        loiterBtn = (Button) view.findViewById(R.id.mc_loiter);
-		loiterBtn.setOnClickListener(this);
+        pauseBtn = (Button) view.findViewById(R.id.mc_pause);
+		pauseBtn.setOnClickListener(this);
 
         autoBtn = (Button) view.findViewById(R.id.mc_autoBtn);
 		autoBtn.setOnClickListener(this);
@@ -150,7 +150,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_RTL.getName());
 			break;
 
-		case R.id.mc_loiter:
+		case R.id.mc_pause:
 			drone.getState().changeFlightMode(ApmModes.ROTOR_LOITER);
 			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_LOITER.getName());
 			break;
@@ -273,7 +273,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
     private void resetFlightModeButtons() {
         homeBtn.setActivated(false);
         landBtn.setActivated(false);
-        loiterBtn.setActivated(false);
+        pauseBtn.setActivated(false);
         autoBtn.setActivated(false);
     }
 
