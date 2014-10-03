@@ -78,6 +78,7 @@
         <ScrollView
             android:layout_width="@dimen/flight_actions_container_width"
             android:layout_height="wrap_content"
+            android:minHeight="@dimen/flight_actions_container_height"
             android:background="@drawable/flight_mode_panel_container_bg"
             android:padding="3dp"
             android:clickable="true">

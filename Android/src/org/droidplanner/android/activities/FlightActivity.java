@@ -11,6 +11,7 @@ import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.drone.variables.State;
 import org.droidplanner.core.model.Drone;
 
 import android.app.Dialog;
@@ -30,11 +31,38 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 @SuppressWarnings("deprecation")
 public class FlightActivity extends DrawerNavigationUI implements
 		FlightActionsFragment.OnMissionControlInteraction, OnDroneListener {
 
+    private static final String TAG = FlightActivity.class.getSimpleName();
 	private static final int GOOGLE_PLAY_SERVICES_REQUEST_CODE = 101;
+
+    private final AtomicBoolean mSlidingPanelCollapsing = new AtomicBoolean(false);
+
+    private final SlidingUpPanelLayout.PanelSlideListener mDisablePanelSliding = new
+            SlidingUpPanelLayout.PanelSlideListener() {
+        @Override
+        public void onPanelSlide(View view, float v) {}
+
+        @Override
+        public void onPanelCollapsed(View view) {
+            mSlidingPanel.setSlidingEnabled(false);
+            mSlidingPanel.setPanelHeight(mFlightActionsView.getHeight());
+            mSlidingPanelCollapsing.set(false);
+        }
+
+        @Override
+        public void onPanelExpanded(View view) {}
+
+        @Override
+        public void onPanelAnchored(View view) {}
+
+        @Override
+        public void onPanelHidden(View view) {}
+    };
 
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
@@ -43,11 +71,13 @@ public class FlightActivity extends DrawerNavigationUI implements
 	private FlightMapFragment mapFragment;
 
     private SlidingUpPanelLayout mSlidingPanel;
+    private View mFlightActionsView;
+
 	private View mLocationButtonsContainer;
 	private ImageButton mGoToMyLocation;
 	private ImageButton mGoToDroneLocation;
 
-	@Override
+    @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_flight);
@@ -55,6 +85,8 @@ public class FlightActivity extends DrawerNavigationUI implements
 		fragmentManager = getSupportFragmentManager();
 
         mSlidingPanel = (SlidingUpPanelLayout) findViewById(R.id.slidingPanelContainer);
+        enableSlidingUpPanel(this.drone);
+
 		warningView = (TextView) findViewById(R.id.failsafeTextView);
 
 		final SlidingDrawer slidingDrawer = (SlidingDrawer) findViewById(R.id.slidingDrawerRight);
@@ -155,16 +187,18 @@ public class FlightActivity extends DrawerNavigationUI implements
 			fragmentManager.beginTransaction().add(R.id.flightActionsFragment, flightActions).commit();
 		}
 
-        final View editorToolsView = findViewById(R.id.flightActionsFragment);
-        editorToolsView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver
+        mFlightActionsView = findViewById(R.id.flightActionsFragment);
+        mFlightActionsView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver
                 .OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                mSlidingPanel.setPanelHeight(editorToolsView.getHeight());
+                if(!mSlidingPanelCollapsing.get()) {
+                    mSlidingPanel.setPanelHeight(mFlightActionsView.getHeight());
+                }
             }
         });
 
-        // Add the telemtry fragment
+        // Add the telemetry fragment
         Fragment telemetryFragment = fragmentManager.findFragmentById(R.id.telemetryFragment);
         if (telemetryFragment == null) {
             telemetryFragment = new TelemetryFragment();
@@ -309,10 +343,43 @@ public class FlightActivity extends DrawerNavigationUI implements
 			onWarningChanged(drone);
 			break;
 
+        case ARMING:
+        case CONNECTED:
+        case DISCONNECTED:
+        case STATE:
+            enableSlidingUpPanel(drone);
+            break;
+
 		default:
 			break;
 		}
 	}
+
+    private void enableSlidingUpPanel(Drone drone){
+        if (mSlidingPanel == null) {
+            return;
+        }
+
+        final State droneState = drone.getState();
+        final boolean isEnabled = drone.getMavClient().isConnected() && droneState.isArmed()
+                && droneState.isFlying();
+
+        if (isEnabled) {
+            mSlidingPanel.setPanelSlideListener(null);
+            mSlidingPanel.setSlidingEnabled(true);
+        } else {
+            if(!mSlidingPanelCollapsing.get()) {
+                if (mSlidingPanel.isPanelExpanded()) {
+                    mSlidingPanel.setPanelSlideListener(mDisablePanelSliding);
+                    mSlidingPanel.collapsePanel();
+                    mSlidingPanelCollapsing.set(true);
+                } else {
+                    mSlidingPanel.setSlidingEnabled(false);
+                    mSlidingPanelCollapsing.set(false);
+                }
+            }
+        }
+    }
 
 	public void onWarningChanged(Drone drone) {
 		if (drone.getState().isWarning()) {
