@@ -150,26 +150,27 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 			switch (request) {
 
 			case KEY_REQUEST_MODE_FOLLOW:
-				final int result = followMe.toggleFollowMeState();
+				followMe.toggleFollowMeState();
 				String eventLabel = null;
-				switch (result) {
-				case Follow.FOLLOW_START:
+				switch (followMe.getState()) {
+				case FOLLOW_START:
+				case FOLLOW_RUNNING:
 					eventLabel = "FollowMe enabled";
 					break;
 
-				case Follow.FOLLOW_END:
+				case FOLLOW_END:
 					eventLabel = "FollowMe disabled";
 					break;
 
-				case Follow.FOLLOW_INVALID_STATE:
+				case FOLLOW_INVALID_STATE:
 					eventLabel = "FollowMe error: invalid state";
 					break;
 
-				case Follow.FOLLOW_DRONE_DISCONNECTED:
+				case FOLLOW_DRONE_DISCONNECTED:
 					eventLabel = "FollowMe error: drone not connected";
 					break;
 
-				case Follow.FOLLOW_DRONE_NOT_ARMED:
+				case FOLLOW_DRONE_NOT_ARMED:
 					eventLabel = "FollowMe error: drone not armed";
 					break;
 				}

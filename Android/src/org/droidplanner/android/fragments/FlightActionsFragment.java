@@ -13,6 +13,7 @@ import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.model.Drone;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -175,26 +176,30 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 			break;
 
 		case R.id.mc_follow:
-			final int result = followMe.toggleFollowMeState();
+			followMe.toggleFollowMeState();
 			String eventLabel = null;
-			switch (result) {
-			case Follow.FOLLOW_START:
+			switch (followMe.getState()) {
+			case FOLLOW_START:
 				eventLabel = "FollowMe enabled";
 				break;
+				
+			case FOLLOW_RUNNING:
+				eventLabel = "FollowMe running";
+				break;
 
-			case Follow.FOLLOW_END:
+			case FOLLOW_END:
 				eventLabel = "FollowMe disabled";
 				break;
 
-			case Follow.FOLLOW_INVALID_STATE:
+			case FOLLOW_INVALID_STATE:
 				eventLabel = "FollowMe error: invalid state";
 				break;
 
-			case Follow.FOLLOW_DRONE_DISCONNECTED:
+			case FOLLOW_DRONE_DISCONNECTED:
 				eventLabel = "FollowMe error: drone not connected";
 				break;
 
-			case Follow.FOLLOW_DRONE_NOT_ARMED:
+			case FOLLOW_DRONE_NOT_ARMED:
 				eventLabel = "FollowMe error: drone not armed";
 				break;
 			}
@@ -252,6 +257,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 
 		case FOLLOW_START:
 		case FOLLOW_STOP:
+		case FOLLOW_UPDATE:
 			updateFlightModeButtons();
 			updateFollowButton();
 			break;

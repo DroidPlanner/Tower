@@ -181,6 +181,11 @@ public class DroneInterfaces {
 		 * 'Follow' mode has been disabled.
 		 */
 		FOLLOW_STOP,
+		
+		/**
+		 * 'Follow' state has been updated.
+		 */
+		FOLLOW_UPDATE,
 
 		/**
          * 
