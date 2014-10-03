@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/flight_mode_panel_container_bg_2" />
+
+    <item android:drawable="@drawable/flight_mode_panel_container_bg_1"
+          android:left="1dp"
+          android:right="1dp"
+          android:bottom="1dp"
+          android:top="1dp"/>
+
+</layer-list>
