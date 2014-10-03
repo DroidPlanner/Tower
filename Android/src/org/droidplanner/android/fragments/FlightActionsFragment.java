@@ -302,7 +302,19 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 	}
 
 	private void updateFollowButton() {
-		followBtn.setActivated(followMe.isEnabled());
+		switch (followMe.getState()) {
+		case FOLLOW_START:
+			followBtn.setBackgroundColor(Color.RED);
+			break;
+		case FOLLOW_RUNNING:
+			followBtn.setActivated(true);
+			followBtn.setBackgroundResource(R.drawable.flight_action_row_bg_selector);
+			break;
+		default:
+			followBtn.setActivated(false);
+			followBtn.setBackgroundResource(R.drawable.flight_action_row_bg_selector);
+			break;
+		}
 	}
 
 	private void resetButtonsContainerVisibility() {
