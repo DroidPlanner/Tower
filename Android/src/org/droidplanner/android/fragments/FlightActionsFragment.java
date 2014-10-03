@@ -252,6 +252,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 
 		case FOLLOW_START:
 		case FOLLOW_STOP:
+			updateFlightModeButtons();
 			updateFollowButton();
 			break;
 
@@ -270,7 +271,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 			break;
 
 		case ROTOR_GUIDED:
-			if (drone.getGuidedPoint().isIdle()) {
+			if (drone.getGuidedPoint().isIdle() && !followMe.isEnabled()) {
 				pauseBtn.setActivated(true);
 			}
 			break;
