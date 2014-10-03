@@ -185,8 +185,7 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 				break;
 
 			case KEY_REQUEST_MODE_LOITER:
-				((DroidPlannerApp) applicationContext).getDrone().getState()
-						.changeFlightMode(ApmModes.ROTOR_LOITER);
+				((DroidPlannerApp) applicationContext).getDrone().getGuidedPoint().pauseAtCurrentLocation();
 				break;
 
 			case KEY_REQUEST_MODE_RTL:
