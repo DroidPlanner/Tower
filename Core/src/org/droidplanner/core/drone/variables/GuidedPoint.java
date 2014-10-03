@@ -13,6 +13,8 @@ import com.MAVLink.Messages.ApmModes;
 
 public class GuidedPoint extends DroneVariable implements OnDroneListener {
 
+    public final static float MIN_ALTITUDE = 2.0f;
+
 	private GuidedStates state = GuidedStates.UNINITIALIZED;
 	private Coord2D coord = new Coord2D(0, 0);
 	private Altitude altitude = new Altitude(0.0);
@@ -69,8 +71,8 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 		changeCoord(coord);
 	}
 
-	public void changeGuidedAltitude(double altChange) {
-		changeAlt(altChange);
+	public void changeGuidedAltitude(double alt) {
+		changeAlt(alt);
 	}
 
 	public void forcedGuidedCoordinate(final Coord2D coord) throws Exception {
@@ -112,28 +114,21 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 		myDrone.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
 	}
 
-	private void changeAlt(double altChange) {
-		switch (state) {
-		case UNINITIALIZED:
-			break;
-		case IDLE:
-			state = GuidedStates.ACTIVE;
-			changeAlt(altChange);
-			break;
-		case ACTIVE:
-			double alt = Math.floor(altitude.valueInMeters());
-			alt = Math.max(alt, 2.0);
+    private void changeAlt(double alt) {
+        switch (state) {
+            case UNINITIALIZED:
+                break;
 
-			if (altChange < -1 && alt <= 10)
-				altChange = -1;
+            case IDLE:
+                state = GuidedStates.ACTIVE;
+                /** FALL THROUGH **/
 
-			if ((alt + altChange) > 1.0) {
-				altitude.set(alt + altChange);
-			}
-			sendGuidedPoint();
-			break;
-		}
-	}
+            case ACTIVE:
+                altitude.set(Math.max(alt, MIN_ALTITUDE));
+                sendGuidedPoint();
+                break;
+        }
+    }
 
 	private void changeCoord(Coord2D coord) {
 		switch (state) {

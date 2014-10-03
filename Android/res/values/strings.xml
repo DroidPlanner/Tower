@@ -482,5 +482,6 @@
     <string name="menu_search_toggle">Toggle Search</string>
     <string name="dialog_confirm_arming_title">Arm propellers?</string>
     <string name="dialog_confirm_arming_msg">Warning! Propellers will spin and drone may begin to fly.</string>
+    <string name="radius_label">Radius</string>
 
 </resources>

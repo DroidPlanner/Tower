@@ -116,8 +116,8 @@ public class Follow implements OnDroneListener, LocationReceiver {
 		drone.notifyDroneEvent(DroneEventsType.FOLLOW_CHANGE_TYPE);
 	}
 
-	public void changeRadius(double increment) {
-		followAlgorithm.changeRadius(increment);
+	public void changeRadius(double radius) {
+		followAlgorithm.changeRadius(radius);
 	}
 
 	public void cycleType() {
