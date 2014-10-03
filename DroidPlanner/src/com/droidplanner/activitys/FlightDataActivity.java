@@ -17,8 +17,6 @@ import android.view.View.OnClickListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.MAVLink.MavLinkArm;
@@ -33,60 +31,51 @@ import com.droidplanner.helpers.units.Length;
 import com.google.android.gms.maps.model.LatLng;
 
 public class FlightDataActivity extends SuperFlightActivity implements
-
 								OnWaypointUpdateListner, ModeChangedListener, GuidePointListener, OnLongClickListener {
     private TextView distanceView;
 
+@Override
+public int getNavigationItem() {
+    return 1;
+}
 
-    @Override
-    public int getNavigationItem() {
-	return 1;
-    }
-	
     Button launchButton, armDisarmButton, landButton,stabilizeButton ,RTLButton;
     RcOutput rcOutput;
-	
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
 
-	setContentView(R.layout.activity_flightdata);
+@Override
+public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-	mapFragment = ((FlightMapFragment) getFragmentManager()
-		       .findFragmentById(R.id.flightMapFragment));
+    setContentView(R.layout.activity_flightdata);
 
-	distanceView = (TextView) findViewById(R.id.textViewDistance);
-	mapFragment.setGuidePointListener(this);
-	mapFragment.updateFragment();
+mapFragment = ((FlightMapFragment) getFragmentManager()
+	       .findFragmentById(R.id.flightMapFragment));
 
-	drone.mission.missionListner = this;
-	drone.setDroneTypeChangedListner(this);
-	drone.setModeChangedListener(this);
-		
-		
-	rcOutput = new RcOutput(drone, this);
-	launchButton = (Button)findViewById(R.id.Launch);
-	armDisarmButton = (Button)findViewById(R.id.ArmDisarm);
-	landButton = (Button)findViewById(R.id.Land);
-	stabilizeButton = (Button)findViewById(R.id.Stabilize);
-	RTLButton = (Button)findViewById(R.id.RTL);
+distanceView = (TextView) findViewById(R.id.textViewDistance);
+mapFragment.setGuidePointListener(this);
+mapFragment.updateFragment();
 
-		if(launchButton!=null){
-			launchButton.setOnLongClickListener(this); // All need to be long press??
-			armDisarmButton.setOnLongClickListener(this);
-			landButton.setOnLongClickListener(this);
-			stabilizeButton.setOnLongClickListener(this);
-			RTLButton.setOnLongClickListener(this);
-			
-			launchButton.setOnClickListener(this); // All normal click to inform user of correct use
-			armDisarmButton.setOnClickListener(this);
-			landButton.setOnClickListener(this);
-			stabilizeButton.setOnClickListener(this);
-			RTLButton.setOnClickListener(this);
-		}
-		
-		
-    }
+drone.mission.missionListner = this;
+drone.setDroneTypeChangedListner(this);
+drone.setModeChangedListener(this);
+
+
+rcOutput = new RcOutput(drone, this);
+launchButton = (Button)findViewById(R.id.Launch);
+armDisarmButton = (Button)findViewById(R.id.ArmDisarm);
+landButton = (Button)findViewById(R.id.Land);
+stabilizeButton = (Button)findViewById(R.id.Stabilize);
+RTLButton = (Button)findViewById(R.id.RTL);
+
+if(launchButton!=null){
+    launchButton.setOnLongClickListener(this); // All need to be long press??
+    armDisarmButton.setOnLongClickListener(this);
+    landButton.setOnLongClickListener(this);
+    stabilizeButton.setOnLongClickListener(this);
+    RTLButton.setOnLongClickListener(this);
+}
+
+}
 
     public boolean onCreateOptionsMenu(Menu menu) {
 	getMenuInflater().inflate(R.menu.menu_flightdata, menu);
@@ -96,16 +85,16 @@ public class FlightDataActivity extends SuperFlightActivity implements
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
-	switch (item.getItemId()) {
-	case R.id.menu_zoom:
-	    mapFragment.zoomToLastKnowPosition();
-	    return true;
-	case R.id.menu_clearFlightPath:
-	    mapFragment.clearFlightPath();
-	    return true;
-	default:
-	    return super.onMenuItemSelected(featureId, item);
-	}
+    switch (item.getItemId()) {
+    case R.id.menu_zoom:
+	mapFragment.zoomToLastKnowPosition();
+	return true;
+    case R.id.menu_clearFlightPath:
+	mapFragment.clearFlightPath();
+	return true;
+    default:
+	return super.onMenuItemSelected(featureId, item);
+    }
     }
 
     @Override
@@ -127,71 +116,33 @@ public class FlightDataActivity extends SuperFlightActivity implements
 
     private void updateDistanceView() {
 	final Location myLoc = mapFragment.mMap.getMyLocation();
-	if(myLoc != null) {
-	    Length distance = new Length(GeoTools.getDistance(drone.guidedPoint.getCoord(),
-							      new LatLng(myLoc.getLatitude(), myLoc.getLongitude())));
-	    distanceView.setText(getString(R.string.length) + ": " + distance);
-	}
-	else {
-	    new Handler().postDelayed(new Runnable()
-		{
-		    @Override
-		    public void run()
-		    {
-			updateDistanceView();
+    if(myLoc != null) {
+	Length distance = new Length(GeoTools.getDistance(drone.guidedPoint.getCoord(),
+							  new LatLng(myLoc.getLatitude(), myLoc.getLongitude())));
+	distanceView.setText(getString(R.string.length) + ": " + distance);
+    }
+    else {
+    new Handler().postDelayed(new Runnable()
+			            {
+	@Override
+	public void run()
+	        {
+		    updateDistanceView();
 		    }
-		}, 2000);
-	}
-	checkDistanceVisible();
+	}, 2000);
+    }
+    checkDistanceVisible();
     }
 
     private void checkDistanceVisible() {
 	distanceView.setVisibility(drone.guidedPoint.isCoordValid() && distanceView.getText().length() > 0 ? View.VISIBLE : View.INVISIBLE);
     }
 
-	
-	/**
-	 * To inform users of the proper use of the flight data GUI buttons catch when a normal press is used.
-	 * A long press should be used and a normal press is not used.
-	 * @param view The button that is pressed which is causing the listener to be triggered
-	 */
-	@Override
-	public void onClick(View view) {
-		
-		// If statement is not strictly needed as nothing else uses click listeners but include it for modification later
-		if (view == launchButton || view == landButton || view == armDisarmButton || view == stabilizeButton || view == RTLButton)
-		{
-						
-			// Also give a toast error to make sure people see the message
-			Toast.makeText(this, "Hold down button for a few seconds to activate", Toast.LENGTH_LONG)
-			.show();
-			
-		}
-		
-	}
-	
-	/**
-	 * To inform users of the proper use of the flight data GUI buttons catch when a normal press is used.
-	 * A long press should be used and a normal press is not used.
-	 * @param view The button that is pressed which is causing the listener to be triggered
-	 */
-	@Override
-	public void onClick(View view) {
-		
-		// If statement is not strictly needed as nothing else uses click listeners but include it for modification later
-		if (view == launchButton || view == landButton || view == armDisarmButton || view == stabilizeButton || view == RTLButton)
-		{
-						
-			// Also give a toast error to make sure people see the message
-			Toast.makeText(this, "Hold down button for a few seconds to activate", Toast.LENGTH_LONG)
-			.show();
-			
-		}
-		
-	}
-
-
-
+    /**
+     * 
+     * @param view
+     * @return True if we have handled the long click, false otherwise
+     */
     /**
      * 
      * @param view
@@ -221,64 +172,64 @@ public class FlightDataActivity extends SuperFlightActivity implements
 	}
 	return false;
     }
-	
+    
     @Override
     public void notifyArmed()
-    {
-	// Call the superclass method
-	super.notifyArmed();
-		
-	if (armDisarmButton != null)
-	    {
-		// Armed
-		armDisarmButton.setText("Disarm");
-		armDisarmButton.setBackgroundColor(0xff0000ff); // Should be standard green
-		armDisarmButton.setTextColor(0xffffffff); // Set text color to white
-	    }
-    }
+	{
+	    // Call the superclass method
+	    super.notifyArmed();
 	
+	if (armDisarmButton != null)
+	        {
+		    // Armed
+		    armDisarmButton.setText("Disarm");
+		    armDisarmButton.setBackgroundColor(0xff0000ff); // Should be standard green
+		    armDisarmButton.setTextColor(0xffffffff); // Set text color to white
+		    }
+	}
+    
     @Override
     public void notifyDisarmed()
-    {
-	// Call the superclass method
-	super.notifyDisarmed();
-		
-	if (armDisarmButton != null)
-	    {
-		// Disarmed
-		armDisarmButton.setText("Arm");
-		armDisarmButton.setBackgroundColor(0xffffa500); // Should be orange
-		armDisarmButton.setTextColor(0xff000000); // Set text color to black
-	    }
-		
-    }
-
-    public void takeOff(){
-	// Check if we have a MAVLink connection to the drone AND Drone is armed
-	if (drone.MavClient.isConnected() && drone.state.isArmed()){
-			    
-	    // Announce that we are launching using text to speech 
-	    drone.tts.speak("Launching");
-	    
-	    // Change the drone state to auto mode
-	    drone.state.changeFlightMode(ApmModes.ROTOR_AUTO);
-			    
-	    // Sent RC input to override safety in APM
-	    super.sendRC();
-			    
-	}
-	else if(drone.MavClient.isConnected() == false)
-	    {
-		// No telemetry link
-		drone.tts.speak("No telemetry link");
-	    }		     
-	else if(drone.state.isArmed() == false)
-	    {
-		// Drone not armed
-		drone.tts.speak("Drone not armed");
-	    }
+	{
+	    // Call the superclass method
+	    super.notifyDisarmed();
 	
-	// We have handled the long press so return true
+	if (armDisarmButton != null)
+	        {
+		    // Disarmed
+		    armDisarmButton.setText("Arm");
+		    armDisarmButton.setBackgroundColor(0xffffa500); // Should be orange
+		    armDisarmButton.setTextColor(0xff000000); // Set text color to black
+		    }
+	
+	}
+
+     public void takeOff(){
+	 // Check if we have a MAVLink connection to the drone AND Drone is armed
+     if (drone.MavClient.isConnected() && drone.state.isArmed()){
+         
+         // Announce that we are launching using text to speech 
+         drone.tts.speak("Launching");
+         
+         // Change the drone state to auto mode
+         drone.state.changeFlightMode(ApmModes.ROTOR_AUTO);
+         
+         // Sent RC input to override safety in APM
+         super.sendRC();
+         
+     }
+     else if(drone.MavClient.isConnected() == false)
+	     {
+		 // No telemetry link
+		 drone.tts.speak("No telemetry link");
+	     }     
+     else if(drone.state.isArmed() == false)
+	     {
+		 // Drone not armed
+		 drone.tts.speak("Drone not armed");
+	         }
+     
+     // We have handled the long press so return true
     }
 
     public void land(){
@@ -290,11 +241,11 @@ public class FlightDataActivity extends SuperFlightActivity implements
 	if(drone.MavClient.isConnected() && drone.waypointsSynced){
 	    if(drone.state.isArmed()){
 		drone.tts.speak("Disarming the vehicle, please stand by");
-	    } 
+	        } 
 	    else{
 		drone.tts.speak("Arming the vehicle, please stand by");
-	    }
-	    MavLinkArm.sendArmMessage(drone, !drone.state.isArmed());	
+	        }
+	    MavLinkArm.sendArmMessage(drone, !drone.state.isArmed());
 	}
 	else if(drone.MavClient.isConnected() == false){
 	    drone.tts.speak("No telemetry link");
@@ -311,4 +262,5 @@ public class FlightDataActivity extends SuperFlightActivity implements
     public void rtlDrone(){
 	drone.state.changeFlightMode(ApmModes.ROTOR_RTL);
     }
+
 }
