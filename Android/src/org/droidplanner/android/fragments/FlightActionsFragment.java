@@ -13,6 +13,7 @@ import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.model.Drone;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -156,6 +157,9 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 			break;
 
 		case R.id.mc_pause:
+			if (followMe.isEnabled()) {
+				followMe.toggleFollowMeState();
+			}
 			drone.getGuidedPoint().pauseAtCurrentLocation();
 			eventBuilder.setAction("Changed flight mode").setLabel("Pause");
 			break;
@@ -172,26 +176,30 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 			break;
 
 		case R.id.mc_follow:
-			final int result = followMe.toggleFollowMeState();
+			followMe.toggleFollowMeState();
 			String eventLabel = null;
-			switch (result) {
-			case Follow.FOLLOW_START:
+			switch (followMe.getState()) {
+			case FOLLOW_START:
 				eventLabel = "FollowMe enabled";
 				break;
+				
+			case FOLLOW_RUNNING:
+				eventLabel = "FollowMe running";
+				break;
 
-			case Follow.FOLLOW_END:
+			case FOLLOW_END:
 				eventLabel = "FollowMe disabled";
 				break;
 
-			case Follow.FOLLOW_INVALID_STATE:
+			case FOLLOW_INVALID_STATE:
 				eventLabel = "FollowMe error: invalid state";
 				break;
 
-			case Follow.FOLLOW_DRONE_DISCONNECTED:
+			case FOLLOW_DRONE_DISCONNECTED:
 				eventLabel = "FollowMe error: drone not connected";
 				break;
 
-			case Follow.FOLLOW_DRONE_NOT_ARMED:
+			case FOLLOW_DRONE_NOT_ARMED:
 				eventLabel = "FollowMe error: drone not armed";
 				break;
 			}
@@ -249,6 +257,8 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 
 		case FOLLOW_START:
 		case FOLLOW_STOP:
+		case FOLLOW_UPDATE:
+			updateFlightModeButtons();
 			updateFollowButton();
 			break;
 
@@ -267,7 +277,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 			break;
 
 		case ROTOR_GUIDED:
-			if (drone.getGuidedPoint().isIdle()) {
+			if (drone.getGuidedPoint().isIdle() && !followMe.isEnabled()) {
 				pauseBtn.setActivated(true);
 			}
 			break;
@@ -292,7 +302,19 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 	}
 
 	private void updateFollowButton() {
-		followBtn.setActivated(followMe.isEnabled());
+		switch (followMe.getState()) {
+		case FOLLOW_START:
+			followBtn.setBackgroundColor(Color.RED);
+			break;
+		case FOLLOW_RUNNING:
+			followBtn.setActivated(true);
+			followBtn.setBackgroundResource(R.drawable.flight_action_row_bg_selector);
+			break;
+		default:
+			followBtn.setActivated(false);
+			followBtn.setBackgroundResource(R.drawable.flight_action_row_bg_selector);
+			break;
+		}
 	}
 
 	private void resetButtonsContainerVisibility() {

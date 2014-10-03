@@ -17,14 +17,12 @@ import com.MAVLink.Messages.ApmModes;
 
 public class Follow implements OnDroneListener, LocationReceiver {
 
-	// Set of return value for the 'toggleFollowMeState' method.
-	public static final int FOLLOW_INVALID_STATE = -1;
-	public static final int FOLLOW_DRONE_NOT_ARMED = -2;
-	public static final int FOLLOW_DRONE_DISCONNECTED = -3;
-	public static final int FOLLOW_START = 0;
-	public static final int FOLLOW_END = 1;
+	/** Set of return value for the 'toggleFollowMeState' method.*/
+	public enum FollowStates {
+		FOLLOW_INVALID_STATE, FOLLOW_DRONE_NOT_ARMED, FOLLOW_DRONE_DISCONNECTED, FOLLOW_START, FOLLOW_RUNNING, FOLLOW_END,
+	};
 
-	private boolean followMeEnabled = false;
+	private FollowStates state = FollowStates.FOLLOW_INVALID_STATE;
 	private Drone drone;
 
 	private ROIEstimator roiEstimator;
@@ -40,48 +38,49 @@ public class Follow implements OnDroneListener, LocationReceiver {
 		drone.addDroneListener(this);
 	}
 
-	public int toggleFollowMeState() {
+	public void toggleFollowMeState() {
 		final State droneState = drone.getState();
 		if (droneState == null) {
-			return FOLLOW_INVALID_STATE;
+			state = FollowStates.FOLLOW_INVALID_STATE;
+			return;
 		}
 
 		if (isEnabled()) {
 			disableFollowMe();
-			drone.getState().changeFlightMode(ApmModes.ROTOR_LOITER);
-			return FOLLOW_END;
 		} else {
 			if (drone.getMavClient().isConnected()) {
 				if (drone.getState().isArmed()) {
 					drone.getState().changeFlightMode(ApmModes.ROTOR_GUIDED);
 					enableFollowMe();
-					return FOLLOW_START;
 				} else {
-					return FOLLOW_DRONE_NOT_ARMED;
+					state = FollowStates.FOLLOW_DRONE_NOT_ARMED;
 				}
 			} else {
-				return FOLLOW_DRONE_DISCONNECTED;
+				state = FollowStates.FOLLOW_DRONE_DISCONNECTED;
+				
 			}
 		}
+		return;
 	}
 
 	private void enableFollowMe() {
 		locationFinder.enableLocationUpdates();
-		followMeEnabled = true;
+		state = FollowStates.FOLLOW_START;
 		drone.notifyDroneEvent(DroneEventsType.FOLLOW_START);
 	}
 
 	private void disableFollowMe() {
 		locationFinder.disableLocationUpdates();
-		if (followMeEnabled) {
-			followMeEnabled = false;
+		if (isEnabled()) {
+			state = FollowStates.FOLLOW_END;
 			MavLinkROI.resetROI(drone);
+			drone.getGuidedPoint().pauseAtCurrentLocation();
 			drone.notifyDroneEvent(DroneEventsType.FOLLOW_STOP);
 		}
 	}
 
 	public boolean isEnabled() {
-		return followMeEnabled;
+		return state == FollowStates.FOLLOW_RUNNING || state == FollowStates.FOLLOW_START;
 	}
 
 	@Override
@@ -106,8 +105,12 @@ public class Follow implements OnDroneListener, LocationReceiver {
 	@Override
 	public void onLocationChanged(Location location) {
 		if (location.getAccuracy() < 10.0) {
+			state = FollowStates.FOLLOW_RUNNING;
 			followAlgorithm.processNewLocation(location);
+		}else{
+			state = FollowStates.FOLLOW_START;
 		}
+		drone.notifyDroneEvent(DroneEventsType.FOLLOW_UPDATE);
 		roiEstimator.onLocationChanged(location);
 	}
 
@@ -126,5 +129,9 @@ public class Follow implements OnDroneListener, LocationReceiver {
 
 	public FollowModes getType() {
 		return followAlgorithm.getType();
+	}
+
+	public FollowStates getState() {
+		return state;
 	}
 }

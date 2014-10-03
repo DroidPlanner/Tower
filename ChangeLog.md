@@ -8,6 +8,12 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.7.10
+* Fixed "Pause" button, for when flying with GCS only (#1116)
+* Switch to Loiter on disarm if landing on RTL or LAND (#1114)
+* Autonomus flight takeoff (#1115)
+* Improved Chinese translation (#1113)
+
 ## Droidplanner v2.7.9
 * UI clean-up (#1106,#1093,#1092,#891,#1110,#1101)
 * Display consumed mAh in status bar (#1111,#1069)
