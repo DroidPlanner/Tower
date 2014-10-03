@@ -31,7 +31,7 @@ import com.droidplanner.helpers.units.Length;
 import com.google.android.gms.maps.model.LatLng;
 
 public class FlightDataActivity extends SuperFlightActivity implements
-								OnWaypointUpdateListner, ModeChangedListener, GuidePointListener, OnLongClickListener {
+								OnWaypointUpdateListner, ModeChangedListener, GuidePointListener, OnLongClickListener, OnClickListener {
     private TextView distanceView;
 
 @Override
@@ -73,6 +73,12 @@ if(launchButton!=null){
     landButton.setOnLongClickListener(this);
     stabilizeButton.setOnLongClickListener(this);
     RTLButton.setOnLongClickListener(this);
+
+    launchButton.setOnClickListener(this); // All normal click to inform user of correct use
+    armDisarmButton.setOnClickListener(this);
+    landButton.setOnClickListener(this);
+    stabilizeButton.setOnClickListener(this);
+    RTLButton.setOnClickListener(this);
 }
 
 }
@@ -261,6 +267,26 @@ if(launchButton!=null){
 
     public void rtlDrone(){
 	drone.state.changeFlightMode(ApmModes.ROTOR_RTL);
+    }
+
+    /**
+     * To inform users of the proper use of the flight data GUI buttons catch when a normal press is used.
+     * A long press should be used and a normal press is not used.
+     * @param view The button that is pressed which is causing the listener to be triggered
+     */
+    @Override
+    public void onClick(View view) {
+    
+	// If statement is not strictly needed as nothing else uses click listeners but include it for modification later
+    if (view == launchButton || view == landButton || view == armDisarmButton || view == stabilizeButton || view == RTLButton)
+	{
+	
+	    // Also give a toast error to make sure people see the message
+	    Toast.makeText(this, "Hold down button for a few seconds to activate", Toast.LENGTH_LONG)
+		.show();
+	
+	}
+    
     }
 
 }
