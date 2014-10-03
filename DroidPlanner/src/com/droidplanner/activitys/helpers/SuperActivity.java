@@ -56,7 +56,7 @@ public abstract class SuperActivity extends Activity implements
 
     private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 
-    private final int[] armSafeScreens = {1,4,5,6};
+    private final Integer[] armSafeScreens = {1,4,5,6};
     public SuperActivity() {
 	super();
     }
