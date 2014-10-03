@@ -156,6 +156,9 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 			break;
 
 		case R.id.mc_pause:
+			if (followMe.isEnabled()) {
+				followMe.toggleFollowMeState();
+			}
 			drone.getGuidedPoint().pauseAtCurrentLocation();
 			eventBuilder.setAction("Changed flight mode").setLabel("Pause");
 			break;
