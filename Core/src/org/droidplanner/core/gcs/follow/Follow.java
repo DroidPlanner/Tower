@@ -15,6 +15,8 @@ import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ApmModes;
 
+import android.util.Log;
+
 public class Follow implements OnDroneListener, LocationReceiver {
 	static final String TAG = Follow.class.getSimpleName();
 
