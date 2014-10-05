@@ -124,6 +124,7 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 
 		case R.id.loiterRadiusPicker:
 			mItem.setRadius(newValue);
+			mItem.getMission().notifyMissionUpdate();
 			break;
 
 		case R.id.loiterTurnPicker:

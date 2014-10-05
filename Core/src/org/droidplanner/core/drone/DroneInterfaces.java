@@ -181,6 +181,11 @@ public class DroneInterfaces {
 		 * 'Follow' mode has been disabled.
 		 */
 		FOLLOW_STOP,
+		
+		/**
+		 * 'Follow' state has been updated.
+		 */
+		FOLLOW_UPDATE,
 
 		/**
          * 
@@ -242,6 +247,8 @@ public class DroneInterfaces {
 	public interface Handler {
 
 		void removeCallbacks(Runnable thread);
+
+        void post(Runnable thread);
 
 		void postDelayed(Runnable thread, long timeout);
 

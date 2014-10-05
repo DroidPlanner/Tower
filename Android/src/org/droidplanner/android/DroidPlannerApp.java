@@ -56,6 +56,11 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 				handler.removeCallbacks(thread);
 			}
 
+            @Override
+            public void post(Runnable thread){
+                handler.post(thread);
+            }
+
 			@Override
 			public void postDelayed(Runnable thread, long timeout) {
 				handler.postDelayed(thread, timeout);

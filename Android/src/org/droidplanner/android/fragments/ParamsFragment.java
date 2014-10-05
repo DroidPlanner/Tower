@@ -34,6 +34,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -121,10 +122,15 @@ public class ParamsFragment extends ListFragment implements
                 }
             }
         });
-        mParamsFilter.setOnClickListener(new View.OnClickListener() {
+        mParamsFilter.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                enableParameterFilter();
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        enableParameterFilter();
+                        break;
+                }
+                return false;
             }
         });
         mParamsFilter.addTextChangedListener(new TextWatcher() {

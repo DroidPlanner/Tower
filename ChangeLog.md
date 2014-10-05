@@ -8,6 +8,25 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.7.10
+* Fixed "Pause" button, for when flying with GCS only (#1116)
+* Switch to Loiter on disarm if landing on RTL or LAND (#1114)
+* Autonomus flight takeoff (#1115)
+* Improved Chinese translation (#1113)
+
+## Droidplanner v2.7.9
+* UI clean-up (#1106,#1093,#1092,#891,#1110,#1101)
+* Display consumed mAh in status bar (#1111,#1069)
+* Fix small bug in Guided mode (#1101,#1110)
+
+## Droidplanner v2.7.8
+* Parameters fix. Added parameter detail, search function (#1098,#1064,#1083,#1011)
+* Fixes to make tablet only flights pratical (#1099)
+* Added a "dronie" function (#1084)
+* Make modes names and spoken text consisntent with ArduCopter (#1097,#1068)
+* Fix circle mission item UI (#1100)
+* Repository maintance (#1094,#1096)
+
 ## Droidplanner v2.7.7
 * Context aware flight actions, takeoff and connect buttons (#1090)
 * New number entry widget (#1062,#1051,#1087,#1091)

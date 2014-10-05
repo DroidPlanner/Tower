@@ -2,6 +2,7 @@ package org.droidplanner.core.mission.waypoints;
 
 import java.util.List;
 
+import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.Mission;
@@ -19,13 +20,18 @@ public class Land extends SpatialCoordItem {
 	}
 
 	public Land(Mission mission) {
-		super(mission, new Coord3D(0, 0, 0));
+		this(mission,new Coord2D(0,0));
 	}
 
+	public Land(Mission mMission, Coord2D coord) {
+		super(mMission, new Coord3D(coord,new Altitude(0)));
+	}
+	
 	public Land(msg_mission_item msg, Mission mission) {
 		super(mission, null);
 		unpackMAVMessage(msg);
 	}
+
 
 	@Override
 	public List<msg_mission_item> packMissionItem() {
