@@ -1,6 +1,6 @@
 #include <pebble.h>
 #include <string.h>
-#define APP_VERSION "two"
+#define APP_VERSION "three"
   
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!variables
 static Window *window;
@@ -98,7 +98,7 @@ static void buttons_draw(Layer *layer, GContext *ctx) {
            NULL);
     }
     if(strcmp("Loiter",mode)!=0)
-    graphics_draw_text(ctx, "Loiter",
+    graphics_draw_text(ctx, "Pause",
          fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
          GRect(0,55,50,30),
          GTextOverflowModeTrailingEllipsis,

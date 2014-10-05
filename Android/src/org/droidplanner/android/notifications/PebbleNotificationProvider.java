@@ -24,7 +24,7 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 	private static final int KEY_APP_VERSION = 3;
 
 	private static final UUID DP_UUID = UUID.fromString("79a2893d-fc7d-48c4-bc9a-34854d94ef6e");
-	private static final String EXPECTED_APP_VERSION = "two";
+	private static final String EXPECTED_APP_VERSION = "three";
 
 	/**
 	 * Application context.
@@ -135,7 +135,7 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 		private static final int KEY_PEBBLE_REQUEST = 100;
 		private static final int KEY_REQUEST_MODE_FOLLOW = 101;
 		private static final int KEY_REQUEST_CYCLE_FOLLOW_TYPE = 102;
-		private static final int KEY_REQUEST_MODE_LOITER = 103;
+		private static final int KEY_REQUEST_PAUSE = 103;
 		private static final int KEY_REQUEST_MODE_RTL = 104;
 
 		protected PebbleReceiverHandler(UUID id) {
@@ -184,7 +184,7 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 				followMe.cycleType();
 				break;
 
-			case KEY_REQUEST_MODE_LOITER:
+			case KEY_REQUEST_PAUSE:
 				((DroidPlannerApp) applicationContext).getDrone().getGuidedPoint().pauseAtCurrentLocation();
 				break;
 
