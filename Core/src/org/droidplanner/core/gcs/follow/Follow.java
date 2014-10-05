@@ -15,7 +15,12 @@ import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ApmModes;
 
+import android.util.Log;
+
 public class Follow implements OnDroneListener, LocationReceiver {
+	static final String TAG = Follow.class.getSimpleName();
+
+	private static final double MAX_SPEED = 15.0;
 
 	/** Set of return value for the 'toggleFollowMeState' method.*/
 	public enum FollowStates {
@@ -106,7 +111,23 @@ public class Follow implements OnDroneListener, LocationReceiver {
 	public void onLocationChanged(Location location) {
 		if (location.getAccuracy() < 10.0) {
 			state = FollowStates.FOLLOW_RUNNING;
-			followAlgorithm.processNewLocation(location);
+
+			// Filter out spurious location changes that may cause a fly-away
+			if(location.hasTimeSinceLast() && location.hasDistanceToPrevious()) {
+				double mps = location.getDistanceToPrevious() / (location.getTimeSinceLast() / 1000);
+
+				if(mps < MAX_SPEED) {
+					followAlgorithm.processNewLocation(location);
+				}
+				else {
+					Log.w(TAG, "Apparent speed is " + mps + " m/s");
+				}
+			}
+			else {
+				followAlgorithm.processNewLocation(location);
+			}
+
+
 		}else{
 			state = FollowStates.FOLLOW_START;
 		}
