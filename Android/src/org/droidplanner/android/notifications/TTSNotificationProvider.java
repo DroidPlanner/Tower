@@ -310,6 +310,9 @@ public class TTSNotificationProvider implements OnInitListener,
 					speak("Warning, weak signal");
 				}
 
+			case WARNING_NO_GPS:
+				speak("Error, no gps lock yet");
+
 			default:
 				break;
 			}
