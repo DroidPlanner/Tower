@@ -101,8 +101,10 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 		String mode = drone.getState().getMode().getName();
 		if (!drone.getState().isArmed())
 			mode = "Disarmd";
-		else if (((DroidPlannerApp) applicationContext).followMe.isEnabled() && mode == "Guided")
+		else if (followMe.isEnabled() && mode == "Guided")
 			mode = "Follow";
+		else if (drone.getGuidedPoint().isIdle() && !followMe.isEnabled() && mode == "Guided")
+			mode = "Paused";
 		data.addString(KEY_MODE, mode);
 
 		FollowModes type = followMe.getType();

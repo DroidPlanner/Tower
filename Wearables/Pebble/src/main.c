@@ -97,7 +97,7 @@ static void buttons_draw(Layer *layer, GContext *ctx) {
            GTextAlignmentCenter,
            NULL);
     }
-    if(strcmp("Loiter",mode)!=0)
+    if(strcmp("Paused",mode)!=0)
     graphics_draw_text(ctx, "Pause",
          fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
          GRect(0,55,50,30),
