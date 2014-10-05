@@ -106,6 +106,15 @@ public class ParamsFragment extends ListFragment implements
 		return inflater.inflate(R.layout.fragment_params, container, false);
 	}
 
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_SEARCH) {
+            toggleParameterFilter(isParameterFilterVisible(), false);
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
