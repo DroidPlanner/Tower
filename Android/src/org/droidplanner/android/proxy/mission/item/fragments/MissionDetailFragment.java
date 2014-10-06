@@ -12,6 +12,9 @@ import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
+import org.droidplanner.core.mission.commands.MissionCMD;
+import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -69,14 +72,8 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		case LAND:
 			fragment = new MissionLandFragment();
 			break;
-		case LOITER:
-			fragment = new MissionLoiterFragment();
-			break;
 		case CIRCLE:
 			fragment = new MissionCircleFragment();
-			break;
-		case LOITERT:
-			fragment = new MissionLoiterTFragment();
 			break;
 		case ROI:
 			fragment = new MissionRegionOfInterestFragment();
@@ -90,20 +87,16 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		case TAKEOFF:
 			fragment = new MissionTakeoffFragment();
 			break;
-
 		case WAYPOINT:
 			fragment = new MissionWaypointFragment();
 			break;
-
 		case SPLINE_WAYPOINT:
 			fragment = new MissionSplineWaypointFragment();
 			break;
-
 		default:
 			fragment = null;
 			break;
 		}
-
 		return fragment;
 	}
 
@@ -132,6 +125,15 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
 		List<MissionItemType> list = new LinkedList<MissionItemType>(Arrays.asList(MissionItemType
 				.values()));
+		MissionItem currentItem = itemRender.getMissionItem();
+		
+		if ((currentItem instanceof Survey)) {
+			list.clear();
+			list.add(MissionItemType.SURVEY);
+		}else{
+			list.remove(MissionItemType.SURVEY);			
+		}
+		
 		if (mMissionProxy.getItems().indexOf(itemRender) != 0) {
 			list.remove(MissionItemType.TAKEOFF);
 		}
@@ -140,6 +142,16 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 			list.remove(MissionItemType.LAND);
 			list.remove(MissionItemType.RTL);
 		}
+		
+		if(currentItem instanceof MissionCMD) {
+			list.remove(MissionItemType.LAND);
+			list.remove(MissionItemType.SPLINE_WAYPOINT);
+			list.remove(MissionItemType.CIRCLE);
+			list.remove(MissionItemType.ROI);
+			list.remove(MissionItemType.WAYPOINT);
+		}
+		
+		
 		commandAdapter = new AdapterMissionItems(this.getActivity(),
 				android.R.layout.simple_list_item_1, list.toArray(new MissionItemType[0]));
 
