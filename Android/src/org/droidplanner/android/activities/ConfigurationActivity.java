@@ -10,6 +10,7 @@ import org.droidplanner.android.fragments.TuningFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 
 /**
  * This class implements and handles the various ui used for the drone
@@ -67,6 +68,14 @@ public class ConfigurationActivity extends DrawerNavigationUI {
                     .commit();
         }
 	}
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        final Fragment currentFragment = getCurrentFragment();
+        return (currentFragment instanceof ParamsFragment
+                && ((ParamsFragment) currentFragment).onKeyDown(keyCode, event))
+                || super.onKeyDown(keyCode, event);
+    }
 
     private Fragment getCurrentFragment(){
         return getSupportFragmentManager().findFragmentById(R.id.configuration_screen);
