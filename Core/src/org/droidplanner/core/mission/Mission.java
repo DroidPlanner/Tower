@@ -288,4 +288,31 @@ public class Mission extends DroneVariable {
 		dronieItems.add(new Land(mMission,start));
 		return dronieItems;
 	}
+
+	public boolean hasTakeoffAndLandOrRTL() {
+		if (items.size() >= 2) {
+			if (isFirstItemTakeoff() && isLastItemLandOrRTL()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isFirstItemTakeoff() {
+		return items.get(0) instanceof Takeoff;
+	}
+
+	private boolean isLastItemLandOrRTL() {
+		MissionItem last = items.get(items.size()-1);
+		return (last instanceof ReturnToHome) || (last instanceof Land);
+	}
+
+	public void addTakeoffAndRTL() {
+		if (!isFirstItemTakeoff()) {
+			items.add(0, new Takeoff(this,new Altitude(10.0)));			
+		}
+		if (!isLastItemLandOrRTL()) {
+			items.add(new ReturnToHome(this));
+		}
+	}
 }
