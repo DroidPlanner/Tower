@@ -2,6 +2,9 @@ package org.droidplanner.android.fragments.mode;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
+import org.droidplanner.core.drone.variables.GuidedPoint;
 import org.droidplanner.core.model.Drone;
 
 import android.os.Bundle;
@@ -13,60 +16,48 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class ModeGuidedFragment extends Fragment implements OnClickListener {
+public class ModeGuidedFragment extends Fragment implements CardWheelHorizontalView.OnCardWheelChangedListener {
 
-	private Button altPlus1;
-	private Button altPlus10;
-	private Button altMinus1;
-	private Button altMinus10;
-	private TextView altTextView;
 	public Drone drone;
+
+    private CardWheelHorizontalView mAltitudeWheel;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_mode_guided, container, false);
 		drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
-		setupViews(view);
-		setupListener();
-		updateLabel();
-		return view;
+		return inflater.inflate(R.layout.fragment_mode_guided, container, false);
 	}
 
-	protected void setupViews(View parentView) {
-		altPlus1 = (Button) parentView.findViewById(R.id.button_altitude_plus_1);
-		altPlus10 = (Button) parentView.findViewById(R.id.button_altitude_plus_10);
-		altMinus1 = (Button) parentView.findViewById(R.id.button_altitude_minus_1);
-		altMinus10 = (Button) parentView.findViewById(R.id.button_altitude_minus_10);
-		altTextView = (TextView) parentView.findViewById(R.id.guided_altitude);
+    @Override
+	public void onViewCreated(View parentView, Bundle savedInstanceState) {
+        super.onViewCreated(parentView, savedInstanceState);
+
+        final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(getActivity()
+                .getApplicationContext(), R.layout.wheel_text_centered, 2, 200, "%d m");
+
+        mAltitudeWheel = (CardWheelHorizontalView) parentView.findViewById(R.id.altitude_spinner);
+        mAltitudeWheel.setViewAdapter(altitudeAdapter);
+
+        final int initialValue = (int) Math.max(drone.getGuidedPoint().getAltitude()
+                        .valueInMeters(), GuidedPoint.MIN_ALTITUDE);
+        mAltitudeWheel.setCurrentValue(initialValue);
+        mAltitudeWheel.addChangingListener(this);
 	}
 
-	protected void setupListener() {
-		altPlus1.setOnClickListener(this);
-		altPlus10.setOnClickListener(this);
-		altMinus1.setOnClickListener(this);
-		altMinus10.setOnClickListener(this);
-	}
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        if(mAltitudeWheel != null) {
+            mAltitudeWheel.removeChangingListener(this);
+        }
+    }
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.button_altitude_plus_1:
-			drone.getGuidedPoint().changeGuidedAltitude(1);
-			break;
-		case R.id.button_altitude_plus_10:
-			drone.getGuidedPoint().changeGuidedAltitude(10);
-			break;
-		case R.id.button_altitude_minus_1:
-			drone.getGuidedPoint().changeGuidedAltitude(-1);
-			break;
-		case R.id.button_altitude_minus_10:
-			drone.getGuidedPoint().changeGuidedAltitude(-10);
-			break;
-		}
-		updateLabel();
-	}
-
-	protected void updateLabel() {
-		this.altTextView.setText("Target Altitude: (" + drone.getGuidedPoint().getAltitude() + ")");
-	}
+    @Override
+    public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+        switch(cardWheel.getId()){
+            case R.id.altitude_spinner:
+                drone.getGuidedPoint().changeGuidedAltitude(newValue);
+                break;
+        }
+    }
 }

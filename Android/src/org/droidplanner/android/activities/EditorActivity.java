@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
@@ -29,7 +28,6 @@ import org.droidplanner.core.model.Drone;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NavUtils;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
 import android.view.Menu;
@@ -98,7 +96,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		gestureMapFragment = ((GestureMapFragment) fragmentManager
 				.findFragmentById(R.id.gestureMapFragment));
 		editorToolsFragment = (EditorToolsFragment) fragmentManager
-				.findFragmentById(R.id.editorToolsFragment);
+				.findFragmentById(R.id.flightActionsFragment);
 		missionListFragment = (EditorListFragment) fragmentManager
 				.findFragmentById(R.id.missionFragment1);
 
@@ -530,6 +528,11 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public void onListVisibilityChanged() {}
+
+    @Override
+    protected boolean enableMissionMenus(){
+        return true;
+    }
 
 	@Override
 	public void onSelectionUpdate(List<MissionItemProxy> selected) {
