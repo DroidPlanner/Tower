@@ -88,7 +88,7 @@ public class TTSNotificationProvider implements OnInitListener,
 
 		public void run() {
 			handler.removeCallbacks(watchdogCallback);
-			if (drone != null && drone.getMavClient().isConnected()) {
+			if (drone != null && drone.getMavClient().isConnected() && drone.getState().isArmed()) {
 				speakPeriodic(drone);
 			}
 
@@ -309,7 +309,12 @@ public class TTSNotificationProvider implements OnInitListener,
 				if (mAppPrefs.getWarningOnLowSignalStrength()) {
 					speak("Warning, weak signal");
 				}
+				break;
 
+			case WARNING_NO_GPS:
+				speak("Error, no gps lock yet");
+				break;
+				
 			default:
 				break;
 			}

@@ -210,6 +210,11 @@ public class DroneInterfaces {
 		 * Announces that a new version for the firmware has been received
 		 */
 		FIRMWARE,
+
+		/**
+		 * Warn that the drone has no gps signal
+		 */
+		WARNING_NO_GPS,
 	}
 
 	public interface OnDroneListener {
