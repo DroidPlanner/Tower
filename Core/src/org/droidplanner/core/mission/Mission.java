@@ -264,12 +264,12 @@ public class Mission extends DroneVariable {
 	}
 
 	public void makeAndUploadDronie() {
-		items.clear();
 		Coord2D currentPosition = myDrone.getGps().getPosition();
 		if(currentPosition == null || myDrone.getGps().getSatCount()>=5){
 			myDrone.notifyDroneEvent(DroneEventsType.WARNING_NO_GPS);
 			return;
 		}
+		items.clear();
 		items.addAll(createDronie(this, currentPosition, GeoTools.newCoordFromBearingAndDistance(
 				currentPosition, 180 + myDrone.getOrientation().getYaw(), 50.0)));
 		sendMissionToAPM();
