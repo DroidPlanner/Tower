@@ -309,10 +309,12 @@ public class TTSNotificationProvider implements OnInitListener,
 				if (mAppPrefs.getWarningOnLowSignalStrength()) {
 					speak("Warning, weak signal");
 				}
+				break;
 
 			case WARNING_NO_GPS:
 				speak("Error, no gps lock yet");
-
+				break;
+				
 			default:
 				break;
 			}
