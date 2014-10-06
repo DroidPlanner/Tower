@@ -2,7 +2,6 @@ package org.droidplanner.android.activities.helpers;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
 import org.droidplanner.android.utils.Utils;
@@ -14,7 +13,9 @@ import org.droidplanner.core.gcs.GCSHeartbeat;
 import org.droidplanner.core.model.Drone;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -188,21 +189,25 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		case R.id.menu_send_mission:
 			if (drone.getMission().hasTakeoffAndLandOrRTL()) {
 				drone.getMission().sendMissionToAPM();				
-			}else{
-				YesNoDialog ynd = YesNoDialog.newInstance("Mission Upload",
-						"Do you want to append  Takeoff and RTL to your mission? ", new YesNoDialog.Listener() {
+			} else {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle("Mission Upload");
+				builder.setMessage("Do you want to append a Takeoff and RTL to your mission?");
+				builder.setPositiveButton(android.R.string.ok,
+						new DialogInterface.OnClickListener() {
 							@Override
-							public void onYes() {
+							public void onClick(DialogInterface dialog, int id) {
 								drone.getMission().addTakeoffAndRTL();
-								drone.getMission().sendMissionToAPM();				
-							}
-
-							@Override
-							public void onNo() {
 								drone.getMission().sendMissionToAPM();
 							}
 						});
-				ynd.show(getSupportFragmentManager(), "Mission Upload");
+				builder.setNegativeButton("Skip", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						drone.getMission().sendMissionToAPM();
+					}
+				});
+				builder.create().show();
 			}
 			return true;
 
