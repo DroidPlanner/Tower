@@ -1,7 +1,7 @@
 // IDroneServiceCallback.aidl
 package com.three_dr.services.android.lib.service;
 
-import package com.three_dr.services.android.lib.drone.connection.ConnectionResult;
+import com.three_dr.services.android.lib.drone.connection.ConnectionResult;
 import com.three_dr.services.android.lib.drone.Drone;
 
 /**
@@ -20,7 +20,7 @@ oneway interface IDroneServiceCallback {
     * Called when the connection attempt fails.
     * @param result Describe why the connection failed.
     */
-    void onConnectionFailed(ConnectionResult result);
+    void onConnectionFailed(in ConnectionResult result);
 
     /**
     * Called when this callback has been unregistered
@@ -31,5 +31,5 @@ oneway interface IDroneServiceCallback {
     * Called when the drone instance was updated.
     * @param drone Updated drone instance.
     */
-    void onDroneUpdated(Drone drone);
+    void onDroneUpdated(in Drone drone);
 }

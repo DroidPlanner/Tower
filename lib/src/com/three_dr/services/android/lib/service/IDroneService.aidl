@@ -20,7 +20,7 @@ interface IDroneService {
     * @param clientCb Client callback instance
     * @return List of drone instances
     */
-    List<Drone> connect(ConnectionParameter params, IDroneServiceCallback clientCb);
+    List<Drone> connect(in ConnectionParameter params, IDroneServiceCallback clientCb);
 
     /**
     * Asynchronous call used to stop listening to updates for the drone instance whose id is
@@ -45,7 +45,7 @@ interface IDroneService {
     * @param droneId Id of the drone to apply the update to.
     * @param updateRequest update to be performed on the specified drone.
     */
-    oneway void updateDrone(String droneId, DroneUpdateRequest updateRequest);
+    oneway void updateDrone(String droneId, in DroneUpdateRequest updateRequest);
 
 
 }
