@@ -2,6 +2,7 @@ package org.droidplanner.android.activities.helpers;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
 import org.droidplanner.android.utils.Utils;
@@ -185,7 +186,24 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_send_mission:
-			drone.getMission().sendMissionToAPM();
+			if (drone.getMission().hasTakeoffAndLandOrRTL()) {
+				drone.getMission().sendMissionToAPM();				
+			}else{
+				YesNoDialog ynd = YesNoDialog.newInstance("Mission Upload",
+						"Do you want to append  Takeoff and RTL to your mission? ", new YesNoDialog.Listener() {
+							@Override
+							public void onYes() {
+								drone.getMission().addTakeoffAndRTL();
+								drone.getMission().sendMissionToAPM();				
+							}
+
+							@Override
+							public void onNo() {
+								drone.getMission().sendMissionToAPM();
+							}
+						});
+				ynd.show(getSupportFragmentManager(), "Mission Upload");
+			}
 			return true;
 
 		case R.id.menu_load_mission:
