@@ -52,6 +52,9 @@ public class FlightActivity extends DrawerNavigationUI implements
             mSlidingPanel.setSlidingEnabled(false);
             mSlidingPanel.setPanelHeight(mFlightActionsView.getHeight());
             mSlidingPanelCollapsing.set(false);
+
+            //Remove the panel slide listener
+            mSlidingPanel.setPanelSlideListener(null);
         }
 
         @Override
@@ -365,7 +368,6 @@ public class FlightActivity extends DrawerNavigationUI implements
                 && droneState.isFlying();
 
         if (isEnabled) {
-            mSlidingPanel.setPanelSlideListener(null);
             mSlidingPanel.setSlidingEnabled(true);
         } else {
             if(!mSlidingPanelCollapsing.get()) {
