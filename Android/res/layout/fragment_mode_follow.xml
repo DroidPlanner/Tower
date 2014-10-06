@@ -21,11 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/follow_me_sample"/>
-
     <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
         android:id="@+id/altitude_spinner"
         android:orientation="horizontal"
