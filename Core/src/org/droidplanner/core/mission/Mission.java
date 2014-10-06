@@ -273,7 +273,6 @@ public class Mission extends DroneVariable {
 		items.addAll(createDronie(this, currentPosition, GeoTools.newCoordFromBearingAndDistance(
 				currentPosition, 180 + myDrone.getOrientation().getYaw(), 50.0)));
 		sendMissionToAPM();
-		myDrone.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
 		notifyMissionUpdate();
 	}
 
@@ -314,5 +313,6 @@ public class Mission extends DroneVariable {
 		if (!isLastItemLandOrRTL()) {
 			items.add(new ReturnToHome(this));
 		}
+		notifyMissionUpdate();
 	}
 }

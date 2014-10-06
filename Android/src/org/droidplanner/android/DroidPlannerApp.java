@@ -105,6 +105,7 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 		mNotificationHandler.onDroneEvent(event, drone);
 
 		switch (event) {
+		case MISSION_UPDATE:
 		case MISSION_RECEIVED:
 			// Refresh the mission render state
 			missionProxy.refresh();
