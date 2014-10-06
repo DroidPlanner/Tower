@@ -1,8 +1,8 @@
-// IDroneApiCallback.aidl
+// IDroneServiceCallback.aidl
 package com.three_dr.services.android.lib.service;
 
-// Declare any non-default types here with import statements
-
+import package com.three_dr.services.android.lib.drone.connection.ConnectionResult;
+import com.three_dr.services.android.lib.drone.Drone;
 
 /**
 * Callback interface used by IDroneService to send drone updates notifications back to the clients.
@@ -14,7 +14,7 @@ oneway interface IDroneServiceCallback {
     * Called when the drone instance was successfully connected.
     * @param drone drone instance connected to.
     */
-    void onConnected(Drone drone);
+    void onConnected(String droneId);
 
     /**
     * Called when the connection attempt fails.
@@ -25,7 +25,7 @@ oneway interface IDroneServiceCallback {
     /**
     * Called when this callback has been unregistered
     */
-    void onDisconnect();
+    void onDisconnect(String droneId);
 
     /**
     * Called when the drone instance was updated.

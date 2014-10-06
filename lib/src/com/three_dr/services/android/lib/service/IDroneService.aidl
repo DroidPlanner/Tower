@@ -1,8 +1,10 @@
-// IDroneApi.aidl
+// IDroneService.aidl
 package com.three_dr.services.android.lib.service;
 
-// Declare any non-default types here with import statements
+import com.three_dr.services.android.lib.drone.connection.ConnectionParameter;
 import com.three_dr.services.android.lib.service.IDroneServiceCallback;
+import com.three_dr.services.android.lib.drone.DroneUpdateRequest;
+import com.three_dr.services.android.lib.drone.Drone;
 
 /**
 * Interface used to access the drone api from another (client) process.
@@ -16,9 +18,9 @@ interface IDroneService {
     *
     * @param params ConnectionParameter object
     * @param clientCb Client callback instance
-    * @return Drone instance
+    * @return List of drone instances
     */
-    Drone connect(ConnectionParameter params, IDroneServiceCallback clientCb);
+    List<Drone> connect(ConnectionParameter params, IDroneServiceCallback clientCb);
 
     /**
     * Asynchronous call used to stop listening to updates for the drone instance whose id is
