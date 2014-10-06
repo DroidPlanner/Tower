@@ -12,7 +12,9 @@ import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
+import org.droidplanner.core.mission.commands.MissionCMD;
 import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -123,8 +125,9 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
 		List<MissionItemType> list = new LinkedList<MissionItemType>(Arrays.asList(MissionItemType
 				.values()));
+		MissionItem currentItem = itemRender.getMissionItem();
 		
-		if ((itemRender.getMissionItem() instanceof Survey)) {
+		if ((currentItem instanceof Survey)) {
 			list.clear();
 			list.add(MissionItemType.SURVEY);
 		}else{
@@ -138,6 +141,14 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		if (mMissionProxy.getItems().indexOf(itemRender) != (mMissionProxy.getItems().size() - 1)) {
 			list.remove(MissionItemType.LAND);
 			list.remove(MissionItemType.RTL);
+		}
+		
+		if(currentItem instanceof MissionCMD) {
+			list.remove(MissionItemType.LAND);
+			list.remove(MissionItemType.SPLINE_WAYPOINT);
+			list.remove(MissionItemType.CIRCLE);
+			list.remove(MissionItemType.ROI);
+			list.remove(MissionItemType.WAYPOINT);
 		}
 		
 		
