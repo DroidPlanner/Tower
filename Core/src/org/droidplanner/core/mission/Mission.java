@@ -265,7 +265,7 @@ public class Mission extends DroneVariable {
 
 	public void makeAndUploadDronie() {
 		Coord2D currentPosition = myDrone.getGps().getPosition();
-		if(currentPosition == null || myDrone.getGps().getSatCount()>=5){
+		if(currentPosition == null || myDrone.getGps().getSatCount()<=5){
 			myDrone.notifyDroneEvent(DroneEventsType.WARNING_NO_GPS);
 			return;
 		}
