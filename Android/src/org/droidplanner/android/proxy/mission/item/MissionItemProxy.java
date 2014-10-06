@@ -90,9 +90,6 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 		List<Coord2D> pathPoints = new ArrayList<Coord2D>();
 		switch (mMissionItem.getType()) {
 		case LAND:
-		case LOITER:
-		case LOITER_INF:
-		case LOITERT:
 		case WAYPOINT:
 		case SPLINE_WAYPOINT:
 			pathPoints.add(((SpatialCoordItem) mMissionItem).getCoordinate());
