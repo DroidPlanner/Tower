@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#151515" >
+    android:background="#151515"
+    android:orientation="horizontal" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="29dp"
-        android:text="MAG Main Screen"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#ffff" />
+    <org.droidplanner.android.widgets.scatterplot.ScatterPlot
+        android:id="@+id/scatterPlot1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1" />
+    
+        <org.droidplanner.android.widgets.scatterplot.ScatterPlot
+            android:id="@+id/scatterPlot2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" />
 
-</RelativeLayout>
+</LinearLayout>
