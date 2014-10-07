@@ -16,9 +16,12 @@ import org.droidplanner.core.model.Drone;
 import com.MAVLink.Messages.ApmModes;
 
 public class Follow implements OnDroneListener, LocationReceiver {
+<<<<<<< HEAD
 
 	private static final double JUMP_FACTOR = 4.0;
 
+=======
+>>>>>>> d0282d0e48111f6f59312c91eb1345ccc5ea3a22
 	/** Set of return value for the 'toggleFollowMeState' method.*/
 	public enum FollowStates {
 		FOLLOW_INVALID_STATE, FOLLOW_DRONE_NOT_ARMED, FOLLOW_DRONE_DISCONNECTED, FOLLOW_START, FOLLOW_RUNNING, FOLLOW_END
