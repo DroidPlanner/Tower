@@ -26,6 +26,8 @@ public class FusedLocation implements LocationFinder, GooglePlayServicesClient.C
 	private LocationClient mLocationClient;
 	private LocationReceiver receiver;
 
+	private Location mLastLocation;
+
 	public FusedLocation(Context context) {
 		mLocationClient = new LocationClient(context, this, this);
 		mLocationClient.connect();
@@ -39,7 +41,6 @@ public class FusedLocation implements LocationFinder, GooglePlayServicesClient.C
 		mLocationRequest.setFastestInterval(MIN_TIME_MS);
 		mLocationRequest.setSmallestDisplacement(MIN_DISTANCE_M);
 		mLocationClient.requestLocationUpdates(mLocationRequest, this);
-
 	}
 
 	@Override
@@ -67,10 +68,20 @@ public class FusedLocation implements LocationFinder, GooglePlayServicesClient.C
 	@Override
 	public void onLocationChanged(Location androidLocation) {
 		if (receiver != null) {
+			double distanceToLast = -1.0;
+			long timeSinceLast = -1L;
+
+			if(mLastLocation != null) {
+				distanceToLast = androidLocation.distanceTo(mLastLocation);
+				timeSinceLast = (androidLocation.getTime() - mLastLocation.getTime());
+			}
+
 			org.droidplanner.core.gcs.location.Location location = new org.droidplanner.core.gcs.location.Location(
 					new Coord2D(androidLocation.getLatitude(), androidLocation.getLongitude()),
 					androidLocation.getAccuracy(), androidLocation.getBearing(),
-					androidLocation.getSpeed());
+					androidLocation.getSpeed(), distanceToLast, timeSinceLast);
+
+			mLastLocation = androidLocation;
 			receiver.onLocationChanged(location);
 		}
 	}
