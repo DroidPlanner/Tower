@@ -12,6 +12,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_current;
 import com.MAVLink.Messages.ardupilotmega.msg_nav_controller_output;
 import com.MAVLink.Messages.ardupilotmega.msg_radio;
+import com.MAVLink.Messages.ardupilotmega.msg_raw_imu;
 import com.MAVLink.Messages.ardupilotmega.msg_rc_channels_raw;
 import com.MAVLink.Messages.ardupilotmega.msg_servo_output_raw;
 import com.MAVLink.Messages.ardupilotmega.msg_statustext;
@@ -56,6 +57,10 @@ public class MavLinkMsgHandler {
 			drone.setDisttowpAndSpeedAltErrors(m_nav.wp_dist, m_nav.alt_error, m_nav.aspd_error);
 			drone.getNavigation().setNavPitchRollYaw(m_nav.nav_pitch, m_nav.nav_roll,
 					m_nav.nav_bearing);
+			break;
+		case msg_raw_imu.MAVLINK_MSG_ID_RAW_IMU:
+			msg_raw_imu msg_imu = (msg_raw_imu) msg;
+			drone.getMagnetometer().newData(msg_imu);
 			break;
 
 		case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:

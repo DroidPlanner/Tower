@@ -11,6 +11,7 @@ import org.droidplanner.core.drone.variables.GPS;
 import org.droidplanner.core.drone.variables.GuidedPoint;
 import org.droidplanner.core.drone.variables.HeartBeat;
 import org.droidplanner.core.drone.variables.Home;
+import org.droidplanner.core.drone.variables.Magnetometer;
 import org.droidplanner.core.drone.variables.MissionStats;
 import org.droidplanner.core.drone.variables.Navigation;
 import org.droidplanner.core.drone.variables.Orientation;
@@ -26,9 +27,6 @@ import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
 
-/**
- * Created by fhuya on 8/20/14.
- */
 public class DroneImpl implements Drone {
 
 	private final DroneEvents events = new DroneEvents(this);
@@ -50,7 +48,8 @@ public class DroneImpl implements Drone {
 	private final GuidedPoint guidedPoint = new GuidedPoint(this);
 	private final Calibration calibrationSetup = new Calibration(this);
 	private final WaypointManager waypointManager = new WaypointManager(this);
-
+	private final Magnetometer mag = new Magnetometer(this);
+	
 	private final State state;
 	private final HeartBeat heartbeat;
 	private final Parameters parameters;
@@ -251,5 +250,10 @@ public class DroneImpl implements Drone {
 	@Override
 	public void setFirmwareVersion(String message) {
 		type.setFirmwareVersion(message);
+	}
+
+	@Override
+	public Magnetometer getMagnetometer() {
+		return mag;
 	}
 }
