@@ -17,6 +17,11 @@ import com.MAVLink.Messages.ApmModes;
 
 public class Follow implements OnDroneListener, LocationReceiver {
 	private static final double JUMP_FACTOR = 4.0;
+<<<<<<< HEAD
+=======
+	
+	private static final double JUMP_FACTOR = 4.0;
+>>>>>>> c0c1c5972719bc5e0b6b046613c006240c998585
 
 	/** Set of return value for the 'toggleFollowMeState' method.*/
 	public enum FollowStates {
