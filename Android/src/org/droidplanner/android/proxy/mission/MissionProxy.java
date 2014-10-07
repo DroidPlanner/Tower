@@ -9,6 +9,7 @@ import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
+import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.geoTools.spline.SplinePath;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
@@ -458,5 +459,18 @@ public class MissionProxy implements DPMap.PathSource {
 		}
 
 		return coords;
+	}
+
+	public Length getMissionLength() {
+		List<Coord2D> points = getPathPoints();
+		if (points.size()>1) {
+			double length = 0;
+			for (int i = 1; i < points.size(); i++) {
+				length += GeoTools.getDistance(points.get(i-1), points.get(i)).valueInMeters();
+			}
+			return new Length(length);
+		}else{
+			return new Length(0);
+		}
 	}
 }
