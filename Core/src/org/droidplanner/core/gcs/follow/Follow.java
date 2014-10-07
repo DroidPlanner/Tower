@@ -16,11 +16,12 @@ import org.droidplanner.core.model.Drone;
 import com.MAVLink.Messages.ApmModes;
 
 public class Follow implements OnDroneListener, LocationReceiver {
+	private static final double JUMP_FACTOR = 4.0;
 
 	/** Set of return value for the 'toggleFollowMeState' method.*/
 	public enum FollowStates {
-		FOLLOW_INVALID_STATE, FOLLOW_DRONE_NOT_ARMED, FOLLOW_DRONE_DISCONNECTED, FOLLOW_START, FOLLOW_RUNNING, FOLLOW_END,
-	};
+		FOLLOW_INVALID_STATE, FOLLOW_DRONE_NOT_ARMED, FOLLOW_DRONE_DISCONNECTED, FOLLOW_START, FOLLOW_RUNNING, FOLLOW_END
+	}
 
 	private FollowStates state = FollowStates.FOLLOW_INVALID_STATE;
 	private Drone drone;
@@ -28,6 +29,8 @@ public class Follow implements OnDroneListener, LocationReceiver {
 	private ROIEstimator roiEstimator;
 	private LocationFinder locationFinder;
 	private FollowAlgorithm followAlgorithm;
+	private long speedReadings = 0;
+	private double totalSpeed = 0.0;
 
 	public Follow(Drone drone, Handler handler, LocationFinder locationFinder) {
 		this.drone = drone;
@@ -67,6 +70,8 @@ public class Follow implements OnDroneListener, LocationReceiver {
 		locationFinder.enableLocationUpdates();
 		state = FollowStates.FOLLOW_START;
 		drone.notifyDroneEvent(DroneEventsType.FOLLOW_START);
+		speedReadings = 0;
+		totalSpeed = 0.0;
 	}
 
 	private void disableFollowMe() {
@@ -104,14 +109,43 @@ public class Follow implements OnDroneListener, LocationReceiver {
 
 	@Override
 	public void onLocationChanged(Location location) {
+		boolean follow = false;
+
 		if (location.getAccuracy() < 10.0) {
 			state = FollowStates.FOLLOW_RUNNING;
-			followAlgorithm.processNewLocation(location);
-		}else{
+
+			double mps = location.getCurrentSpeed();
+			totalSpeed += mps;
+			double avg = (totalSpeed / ++speedReadings);
+
+			// If moving:
+			if(mps > 0) {
+				// If average indicates some movement
+				if(avg >= 1.0) {
+					// Only accept reasonable updates.
+					if(mps < (avg * JUMP_FACTOR)) {
+						follow = true;
+					}
+				}
+				else {
+					// Get moving
+					follow = true;
+				}
+			}
+			else {
+				// Get moving
+				follow = true;
+			}
+		}
+		else {
 			state = FollowStates.FOLLOW_START;
 		}
-		drone.notifyDroneEvent(DroneEventsType.FOLLOW_UPDATE);
-		roiEstimator.onLocationChanged(location);
+
+		if(follow) {
+			followAlgorithm.processNewLocation(location);
+			drone.notifyDroneEvent(DroneEventsType.FOLLOW_UPDATE);
+			roiEstimator.onLocationChanged(location);
+		}
 	}
 
 	public void setType(FollowModes item) {
