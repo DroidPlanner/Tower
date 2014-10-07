@@ -24,6 +24,8 @@ import org.droidplanner.android.utils.file.IO.MissionWriter;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.units.Length;
+import org.droidplanner.core.helpers.units.Speed;
 import org.droidplanner.core.model.Drone;
 
 import android.os.Bundle;
@@ -36,6 +38,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -74,6 +77,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	private boolean mIsSplineEnabled;
 
 	private View mLocationButtonsContainer;
+	private TextView infoView;
 
 	/**
 	 * This view hosts the mission item detail fragment. On phone, or device
@@ -102,6 +106,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 		mSplineToggleContainer = findViewById(R.id.editorSplineToggleContainer);
 		mSplineToggleContainer.setVisibility(View.VISIBLE);
+		
+		infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
 		mLocationButtonsContainer = findViewById(R.id.location_button_container);
 
@@ -268,6 +274,16 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 		switch (event) {
 		case MISSION_UPDATE:
+			Length missionLength = missionProxy.getMissionLength();
+			Speed speedParameter = drone.getSpeed().getSpeedParameter();
+			String infoString = "Distance "+ missionLength;
+			if (speedParameter != null) {
+				int time = (int) (missionLength.valueInMeters() / speedParameter.valueInMetersPerSecond());
+				infoString = infoString	+ String.format(", Flight time: %02d:%02d", time/60,time%60);
+			}
+			infoView.setText(infoString);
+			
+			
 			// Remove detail window if item is removed
 			if (itemDetailFragment != null) {
 				if (!missionProxy.contains(itemDetailFragment.getItem())) {
