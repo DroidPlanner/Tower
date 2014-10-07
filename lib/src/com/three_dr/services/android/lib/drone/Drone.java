@@ -3,32 +3,28 @@ package com.three_dr.services.android.lib.drone;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.three_dr.services.android.lib.drone.property.Gps;
+import com.three_dr.services.android.lib.drone.property.LaunchPad;
+
 import java.io.Serializable;
 
 /**
  * Base class for a drone instance.
  */
-public abstract class Drone implements Parcelable, Serializable {
-    @Override
-    public final int describeContents() {
-        return 0;
-    }
+public final class Drone {
 
-    @Override
-    public final void writeToParcel(Parcel dest, int flags) {
-        dest.writeSerializable(this);
-    }
+    private LaunchPad mLaunchPad;
+    private Gps mGps;
 
-    public static final Creator<Drone> CREATOR = new Creator<Drone>(){
-
-        @Override
-        public final Drone createFromParcel(Parcel source) {
-            return (Drone) source.readSerializable();
+    public float getDistanceToHome(){
+        if(mLaunchPad == null || !mLaunchPad.isValid() || mGps == null || !mGps.isValid()){
+            return 0f;
         }
 
-        @Override
-        public final Drone[] newArray(int size) {
-            return new Drone[size];
-        }
-    };
+        return 0f;//TODO: complete
+    }
+
+    public static final class Builder {
+
+    }
 }
