@@ -23,10 +23,16 @@ public class FusedLocation implements LocationFinder, GooglePlayServicesClient.C
 
 	private static final long MIN_TIME_MS = 500;
 	private static final float MIN_DISTANCE_M = 0.0f;
+    private static final float LOCATION_ACCURACY_THRESHOLD = 10.0f;
+    private static final float JUMP_FACTOR = 4.0f;
+
 	private LocationClient mLocationClient;
 	private LocationReceiver receiver;
 
 	private Location mLastLocation;
+
+    private float mTotalSpeed;
+    private long mSpeedReadings;
 
 	public FusedLocation(Context context) {
 		mLocationClient = new LocationClient(context, this, this);
@@ -35,6 +41,9 @@ public class FusedLocation implements LocationFinder, GooglePlayServicesClient.C
 
 	@Override
 	public void enableLocationUpdates() {
+        mSpeedReadings = 0;
+        mTotalSpeed = 0f;
+
 		LocationRequest mLocationRequest = LocationRequest.create();
 		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 		mLocationRequest.setInterval(MIN_TIME_MS);
@@ -68,7 +77,7 @@ public class FusedLocation implements LocationFinder, GooglePlayServicesClient.C
 	@Override
 	public void onLocationChanged(Location androidLocation) {
 		if (receiver != null) {
-			double distanceToLast = -1.0;
+			float distanceToLast = -1.0f;
 			long timeSinceLast = -1L;
 
 			if(mLastLocation != null) {
@@ -76,18 +85,43 @@ public class FusedLocation implements LocationFinder, GooglePlayServicesClient.C
 				timeSinceLast = (androidLocation.getTime() - mLastLocation.getTime());
 			}
 
+            final float currentSpeed = distanceToLast > 0f && timeSinceLast > 0
+                    ? (distanceToLast / (timeSinceLast / 1000))
+                    : 0f;
+
 			org.droidplanner.core.gcs.location.Location location = new org.droidplanner.core.gcs.location.Location(
 					new Coord2D(androidLocation.getLatitude(), androidLocation.getLongitude()),
-					androidLocation.getAccuracy(), androidLocation.getBearing(),
-					androidLocation.getSpeed(), distanceToLast, timeSinceLast);
+                    androidLocation.getBearing(), androidLocation.getSpeed(), isLocationAccurate(androidLocation.getAccuracy(), currentSpeed));
 
 			mLastLocation = androidLocation;
 			receiver.onLocationChanged(location);
 		}
 	}
 
+    private boolean isLocationAccurate(float accuracy, float currentSpeed){
+        if(accuracy >= LOCATION_ACCURACY_THRESHOLD){
+            return false;
+        }
+
+        mTotalSpeed += currentSpeed;
+        float avg = (mTotalSpeed / ++mSpeedReadings);
+
+        //If moving:
+        if(currentSpeed > 0){
+            //if average indicates some movement
+            if(avg >= 1.0){
+                //Reject unreasonable updates.
+                if(currentSpeed >= (avg * JUMP_FACTOR)){
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
 	@Override
-	public void setLocationListner(LocationReceiver receiver) {
+	public void setLocationListener(LocationReceiver receiver) {
 		this.receiver = receiver;
 
 	}

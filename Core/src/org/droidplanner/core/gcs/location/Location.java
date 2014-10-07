@@ -13,36 +13,28 @@ public class Location {
 
 		public void disableLocationUpdates();
 
-		public void setLocationListner(LocationReceiver receiver);
+		public void setLocationListener(LocationReceiver receiver);
 	}
 
 	private Coord2D coordinate;
-	private double accuracy = 0.0;
 	private double heading = 0.0;
 	private double speed = 0.0;
-	private double distanceToPrevious = 0.0;
-	private long timeSinceLast = 0L;
+    private boolean isAccurate;
 
-	public Location(Coord2D coord2d) {
+	public Location(Coord2D coord2d, float heading, float speed, boolean isAccurate) {
 		coordinate = coord2d;
-	}
-
-	public Location(Coord2D coord2d, double accuracy, float heading, float speed, double distance, long since) {
-		coordinate = coord2d;
-		this.accuracy = accuracy;
 		this.heading = heading;
 		this.speed = speed;
-		this.distanceToPrevious = distance;
-		this.timeSinceLast = since;
+        this.isAccurate = isAccurate;
 	}
 
 	public Coord2D getCoord() {
 		return coordinate;
 	}
 
-	public double getAccuracy() {
-		return accuracy;
-	}
+    public boolean isAccurate(){
+        return this.isAccurate;
+    }
 
 	public double getBearing() {
 		return heading;
@@ -52,24 +44,4 @@ public class Location {
 		return speed;
 	}
 
-	public double getDistanceToPrevious() {
-		return distanceToPrevious;
-	}
-
-	public long getTimeSinceLast() {
-		return timeSinceLast;
-	}
-
-	public boolean hasTimeSinceLast() {
-		return (timeSinceLast > 0);
-	}
-
-	public boolean hasDistanceToPrevious() {
-		return (distanceToPrevious > 0.0);
-	}
-
-	public double getCurrentSpeed() {
-		return (hasDistanceToPrevious() && hasTimeSinceLast())?
-			(distanceToPrevious / (timeSinceLast / 1000)): 0.0;
-	}
 }
