@@ -36,7 +36,9 @@ public class FragmentSetupMAG extends SetupMainPanel implements OnDroneListener 
 	@Override
 	public void setupLocalViews(View v) {
 		plot1 = (ScatterPlot) v.findViewById(R.id.scatterPlot1);
+		plot1.setTitle("XY");
 		plot2 = (ScatterPlot) v.findViewById(R.id.scatterPlot2);
+		plot2.setTitle("YZ");
 	}
 
 	@Override
