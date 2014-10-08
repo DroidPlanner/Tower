@@ -44,7 +44,7 @@ public class MagnetometerCalibration implements OnDroneListener {
 		ellipsoidFit.fitEllipsoid(points);
 		System.out.println(String.format("Sample %d\traw %s\tFit %2.1f \tCenter %s\tRadius %s",points.size(), Arrays.toString(magVector),ellipsoidFit.getFitness()*100,ellipsoidFit.center.toString(), ellipsoidFit.radii.toString()));
 		
-		if (!fitComplete && ellipsoidFit.getFitness() > 0.95 && points.size() > 100) {
+		if (!fitComplete && ellipsoidFit.getFitness() > 0.98 && points.size() > 100) {
 			fitComplete  = true;
 			System.err.println("####################################################################################################################################\n");
 		}
