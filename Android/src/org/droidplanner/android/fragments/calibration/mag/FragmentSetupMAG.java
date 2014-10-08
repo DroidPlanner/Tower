@@ -11,6 +11,7 @@ import org.droidplanner.android.widgets.scatterplot.ScatterPlot;
 import org.droidplanner.core.MAVLink.MavLinkStreamRates;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.drone.variables.helpers.MagnetometerCalibration;
 import org.droidplanner.core.model.Drone;
 
 import android.view.View;
@@ -29,7 +30,6 @@ public class FragmentSetupMAG extends SetupMainPanel implements OnDroneListener 
 
 	@Override
 	public SetupSidePanel getSidePanel() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -46,6 +46,8 @@ public class FragmentSetupMAG extends SetupMainPanel implements OnDroneListener 
 		Drone drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 		MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 0, 0, 0, 0, 0, 0, 50, 0);
 		drone.addDroneListener(this);
+
+		new MagnetometerCalibration(drone);
 	}
 
 	@Override
