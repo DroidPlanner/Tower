@@ -41,7 +41,7 @@ public class FakeFactory {
 			
 			@Override
 			public void post(Runnable thread){
-				
+				new Thread(thread).start();
 			}
 
 			@Override
