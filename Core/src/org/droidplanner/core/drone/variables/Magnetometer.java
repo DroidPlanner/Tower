@@ -1,7 +1,7 @@
 package org.droidplanner.core.drone.variables;
 
-import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ardupilotmega.msg_raw_imu;
@@ -26,5 +26,4 @@ public class Magnetometer extends DroneVariable {
 	public int[] getVector() {
 		return new int[] {x,y,z};
 	}
-
 }
