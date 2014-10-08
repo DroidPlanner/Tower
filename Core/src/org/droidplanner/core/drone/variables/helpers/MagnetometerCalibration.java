@@ -1,4 +1,4 @@
-package org.droidplanner.desktop.logic;
+package org.droidplanner.core.drone.variables.helpers;
 
 import java.util.ArrayList;
 import java.util.Arrays;

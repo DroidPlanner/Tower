@@ -5,6 +5,7 @@ import java.net.InetAddress;
 
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
 import org.droidplanner.core.drone.DroneImpl;
+import org.droidplanner.core.drone.variables.helpers.MagnetometerCalibration;
 import org.droidplanner.core.gcs.follow.Follow;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.desktop.communication.Connection;

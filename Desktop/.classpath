@@ -5,6 +5,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/OSM"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/EllipsoidFit"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
