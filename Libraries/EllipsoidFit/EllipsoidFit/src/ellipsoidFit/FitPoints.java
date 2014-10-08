@@ -283,4 +283,11 @@ public class FitPoints
 		System.out.print("Center: " + center.toString());
 		System.out.print(" Radii: " + radii.toString());
 	}
+
+	public double getFitness() {
+		double x = evecs.getEntry(2);
+		double y = evecs1.getEntry(0);
+		double z = evecs2.getEntry(1);
+		return Math.sqrt(x*x+y*y+z*z)/Math.sqrt(3);
+	}
 }
