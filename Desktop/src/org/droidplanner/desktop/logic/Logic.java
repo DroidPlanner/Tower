@@ -26,7 +26,6 @@ public class Logic implements Runnable {
 				FakeFactory.fakePreferences());
 		mavlinkHandler = new MavLinkMsgHandler(drone);
 		follow = new Follow(drone, FakeFactory.fakeHandler(), new FakeLocation());
-		new MagnetometerCalibration(drone);
 	}
 
 	@Override

@@ -27,6 +27,8 @@ public class UI extends JFrame implements OnDroneListener {
 		add(map.map);
 
 		drone.addDroneListener(this);
+		
+		MagnetometerCal.create(drone);
 	}
 
 	@Override
