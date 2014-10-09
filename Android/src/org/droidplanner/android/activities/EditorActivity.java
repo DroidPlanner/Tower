@@ -76,7 +76,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	private View mSplineToggleContainer;
 	private boolean mIsSplineEnabled;
 
-	private View mLocationButtonsContainer;
 	private TextView infoView;
 
 	/**
@@ -108,8 +107,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		mSplineToggleContainer.setVisibility(View.VISIBLE);
 		
 		infoView = (TextView) findViewById(R.id.editorInfoWindow);
-
-		mLocationButtonsContainer = findViewById(R.id.location_button_container);
 
         final ImageButton resetMapBearing = (ImageButton) findViewById(R.id.map_orientation_button);
         resetMapBearing.setOnClickListener(new View.OnClickListener() {
@@ -454,18 +451,15 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		missionProxy.replace(oldItem, newItem);
 	}
 
-	private static final int MENU_DELETE = 1;
-	private static final int MENU_REVERSE = 2;
-
 	@Override
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 		switch (item.getItemId()) {
-		case MENU_DELETE:
+		case R.id.menu_action_delete:
 			missionProxy.removeSelection(missionProxy.selection);
 			mode.finish();
 			return true;
 
-		case MENU_REVERSE:
+		case R.id.menu_action_reverse:
 			missionProxy.reverse();
 			return true;
 
@@ -475,9 +469,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	@Override
-	public boolean onCreateActionMode(ActionMode arg0, Menu menu) {
-		menu.add(0, MENU_DELETE, 0, "Delete");
-		menu.add(0, MENU_REVERSE, 0, "Reverse");
+	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        mode.getMenuInflater().inflate(R.menu.action_mode_editor, menu);
 		editorToolsFragment.getView().setVisibility(View.INVISIBLE);
 		return true;
 	}
@@ -491,7 +484,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	@Override
-	public boolean onPrepareActionMode(ActionMode arg0, Menu arg1) {
+	public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
 		return false;
 	}
 

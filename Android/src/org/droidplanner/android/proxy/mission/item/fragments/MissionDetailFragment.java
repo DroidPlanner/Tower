@@ -14,7 +14,6 @@ import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.commands.MissionCMD;
 import org.droidplanner.core.mission.survey.Survey;
-import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -57,12 +56,13 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		public void onWaypointTypeChanged(MissionItemProxy newItem, MissionItemProxy oldItem);
 	}
 
-	protected abstract int getResource();
+	protected int getResource(){
+        return R.layout.fragment_editor_detail_generic;
+    }
 
 	protected SpinnerSelfSelect typeSpinner;
 	protected AdapterMissionItems commandAdapter;
 	private OnMissionDetailListener mListener;
-	private MissionProxy mMissionProxy;
 
 	protected MissionItemProxy itemRender;
 
@@ -121,7 +121,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		mMissionProxy = itemRender.getMissionProxy();
+		final MissionProxy mMissionProxy = itemRender.getMissionProxy();
 
 		List<MissionItemType> list = new LinkedList<MissionItemType>(Arrays.asList(MissionItemType
 				.values()));
