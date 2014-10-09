@@ -4,6 +4,7 @@ import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -11,10 +12,13 @@ import javax.swing.JFrame;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.variables.helpers.MagnetometerCalibration;
+import org.droidplanner.core.drone.variables.helpers.MagnetometerCalibration.OnMagCalibrationListner;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.desktop.ui.widgets.GraphPanel;
 
-public class MagnetometerCal implements OnDroneListener {
+import ellipsoidFit.FitPoints;
+
+public class MagnetometerCal implements OnDroneListener, OnMagCalibrationListner {
 	private static final int Y_SIZE = 600;
 	private static final int X_SIZE = 600;
 	private List<Float> data1 = new ArrayList<Float>();
@@ -32,10 +36,10 @@ public class MagnetometerCal implements OnDroneListener {
 	}
 
 	static void create(org.droidplanner.core.model.Drone drone) {
-		OnDroneListener window = new MagnetometerCal();
+		MagnetometerCal window = new MagnetometerCal();
 		drone.addDroneListener(window);
 
-		new MagnetometerCalibration(drone);
+		new MagnetometerCalibration(drone,window);
 	}
 
 	@Override
@@ -52,11 +56,22 @@ public class MagnetometerCal implements OnDroneListener {
 		}
 	}
 
+	@Override
+	public void newEstimation(FitPoints ellipsoidFit,int sampleSize, int[] magVector) {
+		System.out.println(String.format("Sample %d\traw %s\tFit %2.1f \tCenter %s\tRadius %s",sampleSize, Arrays.toString(magVector),ellipsoidFit.getFitness()*100,ellipsoidFit.center.toString(), ellipsoidFit.radii.toString()));
+		
+	}
+
+	@Override
+	public void finished(FitPoints fit) {
+		System.err.println("####################################################################################################################################\n");
+	}
+
 	public class ScatterPlot extends Canvas {
 		private static final long serialVersionUID = 1L;
-
+	
 		private Float[] points = new Float[] {};
-
+	
 		public void newDataSet(Float[] array) {
 			points = array;
 			repaint();
@@ -65,15 +80,15 @@ public class MagnetometerCal implements OnDroneListener {
 		@Override
 		public void paint(Graphics canvas) {
 			canvas.drawString("XX", 0, 0);
-
+	
 			int halfWidth = X_SIZE / 2;
 			int halfHeight = Y_SIZE / 2;
 			int halfScale = (halfHeight > halfWidth) ? halfWidth : halfHeight;
-
+	
 			// Draw the graph lines
 			canvas.drawLine(halfWidth, 0, halfWidth, halfHeight * 2);
 			canvas.drawLine(0, halfHeight, halfWidth * 2, halfHeight);
-
+	
 			// Draw the points
 			int x = 0, y = 0;
 			for (int i = 0; i < points.length; i += 2) {
@@ -87,7 +102,7 @@ public class MagnetometerCal implements OnDroneListener {
 			//canvas.drawArc(x, y,5,5,0,360);
 			
 		}
-
+	
 	}
 
 }

@@ -15,9 +15,11 @@ public class MagnetometerCalibration implements OnDroneListener {
 	FitPoints ellipsoidFit = new FitPoints();
 	public ArrayList<ThreeSpacePoint> points = new ArrayList<ThreeSpacePoint>();
 	private boolean fitComplete =false;
+	private OnMagCalibrationListner listner;
 
-	public MagnetometerCalibration(Drone drone) {
+	public MagnetometerCalibration(Drone drone, OnMagCalibrationListner listner) {
 		drone.addDroneListener(this);
+		this.listner = listner;
 	}
 
 	@Override
@@ -42,11 +44,21 @@ public class MagnetometerCalibration implements OnDroneListener {
 
 	void fit(int[] magVector) {
 		ellipsoidFit.fitEllipsoid(points);
-		System.out.println(String.format("Sample %d\traw %s\tFit %2.1f \tCenter %s\tRadius %s",points.size(), Arrays.toString(magVector),ellipsoidFit.getFitness()*100,ellipsoidFit.center.toString(), ellipsoidFit.radii.toString()));
+		if (listner!=null) {
+			listner.newEstimation(ellipsoidFit,points.size(),magVector);
+		}
+		
 		
 		if (!fitComplete && ellipsoidFit.getFitness() > 0.98 && points.size() > 100) {
 			fitComplete  = true;
-			System.err.println("####################################################################################################################################\n");
+			if (listner!=null) {
+				listner.finished(ellipsoidFit);
+			}
 		}
+	}
+
+	public interface OnMagCalibrationListner {
+		public void newEstimation(FitPoints fit, int sampleSize, int[] magVector);
+		public void finished(FitPoints fit);
 	}
 }

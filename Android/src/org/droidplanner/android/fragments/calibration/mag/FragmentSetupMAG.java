@@ -47,7 +47,7 @@ public class FragmentSetupMAG extends SetupMainPanel implements OnDroneListener 
 		MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 0, 0, 0, 0, 0, 0, 50, 0);
 		drone.addDroneListener(this);
 
-		new MagnetometerCalibration(drone);
+		new MagnetometerCalibration(drone,null);
 	}
 
 	@Override
