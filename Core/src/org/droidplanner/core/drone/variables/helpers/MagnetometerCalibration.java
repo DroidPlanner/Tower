@@ -1,7 +1,6 @@
 package org.droidplanner.core.drone.variables.helpers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.droidplanner.core.MAVLink.MavLinkStreamRates;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;

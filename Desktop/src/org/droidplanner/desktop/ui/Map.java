@@ -48,7 +48,9 @@ public class Map implements OnDroneListener {
 			map.repaint();
 			break;
 		case HEARTBEAT_FIRST:
-			map.setDisplayPosition(new Coordinate(position.getLat(), position.getLng()), 17);
+			if (map!=null) {
+				map.setDisplayPosition(new Coordinate(position.getLat(), position.getLng()), 17);				
+			}
 			break;
 		case MISSION_RECEIVED:
 			for (MissionItem item : drone.getMission().getItems()) {
