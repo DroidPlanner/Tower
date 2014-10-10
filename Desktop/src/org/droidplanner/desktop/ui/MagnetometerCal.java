@@ -27,9 +27,9 @@ public class MagnetometerCal implements OnMagCalibrationListner {
 
 		JFrame frame = new JFrame("Parameters");
 		frame.setLayout(new BorderLayout());
-		plot1 = new ScatterPlot();
+		plot1 = new ScatterPlot("XZ");
 		plot1.setPreferredSize(new Dimension(X_SIZE / 2, Y_SIZE / 2));
-		plot2 = new ScatterPlot();
+		plot2 = new ScatterPlot("YZ");
 		plot2.setPreferredSize(new Dimension(X_SIZE / 2, Y_SIZE / 2));
 		frame.setPreferredSize(new Dimension(X_SIZE, Y_SIZE));
 		frame.add(plot1, BorderLayout.EAST);
@@ -48,15 +48,16 @@ public class MagnetometerCal implements OnMagCalibrationListner {
 		System.out.println(String.format("Sample %d\traw %s\tFit %2.1f \tCenter %s\tRadius %s",
 				sampleSize, Arrays.toString(magVector), ellipsoidFit.getFitness() * 100,
 				ellipsoidFit.center.toString(), ellipsoidFit.radii.toString()));
+		
 		data1.add((float) magVector[0]);
-		data1.add((float) magVector[1]);
+		data1.add((float) magVector[2]);
 		plot1.newDataSet((Float[]) data1.toArray(new Float[data1.size()]));
 		if (ellipsoidFit.center.isNaN() || ellipsoidFit.radii.isNaN()) {
 			plot1.updateSphere(null);
 		} else {
 			plot1.updateSphere(new int[] { (int) ellipsoidFit.center.getEntry(0),
-					(int) ellipsoidFit.center.getEntry(1), (int) ellipsoidFit.radii.getEntry(0),
-					(int) ellipsoidFit.radii.getEntry(1) });
+					(int) ellipsoidFit.center.getEntry(2), (int) ellipsoidFit.radii.getEntry(0),
+					(int) ellipsoidFit.radii.getEntry(2) });
 		}
 		plot1.repaint(100);
 
@@ -91,6 +92,12 @@ public class MagnetometerCal implements OnMagCalibrationListner {
 
 		private int halfWidth, halfHeight, halfScale;
 
+		private String title;
+
+		public ScatterPlot(String title){
+			this.title = title;
+		}
+		
 		public void newDataSet(Float[] array) {
 			points = array;
 		}
@@ -98,7 +105,7 @@ public class MagnetometerCal implements OnMagCalibrationListner {
 		public void updateSphere(int[] sphere) {
 			this.sphere = sphere;
 		}
-
+		
 		@Override
 		public void paint(Graphics canvas) {
 
@@ -106,7 +113,7 @@ public class MagnetometerCal implements OnMagCalibrationListner {
 			halfHeight = this.getHeight() / 2;
 			halfScale = (halfHeight > halfWidth) ? halfWidth : halfHeight;
 
-			canvas.drawString("XX", 0, 0);
+			canvas.drawString(title, 0, 0);
 
 			// Draw the graph lines
 			canvas.drawLine(halfWidth, 0, halfWidth, halfHeight * 2);
