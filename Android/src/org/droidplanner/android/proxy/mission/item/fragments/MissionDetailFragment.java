@@ -1,6 +1,7 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.commands.MissionCMD;
 import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.util.Pair;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -40,20 +42,18 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		 * Only fired when the mission detail is shown as a dialog. Notifies the
 		 * listener that the mission detail dialog has been dismissed.
 		 * 
-		 * @param item
-		 *            mission item proxy whose details the dialog is showing.
+		 * @param itemList
+		 *            list of mission items proxies whose details the dialog is showing.
 		 */
-		public void onDetailDialogDismissed(MissionItemProxy item);
+		public void onDetailDialogDismissed(List<MissionItemProxy> itemList);
 
 		/**
 		 * Notifies the listener that the mission item proxy was changed.
-		 * 
-		 * @param newItem
-		 *            previous mission item proxy
-		 * @param oldItem
-		 *            new mission item proxy
+		 *
+         * @param oldNewItemsPairs an array of pairs containing the previous,
+         *                         and the new mission item proxy.
 		 */
-		public void onWaypointTypeChanged(MissionItemProxy newItem, MissionItemProxy oldItem);
+		public void onWaypointTypeChanged(Pair<MissionItemProxy, MissionItemProxy>[] oldNewItemsPairs);
 	}
 
 	protected int getResource(){
@@ -64,7 +64,8 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	protected AdapterMissionItems commandAdapter;
 	private OnMissionDetailListener mListener;
 
-	protected MissionItemProxy itemRender;
+    protected MissionProxy mMissionProxy;
+	protected MissionItemProxy itemProxy;
 
 	public static MissionDetailFragment newInstance(MissionItemType itemType) {
 		MissionDetailFragment fragment;
@@ -108,24 +109,23 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		final MissionProxy missionProxy = ((DroidPlannerApp) getActivity().getApplication()).missionProxy;
-		final List<MissionItemProxy> selections = missionProxy.selection.getSelected();
+		mMissionProxy = ((DroidPlannerApp) getActivity().getApplication()).missionProxy;
+		final List<MissionItemProxy> selections = mMissionProxy.selection.getSelected();
 		if (selections.isEmpty()) {
 			return null;
 		}
 
-		itemRender = selections.get(0);
+		itemProxy = selections.get(0);
 		return inflater.inflate(getResource(), container, false);
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		final MissionProxy mMissionProxy = itemRender.getMissionProxy();
+		final MissionProxy missionProxy = itemProxy.getMissionProxy();
 
-		List<MissionItemType> list = new LinkedList<MissionItemType>(Arrays.asList(MissionItemType
-				.values()));
-		MissionItem currentItem = itemRender.getMissionItem();
+		List<MissionItemType> list = new LinkedList<MissionItemType>(Arrays.asList(MissionItemType.values()));
+		MissionItem currentItem = itemProxy.getMissionItem();
 		
 		if ((currentItem instanceof Survey)) {
 			list.clear();
@@ -134,11 +134,11 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 			list.remove(MissionItemType.SURVEY);			
 		}
 		
-		if (mMissionProxy.getItems().indexOf(itemRender) != 0) {
+		if (missionProxy.getItems().indexOf(itemProxy) != 0) {
 			list.remove(MissionItemType.TAKEOFF);
 		}
 
-		if (mMissionProxy.getItems().indexOf(itemRender) != (mMissionProxy.getItems().size() - 1)) {
+		if (missionProxy.getItems().indexOf(itemProxy) != (missionProxy.getItems().size() - 1)) {
 			list.remove(MissionItemType.LAND);
 			list.remove(MissionItemType.RTL);
 		}
@@ -151,9 +151,8 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 			list.remove(MissionItemType.WAYPOINT);
 		}
 		
-		
 		commandAdapter = new AdapterMissionItems(this.getActivity(),
-				android.R.layout.simple_list_item_1, list.toArray(new MissionItemType[0]));
+				android.R.layout.simple_list_item_1, list.toArray(new MissionItemType[list.size()]));
 
 		typeSpinner = (SpinnerSelfSelect) view.findViewById(R.id.spinnerWaypointType);
 		typeSpinner.setAdapter(commandAdapter);
@@ -161,15 +160,15 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
 		final TextView waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
 		if (waypointIndex != null) {
-			final int itemOrder = mMissionProxy.getOrder(itemRender);
+			final int itemOrder = missionProxy.getOrder(itemProxy);
 			waypointIndex.setText(String.valueOf(itemOrder));
 		}
 
 		final TextView distanceView = (TextView) view.findViewById(R.id.DistanceValue);
 		if (distanceView != null) {
 			try {
-				distanceView.setText(mMissionProxy.getDistanceFromLastWaypoint(itemRender)
-						.toString());
+				distanceView.setText(missionProxy.getDistanceFromLastWaypoint(itemProxy)
+                        .toString());
 			} catch (IllegalArgumentException e) {
 				Log.w(TAG, e.getMessage(), e);
 			}
@@ -202,7 +201,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	public void onDismiss(DialogInterface dialog) {
 		super.onDismiss(dialog);
 		if (mListener != null) {
-			mListener.onDetailDialogDismissed(itemRender);
+			mListener.onDetailDialogDismissed(Collections.singletonList(itemProxy));
 		}
 	}
 
@@ -210,13 +209,17 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	public void onItemSelected(AdapterView<?> arg0, View v, int position, long id) {
 		MissionItemType selected = commandAdapter.getItem(position);
 		try {
-			final MissionItem oldItem = itemRender.getMissionItem();
+			final MissionItem oldItem = itemProxy.getMissionItem();
 			if (oldItem.getType() != selected) {
 				Log.d("CLASS", "Different waypoint Classes");
 				MissionItem newItem = selected.getNewItem(oldItem);
-				mListener.onWaypointTypeChanged(new MissionItemProxy(itemRender.getMissionProxy(),
-						newItem), itemRender);
-				dismiss();
+
+                Pair<MissionItemProxy, MissionItemProxy>[] oldNewItemsPairs = new Pair[1];
+                oldNewItemsPairs[0] = Pair.create(itemProxy, new MissionItemProxy(itemProxy
+                        .getMissionProxy(), newItem));
+				mListener.onWaypointTypeChanged(oldNewItemsPairs);
+
+                dismiss();
 			}
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
@@ -228,7 +231,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	}
 
 	public MissionItemProxy getItem() {
-		return itemRender;
+		return itemProxy;
 	}
 
 }

@@ -29,7 +29,7 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment impleme
 
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SPLINE_WAYPOINT));
 
-		SplineWaypoint item = (SplineWaypoint) this.itemRender.getMissionItem();
+		SplineWaypoint item = (SplineWaypoint) this.itemProxy.getMissionItem();
 
 		final NumericWheelAdapter delayAdapter = new NumericWheelAdapter(context, 0, 60, "%d s");
 		delayAdapter.setItemResource(R.layout.wheel_text_centered);
@@ -51,7 +51,7 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment impleme
 
 	@Override
 	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
-		final SplineWaypoint item = (SplineWaypoint) this.itemRender.getMissionItem();
+		final SplineWaypoint item = (SplineWaypoint) this.itemProxy.getMissionItem();
 
 		switch (wheel.getId()) {
 		case R.id.altitudePicker:

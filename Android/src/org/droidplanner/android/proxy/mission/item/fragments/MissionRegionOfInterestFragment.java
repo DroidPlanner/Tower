@@ -29,7 +29,7 @@ public class MissionRegionOfInterestFragment extends MissionDetailFragment imple
 		final CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.altitudePicker);
 		altitudePicker.setViewAdapter(altitudeAdapter);
-		altitudePicker.setCurrentValue((int) ((RegionOfInterest) itemRender.getMissionItem())
+		altitudePicker.setCurrentValue((int) ((RegionOfInterest) itemProxy.getMissionItem())
 				.getCoordinate().getAltitude().valueInMeters());
 		altitudePicker.addChangingListener(this);
 	}
@@ -38,7 +38,7 @@ public class MissionRegionOfInterestFragment extends MissionDetailFragment imple
 	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
 		switch (wheel.getId()) {
 		case R.id.altitudePicker:
-			((RegionOfInterest) itemRender.getMissionItem()).setAltitude(new Altitude(newValue));
+			((RegionOfInterest) itemProxy.getMissionItem()).setAltitude(new Altitude(newValue));
 			break;
 		}
 	}

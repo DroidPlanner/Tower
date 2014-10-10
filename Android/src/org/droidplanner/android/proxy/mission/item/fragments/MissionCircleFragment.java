@@ -38,7 +38,7 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CIRCLE));
 
-		mItem = (Circle) this.itemRender.getMissionItem();
+		mItem = (Circle) this.itemProxy.getMissionItem();
 
 		final NumericWheelAdapter altitudeStepAdapter = new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, 1, 10, "%d m");

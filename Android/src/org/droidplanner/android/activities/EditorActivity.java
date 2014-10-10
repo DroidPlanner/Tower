@@ -27,6 +27,7 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.helpers.units.Speed;
 import org.droidplanner.core.model.Drone;
+import org.droidplanner.core.util.Pair;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -442,13 +443,13 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	@Override
-	public void onDetailDialogDismissed(MissionItemProxy item) {
-		missionProxy.selection.removeItemFromSelection(item);
+	public void onDetailDialogDismissed(List<MissionItemProxy> itemList) {
+        missionProxy.selection.removeItemsFromSelection(itemList);
 	}
 
 	@Override
-	public void onWaypointTypeChanged(MissionItemProxy newItem, MissionItemProxy oldItem) {
-		missionProxy.replace(oldItem, newItem);
+	public void onWaypointTypeChanged(Pair<MissionItemProxy, MissionItemProxy>[] oldNewItemsPairs) {
+		missionProxy.replaceAll(oldNewItemsPairs);
 	}
 
 	@Override

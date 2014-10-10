@@ -71,7 +71,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 		super.onViewCreated(view, savedInstanceState);
 		final Context context = getActivity().getApplicationContext();
 
-		this.survey = ((Survey) itemRender.getMissionItem());
+		this.survey = ((Survey) itemProxy.getMissionItem());
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
 
 		cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);

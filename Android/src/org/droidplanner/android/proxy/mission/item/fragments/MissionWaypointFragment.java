@@ -26,7 +26,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.WAYPOINT));
 
-		final Waypoint item = (Waypoint) this.itemRender.getMissionItem();
+		final Waypoint item = (Waypoint) this.itemProxy.getMissionItem();
 
 		final NumericWheelAdapter delayAdapter = new NumericWheelAdapter(context, 0, 60, "%d s");
 		delayAdapter.setItemResource(R.layout.wheel_text_centered);
@@ -49,7 +49,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 
 	@Override
 	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
-		final Waypoint item = (Waypoint) this.itemRender.getMissionItem();
+		final Waypoint item = (Waypoint) this.itemProxy.getMissionItem();
 
 		switch (wheel.getId()) {
 		case R.id.altitudePicker:
