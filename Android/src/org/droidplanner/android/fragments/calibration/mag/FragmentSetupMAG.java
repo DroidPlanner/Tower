@@ -26,6 +26,10 @@ public class FragmentSetupMAG extends SetupMainPanel implements OnMagCalibration
 	private List<Float> data1 = new ArrayList<Float>();
 	private List<Float> data2 = new ArrayList<Float>();
 
+	private Drone drone;
+
+	private MagnetometerCalibration calibration;
+
 	@Override
 	public int getPanelLayout() {
 		return R.layout.fragment_setup_mag_main;
@@ -42,14 +46,15 @@ public class FragmentSetupMAG extends SetupMainPanel implements OnMagCalibration
 		plot1.setTitle("XZ");
 		plot2 = (ScatterPlot) v.findViewById(R.id.scatterPlot2);
 		plot2.setTitle("YZ");
+		
+		drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 	}
 
 	@Override
 	public void doCalibrationStep(int step) {
-		Drone drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 		MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 0, 0, 0, 0, 0, 0, 50, 0);
 
-		new MagnetometerCalibration(drone,this);
+		calibration = new MagnetometerCalibration(drone,this);
 	}
 
 	@Override
@@ -87,7 +92,9 @@ public class FragmentSetupMAG extends SetupMainPanel implements OnMagCalibration
 	@Override
 	public void finished(FitPoints fit) {
 		Log.d("MAG", "############################################################################################");
-		Toast.makeText(getActivity(), "Calibration Finished: "+ fit.center.toString(),Toast.LENGTH_LONG).show();		
+		Toast.makeText(getActivity(), "Calibration Finished: "+ fit.center.toString(),Toast.LENGTH_LONG).show();
+		
+		calibration.sendOffsets();
 		
 	}
 }
