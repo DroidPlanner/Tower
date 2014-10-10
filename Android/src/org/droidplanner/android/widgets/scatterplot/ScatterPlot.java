@@ -4,16 +4,21 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
 public class ScatterPlot extends View {
+	private static final float SCALE_FACTOR = 1 / 1000f;
 
 	private float halfWidth, halfHeight, halfScale;
 
 	private Float[] points = new Float[] {};
-	private Paint paintText, paintChartLines, paintPoints, paintEndPoint;
+	private Paint paintText, paintChartLines, paintPoints, paintEndPoint,paintCircle;
 	private String title = "";
+
+	private int[] sphere;
+
 
 	public ScatterPlot(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -25,7 +30,9 @@ public class ScatterPlot extends View {
 		paintPoints.setStrokeWidth(3f);
 		paintEndPoint = new Paint(paintPoints);
 		paintEndPoint.setColor(Color.RED);
-		paintEndPoint.setStrokeWidth(10f);
+		paintCircle = new Paint(paintPoints);
+		paintCircle.setStyle(Paint.Style.STROKE);
+		paintCircle.setColor(Color.BLUE);
 
 		paintText = new Paint(Paint.ANTI_ALIAS_FLAG);
 		paintText.setTextSize(20f);
@@ -47,7 +54,10 @@ public class ScatterPlot extends View {
 
 	public void newDataSet(Float[] array) {
 		points = array;
-		invalidate();
+	}
+
+	public void updateSphere(int[] sphere) {
+		this.sphere = sphere;
 	}
 
 	@Override
@@ -63,12 +73,33 @@ public class ScatterPlot extends View {
 		// Draw the points
 		float x = 0, y = 0;
 		for (int i = 0; i < points.length; i += 2) {
-			x = halfScale * points[i + 0] + halfWidth;
-			y = -halfScale * points[i + 1] + halfHeight;
+			x = mapToImgX(points[i + 0]);
+			y = mapToImgY(points[i + 1]);
 			canvas.drawPoint(x, y, paintPoints);
 		}
-		canvas.drawPoint(x, y, paintEndPoint); // Redraw the endpoint with a
+		canvas.drawCircle(x, y, 10f, paintEndPoint); // Redraw the endpoint with a
 												// bigger dot
+		
+		// Draw the estimated Sphere
+		if (sphere != null) {
+			x = mapToImgX(sphere[0]);
+			y = mapToImgY(sphere[1]);
+			int width = (int) scale(sphere[2]);
+			int height = (int) scale(sphere[3]);
+			canvas.drawOval(new RectF( x - width, y - height, x + width , y+ height ),paintCircle);
+		}
+	}
+	
+	private int mapToImgX(float coord) {
+		return (int) (scale(coord) + halfWidth);
+	}
+
+	private int mapToImgY(float coord) {
+		return (int) (-scale(coord) + halfHeight);
+	}
+
+	private float scale(float value) {
+		return SCALE_FACTOR * halfScale * value;
 	}
 
 }
