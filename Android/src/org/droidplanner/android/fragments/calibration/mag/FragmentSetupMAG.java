@@ -1,6 +1,7 @@
 package org.droidplanner.android.fragments.calibration.mag;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.droidplanner.R;
@@ -12,11 +13,15 @@ import org.droidplanner.core.MAVLink.MavLinkStreamRates;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.variables.helpers.MagnetometerCalibration;
+import org.droidplanner.core.drone.variables.helpers.MagnetometerCalibration.OnMagCalibrationListner;
 import org.droidplanner.core.model.Drone;
 
+import ellipsoidFit.FitPoints;
+
+import android.util.Log;
 import android.view.View;
 
-public class FragmentSetupMAG extends SetupMainPanel implements OnDroneListener {
+public class FragmentSetupMAG extends SetupMainPanel implements OnDroneListener, OnMagCalibrationListner {
 
 	private ScatterPlot plot1,plot2;
 	
@@ -47,7 +52,7 @@ public class FragmentSetupMAG extends SetupMainPanel implements OnDroneListener 
 		MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 0, 0, 0, 0, 0, 0, 50, 0);
 		drone.addDroneListener(this);
 
-		new MagnetometerCalibration(drone,null);
+		new MagnetometerCalibration(drone,this);
 	}
 
 	@Override
@@ -66,5 +71,19 @@ public class FragmentSetupMAG extends SetupMainPanel implements OnDroneListener 
 			break;
 
 		}
+	}
+
+	@Override
+	public void newEstimation(FitPoints ellipsoidFit, int sampleSize, int[] magVector) {
+		Log.d("MAG", String.format("Sample %d\traw %s\tFit %2.1f \tCenter %s\tRadius %s",
+				sampleSize, Arrays.toString(magVector), ellipsoidFit.getFitness() * 100,
+				ellipsoidFit.center.toString(), ellipsoidFit.radii.toString()));
+		
+	}
+
+	@Override
+	public void finished(FitPoints fit) {
+		Log.d("MAG", "############################################################################################");
+		
 	}
 }
