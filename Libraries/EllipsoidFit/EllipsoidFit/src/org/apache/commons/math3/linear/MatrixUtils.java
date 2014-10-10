@@ -25,17 +25,15 @@ import java.util.Arrays;
 
 import org.apache.commons.math3.Field;
 import org.apache.commons.math3.FieldElement;
+import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
-import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.commons.math3.exception.NoDataException;
-import org.apache.commons.math3.exception.NumberIsTooSmallException;
 import org.apache.commons.math3.exception.NullArgumentException;
-import org.apache.commons.math3.exception.DimensionMismatchException;
+import org.apache.commons.math3.exception.NumberIsTooSmallException;
+import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.commons.math3.exception.ZeroException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
-import org.apache.commons.math3.fraction.BigFraction;
-import org.apache.commons.math3.fraction.Fraction;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.Precision;
 
@@ -508,94 +506,6 @@ public class MatrixUtils {
         if (left.getColumnDimension() != right.getRowDimension()) {
             throw new DimensionMismatchException(left.getColumnDimension(),
                                                  right.getRowDimension());
-        }
-    }
-
-    /**
-     * Convert a {@link FieldMatrix}/{@link Fraction} matrix to a {@link RealMatrix}.
-     * @param m Matrix to convert.
-     * @return the converted matrix.
-     */
-    public static Array2DRowRealMatrix fractionMatrixToRealMatrix(final FieldMatrix<Fraction> m) {
-        final FractionMatrixConverter converter = new FractionMatrixConverter();
-        m.walkInOptimizedOrder(converter);
-        return converter.getConvertedMatrix();
-    }
-
-    /** Converter for {@link FieldMatrix}/{@link Fraction}. */
-    private static class FractionMatrixConverter extends DefaultFieldMatrixPreservingVisitor<Fraction> {
-        /** Converted array. */
-        private double[][] data;
-        /** Simple constructor. */
-        public FractionMatrixConverter() {
-            super(Fraction.ZERO);
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public void start(int rows, int columns,
-                          int startRow, int endRow, int startColumn, int endColumn) {
-            data = new double[rows][columns];
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public void visit(int row, int column, Fraction value) {
-            data[row][column] = value.doubleValue();
-        }
-
-        /**
-         * Get the converted matrix.
-         *
-         * @return the converted matrix.
-         */
-        Array2DRowRealMatrix getConvertedMatrix() {
-            return new Array2DRowRealMatrix(data, false);
-        }
-
-    }
-
-    /**
-     * Convert a {@link FieldMatrix}/{@link BigFraction} matrix to a {@link RealMatrix}.
-     *
-     * @param m Matrix to convert.
-     * @return the converted matrix.
-     */
-    public static Array2DRowRealMatrix bigFractionMatrixToRealMatrix(final FieldMatrix<BigFraction> m) {
-        final BigFractionMatrixConverter converter = new BigFractionMatrixConverter();
-        m.walkInOptimizedOrder(converter);
-        return converter.getConvertedMatrix();
-    }
-
-    /** Converter for {@link FieldMatrix}/{@link BigFraction}. */
-    private static class BigFractionMatrixConverter extends DefaultFieldMatrixPreservingVisitor<BigFraction> {
-        /** Converted array. */
-        private double[][] data;
-        /** Simple constructor. */
-        public BigFractionMatrixConverter() {
-            super(BigFraction.ZERO);
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public void start(int rows, int columns,
-                          int startRow, int endRow, int startColumn, int endColumn) {
-            data = new double[rows][columns];
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public void visit(int row, int column, BigFraction value) {
-            data[row][column] = value.doubleValue();
-        }
-
-        /**
-         * Get the converted matrix.
-         *
-         * @return the converted matrix.
-         */
-        Array2DRowRealMatrix getConvertedMatrix() {
-            return new Array2DRowRealMatrix(data, false);
         }
     }
 
