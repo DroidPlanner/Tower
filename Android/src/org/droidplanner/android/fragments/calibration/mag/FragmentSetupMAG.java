@@ -41,7 +41,7 @@ public class FragmentSetupMAG extends SetupMainPanel implements OnDroneListener,
 	@Override
 	public void setupLocalViews(View v) {
 		plot1 = (ScatterPlot) v.findViewById(R.id.scatterPlot1);
-		plot1.setTitle("XY");
+		plot1.setTitle("XZ");
 		plot2 = (ScatterPlot) v.findViewById(R.id.scatterPlot2);
 		plot2.setTitle("YZ");
 	}
@@ -61,7 +61,7 @@ public class FragmentSetupMAG extends SetupMainPanel implements OnDroneListener,
 		case MAGNETOMETER:
 			int[] mag = drone.getMagnetometer().getVector();
 			data1.add(mag[0]/1000f);
-			data1.add(mag[1]/1000f);
+			data1.add(mag[2]/1000f);
 			plot1.newDataSet((Float[]) data1.toArray(new Float[data1.size()]));
 			data2.add(mag[1]/1000f);
 			data2.add(mag[2]/1000f);
