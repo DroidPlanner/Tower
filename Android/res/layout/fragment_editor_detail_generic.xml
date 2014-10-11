@@ -42,6 +42,6 @@
         android:layout_below="@+id/WaypointType"
         style="@style/ModeDetailText"
         android:background="@drawable/mode_desc_rectangle"
-        android:text="Click on the spinner to select a type for the selected waypoint."/>
+        android:text="Click on the spinner to select a type for the selected waypoints."/>
 
 </RelativeLayout>

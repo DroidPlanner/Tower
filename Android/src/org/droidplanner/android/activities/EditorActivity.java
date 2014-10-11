@@ -79,6 +79,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	private TextView infoView;
 
+    //TODO: change the multi edit icon based on its state.
+    private boolean mMultiEditEnabled;
+
 	/**
 	 * This view hosts the mission item detail fragment. On phone, or device
 	 * with limited screen estate, it's removed from the layout, and the item
@@ -375,16 +378,16 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		}
 	}
 
-	private void showItemDetail(MissionItemProxy item) {
+	private void showItemDetail(MissionDetailFragment itemDetail) {
 		if (itemDetailFragment == null) {
-			addItemDetail(item);
+			addItemDetail(itemDetail);
 		} else {
-			switchItemDetail(item);
+			switchItemDetail(itemDetail);
 		}
 	}
 
-	private void addItemDetail(MissionItemProxy item) {
-		itemDetailFragment = item.getDetailFragment();
+	private void addItemDetail(MissionDetailFragment itemDetail) {
+		itemDetailFragment = itemDetail;
 		if (itemDetailFragment == null)
 			return;
 
@@ -397,9 +400,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		}
 	}
 
-	public void switchItemDetail(MissionItemProxy item) {
+	public void switchItemDetail(MissionDetailFragment itemDetail) {
 		removeItemDetail();
-		addItemDetail(item);
+		addItemDetail(itemDetail);
 	}
 
 	private void removeItemDetail() {
@@ -446,13 +449,33 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	@Override
-	public void onWaypointTypeChanged(Pair<MissionItemProxy, MissionItemProxy>[] oldNewItemsPairs) {
-		missionProxy.replaceAll(oldNewItemsPairs);
+	public void onWaypointTypeChanged(List<Pair<MissionItemProxy, MissionItemProxy>> oldNewItemsList) {
+		missionProxy.replaceAll(oldNewItemsList);
 	}
 
 	@Override
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.menu_action_multi_edit:
+            if(mMultiEditEnabled){
+                removeItemDetail();
+            }
+            else {
+                final List<MissionItemProxy> selectedProxies = missionProxy.selection.getSelected();
+                final int selectedCount = selectedProxies.size();
+                if (selectedCount == 1) {
+                    showItemDetail(selectedProxies.get(0).getDetailFragment());
+                } else if (selectedCount > 1) {
+                    showItemDetail(new MissionDetailFragment());
+                } else {
+                    Toast.makeText(getApplicationContext(), "No Waypoint(s) selected.",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+
+            mMultiEditEnabled = !mMultiEditEnabled;
+			return true;
+
 		case R.id.menu_action_delete:
 			missionProxy.removeSelection(missionProxy.selection);
 			mode.finish();
@@ -478,7 +501,10 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	public void onDestroyActionMode(ActionMode arg0) {
 		missionListFragment.updateChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 		missionProxy.selection.clearSelection();
-		contextualActionBar = null;
+
+        contextualActionBar = null;
+        mMultiEditEnabled = false;
+
 		editorToolsFragment.getView().setVisibility(View.VISIBLE);
 	}
 
@@ -506,6 +532,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public void onItemClick(MissionItemProxy item) {
+        mMultiEditEnabled = false;
 		switch (getTool()) {
 		default:
 			if (contextualActionBar != null) {
@@ -544,17 +571,17 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public void onSelectionUpdate(List<MissionItemProxy> selected) {
-		final int selectedCount = selected.size();
+		final boolean isEmpty = selected.isEmpty();
 
-		missionListFragment.setArrowsVisibility(selectedCount > 0);
+		missionListFragment.setArrowsVisibility(!isEmpty);
 
-		if (selectedCount != 1) {
+		if (isEmpty) {
 			removeItemDetail();
 		} else {
-			if (contextualActionBar != null)
+			if (contextualActionBar != null && !mMultiEditEnabled)
 				removeItemDetail();
 			else {
-				showItemDetail(selected.get(0));
+				showItemDetail(selected.get(0).getDetailFragment());
 			}
 		}
 

@@ -261,12 +261,12 @@ public class MissionProxy implements DPMap.PathSource {
 		}
 	}
 
-    public void replaceAll(Pair<MissionItemProxy, MissionItemProxy>[] oldNewPairs){
-        if(oldNewPairs == null){
+    public void replaceAll(List<Pair<MissionItemProxy, MissionItemProxy>> oldNewList){
+        if(oldNewList == null){
             return;
         }
 
-        final int pairSize = oldNewPairs.length;
+        final int pairSize = oldNewList.size();
         if(pairSize == 0){
             return;
         }
@@ -278,13 +278,13 @@ public class MissionProxy implements DPMap.PathSource {
         final List<MissionItemProxy> itemsToSelect = new ArrayList<MissionItemProxy>(pairSize);
 
         for(int i = 0; i < pairSize; i++){
-            final MissionItemProxy oldItem = oldNewPairs[i].first;
+            final MissionItemProxy oldItem = oldNewList.get(i).first;
             final int index = mMissionItems.indexOf(oldItem);
             if(index == -1){
                 continue;
             }
 
-            final MissionItemProxy newItem = oldNewPairs[i].second;
+            final MissionItemProxy newItem = oldNewList.get(i).second;
             mMissionItems.remove(index);
             mMissionItems.add(index, newItem);
 

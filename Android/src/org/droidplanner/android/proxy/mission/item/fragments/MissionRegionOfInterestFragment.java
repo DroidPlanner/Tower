@@ -4,6 +4,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.core.helpers.units.Altitude;
+import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.waypoints.RegionOfInterest;
 
@@ -29,7 +30,7 @@ public class MissionRegionOfInterestFragment extends MissionDetailFragment imple
 		final CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.altitudePicker);
 		altitudePicker.setViewAdapter(altitudeAdapter);
-		altitudePicker.setCurrentValue((int) ((RegionOfInterest) itemProxy.getMissionItem())
+		altitudePicker.setCurrentValue((int) ((RegionOfInterest) getMissionItems().get(0))
 				.getCoordinate().getAltitude().valueInMeters());
 		altitudePicker.addChangingListener(this);
 	}
@@ -38,7 +39,9 @@ public class MissionRegionOfInterestFragment extends MissionDetailFragment imple
 	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
 		switch (wheel.getId()) {
 		case R.id.altitudePicker:
-			((RegionOfInterest) itemProxy.getMissionItem()).setAltitude(new Altitude(newValue));
+            for(MissionItem missionItem: getMissionItems()) {
+                ((RegionOfInterest) missionItem).setAltitude(new Altitude(newValue));
+            }
 			break;
 		}
 	}

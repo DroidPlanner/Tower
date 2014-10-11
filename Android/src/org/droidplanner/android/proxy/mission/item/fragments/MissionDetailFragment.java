@@ -1,7 +1,7 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,8 +29,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.TextView;
 
-public abstract class MissionDetailFragment extends DialogFragment implements
-		OnItemSelectedListener {
+public class MissionDetailFragment extends DialogFragment implements OnItemSelectedListener {
 
 	private static final String TAG = MissionDetailFragment.class.getSimpleName();
 
@@ -50,10 +49,11 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		/**
 		 * Notifies the listener that the mission item proxy was changed.
 		 *
-         * @param oldNewItemsPairs an array of pairs containing the previous,
+         * @param oldNewItemsList a list of pairs containing the previous,
          *                         and the new mission item proxy.
 		 */
-		public void onWaypointTypeChanged(Pair<MissionItemProxy, MissionItemProxy>[] oldNewItemsPairs);
+		public void onWaypointTypeChanged(List<Pair<MissionItemProxy,
+                MissionItemProxy>> oldNewItemsList);
 	}
 
 	protected int getResource(){
@@ -64,8 +64,9 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	protected AdapterMissionItems commandAdapter;
 	private OnMissionDetailListener mListener;
 
-    protected MissionProxy mMissionProxy;
-	protected MissionItemProxy itemProxy;
+    private MissionProxy mMissionProxy;
+    private List<MissionItem> mSelectedItems;
+    private List<MissionItemProxy> mSelectedProxies;
 
 	public static MissionDetailFragment newInstance(MissionItemType itemType) {
 		MissionDetailFragment fragment;
@@ -110,74 +111,100 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mMissionProxy = ((DroidPlannerApp) getActivity().getApplication()).missionProxy;
-		final List<MissionItemProxy> selections = mMissionProxy.selection.getSelected();
-		if (selections.isEmpty()) {
+		mSelectedProxies = new ArrayList<MissionItemProxy>(mMissionProxy.selection.getSelected());
+		if (mSelectedProxies.isEmpty()) {
 			return null;
 		}
 
-		itemProxy = selections.get(0);
+        mSelectedItems = new ArrayList<MissionItem>(mSelectedProxies.size());
+        for(MissionItemProxy mip : mSelectedProxies){
+            mSelectedItems.add(mip.getMissionItem());
+        }
+
 		return inflater.inflate(getResource(), container, false);
 	}
+
+    protected MissionProxy getMissionProxy(){
+        return mMissionProxy;
+    }
+
+    protected List<? extends MissionItem> getMissionItems(){
+        return mSelectedItems;
+    }
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		final MissionProxy missionProxy = itemProxy.getMissionProxy();
 
 		List<MissionItemType> list = new LinkedList<MissionItemType>(Arrays.asList(MissionItemType.values()));
-		MissionItem currentItem = itemProxy.getMissionItem();
-		
-		if ((currentItem instanceof Survey)) {
-			list.clear();
-			list.add(MissionItemType.SURVEY);
-		}else{
-			list.remove(MissionItemType.SURVEY);			
-		}
-		
-		if (missionProxy.getItems().indexOf(itemProxy) != 0) {
-			list.remove(MissionItemType.TAKEOFF);
-		}
 
-		if (missionProxy.getItems().indexOf(itemProxy) != (missionProxy.getItems().size() - 1)) {
-			list.remove(MissionItemType.LAND);
-			list.remove(MissionItemType.RTL);
-		}
+        if(mSelectedProxies.size() == 1) {
+            final MissionItemProxy itemProxy = mSelectedProxies.get(0);
+            final MissionItem currentItem = itemProxy.getMissionItem();
+
+            if ((currentItem instanceof Survey)) {
+                list.clear();
+                list.add(MissionItemType.SURVEY);
+            } else {
+                list.remove(MissionItemType.SURVEY);
+            }
+
+            if (mMissionProxy.getItems().indexOf(itemProxy) != 0) {
+                list.remove(MissionItemType.TAKEOFF);
+            }
+
+            if (mMissionProxy.getItems().indexOf(itemProxy) != (mMissionProxy.getItems().size() - 1)) {
+                list.remove(MissionItemType.LAND);
+                list.remove(MissionItemType.RTL);
+            }
+
+            if (currentItem instanceof MissionCMD) {
+                list.remove(MissionItemType.LAND);
+                list.remove(MissionItemType.SPLINE_WAYPOINT);
+                list.remove(MissionItemType.CIRCLE);
+                list.remove(MissionItemType.ROI);
+                list.remove(MissionItemType.WAYPOINT);
+            }
+
+            final TextView waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
+            if (waypointIndex != null) {
+                final int itemOrder = mMissionProxy.getOrder(itemProxy);
+                waypointIndex.setText(String.valueOf(itemOrder));
+            }
+
+            final TextView distanceView = (TextView) view.findViewById(R.id.DistanceValue);
+            if (distanceView != null) {
+                try {
+                    distanceView.setText(mMissionProxy.getDistanceFromLastWaypoint(itemProxy)
+                            .toString());
+                } catch (IllegalArgumentException e) {
+                    Log.w(TAG, e.getMessage(), e);
+                }
+            }
+
+            final TextView distanceLabelView = (TextView) view.findViewById(R.id.DistanceLabel);
+            if (distanceLabelView != null) {
+                distanceLabelView.setVisibility(View.VISIBLE);
+            }
+        }
+        else if(mSelectedProxies.size() > 1){
+            //Remove the mission item types that don't apply to multiple items.
+            list.remove(MissionItemType.TAKEOFF);
+            list.remove(MissionItemType.LAND);
+            list.remove(MissionItemType.RTL);
+        }
+        else{
+            //Invalid state. We should not have been able to get here.
+            throw new IllegalStateException("Mission Detail Fragment cannot be shown when no " +
+                    "mission items is selected.");
+        }
 		
-		if(currentItem instanceof MissionCMD) {
-			list.remove(MissionItemType.LAND);
-			list.remove(MissionItemType.SPLINE_WAYPOINT);
-			list.remove(MissionItemType.CIRCLE);
-			list.remove(MissionItemType.ROI);
-			list.remove(MissionItemType.WAYPOINT);
-		}
-		
-		commandAdapter = new AdapterMissionItems(this.getActivity(),
+		commandAdapter = new AdapterMissionItems(getActivity(),
 				android.R.layout.simple_list_item_1, list.toArray(new MissionItemType[list.size()]));
 
 		typeSpinner = (SpinnerSelfSelect) view.findViewById(R.id.spinnerWaypointType);
 		typeSpinner.setAdapter(commandAdapter);
 		typeSpinner.setOnItemSelectedListener(this);
-
-		final TextView waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
-		if (waypointIndex != null) {
-			final int itemOrder = missionProxy.getOrder(itemProxy);
-			waypointIndex.setText(String.valueOf(itemOrder));
-		}
-
-		final TextView distanceView = (TextView) view.findViewById(R.id.DistanceValue);
-		if (distanceView != null) {
-			try {
-				distanceView.setText(missionProxy.getDistanceFromLastWaypoint(itemProxy)
-                        .toString());
-			} catch (IllegalArgumentException e) {
-				Log.w(TAG, e.getMessage(), e);
-			}
-		}
-
-		final TextView distanceLabelView = (TextView) view.findViewById(R.id.DistanceLabel);
-		if (distanceLabelView != null) {
-			distanceLabelView.setVisibility(View.VISIBLE);
-		}
 	}
 
 	@Override
@@ -201,32 +228,38 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	public void onDismiss(DialogInterface dialog) {
 		super.onDismiss(dialog);
 		if (mListener != null) {
-			mListener.onDetailDialogDismissed(Collections.singletonList(itemProxy));
+			mListener.onDetailDialogDismissed(mSelectedProxies);
 		}
 	}
 
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View v, int position, long id) {
-		MissionItemType selected = commandAdapter.getItem(position);
+		final MissionItemType selectedType = commandAdapter.getItem(position);
+
 		try {
-			final MissionItem oldItem = itemProxy.getMissionItem();
-			if (oldItem.getType() != selected) {
-				Log.d("CLASS", "Different waypoint Classes");
-				MissionItem newItem = selected.getNewItem(oldItem);
+			if (mSelectedProxies == null || mSelectedProxies.isEmpty())
+				return;
 
-                Pair<MissionItemProxy, MissionItemProxy>[] oldNewItemsPairs = new Pair[1];
-                oldNewItemsPairs[0] = Pair.create(itemProxy, new MissionItemProxy(itemProxy
-                        .getMissionProxy(), newItem));
-				mListener.onWaypointTypeChanged(oldNewItemsPairs);
+			final List<Pair<MissionItemProxy, MissionItemProxy>> updatesList = new ArrayList<Pair<MissionItemProxy, MissionItemProxy>>(
+					mSelectedProxies.size());
 
-                dismiss();
+			for (MissionItemProxy missionItemProxy : mSelectedProxies) {
+				final MissionItem oldItem = missionItemProxy.getMissionItem();
+				if (oldItem.getType() != selectedType) {
+					updatesList.add(Pair.create(missionItemProxy, new MissionItemProxy(
+							mMissionProxy, selectedType.getNewItem(oldItem))));
+				}
 			}
+
+            if(!updatesList.isEmpty()) {
+                mListener.onWaypointTypeChanged(updatesList);
+                dismiss();
+            }
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {
-	}
+	public void onNothingSelected(AdapterView<?> arg0) {}
 }

@@ -17,7 +17,7 @@ public class MissionSelection {
 	/**
 	 * Stores the selected mission items renders.
 	 */
-	public List<MissionItemProxy> mSelectedItems = new ArrayList<MissionItemProxy>();
+	public final List<MissionItemProxy> mSelectedItems = new ArrayList<MissionItemProxy>();
 	/**
 	 * Stores the list of selection update listeners.
 	 */

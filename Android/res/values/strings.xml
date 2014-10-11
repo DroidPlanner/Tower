@@ -486,5 +486,6 @@
     <string name="radius_label">Radius</string>
     <string name="menu_action_delete">Delete</string>
     <string name="menu_action_reverse">Reverse</string>
+    <string name="menu_action_multi_edit">Multi-Edit</string>
 
 </resources>
