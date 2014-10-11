@@ -229,9 +229,4 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
-
-	public MissionItemProxy getItem() {
-		return itemProxy;
-	}
-
 }

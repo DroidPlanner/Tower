@@ -283,10 +283,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 			
 			
 			// Remove detail window if item is removed
-			if (itemDetailFragment != null) {
-				if (!missionProxy.contains(itemDetailFragment.getItem())) {
+			if (missionProxy.selection.getSelected().isEmpty() && itemDetailFragment != null) {
 					removeItemDetail();
-				}
 			}
 			break;
 
