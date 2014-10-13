@@ -19,6 +19,7 @@ import ellipsoidFit.FitPoints;
 public class MagnetometerCal implements OnMagCalibrationListner {
 	private static final int Y_SIZE = 600;
 	private static final int X_SIZE = 600;
+	private static MagnetometerCalibration cal;
 	private List<Float> data1 = new ArrayList<Float>(), data2 = new ArrayList<Float>();
 	public GraphPanel graph;
 	private ScatterPlot plot1, plot2;
@@ -40,7 +41,7 @@ public class MagnetometerCal implements OnMagCalibrationListner {
 
 	static void create(org.droidplanner.core.model.Drone drone) {
 		MagnetometerCal window = new MagnetometerCal();
-		new MagnetometerCalibration(drone, window);
+		cal = new MagnetometerCalibration(drone, window);
 	}
 
 	@Override
@@ -77,8 +78,9 @@ public class MagnetometerCal implements OnMagCalibrationListner {
 
 	@Override
 	public void finished(FitPoints fit) {
-		System.err
-				.println("################################################################################################################\n");
+		//cal.sendOffsets();
+		cal.stop();
+		System.out.println("CALIBRATED");
 	}
 
 	public class ScatterPlot extends Canvas {

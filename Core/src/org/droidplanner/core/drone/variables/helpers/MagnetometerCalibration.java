@@ -51,7 +51,7 @@ public class MagnetometerCalibration implements OnDroneListener {
 		}
 		
 		
-		if (!fitComplete && ellipsoidFit.getFitness() > 0.98 && points.size() > 100) {
+		if (!fitComplete && ellipsoidFit.getFitness() > 0.95 && points.size() > 100) {
 			fitComplete  = true;
 			if (listner!=null) {
 				listner.finished(ellipsoidFit);
@@ -64,13 +64,17 @@ public class MagnetometerCalibration implements OnDroneListener {
 		Parameter offsetY = drone.getParameters().getParameter("COMPASS_OFS_Y");
 		Parameter offsetZ = drone.getParameters().getParameter("COMPASS_OFS_Z");
 		
-		offsetX.value = ellipsoidFit.center.getEntry(0);
-		offsetY.value = ellipsoidFit.center.getEntry(1);
-		offsetZ.value = ellipsoidFit.center.getEntry(2);
-		
+		offsetX.value = -ellipsoidFit.center.getEntry(0);
+		offsetY.value = -ellipsoidFit.center.getEntry(1);
+		offsetZ.value = -ellipsoidFit.center.getEntry(2);
+				
 		drone.getParameters().sendParameter(offsetX); //TODO should probably do a check after sending the parameters
 		drone.getParameters().sendParameter(offsetY);
 		drone.getParameters().sendParameter(offsetZ);
+	}
+	
+	public void stop(){
+		drone.removeDroneListener(this);
 	}
 
 	public interface OnMagCalibrationListner {
