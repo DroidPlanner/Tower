@@ -435,6 +435,67 @@
             android:selectable="false"
             android:shouldDisableView="false"
             android:title="@string/storage_folder" />
+
+        <PreferenceScreen
+            android:summary="Libraries (and it&apos;s licenses) used in this project"
+            android:title="Licenses" >
+            <Preference
+                android:enabled="false"
+                android:key="@string/pref_storage_key"
+                android:persistent="false"
+                android:selectable="false"
+                android:shouldDisableView="false"
+                android:summary="Apache v2"
+                android:title="AndroidSlidingUpPanel" />
+            <Preference
+                android:enabled="false"
+                android:key="@string/pref_storage_key"
+                android:persistent="false"
+                android:selectable="false"
+                android:shouldDisableView="false"
+                android:summary="GPLv2"
+                android:title="jmapviewer" />
+            <Preference
+                android:enabled="false"
+                android:key="@string/pref_storage_key"
+                android:persistent="false"
+                android:selectable="false"
+                android:shouldDisableView="false"
+                android:summary="Apache v2"
+                android:title="Mapbox Android SDK" />
+            <Preference
+                android:enabled="false"
+                android:key="@string/pref_storage_key"
+                android:persistent="false"
+                android:selectable="false"
+                android:shouldDisableView="false"
+                android:summary="LGPLv3"
+                android:title="usb-serial-for-android" />
+            <Preference
+                android:enabled="false"
+                android:key="@string/pref_storage_key"
+                android:persistent="false"
+                android:selectable="false"
+                android:shouldDisableView="false"
+                android:summary="Apache v2"
+                android:title="HorizontalVariableListView" />
+            <Preference
+                android:enabled="false"
+                android:key="@string/pref_storage_key"
+                android:persistent="false"
+                android:selectable="false"
+                android:shouldDisableView="false"
+                android:summary=""
+                android:title="Google Play Services" />
+            <Preference
+                android:enabled="false"
+                android:key="@string/pref_storage_key"
+                android:persistent="false"
+                android:selectable="false"
+                android:shouldDisableView="false"
+                android:summary=""
+                android:title="PebbleKit" />
+        </PreferenceScreen>
     </PreferenceCategory>
 
 </PreferenceScreen>
