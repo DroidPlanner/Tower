@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:text="@string/editor_info_window"
             style="@style/editorMissionOverviewText"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:layout_alignParentTop="true"
             />
 
