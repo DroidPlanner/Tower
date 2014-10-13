@@ -8,6 +8,9 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.7.12
+* Add support for PL2303 USB devices (#1162)
+
 ## Droidplanner v2.7.11
 * Simultaneous editing of multiple waypoints (#1159, #1123)
 * New icon for the dronie (#1161)
