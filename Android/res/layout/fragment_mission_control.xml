@@ -41,7 +41,7 @@
         <Button
             android:id="@+id/mc_dronieBtn"
             style="@style/flightControlButton.Row"
-            android:drawableTop="@drawable/ic_follow"
+            android:drawableTop="@drawable/ic_dronie"
             android:text="@string/mission_control_dronie"
             />
 
@@ -79,7 +79,7 @@
 
     <LinearLayout
         android:id="@+id/mc_in_flight_buttons"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/flight_actions_container_width"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:visibility="gone"

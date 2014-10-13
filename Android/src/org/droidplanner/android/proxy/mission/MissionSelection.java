@@ -17,23 +17,37 @@ public class MissionSelection {
 	/**
 	 * Stores the selected mission items renders.
 	 */
-	public List<MissionItemProxy> mSelectedItems = new ArrayList<MissionItemProxy>();
+	public final List<MissionItemProxy> mSelectedItems = new ArrayList<MissionItemProxy>();
 	/**
 	 * Stores the list of selection update listeners.
 	 */
 	public List<MissionSelection.OnSelectionUpdateListener> mSelectionsListeners = new ArrayList<MissionSelection.OnSelectionUpdateListener>();
 
 	/**
-	 * Removes the given mission item render from the selected list. TODO: check
-	 * the argument belongs to this mission render
+	 * Removes the given mission item render from the selected list.
 	 * 
 	 * @param item
-	 *            mission item rendere to remove from the selected list
+	 *            mission item render to remove from the selected list
 	 */
 	public void removeItemFromSelection(MissionItemProxy item) {
 		mSelectedItems.remove(item);
 		notifySelectionUpdate();
 	}
+
+    /**
+     * Removes the mission items in the given list from the selected list.
+     * @param itemList list of mission items to remove from the selected list.
+     */
+    public void removeItemsFromSelection(List<MissionItemProxy> itemList){
+        if(itemList == null || itemList.isEmpty()){
+            return;
+        }
+
+        for(MissionItemProxy item : itemList){
+            mSelectedItems.remove(item);
+        }
+        notifySelectionUpdate();
+    }
 
 	/**
 	 * Selects only the given mission items renders. TODO: check the mission

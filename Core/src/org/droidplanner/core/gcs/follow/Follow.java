@@ -19,8 +19,8 @@ public class Follow implements OnDroneListener, LocationReceiver {
 
 	/** Set of return value for the 'toggleFollowMeState' method.*/
 	public enum FollowStates {
-		FOLLOW_INVALID_STATE, FOLLOW_DRONE_NOT_ARMED, FOLLOW_DRONE_DISCONNECTED, FOLLOW_START, FOLLOW_RUNNING, FOLLOW_END,
-	};
+		FOLLOW_INVALID_STATE, FOLLOW_DRONE_NOT_ARMED, FOLLOW_DRONE_DISCONNECTED, FOLLOW_START, FOLLOW_RUNNING, FOLLOW_END
+	}
 
 	private FollowStates state = FollowStates.FOLLOW_INVALID_STATE;
 	private Drone drone;
@@ -33,7 +33,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 		this.drone = drone;
 		followAlgorithm = FollowAlgorithm.FollowModes.LEASH.getAlgorithmType(drone);
 		this.locationFinder = locationFinder;
-		locationFinder.setLocationListner(this);
+		locationFinder.setLocationListener(this);
 		roiEstimator = new ROIEstimator(handler, drone);
 		drone.addDroneListener(this);
 	}
@@ -60,7 +60,6 @@ public class Follow implements OnDroneListener, LocationReceiver {
 				
 			}
 		}
-		return;
 	}
 
 	private void enableFollowMe() {
@@ -104,14 +103,16 @@ public class Follow implements OnDroneListener, LocationReceiver {
 
 	@Override
 	public void onLocationChanged(Location location) {
-		if (location.getAccuracy() < 10.0) {
+		if (location.isAccurate()) {
 			state = FollowStates.FOLLOW_RUNNING;
-			followAlgorithm.processNewLocation(location);
-		}else{
+            followAlgorithm.processNewLocation(location);
+            roiEstimator.onLocationChanged(location);
+		}
+		else {
 			state = FollowStates.FOLLOW_START;
 		}
-		drone.notifyDroneEvent(DroneEventsType.FOLLOW_UPDATE);
-		roiEstimator.onLocationChanged(location);
+
+			drone.notifyDroneEvent(DroneEventsType.FOLLOW_UPDATE);
 	}
 
 	public void setType(FollowModes item) {
@@ -119,8 +120,8 @@ public class Follow implements OnDroneListener, LocationReceiver {
 		drone.notifyDroneEvent(DroneEventsType.FOLLOW_CHANGE_TYPE);
 	}
 
-	public void changeRadius(double increment) {
-		followAlgorithm.changeRadius(increment);
+	public void changeRadius(double radius) {
+		followAlgorithm.changeRadius(radius);
 	}
 
 	public void cycleType() {

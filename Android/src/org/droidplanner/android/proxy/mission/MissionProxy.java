@@ -9,6 +9,7 @@ import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
+import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.geoTools.spline.SplinePath;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
@@ -19,8 +20,7 @@ import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.Waypoint;
-
-import android.util.Pair;
+import org.droidplanner.core.util.Pair;
 
 /**
  * This class is used to render a {@link org.droidplanner.core.mission.Mission}
@@ -261,6 +261,49 @@ public class MissionProxy implements DPMap.PathSource {
 		}
 	}
 
+    public void replaceAll(List<Pair<MissionItemProxy, MissionItemProxy>> oldNewList){
+        if(oldNewList == null){
+            return;
+        }
+
+        final int pairSize = oldNewList.size();
+        if(pairSize == 0){
+            return;
+        }
+
+        final List<Pair<MissionItem, MissionItem>> missionItemsToUpdate = new
+                ArrayList<Pair<MissionItem, MissionItem>>(pairSize);
+
+        final List<MissionItemProxy> selectionsToRemove = new ArrayList<MissionItemProxy>(pairSize);
+        final List<MissionItemProxy> itemsToSelect = new ArrayList<MissionItemProxy>(pairSize);
+
+        for(int i = 0; i < pairSize; i++){
+            final MissionItemProxy oldItem = oldNewList.get(i).first;
+            final int index = mMissionItems.indexOf(oldItem);
+            if(index == -1){
+                continue;
+            }
+
+            final MissionItemProxy newItem = oldNewList.get(i).second;
+            mMissionItems.remove(index);
+            mMissionItems.add(index, newItem);
+
+            missionItemsToUpdate.add(Pair.create(oldItem.getMissionItem(), newItem.getMissionItem()));
+
+            if(selection.selectionContains(oldItem)){
+                selectionsToRemove.add(oldItem);
+                itemsToSelect.add(newItem);
+            }
+        }
+
+        //Update the mission objects
+        mMission.replaceAll(missionItemsToUpdate);
+
+        //Update the selection list.
+        selection.removeItemsFromSelection(selectionsToRemove);
+        selection.addToSelection(itemsToSelect);
+    }
+
 	/**
 	 * Reverse the order of the mission items renders.
 	 */
@@ -458,5 +501,18 @@ public class MissionProxy implements DPMap.PathSource {
 		}
 
 		return coords;
+	}
+
+	public Length getMissionLength() {
+		List<Coord2D> points = getPathPoints();
+		if (points.size()>1) {
+			double length = 0;
+			for (int i = 1; i < points.size(); i++) {
+				length += GeoTools.getDistance(points.get(i-1), points.get(i)).valueInMeters();
+			}
+			return new Length(length);
+		}else{
+			return new Length(0);
+		}
 	}
 }

@@ -163,6 +163,16 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 			menu.setGroupEnabled(R.id.menu_group_connected, true);
 			menu.setGroupVisible(R.id.menu_group_connected, true);
 
+            final boolean areMissionMenusEnabled = enableMissionMenus();
+
+            final MenuItem sendMission = menu.findItem(R.id.menu_send_mission);
+            sendMission.setEnabled(areMissionMenusEnabled);
+            sendMission.setVisible(areMissionMenusEnabled);
+
+            final MenuItem loadMission = menu.findItem(R.id.menu_load_mission);
+            loadMission.setEnabled(areMissionMenusEnabled);
+            loadMission.setVisible(areMissionMenusEnabled);
+
 			toggleConnectionItem.setTitle(R.string.menu_disconnect);
 			toggleConnectionItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
@@ -182,6 +192,10 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		}
 		return super.onCreateOptionsMenu(menu);
 	}
+
+    protected boolean enableMissionMenus(){
+        return false;
+    }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

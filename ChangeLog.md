@@ -8,6 +8,21 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.7.12
+* Add support for PL2303 USB devices (#1162)
+
+## Droidplanner v2.7.11
+* Simultaneous editing of multiple waypoints (#1159, #1123)
+* New icon for the dronie (#1161)
+* Flight time estimation (#1144)
+* UI update - pull-up drawer (#1125, #798, #1053)
+* Clean-up of mission Planning (#1140, #1139, #890, #1017, #1139)
+* Follow-me UI improvements (#1124, #1118, #1117)
+* Update of the Pebble app (#1132)
+* Follow-me speed checks (#1146, #1145, #1128, #1130)
+* Fix on parameter search function (#1160, #1158)
+* Fix on possible bugs on the dronie (#1143, #1135)
+
 ## Droidplanner v2.7.10
 * Fixed "Pause" button, for when flying with GCS only (#1116)
 * Switch to Loiter on disarm if landing on RTL or LAND (#1114)

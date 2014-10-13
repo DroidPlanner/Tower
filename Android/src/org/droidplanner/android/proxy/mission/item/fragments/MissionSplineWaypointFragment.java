@@ -4,6 +4,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.core.helpers.units.Altitude;
+import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 
@@ -29,39 +30,39 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment impleme
 
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SPLINE_WAYPOINT));
 
-		SplineWaypoint item = (SplineWaypoint) this.itemRender.getMissionItem();
+		SplineWaypoint item = (SplineWaypoint) getMissionItems().get(0);
 
-		final NumericWheelAdapter delayAdapter = new NumericWheelAdapter(context, 0, 60, "%d s");
-		delayAdapter.setItemResource(R.layout.wheel_text_centered);
+		final NumericWheelAdapter delayAdapter = new NumericWheelAdapter(context,
+                R.layout.wheel_text_centered, 0, 60, "%d s");
 		final CardWheelHorizontalView delayPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.waypointDelayPicker);
 		delayPicker.setViewAdapter(delayAdapter);
+        delayPicker.addChangingListener(this);
 		delayPicker.setCurrentValue((int) item.getDelay());
-		delayPicker.addChangingListener(this);
 
-		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(context, MIN_ALTITUDE,
-				MAX_ALTITUDE, "%d m");
-		altitudeAdapter.setItemResource(R.layout.wheel_text_centered);
+		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(context,
+                R.layout.wheel_text_centered, MIN_ALTITUDE,	MAX_ALTITUDE, "%d m");
 		final CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.altitudePicker);
 		altitudePicker.setViewAdapter(altitudeAdapter);
+        altitudePicker.addChangingListener(this);
 		altitudePicker.setCurrentValue((int) item.getCoordinate().getAltitude().valueInMeters());
-		altitudePicker.addChangingListener(this);
 	}
 
 	@Override
 	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
-		final SplineWaypoint item = (SplineWaypoint) this.itemRender.getMissionItem();
-
 		switch (wheel.getId()) {
 		case R.id.altitudePicker:
-			item.setAltitude(new Altitude(newValue));
+            for(MissionItem item: getMissionItems()) {
+                ((SplineWaypoint)item).setAltitude(new Altitude(newValue));
+            }
 			break;
 
 		case R.id.waypointDelayPicker:
-			item.setDelay(newValue);
+            for(MissionItem item: getMissionItems()) {
+                ((SplineWaypoint)item).setDelay(newValue);
+            }
 			break;
 		}
-
 	}
 }
