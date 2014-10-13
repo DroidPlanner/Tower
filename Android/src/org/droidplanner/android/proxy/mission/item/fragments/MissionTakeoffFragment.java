@@ -27,13 +27,13 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
 		Takeoff item = (Takeoff) getMissionItems().get(0);
 
 		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(getActivity()
-				.getApplicationContext(), MIN_ALTITUDE, MAX_ALTITUDE, "%d m");
-		altitudeAdapter.setItemResource(R.layout.wheel_text_centered);
+				.getApplicationContext(), R.layout.wheel_text_centered, MIN_ALTITUDE,
+                MAX_ALTITUDE, "%d m");
 		final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.altitudePicker);
 		cardAltitudePicker.setViewAdapter(altitudeAdapter);
+        cardAltitudePicker.addChangingListener(this);
 		cardAltitudePicker.setCurrentValue((int) item.getFinishedAlt().valueInMeters());
-		cardAltitudePicker.addChangingListener(this);
 	}
 
 	@Override

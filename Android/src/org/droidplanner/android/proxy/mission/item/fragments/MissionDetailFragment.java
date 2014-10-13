@@ -25,18 +25,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Spinner;
 import android.widget.TextView;
 
-public class MissionDetailFragment extends DialogFragment implements OnItemSelectedListener {
+public class MissionDetailFragment extends DialogFragment implements SpinnerSelfSelect.OnSpinnerItemSelectedListener {
 
 	private static final String TAG = MissionDetailFragment.class.getSimpleName();
 
 	protected static final int MIN_ALTITUDE = 0; // meter
 	protected static final int MAX_ALTITUDE = 200; // meters
 
-	public interface OnMissionDetailListener {
+    public interface OnMissionDetailListener {
 		/**
 		 * Only fired when the mission detail is shown as a dialog. Notifies the
 		 * listener that the mission detail dialog has been dismissed.
@@ -192,6 +191,7 @@ public class MissionDetailFragment extends DialogFragment implements OnItemSelec
             list.remove(MissionItemType.TAKEOFF);
             list.remove(MissionItemType.LAND);
             list.remove(MissionItemType.RTL);
+            list.remove(MissionItemType.SURVEY);
         }
         else{
             //Invalid state. We should not have been able to get here.
@@ -204,7 +204,7 @@ public class MissionDetailFragment extends DialogFragment implements OnItemSelec
 
 		typeSpinner = (SpinnerSelfSelect) view.findViewById(R.id.spinnerWaypointType);
 		typeSpinner.setAdapter(commandAdapter);
-		typeSpinner.setOnItemSelectedListener(this);
+        typeSpinner.setOnSpinnerItemSelectedListener(this);
 	}
 
 	@Override
@@ -232,34 +232,31 @@ public class MissionDetailFragment extends DialogFragment implements OnItemSelec
 		}
 	}
 
-	@Override
-	public void onItemSelected(AdapterView<?> arg0, View v, int position, long id) {
-		final MissionItemType selectedType = commandAdapter.getItem(position);
+    @Override
+    public void onSpinnerItemSelected(Spinner spinner, int position) {
+        final MissionItemType selectedType = commandAdapter.getItem(position);
 
-		try {
-			if (mSelectedProxies == null || mSelectedProxies.isEmpty())
-				return;
+        try {
+            if (mSelectedProxies == null || mSelectedProxies.isEmpty())
+                return;
 
-			final List<Pair<MissionItemProxy, MissionItemProxy>> updatesList = new ArrayList<Pair<MissionItemProxy, MissionItemProxy>>(
-					mSelectedProxies.size());
+            final List<Pair<MissionItemProxy, MissionItemProxy>> updatesList = new ArrayList<Pair<MissionItemProxy, MissionItemProxy>>(
+                    mSelectedProxies.size());
 
-			for (MissionItemProxy missionItemProxy : mSelectedProxies) {
-				final MissionItem oldItem = missionItemProxy.getMissionItem();
-				if (oldItem.getType() != selectedType) {
-					updatesList.add(Pair.create(missionItemProxy, new MissionItemProxy(
-							mMissionProxy, selectedType.getNewItem(oldItem))));
-				}
-			}
+            for (MissionItemProxy missionItemProxy : mSelectedProxies) {
+                final MissionItem oldItem = missionItemProxy.getMissionItem();
+                if (oldItem.getType() != selectedType) {
+                    updatesList.add(Pair.create(missionItemProxy, new MissionItemProxy(
+                            mMissionProxy, selectedType.getNewItem(oldItem))));
+                }
+            }
 
             if(!updatesList.isEmpty()) {
                 mListener.onWaypointTypeChanged(updatesList);
                 dismiss();
             }
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {}
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
 }

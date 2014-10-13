@@ -74,10 +74,14 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 		super.onViewCreated(view, savedInstanceState);
 		final Context context = getActivity().getApplicationContext();
 
+        cameraAdapter = new CamerasAdapter(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item);
+
 		this.surveyList = ((List<Survey>) getMissionItems());
-		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
 
 		cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
+        cameraSpinner.setAdapter(cameraAdapter);
+
 		footprintCheckBox = (CheckBox) view.findViewById(id.CheckBoxFootprints);
 
 		mAnglePicker = (CardWheelHorizontalView) view.findViewById(id.anglePicker);
@@ -108,20 +112,18 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 		numberOfStripsView = (TextView) view.findViewById(id.numberOfStripsTextView);
 		lengthView = (TextView) view.findViewById(id.lengthTextView);
 
-		cameraAdapter = new CamerasAdapter(getActivity(),
-				android.R.layout.simple_spinner_dropdown_item);
-		cameraSpinner.setAdapter(cameraAdapter);
-
 		footprintCheckBox.setOnClickListener(this);
 		innerWPsCheckbox.setOnClickListener(this);
 		cameraSpinner.setOnSpinnerItemSelectedListener(this);
 
+        mAnglePicker.addChangingListener(this);
+        mOverlapPicker.addChangingListener(this);
+        mSidelapPicker.addChangingListener(this);
+        mAltitudePicker.addChangingListener(this);
+
 		updateViews();
 
-		mAnglePicker.addChangingListener(this);
-		mOverlapPicker.addChangingListener(this);
-		mSidelapPicker.addChangingListener(this);
-		mAltitudePicker.addChangingListener(this);
+        typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
 	}
 
 	@Override

@@ -26,6 +26,7 @@ import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.helpers.units.Speed;
+import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.util.Pair;
 
@@ -459,21 +460,19 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		case R.id.menu_action_multi_edit:
             if(mMultiEditEnabled){
                 removeItemDetail();
-            }
-            else {
-                final List<MissionItemProxy> selectedProxies = missionProxy.selection.getSelected();
-                final int selectedCount = selectedProxies.size();
-                if (selectedCount == 1) {
-                    showItemDetail(selectedProxies.get(0).getDetailFragment());
-                } else if (selectedCount > 1) {
-                    showItemDetail(new MissionDetailFragment());
-                } else {
-                    Toast.makeText(getApplicationContext(), "No Waypoint(s) selected.",
-                            Toast.LENGTH_LONG).show();
-                }
+                enableMultiEdit(false);
+                return true;
             }
 
-            mMultiEditEnabled = !mMultiEditEnabled;
+			final List<MissionItemProxy> selectedProxies = missionProxy.selection.getSelected();
+            if(selectedProxies.size() >= 1){
+                showItemDetail(selectMissionDetailType(selectedProxies));
+                enableMultiEdit(true);
+                return true;
+            }
+
+			Toast.makeText(getApplicationContext(), "No Waypoint(s) selected.", Toast.LENGTH_LONG)
+					.show();
 			return true;
 
 		case R.id.menu_action_delete:
@@ -490,6 +489,25 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		}
 	}
 
+    private MissionDetailFragment selectMissionDetailType(List<MissionItemProxy> proxies){
+        if(proxies == null || proxies.isEmpty())
+            return null;
+
+        MissionItemType referenceType = null;
+        for(MissionItemProxy proxy: proxies){
+            final MissionItemType proxyType = proxy.getMissionItem().getType();
+            if(referenceType == null){
+                referenceType = proxyType;
+            }
+            else if(referenceType != proxyType){
+                //Return a generic mission detail.
+                return new MissionDetailFragment();
+            }
+        }
+
+        return MissionDetailFragment.newInstance(referenceType);
+    }
+
 	@Override
 	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         mode.getMenuInflater().inflate(R.menu.action_mode_editor, menu);
@@ -503,10 +521,22 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		missionProxy.selection.clearSelection();
 
         contextualActionBar = null;
-        mMultiEditEnabled = false;
+        enableMultiEdit(false);
 
 		editorToolsFragment.getView().setVisibility(View.VISIBLE);
 	}
+
+    private void enableMultiEdit(boolean enable){
+        mMultiEditEnabled = enable;
+
+        if(contextualActionBar != null){
+            final Menu menu = contextualActionBar.getMenu();
+            final MenuItem multiEdit = menu.findItem(R.id.menu_action_multi_edit);
+            multiEdit.setIcon(mMultiEditEnabled
+                    ? R.drawable.ic_action_copy_blue
+                    : R.drawable.ic_action_copy);
+        }
+    }
 
 	@Override
 	public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -532,7 +562,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public void onItemClick(MissionItemProxy item) {
-        mMultiEditEnabled = false;
+        enableMultiEdit(false);
 		switch (getTool()) {
 		default:
 			if (contextualActionBar != null) {

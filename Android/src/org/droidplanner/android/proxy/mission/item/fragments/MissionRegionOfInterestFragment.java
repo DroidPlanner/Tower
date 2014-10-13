@@ -25,14 +25,14 @@ public class MissionRegionOfInterestFragment extends MissionDetailFragment imple
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.ROI));
 
 		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(getActivity()
-				.getApplicationContext(), MIN_ALTITUDE, MAX_ALTITUDE, "%d m");
-		altitudeAdapter.setItemResource(R.layout.wheel_text_centered);
+				.getApplicationContext(), R.layout.wheel_text_centered, MIN_ALTITUDE,
+                MAX_ALTITUDE, "%d m");
 		final CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.altitudePicker);
 		altitudePicker.setViewAdapter(altitudeAdapter);
+        altitudePicker.addChangingListener(this);
 		altitudePicker.setCurrentValue((int) ((RegionOfInterest) getMissionItems().get(0))
 				.getCoordinate().getAltitude().valueInMeters());
-		altitudePicker.addChangingListener(this);
 	}
 
 	@Override

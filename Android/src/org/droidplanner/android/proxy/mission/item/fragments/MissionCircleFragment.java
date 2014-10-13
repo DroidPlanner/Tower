@@ -45,19 +45,28 @@ public class MissionCircleFragment extends MissionDetailFragment implements
         //Use the first one as reference.
         final Circle firstItem = mItemsList.get(0);
 
+        boolean isAdvanced = DEFAULT_IS_ADVANCED_ON;
+        if (savedInstanceState != null) {
+            isAdvanced = savedInstanceState
+                    .getBoolean(EXTRA_IS_ADVANCED_ON, DEFAULT_IS_ADVANCED_ON);
+        }
+        checkBoxAdvanced = (CheckBox) view.findViewById(R.id.checkBoxAdvanced);
+        checkBoxAdvanced.setOnCheckedChangeListener(this);
+        checkBoxAdvanced.setChecked(isAdvanced);
+
 		final NumericWheelAdapter altitudeStepAdapter = new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, 1, 10, "%d m");
 		mAltitudeStepPicker = (CardWheelHorizontalView) view.findViewById(R.id.altitudeStepPicker);
 		mAltitudeStepPicker.setViewAdapter(altitudeStepAdapter);
+        mAltitudeStepPicker.addChangingListener(this);
 		mAltitudeStepPicker.setCurrentValue((int) firstItem.getAltitudeStep());
-		mAltitudeStepPicker.addChangingListener(this);
 
 		final NumericWheelAdapter numberStepsAdapter = new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, 1, 10, "%d");
 		mNumberStepsPicker = (CardWheelHorizontalView) view.findViewById(R.id.numberStepsPicker);
 		mNumberStepsPicker.setViewAdapter(numberStepsAdapter);
+        mNumberStepsPicker.addChangingListener(this);
 		mNumberStepsPicker.setCurrentValue(firstItem.getNumberOfSteps());
-		mNumberStepsPicker.addChangingListener(this);
 
 		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(context, MIN_ALTITUDE,
 				MAX_ALTITUDE, "%d m");
@@ -65,17 +74,17 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 		final CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.altitudePicker);
 		altitudePicker.setViewAdapter(altitudeAdapter);
+        altitudePicker.addChangingListener(this);
 		altitudePicker.setCurrentValue((int) firstItem.getCoordinate().getAltitude().valueInMeters
                 ());
-		altitudePicker.addChangingListener(this);
 
 		final NumericWheelAdapter loiterTurnAdapter = new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, 0, 10, "%d");
 		final CardWheelHorizontalView loiterTurnPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.loiterTurnPicker);
 		loiterTurnPicker.setViewAdapter(loiterTurnAdapter);
+        loiterTurnPicker.addChangingListener(this);
 		loiterTurnPicker.setCurrentValue(firstItem.getNumberOfTurns());
-		loiterTurnPicker.addChangingListener(this);
 
 		final NumericWheelAdapter loiterRadiusAdapter = new NumericWheelAdapter(context, 0, 50,
 				"%d m");
@@ -83,17 +92,8 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 		final CardWheelHorizontalView loiterRadiusPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.loiterRadiusPicker);
 		loiterRadiusPicker.setViewAdapter(loiterRadiusAdapter);
+        loiterRadiusPicker.addChangingListener(this);
 		loiterRadiusPicker.setCurrentValue((int) firstItem.getRadius());
-		loiterRadiusPicker.addChangingListener(this);
-
-		boolean isAdvanced = DEFAULT_IS_ADVANCED_ON;
-		if (savedInstanceState != null) {
-			isAdvanced = savedInstanceState
-					.getBoolean(EXTRA_IS_ADVANCED_ON, DEFAULT_IS_ADVANCED_ON);
-		}
-		checkBoxAdvanced = (CheckBox) view.findViewById(R.id.checkBoxAdvanced);
-		checkBoxAdvanced.setOnCheckedChangeListener(this);
-		checkBoxAdvanced.setChecked(isAdvanced);
 	}
 
 	@Override

@@ -32,22 +32,21 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment impleme
 
 		SplineWaypoint item = (SplineWaypoint) getMissionItems().get(0);
 
-		final NumericWheelAdapter delayAdapter = new NumericWheelAdapter(context, 0, 60, "%d s");
-		delayAdapter.setItemResource(R.layout.wheel_text_centered);
+		final NumericWheelAdapter delayAdapter = new NumericWheelAdapter(context,
+                R.layout.wheel_text_centered, 0, 60, "%d s");
 		final CardWheelHorizontalView delayPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.waypointDelayPicker);
 		delayPicker.setViewAdapter(delayAdapter);
+        delayPicker.addChangingListener(this);
 		delayPicker.setCurrentValue((int) item.getDelay());
-		delayPicker.addChangingListener(this);
 
-		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(context, MIN_ALTITUDE,
-				MAX_ALTITUDE, "%d m");
-		altitudeAdapter.setItemResource(R.layout.wheel_text_centered);
+		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(context,
+                R.layout.wheel_text_centered, MIN_ALTITUDE,	MAX_ALTITUDE, "%d m");
 		final CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.altitudePicker);
 		altitudePicker.setViewAdapter(altitudeAdapter);
+        altitudePicker.addChangingListener(this);
 		altitudePicker.setCurrentValue((int) item.getCoordinate().getAltitude().valueInMeters());
-		altitudePicker.addChangingListener(this);
 	}
 
 	@Override
@@ -65,6 +64,5 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment impleme
             }
 			break;
 		}
-
 	}
 }
