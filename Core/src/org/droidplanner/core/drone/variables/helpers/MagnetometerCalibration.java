@@ -51,7 +51,7 @@ public class MagnetometerCalibration implements OnDroneListener {
 		}
 		
 		
-		if (!fitComplete && ellipsoidFit.getFitness() > 0.95 && points.size() > 100) {
+		if (!fitComplete && ellipsoidFit.getFitness() > 0.98 && points.size() > 100) {
 			fitComplete  = true;
 			if (listner!=null) {
 				listner.finished(ellipsoidFit);
