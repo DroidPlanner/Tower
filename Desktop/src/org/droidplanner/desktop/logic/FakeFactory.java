@@ -38,6 +38,11 @@ public class FakeFactory {
 				// TODO Auto-generated method stub
 
 			}
+			
+			@Override
+			public void post(Runnable thread){
+				
+			}
 
 			@Override
 			public void postDelayed(Runnable thread, long timeout) {

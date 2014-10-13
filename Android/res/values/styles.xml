@@ -463,5 +463,9 @@
         <item name="android:drawablePadding">28dp</item>
     </style>
 
+    <style name="slidingPanelGravity">
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
 </resources>
 

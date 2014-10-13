@@ -13,32 +13,28 @@ public class Location {
 
 		public void disableLocationUpdates();
 
-		public void setLocationListner(LocationReceiver receiver);
+		public void setLocationListener(LocationReceiver receiver);
 	}
 
 	private Coord2D coordinate;
-	private double accuracy = 0.0;
 	private double heading = 0.0;
 	private double speed = 0.0;
+    private boolean isAccurate;
 
-	public Location(Coord2D coord2d) {
+	public Location(Coord2D coord2d, float heading, float speed, boolean isAccurate) {
 		coordinate = coord2d;
-	}
-
-	public Location(Coord2D coord2d, double accuracy, float heading, float speed) {
-		coordinate = coord2d;
-		this.accuracy = accuracy;
 		this.heading = heading;
 		this.speed = speed;
+        this.isAccurate = isAccurate;
 	}
 
 	public Coord2D getCoord() {
 		return coordinate;
 	}
 
-	public double getAccuracy() {
-		return accuracy;
-	}
+    public boolean isAccurate(){
+        return this.isAccurate;
+    }
 
 	public double getBearing() {
 		return heading;

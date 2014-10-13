@@ -18,10 +18,8 @@ public abstract class FollowAlgorithm {
 		this.radius = radius;
 	}
 
-	public void changeRadius(Double increment) {
-		radius = new Length(radius.valueInMeters() + increment);
-		if (radius.valueInMeters() < 0)
-			radius = new Length(0);
+	public void changeRadius(Double radius) {
+		this.radius = new Length(Math.max(0, radius));
 	}
 
 	public enum FollowModes {

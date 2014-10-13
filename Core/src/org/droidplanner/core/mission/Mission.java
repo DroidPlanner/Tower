@@ -20,6 +20,7 @@ import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 import org.droidplanner.core.model.Drone;
+import org.droidplanner.core.util.Pair;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
@@ -134,11 +135,40 @@ public class Mission extends DroneVariable {
 	 *            new mission item
 	 */
 	public void replace(MissionItem oldItem, MissionItem newItem) {
-		int index = items.indexOf(oldItem);
+		final int index = items.indexOf(oldItem);
+        if(index == -1){
+            return;
+        }
+
 		items.remove(index);
 		items.add(index, newItem);
 		notifyMissionUpdate();
 	}
+
+    public void replaceAll(List<Pair<MissionItem, MissionItem>> updatesList){
+        if(updatesList == null || updatesList.isEmpty()){
+            return;
+        }
+
+        boolean wasUpdated = false;
+        for(Pair<MissionItem, MissionItem> updatePair : updatesList){
+            final MissionItem oldItem = updatePair.first;
+            final int index = items.indexOf(oldItem);
+            if(index == -1){
+                continue;
+            }
+
+            final MissionItem newItem = updatePair.second;
+            items.remove(index);
+            items.add(index, newItem);
+
+            wasUpdated = true;
+        }
+
+        if(wasUpdated) {
+            notifyMissionUpdate();
+        }
+    }
 
 	/**
 	 * Reverse the order of the mission items.
@@ -264,8 +294,12 @@ public class Mission extends DroneVariable {
 	}
 
 	public void makeAndUploadDronie() {
-		items.clear();
 		Coord2D currentPosition = myDrone.getGps().getPosition();
+		if(currentPosition == null || myDrone.getGps().getSatCount()<=5){
+			myDrone.notifyDroneEvent(DroneEventsType.WARNING_NO_GPS);
+			return;
+		}
+		items.clear();
 		items.addAll(createDronie(this, currentPosition, GeoTools.newCoordFromBearingAndDistance(
 				currentPosition, 180 + myDrone.getOrientation().getYaw(), 50.0)));
 		sendMissionToAPM();
