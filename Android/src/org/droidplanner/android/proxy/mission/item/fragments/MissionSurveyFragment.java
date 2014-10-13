@@ -10,6 +10,7 @@ import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.MissionItemType;
+import org.droidplanner.core.mission.survey.CameraInfo;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.model.Drone;
 
@@ -22,6 +23,8 @@ import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.List;
 
 public class MissionSurveyFragment extends MissionDetailFragment implements OnClickListener,
 		CardWheelHorizontalView.OnCardWheelChangedListener,
@@ -47,7 +50,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 	public CheckBox footprintCheckBox;
 	private CamerasAdapter cameraAdapter;
 
-	private Survey survey;
+	private List<Survey> surveyList;
 
 	@Override
 	protected int getResource() {
@@ -71,10 +74,14 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 		super.onViewCreated(view, savedInstanceState);
 		final Context context = getActivity().getApplicationContext();
 
-		this.survey = ((Survey) itemRender.getMissionItem());
-		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
+        cameraAdapter = new CamerasAdapter(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item);
+
+		this.surveyList = ((List<Survey>) getMissionItems());
 
 		cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
+        cameraSpinner.setAdapter(cameraAdapter);
+
 		footprintCheckBox = (CheckBox) view.findViewById(id.CheckBoxFootprints);
 
 		mAnglePicker = (CardWheelHorizontalView) view.findViewById(id.anglePicker);
@@ -105,25 +112,27 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 		numberOfStripsView = (TextView) view.findViewById(id.numberOfStripsTextView);
 		lengthView = (TextView) view.findViewById(id.lengthTextView);
 
-		cameraAdapter = new CamerasAdapter(getActivity(),
-				android.R.layout.simple_spinner_dropdown_item);
-		cameraSpinner.setAdapter(cameraAdapter);
-
 		footprintCheckBox.setOnClickListener(this);
 		innerWPsCheckbox.setOnClickListener(this);
 		cameraSpinner.setOnSpinnerItemSelectedListener(this);
 
+        mAnglePicker.addChangingListener(this);
+        mOverlapPicker.addChangingListener(this);
+        mSidelapPicker.addChangingListener(this);
+        mAltitudePicker.addChangingListener(this);
+
 		updateViews();
 
-		mAnglePicker.addChangingListener(this);
-		mOverlapPicker.addChangingListener(this);
-		mSidelapPicker.addChangingListener(this);
-		mAltitudePicker.addChangingListener(this);
+        typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
 	}
 
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position) {
-		survey.setCameraInfo(cameraAdapter.getCamera(position));
+        final CameraInfo cameraInfo = cameraAdapter.getCamera(position);
+        for(Survey survey: surveyList) {
+            survey.setCameraInfo(cameraInfo);
+        }
+
 		onChanged(mAnglePicker, 0, 0);
 	}
 
@@ -134,13 +143,15 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 		case R.id.altitudePicker:
 		case R.id.overlapPicker:
 		case R.id.sidelapPicker:
-			survey.update(mAnglePicker.getCurrentValue(),
-					new Altitude(mAltitudePicker.getCurrentValue()),
-					mOverlapPicker.getCurrentValue(), mSidelapPicker.getCurrentValue());
-
 			try {
-				survey.build();
-				mAltitudePicker.setBackgroundResource(R.drawable.bg_cell_white);
+				for (Survey survey : surveyList) {
+					survey.update(mAnglePicker.getCurrentValue(),
+							new Altitude(mAltitudePicker.getCurrentValue()),
+							mOverlapPicker.getCurrentValue(), mSidelapPicker.getCurrentValue());
+
+					survey.build();
+				}
+                mAltitudePicker.setBackgroundResource(R.drawable.bg_cell_white);
 			} catch (Exception e) {
 				Log.e(TAG, "Error while building the survey.", e);
 				mAltitudePicker.setBackgroundColor(Color.RED);
@@ -173,36 +184,36 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 	}
 
 	private void updateCameraSpinner() {
-		cameraAdapter.setTitle(survey.surveyData.getCameraName());
+		cameraAdapter.setTitle(surveyList.get(0).surveyData.getCameraName());
 	}
 
 	private void updateSeekBars() {
-		mAnglePicker.setCurrentValue(survey.surveyData.getAngle().intValue());
-		mOverlapPicker.setCurrentValue((int) survey.surveyData.getOverlap());
-		mSidelapPicker.setCurrentValue((int) survey.surveyData.getSidelap());
-		mAltitudePicker.setCurrentValue((int) survey.surveyData.getAltitude().valueInMeters());
+		mAnglePicker.setCurrentValue(surveyList.get(0).surveyData.getAngle().intValue());
+		mOverlapPicker.setCurrentValue((int) surveyList.get(0).surveyData.getOverlap());
+		mSidelapPicker.setCurrentValue((int) surveyList.get(0).surveyData.getSidelap());
+		mAltitudePicker.setCurrentValue((int) surveyList.get(0).surveyData.getAltitude().valueInMeters());
 	}
 
 	private void updateTextViews() {
 		Context context = getActivity();
 		try {
 			footprintTextView.setText(context.getString(R.string.footprint) + ": "
-					+ survey.surveyData.getLateralFootPrint() + " x"
-					+ survey.surveyData.getLongitudinalFootPrint());
+					+ surveyList.get(0).surveyData.getLateralFootPrint() + " x"
+					+ surveyList.get(0).surveyData.getLongitudinalFootPrint());
 			groundResolutionTextView.setText(context.getString(R.string.ground_resolution) + ": "
-					+ survey.surveyData.getGroundResolution() + "/px");
+                    + surveyList.get(0).surveyData.getGroundResolution() + "/px");
 			distanceTextView.setText(context.getString(R.string.distance_between_pictures) + ": "
-					+ survey.surveyData.getLongitudinalPictureDistance());
+					+ surveyList.get(0).surveyData.getLongitudinalPictureDistance());
 			distanceBetweenLinesTextView.setText(context.getString(R.string.distance_between_lines)
-					+ ": " + survey.surveyData.getLateralPictureDistance());
+					+ ": " + surveyList.get(0).surveyData.getLateralPictureDistance());
 			areaTextView
-					.setText(context.getString(R.string.area) + ": " + survey.polygon.getArea());
+					.setText(context.getString(R.string.area) + ": " + surveyList.get(0).polygon.getArea());
 			lengthView.setText(context.getString(R.string.mission_length) + ": "
-					+ survey.grid.getLength());
+                    + surveyList.get(0).grid.getLength());
 			numberOfPicturesView.setText(context.getString(R.string.pictures) + ": "
-					+ survey.grid.getCameraCount());
+					+ surveyList.get(0).grid.getCameraCount());
 			numberOfStripsView.setText(context.getString(R.string.number_of_strips) + ": "
-					+ survey.grid.getNumberOfLines());
+                    + surveyList.get(0).grid.getNumberOfLines());
 		} catch (Exception e) {
 			footprintTextView.setText(context.getString(R.string.footprint) + ": " + "???");
 			groundResolutionTextView.setText(context.getString(R.string.ground_resolution) + ": "

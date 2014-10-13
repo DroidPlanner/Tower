@@ -26,7 +26,9 @@ import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.helpers.units.Speed;
+import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.model.Drone;
+import org.droidplanner.core.util.Pair;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -76,8 +78,10 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	private View mSplineToggleContainer;
 	private boolean mIsSplineEnabled;
 
-	private View mLocationButtonsContainer;
 	private TextView infoView;
+
+    //TODO: change the multi edit icon based on its state.
+    private boolean mMultiEditEnabled;
 
 	/**
 	 * This view hosts the mission item detail fragment. On phone, or device
@@ -108,8 +112,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		mSplineToggleContainer.setVisibility(View.VISIBLE);
 		
 		infoView = (TextView) findViewById(R.id.editorInfoWindow);
-
-		mLocationButtonsContainer = findViewById(R.id.location_button_container);
 
         final ImageButton resetMapBearing = (ImageButton) findViewById(R.id.map_orientation_button);
         resetMapBearing.setOnClickListener(new View.OnClickListener() {
@@ -285,10 +287,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 			
 			
 			// Remove detail window if item is removed
-			if (itemDetailFragment != null) {
-				if (!missionProxy.contains(itemDetailFragment.getItem())) {
+			if (missionProxy.selection.getSelected().isEmpty() && itemDetailFragment != null) {
 					removeItemDetail();
-				}
 			}
 			break;
 
@@ -379,16 +379,16 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		}
 	}
 
-	private void showItemDetail(MissionItemProxy item) {
+	private void showItemDetail(MissionDetailFragment itemDetail) {
 		if (itemDetailFragment == null) {
-			addItemDetail(item);
+			addItemDetail(itemDetail);
 		} else {
-			switchItemDetail(item);
+			switchItemDetail(itemDetail);
 		}
 	}
 
-	private void addItemDetail(MissionItemProxy item) {
-		itemDetailFragment = item.getDetailFragment();
+	private void addItemDetail(MissionDetailFragment itemDetail) {
+		itemDetailFragment = itemDetail;
 		if (itemDetailFragment == null)
 			return;
 
@@ -401,9 +401,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		}
 	}
 
-	public void switchItemDetail(MissionItemProxy item) {
+	public void switchItemDetail(MissionDetailFragment itemDetail) {
 		removeItemDetail();
-		addItemDetail(item);
+		addItemDetail(itemDetail);
 	}
 
 	private void removeItemDetail() {
@@ -445,27 +445,42 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	@Override
-	public void onDetailDialogDismissed(MissionItemProxy item) {
-		missionProxy.selection.removeItemFromSelection(item);
+	public void onDetailDialogDismissed(List<MissionItemProxy> itemList) {
+        missionProxy.selection.removeItemsFromSelection(itemList);
 	}
 
 	@Override
-	public void onWaypointTypeChanged(MissionItemProxy newItem, MissionItemProxy oldItem) {
-		missionProxy.replace(oldItem, newItem);
+	public void onWaypointTypeChanged(List<Pair<MissionItemProxy, MissionItemProxy>> oldNewItemsList) {
+		missionProxy.replaceAll(oldNewItemsList);
 	}
-
-	private static final int MENU_DELETE = 1;
-	private static final int MENU_REVERSE = 2;
 
 	@Override
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 		switch (item.getItemId()) {
-		case MENU_DELETE:
+		case R.id.menu_action_multi_edit:
+            if(mMultiEditEnabled){
+                removeItemDetail();
+                enableMultiEdit(false);
+                return true;
+            }
+
+			final List<MissionItemProxy> selectedProxies = missionProxy.selection.getSelected();
+            if(selectedProxies.size() >= 1){
+                showItemDetail(selectMissionDetailType(selectedProxies));
+                enableMultiEdit(true);
+                return true;
+            }
+
+			Toast.makeText(getApplicationContext(), "No Waypoint(s) selected.", Toast.LENGTH_LONG)
+					.show();
+			return true;
+
+		case R.id.menu_action_delete:
 			missionProxy.removeSelection(missionProxy.selection);
 			mode.finish();
 			return true;
 
-		case MENU_REVERSE:
+		case R.id.menu_action_reverse:
 			missionProxy.reverse();
 			return true;
 
@@ -474,10 +489,28 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		}
 	}
 
+    private MissionDetailFragment selectMissionDetailType(List<MissionItemProxy> proxies){
+        if(proxies == null || proxies.isEmpty())
+            return null;
+
+        MissionItemType referenceType = null;
+        for(MissionItemProxy proxy: proxies){
+            final MissionItemType proxyType = proxy.getMissionItem().getType();
+            if(referenceType == null){
+                referenceType = proxyType;
+            }
+            else if(referenceType != proxyType){
+                //Return a generic mission detail.
+                return new MissionDetailFragment();
+            }
+        }
+
+        return MissionDetailFragment.newInstance(referenceType);
+    }
+
 	@Override
-	public boolean onCreateActionMode(ActionMode arg0, Menu menu) {
-		menu.add(0, MENU_DELETE, 0, "Delete");
-		menu.add(0, MENU_REVERSE, 0, "Reverse");
+	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        mode.getMenuInflater().inflate(R.menu.action_mode_editor, menu);
 		editorToolsFragment.getView().setVisibility(View.INVISIBLE);
 		return true;
 	}
@@ -486,12 +519,27 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	public void onDestroyActionMode(ActionMode arg0) {
 		missionListFragment.updateChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 		missionProxy.selection.clearSelection();
-		contextualActionBar = null;
+
+        contextualActionBar = null;
+        enableMultiEdit(false);
+
 		editorToolsFragment.getView().setVisibility(View.VISIBLE);
 	}
 
+    private void enableMultiEdit(boolean enable){
+        mMultiEditEnabled = enable;
+
+        if(contextualActionBar != null){
+            final Menu menu = contextualActionBar.getMenu();
+            final MenuItem multiEdit = menu.findItem(R.id.menu_action_multi_edit);
+            multiEdit.setIcon(mMultiEditEnabled
+                    ? R.drawable.ic_action_copy_blue
+                    : R.drawable.ic_action_copy);
+        }
+    }
+
 	@Override
-	public boolean onPrepareActionMode(ActionMode arg0, Menu arg1) {
+	public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
 		return false;
 	}
 
@@ -514,6 +562,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public void onItemClick(MissionItemProxy item) {
+        enableMultiEdit(false);
 		switch (getTool()) {
 		default:
 			if (contextualActionBar != null) {
@@ -552,17 +601,17 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public void onSelectionUpdate(List<MissionItemProxy> selected) {
-		final int selectedCount = selected.size();
+		final boolean isEmpty = selected.isEmpty();
 
-		missionListFragment.setArrowsVisibility(selectedCount > 0);
+		missionListFragment.setArrowsVisibility(!isEmpty);
 
-		if (selectedCount != 1) {
+		if (isEmpty) {
 			removeItemDetail();
 		} else {
-			if (contextualActionBar != null)
+			if (contextualActionBar != null && !mMultiEditEnabled)
 				removeItemDetail();
 			else {
-				showItemDetail(selected.get(0));
+				showItemDetail(selected.get(0).getDetailFragment());
 			}
 		}
 

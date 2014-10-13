@@ -209,6 +209,7 @@
     <string name="waypoint_delay">Delay before next waypoint</string>
     <string name="loiter_radius">Loiter Radius</string>
     <string name="loiter_ccw">CCW</string>
+    <string name="circle_radius">Circle Radius</string>
     <string name="waypoint_altitude">Altitude</string>
     <string name="waypoint_angle">Yaw Angle</string>
     <string name="waypoint_finalaltitude">Target Altitude</string>
@@ -483,5 +484,8 @@
     <string name="dialog_confirm_arming_title">Arm propellers?</string>
     <string name="dialog_confirm_arming_msg">Warning! Propellers will spin and drone may begin to fly.</string>
     <string name="radius_label">Radius</string>
+    <string name="menu_action_delete">Delete</string>
+    <string name="menu_action_reverse">Reverse</string>
+    <string name="menu_action_multi_edit">Multi-Edit</string>
 
 </resources>

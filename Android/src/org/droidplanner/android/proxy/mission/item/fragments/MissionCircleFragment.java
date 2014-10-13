@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
+import java.util.List;
+
 public class MissionCircleFragment extends MissionDetailFragment implements
 		CardWheelHorizontalView.OnCardWheelChangedListener, CompoundButton.OnCheckedChangeListener {
 
@@ -21,7 +23,7 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 
 	private CheckBox checkBoxAdvanced;
 
-	private Circle mItem;
+	private List<Circle> mItemsList;
 
 	private CardWheelHorizontalView mNumberStepsPicker;
 	private CardWheelHorizontalView mAltitudeStepPicker;
@@ -38,21 +40,33 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CIRCLE));
 
-		mItem = (Circle) this.itemRender.getMissionItem();
+		mItemsList = (List<Circle>) getMissionItems();
+
+        //Use the first one as reference.
+        final Circle firstItem = mItemsList.get(0);
+
+        boolean isAdvanced = DEFAULT_IS_ADVANCED_ON;
+        if (savedInstanceState != null) {
+            isAdvanced = savedInstanceState
+                    .getBoolean(EXTRA_IS_ADVANCED_ON, DEFAULT_IS_ADVANCED_ON);
+        }
+        checkBoxAdvanced = (CheckBox) view.findViewById(R.id.checkBoxAdvanced);
+        checkBoxAdvanced.setOnCheckedChangeListener(this);
+        checkBoxAdvanced.setChecked(isAdvanced);
 
 		final NumericWheelAdapter altitudeStepAdapter = new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, 1, 10, "%d m");
 		mAltitudeStepPicker = (CardWheelHorizontalView) view.findViewById(R.id.altitudeStepPicker);
 		mAltitudeStepPicker.setViewAdapter(altitudeStepAdapter);
-		mAltitudeStepPicker.setCurrentValue((int) mItem.getAltitudeStep());
-		mAltitudeStepPicker.addChangingListener(this);
+        mAltitudeStepPicker.addChangingListener(this);
+		mAltitudeStepPicker.setCurrentValue((int) firstItem.getAltitudeStep());
 
 		final NumericWheelAdapter numberStepsAdapter = new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, 1, 10, "%d");
 		mNumberStepsPicker = (CardWheelHorizontalView) view.findViewById(R.id.numberStepsPicker);
 		mNumberStepsPicker.setViewAdapter(numberStepsAdapter);
-		mNumberStepsPicker.setCurrentValue(mItem.getNumberOfSteps());
-		mNumberStepsPicker.addChangingListener(this);
+        mNumberStepsPicker.addChangingListener(this);
+		mNumberStepsPicker.setCurrentValue(firstItem.getNumberOfSteps());
 
 		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(context, MIN_ALTITUDE,
 				MAX_ALTITUDE, "%d m");
@@ -60,16 +74,17 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 		final CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.altitudePicker);
 		altitudePicker.setViewAdapter(altitudeAdapter);
-		altitudePicker.setCurrentValue((int) mItem.getCoordinate().getAltitude().valueInMeters());
-		altitudePicker.addChangingListener(this);
+        altitudePicker.addChangingListener(this);
+		altitudePicker.setCurrentValue((int) firstItem.getCoordinate().getAltitude().valueInMeters
+                ());
 
 		final NumericWheelAdapter loiterTurnAdapter = new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, 0, 10, "%d");
 		final CardWheelHorizontalView loiterTurnPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.loiterTurnPicker);
 		loiterTurnPicker.setViewAdapter(loiterTurnAdapter);
-		loiterTurnPicker.setCurrentValue(mItem.getNumberOfTurns());
-		loiterTurnPicker.addChangingListener(this);
+        loiterTurnPicker.addChangingListener(this);
+		loiterTurnPicker.setCurrentValue(firstItem.getNumberOfTurns());
 
 		final NumericWheelAdapter loiterRadiusAdapter = new NumericWheelAdapter(context, 0, 50,
 				"%d m");
@@ -77,17 +92,8 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 		final CardWheelHorizontalView loiterRadiusPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.loiterRadiusPicker);
 		loiterRadiusPicker.setViewAdapter(loiterRadiusAdapter);
-		loiterRadiusPicker.setCurrentValue((int) mItem.getRadius());
-		loiterRadiusPicker.addChangingListener(this);
-
-		boolean isAdvanced = DEFAULT_IS_ADVANCED_ON;
-		if (savedInstanceState != null) {
-			isAdvanced = savedInstanceState
-					.getBoolean(EXTRA_IS_ADVANCED_ON, DEFAULT_IS_ADVANCED_ON);
-		}
-		checkBoxAdvanced = (CheckBox) view.findViewById(R.id.checkBoxAdvanced);
-		checkBoxAdvanced.setOnCheckedChangeListener(this);
-		checkBoxAdvanced.setChecked(isAdvanced);
+        loiterRadiusPicker.addChangingListener(this);
+		loiterRadiusPicker.setCurrentValue((int) firstItem.getRadius());
 	}
 
 	@Override
@@ -103,11 +109,15 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 			int visibility;
 			if (isChecked) {
 				visibility = View.VISIBLE;
-				mItem.setNumberOfSteps(mNumberStepsPicker.getCurrentValue());
-				mItem.setAltitudeStep(mAltitudeStepPicker.getCurrentValue());
+                for(Circle item: mItemsList) {
+                    item.setNumberOfSteps(mNumberStepsPicker.getCurrentValue());
+                    item.setAltitudeStep(mAltitudeStepPicker.getCurrentValue());
+                }
 			} else {
 				visibility = View.GONE;
-				mItem.setNumberOfSteps(1);
+                for(Circle item: mItemsList) {
+                    item.setNumberOfSteps(1);
+                }
 			}
 
 			mAltitudeStepPicker.setVisibility(visibility);
@@ -119,27 +129,37 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 	public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
 		switch (cardWheel.getId()) {
 		case R.id.altitudePicker:
-			mItem.setAltitude(new Altitude(newValue));
+            for(Circle item: mItemsList) {
+                item.setAltitude(new Altitude(newValue));
+            }
 			break;
 
 		case R.id.loiterRadiusPicker:
-			mItem.setRadius(newValue);
-			mItem.getMission().notifyMissionUpdate();
+            for(Circle item: mItemsList) {
+                item.setRadius(newValue);
+            }
+            getMissionProxy().getMission().notifyMissionUpdate();
 			break;
 
 		case R.id.loiterTurnPicker:
-			mItem.setTurns(newValue);
+            for(Circle item: mItemsList) {
+                item.setTurns(newValue);
+            }
 			break;
 
 		case R.id.numberStepsPicker:
 			if (checkBoxAdvanced.isChecked()) {
-				mItem.setNumberOfSteps(newValue);
+                for(Circle item: mItemsList) {
+                    item.setNumberOfSteps(newValue);
+                }
 			}
 			break;
 
 		case R.id.altitudeStepPicker:
 			if (checkBoxAdvanced.isChecked()) {
-				mItem.setAltitudeStep(newValue);
+                for(Circle item: mItemsList) {
+                    item.setAltitudeStep(newValue);
+                }
 			}
 			break;
 		}
