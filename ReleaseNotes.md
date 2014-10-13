@@ -1,6 +1,10 @@
 # Releases Notes
 These notes document what was removed from a Release Candidate (RC), which is build from a corresponding version of the program. These are not comulative between program versions (they can be between RCs), and express the diff from the master branch.
 
+## Droidplanner v2.7.12 RC1
+* On the DroneSetup pane removed the Tuning, Radio and Calibration Fragments
+* Removed un-finished buttons on the Circle mode fragment
+
 ## Droidplanner v2.7.10 RC2
 * Follow-me UI improvements merged just for this release (#1124)
 
