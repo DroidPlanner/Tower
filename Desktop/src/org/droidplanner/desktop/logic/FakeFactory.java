@@ -1,8 +1,11 @@
 package org.droidplanner.desktop.logic;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
@@ -39,11 +42,15 @@ public class FakeFactory {
 		return new Handler() {
 			
 			private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+			private final Map<Runnable, ScheduledFuture<?>> futureThreads = new HashMap<Runnable, ScheduledFuture<?>>();
 
 			@Override
 			public void removeCallbacks(Runnable thread) {
-				// TODO Auto-generated method stub
-
+				if (futureThreads.containsKey(thread)) {
+					boolean mayInterruptIfRunning = false;
+					futureThreads.get(thread).cancel(mayInterruptIfRunning);
+					System.out.println("Canceled");
+				}
 			}
 			
 			@Override
@@ -53,7 +60,9 @@ public class FakeFactory {
 
 			@Override
 			public void postDelayed(Runnable thread, long timeout) {
-				//scheduler.schedule(thread, timeout, TimeUnit.MILLISECONDS);
+				ScheduledFuture<?> future = scheduler.schedule(thread, timeout, TimeUnit.MILLISECONDS);
+				futureThreads.put(thread, future);
+				System.out.println("PostDelayed");
 			}
 		};
 	}
