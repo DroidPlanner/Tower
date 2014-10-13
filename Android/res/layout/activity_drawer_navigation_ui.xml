@@ -93,6 +93,7 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@android:drawable/ic_menu_preferences"
                     android:drawableStart="@android:drawable/ic_menu_preferences"
+                    android:visibility="gone"
                     android:text="@string/screen_tuning"/>
 
                 <TextView
@@ -102,6 +103,7 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_action_radio"
                     android:drawableStart="@drawable/ic_action_radio"
+                    android:visibility="gone"
                     android:text="@string/screen_rc"/>
 
                 <TextView
@@ -111,6 +113,7 @@
                     android:id="@+id/navigation_calibration"
                     android:drawableLeft="@drawable/ic_action_circles"
                     android:drawableStart="@drawable/ic_action_circles"
+                    android:visibility="gone"
                     android:text="@string/screen_cal"
                     />
 
