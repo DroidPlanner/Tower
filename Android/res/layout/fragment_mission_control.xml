@@ -41,7 +41,7 @@
         <Button
             android:id="@+id/mc_dronieBtn"
             style="@style/flightControlButton.Row"
-            android:drawableTop="@drawable/ic_follow"
+            android:drawableTop="@drawable/ic_dronie"
             android:text="@string/mission_control_dronie"
             />
 
