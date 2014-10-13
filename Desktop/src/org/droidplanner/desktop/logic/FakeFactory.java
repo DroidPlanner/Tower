@@ -1,5 +1,10 @@
 package org.droidplanner.desktop.logic;
 
+import java.util.Stack;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.Preferences;
@@ -32,6 +37,8 @@ public class FakeFactory {
 
 	static Handler fakeHandler() {
 		return new Handler() {
+			
+			private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
 			@Override
 			public void removeCallbacks(Runnable thread) {
@@ -41,13 +48,12 @@ public class FakeFactory {
 			
 			@Override
 			public void post(Runnable thread){
-				new Thread(thread).start();
+				scheduler.execute(thread);
 			}
 
 			@Override
 			public void postDelayed(Runnable thread, long timeout) {
-				// TODO Auto-generated method stub
-
+				//scheduler.schedule(thread, timeout, TimeUnit.MILLISECONDS);
 			}
 		};
 	}
