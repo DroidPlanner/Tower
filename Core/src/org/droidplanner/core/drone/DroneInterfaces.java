@@ -181,6 +181,11 @@ public class DroneInterfaces {
 		 * 'Follow' mode has been disabled.
 		 */
 		FOLLOW_STOP,
+		
+		/**
+		 * 'Follow' state has been updated.
+		 */
+		FOLLOW_UPDATE,
 
 		/**
          * 
@@ -200,11 +205,16 @@ public class DroneInterfaces {
 		/**
 		 *
 		 */
-		WARNING_SIGNAL_WEAK, 
+		WARNING_SIGNAL_WEAK,
 		/**
 		 * Announces that a new version for the firmware has been received
 		 */
 		FIRMWARE,
+
+		/**
+		 * Warn that the drone has no gps signal
+		 */
+		WARNING_NO_GPS,
 	}
 
 	public interface OnDroneListener {
@@ -242,6 +252,8 @@ public class DroneInterfaces {
 	public interface Handler {
 
 		void removeCallbacks(Runnable thread);
+
+        void post(Runnable thread);
 
 		void postDelayed(Runnable thread, long timeout);
 

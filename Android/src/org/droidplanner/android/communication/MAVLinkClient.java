@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * Provide a common class for some ease of use functionality
   */
@@ -28,6 +30,8 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
      * Used to post updates to the main thread.
      */
     private final Handler mHandler = new Handler();
+
+    private final AtomicReference<String> mErrMsgRef = new AtomicReference<String>();
 
     private final MavLinkConnectionListener mConnectionListener = new MavLinkConnectionListener() {
         private final Runnable mConnectedNotification = new Runnable() {
@@ -42,6 +46,28 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
             public void run() {
                 listener.notifyDisconnected();
                 closeConnection();
+            }
+        };
+
+        private final Runnable mErrorNotification = new Runnable() {
+
+            private Toast mErrToast;
+
+            @Override
+            public void run() {
+                mHandler.removeCallbacks(this);
+
+                final String errMsg = mErrMsgRef.get();
+                if(errMsg != null) {
+                    final String toastMsg = mMavLinkErrorPrefix + " " + errMsg;
+                    if(mErrToast == null){
+                        mErrToast = Toast.makeText(parent, toastMsg, Toast.LENGTH_LONG);
+                    }
+                    else{
+                        mErrToast.setText(toastMsg);
+                    }
+                    mErrToast.show();
+                }
             }
         };
 
@@ -67,12 +93,8 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 
         @Override
         public void onComError(final String errMsg) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(parent, mMavLinkErrorPrefix + " " + errMsg, Toast.LENGTH_LONG).show();
-                }
-            });
+            mErrMsgRef.set(errMsg);
+            mHandler.post(mErrorNotification);
         }
     };
 

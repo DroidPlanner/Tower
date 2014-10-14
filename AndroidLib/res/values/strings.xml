@@ -171,7 +171,7 @@
     <string name="mode_rtl">RTL rises to the minimum altitude, returns to the home location and lands. Requires GPS lock.</string>
     <string name="mode_sport">Sport allows a pilot to control rate of rotation directly with the addition of self-leveling.</string>
     <string name="mode_stabilize">Stabilize levels the vehicle in flight.</string>
-    <string name="mode_hybrid">Hybrid allows position hold (GPS) with direct response to pilot input.</string>
+    <string name="mode_poshold">PosHold allows position hold (GPS) with direct response to pilot input.</string>
 
     <!-- Waypoint types -->
     <string name="waypointType_Waypoint">Waypoint</string>
@@ -209,6 +209,7 @@
     <string name="waypoint_delay">Delay before next waypoint</string>
     <string name="loiter_radius">Loiter Radius</string>
     <string name="loiter_ccw">CCW</string>
+    <string name="circle_radius">Circle Radius</string>
     <string name="waypoint_altitude">Altitude</string>
     <string name="waypoint_angle">Yaw Angle</string>
     <string name="waypoint_finalaltitude">Target Altitude</string>
@@ -229,7 +230,7 @@
     <string name="waypoint_coordsrc">Source data:</string>
     <string name="waypoint_jumpto">Jump to waypoint:</string>
     <string name="waypoint_repeat">Repeat waypoint</string>
-    <string name="Orbits">Orbits</string>
+    <string name="circle_turns">Number of turns</string>
 
     <string name="dlg_clear_mission_title">Clear Mission</string>
     <string name="dlg_clear_mission_confirm">Clear all waypoints from the map?</string>
@@ -340,10 +341,14 @@
     <string name="mission_control_control">Control</string>
     <string name="mission_control_edit">Edit</string>
     <string name="mission_control_home">Home</string>
+    <string name="mission_control_arm">Arm</string>
+    <string name="mission_control_disarm">Disarm</string>
     <string name="mission_control_land">Land</string>
-    <string name="mission_control_takeoff">Take</string>
-    <string name="mission_control_loiter">Loiter</string>
-    <string name="mission_control_follow">Follow</string>
+    <string name="mission_control_takeoff">Takeoff</string>
+    <string name="mission_control_pause">Pause</string>
+    <string name="mission_control_auto">Auto</string>
+    <string name="mission_control_follow">Follow</string>    
+    <string name="mission_control_dronie">Dronie</string>
     <string name="telemetry_label">Telemetry</string>
     <string name="flight_modes_label">Flight modes</string>
     <string name="menu_info_bar">Info Bar</string>
@@ -471,5 +476,17 @@
 
     <!-- Help -->
     <string name="help_item_description">How to plan and fly a mission</string>
+    <string name="mission_item_title_takeoff">TAKEOFF</string>
+    <string name="label_advaned">Advanced</string>
+    <string name="label_steps_count">Number of Steps</string>
+    <string name="label_altitude_step">Altitude Step</string>
+    <string name="menu_search_toggle">Toggle Search</string>
+    <string name="dialog_confirm_arming_title">Arm propellers?</string>
+    <string name="dialog_confirm_arming_msg">Warning! Propellers will spin and drone may begin to fly.</string>
+    <string name="radius_label">Radius</string>
+    <string name="menu_action_delete">Delete</string>
+    <string name="menu_action_reverse">Reverse</string>
+    <string name="menu_action_multi_edit">Multi-Edit</string>
+    <string name="label_yes_no_dialog_dont_show">Don\'t show again.</string>
 
 </resources>

@@ -1,26 +1,22 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
+import java.util.List;
+
 import org.droidplanner.R;
-import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
+import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
+import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.waypoints.Circle;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class MissionCircleFragment extends MissionDetailFragment implements
-		SeekBarWithText.OnTextSeekBarChangedListener, OnCheckedChangeListener {
+		CardWheelHorizontalView.OnCardWheelChangedListener{
 
-	private SeekBarWithText altitudeSeekBar;
-	private SeekBarWithText loiterTurnSeekBar;
-	// private CheckBox loiterCCW;
-	private CheckBox checkBoxAdvanced;
-	private SeekBarWithText altitudeStepSeekBar;
-	private SeekBarWithText numberStepSeekBar;
-	private SeekBarWithText loiterRadiusSeekBar;
+	private List<Circle> mItemsList;
 
 	@Override
 	protected int getResource() {
@@ -30,60 +26,64 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		final Context context = getActivity().getApplicationContext();
+
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CIRCLE));
 
-		Circle item = (Circle) this.itemRender.getMissionItem();
+		mItemsList = (List<Circle>) getMissionItems();
 
-		// loiterCCW = (CheckBox) view.findViewById(R.id.loiter_ccw);
-		// loiterCCW.setChecked(!item.isOrbitCW());
-		// loiterCCW.setOnCheckedChangeListener(this);
+        //Use the first one as reference.
+        final Circle firstItem = mItemsList.get(0);
 
-		checkBoxAdvanced = (CheckBox) view.findViewById(R.id.checkBoxAdvanced);
-		checkBoxAdvanced.setOnCheckedChangeListener(this);
+		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(context, MIN_ALTITUDE,
+				MAX_ALTITUDE, "%d m");
+		altitudeAdapter.setItemResource(R.layout.wheel_text_centered);
+		final CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view
+				.findViewById(R.id.altitudePicker);
+		altitudePicker.setViewAdapter(altitudeAdapter);
+        altitudePicker.addChangingListener(this);
+		altitudePicker.setCurrentValue((int) firstItem.getCoordinate().getAltitude().valueInMeters
+                ());
 
-		altitudeStepSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeStep);
-		altitudeStepSeekBar.setValue(item.getAltitudeStep());
-		altitudeStepSeekBar.setOnChangedListener(this);
+		final NumericWheelAdapter loiterTurnAdapter = new NumericWheelAdapter(context,
+				R.layout.wheel_text_centered, 0, 10, "%d");
+		final CardWheelHorizontalView loiterTurnPicker = (CardWheelHorizontalView) view
+				.findViewById(R.id.loiterTurnPicker);
+		loiterTurnPicker.setViewAdapter(loiterTurnAdapter);
+        loiterTurnPicker.addChangingListener(this);
+		loiterTurnPicker.setCurrentValue(firstItem.getNumberOfTurns());
 
-		numberStepSeekBar = (SeekBarWithText) view.findViewById(R.id.numberSteps);
-		numberStepSeekBar.setOnChangedListener(this);
-		numberStepSeekBar.setValue(item.getNumberOfSteps());
-
-		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
-		altitudeSeekBar.setValue(item.getCoordinate().getAltitude().valueInMeters());
-		altitudeSeekBar.setOnChangedListener(this);
-
-		loiterTurnSeekBar = (SeekBarWithText) view.findViewById(R.id.loiterTurn);
-		loiterTurnSeekBar.setOnChangedListener(this);
-		loiterTurnSeekBar.setValue(item.getNumeberOfTurns());
-
-		loiterRadiusSeekBar = (SeekBarWithText) view.findViewById(R.id.loiterRadius);
-		loiterRadiusSeekBar.setAbsValue(item.getRadius());
-		loiterRadiusSeekBar.setOnChangedListener(this);
+		final NumericWheelAdapter loiterRadiusAdapter = new NumericWheelAdapter(context, 0, 50,
+				"%d m");
+		loiterRadiusAdapter.setItemResource(R.layout.wheel_text_centered);
+		final CardWheelHorizontalView loiterRadiusPicker = (CardWheelHorizontalView) view
+				.findViewById(R.id.loiterRadiusPicker);
+		loiterRadiusPicker.setViewAdapter(loiterRadiusAdapter);
+        loiterRadiusPicker.addChangingListener(this);
+		loiterRadiusPicker.setCurrentValue((int) firstItem.getRadius());
 	}
 
 	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		if (buttonView == checkBoxAdvanced) {
-			int visibility = (isChecked) ? View.VISIBLE : View.GONE;
-			altitudeStepSeekBar.setVisibility(visibility);
-			numberStepSeekBar.setVisibility(visibility);
+	public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+		switch (cardWheel.getId()) {
+		case R.id.altitudePicker:
+            for(Circle item: mItemsList) {
+                item.setAltitude(new Altitude(newValue));
+            }
+			break;
+
+		case R.id.loiterRadiusPicker:
+            for(Circle item: mItemsList) {
+                item.setRadius(newValue);
+            }
+            getMissionProxy().getMission().notifyMissionUpdate();
+			break;
+
+		case R.id.loiterTurnPicker:
+            for(Circle item: mItemsList) {
+                item.setTurns(newValue);
+            }
+			break;
 		}
 	}
-
-	@Override
-	public void onSeekBarChanged() {
-		Circle item = (Circle) this.itemRender.getMissionItem();
-
-		item.getCoordinate().getAltitude().set(altitudeSeekBar.getValue());
-		item.setTurns((int) loiterTurnSeekBar.getValue());
-		item.setRadius(loiterRadiusSeekBar.getValue());
-
-		if (checkBoxAdvanced.isChecked()) {
-			item.setMultiCircle((int) numberStepSeekBar.getValue(), altitudeStepSeekBar.getValue());
-		} else {
-			item.setSingleCircle();
-		}
-	}
-
 }

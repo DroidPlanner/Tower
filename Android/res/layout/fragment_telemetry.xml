@@ -6,7 +6,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,7 +13,7 @@
         android:paddingLeft="1dp"
         android:paddingRight="1dp"
         android:paddingBottom="1dp"
-        android:paddingTop="2dp">
+        android:paddingTop="1dp">
 
         <TextView
             android:id="@+id/yawValueText"
@@ -23,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="2dp"
             android:background="@drawable/round_rect_bg"
             android:drawableLeft="@drawable/yaw_icon"
             android:focusable="true"
@@ -39,7 +38,7 @@
             android:layout_alignLeft="@+id/yawValueText"
             android:layout_alignStart="@+id/yawValueText"
             android:layout_below="@+id/yawValueText"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="2dp"
             android:background="@drawable/round_rect_bg"
             android:drawableLeft="@drawable/pitch_icon"
             android:drawablePadding="2dp"
@@ -55,7 +54,7 @@
             android:layout_alignLeft="@+id/pitchValueText"
             android:layout_alignStart="@+id/pitchValueText"
             android:layout_below="@+id/pitchValueText"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="2dp"
             android:background="@drawable/round_rect_bg"
             android:drawableLeft="@drawable/roll_icon"
             android:drawablePadding="2dp"
@@ -77,7 +76,7 @@
         <RelativeLayout
             android:id="@+id/ground_speed_layout"
             android:layout_below="@+id/rollValueText"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ground_speed_bg"
@@ -123,7 +122,7 @@
         <RelativeLayout
             android:id="@+id/air_speed_layout"
             android:layout_below="@+id/ground_speed_layout"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/air_speed_bg"
@@ -169,7 +168,7 @@
         <RelativeLayout
             android:id="@+id/climb_rate_layout"
             android:layout_below="@+id/air_speed_layout"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/climb_rate_bg"

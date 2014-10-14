@@ -5,6 +5,6 @@
 
     <solid android:color="#00a27e"/>
 
-    <corners android:radius="8dp"/>
+    <corners android:radius="@dimen/telem_widget_bg_corner_radius"/>
 
 </shape>

@@ -19,12 +19,19 @@ public class FollowLeash extends FollowAlgorithm {
 
 	@Override
 	public void processNewLocation(Location location) {
-		if (GeoTools.getDistance(location.getCoord(), drone.getGps().getPosition()).valueInMeters() > radius
-				.valueInMeters()) {
-			double headingGCStoDrone = GeoTools.getHeadingFromCoordinates(location.getCoord(),
-					drone.getGps().getPosition());
-			Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(location.getCoord(),
-					headingGCStoDrone, radius.valueInMeters());
+		final Coord2D locationCoord = location.getCoord();
+		final Coord2D dronePosition = drone.getGps().getPosition();
+
+		if (locationCoord == null || dronePosition == null) {
+			return;
+		}
+
+		final double radiusInMeters = radius.valueInMeters();
+		if (GeoTools.getDistance(locationCoord, dronePosition).valueInMeters() > radiusInMeters) {
+			double headingGCStoDrone = GeoTools.getHeadingFromCoordinates(locationCoord,
+					dronePosition);
+			Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(locationCoord,
+					headingGCStoDrone, radiusInMeters);
 			drone.getGuidedPoint().newGuidedCoord(goCoord);
 		}
 	}

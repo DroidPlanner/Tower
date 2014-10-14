@@ -53,10 +53,10 @@
     </org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout>
 
     <fragment
-        android:id="@+id/editorToolsFragment"
+        android:id="@+id/flightActionsFragment"
         android:name="org.droidplanner.android.fragments.EditorToolsFragment"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/missionFragment1"
         android:layout_centerVertical="true"
         android:layout_below="@+id/editorInfoWindow"

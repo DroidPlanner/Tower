@@ -24,7 +24,7 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 	private static final int KEY_APP_VERSION = 3;
 
 	private static final UUID DP_UUID = UUID.fromString("79a2893d-fc7d-48c4-bc9a-34854d94ef6e");
-	private static final String EXPECTED_APP_VERSION = "two";
+	private static final String EXPECTED_APP_VERSION = "three";
 
 	/**
 	 * Application context.
@@ -95,14 +95,16 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 	 * @param drone
 	 */
 	public void sendDataToWatchNow(Drone drone) {
-		Follow followMe = ((DroidPlannerApp) applicationContext).followMe;
+		Follow followMe = ((DroidPlannerApp) applicationContext).getFollowMe();
 		PebbleDictionary data = new PebbleDictionary();
 
 		String mode = drone.getState().getMode().getName();
 		if (!drone.getState().isArmed())
 			mode = "Disarmd";
-		else if (((DroidPlannerApp) applicationContext).followMe.isEnabled() && mode == "Guided")
+		else if (followMe.isEnabled() && mode == "Guided")
 			mode = "Follow";
+		else if (drone.getGuidedPoint().isIdle() && !followMe.isEnabled() && mode == "Guided")
+			mode = "Paused";
 		data.addString(KEY_MODE, mode);
 
 		FollowModes type = followMe.getType();
@@ -135,7 +137,7 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 		private static final int KEY_PEBBLE_REQUEST = 100;
 		private static final int KEY_REQUEST_MODE_FOLLOW = 101;
 		private static final int KEY_REQUEST_CYCLE_FOLLOW_TYPE = 102;
-		private static final int KEY_REQUEST_MODE_LOITER = 103;
+		private static final int KEY_REQUEST_PAUSE = 103;
 		private static final int KEY_REQUEST_MODE_RTL = 104;
 
 		protected PebbleReceiverHandler(UUID id) {
@@ -144,32 +146,33 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 
 		@Override
 		public void receiveData(Context context, int transactionId, PebbleDictionary data) {
-			Follow followMe = ((DroidPlannerApp) applicationContext).followMe;
+			Follow followMe = ((DroidPlannerApp) applicationContext).getFollowMe();
 			PebbleKit.sendAckToPebble(applicationContext, transactionId);
 			int request = (data.getInteger(KEY_PEBBLE_REQUEST).intValue());
 			switch (request) {
 
 			case KEY_REQUEST_MODE_FOLLOW:
-				final int result = followMe.toggleFollowMeState();
+				followMe.toggleFollowMeState();
 				String eventLabel = null;
-				switch (result) {
-				case Follow.FOLLOW_START:
+				switch (followMe.getState()) {
+				case FOLLOW_START:
+				case FOLLOW_RUNNING:
 					eventLabel = "FollowMe enabled";
 					break;
 
-				case Follow.FOLLOW_END:
+				case FOLLOW_END:
 					eventLabel = "FollowMe disabled";
 					break;
 
-				case Follow.FOLLOW_INVALID_STATE:
+				case FOLLOW_INVALID_STATE:
 					eventLabel = "FollowMe error: invalid state";
 					break;
 
-				case Follow.FOLLOW_DRONE_DISCONNECTED:
+				case FOLLOW_DRONE_DISCONNECTED:
 					eventLabel = "FollowMe error: drone not connected";
 					break;
 
-				case Follow.FOLLOW_DRONE_NOT_ARMED:
+				case FOLLOW_DRONE_NOT_ARMED:
 					eventLabel = "FollowMe error: drone not armed";
 					break;
 				}
@@ -183,9 +186,8 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 				followMe.cycleType();
 				break;
 
-			case KEY_REQUEST_MODE_LOITER:
-				((DroidPlannerApp) applicationContext).getDrone().getState()
-						.changeFlightMode(ApmModes.ROTOR_LOITER);
+			case KEY_REQUEST_PAUSE:
+				((DroidPlannerApp) applicationContext).getDrone().getGuidedPoint().pauseAtCurrentLocation();
 				break;
 
 			case KEY_REQUEST_MODE_RTL:

@@ -46,7 +46,7 @@ public class EditorListFragment extends Fragment implements OnItemLongClickListe
 
 		DroidPlannerApp app = ((DroidPlannerApp) getActivity().getApplication());
 		drone = app.getDrone();
-		missionProxy = app.missionProxy;
+		missionProxy = app.getMissionProxy();
 		adapter = new MissionItemProxyView(getActivity(), missionProxy.getItems());
 
 		list = (HListView) view.findViewById(R.id.mission_item_list);

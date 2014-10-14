@@ -2,6 +2,7 @@ package org.droidplanner.core.mission.waypoints;
 
 import java.util.List;
 
+import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
@@ -14,6 +15,11 @@ public class RegionOfInterest extends SpatialCoordItem {
 	public RegionOfInterest(MissionItem item) {
 		super(item);
 	}
+	
+	public RegionOfInterest(Mission mission,Coord3D coord) {
+		super(mission,coord);
+	}
+	
 
 	public RegionOfInterest(msg_mission_item msg, Mission mission) {
 		super(mission, null);

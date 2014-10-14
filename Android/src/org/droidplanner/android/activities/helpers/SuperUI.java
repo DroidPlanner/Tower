@@ -2,6 +2,9 @@ package org.droidplanner.android.activities.helpers;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.dialogs.YesNoDialog;
+import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
+import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
 import org.droidplanner.android.services.DroidPlannerService;
 import org.droidplanner.android.services.DroidPlannerService.DroidPlannerApi;
@@ -34,6 +37,7 @@ import android.widget.Toast;
  */
 public abstract class SuperUI extends FragmentActivity implements OnDroneListener {
 
+    private static final String MISSION_UPLOAD_CHECK_DIALOG = "mission_upload_check_dialog";
     private final static String TAG = SuperUI.class.getSimpleName();
 
     protected final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -172,6 +176,16 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 			menu.setGroupEnabled(R.id.menu_group_connected, true);
 			menu.setGroupVisible(R.id.menu_group_connected, true);
 
+            final boolean areMissionMenusEnabled = enableMissionMenus();
+
+            final MenuItem sendMission = menu.findItem(R.id.menu_send_mission);
+            sendMission.setEnabled(areMissionMenusEnabled);
+            sendMission.setVisible(areMissionMenusEnabled);
+
+            final MenuItem loadMission = menu.findItem(R.id.menu_load_mission);
+            loadMission.setEnabled(areMissionMenusEnabled);
+            loadMission.setVisible(areMissionMenusEnabled);
+
 			toggleConnectionItem.setTitle(R.string.menu_disconnect);
 			toggleConnectionItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
@@ -183,8 +197,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 			menu.setGroupVisible(R.id.menu_group_connected, false);
 
 			toggleConnectionItem.setTitle(R.string.menu_connect);
-			toggleConnectionItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS
-					| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+			toggleConnectionItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
 			if (infoBar != null) {
 				infoBar.setDrone(null);
@@ -193,11 +206,33 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		return super.onCreateOptionsMenu(menu);
 	}
 
+    protected boolean enableMissionMenus(){
+        return false;
+    }
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_send_mission:
-			drone.getMission().sendMissionToAPM();
+			if (drone.getMission().hasTakeoffAndLandOrRTL()) {
+				drone.getMission().sendMissionToAPM();				
+			} else {
+                YesNoWithPrefsDialog dialog = YesNoWithPrefsDialog.newInstance(getApplicationContext(),
+                        "Mission Upload", "Do you want to append a Takeoff and RTL to your " +
+                                "mission?", "Ok", "Skip", new YesNoDialog.Listener() {
+                            @Override
+                            public void onYes() {
+                                app.getMissionProxy().addTakeOffAndRTL();
+                                drone.getMission().sendMissionToAPM();
+                            }
+
+                            @Override
+                            public void onNo() {
+                                drone.getMission().sendMissionToAPM();
+                            }
+                        }, MISSION_UPLOAD_CHECK_DIALOG);
+				dialog.show(getSupportFragmentManager(), "Mission Upload check.");
+			}
 			return true;
 
 		case R.id.menu_load_mission:

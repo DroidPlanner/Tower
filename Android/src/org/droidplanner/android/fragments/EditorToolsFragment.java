@@ -93,7 +93,7 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 					+ OnEditorToolSelected.class.getName());
 		}
 
-		mMissionProxy = ((DroidPlannerApp) activity.getApplication()).missionProxy;
+		mMissionProxy = ((DroidPlannerApp) activity.getApplication()).getMissionProxy();
 
 		listener = (OnEditorToolSelected) activity;
 	}

@@ -19,7 +19,6 @@ public class ListXmlData implements ListXmlData_Interface {
 
 	@Override
 	public int getDepth() {
-		// TODO Auto-generated method stub
 		return depth;
 	}
 }

@@ -6,7 +6,6 @@ import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.model.Drone;
 
-
 public abstract class FollowHeadingAngle extends FollowAlgorithm {
 
 	protected double angleOffset;

@@ -206,7 +206,7 @@
     <string name="waypoint_coordsrc">Quelldaten:</string>
     <string name="waypoint_jumpto">Springe zu Wegpunkt:</string>
     <string name="waypoint_repeat">Wegpunkt wiederholen</string>
-    <string name="Orbits">Umlaufbahnen</string>
+    <string name="circle_turns">Umlaufbahnen</string>
 
     <!-- Selection of map style -->
     <string name="menu_map_type">Kartentyp</string>
@@ -316,7 +316,6 @@
     <string name="mission_control_home">Start</string>
     <string name="mission_control_land">Landen</string>
     <string name="mission_control_takeoff">Abheben</string>
-    <string name="mission_control_loiter">Loiter</string>
     <string name="mission_control_follow">Folgen</string>
 
     <!-- Bluetooth device selection strings -->
@@ -430,7 +429,7 @@
     <string name="ga_mode_details_close_panel">Panel geschlossen um</string>
     <string name="ga_mode_details_open_panel">Panel geöffnet um</string>
     <string name="guided_mode_warning">OK drücken, um Guided Modus zu starten. Um Position zu ändern, Karte drücken und halten.</string>
-    <string name="mode_hybrid">Hybrid erlaubt das Halten der Position (GPS) mit Reaktion auf Eingaben des Piloten.</string>
+    <string name="mode_poshold">PosHold erlaubt das Halten der Position (GPS) mit Reaktion auf Eingaben des Piloten.</string>
     <string name="pref_live_upload">Live Upload aktivieren (Alpha-Test)</string>
     <string name="pref_live_upload_summary">Live-Verfolgung der Drohne auf Droneshare</string>
     <string name="pref_maps_providers_summary">Welcher Karten-Provider verwendet werden soll.</string>

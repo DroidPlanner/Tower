@@ -1,6 +1,7 @@
 package org.droidplanner.core.drone.variables;
 
 import org.droidplanner.core.MAVLink.MavLinkModes;
+import org.droidplanner.core.MAVLink.MavLinkTakeoff;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.DroneVariable;
@@ -12,9 +13,13 @@ import com.MAVLink.Messages.ApmModes;
 
 public class GuidedPoint extends DroneVariable implements OnDroneListener {
 
+    public final static float MIN_ALTITUDE = 2.0f;
+
 	private GuidedStates state = GuidedStates.UNINITIALIZED;
 	private Coord2D coord = new Coord2D(0, 0);
 	private Altitude altitude = new Altitude(0.0);
+
+    private Runnable mPostInitializationTask;
 
 	private enum GuidedStates {
 		UNINITIALIZED, IDLE, ACTIVE
@@ -35,37 +40,73 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 				disable();
 			}
 			break;
+
 		case DISCONNECTED:
 		case HEARTBEAT_TIMEOUT:
 			disable();
-		default:
+
+        default:
 			break;
 		}
+	}
+
+	public void pauseAtCurrentLocation() {
+		if (state !=GuidedStates.ACTIVE) {
+			myDrone.getState().changeFlightMode(ApmModes.ROTOR_GUIDED);
+		}else{
+			newGuidedCoord(myDrone.getGps().getPosition());
+		}
+	}
+
+	public void doGuidedTakeoff(Altitude alt) {
+		coord = myDrone.getGps().getPosition();
+		altitude.set(alt.valueInMeters());
+		state = GuidedStates.IDLE;		
+		myDrone.getState().changeFlightMode(ApmModes.ROTOR_GUIDED);
+		MavLinkTakeoff.sendTakeoff(myDrone, alt);
+		myDrone.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
 	}
 
 	public void newGuidedCoord(Coord2D coord) {
 		changeCoord(coord);
 	}
 
-	public void changeGuidedAltitude(double altChange) {
-		changeAlt(altChange);
+	public void changeGuidedAltitude(double alt) {
+		changeAlt(alt);
 	}
 
-	public void forcedGuidedCoordinate(Coord2D coord) throws Exception {
+	public void forcedGuidedCoordinate(final Coord2D coord) throws Exception {
 		if ((myDrone.getGps().getFixTypeNumeric() != GPS.LOCK_3D)) {
 			throw new Exception("Bad GPS for guided");
 		}
-		initialize();
-		changeCoord(coord);
+
+        if(isInitialized()) {
+            changeCoord(coord);
+        }
+        else{
+            mPostInitializationTask = new Runnable() {
+                @Override
+                public void run() {
+                    changeCoord(coord);
+                }
+            };
+
+            myDrone.getState().changeFlightMode(ApmModes.ROTOR_GUIDED);
+        }
 	}
 
 	private void initialize() {
 		if (state == GuidedStates.UNINITIALIZED) {
 			coord = myDrone.getGps().getPosition();
-			altitude.set(getDroneAltConstained());
+			altitude.set(getDroneAltConstrained());
 			state = GuidedStates.IDLE;
 			myDrone.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
 		}
+
+        if(mPostInitializationTask != null){
+            mPostInitializationTask.run();
+            mPostInitializationTask = null;
+        }
 	}
 
 	private void disable() {
@@ -73,28 +114,21 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 		myDrone.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
 	}
 
-	private void changeAlt(double altChange) {
-		switch (state) {
-		case UNINITIALIZED:
-			break;
-		case IDLE:
-			state = GuidedStates.ACTIVE;
-			changeAlt(altChange);
-			break;
-		case ACTIVE:
-			double alt = Math.floor(altitude.valueInMeters());
-			alt = Math.max(alt, 2.0);
+    private void changeAlt(double alt) {
+        switch (state) {
+            case UNINITIALIZED:
+                break;
 
-			if (altChange < -1 && alt <= 10)
-				altChange = -1;
+            case IDLE:
+                state = GuidedStates.ACTIVE;
+                /** FALL THROUGH **/
 
-			if ((alt + altChange) > 1.0) {
-				altitude.set(alt + altChange);
-			}
-			sendGuidedPoint();
-			break;
-		}
-	}
+            case ACTIVE:
+                altitude.set(Math.max(alt, MIN_ALTITUDE));
+                sendGuidedPoint();
+                break;
+        }
+    }
 
 	private void changeCoord(Coord2D coord) {
 		switch (state) {
@@ -119,7 +153,7 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 		}
 	}
 
-	private double getDroneAltConstained() {
+	private double getDroneAltConstrained() {
 		double alt = Math.floor(myDrone.getAltitude().getAltitude());
 		return Math.max(alt, 2.0);
 	}
@@ -134,6 +168,10 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 
 	public boolean isActive() {
 		return (state == GuidedStates.ACTIVE);
+	}
+	
+	public boolean isIdle() {
+		return (state == GuidedStates.IDLE);
 	}
 
 	public boolean isInitialized() {

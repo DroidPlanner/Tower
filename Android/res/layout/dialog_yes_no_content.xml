@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contentPanel"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="2dip"
+        android:paddingBottom="12dip"
+        android:paddingStart="14dip"
+        android:paddingLeft="14dp"
+        android:paddingRight="10dp"
+        android:paddingEnd="10dip"
+        android:overScrollMode="ifContentScrolls">
+
+        <TextView
+            android:id="@+id/yes_no_message"
+            style="?android:attr/textAppearanceMedium"
+            tools:text="This is a test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dip"/>
+    </ScrollView>
+
+    <CheckBox
+        android:id="@+id/yes_no_dont_show_checkbox"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/label_yes_no_dialog_dont_show"/>
+</LinearLayout>

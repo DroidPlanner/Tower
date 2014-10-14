@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.core.helpers.coordinates.Coord3D;
-import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
@@ -17,8 +16,6 @@ public class Circle extends SpatialCoordItem {
 
 	private double radius = 10.0;
 	private int turns = 1;
-	private int numberOfSteps = 1;
-	private double altitudeStep = 2;
 
 	public Circle(MissionItem item) {
 		super(item);
@@ -41,7 +38,7 @@ public class Circle extends SpatialCoordItem {
 		this.radius = Math.abs(radius);
 	}
 
-	public int getNumeberOfTurns() {
+	public int getNumberOfTurns() {
 		return turns;
 	}
 
@@ -49,38 +46,14 @@ public class Circle extends SpatialCoordItem {
 		return radius;
 	}
 
-	public double getAltitudeStep() {
-		return altitudeStep;
-	}
-
-	public int getNumberOfSteps() {
-		return numberOfSteps;
-	}
-
-	public void setMultiCircle(int number, double stepHeight) {
-		this.numberOfSteps = number;
-		this.altitudeStep = stepHeight;
-	}
-
-	public void setSingleCircle() {
-		numberOfSteps = 1;
-	}
-
 	@Override
 	public List<msg_mission_item> packMissionItem() {
-
 		List<msg_mission_item> list = new ArrayList<msg_mission_item>();
-
-		for (int i = 0; i < getNumberOfSteps(); i++) {
-			Length extraHeight = new Length(getAltitudeStep() * i);
-			packSingleCircle(list, extraHeight);
-		}
-
-		System.out.println(list.toString());
+		packSingleCircle(list);
 		return list;
 	}
 
-	private void packSingleCircle(List<msg_mission_item> list, Length extraHeight) {
+	private void packSingleCircle(List<msg_mission_item> list) {
 		msg_mission_item mavMsg = new msg_mission_item();
 		list.add(mavMsg);
 		mavMsg.autocontinue = 1;
@@ -89,7 +62,7 @@ public class Circle extends SpatialCoordItem {
 		mavMsg.frame = MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT;
 		mavMsg.x = (float) coordinate.getLat();
 		mavMsg.y = (float) coordinate.getLng();
-		mavMsg.z = (float) (coordinate.getAltitude().valueInMeters() + extraHeight.valueInMeters());
+		mavMsg.z = (float) (coordinate.getAltitude().valueInMeters());
 		mavMsg.command = MAV_CMD.MAV_CMD_NAV_LOITER_TURNS;
 		mavMsg.param1 = Math.abs(turns);
 		mavMsg.param3 = (float) radius;

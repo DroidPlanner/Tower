@@ -1,5 +1,9 @@
 apply plugin: 'com.android.library'
 
+repositories {
+    mavenCentral()
+}
+
 android {
     compileSdkVersion 19
     buildToolsVersion '20.0.0'

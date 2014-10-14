@@ -1,5 +1,6 @@
 package org.droidplanner.core.gcs.follow;
 
+import org.droidplanner.core.MAVLink.MavLinkROI;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
@@ -16,14 +17,12 @@ import com.MAVLink.Messages.ApmModes;
 
 public class Follow implements OnDroneListener, LocationReceiver {
 
-	// Set of return value for the 'toggleFollowMeState' method.
-	public static final int FOLLOW_INVALID_STATE = -1;
-	public static final int FOLLOW_DRONE_NOT_ARMED = -2;
-	public static final int FOLLOW_DRONE_DISCONNECTED = -3;
-	public static final int FOLLOW_START = 0;
-	public static final int FOLLOW_END = 1;
+	/** Set of return value for the 'toggleFollowMeState' method.*/
+	public enum FollowStates {
+		FOLLOW_INVALID_STATE, FOLLOW_DRONE_NOT_ARMED, FOLLOW_DRONE_DISCONNECTED, FOLLOW_START, FOLLOW_RUNNING, FOLLOW_END
+	}
 
-	private boolean followMeEnabled = false;
+	private FollowStates state = FollowStates.FOLLOW_INVALID_STATE;
 	private Drone drone;
 
 	private ROIEstimator roiEstimator;
@@ -34,52 +33,53 @@ public class Follow implements OnDroneListener, LocationReceiver {
 		this.drone = drone;
 		followAlgorithm = FollowAlgorithm.FollowModes.LEASH.getAlgorithmType(drone);
 		this.locationFinder = locationFinder;
-		locationFinder.setLocationListner(this);
+		locationFinder.setLocationListener(this);
 		roiEstimator = new ROIEstimator(handler, drone);
 		drone.addDroneListener(this);
 	}
 
-	public int toggleFollowMeState() {
+	public void toggleFollowMeState() {
 		final State droneState = drone.getState();
 		if (droneState == null) {
-			return FOLLOW_INVALID_STATE;
+			state = FollowStates.FOLLOW_INVALID_STATE;
+			return;
 		}
 
 		if (isEnabled()) {
 			disableFollowMe();
-			drone.getState().changeFlightMode(ApmModes.ROTOR_LOITER);
-			return FOLLOW_END;
 		} else {
 			if (drone.getMavClient().isConnected()) {
 				if (drone.getState().isArmed()) {
 					drone.getState().changeFlightMode(ApmModes.ROTOR_GUIDED);
 					enableFollowMe();
-					return FOLLOW_START;
 				} else {
-					return FOLLOW_DRONE_NOT_ARMED;
+					state = FollowStates.FOLLOW_DRONE_NOT_ARMED;
 				}
 			} else {
-				return FOLLOW_DRONE_DISCONNECTED;
+				state = FollowStates.FOLLOW_DRONE_DISCONNECTED;
+				
 			}
 		}
 	}
 
 	private void enableFollowMe() {
 		locationFinder.enableLocationUpdates();
-		followMeEnabled = true;
+		state = FollowStates.FOLLOW_START;
 		drone.notifyDroneEvent(DroneEventsType.FOLLOW_START);
 	}
 
 	private void disableFollowMe() {
 		locationFinder.disableLocationUpdates();
-		if (followMeEnabled) {
-			followMeEnabled = false;
+		if (isEnabled()) {
+			state = FollowStates.FOLLOW_END;
+			MavLinkROI.resetROI(drone);
+			drone.getGuidedPoint().pauseAtCurrentLocation();
 			drone.notifyDroneEvent(DroneEventsType.FOLLOW_STOP);
 		}
 	}
 
 	public boolean isEnabled() {
-		return followMeEnabled;
+		return state == FollowStates.FOLLOW_RUNNING || state == FollowStates.FOLLOW_START;
 	}
 
 	@Override
@@ -103,10 +103,16 @@ public class Follow implements OnDroneListener, LocationReceiver {
 
 	@Override
 	public void onLocationChanged(Location location) {
-		if (location.getAccuracy() < 10.0) {
-			followAlgorithm.processNewLocation(location);
+		if (location.isAccurate()) {
+			state = FollowStates.FOLLOW_RUNNING;
+            followAlgorithm.processNewLocation(location);
+            roiEstimator.onLocationChanged(location);
 		}
-		roiEstimator.onLocationChanged(location);
+		else {
+			state = FollowStates.FOLLOW_START;
+		}
+
+			drone.notifyDroneEvent(DroneEventsType.FOLLOW_UPDATE);
 	}
 
 	public void setType(FollowModes item) {
@@ -114,8 +120,8 @@ public class Follow implements OnDroneListener, LocationReceiver {
 		drone.notifyDroneEvent(DroneEventsType.FOLLOW_CHANGE_TYPE);
 	}
 
-	public void changeRadius(double increment) {
-		followAlgorithm.changeRadius(increment);
+	public void changeRadius(double radius) {
+		followAlgorithm.changeRadius(radius);
 	}
 
 	public void cycleType() {
@@ -124,5 +130,9 @@ public class Follow implements OnDroneListener, LocationReceiver {
 
 	public FollowModes getType() {
 		return followAlgorithm.getType();
+	}
+
+	public FollowStates getState() {
+		return state;
 	}
 }

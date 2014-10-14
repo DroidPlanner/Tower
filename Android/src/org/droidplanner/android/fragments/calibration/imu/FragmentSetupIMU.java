@@ -11,6 +11,7 @@ import org.droidplanner.core.model.Drone;
 
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -112,7 +113,7 @@ public class FragmentSetupIMU extends SetupMainPanel implements OnDroneListener 
 				 * flag and re-trigger the HEARBEAT_TIMEOUT this however should
 				 * not be happening
 				 */
-				if (Calibration.isCalibrating() && msg.isEmpty()) {
+				if (Calibration.isCalibrating() && TextUtils.isEmpty(msg)) {
 					Calibration.setClibrating(false);
 					parentActivity.drone.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
 				} else {
