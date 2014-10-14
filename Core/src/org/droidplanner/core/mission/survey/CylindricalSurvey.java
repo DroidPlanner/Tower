@@ -132,7 +132,7 @@ public class CylindricalSurvey extends MissionItem {
 
 
 	private Length getTopHeight() {
-		return new Length(startHeight.valueInMeters()+ numberOfSteps*heightStep.valueInMeters());
+		return new Length(startHeight.valueInMeters()+ (numberOfSteps-1)*heightStep.valueInMeters());
 	}
 
 	public Altitude getStartAltitude() {

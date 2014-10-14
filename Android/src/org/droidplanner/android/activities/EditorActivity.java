@@ -32,6 +32,7 @@ import org.droidplanner.core.util.Pair;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
 import android.view.Menu;
@@ -611,6 +612,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 			if (contextualActionBar != null && !mMultiEditEnabled)
 				removeItemDetail();
 			else {
+				
 				showItemDetail(selected.get(0).getDetailFragment());
 			}
 		}
