@@ -27,15 +27,20 @@ public class FileStream {
 		return out;
 	}
 
-	static public FileOutputStream getWaypointFileStream(String name) throws FileNotFoundException {
+	static public FileOutputStream getWaypointFileStream(String filename) throws
+            FileNotFoundException {
 		File myDir = new File(DirectoryPath.getWaypointsPath());
 		myDir.mkdirs();
-		File file = new File(myDir, name + "-" + FileManager.getTimeStamp() + ".txt");
+		File file = new File(myDir, filename);
 		if (file.exists())
 			file.delete();
 		FileOutputStream out = new FileOutputStream(file);
 		return out;
 	}
+
+    public static String getWaypointFilename(String prefix){
+        return prefix + "-" + FileManager.getTimeStamp() + ".txt";
+    }
 
 	/**
 	 * Return a filename that is suitable for a tlog

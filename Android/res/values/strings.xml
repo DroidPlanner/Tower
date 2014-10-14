@@ -488,5 +488,8 @@
     <string name="menu_action_reverse">Reverse</string>
     <string name="menu_action_multi_edit">Multi-Edit</string>
     <string name="label_yes_no_dialog_dont_show">Don\'t show again.</string>
+    <string name="file_saved_success">File saved</string>
+    <string name="file_saved_error">Error saving file</string>
+    <string name="label_enter_filename">Enter Filename</string>
 
 </resources>

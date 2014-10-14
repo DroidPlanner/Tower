@@ -22,15 +22,19 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
  */
 public class MissionWriter {
 	public static boolean write(List<msg_mission_item> msgMissionItems) {
-		return write(msgMissionItems, "waypoints");
+		return write(msgMissionItems, FileStream.getWaypointFilename("waypoints"));
 	}
 
-	public static boolean write(List<msg_mission_item> msgMissionItems, String name) {
+	public static boolean write(List<msg_mission_item> msgMissionItems, String filename) {
 		try {
 			if (!FileManager.isExternalStorageAvaliable())
 				return false;
 
-			final FileOutputStream out = FileStream.getWaypointFileStream(name);
+            if(!filename.endsWith(".txt")){
+                filename += ".txt";
+            }
+
+			final FileOutputStream out = FileStream.getWaypointFileStream(filename);
 			writeHeader(out);
 			writeMissionItems(out, msgMissionItems);
 			out.close();
