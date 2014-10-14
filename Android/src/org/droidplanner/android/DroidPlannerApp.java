@@ -26,8 +26,8 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 		DroneInterfaces.OnDroneListener {
 
 	private Drone drone;
-	public Follow followMe;
-	public MissionProxy missionProxy;
+	private Follow followMe;
+	private MissionProxy missionProxy;
 	private MavLinkMsgHandler mavLinkMsgHandler;
 	private DroidPlannerPrefs prefs;
 	/**
@@ -105,7 +105,6 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 		mNotificationHandler.onDroneEvent(event, drone);
 
 		switch (event) {
-		case MISSION_UPDATE:
 		case MISSION_RECEIVED:
 			// Refresh the mission render state
 			missionProxy.refresh();
@@ -122,4 +121,12 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 	public Drone getDrone() {
 		return drone;
 	}
+
+    public Follow getFollowMe() {
+        return followMe;
+    }
+
+    public MissionProxy getMissionProxy() {
+        return missionProxy;
+    }
 }

@@ -487,5 +487,6 @@
     <string name="menu_action_delete">Delete</string>
     <string name="menu_action_reverse">Reverse</string>
     <string name="menu_action_multi_edit">Multi-Edit</string>
+    <string name="label_yes_no_dialog_dont_show">Don\'t show again.</string>
 
 </resources>

@@ -104,6 +104,11 @@ public class Mission extends DroneVariable {
 		notifyMissionUpdate();
 	}
 
+    public void addMissionItem(int index, MissionItem missionItem){
+        items.add(index, missionItem);
+        notifyMissionUpdate();
+    }
+
 	/**
 	 * Signals that this mission object was updated. //TODO: maybe move outside
 	 * of this class
@@ -327,22 +332,12 @@ public class Mission extends DroneVariable {
 		return false;
 	}
 
-	private boolean isFirstItemTakeoff() {
+	public boolean isFirstItemTakeoff() {
 		return items.get(0) instanceof Takeoff;
 	}
 
-	private boolean isLastItemLandOrRTL() {
+	public boolean isLastItemLandOrRTL() {
 		MissionItem last = items.get(items.size()-1);
 		return (last instanceof ReturnToHome) || (last instanceof Land);
-	}
-
-	public void addTakeoffAndRTL() {
-		if (!isFirstItemTakeoff()) {
-			items.add(0, new Takeoff(this,new Altitude(10.0)));			
-		}
-		if (!isLastItemLandOrRTL()) {
-			items.add(new ReturnToHome(this));
-		}
-		notifyMissionUpdate();
 	}
 }

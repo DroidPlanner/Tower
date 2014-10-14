@@ -92,7 +92,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		final Activity activity = getActivity();
 		final DroidPlannerApp app = ((DroidPlannerApp) activity.getApplication());
 		drone = app.getDrone();
-		missionProxy = app.missionProxy;
+		missionProxy = app.getMissionProxy();
 
 		home = new GraphicHome(drone);
 		graphicDrone = new GraphicDrone(drone);

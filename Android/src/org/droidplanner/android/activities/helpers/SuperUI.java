@@ -2,6 +2,8 @@ package org.droidplanner.android.activities.helpers;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.dialogs.YesNoDialog;
+import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
 import org.droidplanner.android.utils.Utils;
@@ -32,8 +34,9 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 
 	public final static String ACTION_TOGGLE_DRONE_CONNECTION = SuperUI.class.getName()
 			+ ".ACTION_TOGGLE_DRONE_CONNECTION";
+    private static final String MISSION_UPLOAD_CHECK_DIALOG = "mission_upload_check_dialog";
 
-	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
+    private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoBarActionProvider infoBar;
 	private GCSHeartbeat gcsHeartbeat;
 	public DroidPlannerApp app;
@@ -204,24 +207,21 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 			if (drone.getMission().hasTakeoffAndLandOrRTL()) {
 				drone.getMission().sendMissionToAPM();				
 			} else {
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle("Mission Upload");
-				builder.setMessage("Do you want to append a Takeoff and RTL to your mission?");
-				builder.setPositiveButton(android.R.string.ok,
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int id) {
-								drone.getMission().addTakeoffAndRTL();
-								drone.getMission().sendMissionToAPM();
-							}
-						});
-				builder.setNegativeButton("Skip", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						drone.getMission().sendMissionToAPM();
-					}
-				});
-				builder.create().show();
+                YesNoWithPrefsDialog dialog = YesNoWithPrefsDialog.newInstance(getApplicationContext(),
+                        "Mission Upload", "Do you want to append a Takeoff and RTL to your " +
+                                "mission?", "Ok", "Skip", new YesNoDialog.Listener() {
+                            @Override
+                            public void onYes() {
+                                app.getMissionProxy().addTakeOffAndRTL();
+                                drone.getMission().sendMissionToAPM();
+                            }
+
+                            @Override
+                            public void onNo() {
+                                drone.getMission().sendMissionToAPM();
+                            }
+                        }, MISSION_UPLOAD_CHECK_DIALOG);
+				dialog.show(getSupportFragmentManager(), "Mission Upload check.");
 			}
 			return true;
 
