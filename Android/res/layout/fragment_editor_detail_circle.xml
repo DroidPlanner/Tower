@@ -91,7 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/title_rect">
 
-        <LinearLayout
+       <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -122,37 +122,8 @@
                 android:id="@+id/loiterTurnPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/Orbits"
+                android:text="@string/circle_turns"
                 style="@style/missionItemDetailCard"/>
-
-            <CheckBox
-                android:id="@+id/checkBoxAdvanced"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:fontFamily="sans-serif-light"
-                android:textSize="20sp"
-                android:padding="5dp"
-                android:text="@string/label_advaned" />
-
-            <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
-                android:id="@+id/numberStepsPicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/label_steps_count"
-                android:visibility="gone"
-                tools:visibility="visible"
-                style="@style/missionItemDetailCard"/>
-
-            <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
-                android:id="@+id/altitudeStepPicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/label_altitude_step"
-                android:visibility="gone"
-                tools:visibility="visible"
-                style="@style/missionItemDetailCard"/>
-
         </LinearLayout>
     </ScrollView>
 

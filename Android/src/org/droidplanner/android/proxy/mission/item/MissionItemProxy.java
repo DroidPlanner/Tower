@@ -13,6 +13,7 @@ import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.commands.Takeoff;
+import org.droidplanner.core.mission.survey.CylindricalSurvey;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.survey.grid.Grid;
 import org.droidplanner.core.mission.waypoints.Circle;
@@ -113,7 +114,13 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 			if (grid != null) {
 				pathPoints.addAll(grid.gridPoints);
 			}
+			break;
+		case CYLINDRICAL_SURVEY:
+			CylindricalSurvey survey = (CylindricalSurvey)mMissionItem;
+			pathPoints.addAll(survey.getPath());
+			break;
 		case TAKEOFF:
+			break;
 		default:
 			break;
 		}
