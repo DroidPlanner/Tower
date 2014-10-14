@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Altitude;
+import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
@@ -51,7 +52,7 @@ public class Survey extends MissionItem {
 			List<msg_mission_item> list = new ArrayList<msg_mission_item>();
 			build();
 			for (Coord2D point : grid.gridPoints) {
-				msg_mission_item mavMsg = packSurveyPoint(point);
+				msg_mission_item mavMsg = packSurveyPoint(point,surveyData.getAltitude());
 				list.add(mavMsg);
 			}
 			return list;
@@ -60,7 +61,7 @@ public class Survey extends MissionItem {
 		}
 	}
 
-	private msg_mission_item packSurveyPoint(Coord2D point) {
+	public static msg_mission_item packSurveyPoint(Coord2D point, Length altitude) {
 		msg_mission_item mavMsg = new msg_mission_item();
 		mavMsg.autocontinue = 1;
 		mavMsg.target_component = 1;
@@ -69,7 +70,7 @@ public class Survey extends MissionItem {
 		mavMsg.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT;
 		mavMsg.x = (float) point.getX();
 		mavMsg.y = (float) point.getY();
-		mavMsg.z = (float) surveyData.getAltitude().valueInMeters();
+		mavMsg.z = (float) altitude.valueInMeters();
 		mavMsg.param1 = 0f;
 		mavMsg.param2 = 0f;
 		mavMsg.param3 = 0f;

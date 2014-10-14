@@ -33,6 +33,11 @@ public class GridBuilder {
 		this.angle = angle;
 		this.lineDist = distance;
 		this.innerWPs = false;
+		this.wpDistance = distance;
+	}
+	
+	public void setAngle(double newAngle){
+		angle = newAngle;
 	}
 
 	public Grid generate() throws Exception {
