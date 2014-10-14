@@ -52,7 +52,7 @@ public class Menu extends JMenuBar implements ActionListener {
 		if (e.getActionCommand().equalsIgnoreCase(DroneMenu.LOAD_MISSION.toString())) {
 			drone.getWaypointManager().getWaypoints();
 		} else if (e.getActionCommand().equalsIgnoreCase(DroneMenu.LOAD_PARAMETERS.toString())) {
-			drone.getParameters().getAllParameters();
+			drone.getParameters().refreshParameters();
 		} else if (e.getActionCommand().equalsIgnoreCase(DroneMenu.FOLLOW.toString())) {
 			follow.toggleFollowMeState();
 		} else if (e.getActionCommand().equalsIgnoreCase(DroneMenu.GRAPH.toString())) {

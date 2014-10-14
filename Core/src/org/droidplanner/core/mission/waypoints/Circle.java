@@ -41,7 +41,7 @@ public class Circle extends SpatialCoordItem {
 		this.radius = Math.abs(radius);
 	}
 
-	public int getNumeberOfTurns() {
+	public int getNumberOfTurns() {
 		return turns;
 	}
 
@@ -53,8 +53,16 @@ public class Circle extends SpatialCoordItem {
 		return altitudeStep;
 	}
 
+	public void setAltitudeStep(double altitudeStep) {
+		this.altitudeStep = altitudeStep;
+	}
+
 	public int getNumberOfSteps() {
 		return numberOfSteps;
+	}
+
+	public void setNumberOfSteps(int numberOfSteps) {
+		this.numberOfSteps = numberOfSteps;
 	}
 
 	public void setMultiCircle(int number, double stepHeight) {

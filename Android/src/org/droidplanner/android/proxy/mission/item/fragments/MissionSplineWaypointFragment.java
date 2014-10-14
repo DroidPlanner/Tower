@@ -1,25 +1,22 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
-import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
-import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
+import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.core.helpers.units.Altitude;
+import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 /**
  * This class renders the detail view for a spline waypoint mission item.
  */
 public class MissionSplineWaypointFragment extends MissionDetailFragment implements
-		OnTextSeekBarChangedListener, OnCheckedChangeListener {
-
-	private SeekBarWithText altitudeSeekBar;
-	private SeekBarWithText delaySeekBar;
+		CardWheelHorizontalView.OnCardWheelChangedListener {
 
 	@Override
 	protected int getResource() {
@@ -29,29 +26,43 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment impleme
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		final Context context = getActivity().getApplicationContext();
+
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SPLINE_WAYPOINT));
 
-		SplineWaypoint item = (SplineWaypoint) this.itemRender.getMissionItem();
+		SplineWaypoint item = (SplineWaypoint) getMissionItems().get(0);
 
-		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
-		altitudeSeekBar.setValue(item.getCoordinate().getAltitude().valueInMeters());
-		altitudeSeekBar.setOnChangedListener(this);
+		final NumericWheelAdapter delayAdapter = new NumericWheelAdapter(context,
+                R.layout.wheel_text_centered, 0, 60, "%d s");
+		final CardWheelHorizontalView delayPicker = (CardWheelHorizontalView) view
+				.findViewById(R.id.waypointDelayPicker);
+		delayPicker.setViewAdapter(delayAdapter);
+        delayPicker.addChangingListener(this);
+		delayPicker.setCurrentValue((int) item.getDelay());
 
-		delaySeekBar = (SeekBarWithText) view.findViewById(R.id.waypointDelay);
-		delaySeekBar.setValue(item.getDelay());
-		delaySeekBar.setOnChangedListener(this);
+		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(context,
+                R.layout.wheel_text_centered, MIN_ALTITUDE,	MAX_ALTITUDE, "%d m");
+		final CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view
+				.findViewById(R.id.altitudePicker);
+		altitudePicker.setViewAdapter(altitudeAdapter);
+        altitudePicker.addChangingListener(this);
+		altitudePicker.setCurrentValue((int) item.getCoordinate().getAltitude().valueInMeters());
 	}
 
 	@Override
-	public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
-		onSeekBarChanged();
-	}
+	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
+		switch (wheel.getId()) {
+		case R.id.altitudePicker:
+            for(MissionItem item: getMissionItems()) {
+                ((SplineWaypoint)item).setAltitude(new Altitude(newValue));
+            }
+			break;
 
-	@Override
-	public void onSeekBarChanged() {
-		SplineWaypoint item = (SplineWaypoint) this.itemRender.getMissionItem();
-		item.setAltitude(new Altitude(altitudeSeekBar.getValue()));
-		item.setDelay((float) delaySeekBar.getValue());
-		item.getMission().notifyMissionUpdate();
+		case R.id.waypointDelayPicker:
+            for(MissionItem item: getMissionItems()) {
+                ((SplineWaypoint)item).setDelay(newValue);
+            }
+			break;
+		}
 	}
 }

@@ -82,6 +82,8 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 		case DISCONNECTED:
 		case MODE:
 		case TYPE:
+		case FOLLOW_START:
+		case FOLLOW_STOP:
 			// Update the mode info panel
 			onModeUpdate(drone.getState().getMode());
 			break;
@@ -122,14 +124,11 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 				infoPanel = new ModeCircleFragment();
 				break;
 			case ROTOR_GUIDED:
-				if (((DroidPlannerApp) getActivity().getApplication()).followMe.isEnabled()) {
+				if (((DroidPlannerApp) getActivity().getApplication()).getFollowMe().isEnabled()) {
 					infoPanel = new ModeFollowFragment();
 				} else {
 					infoPanel = new ModeGuidedFragment();
 				}
-				break;
-			case ROTOR_POSITION:
-				infoPanel = new ModePositionFragment();
 				break;
 			case ROTOR_TOY:
 				infoPanel = new ModeDriftFragment();
@@ -137,8 +136,8 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 			case ROTOR_SPORT:
 				infoPanel = new ModeSportFragment();
 				break;
-			case ROTOR_HYBRID:
-				infoPanel = new ModeHybridFragment();
+			case ROTOR_POSHOLD:
+				infoPanel = new ModePosHoldFragment();
 				break;
 			default:
 				infoPanel = new ModeDisconnectedFragment();

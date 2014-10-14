@@ -36,6 +36,10 @@ public class CalParameters {
 			return;
 		}
 		Parameter param = myDrone.getParameters().getLastParameter();
+		if (param == null) {
+			return;
+		}
+
 		if (isUpdating) {
 			compareCalibrationParameter(param);
 		} else {

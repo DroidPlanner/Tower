@@ -1,5 +1,6 @@
 package org.droidplanner.android.widgets.adapterViews;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Map;
@@ -10,7 +11,7 @@ import org.droidplanner.core.parameters.ParameterMetadata;
 /**
  * Date: 2013-12-09 Time: 1:32 AM
  */
-public class ParamsAdapterItem {
+public class ParamsAdapterItem implements Serializable {
 	public enum Validation {
 		NA, INVALID, VALID
 	}
@@ -112,4 +113,21 @@ public class ParamsAdapterItem {
 			return Validation.NA;
 		}
 	}
+
+    @Override
+    public String toString(){
+        String toString = "";
+
+        final Parameter param = getParameter();
+        if (param != null) {
+            toString = param.name + ": ";
+        }
+
+        final ParameterMetadata metadata = getMetadata();
+        if(metadata != null){
+            toString += metadata.getDisplayName();
+        }
+
+        return toString;
+    }
 }

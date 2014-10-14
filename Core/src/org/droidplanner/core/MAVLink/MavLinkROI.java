@@ -19,4 +19,17 @@ public class MavLinkROI {
 
 		drone.getMavClient().sendMavPacket(msg.pack());
 	}
+
+	public static void resetROI(Drone drone) {
+		msg_command_long msg = new msg_command_long();
+		msg.target_system = 1;
+		msg.target_component = 1;
+		msg.command = MAV_CMD.MAV_CMD_DO_SET_ROI;
+
+		msg.param5 = (float) 0.0;
+		msg.param6 = (float) 0.0;
+		msg.param7 = (float) 0.0;
+
+		drone.getMavClient().sendMavPacket(msg.pack());
+	}
 }

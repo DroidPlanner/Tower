@@ -1,8 +1,10 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
-import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
+import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.core.helpers.units.Altitude;
+import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.waypoints.RegionOfInterest;
 
@@ -10,9 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 
 public class MissionRegionOfInterestFragment extends MissionDetailFragment implements
-		SeekBarWithText.OnTextSeekBarChangedListener {
-
-	private SeekBarWithText altitudeSeekBar;
+		CardWheelHorizontalView.OnCardWheelChangedListener {
 
 	@Override
 	protected int getResource() {
@@ -24,16 +24,25 @@ public class MissionRegionOfInterestFragment extends MissionDetailFragment imple
 		super.onViewCreated(view, savedInstanceState);
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.ROI));
 
-		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
-		altitudeSeekBar.setValue(((RegionOfInterest) itemRender.getMissionItem()).getCoordinate()
-				.getAltitude().valueInMeters());
-		altitudeSeekBar.setOnChangedListener(this);
+		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(getActivity()
+				.getApplicationContext(), R.layout.wheel_text_centered, MIN_ALTITUDE,
+                MAX_ALTITUDE, "%d m");
+		final CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view
+				.findViewById(R.id.altitudePicker);
+		altitudePicker.setViewAdapter(altitudeAdapter);
+        altitudePicker.addChangingListener(this);
+		altitudePicker.setCurrentValue((int) ((RegionOfInterest) getMissionItems().get(0))
+				.getCoordinate().getAltitude().valueInMeters());
 	}
 
 	@Override
-	public void onSeekBarChanged() {
-		((RegionOfInterest) itemRender.getMissionItem()).setAltitude(new Altitude(altitudeSeekBar
-				.getValue()));
+	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
+		switch (wheel.getId()) {
+		case R.id.altitudePicker:
+            for(MissionItem missionItem: getMissionItems()) {
+                ((RegionOfInterest) missionItem).setAltitude(new Altitude(newValue));
+            }
+			break;
+		}
 	}
-
 }

@@ -7,7 +7,6 @@ import org.droidplanner.core.helpers.math.MathUtil;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.model.Drone;
 
-
 public class FollowCircle extends FollowAlgorithm {
 
 	/**

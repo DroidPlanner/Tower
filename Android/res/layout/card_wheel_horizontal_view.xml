@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <org.droidplanner.android.widgets.spinnerWheel.WheelHorizontalView
+        android:id="@+id/horizontalSpinnerWheel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout_width="100dp"
+        tools:layout_height="match_parent"
+        style="@style/missionItemNumberPicker"/>
+
+    <EditText
+        android:id="@+id/numberInputText"
+        style="@style/missionItemNumberPickerView"
+        tools:text="22"
+        android:layout_gravity="center"
+        android:inputType="number"
+        android:imeOptions="actionDone"
+        android:visibility="invisible"
+        android:layout_width="60dp"
+        />
+</FrameLayout>

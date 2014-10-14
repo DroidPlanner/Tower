@@ -57,7 +57,7 @@ public class Type extends DroneVariable {
 	}
 
 	public String getFirmwareVersion() {
-		return firmwareVersion ;
+		return firmwareVersion;
 	}
 
 	public void setFirmwareVersion(String message) {
