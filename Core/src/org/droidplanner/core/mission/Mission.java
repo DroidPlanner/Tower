@@ -104,6 +104,11 @@ public class Mission extends DroneVariable {
 		notifyMissionUpdate();
 	}
 
+    public void addMissionItem(int index, MissionItem missionItem){
+        items.add(index, missionItem);
+        notifyMissionUpdate();
+    }
+
 	/**
 	 * Signals that this mission object was updated. //TODO: maybe move outside
 	 * of this class
@@ -303,7 +308,6 @@ public class Mission extends DroneVariable {
 		items.addAll(createDronie(this, currentPosition, GeoTools.newCoordFromBearingAndDistance(
 				currentPosition, 180 + myDrone.getOrientation().getYaw(), 50.0)));
 		sendMissionToAPM();
-		myDrone.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
 		notifyMissionUpdate();
 	}
 
@@ -317,5 +321,23 @@ public class Mission extends DroneVariable {
 		dronieItems.add(new Waypoint(mMission, new Coord3D(start, new Altitude(startAltitude))));
 		dronieItems.add(new Land(mMission,start));
 		return dronieItems;
+	}
+
+	public boolean hasTakeoffAndLandOrRTL() {
+		if (items.size() >= 2) {
+			if (isFirstItemTakeoff() && isLastItemLandOrRTL()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isFirstItemTakeoff() {
+		return items.get(0) instanceof Takeoff;
+	}
+
+	public boolean isLastItemLandOrRTL() {
+		MissionItem last = items.get(items.size()-1);
+		return (last instanceof ReturnToHome) || (last instanceof Land);
 	}
 }

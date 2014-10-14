@@ -4,6 +4,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.dialogs.YesNoDialog;
+import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.MAVLink.MavLinkArm;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -28,6 +29,7 @@ import com.google.android.gms.analytics.HitBuilders;
 
 public class FlightActionsFragment extends Fragment implements OnClickListener, OnDroneListener {
 
+    private static final String PREF_ARMING_CONFIRMATION_DIALOG = "pref_arming_confirmation_dialog";
 	private static final double TAKEOFF_ALTITUDE = 10.0;
 
 	public interface OnMissionControlInteraction {
@@ -56,7 +58,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 
 		DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
 		drone = droidPlannerApp.getDrone();
-		followMe = droidPlannerApp.followMe;
+		followMe = droidPlannerApp.getFollowMe();
 		return view;
 	}
 
@@ -226,19 +228,21 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 	}
 
 	private void getArmingConfirmation() {
-		YesNoDialog ynd = YesNoDialog.newInstance(getString(R.string.dialog_confirm_arming_title),
-				getString(R.string.dialog_confirm_arming_msg), new YesNoDialog.Listener() {
-					@Override
-					public void onYes() {
-						MavLinkArm.sendArmMessage(drone, true);
-					}
+		YesNoWithPrefsDialog ynd = YesNoWithPrefsDialog.newInstance(getActivity().getApplicationContext(),
+                getString(R.string.dialog_confirm_arming_title),
+                getString(R.string.dialog_confirm_arming_msg), new YesNoDialog.Listener() {
+                    @Override
+                    public void onYes() {
+                        MavLinkArm.sendArmMessage(drone, true);
+                    }
 
-					@Override
-					public void onNo() {
-					}
-				});
+                    @Override
+                    public void onNo() {}
+                }, PREF_ARMING_CONFIRMATION_DIALOG);
 
-		ynd.show(getChildFragmentManager(), "Confirm arming");
+        if(ynd != null) {
+            ynd.show(getChildFragmentManager(), "Confirm arming");
+        }
 	}
 
 	@Override

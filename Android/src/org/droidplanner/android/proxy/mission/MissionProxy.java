@@ -1,5 +1,7 @@
 package org.droidplanner.android.proxy.mission;
 
+import com.google.android.gms.internal.is;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,6 +17,7 @@ import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
@@ -225,6 +228,22 @@ public class MissionProxy implements DPMap.PathSource {
 	
 		addMissionItems(dronieItems);	
 	}
+
+
+
+    public void addTakeOffAndRTL(){
+        if(!mMission.isFirstItemTakeoff()){
+            final Takeoff takeOff = new Takeoff(mMission, new Altitude(Takeoff.DEFAULT_TAKEOFF_ALTITUDE));
+            mMissionItems.add(0, new MissionItemProxy(this, takeOff));
+            mMission.addMissionItem(0, takeOff);
+        }
+
+        if(!mMission.isLastItemLandOrRTL()){
+            final ReturnToHome rtl = new ReturnToHome(mMission);
+            mMissionItems.add(new MissionItemProxy(this, rtl));
+            mMission.addMissionItem(rtl);
+        }
+    }
 
 	/**
 	 * Returns the order for the given argument in the mission set.

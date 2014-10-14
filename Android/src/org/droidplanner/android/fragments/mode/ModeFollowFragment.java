@@ -8,21 +8,17 @@ import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.gcs.follow.Follow;
 import org.droidplanner.core.gcs.follow.FollowAlgorithm.FollowModes;
-import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.model.Drone;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 public class ModeFollowFragment extends ModeGuidedFragment implements
 		OnItemSelectedListener, OnDroneListener {
@@ -36,7 +32,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		DroidPlannerApp app = (DroidPlannerApp) getActivity().getApplication();
-		followMe = app.followMe;
+		followMe = app.getFollowMe();
 		drone = app.getDrone();
 
 		return inflater.inflate(R.layout.fragment_mode_follow, container, false);

@@ -95,7 +95,7 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 	 * @param drone
 	 */
 	public void sendDataToWatchNow(Drone drone) {
-		Follow followMe = ((DroidPlannerApp) applicationContext).followMe;
+		Follow followMe = ((DroidPlannerApp) applicationContext).getFollowMe();
 		PebbleDictionary data = new PebbleDictionary();
 
 		String mode = drone.getState().getMode().getName();
@@ -146,7 +146,7 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 
 		@Override
 		public void receiveData(Context context, int transactionId, PebbleDictionary data) {
-			Follow followMe = ((DroidPlannerApp) applicationContext).followMe;
+			Follow followMe = ((DroidPlannerApp) applicationContext).getFollowMe();
 			PebbleKit.sendAckToPebble(applicationContext, transactionId);
 			int request = (data.getInteger(KEY_PEBBLE_REQUEST).intValue());
 			switch (request) {

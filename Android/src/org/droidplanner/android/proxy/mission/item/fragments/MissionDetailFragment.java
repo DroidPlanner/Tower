@@ -113,7 +113,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mMissionProxy = ((DroidPlannerApp) getActivity().getApplication()).missionProxy;
+		mMissionProxy = ((DroidPlannerApp) getActivity().getApplication()).getMissionProxy();
 		mSelectedProxies = new ArrayList<MissionItemProxy>(mMissionProxy.selection.getSelected());
 		if (mSelectedProxies.isEmpty()) {
 			return null;

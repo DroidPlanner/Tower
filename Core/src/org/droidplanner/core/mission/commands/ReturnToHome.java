@@ -25,6 +25,11 @@ public class ReturnToHome extends MissionCMD {
 		unpackMAVMessage(msg);
 	}
 
+	public ReturnToHome(Mission mission) {
+		super(mission);
+		returnAltitude = new Altitude(0.0);
+	}
+
 	public Altitude getHeight() {
 		return returnAltitude;
 	}
