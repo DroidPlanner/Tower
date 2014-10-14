@@ -83,6 +83,7 @@ public class MissionCylindricalSurveyFragment extends MissionDetailFragment
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		getItem().enableCrossHatch(isChecked);
+        getMissionProxy().getMission().notifyMissionUpdate();
 	}
 
 	@Override
@@ -91,9 +92,11 @@ public class MissionCylindricalSurveyFragment extends MissionDetailFragment
 		switch (cardWheel.getId()) {
 		case R.id.radiusPicker:
 			getItem().setRadius(newValue);
+            getMissionProxy().getMission().notifyMissionUpdate();
 			break;
 		case R.id.startAltitudePicker:
 			getItem().setStartAltitude(newValue);
+            getMissionProxy().getMission().notifyMissionUpdate();
 			break;
 		case R.id.heightStepPicker:
 			getItem().setAltitudeStep(newValue);
