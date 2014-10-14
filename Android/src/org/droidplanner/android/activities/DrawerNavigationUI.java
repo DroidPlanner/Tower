@@ -5,7 +5,6 @@ import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.activities.interfaces.HelpProvider;
 import org.droidplanner.android.fragments.helpers.HelpDialogFragment;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -162,14 +161,6 @@ public abstract class DrawerNavigationUI extends SuperUI implements HelpProvider
         setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mSettings, new Intent(context,
                 SettingsActivity.class));
 
-        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mTuning, new Intent(context,
-                ConfigurationActivity.class).putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_ID,
-                R.id.navigation_tuning));
-
-        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mRadio, new Intent(context,
-                ConfigurationActivity.class).putExtra(ConfigurationActivity
-                .EXTRA_CONFIG_SCREEN_ID, R.id.navigation_radio));
-
         setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mCalibration, new Intent(context,
                 ConfigurationActivity.class).putExtra(ConfigurationActivity
                 .EXTRA_CONFIG_SCREEN_ID, R.id.navigation_calibration));
@@ -229,20 +220,14 @@ public abstract class DrawerNavigationUI extends SuperUI implements HelpProvider
 
         final TextView mParams;
         final TextView mChecklist;
-        final TextView mTuning;
-        final TextView mRadio;
         final TextView mCalibration;
 
         private NavDrawerViewHolder(View containerView){
             mFlightData = (TextView) containerView.findViewById(R.id.navigation_flight_data);
             mEditor = (TextView) containerView.findViewById(R.id.navigation_editor);
-
             mSettings = (TextView) containerView.findViewById(R.id.navigation_settings);
-
             mParams = (TextView) containerView.findViewById(R.id.navigation_params);
             mChecklist = (TextView) containerView.findViewById(R.id.navigation_checklist);
-            mTuning = (TextView) containerView.findViewById(R.id.navigation_tuning);
-            mRadio = (TextView) containerView.findViewById(R.id.navigation_radio);
             mCalibration = (TextView) containerView.findViewById(R.id.navigation_calibration);
         }
     }
