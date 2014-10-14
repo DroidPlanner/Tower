@@ -17,6 +17,11 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	 */
 	interface NotificationProvider extends DroneInterfaces.OnDroneListener {
 		void quickNotify(String feedback);
+
+        /**
+         * Release resources used by the provider.
+         */
+        void onTerminate();
 	}
 
 	/**
@@ -65,4 +70,15 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 		mTtsNotification.quickNotify(feedback);
 		mStatusBarNotification.quickNotify(feedback);
 	}
+
+    /**
+     * Release resources used by the notification handler.
+     * After calling this method, this object should no longer be used.
+     */
+    public void terminate(){
+        mTtsNotification.onTerminate();
+        mStatusBarNotification.onTerminate();
+        mPebbleNotification.onTerminate();
+        mBeepNotification.onTerminate();
+    }
 }
