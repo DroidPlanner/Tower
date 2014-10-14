@@ -43,7 +43,7 @@ public class Survey extends MissionItem {
 		grid = null;
 		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new Coord2D(0, 0));
 		polygon.checkIfValid();
-		grid = gridBuilder.generate();
+		grid = gridBuilder.generate(true);
 	}
 
 	@Override

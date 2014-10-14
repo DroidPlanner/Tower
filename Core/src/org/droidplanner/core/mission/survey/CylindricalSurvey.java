@@ -91,11 +91,11 @@ public class CylindricalSurvey extends MissionItem {
 		GridBuilder grid = new GridBuilder(polygon, 0.0,
 				radius.valueInMeters() / 4, corner );
 		try {
-			for (Coord2D point : grid.generate().gridPoints) {
+			for (Coord2D point : grid.generate(false).gridPoints) {
 				list.add(Survey.packSurveyPoint(point, getTopHeight()));
 			}
 			grid.setAngle(90.0);
-			for (Coord2D point : grid.generate().gridPoints) {
+			for (Coord2D point : grid.generate(false).gridPoints) {
 				list.add(Survey.packSurveyPoint(point, getTopHeight()));
 			}
 		} catch (Exception e) { // Should never fail, since it has good polygons

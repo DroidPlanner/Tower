@@ -40,7 +40,7 @@ public class GridBuilder {
 		angle = newAngle;
 	}
 
-	public Grid generate() throws Exception {
+	public Grid generate(boolean sort) throws Exception {
 		List<Coord2D> polygonPoints = poly.getPoints();
 
 		List<LineCoord2D> circumscribedGrid = new CircumscribedGrid(polygonPoints, angle, lineDist)
@@ -48,7 +48,7 @@ public class GridBuilder {
 		List<LineCoord2D> trimedGrid = new Trimmer(circumscribedGrid, poly.getLines())
 				.getTrimmedGrid();
 		EndpointSorter gridSorter = new EndpointSorter(trimedGrid, wpDistance);
-		gridSorter.sortGrid(origin, innerWPs);
+		gridSorter.sortGrid(origin, innerWPs, sort);
 		grid = new Grid(gridSorter.getSortedGrid(), gridSorter.getCameraLocations());
 		return grid;
 	}
