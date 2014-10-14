@@ -87,16 +87,6 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/mc_joystickBtn"
-            style="@style/flightControlButton.Row"
-            android:layout_width="75dp"
-            android:layout_height="match_parent"
-            android:drawableTop="@drawable/ic_control"
-            android:visibility="gone"
-            android:layout_weight="1"
-            android:text="@string/mission_control_control"/>
-
-        <Button
             android:id="@+id/mc_homeBtn"
             style="@style/flightControlButton.Row"
             android:layout_width="75dp"

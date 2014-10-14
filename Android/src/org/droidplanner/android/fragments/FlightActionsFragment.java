@@ -32,12 +32,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
     private static final String PREF_ARMING_CONFIRMATION_DIALOG = "pref_arming_confirmation_dialog";
 	private static final double TAKEOFF_ALTITUDE = 10.0;
 
-	public interface OnMissionControlInteraction {
-		public void onJoystickSelected();
-	}
-
 	private Drone drone;
-	private OnMissionControlInteraction listener;
 
 	private Follow followMe;
 
@@ -70,9 +65,6 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 		mDisarmedButtons = view.findViewById(R.id.mc_disarmed_buttons);
 		mArmedButtons = view.findViewById(R.id.mc_armed_buttons);
 		mInFlightButtons = view.findViewById(R.id.mc_in_flight_buttons);
-
-		final Button joystickBtn = (Button) view.findViewById(R.id.mc_joystickBtn);
-		joystickBtn.setOnClickListener(this);
 
 		final Button connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
 		connectBtn.setOnClickListener(this);
@@ -114,7 +106,6 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		listener = (OnMissionControlInteraction) activity;
 	}
 
 	@Override
@@ -125,12 +116,6 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 		switch (v.getId()) {
 		case R.id.mc_connectBtn:
 			((SuperUI) getActivity()).toggleDroneConnection();
-			break;
-
-		case R.id.mc_joystickBtn:
-			listener.onJoystickSelected();
-			eventBuilder.setAction("Joystick selected").setLabel(
-					getString(R.string.mission_control_control));
 			break;
 
 		case R.id.mc_armBtn:

@@ -85,25 +85,7 @@
                     android:drawableStart="@drawable/ic_action_paste"
                     android:text="@string/screen_checklist"
                     />
-
-                <TextView
-                    android:id="@+id/navigation_tuning"
-                    style="@style/navigationDrawerEntry"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@android:drawable/ic_menu_preferences"
-                    android:drawableStart="@android:drawable/ic_menu_preferences"
-                    android:text="@string/screen_tuning"/>
-
-                <TextView
-                    android:id="@+id/navigation_radio"
-                    style="@style/navigationDrawerEntry"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_action_radio"
-                    android:drawableStart="@drawable/ic_action_radio"
-                    android:text="@string/screen_rc"/>
-
+                
                 <TextView
                     style="@style/navigationDrawerEntry"
                     android:layout_width="match_parent"
