@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import org.droidplanner.android.utils.file.FileList;
 import org.droidplanner.android.utils.file.FileManager;
 import org.droidplanner.android.utils.file.FileStream;
 
@@ -30,8 +31,8 @@ public class MissionWriter {
 			if (!FileManager.isExternalStorageAvaliable())
 				return false;
 
-            if(!filename.endsWith(".txt")){
-                filename += ".txt";
+            if(!filename.endsWith(FileList.WAYPOINT_FILENAME_EXT)){
+                filename += FileList.WAYPOINT_FILENAME_EXT;
             }
 
 			final FileOutputStream out = FileStream.getWaypointFileStream(filename);

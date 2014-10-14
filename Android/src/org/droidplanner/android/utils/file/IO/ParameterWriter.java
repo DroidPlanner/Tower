@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import org.droidplanner.android.utils.file.FileList;
 import org.droidplanner.android.utils.file.FileManager;
 import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.core.parameters.Parameter;
@@ -16,12 +17,17 @@ public class ParameterWriter {
 		this.parameterList = param;
 	}
 
-	public boolean saveParametersToFile() {
+	public boolean saveParametersToFile(String filename) {
 		try {
 			if (!FileManager.isExternalStorageAvaliable()) {
 				return false;
 			}
-			FileOutputStream out = FileStream.getParameterFileStream();
+
+            if(!filename.endsWith(FileList.PARAM_FILENAME_EXT)){
+                filename += FileList.PARAM_FILENAME_EXT;
+            }
+
+			FileOutputStream out = FileStream.getParameterFileStream(filename);
 
 			writeFirstLine(out);
 

@@ -7,15 +7,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class FileStream {
-	public static FileOutputStream getParameterFileStream() throws FileNotFoundException {
+	public static FileOutputStream getParameterFileStream(String filename) throws
+            FileNotFoundException {
 		File myDir = new File(DirectoryPath.getParametersPath());
 		myDir.mkdirs();
-		File file = new File(myDir, "Parameters-" + FileManager.getTimeStamp() + ".param");
+		File file = new File(myDir, filename);
 		if (file.exists())
 			file.delete();
 		FileOutputStream out = new FileOutputStream(file);
 		return out;
 	}
+
+    public static String getParameterFilename(String prefix){
+        return prefix + "-" + FileManager.getTimeStamp() + FileList.PARAM_FILENAME_EXT;
+    }
 
 	public static FileOutputStream getExceptionFileStream() throws FileNotFoundException {
 		File myDir = new File(DirectoryPath.getLogCatPath());
@@ -39,7 +44,7 @@ public class FileStream {
 	}
 
     public static String getWaypointFilename(String prefix){
-        return prefix + "-" + FileManager.getTimeStamp() + ".txt";
+        return prefix + "-" + FileManager.getTimeStamp() + FileList.WAYPOINT_FILENAME_EXT;
     }
 
 	/**

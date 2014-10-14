@@ -263,11 +263,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	private void saveMissionFile() {
-
         final Context context = getApplicationContext();
         final EditInputDialog dialog = EditInputDialog.newInstance(context, getString(R.string.label_enter_filename),
-                FileStream.getWaypointFilename("waypoints"),
-                new EditInputDialog.Listener() {
+                FileStream.getWaypointFilename("waypoints"), new EditInputDialog.Listener() {
                     @Override
                     public void onOk(CharSequence input) {
                         if (MissionWriter.write(drone.getMission().getMsgMissionItems(),
