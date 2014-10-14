@@ -43,7 +43,6 @@ android {
 
 dependencies {
     compile 'com.android.support:support-v4:20.0.0'
-    compile 'com.sothree.slidinguppanel:library:2.0.2'
     provided 'com.google.android.gms:play-services:5.0.+'
 
     compile project(':Core')
