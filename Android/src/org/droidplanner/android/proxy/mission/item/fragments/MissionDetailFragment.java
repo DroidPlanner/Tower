@@ -14,6 +14,7 @@ import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.commands.MissionCMD;
+import org.droidplanner.core.mission.survey.CylindricalSurvey;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.util.Pair;
 
@@ -94,6 +95,9 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 		case SPLINE_WAYPOINT:
 			fragment = new MissionSplineWaypointFragment();
 			break;
+		case CYLINDRICAL_SURVEY:
+			fragment = new MissionCylindricalSurveyFragment();
+			break;
 		default:
 			fragment = null;
 			break;
@@ -134,7 +138,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-
+		
 		List<MissionItemType> list = new LinkedList<MissionItemType>(Arrays.asList(MissionItemType.values()));
 
         if(mSelectedProxies.size() == 1) {
@@ -146,6 +150,11 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
                 list.add(MissionItemType.SURVEY);
             } else {
                 list.remove(MissionItemType.SURVEY);
+            }
+            
+            if ((currentItem instanceof CylindricalSurvey)) {
+                list.clear();
+                list.add(MissionItemType.CYLINDRICAL_SURVEY);
             }
 
             if (mMissionProxy.getItems().indexOf(itemProxy) != 0) {
@@ -163,6 +172,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
                 list.remove(MissionItemType.CIRCLE);
                 list.remove(MissionItemType.ROI);
                 list.remove(MissionItemType.WAYPOINT);
+                list.remove(MissionItemType.CYLINDRICAL_SURVEY);
             }
 
             final TextView waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
@@ -192,6 +202,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
             list.remove(MissionItemType.LAND);
             list.remove(MissionItemType.RTL);
             list.remove(MissionItemType.SURVEY);
+            list.remove(MissionItemType.CYLINDRICAL_SURVEY);
         }
         else{
             //Invalid state. We should not have been able to get here.
