@@ -57,6 +57,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	 */
 	private static final String ITEM_DETAIL_TAG = "Item Detail Window";
     private static final String EXTRA_IS_SPLINE_ENABLED = "extra_is_spline_enabled";
+    private static final String PREF_CLEAR_MISSION_CONFIRM_DIALOG = "pref_clear_mission_confirmation_dialog";
 
     /**
 	 * Used to provide access and interact with the
@@ -183,7 +184,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		 */
 		mContainerItemDetail = findViewById(R.id.containerItemDetail);
 
-		missionProxy = ((DroidPlannerApp) getApplication()).missionProxy;
+        final DroidPlannerApp dpApp = ((DroidPlannerApp) getApplication());
+		missionProxy = dpApp.getMissionProxy();
 		gestureMapFragment.setOnPathFinishedListener(this);
 	}
 
@@ -619,20 +621,22 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	private void doClearMissionConfirmation() {
-		YesNoDialog ynd = YesNoDialog.newInstance(getString(R.string.dlg_clear_mission_title),
-				getString(R.string.dlg_clear_mission_confirm), new YesNoDialog.Listener() {
-					@Override
-					public void onYes() {
-						missionProxy.clear();
-						missionProxy.addTakeoff();
-					}
+		YesNoDialog ynd = YesNoDialog.newInstance(getApplicationContext(), getString(R.string
+                        .dlg_clear_mission_title),
+                getString(R.string.dlg_clear_mission_confirm), new YesNoDialog.Listener() {
+                    @Override
+                    public void onYes() {
+                        missionProxy.clear();
+                        missionProxy.addTakeoff();
+                    }
 
-					@Override
-					public void onNo() {
-					}
-				});
+                    @Override
+                    public void onNo() {}
+                });
 
-		ynd.show(getSupportFragmentManager(), "clearMission");
+        if(ynd != null) {
+            ynd.show(getSupportFragmentManager(), "clearMission");
+        }
 	}
 
     @Override
