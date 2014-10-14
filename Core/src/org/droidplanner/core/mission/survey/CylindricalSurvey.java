@@ -75,6 +75,7 @@ public class CylindricalSurvey extends MissionItem {
 		for (double altitude = startHeight.valueInMeters(); altitude <= getTopHeight().valueInMeters(); altitude += heightStep.valueInMeters()) {
 			Circle circle = new Circle(mission, new Coord3D(center,
 					new Altitude(altitude)));
+			circle.setRadius(radius.valueInMeters());
 			list.addAll(circle.packMissionItem());
 		}
 	}
