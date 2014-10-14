@@ -5,11 +5,17 @@ import java.io.FilenameFilter;
 
 public class FileList {
 
+    public static final String WAYPOINT_FILENAME_EXT = ".txt";
+
+    public static final String PARAM_FILENAME_EXT = ".param";
+
+    public static final String CAMERA_FILENAME_EXT = ".xml";
+
 	static public String[] getWaypointFileList() {
 		FilenameFilter filter = new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String filename) {
-				return filename.contains(".txt");
+				return filename.contains(WAYPOINT_FILENAME_EXT);
 			}
 		};
 		return getFileList(DirectoryPath.getWaypointsPath(), filter);
@@ -19,7 +25,7 @@ public class FileList {
 		FilenameFilter filter = new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String filename) {
-				return filename.contains(".param");
+				return filename.contains(PARAM_FILENAME_EXT);
 			}
 		};
 		return getFileList(DirectoryPath.getParametersPath(), filter);
@@ -29,7 +35,7 @@ public class FileList {
 		FilenameFilter filter = new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String filename) {
-				return filename.contains(".xml");
+				return filename.contains(CAMERA_FILENAME_EXT);
 			}
 		};
 		return getFileList(DirectoryPath.getCameraInfoPath(), filter);

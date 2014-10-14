@@ -7,9 +7,12 @@ import java.util.TreeSet;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenParameterDialog;
 import org.droidplanner.android.dialogs.parameters.DialogParameterInfo;
+import org.droidplanner.android.utils.file.FileManager;
+import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.file.IO.ParameterWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.adapterViews.ParamsAdapter;
@@ -352,16 +355,30 @@ public class ParamsFragment extends ListFragment implements
 	}
 
 	private void saveParametersToFile() {
-		final List<Parameter> parameters = new ArrayList<Parameter>();
-		for (int i = 0; i < adapter.getCount(); i++)
-			parameters.add(adapter.getItem(i).getParameter());
+        final Context context = getActivity().getApplicationContext();
+        final EditInputDialog dialog = EditInputDialog.newInstance(context,
+                getString(R.string.label_enter_filename), FileStream.getParameterFilename("Parameters-"),
+                new EditInputDialog.Listener() {
+                    @Override
+                    public void onOk(CharSequence input) {
+                        final List<Parameter> parameters = new ArrayList<Parameter>();
+                        for (int i = 0; i < adapter.getCount(); i++) {
+                            parameters.add(adapter.getItem(i).getParameter());
+                        }
 
-		if (parameters.size() > 0) {
-			ParameterWriter parameterWriter = new ParameterWriter(parameters);
-			if (parameterWriter.saveParametersToFile()) {
-				Toast.makeText(getActivity(), R.string.parameters_saved, Toast.LENGTH_SHORT).show();
-			}
-		}
+                        if (parameters.size() > 0) {
+                            ParameterWriter parameterWriter = new ParameterWriter(parameters);
+                            if (parameterWriter.saveParametersToFile(input.toString())) {
+                                Toast.makeText(getActivity(), R.string.parameters_saved, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancel() {}
+                });
+
+        dialog.show(getChildFragmentManager(), "Parameters filename");
 	}
 
 	@Override

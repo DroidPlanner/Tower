@@ -7,15 +7,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class FileStream {
-	public static FileOutputStream getParameterFileStream() throws FileNotFoundException {
+	public static FileOutputStream getParameterFileStream(String filename) throws
+            FileNotFoundException {
 		File myDir = new File(DirectoryPath.getParametersPath());
 		myDir.mkdirs();
-		File file = new File(myDir, "Parameters-" + FileManager.getTimeStamp() + ".param");
+		File file = new File(myDir, filename);
 		if (file.exists())
 			file.delete();
 		FileOutputStream out = new FileOutputStream(file);
 		return out;
 	}
+
+    public static String getParameterFilename(String prefix){
+        return prefix + "-" + FileManager.getTimeStamp() + FileList.PARAM_FILENAME_EXT;
+    }
 
 	public static FileOutputStream getExceptionFileStream() throws FileNotFoundException {
 		File myDir = new File(DirectoryPath.getLogCatPath());
@@ -27,15 +32,20 @@ public class FileStream {
 		return out;
 	}
 
-	static public FileOutputStream getWaypointFileStream(String name) throws FileNotFoundException {
+	static public FileOutputStream getWaypointFileStream(String filename) throws
+            FileNotFoundException {
 		File myDir = new File(DirectoryPath.getWaypointsPath());
 		myDir.mkdirs();
-		File file = new File(myDir, name + "-" + FileManager.getTimeStamp() + ".txt");
+		File file = new File(myDir, filename);
 		if (file.exists())
 			file.delete();
 		FileOutputStream out = new FileOutputStream(file);
 		return out;
 	}
+
+    public static String getWaypointFilename(String prefix){
+        return prefix + "-" + FileManager.getTimeStamp() + FileList.WAYPOINT_FILENAME_EXT;
+    }
 
 	/**
 	 * Return a filename that is suitable for a tlog
