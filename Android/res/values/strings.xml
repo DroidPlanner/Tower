@@ -230,7 +230,7 @@
     <string name="waypoint_coordsrc">Source data:</string>
     <string name="waypoint_jumpto">Jump to waypoint:</string>
     <string name="waypoint_repeat">Repeat waypoint</string>
-    <string name="Orbits">Orbits</string>
+    <string name="circle_turns">Number of turns</string>
 
     <string name="dlg_clear_mission_title">Clear Mission</string>
     <string name="dlg_clear_mission_confirm">Clear all waypoints from the map?</string>
