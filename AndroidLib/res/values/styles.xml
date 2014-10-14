@@ -401,18 +401,6 @@
     </style>
 
     <!-- Number picker widget styles -->
-    <style name="missionItemNumberPicker">
-        <item name="visibleItems">3</item>
-        <item name="isAllVisible">false</item>
-        <item name="isCyclic">false</item>
-        <item name="itemsDimmedAlpha">150</item>
-        <item name="selectionDivider">@android:color/holo_blue_dark</item>
-        <item name="selectionDividerWidth">2dp</item>
-        <item name="selectionDividerActiveAlpha">100</item>
-        <item name="selectionDividerDimmedAlpha">255</item>
-        <item name="android:layout_gravity">center</item>
-    </style>
-
     <style name="missionItemDetailCard">
         <item name="android:background">@drawable/bg_cell_white</item>
         <item name="android:layout_marginLeft">@dimen/margin_left_right_card_wheel_horizontal_view</item>

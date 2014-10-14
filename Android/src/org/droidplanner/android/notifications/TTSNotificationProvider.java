@@ -384,4 +384,11 @@ public class TTSNotificationProvider implements OnInitListener,
 	public void quickNotify(String feedback) {
 		speak(feedback);
 	}
+
+    @Override
+    public void onTerminate() {
+        if(tts != null){
+            tts.shutdown();
+        }
+    }
 }
