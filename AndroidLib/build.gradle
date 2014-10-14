@@ -1,5 +1,9 @@
 apply plugin: 'com.android.library'
 
+repositories {
+    mavenCentral()
+}
+
 android {
     compileSdkVersion 19
     buildToolsVersion '20.0.0'
@@ -39,6 +43,7 @@ android {
 
 dependencies {
     compile 'com.android.support:support-v4:20.0.0'
+    compile 'com.sothree.slidinguppanel:library:2.0.2'
     provided 'com.google.android.gms:play-services:5.0.+'
 
     compile project(':Core')
