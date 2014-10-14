@@ -189,7 +189,7 @@
     <string name="waypoint_coordsrc">Fonte dati:</string>
     <string name="waypoint_jumpto">Vai a Waypoint:</string>
     <string name="waypoint_repeat">Ripetere Waypoint</string>
-    <string name="Orbits">Orbite</string>
+    <string name="circle_turns">Orbite</string>
     <string name="dlg_clear_mission_title">Elimina missione</string>
     <string name="dlg_clear_mission_confirm">Eliminare tutti i waypoints dalla mappa?</string>
 

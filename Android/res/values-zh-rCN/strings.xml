@@ -206,7 +206,7 @@
     <string name="waypoint_coordsrc">源数据</string>
     <string name="waypoint_jumpto">跳至航点：</string>
     <string name="waypoint_repeat">重复航点</string>
-    <string name="Orbits">轨道</string>
+    <string name="circle_turns">轨道</string>
 
     <string name="dlg_clear_mission_title">清除任务</string>
     <string name="dlg_clear_mission_confirm">从地图上清除所有航点？</string>

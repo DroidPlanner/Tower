@@ -206,7 +206,7 @@
     <string name="waypoint_coordsrc">Quelldaten:</string>
     <string name="waypoint_jumpto">Springe zu Wegpunkt:</string>
     <string name="waypoint_repeat">Wegpunkt wiederholen</string>
-    <string name="Orbits">Umlaufbahnen</string>
+    <string name="circle_turns">Umlaufbahnen</string>
 
     <!-- Selection of map style -->
     <string name="menu_map_type">Kartentyp</string>

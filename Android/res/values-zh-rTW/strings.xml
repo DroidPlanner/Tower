@@ -222,7 +222,7 @@
     <string name="waypoint_coordsrc">來源數據:</string>
     <string name="waypoint_jumpto">跳至航點:</string>
     <string name="waypoint_repeat">重覆航點</string>
-    <string name="Orbits">軌跡</string>
+    <string name="circle_turns">軌跡</string>
 
     <string name="dlg_clear_mission_title">清除任務</string>
     <string name="dlg_clear_mission_confirm">是否從清除地圖上的所有航點？</string>
