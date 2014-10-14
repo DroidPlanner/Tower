@@ -81,7 +81,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	private TextView infoView;
 
-    //TODO: change the multi edit icon based on its state.
     private boolean mMultiEditEnabled;
 
 	/**
@@ -301,6 +300,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public void onMapClick(Coord2D point) {
+        enableMultiEdit(false);
+
 		// If an mission item is selected, unselect it.
 		missionProxy.selection.clearSelection();
 
@@ -547,6 +548,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public boolean onItemLongClick(MissionItemProxy item) {
+        enableMultiEdit(false);
 		if (contextualActionBar != null) {
 			if (missionProxy.selection.selectionContains(item)) {
 				missionProxy.selection.clearSelection();
@@ -613,7 +615,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 			if (contextualActionBar != null && !mMultiEditEnabled)
 				removeItemDetail();
 			else {
-				showItemDetail(selected.get(0).getDetailFragment());
+				showItemDetail(selectMissionDetailType(selected));
 			}
 		}
 
