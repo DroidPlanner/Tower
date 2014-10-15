@@ -25,6 +25,8 @@ dependencies {
 
     compile project(':Libraries:PebbleKit')
     compile project(':Libraries:usb-serial-for-android:UsbSerialLibrary')
+
+    wearApp project(':Wearables:AndroidWear')
 }
 
 android {
@@ -32,7 +34,7 @@ android {
     buildToolsVersion '19.1.0'
 
     defaultConfig {
-        applicationId 'org.droidplanner'
+        applicationId "org.droidplanner"
         minSdkVersion 14
         targetSdkVersion 19
         versionName getGitVersion()

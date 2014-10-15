@@ -1,4 +1,4 @@
-//Pure Java project
+//Pure Java projects
 include ':Core'
 include ':Mavlink'
 
@@ -10,3 +10,6 @@ include ':AndroidLib'
 include ':Libraries:HorizontalVariableListView:HorizontalVariableListView'
 include ':Libraries:usb-serial-for-android:UsbSerialLibrary'
 include ':Libraries:PebbleKit'
+
+//Wearable projects
+include ':Wearables:AndroidWear'

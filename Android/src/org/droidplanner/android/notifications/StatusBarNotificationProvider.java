@@ -3,10 +3,11 @@ package org.droidplanner.android.notifications;
 import org.droidplanner.R;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.services.DroidPlannerService;
 import org.droidplanner.android.utils.TextUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.model.Drone;
+import org.droidplanner.core.drone.DroneInterfaces;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -28,29 +29,6 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 	 * Android status bar's notification id.
 	 */
 	private static final int NOTIFICATION_ID = 1;
-
-	/**
-	 * Countdown to notification dismissal.
-	 */
-	private static final long COUNTDOWN_TO_DISMISSAL = 60000l; // ms
-
-	/**
-	 * Used to schedule notification dismissal after a disconnect event.
-	 */
-	private final Handler mHandler = new Handler();
-
-	/**
-	 * Callback used to dismiss the notification.
-	 */
-	private final Runnable mDismissNotification = new Runnable() {
-		@Override
-		public void run() {
-			if (mContext != null) {
-				onTerminate();
-				mNotificationBuilder = null;
-			}
-		}
-	};
 
 	/**
 	 * Application context.
@@ -87,87 +65,86 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		mContext = context;
 		mAppPrefs = new DroidPlannerPrefs(context);
 
-		mNotificationIntent = PendingIntent.getActivity(mContext, 0, new Intent(mContext,
-				FlightActivity.class), 0);
+		mNotificationIntent = PendingIntent.getActivity(mContext, 0,
+				new Intent(mContext, FlightActivity.class), 0);
 
-		mToggleConnectionIntent = PendingIntent.getActivity(mContext, 0, new Intent(mContext,
-                FlightActivity.class).setAction(SuperUI.ACTION_TOGGLE_DRONE_CONNECTION), 0);
+		mToggleConnectionIntent = PendingIntent.getService(mContext, 0,
+                new Intent(mContext, DroidPlannerService.class)
+                        .setAction(DroidPlannerService.ACTION_TOGGLE_DRONE_CONNECTION), 0
+        );
 	}
 
 	@Override
 	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
 		boolean showNotification = true;
 
-		switch (event) {
-		case CONNECTED:
-			// Cancel the notification dismissal
-			mHandler.removeCallbacks(mDismissNotification);
+        switch (event) {
+            case CONNECTED:
+                final String summaryText = mContext.getString(R.string.connected);
 
-			final String summaryText = mContext.getString(R.string.connected);
+                mInboxBuilder = new InboxStyleBuilder().setSummary(summaryText);
+                mNotificationBuilder = new NotificationCompat.Builder(mContext)
+                        .addAction(R.drawable.ic_action_io, mContext.getText(R.string
+                                        .menu_disconnect),
+                                mToggleConnectionIntent)
+                        .setContentIntent(mNotificationIntent)
+                        .setContentText(summaryText)
+                        .setOngoing(mAppPrefs.isNotificationPermanent())
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setLocalOnly(true);
 
-			mInboxBuilder = new InboxStyleBuilder().setSummary(summaryText);
-			mNotificationBuilder = new NotificationCompat.Builder(mContext)
-					.addAction(R.drawable.ic_action_io, mContext.getText(R.string.menu_disconnect),
-							mToggleConnectionIntent).setContentIntent(mNotificationIntent)
-					.setContentText(summaryText).setOngoing(mAppPrefs.isNotificationPermanent())
-					.setSmallIcon(R.drawable.ic_launcher);
+                updateFlightMode(drone);
+                updateDroneState(drone);
+                updateBattery(drone);
+                updateGps(drone);
+                updateHome(drone);
+                updateRadio(drone);
+                break;
 
-			updateFlightMode(drone);
-			updateDroneState(drone);
-			updateBattery(drone);
-			updateGps(drone);
-			updateHome(drone);
-			updateRadio(drone);
-			break;
+            case BATTERY:
+                updateBattery(drone);
+                break;
 
-		case BATTERY:
-			updateBattery(drone);
-			break;
+            case GPS_FIX:
+            case GPS_COUNT:
+                updateGps(drone);
+                break;
 
-		case GPS_FIX:
-		case GPS_COUNT:
-			updateGps(drone);
-			break;
+            case GPS:
+            case HOME:
+                updateHome(drone);
+                break;
 
-		case GPS:
-		case HOME:
-			updateHome(drone);
-			break;
+            case RADIO:
+                updateRadio(drone);
+                break;
 
-		case RADIO:
-			updateRadio(drone);
-			break;
+            case STATE:
+                updateDroneState(drone);
+                break;
 
-		case STATE:
-			updateDroneState(drone);
-			break;
+            case MODE:
+            case TYPE:
+                updateFlightMode(drone);
+                break;
 
-		case MODE:
-		case TYPE:
-			updateFlightMode(drone);
-			break;
+            case DISCONNECTED:
+                mInboxBuilder = null;
 
-		case DISCONNECTED:
-			mInboxBuilder = null;
+                mNotificationBuilder = new NotificationCompat.Builder(mContext)
+                        .addAction(R.drawable.ic_action_io, mContext.getText(R.string.menu_connect),
+                                mToggleConnectionIntent)
+                        .setContentIntent(mNotificationIntent)
+                        .setContentTitle(mContext.getString(R.string.disconnected))
+                        .setOngoing(false).setContentText("")
+                        .setSmallIcon(R.drawable.ic_launcher_bw)
+                        .setLocalOnly(true);
+                break;
 
-			if (mNotificationBuilder != null) {
-				mNotificationBuilder = new NotificationCompat.Builder(mContext)
-						.addAction(R.drawable.ic_action_io,
-								mContext.getText(R.string.menu_connect), mToggleConnectionIntent)
-						.setContentIntent(mNotificationIntent)
-						.setContentTitle(mContext.getString(R.string.disconnected))
-						.setOngoing(false).setContentText("")
-						.setSmallIcon(R.drawable.ic_launcher_bw);
-
-				// Schedule the notification dismissal
-				mHandler.postDelayed(mDismissNotification, COUNTDOWN_TO_DISMISSAL);
-			}
-			break;
-
-		default:
-			showNotification = false;
-			break;
-		}
+            default:
+                showNotification = false;
+                break;
+        }
 
 		if (showNotification) {
 			showNotification();
@@ -178,8 +155,10 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		if (mInboxBuilder == null)
 			return;
 
-		mInboxBuilder.setLine(4, TextUtils.normal("Signal:   ",
-				TextUtils.bold(String.format("%d%%", drone.getRadio().getSignalStrength()))));
+		mInboxBuilder.setLine(
+				4,
+				TextUtils.normal("Signal:   ",
+						TextUtils.bold(String.format("%d%%", drone.getRadio().getSignalStrength()))));
 	}
 
 	private void updateHome(Drone drone) {
@@ -196,17 +175,24 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		if (mInboxBuilder == null)
 			return;
 
-		mInboxBuilder.setLine(1, TextUtils.normal("Satellite:   ", TextUtils.bold(String.format(
-				"%d, %s", drone.getGps().getSatCount(), drone.getGps().getFixType()))));
+		mInboxBuilder.setLine(
+				1,
+				TextUtils.normal(
+						"Satellite:   ",
+						TextUtils.bold(String.format("%d, %s", drone.getGps().getSatCount(),
+								drone.getGps().getFixType()))));
 	}
 
 	private void updateBattery(Drone drone) {
 		if (mInboxBuilder == null)
 			return;
 
-		mInboxBuilder.setLine(3, TextUtils.normal("Battery:   ", TextUtils.bold(String.format(
-				"%2.1fv (%2.0f%%)", drone.getBattery().getBattVolt(), drone.getBattery()
-						.getBattRemain()))));
+		mInboxBuilder.setLine(
+				3,
+				TextUtils.normal(
+						"Battery:   ",
+						TextUtils.bold(String.format("%2.1fv (%2.0f%%)",
+								drone.getBattery().getBattVolt(), drone.getBattery().getBattRemain()))));
 	}
 
 	private void updateDroneState(Drone drone) {
@@ -217,10 +203,8 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		long minutes = timeInSeconds / 60;
 		long seconds = timeInSeconds % 60;
 
-		mInboxBuilder.setLine(
-				2,
-				TextUtils.normal("Air Time:   ",
-						TextUtils.bold(String.format("%02d:%02d", minutes, seconds))));
+		mInboxBuilder.setLine(2, TextUtils.normal("Air Time:   ",
+				TextUtils.bold(String.format("%02d:%02d", minutes, seconds))));
 	}
 
 	private void updateFlightMode(Drone drone) {
@@ -245,7 +229,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		}
 
 		NotificationManagerCompat.from(mContext).notify(NOTIFICATION_ID,
-				mNotificationBuilder.build());
+                mNotificationBuilder.build());
 	}
 
 	/**

@@ -3,7 +3,7 @@ package org.droidplanner.android.communication.connection;
 import java.io.File;
 import java.io.IOException;
 
-import org.droidplanner.android.communication.service.UploaderService;
+import org.droidplanner.android.services.UploaderService;
 import org.droidplanner.android.utils.AndroidLogger;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.FileStream;

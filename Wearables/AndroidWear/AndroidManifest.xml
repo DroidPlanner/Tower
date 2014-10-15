@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.droidplanner" >
+
+    <uses-feature android:name="android.hardware.type.watch" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_title"
+        android:theme="@style/DPWatchTheme" >
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".android.wear.activities.WearUI"
+            android:label="@string/app_title"
+            android:launchMode="singleTask">
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
+        <activity android:name=".android.wear.activities.FlightModesSelectionActivity" />
+        <activity android:name=".android.wear.activities.ContextStreamActivity"
+            android:exported="true"
+            android:allowEmbedded="true"
+            android:label="@string/app_title"
+            android:taskAffinity="" />
+
+        <service android:name=".android.wear.services.DroidPlannerWearService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>

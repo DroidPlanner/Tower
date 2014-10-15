@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="wl_blue">#2878ff</color>
+    <color name="wl_gray">#c1c1c1</color>
+    <color name="dark_gray">#434343</color>
+
     <color name="transparent_dark">#B0000000</color>
     <color name="transparent_light">#d0ffffff</color>
     <color name="opaque_black">#000</color>

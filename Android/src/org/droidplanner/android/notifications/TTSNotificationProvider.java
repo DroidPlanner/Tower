@@ -195,6 +195,13 @@ public class TTSNotificationProvider implements OnInitListener,
 		}
 	}
 
+    @Override
+    public void onTerminate(){
+        if(tts != null){
+            tts.shutdown();
+        }
+    }
+
 	private void speak(String string) {
 		speak(string, false, null);
 	}
@@ -384,11 +391,4 @@ public class TTSNotificationProvider implements OnInitListener,
 	public void quickNotify(String feedback) {
 		speak(feedback);
 	}
-
-    @Override
-    public void onTerminate() {
-        if(tts != null){
-            tts.shutdown();
-        }
-    }
 }

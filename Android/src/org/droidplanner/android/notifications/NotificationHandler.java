@@ -1,5 +1,6 @@
 package org.droidplanner.android.notifications;
 
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.model.Drone;
 
@@ -24,6 +25,8 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
         void onTerminate();
 	}
 
+    private final Drone mDrone;
+
 	/**
 	 * Handles Droidplanner's audible notifications.
 	 */
@@ -44,11 +47,24 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	 */
 	private final EmergencyBeepNotificationProvider mBeepNotification;
 
-	public NotificationHandler(Context context) {
+	
+    /**
+     * Handles notifications, and data relays for connected wear nodes.
+     */
+    private final WearNotificationProvider mWearNotification;
+
+	public NotificationHandler(DroidPlannerApp dpApp) {
+        mDrone = dpApp.getDrone();
+
+        final Context context = dpApp.getApplicationContext();
+
 		mTtsNotification = new TTSNotificationProvider(context);
 		mStatusBarNotification = new StatusBarNotificationProvider(context);
 		mPebbleNotification = new PebbleNotificationProvider(context);
 		mBeepNotification = new EmergencyBeepNotificationProvider(context);
+        mWearNotification = new WearNotificationProvider(context, dpApp.followMe);
+
+        mDrone.addDroneListener(this);
 	}
 
 	@Override
@@ -57,6 +73,7 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 		mStatusBarNotification.onDroneEvent(event, drone);
 		mPebbleNotification.onDroneEvent(event, drone);
 		mBeepNotification.onDroneEvent(event, drone);
+        mWearNotification.onDroneEvent(event, drone);
 	}
 
 	/**
@@ -69,6 +86,8 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	public void quickNotify(String feedback) {
 		mTtsNotification.quickNotify(feedback);
 		mStatusBarNotification.quickNotify(feedback);
+        mPebbleNotification.quickNotify(feedback);
+        mWearNotification.quickNotify(feedback);
 	}
 
     /**
@@ -76,9 +95,11 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
      * After calling this method, this object should no longer be used.
      */
     public void terminate(){
+        mDrone.removeDroneListener(this);
         mTtsNotification.onTerminate();
         mStatusBarNotification.onTerminate();
         mPebbleNotification.onTerminate();
         mBeepNotification.onTerminate();
+        mWearNotification.onTerminate();
     }
 }

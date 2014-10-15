@@ -1,21 +1,20 @@
 package org.droidplanner.android;
 
-import org.droidplanner.android.communication.service.MAVLinkClient;
-import org.droidplanner.android.communication.service.UploaderService;
+import org.droidplanner.android.communication.MAVLinkClient;
 import org.droidplanner.android.gcs.location.FusedLocation;
-import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.services.UploaderService;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneImpl;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.gcs.follow.Follow;
-import org.droidplanner.core.model.Drone;
 
 import android.content.Context;
 import android.os.SystemClock;
@@ -29,11 +28,6 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 	private Follow followMe;
 	private MissionProxy missionProxy;
 	private MavLinkMsgHandler mavLinkMsgHandler;
-	private DroidPlannerPrefs prefs;
-	/**
-	 * Handles dispatching of status bar, and audible notification.
-	 */
-	public NotificationHandler mNotificationHandler;
 
 	@Override
 	public void onCreate() {
@@ -66,10 +60,9 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 				handler.postDelayed(thread, timeout);
 			}
 		};
-		mNotificationHandler = new NotificationHandler(context);
 
-		prefs = new DroidPlannerPrefs(context);
-		drone = new DroneImpl(MAVClient, clock, handler, prefs);
+		DroidPlannerPrefs pref = new DroidPlannerPrefs(context);
+		drone = new DroneImpl(MAVClient, clock, handler, pref);
 		getDrone().addDroneListener(this);
 
 		missionProxy = new MissionProxy(getDrone().getMission());
@@ -102,8 +95,6 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		mNotificationHandler.onDroneEvent(event, drone);
-
 		switch (event) {
 		case MISSION_RECEIVED:
 			// Refresh the mission render state
@@ -112,10 +103,6 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 		default:
 			break;
 		}
-	}
-
-	public DroidPlannerPrefs getPreferences() {
-		return prefs;
 	}
 
 	public Drone getDrone() {

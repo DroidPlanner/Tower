@@ -70,7 +70,7 @@ public enum ApmModes {
         }
 
 		for (ApmModes mode : ApmModes.values()) {
-			if (i == mode.getNumber() & type == mode.getType()) {
+			if (i == mode.getNumber() && type == mode.getType()) {
 				return mode;
 			}
 		}
@@ -83,7 +83,7 @@ public enum ApmModes {
         }
 
 		for (ApmModes mode : ApmModes.values()) {
-			if (str.equals(mode.getName()) & type == mode.getType()) {
+			if (str.equals(mode.getName()) && type == mode.getType()) {
 				return mode;
 			}
 		}
