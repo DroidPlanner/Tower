@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -23,6 +22,7 @@ import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.gcs.location.Location.LocationReceiver;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -101,6 +101,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     private DPMap.OnMapLongClickListener mMapLongClickListener;
     private DPMap.OnMarkerClickListener mMarkerClickListener;
     private DPMap.OnMarkerDragListener mMarkerDragListener;
+    private android.location.LocationListener mLocationListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -417,6 +418,25 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     }
 
     @Override
+    public void setLocationListener(android.location.LocationListener receiver){
+        mLocationListener = receiver;
+
+        //Update the listener with the last received location
+        if(mLocationListener != null){
+            mGApiClientMgr.addTask(mGApiClientMgr.new GoogleApiClientTask() {
+                @Override
+                protected void doRun() {
+                    final Location lastLocation = LocationServices.FusedLocationApi.getLastLocation
+                            (getGoogleApiClient());
+                    if(lastLocation != null){
+                        mLocationListener.onLocationChanged(lastLocation);
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
     public void updateCamera(Coord2D coord, float zoomLevel) {
         if (coord != null) {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
@@ -531,6 +551,25 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
             }
             getMap().animateCamera(animation);
         }
+    }
+
+    @Override
+    public void zoomToFitMyLocation(final List<Coord2D> coords) {
+        mGApiClientMgr.addTask(mGApiClientMgr.new GoogleApiClientTask() {
+            @Override
+            protected void doRun() {
+                final Location myLocation = LocationServices.FusedLocationApi.getLastLocation
+                        (getGoogleApiClient());
+                if(myLocation != null){
+                    final List<Coord2D> updatedCoords = new ArrayList<Coord2D>(coords);
+                    updatedCoords.add(DroneHelper.LocationToCoord(myLocation));
+                    zoomToFit(updatedCoords);
+                }
+                else {
+                    zoomToFit(coords);
+                }
+            }
+        });
     }
 
     @Override
@@ -726,6 +765,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         Log.d(TAG, "User location changed.");
         if (mPanMode.get() == AutoPanMode.USER) {
             updateCamera(DroneHelper.LocationToCoord(location),(int) mMap.getCameraPosition().zoom);
+        }
+
+        if(mLocationListener != null){
+            mLocationListener.onLocationChanged(location);
         }
     }
 }

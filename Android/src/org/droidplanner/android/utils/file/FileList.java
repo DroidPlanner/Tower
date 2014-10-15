@@ -11,6 +11,8 @@ public class FileList {
 
     public static final String CAMERA_FILENAME_EXT = ".xml";
 
+    public static final String TLOG_FILENAME_EXT = ".tlog";
+
 	static public String[] getWaypointFileList() {
 		FilenameFilter filter = new FilenameFilter() {
 			@Override
@@ -40,6 +42,15 @@ public class FileList {
 		};
 		return getFileList(DirectoryPath.getCameraInfoPath(), filter);
 	}
+
+    public static String[] getTLogFileList() {
+        FilenameFilter filter = new FilenameFilter() {
+            public boolean accept(File dir, String filename) {
+                return filename.contains(TLOG_FILENAME_EXT);
+            }
+        };
+        return getFileList(DirectoryPath.getTLogPath().getPath(), filter);
+    }
 
 	static public String[] getFileList(String path, FilenameFilter filter) {
 		File mPath = new File(path);

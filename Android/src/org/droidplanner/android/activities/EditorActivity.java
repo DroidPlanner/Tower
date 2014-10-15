@@ -127,6 +127,17 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             }
         });
 
+        final ImageButton zoomToFit = (ImageButton) findViewById(R.id.zoom_to_fit_button);
+        zoomToFit.setVisibility(View.VISIBLE);
+        zoomToFit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(planningMapFragment != null){
+                    planningMapFragment.zoomToFit();
+                }
+            }
+        });
+
 		ImageButton mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
 		mGoToMyLocation.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -232,10 +243,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_zoom_fit_mission:
-			planningMapFragment.zoomToFit();
-			return true;
-
 		case R.id.menu_open_mission:
 			openMissionFile();
 			return true;

@@ -492,4 +492,9 @@
     <string name="file_saved_error">Error saving file</string>
     <string name="label_enter_filename">Enter Filename</string>
 
+    <!-- Drone locator strings -->
+    <string name="locator">Locator</string>
+    <string name="open_tlog_file">Open Log File</string>
+    <string name="status_waiting_for_gps">Waiting for GPS...</string>
+
 </resources>

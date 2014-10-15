@@ -134,6 +134,12 @@
                 android:value=".android.activities.SettingsActivity"/>
         </activity>
 
+        <activity
+                    android:name=".android.activities.LocatorActivity"
+                    android:label="@string/locator"
+                    android:launchMode="singleTop"
+                    android:theme="@style/CustomActionBarTheme.Transparent"          />
+
         <receiver android:name=".android.communication.service.NetworkConnectivityReceiver"
             android:enabled="false">
             <intent-filter>
