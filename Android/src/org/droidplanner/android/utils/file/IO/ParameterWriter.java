@@ -19,7 +19,7 @@ public class ParameterWriter {
 
 	public boolean saveParametersToFile(String filename) {
 		try {
-			if (!FileManager.isExternalStorageAvaliable()) {
+			if (!FileManager.isExternalStorageAvailable()) {
 				return false;
 			}
 

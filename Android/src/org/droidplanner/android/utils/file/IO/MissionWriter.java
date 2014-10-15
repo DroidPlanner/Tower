@@ -28,7 +28,7 @@ public class MissionWriter {
 
 	public static boolean write(List<msg_mission_item> msgMissionItems, String filename) {
 		try {
-			if (!FileManager.isExternalStorageAvaliable())
+			if (!FileManager.isExternalStorageAvailable())
 				return false;
 
             if(!filename.endsWith(FileList.WAYPOINT_FILENAME_EXT)){

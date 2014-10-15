@@ -131,6 +131,7 @@
     <string name="select_file_to_open">Select file to open:</string>
     <string name="no_files">No files</string>
     <string name="error_when_opening_file">Error when opening file</string>
+    <string name="status_file_opened">File opened</string>
     <string name="save">Save</string>
     <string name="open">Open</string>
     <string name="write">Write</string>
