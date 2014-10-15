@@ -7,9 +7,11 @@ import java.util.Set;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.DroneInterfaces;
+import org.droidplanner.core.gcs.location.Location;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.graphics.Color;
+import android.location.LocationListener;
 
 /**
  * Defines the functionality expected from the map providers.
@@ -264,6 +266,12 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 */
 	public void setOnMarkerDragListener(OnMarkerDragListener listener);
 
+    /**
+     * Sets a callback that's invoked when the user location is updated.
+     * @param listener
+     */
+    public void setLocationListener(LocationListener listener);
+
 	/**
 	 * Updates the map's center, and zoom level.
 	 * 
@@ -343,4 +351,10 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 *            to be displayed
 	 */
 	public void zoomToFit(List<Coord2D> coords);
+
+    /**
+     * Zoom to fit my location and the given coordinates on map
+     * @param coords
+     */
+    public void zoomToFitMyLocation(List<Coord2D> coords);
 }

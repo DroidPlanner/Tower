@@ -33,7 +33,7 @@ public class MissionReader implements OpenFileDialog.FileReader {
 	}
 
 	public boolean openMission(String file) {
-		if (!FileManager.isExternalStorageAvaliable()) {
+		if (!FileManager.isExternalStorageAvailable()) {
 			return false;
 		}
 		try {

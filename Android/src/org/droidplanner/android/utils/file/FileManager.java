@@ -17,7 +17,7 @@ public class FileManager {
 		return timeStamp;
 	}
 
-	public static boolean isExternalStorageAvaliable() {
+	public static boolean isExternalStorageAvailable() {
 		String state = Environment.getExternalStorageState();
 		return Environment.MEDIA_MOUNTED.equals(state);
 	}

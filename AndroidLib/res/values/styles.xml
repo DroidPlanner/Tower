@@ -47,9 +47,6 @@
         <item name="android:gravity">right</item>
         </style>
 
-
-
-
     <style name="largeMissionDetailText">
         <item name="android:textColor">#ffffff</item>
         <item name="android:textSize">40sp</item>
@@ -453,6 +450,13 @@
 
     <style name="slidingPanelGravity">
         <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="mapButton">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:background">@drawable/btn_explore</item>
+        <item name="android:layout_marginBottom">4dp</item>
     </style>
 
 </resources>
