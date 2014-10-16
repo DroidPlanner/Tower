@@ -10,22 +10,21 @@ import org.droidplanner.android.fragments.calibration.SetupMainPanel;
 import org.droidplanner.android.fragments.calibration.SetupSidePanel;
 import org.droidplanner.android.widgets.scatterplot.ScatterPlot;
 import org.droidplanner.core.MAVLink.MavLinkStreamRates;
+import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.variables.helpers.MagnetometerCalibration;
-import org.droidplanner.core.drone.variables.helpers.MagnetometerCalibration.OnMagCalibrationListner;
 import org.droidplanner.core.model.Drone;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 import ellipsoidFit.FitPoints;
+import ellipsoidFit.ThreeSpacePoint;
 
-public class FragmentSetupMAG extends SetupMainPanel implements OnMagCalibrationListner {
+public class FragmentSetupMAG extends SetupMainPanel implements MagnetometerCalibration.OnMagCalibrationListener {
 
 	private ScatterPlot plot1,plot2;
 	
-	private List<Float> data1 = new ArrayList<Float>();
-	private List<Float> data2 = new ArrayList<Float>();
-
 	private Drone drone;
 
 	private MagnetometerCalibration calibration;
@@ -52,42 +51,59 @@ public class FragmentSetupMAG extends SetupMainPanel implements OnMagCalibration
 
 	@Override
 	public void doCalibrationStep(int step) {
-		MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 0, 0, 0, 0, 0, 0, 50, 0);
+		MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 0, 0, 0, 0, 0, 0, 30, 0);
 
-		calibration = new MagnetometerCalibration(drone,this);
+		calibration = new MagnetometerCalibration(drone, this, new DroneInterfaces.Handler() {
+            private final Handler handler = new Handler();
+
+            @Override
+            public void removeCallbacks(Runnable thread) {
+                this.handler.removeCallbacks(thread);
+            }
+
+            @Override
+            public void post(Runnable thread) {
+                this.handler.post(thread);
+            }
+
+            @Override
+            public void postDelayed(Runnable thread, long timeout) {
+                this.handler.postDelayed(thread, timeout);
+            }
+        });
 	}
 
-	@Override
-	public void newEstimation(FitPoints ellipsoidFit, int sampleSize, int[] magVector) {
-		Log.d("MAG", String.format("Sample %d\traw %s\tFit %2.1f \tCenter %s\tRadius %s",
-				sampleSize, Arrays.toString(magVector), ellipsoidFit.getFitness() * 100,
-				ellipsoidFit.center.toString(), ellipsoidFit.radii.toString()));
-		
-		data1.add((float) magVector[0]);
-		data1.add((float) magVector[2]);
-		plot1.newDataSet((Float[]) data1.toArray(new Float[data1.size()]));
-		if (ellipsoidFit.center.isNaN() || ellipsoidFit.radii.isNaN()) {
-			plot1.updateSphere(null);
-		} else {
-			plot1.updateSphere(new int[] { (int) ellipsoidFit.center.getEntry(0),
-					(int) ellipsoidFit.center.getEntry(2), (int) ellipsoidFit.radii.getEntry(0),
-					(int) ellipsoidFit.radii.getEntry(2) });
-		}
-		plot1.invalidate();
-		
-		data2.add((float) magVector[1]);
-		data2.add((float) magVector[2]);
-		plot2.newDataSet((Float[]) data2.toArray(new Float[data2.size()]));
-		if (ellipsoidFit.center.isNaN() || ellipsoidFit.radii.isNaN()) {
-			plot2.updateSphere(null);
-		} else {
-			plot2.updateSphere(new int[] { (int) ellipsoidFit.center.getEntry(1),
-					(int) ellipsoidFit.center.getEntry(2), (int) ellipsoidFit.radii.getEntry(1),
-					(int) ellipsoidFit.radii.getEntry(2) });
-		}
-		plot2.invalidate();
-		
-	}
+    @Override
+    public void newEstimation(FitPoints ellipsoidFit, List<ThreeSpacePoint> points){
+        final int pointsCount = points.size();
+        if(pointsCount == 0)
+            return;
+
+        //Grab the last point
+        final ThreeSpacePoint point = points.get(pointsCount - 1);
+
+        plot1.addData((float)point.x);
+        plot1.addData((float)point.z);
+        if (ellipsoidFit.center.isNaN() || ellipsoidFit.radii.isNaN()) {
+            plot1.updateSphere(null);
+        } else {
+            plot1.updateSphere(new int[] { (int) ellipsoidFit.center.getEntry(0),
+                    (int) ellipsoidFit.center.getEntry(2), (int) ellipsoidFit.radii.getEntry(0),
+                    (int) ellipsoidFit.radii.getEntry(2) });
+        }
+        plot1.invalidate();
+
+        plot2.addData((float) point.y);
+        plot2.addData((float) point.z);
+        if (ellipsoidFit.center.isNaN() || ellipsoidFit.radii.isNaN()) {
+            plot2.updateSphere(null);
+        } else {
+            plot2.updateSphere(new int[] { (int) ellipsoidFit.center.getEntry(1),
+                    (int) ellipsoidFit.center.getEntry(2), (int) ellipsoidFit.radii.getEntry(1),
+                    (int) ellipsoidFit.radii.getEntry(2) });
+        }
+        plot2.invalidate();
+    }
 
 	@Override
 	public void finished(FitPoints fit) {
@@ -95,6 +111,5 @@ public class FragmentSetupMAG extends SetupMainPanel implements OnMagCalibration
 		Toast.makeText(getActivity(), "Calibration Finished: "+ fit.center.toString(),Toast.LENGTH_LONG).show();
 		
 		calibration.sendOffsets();
-		
 	}
 }

@@ -1,10 +1,15 @@
 package org.droidplanner.core.drone.variables.helpers;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.droidplanner.core.MAVLink.MavLinkStreamRates;
+import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.drone.variables.Magnetometer;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.parameters.Parameter;
 
@@ -12,50 +17,97 @@ import ellipsoidFit.FitPoints;
 import ellipsoidFit.ThreeSpacePoint;
 
 public class MagnetometerCalibration implements OnDroneListener {
-	FitPoints ellipsoidFit = new FitPoints();
-	public ArrayList<ThreeSpacePoint> points = new ArrayList<ThreeSpacePoint>();
+
+    private static final double ELLIPSOID_FITNESS_MIN = 0.98;
+    private static final int MIN_POINTS_COUNT = 100;
+
+    private final DroneInterfaces.Handler handler;
+    private final ExecutorService fitRunner;
+
+	private final FitPoints ellipsoidFit = new FitPoints();
+	private final ArrayList<ThreeSpacePoint> points = new ArrayList<ThreeSpacePoint>();
+
+    private final Runnable newEstimationUpdate = new Runnable() {
+        @Override
+        public void run() {
+            handler.removeCallbacks(this);
+            if(listener != null){
+                listener.newEstimation(ellipsoidFit, points);
+            }
+        }
+    };
+
+    private final Runnable finishedEstimationUpdate = new Runnable() {
+        @Override
+        public void run() {
+            handler.removeCallbacks(this);
+            if(listener != null){
+                listener.finished(ellipsoidFit);
+            }
+        }
+    };
+
+    private final Runnable stopCalibration = new Runnable() {
+        @Override
+        public void run() {
+            handler.removeCallbacks(this);
+            stop();
+        }
+    };
+
 	private boolean fitComplete =false;
-	private OnMagCalibrationListner listner;
+	private OnMagCalibrationListener listener;
 	private Drone drone;
 
-	public MagnetometerCalibration(Drone drone, OnMagCalibrationListner listner) {
+	public MagnetometerCalibration(Drone drone, OnMagCalibrationListener listener, DroneInterfaces.Handler handler) {
 		this.drone = drone;
-		drone.addDroneListener(this);
-		this.listner = listner;
+		this.listener = listener;
+        this.handler = handler;
+        this.fitRunner = Executors.newSingleThreadExecutor();
+        drone.addDroneListener(this);
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
+	public void onDroneEvent(DroneEventsType event, final Drone drone) {
 		switch (event) {
+
 		case MAGNETOMETER:
-			int[] magVector = addpoint(drone);
-			fit(magVector);
-			MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 0, 0, 0, 0, 0, 0, 50, 0);
+			addpoint(drone);
+            this.fitRunner.execute(new Runnable() {
+                @Override
+                public void run() {
+                    fit();
+                    MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 0, 0, 0, 0, 0, 0,
+                            30, 0);
+                }
+            });
 			break;
+
 		default:
 			break;
 		}
 	}
 
-	int[] addpoint(Drone drone) {
-		int[] magVector = drone.getMagnetometer().getVector();
-		ThreeSpacePoint point = new ThreeSpacePoint(magVector[0], magVector[1], magVector[2]);
+	void addpoint(Drone drone) {
+		final Magnetometer mag = drone.getMagnetometer();
+		ThreeSpacePoint point = new ThreeSpacePoint(mag.getX(), mag.getY(), mag.getZ());
 		points.add(point);
-		return magVector;
 	}
 
-	void fit(int[] magVector) {
+	void fit() {
 		ellipsoidFit.fitEllipsoid(points);
-		if (listner!=null) {
-			listner.newEstimation(ellipsoidFit,points.size(),magVector);
-		}
-		
-		
-		if (!fitComplete && ellipsoidFit.getFitness() > 0.98 && points.size() > 100) {
+        if(listener != null) {
+            handler.post(newEstimationUpdate);
+        }
+
+		if (!fitComplete && ellipsoidFit.getFitness() > ELLIPSOID_FITNESS_MIN && points.size() >
+                MIN_POINTS_COUNT) {
 			fitComplete  = true;
-			if (listner!=null) {
-				listner.finished(ellipsoidFit);
+			if (listener !=null) {
+                handler.post(finishedEstimationUpdate);
 			}
+
+            this.handler.post(stopCalibration);
 		}
 	}
 
@@ -75,10 +127,12 @@ public class MagnetometerCalibration implements OnDroneListener {
 	
 	public void stop(){
 		drone.removeDroneListener(this);
+        drone.getStreamRates().setupStreamRatesFromPref();
+        this.fitRunner.shutdown();
 	}
 
-	public interface OnMagCalibrationListner {
-		public void newEstimation(FitPoints fit, int sampleSize, int[] magVector);
+	public interface OnMagCalibrationListener {
+		public void newEstimation(FitPoints fit, List<ThreeSpacePoint> points);
 		public void finished(FitPoints fit);
 	}
 }

@@ -26,4 +26,16 @@ public class Magnetometer extends DroneVariable {
 	public int[] getVector() {
 		return new int[] {x,y,z};
 	}
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getZ() {
+        return z;
+    }
 }

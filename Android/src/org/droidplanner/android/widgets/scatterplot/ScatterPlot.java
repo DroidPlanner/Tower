@@ -8,12 +8,15 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.util.ArrayList;
+
 public class ScatterPlot extends View {
 	private static final float SCALE_FACTOR = 1 / 1000f;
 
+    private final RectF reuseRectF = new RectF();
 	private float halfWidth, halfHeight, halfScale;
 
-	private Float[] points = new Float[] {};
+	private ArrayList<Float> points = new ArrayList<Float>();
 	private Paint paintText, paintChartLines, paintPoints, paintEndPoint,paintCircle;
 	private String title = "";
 
@@ -52,9 +55,9 @@ public class ScatterPlot extends View {
 		invalidate();
 	}
 
-	public void newDataSet(Float[] array) {
-		points = array;
-	}
+    public void addData(float datum){
+        points.add(datum);
+    }
 
 	public void updateSphere(int[] sphere) {
 		this.sphere = sphere;
@@ -72,13 +75,13 @@ public class ScatterPlot extends View {
 
 		// Draw the points
 		float x = 0, y = 0;
-		for (int i = 0; i < points.length; i += 2) {
-			x = mapToImgX(points[i + 0]);
-			y = mapToImgY(points[i + 1]);
+        final int pointsCount = points.size();
+		for (int i = 0; i < pointsCount; i += 2) {
+			x = mapToImgX(points.get(i + 0));
+			y = mapToImgY(points.get(i + 1));
 			canvas.drawPoint(x, y, paintPoints);
 		}
-		canvas.drawCircle(x, y, 10f, paintEndPoint); // Redraw the endpoint with a
-												// bigger dot
+		canvas.drawCircle(x, y, 10f, paintEndPoint); // Redraw the endpoint with a bigger dot
 		
 		// Draw the estimated Sphere
 		if (sphere != null) {
@@ -86,7 +89,9 @@ public class ScatterPlot extends View {
 			y = mapToImgY(sphere[1]);
 			int width = (int) scale(sphere[2]);
 			int height = (int) scale(sphere[3]);
-			canvas.drawOval(new RectF( x - width, y - height, x + width , y+ height ),paintCircle);
+
+            this.reuseRectF.set(x -width, y - height, x + width, y + height);
+			canvas.drawOval(this.reuseRectF,paintCircle);
 		}
 	}
 	

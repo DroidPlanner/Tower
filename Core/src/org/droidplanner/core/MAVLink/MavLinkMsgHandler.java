@@ -58,6 +58,7 @@ public class MavLinkMsgHandler {
 			drone.getNavigation().setNavPitchRollYaw(m_nav.nav_pitch, m_nav.nav_roll,
 					m_nav.nav_bearing);
 			break;
+
 		case msg_raw_imu.MAVLINK_MSG_ID_RAW_IMU:
 			msg_raw_imu msg_imu = (msg_raw_imu) msg;
 			drone.getMagnetometer().newData(msg_imu);
