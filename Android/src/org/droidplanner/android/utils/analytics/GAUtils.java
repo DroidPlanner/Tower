@@ -33,7 +33,7 @@ public class GAUtils {
 		 * Category for analytics data related to the action buttons on the
 		 * flight data screen.
 		 */
-		public static final String FLIGHT_DATA_ACTION_BUTTON = "flight_data_action_button";
+		public static final String FLIGHT = "Flight";
 
 		/**
 		 * Category for analytics related to mavlink connection events.
