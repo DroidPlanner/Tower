@@ -15,11 +15,6 @@ public class FakeLocation implements LocationFinder {
 	private LocationReceiver receiver;
 
 	@Override
-	public void setLocationListner(LocationReceiver receiver) {
-		this.receiver = receiver;
-	}
-
-	@Override
 	public void enableLocationUpdates() {
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
@@ -36,7 +31,7 @@ public class FakeLocation implements LocationFinder {
 				} else {
 					loc = GeoTools.newCoordFromBearingAndDistance(loc, 90, -SPEED * dt);
 				}
-				receiver.onLocationChanged(new Location(loc));
+				receiver.onLocationChanged(new Location(loc, 0, 0, false));
 			}
 		}, 0, UPDATE_INTERVAL);
 
@@ -46,5 +41,10 @@ public class FakeLocation implements LocationFinder {
 	public void disableLocationUpdates() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void setLocationListener(LocationReceiver receiver) {	
+		this.receiver = receiver;
 	}
 }
