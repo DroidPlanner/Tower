@@ -1,6 +1,7 @@
 package org.droidplanner.android.dialogs;
 
 import org.droidplanner.R;
+import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.app.AlertDialog;
@@ -13,9 +14,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Toast;
+
+import com.google.android.gms.analytics.HitBuilders;
 
 public class DroneshareDialog extends DialogFragment {
-	// FIXME - move to oncreate
+
+    private static final String DRONESHARE_PROMPT_ACTION = "droneshare_prompt";
+
 	private DroidPlannerPrefs prefs;
 
 	@Override
@@ -61,19 +67,45 @@ public class DroneshareDialog extends DialogFragment {
 				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
-						if (noDroneshare.isChecked())
-							prefs.setDroneshareEnabled(false);
+                        final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                                .setCategory(GAUtils.Category.DRONESHARE)
+                                .setAction(DRONESHARE_PROMPT_ACTION);
+						if (noDroneshare.isChecked()) {
+                            prefs.setDroneshareEnabled(false);
+                            eventBuilder.setLabel("dronshare disabled");
+                        }
 						else {
 							prefs.setDroneshareEnabled(true);
 							prefs.setDroneshareLogin(username.getText().toString());
 							prefs.setDronesharePassword(password.getText().toString());
 							prefs.setDroneshareEmail(email.getText().toString());
+
+                            if(createNew.isChecked()){
+                                eventBuilder.setLabel("droneshare sign up");
+                            }
+                            else if(loginExisting.isChecked()){
+                                eventBuilder.setLabel("droneshare login");
+                            }
 						}
+
+                        GAUtils.sendEvent(eventBuilder);
 					}
 				});
 
 		return builder.create();
 	}
+
+    @Override
+    public void onDismiss(DialogInterface dialog){
+        super.onDismiss(dialog);
+
+        final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                .setCategory(GAUtils.Category.DRONESHARE)
+                .setAction(DRONESHARE_PROMPT_ACTION)
+                .setLabel("droneshare prompt dismissed");
+
+        GAUtils.sendEvent(eventBuilder);
+    }
 
 	static public void perhapsShow(FragmentActivity parent) {
 		DroidPlannerPrefs prefs = new DroidPlannerPrefs(parent);
@@ -83,9 +115,15 @@ public class DroneshareDialog extends DialogFragment {
 		if (prefs.getNumberOfRuns() > numRuns
 				&& prefs.getDroneshareEnabled()
 				&& (prefs.getDroneshareLogin().isEmpty() || prefs.getDronesharePassword().isEmpty())) {
-			// Create an instance of the dialog fragment and show it
+	//		Create an instance of the dialog fragment and show it
 			DialogFragment dialog = new DroneshareDialog();
 			dialog.show(parent.getSupportFragmentManager(), "DroneshareDialog");
-		}
+
+            final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                    .setCategory(GAUtils.Category.DRONESHARE)
+                    .setAction(DRONESHARE_PROMPT_ACTION)
+                    .setLabel("droneshare prompt shown");
+            GAUtils.sendEvent(eventBuilder);
+        }
 	}
 }

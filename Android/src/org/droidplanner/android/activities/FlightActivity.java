@@ -98,12 +98,6 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
                     final int slidingDrawerWidth = slidingDrawer.getContent().getWidth();
                     final boolean isSlidingDrawerOpened = slidingDrawer.isOpened();
                     updateLocationButtonsMargin(isSlidingDrawerOpened, slidingDrawerWidth);
-
-                    // Stop tracking how long this was opened for.
-                    GAUtils.sendTiming(new HitBuilders.TimingBuilder()
-                            .setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL)
-                            .setVariable(getString(R.string.ga_mode_details_close_panel))
-                            .setValue(System.currentTimeMillis()));
                 }
             });
 
@@ -113,12 +107,6 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
                     final int slidingDrawerWidth = slidingDrawer.getContent().getWidth();
                     final boolean isSlidingDrawerOpened = slidingDrawer.isOpened();
                     updateLocationButtonsMargin(isSlidingDrawerOpened, slidingDrawerWidth);
-
-                    // Track how long this is opened for.
-                    GAUtils.sendTiming(new HitBuilders.TimingBuilder()
-                            .setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL)
-                            .setVariable(getString(R.string.ga_mode_details_open_panel))
-                            .setValue(System.currentTimeMillis()));
                 }
             });
         }

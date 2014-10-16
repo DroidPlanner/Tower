@@ -360,8 +360,6 @@
     <string name="expandable_listview_icon_desc">可擴充的清單列表圖示</string>
 
     <!-- Google Analytics -->
-    <string name="ga_mode_details_open_panel">儀表板打開時間</string>
-    <string name="ga_mode_details_close_panel">儀表板關閉時間</string>
 
     <!-- Text To Speech -->
     <string name="pref_title_tts">語音輸出</string>

@@ -370,8 +370,6 @@
     <string name="expandable_listview_icon_desc">Expandable ListView icon</string>
 
     <!-- Google Analytics -->
-    <string name="ga_mode_details_open_panel">Panel Open Time</string>
-    <string name="ga_mode_details_close_panel">Panel Close Time</string>
 
     <!-- Text To Speech -->
     <string name="pref_title_tts">Speech Output</string>
