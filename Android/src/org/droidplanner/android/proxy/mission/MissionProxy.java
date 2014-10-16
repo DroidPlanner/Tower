@@ -1,5 +1,6 @@
 package org.droidplanner.android.proxy.mission;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.internal.is;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
+import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
@@ -525,8 +527,13 @@ public class MissionProxy implements DPMap.PathSource {
     public void sendMissionToAPM(){
         mMission.sendMissionToAPM();
 
-        //TODO: parse the mission items into GA events asynchronously
-
+        //Send an event for the created mission
+        final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                .setCategory(GAUtils.Category.MISSION_PLANNING)
+                .setAction("Mission send to drone")
+                .setLabel("Mission items count")
+                .setValue(mMissionItems.size());
+        GAUtils.sendEvent(eventBuilder);
     }
 
 	public Length getMissionLength() {

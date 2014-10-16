@@ -283,8 +283,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
                             final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
                                     .setCategory(GAUtils.Category.MISSION_PLANNING)
-                                    .setAction("mission saved to file")
-                                    .setLabel("mission items count")
+                                    .setAction("Mission saved to file")
+                                    .setLabel("Mission items count")
                                     .setValue(missionItems.size());
                             GAUtils.sendEvent(eventBuilder);
                         } else {

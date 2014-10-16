@@ -205,8 +205,9 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_send_mission:
+            final MissionProxy missionProxy = app.getMissionProxy();
 			if (drone.getMission().hasTakeoffAndLandOrRTL()) {
-                app.getMissionProxy().sendMissionToAPM();
+                missionProxy.sendMissionToAPM();
 			} else {
                 YesNoWithPrefsDialog dialog = YesNoWithPrefsDialog.newInstance(getApplicationContext(),
                         "Mission Upload", "Do you want to append a Takeoff and RTL to your " +
@@ -214,14 +215,13 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 
                             @Override
                             public void onYes() {
-                                final MissionProxy missionProxy = app.getMissionProxy();
                                 missionProxy.addTakeOffAndRTL();
                                 missionProxy.sendMissionToAPM();
                             }
 
                             @Override
                             public void onNo() {
-                                drone.getMission().sendMissionToAPM();
+                                missionProxy.sendMissionToAPM();
                             }
                         },
                         MISSION_UPLOAD_CHECK_DIALOG);

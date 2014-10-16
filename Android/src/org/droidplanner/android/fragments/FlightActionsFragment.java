@@ -199,7 +199,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 
 		case R.id.mc_dronieBtn:
 			drone.getMission().makeAndUploadDronie();
-			eventBuilder.setAction("Dronie").setLabel("Dronie");
+			eventBuilder.setAction("Dronie").setLabel("Dronie uploaded");
 			break;
 		default:
 			eventBuilder = null;
