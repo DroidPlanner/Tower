@@ -504,9 +504,10 @@ public abstract class InfoBarItem {
 				mLastDroneType = droneType;
 			}
 
-			if (mDrone != null)
-				modesSpinner.forcedSetSelection(mModeAdapter.getPosition(mDrone.getState()
-						.getMode()));
+			if (mDrone != null) {
+                modesSpinner.forcedSetSelection(mModeAdapter.getPosition(mDrone.getState()
+                        .getMode()));
+            }
 		}
 	}
 

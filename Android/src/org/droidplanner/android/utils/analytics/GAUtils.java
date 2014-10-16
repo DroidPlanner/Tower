@@ -35,6 +35,11 @@ public class GAUtils {
 		 */
 		public static final String FLIGHT = "Flight";
 
+        /**
+         * Category for measuring failsafe events.
+         */
+        public static final String FAILSAFE = "Failsafe";
+
 		/**
 		 * Category for analytics related to mavlink connection events.
 		 */
