@@ -43,17 +43,17 @@ public class GAUtils {
 		/**
 		 * Category for analytics related to mavlink connection events.
 		 */
-		public static final String MAVLINK_CONNECTION = "mavlink_connection";
+		public static final String MAVLINK_CONNECTION = "Mavlink connection";
 
         /**
          * Category for droneshare analytics
          */
-        public static final String DRONESHARE = "droneshare";
+        public static final String DRONESHARE = "Droneshare";
 
         /**
          * Category for mission planning, and editing.
          */
-        public static final String MISSION_PLANNING = "mission_planning";
+        public static final String MISSION_PLANNING = "Mission planning";
 	}
 
 	/**
