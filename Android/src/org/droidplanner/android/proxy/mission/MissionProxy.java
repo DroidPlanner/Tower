@@ -522,6 +522,13 @@ public class MissionProxy implements DPMap.PathSource {
 		return coords;
 	}
 
+    public void sendMissionToAPM(){
+        mMission.sendMissionToAPM();
+
+        //TODO: parse the mission items into GA events asynchronously
+
+    }
+
 	public Length getMissionLength() {
 		List<Coord2D> points = getPathPoints();
 		if (points.size()>1) {

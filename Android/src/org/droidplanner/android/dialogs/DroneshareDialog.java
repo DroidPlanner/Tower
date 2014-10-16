@@ -67,12 +67,13 @@ public class DroneshareDialog extends DialogFragment {
 				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
-                        final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                                .setCategory(GAUtils.Category.DRONESHARE)
+                        final HitBuilders.SocialBuilder socialBuilder = new HitBuilders
+                                .SocialBuilder()
+                                .setNetwork(GAUtils.Category.DRONESHARE)
                                 .setAction(DRONESHARE_PROMPT_ACTION);
 						if (noDroneshare.isChecked()) {
                             prefs.setDroneshareEnabled(false);
-                            eventBuilder.setLabel("dronshare disabled");
+                            socialBuilder.setTarget("disabled");
                         }
 						else {
 							prefs.setDroneshareEnabled(true);
@@ -81,14 +82,14 @@ public class DroneshareDialog extends DialogFragment {
 							prefs.setDroneshareEmail(email.getText().toString());
 
                             if(createNew.isChecked()){
-                                eventBuilder.setLabel("droneshare sign up");
+                                socialBuilder.setTarget("sign up");
                             }
                             else if(loginExisting.isChecked()){
-                                eventBuilder.setLabel("droneshare login");
+                                socialBuilder.setTarget("login");
                             }
 						}
 
-                        GAUtils.sendEvent(eventBuilder);
+                        GAUtils.sendEvent(socialBuilder);
 					}
 				});
 
@@ -110,8 +111,7 @@ public class DroneshareDialog extends DialogFragment {
 	static public void perhapsShow(FragmentActivity parent) {
 		DroidPlannerPrefs prefs = new DroidPlannerPrefs(parent);
 
-		int numRuns = 10; // Don't pester the user until they have played with
-							// the app some...
+		int numRuns = 10; // Don't pester the user until they have played with the app some...
 		if (prefs.getNumberOfRuns() > numRuns
 				&& prefs.getDroneshareEnabled()
 				&& (prefs.getDroneshareLogin().isEmpty() || prefs.getDronesharePassword().isEmpty())) {

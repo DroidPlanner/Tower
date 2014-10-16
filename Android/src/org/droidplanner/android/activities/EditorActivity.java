@@ -20,6 +20,7 @@ import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
+import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.file.IO.MissionReader;
 import org.droidplanner.android.utils.file.IO.MissionWriter;
@@ -32,7 +33,6 @@ import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.util.Pair;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -46,6 +46,9 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.google.android.gms.analytics.HitBuilders;
 
 /**
  * This implements the map editor activity. The map editor activity allows the
@@ -273,9 +276,17 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 FileStream.getWaypointFilename("waypoints"), new EditInputDialog.Listener() {
                     @Override
                     public void onOk(CharSequence input) {
-                        if (MissionWriter.write(drone.getMission().getMsgMissionItems(),
-                                input.toString())) {
+                        final List<msg_mission_item> missionItems = drone.getMission()
+                                .getMsgMissionItems();
+                        if (MissionWriter.write( missionItems, input.toString())) {
                             Toast.makeText(context, R.string.file_saved_success, Toast.LENGTH_SHORT).show();
+
+                            final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                                    .setCategory(GAUtils.Category.MISSION_PLANNING)
+                                    .setAction("mission saved to file")
+                                    .setLabel("mission items count")
+                                    .setValue(missionItems.size());
+                            GAUtils.sendEvent(eventBuilder);
                         } else {
                             Toast.makeText(context, R.string.file_saved_error, Toast.LENGTH_SHORT).show();
                         }

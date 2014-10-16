@@ -44,6 +44,11 @@ public class GAUtils {
          * Category for droneshare analytics
          */
         public static final String DRONESHARE = "droneshare";
+
+        /**
+         * Category for mission planning, and editing.
+         */
+        public static final String MISSION_PLANNING = "mission_planning";
 	}
 
 	/**
@@ -110,6 +115,12 @@ public class GAUtils {
 			sendHit(eventBuilder.build());
 		}
 	}
+
+    public static void sendEvent(HitBuilders.SocialBuilder socialBuilder){
+        if(socialBuilder != null){
+            sendHit(socialBuilder.build());
+        }
+    }
 
 	public static void sendTiming(HitBuilders.TimingBuilder timingBuilder) {
 		if (timingBuilder != null) {
