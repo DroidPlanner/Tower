@@ -1,9 +1,12 @@
 package org.droidplanner.android.notifications;
 
+import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.model.Drone;
 
 import android.content.Context;
+
+import com.google.android.gms.analytics.HitBuilders;
 
 /**
  * This class handles DroidPlanner's status bar, and audible notifications. It
@@ -57,6 +60,16 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 		mStatusBarNotification.onDroneEvent(event, drone);
 		mPebbleNotification.onDroneEvent(event, drone);
 		mBeepNotification.onDroneEvent(event, drone);
+
+        switch(event){
+            case AUTOPILOT_WARNING:
+                final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                        .setCategory(GAUtils.Category.FAILSAFE)
+                        .setAction("Autopilot warning")
+                        .setLabel(drone.getState().getWarning());
+                GAUtils.sendEvent(eventBuilder);
+                break;
+        }
 	}
 
 	/**

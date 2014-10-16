@@ -6,6 +6,7 @@ import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
+import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
@@ -204,23 +205,26 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_send_mission:
+            final MissionProxy missionProxy = app.getMissionProxy();
 			if (drone.getMission().hasTakeoffAndLandOrRTL()) {
-				drone.getMission().sendMissionToAPM();				
+                missionProxy.sendMissionToAPM();
 			} else {
                 YesNoWithPrefsDialog dialog = YesNoWithPrefsDialog.newInstance(getApplicationContext(),
                         "Mission Upload", "Do you want to append a Takeoff and RTL to your " +
                                 "mission?", "Ok", "Skip", new YesNoDialog.Listener() {
+
                             @Override
                             public void onYes() {
-                                app.getMissionProxy().addTakeOffAndRTL();
-                                drone.getMission().sendMissionToAPM();
+                                missionProxy.addTakeOffAndRTL();
+                                missionProxy.sendMissionToAPM();
                             }
 
                             @Override
                             public void onNo() {
-                                drone.getMission().sendMissionToAPM();
+                                missionProxy.sendMissionToAPM();
                             }
-                        }, MISSION_UPLOAD_CHECK_DIALOG);
+                        },
+                        MISSION_UPLOAD_CHECK_DIALOG);
 				dialog.show(getSupportFragmentManager(), "Mission Upload check.");
 			}
 			return true;
