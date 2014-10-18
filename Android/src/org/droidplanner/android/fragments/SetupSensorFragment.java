@@ -1,27 +1,155 @@
 package org.droidplanner.android.fragments;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
 import org.droidplanner.R;
+import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.fragments.calibration.SetupMainPanel;
+import org.droidplanner.android.fragments.calibration.SetupSidePanel;
 import org.droidplanner.android.fragments.calibration.imu.FragmentSetupIMU;
 import org.droidplanner.android.fragments.calibration.mag.FragmentSetupMAG;
-import org.droidplanner.android.fragments.helpers.SuperSetupFragment;
 
 /**
  * This fragment is used to calibrate the drone's compass, and accelerometer.
  */
-public class SetupSensorFragment extends SuperSetupFragment {
+public class SetupSensorFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
-	@Override
+    protected ConfigurationActivity parentActivity;
+
+    private FragmentManager fragmentManager;
+    private SetupMainPanel setupPanel;
+    private SetupSidePanel sidePanel;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (!(activity instanceof ConfigurationActivity)) {
+            throw new IllegalStateException("Parent activity must be "
+                    + ConfigurationActivity.class.getName());
+        }
+
+        parentActivity = (ConfigurationActivity) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        parentActivity = null;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        final View view = inflater.inflate(R.layout.fragment_setup, container, false);
+
+        setupLocalViews(view);
+
+        fragmentManager = getChildFragmentManager();
+        setupPanel = (SetupMainPanel) fragmentManager.findFragmentById(R.id.fragment_setup_mainpanel);
+
+        if (setupPanel == null) {
+            setupPanel = initMainPanel();
+
+            fragmentManager.beginTransaction().add(R.id.fragment_setup_mainpanel, setupPanel)
+                    .commit();
+        }
+
+        sidePanel = (SetupSidePanel) fragmentManager
+                .findFragmentById(R.id.fragment_setup_sidepanel);
+        if (sidePanel == null) {
+            sidePanel = setupPanel.getSidePanel();
+            if (sidePanel != null) {
+                fragmentManager.beginTransaction().add(R.id.fragment_setup_sidepanel, sidePanel)
+                        .commit();
+            }
+        }
+
+        return view;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+        changeMainPanel(arg2);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // TODO Auto-generated method stub
+
+    }
+
+    private void setupLocalViews(View view) {
+        Spinner spinnerSetup = (Spinner) view.findViewById(R.id.spinnerSetupType);
+        spinnerSetup.setOnItemSelectedListener(this);
+
+        final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(parentActivity,
+                getSpinnerItems(), R.layout.spinner_setup);
+
+        spinnerSetup.setAdapter(adapter);
+    }
+
+    public void changeMainPanel(int step) {
+        setupPanel = getMainPanel(step);
+        sidePanel = setupPanel.getSidePanel();
+
+        final FragmentTransaction ft = fragmentManager.beginTransaction();
+        if (setupPanel != null) {
+            ft.replace(R.id.fragment_setup_mainpanel, setupPanel);
+        }
+
+        if (sidePanel != null) {
+            ft.replace(R.id.fragment_setup_sidepanel, sidePanel);
+        }
+
+        ft.commit();
+    }
+
+    public SetupSidePanel changeSidePanel(SetupSidePanel sPanel) {
+        sidePanel = sPanel;
+
+        if (setupPanel != null && sidePanel != null)
+            setupPanel.setSidePanel(sidePanel);
+
+        final FragmentTransaction ft = fragmentManager.beginTransaction();
+        if (sidePanel != null) {
+            ft.replace(R.id.fragment_setup_sidepanel, sidePanel);
+        }
+
+        ft.commit();
+
+        return sidePanel;
+    }
+
+    public void doCalibrationStep(int step) {
+        if (setupPanel != null) {
+            setupPanel.doCalibrationStep(step);
+        }
+    }
+
+    public void updateSidePanelTitle(int calibrationStep) {
+        if (sidePanel != null) {
+            sidePanel.updateDescription(calibrationStep);
+        }
+    }
+
 	public SetupMainPanel initMainPanel() {
 		return new FragmentSetupIMU();
 	}
 
-	@Override
 	public int getSpinnerItems() {
 		return R.array.Setup_Sensor_Menu;
 	}
 
-	@Override
 	public SetupMainPanel getMainPanel(int index) {
 		switch (index) {
 		case 0:

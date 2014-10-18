@@ -1,59 +1,87 @@
 package org.droidplanner.android.fragments.calibration.mag;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.fragments.calibration.SetupMainPanel;
-import org.droidplanner.android.fragments.calibration.SetupSidePanel;
 import org.droidplanner.android.widgets.scatterplot.ScatterPlot;
-import org.droidplanner.core.MAVLink.MavLinkStreamRates;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.variables.helpers.MagnetometerCalibration;
 import org.droidplanner.core.model.Drone;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import ellipsoidFit.FitPoints;
 import ellipsoidFit.ThreeSpacePoint;
 
-public class FragmentSetupMAG extends SetupMainPanel implements MagnetometerCalibration.OnMagCalibrationListener {
+public class FragmentSetupMAG extends Fragment implements MagnetometerCalibration
+        .OnMagCalibrationListener {
 
+    private View inProgressCalibrationView;
+    private Button buttonStep;
+    private Button buttonCancel;
+    private ProgressBar calibrationFitness;
 	private ScatterPlot plot1,plot2;
-	
-	private Drone drone;
 
+    private boolean isCalibrationComplete;
+
+	private Drone drone;
 	private MagnetometerCalibration calibration;
 
-	@Override
-	public int getPanelLayout() {
-		return R.layout.fragment_setup_mag_main;
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                              Bundle savedInstanceState){
+        return inflater.inflate(R.layout.fragment_setup_mag_main, container, false);
+    }
 
-	@Override
-	public SetupSidePanel getSidePanel() {
-		return null;
-	}
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
 
-	@Override
-	public void setupLocalViews(View v) {
-		plot1 = (ScatterPlot) v.findViewById(R.id.scatterPlot1);
-		plot1.setTitle("XZ");
-		plot2 = (ScatterPlot) v.findViewById(R.id.scatterPlot2);
-		plot2.setTitle("YZ");
-		
-		drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
-	}
+        plot1 = (ScatterPlot) view.findViewById(R.id.scatterPlot1);
+        plot1.setTitle("XZ");
 
-	@Override
-	public void doCalibrationStep(int step) {
-		MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 0, 0, 0, 0, 0, 0, 30, 0);
+        plot2 = (ScatterPlot) view.findViewById(R.id.scatterPlot2);
+        plot2.setTitle("YZ");
 
-		calibration = new MagnetometerCalibration(drone, this, new DroneInterfaces.Handler() {
+        inProgressCalibrationView = view.findViewById(R.id.in_progress_calibration_container);
+
+        buttonStep = (Button) view.findViewById(R.id.buttonStep);
+        buttonStep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isCalibrationComplete){
+                    //Clear the screen.
+                    clearScreen();
+                }
+                else {
+                    startCalibration();
+                }
+            }
+        });
+
+        buttonCancel = (Button) view.findViewById(R.id.buttonCancel);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopCalibration();
+            }
+        });
+
+        calibrationFitness = (ProgressBar) view.findViewById(R.id.calibration_progress_bar);
+
+        drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
+
+        calibration = new MagnetometerCalibration(drone, this, new DroneInterfaces.Handler() {
             private final Handler handler = new Handler();
 
             @Override
@@ -71,6 +99,41 @@ public class FragmentSetupMAG extends SetupMainPanel implements MagnetometerCali
                 this.handler.postDelayed(thread, timeout);
             }
         });
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        stopCalibration();
+        setCalibrationStatus(false);
+    }
+
+    private void stopCalibration() {
+        if(calibration != null){
+            calibration.stop();
+        }
+        clearScreen();
+    }
+
+    private void clearScreen(){
+        plot1.reset();
+        plot2.reset();
+    }
+
+    private void setCalibrationStatus(boolean isComplete) {
+        isCalibrationComplete = isComplete;
+        if(isComplete){
+            buttonStep.setText(R.string.button_setup_done);
+        }
+        else{
+            buttonStep.setText(R.string.button_setup_calibrate);
+        }
+    }
+
+    public void startCalibration() {
+		if(calibration != null){
+            calibration.start();
+        }
 	}
 
     @Override
@@ -111,5 +174,10 @@ public class FragmentSetupMAG extends SetupMainPanel implements MagnetometerCali
 		Toast.makeText(getActivity(), "Calibration Finished: "+ fit.center.toString(),Toast.LENGTH_LONG).show();
 		
 		calibration.sendOffsets();
+        drone.getStreamRates().setupStreamRatesFromPref();
 	}
+
+    public static CharSequence getTitle(Context context) {
+        return context.getText(R.string.setup_mag_title);
+    }
 }

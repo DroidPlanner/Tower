@@ -63,6 +63,12 @@ public class ScatterPlot extends View {
 		this.sphere = sphere;
 	}
 
+    public void reset(){
+        points.clear();
+        this.sphere = null;
+        invalidate();
+    }
+
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);

@@ -11,7 +11,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_statustext;
 public class Calibration extends DroneVariable {
 	private Drone myDrone;
 	private String mavMsg;
-	private static boolean calibrating;
+	private boolean calibrating;
 
 	public Calibration(Drone drone) {
 		super(drone);
@@ -19,7 +19,7 @@ public class Calibration extends DroneVariable {
 	}
 
 	public void startCalibration() {
-		Calibration.calibrating = true;
+		calibrating = true;
 		MavLinkCalibration.sendStartCalibrationMessage(myDrone);
 	}
 
@@ -33,7 +33,7 @@ public class Calibration extends DroneVariable {
 			mavMsg = statusMsg.getText();
 
 			if (mavMsg.contains("Calibration"))
-				Calibration.calibrating = false;
+				calibrating = false;
 
 			myDrone.notifyDroneEvent(DroneEventsType.CALIBRATION_IMU);
 		}
@@ -43,11 +43,11 @@ public class Calibration extends DroneVariable {
 		return mavMsg;
 	}
 
-	public static void setClibrating(boolean flag) {
-		Calibration.calibrating = flag;
+	public void setCalibrating(boolean flag) {
+		calibrating = flag;
 	}
 
-	public static boolean isCalibrating() {
-		return Calibration.calibrating;
+	public boolean isCalibrating() {
+		return calibrating;
 	}
 }

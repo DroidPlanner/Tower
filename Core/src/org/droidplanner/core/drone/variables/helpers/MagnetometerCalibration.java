@@ -21,6 +21,11 @@ public class MagnetometerCalibration implements OnDroneListener {
     private static final double ELLIPSOID_FITNESS_MIN = 0.98;
     private static final int MIN_POINTS_COUNT = 100;
 
+    public interface OnMagCalibrationListener {
+        public void newEstimation(FitPoints fit, List<ThreeSpacePoint> points);
+        public void finished(FitPoints fit);
+    }
+
     private final DroneInterfaces.Handler handler;
     private final ExecutorService fitRunner;
 
@@ -64,8 +69,18 @@ public class MagnetometerCalibration implements OnDroneListener {
 		this.listener = listener;
         this.handler = handler;
         this.fitRunner = Executors.newSingleThreadExecutor();
-        drone.addDroneListener(this);
 	}
+
+    public void start(){
+        MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 0, 0, 0, 0, 0, 0, 30, 0);
+        drone.addDroneListener(this);
+    }
+
+    public void stop(){
+        drone.removeDroneListener(this);
+        drone.getStreamRates().setupStreamRatesFromPref();
+        this.fitRunner.shutdownNow();
+    }
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, final Drone drone) {
@@ -87,6 +102,11 @@ public class MagnetometerCalibration implements OnDroneListener {
 			break;
 		}
 	}
+
+    public void setPoints(List<ThreeSpacePoint> newPoints){
+        points.clear();
+        points.addAll(newPoints);
+    }
 
 	void addpoint(Drone drone) {
 		final Magnetometer mag = drone.getMagnetometer();
@@ -123,16 +143,5 @@ public class MagnetometerCalibration implements OnDroneListener {
 		drone.getParameters().sendParameter(offsetX); //TODO should probably do a check after sending the parameters
 		drone.getParameters().sendParameter(offsetY);
 		drone.getParameters().sendParameter(offsetZ);
-	}
-	
-	public void stop(){
-		drone.removeDroneListener(this);
-        drone.getStreamRates().setupStreamRatesFromPref();
-        this.fitRunner.shutdown();
-	}
-
-	public interface OnMagCalibrationListener {
-		public void newEstimation(FitPoints fit, List<ThreeSpacePoint> points);
-		public void finished(FitPoints fit);
 	}
 }
