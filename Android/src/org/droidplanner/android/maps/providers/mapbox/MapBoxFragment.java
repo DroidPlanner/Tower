@@ -597,4 +597,10 @@ public class MapBoxFragment extends Fragment implements DPMap {
 			break;
 		}
 	}
+
+	@Override
+	public void skipMarkerClickEvents(boolean skip) {
+		// TODO Auto-generated method stub
+		
+	}
 }

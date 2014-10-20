@@ -103,6 +103,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     private DPMap.OnMarkerDragListener mMarkerDragListener;
     private android.location.LocationListener mLocationListener;
 
+	protected boolean useMarkerClickAsMapClick = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
                              Bundle bundle) {
@@ -591,14 +593,15 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     }
 
     private void setupMapListeners() {
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        final GoogleMap.OnMapClickListener onMapClickListener = new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
                 if (mMapClickListener != null) {
                     mMapClickListener.onMapClick(DroneHelper.LatLngToCoord(latLng));
                 }
             }
-        });
+        };
+		mMap.setOnMapClickListener(onMapClickListener);
 
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
@@ -641,6 +644,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+            	if (useMarkerClickAsMapClick) {
+            		onMapClickListener.onMapClick(marker.getPosition());
+            		return true;
+				}
                 if (mMarkerClickListener != null) {
                     return mMarkerClickListener.onMarkerClick(mBiMarkersMap.getKey(marker));
                 }
@@ -771,4 +778,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
             mLocationListener.onLocationChanged(location);
         }
     }
+
+	@Override
+	public void skipMarkerClickEvents(boolean skip) {
+		useMarkerClickAsMapClick = skip;		
+	}
 }
