@@ -189,7 +189,7 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 	 * @param tool
 	 *            selected tool.
 	 */
-	private void setToolAndUpdateView(EditorTools tool) {
+	public void setToolAndUpdateView(EditorTools tool) {
 		setTool(tool, false);
 		mEditorRadioGroup.check(getViewForTool(tool));
 	}
