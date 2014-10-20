@@ -13,15 +13,15 @@
 
         <TextView
             android:id="@+id/textViewIMUStep"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:layout_centerInParent="true"
+            android:layout_alignParentTop="true"
             android:background="@color/ground_speed_label"
             android:gravity="center"
             android:text="@string/setup_imu_step"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold"/>
 
         <TextView
@@ -34,7 +34,9 @@
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_above="@+id/progressBarTimeOut"/>
+            android:layout_below="@+id/progressBarTimeOut"
+            android:layout_marginBottom="10dp"
+            />
 
         <ProgressBar
             android:id="@+id/progressBarTimeOut"
@@ -45,7 +47,6 @@
             android:layout_marginBottom="29dp"
             android:layout_marginLeft="100dp"
             android:layout_marginRight="100dp"
-            android:layout_above="@+id/textViewIMUStep"
             android:indeterminate="false"
             android:max="300"
             android:minHeight="50dp"
@@ -58,30 +59,32 @@
             android:id="@+id/TextViewIMUOffset"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textViewIMUStep"
-            android:layout_marginTop="32dp"
-            android:layout_centerInParent="true"
+            android:layout_above="@+id/TextViewIMUScaling"
             android:gravity="center"
             android:text="Offset : 00 00 00"
+            android:visibility="invisible"
             android:textColor="#fff"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"/>
 
         <TextView
             android:id="@+id/TextViewIMUScaling"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/TextViewIMUOffset"
+            android:visibility="invisible"
             android:layout_alignLeft="@+id/TextViewIMUOffset"
+            android:layout_alignParentBottom="true"
             android:gravity="center"
             android:text="Scaling : 00 00 00"
             android:textColor="#fff"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"/>
 
     </RelativeLayout>
 
-    <Textview
+    <TextView
         android:id="@+id/textViewDesc"
         style="@style/ModeDetailText"
         android:layout_width="match_parent"

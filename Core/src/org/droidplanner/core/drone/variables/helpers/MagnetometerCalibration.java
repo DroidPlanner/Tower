@@ -103,9 +103,13 @@ public class MagnetometerCalibration implements OnDroneListener {
 		}
 	}
 
-    public void setPoints(List<ThreeSpacePoint> newPoints){
+    public void setPoints(List<? extends ThreeSpacePoint> newPoints){
         points.clear();
         points.addAll(newPoints);
+    }
+
+    public List<ThreeSpacePoint> getPoints(){
+        return points;
     }
 
 	void addpoint(Drone drone) {

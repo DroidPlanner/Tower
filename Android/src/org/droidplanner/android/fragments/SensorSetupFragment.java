@@ -64,7 +64,7 @@ public class SensorSetupFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return 1;
+            return 2;
         }
 
         @Override

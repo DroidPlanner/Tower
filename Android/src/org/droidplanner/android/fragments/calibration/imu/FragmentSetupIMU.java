@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.fragments.SetupSensorFragment;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.variables.Calibration;
@@ -23,10 +22,14 @@ import org.droidplanner.core.model.Drone;
 
 public class FragmentSetupIMU extends Fragment implements OnDroneListener {
 
-	private final static int TIMEOUT_MAX = 300;
+	private final static long TIMEOUT_MAX = 30000l; //ms
+    private final static long UPDATE_TIMEOUT_PERIOD = 100l; //ms
+    private static final String EXTRA_UPDATE_TIMESTAMP = "extra_update_timestamp";
 
     private String msg;
-	private long timeCount;
+
+    private long updateTimestamp;
+
 	private int calibration_step = 0;
 	private TextView textViewStep;
 	private TextView textViewOffset;
@@ -83,15 +86,39 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener {
 		drawableGood = getResources().getDrawable(R.drawable.pstate_good);
 		drawableWarning = getResources().getDrawable(R.drawable.pstate_warning);
 		drawablePoor = getResources().getDrawable(R.drawable.pstate_poor);
+
+        if(savedInstanceState != null){
+            updateTimestamp = savedInstanceState.getLong(EXTRA_UPDATE_TIMESTAMP);
+        }
 	}
 
     @Override
-    public void onStart(){
-        super.onStart();
-        final Drone drone = app.getDrone();
-        if(drone != null && drone.getCalibrationSetup().isCalibrating()){
-            processMAVMessage(drone.getCalibrationSetup().getMessage());
-        }
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putLong(EXTRA_UPDATE_TIMESTAMP, updateTimestamp);
+    }
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		final Drone drone = app.getDrone();
+		if (drone != null && drone.getMavClient().isConnected()) {
+            btnStep.setEnabled(true);
+			if (drone.getCalibrationSetup().isCalibrating()) {
+				processMAVMessage(drone.getCalibrationSetup().getMessage(), false);
+			}
+            else{
+                resetCalibration();
+            }
+		} else {
+            btnStep.setEnabled(false);
+            resetCalibration();
+		}
+	}
+
+    private void resetCalibration(){
+        calibration_step = 0;
+        updateDescription(calibration_step);
     }
 
     @Override
@@ -109,7 +136,7 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener {
 	private void processCalibrationStep(int step) {
 		if (step == 0) {
 			startCalibration();
-			timeCount = 0;
+            updateTimestamp = System.currentTimeMillis();
 		} else if (step > 0 && step < 7) {
 			sendAck(step);
 		} else {
@@ -119,6 +146,8 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener {
 
             textViewOffset.setVisibility(View.INVISIBLE);
             textViewScaling.setVisibility(View.INVISIBLE);
+
+            updateDescription(calibration_step);
 		}
 	}
 
@@ -165,6 +194,20 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener {
             else
                 btnStep.setText(R.string.button_setup_next);
         }
+
+        if (calibration_step == 7 || calibration_step == 0) {
+            handler.removeCallbacks(runnable);
+
+            pbTimeOut.setVisibility(View.INVISIBLE);
+            textViewTimeOut.setVisibility(View.INVISIBLE);
+        } else {
+            handler.removeCallbacks(runnable);
+
+            textViewTimeOut.setVisibility(View.VISIBLE);
+            pbTimeOut.setIndeterminate(true);
+            pbTimeOut.setVisibility(View.VISIBLE);
+            handler.postDelayed(runnable, UPDATE_TIMEOUT_PERIOD);
+        }
     }
 
 	private void sendAck(int step) {
@@ -181,10 +224,27 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener {
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		if (event == DroneEventsType.CALIBRATION_IMU) {
-			processMAVMessage(drone.getCalibrationSetup().getMessage());
-		} else if (event == DroneEventsType.HEARTBEAT_TIMEOUT) {
-			if (app.getDrone() != null) {
+        switch(event){
+            case CALIBRATION_IMU:
+                processMAVMessage(drone.getCalibrationSetup().getMessage(), true);
+                break;
+
+            case CONNECTED:
+                if(calibration_step == 0) {
+                    //Reset the screen, and enable the calibration button
+                    resetCalibration();
+                    btnStep.setEnabled(true);
+                }
+                break;
+
+            case DISCONNECTED:
+                //Reset the screen, and disable the calibration button
+                btnStep.setEnabled(false);
+                resetCalibration();
+                break;
+
+            case CALIBRATION_TIMEOUT:
+                if (drone != null) {
 				/*
 				 * here we will check if we are in calibration mode but if at
 				 * the same time 'msg' is empty - then it is actually not doing
@@ -192,20 +252,26 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener {
 				 * flag and re-trigger the HEARBEAT_TIMEOUT this however should
 				 * not be happening
 				 */
-                final Calibration calibration = app.getDrone().getCalibrationSetup();
-				if (calibration.isCalibrating() && TextUtils.isEmpty(msg)) {
-					calibration.setCalibrating(false);
-					app.getDrone().notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
-				} else {
-					app.mNotificationHandler.quickNotify(msg);
-				}
-			}
-		}
+                    final Calibration calibration = drone.getCalibrationSetup();
+                    if (calibration.isCalibrating() && TextUtils.isEmpty(msg)) {
+                        calibration.setCalibrating(false);
+                        drone.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
+                    } else {
+                        app.mNotificationHandler.quickNotify(msg);
+                    }
+                }
+                break;
+        }
 	}
 
-	private void processMAVMessage(String message) {
-		if (message.contains("Place") || message.contains("Calibration"))
-			processOrientation(message);
+	private void processMAVMessage(String message, boolean updateTime) {
+		if (message.contains("Place") || message.contains("Calibration")) {
+            if(updateTime) {
+                updateTimestamp = System.currentTimeMillis();
+            }
+
+            processOrientation(message);
+        }
 		else if (message.contains("Offsets")) {
             textViewOffset.setVisibility(View.VISIBLE);
 			textViewOffset.setText(message);
@@ -232,44 +298,31 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener {
 			calibration_step = 7;
 
 		msg = message.replace("any key.", "'Next'");
+        app.mNotificationHandler.quickNotify(msg);
 
 		textViewStep.setText(msg);
 
 		updateDescription(calibration_step);
-
-		if (calibration_step == 7) {
-			if (app != null) {
-				app.mNotificationHandler.quickNotify(msg);
-			}
-			handler.removeCallbacks(runnable);
-
-			pbTimeOut.setVisibility(View.INVISIBLE);
-			textViewTimeOut.setVisibility(View.INVISIBLE);
-		} else {
-			handler.removeCallbacks(runnable);
-			timeCount = 0;
-			textViewTimeOut.setVisibility(View.VISIBLE);
-			pbTimeOut.setVisibility(View.VISIBLE);
-			handler.postDelayed(runnable, 100);
-		}
 	}
 
 	private Runnable runnable = new Runnable() {
 		@Override
 		public void run() {
+            handler.removeCallbacks(this);
 			updateTimeOutProgress();
-			handler.postDelayed(this, 100);
+			handler.postDelayed(this, UPDATE_TIMEOUT_PERIOD);
 		}
 	};
 
 	protected void updateTimeOutProgress() {
-		long timeLeft = (int) (TIMEOUT_MAX - timeCount);
+        final long timeElapsed = System.currentTimeMillis() - updateTimestamp;
+		long timeLeft = (int) (TIMEOUT_MAX - timeElapsed);
 
 		if (timeLeft >= 0) {
-			timeCount++;
-			int secLeft = (int) (timeLeft / 10) + 1;
+			int secLeft = (int) (timeLeft / 1000) + 1;
 
-			pbTimeOut.setMax(TIMEOUT_MAX);
+            pbTimeOut.setIndeterminate(false);
+			pbTimeOut.setMax((int) TIMEOUT_MAX);
 			pbTimeOut.setProgress((int) timeLeft);
 
 			textViewTimeOut.setText(timeLeftStr + String.valueOf(secLeft) + "s");

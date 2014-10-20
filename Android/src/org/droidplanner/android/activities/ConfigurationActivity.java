@@ -4,7 +4,6 @@ import org.droidplanner.R;
 import org.droidplanner.android.fragments.ChecklistFragment;
 import org.droidplanner.android.fragments.ParamsFragment;
 import org.droidplanner.android.fragments.SensorSetupFragment;
-import org.droidplanner.android.fragments.SetupSensorFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -92,7 +91,7 @@ public class ConfigurationActivity extends DrawerNavigationUI {
     }
 
     private int getIdForFragment(Fragment fragment){
-        if(fragment instanceof SetupSensorFragment){
+        if(fragment instanceof SensorSetupFragment){
             return R.id.navigation_calibration;
         }
         else if(fragment instanceof ChecklistFragment){

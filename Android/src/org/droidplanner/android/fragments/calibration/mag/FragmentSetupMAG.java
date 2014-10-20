@@ -1,9 +1,11 @@
 package org.droidplanner.android.fragments.calibration.mag;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.lib.parcelables.ParcelableThreeSpacePoint;
 import org.droidplanner.android.widgets.scatterplot.ScatterPlot;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.variables.helpers.MagnetometerCalibration;
@@ -26,13 +28,20 @@ import ellipsoidFit.ThreeSpacePoint;
 public class FragmentSetupMAG extends Fragment implements MagnetometerCalibration
         .OnMagCalibrationListener {
 
+    private static final int CALIBRATION_IDLE = 0;
+    private static final int CALIBRATION_IN_PROGRESS = 1;
+    private static final int CALIBRATION_COMPLETED = 2;
+
+    private static final String EXTRA_CALIBRATION_STATUS = "extra_calibration_status";
+    private static final String EXTRA_CALIBRATION_POINTS = "extra_calibration_points";
+
     private View inProgressCalibrationView;
     private Button buttonStep;
     private Button buttonCancel;
     private ProgressBar calibrationFitness;
 	private ScatterPlot plot1,plot2;
 
-    private boolean isCalibrationComplete;
+    private int calibrationStatus = CALIBRATION_IDLE;
 
 	private Drone drone;
 	private MagnetometerCalibration calibration;
@@ -59,9 +68,10 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
         buttonStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isCalibrationComplete){
+                if(calibrationStatus == CALIBRATION_COMPLETED){
                     //Clear the screen.
                     clearScreen();
+                    setCalibrationStatus(CALIBRATION_IDLE);
                 }
                 else {
                     startCalibration();
@@ -73,7 +83,7 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                stopCalibration();
+                cancelCalibration();
             }
         });
 
@@ -99,18 +109,69 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
                 this.handler.postDelayed(thread, timeout);
             }
         });
+
+        if(savedInstanceState != null){
+            calibrationStatus = savedInstanceState.getInt(EXTRA_CALIBRATION_STATUS,
+                    CALIBRATION_IDLE);
+            setCalibrationStatus(calibrationStatus);
+
+            if(calibrationStatus == CALIBRATION_IN_PROGRESS){
+                final ArrayList<ParcelableThreeSpacePoint> loadedPoints = savedInstanceState
+                        .getParcelableArrayList(EXTRA_CALIBRATION_POINTS);
+                if(loadedPoints != null && !loadedPoints.isEmpty()){
+                    calibration.setPoints(loadedPoints);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+
+        outState.putInt(EXTRA_CALIBRATION_STATUS, calibrationStatus);
+
+        if(calibration != null) {
+            final List<ThreeSpacePoint> fitPoints = calibration.getPoints();
+            final int pointsCount = fitPoints.size();
+            if(pointsCount > 0) {
+                final ArrayList<ParcelableThreeSpacePoint> savedPoints = new
+                        ArrayList<ParcelableThreeSpacePoint>(pointsCount);
+                for(ThreeSpacePoint point : fitPoints){
+                    savedPoints.add(new ParcelableThreeSpacePoint(point));
+                }
+
+                outState.putParcelableArrayList(EXTRA_CALIBRATION_POINTS, savedPoints);
+            }
+        }
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        if(calibrationStatus == CALIBRATION_IN_PROGRESS){
+            startCalibration();
+        }
     }
 
     @Override
     public void onStop(){
         super.onStop();
-        stopCalibration();
-        setCalibrationStatus(false);
+        pauseCalibration();
     }
 
-    private void stopCalibration() {
+    private void pauseCalibration(){
         if(calibration != null){
             calibration.stop();
+        }
+    }
+
+    private void cancelCalibration() {
+        if(calibration != null){
+            calibration.stop();
+            if(calibrationStatus == CALIBRATION_IN_PROGRESS){
+                setCalibrationStatus(CALIBRATION_IDLE);
+            }
         }
         clearScreen();
     }
@@ -120,27 +181,63 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
         plot2.reset();
     }
 
-    private void setCalibrationStatus(boolean isComplete) {
-        isCalibrationComplete = isComplete;
-        if(isComplete){
-            buttonStep.setText(R.string.button_setup_done);
+	private void setCalibrationStatus(int status) {
+        if(calibrationStatus == status){
+            return;
         }
-        else{
-            buttonStep.setText(R.string.button_setup_calibrate);
-        }
-    }
+
+		calibrationStatus = status;
+		switch (calibrationStatus) {
+		case CALIBRATION_IN_PROGRESS:
+			// Hide the 'start' button
+			buttonStep.setVisibility(View.GONE);
+
+			// Show the 'in progress view'
+			inProgressCalibrationView.setVisibility(View.VISIBLE);
+			calibrationFitness.setIndeterminate(true);
+			break;
+
+		case CALIBRATION_COMPLETED:
+			calibrationFitness.setIndeterminate(false);
+			calibrationFitness.setMax(100);
+			calibrationFitness.setProgress(100);
+
+			// Hide the 'in progress view'
+			inProgressCalibrationView.setVisibility(View.GONE);
+
+			// Show the 'calibrate/done' button
+			buttonStep.setVisibility(View.VISIBLE);
+			buttonStep.setText(R.string.button_setup_done);
+			break;
+
+		default:
+			// Hide the 'in progress view'
+			inProgressCalibrationView.setVisibility(View.GONE);
+
+			// Show the 'calibrate/done' button
+			buttonStep.setVisibility(View.VISIBLE);
+			buttonStep.setText(R.string.button_setup_calibrate);
+			break;
+		}
+	}
 
     public void startCalibration() {
 		if(calibration != null){
             calibration.start();
+            setCalibrationStatus(CALIBRATION_IN_PROGRESS);
         }
 	}
 
     @Override
     public void newEstimation(FitPoints ellipsoidFit, List<ThreeSpacePoint> points){
         final int pointsCount = points.size();
-        if(pointsCount == 0)
+        if(pointsCount == 0) {
             return;
+        }
+
+        calibrationFitness.setIndeterminate(false);
+        calibrationFitness.setMax(100);
+        calibrationFitness.setProgress((int)(ellipsoidFit.getFitness() * 100));
 
         //Grab the last point
         final ThreeSpacePoint point = points.get(pointsCount - 1);
@@ -172,9 +269,11 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
 	public void finished(FitPoints fit) {
 		Log.d("MAG", "############################################################################################");
 		Toast.makeText(getActivity(), "Calibration Finished: "+ fit.center.toString(),Toast.LENGTH_LONG).show();
-		
+
 		calibration.sendOffsets();
         drone.getStreamRates().setupStreamRatesFromPref();
+
+        setCalibrationStatus(CALIBRATION_COMPLETED);
 	}
 
     public static CharSequence getTitle(Context context) {
