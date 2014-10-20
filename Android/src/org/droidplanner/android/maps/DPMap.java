@@ -357,4 +357,11 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
      * @param coords
      */
     public void zoomToFitMyLocation(List<Coord2D> coords);
+    
+    /**
+     * Ignore marker clicks on the map and instead report the event as a mapClick
+     * @param skip if it should skip further events
+     */
+    public void skipMarkerClickEvents(boolean skip);
+    
 }

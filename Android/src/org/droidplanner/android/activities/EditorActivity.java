@@ -366,6 +366,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	private void setupTool(EditorTools tool) {
+		planningMapFragment.skipMarkerClickEvents(false);
 		switch (tool) {
 		case DRAW:
 			enableSplineToggle(true);
@@ -382,6 +383,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 			// Enable the spline selection toggle
 			enableSplineToggle(true);
 			gestureMapFragment.disableGestureDetection();
+			planningMapFragment.skipMarkerClickEvents(true);
 			break;
 
 		case TRASH:

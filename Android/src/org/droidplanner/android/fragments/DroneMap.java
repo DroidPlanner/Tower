@@ -254,4 +254,11 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
         mMapFragment.updateCameraBearing(bearing);
     }
 
+    /**
+     * Ignore marker clicks on the map and instead report the event as a mapClick
+     * @param skip if it should skip further events
+     */
+    public void skipMarkerClickEvents(boolean skip){
+    	mMapFragment.skipMarkerClickEvents(skip);
+    }
 }
