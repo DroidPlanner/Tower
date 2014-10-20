@@ -10,6 +10,8 @@ public class Radio extends DroneVariable {
 	public static final int MIN_FADE_MARGIN = 6;
 
 	private double previousSignalStrength = 100;
+	
+	private boolean isValid = false;
 
 	private int rxerrors = -1;
 	private int fixed = -1;
@@ -71,6 +73,7 @@ public class Radio extends DroneVariable {
 
 	public void setRadioState(short rxerrors, short fixed, byte rssi, byte remrssi, byte txbuf,
 			byte noise, byte remnoise) {
+		isValid = true;
 		if (this.rxerrors != rxerrors | this.fixed != fixed | this.rssi != rssi
 				| this.remrssi != remrssi | this.txbuf != txbuf | this.noise != noise
 				| this.remnoise != remnoise) {
@@ -103,6 +106,10 @@ public class Radio extends DroneVariable {
 	 */
 	private double SikValueToDB(int value) {
 		return (value / 1.9) - 127;
+	}
+
+	public boolean isValid() {
+		return isValid;
 	}
 
 }

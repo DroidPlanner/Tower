@@ -399,32 +399,39 @@ public abstract class InfoBarItem {
 			if (mItemView == null)
 				return;
 
-			String infoUpdate;
 			if (drone == null) {
-				infoUpdate = sDefaultValue;
-
-				mRssiView.setText(sDefaultValue);
-				mRemRssiView.setText(sDefaultValue);
-				mNoiseView.setText(sDefaultValue);
-				mRemNoiseView.setText(sDefaultValue);
-				mFadeView.setText(sDefaultValue);
-				mRemFadeView.setText(sDefaultValue);
-			} else {
-				infoUpdate = String.format(Locale.ENGLISH,"%d%%", drone.getRadio().getSignalStrength());
-
-				mRssiView.setText(String.format("RSSI %2.0f dB", drone.getRadio().getRssi()));
-				mRemRssiView.setText(String.format("RemRSSI %2.0f dB", drone.getRadio()
-						.getRemRssi()));
-				mNoiseView.setText(String.format("Noise %2.0f dB", drone.getRadio().getNoise()));
-				mRemNoiseView.setText(String.format("RemNoise %2.0f dB", drone.getRadio()
-						.getRemNoise()));
-				mFadeView.setText(String.format("Fade %2.0f dB", drone.getRadio().getFadeMargin()));
-				mRemFadeView.setText(String.format("RemFade %2.0f dB", drone.getRadio()
-						.getRemFadeMargin()));
+				setDefaultValues();
+			}else if (!drone.getRadio().isValid()){
+				setDefaultValues();
+			}else{
+				setValuesFromRadio(drone);
 			}
 
 			mPopup.update();
-			((TextView) mItemView).setText(infoUpdate);
+		}
+
+		private void setValuesFromRadio(final Drone drone) {
+			((TextView) mItemView).setText(String.format(Locale.ENGLISH,"%d%%", drone.getRadio().getSignalStrength()));
+
+			mRssiView.setText(String.format("RSSI %2.0f dB", drone.getRadio().getRssi()));
+			mRemRssiView.setText(String.format("RemRSSI %2.0f dB", drone.getRadio()
+					.getRemRssi()));
+			mNoiseView.setText(String.format("Noise %2.0f dB", drone.getRadio().getNoise()));
+			mRemNoiseView.setText(String.format("RemNoise %2.0f dB", drone.getRadio()
+					.getRemNoise()));
+			mFadeView.setText(String.format("Fade %2.0f dB", drone.getRadio().getFadeMargin()));
+			mRemFadeView.setText(String.format("RemFade %2.0f dB", drone.getRadio()
+					.getRemFadeMargin()));
+		}
+
+		private void setDefaultValues() {
+			((TextView) mItemView).setText(sDefaultValue);
+			mRssiView.setText(sDefaultValue);
+			mRemRssiView.setText(sDefaultValue);
+			mNoiseView.setText(sDefaultValue);
+			mRemNoiseView.setText(sDefaultValue);
+			mFadeView.setText(sDefaultValue);
+			mRemFadeView.setText(sDefaultValue);
 		}
 	}
 
