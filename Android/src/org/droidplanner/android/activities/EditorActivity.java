@@ -206,6 +206,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	@Override
 	public void onResume() {
 		super.onResume();
+		editorToolsFragment.setToolAndUpdateView(getTool());
 		setupTool(getTool());
 	}
 
