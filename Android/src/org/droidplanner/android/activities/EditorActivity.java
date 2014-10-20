@@ -41,6 +41,8 @@ import android.view.ActionMode.Callback;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -56,7 +58,7 @@ import com.google.android.gms.analytics.HitBuilders;
  */
 public class EditorActivity extends DrawerNavigationUI implements OnPathFinishedListener,
 		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener, OnEditorInteraction,
-		Callback, MissionSelection.OnSelectionUpdateListener {
+		Callback, MissionSelection.OnSelectionUpdateListener, OnClickListener, OnLongClickListener {
 
 	/**
 	 * Used to retrieve the item detail window when the activity is destroyed,
@@ -98,6 +100,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	private View mContainerItemDetail;
 
 	private ActionMode contextualActionBar;
+	private RadioButton normalToggle;
+	private RadioButton splineToggle;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -121,71 +125,20 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
         final ImageButton resetMapBearing = (ImageButton) findViewById(R.id.map_orientation_button);
-        resetMapBearing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(planningMapFragment != null) {
-                    planningMapFragment.updateMapBearing(0);
-                }
-            }
-        });
-
+        resetMapBearing.setOnClickListener(this);
         final ImageButton zoomToFit = (ImageButton) findViewById(R.id.zoom_to_fit_button);
         zoomToFit.setVisibility(View.VISIBLE);
-        zoomToFit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(planningMapFragment != null){
-                    planningMapFragment.zoomToFit();
-                }
-            }
-        });
-
-		ImageButton mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
-		mGoToMyLocation.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				planningMapFragment.goToMyLocation();
-			}
-		});
-		mGoToMyLocation.setOnLongClickListener(new View.OnLongClickListener() {
-			@Override
-			public boolean onLongClick(View v) {
-				planningMapFragment.setAutoPanMode(AutoPanMode.USER);
-				return true;
-			}
-		});
-
-		ImageButton mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
-		mGoToDroneLocation.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				planningMapFragment.goToDroneLocation();
-			}
-		});
-		mGoToDroneLocation.setOnLongClickListener(new View.OnLongClickListener() {
-			@Override
-			public boolean onLongClick(View v) {
-				planningMapFragment.setAutoPanMode(AutoPanMode.DRONE);
-				return true;
-			}
-		});
-
-		final RadioButton normalToggle = (RadioButton) findViewById(R.id.normalWpToggle);
-		normalToggle.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				mIsSplineEnabled = !normalToggle.isChecked();
-			}
-		});
-
-		final RadioButton splineToggle = (RadioButton) findViewById(R.id.splineWpToggle);
-		splineToggle.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				mIsSplineEnabled = splineToggle.isChecked();
-			}
-		});
+        zoomToFit.setOnClickListener(this);
+		final ImageButton mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
+		mGoToMyLocation.setOnClickListener(this);
+		mGoToMyLocation.setOnLongClickListener(this);
+		final ImageButton mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
+		mGoToDroneLocation.setOnClickListener(this);
+		mGoToDroneLocation.setOnLongClickListener(this);
+		normalToggle = (RadioButton) findViewById(R.id.normalWpToggle);
+		normalToggle.setOnClickListener(this);
+		splineToggle = (RadioButton) findViewById(R.id.splineWpToggle);
+		splineToggle.setOnClickListener(this);
 
         if(savedInstanceState != null){
             mIsSplineEnabled = savedInstanceState.getBoolean(EXTRA_IS_SPLINE_ENABLED);
@@ -204,6 +157,50 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         final DroidPlannerApp dpApp = ((DroidPlannerApp) getApplication());
 		missionProxy = dpApp.getMissionProxy();
 		gestureMapFragment.setOnPathFinishedListener(this);
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.map_orientation_button:
+			if(planningMapFragment != null) {
+				planningMapFragment.updateMapBearing(0);
+			}			
+			break;
+		case R.id.zoom_to_fit_button:
+			if(planningMapFragment != null){
+                planningMapFragment.zoomToFit();
+            }
+			break;
+		case R.id.splineWpToggle:
+			mIsSplineEnabled = splineToggle.isChecked();
+			break;
+		case R.id.normalWpToggle:
+			mIsSplineEnabled = !normalToggle.isChecked();
+			break;
+		case R.id.drone_location_button:
+			planningMapFragment.goToDroneLocation();
+			break;
+		case R.id.my_location_button:
+			planningMapFragment.goToMyLocation();
+			break;
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public boolean onLongClick(View view) {
+		switch (view.getId()) {
+		case R.id.drone_location_button:
+			planningMapFragment.setAutoPanMode(AutoPanMode.DRONE);
+			return true;
+		case R.id.my_location_button:
+			planningMapFragment.setAutoPanMode(AutoPanMode.USER);
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	@Override
@@ -679,4 +676,5 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     public CharSequence[][] getHelpItems() {
         return new CharSequence[][] { {}, {} };
     }
+	
 }
