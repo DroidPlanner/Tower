@@ -21,6 +21,10 @@ public class Location {
 	private double speed = 0.0;
     private boolean isAccurate;
 
+    public Location(Coord2D coord2d){
+    	coordinate = coord2d;
+    }
+    
 	public Location(Coord2D coord2d, float heading, float speed, boolean isAccurate) {
 		coordinate = coord2d;
 		this.heading = heading;
