@@ -118,7 +118,7 @@ public enum ApmModes {
 		case MAV_TYPE.MAV_TYPE_OCTOROTOR:
 		case MAV_TYPE.MAV_TYPE_HELICOPTER:
 			return true;
-		case MAV_TYPE.MAV_TYPE_FIXED_WING:
+
 		default:
 			return false;
 		}
