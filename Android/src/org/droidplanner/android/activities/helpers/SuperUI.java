@@ -16,9 +16,7 @@ import org.droidplanner.core.gcs.GCSHeartbeat;
 import org.droidplanner.core.model.Drone;
 
 import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -35,7 +33,6 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 
 	public final static String ACTION_TOGGLE_DRONE_CONNECTION = SuperUI.class.getName()
 			+ ".ACTION_TOGGLE_DRONE_CONNECTION";
-    private static final String MISSION_UPLOAD_CHECK_DIALOG = "mission_upload_check_dialog";
 
     private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoBarActionProvider infoBar;
@@ -224,8 +221,11 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
                                 missionProxy.sendMissionToAPM();
                             }
                         },
-                        MISSION_UPLOAD_CHECK_DIALOG);
-				dialog.show(getSupportFragmentManager(), "Mission Upload check.");
+                        getString(R.string.pref_auto_insert_mission_takeoff_rtl_land_key));
+
+                if(dialog != null) {
+                    dialog.show(getSupportFragmentManager(), "Mission Upload check.");
+                }
 			}
 			return true;
 

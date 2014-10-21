@@ -1,4 +1,4 @@
-package org.droidplanner.android.lib.utils;
+package org.droidplanner.android.utils;
 
 import android.os.Parcel;
 import android.os.Parcelable;
