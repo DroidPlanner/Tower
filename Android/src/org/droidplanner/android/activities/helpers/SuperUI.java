@@ -52,6 +52,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		ActionBar actionBar = getActionBar();
 		if (actionBar != null) {
 			actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
 		}
 
 		app = (DroidPlannerApp) getApplication();
