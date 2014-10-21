@@ -32,8 +32,6 @@ import com.google.android.gms.analytics.HitBuilders;
 
 public class FlightActionsFragment extends Fragment implements OnDroneListener {
 
-    static final String ACTION_FLIGHT_ACTION_BUTTON = "Flight action button";
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){

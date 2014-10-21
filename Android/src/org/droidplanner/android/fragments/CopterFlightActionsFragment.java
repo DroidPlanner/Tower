@@ -30,6 +30,7 @@ import org.droidplanner.core.model.Drone;
 public class CopterFlightActionsFragment extends Fragment implements View.OnClickListener,
         DroneInterfaces.OnDroneListener {
 
+    private static final String ACTION_FLIGHT_ACTION_BUTTON = "Copter flight action button";
     private static final double TAKEOFF_ALTITUDE = 10.0;
 
     private Drone drone;
@@ -127,27 +128,27 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
 
             case R.id.mc_armBtn:
                 getArmingConfirmation();
-                eventBuilder.setAction(FlightActionsFragment.ACTION_FLIGHT_ACTION_BUTTON).setLabel("Arm");
+                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Arm");
                 break;
 
             case R.id.mc_disarmBtn:
                 MavLinkArm.sendArmMessage(drone, false);
-                eventBuilder.setAction(FlightActionsFragment.ACTION_FLIGHT_ACTION_BUTTON).setLabel("Disarm");
+                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Disarm");
                 break;
 
             case R.id.mc_land:
                 drone.getState().changeFlightMode(ApmModes.ROTOR_LAND);
-                eventBuilder.setAction(FlightActionsFragment.ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_LAND.getName());
+                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_LAND.getName());
                 break;
 
             case R.id.mc_takeoff:
                 drone.getState().doTakeoff(new Altitude(TAKEOFF_ALTITUDE));
-                eventBuilder.setAction(FlightActionsFragment.ACTION_FLIGHT_ACTION_BUTTON).setLabel("Takeoff");
+                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Takeoff");
                 break;
 
             case R.id.mc_homeBtn:
                 drone.getState().changeFlightMode(ApmModes.ROTOR_RTL);
-                eventBuilder.setAction(FlightActionsFragment.ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_RTL.getName());
+                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_RTL.getName());
                 break;
 
             case R.id.mc_pause:
@@ -156,18 +157,18 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
                 }
 
                 drone.getGuidedPoint().pauseAtCurrentLocation();
-                eventBuilder.setAction(FlightActionsFragment.ACTION_FLIGHT_ACTION_BUTTON).setLabel("Pause");
+                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Pause");
                 break;
 
             case R.id.mc_autoBtn:
                 drone.getState().changeFlightMode(ApmModes.ROTOR_AUTO);
-                eventBuilder.setAction(FlightActionsFragment.ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_AUTO.getName());
+                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_AUTO.getName());
                 break;
 
             case R.id.mc_TakeoffInAutoBtn:
                 drone.getState().doTakeoff(new Altitude(TAKEOFF_ALTITUDE));
                 drone.getState().changeFlightMode(ApmModes.ROTOR_AUTO);
-                eventBuilder.setAction(FlightActionsFragment.ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_AUTO.getName());
+                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_AUTO.getName());
                 break;
 
             case R.id.mc_follow:
@@ -201,14 +202,14 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
                 }
 
                 if (eventLabel != null) {
-                    eventBuilder.setAction(FlightActionsFragment.ACTION_FLIGHT_ACTION_BUTTON).setLabel(eventLabel);
+                    eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(eventLabel);
                     Toast.makeText(getActivity(), eventLabel, Toast.LENGTH_SHORT).show();
                 }
                 break;
 
             case R.id.mc_dronieBtn:
                 drone.getMission().makeAndUploadDronie();
-                eventBuilder.setAction(FlightActionsFragment.ACTION_FLIGHT_ACTION_BUTTON).setLabel("Dronie uploaded");
+                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Dronie uploaded");
                 break;
 
             default:
