@@ -55,10 +55,9 @@ public class SensorSetupFragment extends Fragment {
             switch(i){
                 case 0:
                 default:
-                    return new FragmentSetupIMU();
-
+                	return new FragmentSetupMAG();
                 case 1:
-                    return new FragmentSetupMAG();
+                	return new FragmentSetupIMU();
             }
         }
 
@@ -72,10 +71,9 @@ public class SensorSetupFragment extends Fragment {
             switch(position){
                 case 0:
                 default:
-                    return FragmentSetupIMU.getTitle(context);
-
+                	return FragmentSetupMAG.getTitle(context);
                 case 1:
-                    return FragmentSetupMAG.getTitle(context);
+                	return FragmentSetupIMU.getTitle(context);
             }
         }
     }
