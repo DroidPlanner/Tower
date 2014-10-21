@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ScatterPlot extends View {
 	private static final float SCALE_FACTOR = 1 / 1000f;

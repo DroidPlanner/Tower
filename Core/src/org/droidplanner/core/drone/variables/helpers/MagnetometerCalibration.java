@@ -19,7 +19,8 @@ import ellipsoidFit.ThreeSpacePoint;
 public class MagnetometerCalibration implements OnDroneListener {
 
     private static final double ELLIPSOID_FITNESS_MIN = 0.98;
-    private static final int MIN_POINTS_COUNT = 100;
+    public static final int MIN_POINTS_COUNT = 100;
+    private static final int REFRESH_RATE = 50; //hz
 
     public interface OnMagCalibrationListener {
         public void newEstimation(FitPoints fit, List<ThreeSpacePoint> points);
@@ -27,7 +28,7 @@ public class MagnetometerCalibration implements OnDroneListener {
     }
 
     private final DroneInterfaces.Handler handler;
-    private final ExecutorService fitRunner;
+    private ExecutorService fitRunner;
 
 	private final FitPoints ellipsoidFit = new FitPoints();
 	private final ArrayList<ThreeSpacePoint> points = new ArrayList<ThreeSpacePoint>();
@@ -68,18 +69,31 @@ public class MagnetometerCalibration implements OnDroneListener {
 		this.drone = drone;
 		this.listener = listener;
         this.handler = handler;
-        this.fitRunner = Executors.newSingleThreadExecutor();
 	}
 
-    public void start(){
-        MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 0, 0, 0, 0, 0, 0, 30, 0);
+    public void start(List<? extends ThreeSpacePoint> newPoints){
+        this.points.clear();
+        if(newPoints != null && !newPoints.isEmpty()){
+            this.points.addAll(newPoints);
+        }
+
+        if(this.fitRunner != null && !this.fitRunner.isShutdown()){
+            this.fitRunner.shutdownNow();
+        }
+
+        this.fitRunner = Executors.newSingleThreadExecutor();
+        MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 0, 0, 0, 0, 0, 0, REFRESH_RATE,
+                0);
         drone.addDroneListener(this);
     }
 
     public void stop(){
         drone.removeDroneListener(this);
         drone.getStreamRates().setupStreamRatesFromPref();
-        this.fitRunner.shutdownNow();
+
+        if(this.fitRunner != null) {
+            this.fitRunner.shutdownNow();
+        }
     }
 
 	@Override
@@ -93,7 +107,7 @@ public class MagnetometerCalibration implements OnDroneListener {
                 public void run() {
                     fit();
                     MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 0, 0, 0, 0, 0, 0,
-                            30, 0);
+                            REFRESH_RATE, 0);
                 }
             });
 			break;
@@ -102,11 +116,6 @@ public class MagnetometerCalibration implements OnDroneListener {
 			break;
 		}
 	}
-
-    public void setPoints(List<? extends ThreeSpacePoint> newPoints){
-        points.clear();
-        points.addAll(newPoints);
-    }
 
     public List<ThreeSpacePoint> getPoints(){
         return points;
@@ -119,6 +128,10 @@ public class MagnetometerCalibration implements OnDroneListener {
 	}
 
 	void fit() {
+        if(points.isEmpty()){
+            return;
+        }
+
 		ellipsoidFit.fitEllipsoid(points);
         if(listener != null) {
             handler.post(newEstimationUpdate);

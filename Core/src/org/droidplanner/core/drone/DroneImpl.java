@@ -29,26 +29,26 @@ import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
 
 public class DroneImpl implements Drone {
 
-	private final DroneEvents events = new DroneEvents(this);
-	private final Type type = new Type(this);
+	private final DroneEvents events;
+	private final Type type;
 	private VehicleProfile profile;
-	private final org.droidplanner.core.drone.variables.GPS GPS = new GPS(this);
+	private final org.droidplanner.core.drone.variables.GPS GPS;
 
-	private final org.droidplanner.core.drone.variables.RC RC = new RC(this);
-	private final Speed speed = new Speed(this);
-	private final Battery battery = new Battery(this);
-	private final Radio radio = new Radio(this);
-	private final Home home = new Home(this);
-	private final Mission mission = new Mission(this);
-	private final MissionStats missionStats = new MissionStats(this);
-	private final StreamRates streamRates = new StreamRates(this);
-	private final Altitude altitude = new Altitude(this);
-	private final Orientation orientation = new Orientation(this);
-	private final Navigation navigation = new Navigation(this);
-	private final GuidedPoint guidedPoint = new GuidedPoint(this);
-	private final Calibration calibrationSetup = new Calibration(this);
-	private final WaypointManager waypointManager = new WaypointManager(this);
-	private final Magnetometer mag = new Magnetometer(this);
+	private final org.droidplanner.core.drone.variables.RC RC;
+	private final Speed speed;
+	private final Battery battery;
+	private final Radio radio;
+	private final Home home;
+	private final Mission mission;
+	private final MissionStats missionStats;
+	private final StreamRates streamRates;
+	private final Altitude altitude;
+	private final Orientation orientation;
+	private final Navigation navigation;
+	private final GuidedPoint guidedPoint;
+	private final Calibration calibrationSetup;
+	private final WaypointManager waypointManager;
+	private final Magnetometer mag;
 	
 	private final State state;
 	private final HeartBeat heartbeat;
@@ -57,17 +57,35 @@ public class DroneImpl implements Drone {
 	private final MAVLinkStreams.MAVLinkOutputStream MavClient;
 	private final Preferences preferences;
 
-    private final DroneInterfaces.Handler mHandler;
-
 	public DroneImpl(MAVLinkStreams.MAVLinkOutputStream mavClient, DroneInterfaces.Clock clock,
 			DroneInterfaces.Handler handler, Preferences pref) {
 		this.MavClient = mavClient;
 		this.preferences = pref;
-        mHandler = handler;
+
+        events = new DroneEvents(this, handler);
 		state = new State(this, clock, handler);
 		heartbeat = new HeartBeat(this, handler);
 		parameters = new Parameters(this, handler);
-		loadVehicleProfile();
+
+        RC = new RC(this);
+        GPS = new GPS(this);
+        this.type = new Type(this);
+        this.speed = new Speed(this);
+        this.battery = new Battery(this);
+        this.radio = new Radio(this);
+        this.home = new Home(this);
+        this.mission = new Mission(this);
+        this.missionStats = new MissionStats(this);
+        this.streamRates = new StreamRates(this);
+        this.altitude = new Altitude(this);
+        this.orientation = new Orientation(this);
+        this.navigation = new Navigation(this);
+        this.guidedPoint =  new GuidedPoint(this);
+        this.calibrationSetup = new Calibration(this);
+        this.waypointManager = new WaypointManager(this);
+        this.mag = new Magnetometer(this);
+
+        loadVehicleProfile();
 	}
 
 	@Override
@@ -75,7 +93,7 @@ public class DroneImpl implements Drone {
 			double climb) {
 		this.altitude.setAltitude(altitude);
 		speed.setGroundAndAirSpeeds(groundSpeed, airSpeed, climb);
-		events.notifyDroneEvent(DroneInterfaces.DroneEventsType.SPEED);
+	    notifyDroneEvent(DroneInterfaces.DroneEventsType.SPEED);
 	}
 
 	@Override
@@ -83,7 +101,7 @@ public class DroneImpl implements Drone {
 		missionStats.setDistanceToWp(disttowp);
 		altitude.setAltitudeError(alt_error);
 		speed.setSpeedError(aspd_error);
-		events.notifyDroneEvent(DroneInterfaces.DroneEventsType.ORIENTATION);
+		notifyDroneEvent(DroneInterfaces.DroneEventsType.ORIENTATION);
 	}
 
 	@Override
@@ -103,13 +121,7 @@ public class DroneImpl implements Drone {
 
 	@Override
 	public void notifyDroneEvent(final DroneInterfaces.DroneEventsType event) {
-        //Send the events on the main thread.
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                events.notifyDroneEvent(event);
-            }
-        });
+        events.notifyDroneEvent(event);
 	}
 
 	@Override

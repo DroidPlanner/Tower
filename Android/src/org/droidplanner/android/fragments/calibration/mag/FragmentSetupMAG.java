@@ -21,12 +21,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import ellipsoidFit.FitPoints;
 import ellipsoidFit.ThreeSpacePoint;
 
 public class FragmentSetupMAG extends Fragment implements MagnetometerCalibration
-        .OnMagCalibrationListener {
+        .OnMagCalibrationListener, DroneInterfaces.OnDroneListener {
 
     private static final int CALIBRATION_IDLE = 0;
     private static final int CALIBRATION_IN_PROGRESS = 1;
@@ -38,6 +39,7 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
     private View inProgressCalibrationView;
     private Button buttonStep;
     private Button buttonCancel;
+    private TextView calibrationProgress;
     private ProgressBar calibrationFitness;
 	private ScatterPlot plot1,plot2;
 
@@ -45,6 +47,8 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
 
 	private Drone drone;
 	private MagnetometerCalibration calibration;
+
+    private List<? extends ThreeSpacePoint> startPoints;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,6 +67,8 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
         plot2.setTitle("YZ");
 
         inProgressCalibrationView = view.findViewById(R.id.in_progress_calibration_container);
+
+        calibrationProgress = (TextView) view.findViewById(R.id.calibration_progress);
 
         buttonStep = (Button) view.findViewById(R.id.buttonStep);
         buttonStep.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +117,7 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
         });
 
         if(savedInstanceState != null){
-            calibrationStatus = savedInstanceState.getInt(EXTRA_CALIBRATION_STATUS,
+            final int calibrationStatus = savedInstanceState.getInt(EXTRA_CALIBRATION_STATUS,
                     CALIBRATION_IDLE);
             setCalibrationStatus(calibrationStatus);
 
@@ -119,7 +125,22 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
                 final ArrayList<ParcelableThreeSpacePoint> loadedPoints = savedInstanceState
                         .getParcelableArrayList(EXTRA_CALIBRATION_POINTS);
                 if(loadedPoints != null && !loadedPoints.isEmpty()){
-                    calibration.setPoints(loadedPoints);
+                    startPoints = loadedPoints;
+
+                    for(ParcelableThreeSpacePoint point: loadedPoints){
+                        final double x = point.x;
+                        final double y = point.y;
+                        final double z = point.z;
+
+                        plot1.addData((float) x);
+                        plot1.addData((float) z);
+
+                        plot2.addData((float) y);
+                        plot2.addData((float) z);
+                    }
+
+                    plot1.invalidate();
+                    plot2.invalidate();
                 }
             }
         }
@@ -149,6 +170,15 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
     @Override
     public void onStart(){
         super.onStart();
+        if(drone.getMavClient().isConnected()){
+            buttonStep.setEnabled(true);
+        }
+        else{
+            cancelCalibration();
+            buttonStep.setEnabled(false);
+        }
+
+        drone.addDroneListener(this);
         if(calibrationStatus == CALIBRATION_IN_PROGRESS){
             startCalibration();
         }
@@ -157,6 +187,7 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
     @Override
     public void onStop(){
         super.onStop();
+        drone.removeDroneListener(this);
         pauseCalibration();
     }
 
@@ -195,6 +226,7 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
 			// Show the 'in progress view'
 			inProgressCalibrationView.setVisibility(View.VISIBLE);
 			calibrationFitness.setIndeterminate(true);
+            calibrationProgress.setText("0 / 100");
 			break;
 
 		case CALIBRATION_COMPLETED:
@@ -223,7 +255,9 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
 
     public void startCalibration() {
 		if(calibration != null){
-            calibration.start();
+            calibration.start(startPoints);
+            startPoints = null;
+
             setCalibrationStatus(CALIBRATION_IN_PROGRESS);
         }
 	}
@@ -235,9 +269,18 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
             return;
         }
 
-        calibrationFitness.setIndeterminate(false);
-        calibrationFitness.setMax(100);
-        calibrationFitness.setProgress((int)(ellipsoidFit.getFitness() * 100));
+        if(pointsCount < MagnetometerCalibration.MIN_POINTS_COUNT){
+            calibrationFitness.setIndeterminate(true);
+            calibrationProgress.setText("0 / 100");
+        }
+        else {
+            final int progress = (int) (ellipsoidFit.getFitness() * 100);
+            calibrationFitness.setIndeterminate(false);
+            calibrationFitness.setMax(100);
+            calibrationFitness.setProgress(progress);
+
+            calibrationProgress.setText(progress + " / 100");
+        }
 
         //Grab the last point
         final ThreeSpacePoint point = points.get(pointsCount - 1);
@@ -278,5 +321,19 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
 
     public static CharSequence getTitle(Context context) {
         return context.getText(R.string.setup_mag_title);
+    }
+
+    @Override
+    public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
+        switch(event){
+            case CONNECTED:
+                buttonStep.setEnabled(true);
+                break;
+
+            case DISCONNECTED:
+                cancelCalibration();
+                buttonStep.setEnabled(false);
+                break;
+        }
     }
 }

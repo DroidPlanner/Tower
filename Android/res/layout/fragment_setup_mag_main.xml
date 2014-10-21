@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:layout_weight="2">
+        android:layout_weight="1.5">
 
         <Button
             android:id="@+id/buttonStep"
@@ -53,7 +53,7 @@
             android:layout_gravity="center"
             android:text="@string/button_setup_calibrate"/>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/in_progress_calibration_container"
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -67,7 +67,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+                android:layout_toLeftOf="@+id/calibration_progress"
+                android:layout_toStartOf="@+id/calibration_progress"
+                android:layout_above="@+id/buttonCancel"
+                android:layout_marginBottom="15dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:padding="20dp"/>
+
+            <TextView
+                android:id="@+id/calibration_progress"
+                android:layout_width="wrap_content"
+                android:minWidth="50dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/calibration_progress_bar"
+                android:layout_alignBottom="@+id/calibration_progress_bar"
+                />
 
             <Button
                 android:id="@+id/buttonCancel"
@@ -75,9 +94,12 @@
                 android:layout_margin="10dp"
                 android:background="@drawable/button_green_drawable"
                 style="@style/modeControl"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
                 android:text="@string/button_setup_cancel"/>
 
-        </LinearLayout>
+        </RelativeLayout>
 
     </FrameLayout>
 </LinearLayout>
