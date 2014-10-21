@@ -38,4 +38,8 @@
     <screenName name="org.droidplanner.android.activities.SettingsActivity">
         Settings Screen
     </screenName>
+
+    <screenName name="org.droidplanner.android.activities.helpers.MapPreferencesActivity">
+        Map Preferences Screen
+    </screenName>
 </resources>

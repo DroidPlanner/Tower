@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Generic strings -->
+    <string name="settings">Impostazioni</string>
+    <string name="help">Aiuto</string>
+    <string name="menu_drone_setup">Configurazione Drone</string>
+    <string name="app_settings">Impostazioni App</string>
+    <string name="flight_data">Dati volo</string>
+    <string name="editor">Editore</string>
+    <string name="send_mission">Invia missione</string>
+    <string name="load_mission">Carica missione</string>
+
+    <!-- Drone Setup tabs -->
+    <string name="screen_tuning">Messa a punto</string>
+    <string name="screen_cal">Calibrazione</string>
+    <string name="screen_checklist">Lista di controllo</string>
+    <string name="screen_rc">Radio</string>
+    <string name="screen_parameters">Parametri</string>
+
+    <!-- App Settings/Preferences -->
+    <string name="pref_connection_type">Tipo connessione telemetria</string>
+    <string name="pref_connection_type_summary">Tipo di collegamento da usare per connettere Drone</string>
+    <string name="pref_maps_title">Mappe</string>
+    <string name="pref_maps_providers_summary">Scegliere il Provider di mappe</string>
+    <string name="pref_maps_providers_title">Providers di mappe</string>
+    <string name="pref_mavlink_rates">Rata di flusso</string>
+    <string name="pref_mavlink_rates_summary">Rata ricezione dati volo del Drone (in Hz)</string>
+    <string name="pref_mavlink_stream_rate_ext_stat">Waypoints, GPS raw,  dati GeoFence , Waypoint corrente etc</string>
+    <string name="pref_mavlink_stream_rate_extra1">Assetto</string>
+    <string name="pref_mavlink_stream_rate_extra2">Dati VFR_Hud</string>
+    <string name="pref_mavlink_stream_rate_extra3">AHRS, Stato Hardware, Vento</string>
+    <string name="pref_mavlink_stream_rate_position">Dati posizione</string>
+    <string name="pref_mavlink_stream_rate_RC_override">Bipasso RC</string>
+    <string name="pref_mavlink_stream_rate_rc_channels">Dati canale RC</string>
+    <string name="pref_mavlink_stream_rate_raw_sensors">Sensore Raw</string>
+    <string name="pref_mavlink_stream_rate_raw_controller">Controller Raw</string>
+    <string name="pref_ui">Interfaccia Utente</string>
+    <string name="pref_ui_language_english">Inglese come lingua IU</string>
+    <string name="pref_ui_language_english_summary">Usare inglese (al posto della lingua del sistema). Richiede riavvio dell\' App.</string>
+    <string name="pref_connection_actions">Mentre connesso a Drone</string>
+    <string name="pref_connection_actions_summary">Azioni da eseguire durante connession con Drone.\nTo Richiede disconnessa / riconnessa</string>
+    <string name="pref_keep_screen_bright">Mantenere schermo acceso</string>
+    <string name="pref_keep_screen_bright_summary">Mantenere schermo acceso e luminoso (incide sulla durata vita batteria)</string>
+    <string name="pref_lock_screen_orientation">Bloccare orientazione schermo</string>
+    <string name="pref_lock_screen_orientation_summary">Bloccare orientazione schermo come orientato durante inizio connessione</string>
+    <string name="pref_flight_data">Dati volo</string>
+    <string name="pref_max_flight_path_size">Dimensione traettoria volo</string>
+    <string name="pref_max_flight_path_size_summary">Dimensione traettoria volo, mettere a zero per disabilitare.</string>
+    <string name="pref_guided_mode_on_long_press">Premere schermo a lungo per modalità Guided</string>
+    <string name="pref_guided_mode_on_long_press_summary">Abilita modalità Guided premendo a lungo la mappa</string>
+    <string name="pref_follow_me_mode_enabled">Abilita modalità FollowMe</string>
+    <string name="pref_follow_me_mode_enabled_summary">Sotto sviluppo</string>
+    <string name="pref_heading_mode">Abilita orientazione FPV</string>
+    <string name="pref_heading_mode_summary">Cambia orientazione su Modalità FPV (-180º to 180º)</string>
+    <string name="pref_advanced">Avanzato</string>
+    <string name="pref_advanced_use_offline_maps">Usare mappe offline</string>
+    <string name="pref_advanced_use_offline_maps_summary">Per vista mappa offline utilizzzare piastre mappe su memoria locale</string>
+    <string name="pref_map_type">Tipo mappa</string>
+    <string name="pref_map_type_summary">Tipo mappa da usare</string>
+    <string name="pref_enable_tts">Abilita Text To Speech</string>
+    <string name="pref_enable_tts_summary">Messaggio audibile per importanti messaggi</string>
+    <string name="pref_vehicle_type">Tipo Drone per difetto</string>
+    <string name="pref_vehicle_type_summary">Tipo Drone per difetto quando sconnesso</string>
+    <string name="pref_rc">Schermo RC</string>
+    <string name="pref_rc_general">Generale</string>
+    <string name="pref_rc_mode">Modalità RC</string>
+    <string name="pref_rc_mode_summary">Throttle su stick sinistro o destro</string>
+    <string name="pref_rc_quickmode_left">QuickMode sinistra</string>
+    <string name="pref_rc_quickmode_right">QuickMode destra</string>
+    <string name="pref_rc_reverse">Invertire</string>
+    <string name="pref_rc_throttle_reverse_summary">Invertire direzione Throttle</string>
+    <string name="pref_rc_throttle_returntocenter">Ritorno al centro</string>
+    <string name="pref_rc_throttle_returntocenter_summary">Su tolta di premuta schermo il Throttle  ritorna al centro</string>
+    <string name="pref_rc_rudder">Rudder (Timone)</string>
+    <string name="pref_rc_rudder_reverse_summary">Invertire direzione Rudder (timone) / Yaw (imbardata)</string>
+    <string name="pref_rc_aileron">Aileron (Alettoni)</string>
+    <string name="pref_rc_aileron_reverse_summary">Invertire direzione Aileron (Alettoni) / Roll (rollio)</string>
+    <string name="pref_rc_elevator">Elevator (equilibratore)</string>
+    <string name="pref_rc_elevator_reverse_summary">Invertire direzione Elevator (equilibratore) / Pitch (Beccheggio)</string>
+    <string name="pref_connection">Preferenze connessione</string>
+    <string name="pref_usb">Connessione USB</string>
+    <string name="pref_baud_type">Rapidità connessione telemetria</string>
+    <string name="pref_baud_type_summary">Rata Baud di connessione Telemetria USB</string>
+    <string name="pref_server">Connessione TCP</string>
+    <string name="pref_server_ip">Server IP</string>
+    <string name="pref_server_port">Porta Server</string>
+    <string name="pref_server_udp">UDP Connessione</string>
+    <string name="pref_udp_server_port">Porta Server UDP</string>
+    <string name="version">Versione</string>
+    <string name="storage_folder">Cartella Memoria</string>
+
+    <!-- Connection State -->
+    <string name="menu_connect">Connettere</string>
+    <string name="menu_disconnect">Sconnettere</string>
+    <string name="connected">Connesso</string>
+    <string name="disconnected">Sconnesso</string>
+
+    <!-- Common Setup Buttons Resource Strings -->
+    <string name="button_setup_calibrate">Calibrare</string>
+    <string name="button_setup_cancel">Cancella</string>
+    <string name="button_setup_send">Inviare</string>
+    <string name="button_setup_next">Prossimo</string>
+    <string name="button_setup_done">Eseguito</string>
+    <string name="Pause">Pausa</string>
+
+    <!-- File operations -->
+    <string name="select_file_to_open">Selezionare file da aprire:</string>
+    <string name="no_files">Nessun file</string>
+    <string name="error_when_opening_file">Errore aprendo file</string>
+    <string name="save">Salvare</string>
+    <string name="open">Aprire</string>
+    <string name="write">Scrivere</string>
+    <string name="refresh">Ricaricare</string>
+
+    <!-- Survey/Mapping related strings -->
+    <string name="distance_between_lines">Laterale</string>
+    <string name="footprint">Impronta</string>
+    <string name="distance_between_pictures">Longitudinale</string>
+    <string name="inner_wps">WPs interno</string>
+    <string name="hatch_angle">Angolo tratteggio:</string>
+    <string name="flight_altitude">Altitudine volo:</string>
+    <string name="overlap">Sovrapposizione:</string>
+    <string name="sidelap">Giro laterale:</string>
+    <string name="mission_length">Lunghezza griglia</string>
+    <string name="pictures">Foto</string>
+    <string name="number_of_strips">Quantità fasce</string>
+    <string name="exception_draw_polygon">Tracciare poligono / WPTs</string>
+    <string name="exception_draw_2_more_polygon_points">Tracciare almeno 2 punti poligono addizionali</string>
+    <string name="exception_draw_1_more_polygon_points">Tracciare almeno 1 punto poligono addizionale</string>
+    <string name="draw_the_survey_region">Tracciare l\' area da rilevare</string>
+    <string name="mission_is_too_lengthy">Missione troppo lunga</string>
+
+    <!-- Flight Mode information -->
+    <string name="mode_acro">Acro consente al pilota di controllare direttamente la rata di rotazione. Non richiede GPS.</string>
+    <string name="mode_althold">Alt Hold controlla automaticamente il throttle e mantiene l\' altitudine . Non richiede GPS.</string>
+    <string name="mode_auto">Auto eseguisce la missione programmata e salvata in memoria veicolo. Richiede GPS lock.</string>
+    <string name="mode_circle">Circle fa rotare il veicolo attorno  al point of interest. Il veicolo punta sempre sul centro. Richiede GPS lock.</string>
+    <string name="mode_drift">Drift combina rollio e beccheggio per creare un volo più naturale ed intuitivo. Richiede GPS lock.</string>
+    <string name="mode_guided">Guided consente il controllo di posizione da postazione terra (Ground Station). Richiede GPS lock.</string>
+    <string name="mode_land">Land atterra nella posizione attuale. Richiede GPS lock.</string>
+    <string name="mode_loiter">Loiter consente al pilota di volare interamente mediante GPS. Richiede GPS lock.</string>
+    <string name="mode_ofloiter">Optical Flow abilitato. Loiter mantiene posizione e altitudine con assistenza del sensore optical flow.</string>
+    <string name="mode_position">Position consente al pilota di volare interamente mediante GPS, ma con controllo manuale di throttle. Richiede GPS lock.</string>
+    <string name="mode_rtl">RTL ascende ad altitudine minima, ritorna sopra posizione Home ed atterra. Richiede lock GPS.</string>
+    <string name="mode_sport">Sport consente al pilota di controllare il veicolo direttamente con aiuto di auto-livello. Non richiede GPS.</string>
+    <string name="mode_stabilize">Stabilize auto-livella il veicolo in volo. Non richiede GPS.</string>
+
+    <!-- Waypoint info -->
+    <string name="waypointInfo_Land">Atterrare veicolo nella posizione attuale. Uscire manualmente da modalità Auto per disarmare motori.</string>
+    <string name="waypointInfo_Generic">Waypoint generico</string>
+    <string name="waypointInfo_Loiter">non usato.</string>
+    <string name="waypointInfo_LoiterN">Orbitare posizione corrente per numero di volte desiderato.</string>
+    <string name="waypointInfo_LoiterT">Mantenere posizione corrente per numero di secondi desiderato, oppure indefinitivamente per terminare Missione.</string>
+    <string name="waypointInfo_RTL">Invia veicolo al punto Home fissato durante armare. Altitudine 0 ritorna veicolo a posizione Home con altitudine fissata secondo parametri RTL.</string>
+    <string name="waypointInfo_TakeOff">Decollo con volo sino altitudine specificata con proseguo su prossimo waypoint.</string>
+    <string name="waypointInfo_Waypoint">Volo su punto in 3D space. Opzione di mantenere posizione (in secondi).</string>
+    <string name="waypointInfo_CondAlt">Ascesa / discesa a velocità specificata. Ritarda missione finché desiderata alitudine raggiunta.</string>
+    <string name="waypointInfo_CondYaw">Impostare condizione per raggiungere cibia con un certo angolo.</string>
+    <string name="waypointInfo_CondDistance">Ritardo missione finché entro distanza desiderata dal prossimo waypoint.</string>
+    <string name="waypointInfo_SetHome">Cambio posizione Home su posizione corrente oppure su posizione specifica.</string>
+    <string name="waypointInfo_SetSpeed">Cambio punti impostazione velocità e/o throttle. Impostazione -1 per entrambi velocità e throttle se nessun cambiamento richiesto.</string>
+    <string name="waypointInfo_ROI">Imposto posizione ed altitudine per puntare Drone sull\' avanti e puntare eventuale camera.</string>
+    <string name="waypointInfo_SetJump">Ripetere Waypoint</string>
+
+    <!-- Waypoint editor -->
+    <string name="distance_to_home">Distanza da Home</string>
+    <string name="loiter_time">Durata Loiter</string>
+    <string name="waypoint_delay">Ritardo prima del prossimo Waypoint</string>
+    <string name="loiter_radius">Raggio Loiter</string>
+    <string name="loiter_ccw">CCW (senso antiorario)</string>
+    <string name="waypoint_altitude">Altitudine</string>
+    <string name="waypoint_angle">Angolo beccheggio</string>
+    <string name="waypoint_finalaltitude">Altitudine obiettivo</string>
+    <string name="waypoint_altrate">Rata ascesa / discesa</string>
+    <string name="waypoint_yawrate">Rata beccheggio</string>
+    <string name="waypoint_yawdir">Imposto direzione beccheggio in senso antiorario</string>
+    <string name="waypoint_yawoffset">Uso offset relativo</string>
+    <string name="waypoint_distance">Distanza</string>
+    <string name="waypoint_homecurrent">Imposta Home usando posizione attuale</string>
+    <string name="waypoint_longitude">Longitudine:</string>
+    <string name="waypoint_latitude">Latitudine:</string>
+    <string name="waypoint_speed">Velocità obbiettivo</string>
+    <string name="waypoint_throttle">Throttle</string>
+    <string name="waypoint_speedtype">Typo velocità</string>
+    <string name="waypoint_airspeed">Velocità aria</string>
+    <string name="waypoint_groundspeed">Velocità al suolo</string>
+    <string name="selectCoodSource">Selezionare origine posizione</string>
+    <string name="waypoint_coordsrc">Fonte dati:</string>
+    <string name="waypoint_jumpto">Vai a Waypoint:</string>
+    <string name="waypoint_repeat">Ripetere Waypoint</string>
+    <string name="circle_turns">Orbite</string>
+    <string name="dlg_clear_mission_title">Elimina missione</string>
+    <string name="dlg_clear_mission_confirm">Eliminare tutti i waypoints dalla mappa?</string>
+
+    <!-- Selection of map style -->
+    <string name="menu_map_type">Tipo mappa</string>
+    <string name="menu_map_type_satellite">Satellite</string>
+    <string name="menu_map_type_hybrid">Ibrido</string>
+    <string name="menu_map_type_normal">Normale</string>
+    <string name="menu_map_type_terrain">Terreno</string>
+
+    <!-- Parameters screen -->
+    <string name="params_click_to_refresh">Cliccare per ricarico parametri Drone</string>
+    <string name="refreshing_parameters">Ricarico parametri&#8230;</string>
+    <string name="parameters_saved">Parametri salvati</string>
+    <string name="msg_parameters_written_to_drone">Parametri scritti su Drone</string>
+    <string name="metadata_value">Valore:</string>
+    <string name="metadata_custom_value">** Valore personalizzato **</string>
+    <string name="metadata_values">Valori:</string>
+    <string name="metadata_units">Unità:</string>
+    <string name="metadata_range">Raggio:</string>
+    <string name="lst_note_hint">Per aggiungere righe usare tasto Enter</string>
+    <string name="set_to_zero_to_disable">(usare 0 per disabilitare).</string>
+
+    <!-- Calibration data progress -->
+    <string name="progress_title_uploading">Caricamento dati calibrazione</string>
+    <string name="progress_desc_uploading">DroidPlanner sta caricando dati calibrazione su Drone</string>
+    <string name="progress_title_downloading">Scaricamento dati calibrazione</string>
+    <string name="progress_desc_downloading">DroidPlanner sta scaricando dati calibrazione da Drone. Se sistema sconnesso premere Cancel.</string>
+
+    <!-- Radio Setup Resource Strings -->
+    <string name="setup_radio_title">Calibrazine canali radio</string>
+    <string name="setup_radio_cal_title">Inizio calibrazione</string>
+    <string name="setup_radio_cal_desc">Premere Calibrare per iniziare calibrazione  radio. Assicurarsi trasmettitore radio sia acceso e trasmettendo.</string>
+    <string name="setup_radio_title_minmax">Fissare valori Min &amp; Max</string>
+    <string name="setup_radio_title_middle">Fissare valori centro</string>
+    <string name="setup_radio_title_complete">Calibrazione completata</string>
+    <string name="setup_radio_desc_minmax">Muovere più volte il joystick in tutte le direzioni fino al limite, muovere gli interruttori, leve e manopole in tutte le posizioni.</string>
+    <string name="setup_radio_desc_middle">Abbassare il throttle stick  sulla posizione minima e tutti gli altri interruttori, leve e manopole su posizione centro.</string>
+    <string name="setup_radio_desc_complete">Calibrazione RC completata. Premere \'Save\' per caricare dati su Drone.</string>
+
+    <!-- Compass Setup Resource Strings -->
+    <string name="setup_mag_title">Calibrazione Compasso</string>
+
+    <!-- Accelerometer Setup Resource Strings -->
+    <string name="setup_imu_title">Calibrazione accelerometro</string>
+    <string name="setup_imu_start">Premere Calibrare per inizio calibrazione  IMU. Assicurarsi Drone sia posata su superfice A LIVELLO prima di iniziare il processo di calibrazione.</string>
+    <string name="setup_imu_normal">Posare Drone in orientazione NORMALE assicurandosi di movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_left">Posare Drone in orientazione SINISTRA assicurandosi di movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_right">Posare Drone in orientazione DESTRA assicurandosi di movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_nosedown">Posare Drone in orientazione NASO IN BASSO assicurandosi di movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_noseup">Posare Drone in orientazione NASO IN ALTO assicurandosi di movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_back">Posare Drone in orientazione DI SCHIENA assicurandosi di movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_completed">Calibrazione Accelerometro completata. Se non riuscita si prega di ricalibrare.</string>
+    <string name="setup_imu_step">Per iniziare calibrazione premere Calibrare.</string>
+    <string name="setup_imu_timeleft">Tempo restante prima della prossima orientazione:</string>
+    <!-- Flight Setup Resource Strings -->
+    <string name="setup_fm_title">Configurazione modalità volo</string>
+    <string name="setup_fm_side_title">Aggiorno modalità volo</string>
+    <string name="setup_fm_side_desc">Premere \'Send\' per caricare nuove modalità volo su Drone.</string>
+    <string name="setup_fm_desc_uploading">Caricando dati configurazione modalità volo</string>
+    <string name="setup_fm_desc_downloading">Scaricando dati configurazione modalità volo</string>
+    <string name="setup_fm_simple">Modalità Simple</string>
+    <string name="setup_fm_super">Modalità Super Simple</string>
+    <!-- Channel Options Setup Resource Strings -->
+    <string name="setup_ch_title">Opzioni configurazione canali</string>
+    <string name="setup_ch_side_title">Aggiorno opzioni canali</string>
+    <string name="setup_ch_side_desc">Press \'Send\' to update the new servo function to vehicle.</string>
+    <string name="setup_ch_tune_title">Canalel 6 - Funzione regolaggio</string>
+    <string name="setup_ch_options_title">Opzioni canale - CH7 &amp; CH8</string>
+    <string name="setup_ch_CH7_options">Opzioni canale 7:</string>
+    <string name="setup_ch_CH6_options">Opzioni canale 6:</string>
+    <string name="setup_ch_CH8_options">Opzioni canale 8:</string>
+    <string name="setup_ch_tune_low">Valore regolaggio - Basso:</string>
+    <string name="setup_ch_tune_high">Valore regolaggio - Alto:</string>
+    <!-- Servo functions Setup Resource Strings -->
+    <string name="setup_sf_title">Configurazione funzioni servo</string>
+    <string name="setup_sf_side_title">Aggiorno funzioni servo</string>
+    <string name="setup_sf_side_desc">Premere \'Send\' per aggiornare le nouve funzioni servo su Drone.</string>
+    <string name="setup_sf_desc_uploading">Carico dati configurazione servo</string>
+    <string name="setup_sf_desc_downloading">Scarico dati configurazione servo</string>
+    <string name="setup_sf_servo_title">Configurazione funzioni servo</string>
+    <!-- Main Screen and Telemetry -->
+    <string name="climb_rate_label">Rata ascesa</string>
+    <string name="altitude_label">Altitudine</string>
+    <string name="ground_speed_label">Velocità al suolo</string>
+    <string name="air_speed_label">Velocità aria</string>
+    <string name="telemetry_label">Telemetry(Telemetria)</string>
+    <string name="flight_modes_label">Flight modes(Modalità volo)</string>
+    <string name="menu_info_bar">Info Bar(Barra info)</string>
+    <string name="drawer_open">Aprire cassetto di navigazione</string>
+    <string name="drawer_close">Chiuder cassetto di navigazione</string>
+    <string name="guided_mode_warning">"Premere OK per entrare modalità Guided (volo guidato). Per cambiare posizione mantenere premuto la mappa.</string>
+    <!-- Bluetooth device selection strings -->
+    <string name="select_device">Selezionare dispositivo da connettere</string>
+    <string name="none_paired">Nessun dispositivo accoppiato</string>
+    <string name="none_found">Nessun dispositivo trovato</string>
+    <string name="title_paired_devices">Dispositivi accoppiati</string>
+    <string name="title_other_devices">Altri dispositivi disponibili</string>
+    <string name="button_scan">Cerca dispositivi</string>
+    <string name="scanning">Ricercando dispositivi...</string>
+    <!-- Content description -->
+    <string name="expandable_listview_icon_desc">Icona vista lista espansibile</string>
+    <!-- Others (when possible move to a grouping above) -->
+    <string name="tune_roll">Adattamento manuale del regolaggio Roll (rollio) and Pitch (beccheggio). Rate_P é il valore primario da variare.</string>
+    <string name="dialog_box_title_altitude">Altitudine</string>
+    <string name="mode_switch">Assegnare canale RC 5 ad un interruttore della radio per controllare modalità volo. Muovere l\' interruttore su ognuna posizione e selezionare la modalità volo sottostante.</string>
+    <string name="MAVLinkError">Errore MAVLink:</string>
+    <string name="msg_connect_first">Si prega di collegare prima</string>
+    <string name="mode1_throttle_on_right_stick">Modalità 1: Throttle su stick DESTRO</string>
+    <string name="mode2_throttle_on_left_stick">Modalità 2: Throttle su stick SINISTRO</string>
+    <string name="pref_map_provider_settings_summary">Impostare map provider selezionato</string>
+    <string name="pref_map_provider_settings_title">Preferenza Map Provider</string>
+    <string name="pref_title_google_map">Preferenza Google Map</string>
+    <string name="pref_title_osm">Preferenza Open Street</string>
+    <string name="activity_title_map_provider_preferences">Preferenza Map Provider</string>
+    <string name="pref_title_language">Lingua</string>
+    <string name="pref_title_screen">Schermo</string>
+    <string name="pref_title_notifications">Notifica</string>
+
+</resources>

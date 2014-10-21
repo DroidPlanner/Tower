@@ -41,7 +41,7 @@
         <Button
             android:id="@+id/mc_dronieBtn"
             style="@style/flightControlButton.Row"
-            android:drawableTop="@drawable/ic_follow"
+            android:drawableTop="@drawable/ic_dronie"
             android:text="@string/mission_control_dronie"
             />
 
@@ -85,16 +85,6 @@
         android:visibility="gone"
         android:background="@drawable/flight_action_buttons_container_bg"
         android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/mc_joystickBtn"
-            style="@style/flightControlButton.Row"
-            android:layout_width="75dp"
-            android:layout_height="match_parent"
-            android:drawableTop="@drawable/ic_control"
-            android:visibility="gone"
-            android:layout_weight="1"
-            android:text="@string/mission_control_control"/>
 
         <Button
             android:id="@+id/mc_homeBtn"

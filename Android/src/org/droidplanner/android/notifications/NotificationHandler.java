@@ -1,9 +1,12 @@
 package org.droidplanner.android.notifications;
 
+import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.model.Drone;
 
 import android.content.Context;
+
+import com.google.android.gms.analytics.HitBuilders;
 
 /**
  * This class handles DroidPlanner's status bar, and audible notifications. It
@@ -17,6 +20,11 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	 */
 	interface NotificationProvider extends DroneInterfaces.OnDroneListener {
 		void quickNotify(String feedback);
+
+        /**
+         * Release resources used by the provider.
+         */
+        void onTerminate();
 	}
 
 	/**
@@ -52,6 +60,16 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 		mStatusBarNotification.onDroneEvent(event, drone);
 		mPebbleNotification.onDroneEvent(event, drone);
 		mBeepNotification.onDroneEvent(event, drone);
+
+        switch(event){
+            case AUTOPILOT_WARNING:
+                final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                        .setCategory(GAUtils.Category.FAILSAFE)
+                        .setAction("Autopilot warning")
+                        .setLabel(drone.getState().getWarning());
+                GAUtils.sendEvent(eventBuilder);
+                break;
+        }
 	}
 
 	/**
@@ -65,4 +83,15 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 		mTtsNotification.quickNotify(feedback);
 		mStatusBarNotification.quickNotify(feedback);
 	}
+
+    /**
+     * Release resources used by the notification handler.
+     * After calling this method, this object should no longer be used.
+     */
+    public void terminate(){
+        mTtsNotification.onTerminate();
+        mStatusBarNotification.onTerminate();
+        mPebbleNotification.onTerminate();
+        mBeepNotification.onTerminate();
+    }
 }

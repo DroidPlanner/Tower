@@ -188,9 +188,7 @@ public class TTSNotificationProvider implements OnInitListener,
 		} else {
 			// Notify the user that the tts engine is not available.
 			Log.e(TAG, "TextToSpeech initialization failed.");
-			Toast.makeText(
-					context,
-					"Please make sure 'Text to Speech' is enabled in the "
+			Toast.makeText(context,	"Please make sure 'Text to Speech' is enabled in the "
 							+ "system accessibility settings.", Toast.LENGTH_LONG).show();
 		}
 	}
@@ -384,4 +382,11 @@ public class TTSNotificationProvider implements OnInitListener,
 	public void quickNotify(String feedback) {
 		speak(feedback);
 	}
+
+    @Override
+    public void onTerminate() {
+        if(tts != null){
+            tts.shutdown();
+        }
+    }
 }

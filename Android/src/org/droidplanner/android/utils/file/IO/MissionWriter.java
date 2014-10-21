@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import org.droidplanner.android.utils.file.FileList;
 import org.droidplanner.android.utils.file.FileManager;
 import org.droidplanner.android.utils.file.FileStream;
 
@@ -22,15 +23,19 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
  */
 public class MissionWriter {
 	public static boolean write(List<msg_mission_item> msgMissionItems) {
-		return write(msgMissionItems, "waypoints");
+		return write(msgMissionItems, FileStream.getWaypointFilename("waypoints"));
 	}
 
-	public static boolean write(List<msg_mission_item> msgMissionItems, String name) {
+	public static boolean write(List<msg_mission_item> msgMissionItems, String filename) {
 		try {
-			if (!FileManager.isExternalStorageAvaliable())
+			if (!FileManager.isExternalStorageAvailable())
 				return false;
 
-			final FileOutputStream out = FileStream.getWaypointFileStream(name);
+            if(!filename.endsWith(FileList.WAYPOINT_FILENAME_EXT)){
+                filename += FileList.WAYPOINT_FILENAME_EXT;
+            }
+
+			final FileOutputStream out = FileStream.getWaypointFileStream(filename);
 			writeHeader(out);
 			writeMissionItems(out, msgMissionItems);
 			out.close();

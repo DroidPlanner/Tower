@@ -73,7 +73,11 @@ public class Follow implements OnDroneListener, LocationReceiver {
 		if (isEnabled()) {
 			state = FollowStates.FOLLOW_END;
 			MavLinkROI.resetROI(drone);
-			drone.getGuidedPoint().pauseAtCurrentLocation();
+
+            if(drone.getState().getMode() == ApmModes.ROTOR_GUIDED) {
+                drone.getGuidedPoint().pauseAtCurrentLocation();
+            }
+
 			drone.notifyDroneEvent(DroneEventsType.FOLLOW_STOP);
 		}
 	}
@@ -90,6 +94,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 				disableFollowMe();
 			}
 			break;
+
 		case DISCONNECTED:
 			disableFollowMe();
 			break;

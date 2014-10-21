@@ -53,51 +53,54 @@
                 <CheckBoxPreference
                     android:defaultValue="true"
                     android:key="@string/pref_permanent_notification_key"
-                    android:title="@string/pref_permanent_notification_title"
-                    android:summary="@string/pref_permanent_notification_summary"/>
+                    android:summary="@string/pref_permanent_notification_summary"
+                    android:title="@string/pref_permanent_notification_title" />
             </PreferenceCategory>
-            <PreferenceCategory android:title="@string/pref_title_tts">
+            <PreferenceCategory android:title="@string/pref_title_tts" >
                 <CheckBoxPreference
                     android:defaultValue="true"
                     android:key="@string/pref_enable_tts_key"
                     android:summary="@string/pref_enable_tts_summary"
                     android:title="@string/pref_enable_tts" />
+
                 <PreferenceScreen android:title="@string/pref_title_tts_periodic_status" >
-                    <PreferenceCategory android:title="@string/pref_title_tts_periodic_status"
-                                        android:summary="@string/pref_tts_periodic_summary"
-                                        android:key="@string/pref_tts_periodic_key">
+                    <PreferenceCategory
+                        android:key="@string/pref_tts_periodic_key"
+                        android:summary="@string/pref_tts_periodic_summary"
+                        android:title="@string/pref_title_tts_periodic_status" >
                         <ListPreference
-                            android:title="@string/pref_tts_periodic_period"
+                            android:defaultValue="0"
                             android:entries="@array/tts_periodic_period"
                             android:entryValues="@array/tts_periodic_period_values"
                             android:key="@string/pref_tts_periodic_period_key"
                             android:summary="@string/pref_tts_periodic_period_summary"
-                            android:defaultValue="0"/>
+                            android:title="@string/pref_tts_periodic_period" />
+
                         <CheckBoxPreference
-                            android:title="@string/pref_tts_periodic_bat_volt"
+                            android:defaultValue="true"
                             android:key="@string/pref_tts_periodic_bat_volt_key"
                             android:summary="@string/pref_tts_periodic_bat_volt_summary"
-                            android:defaultValue="true"/>
+                            android:title="@string/pref_tts_periodic_bat_volt" />
                         <CheckBoxPreference
-                            android:title="@string/pref_tts_periodic_alt"
+                            android:defaultValue="true"
                             android:key="@string/pref_tts_periodic_alt_key"
                             android:summary="@string/pref_tts_periodic_alt_summary"
-                            android:defaultValue="true"/>
+                            android:title="@string/pref_tts_periodic_alt" />
                         <CheckBoxPreference
-                            android:title="@string/pref_tts_periodic_airspeed"
+                            android:defaultValue="true"
                             android:key="@string/pref_tts_periodic_airspeed_key"
                             android:summary="@string/pref_tts_periodic_airspeed_summary"
-                            android:defaultValue="true"/>
+                            android:title="@string/pref_tts_periodic_airspeed" />
                         <CheckBoxPreference
-                            android:title="@string/pref_tts_periodic_rssi"
+                            android:defaultValue="true"
                             android:key="@string/pref_tts_periodic_rssi_key"
                             android:summary="@string/pref_tts_periodic_rssi_summary"
-                            android:defaultValue="true"/>
-
+                            android:title="@string/pref_tts_periodic_rssi" />
                     </PreferenceCategory>
                 </PreferenceScreen>
-                <PreferenceScreen android:title="@string/pref_title_tts_warnings">
-                    <PreferenceCategory android:title="@string/pref_title_tts_warnings">
+                <PreferenceScreen android:title="@string/pref_title_tts_warnings" >
+                    <PreferenceCategory android:title="@string/pref_title_tts_warnings" >
+
                         <!--
                         <CheckBoxPreference
                             android:title="@string/pref_tts_warning_solar_activity"
@@ -109,35 +112,34 @@
                             android:key="@string/pref_tts_warning_wind_speed_key"
                             android:summary="@string/pref_tts_warning_wind_speed_summary"
                             android:defaultValue="true"/>
-                            -->
+                        -->
                         <CheckBoxPreference
-                            android:title="@string/pref_tts_warning_400ft_ceiling_exceeded"
+                            android:defaultValue="true"
                             android:key="@string/pref_tts_warning_400ft_ceiling_exceeded_key"
                             android:summary="@string/pref_tts_warning_400ft_ceiling_exceeded_summary"
-                            android:defaultValue="true"/>
+                            android:title="@string/pref_tts_warning_400ft_ceiling_exceeded" />
                         <CheckBoxPreference
-                            android:title="@string/pref_tts_warning_low_signal_strength"
+                            android:defaultValue="true"
                             android:key="@string/pref_tts_warning_low_signal_key"
                             android:summary="@string/pref_tts_warning_low_signal_strength_summary"
-                            android:defaultValue="true"/>
+                            android:title="@string/pref_tts_warning_low_signal_strength" />
                         <CheckBoxPreference
-                            android:title="@string/pref_tts_warning_lost_signal"
+                            android:defaultValue="true"
                             android:key="@string/pref_tts_warning_lost_signal_key"
                             android:summary="@string/pref_tts_warning_lost_signal_summary"
-                            android:defaultValue="true"/>
+                            android:title="@string/pref_tts_warning_lost_signal" />
                         <CheckBoxPreference
-                            android:title="@string/pref_tts_warning_autopilot_warnings"
+                            android:defaultValue="true"
                             android:key="@string/pref_tts_warning_autopilot_warnings_key"
                             android:summary="@string/pref_tts_warning_autopilot_warnings_summary"
-                            android:defaultValue="true"/>
+                            android:title="@string/pref_tts_warning_autopilot_warnings" />
                     </PreferenceCategory>
-
                 </PreferenceScreen>
+
                 <CheckBoxPreference
                     android:defaultValue="false"
                     android:key="@string/pref_request_max_volume_key"
                     android:title="@string/pref_request_max_volume" />
-
             </PreferenceCategory>
         </PreferenceScreen>
 
@@ -167,12 +169,14 @@
                 android:title="@string/droneshare_enabled" />
 
             <!-- FIXME: Live upload is disabled because it often causes the app to crash on disconnect -->
-            <!--<CheckBoxPreference
+            <!--
+                <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="@string/pref_live_upload_enabled_key"
                 android:summary="@string/pref_live_upload_summary"
-                android:title="@string/pref_live_upload" />-->
-            
+                android:title="@string/pref_live_upload" />
+            -->
+
         </PreferenceScreen>
 
         <!-- Advanced preferences section. -->
@@ -186,75 +190,6 @@
                 android:key="@string/pref_vehicle_type_key"
                 android:summary="@string/pref_vehicle_type_summary"
                 android:title="@string/pref_vehicle_type" />
-
-            <PreferenceScreen
-                android:key="pref_rc"
-                android:title="@string/pref_rc" >
-                <PreferenceCategory
-                    android:key="pref_rc_general"
-                    android:title="@string/pref_rc_general" >
-                    <ListPreference
-                        android:defaultValue="MODE2"
-                        android:entries="@array/RCModes"
-                        android:entryValues="@array/RCModeValues"
-                        android:key="@string/pref_rc_mode_key"
-                        android:summary="@string/pref_rc_mode_summary"
-                        android:title="@string/pref_rc_mode" />
-                    <ListPreference
-                        android:defaultValue="Loiter"
-                        android:entries="@array/RCQuickModes"
-                        android:entryValues="@array/RCQuickModes"
-                        android:key="@string/pref_rc_quickmode_left_key"
-                        android:title="@string/pref_rc_quickmode_left" />
-                    <ListPreference
-                        android:defaultValue="Stabilize"
-                        android:entries="@array/RCQuickModes"
-                        android:entryValues="@array/RCQuickModes"
-                        android:key="@string/pref_rc_quickmode_right_key"
-                        android:title="@string/pref_rc_quickmode_right" />
-                </PreferenceCategory>
-                <PreferenceCategory
-                    android:key="pref_rc_throttle"
-                    android:title="@string/pref_rc_throttle" >
-                    <CheckBoxPreference
-                        android:defaultValue="false"
-                        android:key="pref_rc_throttle_reverse"
-                        android:summary="@string/pref_rc_throttle_reverse_summary"
-                        android:title="@string/pref_rc_reverse" />
-                    <CheckBoxPreference
-                        android:defaultValue="false"
-                        android:key="pref_rc_throttle_returntocenter"
-                        android:summary="@string/pref_rc_throttle_returntocenter_summary"
-                        android:title="@string/pref_rc_throttle_returntocenter" />
-                </PreferenceCategory>
-                <PreferenceCategory
-                    android:key="pref_rc_rudder"
-                    android:title="@string/pref_rc_rudder" >
-                    <CheckBoxPreference
-                        android:defaultValue="false"
-                        android:key="pref_rc_rudder_reverse"
-                        android:summary="@string/pref_rc_rudder_reverse_summary"
-                        android:title="@string/pref_rc_reverse" />
-                </PreferenceCategory>
-                <PreferenceCategory
-                    android:key="pref_rc_aileron"
-                    android:title="@string/pref_rc_aileron" >
-                    <CheckBoxPreference
-                        android:defaultValue="false"
-                        android:key="pref_rc_aileron_reverse"
-                        android:summary="@string/pref_rc_aileron_reverse_summary"
-                        android:title="@string/pref_rc_reverse" />
-                </PreferenceCategory>
-                <PreferenceCategory
-                    android:key="pref_rc_elevator"
-                    android:title="@string/pref_rc_elevator" >
-                    <CheckBoxPreference
-                        android:defaultValue="false"
-                        android:key="pref_rc_elevator_reverse"
-                        android:summary="@string/pref_rc_elevator_reverse_summary"
-                        android:title="@string/pref_rc_reverse" />
-                </PreferenceCategory>
-            </PreferenceScreen>
             <PreferenceScreen
                 android:key="pref_connection"
                 android:title="@string/pref_connection" >
@@ -296,14 +231,14 @@
                 </PreferenceCategory>
                 <PreferenceCategory
                     android:key="pref_bluetooth"
-                    android:title="@string/pref_bluetooth">
+                    android:title="@string/pref_bluetooth" >
                     <org.droidplanner.android.dialogs.ClearBTDialogPreference
                         android:defaultValue=""
+                        android:dialogMessage="@string/pref_forget_bluetooth_device_address_confirm"
                         android:gravity="center"
                         android:key="pref_bluetooth_device_address"
-                        android:title="@string/pref_forget_bluetooth_device_address"
-                        android:dialogMessage="@string/pref_forget_bluetooth_device_address_confirm"
-                        android:positiveButtonText="@string/pref_bluetooth_forget"/>
+                        android:positiveButtonText="@string/pref_bluetooth_forget"
+                        android:title="@string/pref_forget_bluetooth_device_address" />
                 </PreferenceCategory>
             </PreferenceScreen>
             <PreferenceScreen
@@ -376,15 +311,14 @@
                     android:key="@string/pref_max_flight_path_size_key"
                     android:summary="@string/pref_max_flight_path_size_summary"
                     android:title="@string/pref_max_flight_path_size" />
+
                 <CheckBoxPreference
-                	android:defaultValue="false"
-    	            android:key="@string/pref_ui_gps_hdop_key"
-	                android:summary="@string/pref_ui_gps_hdop_summary"
-        	        android:title="@string/pref_ui_gps_hdop_title"/>
+                    android:defaultValue="false"
+                    android:key="@string/pref_ui_gps_hdop_key"
+                    android:summary="@string/pref_ui_gps_hdop_summary"
+                    android:title="@string/pref_ui_gps_hdop_title" />
             </PreferenceCategory>
-            
-            <PreferenceCategory
-                android:title="@string/pref_pebble" >
+            <PreferenceCategory android:title="@string/pref_pebble" >
                 <Preference
                     android:key="@string/pref_pebble_install_key"
                     android:title="@string/pref_pebble_install_watchapp" />
@@ -432,6 +366,67 @@
             android:selectable="false"
             android:shouldDisableView="false"
             android:title="@string/storage_folder" />
+
+        <PreferenceScreen
+            android:summary="Libraries (and it&apos;s licenses) used in this project"
+            android:title="Licenses" >
+            <Preference
+                android:enabled="false"
+                android:key="@string/pref_storage_key"
+                android:persistent="false"
+                android:selectable="false"
+                android:shouldDisableView="false"
+                android:summary="Apache v2"
+                android:title="AndroidSlidingUpPanel" />
+            <Preference
+                android:enabled="false"
+                android:key="@string/pref_storage_key"
+                android:persistent="false"
+                android:selectable="false"
+                android:shouldDisableView="false"
+                android:summary="GPLv2"
+                android:title="jmapviewer" />
+            <Preference
+                android:enabled="false"
+                android:key="@string/pref_storage_key"
+                android:persistent="false"
+                android:selectable="false"
+                android:shouldDisableView="false"
+                android:summary="Apache v2"
+                android:title="Mapbox Android SDK" />
+            <Preference
+                android:enabled="false"
+                android:key="@string/pref_storage_key"
+                android:persistent="false"
+                android:selectable="false"
+                android:shouldDisableView="false"
+                android:summary="LGPLv3"
+                android:title="usb-serial-for-android" />
+            <Preference
+                android:enabled="false"
+                android:key="@string/pref_storage_key"
+                android:persistent="false"
+                android:selectable="false"
+                android:shouldDisableView="false"
+                android:summary="Apache v2"
+                android:title="HorizontalVariableListView" />
+            <Preference
+                android:enabled="false"
+                android:key="@string/pref_storage_key"
+                android:persistent="false"
+                android:selectable="false"
+                android:shouldDisableView="false"
+                android:summary=""
+                android:title="Google Play Services" />
+            <Preference
+                android:enabled="false"
+                android:key="@string/pref_storage_key"
+                android:persistent="false"
+                android:selectable="false"
+                android:shouldDisableView="false"
+                android:summary=""
+                android:title="PebbleKit" />
+        </PreferenceScreen>
     </PreferenceCategory>
 
 </PreferenceScreen>

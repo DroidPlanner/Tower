@@ -1,46 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/opaque_white"
-    android:orientation="vertical" >
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/missionItemDetailLayout">
 
     <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:entries="@array/ExampleWaypointType" />
+        android:layout_alignParentTop="true"
+        android:entries="@array/ExampleWaypointType"/>
 
-    <ScrollView
-        android:id="@+id/scrollView1"
+    <TextView
+        android:id="@+id/WaypointType"
+        style="@style/missionHeaderTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="64dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:background="@drawable/wp_title_rectangle"
+        android:text="Select Waypoint Type"
+        android:textAllCaps="true"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+    <ImageView
+        android:id="@+id/menuHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@id/WaypointType"
+        android:src="@drawable/ic_menu_hint"
+        android:layout_margin="10dp"
+        />
 
-            <org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText
-                android:id="@+id/altitudeView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                custom:inc="1"
-                custom:max="200"
-                custom:min="0"
-                custom:title="@string/waypoint_altitude"
-                custom:unit="m" >
-            </org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/WaypointType"
+        style="@style/ModeDetailText"
+        android:background="@drawable/mode_desc_rectangle"
+        android:text="Click on the spinner to select a type for the selected waypoints."/>
 
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/waypointInfo_Generic" />
-        </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>
+</RelativeLayout>

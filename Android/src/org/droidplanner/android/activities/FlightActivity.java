@@ -1,10 +1,11 @@
 package org.droidplanner.android.activities;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.droidplanner.R;
 import org.droidplanner.android.dialogs.DroneshareDialog;
 import org.droidplanner.android.fragments.FlightActionsFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
-import org.droidplanner.android.fragments.RCFragment;
 import org.droidplanner.android.fragments.TelemetryFragment;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
 import org.droidplanner.android.utils.analytics.GAUtils;
@@ -31,11 +32,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 @SuppressWarnings("deprecation")
-public class FlightActivity extends DrawerNavigationUI implements
-		FlightActionsFragment.OnMissionControlInteraction, OnDroneListener {
+public class FlightActivity extends DrawerNavigationUI implements OnDroneListener {
 
     private static final String TAG = FlightActivity.class.getSimpleName();
 	private static final int GOOGLE_PLAY_SERVICES_REQUEST_CODE = 101;
@@ -68,7 +66,6 @@ public class FlightActivity extends DrawerNavigationUI implements
     };
 
 	private FragmentManager fragmentManager;
-	private RCFragment rcFragment;
 	private TextView warningView;
 
 	private FlightMapFragment mapFragment;
@@ -101,12 +98,6 @@ public class FlightActivity extends DrawerNavigationUI implements
                     final int slidingDrawerWidth = slidingDrawer.getContent().getWidth();
                     final boolean isSlidingDrawerOpened = slidingDrawer.isOpened();
                     updateLocationButtonsMargin(isSlidingDrawerOpened, slidingDrawerWidth);
-
-                    // Stop tracking how long this was opened for.
-                    GAUtils.sendTiming(new HitBuilders.TimingBuilder()
-                            .setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL)
-                            .setVariable(getString(R.string.ga_mode_details_close_panel))
-                            .setValue(System.currentTimeMillis()));
                 }
             });
 
@@ -116,12 +107,6 @@ public class FlightActivity extends DrawerNavigationUI implements
                     final int slidingDrawerWidth = slidingDrawer.getContent().getWidth();
                     final boolean isSlidingDrawerOpened = slidingDrawer.isOpened();
                     updateLocationButtonsMargin(isSlidingDrawerOpened, slidingDrawerWidth);
-
-                    // Track how long this is opened for.
-                    GAUtils.sendTiming(new HitBuilders.TimingBuilder()
-                            .setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL)
-                            .setVariable(getString(R.string.ga_mode_details_open_panel))
-                            .setValue(System.currentTimeMillis()));
                 }
             });
         }
@@ -321,21 +306,6 @@ public class FlightActivity extends DrawerNavigationUI implements
 		marginLp.setMargins(marginLp.leftMargin, marginLp.topMargin, rightMargin,
 				marginLp.bottomMargin);
         mLocationButtonsContainer.requestLayout();
-	}
-
-	@Override
-	public void onJoystickSelected() {
-		toggleRCFragment();
-	}
-
-	private void toggleRCFragment() {
-		if (rcFragment == null) {
-			rcFragment = new RCFragment();
-			fragmentManager.beginTransaction().add(R.id.containerRC, rcFragment).commit();
-		} else {
-			fragmentManager.beginTransaction().remove(rcFragment).commit();
-			rcFragment = null;
-		}
 	}
 
 	@Override

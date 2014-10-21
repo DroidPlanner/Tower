@@ -58,8 +58,7 @@ public abstract class AndroidMavLinkConnection extends MavLinkConnection {
 
 		// Start a new ga analytics session. The new session will be tagged
 		// with the mavlink connection mechanism, as well as whether the user
-		// has an active
-		// droneshare account.
+		// has an active droneshare account.
 		GAUtils.startNewSession(mContext);
 
 		String login = prefs.getDroneshareLogin();

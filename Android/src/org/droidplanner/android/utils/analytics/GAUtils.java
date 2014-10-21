@@ -23,29 +23,37 @@ public class GAUtils {
 	private static final String LOG_TAG = GAUtils.class.getSimpleName();
 
 	// Not instantiable
-	private GAUtils() {
-	}
+	private GAUtils() {}
 
 	/**
 	 * List the analytics categories used in the app.
 	 */
 	public static class Category {
 		/**
-		 * Category for analytics data related to the details panel on the
-		 * flight data screen.
-		 */
-		public static final String FLIGHT_DATA_DETAILS_PANEL = "flight_data_details_panel";
-
-		/**
 		 * Category for analytics data related to the action buttons on the
 		 * flight data screen.
 		 */
-		public static final String FLIGHT_DATA_ACTION_BUTTON = "flight_data_action_button";
+		public static final String FLIGHT = "Flight";
+
+        /**
+         * Category for measuring failsafe events.
+         */
+        public static final String FAILSAFE = "Failsafe";
 
 		/**
 		 * Category for analytics related to mavlink connection events.
 		 */
-		public static final String MAVLINK_CONNECTION = "mavlink_connection";
+		public static final String MAVLINK_CONNECTION = "Mavlink connection";
+
+        /**
+         * Category for droneshare analytics
+         */
+        public static final String DRONESHARE = "Droneshare";
+
+        /**
+         * Category for mission planning, and editing.
+         */
+        public static final String MISSION_PLANNING = "Mission planning";
 	}
 
 	/**
@@ -112,6 +120,12 @@ public class GAUtils {
 			sendHit(eventBuilder.build());
 		}
 	}
+
+    public static void sendEvent(HitBuilders.SocialBuilder socialBuilder){
+        if(socialBuilder != null){
+            sendHit(socialBuilder.build());
+        }
+    }
 
 	public static void sendTiming(HitBuilders.TimingBuilder timingBuilder) {
 		if (timingBuilder != null) {

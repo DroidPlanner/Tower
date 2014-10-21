@@ -20,6 +20,7 @@ import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 import org.droidplanner.core.model.Drone;
+import org.droidplanner.core.util.Pair;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
@@ -103,6 +104,11 @@ public class Mission extends DroneVariable {
 		notifyMissionUpdate();
 	}
 
+    public void addMissionItem(int index, MissionItem missionItem){
+        items.add(index, missionItem);
+        notifyMissionUpdate();
+    }
+
 	/**
 	 * Signals that this mission object was updated. //TODO: maybe move outside
 	 * of this class
@@ -134,11 +140,40 @@ public class Mission extends DroneVariable {
 	 *            new mission item
 	 */
 	public void replace(MissionItem oldItem, MissionItem newItem) {
-		int index = items.indexOf(oldItem);
+		final int index = items.indexOf(oldItem);
+        if(index == -1){
+            return;
+        }
+
 		items.remove(index);
 		items.add(index, newItem);
 		notifyMissionUpdate();
 	}
+
+    public void replaceAll(List<Pair<MissionItem, MissionItem>> updatesList){
+        if(updatesList == null || updatesList.isEmpty()){
+            return;
+        }
+
+        boolean wasUpdated = false;
+        for(Pair<MissionItem, MissionItem> updatePair : updatesList){
+            final MissionItem oldItem = updatePair.first;
+            final int index = items.indexOf(oldItem);
+            if(index == -1){
+                continue;
+            }
+
+            final MissionItem newItem = updatePair.second;
+            items.remove(index);
+            items.add(index, newItem);
+
+            wasUpdated = true;
+        }
+
+        if(wasUpdated) {
+            notifyMissionUpdate();
+        }
+    }
 
 	/**
 	 * Reverse the order of the mission items.
@@ -273,7 +308,6 @@ public class Mission extends DroneVariable {
 		items.addAll(createDronie(this, currentPosition, GeoTools.newCoordFromBearingAndDistance(
 				currentPosition, 180 + myDrone.getOrientation().getYaw(), 50.0)));
 		sendMissionToAPM();
-		myDrone.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
 		notifyMissionUpdate();
 	}
 
@@ -287,5 +321,23 @@ public class Mission extends DroneVariable {
 		dronieItems.add(new Waypoint(mMission, new Coord3D(start, new Altitude(startAltitude))));
 		dronieItems.add(new Land(mMission,start));
 		return dronieItems;
+	}
+
+	public boolean hasTakeoffAndLandOrRTL() {
+		if (items.size() >= 2) {
+			if (isFirstItemTakeoff() && isLastItemLandOrRTL()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isFirstItemTakeoff() {
+		return items.get(0) instanceof Takeoff;
+	}
+
+	public boolean isLastItemLandOrRTL() {
+		MissionItem last = items.get(items.size()-1);
+		return (last instanceof ReturnToHome) || (last instanceof Land);
 	}
 }

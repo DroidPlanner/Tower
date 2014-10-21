@@ -118,16 +118,14 @@ public class ParamsAdapterItem implements Serializable {
     public String toString(){
         String toString = "";
 
-        final ParameterMetadata metadata = getMetadata();
-        if(metadata != null){
-            toString = metadata.getDisplayName();
+        final Parameter param = getParameter();
+        if (param != null) {
+            toString = param.name + ": ";
         }
 
-        if(toString == null) {
-            final Parameter param = getParameter();
-            if (param != null) {
-                toString = param.name;
-            }
+        final ParameterMetadata metadata = getMetadata();
+        if(metadata != null){
+            toString += metadata.getDisplayName();
         }
 
         return toString;

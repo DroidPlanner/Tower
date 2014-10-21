@@ -4,6 +4,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.dialogs.YesNoDialog;
+import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.MAVLink.MavLinkArm;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -28,14 +29,11 @@ import com.google.android.gms.analytics.HitBuilders;
 
 public class FlightActionsFragment extends Fragment implements OnClickListener, OnDroneListener {
 
+    private static final String ACTION_FLIGHT_ACTION_BUTTON = "Flight action button";
+    private static final String PREF_ARMING_CONFIRMATION_DIALOG = "pref_arming_confirmation_dialog";
 	private static final double TAKEOFF_ALTITUDE = 10.0;
 
-	public interface OnMissionControlInteraction {
-		public void onJoystickSelected();
-	}
-
 	private Drone drone;
-	private OnMissionControlInteraction listener;
 
 	private Follow followMe;
 
@@ -56,7 +54,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 
 		DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
 		drone = droidPlannerApp.getDrone();
-		followMe = droidPlannerApp.followMe;
+		followMe = droidPlannerApp.getFollowMe();
 		return view;
 	}
 
@@ -68,9 +66,6 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 		mDisarmedButtons = view.findViewById(R.id.mc_disarmed_buttons);
 		mArmedButtons = view.findViewById(R.id.mc_armed_buttons);
 		mInFlightButtons = view.findViewById(R.id.mc_in_flight_buttons);
-
-		final Button joystickBtn = (Button) view.findViewById(R.id.mc_joystickBtn);
-		joystickBtn.setOnClickListener(this);
 
 		final Button connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
 		connectBtn.setOnClickListener(this);
@@ -104,80 +99,82 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 
 		final Button dronieBtn = (Button) view.findViewById(R.id.mc_dronieBtn);
 		dronieBtn.setOnClickListener(this);
-
-		drone.addDroneListener(this);
-		setupButtonsByFlightState();
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		listener = (OnMissionControlInteraction) activity;
-	}
+    @Override
+    public void onStart(){
+        super.onStart();
+        setupButtonsByFlightState();
+        updateFlightModeButtons();
+        updateFollowButton();
+        drone.addDroneListener(this);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        drone.removeDroneListener(this);
+    }
 
 	@Override
 	public void onClick(View v) {
 		HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-				.setCategory(GAUtils.Category.FLIGHT_DATA_ACTION_BUTTON);
+				.setCategory(GAUtils.Category.FLIGHT);
 
 		switch (v.getId()) {
 		case R.id.mc_connectBtn:
 			((SuperUI) getActivity()).toggleDroneConnection();
 			break;
 
-		case R.id.mc_joystickBtn:
-			listener.onJoystickSelected();
-			eventBuilder.setAction("Joystick selected").setLabel(
-					getString(R.string.mission_control_control));
-			break;
-
 		case R.id.mc_armBtn:
 			getArmingConfirmation();
-			eventBuilder.setAction("Changed flight mode").setLabel("Arm");
+			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Arm");
 			break;
 
 		case R.id.mc_disarmBtn:
 			MavLinkArm.sendArmMessage(drone, false);
-			eventBuilder.setAction("Changed flight mode").setLabel("Disarm");
+			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Disarm");
 			break;
 
 		case R.id.mc_land:
 			drone.getState().changeFlightMode(ApmModes.ROTOR_LAND);
-			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_LAND.getName());
+			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_LAND.getName());
 			break;
 
 		case R.id.mc_takeoff:
 			drone.getState().doTakeoff(new Altitude(TAKEOFF_ALTITUDE));
-			eventBuilder.setAction("Changed flight mode").setLabel("Takeoff");
+			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Takeoff");
 			break;
 
 		case R.id.mc_homeBtn:
 			drone.getState().changeFlightMode(ApmModes.ROTOR_RTL);
-			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_RTL.getName());
+			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_RTL.getName());
 			break;
 
 		case R.id.mc_pause:
 			if (followMe.isEnabled()) {
 				followMe.toggleFollowMeState();
 			}
+
 			drone.getGuidedPoint().pauseAtCurrentLocation();
-			eventBuilder.setAction("Changed flight mode").setLabel("Pause");
+			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Pause");
 			break;
 
 		case R.id.mc_autoBtn:
 			drone.getState().changeFlightMode(ApmModes.ROTOR_AUTO);
-			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_AUTO.getName());
+			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_AUTO.getName());
 			break;
 			
 		case R.id.mc_TakeoffInAutoBtn:
 			drone.getState().doTakeoff(new Altitude(TAKEOFF_ALTITUDE));
 			drone.getState().changeFlightMode(ApmModes.ROTOR_AUTO);
-			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_AUTO.getName());
+			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_AUTO.getName());
 			break;
 
 		case R.id.mc_follow:
 			followMe.toggleFollowMeState();
 			String eventLabel = null;
+
 			switch (followMe.getState()) {
 			case FOLLOW_START:
 				eventLabel = "FollowMe enabled";
@@ -205,15 +202,16 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 			}
 
 			if (eventLabel != null) {
-				eventBuilder.setAction("FollowMe selected").setLabel(eventLabel);
+				eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(eventLabel);
 				Toast.makeText(getActivity(), eventLabel, Toast.LENGTH_SHORT).show();
 			}
 			break;
 
 		case R.id.mc_dronieBtn:
 			drone.getMission().makeAndUploadDronie();
-			eventBuilder.setAction("Dronie").setLabel("Dronie");
+			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Dronie uploaded");
 			break;
+
 		default:
 			eventBuilder = null;
 			break;
@@ -226,19 +224,21 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 	}
 
 	private void getArmingConfirmation() {
-		YesNoDialog ynd = YesNoDialog.newInstance(getString(R.string.dialog_confirm_arming_title),
-				getString(R.string.dialog_confirm_arming_msg), new YesNoDialog.Listener() {
-					@Override
-					public void onYes() {
-						MavLinkArm.sendArmMessage(drone, true);
-					}
+		YesNoWithPrefsDialog ynd = YesNoWithPrefsDialog.newInstance(getActivity().getApplicationContext(),
+                getString(R.string.dialog_confirm_arming_title),
+                getString(R.string.dialog_confirm_arming_msg), new YesNoDialog.Listener() {
+                    @Override
+                    public void onYes() {
+                        MavLinkArm.sendArmMessage(drone, true);
+                    }
 
-					@Override
-					public void onNo() {
-					}
-				});
+                    @Override
+                    public void onNo() {}
+                }, PREF_ARMING_CONFIRMATION_DIALOG);
 
-		ynd.show(getChildFragmentManager(), "Confirm arming");
+        if(ynd != null) {
+            ynd.show(getChildFragmentManager(), "Confirm arming");
+        }
 	}
 
 	@Override
