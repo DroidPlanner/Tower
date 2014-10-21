@@ -99,15 +99,22 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 
 		final Button dronieBtn = (Button) view.findViewById(R.id.mc_dronieBtn);
 		dronieBtn.setOnClickListener(this);
-
-		drone.addDroneListener(this);
-		setupButtonsByFlightState();
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-	}
+    @Override
+    public void onStart(){
+        super.onStart();
+        setupButtonsByFlightState();
+        updateFlightModeButtons();
+        updateFollowButton();
+        drone.addDroneListener(this);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        drone.removeDroneListener(this);
+    }
 
 	@Override
 	public void onClick(View v) {
