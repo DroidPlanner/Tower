@@ -255,6 +255,10 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
 
     public void startCalibration() {
 		if(calibration != null){
+			if (drone.getMagnetometer().getOffsets()==null) {
+				Toast.makeText(getActivity()," Please load the parameters before calibrating", Toast.LENGTH_LONG).show();
+			}
+			
             calibration.start(startPoints);
             startPoints = null;
 
@@ -310,10 +314,14 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
 
 	@Override
 	public void finished(FitPoints fit) {
-		Log.d("MAG", "############################################################################################");
+		Log.d("MAG", "Calibration Finished: "+fit.center.toString());
 		Toast.makeText(getActivity(), "Calibration Finished: "+ fit.center.toString(),Toast.LENGTH_LONG).show();
 
-		calibration.sendOffsets();
+		try {
+			calibration.sendOffsets();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
         drone.getStreamRates().setupStreamRatesFromPref();
 
         setCalibrationStatus(CALIBRATION_COMPLETED);
@@ -334,6 +342,8 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
                 cancelCalibration();
                 buttonStep.setEnabled(false);
                 break;
+		default:
+			break;
         }
     }
 }

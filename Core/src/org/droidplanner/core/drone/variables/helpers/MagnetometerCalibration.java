@@ -123,7 +123,8 @@ public class MagnetometerCalibration implements OnDroneListener {
 
 	void addpoint(Drone drone) {
 		final Magnetometer mag = drone.getMagnetometer();
-		ThreeSpacePoint point = new ThreeSpacePoint(mag.getX(), mag.getY(), mag.getZ());
+		int[] offsets = mag.getOffsets();
+		ThreeSpacePoint point = new ThreeSpacePoint(mag.getX()-offsets[0], mag.getY()-offsets[1], mag.getZ()-offsets[2]);
 		points.add(point);
 	}
 
@@ -148,10 +149,14 @@ public class MagnetometerCalibration implements OnDroneListener {
 		}
 	}
 
-	public void sendOffsets() {
+	public void sendOffsets() throws Exception {
 		Parameter offsetX = drone.getParameters().getParameter("COMPASS_OFS_X");
 		Parameter offsetY = drone.getParameters().getParameter("COMPASS_OFS_Y");
 		Parameter offsetZ = drone.getParameters().getParameter("COMPASS_OFS_Z");
+		
+		if (offsetX == null || offsetY == null || offsetZ == null) {
+			throw new Exception("Parameters have not been loaded");
+		}
 		
 		offsetX.value = -ellipsoidFit.center.getEntry(0);
 		offsetY.value = -ellipsoidFit.center.getEntry(1);
