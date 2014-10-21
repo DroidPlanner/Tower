@@ -1,4 +1,4 @@
-package org.droidplanner.android.lib.utils;
+package org.droidplanner.android.utils;
 
 import android.content.Context;
 import android.os.Handler;

@@ -10,8 +10,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.helpers.LocalMapTileProvider;
-import org.droidplanner.android.lib.utils.GoogleApiClientManager;
-import org.droidplanner.android.lib.utils.GoogleApiClientManager.GoogleApiClientTask;
+import org.droidplanner.android.utils.GoogleApiClientManager;
+import org.droidplanner.android.utils.GoogleApiClientManager.GoogleApiClientTask;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
@@ -22,7 +22,6 @@ import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.gcs.location.Location.LocationReceiver;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -562,12 +561,11 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
             protected void doRun() {
                 final Location myLocation = LocationServices.FusedLocationApi.getLastLocation
                         (getGoogleApiClient());
-                if(myLocation != null){
+                if (myLocation != null) {
                     final List<Coord2D> updatedCoords = new ArrayList<Coord2D>(coords);
                     updatedCoords.add(DroneHelper.LocationToCoord(myLocation));
                     zoomToFit(updatedCoords);
-                }
-                else {
+                } else {
                     zoomToFit(coords);
                 }
             }
