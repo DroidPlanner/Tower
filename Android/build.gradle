@@ -28,13 +28,13 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '19.1.0'
+    compileSdkVersion 21
+    buildToolsVersion "21.0.1"
 
     defaultConfig {
         applicationId 'org.droidplanner'
         minSdkVersion 14
-        targetSdkVersion 19
+        targetSdkVersion 21
         versionName getGitVersion()
     }
 
