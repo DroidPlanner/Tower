@@ -18,8 +18,8 @@ import ellipsoidFit.ThreeSpacePoint;
 
 public class MagnetometerCalibration implements OnDroneListener {
 
-    private static final double ELLIPSOID_FITNESS_MIN = 0.98;
-    public static final int MIN_POINTS_COUNT = 100;
+    private static final double ELLIPSOID_FITNESS_MIN = 0.97;
+    public static final int MIN_POINTS_COUNT = 250;
     private static final int REFRESH_RATE = 50; //hz
 
     public interface OnMagCalibrationListener {
