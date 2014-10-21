@@ -5,18 +5,19 @@ import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JFrame;
 
 import org.droidplanner.core.drone.variables.helpers.MagnetometerCalibration;
-import org.droidplanner.core.drone.variables.helpers.MagnetometerCalibration.OnMagCalibrationListner;
+import org.droidplanner.core.drone.variables.helpers.MagnetometerCalibration.OnMagCalibrationListener;
+import org.droidplanner.desktop.logic.Handler;
 import org.droidplanner.desktop.ui.widgets.GraphPanel;
 
 import ellipsoidFit.FitPoints;
+import ellipsoidFit.ThreeSpacePoint;
 
-public class MagnetometerCal implements OnMagCalibrationListner {
+public class MagnetometerCal implements OnMagCalibrationListener {
 	private static final int Y_SIZE = 600;
 	private static final int X_SIZE = 600;
 	private static MagnetometerCalibration cal;
@@ -41,17 +42,21 @@ public class MagnetometerCal implements OnMagCalibrationListner {
 
 	static void create(org.droidplanner.core.model.Drone drone) {
 		MagnetometerCal window = new MagnetometerCal();
-		cal = new MagnetometerCalibration(drone, window);
+		cal = new MagnetometerCalibration(drone, window, new Handler());
+		cal.start(null);
 	}
 
 	@Override
-	public void newEstimation(FitPoints ellipsoidFit, int sampleSize, int[] magVector) {
+	public void newEstimation(FitPoints ellipsoidFit, List<ThreeSpacePoint> points) {
+        final int sampleSize = points.size();
+        final ThreeSpacePoint magVector = points.get(sampleSize - 1);
+        
 		System.out.println(String.format("Sample %d\traw %s\tFit %2.1f \tCenter %s\tRadius %s",
-				sampleSize, Arrays.toString(magVector), ellipsoidFit.getFitness() * 100,
+				sampleSize, magVector.toString(), ellipsoidFit.getFitness() * 100,
 				ellipsoidFit.center.toString(), ellipsoidFit.radii.toString()));
 		
-		data1.add((float) magVector[0]);
-		data1.add((float) magVector[2]);
+		data1.add((float) magVector.x);
+		data1.add((float) magVector.z);
 		plot1.newDataSet((Float[]) data1.toArray(new Float[data1.size()]));
 		if (ellipsoidFit.center.isNaN() || ellipsoidFit.radii.isNaN()) {
 			plot1.updateSphere(null);
@@ -62,8 +67,8 @@ public class MagnetometerCal implements OnMagCalibrationListner {
 		}
 		plot1.repaint(100);
 
-		data2.add((float) magVector[1]);
-		data2.add((float) magVector[2]);
+		data2.add((float) magVector.y);
+		data2.add((float) magVector.z);
 		plot2.newDataSet((Float[]) data2.toArray(new Float[data2.size()]));
 		if (ellipsoidFit.center.isNaN() || ellipsoidFit.radii.isNaN()) {
 			plot2.updateSphere(null);
@@ -78,9 +83,13 @@ public class MagnetometerCal implements OnMagCalibrationListner {
 
 	@Override
 	public void finished(FitPoints fit) {
-		//cal.sendOffsets();
+		try {
+			cal.sendOffsets();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		cal.stop();
-		System.out.println("CALIBRATED");
+		System.out.println("Calibration Finished: "+fit.center.toString());
 	}
 
 	public class ScatterPlot extends Canvas {
