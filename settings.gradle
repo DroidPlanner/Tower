@@ -4,7 +4,6 @@ include ':Mavlink'
 
 //Android projects
 include ':Android'
-include ':AndroidLib'
 
 //Library projects
 include ':Libraries:HorizontalVariableListView:HorizontalVariableListView'

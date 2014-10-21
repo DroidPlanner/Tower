@@ -5,9 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import org.droidplanner.R;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -18,10 +19,14 @@ import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
  */
 public class YesNoWithPrefsDialog extends YesNoDialog {
 
+    private final static int PREFERENCE_ASK_ID = R.string.pref_dialog_entry_ask;
+    private final static int PREFERENCE_ALWAYS_ID = R.string.pref_dialog_entry_always;
+    private final static int PREFERENCE_NEVER_ID = R.string.pref_dialog_entry_never;
+
+    private final static int DEFAULT_PREFERENCE_ID = PREFERENCE_ASK_ID;
+
 	protected final static String EXTRA_PREF_KEY = "extra_dialog_pref_key";
 
-	protected final static boolean DEFAULT_DONT_SHOW_DIALOG = false;
-    private static final boolean DEFAULT_DIALOG_RESPONSE = false;
 
     public static YesNoWithPrefsDialog newInstance(Context context, String title,
 			String msg, Listener listener, String prefKey) {
@@ -34,19 +39,19 @@ public class YesNoWithPrefsDialog extends YesNoDialog {
                                                    Listener listener, String prefKey){
         if (prefKey != null && !prefKey.isEmpty()) {
             final DroidPlannerPrefs prefs = new DroidPlannerPrefs(context);
-            final boolean dontShow = prefs.prefs.getBoolean(getDontShowPrefKey(prefKey),
-                    DEFAULT_DONT_SHOW_DIALOG);
-            if (dontShow) {
-                if(listener != null) {
-                    final boolean response = prefs.prefs.getBoolean(getResponsePrefKey(prefKey),
-                            DEFAULT_DIALOG_RESPONSE);
-                    if (response) {
+            final String preference = prefs.prefs.getString(prefKey,
+                    context.getString(DEFAULT_PREFERENCE_ID));
+
+            if(!preference.equals(context.getString(PREFERENCE_ASK_ID))) {
+                if(listener != null){
+                    if (preference.equals(context.getString(PREFERENCE_ALWAYS_ID))) {
                         listener.onYes();
                     }
-                    else{
+                    else if(preference.equals(context.getString(PREFERENCE_NEVER_ID))){
                         listener.onNo();
                     }
                 }
+
                 return null;
             }
         }
@@ -104,20 +109,26 @@ public class YesNoWithPrefsDialog extends YesNoDialog {
 	}
 
     private void savePreferences(final String prefKey, final boolean isPositiveResponse){
-        final SharedPreferences.Editor editor = mPrefs.prefs.edit();
-
         if(mCheckbox != null) {
-            editor.putBoolean(getDontShowPrefKey(prefKey), mCheckbox.isChecked());
-        }
+            final SharedPreferences.Editor editor = mPrefs.prefs.edit();
+            if(mCheckbox.isChecked()){
+                Toast.makeText(getActivity(), R.string.pref_dialog_selection_reset_desc, Toast.LENGTH_LONG).show();
+                        editor.putString(prefKey,
+                                getString(isPositiveResponse ? PREFERENCE_ALWAYS_ID : PREFERENCE_NEVER_ID));
+            }
+            else{
+                editor.putString(prefKey, getString(PREFERENCE_ASK_ID));
+            }
 
-        editor.putBoolean(getResponsePrefKey(prefKey), isPositiveResponse).apply();
+            editor.apply();
+        }
     }
 
 	@Override
 	protected View generateContentView(Bundle savedInstanceState) {
 		final View contentView = super.generateContentView(savedInstanceState);
 		if (contentView == null) {
-			return contentView;
+			return null;
 		}
 
 		final String prefKey = getArguments().getString(EXTRA_PREF_KEY);
@@ -125,23 +136,17 @@ public class YesNoWithPrefsDialog extends YesNoDialog {
 			return contentView;
 		}
 
-		final String dontShowPrefKey = getDontShowPrefKey(prefKey);
-		final boolean isChecked = mPrefs.prefs
-				.getBoolean(dontShowPrefKey, DEFAULT_DONT_SHOW_DIALOG);
-
 		mCheckbox = (CheckBox) contentView.findViewById(R.id.yes_no_dont_show_checkbox);
 		mCheckbox.setVisibility(View.VISIBLE);
-		mCheckbox.setChecked(isChecked);
+		mCheckbox.setChecked(isDontShowEnabled(prefKey));
 
 		return contentView;
 	}
 
-    private static String getDontShowPrefKey(String basePrefKey){
-        return basePrefKey + "_dont_show";
-    }
+    private boolean isDontShowEnabled(String prefKey){
+        final String askSelection = getString(R.string.pref_dialog_entry_ask);
+        final String preference = mPrefs.prefs.getString(prefKey, askSelection);
 
-    private static String getResponsePrefKey(String basePrefKey){
-        return basePrefKey + "_response";
+        return !preference.equals(askSelection);
     }
-
 }

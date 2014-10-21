@@ -30,7 +30,6 @@ import com.google.android.gms.analytics.HitBuilders;
 public class FlightActionsFragment extends Fragment implements OnClickListener, OnDroneListener {
 
     private static final String ACTION_FLIGHT_ACTION_BUTTON = "Flight action button";
-    private static final String PREF_ARMING_CONFIRMATION_DIALOG = "pref_arming_confirmation_dialog";
 	private static final double TAKEOFF_ALTITUDE = 10.0;
 
 	private Drone drone;
@@ -234,7 +233,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 
                     @Override
                     public void onNo() {}
-                }, PREF_ARMING_CONFIRMATION_DIALOG);
+                }, getString(R.string.pref_warn_on_arm_key));
 
         if(ynd != null) {
             ynd.show(getChildFragmentManager(), "Confirm arming");

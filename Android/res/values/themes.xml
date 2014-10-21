@@ -18,12 +18,10 @@
    one is updated
    -->
     <style name="CustomActionBarTheme.Transparent">
-        <item name="android:windowActionBarOverlay">true</item>
         <item name="android:actionBarStyle">@style/CustomActionBarTheme.ActionBar.Transparent</item>
     </style>
 
     <style name="CustomActionBarTheme.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <!--<item name="android:background">@drawable/action_texture</item>-->
         <item name="android:titleTextStyle">@style/CustomActionBarTheme.ActionBar.TitleTextStyle</item>
         <item name="android:subtitleTextStyle">@style/CustomActionBarTheme.ActionBar.Text</item>
         <item name="android:background">@android:color/white</item>
