@@ -496,4 +496,15 @@
     <string name="open_tlog_file">Open Log File</string>
     <string name="status_waiting_for_gps">Waiting for GPS...</string>
 
+    <!-- Preference dialogs -->
+    <string name="pref_misc_title">Miscellaneous</string>
+    <string name="pref_dialogs_title">Preference Dialogs</string>
+    <string name="pref_warn_on_arm_title">Arming button warning</string>
+    <string name="pref_auto_insert_mission_takeoff_rtl_land_title">Auto insert \'TakeOff\' and
+        \'RTL\'/\'Land\' to mission</string>
+    <string name="pref_dialog_entry_always">Always</string>
+    <string name="pref_dialog_entry_never">Never</string>
+    <string name="pref_dialog_entry_ask">Ask</string>
+    <string name="pref_dialog_selection_reset_desc"><![CDATA[Reset selection through: Settings -> User Interface -> Preference Dialogs]]></string>
+
 </resources>

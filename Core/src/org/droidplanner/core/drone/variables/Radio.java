@@ -1,11 +1,12 @@
 package org.droidplanner.core.drone.variables;
 
+import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.math.MathUtil;
 import org.droidplanner.core.model.Drone;
 
-public class Radio extends DroneVariable {
+public class Radio extends DroneVariable implements DroneInterfaces.OnDroneListener{
 	public static final int MAX_FADE_MARGIN = 50;
 	public static final int MIN_FADE_MARGIN = 6;
 
@@ -112,4 +113,12 @@ public class Radio extends DroneVariable {
 		return isValid;
 	}
 
+    @Override
+    public void onDroneEvent(DroneEventsType event, Drone drone) {
+        switch(event){
+            case DISCONNECTED:
+                isValid = false;
+                break;
+        }
+    }
 }
