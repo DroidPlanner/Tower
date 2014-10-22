@@ -23,8 +23,6 @@ import android.widget.Toast;
 public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
 		DPMap.OnMarkerDragListener, DPMap.OnMapClickListener, DPMap.OnMarkerClickListener {
 
-	// public MapPath polygonPath;
-	// public CameraGroundOverlays cameraOverlays;
 	private OnEditorInteraction editorListener;
 
 	@Override
@@ -36,16 +34,11 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 		mMapFragment.setOnMapClickListener(this);
 		mMapFragment.setOnMapLongClickListener(this);
 
-		// TODO: figure out if it's still needed
-		// polygonPath = new MapPath(mMap, Color.BLACK, getResources());
-		// cameraOverlays = new CameraGroundOverlays(mMap);
-
 		return view;
 	}
 
 	@Override
 	public void onMapLongClick(Coord2D point) {
-		// mListener.onAddPoint(point);
 	}
 
 	@Override
@@ -66,13 +59,6 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 			SpatialCoordItem waypoint = (SpatialCoordItem) markerInfo;
 			waypoint.setPosition(position);
 
-			/*
-			 * // update info window if(dragging)
-			 * waypoint.updateDistanceFromPrevPoint(); else
-			 * waypoint.setPrevPoint(mission.getWaypoints());
-			 * updateInfoWindow(waypoint, marker);
-			 */
-
 			// update flight path
 			mMapFragment.updateMissionPath(missionProxy);
 		}
@@ -81,7 +67,6 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	@Override
 	public void onMarkerDragEnd(MarkerInfo markerInfo) {
 		checkForWaypointMarker(markerInfo);
-		checkForPolygonMarker();
 	}
 
 	private void checkForWaypointMarker(MarkerInfo markerInfo) {
@@ -92,13 +77,11 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 		}
 	}
 
-	private void checkForPolygonMarker() {
-		/*
-		 * if (PolygonPoint.class.isInstance(info)) {
-		 * Listener.onMovePolygonPoint((PolygonPoint)
-		 * info,marker.getPosition()); }
-		 */
-	}
+    @Override
+    public void onStart(){
+        super.onStart();
+        zoomToFit();
+    }
 
 	@Override
 	public void onMapClick(Coord2D point) {
@@ -124,7 +107,7 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	@Override
 	public boolean onMarkerClick(MarkerInfo info) {
 		if (info instanceof MissionItemMarkerInfo) {
-			editorListener.onItemClick(((MissionItemMarkerInfo) info).getMarkerOrigin());
+			editorListener.onItemClick(((MissionItemMarkerInfo) info).getMarkerOrigin(), false);
 			return true;
 		} else {
 			return false;
@@ -145,7 +128,13 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 		if (homeCoord != null && !homeCoord.isEmpty())
 			visibleCoords.add(homeCoord);
 
-		mMapFragment.zoomToFit(visibleCoords);
+        zoomToFit(visibleCoords);
 	}
+
+    public void zoomToFit(List<Coord2D> itemsToFit){
+        if(!itemsToFit.isEmpty()){
+            mMapFragment.zoomToFit(itemsToFit);
+        }
+    }
 
 }
