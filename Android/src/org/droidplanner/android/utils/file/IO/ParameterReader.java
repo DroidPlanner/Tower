@@ -22,7 +22,7 @@ public class ParameterReader implements
 
 	@Override
 	public boolean openFile(String itemList) {
-		if (!FileManager.isExternalStorageAvaliable()) {
+		if (!FileManager.isExternalStorageAvailable()) {
 			return false;
 		}
 		try {

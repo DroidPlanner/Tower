@@ -4,7 +4,9 @@ import org.droidplanner.core.MAVLink.MavLinkROI;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.drone.variables.GuidedPoint;
 import org.droidplanner.core.drone.variables.State;
+import org.droidplanner.core.drone.variables.Type;
 import org.droidplanner.core.gcs.follow.FollowAlgorithm.FollowModes;
 import org.droidplanner.core.gcs.location.Location;
 import org.droidplanner.core.gcs.location.Location.LocationFinder;
@@ -50,7 +52,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 		} else {
 			if (drone.getMavClient().isConnected()) {
 				if (drone.getState().isArmed()) {
-					drone.getState().changeFlightMode(ApmModes.ROTOR_GUIDED);
+					GuidedPoint.changeToGuidedMode(drone);
 					enableFollowMe();
 				} else {
 					state = FollowStates.FOLLOW_DRONE_NOT_ARMED;
@@ -73,7 +75,11 @@ public class Follow implements OnDroneListener, LocationReceiver {
 		if (isEnabled()) {
 			state = FollowStates.FOLLOW_END;
 			MavLinkROI.resetROI(drone);
-			drone.getGuidedPoint().pauseAtCurrentLocation();
+
+            if(GuidedPoint.isGuidedMode(drone)) {
+                drone.getGuidedPoint().pauseAtCurrentLocation();
+            }
+
 			drone.notifyDroneEvent(DroneEventsType.FOLLOW_STOP);
 		}
 	}
@@ -86,10 +92,11 @@ public class Follow implements OnDroneListener, LocationReceiver {
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case MODE:
-			if ((drone.getState().getMode() != ApmModes.ROTOR_GUIDED)) {
+			if (!GuidedPoint.isGuidedMode(drone)) {
 				disableFollowMe();
 			}
 			break;
+
 		case DISCONNECTED:
 			disableFollowMe();
 			break;

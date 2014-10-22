@@ -1,27 +1,35 @@
 package org.droidplanner.android.fragments.calibration.imu;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
 import org.droidplanner.R;
-import org.droidplanner.android.fragments.SetupSensorFragment;
-import org.droidplanner.android.fragments.calibration.SetupMainPanel;
-import org.droidplanner.android.fragments.calibration.SetupSidePanel;
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.variables.Calibration;
 import org.droidplanner.core.model.Drone;
 
-import android.graphics.drawable.Drawable;
-import android.os.Handler;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+public class FragmentSetupIMU extends Fragment implements OnDroneListener {
 
-public class FragmentSetupIMU extends SetupMainPanel implements OnDroneListener {
+	private final static long TIMEOUT_MAX = 30000l; //ms
+    private final static long UPDATE_TIMEOUT_PERIOD = 100l; //ms
+    private static final String EXTRA_UPDATE_TIMESTAMP = "extra_update_timestamp";
 
-	private final static int TIMEOUT_MAX = 300;
+    private String msg;
 
-	private String msg;
-	private long timeCount;
+    private long updateTimestamp;
+
 	private int calibration_step = 0;
 	private TextView textViewStep;
 	private TextView textViewOffset;
@@ -33,79 +41,210 @@ public class FragmentSetupIMU extends SetupMainPanel implements OnDroneListener 
 
 	private final Handler handler = new Handler();
 
+	private DroidPlannerApp app;
+
+    private Button btnStep;
+    private TextView textDesc;
+
+    @Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		app = (DroidPlannerApp) getActivity().getApplication();
+	}
+
 	@Override
-	public void setupLocalViews(View view) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_setup_imu_main, container, false);
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+
 		textViewStep = (TextView) view.findViewById(R.id.textViewIMUStep);
 		textViewOffset = (TextView) view.findViewById(R.id.TextViewIMUOffset);
 		textViewScaling = (TextView) view.findViewById(R.id.TextViewIMUScaling);
 		textViewTimeOut = (TextView) view.findViewById(R.id.textViewIMUTimeOut);
 		pbTimeOut = (ProgressBar) view.findViewById(R.id.progressBarTimeOut);
 
+        textDesc = (TextView) view.findViewById(R.id.textViewDesc);
+
+        btnStep = (Button) view.findViewById(R.id.buttonStep);
+        btnStep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                processCalibrationStep(calibration_step);
+            }
+        });
+
 		pbTimeOut.setVisibility(View.INVISIBLE);
 		textViewTimeOut.setVisibility(View.INVISIBLE);
 		textViewOffset.setVisibility(View.INVISIBLE);
 		textViewScaling.setVisibility(View.INVISIBLE);
-		timeLeftStr = getResources().getString(R.string.setup_imu_timeleft);
+		timeLeftStr = getString(R.string.setup_imu_timeleft);
+
 		drawableGood = getResources().getDrawable(R.drawable.pstate_good);
 		drawableWarning = getResources().getDrawable(R.drawable.pstate_warning);
 		drawablePoor = getResources().getDrawable(R.drawable.pstate_poor);
 
+        if(savedInstanceState != null){
+            updateTimestamp = savedInstanceState.getLong(EXTRA_UPDATE_TIMESTAMP);
+        }
 	}
 
-	@Override
-	public int getPanelLayout() {
-		return R.layout.fragment_setup_imu_main;
-	}
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putLong(EXTRA_UPDATE_TIMESTAMP, updateTimestamp);
+    }
 
 	@Override
-	public SetupSidePanel getSidePanel() {
-		return new FragmentSetupIMUCalibrate();
+	public void onStart() {
+		super.onStart();
+		final Drone drone = app.getDrone();
+		if (drone != null && drone.getMavClient().isConnected()) {
+            btnStep.setEnabled(true);
+			if (drone.getCalibrationSetup().isCalibrating()) {
+				processMAVMessage(drone.getCalibrationSetup().getMessage(), false);
+			}
+            else{
+                resetCalibration();
+            }
+		} else {
+            btnStep.setEnabled(false);
+            resetCalibration();
+		}
 	}
 
-	@Override
-	public void doCalibrationStep(int step) {
-		processCalibrationStep(calibration_step);
-	}
+    private void resetCalibration(){
+        calibration_step = 0;
+        updateDescription(calibration_step);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        app.getDrone().removeDroneListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        app.getDrone().addDroneListener(this);
+    }
 
 	private void processCalibrationStep(int step) {
 		if (step == 0) {
 			startCalibration();
-			timeCount = 0;
+            updateTimestamp = System.currentTimeMillis();
 		} else if (step > 0 && step < 7) {
 			sendAck(step);
-			if (step == 6) {
-				textViewOffset.setVisibility(View.VISIBLE);
-				textViewScaling.setVisibility(View.VISIBLE);
-			}
 		} else {
 			calibration_step = 0;
-			textViewStep.setText(R.string.setup_imu_step);
 
-			textViewOffset.setVisibility(View.INVISIBLE);
-			textViewScaling.setVisibility(View.INVISIBLE);
+            textViewStep.setText(R.string.setup_imu_step);
 
-			((SetupSensorFragment) getParentFragment()).updateSidePanelTitle(calibration_step);
+            textViewOffset.setVisibility(View.INVISIBLE);
+            textViewScaling.setVisibility(View.INVISIBLE);
+
+            updateDescription(calibration_step);
 		}
 	}
 
+    public void updateDescription(int calibration_step) {
+        int id;
+        switch (calibration_step) {
+            case 0:
+                id = R.string.setup_imu_start;
+                break;
+            case 1:
+                id = R.string.setup_imu_normal;
+                break;
+            case 2:
+                id = R.string.setup_imu_left;
+                break;
+            case 3:
+                id = R.string.setup_imu_right;
+                break;
+            case 4:
+                id = R.string.setup_imu_nosedown;
+                break;
+            case 5:
+                id = R.string.setup_imu_noseup;
+                break;
+            case 6:
+                id = R.string.setup_imu_back;
+                break;
+            case 7:
+                id = R.string.setup_imu_completed;
+                break;
+            default:
+                return;
+        }
+
+        if (textDesc != null) {
+            textDesc.setText(id);
+        }
+
+        if (btnStep != null) {
+            if (calibration_step == 0)
+                btnStep.setText(R.string.button_setup_calibrate);
+            else if (calibration_step == 7)
+                btnStep.setText(R.string.button_setup_done);
+            else
+                btnStep.setText(R.string.button_setup_next);
+        }
+
+        if (calibration_step == 7 || calibration_step == 0) {
+            handler.removeCallbacks(runnable);
+
+            pbTimeOut.setVisibility(View.INVISIBLE);
+            textViewTimeOut.setVisibility(View.INVISIBLE);
+        } else {
+            handler.removeCallbacks(runnable);
+
+            textViewTimeOut.setVisibility(View.VISIBLE);
+            pbTimeOut.setIndeterminate(true);
+            pbTimeOut.setVisibility(View.VISIBLE);
+            handler.postDelayed(runnable, UPDATE_TIMEOUT_PERIOD);
+        }
+    }
+
 	private void sendAck(int step) {
-		if (parentActivity.drone != null) {
-			parentActivity.drone.getCalibrationSetup().sendAckk(step);
+		if (app.getDrone() != null) {
+			app.getDrone().getCalibrationSetup().sendAckk(step);
 		}
 	}
 
 	private void startCalibration() {
-		if (parentActivity.drone != null) {
-			parentActivity.drone.getCalibrationSetup().startCalibration();
+		if (app.getDrone() != null) {
+			app.getDrone().getCalibrationSetup().startCalibration();
 		}
 	}
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		if (event == DroneEventsType.CALIBRATION_IMU) {
-			processMAVMessage(drone.getCalibrationSetup().getMessage());
-		} else if (event == DroneEventsType.HEARTBEAT_TIMEOUT) {
-			if (parentActivity.drone != null) {
+        switch(event){
+            case CALIBRATION_IMU:
+                processMAVMessage(drone.getCalibrationSetup().getMessage(), true);
+                break;
+
+            case CONNECTED:
+                if(calibration_step == 0) {
+                    //Reset the screen, and enable the calibration button
+                    resetCalibration();
+                    btnStep.setEnabled(true);
+                }
+                break;
+
+            case DISCONNECTED:
+                //Reset the screen, and disable the calibration button
+                btnStep.setEnabled(false);
+                resetCalibration();
+                break;
+
+            case CALIBRATION_TIMEOUT:
+                if (drone != null) {
 				/*
 				 * here we will check if we are in calibration mode but if at
 				 * the same time 'msg' is empty - then it is actually not doing
@@ -113,22 +252,31 @@ public class FragmentSetupIMU extends SetupMainPanel implements OnDroneListener 
 				 * flag and re-trigger the HEARBEAT_TIMEOUT this however should
 				 * not be happening
 				 */
-				if (Calibration.isCalibrating() && TextUtils.isEmpty(msg)) {
-					Calibration.setClibrating(false);
-					parentActivity.drone.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
-				} else {
-					parentActivity.app.mNotificationHandler.quickNotify(msg);
-				}
-			}
-		}
+                    final Calibration calibration = drone.getCalibrationSetup();
+                    if (calibration.isCalibrating() && TextUtils.isEmpty(msg)) {
+                        calibration.setCalibrating(false);
+                        drone.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
+                    } else {
+                        app.mNotificationHandler.quickNotify(msg);
+                    }
+                }
+                break;
+        }
 	}
 
-	private void processMAVMessage(String message) {
-		if (message.contains("Place") || message.contains("Calibration"))
-			processOrientation(message);
+	private void processMAVMessage(String message, boolean updateTime) {
+		if (message.contains("Place") || message.contains("Calibration")) {
+            if(updateTime) {
+                updateTimestamp = System.currentTimeMillis();
+            }
+
+            processOrientation(message);
+        }
 		else if (message.contains("Offsets")) {
+            textViewOffset.setVisibility(View.VISIBLE);
 			textViewOffset.setText(message);
 		} else if (message.contains("Scaling")) {
+            textViewScaling.setVisibility(View.VISIBLE);
 			textViewScaling.setText(message);
 		}
 	}
@@ -150,45 +298,33 @@ public class FragmentSetupIMU extends SetupMainPanel implements OnDroneListener 
 			calibration_step = 7;
 
 		msg = message.replace("any key.", "'Next'");
+        app.mNotificationHandler.quickNotify(msg);
 
 		textViewStep.setText(msg);
 
-		((SetupSensorFragment) getParentFragment()).updateSidePanelTitle(calibration_step);
-
-		if (calibration_step == 7) {
-			if (parentActivity != null && parentActivity.app != null) {
-				parentActivity.app.mNotificationHandler.quickNotify(msg);
-			}
-			handler.removeCallbacks(runnable);
-
-			pbTimeOut.setVisibility(View.INVISIBLE);
-			textViewTimeOut.setVisibility(View.INVISIBLE);
-		} else {
-			handler.removeCallbacks(runnable);
-			timeCount = 0;
-			textViewTimeOut.setVisibility(View.VISIBLE);
-			pbTimeOut.setVisibility(View.VISIBLE);
-			handler.postDelayed(runnable, 100);
-		}
+		updateDescription(calibration_step);
 	}
 
 	private Runnable runnable = new Runnable() {
 		@Override
 		public void run() {
+            handler.removeCallbacks(this);
 			updateTimeOutProgress();
-			handler.postDelayed(this, 100);
+			handler.postDelayed(this, UPDATE_TIMEOUT_PERIOD);
 		}
 	};
 
 	protected void updateTimeOutProgress() {
-		long timeLeft = (int) (TIMEOUT_MAX - timeCount);
+        final long timeElapsed = System.currentTimeMillis() - updateTimestamp;
+		long timeLeft = (int) (TIMEOUT_MAX - timeElapsed);
 
 		if (timeLeft >= 0) {
-			timeCount++;
-			int secLeft = (int) (timeLeft / 10) + 1;
+			int secLeft = (int) (timeLeft / 1000) + 1;
 
-			pbTimeOut.setMax(TIMEOUT_MAX);
+            pbTimeOut.setIndeterminate(false);
+			pbTimeOut.setMax((int) TIMEOUT_MAX);
 			pbTimeOut.setProgress((int) timeLeft);
+
 			textViewTimeOut.setText(timeLeftStr + String.valueOf(secLeft) + "s");
 			if (secLeft > 15)
 				pbTimeOut.setProgressDrawable(drawableGood);
@@ -199,25 +335,10 @@ public class FragmentSetupIMU extends SetupMainPanel implements OnDroneListener 
 
 		} else {
 			textViewTimeOut.setText(timeLeftStr + "0s");
-
-		}
-
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		if (parentActivity != null) {
-			parentActivity.drone.removeDroneListener(this);
 		}
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-
-		if (parentActivity != null) {
-			parentActivity.drone.addDroneListener(this);
-		}
+	public static CharSequence getTitle(Context context) {
+		return context.getText(R.string.setup_imu_title);
 	}
 }

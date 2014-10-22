@@ -42,6 +42,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 
 			final boolean isThereMissionMarkers = !missionMarkerInfos.isEmpty();
 			final boolean isHomeValid = home.isValid();
+            final boolean isGuidedVisible = guided.isVisible();
 
 			// Get the list of markers currently on the map.
 			final Set<MarkerInfo> markersOnTheMap = mMapFragment.getMarkerInfoList();
@@ -50,6 +51,10 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 				if (isHomeValid) {
 					markersOnTheMap.remove(home);
 				}
+
+                if(isGuidedVisible){
+                    markersOnTheMap.remove(guided);
+                }
 
 				if (isThereMissionMarkers) {
 					markersOnTheMap.removeAll(missionMarkerInfos);
@@ -61,6 +66,10 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 			if (isHomeValid) {
 				mMapFragment.updateMarker(home);
 			}
+
+            if(isGuidedVisible){
+                mMapFragment.updateMarker(guided);
+            }
 
 			if (isThereMissionMarkers) {
 				mMapFragment.updateMarkers(missionMarkerInfos, isMissionDraggable());
@@ -92,7 +101,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		final Activity activity = getActivity();
 		final DroidPlannerApp app = ((DroidPlannerApp) activity.getApplication());
 		drone = app.getDrone();
-		missionProxy = app.missionProxy;
+		missionProxy = app.getMissionProxy();
 
 		home = new GraphicHome(drone);
 		graphicDrone = new GraphicDrone(drone);
@@ -254,4 +263,11 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
         mMapFragment.updateCameraBearing(bearing);
     }
 
+    /**
+     * Ignore marker clicks on the map and instead report the event as a mapClick
+     * @param skip if it should skip further events
+     */
+    public void skipMarkerClickEvents(boolean skip){
+    	mMapFragment.skipMarkerClickEvents(skip);
+    }
 }

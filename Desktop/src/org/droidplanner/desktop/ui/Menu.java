@@ -16,7 +16,7 @@ public class Menu extends JMenuBar implements ActionListener {
 
 	public enum DroneMenu {
 		LOAD_MISSION("Load Mission"), LOAD_PARAMETERS("Load Parameters"), FOLLOW("Follow"), GRAPH(
-				"Graph");
+				"Graph"), MAG("Magnetometer Calibration");
 		private String text;
 
 		private DroneMenu(String text) {
@@ -57,7 +57,10 @@ public class Menu extends JMenuBar implements ActionListener {
 			follow.toggleFollowMeState();
 		} else if (e.getActionCommand().equalsIgnoreCase(DroneMenu.GRAPH.toString())) {
 			Graph.createGraph(drone);
+		} else if (e.getActionCommand().equalsIgnoreCase(DroneMenu.MAG.toString())) {
+			MagnetometerCal.create(drone);
 		}
+
 	}
 
 }

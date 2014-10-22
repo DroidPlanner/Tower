@@ -1,17 +1,16 @@
 package org.droidplanner.android.activities;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.droidplanner.R;
 import org.droidplanner.android.dialogs.DroneshareDialog;
 import org.droidplanner.android.fragments.FlightActionsFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
-import org.droidplanner.android.fragments.RCFragment;
 import org.droidplanner.android.fragments.TelemetryFragment;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
-import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.drone.variables.State;
 import org.droidplanner.core.model.Drone;
 
 import android.app.Dialog;
@@ -26,16 +25,12 @@ import android.widget.ImageButton;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 @SuppressWarnings("deprecation")
-public class FlightActivity extends DrawerNavigationUI implements
-		FlightActionsFragment.OnMissionControlInteraction, OnDroneListener {
+public class FlightActivity extends DrawerNavigationUI implements OnDroneListener {
 
     private static final String TAG = FlightActivity.class.getSimpleName();
 	private static final int GOOGLE_PLAY_SERVICES_REQUEST_CODE = 101;
@@ -68,13 +63,13 @@ public class FlightActivity extends DrawerNavigationUI implements
     };
 
 	private FragmentManager fragmentManager;
-	private RCFragment rcFragment;
 	private TextView warningView;
 
 	private FlightMapFragment mapFragment;
 
     private SlidingUpPanelLayout mSlidingPanel;
     private View mFlightActionsView;
+    private FlightActionsFragment flightActions;
 
 	private View mLocationButtonsContainer;
 	private ImageButton mGoToMyLocation;
@@ -101,12 +96,6 @@ public class FlightActivity extends DrawerNavigationUI implements
                     final int slidingDrawerWidth = slidingDrawer.getContent().getWidth();
                     final boolean isSlidingDrawerOpened = slidingDrawer.isOpened();
                     updateLocationButtonsMargin(isSlidingDrawerOpened, slidingDrawerWidth);
-
-                    // Stop tracking how long this was opened for.
-                    GAUtils.sendTiming(new HitBuilders.TimingBuilder()
-                            .setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL)
-                            .setVariable(getString(R.string.ga_mode_details_close_panel))
-                            .setValue(System.currentTimeMillis()));
                 }
             });
 
@@ -116,12 +105,6 @@ public class FlightActivity extends DrawerNavigationUI implements
                     final int slidingDrawerWidth = slidingDrawer.getContent().getWidth();
                     final boolean isSlidingDrawerOpened = slidingDrawer.isOpened();
                     updateLocationButtonsMargin(isSlidingDrawerOpened, slidingDrawerWidth);
-
-                    // Track how long this is opened for.
-                    GAUtils.sendTiming(new HitBuilders.TimingBuilder()
-                            .setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL)
-                            .setVariable(getString(R.string.ga_mode_details_open_panel))
-                            .setValue(System.currentTimeMillis()));
                 }
             });
         }
@@ -184,7 +167,8 @@ public class FlightActivity extends DrawerNavigationUI implements
 			}
 		});
 
-		Fragment flightActions = fragmentManager.findFragmentById(R.id.flightActionsFragment);
+		flightActions = (FlightActionsFragment) fragmentManager.findFragmentById(R.id
+                .flightActionsFragment);
 		if (flightActions == null) {
 			flightActions = new FlightActionsFragment();
 			fragmentManager.beginTransaction().add(R.id.flightActionsFragment, flightActions).commit();
@@ -324,21 +308,6 @@ public class FlightActivity extends DrawerNavigationUI implements
 	}
 
 	@Override
-	public void onJoystickSelected() {
-		toggleRCFragment();
-	}
-
-	private void toggleRCFragment() {
-		if (rcFragment == null) {
-			rcFragment = new RCFragment();
-			fragmentManager.beginTransaction().add(R.id.containerRC, rcFragment).commit();
-		} else {
-			fragmentManager.beginTransaction().remove(rcFragment).commit();
-			rcFragment = null;
-		}
-	}
-
-	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		super.onDroneEvent(event, drone);
 		switch (event) {
@@ -363,9 +332,8 @@ public class FlightActivity extends DrawerNavigationUI implements
             return;
         }
 
-        final State droneState = drone.getState();
-        final boolean isEnabled = drone.getMavClient().isConnected() && droneState.isArmed()
-                && droneState.isFlying();
+        final boolean isEnabled = flightActions != null && flightActions.isSlidingUpPanelEnabled
+                (drone);
 
         if (isEnabled) {
             mSlidingPanel.setSlidingEnabled(true);

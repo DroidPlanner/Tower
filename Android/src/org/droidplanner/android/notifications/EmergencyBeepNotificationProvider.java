@@ -6,18 +6,14 @@ import org.droidplanner.core.model.Drone;
 
 import android.content.Context;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.SoundPool;
 
 public class EmergencyBeepNotificationProvider implements NotificationHandler.NotificationProvider {
-	private MediaPlayer beeper;
-	private Context mContext;
+
 	private SoundPool mPool;
 	private int beepBeep;
 
-	public EmergencyBeepNotificationProvider(Context context) {
-		mContext = context;
-		beeper = MediaPlayer.create(context, R.raw.beep_beep);
+	public EmergencyBeepNotificationProvider(Context context){
 		mPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 		beepBeep = mPool.load(context, R.raw.beep_beep, 1);
 	}
@@ -26,6 +22,11 @@ public class EmergencyBeepNotificationProvider implements NotificationHandler.No
 	public void quickNotify(String feedback) {
 
 	}
+
+    @Override
+    public void onTerminate() {
+        mPool.release();
+    }
 
 	@Override
 	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {

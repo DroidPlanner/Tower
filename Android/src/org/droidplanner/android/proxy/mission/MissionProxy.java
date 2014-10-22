@@ -1,5 +1,8 @@
 package org.droidplanner.android.proxy.mission;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.internal.is;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,6 +10,7 @@ import java.util.List;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
+import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
@@ -15,6 +19,7 @@ import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
@@ -225,6 +230,22 @@ public class MissionProxy implements DPMap.PathSource {
 	
 		addMissionItems(dronieItems);	
 	}
+
+
+
+    public void addTakeOffAndRTL(){
+        if(!mMission.isFirstItemTakeoff()){
+            final Takeoff takeOff = new Takeoff(mMission, new Altitude(Takeoff.DEFAULT_TAKEOFF_ALTITUDE));
+            mMissionItems.add(0, new MissionItemProxy(this, takeOff));
+            mMission.addMissionItem(0, takeOff);
+        }
+
+        if(!mMission.isLastItemLandOrRTL()){
+            final ReturnToHome rtl = new ReturnToHome(mMission);
+            mMissionItems.add(new MissionItemProxy(this, rtl));
+            mMission.addMissionItem(rtl);
+        }
+    }
 
 	/**
 	 * Returns the order for the given argument in the mission set.
@@ -502,6 +523,39 @@ public class MissionProxy implements DPMap.PathSource {
 
 		return coords;
 	}
+
+    public static List<Coord2D> getVisibleCoords(List<MissionItemProxy> mipList){
+        final List<Coord2D> coords = new ArrayList<Coord2D>();
+
+        if(mipList == null || mipList.isEmpty()){
+            return coords;
+        }
+
+        for(MissionItemProxy mip: mipList){
+            if(!(mip.getMissionItem() instanceof SpatialCoordItem))
+                continue;
+
+            final Coord2D coordinate = ((SpatialCoordItem) mip.getMissionItem()).getCoordinate();
+            if(coordinate.isEmpty())
+                continue;
+
+            coords.add(coordinate);
+        }
+
+        return coords;
+    }
+
+    public void sendMissionToAPM(){
+        mMission.sendMissionToAPM();
+
+        //Send an event for the created mission
+        final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                .setCategory(GAUtils.Category.MISSION_PLANNING)
+                .setAction("Mission send to drone")
+                .setLabel("Mission items count")
+                .setValue(mMissionItems.size());
+        GAUtils.sendEvent(eventBuilder);
+    }
 
 	public Length getMissionLength() {
 		List<Coord2D> points = getPathPoints();

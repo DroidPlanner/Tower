@@ -3,9 +3,7 @@ package org.droidplanner.android.activities;
 import org.droidplanner.R;
 import org.droidplanner.android.fragments.ChecklistFragment;
 import org.droidplanner.android.fragments.ParamsFragment;
-import org.droidplanner.android.fragments.SetupRadioFragment;
-import org.droidplanner.android.fragments.SetupSensorFragment;
-import org.droidplanner.android.fragments.TuningFragment;
+import org.droidplanner.android.fragments.SensorSetupFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -75,16 +73,8 @@ public class ConfigurationActivity extends DrawerNavigationUI {
     private Fragment getFragmentForId(int fragmentId){
         final Fragment fragment;
         switch(fragmentId){
-            case R.id.navigation_tuning:
-                fragment = new TuningFragment();
-                break;
-
-            case R.id.navigation_radio:
-                fragment = new SetupRadioFragment();
-                break;
-
             case R.id.navigation_calibration:
-                fragment = new SetupSensorFragment();
+                fragment = new SensorSetupFragment();
                 break;
 
             case R.id.navigation_checklist:
@@ -101,13 +91,7 @@ public class ConfigurationActivity extends DrawerNavigationUI {
     }
 
     private int getIdForFragment(Fragment fragment){
-        if(fragment instanceof TuningFragment){
-            return R.id.navigation_tuning;
-        }
-        else if(fragment instanceof SetupRadioFragment){
-            return R.id.navigation_radio;
-        }
-        else if(fragment instanceof SetupSensorFragment){
+        if(fragment instanceof SensorSetupFragment){
             return R.id.navigation_calibration;
         }
         else if(fragment instanceof ChecklistFragment){

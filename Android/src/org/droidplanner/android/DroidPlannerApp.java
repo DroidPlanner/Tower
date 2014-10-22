@@ -26,8 +26,8 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 		DroneInterfaces.OnDroneListener {
 
 	private Drone drone;
-	public Follow followMe;
-	public MissionProxy missionProxy;
+	private Follow followMe;
+	private MissionProxy missionProxy;
 	private MavLinkMsgHandler mavLinkMsgHandler;
 	private DroidPlannerPrefs prefs;
 	/**
@@ -121,4 +121,12 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 	public Drone getDrone() {
 		return drone;
 	}
+
+    public Follow getFollowMe() {
+        return followMe;
+    }
+
+    public MissionProxy getMissionProxy() {
+        return missionProxy;
+    }
 }

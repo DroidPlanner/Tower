@@ -5,6 +5,7 @@ import java.net.InetAddress;
 
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
 import org.droidplanner.core.drone.DroneImpl;
+import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.gcs.follow.Follow;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.desktop.communication.Connection;
@@ -18,12 +19,13 @@ public class Logic implements Runnable {
 	public Follow follow;
 	private MavLinkMsgHandler mavlinkHandler;
 	protected Connection link = new Connection(14550);
+	
 
 	public Logic() {
-		drone = new DroneImpl(link, FakeFactory.fakeClock(), FakeFactory.fakeHandler(),
-				FakeFactory.fakePreferences());
+		Handler handler = new org.droidplanner.desktop.logic.Handler();
+		drone = new DroneImpl(link, new Clock(), handler,FakeFactory.fakePreferences());
 		mavlinkHandler = new MavLinkMsgHandler(drone);
-		follow = new Follow(drone, FakeFactory.fakeHandler(), new FakeLocation());
+		follow = new Follow(drone, handler, new FakeLocation());
 	}
 
 	@Override
@@ -49,4 +51,5 @@ public class Logic implements Runnable {
 		System.out.println("Closing socket");
 		link.socket.close();
 	}
+	
 }

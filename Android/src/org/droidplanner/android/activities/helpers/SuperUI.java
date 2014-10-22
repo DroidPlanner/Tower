@@ -2,8 +2,11 @@ package org.droidplanner.android.activities.helpers;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.dialogs.YesNoDialog;
+import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
+import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
@@ -31,7 +34,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	public final static String ACTION_TOGGLE_DRONE_CONNECTION = SuperUI.class.getName()
 			+ ".ACTION_TOGGLE_DRONE_CONNECTION";
 
-	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
+    private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoBarActionProvider infoBar;
 	private GCSHeartbeat gcsHeartbeat;
 	public DroidPlannerApp app;
@@ -49,6 +52,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		ActionBar actionBar = getActionBar();
 		if (actionBar != null) {
 			actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
 		}
 
 		app = (DroidPlannerApp) getApplication();
@@ -199,7 +203,31 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_send_mission:
-			drone.getMission().sendMissionToAPM();
+            final MissionProxy missionProxy = app.getMissionProxy();
+			if (drone.getMission().hasTakeoffAndLandOrRTL()) {
+                missionProxy.sendMissionToAPM();
+			} else {
+                YesNoWithPrefsDialog dialog = YesNoWithPrefsDialog.newInstance(getApplicationContext(),
+                        "Mission Upload", "Do you want to append a Takeoff and RTL to your " +
+                                "mission?", "Ok", "Skip", new YesNoDialog.Listener() {
+
+                            @Override
+                            public void onYes() {
+                                missionProxy.addTakeOffAndRTL();
+                                missionProxy.sendMissionToAPM();
+                            }
+
+                            @Override
+                            public void onNo() {
+                                missionProxy.sendMissionToAPM();
+                            }
+                        },
+                        getString(R.string.pref_auto_insert_mission_takeoff_rtl_land_key));
+
+                if(dialog != null) {
+                    dialog.show(getSupportFragmentManager(), "Mission Upload check.");
+                }
+			}
 			return true;
 
 		case R.id.menu_load_mission:

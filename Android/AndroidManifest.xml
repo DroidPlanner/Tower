@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
           package="org.droidplanner"
-          android:versionCode="104"
+          android:versionCode="105"
           android:versionName="please run version.sh to get the version name">
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="21" />
 
     <supports-screens
         android:requiresSmallestWidthDp="320"/>
@@ -133,6 +133,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".android.activities.SettingsActivity"/>
         </activity>
+
+        <activity
+                    android:name=".android.activities.LocatorActivity"
+                    android:label="@string/locator"
+                    android:launchMode="singleTop"
+                    android:theme="@style/CustomActionBarTheme.Transparent"          />
 
         <receiver android:name=".android.communication.service.NetworkConnectivityReceiver"
             android:enabled="false">

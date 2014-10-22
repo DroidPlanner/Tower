@@ -131,6 +131,7 @@
     <string name="select_file_to_open">Select file to open:</string>
     <string name="no_files">No files</string>
     <string name="error_when_opening_file">Error when opening file</string>
+    <string name="status_file_opened">File opened</string>
     <string name="save">Save</string>
     <string name="open">Open</string>
     <string name="write">Write</string>
@@ -183,6 +184,7 @@
     <string name="waypointType_Loiter">Loiter</string>
     <string name="waypointType_ROI">Region of Interest</string>
     <string name="waypointType_Survey">Survey Polygon</string>
+    <string name="waypointType_BuildingMapper">Landmark Mapper</string>
 
     <!-- Waypoint info -->
     <string name="waypointInfo_Land">Land vehicle at the current location. You must manually exit Auto mode to disarm motors.</string>
@@ -230,7 +232,7 @@
     <string name="waypoint_coordsrc">Source data:</string>
     <string name="waypoint_jumpto">Jump to waypoint:</string>
     <string name="waypoint_repeat">Repeat waypoint</string>
-    <string name="Orbits">Orbits</string>
+    <string name="circle_turns">Number of turns</string>
 
     <string name="dlg_clear_mission_title">Clear Mission</string>
     <string name="dlg_clear_mission_confirm">Clear all waypoints from the map?</string>
@@ -369,8 +371,6 @@
     <string name="expandable_listview_icon_desc">Expandable ListView icon</string>
 
     <!-- Google Analytics -->
-    <string name="ga_mode_details_open_panel">Panel Open Time</string>
-    <string name="ga_mode_details_close_panel">Panel Close Time</string>
 
     <!-- Text To Speech -->
     <string name="pref_title_tts">Speech Output</string>
@@ -487,5 +487,27 @@
     <string name="menu_action_delete">Delete</string>
     <string name="menu_action_reverse">Reverse</string>
     <string name="menu_action_multi_edit">Multi-Edit</string>
+    <string name="label_yes_no_dialog_dont_show">Don\'t show again.</string>
+    <string name="file_saved_success">File saved</string>
+    <string name="file_saved_error">Error saving file</string>
+    <string name="label_enter_filename">Enter Filename</string>
+
+    <!-- Drone locator strings -->
+    <string name="locator">Locator</string>
+    <string name="open_tlog_file">Open Log File</string>
+    <string name="status_waiting_for_gps">Waiting for GPS...</string>
+
+    <!-- Preference dialogs -->
+    <string name="pref_misc_title">Miscellaneous</string>
+    <string name="pref_dialogs_title">Preference Dialogs</string>
+    <string name="pref_warn_on_arm_title">Arming button warning</string>
+    <string name="pref_auto_insert_mission_takeoff_rtl_land_title">Auto insert \'TakeOff\' and
+        \'RTL\'/\'Land\' to mission</string>
+    <string name="pref_dialog_entry_always">Always</string>
+    <string name="pref_dialog_entry_never">Never</string>
+    <string name="pref_dialog_entry_ask">Ask</string>
+    <string name="pref_dialog_selection_reset_desc"><![CDATA[Reset selection through: Settings -> User Interface -> Preference Dialogs]]></string>
+    <string name="dialog_confirm_take_off_in_auto_title">Take off in Auto?</string>
+    <string name="dialog_confirm_take_off_in_auto_msg">Warning! The drone will now take off and start the mission.</string>
 
 </resources>
