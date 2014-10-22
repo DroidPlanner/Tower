@@ -42,6 +42,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 
 			final boolean isThereMissionMarkers = !missionMarkerInfos.isEmpty();
 			final boolean isHomeValid = home.isValid();
+            final boolean isGuidedVisible = guided.isVisible();
 
 			// Get the list of markers currently on the map.
 			final Set<MarkerInfo> markersOnTheMap = mMapFragment.getMarkerInfoList();
@@ -50,6 +51,10 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 				if (isHomeValid) {
 					markersOnTheMap.remove(home);
 				}
+
+                if(isGuidedVisible){
+                    markersOnTheMap.remove(guided);
+                }
 
 				if (isThereMissionMarkers) {
 					markersOnTheMap.removeAll(missionMarkerInfos);
@@ -61,6 +66,10 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 			if (isHomeValid) {
 				mMapFragment.updateMarker(home);
 			}
+
+            if(isGuidedVisible){
+                mMapFragment.updateMarker(guided);
+            }
 
 			if (isThereMissionMarkers) {
 				mMapFragment.updateMarkers(missionMarkerInfos, isMissionDraggable());
