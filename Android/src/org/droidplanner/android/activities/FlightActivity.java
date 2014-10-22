@@ -8,11 +8,9 @@ import org.droidplanner.android.fragments.FlightActionsFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
 import org.droidplanner.android.fragments.TelemetryFragment;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
-import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.drone.variables.State;
 import org.droidplanner.core.model.Drone;
 
 import android.app.Dialog;
@@ -27,7 +25,6 @@ import android.widget.ImageButton;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -72,6 +69,7 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 
     private SlidingUpPanelLayout mSlidingPanel;
     private View mFlightActionsView;
+    private FlightActionsFragment flightActions;
 
 	private View mLocationButtonsContainer;
 	private ImageButton mGoToMyLocation;
@@ -169,7 +167,8 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 			}
 		});
 
-		Fragment flightActions = fragmentManager.findFragmentById(R.id.flightActionsFragment);
+		flightActions = (FlightActionsFragment) fragmentManager.findFragmentById(R.id
+                .flightActionsFragment);
 		if (flightActions == null) {
 			flightActions = new FlightActionsFragment();
 			fragmentManager.beginTransaction().add(R.id.flightActionsFragment, flightActions).commit();
@@ -333,9 +332,8 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
             return;
         }
 
-        final State droneState = drone.getState();
-        final boolean isEnabled = drone.getMavClient().isConnected() && droneState.isArmed()
-                && droneState.isFlying();
+        final boolean isEnabled = flightActions != null && flightActions.isSlidingUpPanelEnabled
+                (drone);
 
         if (isEnabled) {
             mSlidingPanel.setSlidingEnabled(true);
