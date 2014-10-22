@@ -1,35 +1,35 @@
 package org.droidplanner.android.gcs.location;
 
+import org.droidplanner.android.utils.GoogleApiClientManager;
+import org.droidplanner.android.utils.GoogleApiClientManager.GoogleApiClientTask;
 import org.droidplanner.core.gcs.location.Location.LocationFinder;
 import org.droidplanner.core.gcs.location.Location.LocationReceiver;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.content.Context;
 import android.location.Location;
-import android.os.Bundle;
 import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 /**
  * Feeds Location Data from Android's FusedLocation LocationProvider
  * 
  */
-public class FusedLocation implements LocationFinder, GooglePlayServicesClient.ConnectionCallbacks,
-		GooglePlayServicesClient.OnConnectionFailedListener,
-		com.google.android.gms.location.LocationListener {
+public class FusedLocation implements LocationFinder, com.google.android.gms.location.LocationListener {
 
     private static final String TAG = FusedLocation.class.getSimpleName();
 
-	private static final long MIN_TIME_MS = 500;
-	private static final float MIN_DISTANCE_M = 1.0f;
-    private static final float LOCATION_ACCURACY_THRESHOLD = 10.0f;
+	private static final long MIN_TIME_MS = 1000;
+	private static final float MIN_DISTANCE_M = 0.0f;
+    private static final float LOCATION_ACCURACY_THRESHOLD = 15.0f;
     private static final float JUMP_FACTOR = 4.0f;
 
-	private LocationClient mLocationClient;
+    private final GoogleApiClientManager gApiMgr;
+    private final GoogleApiClientTask requestLocationUpdate;
+    private final GoogleApiClientTask removeLocationUpdate;
+
 	private LocationReceiver receiver;
 
 	private Location mLastLocation;
@@ -38,43 +38,42 @@ public class FusedLocation implements LocationFinder, GooglePlayServicesClient.C
     private long mSpeedReadings;
 
 	public FusedLocation(Context context) {
-		mLocationClient = new LocationClient(context, this, this);
-		mLocationClient.connect();
+        gApiMgr = new GoogleApiClientManager(context, LocationServices.API);
+
+        requestLocationUpdate = gApiMgr.new GoogleApiClientTask() {
+            @Override
+            protected void doRun() {
+                final LocationRequest locationRequest = LocationRequest.create();
+                locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                locationRequest.setInterval(MIN_TIME_MS);
+                locationRequest.setFastestInterval(MIN_TIME_MS);
+                locationRequest.setSmallestDisplacement(MIN_DISTANCE_M);
+                LocationServices.FusedLocationApi.requestLocationUpdates(getGoogleApiClient(),
+                        locationRequest, FusedLocation.this);
+            }
+        };
+
+        removeLocationUpdate = gApiMgr.new GoogleApiClientTask() {
+            @Override
+            protected void doRun() {
+                LocationServices.FusedLocationApi.removeLocationUpdates(getGoogleApiClient(),
+                        FusedLocation.this);
+            }
+        };
+
+        gApiMgr.start();
 	}
 
 	@Override
 	public void enableLocationUpdates() {
         mSpeedReadings = 0;
         mTotalSpeed = 0f;
-
-		LocationRequest mLocationRequest = LocationRequest.create();
-		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-		mLocationRequest.setInterval(MIN_TIME_MS);
-		mLocationRequest.setFastestInterval(MIN_TIME_MS);
-		mLocationRequest.setSmallestDisplacement(MIN_DISTANCE_M);
-		mLocationClient.requestLocationUpdates(mLocationRequest, this);
+        gApiMgr.addTask(requestLocationUpdate);
 	}
 
 	@Override
 	public void disableLocationUpdates() {
-		if (mLocationClient.isConnected()) {
-			mLocationClient.removeLocationUpdates(this);
-		}
-	}
-
-	@Override
-	public void onConnectionFailed(ConnectionResult arg0) {
-
-	}
-
-	@Override
-	public void onConnected(Bundle arg0) {
-
-	}
-
-	@Override
-	public void onDisconnected() {
-
+        gApiMgr.addTask(removeLocationUpdate);
 	}
 
 	@Override
@@ -85,11 +84,11 @@ public class FusedLocation implements LocationFinder, GooglePlayServicesClient.C
 
 			if(mLastLocation != null) {
 				distanceToLast = androidLocation.distanceTo(mLastLocation);
-				timeSinceLast = (androidLocation.getTime() - mLastLocation.getTime());
+				timeSinceLast = (androidLocation.getTime() - mLastLocation.getTime()) / 1000;
 			}
 
             final float currentSpeed = distanceToLast > 0f && timeSinceLast > 0
-                    ? (distanceToLast / (timeSinceLast / 1000))
+                    ? (distanceToLast / timeSinceLast)
                     : 0f;
             final boolean isLocationAccurate = isLocationAccurate(androidLocation.getAccuracy(),
                     currentSpeed);
@@ -131,6 +130,5 @@ public class FusedLocation implements LocationFinder, GooglePlayServicesClient.C
 	@Override
 	public void setLocationListener(LocationReceiver receiver) {
 		this.receiver = receiver;
-
 	}
 }
