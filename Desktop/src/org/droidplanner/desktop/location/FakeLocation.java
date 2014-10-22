@@ -15,7 +15,7 @@ public class FakeLocation implements LocationFinder {
 	private LocationReceiver receiver;
 
 	@Override
-	public void setLocationListner(LocationReceiver receiver) {
+	public void setLocationListener(LocationReceiver receiver) {
 		this.receiver = receiver;
 	}
 
@@ -47,4 +47,6 @@ public class FakeLocation implements LocationFinder {
 		// TODO Auto-generated method stub
 
 	}
+
+	
 }

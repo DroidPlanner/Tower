@@ -31,7 +31,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_action_plane"
-                    android:drawableStart="@drawable/ic_action_location"
+                    android:drawableStart="@drawable/ic_action_plane"
                     android:text="@string/flight_data"
                     />
 

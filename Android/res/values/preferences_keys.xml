@@ -40,6 +40,11 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_dshare_enabled_key">dshare_enabled</string>
     <string name="pref_live_upload_enabled_key">pref_live_upload_enabled</string>
 
+    <string name="pref_dialogs_key">pref_dialogs</string>
+    <string name="pref_warn_on_arm_key">pref_warn_on_arm</string>
+    <string name="pref_auto_insert_mission_takeoff_rtl_land_key">pref_auto_insert_mission_takeoff_rtl_land</string>
+    <string name="pref_warn_on_takeoff_in_auto_key">pref_warn_on_takeoff_in_auto</string>
+
     <string name="pref_enable_tts_key">pref_enable_tts</string>
     <string name="pref_tts_periodic_key">tts_periodic</string>
     <string name="pref_tts_periodic_period_key">tts_periodic_status_period</string>

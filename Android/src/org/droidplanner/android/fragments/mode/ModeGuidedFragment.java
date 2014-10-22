@@ -39,7 +39,7 @@ public class ModeGuidedFragment extends Fragment implements CardWheelHorizontalV
         mAltitudeWheel.setViewAdapter(altitudeAdapter);
 
         final int initialValue = (int) Math.max(drone.getGuidedPoint().getAltitude()
-                        .valueInMeters(), GuidedPoint.MIN_ALTITUDE);
+                        .valueInMeters(), GuidedPoint.getMinAltitude(drone));
         mAltitudeWheel.setCurrentValue(initialValue);
         mAltitudeWheel.addChangingListener(this);
 	}
