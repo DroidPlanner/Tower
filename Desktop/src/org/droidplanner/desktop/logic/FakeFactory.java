@@ -1,7 +1,5 @@
 package org.droidplanner.desktop.logic;
 
-import org.droidplanner.core.drone.DroneInterfaces.Clock;
-import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.Preferences;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
 import org.droidplanner.core.firmware.FirmwareType;
@@ -26,37 +24,6 @@ public class FakeFactory {
 			@Override
 			public Rates getRates() {
 				return new Rates();
-			}
-		};
-	}
-
-	static Handler fakeHandler() {
-		return new Handler() {
-
-			@Override
-			public void removeCallbacks(Runnable thread) {
-				// TODO Auto-generated method stub
-
-			}
-			
-			@Override
-			public void post(Runnable thread){
-				
-			}
-
-			@Override
-			public void postDelayed(Runnable thread, long timeout) {
-				// TODO Auto-generated method stub
-
-			}
-		};
-	}
-
-	static Clock fakeClock() {
-		return new Clock() {
-			@Override
-			public long elapsedRealtime() {
-				return System.currentTimeMillis();
 			}
 		};
 	}

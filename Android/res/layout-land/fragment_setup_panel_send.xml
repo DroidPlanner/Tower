@@ -34,7 +34,7 @@
             android:id="@+id/buttonSend"
             style="@style/modeControl"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_green"
+            android:background="@drawable/button_green_drawable"
             android:text="@string/button_setup_send"/>
     </LinearLayout>
 

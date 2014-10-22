@@ -264,7 +264,7 @@ public class TTSNotificationProvider implements OnInitListener,
 				break;
 
 			case HEARTBEAT_TIMEOUT:
-				if (!Calibration.isCalibrating() && mAppPrefs.getWarningOnLostOrRestoredSignal()) {
+				if (!drone.getCalibrationSetup().isCalibrating() && mAppPrefs.getWarningOnLostOrRestoredSignal()) {
 					speak("Data link lost, check connection.");
 					handler.removeCallbacks(watchdogCallback);
 				}

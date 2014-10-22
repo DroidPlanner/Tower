@@ -214,7 +214,12 @@ public class DroneInterfaces {
 		/**
 		 * Warn that the drone has no gps signal
 		 */
-		WARNING_NO_GPS,
+		WARNING_NO_GPS, 
+		
+		/**
+		 * New magnetometer data has been received
+		 */
+		MAGNETOMETER,
 	}
 
 	public interface OnDroneListener {
