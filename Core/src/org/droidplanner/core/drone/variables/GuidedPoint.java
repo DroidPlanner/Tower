@@ -32,7 +32,7 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case MODE:
-			if (isGuidedMode()) {
+			if (isGuidedMode(myDrone)) {
 				initialize();
 			} else {
 				disable();
@@ -48,9 +48,9 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 		}
 	}
 
-    private boolean isGuidedMode(){
-        final int droneType = myDrone.getType();
-        final ApmModes droneMode = myDrone.getState().getMode();
+    public static boolean isGuidedMode(Drone drone){
+        final int droneType = drone.getType();
+        final ApmModes droneMode = drone.getState().getMode();
 
         if(Type.isCopter(droneType)){
             return droneMode == ApmModes.ROTOR_GUIDED;
@@ -69,20 +69,22 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 
 	public void pauseAtCurrentLocation() {
 		if (state !=GuidedStates.ACTIVE) {
-			changeToGuidedMode();
+			changeToGuidedMode(myDrone);
 		}else{
 			newGuidedCoord(myDrone.getGps().getPosition());
 		}
 	}
 
-    private void changeToGuidedMode(){
-        final State droneState = myDrone.getState();
-        final int droneType = myDrone.getType();
+    public static void changeToGuidedMode(Drone drone){
+        final State droneState = drone.getState();
+        final int droneType = drone.getType();
         if(Type.isCopter(droneType)){
             droneState.changeFlightMode(ApmModes.ROTOR_GUIDED);
         }
         else if(Type.isPlane(droneType)){
-            droneState.changeFlightMode(ApmModes.FIXED_WING_GUIDED);
+            //You have to send a guided point to the plane in order to trigger guided mode.
+            forceSendGuidedPoint(drone, drone.getGps().getPosition(),
+                    getDroneAltConstrained(drone));
         }
         else if(Type.isRover(droneType)){
             droneState.changeFlightMode(ApmModes.ROVER_GUIDED);
@@ -94,7 +96,7 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
             coord = myDrone.getGps().getPosition();
             altitude.set(alt.valueInMeters());
             state = GuidedStates.IDLE;
-            changeToGuidedMode();
+            changeToGuidedMode(myDrone);
             MavLinkTakeoff.sendTakeoff(myDrone, alt);
             myDrone.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
         }
@@ -124,14 +126,14 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
                 }
             };
 
-            changeToGuidedMode();
+            changeToGuidedMode(myDrone);
         }
 	}
 
 	private void initialize() {
 		if (state == GuidedStates.UNINITIALIZED) {
 			coord = myDrone.getGps().getPosition();
-			altitude.set(getDroneAltConstrained());
+			altitude.set(getDroneAltConstrained(myDrone));
 			state = GuidedStates.IDLE;
 			myDrone.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
 		}
@@ -180,15 +182,18 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 
 	private void sendGuidedPoint() {
 		if (state == GuidedStates.ACTIVE) {
-			myDrone.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
-			MavLinkModes.setGuidedMode(myDrone, coord.getLat(), coord.getLng(),
-					altitude.valueInMeters());
+            forceSendGuidedPoint(myDrone, coord, altitude.valueInMeters());
 		}
 	}
 
-	private double getDroneAltConstrained() {
-		double alt = Math.floor(myDrone.getAltitude().getAltitude());
-		return Math.max(alt, getMinAltitude(myDrone));
+    public static void forceSendGuidedPoint(Drone drone, Coord2D coord, double altitudeInMeters){
+        drone.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
+        MavLinkModes.setGuidedMode(drone, coord.getLat(), coord.getLng(), altitudeInMeters);
+    }
+
+	private static double getDroneAltConstrained(Drone drone) {
+		double alt = Math.floor(drone.getAltitude().getAltitude());
+		return Math.max(alt, getMinAltitude(drone));
 	}
 
 	public Coord2D getCoord() {

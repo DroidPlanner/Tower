@@ -20,6 +20,7 @@ import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.MAVLink.MavLinkArm;
 import org.droidplanner.core.drone.DroneInterfaces;
+import org.droidplanner.core.drone.variables.State;
 import org.droidplanner.core.gcs.follow.Follow;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.model.Drone;
@@ -28,7 +29,7 @@ import org.droidplanner.core.model.Drone;
  * Provide functionality for flight action button specific to copters.
  */
 public class CopterFlightActionsFragment extends Fragment implements View.OnClickListener,
-        DroneInterfaces.OnDroneListener {
+        DroneInterfaces.OnDroneListener, FlightActionsFragment.SlidingUpHeader {
 
     private static final String ACTION_FLIGHT_ACTION_BUTTON = "Copter flight action button";
     private static final double TAKEOFF_ALTITUDE = 10.0;
@@ -358,5 +359,12 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
     private void setupButtonsForFlying() {
         resetButtonsContainerVisibility();
         mInFlightButtons.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public boolean isSlidingUpPanelEnabled(Drone drone) {
+        final State droneState = drone.getState();
+        return drone.getMavClient().isConnected() && droneState.isArmed()
+                && droneState.isFlying();
     }
 }

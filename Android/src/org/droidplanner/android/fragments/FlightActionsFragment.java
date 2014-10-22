@@ -32,6 +32,12 @@ import com.google.android.gms.analytics.HitBuilders;
 
 public class FlightActionsFragment extends Fragment implements OnDroneListener {
 
+    interface SlidingUpHeader{
+        boolean isSlidingUpPanelEnabled(Drone drone);
+    }
+
+    private SlidingUpHeader header;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
@@ -80,5 +86,10 @@ public class FlightActionsFragment extends Fragment implements OnDroneListener {
         }
 
         fm.beginTransaction().replace(R.id.flight_actions_bar, actionsBarFragment).commit();
+        header = (SlidingUpHeader) actionsBarFragment;
+    }
+
+    public boolean isSlidingUpPanelEnabled(Drone drone){
+        return header != null && header.isSlidingUpPanelEnabled(drone);
     }
 }

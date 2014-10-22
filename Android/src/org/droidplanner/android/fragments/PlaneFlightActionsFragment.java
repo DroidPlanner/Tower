@@ -17,6 +17,7 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.drone.DroneInterfaces;
+import org.droidplanner.core.drone.variables.State;
 import org.droidplanner.core.gcs.follow.Follow;
 import org.droidplanner.core.model.Drone;
 
@@ -24,7 +25,7 @@ import org.droidplanner.core.model.Drone;
  * Provides functionality for flight action buttons specific to planes.
  */
 public class PlaneFlightActionsFragment extends Fragment implements View.OnClickListener,
-		DroneInterfaces.OnDroneListener {
+		DroneInterfaces.OnDroneListener, FlightActionsFragment.SlidingUpHeader {
 
 	private static final String ACTION_FLIGHT_ACTION_BUTTON = "Copter flight action button";
 
@@ -239,4 +240,10 @@ public class PlaneFlightActionsFragment extends Fragment implements View.OnClick
 			break;
 		}
 	}
+
+    @Override
+    public boolean isSlidingUpPanelEnabled(Drone drone) {
+        final State droneState = drone.getState();
+        return drone.getMavClient().isConnected() && droneState.isArmed();
+    }
 }

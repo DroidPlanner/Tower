@@ -9,11 +9,13 @@ import android.widget.Button;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.core.model.Drone;
 
 /**
  * Provides action buttons functionality for generic drone type.
  */
-public class GenericActionsFragment extends Fragment implements View.OnClickListener {
+public class GenericActionsFragment extends Fragment implements View.OnClickListener,
+        FlightActionsFragment.SlidingUpHeader {
 
     private Button connectBtn;
 
@@ -28,6 +30,7 @@ public class GenericActionsFragment extends Fragment implements View.OnClickList
         super.onViewCreated(view, savedInstanceState);
 
         connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
+        connectBtn.setOnClickListener(this);
     }
 
     @Override
@@ -37,5 +40,10 @@ public class GenericActionsFragment extends Fragment implements View.OnClickList
                 ((SuperUI) getActivity()).toggleDroneConnection();
                 break;
         }
+    }
+
+    @Override
+    public boolean isSlidingUpPanelEnabled(Drone drone) {
+        return false;
     }
 }
