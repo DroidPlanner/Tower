@@ -51,8 +51,8 @@ public class MagnetometerCal implements OnMagCalibrationListener {
         final int sampleSize = points.size();
         final ThreeSpacePoint magVector = points.get(sampleSize - 1);
         
-		System.out.println(String.format("Sample %d\traw %s\tFit %2.1f \tCenter %s\tRadius %s",
-				sampleSize, magVector.toString(), ellipsoidFit.getFitness() * 100,
+		System.out.println(String.format("Sample %d\traw %03d %03d %03d\tFit %2.1f \tCenter %s\tRadius %s",
+				sampleSize, (int) magVector.x, (int) magVector.y, (int) magVector.z, ellipsoidFit.getFitness() * 100,
 				ellipsoidFit.center.toString(), ellipsoidFit.radii.toString()));
 		
 		data1.add((float) magVector.x);
@@ -65,7 +65,6 @@ public class MagnetometerCal implements OnMagCalibrationListener {
 					(int) ellipsoidFit.center.getEntry(2), (int) ellipsoidFit.radii.getEntry(0),
 					(int) ellipsoidFit.radii.getEntry(2) });
 		}
-		plot1.repaint(100);
 
 		data2.add((float) magVector.y);
 		data2.add((float) magVector.z);
@@ -77,6 +76,8 @@ public class MagnetometerCal implements OnMagCalibrationListener {
 					(int) ellipsoidFit.center.getEntry(2), (int) ellipsoidFit.radii.getEntry(1),
 					(int) ellipsoidFit.radii.getEntry(2) });
 		}
+		
+		plot1.repaint(100);
 		plot2.repaint(100);
 
 	}
