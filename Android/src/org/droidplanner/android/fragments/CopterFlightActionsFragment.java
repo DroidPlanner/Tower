@@ -167,8 +167,7 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
                 break;
 
             case R.id.mc_TakeoffInAutoBtn:
-                drone.getState().doTakeoff(new Altitude(TAKEOFF_ALTITUDE));
-                drone.getState().changeFlightMode(ApmModes.ROTOR_AUTO);
+                getTakeOffInAutoConfirmation();
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_AUTO.getName());
                 break;
 
@@ -222,6 +221,26 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
             GAUtils.sendEvent(eventBuilder);
         }
 
+    }
+
+    private void getTakeOffInAutoConfirmation() {
+        YesNoWithPrefsDialog ynd = YesNoWithPrefsDialog.newInstance(getActivity()
+                .getApplicationContext(), getString(R.string.dialog_confirm_take_off_in_auto_title),
+                getString(R.string.dialog_confirm_take_off_in_auto_msg), new YesNoDialog.Listener() {
+            @Override
+            public void onYes() {
+                drone.getState().doTakeoff(new Altitude(TAKEOFF_ALTITUDE));
+                drone.getState().changeFlightMode(ApmModes.ROTOR_AUTO);
+            }
+
+            @Override
+            public void onNo() {
+            }
+        }, getString(R.string.pref_warn_on_takeoff_in_auto_key));
+
+        if(ynd != null){
+            ynd.show(getChildFragmentManager(), "Confirm take off in auto");
+        }
     }
 
     private void getArmingConfirmation() {
