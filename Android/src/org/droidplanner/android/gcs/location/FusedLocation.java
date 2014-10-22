@@ -7,6 +7,7 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -21,8 +22,10 @@ public class FusedLocation implements LocationFinder, GooglePlayServicesClient.C
 		GooglePlayServicesClient.OnConnectionFailedListener,
 		com.google.android.gms.location.LocationListener {
 
+    private static final String TAG = FusedLocation.class.getSimpleName();
+
 	private static final long MIN_TIME_MS = 500;
-	private static final float MIN_DISTANCE_M = 0.0f;
+	private static final float MIN_DISTANCE_M = 1.0f;
     private static final float LOCATION_ACCURACY_THRESHOLD = 10.0f;
     private static final float JUMP_FACTOR = 4.0f;
 
@@ -88,10 +91,13 @@ public class FusedLocation implements LocationFinder, GooglePlayServicesClient.C
             final float currentSpeed = distanceToLast > 0f && timeSinceLast > 0
                     ? (distanceToLast / (timeSinceLast / 1000))
                     : 0f;
+            final boolean isLocationAccurate = isLocationAccurate(androidLocation.getAccuracy(),
+                    currentSpeed);
+            Log.d(TAG, "Is location accurate: " + isLocationAccurate);
 
 			org.droidplanner.core.gcs.location.Location location = new org.droidplanner.core.gcs.location.Location(
 					new Coord2D(androidLocation.getLatitude(), androidLocation.getLongitude()),
-                    androidLocation.getBearing(), androidLocation.getSpeed(), isLocationAccurate(androidLocation.getAccuracy(), currentSpeed));
+                    androidLocation.getBearing(), androidLocation.getSpeed(), isLocationAccurate);
 
 			mLastLocation = androidLocation;
 			receiver.onLocationChanged(location);
@@ -100,6 +106,7 @@ public class FusedLocation implements LocationFinder, GooglePlayServicesClient.C
 
     private boolean isLocationAccurate(float accuracy, float currentSpeed){
         if(accuracy >= LOCATION_ACCURACY_THRESHOLD){
+            Log.d(TAG, "High accuracy: " + accuracy);
             return false;
         }
 
@@ -112,6 +119,7 @@ public class FusedLocation implements LocationFinder, GooglePlayServicesClient.C
             if(avg >= 1.0){
                 //Reject unreasonable updates.
                 if(currentSpeed >= (avg * JUMP_FACTOR)){
+                    Log.d(TAG, "High current speed: " + currentSpeed);
                     return false;
                 }
             }
