@@ -107,7 +107,7 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	@Override
 	public boolean onMarkerClick(MarkerInfo info) {
 		if (info instanceof MissionItemMarkerInfo) {
-			editorListener.onItemClick(((MissionItemMarkerInfo) info).getMarkerOrigin());
+			editorListener.onItemClick(((MissionItemMarkerInfo) info).getMarkerOrigin(), false);
 			return true;
 		} else {
 			return false;
@@ -128,7 +128,13 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 		if (homeCoord != null && !homeCoord.isEmpty())
 			visibleCoords.add(homeCoord);
 
-		mMapFragment.zoomToFit(visibleCoords);
+        zoomToFit(visibleCoords);
 	}
+
+    public void zoomToFit(List<Coord2D> itemsToFit){
+        if(!itemsToFit.isEmpty()){
+            mMapFragment.zoomToFit(itemsToFit);
+        }
+    }
 
 }

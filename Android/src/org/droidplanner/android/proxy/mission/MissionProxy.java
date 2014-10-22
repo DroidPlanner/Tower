@@ -524,6 +524,27 @@ public class MissionProxy implements DPMap.PathSource {
 		return coords;
 	}
 
+    public static List<Coord2D> getVisibleCoords(List<MissionItemProxy> mipList){
+        final List<Coord2D> coords = new ArrayList<Coord2D>();
+
+        if(mipList == null || mipList.isEmpty()){
+            return coords;
+        }
+
+        for(MissionItemProxy mip: mipList){
+            if(!(mip.getMissionItem() instanceof SpatialCoordItem))
+                continue;
+
+            final Coord2D coordinate = ((SpatialCoordItem) mip.getMissionItem()).getCoordinate();
+            if(coordinate.isEmpty())
+                continue;
+
+            coords.add(coordinate);
+        }
+
+        return coords;
+    }
+
     public void sendMissionToAPM(){
         mMission.sendMissionToAPM();
 

@@ -521,6 +521,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		case R.id.menu_action_delete:
 			missionProxy.removeSelection(missionProxy.selection);
 			mode.finish();
+            planningMapFragment.zoomToFit();
 			return true;
 
 		case R.id.menu_action_reverse:
@@ -605,7 +606,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	@Override
-	public void onItemClick(MissionItemProxy item) {
+	public void onItemClick(MissionItemProxy item, boolean zoomToFit) {
         enableMultiEdit(false);
 		switch (getTool()) {
 		default:
@@ -623,16 +624,28 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 					missionProxy.selection.setSelectionTo(item);
 				}
 			}
+
 			break;
 
 		case TRASH:
 			missionProxy.removeItem(item);
 			missionProxy.selection.clearSelection();
+
 			if (missionProxy.getItems().size() <= 0) {
 				editorToolsFragment.setTool(EditorTools.NONE);
 			}
 			break;
 		}
+
+        if(zoomToFit) {
+            List<MissionItemProxy> selected = missionProxy.selection.getSelected();
+            if (selected.isEmpty()) {
+                planningMapFragment.zoomToFit();
+            }
+            else{
+                planningMapFragment.zoomToFit(MissionProxy.getVisibleCoords(selected));
+            }
+        }
 	}
 
 	@Override
