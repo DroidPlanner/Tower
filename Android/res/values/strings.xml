@@ -506,5 +506,7 @@
     <string name="pref_dialog_entry_never">Never</string>
     <string name="pref_dialog_entry_ask">Ask</string>
     <string name="pref_dialog_selection_reset_desc"><![CDATA[Reset selection through: Settings -> User Interface -> Preference Dialogs]]></string>
+    <string name="dialog_confirm_take_off_in_auto_title">Take off in Auto?</string>
+    <string name="dialog_confirm_take_off_in_auto_msg">Warning! The drone will now take off and start the mission.</string>
 
 </resources>
