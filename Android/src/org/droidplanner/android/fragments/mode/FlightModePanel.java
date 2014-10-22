@@ -100,45 +100,66 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 		} else {
 			switch (mode) {
 			case ROTOR_RTL:
+			case FIXED_WING_RTL:
+			case ROVER_RTL:
 				infoPanel = new ModeRTLFragment();
 				break;
+
 			case ROTOR_AUTO:
+			case FIXED_WING_AUTO:
+			case ROVER_AUTO:
 				infoPanel = new ModeAutoFragment();
 				break;
+
 			case ROTOR_LAND:
 				infoPanel = new ModeLandFragment();
 				break;
+
 			case ROTOR_LOITER:
+			case FIXED_WING_LOITER:
 				infoPanel = new ModeLoiterFragment();
 				break;
+
 			case ROTOR_STABILIZE:
+			case FIXED_WING_STABILIZE:
 				infoPanel = new ModeStabilizeFragment();
 				break;
+
 			case ROTOR_ACRO:
 				infoPanel = new ModeAcroFragment();
 				break;
+
 			case ROTOR_ALT_HOLD:
 				infoPanel = new ModeAltholdFragment();
 				break;
+
 			case ROTOR_CIRCLE:
+			case FIXED_WING_CIRCLE:
 				infoPanel = new ModeCircleFragment();
 				break;
+
 			case ROTOR_GUIDED:
+			case FIXED_WING_GUIDED:
+			case ROVER_GUIDED:
 				if (((DroidPlannerApp) getActivity().getApplication()).getFollowMe().isEnabled()) {
 					infoPanel = new ModeFollowFragment();
 				} else {
 					infoPanel = new ModeGuidedFragment();
 				}
 				break;
+
 			case ROTOR_TOY:
 				infoPanel = new ModeDriftFragment();
 				break;
+
 			case ROTOR_SPORT:
 				infoPanel = new ModeSportFragment();
 				break;
+
 			case ROTOR_POSHOLD:
 				infoPanel = new ModePosHoldFragment();
 				break;
+
 			default:
 				infoPanel = new ModeDisconnectedFragment();
 				break;
