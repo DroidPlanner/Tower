@@ -8,6 +8,28 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+
+## Droidplanner v2.8.0
+* Tablet only flight's
+* Initial ArduPlane support (#1181, #1193, #1080, #1194)
+* Compass calibration (#1147)
+* Safety info dialog for autonomous takeoff (#1127, #1196)
+* Minor follow-me fix (#1176, #1195, #1119)
+* Building mapper (#1170, #1171, #1198)
+* Drone Locator (#1177)
+* Flight screen UI bug-fixes (#1120, #1188, #1182, #1192, #1197, #847)
+* Editor UI bug-fixes (#1186, #952, #1187, #1141)
+* Just display radio info after receiving it (#1184, #1165)
+* Added camera info for GoPro 4 (#1181)
+* Mission assistant, auto-add RTL and Land (#1142, #847)
+* Mission save filename dialog (#1173)
+* Fix Droneshare live-trakking (#1174)
+* Codebase clean-up (#1172, #1030, #1191)
+* Android updated to API 21 (#1189)
+* Analytics update (#1180)
+* Travis-CI updates (#1185)
+* Add libraries licenses information (#1164)
+
 ## Droidplanner v2.7.12
 * Add support for PL2303 USB devices (#1162)
 
