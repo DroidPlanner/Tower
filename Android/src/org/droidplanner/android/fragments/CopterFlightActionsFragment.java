@@ -17,6 +17,7 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
+import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.MAVLink.MavLinkArm;
 import org.droidplanner.core.drone.DroneInterfaces;
@@ -35,7 +36,7 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
     private static final double TAKEOFF_ALTITUDE = 10.0;
 
     private Drone drone;
-
+    private MissionProxy missionProxy;
     private Follow followMe;
 
     private View mDisconnectedButtons;
@@ -56,6 +57,7 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
         DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
         drone = droidPlannerApp.getDrone();
         followMe = droidPlannerApp.getFollowMe();
+        missionProxy = droidPlannerApp.getMissionProxy();
         return view;
     }
 
@@ -208,7 +210,7 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
                 break;
 
             case R.id.mc_dronieBtn:
-                drone.getMission().makeAndUploadDronie();
+                getDronieConfirmation();
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Dronie uploaded");
                 break;
 
@@ -221,6 +223,25 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
             GAUtils.sendEvent(eventBuilder);
         }
 
+    }
+
+    private void getDronieConfirmation() {
+        YesNoWithPrefsDialog ynd = YesNoWithPrefsDialog.newInstance(getActivity()
+                .getApplicationContext(), getString(R.string.pref_dronie_creation_title),
+                getString(R.string.pref_dronie_creation_message), new YesNoDialog.Listener() {
+            @Override
+            public void onYes() {
+                missionProxy.makeAndUploadDronie();
+            }
+
+            @Override
+            public void onNo() {
+            }
+        }, getString(R.string.pref_warn_on_dronie_creation_key));
+
+        if(ynd != null){
+            ynd.show(getChildFragmentManager(), "Confirm dronie creation");
+        }
     }
 
     private void getTakeOffInAutoConfirmation() {

@@ -310,26 +310,34 @@ public class Mission extends DroneVariable {
 			return;
 		}
 		items.clear();
-		items.addAll(createDronie(this, currentPosition, GeoTools.newCoordFromBearingAndDistance(
-				currentPosition, 180 + myDrone.getOrientation().getYaw(), 50.0)));
+		items.addAll(createDronie(currentPosition, GeoTools.newCoordFromBearingAndDistance(
+                currentPosition, 180 + myDrone.getOrientation().getYaw(), 50.0)));
 		sendMissionToAPM();
-		myDrone.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
 		notifyMissionUpdate();
 	}
 
-	public static List<MissionItem> createDronie(Mission mMission,Coord2D start, Coord2D end) {
+	public List<MissionItem> createDronie(Coord2D start, Coord2D end) {
 		final int startAltitude = 4;
 		final int roiDistance = -8;
 		Coord2D slowDownPoint = GeoTools.pointAlongTheLine(start, end, 3);
+
+        Speed defaultSpeed = myDrone.getSpeed().getSpeedParameter();
+        if(defaultSpeed == null){
+            defaultSpeed = new Speed(5);
+        }
 		
 		List<MissionItem> dronieItems = new ArrayList<MissionItem>();
-		dronieItems.add(new Takeoff(mMission, new Altitude(startAltitude)));
-		dronieItems.add(new RegionOfInterest(mMission,new Coord3D(GeoTools.pointAlongTheLine(start, end, roiDistance), new Altitude(1.0))));
-		dronieItems.add(new Waypoint(mMission, new Coord3D(end, new Altitude(startAltitude+GeoTools.getDistance(start, end).valueInMeters()/2.0))));
-		dronieItems.add(new Waypoint(mMission, new Coord3D(slowDownPoint, new Altitude(startAltitude+GeoTools.getDistance(start, slowDownPoint).valueInMeters()/2.0))));
-		dronieItems.add(new ChangeSpeed(mMission, new Speed(0.5)));
-		dronieItems.add(new Waypoint(mMission, new Coord3D(start, new Altitude(startAltitude))));
-		dronieItems.add(new Land(mMission,start));
+		dronieItems.add(new Takeoff(this, new Altitude(startAltitude)));
+		dronieItems.add(new RegionOfInterest(this, new Coord3D(GeoTools.pointAlongTheLine(start,
+                end, roiDistance), new Altitude(1.0))));
+		dronieItems.add(new Waypoint(this, new Coord3D(end, new Altitude(startAltitude+GeoTools
+                .getDistance(start, end).valueInMeters()/2.0))));
+		dronieItems.add(new Waypoint(this, new Coord3D(slowDownPoint,
+                new Altitude(startAltitude+GeoTools.getDistance(start, slowDownPoint).valueInMeters()/2.0))));
+		dronieItems.add(new ChangeSpeed(this, new Speed(1.0)));
+		dronieItems.add(new Waypoint(this, new Coord3D(start, new Altitude(startAltitude))));
+        dronieItems.add(new ChangeSpeed(this, defaultSpeed));
+		dronieItems.add(new Land(this,start));
 		return dronieItems;
 	}
 

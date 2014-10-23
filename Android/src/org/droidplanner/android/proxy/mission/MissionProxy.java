@@ -25,6 +25,7 @@ import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.Waypoint;
+import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.util.Pair;
 
 /**
@@ -222,16 +223,6 @@ public class MissionProxy implements DPMap.PathSource {
 		mMissionItems.add(new MissionItemProxy(this, takeoff));
 		mMission.addMissionItem(takeoff);
 	}
-
-	public void addDronie(Coord2D start, Coord2D end) {
-		clear();
-		
-		List<MissionItem> dronieItems = Mission.createDronie(mMission,start, end);		
-	
-		addMissionItems(dronieItems);	
-	}
-
-
 
     public void addTakeOffAndRTL(){
         if(!mMission.isFirstItemTakeoff()){
@@ -569,4 +560,9 @@ public class MissionProxy implements DPMap.PathSource {
 			return new Length(0);
 		}
 	}
+
+    public void makeAndUploadDronie() {
+        mMission.makeAndUploadDronie();
+        refresh();
+    }
 }
