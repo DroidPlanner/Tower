@@ -11,6 +11,7 @@ import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
+import org.droidplanner.core.helpers.units.Speed;
 import org.droidplanner.core.mission.commands.ChangeSpeed;
 import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.Takeoff;
@@ -317,11 +318,15 @@ public class Mission extends DroneVariable {
 
 	public static List<MissionItem> createDronie(Mission mMission,Coord2D start, Coord2D end) {
 		final int startAltitude = 4;
+		final int roiDistance = -8;
+		Coord2D slowDownPoint = GeoTools.pointAlongTheLine(start, end, 10);
 		
 		List<MissionItem> dronieItems = new ArrayList<MissionItem>();
 		dronieItems.add(new Takeoff(mMission, new Altitude(startAltitude)));
-		dronieItems.add(new RegionOfInterest(mMission,new Coord3D(GeoTools.pointAlongTheLine(start, end, -8), new Altitude(1.0))));
+		dronieItems.add(new RegionOfInterest(mMission,new Coord3D(GeoTools.pointAlongTheLine(start, end, roiDistance), new Altitude(1.0))));
 		dronieItems.add(new Waypoint(mMission, new Coord3D(end, new Altitude(startAltitude+GeoTools.getDistance(start, end).valueInMeters()/2.0))));
+		dronieItems.add(new Waypoint(mMission, new Coord3D(slowDownPoint, new Altitude(startAltitude+GeoTools.getDistance(start, slowDownPoint).valueInMeters()/2.0))));
+		dronieItems.add(new ChangeSpeed(mMission, new Speed(0.5)));
 		dronieItems.add(new Waypoint(mMission, new Coord3D(start, new Altitude(startAltitude))));
 		dronieItems.add(new Land(mMission,start));
 		return dronieItems;
