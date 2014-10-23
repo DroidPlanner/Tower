@@ -313,13 +313,14 @@ public class Mission extends DroneVariable {
 		items.addAll(createDronie(this, currentPosition, GeoTools.newCoordFromBearingAndDistance(
 				currentPosition, 180 + myDrone.getOrientation().getYaw(), 50.0)));
 		sendMissionToAPM();
+		myDrone.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
 		notifyMissionUpdate();
 	}
 
 	public static List<MissionItem> createDronie(Mission mMission,Coord2D start, Coord2D end) {
 		final int startAltitude = 4;
 		final int roiDistance = -8;
-		Coord2D slowDownPoint = GeoTools.pointAlongTheLine(start, end, 10);
+		Coord2D slowDownPoint = GeoTools.pointAlongTheLine(start, end, 3);
 		
 		List<MissionItem> dronieItems = new ArrayList<MissionItem>();
 		dronieItems.add(new Takeoff(mMission, new Altitude(startAltitude)));
