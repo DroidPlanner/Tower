@@ -77,6 +77,9 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 		case CIRCLE:
 			fragment = new MissionCircleFragment();
 			break;
+		case CHANGE_SPEED:
+			fragment = new MissionChangeSpeedFragment();
+			break;
 		case ROI:
 			fragment = new MissionRegionOfInterestFragment();
 			break;
