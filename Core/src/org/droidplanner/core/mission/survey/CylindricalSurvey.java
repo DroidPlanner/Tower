@@ -35,7 +35,7 @@ public class CylindricalSurvey extends MissionItem {
 		startHeight = new Altitude(10);
 		heightStep = new Altitude(5);
 		numberOfSteps = 2;
-		crossHatch = true;
+		crossHatch = false;
 	}
 
 	public CylindricalSurvey(Mission mission, Coord2D center) {
