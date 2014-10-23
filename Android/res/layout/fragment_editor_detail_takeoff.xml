@@ -52,7 +52,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/mission_item_title_takeoff"/>
+                android:text="@string/waypointType_TakeOff"/>
 
             <TextView
                 android:id="@+id/DistanceLabel"
