@@ -10,8 +10,9 @@ import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
 
 public class HeartBeat extends DroneVariable implements OnDroneListener {
 
-	private static final long HEARTBEAT_NORMAL_TIMEOUT = 5000;
-	private static final long HEARTBEAT_LOST_TIMEOUT = 15000;
+	private static final long HEARTBEAT_NORMAL_TIMEOUT = 5000; //ms
+	private static final long HEARTBEAT_LOST_TIMEOUT = 15000; //ms
+    private static final long HEARTBEAT_IMU_CALIBRATION_TIMEOUT = 35000; //ms
 
 	public static final int INVALID_MAVLINK_VERSION = -1;
 
@@ -24,7 +25,7 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 	private byte mMavlinkVersion = INVALID_MAVLINK_VERSION;
 
 	public enum HeartbeatState {
-		FIRST_HEARTBEAT, LOST_HEARTBEAT, NORMAL_HEARTBEAT
+		FIRST_HEARTBEAT, LOST_HEARTBEAT, NORMAL_HEARTBEAT, IMU_CALIBRATION
 	}
 
 	public final Handler watchdog;
@@ -59,8 +60,6 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 		case LOST_HEARTBEAT:
 			myDrone.notifyDroneEvent(DroneEventsType.HEARTBEAT_RESTORED);
 			break;
-		case NORMAL_HEARTBEAT:
-			break;
 		}
 
 		heartbeatState = HeartbeatState.NORMAL_HEARTBEAT;
@@ -74,13 +73,21 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
-		case CONNECTED:
+            case CALIBRATION_IMU:
+                //Set the heartbeat in imu calibration mode.
+                heartbeatState = HeartbeatState.IMU_CALIBRATION;
+                restartWatchdog(HEARTBEAT_IMU_CALIBRATION_TIMEOUT);
+                break;
+
+            case CONNECTED:
 			notifyConnected();
 			break;
+
 		case DISCONNECTED:
 			notifyDisconnected();
 			break;
-		default:
+
+            default:
 			break;
 		}
 	}
@@ -96,9 +103,18 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 	}
 
 	private void onHeartbeatTimeout() {
-		heartbeatState = HeartbeatState.LOST_HEARTBEAT;
-		restartWatchdog(HEARTBEAT_LOST_TIMEOUT);
-		myDrone.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
+        switch(heartbeatState){
+            case IMU_CALIBRATION:
+                restartWatchdog(HEARTBEAT_IMU_CALIBRATION_TIMEOUT);
+                myDrone.notifyDroneEvent(DroneEventsType.CALIBRATION_TIMEOUT);
+                break;
+
+            default:
+                heartbeatState = HeartbeatState.LOST_HEARTBEAT;
+                restartWatchdog(HEARTBEAT_LOST_TIMEOUT);
+                myDrone.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
+                break;
+        }
 	}
 
 	private void restartWatchdog(long timeout) {

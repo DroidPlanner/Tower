@@ -6,7 +6,7 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 public interface OnEditorInteraction {
 	public boolean onItemLongClick(MissionItemProxy item);
 
-	public void onItemClick(MissionItemProxy item);
+	public void onItemClick(MissionItemProxy item, boolean zoomToFit);
 
 	public void onMapClick(Coord2D coord);
 

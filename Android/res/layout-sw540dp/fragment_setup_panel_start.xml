@@ -33,7 +33,7 @@
         android:layout_margin="10dp"
         android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_green"
+        android:background="@drawable/button_green_drawable"
         android:text="@string/button_setup_calibrate"/>
 
 </LinearLayout>

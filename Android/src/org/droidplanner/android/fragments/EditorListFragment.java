@@ -110,7 +110,7 @@ public class EditorListFragment extends Fragment implements OnItemLongClickListe
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
 		MissionItemProxy missionItem = (MissionItemProxy) adapter.getItemAtPosition(position);
-		editorListener.onItemClick(missionItem);
+		editorListener.onItemClick(missionItem, true);
 	}
 
 	@Override

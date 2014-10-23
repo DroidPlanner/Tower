@@ -66,7 +66,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	 */
 	private static final String ITEM_DETAIL_TAG = "Item Detail Window";
     private static final String EXTRA_IS_SPLINE_ENABLED = "extra_is_spline_enabled";
-    private static final String PREF_CLEAR_MISSION_CONFIRM_DIALOG = "pref_clear_mission_confirmation_dialog";
 
     /**
 	 * Used to provide access and interact with the
@@ -121,7 +120,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 		mSplineToggleContainer = findViewById(R.id.editorSplineToggleContainer);
 		mSplineToggleContainer.setVisibility(View.VISIBLE);
-		
+
 		infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
         final ImageButton resetMapBearing = (ImageButton) findViewById(R.id.map_orientation_button);
@@ -165,7 +164,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		case R.id.map_orientation_button:
 			if(planningMapFragment != null) {
 				planningMapFragment.updateMapBearing(0);
-			}			
+			}
 			break;
 		case R.id.zoom_to_fit_button:
 			if(planningMapFragment != null){
@@ -311,17 +310,24 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		case MISSION_UPDATE:
 			Length missionLength = missionProxy.getMissionLength();
 			Speed speedParameter = drone.getSpeed().getSpeedParameter();
-			String infoString = "Distance "+ missionLength;
+			String infoString = "Distance " + missionLength;
 			if (speedParameter != null) {
-				int time = (int) (missionLength.valueInMeters() / speedParameter.valueInMetersPerSecond());
-				infoString = infoString	+ String.format(", Flight time: %02d:%02d", time/60,time%60);
+				int time = (int) (missionLength.valueInMeters() / speedParameter
+						.valueInMetersPerSecond());
+				infoString = infoString
+						+ String.format(", Flight time: %02d:%02d", time / 60, time % 60);
 			}
 			infoView.setText(infoString);
-			
-			
+
 			// Remove detail window if item is removed
 			if (missionProxy.selection.getSelected().isEmpty() && itemDetailFragment != null) {
-					removeItemDetail();
+				removeItemDetail();
+			}
+			break;
+
+		case MISSION_RECEIVED:
+			if (planningMapFragment != null) {
+				planningMapFragment.zoomToFit();
 			}
 			break;
 
@@ -515,6 +521,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		case R.id.menu_action_delete:
 			missionProxy.removeSelection(missionProxy.selection);
 			mode.finish();
+            planningMapFragment.zoomToFit();
 			return true;
 
 		case R.id.menu_action_reverse:
@@ -599,7 +606,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	@Override
-	public void onItemClick(MissionItemProxy item) {
+	public void onItemClick(MissionItemProxy item, boolean zoomToFit) {
         enableMultiEdit(false);
 		switch (getTool()) {
 		default:
@@ -617,16 +624,28 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 					missionProxy.selection.setSelectionTo(item);
 				}
 			}
+
 			break;
 
 		case TRASH:
 			missionProxy.removeItem(item);
 			missionProxy.selection.clearSelection();
+
 			if (missionProxy.getItems().size() <= 0) {
 				editorToolsFragment.setTool(EditorTools.NONE);
 			}
 			break;
 		}
+
+        if(zoomToFit) {
+            List<MissionItemProxy> selected = missionProxy.selection.getSelected();
+            if (selected.isEmpty()) {
+                planningMapFragment.zoomToFit();
+            }
+            else{
+                planningMapFragment.zoomToFit(MissionProxy.getVisibleCoords(selected));
+            }
+        }
 	}
 
 	@Override
@@ -679,5 +698,5 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     public CharSequence[][] getHelpItems() {
         return new CharSequence[][] { {}, {} };
     }
-	
+
 }

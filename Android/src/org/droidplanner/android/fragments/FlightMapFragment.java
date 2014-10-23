@@ -35,6 +35,12 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	private static final String PREF_DRONE_LOCATION_FIRST_PRESS = "pref_drone_location_first_press";
 	private static final int DEFAULT_DRONE_LOCATION_FIRST_PRESS = 0;
 
+    /**
+     * The map should zoom on the user location the first time it's acquired. This flag helps
+     * enable the behavior.
+     */
+    private static boolean didZoomOnUserLocation = false;
+
 	private DroidPlannerPrefs mAppPrefs;
 
 	private boolean guidedModeOnLongPress;
@@ -56,6 +62,11 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 		super.onResume();
 		mMapFragment.selectAutoPanMode(mAppPrefs.getAutoPanMode());
 		guidedModeOnLongPress = mAppPrefs.isGuidedModeOnLongPressEnabled();
+
+        if(!didZoomOnUserLocation){
+            super.goToMyLocation();
+            didZoomOnUserLocation = true;
+        }
 	}
 
 	@Override

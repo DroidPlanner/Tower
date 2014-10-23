@@ -1,19 +1,40 @@
 package org.droidplanner.core.drone;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.model.Drone;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 public class DroneEvents extends DroneVariable {
 
-	public DroneEvents(Drone myDrone) {
+	private final ConcurrentLinkedQueue<DroneEventsType> eventsQueue = new ConcurrentLinkedQueue<DroneEventsType>();
+
+	private final DroneInterfaces.Handler handler;
+
+	private final Runnable eventsDispatcher = new Runnable() {
+		@Override
+		public void run() {
+            do {
+                handler.removeCallbacks(this);
+                final DroneEventsType event = eventsQueue.poll();
+                if (event != null && !droneListeners.isEmpty()) {
+                    for (OnDroneListener listener : droneListeners) {
+                        listener.onDroneEvent(event, myDrone);
+                    }
+                }
+            }while(!eventsQueue.isEmpty());
+		}
+	};
+
+	public DroneEvents(Drone myDrone, DroneInterfaces.Handler handler) {
 		super(myDrone);
+		this.handler = handler;
 	}
 
-	private List<OnDroneListener> droneListeners = new ArrayList<OnDroneListener>();
+	private final ConcurrentLinkedQueue<OnDroneListener> droneListeners = new ConcurrentLinkedQueue<OnDroneListener>();
 
 	public void addDroneListener(OnDroneListener listener) {
 		if (listener != null & !droneListeners.contains(listener))
@@ -26,10 +47,7 @@ public class DroneEvents extends DroneVariable {
 	}
 
 	public void notifyDroneEvent(DroneEventsType event) {
-		if (droneListeners.size() > 0) {
-			for (OnDroneListener listener : droneListeners) {
-				listener.onDroneEvent(event, myDrone);
-			}
-		}
+        eventsQueue.offer(event);
+		handler.post(eventsDispatcher);
 	}
 }

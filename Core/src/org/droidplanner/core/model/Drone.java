@@ -12,6 +12,7 @@ import org.droidplanner.core.drone.variables.Calibration;
 import org.droidplanner.core.drone.variables.GPS;
 import org.droidplanner.core.drone.variables.GuidedPoint;
 import org.droidplanner.core.drone.variables.Home;
+import org.droidplanner.core.drone.variables.Magnetometer;
 import org.droidplanner.core.drone.variables.MissionStats;
 import org.droidplanner.core.drone.variables.Navigation;
 import org.droidplanner.core.drone.variables.Orientation;
@@ -86,6 +87,8 @@ public interface Drone {
 	public Calibration getCalibrationSetup();
 
 	public RC getRC();
+	
+	public Magnetometer getMagnetometer();
 
 	public void setAltitudeGroundAndAirSpeeds(double altitude, double groundSpeed, double airSpeed,
 			double climb);
