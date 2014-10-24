@@ -28,7 +28,7 @@ public class MissionChangeSpeedFragment extends MissionDetailFragment implements
 		
 		final NumericWheelAdapter adapter = new NumericWheelAdapter(getActivity()
 				.getApplicationContext(), R.layout.wheel_text_centered, 1,
-                20, "%d m");
+                20, "%d m/s");
 		final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.picker1);
 		cardAltitudePicker.setViewAdapter(adapter);

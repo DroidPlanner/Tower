@@ -119,9 +119,7 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
         resetMapBearing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mapFragment != null) {
-                    mapFragment.updateMapBearing(0);
-                }
+                updateMapBearing(0);
             }
         });
 
@@ -236,6 +234,11 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 			break;
 		}
 	}
+
+    public void updateMapBearing(float bearing){
+        if(mapFragment != null)
+            mapFragment.updateMapBearing(bearing);
+    }
 
 	/**
 	 * Ensures that the device has the correct version of the Google Play
