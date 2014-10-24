@@ -2,8 +2,6 @@ package org.droidplanner.android.activities;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.android.activities.interfaces.HelpProvider;
-import org.droidplanner.android.fragments.helpers.HelpDialogFragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,7 +20,7 @@ import android.widget.TextView;
  * This abstract activity provides its children access to a navigation drawer
  * interface.
  */
-public abstract class DrawerNavigationUI extends SuperUI implements HelpProvider {
+public abstract class DrawerNavigationUI extends SuperUI {
 
 	/**
 	 * Activates the navigation drawer when the home button is clicked.
@@ -93,8 +91,6 @@ public abstract class DrawerNavigationUI extends SuperUI implements HelpProvider
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
-
-        getMenuInflater().inflate(R.menu.menu_navigation_hub, menu);
         return true;
     }
 
@@ -102,15 +98,10 @@ public abstract class DrawerNavigationUI extends SuperUI implements HelpProvider
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Pass the event to ActionBarDrawerToggle, if it returns
 		// true, then it has handled the app icon touch event
-		if (mDrawerToggle.onOptionsItemSelected(item))
+		if (mDrawerToggle.onOptionsItemSelected(item)){
 			return true;
-
-        if(item.getItemId() == R.id.menu_help){
-            final HelpDialogFragment helpDialog = HelpDialogFragment.newInstance();
-            helpDialog.show(getSupportFragmentManager(), "Help Dialog");
-            return true;
-        }
-
+		}
+		
 		return super.onOptionsItemSelected(item);
 	}
 

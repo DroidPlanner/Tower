@@ -694,9 +694,4 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         }
 	}
 
-    @Override
-    public CharSequence[][] getHelpItems() {
-        return new CharSequence[][] { {}, {} };
-    }
-
 }
