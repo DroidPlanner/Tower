@@ -303,17 +303,25 @@ public class Mission extends DroneVariable {
 		return data;
 	}
 
-	public void makeAndUploadDronie() {
+    /**
+     * Create and upload a dronie mission to the drone
+     * @return the bearing in degrees the drone trajectory will take.
+     */
+	public double makeAndUploadDronie() {
 		Coord2D currentPosition = myDrone.getGps().getPosition();
 		if(currentPosition == null || myDrone.getGps().getSatCount()<=5){
 			myDrone.notifyDroneEvent(DroneEventsType.WARNING_NO_GPS);
-			return;
+			return -1;
 		}
+
+        final double bearing = 180 + myDrone.getOrientation().getYaw();
 		items.clear();
 		items.addAll(createDronie(currentPosition, GeoTools.newCoordFromBearingAndDistance(
-                currentPosition, 180 + myDrone.getOrientation().getYaw(), 50.0)));
+                currentPosition, bearing, 50.0)));
 		sendMissionToAPM();
 		notifyMissionUpdate();
+
+        return bearing;
 	}
 
 	public List<MissionItem> createDronie(Coord2D start, Coord2D end) {

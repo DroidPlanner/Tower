@@ -561,8 +561,9 @@ public class MissionProxy implements DPMap.PathSource {
 		}
 	}
 
-    public void makeAndUploadDronie() {
-        mMission.makeAndUploadDronie();
+    public float makeAndUploadDronie() {
+        final double bearing = mMission.makeAndUploadDronie();
         refresh();
+        return (float) bearing;
     }
 }

@@ -1,5 +1,6 @@
 package org.droidplanner.android.fragments;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import com.google.android.gms.analytics.HitBuilders;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
@@ -49,6 +51,15 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
     private Button landBtn;
     private Button pauseBtn;
     private Button autoBtn;
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        if(!(activity instanceof FlightActivity)){
+            throw new IllegalStateException("Parent activity must be an instance of " +
+                    FlightActivity.class.getName());
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -231,7 +242,13 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
                 getString(R.string.pref_dronie_creation_message), new YesNoDialog.Listener() {
             @Override
             public void onYes() {
-                missionProxy.makeAndUploadDronie();
+                final float bearing = missionProxy.makeAndUploadDronie();
+                if(bearing >= 0){
+                    final FlightActivity flightActivity = (FlightActivity) getActivity();
+                    if(flightActivity != null){
+                        flightActivity.updateMapBearing(bearing);
+                    }
+                }
             }
 
             @Override
