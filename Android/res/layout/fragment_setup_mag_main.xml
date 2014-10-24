@@ -35,7 +35,7 @@
         android:background="@drawable/mode_desc_rectangle"
         android:padding="10dp"
         android:layout_marginBottom="20dp"
-        android:text="@string/setup_imu_start"
+        android:text="@string/setup_mag_start"
         />
 
     <FrameLayout
