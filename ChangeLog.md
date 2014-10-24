@@ -9,6 +9,11 @@ All the changes are logged below (preferable with the pull request numbers in pa
 
 # Releases
 
+## Droidplanner v2.8.1
+* Added Change Speed mission item (#1202)
+* UI changes to scan option (#1204)
+* Dronie update (#1203)
+
 ## Droidplanner v2.8.0
 * Tablet only flight's
 * Initial ArduPlane support (#1181, #1193, #1080, #1194)
