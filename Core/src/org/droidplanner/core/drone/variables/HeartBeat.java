@@ -4,6 +4,7 @@ import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.DroneVariable;
+import org.droidplanner.core.gcs.GCSHeartbeat;
 import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
@@ -28,6 +29,7 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 		FIRST_HEARTBEAT, LOST_HEARTBEAT, NORMAL_HEARTBEAT, IMU_CALIBRATION
 	}
 
+    private final GCSHeartbeat gcsHeartBeat;
 	public final Handler watchdog;
 	public final Runnable watchdogCallback = new Runnable() {
 		@Override
@@ -39,6 +41,7 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 	public HeartBeat(Drone myDrone, Handler handler) {
 		super(myDrone);
 		this.watchdog = handler;
+        this.gcsHeartBeat = new GCSHeartbeat(myDrone, 1);
 		myDrone.addDroneListener(this);
 	}
 
@@ -93,10 +96,12 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 	}
 
 	private void notifyConnected() {
+        gcsHeartBeat.setActive(true);
 		restartWatchdog(HEARTBEAT_NORMAL_TIMEOUT);
 	}
 
 	private void notifyDisconnected() {
+        gcsHeartBeat.setActive(false);
 		watchdog.removeCallbacks(watchdogCallback);
 		heartbeatState = HeartbeatState.FIRST_HEARTBEAT;
 		mMavlinkVersion = INVALID_MAVLINK_VERSION;

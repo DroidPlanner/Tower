@@ -73,7 +73,7 @@ public class ParamsFragment extends ListFragment implements
 
         final DroidPlannerApp dpApp = (DroidPlannerApp) getActivity().getApplication();
         drone = dpApp.getDrone();
-        mPrefs = dpApp.getPreferences();
+        mPrefs = new DroidPlannerPrefs(getActivity().getApplicationContext());
 
 		// create adapter
 		if (savedInstanceState != null) {

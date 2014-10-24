@@ -2,7 +2,7 @@ package org.droidplanner.android.notifications;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.FlightActivity;
-import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.services.DroidPlannerService;
 import org.droidplanner.android.utils.TextUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.drone.DroneInterfaces;
@@ -90,8 +90,9 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		mNotificationIntent = PendingIntent.getActivity(mContext, 0, new Intent(mContext,
 				FlightActivity.class), 0);
 
-		mToggleConnectionIntent = PendingIntent.getActivity(mContext, 0, new Intent(mContext,
-                FlightActivity.class).setAction(SuperUI.ACTION_TOGGLE_DRONE_CONNECTION), 0);
+		mToggleConnectionIntent = PendingIntent
+                .getService(mContext, 0, new Intent(mContext, DroidPlannerService.class)
+                .setAction(DroidPlannerService.ACTION_TOGGLE_DRONE_CONNECTION), 0);
 	}
 
 	@Override
@@ -108,8 +109,10 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 			mInboxBuilder = new InboxStyleBuilder().setSummary(summaryText);
 			mNotificationBuilder = new NotificationCompat.Builder(mContext)
 					.addAction(R.drawable.ic_action_io, mContext.getText(R.string.menu_disconnect),
-							mToggleConnectionIntent).setContentIntent(mNotificationIntent)
-					.setContentText(summaryText).setOngoing(mAppPrefs.isNotificationPermanent())
+							mToggleConnectionIntent)
+                    .setContentIntent(mNotificationIntent)
+					.setContentText(summaryText)
+                    .setOngoing(mAppPrefs.isNotificationPermanent())
 					.setSmallIcon(R.drawable.ic_launcher);
 
 			updateFlightMode(drone);
@@ -158,9 +161,6 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 						.setContentTitle(mContext.getString(R.string.disconnected))
 						.setOngoing(false).setContentText("")
 						.setSmallIcon(R.drawable.ic_launcher_bw);
-
-				// Schedule the notification dismissal
-				mHandler.postDelayed(mDismissNotification, COUNTDOWN_TO_DISMISSAL);
 			}
 			break;
 
@@ -186,9 +186,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		if (mInboxBuilder == null)
 			return;
 
-		mInboxBuilder.setLine(
-				0,
-				TextUtils.normal("Home:   ",
+		mInboxBuilder.setLine(0, TextUtils.normal("Home:   ",
 						TextUtils.bold(drone.getHome().getDroneDistanceToHome().toString())));
 	}
 
@@ -217,9 +215,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		long minutes = timeInSeconds / 60;
 		long seconds = timeInSeconds % 60;
 
-		mInboxBuilder.setLine(
-				2,
-				TextUtils.normal("Air Time:   ",
+		mInboxBuilder.setLine(2, TextUtils.normal("Air Time:   ",
 						TextUtils.bold(String.format("%02d:%02d", minutes, seconds))));
 	}
 
