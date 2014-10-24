@@ -168,6 +168,14 @@
                         android:defaultValue="@string/pref_dialog_entry_ask"
                         android:entryValues="@array/preference_dialog_entry"/>
 
+                    <ListPreference
+                        android:key="@string/pref_warn_on_dronie_creation_key"
+                        android:title="@string/pref_dronie_creation_title"
+                        android:entries="@array/preference_dialog_entry"
+                        android:entryValues="@array/preference_dialog_entry"
+                        android:defaultValue="@string/pref_dialog_entry_ask"
+                        />
+
                 </PreferenceScreen>
             </PreferenceCategory>
         </PreferenceScreen>
