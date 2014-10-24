@@ -75,9 +75,9 @@ public class Radio extends DroneVariable implements DroneInterfaces.OnDroneListe
 	public void setRadioState(short rxerrors, short fixed, byte rssi, byte remrssi, byte txbuf,
 			byte noise, byte remnoise) {
 		isValid = true;
-		if (this.rxerrors != rxerrors | this.fixed != fixed | this.rssi != rssi
-				| this.remrssi != remrssi | this.txbuf != txbuf | this.noise != noise
-				| this.remnoise != remnoise) {
+		if (this.rxerrors != rxerrors || this.fixed != fixed || this.rssi != rssi
+				|| this.remrssi != remrssi || this.txbuf != txbuf || this.noise != noise
+				|| this.remnoise != remnoise) {
 
 			this.rxerrors = rxerrors & 0xFFFF;
 			this.fixed = fixed & 0xFFFF;
