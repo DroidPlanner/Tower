@@ -9,6 +9,7 @@ import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.gcs.location.Location;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.model.Drone;
 
 import android.graphics.Color;
 import android.location.LocationListener;

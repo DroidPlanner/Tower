@@ -1,10 +1,13 @@
 package org.droidplanner.android.fragments.calibration.imu;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,15 +15,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.helpers.ApiInterface;
+import org.droidplanner.android.notifications.TTSNotificationProvider;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.variables.Calibration;
 import org.droidplanner.core.model.Drone;
 
-public class FragmentSetupIMU extends Fragment implements OnDroneListener {
+public class FragmentSetupIMU extends Fragment implements OnDroneListener, ApiInterface.Subscriber {
 
 	private final static long TIMEOUT_MAX = 30000l; //ms
     private final static long UPDATE_TIMEOUT_PERIOD = 100l; //ms
@@ -41,16 +47,19 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener {
 
 	private final Handler handler = new Handler();
 
-	private DroidPlannerApp app;
-
     private Button btnStep;
     private TextView textDesc;
+    private DroidPlannerApi dpApi;
 
     @Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		app = (DroidPlannerApp) getActivity().getApplication();
-	}
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (!(activity instanceof ApiInterface.Provider)) {
+            throw new IllegalStateException("Parent activity must be an instance of "
+                    + ApiInterface.Provider.class.getName());
+        }
+    }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -101,20 +110,18 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener {
 	@Override
 	public void onStart() {
 		super.onStart();
-		final Drone drone = app.getDrone();
-		if (drone != null && drone.getMavClient().isConnected()) {
-            btnStep.setEnabled(true);
-			if (drone.getCalibrationSetup().isCalibrating()) {
-				processMAVMessage(drone.getCalibrationSetup().getMessage(), false);
-			}
-            else{
-                resetCalibration();
-            }
-		} else {
-            btnStep.setEnabled(false);
-            resetCalibration();
-		}
+
+        ApiInterface.Provider apiProvider = (ApiInterface.Provider) getActivity();
+        if(apiProvider != null && apiProvider.getApi() != null){
+            onApiConnected(apiProvider.getApi());
+        }
 	}
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        onApiDisconnected();
+    }
 
     private void resetCalibration(){
         calibration_step = 0;
@@ -122,15 +129,31 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        app.getDrone().removeDroneListener(this);
+    public void onApiConnected(DroidPlannerApi api) {
+        dpApi = api;
+
+        final Drone drone = dpApi.getDrone();
+        if (drone != null && dpApi.isConnected()) {
+            btnStep.setEnabled(true);
+            if (drone.getCalibrationSetup().isCalibrating()) {
+                processMAVMessage(drone.getCalibrationSetup().getMessage(), false);
+            }
+            else{
+                resetCalibration();
+            }
+        } else {
+            btnStep.setEnabled(false);
+            resetCalibration();
+        }
+
+        dpApi.addDroneListener(this);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        app.getDrone().addDroneListener(this);
+    public void onApiDisconnected() {
+        if(dpApi != null){
+            dpApi.removeDroneListener(this);
+        }
     }
 
 	private void processCalibrationStep(int step) {
@@ -211,14 +234,14 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener {
     }
 
 	private void sendAck(int step) {
-		if (app.getDrone() != null) {
-			app.getDrone().getCalibrationSetup().sendAckk(step);
+		if (dpApi != null) {
+			dpApi.getDrone().getCalibrationSetup().sendAckk(step);
 		}
 	}
 
 	private void startCalibration() {
-		if (app.getDrone() != null) {
-			app.getDrone().getCalibrationSetup().startCalibration();
+		if (dpApi != null) {
+			dpApi.getDrone().getCalibrationSetup().startCalibration();
 		}
 	}
 
@@ -257,7 +280,7 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener {
                         calibration.setCalibrating(false);
                         drone.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
                     } else {
-                        app.mNotificationHandler.quickNotify(msg);
+                        relayInstructions(msg);
                     }
                 }
                 break;
@@ -298,7 +321,7 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener {
 			calibration_step = 7;
 
 		msg = message.replace("any key.", "'Next'");
-        app.mNotificationHandler.quickNotify(msg);
+        relayInstructions(msg);
 
 		textViewStep.setText(msg);
 
@@ -313,6 +336,19 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener {
 			handler.postDelayed(this, UPDATE_TIMEOUT_PERIOD);
 		}
 	};
+
+    private void relayInstructions(String instructions){
+        final Activity activity = getActivity();
+        if(activity == null) return;
+
+        final Context context = activity.getApplicationContext();
+
+        LocalBroadcastManager.getInstance(context).sendBroadcast(new
+                Intent(TTSNotificationProvider.ACTION_SPEAK_MESSAGE).putExtra
+                (TTSNotificationProvider.EXTRA_MESSAGE_TO_SPEAK, instructions));
+
+        Toast.makeText(context, instructions, Toast.LENGTH_LONG).show();
+    }
 
 	protected void updateTimeOutProgress() {
         final long timeElapsed = System.currentTimeMillis() - updateTimestamp;

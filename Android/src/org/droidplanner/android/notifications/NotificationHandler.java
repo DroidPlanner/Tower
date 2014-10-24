@@ -1,5 +1,6 @@
 package org.droidplanner.android.notifications;
 
+import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.model.Drone;
@@ -19,8 +20,6 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	 * notification provider types (i.e: audible (text to speech), status bar).
 	 */
 	interface NotificationProvider extends DroneInterfaces.OnDroneListener {
-		void quickNotify(String feedback);
-
         /**
          * Release resources used by the provider.
          */
@@ -47,10 +46,10 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	 */
 	private final EmergencyBeepNotificationProvider mBeepNotification;
 
-	public NotificationHandler(Context context) {
+	public NotificationHandler(Context context, DroidPlannerApi dpApi) {
 		mTtsNotification = new TTSNotificationProvider(context);
 		mStatusBarNotification = new StatusBarNotificationProvider(context);
-		mPebbleNotification = new PebbleNotificationProvider(context);
+		mPebbleNotification = new PebbleNotificationProvider(context, dpApi);
 		mBeepNotification = new EmergencyBeepNotificationProvider(context);
 	}
 
@@ -70,18 +69,6 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
                 GAUtils.sendEvent(eventBuilder);
                 break;
         }
-	}
-
-	/**
-	 * Sends a quick notification to the user. Uses toasts for written
-	 * notification, and speech if voice notification is enabled.
-	 * 
-	 * @param feedback
-	 *            short message to show the user.
-	 */
-	public void quickNotify(String feedback) {
-		mTtsNotification.quickNotify(feedback);
-		mStatusBarNotification.quickNotify(feedback);
 	}
 
     /**

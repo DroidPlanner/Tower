@@ -3,6 +3,7 @@ package org.droidplanner.android.activities;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.droidplanner.R;
+import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.dialogs.DroneshareDialog;
 import org.droidplanner.android.fragments.FlightActionsFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
@@ -29,7 +30,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-@SuppressWarnings("deprecation")
 public class FlightActivity extends DrawerNavigationUI implements OnDroneListener {
 
     private static final String TAG = FlightActivity.class.getSimpleName();
@@ -83,7 +83,6 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 		fragmentManager = getSupportFragmentManager();
 
         mSlidingPanel = (SlidingUpPanelLayout) findViewById(R.id.slidingPanelContainer);
-        enableSlidingUpPanel(this.drone);
 
 		warningView = (TextView) findViewById(R.id.failsafeTextView);
 
@@ -203,6 +202,12 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 
 		DroneshareDialog.perhapsShow(this);
 	}
+
+    @Override
+    public void onApiConnected(DroidPlannerApi api){
+        super.onApiConnected(api);
+        enableSlidingUpPanel(this.dpApi.getDrone());
+    }
 
     @Override
     protected int getNavigationDrawerEntryId() {
@@ -331,7 +336,7 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 	}
 
     private void enableSlidingUpPanel(Drone drone){
-        if (mSlidingPanel == null) {
+        if (mSlidingPanel == null || drone == null) {
             return;
         }
 

@@ -8,7 +8,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
@@ -17,6 +18,7 @@ import org.droidplanner.android.utils.collection.HashBiMap;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.drone.DroneInterfaces;
+import org.droidplanner.core.drone.variables.GPS;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.model.Drone;
 
@@ -121,7 +123,6 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		}
 	};
 
-	private Drone mDrone;
 	private DroidPlannerPrefs mPrefs;
 
 	private final AtomicReference<AutoPanMode> mPanMode = new AtomicReference<AutoPanMode>(
@@ -148,6 +149,15 @@ public class MapBoxFragment extends Fragment implements DPMap {
 	private OnMarkerClickListener mMarkerClickListener;
     private LocationListener mLocationListener;
 
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        if(!(activity instanceof ApiInterface.Provider)){
+            throw new IllegalStateException("Parent activity must implement " +
+                    ApiInterface.Provider.class.getName());
+        }
+    }
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.fragment_mapbox, container, false);
@@ -158,10 +168,16 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		super.onViewCreated(view, savedInstanceState);
 
 		final Activity activity = getActivity();
-		mDrone = ((DroidPlannerApp) activity.getApplication()).getDrone();
 		mPrefs = new DroidPlannerPrefs(activity.getApplicationContext());
 		mMapView = (MapView) view.findViewById(R.id.mapbox_mapview);
 	}
+
+    private DroidPlannerApi getDPApi(){
+        ApiInterface.Provider apiProvider = (ApiInterface.Provider) getActivity();
+        if(apiProvider == null) return null;
+
+        return apiProvider.getApi();
+    }
 
 	@Override
 	public void onStart() {
@@ -301,13 +317,18 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
 	@Override
 	public void goToDroneLocation() {
-		if (!mDrone.getGps().isPositionValid()) {
+        DroidPlannerApi dpApi = getDPApi();
+        if(dpApi == null)
+            return;
+
+        GPS gps = dpApi.getGps();
+		if (!gps.isPositionValid()) {
 			Toast.makeText(getActivity().getApplicationContext(), "No drone location available",
 					Toast.LENGTH_SHORT).show();
 			return;
 		}
 		final float currentZoomLevel = getMapZoomLevel();
-		final Coord2D droneLocation = mDrone.getGps().getPosition();
+		final Coord2D droneLocation = gps.getPosition();
 		updateCamera(droneLocation, currentZoomLevel);
 	}
 
@@ -385,7 +406,9 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		if (mPanMode.compareAndSet(current, update)) {
 			switch (current) {
 			case DRONE:
-				mDrone.removeDroneListener(this);
+                DroidPlannerApi dpApi = getDPApi();
+                if(dpApi != null)
+                    dpApi.removeDroneListener(this);
 				break;
 
 			case USER:
@@ -402,7 +425,9 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
 			switch (update) {
 			case DRONE:
-				mDrone.addDroneListener(this);
+                DroidPlannerApi dpApi = getDPApi();
+                if(dpApi != null)
+                    dpApi.addDroneListener(this);
 				break;
 
 			case USER:

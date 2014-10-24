@@ -8,7 +8,6 @@ import org.droidplanner.R;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.variables.Calibration;
 import org.droidplanner.core.model.Drone;
 
 import android.content.BroadcastReceiver;
@@ -32,6 +31,7 @@ import com.MAVLink.Messages.ApmModes;
 public class TTSNotificationProvider implements OnInitListener,
 		NotificationHandler.NotificationProvider {
 
+    private static final String CLAZZ_NAME = TTSNotificationProvider.class.getName();
 	private static final String TAG = TTSNotificationProvider.class.getSimpleName();
 
 	private static final double BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT = 10;
@@ -41,7 +41,13 @@ public class TTSNotificationProvider implements OnInitListener,
 	 */
 	private static final String PERIODIC_STATUS_UTTERANCE_ID = "periodic_status_utterance";
 
-	private final AtomicBoolean mIsPeriodicStatusStarted = new AtomicBoolean(false);
+    /**
+     * Action used for message to be delivered by the tts speech engine.
+     */
+    public static final String ACTION_SPEAK_MESSAGE = CLAZZ_NAME + ".ACTION_SPEAK_MESSAGE";
+    public static final String EXTRA_MESSAGE_TO_SPEAK = "extra_message_to_speak";
+
+    private final AtomicBoolean mIsPeriodicStatusStarted = new AtomicBoolean(false);
 	/**
 	 * Listens for updates to the status interval.
 	 */
@@ -53,6 +59,12 @@ public class TTSNotificationProvider implements OnInitListener,
 			if (SettingsFragment.ACTION_UPDATED_STATUS_PERIOD.equals(action)) {
 				scheduleWatchdog();
 			}
+            else if(ACTION_SPEAK_MESSAGE.equals(action)){
+                String msg = intent.getStringExtra(EXTRA_MESSAGE_TO_SPEAK);
+                if(msg != null){
+                    speak(msg);
+                }
+            }
 		}
 	};
 
@@ -179,11 +191,14 @@ public class TTSNotificationProvider implements OnInitListener,
 
 			if (tts != null) {
 				tts.setOnUtteranceCompletedListener(mSpeechCompleteListener);
-				// Register the broadcast receiver for the speech output period
-				// updates
+
+				// Register the broadcast receiver
+                final IntentFilter intentFilter = new IntentFilter();
+                intentFilter.addAction(ACTION_SPEAK_MESSAGE);
+                intentFilter.addAction(SettingsFragment.ACTION_UPDATED_STATUS_PERIOD);
+
 				LocalBroadcastManager.getInstance(context).registerReceiver(
-						mSpeechIntervalUpdateReceiver,
-						new IntentFilter(SettingsFragment.ACTION_UPDATED_STATUS_PERIOD));
+						mSpeechIntervalUpdateReceiver, intentFilter);
 			}
 		} else {
 			// Notify the user that the tts engine is not available.
@@ -376,11 +391,6 @@ public class TTSNotificationProvider implements OnInitListener,
 			speak("Lost GPS Lock");
 			break;
 		}
-	}
-
-	@Override
-	public void quickNotify(String feedback) {
-		speak(feedback);
 	}
 
     @Override

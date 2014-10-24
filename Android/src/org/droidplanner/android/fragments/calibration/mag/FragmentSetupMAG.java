@@ -5,12 +5,15 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.lib.parcelables.ParcelableThreeSpacePoint;
 import org.droidplanner.android.widgets.scatterplot.ScatterPlot;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.variables.helpers.MagnetometerCalibration;
 import org.droidplanner.core.model.Drone;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,7 +30,7 @@ import ellipsoidFit.FitPoints;
 import ellipsoidFit.ThreeSpacePoint;
 
 public class FragmentSetupMAG extends Fragment implements MagnetometerCalibration
-        .OnMagCalibrationListener, DroneInterfaces.OnDroneListener {
+        .OnMagCalibrationListener, DroneInterfaces.OnDroneListener, ApiInterface.Subscriber {
 
     private static final int CALIBRATION_IDLE = 0;
     private static final int CALIBRATION_IN_PROGRESS = 1;
@@ -45,12 +48,22 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
 
     private int calibrationStatus = CALIBRATION_IDLE;
 
-	private Drone drone;
+    private DroidPlannerApi dpApi;
 	private MagnetometerCalibration calibration;
 
     private List<? extends ThreeSpacePoint> startPoints;
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (!(activity instanceof ApiInterface.Provider)) {
+            throw new IllegalStateException("Parent activity must be an instance of "
+                    + ApiInterface.Provider.class.getName());
+        }
+    }
+
+        @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState){
         return inflater.inflate(R.layout.fragment_setup_mag_main, container, false);
@@ -94,27 +107,6 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
         });
 
         calibrationFitness = (ProgressBar) view.findViewById(R.id.calibration_progress_bar);
-
-        drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
-
-        calibration = new MagnetometerCalibration(drone, this, new DroneInterfaces.Handler() {
-            private final Handler handler = new Handler();
-
-            @Override
-            public void removeCallbacks(Runnable thread) {
-                this.handler.removeCallbacks(thread);
-            }
-
-            @Override
-            public void post(Runnable thread) {
-                this.handler.post(thread);
-            }
-
-            @Override
-            public void postDelayed(Runnable thread, long timeout) {
-                this.handler.postDelayed(thread, timeout);
-            }
-        });
 
         if(savedInstanceState != null){
             final int calibrationStatus = savedInstanceState.getInt(EXTRA_CALIBRATION_STATUS,
@@ -170,25 +162,17 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
     @Override
     public void onStart(){
         super.onStart();
-        if(drone.getMavClient().isConnected()){
-            buttonStep.setEnabled(true);
-        }
-        else{
-            cancelCalibration();
-            buttonStep.setEnabled(false);
-        }
 
-        drone.addDroneListener(this);
-        if(calibrationStatus == CALIBRATION_IN_PROGRESS){
-            startCalibration();
+        ApiInterface.Provider apiProvider = (ApiInterface.Provider) getActivity();
+        if(apiProvider != null && apiProvider.getApi() != null){
+            onApiConnected(apiProvider.getApi());
         }
     }
 
     @Override
     public void onStop(){
         super.onStop();
-        drone.removeDroneListener(this);
-        pauseCalibration();
+        onApiDisconnected();
     }
 
     private void pauseCalibration(){
@@ -254,8 +238,8 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
 	}
 
     public void startCalibration() {
-		if(calibration != null){
-			if (drone.getMagnetometer().getOffsets()==null) {
+		if(calibration != null && dpApi != null){
+			if (dpApi.getDrone().getMagnetometer().getOffsets()==null) {
 				Toast.makeText(getActivity()," Please load the parameters before calibrating", Toast.LENGTH_LONG).show();
 			}
 			
@@ -322,7 +306,8 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        drone.getStreamRates().setupStreamRatesFromPref();
+
+        dpApi.getDrone().getStreamRates().setupStreamRatesFromPref();
 
         setCalibrationStatus(CALIBRATION_COMPLETED);
 	}
@@ -345,5 +330,54 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
 		default:
 			break;
         }
+    }
+
+    @Override
+    public void onApiConnected(DroidPlannerApi api) {
+        dpApi = api;
+
+        calibration = new MagnetometerCalibration(api.getDrone(), this,
+                new DroneInterfaces.Handler() {
+            private final Handler handler = new Handler();
+
+            @Override
+            public void removeCallbacks(Runnable thread) {
+                this.handler.removeCallbacks(thread);
+            }
+
+            @Override
+            public void post(Runnable thread) {
+                this.handler.post(thread);
+            }
+
+            @Override
+            public void postDelayed(Runnable thread, long timeout) {
+                this.handler.postDelayed(thread, timeout);
+            }
+        });
+
+        if(api.isConnected()){
+            buttonStep.setEnabled(true);
+        }
+        else{
+            cancelCalibration();
+            buttonStep.setEnabled(false);
+        }
+
+        api.addDroneListener(this);
+        if(calibrationStatus == CALIBRATION_IN_PROGRESS){
+            startCalibration();
+        }
+    }
+
+    @Override
+    public void onApiDisconnected() {
+        if(dpApi != null)
+            dpApi.removeDroneListener(this);
+
+        pauseCalibration();
+
+        calibration = null;
+        dpApi = null;
     }
 }

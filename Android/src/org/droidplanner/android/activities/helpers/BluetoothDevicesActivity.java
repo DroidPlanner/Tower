@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.services.DroidPlannerService;
+import org.droidplanner.android.api.services.DroidPlannerService;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.app.Activity;

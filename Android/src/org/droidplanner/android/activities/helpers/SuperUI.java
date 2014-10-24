@@ -3,10 +3,10 @@ package org.droidplanner.android.activities.helpers;
 import org.droidplanner.R;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
-import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
+import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.proxy.mission.MissionProxy;
-import org.droidplanner.android.services.DroidPlannerService;
-import org.droidplanner.android.services.DroidPlannerService.DroidPlannerApi;
+import org.droidplanner.android.api.services.DroidPlannerService;
+import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
@@ -31,37 +31,34 @@ import android.view.MenuItem;
 /**
  * Parent class for the app activity classes.
  */
-public abstract class SuperUI extends FragmentActivity implements OnDroneListener {
+public abstract class SuperUI extends FragmentActivity implements OnDroneListener,
+        ApiInterface.Provider, ApiInterface.Subscriber {
 
     private final ServiceConnection dpServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            dpApi = (DroidPlannerApi) service;
-
-            invalidateOptionsMenu();
-
-            final Drone drone = dpApi.getDrone();
-            drone.addDroneListener(SuperUI.this);
-            drone.getMavClient().queryConnectionState();
-            drone.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
+            setApiHandle(service);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            dpApi = null;
+            unsetApiHandle();
         }
     };
 
+    private boolean wasApiConnectedCalled;
+    private boolean wasApiDisconnectedCalled;
+
     private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoBarActionProvider infoBar;
-	protected DroidPlannerService.DroidPlannerApi dpApi;
+	protected DroidPlannerApi dpApi;
 
 	/**
 	 * Handle to the app preferences.
 	 */
 	protected DroidPlannerPrefs mAppPrefs;
 
-	@Override
+    @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -88,25 +85,64 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 
 		screenOrientation.unlock();
 		Utils.updateUILanguage(getApplicationContext());
-
-		handleIntent(getIntent());
 	}
 
-	@Override
-	public void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		handleIntent(intent);
-	}
+    private void setApiHandle(IBinder service){
+        wasApiConnectedCalled = false;
+        onApiConnected((DroidPlannerApi) service);
+        if(!wasApiConnectedCalled){
+            throw new IllegalStateException("super.onApiConnected() was not " +
+                    "called.");
+        }
+    }
 
-	private void handleIntent(Intent intent) {
-		if (intent == null)
-			return;
+    public void unsetApiHandle(){
+        wasApiDisconnectedCalled = false;
+        onApiDisconnected();
+        if(!wasApiDisconnectedCalled){
+            throw new IllegalStateException("super.onApiDisconnected() was not " +
+                    "called");
+        }
+    }
 
-		final String action = intent.getAction();
-		if (DroidPlannerService.ACTION_TOGGLE_DRONE_CONNECTION.equals(action)) {
-			toggleDroneConnection();
-		}
-	}
+    @Override
+    public final DroidPlannerApi getApi(){
+        return dpApi;
+    }
+
+    @Override
+    public void onApiConnected(DroidPlannerApi api){
+        dpApi = api;
+
+        invalidateOptionsMenu();
+
+        final Drone drone = dpApi.getDrone();
+        drone.addDroneListener(SuperUI.this);
+        drone.getMavClient().queryConnectionState();
+        drone.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
+
+        wasApiConnectedCalled = true;
+    }
+
+    @Override
+    public void onApiDisconnected(){
+        if(dpApi != null) {
+            final Drone drone = dpApi.getDrone();
+            if(drone != null)
+                drone.removeDroneListener(this);
+        }
+
+        if (infoBar != null) {
+            infoBar.setDrone(null);
+            infoBar = null;
+        }
+
+        dpApi = null;
+
+        wasApiDisconnectedCalled = true;
+    }
+
+
 
 	@Override
 	protected void onStart() {
@@ -127,19 +163,8 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	@Override
 	protected void onStop() {
 		super.onStop();
-
-        if(dpApi != null) {
-            final Drone drone = dpApi.getDrone();
-            if(drone != null)
-                drone.removeDroneListener(this);
-        }
-
+        unsetApiHandle();
         unbindService(dpServiceConnection);
-
-		if (infoBar != null) {
-			infoBar.setDrone(null);
-			infoBar = null;
-		}
 	}
 
 	@Override
@@ -273,13 +298,6 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 			toggleDroneConnection();
 			return true;
 
-		case R.id.menu_map_type_hybrid:
-		case R.id.menu_map_type_normal:
-		case R.id.menu_map_type_terrain:
-		case R.id.menu_map_type_satellite:
-			setMapTypeFromItemId(item.getItemId());
-			return true;
-
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
@@ -288,29 +306,6 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	public void toggleDroneConnection() {
         startService(new Intent(getApplicationContext(), DroidPlannerService.class).setAction
                 (DroidPlannerService.ACTION_TOGGLE_DRONE_CONNECTION));
-	}
-
-	private void setMapTypeFromItemId(int itemId) {
-		final String mapType;
-		switch (itemId) {
-		case R.id.menu_map_type_hybrid:
-			mapType = GoogleMapFragment.MAP_TYPE_HYBRID;
-			break;
-		case R.id.menu_map_type_normal:
-			mapType = GoogleMapFragment.MAP_TYPE_NORMAL;
-			break;
-		case R.id.menu_map_type_terrain:
-			mapType = GoogleMapFragment.MAP_TYPE_TERRAIN;
-			break;
-		default:
-			mapType = GoogleMapFragment.MAP_TYPE_SATELLITE;
-			break;
-		}
-
-		PreferenceManager.getDefaultSharedPreferences(this).edit()
-				.putString(GoogleMapFragment.PREF_MAP_TYPE, mapType).commit();
-
-		// drone.notifyMapTypeChanged();
 	}
 
 }

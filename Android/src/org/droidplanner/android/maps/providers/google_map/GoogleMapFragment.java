@@ -9,7 +9,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.helpers.LocalMapTileProvider;
 import org.droidplanner.android.utils.GoogleApiClientManager;
 import org.droidplanner.android.utils.GoogleApiClientManager.GoogleApiClientTask;
@@ -20,10 +21,12 @@ import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.utils.collection.HashBiMap;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.core.drone.variables.GPS;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -79,7 +82,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
     private final HashBiMap<MarkerInfo, Marker> mBiMarkersMap = new HashBiMap<MarkerInfo, Marker>();
 
-    private Drone mDrone;
     private DroidPlannerPrefs mAppPrefs;
 
     private final LinkedList<Runnable> onMapLaidOutTasks = new LinkedList<Runnable>();
@@ -109,6 +111,15 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
 	protected boolean useMarkerClickAsMapClick = false;
     private boolean isMapLayoutFinished = false;
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        if(!(activity instanceof ApiInterface.Provider)){
+            throw new IllegalStateException("Parent activity must implement " +
+                    ApiInterface.Provider.class.getName());
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -153,7 +164,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
             }
         };
 
-        mDrone = ((DroidPlannerApp) activity.getApplication()).getDrone();
         mAppPrefs = new DroidPlannerPrefs(context);
 
         final Bundle args = getArguments();
@@ -238,11 +248,20 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         setAutoPanMode(currentMode, target);
     }
 
+    private DroidPlannerApi getDPApi(){
+        ApiInterface.Provider apiProvider = (ApiInterface.Provider) getActivity();
+        if(apiProvider == null) return null;
+
+        return apiProvider.getApi();
+    }
+
     private void setAutoPanMode(AutoPanMode current, AutoPanMode update) {
         if (mPanMode.compareAndSet(current, update)) {
             switch (current) {
                 case DRONE:
-                    mDrone.removeDroneListener(this);
+                    DroidPlannerApi dpApi = getDPApi();
+                    if(dpApi != null)
+                        dpApi.removeDroneListener(this);
                     break;
 
                 case USER:
@@ -258,7 +277,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
             switch (update) {
                 case DRONE:
-                    mDrone.addDroneListener(this);
+                    DroidPlannerApi dpApi = getDPApi();
+                    if(dpApi != null)
+                        dpApi.addDroneListener(this);
                     break;
 
                 case USER:
@@ -622,12 +643,18 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
     @Override
     public void goToDroneLocation() {
-        if(!mDrone.getGps().isPositionValid()){
+        DroidPlannerApi dpApi = getDPApi();
+        if(dpApi == null)
+            return;
+
+        GPS gps = dpApi.getGps();
+        if(!gps.isPositionValid()){
             Toast.makeText(getActivity().getApplicationContext(), R.string.drone_no_location, Toast.LENGTH_SHORT).show();
             return;
         }
+
         final float currentZoomLevel = getMap().getCameraPosition().zoom;
-        final Coord2D droneLocation = mDrone.getGps().getPosition();
+        final Coord2D droneLocation = gps.getPosition();
         updateCamera(droneLocation, (int) currentZoomLevel);
     }
 

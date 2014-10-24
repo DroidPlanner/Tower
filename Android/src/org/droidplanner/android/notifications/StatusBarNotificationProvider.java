@@ -2,7 +2,7 @@ package org.droidplanner.android.notifications;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.FlightActivity;
-import org.droidplanner.android.services.DroidPlannerService;
+import org.droidplanner.android.api.services.DroidPlannerService;
 import org.droidplanner.android.utils.TextUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.drone.DroneInterfaces;
@@ -11,11 +11,9 @@ import org.droidplanner.core.model.Drone;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * Implements DroidPlanner's status bar notifications.
@@ -28,29 +26,6 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 	 * Android status bar's notification id.
 	 */
 	private static final int NOTIFICATION_ID = 1;
-
-	/**
-	 * Countdown to notification dismissal.
-	 */
-	private static final long COUNTDOWN_TO_DISMISSAL = 60000l; // ms
-
-	/**
-	 * Used to schedule notification dismissal after a disconnect event.
-	 */
-	private final Handler mHandler = new Handler();
-
-	/**
-	 * Callback used to dismiss the notification.
-	 */
-	private final Runnable mDismissNotification = new Runnable() {
-		@Override
-		public void run() {
-			if (mContext != null) {
-				onTerminate();
-				mNotificationBuilder = null;
-			}
-		}
-	};
 
 	/**
 	 * Application context.
@@ -101,9 +76,6 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 
 		switch (event) {
 		case CONNECTED:
-			// Cancel the notification dismissal
-			mHandler.removeCallbacks(mDismissNotification);
-
 			final String summaryText = mContext.getString(R.string.connected);
 
 			mInboxBuilder = new InboxStyleBuilder().setSummary(summaryText);
@@ -250,11 +222,6 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
     @Override
 	public void onTerminate() {
 		NotificationManagerCompat.from(mContext).cancelAll();
-	}
-
-	@Override
-	public void quickNotify(String feedback) {
-		Toast.makeText(mContext, feedback, Toast.LENGTH_LONG).show();
 	}
 
 	private static class InboxStyleBuilder {

@@ -1,9 +1,11 @@
 package org.droidplanner.android.activities;
 
 import org.droidplanner.R;
+import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.fragments.ChecklistFragment;
 import org.droidplanner.android.fragments.ParamsFragment;
 import org.droidplanner.android.fragments.SensorSetupFragment;
+import org.droidplanner.android.helpers.ApiInterface;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,6 +38,26 @@ public class ConfigurationActivity extends DrawerNavigationUI {
 
 		handleIntent(getIntent());
 	}
+
+    @Override
+    public void onApiConnected(DroidPlannerApi api){
+        super.onApiConnected(api);
+
+        final Fragment currentFragment = getCurrentFragment();
+        if(currentFragment instanceof ApiInterface.Subscriber && currentFragment.isResumed()){
+            ((ApiInterface.Subscriber) currentFragment).onApiConnected(api);
+        }
+    }
+
+    @Override
+    public void onApiDisconnected(){
+        super.onApiDisconnected();
+
+        final Fragment currentFragment = getCurrentFragment();
+        if(currentFragment instanceof ApiInterface.Subscriber && currentFragment.isResumed()){
+            ((ApiInterface.Subscriber) currentFragment).onApiDisconnected();
+        }
+    }
 
     @Override
     protected int getNavigationDrawerEntryId() {

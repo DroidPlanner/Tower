@@ -2,7 +2,7 @@ package org.droidplanner.android.notifications;
 
 import java.util.UUID;
 
-import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.gcs.follow.Follow;
 import org.droidplanner.core.gcs.follow.FollowAlgorithm.FollowModes;
@@ -29,13 +29,19 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 	/**
 	 * Application context.
 	 */
-	private Context applicationContext;
+	private final Context applicationContext;
+
+    /**
+     * Handle to the dp api
+     */
+    private final DroidPlannerApi dpApi;
 
 	long timeWhenLastTelemSent = System.currentTimeMillis();
 	private PebbleDataReceiver datahandler;
 
-	public PebbleNotificationProvider(Context context) {
-		applicationContext = context.getApplicationContext();
+	public PebbleNotificationProvider(Context context, DroidPlannerApi dpApi) {
+        this.dpApi = dpApi;
+		applicationContext = context;
 		PebbleKit.startAppOnPebble(applicationContext, DP_UUID);
 		datahandler = new PebbleReceiverHandler(DP_UUID);
 		PebbleKit.registerReceivedDataHandler(applicationContext, datahandler);
@@ -95,15 +101,15 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 	 * @param drone
 	 */
 	public void sendDataToWatchNow(Drone drone) {
-		Follow followMe = ((DroidPlannerApp) applicationContext).getFollowMe();
+		Follow followMe = dpApi.getFollowMe();
 		PebbleDictionary data = new PebbleDictionary();
 
 		String mode = drone.getState().getMode().getName();
 		if (!drone.getState().isArmed())
-			mode = "Disarmd";
-		else if (followMe.isEnabled() && mode == "Guided")
+			mode = "Disarmed";
+		else if (followMe.isEnabled() && "Guided".equals(mode))
 			mode = "Follow";
-		else if (drone.getGuidedPoint().isIdle() && !followMe.isEnabled() && mode == "Guided")
+		else if (drone.getGuidedPoint().isIdle() && !followMe.isEnabled() && "Guided".equals(mode))
 			mode = "Paused";
 		data.addString(KEY_MODE, mode);
 
@@ -146,7 +152,7 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 
 		@Override
 		public void receiveData(Context context, int transactionId, PebbleDictionary data) {
-			Follow followMe = ((DroidPlannerApp) applicationContext).getFollowMe();
+			Follow followMe = dpApi.getFollowMe();
 			PebbleKit.sendAckToPebble(applicationContext, transactionId);
 			int request = (data.getInteger(KEY_PEBBLE_REQUEST).intValue());
 			switch (request) {
@@ -187,18 +193,13 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 				break;
 
 			case KEY_REQUEST_PAUSE:
-				((DroidPlannerApp) applicationContext).getDrone().getGuidedPoint().pauseAtCurrentLocation();
+				dpApi.getDrone().getGuidedPoint().pauseAtCurrentLocation();
 				break;
 
 			case KEY_REQUEST_MODE_RTL:
-				((DroidPlannerApp) applicationContext).getDrone().getState()
-						.changeFlightMode(ApmModes.ROTOR_RTL);
+				dpApi.getDrone().getState().changeFlightMode(ApmModes.ROTOR_RTL);
 				break;
 			}
 		}
-	}
-
-	@Override
-	public void quickNotify(String feedback) {
 	}
 }

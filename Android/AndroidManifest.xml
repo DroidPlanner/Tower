@@ -73,7 +73,7 @@
 
         <service android:name=".android.communication.service.MAVLinkService"/>
         <service android:name=".android.communication.service.UploaderService"/>
-        <service android:name=".android.services.DroidPlannerService"/>
+        <service android:name=".android.api.services.DroidPlannerService"/>
 
         <activity
             android:name=".android.activities.FlightActivity"

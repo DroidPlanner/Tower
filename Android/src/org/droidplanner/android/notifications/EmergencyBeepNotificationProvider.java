@@ -18,11 +18,6 @@ public class EmergencyBeepNotificationProvider implements NotificationHandler.No
 		beepBeep = mPool.load(context, R.raw.beep_beep, 1);
 	}
 
-	@Override
-	public void quickNotify(String feedback) {
-
-	}
-
     @Override
     public void onTerminate() {
         mPool.release();
