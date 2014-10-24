@@ -2,11 +2,14 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.widgets.AttitudeIndicator;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.model.Drone;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -16,10 +19,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class TelemetryFragment extends Fragment implements OnDroneListener {
+public class TelemetryFragment extends Fragment implements OnDroneListener, ApiInterface.Subscriber {
 
 	private AttitudeIndicator attitudeIndicator;
-	private Drone drone;
 	private TextView roll;
 	private TextView yaw;
 	private TextView pitch;
@@ -29,6 +31,18 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	private TextView altitude;
 	private TextView targetAltitude;
 	private boolean headingModeFPV;
+
+    private DroidPlannerApi dpApi;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (!(activity instanceof ApiInterface.Provider)) {
+            throw new IllegalStateException("Parent activity must be an instance of "
+                    + ApiInterface.Provider.class.getName());
+        }
+    }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,16 +59,22 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 		altitude = (TextView) view.findViewById(R.id.altitudeValue);
 		targetAltitude = (TextView) view.findViewById(R.id.targetAltitudeValue);
 
-		drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 		return view;
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
-		drone.addDroneListener(this);
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity()
+        final Activity activity = getActivity();
+
+        ApiInterface.Provider apiProvider = (ApiInterface.Provider) activity;
+        DroidPlannerApi api = apiProvider == null ? null : apiProvider.getApi();
+        if(api != null) {
+            onApiConnected(api);
+        }
+
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity
 				.getApplicationContext());
 		headingModeFPV = prefs.getBoolean("pref_heading_mode", false);
 	}
@@ -62,8 +82,21 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	@Override
 	public void onStop() {
 		super.onStop();
-		drone.removeDroneListener(this);
+		onApiDisconnected();
 	}
+
+    @Override
+    public void onApiConnected(DroidPlannerApi api) {
+        dpApi = api;
+        api.addDroneListener(this);
+    }
+
+    @Override
+    public void onApiDisconnected() {
+        if(dpApi != null){
+            dpApi.removeDroneListener(this);
+        }
+    }
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
@@ -110,7 +143,6 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 		double targetAlt = drone.getAltitude().getTargetAltitude();
 		altitude.setText(String.format("%3.1f", alt));
 		targetAltitude.setText(String.format("%3.1f", targetAlt));
-
 	}
 
 }
