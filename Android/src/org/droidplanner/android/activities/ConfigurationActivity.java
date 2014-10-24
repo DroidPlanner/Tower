@@ -101,9 +101,4 @@ public class ConfigurationActivity extends DrawerNavigationUI {
             return R.id.navigation_params;
         }
     }
-
-    @Override
-    public CharSequence[][] getHelpItems() {
-        return new CharSequence[][] { {}, {} };
-    }
 }
