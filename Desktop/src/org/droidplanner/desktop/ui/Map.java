@@ -70,6 +70,10 @@ public class Map implements OnDroneListener {
 			guidedMarker.setLon(drone.getGuidedPoint().getCoord().getLng());
 			map.repaint();
 			break;
+		case FOOTPRINT:
+			Coord2D coord = drone.getCameraFootprints().getLastFootprint();
+			map.addMapMarker(new MapMarkerDot(coord.getLat(), coord.getLng()));
+			map.repaint();
 		default:
 			break;
 		}
