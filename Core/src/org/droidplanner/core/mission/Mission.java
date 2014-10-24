@@ -1,8 +1,8 @@
 package org.droidplanner.core.mission;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.Messages.enums.MAV_CMD;
 
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneVariable;
@@ -11,6 +11,8 @@ import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
+import org.droidplanner.core.helpers.units.Speed;
+import org.droidplanner.core.mission.commands.ChangeSpeed;
 import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.waypoints.Circle;
@@ -22,9 +24,9 @@ import org.droidplanner.core.mission.waypoints.Waypoint;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.util.Pair;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import com.MAVLink.Messages.enums.MAV_CMD;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This implements a mavlink mission. A mavlink mission is a set of
@@ -104,10 +106,10 @@ public class Mission extends DroneVariable {
 		notifyMissionUpdate();
 	}
 
-    public void addMissionItem(int index, MissionItem missionItem){
-        items.add(index, missionItem);
-        notifyMissionUpdate();
-    }
+	public void addMissionItem(int index, MissionItem missionItem) {
+		items.add(index, missionItem);
+		notifyMissionUpdate();
+	}
 
 	/**
 	 * Signals that this mission object was updated. //TODO: maybe move outside
@@ -141,39 +143,39 @@ public class Mission extends DroneVariable {
 	 */
 	public void replace(MissionItem oldItem, MissionItem newItem) {
 		final int index = items.indexOf(oldItem);
-        if(index == -1){
-            return;
-        }
+		if (index == -1) {
+			return;
+		}
 
 		items.remove(index);
 		items.add(index, newItem);
 		notifyMissionUpdate();
 	}
 
-    public void replaceAll(List<Pair<MissionItem, MissionItem>> updatesList){
-        if(updatesList == null || updatesList.isEmpty()){
-            return;
-        }
+	public void replaceAll(List<Pair<MissionItem, MissionItem>> updatesList) {
+		if (updatesList == null || updatesList.isEmpty()) {
+			return;
+		}
 
-        boolean wasUpdated = false;
-        for(Pair<MissionItem, MissionItem> updatePair : updatesList){
-            final MissionItem oldItem = updatePair.first;
-            final int index = items.indexOf(oldItem);
-            if(index == -1){
-                continue;
-            }
+		boolean wasUpdated = false;
+		for (Pair<MissionItem, MissionItem> updatePair : updatesList) {
+			final MissionItem oldItem = updatePair.first;
+			final int index = items.indexOf(oldItem);
+			if (index == -1) {
+				continue;
+			}
 
-            final MissionItem newItem = updatePair.second;
-            items.remove(index);
-            items.add(index, newItem);
+			final MissionItem newItem = updatePair.second;
+			items.remove(index);
+			items.add(index, newItem);
 
-            wasUpdated = true;
-        }
+			wasUpdated = true;
+		}
 
-        if(wasUpdated) {
-            notifyMissionUpdate();
-        }
-    }
+		if (wasUpdated) {
+			notifyMissionUpdate();
+		}
+	}
 
 	/**
 	 * Reverse the order of the mission items.
@@ -267,6 +269,9 @@ public class Mission extends DroneVariable {
 			case MAV_CMD.MAV_CMD_NAV_TAKEOFF:
 				received.add(new Takeoff(msg, this));
 				break;
+			case MAV_CMD.MAV_CMD_DO_CHANGE_SPEED:
+				received.add(new ChangeSpeed(msg, this));
+				break;
 			case MAV_CMD.MAV_CMD_DO_SET_ROI:
 				received.add(new RegionOfInterest(msg, this));
 				break;
@@ -298,28 +303,50 @@ public class Mission extends DroneVariable {
 		return data;
 	}
 
-	public void makeAndUploadDronie() {
+	/**
+	 * Create and upload a dronie mission to the drone
+	 * 
+	 * @return the bearing in degrees the drone trajectory will take.
+	 */
+	public double makeAndUploadDronie() {
 		Coord2D currentPosition = myDrone.getGps().getPosition();
-		if(currentPosition == null || myDrone.getGps().getSatCount()<=5){
+		if (currentPosition == null || myDrone.getGps().getSatCount() <= 5) {
 			myDrone.notifyDroneEvent(DroneEventsType.WARNING_NO_GPS);
-			return;
+			return -1;
 		}
+
+		final double bearing = 180 + myDrone.getOrientation().getYaw();
 		items.clear();
-		items.addAll(createDronie(this, currentPosition, GeoTools.newCoordFromBearingAndDistance(
-				currentPosition, 180 + myDrone.getOrientation().getYaw(), 50.0)));
+		items.addAll(createDronie(currentPosition,
+				GeoTools.newCoordFromBearingAndDistance(currentPosition, bearing, 50.0)));
 		sendMissionToAPM();
 		notifyMissionUpdate();
+
+		return bearing;
 	}
 
-	public static List<MissionItem> createDronie(Mission mMission,Coord2D start, Coord2D end) {
+	public List<MissionItem> createDronie(Coord2D start, Coord2D end) {
 		final int startAltitude = 4;
-		
+		final int roiDistance = -8;
+		Coord2D slowDownPoint = GeoTools.pointAlongTheLine(start, end, 5);
+
+		Speed defaultSpeed = myDrone.getSpeed().getSpeedParameter();
+		if (defaultSpeed == null) {
+			defaultSpeed = new Speed(5);
+		}
+
 		List<MissionItem> dronieItems = new ArrayList<MissionItem>();
-		dronieItems.add(new Takeoff(mMission, new Altitude(startAltitude)));
-		dronieItems.add(new RegionOfInterest(mMission,new Coord3D(GeoTools.pointAlongTheLine(start, end, -8), new Altitude(1.0))));
-		dronieItems.add(new Waypoint(mMission, new Coord3D(end, new Altitude(startAltitude+GeoTools.getDistance(start, end).valueInMeters()/2.0))));
-		dronieItems.add(new Waypoint(mMission, new Coord3D(start, new Altitude(startAltitude))));
-		dronieItems.add(new Land(mMission,start));
+		dronieItems.add(new Takeoff(this, new Altitude(startAltitude)));
+		dronieItems.add(new RegionOfInterest(this, new Coord3D(GeoTools.pointAlongTheLine(start,
+				end, roiDistance), new Altitude(1.0))));
+		dronieItems.add(new Waypoint(this, new Coord3D(end, new Altitude(startAltitude
+				+ GeoTools.getDistance(start, end).valueInMeters() / 2.0))));
+		dronieItems.add(new Waypoint(this, new Coord3D(slowDownPoint, new Altitude(startAltitude
+				+ GeoTools.getDistance(start, slowDownPoint).valueInMeters() / 2.0))));
+		dronieItems.add(new ChangeSpeed(this, new Speed(1.0)));
+		dronieItems.add(new Waypoint(this, new Coord3D(start, new Altitude(startAltitude))));
+		dronieItems.add(new ChangeSpeed(this, defaultSpeed));
+		dronieItems.add(new Land(this, start));
 		return dronieItems;
 	}
 
@@ -337,7 +364,7 @@ public class Mission extends DroneVariable {
 	}
 
 	public boolean isLastItemLandOrRTL() {
-		MissionItem last = items.get(items.size()-1);
+		MissionItem last = items.get(items.size() - 1);
 		return (last instanceof ReturnToHome) || (last instanceof Land);
 	}
 }
