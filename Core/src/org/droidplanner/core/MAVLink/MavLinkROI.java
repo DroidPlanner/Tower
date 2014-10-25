@@ -4,6 +4,7 @@ import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ardupilotmega.msg_command_long;
+import com.MAVLink.Messages.ardupilotmega.msg_digicam_control;
 import com.MAVLink.Messages.enums.MAV_CMD;
 
 public class MavLinkROI {
@@ -30,6 +31,14 @@ public class MavLinkROI {
 		msg.param6 = (float) 0.0;
 		msg.param7 = (float) 0.0;
 
+		drone.getMavClient().sendMavPacket(msg.pack());
+	}
+	
+	public static void triggerCamera(Drone drone){
+		msg_digicam_control msg = new msg_digicam_control();
+		msg.target_system = 1;
+		msg.target_component = 1;
+		msg.shot = 1;
 		drone.getMavClient().sendMavPacket(msg.pack());
 	}
 }
