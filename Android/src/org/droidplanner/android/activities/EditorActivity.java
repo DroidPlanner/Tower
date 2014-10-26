@@ -131,7 +131,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
         final ImageButton resetMapBearing = (ImageButton) findViewById(R.id.map_orientation_button);
-        resetMapBearing.setOnClickListener(this);
+        resetMapBearing.setVisibility(View.GONE);
+
         final ImageButton zoomToFit = (ImageButton) findViewById(R.id.zoom_to_fit_button);
         zoomToFit.setVisibility(View.VISIBLE);
         zoomToFit.setOnClickListener(this);
@@ -176,11 +177,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.map_orientation_button:
-			if(planningMapFragment != null) {
-				planningMapFragment.updateMapBearing(0);
-			}
-			break;
 		case R.id.zoom_to_fit_button:
 			if(planningMapFragment != null){
                 planningMapFragment.zoomToFit();
