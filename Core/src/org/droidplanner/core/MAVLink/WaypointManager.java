@@ -109,6 +109,16 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 		}
 	}
 
+    public void sendClearWaypoints() {
+        if(state != WaypointStates.IDLE) {
+            return;
+        }
+
+        if(mission != null) {
+            MavLinkWaypoint.sendClearMission(myDrone);
+        }
+    }
+
 	private void updateMsgIndexes(List<msg_mission_item> data) {
 		short index = 0;
 		for (msg_mission_item msg : data) {
