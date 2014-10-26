@@ -782,7 +782,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
         switch (event) {
             case GPS:
-                if (mPanMode.get() == AutoPanMode.DRONE && drone.getGps().isPositionValid()) {
+                if (mPanMode.get() == AutoPanMode.DRONE && drone.getGps().isPositionValid() &&
+                        getMap() != null) {
                     final float currentZoomLevel = getMap().getCameraPosition().zoom;
                     final Coord2D droneLocation = drone.getGps().getPosition();
                     updateCamera(droneLocation, currentZoomLevel);

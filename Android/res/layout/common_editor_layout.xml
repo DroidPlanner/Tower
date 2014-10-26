@@ -48,6 +48,7 @@
             layout="@layout/button_my_location"
             android:layout_margin="8dp"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_below="@+id/editorInfoWindow"
             android:layout_alignWithParentIfMissing="true" />
     </org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout>

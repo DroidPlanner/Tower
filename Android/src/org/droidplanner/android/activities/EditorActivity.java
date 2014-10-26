@@ -7,6 +7,7 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.YesNoDialog;
+import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenMissionDialog;
 import org.droidplanner.android.fragments.EditorListFragment;
@@ -234,15 +235,42 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-
 		getMenuInflater().inflate(R.menu.menu_mission, menu);
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.menu_send_mission:
+			final MissionProxy missionProxy = app.getMissionProxy();
+			if (drone.getMission().getItems().isEmpty()
+                    || drone.getMission().hasTakeoffAndLandOrRTL()) {
+				missionProxy.sendMissionToAPM();
+			} else {
+				YesNoWithPrefsDialog dialog = YesNoWithPrefsDialog.newInstance(
+						getApplicationContext(), "Mission Upload",
+						"Do you want to append a Takeoff and RTL to your " + "mission?", "Ok",
+						"Skip", new YesNoDialog.Listener() {
+
+							@Override
+							public void onYes() {
+								missionProxy.addTakeOffAndRTL();
+								missionProxy.sendMissionToAPM();
+							}
+
+							@Override
+							public void onNo() {
+								missionProxy.sendMissionToAPM();
+							}
+						}, getString(R.string.pref_auto_insert_mission_takeoff_rtl_land_key));
+
+				if (dialog != null) {
+					dialog.show(getSupportFragmentManager(), "Mission Upload check.");
+				}
+			}
+			return true;
+
 		case R.id.menu_open_mission:
 			openMissionFile();
 			return true;
@@ -651,16 +679,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	@Override
 	public void onListVisibilityChanged() {}
 
-    @Override
-    protected boolean enableMissionMenus(){
-        return true;
-    }
-
 	@Override
 	public void onSelectionUpdate(List<MissionItemProxy> selected) {
 		final boolean isEmpty = selected.isEmpty();
-
-		missionListFragment.setArrowsVisibility(!isEmpty);
 
 		if (isEmpty) {
 			removeItemDetail();
