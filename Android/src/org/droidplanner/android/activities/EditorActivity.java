@@ -373,7 +373,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 				int time = (int) (missionLength.valueInMeters() / speedParameter
 						.valueInMetersPerSecond());
 				infoString = infoString
-						+ String.format(", Flight time: %02d:%02d", time / 60, time % 60);
+						+ String.format("\nFlight time: %02d:%02d", time / 60, time % 60);
 			}
 			infoView.setText(infoString);
 
