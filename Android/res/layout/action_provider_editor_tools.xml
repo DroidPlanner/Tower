@@ -10,6 +10,12 @@
     android:gravity="center">
 
     <org.droidplanner.android.widgets.button.RadioButtonCenter
+        android:id="@+id/editor_tools_cmd"
+        style="@style/editorButton"
+        android:button="@drawable/ic_action_laptop"
+        />
+
+    <org.droidplanner.android.widgets.button.RadioButtonCenter
         android:id="@+id/editor_tools_marker"
         style="@style/editorButton"
         android:button="@drawable/ic_editor_wp_black"
@@ -19,12 +25,6 @@
         android:id="@+id/editor_tools_draw"
         style="@style/editorButton"
         android:button="@drawable/ic_editor_draw_black"
-        />
-
-    <org.droidplanner.android.widgets.button.RadioButtonCenter
-        android:id="@+id/editor_tools_poly"
-        style="@style/editorButton"
-        android:button="@drawable/ic_editor_poly_black"
         />
 
     <org.droidplanner.android.widgets.button.RadioButtonCenter

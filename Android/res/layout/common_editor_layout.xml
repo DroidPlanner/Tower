@@ -20,38 +20,44 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:fitsSystemWindows="true"
+        android:id="@+id/infoWindowContainer"
+        android:background="@color/bottom_top_bar"
         >
 
         <TextView
             android:id="@+id/editorInfoWindow"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/editor_info_window"
             style="@style/editorMissionOverviewText"
             android:visibility="visible"
+            android:layout_toLeftOf="@+id/waypoint_type_spinner"
+            android:layout_toStartOf="@+id/waypoint_type_spinner"
             android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@android:color/transparent"
             />
 
-        <include
-            android:id="@+id/editorSplineToggleContainer"
+        <Spinner
+            android:id="@+id/waypoint_type_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            layout="@layout/editor_spline_toggle"
-            android:layout_below="@+id/editorInfoWindow"
-            android:layout_alignWithParentIfMissing="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"/>
-
-        <include
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            layout="@layout/button_my_location"
-            android:layout_margin="8dp"
+            android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/editorInfoWindow"
-            android:layout_alignWithParentIfMissing="true" />
+            android:layout_centerVertical="true"/>
+
     </org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout>
+
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/button_my_location"
+        android:layout_margin="8dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/infoWindowContainer"      />
 
     <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
         android:layout_width="match_parent"

@@ -11,6 +11,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.widgets.button.RadioButtonCenter;
+import org.droidplanner.core.mission.MissionItemType;
 
 /**
  * Implements and displays the 'tools' used in the editor window
@@ -18,14 +19,50 @@ import org.droidplanner.android.widgets.button.RadioButtonCenter;
  */
 public class EditorToolsActionProvider extends ActionProvider implements View.OnClickListener, View.OnLongClickListener {
 
-    /**
-     * Used as key to retrieve the last selected tool from the bundle passed on
-     * fragment creation.
-     */
-    private static final String STATE_SELECTED_TOOL = "selected_tool";
-
     public enum EditorTools {
-        MARKER, DRAW, POLY, TRASH, NONE
+        COMMAND,
+
+        MARKER{
+            private final MissionItemType[] supportedTypes = {
+                    MissionItemType.WAYPOINT,
+                    MissionItemType.SPLINE_WAYPOINT,
+                    MissionItemType.LAND,
+                    MissionItemType.CIRCLE,
+                    MissionItemType.ROI,
+                    MissionItemType.CYLINDRICAL_SURVEY
+            };
+
+            @Override
+            public MissionItemType[] getSupportedMissionItemType(){
+                return supportedTypes;
+            }
+        },
+
+        DRAW{
+            private final MissionItemType[] supportedTypes = {
+                    MissionItemType.WAYPOINT,
+                    MissionItemType.SPLINE_WAYPOINT,
+                    MissionItemType.CIRCLE,
+                    MissionItemType.SURVEY
+            };
+
+            @Override
+            public MissionItemType[] getSupportedMissionItemType(){
+                return supportedTypes;
+            }
+        },
+
+        TRASH,
+
+        NONE;
+
+        public int getDefaultMissionItemTypeIndex(){
+            return 0;
+        }
+
+        public MissionItemType[] getSupportedMissionItemType(){
+            return new MissionItemType[0];
+        }
     }
 
     public interface OnEditorToolSelected {
@@ -67,12 +104,12 @@ public class EditorToolsActionProvider extends ActionProvider implements View.On
                 .findViewById(R.id.editor_tools_draw);
         final RadioButtonCenter buttonMarker = (RadioButtonCenter) view
                 .findViewById(R.id.editor_tools_marker);
-        final RadioButtonCenter buttonPoly = (RadioButtonCenter) view
-                .findViewById(R.id.editor_tools_poly);
         final RadioButtonCenter buttonTrash = (RadioButtonCenter) view
                 .findViewById(R.id.editor_tools_trash);
+        final RadioButtonCenter buttonCmd = (RadioButtonCenter) view.findViewById(R.id
+                .editor_tools_cmd);
 
-        for (View vv : new View[] { buttonDraw, buttonMarker, buttonPoly, buttonTrash }) {
+        for (View vv : new View[] { buttonDraw, buttonMarker, buttonTrash, buttonCmd }) {
             vv.setOnClickListener(this);
             vv.setOnLongClickListener(this);
         }
@@ -188,11 +225,11 @@ public class EditorToolsActionProvider extends ActionProvider implements View.On
             case R.id.editor_tools_draw:
                 return EditorTools.DRAW;
 
-            case R.id.editor_tools_poly:
-                return EditorTools.POLY;
-
             case R.id.editor_tools_trash:
                 return EditorTools.TRASH;
+
+            case R.id.editor_tools_cmd:
+                return EditorTools.COMMAND;
 
             default:
                 return EditorTools.NONE;
@@ -214,11 +251,11 @@ public class EditorToolsActionProvider extends ActionProvider implements View.On
             case DRAW:
                 return R.id.editor_tools_draw;
 
-            case POLY:
-                return R.id.editor_tools_poly;
-
             case TRASH:
                 return R.id.editor_tools_trash;
+
+            case COMMAND:
+                return R.id.editor_tools_cmd;
 
             case NONE:
             default:

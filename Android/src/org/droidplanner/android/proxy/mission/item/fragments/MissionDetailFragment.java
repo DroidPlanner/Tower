@@ -36,6 +36,16 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 	protected static final int MIN_ALTITUDE = 0; // meter
 	protected static final int MAX_ALTITUDE = 200; // meters
 
+    public static final List<MissionItemType> typeWithNoMuliEditSupport = new
+            ArrayList<MissionItemType>();
+    {
+        typeWithNoMuliEditSupport.add(MissionItemType.LAND);
+        typeWithNoMuliEditSupport.add(MissionItemType.TAKEOFF);
+        typeWithNoMuliEditSupport.add(MissionItemType.SURVEY);
+        typeWithNoMuliEditSupport.add(MissionItemType.RTL);
+        typeWithNoMuliEditSupport.add(MissionItemType.CYLINDRICAL_SURVEY);
+    }
+
     public interface OnMissionDetailListener {
 		/**
 		 * Only fired when the mission detail is shown as a dialog. Notifies the
@@ -202,11 +212,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
         }
         else if(mSelectedProxies.size() > 1){
             //Remove the mission item types that don't apply to multiple items.
-            list.remove(MissionItemType.TAKEOFF);
-            list.remove(MissionItemType.LAND);
-            list.remove(MissionItemType.RTL);
-            list.remove(MissionItemType.SURVEY);
-            list.remove(MissionItemType.CYLINDRICAL_SURVEY);
+            list.removeAll(typeWithNoMuliEditSupport);
         }
         else{
             //Invalid state. We should not have been able to get here.
