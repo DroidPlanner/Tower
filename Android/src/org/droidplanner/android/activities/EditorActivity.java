@@ -456,7 +456,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 		final MissionItemType[] availableMissionItemTypes = tool.getSupportedMissionItemType();
 		final AdapterMissionItems spinnerAdapter = new AdapterMissionItems(this,
-				android.R.layout.simple_list_item_1, availableMissionItemTypes);
+				R.layout.editor_spinner_entry, availableMissionItemTypes);
 		int spinnerSelection = spinnerSelectionPerTool.getInt(tool.name(),
 				tool.getDefaultMissionItemTypeIndex());
 		if (spinnerSelection > availableMissionItemTypes.length)
