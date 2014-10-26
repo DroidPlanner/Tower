@@ -401,6 +401,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                         .getSelectedItem();
             if(selectionType != null){
                 missionProxy.addMissionItem(selectionType, point);
+                if(selectionType == MissionItemType.LAND)
+                    editorToolbar.setTool(EditorTools.NONE);
             }
 			break;
 
@@ -485,11 +487,49 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                     "command", selections, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    final Context context = getApplicationContext();
+
                     String label = selections[which].toString();
-                    MissionItemType selectedType = MissionItemType.fromLabel(label);
-                    missionProxy.addMissionCmd(selectedType);
-                    Toast.makeText(getApplicationContext(), label + " command added.",
-                            Toast.LENGTH_SHORT).show();
+                    final MissionItemType selectedType = MissionItemType.fromLabel(label);
+
+                    List<MissionItemProxy> missionProxies = missionProxy.getItems();
+                    boolean allGood = missionProxies.isEmpty();
+                    if(!allGood){
+                        MissionItemType lastMissionItemType = missionProxies
+                                .get(missionProxies.size() -1).getMissionItem().getType() ;
+
+                        switch(selectedType){
+                            case TAKEOFF:
+                                //Takeoff should be preceded by Land or RTL
+                                allGood = lastMissionItemType == MissionItemType.LAND ||
+                                        lastMissionItemType == MissionItemType.RTL;
+                                if(!allGood){
+                                    Toast.makeText(context, "Must be preceded by Land or RTL",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                                break;
+
+                            case CHANGE_SPEED:
+                                //Can be preceded by any type of waypoint.
+                                allGood = true;
+                                break;
+
+                            case RTL:
+                                //Can be preceded by any type except itself.
+                                allGood = lastMissionItemType != selectedType;
+                                if(!allGood){
+                                    Toast.makeText(context, "Cannot be preceded by RTL",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                                break;
+                        }
+                    }
+
+                    if(allGood) {
+                        missionProxy.addMissionCmd(selectedType);
+                        Toast.makeText(context, label + " command added.", Toast.LENGTH_SHORT)
+                                .show();
+                    }
                 }
             });
 

@@ -170,7 +170,8 @@ public class EditorToolsActionProvider extends ActionProvider implements View.On
      */
     private void setTool(EditorTools tool, boolean notifyListeners) {
         if (mMissionProxy != null && mMissionProxy.getItems().size() > 0
-                && tool != EditorTools.TRASH && tool != EditorTools.NONE) {
+                && tool != EditorTools.TRASH && tool != EditorTools.NONE && tool != EditorTools
+                .COMMAND) {
             MissionItemProxy lastMissionItem = mMissionProxy.getItems().get(
                     mMissionProxy.getItems().size() - 1);
 
