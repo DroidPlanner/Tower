@@ -258,32 +258,41 @@ public class MissionProxy implements DPMap.PathSource {
 	 *            mission item render to update
 	 * @param newItem
 	 *            new mission item render
+     * @return true if the replacement was successful
 	 */
-	public void replace(MissionItemProxy oldItem, MissionItemProxy newItem) {
+	public boolean replace(MissionItemProxy oldItem, MissionItemProxy newItem) {
 		final int index = mMissionItems.indexOf(oldItem);
 		if (index == -1)
-			return;
+			return false;
 
 		mMissionItems.remove(index);
 		mMissionItems.add(index, newItem);
 
 		// Update the mission object
-		mMission.replace(oldItem.getMissionItem(), newItem.getMissionItem());
+		final boolean wasReplaced = mMission.replace(oldItem.getMissionItem(),
+                newItem.getMissionItem());
 
 		if (selection.selectionContains(oldItem)) {
 			selection.removeItemFromSelection(oldItem);
 			selection.addToSelection(newItem);
 		}
+
+        return wasReplaced;
 	}
 
-    public void replaceAll(List<Pair<MissionItemProxy, MissionItemProxy>> oldNewList){
+    /**
+     *
+     * @param oldNewList
+     * @return the count of replaced mission items.
+     */
+    public int replaceAll(List<Pair<MissionItemProxy, MissionItemProxy>> oldNewList){
         if(oldNewList == null){
-            return;
+            return 0;
         }
 
         final int pairSize = oldNewList.size();
         if(pairSize == 0){
-            return;
+            return 0;
         }
 
         final List<Pair<MissionItem, MissionItem>> missionItemsToUpdate = new
@@ -312,11 +321,13 @@ public class MissionProxy implements DPMap.PathSource {
         }
 
         //Update the mission objects
-        mMission.replaceAll(missionItemsToUpdate);
+        final int replacedCount = mMission.replaceAll(missionItemsToUpdate);
 
         //Update the selection list.
         selection.removeItemsFromSelection(selectionsToRemove);
         selection.addToSelection(itemsToSelect);
+
+        return replacedCount;
     }
 
 	/**

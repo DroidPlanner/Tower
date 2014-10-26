@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <item
+        android:id="@+id/menu_editor_toolbar"
+        android:title="Editor Toolbar"
+        android:showAsAction="always"
+        android:actionProviderClass="org.droidplanner.android.widgets.actionProviders.EditorToolsActionProvider"/>
+
     <group
         android:id="@+id/menu_group_connected"
         android:enabled="false"

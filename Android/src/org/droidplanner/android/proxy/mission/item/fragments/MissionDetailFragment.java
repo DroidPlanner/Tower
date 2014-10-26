@@ -49,10 +49,11 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 		/**
 		 * Notifies the listener that the mission item proxy was changed.
 		 *
+         * @param newType the new selected mission item type
          * @param oldNewItemsList a list of pairs containing the previous,
          *                         and the new mission item proxy.
 		 */
-		public void onWaypointTypeChanged(List<Pair<MissionItemProxy,
+		public void onWaypointTypeChanged(MissionItemType newType, List<Pair<MissionItemProxy,
                 MissionItemProxy>> oldNewItemsList);
 	}
 
@@ -266,7 +267,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
             }
 
             if(!updatesList.isEmpty()) {
-                mListener.onWaypointTypeChanged(updatesList);
+                mListener.onWaypointTypeChanged(selectedType, updatesList);
                 dismiss();
             }
         } catch (IllegalArgumentException e) {

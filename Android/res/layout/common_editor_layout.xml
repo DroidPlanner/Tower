@@ -53,20 +53,6 @@
             android:layout_alignWithParentIfMissing="true" />
     </org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout>
 
-    <fragment
-        android:id="@+id/flightActionsFragment"
-        android:name="org.droidplanner.android.fragments.EditorToolsFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/missionFragment1"
-        android:layout_centerVertical="true"
-        android:layout_below="@+id/editorInfoWindow"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_margin="5dp"
-        tools:layout="@layout/fragment_editor_tools"
-        />
-
     <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -12,9 +12,6 @@ import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenMissionDialog;
 import org.droidplanner.android.fragments.EditorListFragment;
 import org.droidplanner.android.fragments.EditorMapFragment;
-import org.droidplanner.android.fragments.EditorToolsFragment;
-import org.droidplanner.android.fragments.EditorToolsFragment.EditorTools;
-import org.droidplanner.android.fragments.EditorToolsFragment.OnEditorToolSelected;
 import org.droidplanner.android.fragments.helpers.GestureMapFragment;
 import org.droidplanner.android.fragments.helpers.GestureMapFragment.OnPathFinishedListener;
 import org.droidplanner.android.proxy.mission.MissionProxy;
@@ -26,6 +23,9 @@ import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.file.IO.MissionReader;
 import org.droidplanner.android.utils.file.IO.MissionWriter;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.android.widgets.actionProviders.EditorToolsActionProvider;
+import org.droidplanner.android.widgets.actionProviders.EditorToolsActionProvider.EditorTools;
+import org.droidplanner.android.widgets.actionProviders.EditorToolsActionProvider.OnEditorToolSelected;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Length;
@@ -58,7 +58,7 @@ import com.google.android.gms.analytics.HitBuilders;
  * user to create and/or modify autonomous missions for the drone.
  */
 public class EditorActivity extends DrawerNavigationUI implements OnPathFinishedListener,
-		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener, OnEditorInteraction,
+        OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener, OnEditorInteraction,
 		Callback, MissionSelection.OnSelectionUpdateListener, OnClickListener, OnLongClickListener {
 
 	/**
@@ -67,6 +67,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	 */
 	private static final String ITEM_DETAIL_TAG = "Item Detail Window";
     private static final String EXTRA_IS_SPLINE_ENABLED = "extra_is_spline_enabled";
+    private static final String EXTRA_EDITOR_TOOL = "extra_editor_tool";
 
     /**
 	 * Used to provide access and interact with the
@@ -75,12 +76,21 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	 */
 	private MissionProxy missionProxy;
 
+    /**
+     * Menu action provider hosting the editor tools.
+     */
+    private EditorToolsActionProvider editorToolbar;
+
+    /**
+     * Stores the default or last used editor tool.
+     */
+    private EditorToolsActionProvider.EditorTools savedEditorTool;
+
 	/*
 	 * View widgets.
 	 */
 	private EditorMapFragment planningMapFragment;
 	private GestureMapFragment gestureMapFragment;
-	private EditorToolsFragment editorToolsFragment;
 	private MissionDetailFragment itemDetailFragment;
 	private FragmentManager fragmentManager;
 	private EditorListFragment missionListFragment;
@@ -114,8 +124,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 				.findFragmentById(R.id.mapFragment));
 		gestureMapFragment = ((GestureMapFragment) fragmentManager
 				.findFragmentById(R.id.gestureMapFragment));
-		editorToolsFragment = (EditorToolsFragment) fragmentManager
-				.findFragmentById(R.id.flightActionsFragment);
 		missionListFragment = (EditorListFragment) fragmentManager
 				.findFragmentById(R.id.missionFragment1);
 
@@ -140,9 +148,12 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		splineToggle = (RadioButton) findViewById(R.id.splineWpToggle);
 		splineToggle.setOnClickListener(this);
 
+        String editorToolName = EditorToolsActionProvider.EditorTools.MARKER.name();
         if(savedInstanceState != null){
             mIsSplineEnabled = savedInstanceState.getBoolean(EXTRA_IS_SPLINE_ENABLED);
+            editorToolName = savedInstanceState.getString(EXTRA_EDITOR_TOOL, editorToolName);
         }
+        this.savedEditorTool = EditorToolsActionProvider.EditorTools.valueOf(editorToolName);
 
 		// Retrieve the item detail fragment using its tag
 		itemDetailFragment = (MissionDetailFragment) fragmentManager
@@ -206,7 +217,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	@Override
 	public void onResume() {
 		super.onResume();
-		editorToolsFragment.setToolAndUpdateView(getTool());
+        if(editorToolbar != null)
+		    editorToolbar.setToolAndUpdateView(getTool());
 		setupTool(getTool());
 	}
 
@@ -214,6 +226,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     public void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
         outState.putBoolean(EXTRA_IS_SPLINE_ENABLED, mIsSplineEnabled);
+
+        if(editorToolbar != null)
+            outState.putString(EXTRA_EDITOR_TOOL, editorToolbar.getTool().name());
     }
 
     @Override
@@ -235,12 +250,27 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+        //Reset the previous editor toolbar
+        if(editorToolbar != null){
+            editorToolbar.initialize(null, null, EditorToolsActionProvider.EditorTools.NONE);
+        }
+
 		getMenuInflater().inflate(R.menu.menu_mission, menu);
+
+        final MenuItem editorToolbarItem = menu.findItem(R.id.menu_editor_toolbar);
+        if(editorToolbarItem != null)
+            editorToolbar = (EditorToolsActionProvider) editorToolbarItem.getActionProvider();
+
+        editorToolbar.initialize(this, missionProxy, savedEditorTool);
+
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        if(editorToolbar != null)
+            editorToolbar.setTool(EditorTools.NONE);
+
 		switch (item.getItemId()) {
 		case R.id.menu_send_mission:
 			final MissionProxy missionProxy = app.getMissionProxy();
@@ -391,7 +421,10 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	public EditorTools getTool() {
-		return editorToolsFragment.getTool();
+        if(editorToolbar != null)
+            return editorToolbar.getTool();
+
+        return this.savedEditorTool;
 	}
 
 	@Override
@@ -401,6 +434,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	private void setupTool(EditorTools tool) {
+        this.savedEditorTool = tool;
+
 		planningMapFragment.skipMarkerClickEvents(false);
 		switch (tool) {
 		case DRAW:
@@ -504,7 +539,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 			if (path.size() > 2) {
 				missionProxy.addSurveyPolygon(points);
 			} else {
-				editorToolsFragment.setTool(EditorTools.POLY);
+				editorToolbar.setTool(EditorTools.POLY);
 				return;
 			}
 			break;
@@ -512,7 +547,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		default:
 			break;
 		}
-		editorToolsFragment.setTool(EditorTools.NONE);
+		editorToolbar.setTool(EditorTools.NONE);
 	}
 
 	@Override
@@ -521,8 +556,12 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	@Override
-	public void onWaypointTypeChanged(List<Pair<MissionItemProxy, MissionItemProxy>> oldNewItemsList) {
-		missionProxy.replaceAll(oldNewItemsList);
+	public void onWaypointTypeChanged(MissionItemType newType, List<Pair<MissionItemProxy,
+            MissionItemProxy>> oldNewItemsList) {
+		if(missionProxy.replaceAll(oldNewItemsList) > 0 && editorToolbar != null
+                && (newType == MissionItemType.LAND || newType == MissionItemType.RTL)){
+         editorToolbar.setTool(EditorTools.NONE);
+        }
 	}
 
 	@Override
@@ -583,7 +622,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	@Override
 	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         mode.getMenuInflater().inflate(R.menu.action_mode_editor, menu);
-		editorToolsFragment.getView().setVisibility(View.INVISIBLE);
 		return true;
 	}
 
@@ -594,8 +632,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
         contextualActionBar = null;
         enableMultiEdit(false);
-
-		editorToolsFragment.getView().setVisibility(View.VISIBLE);
 	}
 
     private void enableMultiEdit(boolean enable){
@@ -625,7 +661,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 				missionProxy.selection.setSelectionTo(missionProxy.getItems());
 			}
 		} else {
-			editorToolsFragment.setTool(EditorTools.NONE);
+			editorToolbar.setTool(EditorTools.NONE);
 			missionListFragment.updateChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 			contextualActionBar = startActionMode(this);
 			missionProxy.selection.setSelectionTo(item);
@@ -648,7 +684,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 				if (missionProxy.selection.selectionContains(item)) {
 					missionProxy.selection.clearSelection();
 				} else {
-					editorToolsFragment.setTool(EditorTools.NONE);
+					editorToolbar.setTool(EditorTools.NONE);
 					missionProxy.selection.setSelectionTo(item);
 				}
 			}
@@ -660,7 +696,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 			missionProxy.selection.clearSelection();
 
 			if (missionProxy.getItems().size() <= 0) {
-				editorToolsFragment.setTool(EditorTools.NONE);
+				editorToolbar.setTool(EditorTools.NONE);
 			}
 			break;
 		}
@@ -703,7 +739,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                     @Override
                     public void onYes() {
                         missionProxy.clear();
-                        missionProxy.addTakeoff();
                     }
 
                     @Override
@@ -714,5 +749,4 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             ynd.show(getSupportFragmentManager(), "clearMission");
         }
 	}
-
 }
