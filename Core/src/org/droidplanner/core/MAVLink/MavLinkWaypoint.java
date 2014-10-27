@@ -3,6 +3,7 @@ package org.droidplanner.core.MAVLink;
 import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
+import com.MAVLink.Messages.ardupilotmega.msg_mission_clear_all;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_count;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_request;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_request_list;
@@ -50,5 +51,12 @@ public class MavLinkWaypoint {
 		msg.seq = i;
 		drone.getMavClient().sendMavPacket(msg.pack());
 	}
+
+    public static void sendClearMission(Drone drone) {
+        msg_mission_clear_all clear = new msg_mission_clear_all();
+        clear.target_system = 1;
+        clear.target_component = 1;
+        drone.getMavClient().sendMavPacket(clear.pack());
+    }
 
 }

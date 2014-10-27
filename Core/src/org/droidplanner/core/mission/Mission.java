@@ -294,6 +294,7 @@ public class Mission extends DroneVariable {
 	 * Sends the mission to the drone using the mavlink protocol.
 	 */
 	public void sendMissionToAPM() {
+        myDrone.getWaypointManager().sendClearWaypoints();
 		myDrone.getWaypointManager().writeWaypoints(getMsgMissionItems());
 	}
 
