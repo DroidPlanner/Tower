@@ -95,7 +95,7 @@
             android:id="@+id/flightActionsFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:layout="@layout/fragment_mission_control"
+            tools:layout="@layout/fragment_flight_actions_bar"
             android:fitsSystemWindows="true"/>
 
         <ScrollView

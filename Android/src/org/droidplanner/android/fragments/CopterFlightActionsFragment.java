@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.MAVLink.Messages.ApmModes;
 import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.common.api.Api;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
@@ -20,6 +21,7 @@ import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
+import org.droidplanner.android.fragments.helpers.ApiSubscriberFragment;
 import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.analytics.GAUtils;
@@ -33,7 +35,7 @@ import org.droidplanner.core.model.Drone;
 /**
  * Provide functionality for flight action button specific to copters.
  */
-public class CopterFlightActionsFragment extends Fragment implements View.OnClickListener,
+public class CopterFlightActionsFragment extends ApiSubscriberFragment implements View.OnClickListener,
         DroneInterfaces.OnDroneListener, FlightActionsFragment.SlidingUpHeader {
 
     private static final String ACTION_FLIGHT_ACTION_BUTTON = "Copter flight action button";
@@ -54,34 +56,9 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
     private Button pauseBtn;
     private Button autoBtn;
 
-    private ApiInterface.Provider apiProvider;
-
-    @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-        if(!(activity instanceof FlightActivity)){
-            throw new IllegalStateException("Parent activity must be an instance of " +
-                    FlightActivity.class.getName());
-        }
-
-        apiProvider = (FlightActivity) activity;
-    }
-
-    @Override
-    public void onDetach(){
-        super.onDetach();
-        apiProvider = null;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_copter_mission_control, container, false);
-
-        DroidPlannerApi dpApi = apiProvider.getApi();
-        drone = dpApi.getDrone();
-        followMe = dpApi.getFollowMe();
-        missionProxy = dpApi.getMissionProxy();
-        return view;
+        return inflater.inflate(R.layout.fragment_copter_mission_control, container, false);
     }
 
     @Override
@@ -128,8 +105,11 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
     }
 
     @Override
-    public void onStart(){
-        super.onStart();
+    protected void onApiConnectedImpl(DroidPlannerApi api) {
+        drone = api.getDrone();
+        followMe = api.getFollowMe();
+        missionProxy = api.getMissionProxy();
+
         setupButtonsByFlightState();
         updateFlightModeButtons();
         updateFollowButton();
@@ -137,8 +117,7 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
     }
 
     @Override
-    public void onStop(){
-        super.onStop();
+    protected void onApiDisconnectedImpl() {
         drone.removeDroneListener(this);
     }
 

@@ -214,6 +214,10 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
         if(mapFragment != null){
             mapFragment.onApiConnected(api);
         }
+
+        if(flightActions != null){
+            flightActions.onApiConnected(api);
+        }
         enableSlidingUpPanel(this.dpApi.getDrone());
     }
 
@@ -222,6 +226,9 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
         super.onApiDisconnected();
         if(mapFragment != null)
             mapFragment.onApiDisconnected();
+
+        if(flightActions != null)
+            flightActions.onApiDisconnected();
     }
 
     @Override

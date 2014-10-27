@@ -6,6 +6,7 @@ import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
+import org.droidplanner.android.fragments.helpers.ApiSubscriberFragment;
 import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.MAVLink.MavLinkArm;
@@ -32,23 +33,13 @@ import android.widget.Toast;
 import com.MAVLink.Messages.ApmModes;
 import com.google.android.gms.analytics.HitBuilders;
 
-public class FlightActionsFragment extends Fragment implements OnDroneListener, ApiInterface.Subscriber {
+public class FlightActionsFragment extends ApiSubscriberFragment implements OnDroneListener {
 
     interface SlidingUpHeader{
         boolean isSlidingUpPanelEnabled(Drone drone);
     }
 
     private SlidingUpHeader header;
-    private DroidPlannerApi dpApi;
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (!(activity instanceof ApiInterface.Provider)) {
-            throw new IllegalStateException("Parent activity must implement " +
-                    ApiInterface.Provider.class.getName());
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,34 +48,14 @@ public class FlightActionsFragment extends Fragment implements OnDroneListener, 
     }
 
     @Override
-    public void onApiConnected(DroidPlannerApi api) {
-        if(dpApi != null || api == null) return;
-
-        dpApi = api;
-        selectActionsBar(dpApi.getDrone().getType());
-        dpApi.addDroneListener(this);
+    protected void onApiConnectedImpl(DroidPlannerApi api) {
+        selectActionsBar(api.getDrone().getType());
+        api.addDroneListener(this);
     }
 
     @Override
-    public void onApiDisconnected() {
-        if(dpApi == null) return;
-
-        dpApi.removeDroneListener(this);
-        dpApi = null;
-    }
-
-    @Override
-    public void onStart(){
-        super.onStart();
-
-        DroidPlannerApi api = ((ApiInterface.Provider)getActivity()).getApi();
-        onApiConnected(api);
-    }
-
-    @Override
-    public void onStop(){
-        super.onStop();
-        onApiDisconnected();
+    protected void onApiDisconnectedImpl() {
+        getApi().removeDroneListener(this);
     }
 
     @Override
