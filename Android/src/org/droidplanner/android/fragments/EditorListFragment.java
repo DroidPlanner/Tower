@@ -10,6 +10,8 @@ import java.util.List;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
+import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
@@ -29,28 +31,40 @@ import android.widget.AbsListView;
 import android.widget.ImageButton;
 
 public class EditorListFragment extends Fragment implements OnItemLongClickListener,
-		OnItemClickListener, OnDroneListener, MissionSelection.OnSelectionUpdateListener {
+		OnItemClickListener, OnDroneListener, MissionSelection.OnSelectionUpdateListener,
+        ApiInterface.Subscriber {
 
 	private HListView list;
 	private MissionProxy missionProxy;
 	private MissionItemProxyView adapter;
 	private OnEditorInteraction editorListener;
 	private Drone drone;
+    private DroidPlannerApi dpApi;
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        if(!(activity instanceof ApiInterface.Provider)){
+            throw new IllegalStateException("Parent activity must implement " +
+                    ApiInterface.Provider.class.getName());
+        }
+
+        if(!(activity instanceof OnEditorInteraction)){
+            throw new IllegalStateException("Parent activity must implement " +
+                    OnEditorInteraction.class.getName());
+        }
+
+        editorListener = (OnEditorInteraction) (activity);
+    }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_editor_list, container, false);
 
-		DroidPlannerApp app = ((DroidPlannerApp) getActivity().getApplication());
-		drone = app.getDrone();
-		missionProxy = app.getMissionProxy();
-		adapter = new MissionItemProxyView(getActivity(), missionProxy.getItems());
-
 		list = (HListView) view.findViewById(R.id.mission_item_list);
 		list.setOnItemClickListener(this);
 		list.setOnItemLongClickListener(this);
 		list.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-		list.setAdapter(adapter);
 
 		return view;
 	}
@@ -59,22 +73,40 @@ public class EditorListFragment extends Fragment implements OnItemLongClickListe
 	public void onStart() {
 		super.onStart();
 		updateViewVisibility();
-		drone.addDroneListener(this);
-		missionProxy.selection.addSelectionUpdateListener(this);
+
+        DroidPlannerApi api = ((ApiInterface.Provider)getActivity()).getApi();
+        onApiConnected(api);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		drone.removeDroneListener(this);
-		missionProxy.selection.removeSelectionUpdateListener(this);
+		onApiDisconnected();
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		editorListener = (OnEditorInteraction) (activity);
-	}
+    @Override
+    public void onApiConnected(DroidPlannerApi api) {
+        if(dpApi != null || api == null) return;
+
+        dpApi = api;
+
+        drone = dpApi.getDrone();
+        missionProxy = dpApi.getMissionProxy();
+
+        adapter = new MissionItemProxyView(getActivity(), missionProxy.getItems());
+        list.setAdapter(adapter);
+
+        dpApi.addDroneListener(this);
+        missionProxy.selection.addSelectionUpdateListener(this);
+    }
+
+    @Override
+    public void onApiDisconnected() {
+        if(dpApi == null) return;
+
+        drone.removeDroneListener(this);
+        missionProxy.selection.removeSelectionUpdateListener(this);
+    }
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {

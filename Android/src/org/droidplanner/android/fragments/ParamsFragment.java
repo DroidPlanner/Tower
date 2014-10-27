@@ -7,10 +7,13 @@ import java.util.TreeSet;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenParameterDialog;
 import org.droidplanner.android.dialogs.parameters.DialogParameterInfo;
+import org.droidplanner.android.fragments.helpers.ApiSubscriberListFragment;
+import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.utils.file.FileManager;
 import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.file.IO.ParameterWriter;
@@ -20,10 +23,12 @@ import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.drone.profiles.Parameters;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.parameters.Parameter;
 import org.droidplanner.core.parameters.ParameterMetadata;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -47,8 +52,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ParamsFragment extends ListFragment implements
-		DroneInterfaces.OnParameterManagerListener, OnDroneListener {
+public class ParamsFragment extends ApiSubscriberListFragment implements OnDroneListener,
+		DroneInterfaces.OnParameterManagerListener, ApiInterface.Subscriber {
 
 	static final String TAG = ParamsFragment.class.getSimpleName();
 
@@ -61,7 +66,7 @@ public class ParamsFragment extends ListFragment implements
     private ProgressBar mLoadingProgress;
     private EditText mParamsFilter;
 
-	private Drone drone;
+    private Drone drone;
     private DroidPlannerPrefs mPrefs;
 	private ParamsAdapter adapter;
 
@@ -71,8 +76,6 @@ public class ParamsFragment extends ListFragment implements
 
         setHasOptionsMenu(true);
 
-        final DroidPlannerApp dpApp = (DroidPlannerApp) getActivity().getApplication();
-        drone = dpApp.getDrone();
         mPrefs = new DroidPlannerPrefs(getActivity().getApplicationContext());
 
 		// create adapter
@@ -86,11 +89,6 @@ public class ParamsFragment extends ListFragment implements
 		} else {
 			// empty adapter
 			adapter = new ParamsAdapter(getActivity(), R.layout.row_params);
-
-            final List<Parameter> parametersList = drone.getParameters().getParametersList();
-            if(!parametersList.isEmpty()) {
-                loadAdapter(parametersList);
-            }
 		}
 		setListAdapter(adapter);
 
@@ -204,19 +202,28 @@ public class ParamsFragment extends ListFragment implements
     }
 
     @Override
-	public void onStart() {
-		super.onStart();
-		drone.addDroneListener(this);
-		drone.getParameters().setParameterListener(this);
-        toggleParameterFilter(isParameterFilterVisible(), false);
-	}
+    public void onApiConnectedImpl() {
+        DroidPlannerApi dpApi = getApi();
+        this.drone = dpApi.getDrone();
+        Parameters droneParams = drone.getParameters();
 
-	@Override
-	public void onStop() {
-		super.onStop();
-		drone.removeDroneListener(this);
-		drone.getParameters().setParameterListener(null);
-	}
+        if(adapter.isEmpty()) {
+            List<Parameter> parametersList = droneParams.getParametersList();
+            if (!parametersList.isEmpty())
+                loadAdapter(parametersList);
+        }
+
+        dpApi.addDroneListener(this);
+        droneParams.setParameterListener(this);
+        toggleParameterFilter(isParameterFilterVisible(), false);
+    }
+
+    @Override
+    public void onApiDisconnectedImpl() {
+        DroidPlannerApi dpApi = getApi();
+        dpApi.removeDroneListener(this);
+        dpApi.getDrone().getParameters().setParameterListener(null);
+    }
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {

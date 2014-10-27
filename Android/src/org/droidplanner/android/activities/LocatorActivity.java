@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
 
 import org.droidplanner.R;
+import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenTLogDialog;
 import org.droidplanner.android.fragments.LocatorListFragment;
@@ -120,6 +121,20 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
             // fresh start
             lastPositions.clear();
         }
+    }
+
+    @Override
+    public void onApiConnected(DroidPlannerApi api){
+        super.onApiConnected(api);
+        if(locatorMapFragment != null)
+            locatorMapFragment.onApiConnected(api);
+    }
+
+    @Override
+    public void onApiDisconnected(){
+        super.onApiDisconnected();
+        if(locatorMapFragment != null)
+            locatorMapFragment.onApiDisconnected();
     }
 
     @Override

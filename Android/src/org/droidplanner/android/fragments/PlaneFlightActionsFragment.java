@@ -1,5 +1,6 @@
 package org.droidplanner.android.fragments;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,7 +15,10 @@ import com.google.android.gms.analytics.HitBuilders;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.variables.State;
@@ -40,12 +44,32 @@ public class PlaneFlightActionsFragment extends Fragment implements View.OnClick
 	private Button pauseBtn;
 	private Button autoBtn;
 
+    private ApiInterface.Provider apiProvider;
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        if(!(activity instanceof FlightActivity)){
+            throw new IllegalStateException("Parent activity must be an instance of " +
+                    FlightActivity.class.getName());
+        }
+
+        apiProvider = (FlightActivity) activity;
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        apiProvider = null;
+    }
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
-		drone = droidPlannerApp.getDrone();
-		followMe = droidPlannerApp.getFollowMe();
+
+        DroidPlannerApi dpApi = apiProvider.getApi();
+		drone = dpApi.getDrone();
+		followMe = dpApi.getFollowMe();
 	}
 
 	@Override

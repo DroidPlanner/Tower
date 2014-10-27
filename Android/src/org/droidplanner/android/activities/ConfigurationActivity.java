@@ -44,7 +44,7 @@ public class ConfigurationActivity extends DrawerNavigationUI {
         super.onApiConnected(api);
 
         final Fragment currentFragment = getCurrentFragment();
-        if(currentFragment instanceof ApiInterface.Subscriber && currentFragment.isResumed()){
+        if(currentFragment instanceof ApiInterface.Subscriber && currentFragment.isAdded()){
             ((ApiInterface.Subscriber) currentFragment).onApiConnected(api);
         }
     }
@@ -54,7 +54,7 @@ public class ConfigurationActivity extends DrawerNavigationUI {
         super.onApiDisconnected();
 
         final Fragment currentFragment = getCurrentFragment();
-        if(currentFragment instanceof ApiInterface.Subscriber && currentFragment.isResumed()){
+        if(currentFragment instanceof ApiInterface.Subscriber && currentFragment.isAdded()){
             ((ApiInterface.Subscriber) currentFragment).onApiDisconnected();
         }
     }

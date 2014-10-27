@@ -39,6 +39,10 @@ public class DroidPlannerApi extends Binder {
         getDrone().addDroneListener(listener);
     }
 
+    public void notifyDroneEvent(DroneInterfaces.DroneEventsType event){
+        getDrone().notifyDroneEvent(event);
+    }
+
     public void removeDroneListener(DroneInterfaces.OnDroneListener listener){
         getDrone().removeDroneListener(listener);
     }

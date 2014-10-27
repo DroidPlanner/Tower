@@ -12,7 +12,9 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
+import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.communication.service.UploaderService;
+import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.DirectoryPath;
@@ -21,6 +23,7 @@ import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.variables.HeartBeat;
 import org.droidplanner.core.model.Drone;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -76,6 +79,25 @@ public class SettingsFragment extends DpPreferenceFragment implements
 	private final HashSet<String> mDefaultSummaryPrefs = new HashSet<String>();
 
 	private final Handler mHandler = new Handler();
+
+    private ApiInterface.Provider apiProvider;
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        if(!(activity instanceof ApiInterface.Provider)){
+            throw new IllegalStateException("Parent activity must implement " + ApiInterface
+                    .Provider.class.getName());
+        }
+
+        apiProvider = (ApiInterface.Provider) activity;
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        apiProvider = null;
+    }
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -388,8 +410,9 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		}
 
 		DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
-		if (key.equals(getString(R.string.pref_vehicle_type_key))) {
-			droidPlannerApp.getDrone().notifyDroneEvent(DroneEventsType.TYPE);
+		if (key.equals(getString(R.string.pref_vehicle_type_key)) && apiProvider != null && apiProvider.getApi() !=
+                null) {
+			apiProvider.getApi().notifyDroneEvent(DroneEventsType.TYPE);
 		}
 
 		if (key.equals(getString(R.string.pref_rc_mode_key))) {
@@ -444,25 +467,28 @@ public class SettingsFragment extends DpPreferenceFragment implements
 	public void onStart() {
 		super.onStart();
 
-		final Drone drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
-		final int mavlinkVersion = drone.getMavlinkVersion();
-		if (mavlinkVersion != HeartBeat.INVALID_MAVLINK_VERSION) {
-			updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
-		} else {
-			updateMavlinkVersionPreference(null);
-		}
+        DroidPlannerApi dpApi = apiProvider.getApi();
+        if(dpApi != null) {
+            final Drone drone = dpApi.getDrone();
+            final int mavlinkVersion = drone.getMavlinkVersion();
+            if (mavlinkVersion != HeartBeat.INVALID_MAVLINK_VERSION) {
+                updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
+            } else {
+                updateMavlinkVersionPreference(null);
+            }
 
-		updateFirmwareVersionPreference(drone.getFirmwareVersion());
+            updateFirmwareVersionPreference(drone.getFirmwareVersion());
 
-		drone.addDroneListener(this);
+            drone.addDroneListener(this);
+        }
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
 
-		final Drone drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
-		drone.removeDroneListener(this);
+        if(apiProvider != null && apiProvider.getApi() != null)
+		apiProvider.getApi().removeDroneListener(this);
 	}
 
 	@Override

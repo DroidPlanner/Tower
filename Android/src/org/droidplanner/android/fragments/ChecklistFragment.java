@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.widgets.checklist.CheckListAdapter;
 import org.droidplanner.android.widgets.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
 import org.droidplanner.android.widgets.checklist.CheckListItem;
@@ -26,7 +28,9 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 public class ChecklistFragment extends Fragment implements OnXmlParserError,
-		OnCheckListItemUpdateListener, OnDroneListener {
+		OnCheckListItemUpdateListener, OnDroneListener, ApiInterface.Subscriber {
+
+    private DroidPlannerApi dpApi;
 
 	private Context context;
 	private Drone drone;
@@ -43,7 +47,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 		View view = inflater.inflate(R.layout.fragment_checklist, container, false);
 		expListView = (ExpandableListView) view.findViewById(R.id.expListView);
 
-		createListAdapter();
+		createListAdapter(inflater);
 		expListView.setAdapter(listAdapter);
 
 		listViewAutoExpand(true, true);
@@ -54,6 +58,12 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
+
+		if (!(activity instanceof ApiInterface.Provider)) {
+			throw new IllegalStateException("Parent activity must implement "
+					+ ApiInterface.Provider.class.getName());
+		}
+
 		this.context = activity;
 		loadXMLChecklist();
 		prepareListData();
@@ -69,18 +79,39 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 		super.onDetach();
 	}
 
+    @Override
+    public void onApiConnected(DroidPlannerApi api){
+        if(dpApi != null)
+            return;
+
+        dpApi = api;
+        dpApi.addDroneListener(this);
+
+        sysLink = new CheckListSysLink(dpApi.getDrone());
+    }
+
+    @Override
+    public void onApiDisconnected(){
+        if(dpApi == null)
+            return;
+
+        dpApi.removeDroneListener(this);
+        dpApi = null;
+    }
+
 	@Override
 	public void onStart() {
 		super.onStart();
-		drone = ((SuperUI) this.context).drone;
-		sysLink = new CheckListSysLink(this.drone);
-		drone.addDroneListener(this);
+
+        DroidPlannerApi api = ((ApiInterface.Provider) getActivity()).getApi();
+        if(api != null)
+            onApiConnected(api);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		drone.removeDroneListener(this);
+		onApiDisconnected();
 	}
 
 	@Override
@@ -124,10 +155,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	}
 
 	// create listAdapter
-	private void createListAdapter() {
-		final LayoutInflater layoutInflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+	private void createListAdapter(LayoutInflater layoutInflater) {
 		listAdapter = new CheckListAdapter(layoutInflater, listDataHeader, listDataChild);
 
 		listAdapter.setHeaderLayout(R.layout.list_group_header);

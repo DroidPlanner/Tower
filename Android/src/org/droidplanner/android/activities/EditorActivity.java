@@ -175,6 +175,13 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     @Override
     public void onApiConnected(DroidPlannerApi api){
         super.onApiConnected(api);
+
+        if(planningMapFragment != null)
+            planningMapFragment.onApiConnected(api);
+
+        if(missionListFragment != null)
+            missionListFragment.onApiConnected(api);
+
         missionProxy = dpApi.getMissionProxy();
         if(missionProxy != null)
            missionProxy.selection.addSelectionUpdateListener(this);
@@ -183,6 +190,10 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     @Override
     public void onApiDisconnected(){
         super.onApiDisconnected();
+
+        if(planningMapFragment != null)
+            planningMapFragment.onApiDisconnected();
+
         if(missionProxy != null)
             missionProxy.selection.removeSelectionUpdateListener(this);
     }
@@ -268,32 +279,35 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 		switch (item.getItemId()) {
 		case R.id.menu_send_mission:
-			final MissionProxy missionProxy = app.getMissionProxy();
-			if (drone.getMission().getItems().isEmpty()
-                    || drone.getMission().hasTakeoffAndLandOrRTL()) {
-				missionProxy.sendMissionToAPM();
-			} else {
-				YesNoWithPrefsDialog dialog = YesNoWithPrefsDialog.newInstance(
-						getApplicationContext(), "Mission Upload",
-						"Do you want to append a Takeoff and RTL to your " + "mission?", "Ok",
-						"Skip", new YesNoDialog.Listener() {
+            if(dpApi != null) {
+                final MissionProxy missionProxy = dpApi.getMissionProxy();
+                Drone drone = dpApi.getDrone();
+                if (drone.getMission().getItems().isEmpty()
+                        || drone.getMission().hasTakeoffAndLandOrRTL()) {
+                    missionProxy.sendMissionToAPM();
+                } else {
+                    YesNoWithPrefsDialog dialog = YesNoWithPrefsDialog.newInstance(
+                            getApplicationContext(), "Mission Upload",
+                            "Do you want to append a Takeoff and RTL to your " + "mission?", "Ok",
+                            "Skip", new YesNoDialog.Listener() {
 
-							@Override
-							public void onYes() {
-								missionProxy.addTakeOffAndRTL();
-								missionProxy.sendMissionToAPM();
-							}
+                                @Override
+                                public void onYes() {
+                                    missionProxy.addTakeOffAndRTL();
+                                    missionProxy.sendMissionToAPM();
+                                }
 
-							@Override
-							public void onNo() {
-								missionProxy.sendMissionToAPM();
-							}
-						}, getString(R.string.pref_auto_insert_mission_takeoff_rtl_land_key));
+                                @Override
+                                public void onNo() {
+                                    missionProxy.sendMissionToAPM();
+                                }
+                            }, getString(R.string.pref_auto_insert_mission_takeoff_rtl_land_key));
 
-				if (dialog != null) {
-					dialog.show(getSupportFragmentManager(), "Mission Upload check.");
-				}
-			}
+                    if (dialog != null) {
+                        dialog.show(getSupportFragmentManager(), "Mission Upload check.");
+                    }
+                }
+            }
 			return true;
 
 		case R.id.menu_open_mission:

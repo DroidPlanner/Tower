@@ -17,8 +17,10 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
+import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.MAVLink.MavLinkArm;
@@ -52,6 +54,8 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
     private Button pauseBtn;
     private Button autoBtn;
 
+    private ApiInterface.Provider apiProvider;
+
     @Override
     public void onAttach(Activity activity){
         super.onAttach(activity);
@@ -59,16 +63,24 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
             throw new IllegalStateException("Parent activity must be an instance of " +
                     FlightActivity.class.getName());
         }
+
+        apiProvider = (FlightActivity) activity;
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        apiProvider = null;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_copter_mission_control, container, false);
 
-        DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
-        drone = droidPlannerApp.getDrone();
-        followMe = droidPlannerApp.getFollowMe();
-        missionProxy = droidPlannerApp.getMissionProxy();
+        DroidPlannerApi dpApi = apiProvider.getApi();
+        drone = dpApi.getDrone();
+        followMe = dpApi.getFollowMe();
+        missionProxy = dpApi.getMissionProxy();
         return view;
     }
 

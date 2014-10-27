@@ -84,7 +84,17 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 
 		screenOrientation.unlock();
 		Utils.updateUILanguage(getApplicationContext());
+
+        bindService(new Intent(getApplicationContext(), DroidPlannerService.class),
+                dpServiceConnection, Context.BIND_AUTO_CREATE);
 	}
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        unsetApiHandle();
+        unbindService(dpServiceConnection);
+    }
 
     private void setApiHandle(IBinder service){
         wasApiConnectedCalled = false;
@@ -142,8 +152,6 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	protected void onStart() {
 		super.onStart();
 		maxVolumeIfEnabled();
-		bindService(new Intent(getApplicationContext(), DroidPlannerService.class),
-                dpServiceConnection, Context.BIND_AUTO_CREATE);
 	}
 
 	private void maxVolumeIfEnabled() {
@@ -152,13 +160,6 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 			audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
 					audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
 		}
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-        unsetApiHandle();
-        unbindService(dpServiceConnection);
 	}
 
 	@Override

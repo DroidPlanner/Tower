@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
@@ -47,7 +49,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
         typeWithNoMuliEditSupport.add(MissionItemType.CYLINDRICAL_SURVEY);
     }
 
-    public interface OnMissionDetailListener {
+    public interface OnMissionDetailListener extends ApiInterface.Provider {
 		/**
 		 * Only fired when the mission detail is shown as a dialog. Notifies the
 		 * listener that the mission detail dialog has been dismissed.
@@ -76,6 +78,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 	protected AdapterMissionItems commandAdapter;
 	private OnMissionDetailListener mListener;
 
+    protected DroidPlannerApi dpApi;
     private MissionProxy mMissionProxy;
     private List<MissionItem> mSelectedItems;
     private List<MissionItemProxy> mSelectedProxies;
@@ -128,7 +131,11 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mMissionProxy = ((DroidPlannerApp) getActivity().getApplication()).getMissionProxy();
+        dpApi = mListener.getApi();
+        if(dpApi == null)
+            return null;
+
+		mMissionProxy = dpApi.getMissionProxy();
 		mSelectedProxies = new ArrayList<MissionItemProxy>(mMissionProxy.selection.getSelected());
 		if (mSelectedProxies.isEmpty()) {
 			return null;

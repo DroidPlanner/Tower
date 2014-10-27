@@ -211,7 +211,17 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
     @Override
     public void onApiConnected(DroidPlannerApi api){
         super.onApiConnected(api);
+        if(mapFragment != null){
+            mapFragment.onApiConnected(api);
+        }
         enableSlidingUpPanel(this.dpApi.getDrone());
+    }
+
+    @Override
+    public void onApiDisconnected(){
+        super.onApiDisconnected();
+        if(mapFragment != null)
+            mapFragment.onApiDisconnected();
     }
 
     @Override
@@ -228,9 +238,9 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
         if (infoBarItem != null)
             infoBar = (InfoBarActionProvider) infoBarItem.getActionProvider();
 
-        if(drone.getMavClient().isConnected()) {
+        if(dpApi != null && dpApi.isConnected()) {
             if (infoBar != null) {
-                infoBar.setDrone(drone);
+                infoBar.setDrone(dpApi.getDrone());
             }
         }
         else{

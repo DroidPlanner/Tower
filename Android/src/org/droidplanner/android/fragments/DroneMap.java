@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
 import org.droidplanner.android.graphic.map.GraphicHome;
+import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
@@ -29,7 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public abstract class DroneMap extends Fragment implements OnDroneListener {
+public abstract class DroneMap extends Fragment implements OnDroneListener, ApiInterface.Subscriber {
 
 	private final static String TAG = DroneMap.class.getSimpleName();
 
@@ -38,6 +39,9 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 	private final Runnable mUpdateMap = new Runnable() {
 		@Override
 		public void run() {
+            if(mMapFragment == null)
+                return;
+
 			final List<MarkerInfo> missionMarkerInfos = missionProxy.getMarkersInfos();
 
 			final boolean isThereMissionMarkers = !missionMarkerInfos.isEmpty();
@@ -83,6 +87,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 
 	protected DPMap mMapFragment;
 
+    private DroidPlannerApi dpApi;
 	private GraphicHome home;
 	public GraphicDrone graphicDrone;
 	public GraphicGuided guided;
@@ -97,19 +102,8 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
 		final View view = inflater.inflate(R.layout.fragment_drone_map, viewGroup, false);
-
-		final Activity activity = getActivity();
-		final DroidPlannerApp app = ((DroidPlannerApp) activity.getApplication());
-		drone = app.getDrone();
-		missionProxy = app.getMissionProxy();
-
-		home = new GraphicHome(drone);
-		graphicDrone = new GraphicDrone(drone);
-		guided = new GraphicGuided(drone);
-
-		updateMapFragment();
-
-		return view;
+        updateMapFragment();
+        return view;
 	}
 
 	@Override
@@ -118,10 +112,35 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		mHandler.removeCallbacksAndMessages(null);
 	}
 
+    @Override
+    public void onApiConnected(DroidPlannerApi api){
+        if(dpApi == null) {
+            dpApi = api;
+            dpApi.addDroneListener(this);
+
+            drone = api.getDrone();
+            missionProxy = api.getMissionProxy();
+
+            home = new GraphicHome(drone);
+            graphicDrone = new GraphicDrone(drone);
+            guided = new GraphicGuided(drone);
+
+            postUpdate();
+        }
+    }
+
+    @Override
+    public void onApiDisconnected(){
+        if(dpApi == null)
+            return;
+
+        dpApi.removeDroneListener(this);
+        dpApi = null;
+    }
+
 	private void updateMapFragment() {
 		// Add the map fragment instance (based on user preference)
-		final DPMapProvider mapProvider = Utils.getMapProvider(getActivity()
-				.getApplicationContext());
+		final DPMapProvider mapProvider = Utils.getMapProvider(context);
 
 		final FragmentManager fm = getChildFragmentManager();
 		mMapFragment = (DPMap) fm.findFragmentById(R.id.map_fragment_container);
@@ -139,30 +158,43 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 	@Override
 	public void onPause() {
 		super.onPause();
-		drone.removeDroneListener(this);
-		mHandler.removeCallbacksAndMessages(null);
 		mMapFragment.saveCameraPosition();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		drone.addDroneListener(this);
 		mMapFragment.loadCameraPosition();
-		postUpdate();
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
 		updateMapFragment();
+
+        final DroidPlannerApi api = ((ApiInterface.Provider) getActivity()).getApi();
+        if(api != null){
+            onApiConnected(api);
+        }
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		context = activity.getApplicationContext();
-	}
+    @Override
+    public void onStop(){
+        super.onStop();
+        mHandler.removeCallbacksAndMessages(null);
+        onApiDisconnected();
+    }
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        if(!(activity instanceof ApiInterface.Provider)){
+            throw new IllegalStateException("Parent activity must implement " +
+                    ApiInterface.Provider.class.getName());
+        }
+
+        context = activity.getApplicationContext();
+    }
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {

@@ -2,6 +2,8 @@ package org.droidplanner.android.fragments.mode;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -10,6 +12,7 @@ import org.droidplanner.core.gcs.follow.Follow;
 import org.droidplanner.core.gcs.follow.FollowAlgorithm.FollowModes;
 import org.droidplanner.core.model.Drone;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,11 +33,15 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
     private CardWheelHorizontalView mRadiusWheel;
 
     @Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		DroidPlannerApp app = (DroidPlannerApp) getActivity().getApplication();
-		followMe = app.getFollowMe();
-		drone = app.getDrone();
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
 
+        DroidPlannerApi dpApi = ((ApiInterface.Provider)activity).getApi();
+        followMe = dpApi.getFollowMe();
+    }
+
+    @Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.fragment_mode_follow, container, false);
 	}
 
