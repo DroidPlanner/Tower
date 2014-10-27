@@ -141,23 +141,25 @@ public class Mission extends DroneVariable {
 	 * @param newItem
 	 *            new mission item
 	 */
-	public void replace(MissionItem oldItem, MissionItem newItem) {
+	public boolean replace(MissionItem oldItem, MissionItem newItem) {
 		final int index = items.indexOf(oldItem);
 		if (index == -1) {
-			return;
+			return false;
 		}
 
 		items.remove(index);
 		items.add(index, newItem);
 		notifyMissionUpdate();
+
+        return true;
 	}
 
-	public void replaceAll(List<Pair<MissionItem, MissionItem>> updatesList) {
+	public int replaceAll(List<Pair<MissionItem, MissionItem>> updatesList) {
 		if (updatesList == null || updatesList.isEmpty()) {
-			return;
+			return 0;
 		}
 
-		boolean wasUpdated = false;
+		int replacedCount = 0;
 		for (Pair<MissionItem, MissionItem> updatePair : updatesList) {
 			final MissionItem oldItem = updatePair.first;
 			final int index = items.indexOf(oldItem);
@@ -168,13 +170,14 @@ public class Mission extends DroneVariable {
 			final MissionItem newItem = updatePair.second;
 			items.remove(index);
 			items.add(index, newItem);
-
-			wasUpdated = true;
+            replacedCount++;
 		}
 
-		if (wasUpdated) {
+		if (replacedCount > 0) {
 			notifyMissionUpdate();
 		}
+
+        return replacedCount;
 	}
 
 	/**

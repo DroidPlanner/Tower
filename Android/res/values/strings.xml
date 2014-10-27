@@ -206,7 +206,7 @@
 
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">One cannot add new waypoints after LAND or RTL</string>
-    <string name="editor_info_window">Distance: 200m, Flight time: 3:30s</string>
+    <string name="editor_info_window">Distance: 200m\nFlight time: 3:30s</string>
     <string name="distance_to_home">Distance to home</string>
     <string name="loiter_time">Loiter Time</string>
     <string name="waypoint_delay">Delay before next waypoint</string>
@@ -277,6 +277,7 @@
 
     <!-- Compass Setup Resource Strings -->
     <string name="setup_mag_title">Compass Calibration</string>
+    <string name="setup_mag_start">Press Calibrate to start magnetometer calibration. Perform the calibration outdoors away from metal objects.</string>
 
     <!-- Accelerometer Setup Resource Strings -->
     <string name="setup_imu_title">Accelerometer Calibration</string>
@@ -291,6 +292,7 @@
     <string name="setup_imu_step">To start calibration, press Calibrate.</string>
     <string name="setup_imu_timeleft">Time left before next orientation:</string>
 
+    
     <!-- Flight Setup Resource Strings -->
     <string name="setup_fm_title">Flight Mode Configuration</string>
     <string name="setup_fm_side_title">Update Flight Mode</string>

@@ -9,6 +9,7 @@ import org.droidplanner.android.fragments.FlightMapFragment;
 import org.droidplanner.android.fragments.TelemetryFragment;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.model.Drone;
@@ -18,6 +19,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -61,6 +64,8 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
         @Override
         public void onPanelHidden(View view) {}
     };
+
+    private InfoBarActionProvider infoBar;
 
 	private FragmentManager fragmentManager;
 	private TextView warningView;
@@ -205,13 +210,36 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 	}
 
     @Override
-    protected int getNavigationDrawerEntryId() {
-        return R.id.navigation_flight_data;
+    public boolean onCreateOptionsMenu(Menu menu){
+        // Reset the previous info bar
+        if (infoBar != null) {
+            infoBar.setDrone(null);
+            infoBar = null;
+        }
+
+        getMenuInflater().inflate(R.menu.menu_flight_activity, menu);
+
+        final MenuItem infoBarItem = menu.findItem(R.id.menu_info_bar);
+        if (infoBarItem != null)
+            infoBar = (InfoBarActionProvider) infoBarItem.getActionProvider();
+
+        if(drone.getMavClient().isConnected()) {
+            if (infoBar != null) {
+                infoBar.setDrone(drone);
+            }
+        }
+        else{
+            if (infoBar != null) {
+                infoBar.setDrone(null);
+            }
+        }
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    protected boolean enableMissionMenus(){
-        return true;
+    protected int getNavigationDrawerEntryId() {
+        return R.id.navigation_flight_data;
     }
 
     private void updateMapLocationButtons(AutoPanMode mode) {
@@ -289,6 +317,15 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 		setupMapFragment();
 	}
 
+    @Override
+    public void onStop(){
+        super.onStop();
+        if (infoBar != null) {
+            infoBar.setDrone(null);
+            infoBar = null;
+        }
+    }
+
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
@@ -313,6 +350,11 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		super.onDroneEvent(event, drone);
+
+        if (infoBar != null) {
+            infoBar.onDroneEvent(event, drone);
+        }
+
 		switch (event) {
 		case AUTOPILOT_WARNING:
 			onWarningChanged(drone);
@@ -363,9 +405,4 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 		}
 	}
 
-	@Override
-	public CharSequence[][] getHelpItems() {
-		return new CharSequence[][] { { getString(R.string.help_item_description) },
-				{ "https://www.youtube.com/watch?v=btsk7bzn-9Q" } };
-	}
 }
