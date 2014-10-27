@@ -3,6 +3,7 @@ package org.droidplanner.android.fragments.mode;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.fragments.helpers.ApiSubscriberFragment;
 import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
@@ -19,23 +20,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class ModeGuidedFragment extends Fragment implements CardWheelHorizontalView.OnCardWheelChangedListener {
+public class ModeGuidedFragment extends ApiSubscriberFragment implements CardWheelHorizontalView
+        .OnCardWheelChangedListener {
 
 	protected Drone drone;
 
     private CardWheelHorizontalView mAltitudeWheel;
-
-    @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-        if(!(activity instanceof ApiInterface.Provider)){
-            throw new IllegalStateException("Parent activity must implement " +
-                    ApiInterface.Provider.class.getName());
-        }
-
-        DroidPlannerApi dpApi = ((ApiInterface.Provider)activity).getApi();
-        drone = dpApi.getDrone();
-    }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,9 +42,12 @@ public class ModeGuidedFragment extends Fragment implements CardWheelHorizontalV
         mAltitudeWheel = (CardWheelHorizontalView) parentView.findViewById(R.id.altitude_spinner);
         mAltitudeWheel.setViewAdapter(altitudeAdapter);
 
-        final int initialValue = (int) Math.max(drone.getGuidedPoint().getAltitude()
-                        .valueInMeters(), GuidedPoint.getMinAltitude(drone));
-        mAltitudeWheel.setCurrentValue(initialValue);
+        if(drone != null){
+            final int initialValue = (int) Math.max(drone.getGuidedPoint().getAltitude()
+                    .valueInMeters(), GuidedPoint.getMinAltitude(drone));
+            mAltitudeWheel.setCurrentValue(initialValue);
+        }
+
         mAltitudeWheel.addChangingListener(this);
 	}
 
@@ -70,8 +63,24 @@ public class ModeGuidedFragment extends Fragment implements CardWheelHorizontalV
     public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
         switch(cardWheel.getId()){
             case R.id.altitude_spinner:
-                drone.getGuidedPoint().changeGuidedAltitude(newValue);
+                if(drone != null)
+                    drone.getGuidedPoint().changeGuidedAltitude(newValue);
                 break;
         }
+    }
+
+    @Override
+    protected void onApiConnectedImpl(DroidPlannerApi api) {
+        drone = api.getDrone();
+        if(mAltitudeWheel != null) {
+            final int initialValue = (int) Math.max(drone.getGuidedPoint().getAltitude()
+                    .valueInMeters(), GuidedPoint.getMinAltitude(drone));
+            mAltitudeWheel.setCurrentValue(initialValue);
+        }
+    }
+
+    @Override
+    protected void onApiDisconnectedImpl() {
+
     }
 }

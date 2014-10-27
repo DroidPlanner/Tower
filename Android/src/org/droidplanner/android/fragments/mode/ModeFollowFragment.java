@@ -33,14 +33,6 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
     private CardWheelHorizontalView mRadiusWheel;
 
     @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-
-        DroidPlannerApi dpApi = ((ApiInterface.Provider)activity).getApi();
-        followMe = dpApi.getFollowMe();
-    }
-
-    @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.fragment_mode_follow, container, false);
 	}
@@ -64,8 +56,6 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 				android.R.layout.simple_spinner_item, FollowModes.values());
 		spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-
-        drone.addDroneListener(this);
 	}
 
     @Override
@@ -78,10 +68,25 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
     }
 
     @Override
+    protected void onApiConnectedImpl(DroidPlannerApi api){
+        super.onApiConnectedImpl(api);
+        followMe = api.getFollowMe();
+        api.addDroneListener(this);
+    }
+
+    @Override
+    protected void onApiDisconnectedImpl(){
+        super.onApiDisconnectedImpl();
+        getApi().removeDroneListener(this);
+        followMe = null;
+    }
+
+    @Override
     public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue){
         switch(cardWheel.getId()){
             case R.id.radius_spinner:
-                followMe.changeRadius(newValue);
+                if(followMe != null)
+                    followMe.changeRadius(newValue);
                 break;
 
             default:
@@ -91,15 +96,17 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
     }
 
     private void updateCurrentRadius(){
-        if(mRadiusWheel != null){
+        if(mRadiusWheel != null && followMe != null){
             mRadiusWheel.setCurrentValue((int) followMe.getRadius().valueInMeters());
         }
     }
 
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		followMe.setType(adapter.getItem(position));
-		updateCurrentRadius();
+        if(followMe != null) {
+            followMe.setType(adapter.getItem(position));
+            updateCurrentRadius();
+        }
 	}
 
 	@Override
@@ -110,7 +117,8 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case FOLLOW_CHANGE_TYPE:
-			spinner.setSelection(adapter.getPosition(followMe.getType()));
+            if(followMe != null)
+			    spinner.setSelection(adapter.getPosition(followMe.getType()));
 			break;
 		default:
 			break;

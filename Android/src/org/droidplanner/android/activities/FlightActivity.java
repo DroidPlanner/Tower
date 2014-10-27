@@ -71,10 +71,12 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 	private TextView warningView;
 
 	private FlightMapFragment mapFragment;
+    private FlightActionsFragment flightActions;
+    private TelemetryFragment telemetryFragment;
+    private FlightModePanel flightModePanel;
 
     private SlidingUpPanelLayout mSlidingPanel;
     private View mFlightActionsView;
-    private FlightActionsFragment flightActions;
 
 	private View mLocationButtonsContainer;
 	private ImageButton mGoToMyLocation;
@@ -188,7 +190,8 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
         });
 
         // Add the telemetry fragment
-        Fragment telemetryFragment = fragmentManager.findFragmentById(R.id.telemetryFragment);
+        telemetryFragment = (TelemetryFragment) fragmentManager.findFragmentById(R.id
+                .telemetryFragment);
         if (telemetryFragment == null) {
             telemetryFragment = new TelemetryFragment();
             fragmentManager.beginTransaction()
@@ -197,7 +200,8 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
         }
 
         // Add the mode info panel fragment
-        Fragment flightModePanel = fragmentManager.findFragmentById(R.id.sliding_drawer_content);
+        flightModePanel = (FlightModePanel) fragmentManager.findFragmentById(R.id
+                .sliding_drawer_content);
         if (flightModePanel == null) {
             flightModePanel = new FlightModePanel();
             fragmentManager.beginTransaction()
@@ -218,6 +222,13 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
         if(flightActions != null){
             flightActions.onApiConnected(api);
         }
+
+        if(telemetryFragment != null)
+            telemetryFragment.onApiConnected(api);
+
+        if(flightModePanel != null)
+            flightModePanel.onApiConnected(api);
+
         enableSlidingUpPanel(this.dpApi);
     }
 
@@ -229,6 +240,12 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 
         if(flightActions != null)
             flightActions.onApiDisconnected();
+
+        if(telemetryFragment != null)
+            telemetryFragment.onApiDisconnected();
+
+        if(flightModePanel != null)
+            flightModePanel.onApiDisconnected();
     }
 
     @Override

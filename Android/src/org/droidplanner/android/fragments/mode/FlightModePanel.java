@@ -2,6 +2,7 @@ package org.droidplanner.android.fragments.mode;
 
 import org.droidplanner.R;
 import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.fragments.helpers.ApiSubscriberFragment;
 import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
@@ -19,64 +20,27 @@ import com.MAVLink.Messages.ApmModes;
 /**
  * Implements the flight/apm mode panel description.
  */
-public class FlightModePanel extends Fragment implements OnDroneListener {
-
-	/**
-	 * This is the parent activity for this fragment.
-	 */
-	private ApiInterface.Provider mParentActivity;
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-
-		if (!(activity instanceof ApiInterface.Provider)) {
-			throw new IllegalStateException("Parent activity must be an instance of "
-					+ ApiInterface.Provider.class.getName());
-		}
-
-		mParentActivity = (ApiInterface.Provider) activity;
-	}
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		mParentActivity = null;
-	}
+public class FlightModePanel extends ApiSubscriberFragment implements OnDroneListener {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.fragment_flight_mode_panel, container, false);
 	}
 
-	@Override
-	public void onStart() {
-		super.onStart();
+    @Override
+    protected void onApiConnectedImpl(DroidPlannerApi api) {
+        api.addDroneListener(this);
 
-		if (mParentActivity != null) {
-            DroidPlannerApi dpApi = mParentActivity.getApi();
-            if(dpApi != null) {
-                dpApi.addDroneListener(this);
+        // Update the mode info panel based on the current mode.
+        onModeUpdate(api.getState().getMode());
+    }
 
-                // Update the mode info panel based on the current mode.
-                onModeUpdate(dpApi.getState().getMode());
-            }
-		}
-	}
+    @Override
+    protected void onApiDisconnectedImpl() {
+        getApi().removeDroneListener(this);
+    }
 
-	@Override
-	public void onStop() {
-		super.onStop();
-
-		if (mParentActivity != null) {
-            DroidPlannerApi dpApi = mParentActivity.getApi();
-            if (dpApi != null) {
-                dpApi.removeDroneListener(this);
-            }
-        }
-	}
-
-	@Override
+    @Override
 	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
 		switch (event) {
 		case CONNECTED:
@@ -95,7 +59,7 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 
 	private void onModeUpdate(ApmModes mode) {
 		// Update the info panel fragment
-        final DroidPlannerApi dpApi = mParentActivity == null ? null : mParentActivity.getApi();
+        final DroidPlannerApi dpApi = getApi();
 		Fragment infoPanel;
 		if (dpApi == null || !dpApi.isConnected()) {
 			infoPanel = new ModeDisconnectedFragment();

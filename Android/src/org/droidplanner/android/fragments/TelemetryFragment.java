@@ -67,7 +67,7 @@ public class TelemetryFragment extends ApiSubscriberFragment implements OnDroneL
 
     @Override
     protected void onApiDisconnectedImpl() {
-            getApi().removeDroneListener(this);
+        getApi().removeDroneListener(this);
     }
 
 	@Override
