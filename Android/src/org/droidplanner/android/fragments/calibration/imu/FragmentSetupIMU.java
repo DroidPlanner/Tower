@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,16 +16,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Api;
+
 import org.droidplanner.R;
 import org.droidplanner.android.api.services.DroidPlannerApi;
-import org.droidplanner.android.helpers.ApiInterface;
+import org.droidplanner.android.fragments.helpers.ApiSubscriberFragment;
 import org.droidplanner.android.notifications.TTSNotificationProvider;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.variables.Calibration;
 import org.droidplanner.core.model.Drone;
 
-public class FragmentSetupIMU extends Fragment implements OnDroneListener, ApiInterface.Subscriber {
+public class FragmentSetupIMU extends ApiSubscriberFragment implements OnDroneListener {
 
 	private final static long TIMEOUT_MAX = 30000l; //ms
     private final static long UPDATE_TIMEOUT_PERIOD = 100l; //ms
@@ -49,17 +50,6 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener, ApiIn
 
     private Button btnStep;
     private TextView textDesc;
-    private DroidPlannerApi dpApi;
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        if (!(activity instanceof ApiInterface.Provider)) {
-            throw new IllegalStateException("Parent activity must be an instance of "
-                    + ApiInterface.Provider.class.getName());
-        }
-    }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -79,6 +69,7 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener, ApiIn
         textDesc = (TextView) view.findViewById(R.id.textViewDesc);
 
         btnStep = (Button) view.findViewById(R.id.buttonStep);
+        btnStep.setEnabled(false);
         btnStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,33 +98,15 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener, ApiIn
         outState.putLong(EXTRA_UPDATE_TIMESTAMP, updateTimestamp);
     }
 
-	@Override
-	public void onStart() {
-		super.onStart();
-
-        ApiInterface.Provider apiProvider = (ApiInterface.Provider) getActivity();
-        if(apiProvider != null && apiProvider.getApi() != null){
-            onApiConnected(apiProvider.getApi());
-        }
-	}
-
-    @Override
-    public void onStop(){
-        super.onStop();
-        onApiDisconnected();
-    }
-
     private void resetCalibration(){
         calibration_step = 0;
         updateDescription(calibration_step);
     }
 
     @Override
-    public void onApiConnected(DroidPlannerApi api) {
-        dpApi = api;
-
-        final Drone drone = dpApi.getDrone();
-        if (drone != null && dpApi.isConnected()) {
+    public void onApiConnectedImpl(DroidPlannerApi api) {
+        final Drone drone = api.getDrone();
+        if (drone != null && api.isConnected()) {
             btnStep.setEnabled(true);
             if (drone.getCalibrationSetup().isCalibrating()) {
                 processMAVMessage(drone.getCalibrationSetup().getMessage(), false);
@@ -146,14 +119,12 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener, ApiIn
             resetCalibration();
         }
 
-        dpApi.addDroneListener(this);
+        api.addDroneListener(this);
     }
 
     @Override
-    public void onApiDisconnected() {
-        if(dpApi != null){
-            dpApi.removeDroneListener(this);
-        }
+    public void onApiDisconnectedImpl() {
+            getApi().removeDroneListener(this);
     }
 
 	private void processCalibrationStep(int step) {
@@ -234,12 +205,14 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener, ApiIn
     }
 
 	private void sendAck(int step) {
+        DroidPlannerApi dpApi = getApi();
 		if (dpApi != null) {
 			dpApi.getDrone().getCalibrationSetup().sendAckk(step);
 		}
 	}
 
 	private void startCalibration() {
+        DroidPlannerApi dpApi = getApi();
 		if (dpApi != null) {
 			dpApi.getDrone().getCalibrationSetup().startCalibration();
 		}

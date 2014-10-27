@@ -53,10 +53,10 @@ public abstract class ApiSubscriberListFragment extends ListFragment implements 
         if(dpApi != null || api == null) return;
 
         dpApi = api;
-        onApiConnectedImpl();
+        onApiConnectedImpl(api);
     }
 
-    protected abstract void onApiConnectedImpl();
+    protected abstract void onApiConnectedImpl(DroidPlannerApi api);
 
     @Override
     public final void onApiDisconnected() {

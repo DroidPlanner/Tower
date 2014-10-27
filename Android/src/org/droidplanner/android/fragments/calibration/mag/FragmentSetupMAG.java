@@ -6,6 +6,7 @@ import java.util.List;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.fragments.helpers.ApiSubscriberFragment;
 import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.lib.parcelables.ParcelableThreeSpacePoint;
 import org.droidplanner.android.widgets.scatterplot.ScatterPlot;
@@ -29,8 +30,8 @@ import android.widget.Toast;
 import ellipsoidFit.FitPoints;
 import ellipsoidFit.ThreeSpacePoint;
 
-public class FragmentSetupMAG extends Fragment implements MagnetometerCalibration
-        .OnMagCalibrationListener, DroneInterfaces.OnDroneListener, ApiInterface.Subscriber {
+public class FragmentSetupMAG extends ApiSubscriberFragment implements MagnetometerCalibration
+        .OnMagCalibrationListener, DroneInterfaces.OnDroneListener {
 
     private static final int CALIBRATION_IDLE = 0;
     private static final int CALIBRATION_IN_PROGRESS = 1;
@@ -48,7 +49,6 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
 
     private int calibrationStatus = CALIBRATION_IDLE;
 
-    private DroidPlannerApi dpApi;
 	private MagnetometerCalibration calibration;
 
     private List<? extends ThreeSpacePoint> startPoints;
@@ -84,6 +84,7 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
         calibrationProgress = (TextView) view.findViewById(R.id.calibration_progress);
 
         buttonStep = (Button) view.findViewById(R.id.buttonStep);
+        buttonStep.setEnabled(false);
         buttonStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,22 +160,6 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
         }
     }
 
-    @Override
-    public void onStart(){
-        super.onStart();
-
-        ApiInterface.Provider apiProvider = (ApiInterface.Provider) getActivity();
-        if(apiProvider != null && apiProvider.getApi() != null){
-            onApiConnected(apiProvider.getApi());
-        }
-    }
-
-    @Override
-    public void onStop(){
-        super.onStop();
-        onApiDisconnected();
-    }
-
     private void pauseCalibration(){
         if(calibration != null){
             calibration.stop();
@@ -238,6 +223,7 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
 	}
 
     public void startCalibration() {
+        DroidPlannerApi dpApi = getApi();
 		if(calibration != null && dpApi != null){
 			if (dpApi.getDrone().getMagnetometer().getOffsets()==null) {
 				Toast.makeText(getActivity()," Please load the parameters before calibrating", Toast.LENGTH_LONG).show();
@@ -307,7 +293,7 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
 			e.printStackTrace();
 		}
 
-        dpApi.getDrone().getStreamRates().setupStreamRatesFromPref();
+        getApi().getDrone().getStreamRates().setupStreamRatesFromPref();
 
         setCalibrationStatus(CALIBRATION_COMPLETED);
 	}
@@ -333,9 +319,7 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
     }
 
     @Override
-    public void onApiConnected(DroidPlannerApi api) {
-        dpApi = api;
-
+    public void onApiConnectedImpl(DroidPlannerApi api) {
         calibration = new MagnetometerCalibration(api.getDrone(), this,
                 new DroneInterfaces.Handler() {
             private final Handler handler = new Handler();
@@ -371,13 +355,11 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
     }
 
     @Override
-    public void onApiDisconnected() {
-        if(dpApi != null)
-            dpApi.removeDroneListener(this);
+    public void onApiDisconnectedImpl() {
+            getApi().removeDroneListener(this);
 
         pauseCalibration();
 
         calibration = null;
-        dpApi = null;
     }
 }

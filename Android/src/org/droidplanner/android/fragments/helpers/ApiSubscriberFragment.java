@@ -52,10 +52,10 @@ public abstract class ApiSubscriberFragment extends Fragment implements ApiInter
         if(dpApi != null || api == null) return;
 
         dpApi = api;
-        onApiConnectedImpl();
+        onApiConnectedImpl(api);
     }
 
-    protected abstract void onApiConnectedImpl();
+    protected abstract void onApiConnectedImpl(DroidPlannerApi api);
 
     @Override
     public final void onApiDisconnected() {

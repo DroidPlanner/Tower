@@ -6,15 +6,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenParameterDialog;
 import org.droidplanner.android.dialogs.parameters.DialogParameterInfo;
 import org.droidplanner.android.fragments.helpers.ApiSubscriberListFragment;
-import org.droidplanner.android.helpers.ApiInterface;
-import org.droidplanner.android.utils.file.FileManager;
 import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.file.IO.ParameterWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -28,11 +25,9 @@ import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.parameters.Parameter;
 import org.droidplanner.core.parameters.ParameterMetadata;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -53,7 +48,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ParamsFragment extends ApiSubscriberListFragment implements OnDroneListener,
-		DroneInterfaces.OnParameterManagerListener, ApiInterface.Subscriber {
+		DroneInterfaces.OnParameterManagerListener {
 
 	static final String TAG = ParamsFragment.class.getSimpleName();
 
@@ -202,7 +197,7 @@ public class ParamsFragment extends ApiSubscriberListFragment implements OnDrone
     }
 
     @Override
-    public void onApiConnectedImpl() {
+    public void onApiConnectedImpl(DroidPlannerApi api) {
         DroidPlannerApi dpApi = getApi();
         this.drone = dpApi.getDrone();
         Parameters droneParams = drone.getParameters();
