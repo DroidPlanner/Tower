@@ -2,8 +2,6 @@ package org.droidplanner.core.MAVLink;
 
 import org.droidplanner.core.model.Drone;
 
-import android.util.Log;
-
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
@@ -47,7 +45,6 @@ public class MavLinkModes {
 		msg.target_system = 1;
 		msg.target_component = 1;
 		drone.getMavClient().sendMavPacket(msg.pack());
-		Log.d("RC", "sent "+msg.toString());
 	}
 
 	public static void changeFlightMode(Drone drone, ApmModes mode) {
