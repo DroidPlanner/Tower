@@ -17,7 +17,7 @@ public class AdapterMissionItems extends ArrayAdapter<MissionItemType> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = super.getView(position, convertView, parent);
-		((TextView) view).setText(getItem(position).getLabel());
+		((TextView) view).setText(getItem(position).getName());
 		return view;
 	}
 

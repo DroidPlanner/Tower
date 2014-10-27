@@ -20,58 +20,51 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:fitsSystemWindows="true"
-        android:id="@+id/infoWindowContainer"
         >
 
         <TextView
             android:id="@+id/editorInfoWindow"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/editor_info_window"
-            android:textSize="16sp"
-            android:layout_toLeftOf="@+id/waypoint_type_spinner_container"
-            android:layout_toStartOf="@+id/waypoint_type_spinner_container"
-            android:layout_alignTop="@+id/waypoint_type_spinner_container"
-            android:layout_alignBottom="@+id/waypoint_type_spinner_container"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="@color/bottom_top_bar"
-            android:gravity="center_vertical|start"
-            android:textColor="@android:color/white"
-            android:paddingStart="5dp"
-            android:paddingLeft="5dp"
+            style="@style/editorMissionOverviewText"
+            android:visibility="visible"
+            android:layout_alignParentTop="true"
             />
 
-        <FrameLayout
-            android:id="@+id/waypoint_type_spinner_container"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
+        <include
+            android:id="@+id/editorSplineToggleContainer"
             android:layout_width="wrap_content"
-            android:minWidth="170dp"
-            android:layout_height="45dp"
-            style="@style/missionItemDetailCard"
-            android:background="@color/bottom_top_bar"
-            android:gravity="center">
+            android:layout_height="wrap_content"
+            layout="@layout/editor_spline_toggle"
+            android:layout_below="@+id/editorInfoWindow"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"/>
 
-            <Spinner
-                android:id="@+id/waypoint_type_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                style="@android:style/Widget.Holo.Spinner"
-                />
-        </FrameLayout>
-
+        <include
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/button_my_location"
+            android:layout_margin="8dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/editorInfoWindow"
+            android:layout_alignWithParentIfMissing="true" />
     </org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout>
 
-    <include
+    <fragment
+        android:id="@+id/flightActionsFragment"
+        android:name="org.droidplanner.android.fragments.EditorToolsFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        layout="@layout/button_my_location"
-        android:layout_margin="8dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/infoWindowContainer"/>
+        android:layout_above="@+id/missionFragment1"
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/editorInfoWindow"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="5dp"
+        tools:layout="@layout/fragment_editor_tools"
+        />
 
     <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
         android:layout_width="match_parent"

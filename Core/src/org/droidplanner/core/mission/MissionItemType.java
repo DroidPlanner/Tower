@@ -19,49 +19,15 @@ public enum MissionItemType {
 			"Return to Launch"), LAND("Land"), CIRCLE("Circle"), ROI("Region of Interest"), SURVEY(
 			"Survey"), CYLINDRICAL_SURVEY("Structure Scan"), CHANGE_SPEED("Change Speed");
 
-	private final String label;
+	private final String name;
 
-	private MissionItemType(String label) {
-		this.label = label;
+	private MissionItemType(String name) {
+		this.name = name;
 	}
 
-	public String getLabel() {
-		return label;
+	public String getName() {
+		return name;
 	}
-
-    public static MissionItemType fromLabel(String label){
-        if(WAYPOINT.getLabel().equals(label))
-            return WAYPOINT;
-
-        if(SPLINE_WAYPOINT.getLabel().equals(label))
-            return SPLINE_WAYPOINT;
-
-        if(TAKEOFF.getLabel().equals(label))
-            return TAKEOFF;
-
-        if(RTL.getLabel().equals(label))
-            return RTL;
-
-        if(LAND.getLabel().equals(label))
-            return LAND;
-
-        if(CIRCLE.getLabel().equals(label))
-            return CIRCLE;
-
-        if(ROI.getLabel().equals(label))
-            return ROI;
-
-        if(SURVEY.getLabel().equals(label))
-            return SURVEY;
-
-        if(CYLINDRICAL_SURVEY.getLabel().equals(label))
-            return CYLINDRICAL_SURVEY;
-
-        if(CHANGE_SPEED.getLabel().equals(label))
-            return CHANGE_SPEED;
-
-        return null;
-    }
 
 	public MissionItem getNewItem(MissionItem referenceItem) throws IllegalArgumentException {
 		switch (this) {
@@ -86,7 +52,7 @@ public enum MissionItemType {
 		case CYLINDRICAL_SURVEY:
 			return new CylindricalSurvey(referenceItem);
 		default:
-			throw new IllegalArgumentException("Unrecognized mission item type (" + label + ")"
+			throw new IllegalArgumentException("Unrecognized mission item type (" + name + ")"
 					+ ".");
 		}
 	}

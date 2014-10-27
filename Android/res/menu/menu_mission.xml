@@ -1,27 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    <item
-        android:id="@+id/menu_editor_toolbar"
-        android:title="Editor Toolbar"
-        android:showAsAction="always"
-        android:actionProviderClass="org.droidplanner.android.widgets.actionProviders.EditorToolsActionProvider"/>
-
-    <group
-        android:id="@+id/menu_group_connected"
-        android:enabled="false"
-        android:visible="false">
-
-        <item
-            android:id="@+id/menu_send_mission"
-            android:showAsAction="never"
-            android:title="@string/send_mission"/>
-        <item
-            android:id="@+id/menu_load_mission"
-            android:showAsAction="never"
-            android:title="@string/load_mission"/>
-    </group>
-
     <item
         android:id="@+id/menu_open_mission"
         android:icon="@drawable/ic_action_folder_open"
