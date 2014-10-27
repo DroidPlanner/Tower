@@ -5,6 +5,7 @@ import java.util.List;
 import org.droidplanner.R;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
+import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.survey.CylindricalSurvey;
 
@@ -18,10 +19,6 @@ import android.widget.CompoundButton;
 public class MissionCylindricalSurveyFragment extends MissionDetailFragment
 		implements CardWheelHorizontalView.OnCardWheelChangedListener,
 		CompoundButton.OnCheckedChangeListener {
-
-	private CheckBox checkBoxAdvanced;
-	private CardWheelHorizontalView radiusPicker, startAltitudeStepPicker,
-			endAltitudeStepPicker, mNumberStepsPicker;
 
 	@Override
 	protected int getResource() {
@@ -38,10 +35,9 @@ public class MissionCylindricalSurveyFragment extends MissionDetailFragment
 				.getPosition(MissionItemType.CYLINDRICAL_SURVEY));
 
 		// Use the first one as reference.
-		final CylindricalSurvey firstItem = ((List<CylindricalSurvey>) getMissionItems())
-				.get(0);
+		final CylindricalSurvey firstItem = getMissionItems().get(0);
 
-		radiusPicker = (CardWheelHorizontalView) view
+		CardWheelHorizontalView radiusPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.radiusPicker);
 		radiusPicker.setViewAdapter(new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, 2, 50, "%d m"));
@@ -49,7 +45,7 @@ public class MissionCylindricalSurveyFragment extends MissionDetailFragment
 		radiusPicker.setCurrentValue((int) firstItem.getRadius()
 				.valueInMeters());
 
-		startAltitudeStepPicker = (CardWheelHorizontalView) view
+		CardWheelHorizontalView startAltitudeStepPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.startAltitudePicker);
 		startAltitudeStepPicker.setViewAdapter(new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, MIN_ALTITUDE, MAX_ALTITUDE,
@@ -58,7 +54,7 @@ public class MissionCylindricalSurveyFragment extends MissionDetailFragment
 		startAltitudeStepPicker.setCurrentValue((int) firstItem
 				.getStartAltitude().valueInMeters());
 
-		endAltitudeStepPicker = (CardWheelHorizontalView) view
+		CardWheelHorizontalView endAltitudeStepPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.heightStepPicker);
 		endAltitudeStepPicker.setViewAdapter(new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, MIN_ALTITUDE, MAX_ALTITUDE,
@@ -67,22 +63,23 @@ public class MissionCylindricalSurveyFragment extends MissionDetailFragment
 		endAltitudeStepPicker.setCurrentValue((int) firstItem.getEndAltitude()
 				.valueInMeters());
 
-		mNumberStepsPicker = (CardWheelHorizontalView) view
+		CardWheelHorizontalView mNumberStepsPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.stepsPicker);
 		mNumberStepsPicker.setViewAdapter(new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, 1, 10, "%d"));
 		mNumberStepsPicker.addChangingListener(this);
 		mNumberStepsPicker.setCurrentValue(firstItem.getNumberOfSteps());
 
-		checkBoxAdvanced = (CheckBox) view
-				.findViewById(R.id.checkBoxSurveyCrossHatch);
+		CheckBox checkBoxAdvanced = (CheckBox) view.findViewById(R.id.checkBoxSurveyCrossHatch);
 		checkBoxAdvanced.setOnCheckedChangeListener(this);
 		checkBoxAdvanced.setChecked(firstItem.isCrossHatchEnabled());
 	}
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		getItem().enableCrossHatch(isChecked);
+        for(CylindricalSurvey item: getMissionItems())
+            item.enableCrossHatch(isChecked);
+
         getMissionProxy().getMission().notifyMissionUpdate();
 	}
 
@@ -91,25 +88,29 @@ public class MissionCylindricalSurveyFragment extends MissionDetailFragment
 			int newValue) {
 		switch (cardWheel.getId()) {
 		case R.id.radiusPicker:
-			getItem().setRadius(newValue);
+            for(CylindricalSurvey item: getMissionItems())
+                item.setRadius(newValue);
             getMissionProxy().getMission().notifyMissionUpdate();
 			break;
+
 		case R.id.startAltitudePicker:
-			getItem().setStartAltitude(newValue);
+            for(CylindricalSurvey item: getMissionItems())
+                item.setStartAltitude(newValue);
             getMissionProxy().getMission().notifyMissionUpdate();
 			break;
 		case R.id.heightStepPicker:
-			getItem().setAltitudeStep(newValue);
+            for(CylindricalSurvey item: getMissionItems())
+                item.setAltitudeStep(newValue);
 			break;
 		case R.id.stepsPicker:
-			getItem().setNumberOfSteps(newValue);
+            for(CylindricalSurvey item: getMissionItems())
+                item.setNumberOfSteps(newValue);
 			break;
 		}
 	}
 
-	private CylindricalSurvey getItem() {
-		CylindricalSurvey cylindricalSurvey = (CylindricalSurvey) getMissionItems()
-				.get(0);
-		return cylindricalSurvey;
-	}
+    @Override
+    protected List<CylindricalSurvey> getMissionItems(){
+        return (List<CylindricalSurvey>) super.getMissionItems();
+    }
 }

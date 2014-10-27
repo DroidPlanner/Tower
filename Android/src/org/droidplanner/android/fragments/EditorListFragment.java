@@ -29,15 +29,12 @@ import android.widget.AbsListView;
 import android.widget.ImageButton;
 
 public class EditorListFragment extends Fragment implements OnItemLongClickListener,
-		OnItemClickListener, OnDroneListener, OnClickListener,
-		MissionSelection.OnSelectionUpdateListener {
+		OnItemClickListener, OnDroneListener, MissionSelection.OnSelectionUpdateListener {
 
 	private HListView list;
 	private MissionProxy missionProxy;
 	private MissionItemProxyView adapter;
 	private OnEditorInteraction editorListener;
-	private ImageButton leftArrow;
-	private ImageButton rightArrow;
 	private Drone drone;
 
 	@Override
@@ -54,11 +51,6 @@ public class EditorListFragment extends Fragment implements OnItemLongClickListe
 		list.setOnItemLongClickListener(this);
 		list.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 		list.setAdapter(adapter);
-
-		leftArrow = (ImageButton) view.findViewById(R.id.listLeftArrow);
-		rightArrow = (ImageButton) view.findViewById(R.id.listRightArrow);
-		leftArrow.setOnClickListener(this);
-		rightArrow.setOnClickListener(this);
 
 		return view;
 	}
@@ -119,16 +111,6 @@ public class EditorListFragment extends Fragment implements OnItemLongClickListe
 		return editorListener.onItemLongClick(missionItem);
 	}
 
-	public void setArrowsVisibility(boolean visible) {
-		if (visible) {
-			leftArrow.setVisibility(View.VISIBLE);
-			rightArrow.setVisibility(View.VISIBLE);
-		} else {
-			leftArrow.setVisibility(View.INVISIBLE);
-			rightArrow.setVisibility(View.INVISIBLE);
-		}
-	}
-
 	/**
 	 * Updates the choice mode of the listview containing the mission items.
 	 * 
@@ -140,18 +122,6 @@ public class EditorListFragment extends Fragment implements OnItemLongClickListe
 		case AbsListView.CHOICE_MODE_MULTIPLE:
 			list.setChoiceMode(choiceMode);
 			break;
-		}
-	}
-
-	@Override
-	public void onClick(View v) {
-		if (v == leftArrow) {
-			missionProxy.moveSelection(false);
-			adapter.notifyDataSetChanged();
-		}
-		if (v == rightArrow) {
-			missionProxy.moveSelection(true);
-			adapter.notifyDataSetChanged();
 		}
 	}
 
