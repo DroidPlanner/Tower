@@ -28,6 +28,10 @@ public class ChangeSpeed extends MissionCMD {
 		this.speed = speed;
 	}
 
+    public ChangeSpeed(Mission mission){
+        super(mission);
+    }
+
 	@Override
 	public List<msg_mission_item> packMissionItem() {
 		List<msg_mission_item> list = super.packMissionItem();

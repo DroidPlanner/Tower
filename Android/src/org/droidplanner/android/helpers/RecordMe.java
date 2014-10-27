@@ -2,6 +2,7 @@ package org.droidplanner.android.helpers;
 
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.mission.MissionItemType;
 
 import android.content.Context;
 import android.location.Location;
@@ -55,7 +56,7 @@ public class RecordMe implements LocationListener {
 	public void onLocationChanged(Location location) {
 		// TODO find a better way to do the altitude
 		Coord2D coord = new Coord2D(location.getLatitude(), location.getLongitude());
-		missionProxy.addWaypoint(coord);
+		missionProxy.addMissionItem(MissionItemType.WAYPOINT, coord);
 	}
 
 	@Override
