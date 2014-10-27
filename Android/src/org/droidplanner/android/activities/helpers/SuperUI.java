@@ -125,10 +125,9 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 
         invalidateOptionsMenu();
 
-        final Drone drone = dpApi.getDrone();
-        drone.addDroneListener(SuperUI.this);
-        drone.getMavClient().queryConnectionState();
-        drone.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
+        api.addDroneListener(SuperUI.this);
+        api.getMavClient().queryConnectionState();
+        api.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
 
         wasApiConnectedCalled = true;
     }
@@ -136,9 +135,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
     @Override
     public void onApiDisconnected(){
         if(dpApi != null) {
-            final Drone drone = dpApi.getDrone();
-            if(drone != null)
-                drone.removeDroneListener(this);
+                dpApi.removeDroneListener(this);
         }
 
         dpApi = null;
@@ -186,8 +183,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		final MenuItem toggleConnectionItem = menu.findItem(R.id.menu_connect);
 
 		// Configure the info bar action provider if we're connected
-        final Drone drone = dpApi == null ? null : dpApi.getDrone();
-		if (drone != null && drone.getMavClient().isConnected()) {
+		if (dpApi != null && dpApi.isConnected()) {
 			menu.setGroupEnabled(R.id.menu_group_connected, true);
 			menu.setGroupVisible(R.id.menu_group_connected, true);
 
@@ -208,7 +204,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 
 		case R.id.menu_load_mission:
             if(dpApi != null) {
-                dpApi.getDrone().getWaypointManager().getWaypoints();
+                dpApi.getWaypointManager().getWaypoints();
             }
 			return true;
 

@@ -281,14 +281,13 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		case R.id.menu_send_mission:
             if(dpApi != null) {
                 final MissionProxy missionProxy = dpApi.getMissionProxy();
-                Drone drone = dpApi.getDrone();
-                if (drone.getMission().getItems().isEmpty()
-                        || drone.getMission().hasTakeoffAndLandOrRTL()) {
+                if (dpApi.getMission().getItems().isEmpty()
+                        || dpApi.getMission().hasTakeoffAndLandOrRTL()) {
                     missionProxy.sendMissionToAPM();
                 } else {
                     YesNoWithPrefsDialog dialog = YesNoWithPrefsDialog.newInstance(
                             getApplicationContext(), "Mission Upload",
-                            "Do you want to append a Takeoff and RTL to your " + "mission?", "Ok",
+                            "Do you want to append a Takeoff and RTL to your mission?", "Ok",
                             "Skip", new YesNoDialog.Listener() {
 
                                 @Override
@@ -328,9 +327,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 			@Override
 			public void waypointFileLoaded(MissionReader reader) {
                 if(dpApi != null) {
-                    Drone drone = dpApi.getDrone();
-                    if(drone != null)
-                        drone.getMission().onMissionLoaded(reader.getMsgMissionItems());
+                        dpApi.getMission().onMissionLoaded(reader.getMsgMissionItems());
                 }
 
 				planningMapFragment.zoomToFit();
@@ -346,9 +343,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                     @Override
                     public void onOk(CharSequence input) {
                         if(dpApi != null) {
-                            Drone drone = dpApi.getDrone();
-                            if(drone != null) {
-                                final List<msg_mission_item> missionItems = drone.getMission()
+                                final List<msg_mission_item> missionItems = dpApi.getMission()
                                         .getMsgMissionItems();
                                 if (MissionWriter.write(missionItems, input.toString())) {
                                     Toast.makeText(context, R.string.file_saved_success, Toast.LENGTH_SHORT).show();
@@ -362,7 +357,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
                                     return;
                                 }
-                            }
                         }
 
                         Toast.makeText(context, R.string.file_saved_error, Toast.LENGTH_SHORT).show();

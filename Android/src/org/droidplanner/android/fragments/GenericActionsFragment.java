@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.core.model.Drone;
 
 /**
@@ -16,8 +17,6 @@ import org.droidplanner.core.model.Drone;
  */
 public class GenericActionsFragment extends Fragment implements View.OnClickListener,
         FlightActionsFragment.SlidingUpHeader {
-
-    private Button connectBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,7 +28,7 @@ public class GenericActionsFragment extends Fragment implements View.OnClickList
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
+        Button connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
         connectBtn.setOnClickListener(this);
     }
 
@@ -43,7 +42,7 @@ public class GenericActionsFragment extends Fragment implements View.OnClickList
     }
 
     @Override
-    public boolean isSlidingUpPanelEnabled(Drone drone) {
+    public boolean isSlidingUpPanelEnabled(DroidPlannerApi api) {
         return false;
     }
 }

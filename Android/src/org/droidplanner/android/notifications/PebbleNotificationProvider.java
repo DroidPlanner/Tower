@@ -193,11 +193,11 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 				break;
 
 			case KEY_REQUEST_PAUSE:
-				dpApi.getDrone().getGuidedPoint().pauseAtCurrentLocation();
+				dpApi.getGuidedPoint().pauseAtCurrentLocation();
 				break;
 
 			case KEY_REQUEST_MODE_RTL:
-				dpApi.getDrone().getState().changeFlightMode(ApmModes.ROTOR_RTL);
+				dpApi.getState().changeFlightMode(ApmModes.ROTOR_RTL);
 				break;
 			}
 		}

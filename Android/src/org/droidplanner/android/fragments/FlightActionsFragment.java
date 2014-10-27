@@ -36,7 +36,7 @@ import com.google.android.gms.analytics.HitBuilders;
 public class FlightActionsFragment extends ApiSubscriberFragment implements OnDroneListener {
 
     interface SlidingUpHeader{
-        boolean isSlidingUpPanelEnabled(Drone drone);
+        boolean isSlidingUpPanelEnabled(DroidPlannerApi api);
     }
 
     private SlidingUpHeader header;
@@ -86,7 +86,7 @@ public class FlightActionsFragment extends ApiSubscriberFragment implements OnDr
         header = (SlidingUpHeader) actionsBarFragment;
     }
 
-    public boolean isSlidingUpPanelEnabled(Drone drone){
-        return header != null && header.isSlidingUpPanelEnabled(drone);
+    public boolean isSlidingUpPanelEnabled(DroidPlannerApi api){
+        return header != null && header.isSlidingUpPanelEnabled(api);
     }
 }

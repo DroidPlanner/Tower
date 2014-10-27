@@ -218,7 +218,7 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
         if(flightActions != null){
             flightActions.onApiConnected(api);
         }
-        enableSlidingUpPanel(this.dpApi.getDrone());
+        enableSlidingUpPanel(this.dpApi);
     }
 
     @Override
@@ -386,7 +386,7 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
         case CONNECTED:
         case DISCONNECTED:
         case STATE:
-            enableSlidingUpPanel(drone);
+            enableSlidingUpPanel(dpApi);
             break;
 
 		default:
@@ -394,13 +394,13 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 		}
 	}
 
-    private void enableSlidingUpPanel(Drone drone){
-        if (mSlidingPanel == null || drone == null) {
+    private void enableSlidingUpPanel(DroidPlannerApi api){
+        if (mSlidingPanel == null || api == null) {
             return;
         }
 
         final boolean isEnabled = flightActions != null && flightActions.isSlidingUpPanelEnabled
-                (drone);
+                (api);
 
         if (isEnabled) {
             mSlidingPanel.setSlidingEnabled(true);

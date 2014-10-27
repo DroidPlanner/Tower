@@ -9,9 +9,12 @@ import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
+import org.droidplanner.core.MAVLink.WaypointManager;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.variables.GPS;
+import org.droidplanner.core.drone.variables.GuidedPoint;
 import org.droidplanner.core.gcs.follow.Follow;
+import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.model.Drone;
 
 import java.lang.ref.WeakReference;
@@ -51,8 +54,16 @@ public class DroidPlannerApi extends Binder {
         return getDrone().getGps();
     }
 
+    public GuidedPoint getGuidedPoint(){
+        return getDrone().getGuidedPoint();
+    }
+
     public org.droidplanner.core.drone.variables.State getState(){
         return getDrone().getState();
+    }
+
+    public Mission getMission(){
+        return getDrone().getMission();
     }
 
     public boolean isConnected(){
@@ -96,5 +107,9 @@ public class DroidPlannerApi extends Binder {
             }
         }
         drone.getMavClient().toggleConnectionState();
+    }
+
+    public WaypointManager getWaypointManager() {
+        return getDrone().getWaypointManager();
     }
 }
