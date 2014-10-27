@@ -35,6 +35,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 			+ ".ACTION_TOGGLE_DRONE_CONNECTION";
 
     private ScreenOrientation screenOrientation = new ScreenOrientation(this);
+	private InfoBarActionProvider infoBar;
 	private GCSHeartbeat gcsHeartbeat;
 	public DroidPlannerApp app;
 	public Drone drone;
@@ -115,17 +116,25 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	protected void onStop() {
 		super.onStop();
 		drone.removeDroneListener(this);
+
+		if (infoBar != null) {
+			infoBar.setDrone(null);
+			infoBar = null;
+		}
 	}
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		if (infoBar != null) {
+			infoBar.onDroneEvent(event, drone);
+		}
+
 		switch (event) {
 		case CONNECTED:
 			gcsHeartbeat.setActive(true);
 			invalidateOptionsMenu();
 			screenOrientation.requestLock();
 			break;
-
 		case DISCONNECTED:
 			gcsHeartbeat.setActive(false);
 			invalidateOptionsMenu();
@@ -138,29 +147,88 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		// Reset the previous info bar
+		if (infoBar != null) {
+			infoBar.setDrone(null);
+			infoBar = null;
+		}
+
 		getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
 
 		final MenuItem toggleConnectionItem = menu.findItem(R.id.menu_connect);
+		final MenuItem infoBarItem = menu.findItem(R.id.menu_info_bar);
+		if (infoBarItem != null)
+			infoBar = (InfoBarActionProvider) infoBarItem.getActionProvider();
 
 		// Configure the info bar action provider if we're connected
 		if (drone.getMavClient().isConnected()) {
 			menu.setGroupEnabled(R.id.menu_group_connected, true);
 			menu.setGroupVisible(R.id.menu_group_connected, true);
 
-			toggleConnectionItem.setTitle(R.string.menu_disconnect);
+            final boolean areMissionMenusEnabled = enableMissionMenus();
 
+            final MenuItem sendMission = menu.findItem(R.id.menu_send_mission);
+            sendMission.setEnabled(areMissionMenusEnabled);
+            sendMission.setVisible(areMissionMenusEnabled);
+
+            final MenuItem loadMission = menu.findItem(R.id.menu_load_mission);
+            loadMission.setEnabled(areMissionMenusEnabled);
+            loadMission.setVisible(areMissionMenusEnabled);
+
+			toggleConnectionItem.setTitle(R.string.menu_disconnect);
+			toggleConnectionItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
+			if (infoBar != null) {
+				infoBar.setDrone(drone);
+			}
 		} else {
 			menu.setGroupEnabled(R.id.menu_group_connected, false);
 			menu.setGroupVisible(R.id.menu_group_connected, false);
 
 			toggleConnectionItem.setTitle(R.string.menu_connect);
+			toggleConnectionItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
+			if (infoBar != null) {
+				infoBar.setDrone(null);
+			}
 		}
 		return super.onCreateOptionsMenu(menu);
 	}
 
+    protected boolean enableMissionMenus(){
+        return false;
+    }
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.menu_send_mission:
+            final MissionProxy missionProxy = app.getMissionProxy();
+			if (drone.getMission().hasTakeoffAndLandOrRTL()) {
+                missionProxy.sendMissionToAPM();
+			} else {
+                YesNoWithPrefsDialog dialog = YesNoWithPrefsDialog.newInstance(getApplicationContext(),
+                        "Mission Upload", "Do you want to append a Takeoff and RTL to your " +
+                                "mission?", "Ok", "Skip", new YesNoDialog.Listener() {
+
+                            @Override
+                            public void onYes() {
+                                missionProxy.addTakeOffAndRTL();
+                                missionProxy.sendMissionToAPM();
+                            }
+
+                            @Override
+                            public void onNo() {
+                                missionProxy.sendMissionToAPM();
+                            }
+                        },
+                        getString(R.string.pref_auto_insert_mission_takeoff_rtl_land_key));
+
+                if(dialog != null) {
+                    dialog.show(getSupportFragmentManager(), "Mission Upload check.");
+                }
+			}
+			return true;
 
 		case R.id.menu_load_mission:
 			drone.getWaypointManager().getWaypoints();
@@ -180,6 +248,13 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		switch (item.getItemId()) {
 		case R.id.menu_connect:
 			toggleDroneConnection();
+			return true;
+
+		case R.id.menu_map_type_hybrid:
+		case R.id.menu_map_type_normal:
+		case R.id.menu_map_type_terrain:
+		case R.id.menu_map_type_satellite:
+			setMapTypeFromItemId(item.getItemId());
 			return true;
 
 		default:
@@ -203,4 +278,28 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		}
 		drone.getMavClient().toggleConnectionState();
 	}
+
+	private void setMapTypeFromItemId(int itemId) {
+		final String mapType;
+		switch (itemId) {
+		case R.id.menu_map_type_hybrid:
+			mapType = GoogleMapFragment.MAP_TYPE_HYBRID;
+			break;
+		case R.id.menu_map_type_normal:
+			mapType = GoogleMapFragment.MAP_TYPE_NORMAL;
+			break;
+		case R.id.menu_map_type_terrain:
+			mapType = GoogleMapFragment.MAP_TYPE_TERRAIN;
+			break;
+		default:
+			mapType = GoogleMapFragment.MAP_TYPE_SATELLITE;
+			break;
+		}
+
+		PreferenceManager.getDefaultSharedPreferences(this).edit()
+				.putString(GoogleMapFragment.PREF_MAP_TYPE, mapType).commit();
+
+		// drone.notifyMapTypeChanged();
+	}
+
 }
