@@ -11,6 +11,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.fragments.helpers.ApiSubscriberFragment;
 import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.MissionSelection;
@@ -30,25 +31,18 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
 
-public class EditorListFragment extends Fragment implements OnItemLongClickListener,
-		OnItemClickListener, OnDroneListener, MissionSelection.OnSelectionUpdateListener,
-        ApiInterface.Subscriber {
+public class EditorListFragment extends ApiSubscriberFragment implements OnItemLongClickListener,
+		OnItemClickListener, OnDroneListener, MissionSelection.OnSelectionUpdateListener {
 
 	private HListView list;
 	private MissionProxy missionProxy;
 	private MissionItemProxyView adapter;
 	private OnEditorInteraction editorListener;
 	private Drone drone;
-    private DroidPlannerApi dpApi;
 
     @Override
     public void onAttach(Activity activity){
         super.onAttach(activity);
-        if(!(activity instanceof ApiInterface.Provider)){
-            throw new IllegalStateException("Parent activity must implement " +
-                    ApiInterface.Provider.class.getName());
-        }
-
         if(!(activity instanceof OnEditorInteraction)){
             throw new IllegalStateException("Parent activity must implement " +
                     OnEditorInteraction.class.getName());
@@ -73,23 +67,10 @@ public class EditorListFragment extends Fragment implements OnItemLongClickListe
 	public void onStart() {
 		super.onStart();
 		updateViewVisibility();
-
-        DroidPlannerApi api = ((ApiInterface.Provider)getActivity()).getApi();
-        onApiConnected(api);
-	}
-
-	@Override
-	public void onStop() {
-		super.onStop();
-		onApiDisconnected();
 	}
 
     @Override
-    public void onApiConnected(DroidPlannerApi api) {
-        if(dpApi != null || api == null) return;
-
-        dpApi = api;
-
+    protected void onApiConnectedImpl(DroidPlannerApi dpApi) {
         drone = dpApi.getDrone();
         missionProxy = dpApi.getMissionProxy();
 
@@ -101,9 +82,7 @@ public class EditorListFragment extends Fragment implements OnItemLongClickListe
     }
 
     @Override
-    public void onApiDisconnected() {
-        if(dpApi == null) return;
-
+    protected void onApiDisconnectedImpl() {
         drone.removeDroneListener(this);
         missionProxy.selection.removeSelectionUpdateListener(this);
     }

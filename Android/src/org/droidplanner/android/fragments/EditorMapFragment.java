@@ -79,7 +79,7 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	}
 
     @Override
-    public void onApiConnected(DroidPlannerApi api){
+    protected void onApiConnectedImpl(DroidPlannerApi api){
         super.onApiConnected(api);
         zoomToFit();
     }
@@ -92,6 +92,11 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
+        if(!(activity instanceof OnEditorInteraction)){
+            throw new IllegalStateException("Parent activity must implement " +
+                    OnEditorInteraction.class.getName());
+        }
+
 		editorListener = (OnEditorInteraction) activity;
 	}
 

@@ -3,6 +3,7 @@ package org.droidplanner.android.fragments;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.fragments.helpers.ApiSubscriberFragment;
 import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.widgets.AttitudeIndicator;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -19,7 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class TelemetryFragment extends Fragment implements OnDroneListener, ApiInterface.Subscriber {
+public class TelemetryFragment extends ApiSubscriberFragment implements OnDroneListener {
 
 	private AttitudeIndicator attitudeIndicator;
 	private TextView roll;
@@ -31,18 +32,6 @@ public class TelemetryFragment extends Fragment implements OnDroneListener, ApiI
 	private TextView altitude;
 	private TextView targetAltitude;
 	private boolean headingModeFPV;
-
-    private DroidPlannerApi dpApi;
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        if (!(activity instanceof ApiInterface.Provider)) {
-            throw new IllegalStateException("Parent activity must be an instance of "
-                    + ApiInterface.Provider.class.getName());
-        }
-    }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,36 +55,19 @@ public class TelemetryFragment extends Fragment implements OnDroneListener, ApiI
 	public void onStart() {
 		super.onStart();
 
-        final Activity activity = getActivity();
-
-        ApiInterface.Provider apiProvider = (ApiInterface.Provider) activity;
-        DroidPlannerApi api = apiProvider == null ? null : apiProvider.getApi();
-        if(api != null) {
-            onApiConnected(api);
-        }
-
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity()
 				.getApplicationContext());
 		headingModeFPV = prefs.getBoolean("pref_heading_mode", false);
 	}
 
-	@Override
-	public void onStop() {
-		super.onStop();
-		onApiDisconnected();
-	}
-
     @Override
-    public void onApiConnected(DroidPlannerApi api) {
-        dpApi = api;
+    protected void onApiConnectedImpl(DroidPlannerApi api) {
         api.addDroneListener(this);
     }
 
     @Override
-    public void onApiDisconnected() {
-        if(dpApi != null){
-            dpApi.removeDroneListener(this);
-        }
+    protected void onApiDisconnectedImpl() {
+            getApi().removeDroneListener(this);
     }
 
 	@Override

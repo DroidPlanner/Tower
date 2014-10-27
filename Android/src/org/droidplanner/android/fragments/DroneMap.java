@@ -5,10 +5,10 @@ import java.util.Set;
 
 import org.droidplanner.R;
 import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.fragments.helpers.ApiSubscriberFragment;
 import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
 import org.droidplanner.android.graphic.map.GraphicHome;
-import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
@@ -30,7 +30,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public abstract class DroneMap extends Fragment implements OnDroneListener, ApiInterface.Subscriber {
+import com.google.android.gms.common.api.Api;
+
+public abstract class DroneMap extends ApiSubscriberFragment implements OnDroneListener {
 
 	private final static String TAG = DroneMap.class.getSimpleName();
 
@@ -87,7 +89,6 @@ public abstract class DroneMap extends Fragment implements OnDroneListener, ApiI
 
 	protected DPMap mMapFragment;
 
-    private DroidPlannerApi dpApi;
 	private GraphicHome home;
 	public GraphicDrone graphicDrone;
 	public GraphicGuided guided;
@@ -113,10 +114,8 @@ public abstract class DroneMap extends Fragment implements OnDroneListener, ApiI
 	}
 
     @Override
-    public void onApiConnected(DroidPlannerApi api){
-        if(dpApi == null) {
-            dpApi = api;
-            dpApi.addDroneListener(this);
+    protected void onApiConnectedImpl(DroidPlannerApi api){
+            api.addDroneListener(this);
 
             drone = api.getDrone();
             missionProxy = api.getMissionProxy();
@@ -126,16 +125,11 @@ public abstract class DroneMap extends Fragment implements OnDroneListener, ApiI
             guided = new GraphicGuided(drone);
 
             postUpdate();
-        }
     }
 
     @Override
-    public void onApiDisconnected(){
-        if(dpApi == null)
-            return;
-
-        dpApi.removeDroneListener(this);
-        dpApi = null;
+    public void onApiDisconnectedImpl(){
+        getApi().removeDroneListener(this);
     }
 
 	private void updateMapFragment() {
@@ -171,28 +165,17 @@ public abstract class DroneMap extends Fragment implements OnDroneListener, ApiI
 	public void onStart() {
 		super.onStart();
 		updateMapFragment();
-
-        final DroidPlannerApi api = ((ApiInterface.Provider) getActivity()).getApi();
-        if(api != null){
-            onApiConnected(api);
-        }
 	}
 
     @Override
     public void onStop(){
         super.onStop();
         mHandler.removeCallbacksAndMessages(null);
-        onApiDisconnected();
     }
 
     @Override
     public void onAttach(Activity activity){
         super.onAttach(activity);
-        if(!(activity instanceof ApiInterface.Provider)){
-            throw new IllegalStateException("Parent activity must implement " +
-                    ApiInterface.Provider.class.getName());
-        }
-
         context = activity.getApplicationContext();
     }
 
