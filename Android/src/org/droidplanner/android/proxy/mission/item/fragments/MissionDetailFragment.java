@@ -18,7 +18,6 @@ import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.commands.MissionCMD;
 import org.droidplanner.core.mission.survey.CylindricalSurvey;
 import org.droidplanner.core.mission.survey.Survey;
-import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.util.Pair;
 
 import android.app.Activity;
@@ -173,14 +172,8 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
             } else {
                 list.remove(MissionItemType.SURVEY);
             }
-
-            if(currentItem instanceof SpatialCoordItem){
-                list.remove(MissionItemType.TAKEOFF);
-                list.remove(MissionItemType.CHANGE_SPEED);
-                list.remove(MissionItemType.RTL);
-            }
             
-            if (currentItem instanceof CylindricalSurvey) {
+            if ((currentItem instanceof CylindricalSurvey)) {
                 list.clear();
                 list.add(MissionItemType.CYLINDRICAL_SURVEY);
             }

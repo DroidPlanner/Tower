@@ -3,13 +3,14 @@ package org.droidplanner.android.fragments.helpers;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.helpers.ApiInterface;
 
 /**
  * Provides access to the DroidPlannerApi to its derived class.
  */
-public abstract class ApiSubscriberFragment extends Fragment implements ApiInterface.Subscriber{
+public abstract class ApiListenerFragment extends Fragment implements DroidPlannerApp.ApiListener{
 
     private DroidPlannerApi dpApi;
     private ApiInterface.Provider apiProvider;

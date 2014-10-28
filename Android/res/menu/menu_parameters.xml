@@ -19,12 +19,12 @@
 
     <item
         android:id="@+id/menu_open_parameters"
-        android:showAsAction="ifRoom"
+        android:showAsAction="never"
         android:icon="@drawable/ic_action_folder_open"
         android:title="@string/open"/>
     <item
         android:id="@+id/menu_save_parameters"
-        android:showAsAction="ifRoom"
+        android:showAsAction="never"
         android:icon="@drawable/ic_action_save"
         android:title="@string/save"/>
 </menu>

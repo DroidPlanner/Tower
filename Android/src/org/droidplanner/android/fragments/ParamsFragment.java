@@ -246,6 +246,7 @@ public class ParamsFragment extends ApiSubscriberListFragment implements OnDrone
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
+
 		inflater.inflate(R.menu.menu_parameters, menu);
 	}
 

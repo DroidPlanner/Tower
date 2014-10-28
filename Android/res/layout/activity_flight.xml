@@ -43,7 +43,6 @@
                 android:layout_height="match_parent"
                 android:scaleType="fitEnd"
                 android:paddingTop="@dimen/slide_button_padding_top"
-                android:paddingBottom="@dimen/slide_button_padding_bottom"
                 android:src="@drawable/drawer_tab"
                 tools:ignore="ContentDescription"/>
 

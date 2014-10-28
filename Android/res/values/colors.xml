@@ -44,7 +44,7 @@
     <color name="vpi__bright_foreground_inverse_holo_light">@color/vpi__bright_foreground_holo_dark</color>
 
     <!-- color for the top, and bottom bar -->
-    <color name="bottom_top_bar">#b6848484</color>
+    <color name="bottom_top_bar">#66848484</color>
     <color name="editor_bar">#66848484</color>
 
 </resources>

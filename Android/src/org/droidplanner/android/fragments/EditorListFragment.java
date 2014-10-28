@@ -38,6 +38,8 @@ public class EditorListFragment extends ApiSubscriberFragment implements OnItemL
 	private MissionProxy missionProxy;
 	private MissionItemProxyView adapter;
 	private OnEditorInteraction editorListener;
+	private ImageButton leftArrow;
+	private ImageButton rightArrow;
 	private Drone drone;
 
     @Override
@@ -59,6 +61,11 @@ public class EditorListFragment extends ApiSubscriberFragment implements OnItemL
 		list.setOnItemClickListener(this);
 		list.setOnItemLongClickListener(this);
 		list.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+
+		leftArrow = (ImageButton) view.findViewById(R.id.listLeftArrow);
+		rightArrow = (ImageButton) view.findViewById(R.id.listRightArrow);
+		leftArrow.setOnClickListener(this);
+		rightArrow.setOnClickListener(this);
 
 		return view;
 	}
@@ -122,6 +129,16 @@ public class EditorListFragment extends ApiSubscriberFragment implements OnItemL
 		return editorListener.onItemLongClick(missionItem);
 	}
 
+	public void setArrowsVisibility(boolean visible) {
+		if (visible) {
+			leftArrow.setVisibility(View.VISIBLE);
+			rightArrow.setVisibility(View.VISIBLE);
+		} else {
+			leftArrow.setVisibility(View.INVISIBLE);
+			rightArrow.setVisibility(View.INVISIBLE);
+		}
+	}
+
 	/**
 	 * Updates the choice mode of the listview containing the mission items.
 	 * 
@@ -133,6 +150,18 @@ public class EditorListFragment extends ApiSubscriberFragment implements OnItemL
 		case AbsListView.CHOICE_MODE_MULTIPLE:
 			list.setChoiceMode(choiceMode);
 			break;
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v == leftArrow) {
+			missionProxy.moveSelection(false);
+			adapter.notifyDataSetChanged();
+		}
+		if (v == rightArrow) {
+			missionProxy.moveSelection(true);
+			adapter.notifyDataSetChanged();
 		}
 	}
 
