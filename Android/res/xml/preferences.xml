@@ -119,7 +119,7 @@
                             android:summary="@string/pref_tts_warning_400ft_ceiling_exceeded_summary"
                             android:title="@string/pref_tts_warning_400ft_ceiling_exceeded" />
                         <CheckBoxPreference
-                            android:defaultValue="true"
+                            android:defaultValue="false"
                             android:key="@string/pref_tts_warning_low_signal_key"
                             android:summary="@string/pref_tts_warning_low_signal_strength_summary"
                             android:title="@string/pref_tts_warning_low_signal_strength" />
