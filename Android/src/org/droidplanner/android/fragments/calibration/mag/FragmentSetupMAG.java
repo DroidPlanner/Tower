@@ -38,7 +38,6 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
 
     private View inProgressCalibrationView;
     private Button buttonStep;
-    private Button buttonCancel;
     private TextView calibrationProgress;
     private ProgressBar calibrationFitness;
 	private ScatterPlot plot1,plot2;
@@ -85,7 +84,7 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
             }
         });
 
-        buttonCancel = (Button) view.findViewById(R.id.buttonCancel);
+        Button buttonCancel = (Button) view.findViewById(R.id.buttonCancel);
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,7 +169,7 @@ public class FragmentSetupMAG extends Fragment implements MagnetometerCalibratio
     @Override
     public void onStart(){
         super.onStart();
-        if(drone.getMavClient().isConnected()){
+        if(drone.getMavClient().isConnected() && !drone.getState().isFlying()){
             buttonStep.setEnabled(true);
         }
         else{
