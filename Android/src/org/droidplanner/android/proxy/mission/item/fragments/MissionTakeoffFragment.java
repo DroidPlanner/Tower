@@ -27,7 +27,7 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
 		Takeoff item = (Takeoff) getMissionItems().get(0);
 
 		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(getActivity()
-				.getApplicationContext(), R.layout.wheel_text_centered, MIN_ALTITUDE,
+				.getApplicationContext(), R.layout.wheel_text_centered, 0,
                 MAX_ALTITUDE, "%d m");
 		final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.altitudePicker);
