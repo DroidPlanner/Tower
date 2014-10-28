@@ -18,9 +18,15 @@ public class Calibration extends DroneVariable {
 		this.myDrone = drone;
 	}
 
-	public void startCalibration() {
-		calibrating = true;
-		MavLinkCalibration.sendStartCalibrationMessage(myDrone);
+	public boolean startCalibration() {
+        if(myDrone.getState().isFlying()) {
+            calibrating = false;
+        }
+        else {
+            calibrating = true;
+            MavLinkCalibration.sendStartCalibrationMessage(myDrone);
+        }
+        return calibrating;
 	}
 
 	public void sendAckk(int step) {
