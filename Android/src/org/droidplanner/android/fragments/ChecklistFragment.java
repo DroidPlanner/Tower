@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.api.services.DroidPlannerApi;
-import org.droidplanner.android.fragments.helpers.ApiSubscriberFragment;
+import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.widgets.checklist.CheckListAdapter;
 import org.droidplanner.android.widgets.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
 import org.droidplanner.android.widgets.checklist.CheckListItem;
@@ -25,7 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
-public class ChecklistFragment extends ApiSubscriberFragment implements OnXmlParserError,
+public class ChecklistFragment extends ApiListenerFragment implements OnXmlParserError,
 		OnCheckListItemUpdateListener, OnDroneListener {
 
 	private Context context;
@@ -69,7 +69,7 @@ public class ChecklistFragment extends ApiSubscriberFragment implements OnXmlPar
 	}
 
     @Override
-    public void onApiConnectedImpl(DroidPlannerApi api){
+    public void onApiConnected(DroidPlannerApi api){
         DroidPlannerApi dpApi = getApi();
         dpApi.addDroneListener(this);
 
@@ -77,7 +77,7 @@ public class ChecklistFragment extends ApiSubscriberFragment implements OnXmlPar
     }
 
     @Override
-    public void onApiDisconnectedImpl(){
+    public void onApiDisconnected(){
         getApi().removeDroneListener(this);
     }
 

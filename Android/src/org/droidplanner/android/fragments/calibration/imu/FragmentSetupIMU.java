@@ -16,18 +16,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.Api;
-
 import org.droidplanner.R;
 import org.droidplanner.android.api.services.DroidPlannerApi;
-import org.droidplanner.android.fragments.helpers.ApiSubscriberFragment;
+import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.notifications.TTSNotificationProvider;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.variables.Calibration;
 import org.droidplanner.core.model.Drone;
 
-public class FragmentSetupIMU extends ApiSubscriberFragment implements OnDroneListener {
+public class FragmentSetupIMU extends ApiListenerFragment implements OnDroneListener {
 
 	private final static long TIMEOUT_MAX = 30000l; //ms
     private final static long UPDATE_TIMEOUT_PERIOD = 100l; //ms
@@ -104,7 +102,7 @@ public class FragmentSetupIMU extends ApiSubscriberFragment implements OnDroneLi
     }
 
     @Override
-    public void onApiConnectedImpl(DroidPlannerApi api) {
+    public void onApiConnected(DroidPlannerApi api) {
         final Drone drone = api.getDrone();
         if (drone != null && api.isConnected()) {
             btnStep.setEnabled(true);
@@ -123,7 +121,7 @@ public class FragmentSetupIMU extends ApiSubscriberFragment implements OnDroneLi
     }
 
     @Override
-    public void onApiDisconnectedImpl() {
+    public void onApiDisconnected() {
             getApi().removeDroneListener(this);
     }
 

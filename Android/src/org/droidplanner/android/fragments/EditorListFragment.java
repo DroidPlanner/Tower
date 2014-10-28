@@ -8,11 +8,9 @@ import it.sephiroth.android.library.widget.HListView;
 import java.util.List;
 
 import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.api.services.DroidPlannerApi;
-import org.droidplanner.android.fragments.helpers.ApiSubscriberFragment;
-import org.droidplanner.android.helpers.ApiInterface;
+import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
@@ -23,7 +21,6 @@ import org.droidplanner.core.model.Drone;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,8 +28,8 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
 
-public class EditorListFragment extends ApiSubscriberFragment implements OnItemLongClickListener,
-		OnItemClickListener, OnDroneListener, MissionSelection.OnSelectionUpdateListener {
+public class EditorListFragment extends ApiListenerFragment implements OnItemLongClickListener,
+		OnItemClickListener, OnDroneListener, MissionSelection.OnSelectionUpdateListener, OnClickListener {
 
 	private HListView list;
 	private MissionProxy missionProxy;
@@ -77,7 +74,7 @@ public class EditorListFragment extends ApiSubscriberFragment implements OnItemL
 	}
 
     @Override
-    protected void onApiConnectedImpl(DroidPlannerApi dpApi) {
+    public void onApiConnected(DroidPlannerApi dpApi) {
         drone = dpApi.getDrone();
         missionProxy = dpApi.getMissionProxy();
 
@@ -89,7 +86,7 @@ public class EditorListFragment extends ApiSubscriberFragment implements OnItemL
     }
 
     @Override
-    protected void onApiDisconnectedImpl() {
+    public void onApiDisconnected() {
         drone.removeDroneListener(this);
         missionProxy.selection.removeSelectionUpdateListener(this);
     }

@@ -42,8 +42,6 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     /*
     View widgets.
      */
-    private FragmentManager fragmentManager;
-
     private LocatorMapFragment locatorMapFragment;
     private LocatorListFragment locatorListFragment;
     private LinearLayout statusView;
@@ -64,7 +62,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_locator);
 
-        fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
         locatorMapFragment = ((LocatorMapFragment) fragmentManager
                 .findFragmentById(R.id.mapFragment));
@@ -121,20 +119,6 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
             // fresh start
             lastPositions.clear();
         }
-    }
-
-    @Override
-    public void onApiConnected(DroidPlannerApi api){
-        super.onApiConnected(api);
-        if(locatorMapFragment != null)
-            locatorMapFragment.onApiConnected(api);
-    }
-
-    @Override
-    public void onApiDisconnected(){
-        super.onApiDisconnected();
-        if(locatorMapFragment != null)
-            locatorMapFragment.onApiDisconnected();
     }
 
     @Override

@@ -1,26 +1,22 @@
 package org.droidplanner.android.fragments;
 
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.api.services.DroidPlannerApi;
-import org.droidplanner.android.fragments.helpers.ApiSubscriberFragment;
-import org.droidplanner.android.helpers.ApiInterface;
-import org.droidplanner.android.widgets.AttitudeIndicator;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.model.Drone;
-
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class TelemetryFragment extends ApiSubscriberFragment implements OnDroneListener {
+import org.droidplanner.R;
+import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
+import org.droidplanner.android.widgets.AttitudeIndicator;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.model.Drone;
+
+public class TelemetryFragment extends ApiListenerFragment implements OnDroneListener {
 
 	private AttitudeIndicator attitudeIndicator;
 	private TextView roll;
@@ -60,15 +56,15 @@ public class TelemetryFragment extends ApiSubscriberFragment implements OnDroneL
 		headingModeFPV = prefs.getBoolean("pref_heading_mode", false);
 	}
 
-    @Override
-    protected void onApiConnectedImpl(DroidPlannerApi api) {
-        api.addDroneListener(this);
-    }
+	@Override
+	public void onApiConnected(DroidPlannerApi api) {
+		api.addDroneListener(this);
+	}
 
-    @Override
-    protected void onApiDisconnectedImpl() {
-        getApi().removeDroneListener(this);
-    }
+	@Override
+	public void onApiDisconnected() {
+		getApi().removeDroneListener(this);
+	}
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {

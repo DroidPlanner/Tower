@@ -6,9 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.api.services.DroidPlannerApi;
-import org.droidplanner.android.helpers.ApiInterface;
+import org.droidplanner.android.fragments.helpers.ApiListenerDialogFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
@@ -31,7 +30,8 @@ import android.view.ViewGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class MissionDetailFragment extends DialogFragment implements SpinnerSelfSelect.OnSpinnerItemSelectedListener {
+public class MissionDetailFragment extends ApiListenerDialogFragment implements SpinnerSelfSelect
+        .OnSpinnerItemSelectedListener {
 
 	private static final String TAG = MissionDetailFragment.class.getSimpleName();
 
@@ -48,7 +48,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
         typeWithNoMuliEditSupport.add(MissionItemType.CYLINDRICAL_SURVEY);
     }
 
-    public interface OnMissionDetailListener extends ApiInterface.Provider {
+    public interface OnMissionDetailListener {
 		/**
 		 * Only fired when the mission detail is shown as a dialog. Notifies the
 		 * listener that the mission detail dialog has been dismissed.
@@ -77,10 +77,9 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 	protected AdapterMissionItems commandAdapter;
 	private OnMissionDetailListener mListener;
 
-    protected DroidPlannerApi dpApi;
     private MissionProxy mMissionProxy;
-    private List<MissionItem> mSelectedItems;
-    private List<MissionItemProxy> mSelectedProxies;
+    private final List<MissionItem> mSelectedItems = new ArrayList<MissionItem>();
+    private final List<MissionItemProxy> mSelectedProxies = new ArrayList<MissionItemProxy>();
 
 	public static MissionDetailFragment newInstance(MissionItemType itemType) {
 		MissionDetailFragment fragment;
@@ -128,39 +127,22 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 		setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 	}
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        dpApi = mListener.getApi();
-        if(dpApi == null)
-            return null;
+    @Override
+    public void onApiConnected(DroidPlannerApi api) {
+        mMissionProxy = api.getMissionProxy();
 
-		mMissionProxy = dpApi.getMissionProxy();
-		mSelectedProxies = new ArrayList<MissionItemProxy>(mMissionProxy.selection.getSelected());
-		if (mSelectedProxies.isEmpty()) {
-			return null;
-		}
+        mSelectedProxies.clear();
+        mSelectedProxies.addAll(mMissionProxy.selection.getSelected());
 
-        mSelectedItems = new ArrayList<MissionItem>(mSelectedProxies.size());
+        mSelectedItems.clear();
         for(MissionItemProxy mip : mSelectedProxies){
             mSelectedItems.add(mip.getMissionItem());
         }
 
-		return inflater.inflate(getResource(), container, false);
-	}
+        final View view = getView();
+        if(view == null) return;
 
-    protected MissionProxy getMissionProxy(){
-        return mMissionProxy;
-    }
-
-    protected List<? extends MissionItem> getMissionItems(){
-        return mSelectedItems;
-    }
-
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		
-		List<MissionItemType> list = new LinkedList<MissionItemType>(Arrays.asList(MissionItemType.values()));
+        List<MissionItemType> list = new LinkedList<MissionItemType>(Arrays.asList(MissionItemType.values()));
 
         if(mSelectedProxies.size() == 1) {
             final MissionItemProxy itemProxy = mSelectedProxies.get(0);
@@ -172,7 +154,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
             } else {
                 list.remove(MissionItemType.SURVEY);
             }
-            
+
             if ((currentItem instanceof CylindricalSurvey)) {
                 list.clear();
                 list.add(MissionItemType.CYLINDRICAL_SURVEY);
@@ -226,14 +208,30 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
             throw new IllegalStateException("Mission Detail Fragment cannot be shown when no " +
                     "mission items is selected.");
         }
-		
-		commandAdapter = new AdapterMissionItems(getActivity(),
-				android.R.layout.simple_list_item_1, list.toArray(new MissionItemType[list.size()]));
 
-		typeSpinner = (SpinnerSelfSelect) view.findViewById(R.id.spinnerWaypointType);
-		typeSpinner.setAdapter(commandAdapter);
+        commandAdapter = new AdapterMissionItems(getActivity(),
+                android.R.layout.simple_list_item_1, list.toArray(new MissionItemType[list.size()]));
+
+        typeSpinner = (SpinnerSelfSelect) view.findViewById(R.id.spinnerWaypointType);
+        typeSpinner.setAdapter(commandAdapter);
         typeSpinner.setOnSpinnerItemSelectedListener(this);
+    }
+
+    @Override
+    public void onApiDisconnected() {}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		return inflater.inflate(getResource(), container, false);
 	}
+
+    protected MissionProxy getMissionProxy(){
+        return mMissionProxy;
+    }
+
+    protected List<? extends MissionItem> getMissionItems(){
+        return mSelectedItems;
+    }
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -252,7 +250,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 		mListener = null;
 	}
 
-	@Override
+    @Override
 	public void onDismiss(DialogInterface dialog) {
 		super.onDismiss(dialog);
 		if (mListener != null) {
@@ -265,7 +263,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
         final MissionItemType selectedType = commandAdapter.getItem(position);
 
         try {
-            if (mSelectedProxies == null || mSelectedProxies.isEmpty())
+            if (mSelectedProxies.isEmpty())
                 return;
 
             final List<Pair<MissionItemProxy, MissionItemProxy>> updatesList = new ArrayList<Pair<MissionItemProxy, MissionItemProxy>>(

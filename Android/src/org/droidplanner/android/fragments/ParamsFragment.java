@@ -11,7 +11,7 @@ import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenParameterDialog;
 import org.droidplanner.android.dialogs.parameters.DialogParameterInfo;
-import org.droidplanner.android.fragments.helpers.ApiSubscriberListFragment;
+import org.droidplanner.android.fragments.helpers.ApiListenerListFragment;
 import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.file.IO.ParameterWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -47,7 +47,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ParamsFragment extends ApiSubscriberListFragment implements OnDroneListener,
+public class ParamsFragment extends ApiListenerListFragment implements OnDroneListener,
 		DroneInterfaces.OnParameterManagerListener {
 
 	static final String TAG = ParamsFragment.class.getSimpleName();
@@ -197,7 +197,7 @@ public class ParamsFragment extends ApiSubscriberListFragment implements OnDrone
     }
 
     @Override
-    public void onApiConnectedImpl(DroidPlannerApi api) {
+    public void onApiConnected(DroidPlannerApi api) {
         DroidPlannerApi dpApi = getApi();
         this.drone = dpApi.getDrone();
         Parameters droneParams = drone.getParameters();
@@ -214,7 +214,7 @@ public class ParamsFragment extends ApiSubscriberListFragment implements OnDrone
     }
 
     @Override
-    public void onApiDisconnectedImpl() {
+    public void onApiDisconnected() {
         DroidPlannerApi dpApi = getApi();
         dpApi.removeDroneListener(this);
         dpApi.getDrone().getParameters().setParameterListener(null);

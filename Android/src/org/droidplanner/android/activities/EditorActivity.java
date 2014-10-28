@@ -160,23 +160,14 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     public void onApiConnected(DroidPlannerApi api){
         super.onApiConnected(api);
 
-        if(planningMapFragment != null)
-            planningMapFragment.onApiConnected(api);
-
-        if(missionListFragment != null)
-            missionListFragment.onApiConnected(api);
-
-        missionProxy = dpApi.getMissionProxy();
+        missionProxy = api.getMissionProxy();
         if(missionProxy != null)
-           missionProxy.selection.addSelectionUpdateListener(this);
+            missionProxy.selection.addSelectionUpdateListener(this);
     }
 
     @Override
     public void onApiDisconnected(){
         super.onApiDisconnected();
-
-        if(planningMapFragment != null)
-            planningMapFragment.onApiDisconnected();
 
         if(missionProxy != null)
             missionProxy.selection.removeSelectionUpdateListener(this);
@@ -272,6 +263,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		OpenFileDialog missionDialog = new OpenMissionDialog() {
 			@Override
 			public void waypointFileLoaded(MissionReader reader) {
+                DroidPlannerApi dpApi = dpApp.getApi();
                 if(dpApi != null) {
                         dpApi.getMission().onMissionLoaded(reader.getMsgMissionItems());
                 }
@@ -288,6 +280,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 FileStream.getWaypointFilename("waypoints"), new EditInputDialog.Listener() {
                     @Override
                     public void onOk(CharSequence input) {
+                        DroidPlannerApi dpApi = dpApp.getApi();
                         if(dpApi != null) {
                                 final List<msg_mission_item> missionItems = dpApi.getMission()
                                         .getMsgMissionItems();
@@ -511,7 +504,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	@Override
-	public void onWaypointTypeChanged(List<Pair<MissionItemProxy, MissionItemProxy>> oldNewItemsList) {
+	public void onWaypointTypeChanged(MissionItemType newType, List<Pair<MissionItemProxy,
+            MissionItemProxy>> oldNewItemsList) {
 		missionProxy.replaceAll(oldNewItemsList);
 	}
 

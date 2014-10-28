@@ -9,8 +9,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.api.services.DroidPlannerApi;
-import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.helpers.LocalMapTileProvider;
 import org.droidplanner.android.utils.GoogleApiClientManager;
 import org.droidplanner.android.utils.GoogleApiClientManager.GoogleApiClientTask;
@@ -112,13 +112,12 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 	protected boolean useMarkerClickAsMapClick = false;
     private boolean isMapLayoutFinished = false;
 
+    protected DroidPlannerApp dpApp;
+
     @Override
     public void onAttach(Activity activity){
         super.onAttach(activity);
-        if(!(activity instanceof ApiInterface.Provider)){
-            throw new IllegalStateException("Parent activity must implement " +
-                    ApiInterface.Provider.class.getName());
-        }
+        dpApp = (DroidPlannerApp) activity.getApplication();
     }
 
     @Override
@@ -249,10 +248,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     }
 
     private DroidPlannerApi getDPApi(){
-        ApiInterface.Provider apiProvider = (ApiInterface.Provider) getActivity();
-        if(apiProvider == null) return null;
-
-        return apiProvider.getApi();
+        return dpApp.getApi();
     }
 
     private void setAutoPanMode(AutoPanMode current, AutoPanMode update) {

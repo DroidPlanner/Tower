@@ -79,8 +79,8 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	}
 
     @Override
-    protected void onApiConnectedImpl(DroidPlannerApi api){
-        super.onApiConnectedImpl(api);
+    public void onApiConnected(DroidPlannerApi api){
+        super.onApiConnected(api);
         zoomToFit();
     }
 

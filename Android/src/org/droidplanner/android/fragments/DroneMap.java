@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.droidplanner.R;
 import org.droidplanner.android.api.services.DroidPlannerApi;
-import org.droidplanner.android.fragments.helpers.ApiSubscriberFragment;
+import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
 import org.droidplanner.android.graphic.map.GraphicHome;
@@ -30,9 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.common.api.Api;
-
-public abstract class DroneMap extends ApiSubscriberFragment implements OnDroneListener {
+public abstract class DroneMap extends ApiListenerFragment implements OnDroneListener {
 
 	private final static String TAG = DroneMap.class.getSimpleName();
 
@@ -41,7 +39,7 @@ public abstract class DroneMap extends ApiSubscriberFragment implements OnDroneL
 	private final Runnable mUpdateMap = new Runnable() {
 		@Override
 		public void run() {
-            if(mMapFragment == null)
+            if(getActivity() == null && mMapFragment == null)
                 return;
 
 			final List<MarkerInfo> missionMarkerInfos = missionProxy.getMarkersInfos();
@@ -114,7 +112,7 @@ public abstract class DroneMap extends ApiSubscriberFragment implements OnDroneL
 	}
 
     @Override
-    protected void onApiConnectedImpl(DroidPlannerApi api){
+    public void onApiConnected(DroidPlannerApi api){
             api.addDroneListener(this);
 
             drone = api.getDrone();
@@ -128,7 +126,7 @@ public abstract class DroneMap extends ApiSubscriberFragment implements OnDroneL
     }
 
     @Override
-    public void onApiDisconnectedImpl(){
+    public void onApiDisconnected(){
         getApi().removeDroneListener(this);
     }
 

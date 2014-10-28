@@ -10,11 +10,9 @@ import java.util.Locale;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.communication.service.UploaderService;
-import org.droidplanner.android.helpers.ApiInterface;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.DirectoryPath;
@@ -24,6 +22,7 @@ import org.droidplanner.core.drone.variables.HeartBeat;
 import org.droidplanner.core.model.Drone;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -39,9 +38,16 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceCategory;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.getpebble.android.kit.PebbleKit;
@@ -51,8 +57,8 @@ import com.google.android.gms.analytics.HitBuilders;
 /**
  * Implements the application settings screen.
  */
-public class SettingsFragment extends DpPreferenceFragment implements
-		OnSharedPreferenceChangeListener, DroneInterfaces.OnDroneListener {
+public class SettingsFragment extends PreferenceFragment implements
+		OnSharedPreferenceChangeListener, DroneInterfaces.OnDroneListener, DroidPlannerApp.ApiListener {
 
 	/**
 	 * Used as tag for logging.
@@ -80,23 +86,12 @@ public class SettingsFragment extends DpPreferenceFragment implements
 
 	private final Handler mHandler = new Handler();
 
-    private ApiInterface.Provider apiProvider;
+    private DroidPlannerApp dpApp;
 
     @Override
     public void onAttach(Activity activity){
         super.onAttach(activity);
-        if(!(activity instanceof ApiInterface.Provider)){
-            throw new IllegalStateException("Parent activity must implement " + ApiInterface
-                    .Provider.class.getName());
-        }
-
-        apiProvider = (ApiInterface.Provider) activity;
-    }
-
-    @Override
-    public void onDetach(){
-        super.onDetach();
-        apiProvider = null;
+        dpApp = (DroidPlannerApp) activity.getApplication();
     }
 
 	@Override
@@ -409,10 +404,8 @@ public class SettingsFragment extends DpPreferenceFragment implements
 					+ getString(R.string.set_to_zero_to_disable));
 		}
 
-		DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
-		if (key.equals(getString(R.string.pref_vehicle_type_key)) && apiProvider != null && apiProvider.getApi() !=
-                null) {
-			apiProvider.getApi().notifyDroneEvent(DroneEventsType.TYPE);
+		if (key.equals(getString(R.string.pref_vehicle_type_key)) && dpApp.getApi() != null) {
+			dpApp.getApi().notifyDroneEvent(DroneEventsType.TYPE);
 		}
 
 		if (key.equals(getString(R.string.pref_rc_mode_key))) {
@@ -466,29 +459,13 @@ public class SettingsFragment extends DpPreferenceFragment implements
 	@Override
 	public void onStart() {
 		super.onStart();
-
-        DroidPlannerApi dpApi = apiProvider.getApi();
-        if(dpApi != null) {
-            final Drone drone = dpApi.getDrone();
-            final int mavlinkVersion = drone.getMavlinkVersion();
-            if (mavlinkVersion != HeartBeat.INVALID_MAVLINK_VERSION) {
-                updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
-            } else {
-                updateMavlinkVersionPreference(null);
-            }
-
-            updateFirmwareVersionPreference(drone.getFirmwareVersion());
-
-            drone.addDroneListener(this);
-        }
+        dpApp.addApiListener(this);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-
-        if(apiProvider != null && apiProvider.getApi() != null)
-		apiProvider.getApi().removeDroneListener(this);
+        dpApp.removeApiListener(this);
 	}
 
 	@Override
@@ -523,4 +500,71 @@ public class SettingsFragment extends DpPreferenceFragment implements
 			break;
 		}
 	}
+
+    /**
+     * Allows the settings screen to perform the correct/expected behavior when
+     * the up arrow is clicked.
+     *
+     * @param prefScreen
+     * @param pref
+     * @return
+     */
+    @Override
+    public boolean onPreferenceTreeClick(PreferenceScreen prefScreen, Preference pref) {
+        if (pref instanceof PreferenceScreen) {
+            final Dialog dialog = ((PreferenceScreen) pref).getDialog();
+            final View homeBtn = dialog.findViewById(android.R.id.home);
+            if (homeBtn != null) {
+                View.OnClickListener dismissDialogClickListener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                };
+
+                // Prepare yourselves for some hacky programming
+                ViewParent homeBtnContainer = homeBtn.getParent();
+
+                // The home button is an ImageView inside a FrameLayout
+                if (homeBtnContainer instanceof FrameLayout) {
+                    ViewGroup containerParent = (ViewGroup) homeBtnContainer.getParent();
+
+                    if (containerParent instanceof LinearLayout) {
+                        // This view also contains the title text, set the whole
+                        // view as clickable
+                        containerParent.setOnClickListener(dismissDialogClickListener);
+                    } else {
+                        // Just set it on the home button
+                        ((FrameLayout) homeBtnContainer)
+                                .setOnClickListener(dismissDialogClickListener);
+                    }
+                } else {
+                    // The 'If all else fails' default case
+                    homeBtn.setOnClickListener(dismissDialogClickListener);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onApiConnected(DroidPlannerApi api) {
+            final Drone drone = api.getDrone();
+            final int mavlinkVersion = drone.getMavlinkVersion();
+            if (mavlinkVersion != HeartBeat.INVALID_MAVLINK_VERSION) {
+                updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
+            } else {
+                updateMavlinkVersionPreference(null);
+            }
+
+            updateFirmwareVersionPreference(drone.getFirmwareVersion());
+
+            api.addDroneListener(this);
+    }
+
+    @Override
+    public void onApiDisconnected() {
+            dpApp.getApi().removeDroneListener(this);
+    }
 }

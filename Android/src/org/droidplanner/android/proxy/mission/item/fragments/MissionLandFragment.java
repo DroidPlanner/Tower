@@ -1,6 +1,7 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
+import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.core.mission.MissionItemType;
 
 import android.os.Bundle;
@@ -14,9 +15,9 @@ public class MissionLandFragment extends MissionDetailFragment {
 	}
 
 	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.LAND));
-	}
+	public void onApiConnected(DroidPlannerApi api){
+        super.onApiConnected(api);
+        typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.LAND));
+    }
 
 }

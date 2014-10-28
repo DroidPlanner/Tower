@@ -1,9 +1,7 @@
 package org.droidplanner.android.fragments;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +10,14 @@ import android.widget.Toast;
 
 import com.MAVLink.Messages.ApmModes;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.common.api.Api;
 
 import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
-import org.droidplanner.android.fragments.helpers.ApiSubscriberFragment;
-import org.droidplanner.android.helpers.ApiInterface;
+import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.MAVLink.MavLinkArm;
@@ -35,7 +30,7 @@ import org.droidplanner.core.model.Drone;
 /**
  * Provide functionality for flight action button specific to copters.
  */
-public class CopterFlightActionsFragment extends ApiSubscriberFragment implements View.OnClickListener,
+public class CopterFlightActionsFragment extends ApiListenerFragment implements View.OnClickListener,
         DroneInterfaces.OnDroneListener, FlightActionsFragment.SlidingUpHeader {
 
     private static final String ACTION_FLIGHT_ACTION_BUTTON = "Copter flight action button";
@@ -104,7 +99,7 @@ public class CopterFlightActionsFragment extends ApiSubscriberFragment implement
     }
 
     @Override
-    protected void onApiConnectedImpl(DroidPlannerApi api) {
+    public void onApiConnected(DroidPlannerApi api) {
         followMe = api.getFollowMe();
         missionProxy = api.getMissionProxy();
 
@@ -115,7 +110,7 @@ public class CopterFlightActionsFragment extends ApiSubscriberFragment implement
     }
 
     @Override
-    protected void onApiDisconnectedImpl() {
+    public void onApiDisconnected() {
         getApi().removeDroneListener(this);
     }
 
