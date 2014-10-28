@@ -104,7 +104,7 @@ public class FragmentSetupIMU extends ApiListenerFragment implements OnDroneList
     @Override
     public void onApiConnected(DroidPlannerApi api) {
         final Drone drone = api.getDrone();
-        if (drone != null && api.isConnected()) {
+        if (drone != null && api.isConnected() && !api.getState().isFlying()) {
             btnStep.setEnabled(true);
             if (drone.getCalibrationSetup().isCalibrating()) {
                 processMAVMessage(drone.getCalibrationSetup().getMessage(), false);
@@ -212,7 +212,11 @@ public class FragmentSetupIMU extends ApiListenerFragment implements OnDroneList
 	private void startCalibration() {
         DroidPlannerApi dpApi = getApi();
 		if (dpApi != null) {
-			dpApi.getDrone().getCalibrationSetup().startCalibration();
+			boolean isCalibrating = dpApi.getDrone().getCalibrationSetup().startCalibration();
+            if(!isCalibrating){
+                Toast.makeText(getActivity(), R.string.failed_start_calibration_message,
+                        Toast.LENGTH_LONG).show();
+            }
 		}
 	}
 

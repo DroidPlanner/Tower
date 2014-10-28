@@ -325,7 +325,7 @@ public class FragmentSetupMAG extends ApiListenerFragment implements
 					}
 				});
 
-		if (api.isConnected()) {
+		if (api.isConnected() && !api.getState().isFlying()) {
 			buttonStep.setEnabled(true);
 		} else {
 			cancelCalibration();
