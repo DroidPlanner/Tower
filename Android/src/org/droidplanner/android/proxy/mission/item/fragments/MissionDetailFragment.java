@@ -33,8 +33,8 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 
 	private static final String TAG = MissionDetailFragment.class.getSimpleName();
 
-	protected static final int MIN_ALTITUDE = 0; // meter
-	protected static final int MAX_ALTITUDE = 200; // meters
+	protected static final int MIN_ALTITUDE = -200; // meter
+	protected static final int MAX_ALTITUDE = +200; // meters
 
     public interface OnMissionDetailListener {
 		/**
