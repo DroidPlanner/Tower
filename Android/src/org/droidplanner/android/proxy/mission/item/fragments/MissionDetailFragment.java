@@ -101,6 +101,9 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 		case CYLINDRICAL_SURVEY:
 			fragment = new MissionStructureScannerFragment();
 			break;
+		case CAMERA_TRIGGER:
+			fragment = new MissionCameraTriggerFragment();
+			break;
 		default:
 			fragment = null;
 			break;

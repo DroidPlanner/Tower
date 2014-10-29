@@ -3,6 +3,7 @@ package org.droidplanner.core.mission;
 import java.util.Collections;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.mission.commands.CameraTrigger;
 import org.droidplanner.core.mission.commands.ChangeSpeed;
 import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.Takeoff;
@@ -17,7 +18,7 @@ import org.droidplanner.core.mission.waypoints.Waypoint;
 public enum MissionItemType {
 	WAYPOINT("Waypoint"), SPLINE_WAYPOINT("Spline Waypoint"), TAKEOFF("Takeoff"), RTL(
 			"Return to Launch"), LAND("Land"), CIRCLE("Circle"), ROI("Region of Interest"), SURVEY(
-			"Survey"), CYLINDRICAL_SURVEY("Structure Scan"), CHANGE_SPEED("Change Speed");
+			"Survey"), CYLINDRICAL_SURVEY("Structure Scan"), CHANGE_SPEED("Change Speed"), CAMERA_TRIGGER("Camera Trigger");
 
 	private final String name;
 
@@ -39,6 +40,8 @@ public enum MissionItemType {
 			return new Takeoff(referenceItem);
 		case CHANGE_SPEED:
 			return new ChangeSpeed(referenceItem);
+		case CAMERA_TRIGGER:
+			return new CameraTrigger(referenceItem);
 		case RTL:
 			return new ReturnToHome(referenceItem);
 		case LAND:
