@@ -43,7 +43,7 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo 
 			break;
 
 		case CYLINDRICAL_SURVEY:
-			markerInfos.add(new CylindricalSurveyMarkerInfoProvider(origin));
+			markerInfos.add(new StructureScannerMarkerInfoProvider(origin));
 			break;
 			
 		case SURVEY:

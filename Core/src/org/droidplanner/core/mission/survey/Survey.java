@@ -9,6 +9,7 @@ import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
+import org.droidplanner.core.mission.commands.CameraTrigger;
 import org.droidplanner.core.mission.survey.grid.Grid;
 import org.droidplanner.core.mission.survey.grid.GridBuilder;
 import org.droidplanner.core.polygon.Polygon;
@@ -51,13 +52,21 @@ public class Survey extends MissionItem {
 		try {
 			List<msg_mission_item> list = new ArrayList<msg_mission_item>();
 			build();
-			for (Coord2D point : grid.gridPoints) {
-				msg_mission_item mavMsg = packSurveyPoint(point,surveyData.getAltitude());
-				list.add(mavMsg);
-			}
+
+			list.addAll((new CameraTrigger(mission, surveyData.getLongitudinalPictureDistance())).packMissionItem());
+			packGridPoints(list);
+			list.addAll((new CameraTrigger(mission, new Length(0.0)).packMissionItem()));
+			
 			return list;
 		} catch (Exception e) {
 			return new ArrayList<msg_mission_item>();
+		}
+	}
+
+	private void packGridPoints(List<msg_mission_item> list) {
+		for (Coord2D point : grid.gridPoints) {
+			msg_mission_item mavMsg = packSurveyPoint(point,surveyData.getAltitude());
+			list.add(mavMsg);
 		}
 	}
 

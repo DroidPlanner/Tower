@@ -13,7 +13,6 @@ public class GridBuilder {
 	private Double angle;
 	private Double lineDist;
 	private Coord2D origin;
-	private boolean innerWPs;
 	private Double wpDistance;
 
 	private Grid grid;
@@ -23,7 +22,6 @@ public class GridBuilder {
 		this.origin = originPoint;
 		this.angle = surveyData.getAngle();
 		this.lineDist = surveyData.getLateralPictureDistance().valueInMeters();
-		this.innerWPs = surveyData.shouldGenerateInnerWPs();
 		this.wpDistance = surveyData.getLongitudinalPictureDistance().valueInMeters();
 	}
 
@@ -32,7 +30,6 @@ public class GridBuilder {
 		this.origin = originPoint;
 		this.angle = angle;
 		this.lineDist = distance;
-		this.innerWPs = false;
 		this.wpDistance = distance;
 	}
 	
@@ -48,7 +45,7 @@ public class GridBuilder {
 		List<LineCoord2D> trimedGrid = new Trimmer(circumscribedGrid, poly.getLines())
 				.getTrimmedGrid();
 		EndpointSorter gridSorter = new EndpointSorter(trimedGrid, wpDistance);
-		gridSorter.sortGrid(origin, innerWPs, sort);
+		gridSorter.sortGrid(origin, sort);
 		grid = new Grid(gridSorter.getSortedGrid(), gridSorter.getCameraLocations());
 		return grid;
 	}

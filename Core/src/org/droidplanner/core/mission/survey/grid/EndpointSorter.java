@@ -16,28 +16,26 @@ public class EndpointSorter {
 	private Double sampleDistance;
 	private List<Coord2D> cameraLocations = new ArrayList<Coord2D>();
 
-	private boolean toggle;
-
 	public EndpointSorter(List<LineCoord2D> grid, Double sampleDistance) {
 		this.grid = grid;
 		this.sampleDistance = sampleDistance;
 	}
 
-	public void sortGrid(Coord2D lastpnt, boolean innerWPs, boolean sort) throws Exception {
+	public void sortGrid(Coord2D lastpnt, boolean sort) throws Exception {
 		while (grid.size() > 0) {
 			if (sort) {				
 				LineCoord2D closestLine = LineTools.findClosestLineToPoint(lastpnt, grid);
-				Coord2D secondWp = processOneGridLine(closestLine, lastpnt, innerWPs,sort);
+				Coord2D secondWp = processOneGridLine(closestLine, lastpnt, sort);
 				lastpnt = secondWp;
 			}else{
 				LineCoord2D closestLine = grid.get(0);
-				Coord2D secondWp = processOneGridLine(closestLine, lastpnt, innerWPs,sort);
+				Coord2D secondWp = processOneGridLine(closestLine, lastpnt, sort);
 				lastpnt = secondWp;
 			}
 		}
 	}
 
-	private Coord2D processOneGridLine(LineCoord2D closestLine, Coord2D lastpnt, boolean innerWPs, boolean sort)
+	private Coord2D processOneGridLine(LineCoord2D closestLine, Coord2D lastpnt, boolean sort)
 			throws Exception {
 		Coord2D firstWP, secondWp;
 		firstWP = closestLine.getClosestEndpointTo(lastpnt);
@@ -45,25 +43,20 @@ public class EndpointSorter {
 
 		grid.remove(closestLine);
 
-		addWaypointsBetween(firstWP, secondWp, innerWPs);
+		updateCameraLocations(firstWP, secondWp);
+		gridPoints.add(firstWP);
+		gridPoints.add(secondWp);
+		
 		if (cameraLocations.size() > MAX_NUMBER_OF_CAMERAS) {
 			throw new Exception("Too many camera positions");
 		}
 		return secondWp;
 	}
 
-	private void addWaypointsBetween(Coord2D firstWP, Coord2D secondWp, boolean innerWPs) {
+	private void updateCameraLocations(Coord2D firstWP, Coord2D secondWp) {
 		List<Coord2D> cameraLocationsOnThisStrip = new LineSampler(firstWP, secondWp)
 				.sample(sampleDistance);
 		cameraLocations.addAll(cameraLocationsOnThisStrip);
-		if (innerWPs) {
-			for (Coord2D point : cameraLocationsOnThisStrip) {
-				gridPoints.add(point);
-			}
-		} else {
-			gridPoints.add(firstWP);
-			gridPoints.add(secondWp);
-		}
 	}
 
 	public List<Coord2D> getSortedGrid() {

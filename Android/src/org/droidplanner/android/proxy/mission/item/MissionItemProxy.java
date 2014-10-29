@@ -13,12 +13,12 @@ import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.commands.Takeoff;
-import org.droidplanner.core.mission.survey.CylindricalSurvey;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.survey.grid.Grid;
 import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
+import org.droidplanner.core.mission.waypoints.StructureScanner;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -116,7 +116,7 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 			}
 			break;
 		case CYLINDRICAL_SURVEY:
-			CylindricalSurvey survey = (CylindricalSurvey)mMissionItem;
+			StructureScanner survey = (StructureScanner)mMissionItem;
 			pathPoints.addAll(survey.getPath());
 			break;
 		case TAKEOFF:

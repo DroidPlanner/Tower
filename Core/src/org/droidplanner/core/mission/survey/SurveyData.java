@@ -11,7 +11,6 @@ public class SurveyData {
 	private Double angle = 0.0;
 	private Double overlap = 50.0;
 	private Double sidelap = 60.0;
-	private boolean generateInnerWps = false;
 	private CameraInfo camera = new CameraInfo();
 
 	public void update(double angle, Altitude altitude, double overlap, double sidelap) {
@@ -62,10 +61,6 @@ public class SurveyData {
 		}
 	}
 
-	public void setInnerWpsState(boolean state) {
-		generateInnerWps = state;
-	}
-
 	public Altitude getAltitude() {
 		return altitude;
 	}
@@ -84,10 +79,6 @@ public class SurveyData {
 
 	public String getCameraName() {
 		return camera.name;
-	}
-
-	public boolean shouldGenerateInnerWPs() {
-		return generateInnerWps;
 	}
 
 	@Override
