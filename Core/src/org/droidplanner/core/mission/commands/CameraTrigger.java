@@ -43,7 +43,7 @@ public class CameraTrigger extends MissionCMD {
 
 	@Override
 	public MissionItemType getType() {
-		return MissionItemType.CHANGE_SPEED;
+		return MissionItemType.CAMERA_TRIGGER;
 	}
 
 	public Length getTriggerDistance() {
