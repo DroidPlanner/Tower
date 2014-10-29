@@ -27,7 +27,7 @@ public class MissionCameraTriggerFragment extends MissionDetailFragment implemen
 		CameraTrigger item = (CameraTrigger) getMissionItems().get(0);
 		
 		final NumericWheelAdapter adapter = new NumericWheelAdapter(getActivity()
-				.getApplicationContext(), R.layout.wheel_text_centered, 1,
+				.getApplicationContext(), R.layout.wheel_text_centered, 0,
                 100, "%d m");
 		final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.picker1);
