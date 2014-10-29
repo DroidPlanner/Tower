@@ -6,12 +6,12 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.mission.commands.ChangeSpeed;
 import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.Takeoff;
-import org.droidplanner.core.mission.survey.CylindricalSurvey;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.Land;
 import org.droidplanner.core.mission.waypoints.RegionOfInterest;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
+import org.droidplanner.core.mission.waypoints.StructureScanner;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 
 public enum MissionItemType {
@@ -50,7 +50,7 @@ public enum MissionItemType {
 		case SURVEY:
 			return new Survey(referenceItem.getMission(), Collections.<Coord2D> emptyList());
 		case CYLINDRICAL_SURVEY:
-			return new CylindricalSurvey(referenceItem);
+			return new StructureScanner(referenceItem);
 		default:
 			throw new IllegalArgumentException("Unrecognized mission item type (" + name + ")"
 					+ ".");
