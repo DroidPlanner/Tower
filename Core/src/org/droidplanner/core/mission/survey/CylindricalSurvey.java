@@ -20,38 +20,18 @@ import org.droidplanner.core.polygon.Polygon;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 
-public class CylindricalSurvey extends MissionItem {
+public class CylindricalSurvey extends SpatialCoordItem {
+	private Length radius = new Length(10.0);
+	private Altitude heightStep = new Altitude(5);
+	private int numberOfSteps = 2;
+	private boolean crossHatch = false;
 
-	protected Coord2D center;
-	private Length radius;
-	private Altitude startHeight, heightStep;
-	private int numberOfSteps;
-	private boolean crossHatch;
-
-	private CylindricalSurvey(Mission mission) {
-		super(mission);
-		this.center = null;
-		radius = new Length(10.0);
-		startHeight = new Altitude(10);
-		heightStep = new Altitude(5);
-		numberOfSteps = 2;
-		crossHatch = false;
-	}
-
-	public CylindricalSurvey(Mission mission, Coord2D center) {
-		this(mission);
-		this.center = center;
+	public CylindricalSurvey(Mission mission, Coord3D coord) {
+		super(mission,coord);
 	}
 
 	public CylindricalSurvey(MissionItem item) {
-		this(item.getMission());
-		Coord3D coordinate;
-		if (item instanceof SpatialCoordItem) {
-			coordinate = ((SpatialCoordItem) item).getCoordinate();
-		} else {
-			coordinate = new Coord3D(0, 0, new Altitude(0));
-		}
-		this.center = coordinate;
+		super(item);
 	}
 
 	@Override
@@ -67,14 +47,13 @@ public class CylindricalSurvey extends MissionItem {
 
 	private void packROI(List<msg_mission_item> list) {
 		RegionOfInterest roi = new RegionOfInterest(mission, new Coord3D(
-				center, new Altitude(0.0)));
+				coordinate, new Altitude(0.0)));
 		list.addAll(roi.packMissionItem());
 	}
 
 	private void packCircles(List<msg_mission_item> list) {
-		for (double altitude = startHeight.valueInMeters(); altitude <= getTopHeight().valueInMeters(); altitude += heightStep.valueInMeters()) {
-			Circle circle = new Circle(mission, new Coord3D(center,
-					new Altitude(altitude)));
+		for (double altitude = coordinate.getAltitude().valueInMeters(); altitude <= getTopHeight().valueInMeters(); altitude += heightStep.valueInMeters()) {
+			Circle circle = new Circle(mission, new Coord3D(coordinate,	new Altitude(altitude)));
 			circle.setRadius(radius.valueInMeters());
 			list.addAll(circle.packMissionItem());
 		}
@@ -83,11 +62,11 @@ public class CylindricalSurvey extends MissionItem {
 	private void packHatch(List<msg_mission_item> list) {
 		Polygon polygon = new Polygon();
 		for (double angle = 0; angle <= 360; angle += 10) {
-			polygon.addPoint(GeoTools.newCoordFromBearingAndDistance(center,
+			polygon.addPoint(GeoTools.newCoordFromBearingAndDistance(coordinate,
 					angle, radius.valueInMeters()));
 		}
 
-		Coord2D corner = GeoTools.newCoordFromBearingAndDistance(center,
+		Coord2D corner = GeoTools.newCoordFromBearingAndDistance(coordinate,
 				-45, radius.valueInMeters()*2);
 		GridBuilder grid = new GridBuilder(polygon, 0.0,
 				radius.valueInMeters() / 4, corner );
@@ -112,7 +91,7 @@ public class CylindricalSurvey extends MissionItem {
 			}
 			if (msg_mission_item.command == MAV_CMD.MAV_CMD_NAV_LOITER_TURNS) {
 				for (double angle = 0; angle <= 360; angle += 12) {
-					path.add(GeoTools.newCoordFromBearingAndDistance(center,angle, radius.valueInMeters()));
+					path.add(GeoTools.newCoordFromBearingAndDistance(coordinate,angle, radius.valueInMeters()));
 				}
 			}
 			
@@ -133,11 +112,7 @@ public class CylindricalSurvey extends MissionItem {
 
 
 	private Length getTopHeight() {
-		return new Length(startHeight.valueInMeters()+ (numberOfSteps-1)*heightStep.valueInMeters());
-	}
-
-	public Altitude getStartAltitude() {
-		return startHeight;
+		return new Length(coordinate.getAltitude().valueInMeters()+ (numberOfSteps-1)*heightStep.valueInMeters());
 	}
 
 	public Altitude getEndAltitude() {
@@ -153,7 +128,7 @@ public class CylindricalSurvey extends MissionItem {
 	}
 
 	public Coord2D getCenter() {
-		return center;
+		return coordinate;
 	}
 
 	public void setRadius(int newValue) {
@@ -166,10 +141,6 @@ public class CylindricalSurvey extends MissionItem {
 
 	public boolean isCrossHatchEnabled() {
 		return crossHatch;
-	}
-
-	public void setStartAltitude(int newValue) {
-		startHeight = new Altitude(newValue);		
 	}
 
 	public void setAltitudeStep(int newValue) {
