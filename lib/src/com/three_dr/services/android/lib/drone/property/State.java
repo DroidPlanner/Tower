@@ -5,10 +5,10 @@ package com.three_dr.services.android.lib.drone.property;
  */
 public class State  {
 
-    private boolean armed;
-    private boolean isFlying;
-    private VehicleMode vehicleMode;
-    private Type vehicleType;
+    private final boolean armed;
+    private final boolean isFlying;
+    private final VehicleMode vehicleMode;
+    private final Type vehicleType;
 
     public State(VehicleMode mode, Type type, boolean armed, boolean flying){
         this.vehicleMode = mode;

@@ -3,6 +3,11 @@ package com.three_dr.services.android.lib.model;
 
 import com.three_dr.services.android.lib.drone.property.Gps;
 import com.three_dr.services.android.lib.drone.property.Home;
+import com.three_dr.services.android.lib.drone.property.Speed;
+import com.three_dr.services.android.lib.drone.property.Attitude;
+import com.three_dr.services.android.lib.drone.property.Altitude;
+import com.three_dr.services.android.lib.drone.property.Battery;
+import com.three_dr.services.android.lib.drone.property.Parameters;
 
 /**
 * Interface used to access the drone properties.

@@ -9,7 +9,7 @@ public class Type {
     public static final int TYPE_COPTER = 2;
     public static final int TYPE_ROVER = 10;
 
-    private int droneType;
+    private final int droneType;
 
     public Type(int droneType){
         if(droneType != TYPE_PLANE && droneType != TYPE_COPTER && droneType != TYPE_ROVER){

@@ -3,6 +3,7 @@ package com.three_dr.services.android.lib.model;
 
 import com.three_dr.services.android.lib.drone.connection.ConnectionParameter;
 import com.three_dr.services.android.lib.model.IDroidPlannerCallbackApi;
+import com.three_dr.services.android.lib.drone.property.Parameters;
 
 /**
 * Interface used to establish/break connection with a drone.
@@ -23,9 +24,9 @@ oneway interface IDroidPlannerWriterApi {
     /**
     * Change the vehicle mode for the specified drone.
     * @param droneId id of the drone instance whose mode to update.
-    * @param newMode new vehicle mode.
+    * @param newMode enum name of the new vehicle mode.
     */
-    void changeVehicleMode(int droneId, VehicleMode newMode);
+    void changeVehicleMode(int droneId, String newModeName);
 
     /**
     * Asynchronous call used to stop listening to updates for the drone instance whose id is
@@ -37,4 +38,16 @@ oneway interface IDroidPlannerWriterApi {
     * @param clientCb Non-null callback. The specified callback will be unregistered.
     */
     void disconnectFromDrone(int droneId, IDroidPlannerCallbackApi callback);
+
+    /**
+    * Refresh the parameters for the specified drone.
+    * @param droneId id of the drone whose parameters to refresh.
+    */
+    void refreshParameters(int droneId);
+
+    /**
+    * Write the given parameters to the specified drone.
+    * @param droneId id of the drone whose parameters to write.
+    */
+    void writeParameter(int droneId, Parameters parameters);
 }
