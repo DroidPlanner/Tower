@@ -116,12 +116,13 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 		innerWPsCheckbox.setOnClickListener(this);
 		cameraSpinner.setOnSpinnerItemSelectedListener(this);
 
+		updateViews();
+		
         mAnglePicker.addChangingListener(this);
         mOverlapPicker.addChangingListener(this);
         mSidelapPicker.addChangingListener(this);
         mAltitudePicker.addChangingListener(this);
 
-		updateViews();
 
         typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
 	}
