@@ -1,4 +1,4 @@
-package org.droidplanner.core.mission.survey;
+package org.droidplanner.core.mission.waypoints;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,26 +11,24 @@ import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
+import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.survey.grid.GridBuilder;
-import org.droidplanner.core.mission.waypoints.Circle;
-import org.droidplanner.core.mission.waypoints.RegionOfInterest;
-import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.polygon.Polygon;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 
-public class CylindricalSurvey extends SpatialCoordItem {
+public class StructureScanner extends SpatialCoordItem {
 	private Length radius = new Length(10.0);
 	private Altitude heightStep = new Altitude(5);
 	private int numberOfSteps = 2;
 	private boolean crossHatch = false;
 
-	public CylindricalSurvey(Mission mission, Coord3D coord) {
+	public StructureScanner(Mission mission, Coord3D coord) {
 		super(mission,coord);
 	}
 
-	public CylindricalSurvey(MissionItem item) {
+	public StructureScanner(MissionItem item) {
 		super(item);
 	}
 

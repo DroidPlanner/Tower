@@ -14,8 +14,8 @@ import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.commands.MissionCMD;
-import org.droidplanner.core.mission.survey.CylindricalSurvey;
 import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.waypoints.StructureScanner;
 import org.droidplanner.core.util.Pair;
 
 import android.app.Activity;
@@ -99,7 +99,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 			fragment = new MissionSplineWaypointFragment();
 			break;
 		case CYLINDRICAL_SURVEY:
-			fragment = new MissionCylindricalSurveyFragment();
+			fragment = new MissionStructureScannerFragment();
 			break;
 		default:
 			fragment = null;
@@ -155,7 +155,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
                 list.remove(MissionItemType.SURVEY);
             }
             
-            if ((currentItem instanceof CylindricalSurvey)) {
+            if ((currentItem instanceof StructureScanner)) {
                 list.clear();
                 list.add(MissionItemType.CYLINDRICAL_SURVEY);
             }

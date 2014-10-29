@@ -6,9 +6,9 @@ import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 /**
  *
  */
-public class CylindricalSurveyMarkerInfoProvider extends MissionItemMarkerInfo {
+public class StructureScannerMarkerInfoProvider extends MissionItemMarkerInfo {
 
-	protected CylindricalSurveyMarkerInfoProvider(MissionItemProxy origin) {
+	protected StructureScannerMarkerInfoProvider(MissionItemProxy origin) {
 		super(origin);
 	}
 

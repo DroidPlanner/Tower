@@ -7,7 +7,7 @@ import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.survey.CylindricalSurvey;
+import org.droidplanner.core.mission.waypoints.StructureScanner;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
-public class MissionCylindricalSurveyFragment extends MissionDetailFragment
+public class MissionStructureScannerFragment extends MissionDetailFragment
 		implements CardWheelHorizontalView.OnCardWheelChangedListener,
 		CompoundButton.OnCheckedChangeListener {
 
@@ -39,7 +39,7 @@ public class MissionCylindricalSurveyFragment extends MissionDetailFragment
 				.getPosition(MissionItemType.CYLINDRICAL_SURVEY));
 
 		// Use the first one as reference.
-		final CylindricalSurvey firstItem = ((List<CylindricalSurvey>) getMissionItems())
+		final StructureScanner firstItem = ((List<StructureScanner>) getMissionItems())
 				.get(0);
 
 		radiusPicker = (CardWheelHorizontalView) view
@@ -108,8 +108,8 @@ public class MissionCylindricalSurveyFragment extends MissionDetailFragment
 		}
 	}
 
-	private CylindricalSurvey getItem() {
-		CylindricalSurvey cylindricalSurvey = (CylindricalSurvey) getMissionItems()
+	private StructureScanner getItem() {
+		StructureScanner cylindricalSurvey = (StructureScanner) getMissionItems()
 				.get(0);
 		return cylindricalSurvey;
 	}
