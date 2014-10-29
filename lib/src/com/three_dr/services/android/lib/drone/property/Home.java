@@ -8,18 +8,18 @@ import com.three_dr.services.android.lib.coordinate.LatLngAlt;
 /**
  * Location from which the drone took off.
  */
-public class LaunchPad implements Parcelable {
+public class Home implements Parcelable {
 
     /**
      * Lauch pad 3D coordinate.
      */
     private final LatLngAlt mCoordinate;
 
-    public LaunchPad(float latitude, float longitude, float altitude){
+    public Home(float latitude, float longitude, float altitude){
         mCoordinate = new LatLngAlt(latitude, longitude, altitude);
     }
 
-    public LaunchPad(LatLngAlt coordinate){
+    public Home(LatLngAlt coordinate){
         mCoordinate = coordinate;
     }
 
@@ -37,11 +37,11 @@ public class LaunchPad implements Parcelable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof LaunchPad)) return false;
+        if (!(o instanceof Home)) return false;
 
-        LaunchPad launchPad = (LaunchPad) o;
+        Home home = (Home) o;
 
-        return !(mCoordinate != null ? !mCoordinate.equals(launchPad.mCoordinate) : launchPad.mCoordinate != null);
+        return !(mCoordinate != null ? !mCoordinate.equals(home.mCoordinate) : home.mCoordinate != null);
 
     }
 
@@ -68,17 +68,17 @@ public class LaunchPad implements Parcelable {
         dest.writeParcelable(this.mCoordinate, 0);
     }
 
-    private LaunchPad(Parcel in) {
+    private Home(Parcel in) {
         this.mCoordinate = in.readParcelable(LatLngAlt.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<LaunchPad> CREATOR = new Parcelable.Creator<LaunchPad>() {
-        public LaunchPad createFromParcel(Parcel source) {
-            return new LaunchPad(source);
+    public static final Parcelable.Creator<Home> CREATOR = new Parcelable.Creator<Home>() {
+        public Home createFromParcel(Parcel source) {
+            return new Home(source);
         }
 
-        public LaunchPad[] newArray(int size) {
-            return new LaunchPad[size];
+        public Home[] newArray(int size) {
+            return new Home[size];
         }
     };
 }
