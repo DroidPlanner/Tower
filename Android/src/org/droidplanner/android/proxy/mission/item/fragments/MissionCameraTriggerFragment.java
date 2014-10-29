@@ -1,6 +1,7 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
+import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.core.helpers.units.Length;
@@ -20,8 +21,10 @@ public class MissionCameraTriggerFragment extends MissionDetailFragment implemen
 	}
 
 	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
+	public void onApiConnected(DroidPlannerApi api) {
+		super.onApiConnected(api);
+
+        final View view = getView();
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CAMERA_TRIGGER));
 
 		CameraTrigger item = (CameraTrigger) getMissionItems().get(0);
