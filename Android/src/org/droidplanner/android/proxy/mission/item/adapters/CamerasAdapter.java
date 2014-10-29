@@ -16,11 +16,13 @@ public class CamerasAdapter extends ArrayAdapter<String> {
 	private CameraInfoLoader loader;
 	private Context context;
 	private String title = "";
+	CameraInfo defaultCamera = new CameraInfo();
 
 	public CamerasAdapter(Context context, int resource) {
 		super(context, resource);
 		this.context = context;
 		loader = new CameraInfoLoader(context);
+		add(defaultCamera.name);
 		addAll(loader.getCameraInfoList());
 	}
 
@@ -37,19 +39,14 @@ public class CamerasAdapter extends ArrayAdapter<String> {
 
 	public CameraInfo getCamera(int position) {
 		try {
+			if (position == getPosition(defaultCamera.name)) {
+				return defaultCamera;
+			}
 			return loader.openFile(getItem(position));
 		} catch (Exception e) {
 			Toast.makeText(context, context.getString(R.string.error_when_opening_file),
 					Toast.LENGTH_SHORT).show();
-			return loadLastFile();
-		}
-	}
-
-	private CameraInfo loadLastFile() {
-		try {
-			return loader.openFile(getItem(this.getCount() - 1));
-		} catch (Exception e) {
-			throw new RuntimeException("DP was not able to load a camera");
+			return defaultCamera;
 		}
 	}
 }
