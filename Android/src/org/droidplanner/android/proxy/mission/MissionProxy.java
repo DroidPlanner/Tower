@@ -1,8 +1,5 @@
 package org.droidplanner.android.proxy.mission;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.internal.is;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,8 +22,9 @@ import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.Waypoint;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.util.Pair;
+
+import com.google.android.gms.analytics.HitBuilders;
 
 /**
  * This class is used to render a {@link org.droidplanner.core.mission.Mission}
@@ -144,6 +142,11 @@ public class MissionProxy implements DPMap.PathSource {
 		Survey survey = new Survey(mMission, points);
 		mMissionItems.add(new MissionItemProxy(this, survey));
 		mMission.addMissionItem(survey);
+		try {
+			survey.build();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

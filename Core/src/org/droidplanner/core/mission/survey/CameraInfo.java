@@ -1,14 +1,14 @@
 package org.droidplanner.core.mission.survey;
 
 public class CameraInfo {
-	public String name = "Default";
+	public String name = "Canon SX260";
 	public Double sensorWidth = 6.12;
 	public Double sensorHeight = 4.22;
-	public Double focalLength = 7.0;
+	public Double sensorResolution = 12.1;
+	public Double focalLength = 5.0;
 	public Double overlap = 50.0;
 	public Double sidelap = 60.0;
 	public boolean isInLandscapeOrientation = true;
-	public Double sensorResolution = 10.1;
 
 	public Double getSensorLateralSize() {
 		if (isInLandscapeOrientation) {
