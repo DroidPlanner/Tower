@@ -50,7 +50,7 @@ public class CameraTrigger extends MissionCMD {
 		return distance;
 	}
 
-	public void setSpeed(Length triggerDistance) {
+	public void setTriggerDistance(Length triggerDistance) {
 		this.distance = triggerDistance;
 	}
 }
