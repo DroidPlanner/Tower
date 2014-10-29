@@ -21,6 +21,7 @@ dependencies {
     compile project(':Core')
     compile project(':Mavlink')
     compile project(':Libraries:HorizontalVariableListView:HorizontalVariableListView')
+    compile project(':Libraries:3DR-Services-Library:lib')
 
     compile files('libs/usbseriallibrary.jar')
     compile files('libs/j2xx.jar')
