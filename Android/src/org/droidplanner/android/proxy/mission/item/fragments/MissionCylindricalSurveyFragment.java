@@ -5,6 +5,7 @@ import java.util.List;
 import org.droidplanner.R;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
+import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.survey.CylindricalSurvey;
 
@@ -56,7 +57,7 @@ public class MissionCylindricalSurveyFragment extends MissionDetailFragment
 				"%d m"));
 		startAltitudeStepPicker.addChangingListener(this);
 		startAltitudeStepPicker.setCurrentValue((int) firstItem
-				.getStartAltitude().valueInMeters());
+				.getCoordinate().getAltitude().valueInMeters());
 
 		endAltitudeStepPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.heightStepPicker);
@@ -95,7 +96,7 @@ public class MissionCylindricalSurveyFragment extends MissionDetailFragment
             getMissionProxy().getMission().notifyMissionUpdate();
 			break;
 		case R.id.startAltitudePicker:
-			getItem().setStartAltitude(newValue);
+			getItem().setAltitude( new Altitude(newValue));
             getMissionProxy().getMission().notifyMissionUpdate();
 			break;
 		case R.id.heightStepPicker:
