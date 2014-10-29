@@ -10,7 +10,10 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 import org.droidplanner.R;
+import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 /**
@@ -111,7 +114,8 @@ public class YesNoWithPrefsDialog extends YesNoDialog {
     private void savePreferences(final String prefKey, final boolean isPositiveResponse){
         if(mCheckbox != null) {
             final SharedPreferences.Editor editor = mPrefs.prefs.edit();
-            if(mCheckbox.isChecked()){
+            final boolean dontShow = mCheckbox.isChecked();
+            if(dontShow){
                 Toast.makeText(getActivity(), R.string.pref_dialog_selection_reset_desc, Toast.LENGTH_LONG).show();
                         editor.putString(prefKey,
                                 getString(isPositiveResponse ? PREFERENCE_ALWAYS_ID : PREFERENCE_NEVER_ID));
@@ -121,6 +125,13 @@ public class YesNoWithPrefsDialog extends YesNoDialog {
             }
 
             editor.apply();
+
+            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                    .setCategory(GAUtils.Category.PREFERENCE_DIALOGS)
+                    .setAction(getArguments().getString(EXTRA_TITLE))
+                    .setLabel("Response: " + (isPositiveResponse ? "Yes" : "No") + (dontShow ?
+                            " (Always)" : " (Just once)"));
+            GAUtils.sendEvent(eventBuilder);
         }
     }
 

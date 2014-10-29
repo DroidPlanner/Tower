@@ -540,11 +540,32 @@ public class MissionProxy implements DPMap.PathSource {
         mMission.sendMissionToAPM();
 
         //Send an event for the created mission
-        final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
                 .setCategory(GAUtils.Category.MISSION_PLANNING)
-                .setAction("Mission send to drone")
+                .setAction("Mission sent to drone")
                 .setLabel("Mission items count")
                 .setValue(mMissionItems.size());
+        GAUtils.sendEvent(eventBuilder);
+
+        String missionItemsList = "[";
+        if(!mMissionItems.isEmpty()){
+            boolean isFirst = true;
+            for(MissionItemProxy itemProxy: mMissionItems){
+                if(isFirst)
+                    isFirst = false;
+                else
+                    missionItemsList += ", ";
+
+                missionItemsList += itemProxy.getMissionItem().getType().getName();
+            }
+        }
+
+        missionItemsList += "]";
+
+        eventBuilder = new HitBuilders.EventBuilder()
+                .setCategory(GAUtils.Category.MISSION_PLANNING)
+                .setAction("Mission sent to drone")
+                .setLabel("Mission items: " + missionItemsList);
         GAUtils.sendEvent(eventBuilder);
     }
 

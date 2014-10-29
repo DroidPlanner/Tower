@@ -524,13 +524,21 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 if (selectedProxies.size() >= 1) {
                     showItemDetail(selectMissionDetailType(selectedProxies));
                     enableMultiEdit(true);
-                    return true;
+                } else {
+                    Toast.makeText(getApplicationContext(), "No Waypoint(s) selected.", Toast.LENGTH_LONG)
+                            .show();
                 }
-            }
 
-			Toast.makeText(getApplicationContext(), R.string.editor_multi_edit_no_waypoint_error,
-                    Toast.LENGTH_LONG).show();
-			return true;
+                Toast.makeText(getApplicationContext(), R.string.editor_multi_edit_no_waypoint_error,
+                        Toast.LENGTH_LONG).show();
+
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                        .setCategory(GAUtils.Category.EDITOR)
+                        .setAction("Action mode button")
+                        .setLabel("Multi edit");
+                GAUtils.sendEvent(eventBuilder);
+            }
+            return true;
 
 		case R.id.menu_action_delete:
             if(missionProxy != null)
