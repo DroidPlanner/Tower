@@ -59,6 +59,11 @@ public class GAUtils {
          * Category for mission planning, and editing.
          */
         public static final String MISSION_PLANNING = "Mission planning";
+
+        /**
+         * Category for analytics data related to the preference dialogs.
+         */
+        public static final String PREFERENCE_DIALOGS = "Preference Dialogs";
 	}
 
 	/**
