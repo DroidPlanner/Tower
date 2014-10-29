@@ -8,6 +8,8 @@ import com.three_dr.services.android.lib.drone.property.Attitude;
 import com.three_dr.services.android.lib.drone.property.Altitude;
 import com.three_dr.services.android.lib.drone.property.Battery;
 import com.three_dr.services.android.lib.drone.property.Parameters;
+import com.three_dr.services.android.lib.drone.property.Mission;
+import com.three_dr.services.android.lib.drone.property.State;
 
 /**
 * Interface used to access the drone properties.

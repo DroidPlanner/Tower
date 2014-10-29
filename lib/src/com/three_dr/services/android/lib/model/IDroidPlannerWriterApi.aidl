@@ -4,6 +4,7 @@ package com.three_dr.services.android.lib.model;
 import com.three_dr.services.android.lib.drone.connection.ConnectionParameter;
 import com.three_dr.services.android.lib.model.IDroidPlannerCallbackApi;
 import com.three_dr.services.android.lib.drone.property.Parameters;
+import com.three_dr.services.android.lib.drone.property.Mission;
 
 /**
 * Interface used to establish/break connection with a drone.
@@ -49,5 +50,12 @@ oneway interface IDroidPlannerWriterApi {
     * Write the given parameters to the specified drone.
     * @param droneId id of the drone whose parameters to write.
     */
-    void writeParameter(int droneId, Parameters parameters);
+    void writeParameter(int droneId, in Parameters parameters);
+
+    /**
+    * Upload the given mission to the specified drone.
+    * @param droneId id of the drone to which the mission is uploaded.
+    * @param mission mission to upload to the drone.
+    */
+    void sendMission(int droneId, in Mission mission);
 }
