@@ -36,6 +36,11 @@ public class GAUtils {
 		public static final String FLIGHT = "Flight";
 
         /**
+         * Category for analytics data related to the editor screen.
+         */
+        public static final String EDITOR = "Editor";
+
+        /**
          * Category for measuring failsafe events.
          */
         public static final String FAILSAFE = "Failsafe";
