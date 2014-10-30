@@ -1,1 +1,10 @@
-<manifest package="com.three_dr.services.android.lib" />
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.three_dr.services.android.lib"
+    android:versionCode="1"
+    android:versionName="0.0.0">
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="21" />
+</manifest>
