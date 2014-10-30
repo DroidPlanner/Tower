@@ -336,6 +336,7 @@ public class MissionProxy implements DPMap.PathSource {
 	}
 
 	public void clear() {
+        selection.clearSelection();
 		removeItemList(mMissionItems);
 	}
 
