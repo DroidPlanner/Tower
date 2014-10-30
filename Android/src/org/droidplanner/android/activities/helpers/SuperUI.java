@@ -204,7 +204,8 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		switch (item.getItemId()) {
 		case R.id.menu_send_mission:
             final MissionProxy missionProxy = app.getMissionProxy();
-			if (drone.getMission().hasTakeoffAndLandOrRTL()) {
+
+			if (missionProxy.getItems().isEmpty() || drone.getMission().hasTakeoffAndLandOrRTL()) {
                 missionProxy.sendMissionToAPM();
 			} else {
                 YesNoWithPrefsDialog dialog = YesNoWithPrefsDialog.newInstance(getApplicationContext(),

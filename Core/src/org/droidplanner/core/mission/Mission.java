@@ -364,10 +364,13 @@ public class Mission extends DroneVariable {
 	}
 
 	public boolean isFirstItemTakeoff() {
-		return items.get(0) instanceof Takeoff;
+		return !items.isEmpty() && items.get(0) instanceof Takeoff;
 	}
 
 	public boolean isLastItemLandOrRTL() {
+        if(items.isEmpty())
+            return false;
+
 		MissionItem last = items.get(items.size() - 1);
 		return (last instanceof ReturnToHome) || (last instanceof Land);
 	}
