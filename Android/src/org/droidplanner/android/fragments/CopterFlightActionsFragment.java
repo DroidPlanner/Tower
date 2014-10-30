@@ -335,7 +335,7 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
                 break;
 
             case ROTOR_GUIDED:
-                if (drone.getGuidedPoint().isIdle() && !followMe.isEnabled()) {
+                if (drone.getGuidedPoint().isInitialized() && !followMe.isEnabled()) {
                     pauseBtn.setActivated(true);
                 }
                 break;
