@@ -73,4 +73,8 @@ public class DPDrone {
     public void writeParameters(Parameters parameters){
         throw new UnsupportedOperationException("Method not implemented");
     }
+
+    public void toggleConnectionState() {
+        throw new UnsupportedOperationException("Method not implemented");
+    }
 }

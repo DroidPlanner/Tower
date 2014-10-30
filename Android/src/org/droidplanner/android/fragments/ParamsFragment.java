@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -64,7 +65,7 @@ public class ParamsFragment extends ApiListenerListFragment {
         intentFilter.addAction(Event.EVENT_PARAMETERS_RECEIVED);
     }
 
-    private final BroadcastReceiver broadcastReceived = new BroadcastReceiver() {
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
@@ -72,7 +73,8 @@ public class ParamsFragment extends ApiListenerListFragment {
                 startProgress();
             }
             else if(Event.EVENT_PARAMETERS_REFRESH_ENDED.equals(action)){
-                loadAdapter(dpDrone.getParameters().getParameters());
+                if(dpDrone != null)
+                    loadAdapter(dpDrone.getParameters().getParameters());
                 stopProgress();
             }
             else if(Event.EVENT_PARAMETERS_RECEIVED.equals(action)){
@@ -87,7 +89,8 @@ public class ParamsFragment extends ApiListenerListFragment {
                 stopProgress();
             }
             else if(Event.EVENT_TYPE_UPDATED.equals(action)){
-                loadAdapter(dpDrone.getParameters().getParameters());
+                if(dpDrone != null)
+                    loadAdapter(dpDrone.getParameters().getParameters());
             }
         }
     };
@@ -245,10 +248,15 @@ public class ParamsFragment extends ApiListenerListFragment {
         }
 
         toggleParameterFilter(isParameterFilterVisible(), false);
+
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(broadcastReceiver,
+                intentFilter);
     }
 
     @Override
-    public void onApiDisconnected() {}
+    public void onApiDisconnected() {
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(broadcastReceiver);
+    }
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
