@@ -9,6 +9,22 @@ All the changes are logged below (preferable with the pull request numbers in pa
 
 # Releases
 
+## Droidplanner v2.8.2
+* Allow negative altitudes (#1231)
+* Improved Structure Scanner (#1234, #1237)
+* Camera triggering on survey missions (#1236)
+* Camera triggering during missions (#1235)
+* Improved survey camera support (#1227)
+* Default "low-signal" alarm to off (#1228)
+* Disable calibration if the drone is flying (#1229)
+* Analytics update (#1233)
+* Fix editor bugs (#1240)
+* Removed the help menu (#1207)
+* Typo fixes (#1205, #1201)
+* Core features expansion (#1209, #1210, #1211)
+* Doxygen documentation support (#1208)
+* Source clean-up (#1221,#1222)
+
 ## Droidplanner v2.8.1
 * Added Change Speed mission item (#1202)
 * UI changes to scan option (#1204)
