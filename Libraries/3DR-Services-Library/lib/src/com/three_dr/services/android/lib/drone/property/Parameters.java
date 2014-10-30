@@ -4,32 +4,23 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by fhuya on 10/28/14.
  */
 public class Parameters implements Parcelable {
 
-    private Bundle parametersBundle = new Bundle();
+    private List<Parameter> parametersList = new ArrayList<Parameter>();
 
     public Parameters(List<Parameter> parameterList) {
-        if(!parameterList.isEmpty()){
-            for(Parameter parameter: parameterList){
-                parametersBundle.putParcelable(parameter.getName(), parameter);
-            }
-        }
+        this.parametersList = parameterList;
     }
 
-    public Parameter getParameter(String parameterName){
-        return parametersBundle.getParcelable(parameterName);
+    public List<Parameter> getParameters(){
+        return parametersList;
     }
-
-    public Bundle getParameters(){
-        return parametersBundle;
-    }
-
 
     @Override
     public int describeContents() {
@@ -38,14 +29,14 @@ public class Parameters implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeBundle(parametersBundle);
+        dest.writeTypedList(parametersList);
     }
 
     private Parameters(Parcel in) {
-        parametersBundle = in.readBundle();
+        in.readTypedList(parametersList, Parameter.CREATOR);
     }
 
-    public static final Parcelable.Creator<Parameters> CREATOR = new Parcelable.Creator<Parameters>() {
+    public static final Creator<Parameters> CREATOR = new Creator<Parameters>() {
         public Parameters createFromParcel(Parcel source) {
             return new Parameters(source);
         }

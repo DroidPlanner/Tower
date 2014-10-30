@@ -12,6 +12,7 @@ import com.three_dr.services.android.lib.model.IDroidPlannerReaderApi;
 import com.three_dr.services.android.lib.model.IDroidPlannerWriterApi;
 
 import org.droidplanner.android.api.DPCallbackApi;
+import org.droidplanner.android.api.model.DPDrone;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.api.services.DroidPlannerService;
 import org.droidplanner.android.communication.service.UploaderService;
@@ -107,6 +108,8 @@ public class DroidPlannerApp extends Application {
     private IDroidPlannerWriterApi dpWriterApi;
     private IDroidPlannerReaderApi dpReaderApi;
 
+    private DPDrone dpDrone;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -125,6 +128,10 @@ public class DroidPlannerApp extends Application {
 
     public DroidPlannerApi getApi(){
         return dpApi;
+    }
+
+    public DPDrone getDPDrone(){
+        return dpDrone;
     }
 
 	public void addApiListener(ApiListener listener) {

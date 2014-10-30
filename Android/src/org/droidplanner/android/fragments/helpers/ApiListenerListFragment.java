@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.v4.app.ListFragment;
 
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.api.model.DPDrone;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 
 /**
@@ -15,6 +16,10 @@ public abstract class ApiListenerListFragment extends ListFragment implements Dr
 
     protected DroidPlannerApi getApi(){
         return dpApp.getApi();
+    }
+
+    protected DPDrone getDPDrone(){
+        return dpApp.getDPDrone();
     }
 
     @Override

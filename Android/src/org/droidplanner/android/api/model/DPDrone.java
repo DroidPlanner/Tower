@@ -61,4 +61,16 @@ public class DPDrone {
     public Mission getMission()  {
         return null;
     }
+
+    public boolean isConnected(){
+        throw new UnsupportedOperationException("Method not implemented");
+    }
+
+    public void refreshParameters(){
+        throw new UnsupportedOperationException("Method not implemented");
+    }
+
+    public void writeParameters(Parameters parameters){
+        throw new UnsupportedOperationException("Method not implemented");
+    }
 }

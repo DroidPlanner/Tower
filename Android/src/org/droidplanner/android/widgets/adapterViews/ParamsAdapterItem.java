@@ -23,14 +23,12 @@ public class ParamsAdapterItem implements Serializable {
     }
 
 	private Parameter parameter;
-	private ParameterMetadata metadata;
 
 	private String dirtyValue;
 	private Validation validation;
 
-	public ParamsAdapterItem(Parameter parameter, ParameterMetadata metadata) {
+	public ParamsAdapterItem(Parameter parameter) {
 		this.parameter = parameter;
-		this.metadata = metadata;
 	}
 
 	public Parameter getParameter() {
@@ -46,14 +44,6 @@ public class ParamsAdapterItem implements Serializable {
 		}
 	}
 
-	public ParameterMetadata getMetadata() {
-		return metadata;
-	}
-
-	public void setMetadata(ParameterMetadata metadata) {
-		this.metadata = metadata;
-	}
-
 	public void setDirtyValue(String value) {
 		// dirty if different from original value, set validation if dirty
 		dirtyValue = (Double.toString(parameter.getValue()).equals(value)) ? null : value;
@@ -63,8 +53,7 @@ public class ParamsAdapterItem implements Serializable {
 
 	public void commit() {
 		try {
-            parameter = new Parameter(parameter.getName(), formatter.parse(dirtyValue).doubleValue(),
-                    parameter.getType());
+			parameter.setValue(formatter.parse(dirtyValue).doubleValue());
 			dirtyValue = null;
 		} catch (ParseException e) {
 			// nop
@@ -80,13 +69,10 @@ public class ParamsAdapterItem implements Serializable {
 	}
 
 	private Validation validateValue(String value) {
-		if (metadata == null) {
-			return Validation.NA;
-
-		} else if (metadata.getRange() != null) {
+		if (parameter.getRange() != null) {
 			return validateInRange(value);
 
-		} else if (metadata.getValues() != null) {
+		} else if (parameter.getValues() != null) {
 			return validateInValues(value);
 
 		} else {
@@ -97,7 +83,7 @@ public class ParamsAdapterItem implements Serializable {
 	private Validation validateInRange(String value) {
 		try {
 			final double dval = formatter.parse(value).doubleValue();
-			final double[] range = metadata.parseRange();
+			final double[] range = parameter.parseRange();
 			return (dval >= range[ParameterMetadata.RANGE_LOW] && dval <= range[ParameterMetadata.RANGE_HIGH]) ? Validation.VALID
 					: Validation.INVALID;
 		} catch (ParseException ex) {
@@ -108,7 +94,7 @@ public class ParamsAdapterItem implements Serializable {
 	private Validation validateInValues(String value) {
 		try {
 			final double dval = formatter.parse(value).doubleValue();
-			final Map<Double, String> values = metadata.parseValues();
+			final Map<Double, String> values = parameter.parseValues();
 			if (values.keySet().contains(dval)) {
 				return Validation.VALID;
 			} else {
@@ -126,11 +112,7 @@ public class ParamsAdapterItem implements Serializable {
         final Parameter param = getParameter();
         if (param != null) {
             toString = param.getName() + ": ";
-        }
-
-        final ParameterMetadata metadata = getMetadata();
-        if(metadata != null){
-            toString += metadata.getDisplayName();
+            toString += parameter.getDisplayName();
         }
 
         return toString;
