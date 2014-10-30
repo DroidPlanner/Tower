@@ -77,4 +77,8 @@ public class DPDrone {
     public void toggleConnectionState() {
         throw new UnsupportedOperationException("Method not implemented");
     }
+
+    public void arm(boolean b) {
+        throw new UnsupportedOperationException("Method not implemented");
+    }
 }

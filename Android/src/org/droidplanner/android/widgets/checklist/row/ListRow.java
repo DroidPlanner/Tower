@@ -71,8 +71,6 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 			mListItem.setSys_value(mDrone.getBattery().getBattCurrent());
 		} else if (sys_tag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
 			mListItem.setSys_value(mDrone.getGps().getSatCount());
-		} else if (sys_tag.equalsIgnoreCase("SYS_DEF_ALT")) {
-			mListItem.setSys_value(mDrone.getMission().getDefaultAlt().valueInMeters());
 		} else if (sys_tag.equalsIgnoreCase("SYS_ARM_STATE")) {
 			mListItem.setSys_activated(mDrone.getState().isArmed());
 		} else if (sys_tag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {

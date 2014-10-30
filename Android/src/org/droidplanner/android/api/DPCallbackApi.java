@@ -17,6 +17,9 @@ import java.lang.ref.WeakReference;
 */
 public final class DPCallbackApi extends IDroidPlannerCallbackApi.Stub {
 
+    public static final String ACTION_DRONE_EVENT = DPCallbackApi.class.getName() + "" +
+            ".ACTION_DRONE_EVENT";
+
     private final WeakReference<DroidPlannerApp> appRef;
     private final LocalBroadcastManager lbm;
 
@@ -40,6 +43,7 @@ public final class DPCallbackApi extends IDroidPlannerCallbackApi.Stub {
 
     @Override
     public void onDroneEvent(int droneId, String event, Bundle eventExtras) throws RemoteException {
-        lbm.sendBroadcast((new Intent(event).putExtras(eventExtras)));
+        lbm.sendBroadcast(new Intent(ACTION_DRONE_EVENT));
+        lbm.sendBroadcast(new Intent(event).putExtras(eventExtras));
     }
 }

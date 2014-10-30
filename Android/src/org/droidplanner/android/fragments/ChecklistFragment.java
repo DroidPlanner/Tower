@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.droidplanner.R;
+import org.droidplanner.android.api.DPCallbackApi;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.widgets.checklist.CheckListAdapter;
@@ -13,12 +14,12 @@ import org.droidplanner.android.widgets.checklist.CheckListItem;
 import org.droidplanner.android.widgets.checklist.CheckListSysLink;
 import org.droidplanner.android.widgets.checklist.CheckListXmlParser;
 import org.droidplanner.android.widgets.checklist.xml.ListXmlParser.OnXmlParserError;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.model.Drone;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +27,22 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 public class ChecklistFragment extends ApiListenerFragment implements OnXmlParserError,
-		OnCheckListItemUpdateListener, OnDroneListener {
+		OnCheckListItemUpdateListener {
+
+    private final static IntentFilter intentFilter = new IntentFilter();
+    {
+        intentFilter.addAction(DPCallbackApi.ACTION_DRONE_EVENT);
+    }
+
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(DPCallbackApi.ACTION_DRONE_EVENT.equals(action)){
+                onInfoUpdate();
+            }
+        }
+    };
 
 	private Context context;
 	private ExpandableListView expListView;
@@ -70,21 +86,14 @@ public class ChecklistFragment extends ApiListenerFragment implements OnXmlParse
 
     @Override
     public void onApiConnected(DroidPlannerApi api){
-        DroidPlannerApi dpApi = getApi();
-        dpApi.addDroneListener(this);
-
-        sysLink = new CheckListSysLink(dpApi.getDrone());
+        sysLink = new CheckListSysLink(getDPDrone());
+        getBroadcastManager().registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onApiDisconnected(){
-        getApi().removeDroneListener(this);
+        getBroadcastManager().unregisterReceiver(broadcastReceiver);
     }
-
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		onInfoUpdate();
-	}
 
 	public void onInfoUpdate() {
 		for (CheckListItem item : checklistItems) {

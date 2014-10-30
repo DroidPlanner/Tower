@@ -25,8 +25,6 @@ public class CheckListSysLink {
 			mListItem.setSys_value(drone.getBattery().getBatteryCurrent());
 		} else if (mSysTag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
 			mListItem.setSys_value(drone.getGps().getSatellitesCount());
-		} else if (mSysTag.equalsIgnoreCase("SYS_DEF_ALT")) {
-			mListItem.setSys_value(drone.getAltitude().getAltitude());
 		} else if (mSysTag.equalsIgnoreCase("SYS_ARM_STATE")) {
 			mListItem.setSys_activated(drone.getState().isArmed());
 		} else if (mSysTag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
@@ -47,23 +45,15 @@ public class CheckListSysLink {
 		} else if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_ARM_STATE")) {
 			doSysArm(checkListItem);
 
-		} else if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_DEF_ALT")) {
-			doDefAlt(checkListItem);
-
 		}
 	}
 
-	private void doDefAlt(CheckListItem checkListItem) {
-		drone.getMission().setDefaultAlt(new Altitude(checkListItem.getFloatValue()));
-	}
-
 	private void doSysArm(CheckListItem checkListItem) {
-		if (drone.getMavClient().isConnected()) {
+		if (drone.isConnected()) {
 			if (checkListItem.isSys_activated() && !drone.getState().isArmed()) {
-				drone.notifyDroneEvent(DroneEventsType.ARMING_STARTED);
-				MavLinkArm.sendArmMessage(drone, true);
+				drone.arm(true);
 			} else {
-				MavLinkArm.sendArmMessage(drone, false);
+				drone.arm(false);
 			}
 		}
 	}
