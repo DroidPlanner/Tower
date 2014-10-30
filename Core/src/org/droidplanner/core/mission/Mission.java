@@ -12,6 +12,7 @@ import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.helpers.units.Speed;
+import org.droidplanner.core.mission.commands.CameraTrigger;
 import org.droidplanner.core.mission.commands.ChangeSpeed;
 import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.Takeoff;
@@ -272,6 +273,9 @@ public class Mission extends DroneVariable {
 			case MAV_CMD.MAV_CMD_DO_CHANGE_SPEED:
 				received.add(new ChangeSpeed(msg, this));
 				break;
+			case MAV_CMD.MAV_CMD_DO_SET_CAM_TRIGG_DIST:
+				received.add(new CameraTrigger(msg,this));
+				break;
 			case MAV_CMD.MAV_CMD_DO_SET_ROI:
 				received.add(new RegionOfInterest(msg, this));
 				break;
@@ -360,10 +364,13 @@ public class Mission extends DroneVariable {
 	}
 
 	public boolean isFirstItemTakeoff() {
-		return items.get(0) instanceof Takeoff;
+		return !items.isEmpty() && items.get(0) instanceof Takeoff;
 	}
 
 	public boolean isLastItemLandOrRTL() {
+        if(items.isEmpty())
+            return false;
+
 		MissionItem last = items.get(items.size() - 1);
 		return (last instanceof ReturnToHome) || (last instanceof Land);
 	}

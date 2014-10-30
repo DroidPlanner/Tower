@@ -325,8 +325,4 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     public void onProviderDisabled(String provider) {
     }
 
-    @Override
-    public CharSequence[][] getHelpItems() {
-        return new CharSequence[0][];
-    }
 }

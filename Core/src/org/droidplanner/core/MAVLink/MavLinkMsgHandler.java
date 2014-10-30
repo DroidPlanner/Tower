@@ -6,6 +6,7 @@ import org.droidplanner.core.model.Drone;
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_attitude;
+import com.MAVLink.Messages.ardupilotmega.msg_camera_feedback;
 import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
 import com.MAVLink.Messages.ardupilotmega.msg_gps_raw_int;
 import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
@@ -122,6 +123,11 @@ public class MavLinkMsgHandler {
 				drone.setFirmwareVersion(message);
 				break;
 			}
+			break;
+		case msg_camera_feedback.MAVLINK_MSG_ID_CAMERA_FEEDBACK:
+			drone.getCameraFootprints().newImageLocation((msg_camera_feedback) msg);
+			break;
+		default:
 			break;
 		}
 	}

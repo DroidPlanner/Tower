@@ -30,8 +30,4 @@ public class SettingsActivity extends DrawerNavigationUI {
         return R.id.navigation_settings;
     }
 
-    @Override
-	public CharSequence[][] getHelpItems() {
-		return new CharSequence[][] { {}, {} };
-	}
 }

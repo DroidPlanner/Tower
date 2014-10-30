@@ -229,4 +229,8 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
         }
     }
 
+    public void newGuidedVelocity( double xVel, double yVel, double zVel){
+			MavLinkModes.sendGuidedVelocity(myDrone,xVel,yVel,zVel);
+	}
+
 }

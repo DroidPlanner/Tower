@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
@@ -102,7 +103,7 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener {
 	public void onStart() {
 		super.onStart();
 		final Drone drone = app.getDrone();
-		if (drone != null && drone.getMavClient().isConnected()) {
+		if (drone != null && drone.getMavClient().isConnected() && !drone.getState().isFlying()) {
             btnStep.setEnabled(true);
 			if (drone.getCalibrationSetup().isCalibrating()) {
 				processMAVMessage(drone.getCalibrationSetup().getMessage(), false);
@@ -218,7 +219,11 @@ public class FragmentSetupIMU extends Fragment implements OnDroneListener {
 
 	private void startCalibration() {
 		if (app.getDrone() != null) {
-			app.getDrone().getCalibrationSetup().startCalibration();
+			boolean isCalibrating = app.getDrone().getCalibrationSetup().startCalibration();
+            if(!isCalibrating){
+                Toast.makeText(getActivity(), getString(R.string.failed_start_calibration_message),
+                        Toast.LENGTH_LONG).show();
+            }
 		}
 	}
 

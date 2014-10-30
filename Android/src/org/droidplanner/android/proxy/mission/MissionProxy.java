@@ -1,8 +1,5 @@
 package org.droidplanner.android.proxy.mission;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.internal.is;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,8 +22,9 @@ import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.Waypoint;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.util.Pair;
+
+import com.google.android.gms.analytics.HitBuilders;
 
 /**
  * This class is used to render a {@link org.droidplanner.core.mission.Mission}
@@ -144,6 +142,11 @@ public class MissionProxy implements DPMap.PathSource {
 		Survey survey = new Survey(mMission, points);
 		mMissionItems.add(new MissionItemProxy(this, survey));
 		mMission.addMissionItem(survey);
+		try {
+			survey.build();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -226,7 +229,15 @@ public class MissionProxy implements DPMap.PathSource {
 
     public void addTakeOffAndRTL(){
         if(!mMission.isFirstItemTakeoff()){
-            final Takeoff takeOff = new Takeoff(mMission, new Altitude(Takeoff.DEFAULT_TAKEOFF_ALTITUDE));
+            Altitude defaultAlt = new Altitude(Takeoff.DEFAULT_TAKEOFF_ALTITUDE);
+            if(!mMissionItems.isEmpty()){
+                MissionItem firstItem = mMissionItems.get(0).getMissionItem();
+                if(firstItem instanceof SpatialCoordItem)
+                    defaultAlt = new Altitude(((SpatialCoordItem)firstItem).getCoordinate()
+                            .getAltitude().valueInMeters());
+            }
+
+            final Takeoff takeOff = new Takeoff(mMission, defaultAlt);
             mMissionItems.add(0, new MissionItemProxy(this, takeOff));
             mMission.addMissionItem(0, takeOff);
         }
@@ -325,6 +336,7 @@ public class MissionProxy implements DPMap.PathSource {
 	}
 
 	public void clear() {
+        selection.clearSelection();
 		removeItemList(mMissionItems);
 	}
 
@@ -540,11 +552,32 @@ public class MissionProxy implements DPMap.PathSource {
         mMission.sendMissionToAPM();
 
         //Send an event for the created mission
-        final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
                 .setCategory(GAUtils.Category.MISSION_PLANNING)
-                .setAction("Mission send to drone")
+                .setAction("Mission sent to drone")
                 .setLabel("Mission items count")
                 .setValue(mMissionItems.size());
+        GAUtils.sendEvent(eventBuilder);
+
+        String missionItemsList = "[";
+        if(!mMissionItems.isEmpty()){
+            boolean isFirst = true;
+            for(MissionItemProxy itemProxy: mMissionItems){
+                if(isFirst)
+                    isFirst = false;
+                else
+                    missionItemsList += ", ";
+
+                missionItemsList += itemProxy.getMissionItem().getType().getName();
+            }
+        }
+
+        missionItemsList += "]";
+
+        eventBuilder = new HitBuilders.EventBuilder()
+                .setCategory(GAUtils.Category.MISSION_PLANNING)
+                .setAction("Mission sent to drone")
+                .setLabel("Mission items: " + missionItemsList);
         GAUtils.sendEvent(eventBuilder);
     }
 

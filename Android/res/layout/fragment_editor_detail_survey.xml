@@ -141,102 +141,98 @@
                 android:orientation="vertical" >
 
                 <HorizontalScrollView
+                    style="@style/missionItemDetailCard"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/missionItemDetailCard">
+                    android:layout_height="wrap_content" >
 
                     <GridLayout
                         android:id="@+id/myGrid"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:columnCount="2">
+                        android:columnCount="2" >
 
                         <TextView
                             android:id="@+id/footprintTextView"
                             android:layout_gravity="left"
                             android:layout_marginLeft="10dp"
-                            android:text="@string/footprint"/>
+                            android:text="@string/footprint" />
 
                         <TextView
                             android:id="@+id/groundResolutionTextView"
                             android:layout_gravity="left"
                             android:layout_marginLeft="10dp"
-                            android:text="@string/ground_resolution"/>
+                            android:text="@string/ground_resolution" />
 
                         <TextView
                             android:id="@+id/distanceTextView"
                             android:layout_gravity="left"
                             android:layout_marginLeft="10dp"
-                            android:text="@string/distance_between_pictures"/>
+                            android:text="@string/distance_between_pictures" />
 
                         <TextView
                             android:id="@+id/distanceBetweenLinesTextView"
                             android:layout_gravity="left"
                             android:layout_marginLeft="10dp"
-                            android:text="@string/distance_between_lines"/>
+                            android:text="@string/distance_between_lines" />
 
                         <TextView
                             android:id="@+id/areaTextView"
                             android:layout_gravity="left"
                             android:layout_marginLeft="10dp"
-                            android:text="@string/area"/>
+                            android:text="@string/area" />
 
                         <TextView
                             android:id="@+id/lengthTextView"
                             android:layout_gravity="left"
                             android:layout_marginLeft="10dp"
-                            android:text="@string/mission_length"/>
+                            android:text="@string/mission_length" />
 
                         <TextView
                             android:id="@+id/numberOfPicturesTextView"
                             android:layout_gravity="left"
                             android:layout_marginLeft="10dp"
-                            android:text="@string/pictures"/>
+                            android:text="@string/pictures" />
 
                         <TextView
                             android:id="@+id/numberOfStripsTextView"
                             android:layout_gravity="left"
                             android:layout_marginLeft="10dp"
-                            android:text="@string/number_of_strips"/>
+                            android:text="@string/number_of_strips" />
                     </GridLayout>
                 </HorizontalScrollView>
+
                 <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
                     android:id="@+id/anglePicker"
+                    style="@style/missionItemDetailCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/hatch_angle"
-                    style="@style/missionItemDetailCard"/>
+                    android:text="@string/hatch_angle" />
 
                 <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
                     android:id="@+id/altitudePicker"
+                    style="@style/missionItemDetailCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/flight_altitude"
-                    style="@style/missionItemDetailCard"/>
+                    android:text="@string/flight_altitude" />
 
-                <LinearLayout
+                <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+                    android:id="@+id/overlapPicker"
+                    style="@style/missionItemDetailCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
+                    android:text="@string/overlap" >
+                </org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView>
 
-                    <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
-                        android:id="@+id/overlapPicker"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:text="@string/overlap"
-                        style="@style/missionItemDetailCard"/>
+                <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+                    android:id="@+id/sidelapPicker"
+                    style="@style/missionItemDetailCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sidelap" >
+                </org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView>
 
-                    <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
-                        android:id="@+id/sidelapPicker"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:text="@string/sidelap"
-                        style="@style/missionItemDetailCard"/>
-
-                </LinearLayout>
             </LinearLayout>
+
         </RelativeLayout>
 
     </ScrollView>

@@ -14,8 +14,8 @@ import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.commands.MissionCMD;
-import org.droidplanner.core.mission.survey.CylindricalSurvey;
 import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.waypoints.StructureScanner;
 import org.droidplanner.core.util.Pair;
 
 import android.app.Activity;
@@ -33,8 +33,8 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 
 	private static final String TAG = MissionDetailFragment.class.getSimpleName();
 
-	protected static final int MIN_ALTITUDE = 0; // meter
-	protected static final int MAX_ALTITUDE = 200; // meters
+	protected static final int MIN_ALTITUDE = -200; // meter
+	protected static final int MAX_ALTITUDE = +200; // meters
 
     public interface OnMissionDetailListener {
 		/**
@@ -99,7 +99,10 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 			fragment = new MissionSplineWaypointFragment();
 			break;
 		case CYLINDRICAL_SURVEY:
-			fragment = new MissionCylindricalSurveyFragment();
+			fragment = new MissionStructureScannerFragment();
+			break;
+		case CAMERA_TRIGGER:
+			fragment = new MissionCameraTriggerFragment();
 			break;
 		default:
 			fragment = null;
@@ -155,7 +158,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
                 list.remove(MissionItemType.SURVEY);
             }
             
-            if ((currentItem instanceof CylindricalSurvey)) {
+            if ((currentItem instanceof StructureScanner)) {
                 list.clear();
                 list.add(MissionItemType.CYLINDRICAL_SURVEY);
             }

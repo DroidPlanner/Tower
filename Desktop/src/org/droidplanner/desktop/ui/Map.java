@@ -2,6 +2,7 @@ package org.droidplanner.desktop.ui;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
@@ -9,10 +10,13 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.core.survey.Footprint;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
 import org.openstreetmap.gui.jmapviewer.MapMarkerIcon;
+import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
+import org.openstreetmap.gui.jmapviewer.MapRectangleImpl;
 import org.openstreetmap.gui.jmapviewer.OsmFileCacheTileLoader;
 import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
 
@@ -40,6 +44,7 @@ public class Map implements OnDroneListener {
 	@Override
 	public void onDroneEvent(DroneEventsType event, org.droidplanner.core.model.Drone drone) {
 		Coord2D position = drone.getGps().getPosition();
+		try{
 		switch (event) {
 		case GPS:
 			marker.setLat(position.getLat());
@@ -69,8 +74,18 @@ public class Map implements OnDroneListener {
 			guidedMarker.setLon(drone.getGuidedPoint().getCoord().getLng());
 			map.repaint();
 			break;
+		case FOOTPRINT:
+			ArrayList<Coordinate> corners = new ArrayList<Coordinate>();
+			for (Coord2D vertex : drone.getCameraFootprints().getLastFootprint().getVertex()) {
+				corners.add(new Coordinate(vertex.getLat(), vertex.getLng()));
+			}			
+			map.addMapPolygon(new MapPolygonImpl(corners));
+			map.repaint();
 		default:
 			break;
+		}
+		}catch(NullPointerException e){
+			
 		}
 	}
 

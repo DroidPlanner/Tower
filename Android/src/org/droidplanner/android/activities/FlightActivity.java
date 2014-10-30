@@ -363,9 +363,4 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 		}
 	}
 
-	@Override
-	public CharSequence[][] getHelpItems() {
-		return new CharSequence[][] { { getString(R.string.help_item_description) },
-				{ "https://www.youtube.com/watch?v=btsk7bzn-9Q" } };
-	}
 }

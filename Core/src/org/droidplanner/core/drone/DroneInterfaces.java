@@ -220,6 +220,11 @@ public class DroneInterfaces {
 		 * New magnetometer data has been received
 		 */
 		MAGNETOMETER,
+		
+		/**
+		 * The drone camera footprints has been updated
+		 */
+		FOOTPRINT,
 	}
 
 	public interface OnDroneListener {
