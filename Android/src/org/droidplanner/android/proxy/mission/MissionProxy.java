@@ -229,7 +229,15 @@ public class MissionProxy implements DPMap.PathSource {
 
     public void addTakeOffAndRTL(){
         if(!mMission.isFirstItemTakeoff()){
-            final Takeoff takeOff = new Takeoff(mMission, new Altitude(Takeoff.DEFAULT_TAKEOFF_ALTITUDE));
+            Altitude defaultAlt = new Altitude(Takeoff.DEFAULT_TAKEOFF_ALTITUDE);
+            if(!mMissionItems.isEmpty()){
+                MissionItem firstItem = mMissionItems.get(0).getMissionItem();
+                if(firstItem instanceof SpatialCoordItem)
+                    defaultAlt = new Altitude(((SpatialCoordItem)firstItem).getCoordinate()
+                            .getAltitude().valueInMeters());
+            }
+
+            final Takeoff takeOff = new Takeoff(mMission, defaultAlt);
             mMissionItems.add(0, new MissionItemProxy(this, takeOff));
             mMission.addMissionItem(0, takeOff);
         }
