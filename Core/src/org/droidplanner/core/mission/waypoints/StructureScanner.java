@@ -11,7 +11,9 @@ import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
+import org.droidplanner.core.mission.survey.CameraInfo;
 import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.survey.SurveyData;
 import org.droidplanner.core.mission.survey.grid.GridBuilder;
 import org.droidplanner.core.polygon.Polygon;
 
@@ -23,6 +25,7 @@ public class StructureScanner extends SpatialCoordItem {
 	private Altitude heightStep = new Altitude(5);
 	private int numberOfSteps = 2;
 	private boolean crossHatch = false;
+	SurveyData survey = new SurveyData();
 
 	public StructureScanner(Mission mission, Coord3D coord) {
 		super(mission,coord);
@@ -66,14 +69,20 @@ public class StructureScanner extends SpatialCoordItem {
 
 		Coord2D corner = GeoTools.newCoordFromBearingAndDistance(coordinate,
 				-45, radius.valueInMeters()*2);
-		GridBuilder grid = new GridBuilder(polygon, 0.0,
-				radius.valueInMeters() / 4, corner );
+		
+		
+		survey.setAltitude(getTopHeight());
+		
 		try {
+			survey.update(0.0, survey.getAltitude(), survey.getOverlap(), survey.getSidelap());
+			GridBuilder grid = new GridBuilder(polygon, survey, corner);
 			for (Coord2D point : grid.generate(false).gridPoints) {
 				list.add(Survey.packSurveyPoint(point, getTopHeight()));
 			}
-			grid.setAngle(90.0);
-			for (Coord2D point : grid.generate(false).gridPoints) {
+			
+			survey.update(90.0, survey.getAltitude(), survey.getOverlap(), survey.getSidelap());
+			GridBuilder grid2 = new GridBuilder(polygon, survey, corner);
+			for (Coord2D point : grid2.generate(false).gridPoints) {
 				list.add(Survey.packSurveyPoint(point, getTopHeight()));
 			}
 		} catch (Exception e) { // Should never fail, since it has good polygons
@@ -109,8 +118,8 @@ public class StructureScanner extends SpatialCoordItem {
 	
 
 
-	private Length getTopHeight() {
-		return new Length(coordinate.getAltitude().valueInMeters()+ (numberOfSteps-1)*heightStep.valueInMeters());
+	private Altitude getTopHeight() {
+		return new Altitude(coordinate.getAltitude().valueInMeters()+ (numberOfSteps-1)*heightStep.valueInMeters());
 	}
 
 	public Altitude getEndAltitude() {
@@ -147,6 +156,11 @@ public class StructureScanner extends SpatialCoordItem {
 
 	public void setNumberOfSteps(int newValue) {
 		numberOfSteps = newValue;	
+	}
+
+	public void setCamera(CameraInfo cameraInfo) {
+		survey.setCameraInfo(cameraInfo);
+		
 	}
 
 }
