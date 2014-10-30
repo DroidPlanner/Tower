@@ -7,9 +7,9 @@ android {
     defaultConfig {
         applicationId "com.three_dr.services.android.lib"
         minSdkVersion 14
-        targetSdkVersion 20
+        targetSdkVersion 21
         versionCode 1
-        versionName "1.0"
+        versionName "0.0.0"
     }
 
     sourceSets {
@@ -34,8 +34,4 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-}
-
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
 }
