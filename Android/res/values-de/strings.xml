@@ -180,7 +180,7 @@
     <string name="waypointInfo_SetJump">Wegpunkt wiederholen</string>
 
     <!-- Waypoint editor -->
-    <string name="editor_info_window">Distanz: 200m\nFlugzeit: 3:30s</string>
+    <string name="editor_info_window">Distanz: 200m, Flugzeit: 3:30s</string>
     <string name="distance_to_home">Distanz zum Start</string>
     <string name="loiter_time">Zeit</string>
     <string name="waypoint_delay">Verzögerung vor dem nächsten Wegpunkt</string>

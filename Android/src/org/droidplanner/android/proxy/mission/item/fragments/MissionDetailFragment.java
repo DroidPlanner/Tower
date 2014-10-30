@@ -14,9 +14,8 @@ import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.commands.MissionCMD;
-import org.droidplanner.core.mission.survey.CylindricalSurvey;
 import org.droidplanner.core.mission.survey.Survey;
-import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.core.mission.waypoints.StructureScanner;
 import org.droidplanner.core.util.Pair;
 
 import android.app.Activity;
@@ -34,18 +33,8 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 
 	private static final String TAG = MissionDetailFragment.class.getSimpleName();
 
-	protected static final int MIN_ALTITUDE = 0; // meter
-	protected static final int MAX_ALTITUDE = 200; // meters
-
-    public static final List<MissionItemType> typeWithNoMuliEditSupport = new
-            ArrayList<MissionItemType>();
-    {
-        typeWithNoMuliEditSupport.add(MissionItemType.LAND);
-        typeWithNoMuliEditSupport.add(MissionItemType.TAKEOFF);
-        typeWithNoMuliEditSupport.add(MissionItemType.SURVEY);
-        typeWithNoMuliEditSupport.add(MissionItemType.RTL);
-        typeWithNoMuliEditSupport.add(MissionItemType.CYLINDRICAL_SURVEY);
-    }
+	protected static final int MIN_ALTITUDE = -200; // meter
+	protected static final int MAX_ALTITUDE = +200; // meters
 
     public interface OnMissionDetailListener {
 		/**
@@ -60,11 +49,10 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 		/**
 		 * Notifies the listener that the mission item proxy was changed.
 		 *
-         * @param newType the new selected mission item type
          * @param oldNewItemsList a list of pairs containing the previous,
          *                         and the new mission item proxy.
 		 */
-		public void onWaypointTypeChanged(MissionItemType newType, List<Pair<MissionItemProxy,
+		public void onWaypointTypeChanged(List<Pair<MissionItemProxy,
                 MissionItemProxy>> oldNewItemsList);
 	}
 
@@ -111,7 +99,10 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 			fragment = new MissionSplineWaypointFragment();
 			break;
 		case CYLINDRICAL_SURVEY:
-			fragment = new MissionCylindricalSurveyFragment();
+			fragment = new MissionStructureScannerFragment();
+			break;
+		case CAMERA_TRIGGER:
+			fragment = new MissionCameraTriggerFragment();
 			break;
 		default:
 			fragment = null;
@@ -160,20 +151,14 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
             final MissionItemProxy itemProxy = mSelectedProxies.get(0);
             final MissionItem currentItem = itemProxy.getMissionItem();
 
-            if (currentItem instanceof Survey) {
+            if ((currentItem instanceof Survey)) {
                 list.clear();
                 list.add(MissionItemType.SURVEY);
             } else {
                 list.remove(MissionItemType.SURVEY);
             }
-
-            if(currentItem instanceof SpatialCoordItem){
-                list.remove(MissionItemType.TAKEOFF);
-                list.remove(MissionItemType.CHANGE_SPEED);
-                list.remove(MissionItemType.RTL);
-            }
             
-            if (currentItem instanceof CylindricalSurvey) {
+            if ((currentItem instanceof StructureScanner)) {
                 list.clear();
                 list.add(MissionItemType.CYLINDRICAL_SURVEY);
             }
@@ -219,7 +204,11 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
         }
         else if(mSelectedProxies.size() > 1){
             //Remove the mission item types that don't apply to multiple items.
-            list.removeAll(typeWithNoMuliEditSupport);
+            list.remove(MissionItemType.TAKEOFF);
+            list.remove(MissionItemType.LAND);
+            list.remove(MissionItemType.RTL);
+            list.remove(MissionItemType.SURVEY);
+            list.remove(MissionItemType.CYLINDRICAL_SURVEY);
         }
         else{
             //Invalid state. We should not have been able to get here.
@@ -280,7 +269,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
             }
 
             if(!updatesList.isEmpty()) {
-                mListener.onWaypointTypeChanged(selectedType, updatesList);
+                mListener.onWaypointTypeChanged(updatesList);
                 dismiss();
             }
         } catch (IllegalArgumentException e) {

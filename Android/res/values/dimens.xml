@@ -58,7 +58,6 @@
     <dimen name="margin_top_bottom_card_wheel_horizontal_view">4dp</dimen>
     <dimen name="telem_widget_bg_corner_radius">4dp</dimen>
     <dimen name="slide_button_padding_top">0dp</dimen>
-    <dimen name="slide_button_padding_bottom">70dp</dimen>
     <dimen name="flight_actions_container_width">360dp</dimen>
     <dimen name="flight_actions_container_height">320dp</dimen>
 

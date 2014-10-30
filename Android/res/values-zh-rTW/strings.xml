@@ -196,7 +196,7 @@
 
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">航點無法加在降落或返航的任務之後。</string>
-    <string name="editor_info_window">距離: 200公尺\n飛行時間: 3分30秒</string>
+    <string name="editor_info_window">距離: 200公尺, 飛行時間: 3分30秒</string>
     <string name="distance_to_home">到 家 的距離</string>
     <string name="loiter_time">停懸時間</string>
     <string name="waypoint_delay">往下一個航點前的延遲時間</string>
@@ -465,6 +465,7 @@
     
     <!-- Help -->
     <string name="help_item_description">如何設定和實際操作任務，請點我看影片</string>
+    <string name="mission_item_title_takeoff">起飛</string>
     <string name="label_advaned">進階設定</string>
     <string name="label_steps_count">階層數</string>
     <string name="label_altitude_step">階層高度</string>

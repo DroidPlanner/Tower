@@ -1,8 +1,5 @@
 package org.droidplanner.android.proxy.mission;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.internal.is;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,20 +16,15 @@ import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
-import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.commands.ChangeSpeed;
 import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.Takeoff;
-import org.droidplanner.core.mission.survey.CylindricalSurvey;
 import org.droidplanner.core.mission.survey.Survey;
-import org.droidplanner.core.mission.waypoints.Circle;
-import org.droidplanner.core.mission.waypoints.Land;
-import org.droidplanner.core.mission.waypoints.RegionOfInterest;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.Waypoint;
-import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.util.Pair;
+
+import com.google.android.gms.analytics.HitBuilders;
 
 /**
  * This class is used to render a {@link org.droidplanner.core.mission.Mission}
@@ -140,140 +132,89 @@ public class MissionProxy implements DPMap.PathSource {
 		selection.notifySelectionUpdate();
 	}
 
-    public void addMissionItems(MissionItemType itemType, List<Coord2D> points){
-        if(points.isEmpty()){
-            return;
-        }
+	/**
+	 * Adds a survey mission item to the set.
+	 * 
+	 * @param points
+	 *            2D points making up the survey
+	 */
+	public void addSurveyPolygon(List<Coord2D> points) {
+		Survey survey = new Survey(mMission, points);
+		mMissionItems.add(new MissionItemProxy(this, survey));
+		mMission.addMissionItem(survey);
+		try {
+			survey.build();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-        switch(itemType){
-            case SURVEY:
-                Survey survey = new Survey(mMission, points);
-                addMissionItem(survey);
-                break;
+	/**
+	 * Add a set of waypoints generated around the passed 2D points. TODO:
+	 * replace Coord2D with library's classes such as android.graphics.Point
+	 * 
+	 * @param points
+	 *            list of points used to generate the mission waypoints
+	 */
+	public void addWaypoints(List<Coord2D> points) {
+		final Altitude alt = mMission.getLastAltitude();
+		final List<MissionItem> missionItemsToAdd = new ArrayList<MissionItem>(points.size());
+		for (Coord2D point : points) {
+			Waypoint waypoint = new Waypoint(mMission, new Coord3D(point, alt));
+			missionItemsToAdd.add(waypoint);
+		}
 
-            case WAYPOINT: {
-                final Altitude alt = mMission.getLastAltitude();
-                final List<MissionItem> missionItemsToAdd = new ArrayList<MissionItem>(points.size());
-                for (Coord2D point : points) {
-                    Waypoint waypoint = new Waypoint(mMission, new Coord3D(point, alt));
-                    missionItemsToAdd.add(waypoint);
-                }
+		addMissionItems(missionItemsToAdd);
+	}
 
-                addMissionItems(missionItemsToAdd);
-                break;
-            }
+	/**
+	 * Add a set of spline waypoints generated around the passed 2D points.
+	 * 
+	 * @param points
+	 *            list of points used as location for the spline waypoints
+	 */
+	public void addSplineWaypoints(List<Coord2D> points) {
+		final Altitude alt = mMission.getLastAltitude();
+		final List<MissionItem> missionItemsToAdd = new ArrayList<MissionItem>(points.size());
+		for (Coord2D point : points) {
+			SplineWaypoint splineWaypoint = new SplineWaypoint(mMission, new Coord3D(point, alt));
+			missionItemsToAdd.add(splineWaypoint);
+		}
 
-            case SPLINE_WAYPOINT: {
-                final Altitude alt = mMission.getLastAltitude();
-                final List<MissionItem> missionItemsToAdd = new ArrayList<MissionItem>(points.size());
-                for (Coord2D point : points) {
-                    SplineWaypoint splineWaypoint = new SplineWaypoint(mMission, new Coord3D(point, alt));
-                    missionItemsToAdd.add(splineWaypoint);
-                }
+		addMissionItems(missionItemsToAdd);
+	}
 
-                addMissionItems(missionItemsToAdd);
-                break;
-            }
+	private void addMissionItems(List<MissionItem> missionItems) {
+		for (MissionItem missionItem : missionItems) {
+			mMissionItems.add(new MissionItemProxy(this, missionItem));
+		}
+		mMission.addMissionItems(missionItems);
+	}
 
-            case CIRCLE: {
-                final Altitude alt = mMission.getLastAltitude();
-                final List<MissionItem> missionItemsToAdd = new ArrayList<MissionItem>(points.size());
-                for (Coord2D point : points) {
-                    Circle circle = new Circle(mMission, new Coord3D(point, alt));
-                    missionItemsToAdd.add(circle);
-                }
+	/**
+	 * Add a waypoint generated around the passed 2D point. TODO: replace
+	 * Coord2D with library's classes such as android.graphics.Point
+	 * 
+	 * @param point
+	 *            point used to generate the mission waypoint
+	 */
+	public void addWaypoint(Coord2D point) {
+		final Altitude alt = mMission.getLastAltitude();
+		final Waypoint waypoint = new Waypoint(mMission, new Coord3D(point, alt));
+		addMissionItem(waypoint);
+	}
 
-                addMissionItems(missionItemsToAdd);
-                break;
-            }
-
-            case CYLINDRICAL_SURVEY: {
-                final List<MissionItem> missionItemsToAdd = new ArrayList<MissionItem>(points
-                        .size());
-                for(Coord2D point: points){
-                    CylindricalSurvey missionItem = new CylindricalSurvey(mMission, point);
-                    missionItemsToAdd.add(missionItem);
-                }
-
-                addMissionItems(missionItemsToAdd);
-                break;
-            }
-
-            default:
-                break;
-        }
-    }
-
-    public void addMissionCmd(MissionItemType cmdType){
-        MissionItem missionItem;
-        switch(cmdType){
-            case TAKEOFF:
-                missionItem = new Takeoff(mMission, mMission.getLastAltitude());
-                break;
-
-            case CHANGE_SPEED:
-                missionItem = new ChangeSpeed(mMission);
-                break;
-
-            case RTL:
-                missionItem = new ReturnToHome(mMission);
-                break;
-
-            default:
-                missionItem = null;
-                break;
-        }
-
-        if(missionItem != null){
-            addMissionItem(missionItem);
-        }
-    }
-
-    public void addMissionItem(MissionItemType itemType, Coord2D point){
-        final Coord3D coordinate = new Coord3D(point, mMission.getLastAltitude());
-
-        MissionItem missionItem;
-        switch(itemType){
-            case WAYPOINT:
-                missionItem = new Waypoint(mMission, coordinate);
-                break;
-
-            case SPLINE_WAYPOINT:
-                missionItem = new SplineWaypoint(mMission, coordinate);
-                break;
-
-            case LAND:
-                missionItem = new Land(mMission, point);
-                break;
-
-            case CIRCLE:
-                missionItem = new Circle(mMission, coordinate);
-                break;
-
-            case ROI:
-                missionItem = new RegionOfInterest(mMission, coordinate);
-                break;
-
-            case CYLINDRICAL_SURVEY:
-                missionItem = new CylindricalSurvey(mMission, point);
-                break;
-
-            default:
-                missionItem = null;
-                break;
-        }
-
-        if(missionItem != null){
-            addMissionItem(missionItem);
-        }
-    }
-
-    private void addMissionItems(List<MissionItem> missionItems) {
-        for (MissionItem missionItem : missionItems) {
-            mMissionItems.add(new MissionItemProxy(this, missionItem));
-        }
-        mMission.addMissionItems(missionItems);
-    }
+	/**
+	 * Add a spline waypoint generated around the passed 2D point.
+	 * 
+	 * @param point
+	 *            point used as location for the spline waypoint.
+	 */
+	public void addSplineWaypoint(Coord2D point) {
+		final Altitude alt = mMission.getLastAltitude();
+		final SplineWaypoint splineWaypoint = new SplineWaypoint(mMission, new Coord3D(point, alt));
+		addMissionItem(splineWaypoint);
+	}
 
 	private void addMissionItem(MissionItem missionItem) {
 		mMissionItems.add(new MissionItemProxy(this, missionItem));
@@ -287,9 +228,6 @@ public class MissionProxy implements DPMap.PathSource {
 	}
 
     public void addTakeOffAndRTL(){
-        if(mMission.getItems().isEmpty())
-            return;
-
         if(!mMission.isFirstItemTakeoff()){
             final Takeoff takeOff = new Takeoff(mMission, new Altitude(Takeoff.DEFAULT_TAKEOFF_ALTITUDE));
             mMissionItems.add(0, new MissionItemProxy(this, takeOff));
@@ -320,41 +258,32 @@ public class MissionProxy implements DPMap.PathSource {
 	 *            mission item render to update
 	 * @param newItem
 	 *            new mission item render
-     * @return true if the replacement was successful
 	 */
-	public boolean replace(MissionItemProxy oldItem, MissionItemProxy newItem) {
+	public void replace(MissionItemProxy oldItem, MissionItemProxy newItem) {
 		final int index = mMissionItems.indexOf(oldItem);
 		if (index == -1)
-			return false;
+			return;
 
 		mMissionItems.remove(index);
 		mMissionItems.add(index, newItem);
 
 		// Update the mission object
-		final boolean wasReplaced = mMission.replace(oldItem.getMissionItem(),
-                newItem.getMissionItem());
+		mMission.replace(oldItem.getMissionItem(), newItem.getMissionItem());
 
 		if (selection.selectionContains(oldItem)) {
 			selection.removeItemFromSelection(oldItem);
 			selection.addToSelection(newItem);
 		}
-
-        return wasReplaced;
 	}
 
-    /**
-     *
-     * @param oldNewList
-     * @return the count of replaced mission items.
-     */
-    public int replaceAll(List<Pair<MissionItemProxy, MissionItemProxy>> oldNewList){
+    public void replaceAll(List<Pair<MissionItemProxy, MissionItemProxy>> oldNewList){
         if(oldNewList == null){
-            return 0;
+            return;
         }
 
         final int pairSize = oldNewList.size();
         if(pairSize == 0){
-            return 0;
+            return;
         }
 
         final List<Pair<MissionItem, MissionItem>> missionItemsToUpdate = new
@@ -383,13 +312,11 @@ public class MissionProxy implements DPMap.PathSource {
         }
 
         //Update the mission objects
-        final int replacedCount = mMission.replaceAll(missionItemsToUpdate);
+        mMission.replaceAll(missionItemsToUpdate);
 
         //Update the selection list.
         selection.removeItemsFromSelection(selectionsToRemove);
         selection.addToSelection(itemsToSelect);
-
-        return replacedCount;
     }
 
 	/**
@@ -616,11 +543,32 @@ public class MissionProxy implements DPMap.PathSource {
         mMission.sendMissionToAPM();
 
         //Send an event for the created mission
-        final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
                 .setCategory(GAUtils.Category.MISSION_PLANNING)
-                .setAction("Mission send to drone")
+                .setAction("Mission sent to drone")
                 .setLabel("Mission items count")
                 .setValue(mMissionItems.size());
+        GAUtils.sendEvent(eventBuilder);
+
+        String missionItemsList = "[";
+        if(!mMissionItems.isEmpty()){
+            boolean isFirst = true;
+            for(MissionItemProxy itemProxy: mMissionItems){
+                if(isFirst)
+                    isFirst = false;
+                else
+                    missionItemsList += ", ";
+
+                missionItemsList += itemProxy.getMissionItem().getType().getName();
+            }
+        }
+
+        missionItemsList += "]";
+
+        eventBuilder = new HitBuilders.EventBuilder()
+                .setCategory(GAUtils.Category.MISSION_PLANNING)
+                .setAction("Mission sent to drone")
+                .setLabel("Mission items: " + missionItemsList);
         GAUtils.sendEvent(eventBuilder);
     }
 

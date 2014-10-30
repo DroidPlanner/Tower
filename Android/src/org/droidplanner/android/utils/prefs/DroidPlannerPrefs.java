@@ -42,7 +42,7 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	public static final String DEFAULT_SPEECH_PERIOD = "0";
 	public static final boolean DEFAULT_TTS_CEILING_EXCEEDED = true;
 	public static final boolean DEFAULT_TTS_WARNING_LOST_SIGNAL = true;
-	public static final boolean DEFAULT_TTS_WARNING_LOW_SIGNAL = true;
+	public static final boolean DEFAULT_TTS_WARNING_LOW_SIGNAL = false;
 	public static final boolean DEFAULT_TTS_WARNING_AUTOPILOT_WARNING = true;
 
 	// Public for legacy usage

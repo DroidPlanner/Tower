@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/opaque_white"
+    android:orientation="vertical" >
+
+    <org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText
+        android:id="@+id/angleView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        custom:inc="0.1"
+        custom:max="180"
+        custom:min="0"
+        custom:title="Hatch angle:"
+        custom:unit="º" >
+    </org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
+
+    <org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText
+        android:id="@+id/distanceView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        custom:inc="5"
+        custom:max="500"
+        custom:min="5"
+        custom:title="Distance between lines:"
+        custom:unit="m" >
+    </org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
+
+    <org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText
+        android:id="@+id/altitudeView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        custom:inc="1"
+        custom:max="200"
+        custom:min="5"
+        custom:title="Flight Altitude:"
+        custom:unit="m" >
+    </org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
+
+</LinearLayout>
