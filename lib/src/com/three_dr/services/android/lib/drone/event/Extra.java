@@ -1,7 +1,7 @@
 package com.three_dr.services.android.lib.drone.event;
 
 /**
- * Holds handles used to retrieve additional information broadcasted along a drone event.
+ * Holds handles used to retrieve additional information broadcast along a drone event.
  */
 public class Extra {
 
