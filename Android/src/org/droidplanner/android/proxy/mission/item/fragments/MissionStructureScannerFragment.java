@@ -35,7 +35,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment
 
 	@Override
 	protected int getResource() {
-		return R.layout.fragment_editor_detail_cylindrical_mapping;
+		return R.layout.fragment_editor_detail_structure_scanner;
 	}
 
 	@Override
