@@ -182,6 +182,7 @@
     <string name="waypointType_Land">Land</string>
     <string name="waypointType_Change_Speed">Change Speed</string>
     <string name="waypointType_Camera_Trigger">Camera Trigger</string>
+    <string name="waypointType_EPM">EPM</string>
     <string name="waypointType_Circle">Circle</string>
     <string name="waypointType_Loiter">Loiter</string>
     <string name="waypointType_ROI">Region of Interest</string>
@@ -203,6 +204,7 @@
     <string name="waypointInfo_SetHome">Changes the home location either to the current location or a specified location.</string>
     <string name="waypointInfo_SetSpeed">Change vehicle speed until the end of this mission.</string>
     <string name="waypointInfo_CameraTrigger">Trigger the camera shutter at regular distance intervals.</string>
+    <string name="waypointInfo_EpmGrabber">Release the payload of the EPM grabber</string>
     <string name="waypointInfo_ROI">Sets a location and altitude to point copter towards and to aim an optional camera.</string>
     <string name="waypointInfo_SetJump">Repeat waypoint</string>
 
