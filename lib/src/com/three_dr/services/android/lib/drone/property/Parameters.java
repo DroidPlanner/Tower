@@ -1,50 +1,35 @@
 package com.three_dr.services.android.lib.drone.property;
 
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by fhuya on 10/28/14.
  */
 public class Parameters implements Parcelable {
 
-    private List<Parameter> parameterList = new ArrayList<Parameter>();
+    private Bundle parametersBundle = new Bundle();
 
     public Parameters(List<Parameter> parameterList) {
-        this.parameterList = parameterList;
+        if(!parameterList.isEmpty()){
+            for(Parameter parameter: parameterList){
+                parametersBundle.putParcelable(parameter.getName(), parameter);
+            }
+        }
     }
 
-    public List<Parameter> getParameterList() {
-        return parameterList;
+    public Parameter getParameter(String parameterName){
+        return parametersBundle.getParcelable(parameterName);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Parameters)) return false;
-
-        Parameters that = (Parameters) o;
-
-        if (parameterList != null ? !parameterList.equals(that.parameterList) : that.parameterList != null)
-            return false;
-
-        return true;
+    public Bundle getParameters(){
+        return parametersBundle;
     }
 
-    @Override
-    public int hashCode() {
-        return parameterList != null ? parameterList.hashCode() : 0;
-    }
-
-    @Override
-    public String toString() {
-        return "Parameters{" +
-                "parameterList=" + parameterList +
-                '}';
-    }
 
     @Override
     public int describeContents() {
@@ -53,11 +38,11 @@ public class Parameters implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(parameterList);
+        dest.writeBundle(parametersBundle);
     }
 
     private Parameters(Parcel in) {
-        in.readTypedList(parameterList, Parameter.CREATOR);
+        parametersBundle = in.readBundle();
     }
 
     public static final Parcelable.Creator<Parameters> CREATOR = new Parcelable.Creator<Parameters>() {
