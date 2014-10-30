@@ -235,6 +235,9 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		case R.id.menu_load_mission:
 			drone.getWaypointManager().getWaypoints();
 			return true;
+		case R.id.menu_triggerCamera:
+			MavLinkROI.triggerCamera(drone);
+			return true;
 		case R.id.menu_epm_grab:
 			MavLinkROI.empCommand(drone, false);
 			return true;
