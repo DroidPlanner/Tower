@@ -71,20 +71,14 @@
         android:src="@drawable/ic_menu_hint"
         tools:ignore="ContentDescription" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/title_rect"
-        android:orientation="vertical"
-        android:paddingBottom="5dp" >
 
         <TextView
             style="@style/ModeDetailText"
             android:layout_width="match_parent"
+            android:layout_below="@id/title_rect"
             android:layout_height="wrap_content"
             android:background="@drawable/mode_desc_rectangle"
             android:padding="12dp"
             android:text="@string/waypointInfo_EpmGrabber" />
-    </LinearLayout>
 
 </RelativeLayout>
