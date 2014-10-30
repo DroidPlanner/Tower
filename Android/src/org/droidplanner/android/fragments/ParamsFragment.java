@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.droidplanner.R;
+import org.droidplanner.android.api.model.DPDrone;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
@@ -17,7 +18,6 @@ import org.droidplanner.android.utils.file.IO.ParameterWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.adapterViews.ParamsAdapter;
 import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
-import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.profiles.Parameters;
@@ -26,7 +26,10 @@ import org.droidplanner.core.parameters.Parameter;
 import org.droidplanner.core.parameters.ParameterMetadata;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -47,14 +50,53 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ParamsFragment extends ApiListenerListFragment implements OnDroneListener,
-		DroneInterfaces.OnParameterManagerListener {
+import com.three_dr.services.android.lib.drone.event.Event;
+import com.three_dr.services.android.lib.drone.event.Extra;
+
+public class ParamsFragment extends ApiListenerListFragment {
 
 	static final String TAG = ParamsFragment.class.getSimpleName();
 
 	public static final String ADAPTER_ITEMS = ParamsFragment.class.getName() + ".adapter.items";
     private static final String PREF_PARAMS_FILTER_ON = "pref_params_filter_on";
     private static final boolean DEFAULT_PARAMS_FILTER_ON = true;
+
+    private final static IntentFilter intentFilter = new IntentFilter();
+    {
+        intentFilter.addAction(Event.EVENT_PARAMETERS_REFRESH_STARTED);
+        intentFilter.addAction(Event.EVENT_PARAMETERS_REFRESH_ENDED);
+        intentFilter.addAction(Event.EVENT_PARAMETERS_RECEIVED);
+    }
+
+    private final BroadcastReceiver broadcastReceived = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(Event.EVENT_PARAMETERS_REFRESH_STARTED.equals(action)){
+                startProgress();
+            }
+            else if(Event.EVENT_PARAMETERS_REFRESH_ENDED.equals(action)){
+                loadAdapter(dpDrone.getParameters());
+                stopProgress();
+            }
+            else if(Event.EVENT_PARAMETERS_RECEIVED.equals(action)){
+                final int defaultValue = -1;
+                int index = intent.getIntExtra(Extra.EXTRA_PARAMETER_INDEX, defaultValue);
+                int count = intent.getIntExtra(Extra.EXTRA_PARAMETERS_COUNT, defaultValue);
+
+                if(index != defaultValue && count != defaultValue)
+                    updateProgress(index, count);
+            }
+            else if(Event.EVENT_DISCONNECTED.equals(action)){
+                stopProgress();
+            }
+            else if(Event.EVENT_TYPE_UPDATED.equals(action)){
+                adapter.loadMetadata(dpDrone);
+            }
+        }
+    };
+
+    private DPDrone dpDrone;
 
     private ProgressDialog progressDialog;
 
@@ -208,30 +250,11 @@ public class ParamsFragment extends ApiListenerListFragment implements OnDroneLi
                 loadAdapter(parametersList);
         }
 
-        dpApi.addDroneListener(this);
-        droneParams.setParameterListener(this);
         toggleParameterFilter(isParameterFilterVisible(), false);
     }
 
     @Override
-    public void onApiDisconnected() {
-        DroidPlannerApi dpApi = getApi();
-        dpApi.removeDroneListener(this);
-        dpApi.getDrone().getParameters().setParameterListener(null);
-    }
-
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-        switch(event){
-            case TYPE:
-                adapter.loadMetadata(drone);
-                break;
-
-            case DISCONNECTED:
-                stopProgress();
-                break;
-        }
-	}
+    public void onApiDisconnected() {}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
@@ -306,8 +329,7 @@ public class ParamsFragment extends ApiListenerListFragment implements OnDroneLi
     }
 
     private boolean isParameterFilterVisible(){
-        return mPrefs.prefs.getBoolean(PREF_PARAMS_FILTER_ON,
-                DEFAULT_PARAMS_FILTER_ON);
+        return mPrefs.prefs.getBoolean(PREF_PARAMS_FILTER_ON, DEFAULT_PARAMS_FILTER_ON);
     }
 
 	private void showInfo(int position, EditText valueView) {
@@ -381,22 +403,6 @@ public class ParamsFragment extends ApiListenerListFragment implements OnDroneLi
                 });
 
         dialog.show(getChildFragmentManager(), "Parameters filename");
-	}
-
-	@Override
-	public void onBeginReceivingParameters() {
-		startProgress();
-	}
-
-	@Override
-	public void onParameterReceived(Parameter parameter, int index, int count) {
-        updateProgress(index, count);
-	}
-
-	@Override
-	public void onEndReceivingParameters(List<Parameter> parameters) {
-        loadAdapter(parameters);
-		stopProgress();
 	}
 
     private void loadAdapter(List<Parameter> parameters){

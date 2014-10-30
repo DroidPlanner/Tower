@@ -8,6 +8,10 @@ import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
 
+import com.three_dr.services.android.lib.model.IDroidPlannerReaderApi;
+import com.three_dr.services.android.lib.model.IDroidPlannerWriterApi;
+
+import org.droidplanner.android.api.DPCallbackApi;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.api.services.DroidPlannerService;
 import org.droidplanner.android.communication.service.UploaderService;
@@ -32,13 +36,17 @@ public class DroidPlannerApp extends Application {
     }
 
     private final AtomicInteger apiBindingState = new AtomicInteger(API_UNBOUND);
+    private final DPCallbackApi dpCallback = new DPCallbackApi(this);
 
     private final Runnable disconnectionTask = new Runnable() {
         @Override
         public void run() {
             if(apiBindingState.compareAndSet(API_BOUND, API_UNBOUND)) {
                 notifyApiDisconnected();
+
                 unbindService(serviceConnection);
+                unbindService(readerServiceConnection);
+                unbindService(writerServiceConnection);
             }
         }
     };
@@ -57,6 +65,30 @@ public class DroidPlannerApp extends Application {
         }
     };
 
+    private final ServiceConnection writerServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            dpWriterApi = IDroidPlannerWriterApi.Stub.asInterface(service);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            dpWriterApi = null;
+        }
+    };
+
+    private final ServiceConnection readerServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            dpReaderApi = IDroidPlannerReaderApi.Stub.asInterface(service);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            dpReaderApi = null;
+        }
+    };
+
     private final Handler handler = new Handler();
     private final List<ApiListener> apiListeners = new ArrayList<ApiListener>();
 
@@ -71,6 +103,9 @@ public class DroidPlannerApp extends Application {
     private Thread.UncaughtExceptionHandler exceptionHandler;
 
     private DroidPlannerApi dpApi;
+
+    private IDroidPlannerWriterApi dpWriterApi;
+    private IDroidPlannerReaderApi dpReaderApi;
 
     @Override
     public void onCreate() {
@@ -105,6 +140,12 @@ public class DroidPlannerApp extends Application {
         if(apiBindingState.compareAndSet(API_UNBOUND, API_BOUND)){
             bindService(new Intent(getApplicationContext(), DroidPlannerService.class),
                     serviceConnection, Context.BIND_AUTO_CREATE);
+
+            bindService(new Intent(IDroidPlannerWriterApi.class.getName()),
+                    writerServiceConnection, Context.BIND_AUTO_CREATE);
+
+            bindService(new Intent(IDroidPlannerReaderApi.class.getName()),
+                    readerServiceConnection, Context.BIND_AUTO_CREATE);
         }
 	}
 
@@ -134,4 +175,5 @@ public class DroidPlannerApp extends Application {
         for(ApiListener listener: apiListeners)
             listener.onApiDisconnected();
     }
+
 }

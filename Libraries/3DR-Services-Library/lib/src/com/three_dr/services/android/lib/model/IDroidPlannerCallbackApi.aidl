@@ -10,27 +10,16 @@ import com.three_dr.services.android.lib.drone.connection.ConnectionResult;
 oneway interface IDroidPlannerCallbackApi {
 
     /**
-    * Called when the drone instance was successfully connected.
-    * @param droneId id of the drone instance connected to.
-    */
-    void onConnected(int droneId);
-
-    /**
     * Called when the connection attempt fails.
     * @param result Describe why the connection failed.
     */
     void onConnectionFailed(in ConnectionResult result);
 
     /**
-    * Called when this callback has been unregistered
-    * @param droneId id of the drone instance disconnected from.
-    */
-    void onDisconnect(int droneId);
-
-    /**
     * Called when a drone property is updated.
     * @param droneId id of the drone whose property was updated.
-    * @param propertyType type of the updated property.
+    * @param event string representing the event.
     */
-    void onPropertyChanged(int droneId, String propertyType);
+    void onDroneEvent(int droneId, String event, in Bundle eventExtras);
+
 }

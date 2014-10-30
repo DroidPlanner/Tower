@@ -1,11 +1,12 @@
 package org.droidplanner.android.widgets.adapterViews;
 
+import com.three_dr.services.android.lib.drone.property.Parameter;
+
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Map;
 
-import org.droidplanner.core.parameters.Parameter;
 import org.droidplanner.core.parameters.ParameterMetadata;
 
 /**
@@ -16,9 +17,12 @@ public class ParamsAdapterItem implements Serializable {
 		NA, INVALID, VALID
 	}
 
-	private static final DecimalFormat formatter = Parameter.getFormat();
+    private final static DecimalFormat formatter = (DecimalFormat) DecimalFormat.getInstance();
+    static {
+        formatter.applyPattern("0.###");
+    }
 
-	private final Parameter parameter;
+	private Parameter parameter;
 	private ParameterMetadata metadata;
 
 	private String dirtyValue;
@@ -35,7 +39,7 @@ public class ParamsAdapterItem implements Serializable {
 
 		try {
 			final double dval = formatter.parse(dirtyValue).doubleValue();
-			return new Parameter(parameter.name, dval, parameter.type);
+			return new Parameter(parameter.getName(), dval, parameter.getType());
 
 		} catch (ParseException e) {
 			return parameter;
@@ -52,14 +56,15 @@ public class ParamsAdapterItem implements Serializable {
 
 	public void setDirtyValue(String value) {
 		// dirty if different from original value, set validation if dirty
-		dirtyValue = (parameter.getValue().equals(value)) ? null : value;
+		dirtyValue = (Double.toString(parameter.getValue()).equals(value)) ? null : value;
 		if (dirtyValue != null)
 			validation = validateValue(dirtyValue);
 	}
 
 	public void commit() {
 		try {
-			parameter.value = formatter.parse(dirtyValue).doubleValue();
+            parameter = new Parameter(parameter.getName(), formatter.parse(dirtyValue).doubleValue(),
+                    parameter.getType());
 			dirtyValue = null;
 		} catch (ParseException e) {
 			// nop
@@ -120,7 +125,7 @@ public class ParamsAdapterItem implements Serializable {
 
         final Parameter param = getParameter();
         if (param != null) {
-            toString = param.name + ": ";
+            toString = param.getName() + ": ";
         }
 
         final ParameterMetadata metadata = getMetadata();
