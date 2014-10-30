@@ -61,7 +61,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment
 		radiusPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.radiusPicker);
 		radiusPicker.setViewAdapter(new NumericWheelAdapter(context,
-				R.layout.wheel_text_centered, 2, 50, "%d m"));
+				R.layout.wheel_text_centered, 2, 100, "%d m"));
 		radiusPicker.addChangingListener(this);
 		radiusPicker.setCurrentValue((int) firstItem.getRadius()
 				.valueInMeters());
