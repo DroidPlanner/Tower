@@ -11,7 +11,6 @@ import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.survey.CameraInfo;
-import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.waypoints.StructureScanner;
 
 import android.content.Context;
@@ -28,7 +27,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment
 
 	private CheckBox checkBoxAdvanced;
 	private CardWheelHorizontalView radiusPicker, startAltitudeStepPicker,
-			endAltitudeStepPicker, mNumberStepsPicker;
+			stepHeightStepPicker, mNumberStepsPicker;
 	private SpinnerSelfSelect cameraSpinner;
 	private CamerasAdapter cameraAdapter;
 	private List<StructureScanner> missionItems;
@@ -75,13 +74,13 @@ public class MissionStructureScannerFragment extends MissionDetailFragment
 		startAltitudeStepPicker.setCurrentValue((int) firstItem
 				.getCoordinate().getAltitude().valueInMeters());
 
-		endAltitudeStepPicker = (CardWheelHorizontalView) view
+		stepHeightStepPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.heightStepPicker);
-		endAltitudeStepPicker.setViewAdapter(new NumericWheelAdapter(context,
-				R.layout.wheel_text_centered, MIN_ALTITUDE, MAX_ALTITUDE,
+		stepHeightStepPicker.setViewAdapter(new NumericWheelAdapter(context,
+				R.layout.wheel_text_centered, 1, MAX_ALTITUDE,
 				"%d m"));
-		endAltitudeStepPicker.addChangingListener(this);
-		endAltitudeStepPicker.setCurrentValue((int) firstItem.getEndAltitude()
+		stepHeightStepPicker.addChangingListener(this);
+		stepHeightStepPicker.setCurrentValue((int) firstItem.getEndAltitude()
 				.valueInMeters());
 
 		mNumberStepsPicker = (CardWheelHorizontalView) view
