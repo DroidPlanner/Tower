@@ -7,6 +7,10 @@ public class Event {
 
     private static final String CLAZZ_NAME = Event.class.getName();
 
+    public static final String EVENT_CALIBRATION_IMU = CLAZZ_NAME + ".CALIBRATION_IMU";
+
+    public static final String EVENT_CALIBRATION_TIMEOUT = CLAZZ_NAME + ".CALIBRATION_TIMEOUT";
+
     public static final String EVENT_CONNECTED = CLAZZ_NAME + ".CONNECTED";
 
     public static final String EVENT_DISCONNECTED = CLAZZ_NAME + ".DISCONNECTED";
