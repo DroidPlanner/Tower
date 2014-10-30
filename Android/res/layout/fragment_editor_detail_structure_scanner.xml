@@ -100,31 +100,6 @@
                 android:background="@drawable/mode_desc_rectangle"
                 android:text="Map a building" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:id="@+id/staticText"
-                    style="@style/ModeDetailText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:text="@string/camera_"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
-                    android:id="@+id/cameraFileSpinner"
-                    android:layout_width="196dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/staticText"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignTop="@id/staticText"
-                    android:layout_gravity="center"
-                    android:layout_toRightOf="@id/staticText"
-                    android:entries="@array/ExampleCameraArray" />
-            </RelativeLayout>
-
             <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
                 android:id="@+id/radiusPicker"
                 style="@style/missionItemDetailCard"
@@ -162,6 +137,32 @@
                 android:padding="5dp"
                 android:text="Cross Hatch"
                 android:textSize="20sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/staticText"
+                    style="@style/ModeDetailText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="@string/camera_"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
+                    android:id="@+id/cameraFileSpinner"
+                    android:layout_width="196dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/staticText"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@id/staticText"
+                    android:layout_gravity="center"
+                    android:layout_toRightOf="@id/staticText"
+                    android:entries="@array/ExampleCameraArray" />
+            </RelativeLayout>
+
         </LinearLayout>
     </ScrollView>
 
