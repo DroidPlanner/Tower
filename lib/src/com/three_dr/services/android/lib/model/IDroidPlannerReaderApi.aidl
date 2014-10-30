@@ -69,4 +69,10 @@ interface IDroidPlannerReaderApi {
     * @param droneId id of the drone whose property to retrieve.
     */
     Mission getMission(int droneId);
+
+    /**
+    * Checks if we have access to the specified drone.
+    * @param droneId id of the drone whose access to check.
+    */
+    boolean isConnected(int droneId);
 }

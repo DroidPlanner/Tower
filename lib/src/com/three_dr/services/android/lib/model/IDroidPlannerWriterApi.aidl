@@ -50,7 +50,7 @@ oneway interface IDroidPlannerWriterApi {
     * Write the given parameters to the specified drone.
     * @param droneId id of the drone whose parameters to write.
     */
-    void writeParameter(int droneId, in Parameters parameters);
+    void writeParameters(int droneId, in Parameters parameters);
 
     /**
     * Upload the given mission to the specified drone.
