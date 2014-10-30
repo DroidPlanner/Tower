@@ -11,8 +11,8 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 public class EpmGripper extends MissionCMD {
 	// TODO Update mavlink and use the correct enum here
 	public final static short MAV_CMD_DO_GRIPPER = 211;
-	private final static int GRIPPER_ACTION_RELEASE = 0;
-	private final static int GRIPPER_ACTION_GRAB = 1;
+	public final static int GRIPPER_ACTION_RELEASE = 0;
+	public final static int GRIPPER_ACTION_GRAB = 1;
 
 	private boolean release = true;
 
