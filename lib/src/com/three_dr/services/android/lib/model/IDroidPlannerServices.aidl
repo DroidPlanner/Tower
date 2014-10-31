@@ -3,6 +3,7 @@ package com.three_dr.services.android.lib.model;
 
 import com.three_dr.services.android.lib.model.IDroidPlannerApiCallback;
 import com.three_dr.services.android.lib.model.IDroidPlannerApi;
+import com.three_dr.services.android.lib.drone.connection.ConnectionParameter;
 
 /**
 * Used to establish connection with a drone.
