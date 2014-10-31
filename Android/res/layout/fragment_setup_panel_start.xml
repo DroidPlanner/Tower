@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.calibration.FragmentSetupRCMenu">
+
+    <TextView
+        android:id="@+id/setupDesc"
+        style="@style/ModeDetailText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/mode_desc_rectangle"
+        android:padding="12dp"
+        android:text="@string/setup_radio_cal_desc"/>
+
+    <Button
+        android:id="@+id/buttonStart"
+        style="@style/modeControl"
+        android:layout_width="@dimen/setup_action_button_width"
+        android:layout_margin="10dp"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_green_drawable"
+        android:text="@string/button_setup_calibrate"/>
+
+</LinearLayout>

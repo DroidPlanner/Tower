@@ -1,6 +1,0 @@
-[submodule "usb-serial-for-android"]
-	path = usb-serial-for-android
-	url = https://github.com/DroidPlanner/usb-serial-for-android.git
-[submodule "HorizontalVariableListView"]
-	path = HorizontalVariableListView
-	url = https://github.com/DroidPlanner/HorizontalVariableListView.git

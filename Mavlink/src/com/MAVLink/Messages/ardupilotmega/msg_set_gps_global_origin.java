@@ -17,15 +17,15 @@ public class msg_set_gps_global_origin extends MAVLinkMessage{
 	
 
  	/**
-	* global position * 1E7
+	* Latitude (WGS84), in degrees * 1E7
 	*/
 	public int latitude; 
  	/**
-	* global position * 1E7
+	* Longitude (WGS84, in degrees * 1E7
 	*/
 	public int longitude; 
  	/**
-	* global position * 1000
+	* Altitude (WGS84), in meters * 1000 (positive for up)
 	*/
 	public int altitude; 
  	/**

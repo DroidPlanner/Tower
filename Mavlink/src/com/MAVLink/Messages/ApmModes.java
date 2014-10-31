@@ -25,10 +25,11 @@ public enum ApmModes {
 	ROTOR_LOITER(5, "Loiter",MAV_TYPE.MAV_TYPE_QUADROTOR),
 	ROTOR_RTL(6, "RTL",MAV_TYPE.MAV_TYPE_QUADROTOR),
 	ROTOR_CIRCLE(7, "Circle",MAV_TYPE.MAV_TYPE_QUADROTOR),
-	ROTOR_POSITION(8, "Pos Hold",MAV_TYPE.MAV_TYPE_QUADROTOR),
 	ROTOR_LAND(9, "Land",MAV_TYPE.MAV_TYPE_QUADROTOR),
 	ROTOR_TOY(11, "Drift",MAV_TYPE.MAV_TYPE_QUADROTOR),
-	ROTOR_TAKEOFF(13, "Sport",MAV_TYPE.MAV_TYPE_QUADROTOR),
+	ROTOR_SPORT(13, "Sport",MAV_TYPE.MAV_TYPE_QUADROTOR),
+	ROTOR_AUTOTUNE(15, "Autotune",MAV_TYPE.MAV_TYPE_QUADROTOR),
+	ROTOR_POSHOLD(16, "PosHold",MAV_TYPE.MAV_TYPE_QUADROTOR),
 
 	ROVER_MANUAL(0, "MANUAL", MAV_TYPE.MAV_TYPE_GROUND_ROVER),
 	ROVER_LEARNING(2, "LEARNING", MAV_TYPE.MAV_TYPE_GROUND_ROVER),
@@ -64,6 +65,10 @@ public enum ApmModes {
 	}
 
 	public static ApmModes getMode(int i, int type) {
+        if (isCopter(type)) {
+            type = MAV_TYPE.MAV_TYPE_QUADROTOR;
+        }
+
 		for (ApmModes mode : ApmModes.values()) {
 			if (i == mode.getNumber() & type == mode.getType()) {
 				return mode;
@@ -73,6 +78,10 @@ public enum ApmModes {
 	}
 
 	public static ApmModes getMode(String str, int type) {
+        if (isCopter(type)) {
+            type = MAV_TYPE.MAV_TYPE_QUADROTOR;
+        }
+
 		for (ApmModes mode : ApmModes.values()) {
 			if (str.equals(mode.getName()) & type == mode.getType()) {
 				return mode;
@@ -109,7 +118,7 @@ public enum ApmModes {
 		case MAV_TYPE.MAV_TYPE_OCTOROTOR:
 		case MAV_TYPE.MAV_TYPE_HELICOPTER:
 			return true;
-		case MAV_TYPE.MAV_TYPE_FIXED_WING:
+
 		default:
 			return false;
 		}

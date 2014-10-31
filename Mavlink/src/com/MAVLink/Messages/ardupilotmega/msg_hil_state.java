@@ -7,7 +7,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
 //import android.util.Log;
 
 /**
-* Sent from simulation to autopilot. This packet is useful for high throughput applications such as hardware in the loop simulations.
+* DEPRECATED PACKET! Suffers from missing airspeed fields and singularities due to Euler angles. Please use HIL_STATE_QUATERNION instead. Sent from simulation to autopilot. This packet is useful for high throughput applications such as hardware in the loop simulations.
 */
 public class msg_hil_state extends MAVLinkMessage{
 
@@ -33,15 +33,15 @@ public class msg_hil_state extends MAVLinkMessage{
 	*/
 	public float yaw; 
  	/**
-	* Roll angular speed (rad/s)
+	* Body frame roll / phi angular speed (rad/s)
 	*/
 	public float rollspeed; 
  	/**
-	* Pitch angular speed (rad/s)
+	* Body frame pitch / theta angular speed (rad/s)
 	*/
 	public float pitchspeed; 
  	/**
-	* Yaw angular speed (rad/s)
+	* Body frame yaw / psi angular speed (rad/s)
 	*/
 	public float yawspeed; 
  	/**

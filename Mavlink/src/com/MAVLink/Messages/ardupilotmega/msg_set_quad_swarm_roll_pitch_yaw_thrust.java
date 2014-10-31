@@ -17,19 +17,19 @@ public class msg_set_quad_swarm_roll_pitch_yaw_thrust extends MAVLinkMessage{
 	
 
  	/**
-	* Desired roll angle in radians +-PI (+-32767)
+	* Desired roll angle in radians +-PI (+-INT16_MAX)
 	*/
 	public short roll[] = new short[4]; 
  	/**
-	* Desired pitch angle in radians +-PI (+-32767)
+	* Desired pitch angle in radians +-PI (+-INT16_MAX)
 	*/
 	public short pitch[] = new short[4]; 
  	/**
-	* Desired yaw angle in radians, scaled to int16 +-PI (+-32767)
+	* Desired yaw angle in radians, scaled to int16 +-PI (+-INT16_MAX)
 	*/
 	public short yaw[] = new short[4]; 
  	/**
-	* Collective thrust, scaled to uint16 (0..65535)
+	* Collective thrust, scaled to uint16 (0..UINT16_MAX)
 	*/
 	public short thrust[] = new short[4]; 
  	/**

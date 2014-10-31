@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/missionItemDetailLayout">
+
+    <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
+        android:id="@+id/spinnerWaypointType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_alignParentTop="true"
+        android:entries="@array/ExampleWaypointType"/>
+
+    <TextView
+        android:id="@+id/WaypointType"
+        style="@style/missionHeaderTitle"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:background="@drawable/wp_title_rectangle"
+        android:text="Select Waypoint Type"
+        android:textAllCaps="true"/>
+
+    <ImageView
+        android:id="@+id/menuHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@id/WaypointType"
+        android:src="@drawable/ic_menu_hint"
+        android:layout_margin="10dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/WaypointType"
+        style="@style/ModeDetailText"
+        android:background="@drawable/mode_desc_rectangle"
+        android:text="Click on the spinner to select a type for the selected waypoints."/>
+
+</RelativeLayout>

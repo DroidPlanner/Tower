@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/flyoutPanelLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="3dp"
+    android:paddingRight="3dp">
+
+    <TextView
+        android:id="@+id/ModeDetail"
+        android:background="@drawable/mode_desc_rectangle"
+        style="@style/ModeDetailText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/mode_guided"/>
+
+    <Spinner
+        android:id="@+id/follow_type_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+        android:id="@+id/altitude_spinner"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/missionItemDetailCard"
+        android:text="@string/altitude_label"/>
+
+    <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+        android:id="@+id/radius_spinner"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/missionItemDetailCard"
+        android:text="@string/radius_label"/>
+
+</LinearLayout>

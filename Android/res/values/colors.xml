@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="transparent_dark">#B0000000</color>
+    <color name="transparent_light">#d0ffffff</color>
+    <color name="opaque_black">#000</color>
+    <color name="opaque_white">#fff</color>
+    <color name="greyText">#4d4d4d</color>
+    <color name="dark_grey">#9E9E9E</color>
+    <color name="transparent_dark_grey">#d09E9E9E</color>
+    <color name="transparent_light_grey">#d0EFEFEF</color>
+    <color name="light_grey">#EFEFEF</color>
+    <color name="white_grey">#f7f6f6</color>
+    <color name="navigation_entry_color">#212121</color>
+
+    <color name="ground_speed_units">#57eccd</color>
+    <color name="ground_speed_label">#0a5242</color>
+
+    <color name="air_speed_units">#7bd8ff</color>
+    <color name="air_speed_label">#0a3f55</color>
+
+    <color name="climb_rate_units">#d5eaf2</color>
+    <color name="climb_rate_label">#384043</color>
+
+    <color name="altitude_units">#d5eaf2</color>
+    <color name="altitude_label">#134456</color>
+
+    <color name="altitude_target">#55d8ff</color>
+    <color name="dark_title_bg">#737373</color>
+
+    <color name="paramAltRow">#fff0f0f0</color>
+    <color name="light_title_bg">#e4e4e4</color>
+    <color name="Droidblue">#3CB4E5</color>
+
+
+    <!-- Colors for the view pager tab strip -->
+    <color name="vpi__background_holo_dark">#ff000000</color>
+    <color name="vpi__background_holo_light">#fff3f3f3</color>
+    <color name="vpi__bright_foreground_holo_dark">@color/vpi__background_holo_light</color>
+    <color name="vpi__bright_foreground_holo_light">@color/vpi__background_holo_dark</color>
+    <color name="vpi__bright_foreground_disabled_holo_dark">#ff4c4c4c</color>
+    <color name="vpi__bright_foreground_disabled_holo_light">#ffb2b2b2</color>
+    <color name="vpi__bright_foreground_inverse_holo_dark">@color/vpi__bright_foreground_holo_light</color>
+    <color name="vpi__bright_foreground_inverse_holo_light">@color/vpi__bright_foreground_holo_dark</color>
+
+    <!-- color for the top, and bottom bar -->
+    <color name="bottom_top_bar">#66848484</color>
+    <color name="editor_bar">#66848484</color>
+
+</resources>

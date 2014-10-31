@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/mc_disconnected_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:background="@drawable/flight_action_buttons_container_bg"
+        android:layout_gravity="center_horizontal"
+        >
+
+        <Button
+            android:id="@+id/mc_connectBtn"
+            style="@style/flightControlButton.Row"
+            android:drawableTop="@drawable/ic_connect"
+            android:text="@string/menu_connect"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mc_connected_buttons"
+        android:layout_width="@dimen/flight_actions_container_width"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        android:background="@drawable/flight_action_buttons_container_bg"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/mc_homeBtn"
+            style="@style/flightControlButton.Row"
+            android:layout_width="75dp"
+            android:layout_height="match_parent"
+            android:drawableTop="@drawable/ic_home"
+            android:layout_weight="1"
+            android:text="@string/mission_control_home"/>
+
+        <Button
+            android:id="@+id/mc_pause"
+            style="@style/flightControlButton.Row"
+            android:layout_width="75dp"
+            android:layout_height="match_parent"
+            android:drawableTop="@drawable/ic_pause"
+            android:text="@string/mission_control_pause"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/mc_autoBtn"
+            style="@style/flightControlButton.Row"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_auto"
+            android:text="@string/mission_control_auto"
+            />
+
+        <Button
+            android:id="@+id/mc_follow"
+            style="@style/flightControlButton.Row"
+            android:layout_width="75dp"
+            android:layout_height="match_parent"
+            android:drawableTop="@drawable/ic_follow"
+            android:text="@string/mission_control_follow"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+</FrameLayout>

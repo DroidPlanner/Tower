@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="#151515">
+
+        <TextView
+            android:id="@+id/textViewIMUStep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_alignParentTop="true"
+            android:background="@color/ground_speed_label"
+            android:gravity="center"
+            android:text="@string/setup_imu_step"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/textViewIMUTimeOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Time to next orientation: 30s"
+            android:padding="10dp"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_below="@+id/progressBarTimeOut"
+            android:layout_marginBottom="10dp"
+            />
+
+        <ProgressBar
+            android:id="@+id/progressBarTimeOut"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="29dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:indeterminate="false"
+            android:max="300"
+            android:minHeight="50dp"
+            android:minWidth="300dp"
+            android:progress="150"
+            android:progressDrawable="@drawable/pstate_good"/>
+
+
+        <TextView
+            android:id="@+id/TextViewIMUOffset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/TextViewIMUScaling"
+            android:gravity="center"
+            android:text="Offset : 00 00 00"
+            android:visibility="invisible"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/TextViewIMUScaling"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_alignLeft="@+id/TextViewIMUOffset"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:text="Scaling : 00 00 00"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2">
+
+        <TextView
+            android:id="@+id/textViewDesc"
+            style="@style/ModeDetailText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/mode_desc_rectangle"
+            android:padding="10dp"
+            android:layout_marginBottom="20dp"
+            android:text="@string/setup_imu_start"
+            android:layout_alignParentTop="true"/>
+
+        <Button
+            android:id="@+id/buttonStep"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:background="@drawable/button_green_drawable"
+            android:layout_centerInParent="true"
+            style="@style/modeControl"
+            android:text="@string/button_setup_calibrate"/>
+
+    </RelativeLayout>
+</LinearLayout>

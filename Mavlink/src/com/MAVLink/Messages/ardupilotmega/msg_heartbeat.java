@@ -29,7 +29,7 @@ public class msg_heartbeat extends MAVLinkMessage{
 	*/
 	public byte autopilot; 
  	/**
-	* System mode bitfield, see MAV_MODE_FLAGS ENUM in mavlink/include/mavlink_types.h
+	* System mode bitfield, see MAV_MODE_FLAG ENUM in mavlink/include/mavlink_types.h
 	*/
 	public byte base_mode; 
  	/**

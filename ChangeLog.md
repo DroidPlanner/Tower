@@ -8,6 +8,251 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+
+## Droidplanner v2.8.2
+* Allow negative altitudes (#1231)
+* Improved Structure Scanner (#1234, #1237)
+* Camera triggering on survey missions (#1236)
+* Camera triggering during missions (#1235)
+* Improved survey camera support (#1227)
+* Default "low-signal" alarm to off (#1228)
+* Disable calibration if the drone is flying (#1229)
+* Analytics update (#1233)
+* Fix editor bugs (#1240)
+* Removed the help menu (#1207)
+* Typo fixes (#1205, #1201)
+* Core features expansion (#1209, #1210, #1211)
+* Doxygen documentation support (#1208)
+* Source clean-up (#1221,#1222)
+
+## Droidplanner v2.8.1
+* Added Change Speed mission item (#1202)
+* UI changes to scan option (#1204)
+* Dronie update (#1203)
+
+## Droidplanner v2.8.0
+* Tablet only flight's
+* Initial ArduPlane support (#1181, #1193, #1080, #1194)
+* Compass calibration (#1147)
+* Safety info dialog for autonomous takeoff (#1127, #1196)
+* Minor follow-me fix (#1176, #1195, #1119)
+* Building mapper (#1170, #1171, #1198)
+* Drone Locator (#1177)
+* Flight screen UI bug-fixes (#1120, #1188, #1182, #1192, #1197, #847)
+* Editor UI bug-fixes (#1186, #952, #1187, #1141)
+* Just display radio info after receiving it (#1184, #1165)
+* Added camera info for GoPro 4 (#1181)
+* Mission assistant, auto-add RTL and Land (#1142, #847)
+* Mission save filename dialog (#1173)
+* Fix Droneshare live-trakking (#1174)
+* Codebase clean-up (#1172, #1030, #1191)
+* Android updated to API 21 (#1189)
+* Analytics update (#1180)
+* Travis-CI updates (#1185)
+* Add libraries licenses information (#1164)
+
+## Droidplanner v2.7.12
+* Add support for PL2303 USB devices (#1162)
+
+## Droidplanner v2.7.11
+* Simultaneous editing of multiple waypoints (#1159, #1123)
+* New icon for the dronie (#1161)
+* Flight time estimation (#1144)
+* UI update - pull-up drawer (#1125, #798, #1053)
+* Clean-up of mission Planning (#1140, #1139, #890, #1017, #1139)
+* Follow-me UI improvements (#1124, #1118, #1117)
+* Update of the Pebble app (#1132)
+* Follow-me speed checks (#1146, #1145, #1128, #1130)
+* Fix on parameter search function (#1160, #1158)
+* Fix on possible bugs on the dronie (#1143, #1135)
+
+## Droidplanner v2.7.10
+* Fixed "Pause" button, for when flying with GCS only (#1116)
+* Switch to Loiter on disarm if landing on RTL or LAND (#1114)
+* Autonomus flight takeoff (#1115)
+* Improved Chinese translation (#1113)
+
+## Droidplanner v2.7.9
+* UI clean-up (#1106,#1093,#1092,#891,#1110,#1101)
+* Display consumed mAh in status bar (#1111,#1069)
+* Fix small bug in Guided mode (#1101,#1110)
+
+## Droidplanner v2.7.8
+* Parameters fix. Added parameter detail, search function (#1098,#1064,#1083,#1011)
+* Fixes to make tablet only flights pratical (#1099)
+* Added a "dronie" function (#1084)
+* Make modes names and spoken text consisntent with ArduCopter (#1097,#1068)
+* Fix circle mission item UI (#1100)
+* Repository maintance (#1094,#1096)
+
+## Droidplanner v2.7.7
+* Context aware flight actions, takeoff and connect buttons (#1090)
+* New number entry widget (#1062,#1051,#1087,#1091)
+* Display firmware version on settings screen, and report to GA (#1067,#1073)
+* Release ROI after follow-me is disabled (#1085,#1078)
+* Bug fixes (#1073,#1077,#1088)
+* Build setup fix (#1072)
+
+## Droidplanner v2.7.6
+* Warn user about all HIGH_SEVERITY messages from the drone (#1066)
+
+## Droidplanner v2.7.5
+* Fix follow-me for "heading" related follow modes (#1065)
+* Complementing German translation (#1059)
+
+## Droidplanner v2.7.4
+* Added extra follow-modes (#1057)
+* Fix error on Mavlink message handling (#1056,#1050)
+
+## Droidplanner v2.7.3
+* German translation improvements (#1034,#1045)
+* Chinise translation (#1021)
+* Fix erros on speech output (#1043,#1046)
+* Fix possible NPE (#1036,#1037)
+* Improvement to Handling of USB libraries (#1033,#1035,#1042)
+* Mavlink library update (#1038)
+
+## Droidplanner v2.7.2
+* Extra speech warnings (#1012,#835)
+* Gray drone on heartbeat loss (#1002,#497,#1018)
+* Crash alert. beep beep (#1010,#1031)
+* Gopro specs (#1029)
+* Correct Area calculation method (#1001,#842)
+* MavLink Connection restructuring (#1009)
+* Set sequence number in msg_heartbeat (#956)
+* Fix problem on settings screen (#998,#1008)
+* Fix .gitignore for android studio files (#1016)
+* Fix German translation (#1004)
+* Catch possible NullPointerException (#1014,#1013)
+
+## Droidplanner v2.7.1
+* Fix sporadic bug on logging code (#1000)
+* Fix problem on settings screen (#998)
+
+## Droidplanner v2.7.0
+* Development of a desktop App (#982)
+* Periodic voice notifications (#996)
+* Follow-me safety/performance improvements (#992)
+* Fix Failsafe message text (#981)
+* Fix home info display (#993)
+* Mapbox integration (#985)
+* Small typo fixes on the code(#990)
+* Implement follow-me on Desktop app (#989)
+* Making follow-me code more generic (#988)
+* Encapsulate Drone model on CORE project (#994)
+* Fix on the build system (#984,#979,#991,#996)
+
+## Droidplanner v2.6.2
+* Parameter download on start-up (#976)
+* Use FTDI usb library for FTDI devices (#975)
+* Fix NullPointer error on editor (#972)
+* Fix a couple of mission items unpack method (#971)
+
+## Droidplanner v2.6.1
+* Failsafe messages (#922)
+* Fixed the circle item on mission planning (#970)
+* Do not crash the app when there is no USB device (#954)
+* Refactor the ROI class (#947)
+* New 3D distance method (#943)
+* Fix issues with Droneshare uploader (#920)
+* Do not allow mission items after RTL or Land (#959)
+* When the user doesn't have TTS, fail silently (#924, #911)
+* Fix issue with waypoint tool icon on editor (#909,#918)
+* Moved all the libraries to a sub-folder (#960)
+* Moved follow-me development to another branch (#948)
+* Smaller changes to project structure (#921, #923, #938, #939, #945, #946)
+
+## Droidplanner v2.6.0
+* Improved follow-me ROI (#916)
+* New follow-modes, 'track from above', ' right' and 'left' (#908, #887)
+* Change default radius values for the varius follow-modes (#904)
+* Added option to load/save files from the mission editor (#901)
+* Option to displayb HDOP instead of GPS fix (#898)
+* Droneshare imoprovements (#917,#913,#785,#895)
+* Fixed parameters download (#906, #820)
+* Fix duplicated parameters after a fetch (#902)
+* Fix telemetry indicator bug (#914)
+* Add hysteresis to TTS notification of battery voltage (#329)
+* Fix some problems with the Pebble app (#897)
+* Small fix to the telmetry fragment layout (#896)
+* Clean-up of small language issues (#903, #894,#905)
+* Clean up of the preferences file (#900)
+
+## Droidplanner v2.5.1
+* Fix upload to DroneShare (#880)
+* Clean-up of the codebase (#881)
+* Remember last BlueTooth device (#879)
+* Pebble support for follow-types (#876)
+* Refactoring Follow-me algorithms, implemented Lead-me (#882)
+
+## Droidplanner v2.5.0
+* Support for Pebble Watch (#874)
+* Follow-Me types (#871)
+* Release GPS when not in use (#873,#872)
+* Fix map padding (#870,#869)
+* Added CONTRIBUTING.md file to guide new developers (#862)
+
+## Droidplanner v2.4.4
+* Implemented optional max volume on start (#838,#841,#840)
+* Added Unit tests to Travis CI (#839)
+* Added Italian translation (#845)
+* Removed Android dependencies from the Core library (#849)
+* Improved follow-me UX (#850)
+* Advanced notifications (#851)
+* Fix maps bug, which crashed the app on some devices (#853, #852)
+* Updating project libraries  (#855)
+* Go-to-drone button, and auto-pan (#859)
+* Added SRTM library (#860)
+
+## Droidplanner v2.4.3
+* Improve analytics (#829)
+* Fixed German translation (#831)
+* Restructuring Settings menu (#815)
+* Updating parameters description (#828)
+* Adding support for direct connections to the Pixhawk (#816)
+* Travis CI integration (#821,#824,#829)
+* Fixing log bufferoverflow exception (#834)
+
+## Droidplanner v2.4.2
+* Added google analytics (#813)
+* Update google play services (#813)
+* Update Droneshare library (#814)
+
+## Droidplanner v2.4.1
+* Add basic follow-me UI (810)
+* Add support for OSM (#799)
+* Fix editor tools bugs (#796)
+* Fix gradle build (#795)
+* Fix Eclipse Mavlink build (#797)
+
+## Droidplanner v2.4.0
+* Initial support for Follow-me (#769)
+* Circle mission item, and advanced circle (#790)
+* Offline/Delayed tlog auto upload to DroneShare (#783,#787)
+* Fixing problems and adding test cases for the GeoTool classes (#770)
+
+## Droidplanner v2.3.3
+* Fixing mission upload problem in AC3.2 (#767)
+* Adding support for Hybrid mode (#766)
+
+## Droidplanner v2.3.2
+* Change waypoint max delay to 60s (#730)
+* Land mission item defaults altitude to zero (#752)
+* Mission progress update are reported by TTS (#759)
+
+## Droidplanner v2.3.1
+* Improve Mission Support, Takeoff and ROI (#739)
+* Fix problems with UDP connection (#742)
+* Fix build settings (#748,#749)
+* Add support for Droneshare (#746)
+
+## Droidplanner v2.3.0
+* Decoupling of drone code from Android (#734, #649)
+* Mode change bugfix for copter other than quads (#719)
+* Fixed problems added by #734 in the Coord2D class (#735,#736,#737)
+* Cleaning up Android Studio files (#738,#744)
+* Chinese Translation (#717) 
+
 ## Droidplanner v2.2.5
 * Long press on trash tool removes the entire mission (#714)
 * Clear the previous flight path when arming (#705)

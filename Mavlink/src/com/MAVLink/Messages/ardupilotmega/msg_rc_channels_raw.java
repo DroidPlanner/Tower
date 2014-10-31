@@ -21,35 +21,35 @@ public class msg_rc_channels_raw extends MAVLinkMessage{
 	*/
 	public int time_boot_ms; 
  	/**
-	* RC channel 1 value, in microseconds. A value of 65535 implies the channel is unused.
+	* RC channel 1 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
 	*/
 	public short chan1_raw; 
  	/**
-	* RC channel 2 value, in microseconds. A value of 65535 implies the channel is unused.
+	* RC channel 2 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
 	*/
 	public short chan2_raw; 
  	/**
-	* RC channel 3 value, in microseconds. A value of 65535 implies the channel is unused.
+	* RC channel 3 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
 	*/
 	public short chan3_raw; 
  	/**
-	* RC channel 4 value, in microseconds. A value of 65535 implies the channel is unused.
+	* RC channel 4 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
 	*/
 	public short chan4_raw; 
  	/**
-	* RC channel 5 value, in microseconds. A value of 65535 implies the channel is unused.
+	* RC channel 5 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
 	*/
 	public short chan5_raw; 
  	/**
-	* RC channel 6 value, in microseconds. A value of 65535 implies the channel is unused.
+	* RC channel 6 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
 	*/
 	public short chan6_raw; 
  	/**
-	* RC channel 7 value, in microseconds. A value of 65535 implies the channel is unused.
+	* RC channel 7 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
 	*/
 	public short chan7_raw; 
  	/**
-	* RC channel 8 value, in microseconds. A value of 65535 implies the channel is unused.
+	* RC channel 8 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
 	*/
 	public short chan8_raw; 
  	/**

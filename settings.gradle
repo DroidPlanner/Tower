@@ -1,3 +1,12 @@
+//Pure Java project
+include ':Core'
 include ':Mavlink'
-include ':HorizontalVariableListView:HorizontalVariableListView'
-include ':DroidPlanner'
+
+//Android projects
+include ':Android'
+
+//Library projects
+include ':Libraries:HorizontalVariableListView:HorizontalVariableListView'
+include ':Libraries:usb-serial-for-android:UsbSerialLibrary'
+include ':Libraries:PebbleKit'
+include ':Libraries:EllipsoidFit:EllipsoidFit'

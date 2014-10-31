@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?android:attr/buttonBarStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingEnd="5dp"
+    android:paddingStart="5dp" >
+
+    <TextView
+        android:id="@+id/bar_power_current"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start|center_vertical"
+        android:text=""
+        android:textSize="@dimen/info_bar_text_size" />
+
+    <TextView
+        android:id="@+id/bar_power_mAh"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start|center_vertical"
+        android:text=""
+        android:textSize="@dimen/info_bar_text_size" />
+
+</LinearLayout>

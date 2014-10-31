@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <integer name="airSpeedRadioBtn">0</integer>
-    <integer name="groundSpeedRadioBtn">1</integer>
-    <integer name="google_play_services_version">4030500</integer>
-</resources>

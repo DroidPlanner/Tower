@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/menu_load_parameters"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_reload"
+        android:title="@string/refresh" />
+    <item
+        android:id="@+id/menu_write_parameters"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_upload"
+        android:title="@string/write"/>
+    <item
+        android:id="@+id/menu_filter_params"
+        android:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="@string/menu_search_toggle"
+        />
+
+    <item
+        android:id="@+id/menu_open_parameters"
+        android:showAsAction="never"
+        android:icon="@drawable/ic_action_folder_open"
+        android:title="@string/open"/>
+    <item
+        android:id="@+id/menu_save_parameters"
+        android:showAsAction="never"
+        android:icon="@drawable/ic_action_save"
+        android:title="@string/save"/>
+</menu>

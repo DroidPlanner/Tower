@@ -30,7 +30,7 @@ public class Parser {
 	 */
 	public MAVLinkPacket mavlink_parse_char(int c) {
 		msg_received = false;
-		
+
 		switch (state) {
 		case MAVLINK_PARSE_STATE_UNINIT:
 		case MAVLINK_PARSE_STATE_IDLE:
@@ -118,12 +118,10 @@ public class Parser {
 
 		}
 		if (msg_received) {
-			return m;		
-		}else {
+			return m;
+		} else {
 			return null;
 		}
 	}
 
-	
-	
 }

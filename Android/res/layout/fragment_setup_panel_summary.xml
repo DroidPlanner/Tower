@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:id="@+id/setupDesc"
+        style="@style/ModeDetailText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/mode_desc_rectangle"
+        android:padding="10dp"
+        android:text="@string/setup_radio_desc_complete"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/setupSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="RC #\t\tMin \t\tMid \t\tMax "
+                android:padding="10dp"
+                tools:ignore="HardcodedText"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonCancel"
+                    style="@style/modeControl"
+                    android:layout_width="@dimen/setup_action_button_width"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:background="@drawable/button_blue"
+                    android:text="@string/button_setup_cancel"/>
+
+                <Button
+                    android:id="@+id/buttonSend"
+                    style="@style/modeControl"
+                    android:layout_width="@dimen/setup_action_button_width"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_green_drawable"
+                    android:text="@string/button_setup_send"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -172,8 +172,8 @@ def generate_message_h(directory, m):
 package com.MAVLink.Messages.ardupilotmega;
 
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.MAVLinkPacket;
+import com.MAVLink.Messages.MAVLinkPayload;
 //import android.util.Log;
 
 /**
@@ -255,8 +255,8 @@ def generate_MAVLinkMessage(directory, xml_list):
     f = open(os.path.join(directory, "MAVLinkPacket.java"), mode='w')
     f.write('''package com.MAVLink.Messages;
 
-import android.util.Log;
 import java.io.Serializable;
+import android.util.Log;
 import com.MAVLink.Messages.ardupilotmega.*;
 
 /**
@@ -278,8 +278,6 @@ import com.MAVLink.Messages.ardupilotmega.*;
  * The minimum packet length is 8 bytes for acknowledgement packets without payload
  * The maximum packet length is 263 bytes for full payload
  * 
- * @author ghelle
- *
  */
 public class MAVLinkPacket implements Serializable {
 	private static final long serialVersionUID = 2095947771227815314L;

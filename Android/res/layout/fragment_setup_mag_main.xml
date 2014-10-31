@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="#151515"
+        android:layout_weight="1">
+
+        <org.droidplanner.android.widgets.scatterplot.ScatterPlot
+            android:id="@+id/scatterPlot1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
+
+        <org.droidplanner.android.widgets.scatterplot.ScatterPlot
+            android:id="@+id/scatterPlot2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewDesc"
+        style="@style/ModeDetailText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/mode_desc_rectangle"
+        android:padding="10dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/setup_mag_start"
+        />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_weight="1.5">
+
+        <Button
+            android:id="@+id/buttonStep"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_green_drawable"
+            style="@style/modeControl"
+            android:layout_gravity="center"
+            android:text="@string/button_setup_calibrate"/>
+
+        <RelativeLayout
+            android:id="@+id/in_progress_calibration_container"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <ProgressBar
+                android:id="@+id/calibration_progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+                android:layout_toLeftOf="@+id/calibration_progress"
+                android:layout_toStartOf="@+id/calibration_progress"
+                android:layout_above="@+id/buttonCancel"
+                android:layout_marginBottom="15dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:padding="20dp"/>
+
+            <TextView
+                android:id="@+id/calibration_progress"
+                android:layout_width="wrap_content"
+                android:minWidth="50dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/calibration_progress_bar"
+                android:layout_alignBottom="@+id/calibration_progress_bar"
+                />
+
+            <Button
+                android:id="@+id/buttonCancel"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_green_drawable"
+                style="@style/modeControl"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:text="@string/button_setup_cancel"/>
+
+        </RelativeLayout>
+
+    </FrameLayout>
+</LinearLayout>

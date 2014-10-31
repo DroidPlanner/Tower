@@ -16,5 +16,9 @@ public class MAV_AUTOPILOT {
 	public static final int MAV_AUTOPILOT_UDB = 10; /* UAV Dev Board | */
 	public static final int MAV_AUTOPILOT_FP = 11; /* FlexiPilot | */
 	public static final int MAV_AUTOPILOT_PX4 = 12; /* PX4 Autopilot - http://pixhawk.ethz.ch/px4/ | */
-	public static final int MAV_AUTOPILOT_ENUM_END = 13; /*  | */
+	public static final int MAV_AUTOPILOT_SMACCMPILOT = 13; /* SMACCMPilot - http://smaccmpilot.org | */
+	public static final int MAV_AUTOPILOT_AUTOQUAD = 14; /* AutoQuad -- http://autoquad.org | */
+	public static final int MAV_AUTOPILOT_ARMAZILA = 15; /* Armazila -- http://armazila.com | */
+	public static final int MAV_AUTOPILOT_AEROB = 16; /* Aerob -- http://aerob.ru | */
+	public static final int MAV_AUTOPILOT_ENUM_END = 17; /*  | */
 }

@@ -1,0 +1,88 @@
+apply plugin: 'com.android.application'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile files('libs/droneapi-java.jar')
+    compile 'com.google.android.gms:play-services:5.0.89'
+    compile 'com.sothree.slidinguppanel:library:2.0.2'
+
+    compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:0.4.0@aar'){
+        transitive=true
+    }
+    compile ('com.cocoahero.android:geojson:1.0.0@aar'){
+        transitive=true
+    }
+
+    compile 'com.android.support:support-v4:20.0.0'
+
+    compile project(':Core')
+    compile project(':Mavlink')
+    compile project(':Libraries:HorizontalVariableListView:HorizontalVariableListView')
+
+    compile files('libs/usbseriallibrary.jar')
+    compile files('libs/j2xx.jar')
+    compile files('libs/protobuf-java-2.5.0.jar')
+    compile files('libs/jeromq-0.3.4.jar')
+
+    compile project(':Libraries:PebbleKit')
+    compile project(':Libraries:usb-serial-for-android:UsbSerialLibrary')
+}
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.0.1"
+
+    defaultConfig {
+        applicationId 'org.droidplanner'
+        minSdkVersion 14
+        targetSdkVersion 21
+        versionName getGitVersion()
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+
+        // Move the tests to tests/java, tests/res, etc...
+        androidTest.setRoot('tests')
+
+        // Move the build types to build-types/<type>
+        // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
+        // This moves them out of them default location under src/<type>/... which would
+        // conflict with src/ being used by the main source set.
+        // Adding new build types or product flavors should be accompanied
+        // by a similar customization.
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
+    }
+
+    //FIXME: remove this after lint errors have been taken care of
+    lintOptions {
+        abortOnError false
+    }
+
+}
+
+/**
+ * @return The most recent git tag to be used as version name for the app.
+ */
+def getGitVersion(){
+    def cmd = "git describe --tag --dirty"
+    try {
+        def proc = cmd.execute()
+        return proc.text.trim()
+    }catch(IOException e){
+        //Unable to find 'git'
+        return "please update version name manually"
+    }
+}

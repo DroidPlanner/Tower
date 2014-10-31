@@ -7,7 +7,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
 //import android.util.Log;
 
 /**
-* Send a command with up to four parameters to the MAV
+* Send a command with up to seven parameters to the MAV
 */
 public class msg_command_long extends MAVLinkMessage{
 

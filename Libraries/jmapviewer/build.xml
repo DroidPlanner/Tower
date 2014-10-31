@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="all" name="Compile and build java classes plus jar archives">
+
+	<target name="all" depends="clean,build,svn_info,pack,create_run_jar,create_release_zip,create_source_release_zip" />
+
+	<target name="clean">
+		<mkdir dir="bin" />
+		<delete>
+			<fileset dir="bin">
+				<include name="**" />
+			</fileset>
+			<fileset dir="." includes="*.jar"/>
+		</delete>
+	</target>
+
+	<target name="build">
+		<javac srcdir="src" destdir="bin" source="1.7" target="1.7" debug="true" includeantruntime="false" encoding="UTF-8">
+			<include name="org/openstreetmap/gui/jmapviewer/**" />
+		</javac>
+
+		<copy todir="bin">
+			<fileset dir="src">
+				<include name="**/*.png" />
+			</fileset>
+		</copy>
+	</target>
+	
+    <target name="svn_info" description="Get SVN info for use in JAR/ZIP filenames.">
+        <!-- Get the svn ReleaseVersion property -->
+        <exec executable="svn" outputproperty="svnReleaseVersion">
+            <arg line="propget ReleaseVersion" />
+            <env key="LANG" value="en_US"/>
+        </exec>
+    </target>
+	
+	<target name="pack">
+		<!-- Create the JAR file containing the compiled class files -->
+		<jar destfile="JMapViewer.jar" filesetmanifest="mergewithoutmain">
+			<fileset dir="bin" includes="**/jmapviewer/**" />
+		</jar>
+		<!-- Create the JAR file containing the source java files -->
+		<jar destfile="JMapViewer_src.jar" filesetmanifest="mergewithoutmain">
+			<fileset dir="src" includes="**/jmapviewer/**" />
+		</jar>
+	</target>
+	
+	<!-- if you want to build outside of svn, use "ant clean build [pack]" -->
+	
+	<target name="create_run_jar" description="Create a JAR file that can be used to execute the JMapViewer demo app. Requires JMapViewer.jar to be present.">
+		<jar destfile="JMapViewer_Demo.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Main-Class" value="org.openstreetmap.gui.jmapviewer.Demo" />
+				<attribute name="Class-Path" value="JMapViewer.jar" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="create_release_zip" description="Create a release zip file containing the binary and source jar files as well as the demo starter">
+		<zip basedir="." destfile="releases/${svnReleaseVersion}/JMapViewer-${svnReleaseVersion}.zip">
+			<include name="JMapViewer*.jar" />
+			<include name="Readme.txt" />
+			<include name="Gpl.txt" />
+		</zip>
+		<delete>
+			<fileset dir="." includes="JMapViewer*.jar"/>
+		</delete> 
+	</target>
+	
+	<target name="create_source_release_zip" description="Create a release zip file containing the source files">
+		<zip destfile="releases/${svnReleaseVersion}/JMapViewer-${svnReleaseVersion}-Source.zip">
+			<zipfileset file="Readme.txt" prefix="jmapviewer-${svnReleaseVersion}"/>
+			<zipfileset file="build.xml" prefix="jmapviewer-${svnReleaseVersion}"/>
+			<zipfileset file="Gpl.txt" prefix="jmapviewer-${svnReleaseVersion}"/>
+			<zipfileset dir="src" includes="**/jmapviewer/**" prefix="jmapviewer-${svnReleaseVersion}/src"/>
+		</zip>
+	</target>
+
+</project>

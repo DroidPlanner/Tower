@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    >
+
+    <fragment
+        android:id="@id/mapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="false"
+        class="org.droidplanner.android.fragments.LocatorMapFragment"/>
+
+    <org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:fitsSystemWindows="true"
+        >
+
+        <LinearLayout
+            android:id="@+id/statusView"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:visibility="invisible"
+            style="@style/editorMissionOverviewText">
+
+            <TextView
+                android:id="@+id/latView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/editorMissionOverviewText"/>
+
+            <TextView
+                android:id="@+id/lonView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/editorMissionOverviewText"/>
+
+            <TextView
+                android:id="@+id/distanceView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/editorMissionOverviewText"/>
+
+            <TextView
+                android:id="@+id/azimuthView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/editorMissionOverviewText"/>
+        </LinearLayout>
+
+        <include
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/button_my_location"
+            android:layout_margin="8dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            />
+    </org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout>
+
+    <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:fitsSystemWindows="true"
+        android:id="@+id/lowerWidgetContainer"
+        >
+
+        <fragment
+            android:id="@+id/locatorListFragment"
+            android:name="org.droidplanner.android.fragments.LocatorListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/editor_mission_fragment_height"
+            tools:layout="@layout/fragment_locator_list"
+            />
+    </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
+
+</RelativeLayout>

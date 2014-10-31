@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/drawer_layout"
+    >
+
+    <FrameLayout
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:id="@+id/nav_drawer_container"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/navigation_flight_data"
+                    style="@style/navigationDrawerEntry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_action_plane"
+                    android:drawableStart="@drawable/ic_action_plane"
+                    android:text="@string/flight_data"
+                    />
+
+                <TextView
+                    android:id="@+id/navigation_editor"
+                    style="@style/navigationDrawerEntry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_action_location"
+                    android:drawableStart="@drawable/ic_action_location"
+                    android:text="@string/editor"/>
+
+                <TextView
+                    android:id="@+id/navigation_locator"
+                    style="@style/navigationDrawerEntry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_action_circles"
+                    android:drawableStart="@drawable/ic_action_circles"
+                    android:text="@string/locator"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@color/light_grey"/>
+
+                <TextView
+                    style="@style/navigationDrawerEntry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/navigation_settings"
+                    android:drawableLeft="@drawable/ic_action_settings"
+                    android:drawableStart="@drawable/ic_action_settings"
+                    android:text="@string/settings"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@color/light_grey"/>
+
+                <TextView
+                    style="@style/navigationDrawerEntry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/navigation_params"
+                    android:drawableLeft="@drawable/ic_action_database"
+                    android:drawableStart="@drawable/ic_action_database"
+                    android:text="@string/screen_parameters"/>
+
+                <TextView
+                    style="@style/navigationDrawerEntry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/navigation_checklist"
+                    android:drawableLeft="@drawable/ic_action_paste"
+                    android:drawableStart="@drawable/ic_action_paste"
+                    android:text="@string/screen_checklist"
+                    />
+                
+                <TextView
+                    style="@style/navigationDrawerEntry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/navigation_calibration"
+                    android:drawableLeft="@drawable/ic_action_gear"
+                    android:drawableStart="@drawable/ic_action_gear"
+                    android:text="@string/screen_cal"
+                    />
+
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+
+</android.support.v4.widget.DrawerLayout>

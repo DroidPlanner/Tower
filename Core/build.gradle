@@ -1,0 +1,60 @@
+apply plugin: 'com.android.library'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    unitTest {
+        java.srcDir file('test')
+    }
+}
+
+configurations {
+    unitTestCompile.extendsFrom runtime
+    unitTestRuntime.extendsFrom unitTestCompile
+}
+
+dependencies {
+    compile project(':Mavlink')
+    compile project(':Libraries:EllipsoidFit:EllipsoidFit')
+
+    //FIXME: hackish implementation
+    unitTestCompile files("$project.buildDir/intermediates/classes/release")
+    unitTestCompile files("${project(':Mavlink').buildDir}/intermediates/classes/release")
+    unitTestCompile 'junit:junit:3.8.1'
+}
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.0.1"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 21
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+
+        androidTest {
+            java.srcDirs = ['test']
+        }
+    }
+}
+
+task unitTest(type: Test, dependsOn: assemble){
+    description = "run unit tests"
+    testClassesDir = project.sourceSets.unitTest.output.classesDir
+    classpath = project.sourceSets.unitTest.runtimeClasspath
+}
+
+check.dependsOn unitTest
