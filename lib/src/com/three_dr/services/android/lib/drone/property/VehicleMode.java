@@ -12,7 +12,7 @@ public class VehicleMode implements Parcelable {
     private final int droneType;
     private final String label;
 
-    VehicleMode(int mode, int droneType, String label){
+    public VehicleMode(int mode, int droneType, String label){
         this.mode = mode;
         this.droneType = droneType;
         this.label = label;
