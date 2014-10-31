@@ -7,7 +7,7 @@ import com.three_dr.services.android.lib.drone.connection.ConnectionResult;
 * Callback interface used to send drone property updates back to the clients.
 * Note that this is a one way interface so the server doesn't block waiting for the client.
 */
-oneway interface IDroidPlannerCallbackApi {
+oneway interface IDroidPlannerApiCallback {
 
     /**
     * Called when the connection attempt fails.
