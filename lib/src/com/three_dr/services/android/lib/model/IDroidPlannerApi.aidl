@@ -87,7 +87,7 @@ interface IDroidPlannerApi {
         * Change the vehicle mode for the connected drone.
         * @param newMode new vehicle mode.
         */
-        oneway void changeVehicleMode(VehicleMode newMode);
+        oneway void changeVehicleMode(in VehicleMode newMode);
 
         /**
         * Asynchronous call used to stop listening to updates for the drone instance whose id is
