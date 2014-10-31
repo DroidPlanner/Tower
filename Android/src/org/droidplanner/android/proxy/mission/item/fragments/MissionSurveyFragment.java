@@ -43,11 +43,9 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 	public TextView footprintTextView;
 	public TextView groundResolutionTextView;
 	public SpinnerSelfSelect cameraSpinner;
-	public CheckBox innerWPsCheckbox;
 	public TextView numberOfPicturesView;
 	public TextView numberOfStripsView;
 	public TextView lengthView;
-	public CheckBox footprintCheckBox;
 	private CamerasAdapter cameraAdapter;
 
 	private List<Survey> surveyList;
@@ -81,9 +79,6 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 
 		cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
         cameraSpinner.setAdapter(cameraAdapter);
-
-		footprintCheckBox = (CheckBox) view.findViewById(id.CheckBoxFootprints);
-
 		mAnglePicker = (CardWheelHorizontalView) view.findViewById(id.anglePicker);
 		mAnglePicker.setViewAdapter(new NumericWheelAdapter(context, R.layout.wheel_text_centered,
 				0, 180, "%dº"));
@@ -100,8 +95,6 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 		mAltitudePicker.setViewAdapter(new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, 5, 200, "%d m"));
 
-		innerWPsCheckbox = (CheckBox) view.findViewById(id.checkBoxInnerWPs);
-
 		areaTextView = (TextView) view.findViewById(id.areaTextView);
 		distanceBetweenLinesTextView = (TextView) view
 				.findViewById(id.distanceBetweenLinesTextView);
@@ -112,8 +105,6 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 		numberOfStripsView = (TextView) view.findViewById(id.numberOfStripsTextView);
 		lengthView = (TextView) view.findViewById(id.lengthTextView);
 
-		footprintCheckBox.setOnClickListener(this);
-		innerWPsCheckbox.setOnClickListener(this);
 		cameraSpinner.setOnSpinnerItemSelectedListener(this);
 
 		updateViews();
