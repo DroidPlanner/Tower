@@ -20,6 +20,6 @@ oneway interface IDroidPlannerCallbackApi {
     * @param droneId id of the drone whose property was updated.
     * @param event string representing the event.
     */
-    void onDroneEvent(int droneId, String event, in Bundle eventExtras);
+    void onDroneEvent(String event, in Bundle eventExtras);
 
 }
