@@ -160,7 +160,10 @@ public class StructureScanner extends SpatialCoordItem {
 
 	public void setCamera(CameraInfo cameraInfo) {
 		survey.setCameraInfo(cameraInfo);
-		
+	}
+
+	public String getCamera() {
+		return survey.getCameraName();
 	}
 
 }
