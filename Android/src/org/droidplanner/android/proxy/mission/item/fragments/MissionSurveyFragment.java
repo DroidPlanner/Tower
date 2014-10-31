@@ -120,7 +120,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position) {
-		if (spinner.equals(cameraSpinner)) {
+		if (spinner.getId() == id.cameraFileSpinner) {
 			CameraInfo cameraInfo = cameraAdapter.getCamera(position);
 			cameraAdapter.setTitle(cameraInfo.name);
 			for (Survey survey : surveyList) {
