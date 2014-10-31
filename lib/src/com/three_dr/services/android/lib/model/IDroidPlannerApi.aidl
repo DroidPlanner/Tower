@@ -16,61 +16,66 @@ import com.three_dr.services.android.lib.drone.property.State;
 */
 interface IDroidPlannerApi {
     /**
-        * Retrieves the gps property of the specified drone.
+        * Retrieves the gps property of the connected drone.
         * @param droneId id of the drone whose property to retrieve.
         */
         Gps getGps();
 
         /**
-        * Retrieves the state property of the specified drone.
+        * Retrieves the state property of the connected drone.
         * @param droneId id of the drone whose property to retrieve.
         */
         State getState();
 
         /**
-        * Retrieves the parameters property of the specified drone.
+        * Retrieves all the vehicle modes for the connected drone.
+        */
+        VehicleMode[] getAllVehicleModes();
+
+        /**
+        * Retrieves the parameters property of the connected drone.
         * @param droneId id of the drone whose property to retrieve.
         */
         Parameters getParameters();
 
         /**
-        * Retrieves the speed property of the specified drone.
+        * Retrieves the speed property of the connected drone.
         * @param droneId id of the drone whose property to retrieve.
         */
         Speed getSpeed();
 
         /**
-        * Retrieves the attitude property of the specified drone.
+        * Retrieves the attitude property of the connected drone.
         * @param droneId id of the drone whose property to retrieve.
         */
         Attitude getAttitude();
 
         /**
-        * Retrieves the home property of the specified drone.
+        * Retrieves the home property of the connected drone.
         * @param droneId id of the drone whose property to retrieve.
         */
         Home getHome();
 
         /**
-        * Retrieves the battery property of the specified drone.
+        * Retrieves the battery property of the connected drone.
         * @param droneId id of the drone whose property to retrieve.
         */
         Battery getBattery();
 
         /**
-        * Retrieves the altitude property of the specified drone.
+        * Retrieves the altitude property of the connected drone.
         * @param droneId id of the drone whose property to retrieve.
         */
         Altitude getAltitude();
 
         /**
-        * Retrieves the mission property of the specified drone.
+        * Retrieves the mission property of the connected drone.
         * @param droneId id of the drone whose property to retrieve.
         */
         Mission getMission();
 
         /**
-        * Checks if we have access to the specified drone.
+        * Checks if we have access to the connected drone.
         * @param droneId id of the drone whose access to check.
         */
         boolean isConnected();
@@ -78,31 +83,31 @@ interface IDroidPlannerApi {
         /*** Oneway method calls ***/
 
         /**
-        * Change the vehicle mode for the specified drone.
+        * Change the vehicle mode for the connected drone.
         * @param newMode enum name of the new vehicle mode.
         */
         oneway void changeVehicleMode(String newModeName);
 
         /**
         * Asynchronous call used to stop listening to updates for the drone instance whose id is
-        * specified by 'droneId'.
+        * connected by 'droneId'.
         * If no other clients is listening to the drone instance, connection with the underlying
         * vehicle will be broken.
         */
         oneway void disconnectFromDrone();
 
         /**
-        * Refresh the parameters for the specified drone.
+        * Refresh the parameters for the connected drone.
         */
         oneway void refreshParameters();
 
         /**
-        * Write the given parameters to the specified drone.
+        * Write the given parameters to the connected drone.
         */
         oneway void writeParameters(in Parameters parameters);
 
         /**
-        * Upload the given mission to the specified drone.
+        * Upload the given mission to the connected drone.
         * @param mission mission to upload to the drone.
         */
         oneway void sendMission(in Mission mission);

@@ -75,7 +75,7 @@ public class State implements Parcelable {
         dest.writeByte(armed ? (byte) 1 : (byte) 0);
         dest.writeByte(isFlying ? (byte) 1 : (byte) 0);
         dest.writeString(this.calibrationStatus);
-        dest.writeInt(this.vehicleMode == null ? -1 : this.vehicleMode.ordinal());
+        dest.writeParcelable(this.vehicleMode, 0);
         dest.writeParcelable(this.vehicleType, 0);
         dest.writeString(this.failsafeWarning);
     }
@@ -84,8 +84,7 @@ public class State implements Parcelable {
         this.armed = in.readByte() != 0;
         this.isFlying = in.readByte() != 0;
         this.calibrationStatus = in.readString();
-        int tmpVehicleMode = in.readInt();
-        this.vehicleMode = tmpVehicleMode == -1 ? null : VehicleMode.values()[tmpVehicleMode];
+        this.vehicleMode = in.readParcelable(VehicleMode.class.getClassLoader());
         this.vehicleType = in.readParcelable(Type.class.getClassLoader());
         this.failsafeWarning = in.readString();
     }
