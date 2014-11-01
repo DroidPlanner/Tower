@@ -53,11 +53,11 @@ public class SetServo extends MissionCMD {
 		return list;
 	}
 
-	public float getPwm() {
+	public int getPwm() {
 		return pwm;
 	}
 
-	public float getChannel() {
+	public int getChannel() {
 		return channel;
 	}
 
