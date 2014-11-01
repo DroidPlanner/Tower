@@ -1,6 +1,6 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.three_dr.services.android.lib"
+    package="com.ox3dr.services.android.lib"
     android:versionCode="1"
     android:versionName="0.0.0">
 
