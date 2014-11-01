@@ -26,6 +26,14 @@ public class ConnectionParameter implements Parcelable {
     }
 
     @Override
+    public String toString() {
+        return "ConnectionParameter{" +
+                "connectionType=" + connectionType +
+                ", paramsBundle=" + paramsBundle +
+                '}';
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
