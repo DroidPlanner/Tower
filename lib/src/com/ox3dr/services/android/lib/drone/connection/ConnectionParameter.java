@@ -26,6 +26,20 @@ public class ConnectionParameter implements Parcelable {
     }
 
     @Override
+    public boolean equals(Object o){
+        if(this == o) return true;
+        if(!(o instanceof ConnectionParameter)) return false;
+
+        ConnectionParameter that = (ConnectionParameter) o;
+        return toString().equals(that.toString());
+    }
+
+    @Override
+    public int hashCode(){
+        return toString().hashCode();
+    }
+
+    @Override
     public String toString() {
         return "ConnectionParameter{" +
                 "connectionType=" + connectionType +
