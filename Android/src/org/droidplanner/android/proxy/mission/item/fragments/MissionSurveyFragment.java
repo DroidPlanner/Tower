@@ -1,5 +1,7 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
+import java.util.List;
+
 import org.droidplanner.R;
 import org.droidplanner.R.id;
 import org.droidplanner.android.DroidPlannerApp;
@@ -19,14 +21,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.List;
-
-public class MissionSurveyFragment extends MissionDetailFragment implements OnClickListener,
+public class MissionSurveyFragment extends MissionDetailFragment implements 
 		CardWheelHorizontalView.OnCardWheelChangedListener,
 		SpinnerSelfSelect.OnSpinnerItemSelectedListener, DroneInterfaces.OnDroneListener {
 
@@ -43,11 +42,9 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 	public TextView footprintTextView;
 	public TextView groundResolutionTextView;
 	public SpinnerSelfSelect cameraSpinner;
-	public CheckBox innerWPsCheckbox;
 	public TextView numberOfPicturesView;
 	public TextView numberOfStripsView;
 	public TextView lengthView;
-	public CheckBox footprintCheckBox;
 	private CamerasAdapter cameraAdapter;
 
 	private List<Survey> surveyList;
@@ -74,16 +71,16 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 		super.onViewCreated(view, savedInstanceState);
 		final Context context = getActivity().getApplicationContext();
 
-        cameraAdapter = new CamerasAdapter(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item);
 
 		this.surveyList = ((List<Survey>) getMissionItems());
 
+		cameraAdapter = new CamerasAdapter(getActivity(),
+				android.R.layout.simple_spinner_dropdown_item);
 		cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
         cameraSpinner.setAdapter(cameraAdapter);
-
-		footprintCheckBox = (CheckBox) view.findViewById(id.CheckBoxFootprints);
-
+		cameraSpinner.setOnSpinnerItemSelectedListener(this);
+        cameraAdapter.setTitle(surveyList.get(0).surveyData.getCameraName());
+        
 		mAnglePicker = (CardWheelHorizontalView) view.findViewById(id.anglePicker);
 		mAnglePicker.setViewAdapter(new NumericWheelAdapter(context, R.layout.wheel_text_centered,
 				0, 180, "%dº"));
@@ -100,8 +97,6 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 		mAltitudePicker.setViewAdapter(new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, 5, 200, "%d m"));
 
-		innerWPsCheckbox = (CheckBox) view.findViewById(id.checkBoxInnerWPs);
-
 		areaTextView = (TextView) view.findViewById(id.areaTextView);
 		distanceBetweenLinesTextView = (TextView) view
 				.findViewById(id.distanceBetweenLinesTextView);
@@ -111,10 +106,6 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 		numberOfPicturesView = (TextView) view.findViewById(id.numberOfPicturesTextView);
 		numberOfStripsView = (TextView) view.findViewById(id.numberOfStripsTextView);
 		lengthView = (TextView) view.findViewById(id.lengthTextView);
-
-		footprintCheckBox.setOnClickListener(this);
-		innerWPsCheckbox.setOnClickListener(this);
-		cameraSpinner.setOnSpinnerItemSelectedListener(this);
 
 		updateViews();
 		
@@ -129,14 +120,18 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position) {
-        final CameraInfo cameraInfo = cameraAdapter.getCamera(position);
-        for(Survey survey: surveyList) {
-            survey.setCameraInfo(cameraInfo);
-        }
+		if (spinner.getId() == id.cameraFileSpinner) {
+			CameraInfo cameraInfo = cameraAdapter.getCamera(position);
+			cameraAdapter.setTitle(cameraInfo.name);
+			for (Survey survey : surveyList) {
+				survey.setCameraInfo(cameraInfo);
+			}
 
-		onChanged(mAnglePicker, 0, 0);
+			onChanged(mAnglePicker, 0, 0);
+	        getMissionProxy().getMission().notifyMissionUpdate();
+		}
 	}
-
+	
 	@Override
 	public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
 		switch (cardWheel.getId()) {
@@ -160,12 +155,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 			break;
 		}
 	}
-
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-	}
-
+	
 	@Override
 	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
 		switch (event) {
@@ -181,11 +171,6 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 	private void updateViews() {
 		updateTextViews();
 		updateSeekBars();
-		updateCameraSpinner();
-	}
-
-	private void updateCameraSpinner() {
-		cameraAdapter.setTitle(surveyList.get(0).surveyData.getCameraName());
 	}
 
 	private void updateSeekBars() {
@@ -194,7 +179,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 		mSidelapPicker.setCurrentValue((int) surveyList.get(0).surveyData.getSidelap());
 		mAltitudePicker.setCurrentValue((int) surveyList.get(0).surveyData.getAltitude().valueInMeters());
 	}
-
+	
 	private void updateTextViews() {
 		Context context = getActivity();
 		try {

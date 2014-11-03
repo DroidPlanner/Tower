@@ -55,7 +55,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment
 		cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
         cameraSpinner.setAdapter(cameraAdapter);
         cameraSpinner.setOnSpinnerItemSelectedListener(this);
-        cameraSpinner.setSelection(0);
+        cameraAdapter.setTitle(firstItem.getCamera());
 
 		radiusPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.radiusPicker);
@@ -125,7 +125,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment
 	
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position) {
-		if (spinner.equals(cameraSpinner)) {
+		if (spinner.getId() == id.cameraFileSpinner) {
 			CameraInfo cameraInfo = cameraAdapter.getCamera(position);
 			cameraAdapter.setTitle(cameraInfo.name);
 			for (StructureScanner scan : missionItems) {

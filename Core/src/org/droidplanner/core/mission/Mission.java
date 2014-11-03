@@ -14,6 +14,7 @@ import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.helpers.units.Speed;
 import org.droidplanner.core.mission.commands.CameraTrigger;
 import org.droidplanner.core.mission.commands.ChangeSpeed;
+import org.droidplanner.core.mission.commands.EpmGripper;
 import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.waypoints.Circle;
@@ -259,11 +260,9 @@ public class Mission extends DroneVariable {
 			case MAV_CMD.MAV_CMD_NAV_WAYPOINT:
 				received.add(new Waypoint(msg, this));
 				break;
-
 			case MAV_CMD.MAV_CMD_NAV_SPLINE_WAYPOINT:
 				received.add(new SplineWaypoint(msg, this));
 				break;
-
 			case MAV_CMD.MAV_CMD_NAV_LAND:
 				received.add(new Land(msg, this));
 				break;
@@ -275,6 +274,9 @@ public class Mission extends DroneVariable {
 				break;
 			case MAV_CMD.MAV_CMD_DO_SET_CAM_TRIGG_DIST:
 				received.add(new CameraTrigger(msg,this));
+				break;
+			case EpmGripper.MAV_CMD_DO_GRIPPER:
+				received.add(new EpmGripper(msg, this));
 				break;
 			case MAV_CMD.MAV_CMD_DO_SET_ROI:
 				received.add(new RegionOfInterest(msg, this));
@@ -364,10 +366,13 @@ public class Mission extends DroneVariable {
 	}
 
 	public boolean isFirstItemTakeoff() {
-		return items.get(0) instanceof Takeoff;
+		return !items.isEmpty() && items.get(0) instanceof Takeoff;
 	}
 
 	public boolean isLastItemLandOrRTL() {
+        if(items.isEmpty())
+            return false;
+
 		MissionItem last = items.get(items.size() - 1);
 		return (last instanceof ReturnToHome) || (last instanceof Land);
 	}

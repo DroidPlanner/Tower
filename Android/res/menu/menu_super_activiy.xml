@@ -20,6 +20,19 @@
             android:id="@+id/menu_load_mission"
             android:showAsAction="never"
             android:title="@string/load_mission"/>
+        
+        <item
+            android:id="@+id/menu_triggerCamera"
+            android:showAsAction="never"
+            android:title="Picture"/>
+        <item
+            android:id="@+id/menu_epm_release"
+            android:showAsAction="never"
+            android:title="Release"/>
+        <item
+            android:id="@+id/menu_epm_grab"
+            android:showAsAction="never"
+            android:title="Grab"/>
     </group>
 
     <item
