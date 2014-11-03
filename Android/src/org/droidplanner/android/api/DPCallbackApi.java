@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.content.LocalBroadcastManager;
+import android.widget.Toast;
 
 import com.three_dr.services.android.lib.drone.connection.ConnectionResult;
 import com.three_dr.services.android.lib.model.IDroidPlannerCallbackApi;
@@ -17,8 +18,17 @@ import java.lang.ref.WeakReference;
 */
 public final class DPCallbackApi extends IDroidPlannerCallbackApi.Stub {
 
-    public static final String ACTION_DRONE_EVENT = DPCallbackApi.class.getName() + "" +
-            ".ACTION_DRONE_EVENT";
+    private static final String CLAZZ_NAME = DPCallbackApi.class.getName();
+
+    public static final String ACTION_DRONE_EVENT = CLAZZ_NAME + ".ACTION_DRONE_EVENT";
+    public static final String ACTION_DRONE_CONNECTION_FAILED = CLAZZ_NAME +
+            ".ACTION_DRONE_CONNECTION_FAILED";
+
+    public static final String EXTRA_CONNECTION_FAILED_ERROR_CODE =
+            "extra_connection_failed_error_code";
+
+    public static final String EXTRA_CONNECTION_FAILED_ERROR_MESSAGE =
+            "extra_connection_failed_error_message";
 
     private final WeakReference<DroidPlannerApp> appRef;
     private final LocalBroadcastManager lbm;
@@ -38,7 +48,12 @@ public final class DPCallbackApi extends IDroidPlannerCallbackApi.Stub {
 
     @Override
     public void onConnectionFailed(ConnectionResult result) throws RemoteException {
+        Toast.makeText(getApplication().getApplicationContext(), "Connection failed: " + result
+                .getErrorMessage(), Toast.LENGTH_LONG).show();
 
+        lbm.sendBroadcast(new Intent(ACTION_DRONE_CONNECTION_FAILED)
+                .putExtra(EXTRA_CONNECTION_FAILED_ERROR_CODE, result.getErrorCode())
+        .putExtra(EXTRA_CONNECTION_FAILED_ERROR_MESSAGE, result.getErrorMessage()));
     }
 
     @Override
