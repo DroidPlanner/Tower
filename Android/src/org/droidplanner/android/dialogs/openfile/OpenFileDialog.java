@@ -59,8 +59,9 @@ public abstract class OpenFileDialog implements OnClickListener {
         public OpenFileAsyncTask(OpenFileDialog dialog){
             containerRef = new WeakReference<OpenFileDialog>(dialog);
             progressDialog = new ProgressDialog(dialog.context);
+            progressDialog.setTitle("Processing...");
+            progressDialog.setMessage("Please wait.");
             progressDialog.setIndeterminate(true);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         }
 
         @Override
