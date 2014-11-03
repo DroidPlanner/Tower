@@ -104,6 +104,12 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 		case CAMERA_TRIGGER:
 			fragment = new MissionCameraTriggerFragment();
 			break;
+		case EPM_GRIPPER:
+			fragment = new MissionEpmGrabberFragment();
+			break;
+		case SET_SERVO:
+			fragment = new SetServoFragment();
+			break;
 		default:
 			fragment = null;
 			break;

@@ -10,6 +10,7 @@ import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
+import org.droidplanner.core.MAVLink.MavLinkROI;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.gcs.GCSHeartbeat;
@@ -234,11 +235,18 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		case R.id.menu_load_mission:
 			drone.getWaypointManager().getWaypoints();
 			return true;
-
+		case R.id.menu_triggerCamera:
+			MavLinkROI.triggerCamera(drone);
+			return true;
+		case R.id.menu_epm_grab:
+			MavLinkROI.empCommand(drone, false);
+			return true;
+		case R.id.menu_epm_release:
+			MavLinkROI.empCommand(drone, true);
+			return true;
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
-
 		default:
 			return super.onOptionsItemSelected(item);
 		}

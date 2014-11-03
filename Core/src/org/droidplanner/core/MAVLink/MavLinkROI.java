@@ -1,6 +1,7 @@
 package org.droidplanner.core.MAVLink;
 
 import org.droidplanner.core.helpers.coordinates.Coord3D;
+import org.droidplanner.core.mission.commands.EpmGripper;
 import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ardupilotmega.msg_command_long;
@@ -41,4 +42,15 @@ public class MavLinkROI {
 		msg.shot = 1;
 		drone.getMavClient().sendMavPacket(msg.pack());
 	}
+	
+	public static void empCommand(Drone drone, boolean release) {
+		msg_command_long msg = new msg_command_long();
+		msg.target_system = 1;
+		msg.target_component = 1;
+		msg.command = EpmGripper.MAV_CMD_DO_GRIPPER;
+		msg.param2 = release ? EpmGripper.GRIPPER_ACTION_RELEASE : EpmGripper.GRIPPER_ACTION_GRAB;
+
+		drone.getMavClient().sendMavPacket(msg.pack());
+	}
+	
 }

@@ -14,7 +14,9 @@ import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.helpers.units.Speed;
 import org.droidplanner.core.mission.commands.CameraTrigger;
 import org.droidplanner.core.mission.commands.ChangeSpeed;
+import org.droidplanner.core.mission.commands.EpmGripper;
 import org.droidplanner.core.mission.commands.ReturnToHome;
+import org.droidplanner.core.mission.commands.SetServo;
 import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.Land;
@@ -256,14 +258,15 @@ public class Mission extends DroneVariable {
 
 		for (msg_mission_item msg : msgs) {
 			switch (msg.command) {
+			case MAV_CMD.MAV_CMD_DO_SET_SERVO:
+				received.add(new SetServo(msg, this));
+				break;
 			case MAV_CMD.MAV_CMD_NAV_WAYPOINT:
 				received.add(new Waypoint(msg, this));
 				break;
-
 			case MAV_CMD.MAV_CMD_NAV_SPLINE_WAYPOINT:
 				received.add(new SplineWaypoint(msg, this));
 				break;
-
 			case MAV_CMD.MAV_CMD_NAV_LAND:
 				received.add(new Land(msg, this));
 				break;
@@ -275,6 +278,9 @@ public class Mission extends DroneVariable {
 				break;
 			case MAV_CMD.MAV_CMD_DO_SET_CAM_TRIGG_DIST:
 				received.add(new CameraTrigger(msg,this));
+				break;
+			case EpmGripper.MAV_CMD_DO_GRIPPER:
+				received.add(new EpmGripper(msg, this));
 				break;
 			case MAV_CMD.MAV_CMD_DO_SET_ROI:
 				received.add(new RegionOfInterest(msg, this));
