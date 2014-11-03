@@ -27,5 +27,5 @@ public class Event {
 
     public static final String EVENT_TYPE_UPDATED = CLAZZ_NAME + ".TYPE_UPDATED";
 
-
+    public static final String EVENT_HEARTBEAT_TIMEOUT = CLAZZ_NAME + ".HEARTBEAT_TIMEOUT";
 }
