@@ -182,6 +182,7 @@
     <string name="waypointType_Land">Land</string>
     <string name="waypointType_Change_Speed">Change Speed</string>
     <string name="waypointType_Camera_Trigger">Camera Trigger</string>
+    <string name="waypointType_Set_Servo">Set Servo</string>
     <string name="waypointType_EPM">EPM</string>
     <string name="waypointType_Circle">Circle</string>
     <string name="waypointType_Loiter">Loiter</string>
@@ -204,9 +205,13 @@
     <string name="waypointInfo_SetHome">Changes the home location either to the current location or a specified location.</string>
     <string name="waypointInfo_SetSpeed">Change vehicle speed until the end of this mission.</string>
     <string name="waypointInfo_CameraTrigger">Trigger the camera shutter at regular distance intervals.</string>
+    <string name="waypointInfo_SetServo">Move a servo to a particular PWM value.</string>
     <string name="waypointInfo_EpmGrabber">Release the payload of the EPM grabber</string>
     <string name="waypointInfo_ROI">Sets a location and altitude to point copter towards and to aim an optional camera.</string>
     <string name="waypointInfo_SetJump">Repeat waypoint</string>
+    
+    <!-- Custom waypoint info -->
+    <string name="pwm">PWM:</string>
 
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">One cannot add new waypoints after LAND or RTL</string>
@@ -346,6 +351,7 @@
     <string name="speed_unit">m/s</string>
     <string name="speed_label">Speed</string>
     <string name="length_label">Length</string>
+    <string name="channel_label">Channel</string>
     <string name="ground_speed_label">Ground Speed</string>
     <string name="air_speed_label">Air Speed</string>
     <string name="default_angle_value">--°</string>
