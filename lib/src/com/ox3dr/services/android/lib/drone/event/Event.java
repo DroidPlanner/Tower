@@ -28,4 +28,19 @@ public class Event {
     public static final String EVENT_TYPE_UPDATED = CLAZZ_NAME + ".TYPE_UPDATED";
 
     public static final String EVENT_HEARTBEAT_TIMEOUT = CLAZZ_NAME + ".HEARTBEAT_TIMEOUT";
+
+    public static final String EVENT_VEHICLE_MODE = CLAZZ_NAME + ".VEHICLE_MODE";
+
+    public static final String EVENT_RADIO = CLAZZ_NAME + ".RADIO";
+
+    public static final String EVENT_ARMING = CLAZZ_NAME + ".ARMING";
+
+    public static final String EVENT_AUTOPILOT_FAILSAFE = CLAZZ_NAME + ".AUTOPILOT_FAILSAFE";
+
+    public static final String EVENT_ATTITUDE = CLAZZ_NAME + ".ATTITUDE";
+    public static final String EVENT_SPEED = CLAZZ_NAME + ".SPEED";
+    public static final String EVENT_BATTERY = CLAZZ_NAME + ".BATTERY";
+    public static final String EVENT_STATE = CLAZZ_NAME + ".STATE";
+    public static final String EVENT_HOME = CLAZZ_NAME + ".HOME";
+    public static final String EVENT_GPS = CLAZZ_NAME + ".GPS";
 }
