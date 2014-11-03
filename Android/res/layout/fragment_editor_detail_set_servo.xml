@@ -49,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
-                android:text="@string/waypointType_Camera_Trigger" />
+                android:text="@string/waypointType_Set_Servo" />
 
             <TextView
                 android:id="@+id/DistanceLabel"
@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/mode_desc_rectangle"
             android:padding="12dp"
-            android:text="@string/waypointInfo_CameraTrigger" />
+            android:text="@string/waypointInfo_SetServo" />
 
         <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
             android:id="@+id/picker1"
@@ -92,7 +92,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:text="@string/length_label" />
+            android:text="@string/channel_label" />
+        
+        <TextView
+            style="@style/ModeDetailText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="@string/pwm"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        
+        <EditText 
+            android:id="@+id/PwmEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:imeOptions="actionDone"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            />
+
     </LinearLayout>
 
 </RelativeLayout>

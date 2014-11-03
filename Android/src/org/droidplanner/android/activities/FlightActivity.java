@@ -332,6 +332,14 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
             enableSlidingUpPanel(dpApp.getApi());
             break;
 
+        case FOLLOW_START:
+            //Extend the sliding drawer if collapsed.
+            if(!mSlidingPanelCollapsing.get() && mSlidingPanel.isSlidingEnabled() &&
+                    !mSlidingPanel.isPanelExpanded()){
+                mSlidingPanel.expandPanel();
+            }
+            break;
+
 		default:
 			break;
 		}

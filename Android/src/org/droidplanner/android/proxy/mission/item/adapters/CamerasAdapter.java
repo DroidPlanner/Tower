@@ -16,7 +16,7 @@ public class CamerasAdapter extends ArrayAdapter<String> {
 	private CameraInfoLoader loader;
 	private Context context;
 	private String title = "";
-	CameraInfo defaultCamera = new CameraInfo();
+	public CameraInfo defaultCamera = new CameraInfo();
 
 	public CamerasAdapter(Context context, int resource) {
 		super(context, resource);

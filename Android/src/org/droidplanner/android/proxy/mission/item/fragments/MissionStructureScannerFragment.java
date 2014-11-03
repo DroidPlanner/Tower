@@ -3,12 +3,16 @@ package org.droidplanner.android.proxy.mission.item.fragments;
 import java.util.List;
 
 import org.droidplanner.R;
+import org.droidplanner.R.id;
+import org.droidplanner.android.proxy.mission.item.adapters.CamerasAdapter;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
+import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.MissionItemType;
+import org.droidplanner.core.mission.survey.CameraInfo;
 import org.droidplanner.core.mission.waypoints.StructureScanner;
 
 import android.content.Context;
@@ -17,14 +21,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Spinner;
 
 public class MissionStructureScannerFragment extends MissionDetailFragment
 		implements CardWheelHorizontalView.OnCardWheelChangedListener,
 		CompoundButton.OnCheckedChangeListener {
 
+    private CamerasAdapter cameraAdapter;
+    
 	@Override
 	protected int getResource() {
-		return R.layout.fragment_editor_detail_cylindrical_mapping;
+		return R.layout.fragment_editor_detail_structure_scanner;
 	}
 
     @Override
@@ -36,11 +43,18 @@ public class MissionStructureScannerFragment extends MissionDetailFragment
 
         Log.d("DEBUG", "onViewCreated");
         typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CYLINDRICAL_SURVEY));
+		
+        cameraAdapter = new CamerasAdapter(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item);
+		SpinnerSelfSelect cameraSpinner = (SpinnerSelfSelect) view.findViewById(id
+                .cameraFileSpinner);
+        cameraSpinner.setAdapter(cameraAdapter);
+        cameraSpinner.setOnSpinnerItemSelectedListener(this);
 
         CardWheelHorizontalView radiusPicker = (CardWheelHorizontalView) view.findViewById(R.id
                 .radiusPicker);
         radiusPicker.setViewAdapter(new NumericWheelAdapter(context,
-                R.layout.wheel_text_centered, 2, 50, "%d m"));
+                R.layout.wheel_text_centered, 2, 100, "%d m"));
         radiusPicker.addChangingListener(this);
 
         CardWheelHorizontalView startAltitudeStepPicker = (CardWheelHorizontalView) view
@@ -52,7 +66,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment
         CardWheelHorizontalView endAltitudeStepPicker = (CardWheelHorizontalView) view
                 .findViewById(R.id.heightStepPicker);
         endAltitudeStepPicker.setViewAdapter(new NumericWheelAdapter(context,
-                R.layout.wheel_text_centered, MIN_ALTITUDE, MAX_ALTITUDE,				"%d m"));
+                R.layout.wheel_text_centered, 1, MAX_ALTITUDE,				"%d m"));
         endAltitudeStepPicker.addChangingListener(this);
 
         CardWheelHorizontalView mNumberStepsPicker = (CardWheelHorizontalView) view.findViewById
@@ -66,6 +80,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment
 
 // Use the first one as reference.
         final StructureScanner firstItem = getMissionItems().get(0);
+        cameraAdapter.setTitle(firstItem.getCamera());
         radiusPicker.setCurrentValue((int) firstItem.getRadius().valueInMeters());
         startAltitudeStepPicker.setCurrentValue((int) firstItem.getCoordinate().getAltitude().valueInMeters());
         endAltitudeStepPicker.setCurrentValue((int) firstItem.getEndAltitude().valueInMeters());
@@ -89,20 +104,12 @@ public class MissionStructureScannerFragment extends MissionDetailFragment
 		case R.id.radiusPicker: {
             for(StructureScanner item: getMissionItems())
                 item.setRadius(newValue);
-
-            MissionProxy missionProxy = getMissionProxy();
-            if (missionProxy != null)
-                missionProxy.getMission().notifyMissionUpdate();
             break;
         }
 
 		case R.id.startAltitudePicker: {
             for(StructureScanner item: getMissionItems())
                 item.setAltitude(new Altitude(newValue));
-
-            MissionProxy missionProxy = getMissionProxy();
-            if (missionProxy != null)
-                missionProxy.getMission().notifyMissionUpdate();
             break;
         }
 
@@ -115,8 +122,24 @@ public class MissionStructureScannerFragment extends MissionDetailFragment
                 item.setNumberOfSteps(newValue);
 			break;
 		}
+
+        MissionProxy missionProxy = getMissionProxy();
+        if (missionProxy != null)
+            missionProxy.getMission().notifyMissionUpdate();
 	}
 
+    @Override
+    public void onSpinnerItemSelected(Spinner spinner, int position) {
+        if (spinner.getId() == id.cameraFileSpinner) {
+            CameraInfo cameraInfo = cameraAdapter.getCamera(position);
+            cameraAdapter.setTitle(cameraInfo.name);
+            for (StructureScanner scan : getMissionItems()) {
+                scan.setCamera(cameraInfo);
+            }
+            getMissionProxy().getMission().notifyMissionUpdate();
+        }
+    }
+    
     @Override
     protected List<StructureScanner> getMissionItems(){
         return (List<StructureScanner>) super.getMissionItems();
