@@ -320,7 +320,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                 break;
 
             case ROTOR_GUIDED:
-                if (getApi().getGuidedPoint().isIdle() && !followMe.isEnabled()) {
+                if (getApi().getGuidedPoint().isInitialized() && !followMe.isEnabled()) {
                     pauseBtn.setActivated(true);
                 }
                 break;

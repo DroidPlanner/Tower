@@ -95,7 +95,7 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
 			break;
 
 		case FIXED_WING_GUIDED:
-			if (drone.getGuidedPoint().isIdle() && !followMe.isEnabled()) {
+            if (drone.getGuidedPoint().isInitialized() && !followMe.isEnabled()) {
 				pauseBtn.setActivated(true);
 			}
 			break;
