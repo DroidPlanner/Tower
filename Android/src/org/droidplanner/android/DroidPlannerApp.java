@@ -201,16 +201,28 @@ public class DroidPlannerApp extends Application {
         ConnectionParameter connParams;
         switch(connectionType){
             case ConnectionType.TYPE_USB:
+                extraParams.putInt(ConnectionType.EXTRA_USB_BAUD_RATE, dpPrefs.getUsbBaudRate());
                 connParams = new ConnectionParameter(connectionType, extraParams);
                 break;
 
             case ConnectionType.TYPE_UDP:
+                extraParams.putInt(ConnectionType.EXTRA_UDP_SERVER_PORT,
+                        dpPrefs.getUdpServerPort());
+                connParams = new ConnectionParameter(connectionType, extraParams);
                 break;
 
             case ConnectionType.TYPE_TCP:
+                extraParams.putString(ConnectionType.EXTRA_TCP_SERVER_IP, dpPrefs.getTcpServerIp());
+                extraParams.putInt(ConnectionType.EXTRA_TCP_SERVER_PORT,
+                        dpPrefs.getTcpServerPort());
+                connParams = new ConnectionParameter(connectionType, extraParams);
                 break;
 
             case ConnectionType.TYPE_BLUETOOTH:
+                String btAddress = dpPrefs.getBluetoothDeviceAddress();
+                if(btAddress != null)
+                    extraParams.putString(ConnectionType.EXTRA_BLUETOOTH_ADDRESS, btAddress);
+                connParams = new ConnectionParameter(connectionType, extraParams);
                 break;
 
             default:
