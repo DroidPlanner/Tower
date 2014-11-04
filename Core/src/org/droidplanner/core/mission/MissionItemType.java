@@ -5,6 +5,7 @@ import java.util.Collections;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.mission.commands.CameraTrigger;
 import org.droidplanner.core.mission.commands.ChangeSpeed;
+import org.droidplanner.core.mission.commands.ConditionYaw;
 import org.droidplanner.core.mission.commands.EpmGripper;
 import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.SetServo;
@@ -60,6 +61,8 @@ public enum MissionItemType {
 			return new StructureScanner(referenceItem);
 		case SET_SERVO:
 			return new SetServo(referenceItem);
+		case CONDITION_YAW:
+			return new ConditionYaw(referenceItem);
 		default:
 			throw new IllegalArgumentException("Unrecognized mission item type (" + name + ")"
 					+ ".");
