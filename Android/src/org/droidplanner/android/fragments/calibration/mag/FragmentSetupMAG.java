@@ -21,7 +21,6 @@ import org.droidplanner.R;
 import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
-import org.droidplanner.android.lib.parcelables.ParcelableThreeSpacePoint;
 import org.droidplanner.android.widgets.scatterplot.ScatterPlot;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.variables.helpers.MagnetometerCalibration;
