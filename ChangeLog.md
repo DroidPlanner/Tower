@@ -9,6 +9,13 @@ All the changes are logged below (preferable with the pull request numbers in pa
 
 # Releases
 
+## Droidplanner v2.8.3
+* EPM support (#1242)
+* Do set servo (#1247)
+* Fix camera selection in editor (#1246)
+* Drone locator progress bar fix (#1249)
+* Minor follow-me UI update (#1241)
+
 ## Droidplanner v2.8.2
 * Allow negative altitudes (#1231)
 * Improved Structure Scanner (#1234, #1237)

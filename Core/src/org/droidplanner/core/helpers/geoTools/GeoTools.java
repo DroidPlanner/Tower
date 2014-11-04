@@ -132,6 +132,10 @@ public class GeoTools {
 				Math.cos(fLat) * Math.sin(tLat) - Math.sin(fLat) * Math.cos(tLat)
 						* Math.cos(tLng - fLng)));
 
+		return warpToPositiveAngle(degree);
+	}
+
+	public static double warpToPositiveAngle(double degree) {
 		if (degree >= 0) {
 			return degree;
 		} else {
