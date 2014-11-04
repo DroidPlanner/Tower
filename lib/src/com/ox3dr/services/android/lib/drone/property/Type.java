@@ -29,10 +29,12 @@ public class Type implements Parcelable {
     }
 
     private final int droneType;
-    private Firmware firmware;
+    private final String firmwareVersion;
+    private final Firmware firmware;
 
-    public Type(int droneType){
+    public Type(int droneType, String firmwareVersion){
         this.droneType = droneType;
+        this.firmwareVersion = firmwareVersion;
 
         switch(droneType){
             case TYPE_COPTER:
@@ -62,6 +64,11 @@ public class Type implements Parcelable {
         return firmware;
     }
 
+    public String getFirmwareVersion(){
+        return firmwareVersion;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -70,11 +77,13 @@ public class Type implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.droneType);
+        dest.writeString(this.firmwareVersion);
         dest.writeInt(this.firmware == null ? -1 : this.firmware.ordinal());
     }
 
     private Type(Parcel in) {
         this.droneType = in.readInt();
+        this.firmwareVersion = in.readString();
         int tmpFirmware = in.readInt();
         this.firmware = tmpFirmware == -1 ? null : Firmware.values()[tmpFirmware];
     }
