@@ -111,11 +111,6 @@
         <item>@string/setup_imu_title</item>
         <item>@string/setup_mag_title</item>
     </string-array>
-    <string-array name="VehicleType">
-        <item>ArduCopter</item>
-        <item>ArduPlane</item>
-        <item>ArduRover</item>
-    </string-array>
     <string-array name="FligthMode_CopterV3_1">
         <item>0;Stabilize</item>
         <item>1;Acro</item>

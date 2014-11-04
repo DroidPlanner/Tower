@@ -220,13 +220,6 @@
         <PreferenceScreen
             android:key="pref_advanced"
             android:title="@string/pref_advanced" >
-            <ListPreference
-                android:defaultValue="ArduCopter"
-                android:entries="@array/VehicleType"
-                android:entryValues="@array/VehicleType"
-                android:key="@string/pref_vehicle_type_key"
-                android:summary="@string/pref_vehicle_type_summary"
-                android:title="@string/pref_vehicle_type" />
             <PreferenceScreen
                 android:key="pref_connection"
                 android:title="@string/pref_connection" >

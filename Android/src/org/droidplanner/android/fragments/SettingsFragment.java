@@ -1,30 +1,9 @@
 package org.droidplanner.android.fragments;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.HashSet;
-import java.util.Locale;
-
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
-import org.droidplanner.android.api.services.DroidPlannerApi;
-import org.droidplanner.android.communication.service.UploaderService;
-import org.droidplanner.android.maps.providers.DPMapProvider;
-import org.droidplanner.android.utils.analytics.GAUtils;
-import org.droidplanner.android.utils.file.DirectoryPath;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.variables.HeartBeat;
-import org.droidplanner.core.model.Drone;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -34,6 +13,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.RemoteException;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -41,7 +21,6 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -57,12 +36,33 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.ox3dr.services.android.lib.drone.connection.ConnectionType;
 import com.ox3dr.services.android.lib.drone.event.Event;
+import com.ox3dr.services.android.lib.drone.event.Extra;
+import com.ox3dr.services.android.lib.drone.property.State;
+import com.ox3dr.services.android.lib.drone.property.Type;
+import com.ox3dr.services.android.lib.model.IDroidPlannerApi;
+
+import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
+import org.droidplanner.android.communication.service.UploaderService;
+import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.utils.analytics.GAUtils;
+import org.droidplanner.android.utils.file.DirectoryPath;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.HashSet;
+import java.util.Locale;
 
 /**
  * Implements the application settings screen.
  */
 public class SettingsFragment extends PreferenceFragment implements
-		OnSharedPreferenceChangeListener, DroneInterfaces.OnDroneListener, DroidPlannerApp.ApiListener {
+		OnSharedPreferenceChangeListener, DroidPlannerApp.ApiListener {
 
 	/**
 	 * Used as tag for logging.
@@ -83,6 +83,43 @@ public class SettingsFragment extends PreferenceFragment implements
 	 */
 	public static final String EXTRA_UPDATED_STATUS_PERIOD = "extra_updated_status_period";
 
+	private static final IntentFilter intentFilter = new IntentFilter();
+	{
+		intentFilter.addAction(Event.EVENT_DISCONNECTED);
+		intentFilter.addAction(Event.EVENT_STATE);
+		intentFilter.addAction(Event.EVENT_HEARTBEAT_FIRST);
+		intentFilter.addAction(Event.EVENT_HEARTBEAT_RESTORED);
+		intentFilter.addAction(Event.EVENT_TYPE_UPDATED);
+	}
+
+	private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final String action = intent.getAction();
+			if (Event.EVENT_DISCONNECTED.equals(action)) {
+				updateMavlinkVersionPreference(null);
+				updateFirmwareVersionPreference(null);
+			} else if (Event.EVENT_HEARTBEAT_FIRST.equals(action)
+					|| Event.EVENT_HEARTBEAT_RESTORED.equals(action)) {
+				int mavlinkVersion = intent.getIntExtra(Extra.EXTRA_MAVLINK_VERSION, -1);
+				if (mavlinkVersion == -1)
+					updateMavlinkVersionPreference(null);
+				else
+					updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
+			} else if (Event.EVENT_TYPE_UPDATED.equals(action)) {
+				try {
+					if (dpApp.isDpApiConnected())
+						updateFirmwareVersionPreference(dpApp.getDpApi().getType()
+								.getFirmwareVersion());
+					else
+						updateFirmwareVersionPreference(null);
+				} catch (RemoteException e) {
+					Log.e(TAG, "Unable to access droidplanner api", e);
+				}
+			}
+		}
+	};
+
 	/**
 	 * Keep track of which preferences' summary need to be updated.
 	 */
@@ -90,14 +127,14 @@ public class SettingsFragment extends PreferenceFragment implements
 
 	private final Handler mHandler = new Handler();
 
-    private DroidPlannerApp dpApp;
-    private DroidPlannerPrefs dpPrefs;
+	private DroidPlannerApp dpApp;
+	private DroidPlannerPrefs dpPrefs;
 
-    @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-        dpApp = (DroidPlannerApp) activity.getApplication();
-    }
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		dpApp = (DroidPlannerApp) activity.getApplication();
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -107,7 +144,7 @@ public class SettingsFragment extends PreferenceFragment implements
 		initSummaryPerPrefs();
 
 		final Context context = getActivity().getApplicationContext();
-        dpPrefs = new DroidPlannerPrefs(context);
+		dpPrefs = new DroidPlannerPrefs(context);
 		final SharedPreferences sharedPref = dpPrefs.prefs;
 
 		setupPeriodicControls();
@@ -149,7 +186,8 @@ public class SettingsFragment extends PreferenceFragment implements
 			updateMapSettingsPreference(defaultProviderName);
 		}
 
-		// update the summary for the preferences in the mDefaultSummaryPrefs hash table.
+		// update the summary for the preferences in the mDefaultSummaryPrefs
+		// hash table.
 		for (String prefKey : mDefaultSummaryPrefs) {
 			final Preference pref = findPreference(prefKey);
 			if (pref != null) {
@@ -210,7 +248,7 @@ public class SettingsFragment extends PreferenceFragment implements
 		updateMavlinkVersionPreference(null);
 		setupPebblePreference();
 		setDronesharePreferencesListeners();
-        setupConnectionPreferences();
+		setupConnectionPreferences();
 	}
 
 	/**
@@ -263,50 +301,50 @@ public class SettingsFragment extends PreferenceFragment implements
 		}
 	}
 
-    private void setupConnectionPreferences(){
-        ListPreference connectionTypePref = (ListPreference) findPreference(getString(R.string
-                .pref_connection_type_key));
-        if(connectionTypePref != null){
-            int defaultConnectionType = dpPrefs.getConnectionParameterType();
-            updateConnectionPreferenceSummary(connectionTypePref, defaultConnectionType);
-            connectionTypePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int connectionType = Integer.parseInt((String)newValue);
-                    updateConnectionPreferenceSummary(preference, connectionType);
-                    return false;
-                }
-            });
-        }
-    }
+	private void setupConnectionPreferences() {
+		ListPreference connectionTypePref = (ListPreference) findPreference(getString(R.string.pref_connection_type_key));
+		if (connectionTypePref != null) {
+			int defaultConnectionType = dpPrefs.getConnectionParameterType();
+			updateConnectionPreferenceSummary(connectionTypePref, defaultConnectionType);
+			connectionTypePref
+					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+						@Override
+						public boolean onPreferenceChange(Preference preference, Object newValue) {
+							int connectionType = Integer.parseInt((String) newValue);
+							updateConnectionPreferenceSummary(preference, connectionType);
+							return false;
+						}
+					});
+		}
+	}
 
-    private void updateConnectionPreferenceSummary(Preference preference, int connectionType){
-        String connectionName;
-        switch(connectionType){
-            case ConnectionType.TYPE_USB:
-                connectionName = "USB";
-                break;
+	private void updateConnectionPreferenceSummary(Preference preference, int connectionType) {
+		String connectionName;
+		switch (connectionType) {
+		case ConnectionType.TYPE_USB:
+			connectionName = "USB";
+			break;
 
-            case ConnectionType.TYPE_UDP:
-                connectionName = "UDP";
-                break;
+		case ConnectionType.TYPE_UDP:
+			connectionName = "UDP";
+			break;
 
-            case ConnectionType.TYPE_TCP:
-                connectionName = "TCP";
-                break;
+		case ConnectionType.TYPE_TCP:
+			connectionName = "TCP";
+			break;
 
-            case ConnectionType.TYPE_BLUETOOTH:
-                connectionName = "BLUETOOTH";
-                break;
+		case ConnectionType.TYPE_BLUETOOTH:
+			connectionName = "BLUETOOTH";
+			break;
 
-            default:
-                connectionName = null;
-                break;
-        }
+		default:
+			connectionName = null;
+			break;
+		}
 
-        if(connectionName != null)
-            preference.setSummary(connectionName);
-    }
+		if (connectionName != null)
+			preference.setSummary(connectionName);
+	}
 
 	/**
 	 * Pebble Install Button. When clicked, will check for pebble if pebble is
@@ -370,7 +408,6 @@ public class SettingsFragment extends PreferenceFragment implements
 		mDefaultSummaryPrefs.add(getString(R.string.pref_server_ip_key));
 		mDefaultSummaryPrefs.add(getString(R.string.pref_udp_server_port_key));
 		mDefaultSummaryPrefs.add(getString(R.string.pref_bluetooth_device_address_key));
-		mDefaultSummaryPrefs.add(getString(R.string.pref_vehicle_type_key));
 		mDefaultSummaryPrefs.add(getString(R.string.pref_rc_quickmode_left_key));
 		mDefaultSummaryPrefs.add(getString(R.string.pref_rc_quickmode_right_key));
 	}
@@ -454,10 +491,6 @@ public class SettingsFragment extends PreferenceFragment implements
 					+ getString(R.string.set_to_zero_to_disable));
 		}
 
-		if (key.equals(getString(R.string.pref_vehicle_type_key)) && dpApp.getApi() != null) {
-			dpApp.getApi().notifyDroneEvent(DroneEventsType.TYPE);
-		}
-
 		if (key.equals(getString(R.string.pref_rc_mode_key))) {
 			if (sharedPreferences.getString(key, "MODE2").equalsIgnoreCase("MODE1")) {
 				preference.setSummary(R.string.mode1_throttle_on_right_stick);
@@ -509,13 +542,13 @@ public class SettingsFragment extends PreferenceFragment implements
 	@Override
 	public void onStart() {
 		super.onStart();
-        dpApp.addApiListener(this);
+		dpApp.addApiListener(this);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-        dpApp.removeApiListener(this);
+		dpApp.removeApiListener(this);
 	}
 
 	@Override
@@ -531,99 +564,73 @@ public class SettingsFragment extends PreferenceFragment implements
 				this);
 	}
 
-    private static final IntentFilter intentFilter = new IntentFilter();
-    {
-        intentFilter.addAction(Event.EVENT_DISCONNECTED);
-        intentFilter.addAction(Event.EVENT_STATE);
-        intentFilter.addAction(Event.EVENT_HEARTBEAT_FIRST);
-        intentFilter.addAction(Event.EVENT_HEARTBEAT_RESTORED);
-        intentFilter.addAction(Event.EVENT_TYPE);
-    }
-
+	/**
+	 * Allows the settings screen to perform the correct/expected behavior when
+	 * the up arrow is clicked.
+	 *
+	 * @param prefScreen
+	 * @param pref
+	 * @return
+	 */
 	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		switch (event) {
-		case DISCONNECTED:
-			updateMavlinkVersionPreference(null);
-			updateFirmwareVersionPreference(null);
-			break;
+	public boolean onPreferenceTreeClick(PreferenceScreen prefScreen, Preference pref) {
+		if (pref instanceof PreferenceScreen) {
+			final Dialog dialog = ((PreferenceScreen) pref).getDialog();
+			final View homeBtn = dialog.findViewById(android.R.id.home);
+			if (homeBtn != null) {
+				View.OnClickListener dismissDialogClickListener = new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						dialog.dismiss();
+					}
+				};
 
-		case HEARTBEAT_FIRST:
-		case HEARTBEAT_RESTORED:
-			updateMavlinkVersionPreference(String.valueOf(drone.getMavlinkVersion()));
-			break;
-		case FIRMWARE:
-			updateFirmwareVersionPreference(drone.getFirmwareVersion());
-			break;
-		default:
-			break;
+				// Prepare yourselves for some hacky programming
+				ViewParent homeBtnContainer = homeBtn.getParent();
+
+				// The home button is an ImageView inside a FrameLayout
+				if (homeBtnContainer instanceof FrameLayout) {
+					ViewGroup containerParent = (ViewGroup) homeBtnContainer.getParent();
+
+					if (containerParent instanceof LinearLayout) {
+						// This view also contains the title text, set the whole
+						// view as clickable
+						containerParent.setOnClickListener(dismissDialogClickListener);
+					} else {
+						// Just set it on the home button
+						((FrameLayout) homeBtnContainer)
+								.setOnClickListener(dismissDialogClickListener);
+					}
+				} else {
+					// The 'If all else fails' default case
+					homeBtn.setOnClickListener(dismissDialogClickListener);
+				}
+			}
+			return true;
 		}
+		return false;
 	}
 
-    /**
-     * Allows the settings screen to perform the correct/expected behavior when
-     * the up arrow is clicked.
-     *
-     * @param prefScreen
-     * @param pref
-     * @return
-     */
-    @Override
-    public boolean onPreferenceTreeClick(PreferenceScreen prefScreen, Preference pref) {
-        if (pref instanceof PreferenceScreen) {
-            final Dialog dialog = ((PreferenceScreen) pref).getDialog();
-            final View homeBtn = dialog.findViewById(android.R.id.home);
-            if (homeBtn != null) {
-                View.OnClickListener dismissDialogClickListener = new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                };
+	@Override
+	public void onApiConnected(IDroidPlannerApi api) throws RemoteException {
+		State droneState = api.getState();
+		Type droneType = api.getType();
+		final int mavlinkVersion = droneState.getMavlinkVersion();
+		if (mavlinkVersion != State.INVALID_MAVLINK_VERSION) {
+			updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
+		} else {
+			updateMavlinkVersionPreference(null);
+		}
 
-                // Prepare yourselves for some hacky programming
-                ViewParent homeBtnContainer = homeBtn.getParent();
+		updateFirmwareVersionPreference(droneType.getFirmwareVersion());
 
-                // The home button is an ImageView inside a FrameLayout
-                if (homeBtnContainer instanceof FrameLayout) {
-                    ViewGroup containerParent = (ViewGroup) homeBtnContainer.getParent();
+		LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(
+				broadcastReceiver, intentFilter);
+	}
 
-                    if (containerParent instanceof LinearLayout) {
-                        // This view also contains the title text, set the whole
-                        // view as clickable
-                        containerParent.setOnClickListener(dismissDialogClickListener);
-                    } else {
-                        // Just set it on the home button
-                        ((FrameLayout) homeBtnContainer)
-                                .setOnClickListener(dismissDialogClickListener);
-                    }
-                } else {
-                    // The 'If all else fails' default case
-                    homeBtn.setOnClickListener(dismissDialogClickListener);
-                }
-            }
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void onApiConnected(DroidPlannerApi api) {
-            final Drone drone = api.getDrone();
-            final int mavlinkVersion = drone.getMavlinkVersion();
-            if (mavlinkVersion != HeartBeat.INVALID_MAVLINK_VERSION) {
-                updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
-            } else {
-                updateMavlinkVersionPreference(null);
-            }
-
-            updateFirmwareVersionPreference(drone.getFirmwareVersion());
-
-            api.addDroneListener(this);
-    }
-
-    @Override
-    public void onApiDisconnected() {
-            dpApp.getApi().removeDroneListener(this);
-    }
+	@Override
+	public void onApiDisconnected() {
+		LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
+				.unregisterReceiver(broadcastReceiver);
+	}
 }
