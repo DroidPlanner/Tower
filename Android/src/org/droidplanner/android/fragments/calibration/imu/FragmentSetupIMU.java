@@ -256,14 +256,14 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
     }
 
 	private void sendAck(int step) {
-        DroidPlannerApi dpApi = getApi();
+        DroidPlannerApi dpApi = getDroneApi();
 		if (dpApi != null) {
 			dpApi.getDrone().getCalibrationSetup().sendAckk(step);
 		}
 	}
 
 	private void startCalibration() {
-        DroidPlannerApi dpApi = getApi();
+        DroidPlannerApi dpApi = getDroneApi();
 		if (dpApi != null) {
 			boolean isCalibrating = dpApi.getDrone().getCalibrationSetup().startCalibration();
             if(!isCalibrating){

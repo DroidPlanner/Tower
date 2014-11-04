@@ -13,7 +13,6 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.RemoteException;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -39,11 +38,11 @@ import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.event.Extra;
 import com.ox3dr.services.android.lib.drone.property.State;
 import com.ox3dr.services.android.lib.drone.property.Type;
-import com.ox3dr.services.android.lib.model.IDroidPlannerApi;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.analytics.GAUtils;
@@ -107,15 +106,11 @@ public class SettingsFragment extends PreferenceFragment implements
 				else
 					updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
 			} else if (Event.EVENT_TYPE_UPDATED.equals(action)) {
-				try {
-					if (dpApp.isDpApiConnected())
-						updateFirmwareVersionPreference(dpApp.getDpApi().getType()
-								.getFirmwareVersion());
-					else
-						updateFirmwareVersionPreference(null);
-				} catch (RemoteException e) {
-					Log.e(TAG, "Unable to access droidplanner api", e);
-				}
+				if (dpApp.isDpApiConnected()) {
+					updateFirmwareVersionPreference(dpApp.getDroneApi().getType()
+							.getFirmwareVersion());
+				} else
+					updateFirmwareVersionPreference(null);
 			}
 		}
 	};
@@ -612,7 +607,7 @@ public class SettingsFragment extends PreferenceFragment implements
 	}
 
 	@Override
-	public void onApiConnected(IDroidPlannerApi api) throws RemoteException {
+	public void onApiConnected(DroneApi api) {
 		State droneState = api.getState();
 		Type droneType = api.getType();
 		final int mavlinkVersion = droneState.getMavlinkVersion();

@@ -1,13 +1,11 @@
 package org.droidplanner.android.widgets.adapterViews;
 
-import com.three_dr.services.android.lib.drone.property.Parameter;
+import com.ox3dr.services.android.lib.drone.property.Parameter;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Map;
-
-import org.droidplanner.core.parameters.ParameterMetadata;
 
 /**
  * Date: 2013-12-09 Time: 1:32 AM
@@ -84,7 +82,8 @@ public class ParamsAdapterItem implements Serializable {
 		try {
 			final double dval = formatter.parse(value).doubleValue();
 			final double[] range = parameter.parseRange();
-			return (dval >= range[ParameterMetadata.RANGE_LOW] && dval <= range[ParameterMetadata.RANGE_HIGH]) ? Validation.VALID
+			return (dval >= range[Parameter.RANGE_LOW] && dval <= range[Parameter.RANGE_HIGH])
+                    ? Validation.VALID
 					: Validation.INVALID;
 		} catch (ParseException ex) {
 			return Validation.NA;

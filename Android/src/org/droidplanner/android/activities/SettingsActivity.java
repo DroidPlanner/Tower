@@ -1,13 +1,12 @@
 package org.droidplanner.android.activities;
 
-import org.droidplanner.R;
-import org.droidplanner.android.fragments.SettingsFragment;
-
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 
-import com.ox3dr.services.android.lib.model.IDroidPlannerApi;
+import org.droidplanner.R;
+import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.fragments.SettingsFragment;
 
 /**
  * This activity holds the SettingsFragment.
@@ -27,11 +26,12 @@ public class SettingsActivity extends DrawerNavigationUI {
 		}
 	}
 
-    @Override
-    protected int getNavigationDrawerEntryId() {
-        return R.id.navigation_settings;
-    }
+	@Override
+	protected int getNavigationDrawerEntryId() {
+		return R.id.navigation_settings;
+	}
 
-    @Override
-    public void onApiConnected(IDroidPlannerApi api) {}
+	@Override
+	public void onApiConnected(DroneApi api) {
+	}
 }

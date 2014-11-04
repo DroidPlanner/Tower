@@ -5,8 +5,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.api.model.DPDrone;
-import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.api.DroneApi;
 
 /**
  * Provides access to the DroidPlannerApi to its derived class.
@@ -17,12 +16,8 @@ public abstract class ApiListenerDialogFragment extends DialogFragment implement
     private DroidPlannerApp dpApp;
     private LocalBroadcastManager broadcastManager;
 
-    protected DroidPlannerApi getApi(){
-        return dpApp.getApi();
-    }
-
-    protected DPDrone getDPDrone(){
-        return dpApp.getDPDrone();
+    protected DroneApi getDroneApi(){
+        return dpApp.getDroneApi();
     }
 
     protected LocalBroadcastManager getBroadcastManager(){

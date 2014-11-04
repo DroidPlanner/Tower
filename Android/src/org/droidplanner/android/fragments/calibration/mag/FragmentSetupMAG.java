@@ -207,7 +207,7 @@ public class FragmentSetupMAG extends ApiListenerFragment implements
 	}
 
 	public void startCalibration() {
-		DroidPlannerApi dpApi = getApi();
+		DroidPlannerApi dpApi = getDroneApi();
 		if (calibration != null && dpApi != null) {
 			if (dpApi.getDrone().getMagnetometer().getOffsets() == null) {
 				Toast.makeText(getActivity(), " Please load the parameters before calibrating",
@@ -278,7 +278,7 @@ public class FragmentSetupMAG extends ApiListenerFragment implements
 			e.printStackTrace();
 		}
 
-		getApi().getDrone().getStreamRates().setupStreamRatesFromPref();
+		getDroneApi().getDrone().getStreamRates().setupStreamRatesFromPref();
 
 		setCalibrationStatus(CALIBRATION_COMPLETED);
 	}
@@ -340,7 +340,7 @@ public class FragmentSetupMAG extends ApiListenerFragment implements
 
 	@Override
 	public void onApiDisconnected() {
-		getApi().removeDroneListener(this);
+		getDroneApi().removeDroneListener(this);
 
 		pauseCalibration();
 

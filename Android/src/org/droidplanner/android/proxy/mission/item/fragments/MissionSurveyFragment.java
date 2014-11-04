@@ -2,11 +2,8 @@ package org.droidplanner.android.proxy.mission.item.fragments;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -114,7 +111,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	@Override
 	public void onApiDisconnected() {
 		super.onApiDisconnected();
-		getApi().removeDroneListener(this);
+		getDroneApi().removeDroneListener(this);
 	}
 
 	@Override

@@ -1,12 +1,14 @@
 package org.droidplanner.android.activities;
 
 import org.droidplanner.R;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.fragments.ChecklistFragment;
 import org.droidplanner.android.fragments.ParamsFragment;
 import org.droidplanner.android.fragments.SensorSetupFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.v4.app.Fragment;
 
 /**
@@ -101,4 +103,7 @@ public class ConfigurationActivity extends DrawerNavigationUI {
             return R.id.navigation_params;
         }
     }
+
+    @Override
+    public void onApiConnected(DroneApi api) {}
 }

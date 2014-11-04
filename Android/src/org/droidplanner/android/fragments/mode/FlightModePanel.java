@@ -35,7 +35,7 @@ public class FlightModePanel extends ApiListenerFragment implements OnDroneListe
 
 	@Override
 	public void onApiDisconnected() {
-		getApi().removeDroneListener(this);
+		getDroneApi().removeDroneListener(this);
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class FlightModePanel extends ApiListenerFragment implements OnDroneListe
 
 	private void onModeUpdate(ApmModes mode) {
 		// Update the info panel fragment
-		final DroidPlannerApi dpApi = getApi();
+		final DroidPlannerApi dpApi = getDroneApi();
 		Fragment infoPanel;
 		if (dpApi == null || !dpApi.isConnected()) {
 			infoPanel = new ModeDisconnectedFragment();

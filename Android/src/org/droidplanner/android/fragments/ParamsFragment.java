@@ -6,8 +6,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.model.DPDrone;
-import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenParameterDialog;
@@ -25,11 +24,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,10 +46,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.three_dr.services.android.lib.drone.event.Event;
-import com.three_dr.services.android.lib.drone.event.Extra;
-import com.three_dr.services.android.lib.drone.property.Parameter;
-import com.three_dr.services.android.lib.drone.property.Parameters;
+import com.google.android.gms.internal.is;
+import com.ox3dr.services.android.lib.model.IDroidPlannerApi;
+import com.ox3dr.services.android.lib.drone.event.Event;
+import com.ox3dr.services.android.lib.drone.event.Extra;
+import com.ox3dr.services.android.lib.drone.property.Parameter;
+import com.ox3dr.services.android.lib.drone.property.Parameters;
 
 public class ParamsFragment extends ApiListenerListFragment {
 
@@ -73,8 +76,9 @@ public class ParamsFragment extends ApiListenerListFragment {
                 startProgress();
             }
             else if(Event.EVENT_PARAMETERS_REFRESH_ENDED.equals(action)){
-                if(dpDrone != null)
-                    loadAdapter(dpDrone.getParameters().getParameters());
+                if(getDroneApi().isConnected()) {
+                        loadAdapter(getDroneApi().getParameters().getParameters());
+                }
                 stopProgress();
             }
             else if(Event.EVENT_PARAMETERS_RECEIVED.equals(action)){
@@ -89,13 +93,11 @@ public class ParamsFragment extends ApiListenerListFragment {
                 stopProgress();
             }
             else if(Event.EVENT_TYPE_UPDATED.equals(action)){
-                if(dpDrone != null)
-                    loadAdapter(dpDrone.getParameters().getParameters());
+                if(getDroneApi().isConnected())
+                    loadAdapter(getDroneApi().getParameters().getParameters());
             }
         }
     };
-
-    private DPDrone dpDrone;
 
     private ProgressDialog progressDialog;
 
@@ -237,9 +239,8 @@ public class ParamsFragment extends ApiListenerListFragment {
     }
 
     @Override
-    public void onApiConnected(DroidPlannerApi api) {
-        dpDrone = getDPDrone();
-        Parameters droneParams = dpDrone.getParameters();
+    public void onApiConnected(DroneApi api) {
+        Parameters droneParams = api.getParameters();
 
         if(adapter.isEmpty()) {
             List<Parameter> parametersList = droneParams.getParameters();
@@ -249,8 +250,8 @@ public class ParamsFragment extends ApiListenerListFragment {
 
         toggleParameterFilter(isParameterFilterVisible(), false);
 
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(broadcastReceiver,
-                intentFilter);
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -343,15 +344,16 @@ public class ParamsFragment extends ApiListenerListFragment {
 	}
 
 	private void refreshParameters() {
-		if (dpDrone != null && dpDrone.isConnected()) {
-			dpDrone.refreshParameters();
+		if (getDroneApi().isConnected()) {
+			getDroneApi().refreshParameters();
 		} else {
 			Toast.makeText(getActivity(), R.string.msg_connect_first, Toast.LENGTH_SHORT).show();
 		}
 	}
 
 	private void writeModifiedParametersToDrone() {
-        if(dpDrone == null)
+        final DroneApi droneApi = getDroneApi();
+        if(!droneApi.isConnected())
             return;
 
         final int adapterCount = adapter.getCount();
@@ -367,7 +369,7 @@ public class ParamsFragment extends ApiListenerListFragment {
 
         final int parametersCount = parametersList.size();
 		if (parametersCount > 0) {
-            dpDrone.writeParameters(new Parameters(parametersList));
+            droneApi.writeParameters(new Parameters(parametersList));
             adapter.notifyDataSetChanged();
             Toast.makeText(getActivity(),
                     parametersCount + " " + getString(R.string.msg_parameters_written_to_drone),

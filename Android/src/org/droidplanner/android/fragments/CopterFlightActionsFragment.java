@@ -111,7 +111,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
     @Override
     public void onApiDisconnected() {
-        getApi().removeDroneListener(this);
+        getDroneApi().removeDroneListener(this);
     }
 
     @Override
@@ -130,22 +130,22 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                 break;
 
             case R.id.mc_disarmBtn:
-                MavLinkArm.sendArmMessage(getApi().getDrone(), false);
+                MavLinkArm.sendArmMessage(getDroneApi().getDrone(), false);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Disarm");
                 break;
 
             case R.id.mc_land:
-                getApi().getState().changeFlightMode(ApmModes.ROTOR_LAND);
+                getDroneApi().getState().changeFlightMode(ApmModes.ROTOR_LAND);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_LAND.getName());
                 break;
 
             case R.id.mc_takeoff:
-                getApi().getState().doTakeoff(new Altitude(TAKEOFF_ALTITUDE));
+                getDroneApi().getState().doTakeoff(new Altitude(TAKEOFF_ALTITUDE));
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Takeoff");
                 break;
 
             case R.id.mc_homeBtn:
-                getApi().getState().changeFlightMode(ApmModes.ROTOR_RTL);
+                getDroneApi().getState().changeFlightMode(ApmModes.ROTOR_RTL);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_RTL.getName());
                 break;
 
@@ -154,12 +154,12 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                     followMe.toggleFollowMeState();
                 }
 
-                getApi().getGuidedPoint().pauseAtCurrentLocation();
+                getDroneApi().getGuidedPoint().pauseAtCurrentLocation();
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Pause");
                 break;
 
             case R.id.mc_autoBtn:
-                getApi().getState().changeFlightMode(ApmModes.ROTOR_AUTO);
+                getDroneApi().getState().changeFlightMode(ApmModes.ROTOR_AUTO);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_AUTO.getName());
                 break;
 
@@ -247,19 +247,19 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
     private void getTakeOffInAutoConfirmation() {
         YesNoWithPrefsDialog ynd = YesNoWithPrefsDialog.newInstance(getActivity()
-                .getApplicationContext(), getString(R.string.dialog_confirm_take_off_in_auto_title),
+                        .getApplicationContext(), getString(R.string.dialog_confirm_take_off_in_auto_title),
                 getString(R.string.dialog_confirm_take_off_in_auto_msg), new YesNoDialog.Listener() {
-            @Override
-            public void onYes() {
-                State droneState = getApi().getState();
-                droneState.doTakeoff(new Altitude(TAKEOFF_ALTITUDE));
-                droneState.changeFlightMode(ApmModes.ROTOR_AUTO);
-            }
+                    @Override
+                    public void onYes() {
+                        State droneState = getDroneApi().getState();
+                        droneState.doTakeoff(new Altitude(TAKEOFF_ALTITUDE));
+                        droneState.changeFlightMode(ApmModes.ROTOR_AUTO);
+                    }
 
-            @Override
-            public void onNo() {
-            }
-        }, getString(R.string.pref_warn_on_takeoff_in_auto_key));
+                    @Override
+                    public void onNo() {
+                    }
+                }, getString(R.string.pref_warn_on_takeoff_in_auto_key));
 
         if(ynd != null){
             ynd.show(getChildFragmentManager(), "Confirm take off in auto");
@@ -272,7 +272,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                 getString(R.string.dialog_confirm_arming_msg), new YesNoDialog.Listener() {
                     @Override
                     public void onYes() {
-                        MavLinkArm.sendArmMessage(getApi().getDrone(), true);
+                        MavLinkArm.sendArmMessage(getDroneApi().getDrone(), true);
                     }
 
                     @Override
@@ -313,14 +313,14 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     private void updateFlightModeButtons() {
         resetFlightModeButtons();
 
-        final ApmModes flightMode = getApi().getState().getMode();
+        final ApmModes flightMode = getDroneApi().getState().getMode();
         switch (flightMode) {
             case ROTOR_AUTO:
                 autoBtn.setActivated(true);
                 break;
 
             case ROTOR_GUIDED:
-                if (getApi().getGuidedPoint().isInitialized() && !followMe.isEnabled()) {
+                if (getDroneApi().getGuidedPoint().isInitialized() && !followMe.isEnabled()) {
                     pauseBtn.setActivated(true);
                 }
                 break;
@@ -368,9 +368,9 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     }
 
     private void setupButtonsByFlightState() {
-        if (getApi().isConnected()) {
-            if (getApi().getState().isArmed()) {
-                if (getApi().getState().isFlying()) {
+        if (getDroneApi().isConnected()) {
+            if (getDroneApi().getState().isArmed()) {
+                if (getDroneApi().getState().isFlying()) {
                     setupButtonsForFlying();
                 } else {
                     setupButtonsForArmed();

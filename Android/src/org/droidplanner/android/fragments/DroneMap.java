@@ -127,7 +127,7 @@ public abstract class DroneMap extends ApiListenerFragment implements OnDroneLis
 
     @Override
     public void onApiDisconnected(){
-        getApi().removeDroneListener(this);
+        getDroneApi().removeDroneListener(this);
     }
 
 	private void updateMapFragment() {

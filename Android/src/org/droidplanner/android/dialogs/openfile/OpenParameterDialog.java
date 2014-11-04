@@ -1,6 +1,6 @@
 package org.droidplanner.android.dialogs.openfile;
 
-import com.three_dr.services.android.lib.drone.property.Parameter;
+import com.ox3dr.services.android.lib.drone.property.Parameter;
 
 import java.util.List;
 

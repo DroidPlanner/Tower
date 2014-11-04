@@ -19,7 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.three_dr.services.android.lib.drone.property.Parameter;
+import com.ox3dr.services.android.lib.drone.property.Parameter;
 
 /**
  * Date: 2013-12-08 Time: 11:00 PM

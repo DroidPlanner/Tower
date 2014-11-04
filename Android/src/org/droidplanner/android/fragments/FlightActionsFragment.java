@@ -36,7 +36,7 @@ public class FlightActionsFragment extends ApiListenerFragment implements OnDron
 
 	@Override
 	public void onApiDisconnected() {
-		getApi().removeDroneListener(this);
+		getDroneApi().removeDroneListener(this);
 	}
 
 	@Override

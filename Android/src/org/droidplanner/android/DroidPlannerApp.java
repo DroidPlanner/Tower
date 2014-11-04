@@ -22,6 +22,7 @@ import com.ox3dr.services.android.lib.model.IDroidPlannerServices;
 
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
 import org.droidplanner.android.api.DPApiCallback;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.IO.ExceptionWriter;
@@ -46,7 +47,7 @@ public class DroidPlannerApp extends Application {
 	private static final int API_BOUND = 1;
 
 	public interface ApiListener {
-		void onApiConnected(IDroidPlannerApi api) throws RemoteException;
+		void onApiConnected(DroneApi api);
 
 		void onApiDisconnected();
 	}
@@ -111,6 +112,8 @@ public class DroidPlannerApp extends Application {
 
 	private Thread.UncaughtExceptionHandler exceptionHandler;
 
+    private final DroneApi droneApi = new DroneApi(null);
+
 	private IDroidPlannerServices ox3drServices;
 	private IDroidPlannerApi dpApi;
 
@@ -137,22 +140,16 @@ public class DroidPlannerApp extends Application {
 		startService(UploaderService.createIntent(this));
 	}
 
-	public IDroidPlannerApi getDpApi() {
-		return dpApi;
-	}
+	public DroneApi getDroneApi(){
+        return droneApi;
+    }
 
 	public void addApiListener(ApiListener listener) {
 		if (listener == null)
 			return;
 
 		if (dpApi != null)
-			try {
-				listener.onApiConnected(dpApi);
-			} catch (RemoteException e) {
-				Log.e(TAG, "Unable to access droidplanner api", e);
-				notifyApiDisconnected();
-				dpApi = null;
-			}
+				listener.onApiConnected(droneApi);
 
 		apiListeners.add(listener);
 
@@ -179,15 +176,8 @@ public class DroidPlannerApp extends Application {
 		if (apiListeners.isEmpty() || !isDpApiConnected())
 			return;
 
-        try {
-			for (ApiListener listener : apiListeners) {
-				listener.onApiConnected(dpApi);
-			}
-		} catch (RemoteException e) {
-			Log.e(TAG, e.getMessage(), e);
-            notifyApiDisconnected();
-            dpApi = null;
-		}
+			for (ApiListener listener : apiListeners)
+				listener.onApiConnected(droneApi);
 	}
 
 	private void notifyApiDisconnected() {
@@ -211,6 +201,7 @@ public class DroidPlannerApp extends Application {
 
 		try {
 			dpApi = ox3drServices.connectToDrone(connParams, dpCallback);
+            droneApi.setDpApi(dpApi);
 			notifyApiConnected();
 		} catch (RemoteException e) {
 			Log.e(TAG, "Unable to retrieve a droidplanner api connection.", e);
@@ -228,6 +219,7 @@ public class DroidPlannerApp extends Application {
 		}
 
 		notifyApiDisconnected();
+        droneApi.setDpApi(null);
 		dpApi = null;
 	}
 

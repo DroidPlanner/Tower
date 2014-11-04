@@ -74,7 +74,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	@Override
 	public void onApiDisconnected() {
 		super.onApiDisconnected();
-		getApi().removeDroneListener(this);
+		getDroneApi().removeDroneListener(this);
 		followMe = null;
 	}
 

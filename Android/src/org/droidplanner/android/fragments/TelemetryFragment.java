@@ -63,7 +63,7 @@ public class TelemetryFragment extends ApiListenerFragment implements OnDroneLis
 
 	@Override
 	public void onApiDisconnected() {
-		getApi().removeDroneListener(this);
+		getDroneApi().removeDroneListener(this);
 	}
 
 	@Override
