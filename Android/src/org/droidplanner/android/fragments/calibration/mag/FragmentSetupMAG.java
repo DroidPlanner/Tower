@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ox3dr.services.android.lib.drone.event.Event;
+import com.ox3dr.services.android.lib.drone.event.Extra;
 
 import org.droidplanner.R;
 import org.droidplanner.android.api.DroneApi;
@@ -24,7 +25,6 @@ import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.widgets.scatterplot.ScatterPlot;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.variables.helpers.MagnetometerCalibration;
-import org.droidplanner.core.model.Drone;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +32,7 @@ import java.util.List;
 import ellipsoidFit.FitPoints;
 import ellipsoidFit.ThreeSpacePoint;
 
-public class FragmentSetupMAG extends ApiListenerFragment implements
-		MagnetometerCalibration.OnMagCalibrationListener {
+public class FragmentSetupMAG extends ApiListenerFragment {
 
 	private static final int CALIBRATION_IDLE = 0;
 	private static final int CALIBRATION_IN_PROGRESS = 1;
@@ -42,25 +41,86 @@ public class FragmentSetupMAG extends ApiListenerFragment implements
 	private static final String EXTRA_CALIBRATION_STATUS = "extra_calibration_status";
 	private static final String EXTRA_CALIBRATION_POINTS = "extra_calibration_points";
 
-    private static final IntentFilter intentFilter = new IntentFilter();
-    static {
-        intentFilter.addAction(Event.EVENT_CONNECTED);
-        intentFilter.addAction(Event.EVENT_DISCONNECTED);
-    }
+	private static final IntentFilter intentFilter = new IntentFilter();
+	static {
+		intentFilter.addAction(Event.EVENT_CONNECTED);
+		intentFilter.addAction(Event.EVENT_DISCONNECTED);
+        intentFilter.addAction(Event.EVENT_CALIBRATION_MAG_STARTED);
+        intentFilter.addAction(Event.EVENT_CALIBRATION_MAG_ESTIMATION);
+        intentFilter.addAction(Event.EVENT_CALIBRATION_MAG_COMPLETED);
+	}
 
-    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            if(Event.EVENT_CONNECTED.equals(action)){
-                buttonStep.setEnabled(true);
+	private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final String action = intent.getAction();
+			if (Event.EVENT_CONNECTED.equals(action)) {
+				buttonStep.setEnabled(true);
+			}
+            else if (Event.EVENT_DISCONNECTED.equals(action)) {
+				cancelCalibration();
+				buttonStep.setEnabled(false);
+			}
+            else if(Event.EVENT_CALIBRATION_MAG_STARTED.equals(action)){
+
             }
-            else if(Event.EVENT_DISCONNECTED.equals(action)){
-                cancelCalibration();
-                buttonStep.setEnabled(false);
+            else if(Event.EVENT_CALIBRATION_MAG_ESTIMATION.equals(action)){
+
+                final int pointsCount = points.size();
+                if (pointsCount == 0) {
+                    return;
+                }
+
+                if (pointsCount < MagnetometerCalibration.MIN_POINTS_COUNT) {
+                    calibrationFitness.setIndeterminate(true);
+                    calibrationProgress.setText("0 / 100");
+                } else {
+                    final int progress = (int) (ellipsoidFit.getFitness() * 100);
+                    calibrationFitness.setIndeterminate(false);
+                    calibrationFitness.setMax(100);
+                    calibrationFitness.setProgress(progress);
+
+                    calibrationProgress.setText(progress + " / 100");
+                }
+
+                // Grab the last point
+                final ThreeSpacePoint point = points.get(pointsCount - 1);
+
+                plot1.addData((float) point.x);
+                plot1.addData((float) point.z);
+                if (ellipsoidFit.center.isNaN() || ellipsoidFit.radii.isNaN()) {
+                    plot1.updateSphere(null);
+                } else {
+                    plot1.updateSphere(new int[] { (int) ellipsoidFit.center.getEntry(0),
+                            (int) ellipsoidFit.center.getEntry(2), (int) ellipsoidFit.radii.getEntry(0),
+                            (int) ellipsoidFit.radii.getEntry(2) });
+                }
+                plot1.invalidate();
+
+                plot2.addData((float) point.y);
+                plot2.addData((float) point.z);
+                if (ellipsoidFit.center.isNaN() || ellipsoidFit.radii.isNaN()) {
+                    plot2.updateSphere(null);
+                } else {
+                    plot2.updateSphere(new int[] { (int) ellipsoidFit.center.getEntry(1),
+                            (int) ellipsoidFit.center.getEntry(2), (int) ellipsoidFit.radii.getEntry(1),
+                            (int) ellipsoidFit.radii.getEntry(2) });
+                }
+                plot2.invalidate();
+
             }
-        }
-    };
+            else if(Event.EVENT_CALIBRATION_MAG_COMPLETED.equals(action)){
+                double[] offsets = intent.getDoubleArrayExtra(Extra.EXTRA_CALIBRATION_MAG_OFFSETS);
+                if(offsets != null) {
+                    Log.d("MAG", "Calibration Finished: " + offsets.toString());
+                    Toast.makeText(getActivity(), "Calibration Finished: " + offsets.toString(),
+                            Toast.LENGTH_LONG).show();
+                }
+
+                setCalibrationStatus(CALIBRATION_COMPLETED);
+            }
+		}
+	};
 
 	private View inProgressCalibrationView;
 	private Button buttonStep;
@@ -69,10 +129,6 @@ public class FragmentSetupMAG extends ApiListenerFragment implements
 	private ScatterPlot plot1, plot2;
 
 	private int calibrationStatus = CALIBRATION_IDLE;
-
-	private MagnetometerCalibration calibration;
-
-	private List<? extends ThreeSpacePoint> startPoints;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -248,64 +304,7 @@ public class FragmentSetupMAG extends ApiListenerFragment implements
 
 	@Override
 	public void newEstimation(FitPoints ellipsoidFit, List<ThreeSpacePoint> points) {
-		final int pointsCount = points.size();
-		if (pointsCount == 0) {
-			return;
-		}
 
-		if (pointsCount < MagnetometerCalibration.MIN_POINTS_COUNT) {
-			calibrationFitness.setIndeterminate(true);
-			calibrationProgress.setText("0 / 100");
-		} else {
-			final int progress = (int) (ellipsoidFit.getFitness() * 100);
-			calibrationFitness.setIndeterminate(false);
-			calibrationFitness.setMax(100);
-			calibrationFitness.setProgress(progress);
-
-			calibrationProgress.setText(progress + " / 100");
-		}
-
-		// Grab the last point
-		final ThreeSpacePoint point = points.get(pointsCount - 1);
-
-		plot1.addData((float) point.x);
-		plot1.addData((float) point.z);
-		if (ellipsoidFit.center.isNaN() || ellipsoidFit.radii.isNaN()) {
-			plot1.updateSphere(null);
-		} else {
-			plot1.updateSphere(new int[] { (int) ellipsoidFit.center.getEntry(0),
-					(int) ellipsoidFit.center.getEntry(2), (int) ellipsoidFit.radii.getEntry(0),
-					(int) ellipsoidFit.radii.getEntry(2) });
-		}
-		plot1.invalidate();
-
-		plot2.addData((float) point.y);
-		plot2.addData((float) point.z);
-		if (ellipsoidFit.center.isNaN() || ellipsoidFit.radii.isNaN()) {
-			plot2.updateSphere(null);
-		} else {
-			plot2.updateSphere(new int[] { (int) ellipsoidFit.center.getEntry(1),
-					(int) ellipsoidFit.center.getEntry(2), (int) ellipsoidFit.radii.getEntry(1),
-					(int) ellipsoidFit.radii.getEntry(2) });
-		}
-		plot2.invalidate();
-	}
-
-	@Override
-	public void finished(FitPoints fit) {
-		Log.d("MAG", "Calibration Finished: " + fit.center.toString());
-		Toast.makeText(getActivity(), "Calibration Finished: " + fit.center.toString(),
-				Toast.LENGTH_LONG).show();
-
-		try {
-			calibration.sendOffsets();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		getDroneApi().getDrone().getStreamRates().setupStreamRatesFromPref();
-
-		setCalibrationStatus(CALIBRATION_COMPLETED);
 	}
 
 	public static CharSequence getTitle(Context context) {
@@ -341,7 +340,7 @@ public class FragmentSetupMAG extends ApiListenerFragment implements
 			buttonStep.setEnabled(false);
 		}
 
-        getBroadcastManager().registerReceiver(broadcastReceiver, intentFilter);
+		getBroadcastManager().registerReceiver(broadcastReceiver, intentFilter);
 		if (calibrationStatus == CALIBRATION_IN_PROGRESS) {
 			startCalibration();
 		}
