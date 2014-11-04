@@ -26,7 +26,8 @@ public class ConditionYaw extends MissionCMD {
 
 	public ConditionYaw(Mission mission, double angle, boolean isRelative) {
 		super(mission);
-		setAngle(angle, isRelative);
+		setAngle(angle);
+		setRelative(isRelative);
 	}
 	
 	@Override
@@ -53,8 +54,11 @@ public class ConditionYaw extends MissionCMD {
 		return MissionItemType.CONDITION_YAW;
 	}	
 
-	public void setAngle(double angle, boolean isRelative) {
+	public void setAngle(double angle) {
 		this.angle = angle;
+	}
+	
+	public void setRelative(boolean isRelative){
 		this.isRelative = isRelative;
 	}
 	
@@ -68,6 +72,10 @@ public class ConditionYaw extends MissionCMD {
 
 	public double getAngularSpeed() {
 		return angularSpeed;
+	}
+	
+	public boolean isRelative(){
+		return isRelative;
 	}
 
 
