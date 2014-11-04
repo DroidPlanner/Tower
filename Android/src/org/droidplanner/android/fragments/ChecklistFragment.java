@@ -29,10 +29,7 @@ import android.widget.ExpandableListView;
 public class ChecklistFragment extends ApiListenerFragment implements OnXmlParserError,
 		OnCheckListItemUpdateListener {
 
-    private final static IntentFilter intentFilter = new IntentFilter();
-    {
-        intentFilter.addAction(DPApiCallback.ACTION_DRONE_EVENT);
-    }
+    private final static IntentFilter intentFilter = new IntentFilter(DPApiCallback.ACTION_DRONE_EVENT);
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override

@@ -1,6 +1,9 @@
 package org.droidplanner.android.fragments.calibration.mag;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,7 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ox3dr.services.android.lib.drone.event.Event;
+
 import org.droidplanner.R;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.lib.parcelables.ParcelableThreeSpacePoint;
@@ -28,7 +34,7 @@ import ellipsoidFit.FitPoints;
 import ellipsoidFit.ThreeSpacePoint;
 
 public class FragmentSetupMAG extends ApiListenerFragment implements
-		MagnetometerCalibration.OnMagCalibrationListener, DroneInterfaces.OnDroneListener {
+		MagnetometerCalibration.OnMagCalibrationListener {
 
 	private static final int CALIBRATION_IDLE = 0;
 	private static final int CALIBRATION_IN_PROGRESS = 1;
@@ -36,6 +42,26 @@ public class FragmentSetupMAG extends ApiListenerFragment implements
 
 	private static final String EXTRA_CALIBRATION_STATUS = "extra_calibration_status";
 	private static final String EXTRA_CALIBRATION_POINTS = "extra_calibration_points";
+
+    private static final IntentFilter intentFilter = new IntentFilter();
+    static {
+        intentFilter.addAction(Event.EVENT_CONNECTED);
+        intentFilter.addAction(Event.EVENT_DISCONNECTED);
+    }
+
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(Event.EVENT_CONNECTED.equals(action)){
+                buttonStep.setEnabled(true);
+            }
+            else if(Event.EVENT_DISCONNECTED.equals(action)){
+                cancelCalibration();
+                buttonStep.setEnabled(false);
+            }
+        }
+    };
 
 	private View inProgressCalibrationView;
 	private Button buttonStep;
@@ -288,23 +314,7 @@ public class FragmentSetupMAG extends ApiListenerFragment implements
 	}
 
 	@Override
-	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
-		switch (event) {
-		case CONNECTED:
-			buttonStep.setEnabled(true);
-			break;
-
-		case DISCONNECTED:
-			cancelCalibration();
-			buttonStep.setEnabled(false);
-			break;
-		default:
-			break;
-		}
-	}
-
-	@Override
-	public void onApiConnected(DroidPlannerApi api) {
+	public void onApiConnected(DroneApi api) {
 		calibration = new MagnetometerCalibration(api.getDrone(), this,
 				new DroneInterfaces.Handler() {
 					private final Handler handler = new Handler();
@@ -332,7 +342,7 @@ public class FragmentSetupMAG extends ApiListenerFragment implements
 			buttonStep.setEnabled(false);
 		}
 
-		api.addDroneListener(this);
+        getBroadcastManager().registerReceiver(broadcastReceiver, intentFilter);
 		if (calibrationStatus == CALIBRATION_IN_PROGRESS) {
 			startCalibration();
 		}
@@ -340,10 +350,8 @@ public class FragmentSetupMAG extends ApiListenerFragment implements
 
 	@Override
 	public void onApiDisconnected() {
-		getDroneApi().removeDroneListener(this);
-
+		getBroadcastManager().unregisterReceiver(broadcastReceiver);
 		pauseCalibration();
-
 		calibration = null;
 	}
 }

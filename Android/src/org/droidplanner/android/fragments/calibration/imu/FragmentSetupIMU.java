@@ -17,8 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.three_dr.services.android.lib.drone.event.Event;
-import com.three_dr.services.android.lib.drone.event.Extra;
+import com.ox3dr.services.android.lib.drone.event.Event;
+import com.ox3dr.services.android.lib.drone.event.Extra;
 
 import org.droidplanner.R;
 import org.droidplanner.android.api.model.DPDrone;
@@ -35,7 +35,7 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
     private static final String EXTRA_UPDATE_TIMESTAMP = "extra_update_timestamp";
 
     private static final IntentFilter intentFilter = new IntentFilter();
-    {
+    static {
         intentFilter.addAction(Event.EVENT_CALIBRATION_IMU);
         intentFilter.addAction(Event.EVENT_CALIBRATION_TIMEOUT);
         intentFilter.addAction(Event.EVENT_CONNECTED);

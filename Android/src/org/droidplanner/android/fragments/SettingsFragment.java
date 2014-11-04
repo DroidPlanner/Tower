@@ -83,7 +83,7 @@ public class SettingsFragment extends PreferenceFragment implements
 	public static final String EXTRA_UPDATED_STATUS_PERIOD = "extra_updated_status_period";
 
 	private static final IntentFilter intentFilter = new IntentFilter();
-	{
+	static {
 		intentFilter.addAction(Event.EVENT_DISCONNECTED);
 		intentFilter.addAction(Event.EVENT_STATE);
 		intentFilter.addAction(Event.EVENT_HEARTBEAT_FIRST);

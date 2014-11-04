@@ -62,7 +62,7 @@ public class ParamsFragment extends ApiListenerListFragment {
     private static final boolean DEFAULT_PARAMS_FILTER_ON = true;
 
     private final static IntentFilter intentFilter = new IntentFilter();
-    {
+    static {
         intentFilter.addAction(Event.EVENT_PARAMETERS_REFRESH_STARTED);
         intentFilter.addAction(Event.EVENT_PARAMETERS_REFRESH_ENDED);
         intentFilter.addAction(Event.EVENT_PARAMETERS_RECEIVED);
@@ -250,13 +250,12 @@ public class ParamsFragment extends ApiListenerListFragment {
 
         toggleParameterFilter(isParameterFilterVisible(), false);
 
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
-                .registerReceiver(broadcastReceiver, intentFilter);
+        getBroadcastManager().registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onApiDisconnected() {
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(broadcastReceiver);
+        getBroadcastManager().unregisterReceiver(broadcastReceiver);
     }
 
 	@Override
