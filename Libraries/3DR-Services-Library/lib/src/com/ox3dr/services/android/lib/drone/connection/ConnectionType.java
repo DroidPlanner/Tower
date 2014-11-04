@@ -9,6 +9,14 @@ public class ConnectionType {
      *  USB connection type
      */
     public static final int TYPE_USB = 0;
+    /**
+     * Key used to retrieve the usb baud rate from the connection parameter bundle.
+     */
+    public static final String EXTRA_USB_BAUD_RATE = "extra_usb_baud_rate";
+    /**
+     * Default value for the usb baud rate.
+     */
+    public static final int DEFAULT_USB_BAUD_RATE = 57600;
 
     /**
      * UDP connection type
