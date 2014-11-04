@@ -5,6 +5,7 @@ import java.util.Collections;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.mission.commands.CameraTrigger;
 import org.droidplanner.core.mission.commands.ChangeSpeed;
+import org.droidplanner.core.mission.commands.ConditionYaw;
 import org.droidplanner.core.mission.commands.EpmGripper;
 import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.SetServo;
@@ -20,7 +21,7 @@ import org.droidplanner.core.mission.waypoints.Waypoint;
 public enum MissionItemType {
 	WAYPOINT("Waypoint"), SPLINE_WAYPOINT("Spline Waypoint"), TAKEOFF("Takeoff"), RTL(
 			"Return to Launch"), LAND("Land"), CIRCLE("Circle"), ROI("Region of Interest"), SURVEY(
-			"Survey"), CYLINDRICAL_SURVEY("Structure Scan"), CHANGE_SPEED("Change Speed"), CAMERA_TRIGGER("Camera Trigger"), EPM_GRIPPER("EPM"), SET_SERVO("Set Servo");
+			"Survey"), CYLINDRICAL_SURVEY("Structure Scan"), CHANGE_SPEED("Change Speed"), CAMERA_TRIGGER("Camera Trigger"), EPM_GRIPPER("EPM"), SET_SERVO("Set Servo"), CONDITION_YAW("Condition Yaw");
 
 	private final String name;
 
@@ -60,6 +61,8 @@ public enum MissionItemType {
 			return new StructureScanner(referenceItem);
 		case SET_SERVO:
 			return new SetServo(referenceItem);
+		case CONDITION_YAW:
+			return new ConditionYaw(referenceItem);
 		default:
 			throw new IllegalArgumentException("Unrecognized mission item type (" + name + ")"
 					+ ".");

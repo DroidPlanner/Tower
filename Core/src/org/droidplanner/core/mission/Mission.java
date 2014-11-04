@@ -14,6 +14,7 @@ import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.helpers.units.Speed;
 import org.droidplanner.core.mission.commands.CameraTrigger;
 import org.droidplanner.core.mission.commands.ChangeSpeed;
+import org.droidplanner.core.mission.commands.ConditionYaw;
 import org.droidplanner.core.mission.commands.EpmGripper;
 import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.SetServo;
@@ -290,6 +291,10 @@ public class Mission extends DroneVariable {
 				break;
 			case MAV_CMD.MAV_CMD_NAV_RETURN_TO_LAUNCH:
 				received.add(new ReturnToHome(msg, this));
+				break;				
+			case MAV_CMD.MAV_CMD_CONDITION_YAW:
+				received.add(new ConditionYaw(msg, this));
+				break;
 			default:
 				break;
 			}

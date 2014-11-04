@@ -181,6 +181,7 @@
     <string name="waypointType_RTL">Return To Launch</string>
     <string name="waypointType_Land">Land</string>
     <string name="waypointType_Change_Speed">Change Speed</string>
+    <string name="waypointType_Condition_Yaw">Condition Yaw</string>
     <string name="waypointType_Camera_Trigger">Camera Trigger</string>
     <string name="waypointType_Set_Servo">Set Servo</string>
     <string name="waypointType_EPM">EPM</string>
@@ -367,6 +368,8 @@
     <string name="mission_control_follow">Follow</string>    
     <string name="mission_control_dronie">Dronie</string>
     <string name="mission_control_change_speed">Change Speed</string>
+    <string name="mission_control_condition_yaw_angle">Target angle</string>
+    <string name="mission_control_condition_yaw_relative">Relative Angle</string>
     <string name="telemetry_label">Telemetry</string>
     <string name="flight_modes_label">Flight modes</string>
     <string name="menu_info_bar">Info Bar</string>
