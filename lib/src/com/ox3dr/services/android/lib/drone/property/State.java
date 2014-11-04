@@ -9,6 +9,8 @@ import android.text.TextUtils;
  */
 public class State implements Parcelable {
 
+    public static final int INVALID_MAVLINK_VERSION = -1;
+
     private boolean armed;
     private boolean isFlying;
     private String calibrationStatus;
