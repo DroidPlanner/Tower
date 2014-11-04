@@ -16,7 +16,7 @@ public class ConnectionType {
     /**
      * Default value for the usb baud rate.
      */
-    public static final int DEFAULT_BAUD_RATE = 57600;
+    public static final int DEFAULT_USB_BAUD_RATE = 57600;
 
     /**
      * UDP connection type
