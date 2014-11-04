@@ -13,8 +13,7 @@ public class Extra {
     /**
      * Used to access the points used to start the magnetometer calibration.
      */
-    public static final String EXTRA_CALIBRATION_MAG_START_POINTS = CLAZZ_NAME + "" +
-            ".CALIBRATION_MAG_START_POINTS";
+    public static final String EXTRA_CALIBRATION_MAG_POINTS = CLAZZ_NAME + ".CALIBRATION_MAG_POINTS";
 
     /**
      * Used to access the magnetometer calibration fitness value.
