@@ -7,7 +7,6 @@ import java.util.Set;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.gcs.location.Location;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.graphics.Color;

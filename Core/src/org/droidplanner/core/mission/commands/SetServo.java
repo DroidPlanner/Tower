@@ -2,7 +2,6 @@ package org.droidplanner.core.mission.commands;
 
 import java.util.List;
 
-import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;

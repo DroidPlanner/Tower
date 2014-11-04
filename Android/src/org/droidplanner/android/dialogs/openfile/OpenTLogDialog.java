@@ -1,8 +1,8 @@
 package org.droidplanner.android.dialogs.openfile;
 
-import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
-
 import org.droidplanner.android.utils.file.IO.TLogReader;
+
+import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
 
 public abstract class OpenTLogDialog extends OpenFileDialog {
     public abstract void tlogFileLoaded(TLogReader reader);

@@ -1,5 +1,12 @@
 package org.droidplanner.android.fragments.calibration.imu;
 
+import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.drone.variables.Calibration;
+import org.droidplanner.core.model.Drone;
+
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -13,13 +20,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.drone.variables.Calibration;
-import org.droidplanner.core.model.Drone;
 
 public class FragmentSetupIMU extends Fragment implements OnDroneListener {
 

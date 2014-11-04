@@ -16,8 +16,8 @@
  */
 package org.apache.commons.math3.linear;
 
-import org.apache.commons.math3.util.IterationEvent;
 import org.apache.commons.math3.exception.MathUnsupportedOperationException;
+import org.apache.commons.math3.util.IterationEvent;
 
 /**
  * This is the base class for all events occuring during the iterations of a

@@ -1,18 +1,5 @@
 package org.droidplanner.android.fragments;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
-
-import com.MAVLink.Messages.ApmModes;
-import com.google.android.gms.analytics.HitBuilders;
-
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.FlightActivity;
@@ -27,6 +14,19 @@ import org.droidplanner.core.drone.variables.State;
 import org.droidplanner.core.gcs.follow.Follow;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.model.Drone;
+
+import android.app.Activity;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
+
+import com.MAVLink.Messages.ApmModes;
+import com.google.android.gms.analytics.HitBuilders;
 
 /**
  * Provide functionality for flight action button specific to copters.

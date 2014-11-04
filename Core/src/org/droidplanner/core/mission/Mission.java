@@ -1,8 +1,8 @@
 package org.droidplanner.core.mission;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import com.MAVLink.Messages.enums.MAV_CMD;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneVariable;
@@ -28,9 +28,9 @@ import org.droidplanner.core.mission.waypoints.Waypoint;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.util.Pair;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.Messages.enums.MAV_CMD;
 
 /**
  * This implements a mavlink mission. A mavlink mission is a set of

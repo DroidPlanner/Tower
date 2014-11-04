@@ -18,10 +18,11 @@
 package org.apache.commons.math3.analysis.function;
 
 import java.util.Arrays;
+
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.exception.NoDataException;
+import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.util.MathArrays;
 
 /**

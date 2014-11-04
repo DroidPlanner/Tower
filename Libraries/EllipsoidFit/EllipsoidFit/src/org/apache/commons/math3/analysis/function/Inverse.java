@@ -17,8 +17,8 @@
 
 package org.apache.commons.math3.analysis.function;
 
-import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.DifferentiableUnivariateFunction;
+import org.apache.commons.math3.analysis.UnivariateFunction;
 
 /**
  * Inverse function.

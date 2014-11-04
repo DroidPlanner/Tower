@@ -1,5 +1,18 @@
 package org.droidplanner.android.activities;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.droidplanner.R;
+import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
+import org.droidplanner.android.dialogs.openfile.OpenTLogDialog;
+import org.droidplanner.android.fragments.LocatorListFragment;
+import org.droidplanner.android.fragments.LocatorMapFragment;
+import org.droidplanner.android.utils.file.IO.TLogReader;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.geoTools.GeoTools;
+
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -12,19 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
-
-import org.droidplanner.R;
-import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
-import org.droidplanner.android.dialogs.openfile.OpenTLogDialog;
-import org.droidplanner.android.fragments.LocatorListFragment;
-import org.droidplanner.android.fragments.LocatorMapFragment;
-import org.droidplanner.android.utils.file.IO.TLogReader;
-import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.helpers.geoTools.GeoTools;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This implements the map locator activity. The map locator activity allows the user to find
