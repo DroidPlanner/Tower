@@ -13,13 +13,10 @@ public class State implements Parcelable {
     private boolean isFlying;
     private String calibrationStatus;
     private VehicleMode vehicleMode;
-    private Type vehicleType;
     private String failsafeWarning;
 
-    public State(VehicleMode mode, Type type, boolean armed, boolean flying,
-                 String failsafeWarning){
+    public State(VehicleMode mode, boolean armed, boolean flying, String failsafeWarning){
         this.vehicleMode = mode;
-        this.vehicleType = type;
         this.armed = armed;
         this.isFlying = flying;
         this.failsafeWarning = failsafeWarning;
@@ -35,10 +32,6 @@ public class State implements Parcelable {
 
     public VehicleMode getVehicleMode() {
         return vehicleMode;
-    }
-
-    public Type getVehicleType(){
-        return vehicleType;
     }
 
     public String getFailsafeWarning() {
@@ -76,7 +69,6 @@ public class State implements Parcelable {
         dest.writeByte(isFlying ? (byte) 1 : (byte) 0);
         dest.writeString(this.calibrationStatus);
         dest.writeParcelable(this.vehicleMode, 0);
-        dest.writeParcelable(this.vehicleType, 0);
         dest.writeString(this.failsafeWarning);
     }
 
@@ -85,7 +77,6 @@ public class State implements Parcelable {
         this.isFlying = in.readByte() != 0;
         this.calibrationStatus = in.readString();
         this.vehicleMode = in.readParcelable(VehicleMode.class.getClassLoader());
-        this.vehicleType = in.readParcelable(Type.class.getClassLoader());
         this.failsafeWarning = in.readString();
     }
 

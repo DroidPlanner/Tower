@@ -43,4 +43,8 @@ public class Event {
     public static final String EVENT_STATE = CLAZZ_NAME + ".STATE";
     public static final String EVENT_HOME = CLAZZ_NAME + ".HOME";
     public static final String EVENT_GPS = CLAZZ_NAME + ".GPS";
+    public static final String EVENT_TYPE = CLAZZ_NAME + ".TYPE";
+    public static final String EVENT_HEARTBEAT_FIRST = CLAZZ_NAME + ".HEARTBEAT_FIRST";
+    public static final String EVENT_HEARTBEAT_RESTORED = CLAZZ_NAME + ".HEARTBEAT_RESTORED";
+
 }
