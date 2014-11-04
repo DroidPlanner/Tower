@@ -7,6 +7,8 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 
+import com.ox3dr.services.android.lib.model.IDroidPlannerApi;
+
 /**
  * This activity holds the SettingsFragment.
  */
@@ -30,4 +32,6 @@ public class SettingsActivity extends DrawerNavigationUI {
         return R.id.navigation_settings;
     }
 
+    @Override
+    public void onApiConnected(IDroidPlannerApi api) {}
 }

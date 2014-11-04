@@ -27,6 +27,7 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -55,6 +56,7 @@ import com.getpebble.android.kit.PebbleKit;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.ox3dr.services.android.lib.drone.connection.ConnectionType;
+import com.ox3dr.services.android.lib.drone.event.Event;
 
 /**
  * Implements the application settings screen.
@@ -528,6 +530,15 @@ public class SettingsFragment extends PreferenceFragment implements
 		getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(
 				this);
 	}
+
+    private static final IntentFilter intentFilter = new IntentFilter();
+    {
+        intentFilter.addAction(Event.EVENT_DISCONNECTED);
+        intentFilter.addAction(Event.EVENT_STATE);
+        intentFilter.addAction(Event.EVENT_HEARTBEAT_FIRST);
+        intentFilter.addAction(Event.EVENT_HEARTBEAT_RESTORED);
+        intentFilter.addAction(Event.EVENT_TYPE);
+    }
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
