@@ -227,27 +227,27 @@ public class MissionProxy implements DPMap.PathSource {
 		mMission.addMissionItem(takeoff);
 	}
 
-    public void addTakeOffAndRTL(){
-        if(!mMission.isFirstItemTakeoff()){
-            Altitude defaultAlt = new Altitude(Takeoff.DEFAULT_TAKEOFF_ALTITUDE);
-            if(!mMissionItems.isEmpty()){
-                MissionItem firstItem = mMissionItems.get(0).getMissionItem();
-                if(firstItem instanceof SpatialCoordItem)
-                    defaultAlt = new Altitude(((SpatialCoordItem)firstItem).getCoordinate()
-                            .getAltitude().valueInMeters());
-            }
+	public void addTakeOffAndRTL() {
+		if (!mMission.isFirstItemTakeoff()) {
+			Altitude defaultAlt = new Altitude(Takeoff.DEFAULT_TAKEOFF_ALTITUDE);
+			if (!mMissionItems.isEmpty()) {
+				MissionItem firstItem = mMissionItems.get(0).getMissionItem();
+				if (firstItem instanceof SpatialCoordItem)
+					defaultAlt = new Altitude(((SpatialCoordItem) firstItem).getCoordinate()
+							.getAltitude().valueInMeters());
+			}
 
-            final Takeoff takeOff = new Takeoff(mMission, defaultAlt);
-            mMissionItems.add(0, new MissionItemProxy(this, takeOff));
-            mMission.addMissionItem(0, takeOff);
-        }
+			final Takeoff takeOff = new Takeoff(mMission, defaultAlt);
+			mMissionItems.add(0, new MissionItemProxy(this, takeOff));
+			mMission.addMissionItem(0, takeOff);
+		}
 
-        if(!mMission.isLastItemLandOrRTL()){
-            final ReturnToHome rtl = new ReturnToHome(mMission);
-            mMissionItems.add(new MissionItemProxy(this, rtl));
-            mMission.addMissionItem(rtl);
-        }
-    }
+		if (!mMission.isLastItemLandOrRTL()) {
+			final ReturnToHome rtl = new ReturnToHome(mMission);
+			mMissionItems.add(new MissionItemProxy(this, rtl));
+			mMission.addMissionItem(rtl);
+		}
+	}
 
 	/**
 	 * Returns the order for the given argument in the mission set.
@@ -284,48 +284,49 @@ public class MissionProxy implements DPMap.PathSource {
 		}
 	}
 
-    public void replaceAll(List<Pair<MissionItemProxy, MissionItemProxy>> oldNewList){
-        if(oldNewList == null){
-            return;
-        }
+	public void replaceAll(List<Pair<MissionItemProxy, MissionItemProxy>> oldNewList) {
+		if (oldNewList == null) {
+			return;
+		}
 
-        final int pairSize = oldNewList.size();
-        if(pairSize == 0){
-            return;
-        }
+		final int pairSize = oldNewList.size();
+		if (pairSize == 0) {
+			return;
+		}
 
-        final List<Pair<MissionItem, MissionItem>> missionItemsToUpdate = new
-                ArrayList<Pair<MissionItem, MissionItem>>(pairSize);
+		final List<Pair<MissionItem, MissionItem>> missionItemsToUpdate = new ArrayList<Pair<MissionItem, MissionItem>>(
+				pairSize);
 
-        final List<MissionItemProxy> selectionsToRemove = new ArrayList<MissionItemProxy>(pairSize);
-        final List<MissionItemProxy> itemsToSelect = new ArrayList<MissionItemProxy>(pairSize);
+		final List<MissionItemProxy> selectionsToRemove = new ArrayList<MissionItemProxy>(pairSize);
+		final List<MissionItemProxy> itemsToSelect = new ArrayList<MissionItemProxy>(pairSize);
 
-        for(int i = 0; i < pairSize; i++){
-            final MissionItemProxy oldItem = oldNewList.get(i).first;
-            final int index = mMissionItems.indexOf(oldItem);
-            if(index == -1){
-                continue;
-            }
+		for (int i = 0; i < pairSize; i++) {
+			final MissionItemProxy oldItem = oldNewList.get(i).first;
+			final int index = mMissionItems.indexOf(oldItem);
+			if (index == -1) {
+				continue;
+			}
 
-            final MissionItemProxy newItem = oldNewList.get(i).second;
-            mMissionItems.remove(index);
-            mMissionItems.add(index, newItem);
+			final MissionItemProxy newItem = oldNewList.get(i).second;
+			mMissionItems.remove(index);
+			mMissionItems.add(index, newItem);
 
-            missionItemsToUpdate.add(Pair.create(oldItem.getMissionItem(), newItem.getMissionItem()));
+			missionItemsToUpdate
+					.add(Pair.create(oldItem.getMissionItem(), newItem.getMissionItem()));
 
-            if(selection.selectionContains(oldItem)){
-                selectionsToRemove.add(oldItem);
-                itemsToSelect.add(newItem);
-            }
-        }
+			if (selection.selectionContains(oldItem)) {
+				selectionsToRemove.add(oldItem);
+				itemsToSelect.add(newItem);
+			}
+		}
 
-        //Update the mission objects
-        mMission.replaceAll(missionItemsToUpdate);
+		// Update the mission objects
+		mMission.replaceAll(missionItemsToUpdate);
 
-        //Update the selection list.
-        selection.removeItemsFromSelection(selectionsToRemove);
-        selection.addToSelection(itemsToSelect);
-    }
+		// Update the selection list.
+		selection.removeItemsFromSelection(selectionsToRemove);
+		selection.addToSelection(itemsToSelect);
+	}
 
 	/**
 	 * Reverse the order of the mission items renders.
@@ -336,7 +337,7 @@ public class MissionProxy implements DPMap.PathSource {
 	}
 
 	public void clear() {
-        selection.clearSelection();
+		selection.clearSelection();
 		removeItemList(mMissionItems);
 	}
 
@@ -527,76 +528,73 @@ public class MissionProxy implements DPMap.PathSource {
 		return coords;
 	}
 
-    public static List<Coord2D> getVisibleCoords(List<MissionItemProxy> mipList){
-        final List<Coord2D> coords = new ArrayList<Coord2D>();
+	public static List<Coord2D> getVisibleCoords(List<MissionItemProxy> mipList) {
+		final List<Coord2D> coords = new ArrayList<Coord2D>();
 
-        if(mipList == null || mipList.isEmpty()){
-            return coords;
-        }
+		if (mipList == null || mipList.isEmpty()) {
+			return coords;
+		}
 
-        for(MissionItemProxy mip: mipList){
-            if(!(mip.getMissionItem() instanceof SpatialCoordItem))
-                continue;
+		for (MissionItemProxy mip : mipList) {
+			if (!(mip.getMissionItem() instanceof SpatialCoordItem))
+				continue;
 
-            final Coord2D coordinate = ((SpatialCoordItem) mip.getMissionItem()).getCoordinate();
-            if(coordinate.isEmpty())
-                continue;
+			final Coord2D coordinate = ((SpatialCoordItem) mip.getMissionItem()).getCoordinate();
+			if (coordinate.isEmpty())
+				continue;
 
-            coords.add(coordinate);
-        }
+			coords.add(coordinate);
+		}
 
-        return coords;
-    }
+		return coords;
+	}
 
-    public void sendMissionToAPM(){
-        mMission.sendMissionToAPM();
+	public void sendMissionToAPM() {
+		mMission.sendMissionToAPM();
 
-        //Send an event for the created mission
-        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                .setCategory(GAUtils.Category.MISSION_PLANNING)
-                .setAction("Mission sent to drone")
-                .setLabel("Mission items count")
-                .setValue(mMissionItems.size());
-        GAUtils.sendEvent(eventBuilder);
+		// Send an event for the created mission
+		HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+				.setCategory(GAUtils.Category.MISSION_PLANNING).setAction("Mission sent to drone")
+				.setLabel("Mission items count").setValue(mMissionItems.size());
+		GAUtils.sendEvent(eventBuilder);
 
-        String missionItemsList = "[";
-        if(!mMissionItems.isEmpty()){
-            boolean isFirst = true;
-            for(MissionItemProxy itemProxy: mMissionItems){
-                if(isFirst)
-                    isFirst = false;
-                else
-                    missionItemsList += ", ";
+		String missionItemsList = "[";
+		if (!mMissionItems.isEmpty()) {
+			boolean isFirst = true;
+			for (MissionItemProxy itemProxy : mMissionItems) {
+				if (isFirst)
+					isFirst = false;
+				else
+					missionItemsList += ", ";
 
-                missionItemsList += itemProxy.getMissionItem().getType().getName();
-            }
-        }
+				missionItemsList += itemProxy.getMissionItem().getType().getName();
+			}
+		}
 
-        missionItemsList += "]";
+		missionItemsList += "]";
 
-        eventBuilder = new HitBuilders.EventBuilder()
-                .setCategory(GAUtils.Category.MISSION_PLANNING)
-                .setAction("Mission sent to drone")
-                .setLabel("Mission items: " + missionItemsList);
-        GAUtils.sendEvent(eventBuilder);
-    }
+		eventBuilder = new HitBuilders.EventBuilder()
+				.setCategory(GAUtils.Category.MISSION_PLANNING).setAction("Mission sent to drone")
+				.setLabel("Mission items: " + missionItemsList);
+		GAUtils.sendEvent(eventBuilder);
+	}
 
 	public Length getMissionLength() {
 		List<Coord2D> points = getPathPoints();
-		if (points.size()>1) {
+		if (points.size() > 1) {
 			double length = 0;
 			for (int i = 1; i < points.size(); i++) {
-				length += GeoTools.getDistance(points.get(i-1), points.get(i)).valueInMeters();
+				length += GeoTools.getDistance(points.get(i - 1), points.get(i)).valueInMeters();
 			}
 			return new Length(length);
-		}else{
+		} else {
 			return new Length(0);
 		}
 	}
 
-    public float makeAndUploadDronie() {
-        final double bearing = mMission.makeAndUploadDronie();
-        refresh();
-        return (float) bearing;
-    }
+	public float makeAndUploadDronie() {
+		final double bearing = mMission.makeAndUploadDronie();
+		refresh();
+		return (float) bearing;
+	}
 }

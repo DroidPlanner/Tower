@@ -49,11 +49,11 @@ public class LocatorListFragment extends Fragment implements OnItemClickListener
 		listener = (OnLocatorListListener) activity;
 	}
 
-    @Override
-    public void onStart(){
-        super.onStart();
-        updateViewVisibility();
-    }
+	@Override
+	public void onStart() {
+		super.onStart();
+		updateViewVisibility();
+	}
 
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
@@ -65,16 +65,16 @@ public class LocatorListFragment extends Fragment implements OnItemClickListener
 	public void notifyDataSetChanged() {
 		list.clearChoices();
 		adapter.notifyDataSetChanged();
-        updateViewVisibility();
+		updateViewVisibility();
 	}
 
-    public void updateViewVisibility() {
-        View view = getView();
-        if (adapter != null && view != null) {
-            if (adapter.getCount() > 0)
-                view.setVisibility(View.VISIBLE);
-            else
-                view.setVisibility(View.INVISIBLE);
-        }
-    }
+	public void updateViewVisibility() {
+		View view = getView();
+		if (adapter != null && view != null) {
+			if (adapter.getCount() > 0)
+				view.setVisibility(View.VISIBLE);
+			else
+				view.setVisibility(View.INVISIBLE);
+		}
+	}
 }

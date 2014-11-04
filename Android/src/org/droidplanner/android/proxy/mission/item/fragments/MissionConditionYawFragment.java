@@ -13,9 +13,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
-public class MissionConditionYawFragment extends MissionDetailFragment
-		implements CardWheelHorizontalView.OnCardWheelChangedListener,
-		OnCheckedChangeListener {
+public class MissionConditionYawFragment extends MissionDetailFragment implements
+		CardWheelHorizontalView.OnCardWheelChangedListener, OnCheckedChangeListener {
 
 	private CheckBox checkBoxRelative;
 
@@ -27,14 +26,12 @@ public class MissionConditionYawFragment extends MissionDetailFragment
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		typeSpinner.setSelection(commandAdapter
-				.getPosition(MissionItemType.CONDITION_YAW));
+		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CONDITION_YAW));
 
 		ConditionYaw item = (ConditionYaw) getMissionItems().get(0);
 
-		final NumericWheelAdapter adapter = new NumericWheelAdapter(
-				getActivity().getApplicationContext(),
-				R.layout.wheel_text_centered, 0, 359, "%d deg");
+		final NumericWheelAdapter adapter = new NumericWheelAdapter(getActivity()
+				.getApplicationContext(), R.layout.wheel_text_centered, 0, 359, "%d deg");
 		final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.picker1);
 		cardAltitudePicker.setViewAdapter(adapter);
@@ -47,8 +44,7 @@ public class MissionConditionYawFragment extends MissionDetailFragment
 	}
 
 	@Override
-	public void onChanged(CardWheelHorizontalView wheel, int oldValue,
-			int newValue) {
+	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
 		switch (wheel.getId()) {
 		case R.id.picker1:
 			for (MissionItem missionItem : getMissionItems()) {

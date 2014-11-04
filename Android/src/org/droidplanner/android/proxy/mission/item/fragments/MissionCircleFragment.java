@@ -14,7 +14,7 @@ import android.os.Bundle;
 import android.view.View;
 
 public class MissionCircleFragment extends MissionDetailFragment implements
-		CardWheelHorizontalView.OnCardWheelChangedListener{
+		CardWheelHorizontalView.OnCardWheelChangedListener {
 
 	private List<Circle> mItemsList;
 
@@ -32,8 +32,8 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 
 		mItemsList = (List<Circle>) getMissionItems();
 
-        //Use the first one as reference.
-        final Circle firstItem = mItemsList.get(0);
+		// Use the first one as reference.
+		final Circle firstItem = mItemsList.get(0);
 
 		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(context, MIN_ALTITUDE,
 				MAX_ALTITUDE, "%d m");
@@ -41,16 +41,16 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 		final CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.altitudePicker);
 		altitudePicker.setViewAdapter(altitudeAdapter);
-        altitudePicker.addChangingListener(this);
-		altitudePicker.setCurrentValue((int) firstItem.getCoordinate().getAltitude().valueInMeters
-                ());
+		altitudePicker.addChangingListener(this);
+		altitudePicker.setCurrentValue((int) firstItem.getCoordinate().getAltitude()
+				.valueInMeters());
 
 		final NumericWheelAdapter loiterTurnAdapter = new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, 0, 10, "%d");
 		final CardWheelHorizontalView loiterTurnPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.loiterTurnPicker);
 		loiterTurnPicker.setViewAdapter(loiterTurnAdapter);
-        loiterTurnPicker.addChangingListener(this);
+		loiterTurnPicker.addChangingListener(this);
 		loiterTurnPicker.setCurrentValue(firstItem.getNumberOfTurns());
 
 		final NumericWheelAdapter loiterRadiusAdapter = new NumericWheelAdapter(context, 0, 50,
@@ -59,7 +59,7 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 		final CardWheelHorizontalView loiterRadiusPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.loiterRadiusPicker);
 		loiterRadiusPicker.setViewAdapter(loiterRadiusAdapter);
-        loiterRadiusPicker.addChangingListener(this);
+		loiterRadiusPicker.addChangingListener(this);
 		loiterRadiusPicker.setCurrentValue((int) firstItem.getRadius());
 	}
 
@@ -67,22 +67,22 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 	public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
 		switch (cardWheel.getId()) {
 		case R.id.altitudePicker:
-            for(Circle item: mItemsList) {
-                item.setAltitude(new Altitude(newValue));
-            }
+			for (Circle item : mItemsList) {
+				item.setAltitude(new Altitude(newValue));
+			}
 			break;
 
 		case R.id.loiterRadiusPicker:
-            for(Circle item: mItemsList) {
-                item.setRadius(newValue);
-            }
-            getMissionProxy().getMission().notifyMissionUpdate();
+			for (Circle item : mItemsList) {
+				item.setRadius(newValue);
+			}
+			getMissionProxy().getMission().notifyMissionUpdate();
 			break;
 
 		case R.id.loiterTurnPicker:
-            for(Circle item: mItemsList) {
-                item.setTurns(newValue);
-            }
+			for (Circle item : mItemsList) {
+				item.setTurns(newValue);
+			}
 			break;
 		}
 	}

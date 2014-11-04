@@ -88,7 +88,7 @@ public interface Drone {
 	public Calibration getCalibrationSetup();
 
 	public RC getRC();
-	
+
 	public Magnetometer getMagnetometer();
 
 	public void setAltitudeGroundAndAirSpeeds(double altitude, double groundSpeed, double airSpeed,

@@ -28,7 +28,6 @@ public class SetServo extends MissionCMD {
 		this.channel = channel;
 		this.pwm = pwm;
 	}
-	
 
 	@Override
 	public void unpackMAVMessage(msg_mission_item mavMsg) {

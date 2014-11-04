@@ -25,7 +25,7 @@ import com.MAVLink.Messages.enums.MAV_STATE;
 public class MavLinkMsgHandler {
 
 	private static final byte SEVERITY_HIGH = 3;
-    private static final byte SEVERITY_CRITICAL = 4;
+	private static final byte SEVERITY_CRITICAL = 4;
 
 	private Drone drone;
 
@@ -113,7 +113,8 @@ public class MavLinkMsgHandler {
 			msg_statustext msg_statustext = (msg_statustext) msg;
 			String message = msg_statustext.getText();
 
-			if (msg_statustext.severity == SEVERITY_HIGH || msg_statustext.severity == SEVERITY_CRITICAL) {
+			if (msg_statustext.severity == SEVERITY_HIGH
+					|| msg_statustext.severity == SEVERITY_CRITICAL) {
 				drone.getState().setWarning(message);
 				break;
 			} else if (message.equals("Low Battery!")) {

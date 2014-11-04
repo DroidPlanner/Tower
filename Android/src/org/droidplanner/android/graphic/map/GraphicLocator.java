@@ -10,44 +10,44 @@ import android.graphics.BitmapFactory;
 
 public class GraphicLocator extends MarkerInfo.SimpleMarkerInfo {
 
-    private Coord2D lastPosition;
+	private Coord2D lastPosition;
 
-    @Override
-    public float getAnchorU() {
-        return 0.5f;
-    }
+	@Override
+	public float getAnchorU() {
+		return 0.5f;
+	}
 
-    @Override
-    public float getAnchorV() {
-        return 0.5f;
-    }
+	@Override
+	public float getAnchorV() {
+		return 0.5f;
+	}
 
-    @Override
-    public Coord2D getPosition(){
-        return lastPosition;
-    }
+	@Override
+	public Coord2D getPosition() {
+		return lastPosition;
+	}
 
-    @Override
-    public Bitmap getIcon(Resources res){
-        return BitmapFactory.decodeResource(res, R.drawable.quad);
-    }
+	@Override
+	public Bitmap getIcon(Resources res) {
+		return BitmapFactory.decodeResource(res, R.drawable.quad);
+	}
 
-    @Override
-    public boolean isVisible(){
-        return true;
-    }
+	@Override
+	public boolean isVisible() {
+		return true;
+	}
 
-    @Override
-    public boolean isFlat(){
-        return true;
-    }
+	@Override
+	public boolean isFlat() {
+		return true;
+	}
 
-    @Override
-    public float getRotation(){
-        return 0;
-    }
+	@Override
+	public float getRotation() {
+		return 0;
+	}
 
-    public void setLastPosition(Coord2D lastPosition) {
-        this.lastPosition = lastPosition;
-    }
+	public void setLastPosition(Coord2D lastPosition) {
+		this.lastPosition = lastPosition;
+	}
 }

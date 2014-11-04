@@ -190,6 +190,7 @@ public class GeoTools {
 	}
 
 	public static Coord2D pointAlongTheLine(Coord2D start, Coord2D end, int distance) {
-		return newCoordFromBearingAndDistance(start, getHeadingFromCoordinates(start, end), distance);
+		return newCoordFromBearingAndDistance(start, getHeadingFromCoordinates(start, end),
+				distance);
 	}
 }

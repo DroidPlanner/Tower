@@ -27,12 +27,11 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
 		Takeoff item = (Takeoff) getMissionItems().get(0);
 
 		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(getActivity()
-				.getApplicationContext(), R.layout.wheel_text_centered, 0,
-                MAX_ALTITUDE, "%d m");
+				.getApplicationContext(), R.layout.wheel_text_centered, 0, MAX_ALTITUDE, "%d m");
 		final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.altitudePicker);
 		cardAltitudePicker.setViewAdapter(altitudeAdapter);
-        cardAltitudePicker.addChangingListener(this);
+		cardAltitudePicker.addChangingListener(this);
 		cardAltitudePicker.setCurrentValue((int) item.getFinishedAlt().valueInMeters());
 	}
 
@@ -40,10 +39,10 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
 	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
 		switch (wheel.getId()) {
 		case R.id.altitudePicker:
-            for(MissionItem missionItem : getMissionItems()) {
-                Takeoff item = (Takeoff) missionItem;
-                item.setFinishedAlt(new Altitude(newValue));
-            }
+			for (MissionItem missionItem : getMissionItems()) {
+				Takeoff item = (Takeoff) missionItem;
+				item.setFinishedAlt(new Altitude(newValue));
+			}
 			break;
 		}
 	}

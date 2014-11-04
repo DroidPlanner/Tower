@@ -13,11 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ModeGuidedFragment extends Fragment implements CardWheelHorizontalView.OnCardWheelChangedListener {
+public class ModeGuidedFragment extends Fragment implements
+		CardWheelHorizontalView.OnCardWheelChangedListener {
 
 	public Drone drone;
 
-    private CardWheelHorizontalView mAltitudeWheel;
+	private CardWheelHorizontalView mAltitudeWheel;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -25,36 +26,36 @@ public class ModeGuidedFragment extends Fragment implements CardWheelHorizontalV
 		return inflater.inflate(R.layout.fragment_mode_guided, container, false);
 	}
 
-    @Override
+	@Override
 	public void onViewCreated(View parentView, Bundle savedInstanceState) {
-        super.onViewCreated(parentView, savedInstanceState);
+		super.onViewCreated(parentView, savedInstanceState);
 
-        final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(getActivity()
-                .getApplicationContext(), R.layout.wheel_text_centered, 2, 200, "%d m");
+		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(getActivity()
+				.getApplicationContext(), R.layout.wheel_text_centered, 2, 200, "%d m");
 
-        mAltitudeWheel = (CardWheelHorizontalView) parentView.findViewById(R.id.altitude_spinner);
-        mAltitudeWheel.setViewAdapter(altitudeAdapter);
+		mAltitudeWheel = (CardWheelHorizontalView) parentView.findViewById(R.id.altitude_spinner);
+		mAltitudeWheel.setViewAdapter(altitudeAdapter);
 
-        final int initialValue = (int) Math.max(drone.getGuidedPoint().getAltitude()
-                        .valueInMeters(), GuidedPoint.getMinAltitude(drone));
-        mAltitudeWheel.setCurrentValue(initialValue);
-        mAltitudeWheel.addChangingListener(this);
+		final int initialValue = (int) Math.max(drone.getGuidedPoint().getAltitude()
+				.valueInMeters(), GuidedPoint.getMinAltitude(drone));
+		mAltitudeWheel.setCurrentValue(initialValue);
+		mAltitudeWheel.addChangingListener(this);
 	}
 
-    @Override
-    public void onDestroyView(){
-        super.onDestroyView();
-        if(mAltitudeWheel != null) {
-            mAltitudeWheel.removeChangingListener(this);
-        }
-    }
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		if (mAltitudeWheel != null) {
+			mAltitudeWheel.removeChangingListener(this);
+		}
+	}
 
-    @Override
-    public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
-        switch(cardWheel.getId()){
-            case R.id.altitude_spinner:
-                drone.getGuidedPoint().changeGuidedAltitude(newValue);
-                break;
-        }
-    }
+	@Override
+	public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+		switch (cardWheel.getId()) {
+		case R.id.altitude_spinner:
+			drone.getGuidedPoint().changeGuidedAltitude(newValue);
+			break;
+		}
+	}
 }

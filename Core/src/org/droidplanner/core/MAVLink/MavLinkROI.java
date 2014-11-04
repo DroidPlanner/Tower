@@ -34,15 +34,15 @@ public class MavLinkROI {
 
 		drone.getMavClient().sendMavPacket(msg.pack());
 	}
-	
-	public static void triggerCamera(Drone drone){
+
+	public static void triggerCamera(Drone drone) {
 		msg_digicam_control msg = new msg_digicam_control();
 		msg.target_system = 1;
 		msg.target_component = 1;
 		msg.shot = 1;
 		drone.getMavClient().sendMavPacket(msg.pack());
 	}
-	
+
 	public static void empCommand(Drone drone, boolean release) {
 		msg_command_long msg = new msg_command_long();
 		msg.target_system = 1;
@@ -52,5 +52,5 @@ public class MavLinkROI {
 
 		drone.getMavClient().sendMavPacket(msg.pack());
 	}
-	
+
 }

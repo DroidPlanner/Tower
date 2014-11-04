@@ -21,10 +21,10 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	interface NotificationProvider extends DroneInterfaces.OnDroneListener {
 		void quickNotify(String feedback);
 
-        /**
-         * Release resources used by the provider.
-         */
-        void onTerminate();
+		/**
+		 * Release resources used by the provider.
+		 */
+		void onTerminate();
 	}
 
 	/**
@@ -61,15 +61,14 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 		mPebbleNotification.onDroneEvent(event, drone);
 		mBeepNotification.onDroneEvent(event, drone);
 
-        switch(event){
-            case AUTOPILOT_WARNING:
-                final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                        .setCategory(GAUtils.Category.FAILSAFE)
-                        .setAction("Autopilot warning")
-                        .setLabel(drone.getState().getWarning());
-                GAUtils.sendEvent(eventBuilder);
-                break;
-        }
+		switch (event) {
+		case AUTOPILOT_WARNING:
+			final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+					.setCategory(GAUtils.Category.FAILSAFE).setAction("Autopilot warning")
+					.setLabel(drone.getState().getWarning());
+			GAUtils.sendEvent(eventBuilder);
+			break;
+		}
 	}
 
 	/**
@@ -84,14 +83,14 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 		mStatusBarNotification.quickNotify(feedback);
 	}
 
-    /**
-     * Release resources used by the notification handler.
-     * After calling this method, this object should no longer be used.
-     */
-    public void terminate(){
-        mTtsNotification.onTerminate();
-        mStatusBarNotification.onTerminate();
-        mPebbleNotification.onTerminate();
-        mBeepNotification.onTerminate();
-    }
+	/**
+	 * Release resources used by the notification handler. After calling this
+	 * method, this object should no longer be used.
+	 */
+	public void terminate() {
+		mTtsNotification.onTerminate();
+		mStatusBarNotification.onTerminate();
+		mPebbleNotification.onTerminate();
+		mBeepNotification.onTerminate();
+	}
 }

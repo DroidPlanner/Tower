@@ -19,113 +19,111 @@ import com.MAVLink.Messages.MAVLinkPacket;
 
 /**
  * Read tlog file w/ optional message filter
- *
+ * 
  * <timestamp><MavLink packet>...
- *
+ * 
  * See http://qgroundcontrol.org/mavlink for details
- *
+ * 
  */
 public class TLogReader implements OpenFileDialog.FileReader {
 
-    public static final int MSGFILTER_NONE = -1;
+	public static final int MSGFILTER_NONE = -1;
 
-    public static class Event
-    {
-        private long timestamp;
-        private MAVLinkMessage mavLinkMessage;
+	public static class Event {
+		private long timestamp;
+		private MAVLinkMessage mavLinkMessage;
 
-        public Event(long timestamp, MAVLinkMessage mavLinkMessage) {
-            this.timestamp = timestamp;
-            this.mavLinkMessage = mavLinkMessage;
-        }
+		public Event(long timestamp, MAVLinkMessage mavLinkMessage) {
+			this.timestamp = timestamp;
+			this.mavLinkMessage = mavLinkMessage;
+		}
 
-        public long getTimestamp() {
-            return timestamp;
-        }
+		public long getTimestamp() {
+			return timestamp;
+		}
 
-        public MAVLinkMessage getMavLinkMessage() {
-            return mavLinkMessage;
-        }
-    }
+		public MAVLinkMessage getMavLinkMessage() {
+			return mavLinkMessage;
+		}
+	}
 
-    private static final int TIMESTAMP_SIZE = Long.SIZE / Byte.SIZE;
+	private static final int TIMESTAMP_SIZE = Long.SIZE / Byte.SIZE;
 
-    private final int msgFilter;
-    private final List<Event> logEvents = new LinkedList<Event>();
+	private final int msgFilter;
+	private final List<Event> logEvents = new LinkedList<Event>();
 
+	public TLogReader(int msgFilter) {
+		this.msgFilter = msgFilter;
+	}
 
-    public TLogReader(int msgFilter) {
-        this.msgFilter = msgFilter;
-    }
+	public List<Event> getLogEvents() {
+		return logEvents;
+	}
 
-    public List<Event> getLogEvents() {
-        return logEvents;
-    }
+	private boolean openTLog(String file) {
+		if (!FileManager.isExternalStorageAvailable()) {
+			return false;
+		}
 
-    private boolean openTLog(String file) {
-        if (!FileManager.isExternalStorageAvailable()) {
-            return false;
-        }
+		final Parser parser = new Parser();
+		DataInputStream in = null;
+		try {
+			// open file
+			in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
 
-        final Parser parser = new Parser();
-        DataInputStream in = null;
-        try {
-            // open file
-            in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
+			// read events, filter (if specified)
+			long timestamp;
+			long prevTimestamp = 0;
+			while (in.available() > 0) {
+				// read timestamp
+				timestamp = in.readLong() / 1000;
 
-            // read events, filter (if specified)
-            long timestamp;
-            long prevTimestamp = 0;
-            while(in.available() > 0) {
-                // read timestamp
-                timestamp = in.readLong() / 1000;
+				// read packet
+				MAVLinkPacket packet;
+				while ((packet = parser.mavlink_parse_char(in.readUnsignedByte())) == null)
+					;
 
-                // read packet
-                MAVLinkPacket packet;
-                while((packet = parser.mavlink_parse_char(in.readUnsignedByte())) == null);
+				if (msgFilter == MSGFILTER_NONE || packet.msgid == msgFilter) {
+					if ((timestamp - prevTimestamp) > 60000) {
+						logEvents.add(new Event(timestamp, packet.unpack()));
+						prevTimestamp = timestamp;
+					}
+				}
+			}
 
-                if(msgFilter == MSGFILTER_NONE || packet.msgid == msgFilter) {
-                    if((timestamp - prevTimestamp) > 60000) {
-                        logEvents.add(new Event(timestamp, packet.unpack()));
-                        prevTimestamp = timestamp;
-                    }
-                }
-            }
+		} catch (EOFException e) {
+			// NOP - file may be incomplete - take what we have
+			// fall thru...
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			// close file
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+					// NOP
+				}
+			}
+		}
 
-        } catch (EOFException e) {
-            // NOP - file may be incomplete - take what we have
-            // fall thru...
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        finally {
-            // close file
-            if(in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    // NOP
-                }
-            }
-        }
+		return true;
+	}
 
-        return true;
-    }
+	@Override
+	public String getPath() {
+		return DirectoryPath.getTLogPath().getPath() + "/";
+	}
 
-    @Override
-    public String getPath() {
-        return DirectoryPath.getTLogPath().getPath() + "/";
-    }
+	@Override
+	public String[] getFileList() {
+		return FileList.getTLogFileList();
+	}
 
-    @Override
-    public String[] getFileList() {
-        return FileList.getTLogFileList();
-    }
-
-    @Override
-    public boolean openFile(String file) {
-        return openTLog(file);
-    }
+	@Override
+	public boolean openFile(String file) {
+		return openTLog(file);
+	}
 }

@@ -39,7 +39,7 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 	private final int resource;
 	private final int colorAltRow;
 
-    private final LayoutInflater mInflater;
+	private final LayoutInflater mInflater;
 
 	private Map<String, ParameterMetadata> metadataMap;
 
@@ -55,7 +55,7 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 
 		this.resource = resource;
 		colorAltRow = context.getResources().getColor(R.color.paramAltRow);
-        mInflater = LayoutInflater.from(context);
+		mInflater = LayoutInflater.from(context);
 	}
 
 	public void clearFocus() {
@@ -129,14 +129,14 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 
 		clear();
 		for (Parameter parameter : parameters) {
-            addParameter(parameter);
-        }
+			addParameter(parameter);
+		}
 	}
 
 	private void addParameter(Parameter parameter) {
 		try {
 			Parameter.checkParameterName(parameter.name);
-            add(new ParamsAdapterItem(parameter, getMetadata(parameter.name)));
+			add(new ParamsAdapterItem(parameter, getMetadata(parameter.name)));
 		} catch (Exception ex) {
 			// eat it
 		}

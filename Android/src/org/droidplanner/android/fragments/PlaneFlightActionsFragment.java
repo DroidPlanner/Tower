@@ -146,77 +146,79 @@ public class PlaneFlightActionsFragment extends Fragment implements View.OnClick
 
 	@Override
 	public void onClick(View v) {
-        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                .setCategory(GAUtils.Category.FLIGHT);
+		HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+				.setCategory(GAUtils.Category.FLIGHT);
 
-        switch(v.getId()){
-            case R.id.mc_connectBtn:
-                ((SuperUI) getActivity()).toggleDroneConnection();
-                break;
+		switch (v.getId()) {
+		case R.id.mc_connectBtn:
+			((SuperUI) getActivity()).toggleDroneConnection();
+			break;
 
-            case R.id.mc_homeBtn:
-                drone.getState().changeFlightMode(ApmModes.FIXED_WING_RTL);
-                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.FIXED_WING_RTL.getName());
-                break;
+		case R.id.mc_homeBtn:
+			drone.getState().changeFlightMode(ApmModes.FIXED_WING_RTL);
+			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(
+					ApmModes.FIXED_WING_RTL.getName());
+			break;
 
-            case R.id.mc_pause:
-                if (followMe.isEnabled()) {
-                    followMe.toggleFollowMeState();
-                }
+		case R.id.mc_pause:
+			if (followMe.isEnabled()) {
+				followMe.toggleFollowMeState();
+			}
 
-                drone.getGuidedPoint().pauseAtCurrentLocation();
-                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Pause");
-                break;
+			drone.getGuidedPoint().pauseAtCurrentLocation();
+			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Pause");
+			break;
 
-            case R.id.mc_autoBtn:
-                drone.getState().changeFlightMode(ApmModes.FIXED_WING_AUTO);
-                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.FIXED_WING_AUTO.getName());
-                break;
+		case R.id.mc_autoBtn:
+			drone.getState().changeFlightMode(ApmModes.FIXED_WING_AUTO);
+			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(
+					ApmModes.FIXED_WING_AUTO.getName());
+			break;
 
-            case R.id.mc_follow:
-                followMe.toggleFollowMeState();
-                String eventLabel = null;
+		case R.id.mc_follow:
+			followMe.toggleFollowMeState();
+			String eventLabel = null;
 
-                switch (followMe.getState()) {
-                    case FOLLOW_START:
-                        eventLabel = "FollowMe enabled";
-                        break;
+			switch (followMe.getState()) {
+			case FOLLOW_START:
+				eventLabel = "FollowMe enabled";
+				break;
 
-                    case FOLLOW_RUNNING:
-                        eventLabel = "FollowMe running";
-                        break;
+			case FOLLOW_RUNNING:
+				eventLabel = "FollowMe running";
+				break;
 
-                    case FOLLOW_END:
-                        eventLabel = "FollowMe disabled";
-                        break;
+			case FOLLOW_END:
+				eventLabel = "FollowMe disabled";
+				break;
 
-                    case FOLLOW_INVALID_STATE:
-                        eventLabel = "FollowMe error: invalid state";
-                        break;
+			case FOLLOW_INVALID_STATE:
+				eventLabel = "FollowMe error: invalid state";
+				break;
 
-                    case FOLLOW_DRONE_DISCONNECTED:
-                        eventLabel = "FollowMe error: drone not connected";
-                        break;
+			case FOLLOW_DRONE_DISCONNECTED:
+				eventLabel = "FollowMe error: drone not connected";
+				break;
 
-                    case FOLLOW_DRONE_NOT_ARMED:
-                        eventLabel = "FollowMe error: drone not armed";
-                        break;
-                }
+			case FOLLOW_DRONE_NOT_ARMED:
+				eventLabel = "FollowMe error: drone not armed";
+				break;
+			}
 
-                if (eventLabel != null) {
-                    eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(eventLabel);
-                    Toast.makeText(getActivity(), eventLabel, Toast.LENGTH_SHORT).show();
-                }
-                break;
+			if (eventLabel != null) {
+				eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(eventLabel);
+				Toast.makeText(getActivity(), eventLabel, Toast.LENGTH_SHORT).show();
+			}
+			break;
 
-            default:
-                eventBuilder = null;
-                break;
-        }
+		default:
+			eventBuilder = null;
+			break;
+		}
 
-        if (eventBuilder != null) {
-            GAUtils.sendEvent(eventBuilder);
-        }
+		if (eventBuilder != null) {
+			GAUtils.sendEvent(eventBuilder);
+		}
 	}
 
 	@Override
@@ -241,9 +243,9 @@ public class PlaneFlightActionsFragment extends Fragment implements View.OnClick
 		}
 	}
 
-    @Override
-    public boolean isSlidingUpPanelEnabled(Drone drone) {
-        final State droneState = drone.getState();
-        return drone.getMavClient().isConnected() && droneState.isArmed();
-    }
+	@Override
+	public boolean isSlidingUpPanelEnabled(Drone drone) {
+		final State droneState = drone.getState();
+		return drone.getMavClient().isConnected() && droneState.isArmed();
+	}
 }

@@ -265,11 +265,12 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 */
 	public void setOnMarkerDragListener(OnMarkerDragListener listener);
 
-    /**
-     * Sets a callback that's invoked when the user location is updated.
-     * @param listener
-     */
-    public void setLocationListener(LocationListener listener);
+	/**
+	 * Sets a callback that's invoked when the user location is updated.
+	 * 
+	 * @param listener
+	 */
+	public void setLocationListener(LocationListener listener);
 
 	/**
 	 * Updates the map's center, and zoom level.
@@ -281,11 +282,13 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 */
 	public void updateCamera(Coord2D coord, float zoomLevel);
 
-    /**
-     * Updates the map's bearing.
-     * @param bearing direction that the camera is pointing in.
-     */
-    public void updateCameraBearing(float bearing);
+	/**
+	 * Updates the map's bearing.
+	 * 
+	 * @param bearing
+	 *            direction that the camera is pointing in.
+	 */
+	public void updateCameraBearing(float bearing);
 
 	/**
 	 * Updates the drone leash path on the map.
@@ -351,16 +354,20 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 */
 	public void zoomToFit(List<Coord2D> coords);
 
-    /**
-     * Zoom to fit my location and the given coordinates on map
-     * @param coords
-     */
-    public void zoomToFitMyLocation(List<Coord2D> coords);
-    
-    /**
-     * Ignore marker clicks on the map and instead report the event as a mapClick
-     * @param skip if it should skip further events
-     */
-    public void skipMarkerClickEvents(boolean skip);
-    
+	/**
+	 * Zoom to fit my location and the given coordinates on map
+	 * 
+	 * @param coords
+	 */
+	public void zoomToFitMyLocation(List<Coord2D> coords);
+
+	/**
+	 * Ignore marker clicks on the map and instead report the event as a
+	 * mapClick
+	 * 
+	 * @param skip
+	 *            if it should skip further events
+	 */
+	public void skipMarkerClickEvents(boolean skip);
+
 }

@@ -13,15 +13,14 @@ import android.view.View;
 public class ScatterPlot extends View {
 	private static final float SCALE_FACTOR = 1 / 1000f;
 
-    private final RectF reuseRectF = new RectF();
+	private final RectF reuseRectF = new RectF();
 	private float halfWidth, halfHeight, halfScale;
 
 	private ArrayList<Float> points = new ArrayList<Float>();
-	private Paint paintText, paintChartLines, paintPoints, paintEndPoint,paintCircle;
+	private Paint paintText, paintChartLines, paintPoints, paintEndPoint, paintCircle;
 	private String title = "";
 
 	private int[] sphere;
-
 
 	public ScatterPlot(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -55,19 +54,19 @@ public class ScatterPlot extends View {
 		invalidate();
 	}
 
-    public void addData(float datum){
-        points.add(datum);
-    }
+	public void addData(float datum) {
+		points.add(datum);
+	}
 
 	public void updateSphere(int[] sphere) {
 		this.sphere = sphere;
 	}
 
-    public void reset(){
-        points.clear();
-        this.sphere = null;
-        invalidate();
-    }
+	public void reset() {
+		points.clear();
+		this.sphere = null;
+		invalidate();
+	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
@@ -81,14 +80,15 @@ public class ScatterPlot extends View {
 
 		// Draw the points
 		float x = 0, y = 0;
-        final int pointsCount = points.size();
+		final int pointsCount = points.size();
 		for (int i = 0; i < pointsCount; i += 2) {
 			x = mapToImgX(points.get(i + 0));
 			y = mapToImgY(points.get(i + 1));
 			canvas.drawPoint(x, y, paintPoints);
 		}
-		canvas.drawCircle(x, y, 10f, paintEndPoint); // Redraw the endpoint with a bigger dot
-		
+		canvas.drawCircle(x, y, 10f, paintEndPoint); // Redraw the endpoint with
+														// a bigger dot
+
 		// Draw the estimated Sphere
 		if (sphere != null) {
 			x = mapToImgX(sphere[0]);
@@ -96,11 +96,11 @@ public class ScatterPlot extends View {
 			int width = (int) scale(sphere[2]);
 			int height = (int) scale(sphere[3]);
 
-            this.reuseRectF.set(x -width, y - height, x + width, y + height);
-			canvas.drawOval(this.reuseRectF,paintCircle);
+			this.reuseRectF.set(x - width, y - height, x + width, y + height);
+			canvas.drawOval(this.reuseRectF, paintCircle);
 		}
 	}
-	
+
 	private int mapToImgX(float coord) {
 		return (int) (scale(coord) + halfWidth);
 	}

@@ -15,15 +15,15 @@ public class DroneEvents extends DroneVariable {
 	private final Runnable eventsDispatcher = new Runnable() {
 		@Override
 		public void run() {
-            do {
-                handler.removeCallbacks(this);
-                final DroneEventsType event = eventsQueue.poll();
-                if (event != null && !droneListeners.isEmpty()) {
-                    for (OnDroneListener listener : droneListeners) {
-                        listener.onDroneEvent(event, myDrone);
-                    }
-                }
-            }while(!eventsQueue.isEmpty());
+			do {
+				handler.removeCallbacks(this);
+				final DroneEventsType event = eventsQueue.poll();
+				if (event != null && !droneListeners.isEmpty()) {
+					for (OnDroneListener listener : droneListeners) {
+						listener.onDroneEvent(event, myDrone);
+					}
+				}
+			} while (!eventsQueue.isEmpty());
 		}
 	};
 
@@ -45,7 +45,7 @@ public class DroneEvents extends DroneVariable {
 	}
 
 	public void notifyDroneEvent(DroneEventsType event) {
-        eventsQueue.offer(event);
+		eventsQueue.offer(event);
 		handler.post(eventsDispatcher);
 	}
 }

@@ -14,7 +14,7 @@ public class ConditionYawTest extends TestCase {
 
 	public void testPackMissionItem() {
 		Mission mission = new Mission(null);
-		ConditionYaw item = new ConditionYaw(mission, 12,false);
+		ConditionYaw item = new ConditionYaw(mission, 12, false);
 
 		List<msg_mission_item> listOfMsg = item.packMissionItem();
 		assertEquals(1, listOfMsg.size());

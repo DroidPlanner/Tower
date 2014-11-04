@@ -20,12 +20,12 @@ public class CameraFootprints extends DroneVariable {
 	}
 
 	public void newImageLocation(msg_camera_feedback msg) {
-		footprints.add(new Footprint(camera,msg));
+		footprints.add(new Footprint(camera, msg));
 		myDrone.notifyDroneEvent(DroneEventsType.FOOTPRINT);
 	}
 
 	public Footprint getLastFootprint() {
-		return footprints.get(footprints.size()-1);
+		return footprints.get(footprints.size() - 1);
 	}
 
 }

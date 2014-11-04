@@ -20,61 +20,60 @@ import android.view.ViewGroup;
  */
 public class SensorSetupFragment extends Fragment {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_sensor_setup, container, false);
-    }
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_sensor_setup, container, false);
+	}
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState){
-        super.onViewCreated(view, savedInstanceState);
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
 
-        final SensorPagerAdapter pagerAdapter = new SensorPagerAdapter(getActivity()
-                .getApplicationContext(), getChildFragmentManager());
+		final SensorPagerAdapter pagerAdapter = new SensorPagerAdapter(getActivity()
+				.getApplicationContext(), getChildFragmentManager());
 
-        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.configuration_pager);
-        viewPager.setAdapter(pagerAdapter);
+		final ViewPager viewPager = (ViewPager) view.findViewById(R.id.configuration_pager);
+		viewPager.setAdapter(pagerAdapter);
 
-        final TabPageIndicator tabIndicator = (TabPageIndicator) view.findViewById(R.id
-                .configuration_tab_strip);
-        tabIndicator.setViewPager(viewPager);
-    }
+		final TabPageIndicator tabIndicator = (TabPageIndicator) view
+				.findViewById(R.id.configuration_tab_strip);
+		tabIndicator.setViewPager(viewPager);
+	}
 
-    private static class SensorPagerAdapter extends FragmentPagerAdapter {
+	private static class SensorPagerAdapter extends FragmentPagerAdapter {
 
-        private final Context context;
+		private final Context context;
 
-        public SensorPagerAdapter(Context context, FragmentManager fm) {
-            super(fm);
-            this.context = context;
-        }
+		public SensorPagerAdapter(Context context, FragmentManager fm) {
+			super(fm);
+			this.context = context;
+		}
 
-        @Override
-        public Fragment getItem(int i) {
-            switch(i){
-                case 0:
-                default:
-                	return new FragmentSetupMAG();
-                case 1:
-                	return new FragmentSetupIMU();
-            }
-        }
+		@Override
+		public Fragment getItem(int i) {
+			switch (i) {
+			case 0:
+			default:
+				return new FragmentSetupMAG();
+			case 1:
+				return new FragmentSetupIMU();
+			}
+		}
 
-        @Override
-        public int getCount() {
-            return 2;
-        }
+		@Override
+		public int getCount() {
+			return 2;
+		}
 
-        @Override
-        public CharSequence getPageTitle(int position){
-            switch(position){
-                case 0:
-                default:
-                	return FragmentSetupMAG.getTitle(context);
-                case 1:
-                	return FragmentSetupIMU.getTitle(context);
-            }
-        }
-    }
+		@Override
+		public CharSequence getPageTitle(int position) {
+			switch (position) {
+			case 0:
+			default:
+				return FragmentSetupMAG.getTitle(context);
+			case 1:
+				return FragmentSetupIMU.getTitle(context);
+			}
+		}
+	}
 }

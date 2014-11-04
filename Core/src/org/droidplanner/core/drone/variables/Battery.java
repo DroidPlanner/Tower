@@ -29,11 +29,11 @@ public class Battery extends DroneVariable {
 	public Double getBattDischarge() {
 		Parameter battCap = myDrone.getParameters().getParameter("BATT_CAPACITY");
 		if (battCap == null || battRemain == -1) {
-			return null;			
+			return null;
 		}
-		return (1-battRemain/100.0)*battCap.value; 
+		return (1 - battRemain / 100.0) * battCap.value;
 	}
-	
+
 	public void setBatteryState(double battVolt, double battRemain, double battCurrent) {
 		if (this.battVolt != battVolt | this.battRemain != battRemain
 				| this.battCurrent != battCurrent) {

@@ -278,7 +278,7 @@ public class Mission extends DroneVariable {
 				received.add(new ChangeSpeed(msg, this));
 				break;
 			case MAV_CMD.MAV_CMD_DO_SET_CAM_TRIGG_DIST:
-				received.add(new CameraTrigger(msg,this));
+				received.add(new CameraTrigger(msg, this));
 				break;
 			case EpmGripper.MAV_CMD_DO_GRIPPER:
 				received.add(new EpmGripper(msg, this));
@@ -291,7 +291,7 @@ public class Mission extends DroneVariable {
 				break;
 			case MAV_CMD.MAV_CMD_NAV_RETURN_TO_LAUNCH:
 				received.add(new ReturnToHome(msg, this));
-				break;				
+				break;
 			case MAV_CMD.MAV_CMD_CONDITION_YAW:
 				received.add(new ConditionYaw(msg, this));
 				break;
@@ -379,8 +379,8 @@ public class Mission extends DroneVariable {
 	}
 
 	public boolean isLastItemLandOrRTL() {
-        if(items.isEmpty())
-            return false;
+		if (items.isEmpty())
+			return false;
 
 		MissionItem last = items.get(items.size() - 1);
 		return (last instanceof ReturnToHome) || (last instanceof Land);

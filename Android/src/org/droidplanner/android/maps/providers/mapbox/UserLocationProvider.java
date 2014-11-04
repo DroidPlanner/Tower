@@ -11,26 +11,27 @@ import com.mapbox.mapboxsdk.views.MapView;
  * Provide facilities for a listener to be notified of location updates.
  */
 public class UserLocationProvider extends UserLocationOverlay {
-    private LocationListener mLocationListener;
+	private LocationListener mLocationListener;
 
-    public UserLocationProvider(GpsLocationProvider myLocationProvider, MapView mapView, int arrowId, int personId) {
-        super(myLocationProvider, mapView, arrowId, personId);
-    }
+	public UserLocationProvider(GpsLocationProvider myLocationProvider, MapView mapView,
+			int arrowId, int personId) {
+		super(myLocationProvider, mapView, arrowId, personId);
+	}
 
-    public UserLocationProvider(GpsLocationProvider myLocationProvider, MapView mapView) {
-        super(myLocationProvider, mapView);
-    }
+	public UserLocationProvider(GpsLocationProvider myLocationProvider, MapView mapView) {
+		super(myLocationProvider, mapView);
+	}
 
-    public void setLocationListener(LocationListener listener){
-        mLocationListener = listener;
-    }
+	public void setLocationListener(LocationListener listener) {
+		mLocationListener = listener;
+	}
 
-    @Override
-    public void onLocationChanged(Location location, GpsLocationProvider source){
-        super.onLocationChanged(location, source);
+	@Override
+	public void onLocationChanged(Location location, GpsLocationProvider source) {
+		super.onLocationChanged(location, source);
 
-        if(mLocationListener != null){
-            mLocationListener.onLocationChanged(location);
-        }
-    }
+		if (mLocationListener != null) {
+			mLocationListener.onLocationChanged(location);
+		}
+	}
 }

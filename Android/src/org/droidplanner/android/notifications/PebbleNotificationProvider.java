@@ -41,7 +41,7 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 		PebbleKit.registerReceivedDataHandler(applicationContext, datahandler);
 	}
 
-    @Override
+	@Override
 	public void onTerminate() {
 		if (datahandler != null) {
 			applicationContext.unregisterReceiver(datahandler);
@@ -187,7 +187,8 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 				break;
 
 			case KEY_REQUEST_PAUSE:
-				((DroidPlannerApp) applicationContext).getDrone().getGuidedPoint().pauseAtCurrentLocation();
+				((DroidPlannerApp) applicationContext).getDrone().getGuidedPoint()
+						.pauseAtCurrentLocation();
 				break;
 
 			case KEY_REQUEST_MODE_RTL:

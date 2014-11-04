@@ -42,7 +42,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 
 			final boolean isThereMissionMarkers = !missionMarkerInfos.isEmpty();
 			final boolean isHomeValid = home.isValid();
-            final boolean isGuidedVisible = guided.isVisible();
+			final boolean isGuidedVisible = guided.isVisible();
 
 			// Get the list of markers currently on the map.
 			final Set<MarkerInfo> markersOnTheMap = mMapFragment.getMarkerInfoList();
@@ -52,9 +52,9 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 					markersOnTheMap.remove(home);
 				}
 
-                if(isGuidedVisible){
-                    markersOnTheMap.remove(guided);
-                }
+				if (isGuidedVisible) {
+					markersOnTheMap.remove(guided);
+				}
 
 				if (isThereMissionMarkers) {
 					markersOnTheMap.removeAll(missionMarkerInfos);
@@ -67,9 +67,9 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 				mMapFragment.updateMarker(home);
 			}
 
-            if(isGuidedVisible){
-                mMapFragment.updateMarker(guided);
-            }
+			if (isGuidedVisible) {
+				mMapFragment.updateMarker(guided);
+			}
 
 			if (isThereMissionMarkers) {
 				mMapFragment.updateMarkers(missionMarkerInfos, isMissionDraggable());
@@ -255,19 +255,23 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		mMapFragment.goToDroneLocation();
 	}
 
-    /**
-     * Update the map rotation.
-     * @param bearing
-     */
-    public void updateMapBearing(float bearing){
-        mMapFragment.updateCameraBearing(bearing);
-    }
+	/**
+	 * Update the map rotation.
+	 * 
+	 * @param bearing
+	 */
+	public void updateMapBearing(float bearing) {
+		mMapFragment.updateCameraBearing(bearing);
+	}
 
-    /**
-     * Ignore marker clicks on the map and instead report the event as a mapClick
-     * @param skip if it should skip further events
-     */
-    public void skipMarkerClickEvents(boolean skip){
-    	mMapFragment.skipMarkerClickEvents(skip);
-    }
+	/**
+	 * Ignore marker clicks on the map and instead report the event as a
+	 * mapClick
+	 * 
+	 * @param skip
+	 *            if it should skip further events
+	 */
+	public void skipMarkerClickEvents(boolean skip) {
+		mMapFragment.skipMarkerClickEvents(skip);
+	}
 }

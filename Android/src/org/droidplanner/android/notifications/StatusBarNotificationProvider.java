@@ -91,7 +91,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 				FlightActivity.class), 0);
 
 		mToggleConnectionIntent = PendingIntent.getActivity(mContext, 0, new Intent(mContext,
-                FlightActivity.class).setAction(SuperUI.ACTION_TOGGLE_DRONE_CONNECTION), 0);
+				FlightActivity.class).setAction(SuperUI.ACTION_TOGGLE_DRONE_CONNECTION), 0);
 	}
 
 	@Override
@@ -251,7 +251,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 	/**
 	 * Dismiss the app status bar notification.
 	 */
-    @Override
+	@Override
 	public void onTerminate() {
 		NotificationManagerCompat.from(mContext).cancelAll();
 	}

@@ -24,18 +24,15 @@ public class SetServoFragment extends MissionDetailFragment implements
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		typeSpinner.setSelection(commandAdapter
-				.getPosition(MissionItemType.SET_SERVO));
+		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SET_SERVO));
 
 		SetServo item = (SetServo) getMissionItems().get(0);
 
-		final NumericWheelAdapter adapter = new NumericWheelAdapter(
-				getActivity().getApplicationContext(),
-				R.layout.wheel_text_centered, 1, 8, "%d");
+		final NumericWheelAdapter adapter = new NumericWheelAdapter(getActivity()
+				.getApplicationContext(), R.layout.wheel_text_centered, 1, 8, "%d");
 		final CardWheelHorizontalView cardChannelPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.picker1);
-		final EditText pwmEditText = (EditText) view
-				.findViewById(R.id.PwmEditText);
+		final EditText pwmEditText = (EditText) view.findViewById(R.id.PwmEditText);
 
 		cardChannelPicker.setViewAdapter(adapter);
 		cardChannelPicker.addChangingListener(this);
@@ -47,8 +44,7 @@ public class SetServoFragment extends MissionDetailFragment implements
 	}
 
 	@Override
-	public void onChanged(CardWheelHorizontalView wheel, int oldValue,
-			int newValue) {
+	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
 		switch (wheel.getId()) {
 		case R.id.picker1:
 			for (MissionItem missionItem : getMissionItems()) {
@@ -65,8 +61,7 @@ public class SetServoFragment extends MissionDetailFragment implements
 	}
 
 	@Override
-	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-			int arg3) {
+	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
 
 	}
 

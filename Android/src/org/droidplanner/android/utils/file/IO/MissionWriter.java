@@ -31,9 +31,9 @@ public class MissionWriter {
 			if (!FileManager.isExternalStorageAvailable())
 				return false;
 
-            if(!filename.endsWith(FileList.WAYPOINT_FILENAME_EXT)){
-                filename += FileList.WAYPOINT_FILENAME_EXT;
-            }
+			if (!filename.endsWith(FileList.WAYPOINT_FILENAME_EXT)) {
+				filename += FileList.WAYPOINT_FILENAME_EXT;
+			}
 
 			final FileOutputStream out = FileStream.getWaypointFileStream(filename);
 			writeHeader(out);

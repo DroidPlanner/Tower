@@ -15,11 +15,10 @@ public class RegionOfInterest extends SpatialCoordItem {
 	public RegionOfInterest(MissionItem item) {
 		super(item);
 	}
-	
-	public RegionOfInterest(Mission mission,Coord3D coord) {
-		super(mission,coord);
+
+	public RegionOfInterest(Mission mission, Coord3D coord) {
+		super(mission, coord);
 	}
-	
 
 	public RegionOfInterest(msg_mission_item msg, Mission mission) {
 		super(mission, null);

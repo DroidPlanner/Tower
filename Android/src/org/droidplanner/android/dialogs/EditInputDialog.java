@@ -14,72 +14,73 @@ import android.widget.EditText;
  */
 public class EditInputDialog extends YesNoDialog {
 
-    protected static final String EXTRA_HINT = "hint";
+	protected static final String EXTRA_HINT = "hint";
 
-    public interface Listener {
-        void onOk(final CharSequence input);
+	public interface Listener {
+		void onOk(final CharSequence input);
 
-        void onCancel();
-    }
+		void onCancel();
+	}
 
-    public static EditInputDialog newInstance(Context context, String title,
-                                              String hint, Listener listener){
-        EditInputDialog dialog = new EditInputDialog();
+	public static EditInputDialog newInstance(Context context, String title, String hint,
+			Listener listener) {
+		EditInputDialog dialog = new EditInputDialog();
 
-        Bundle bundle = new Bundle();
-        bundle.putString(EXTRA_TITLE, title);
+		Bundle bundle = new Bundle();
+		bundle.putString(EXTRA_TITLE, title);
 
-        if(hint == null){
-            hint = "";
-        }
-        bundle.putString(EXTRA_HINT, hint);
+		if (hint == null) {
+			hint = "";
+		}
+		bundle.putString(EXTRA_HINT, hint);
 
-        dialog.setArguments(bundle);
-        dialog.mListener = listener;
+		dialog.setArguments(bundle);
+		dialog.mListener = listener;
 
-        return dialog;
-    }
+		return dialog;
+	}
 
-    protected Listener mListener;
-    private EditText mEditText;
+	protected Listener mListener;
+	private EditText mEditText;
 
-    @Override
-    protected AlertDialog.Builder buildDialog(Bundle savedInstanceState){
-        final Bundle arguments = getArguments();
+	@Override
+	protected AlertDialog.Builder buildDialog(Bundle savedInstanceState) {
+		final Bundle arguments = getArguments();
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setTitle(arguments.getString(EXTRA_TITLE))
-                .setView(generateContentView(savedInstanceState))
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        CharSequence input = mEditText.getText();
-                        if(input == null) input = mEditText.getHint();
+		final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+				.setTitle(arguments.getString(EXTRA_TITLE))
+				.setView(generateContentView(savedInstanceState))
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						CharSequence input = mEditText.getText();
+						if (input == null)
+							input = mEditText.getHint();
 
-                        mListener.onOk(input);
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mListener.onCancel();
-                    }
-                });
+						mListener.onOk(input);
+					}
+				})
+				.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						mListener.onCancel();
+					}
+				});
 
-        return builder;
-    }
+		return builder;
+	}
 
-    @Override
-    protected View generateContentView(Bundle savedInstanceState){
-        final View contentView = getActivity().getLayoutInflater().inflate(R.layout
-                .dialog_edit_input_content, null);
+	@Override
+	protected View generateContentView(Bundle savedInstanceState) {
+		final View contentView = getActivity().getLayoutInflater().inflate(
+				R.layout.dialog_edit_input_content, null);
 
-        if(contentView == null)
-            return contentView;
+		if (contentView == null)
+			return contentView;
 
-        mEditText = (EditText) contentView.findViewById(R.id.dialog_edit_text_content);
-        mEditText.setHint(getArguments().getString(EXTRA_HINT));
+		mEditText = (EditText) contentView.findViewById(R.id.dialog_edit_text_content);
+		mEditText.setHint(getArguments().getString(EXTRA_HINT));
 
-        return contentView;
-    }
+		return contentView;
+	}
 }

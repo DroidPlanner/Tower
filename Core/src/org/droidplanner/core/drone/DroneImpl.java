@@ -63,31 +63,31 @@ public class DroneImpl implements Drone {
 		this.MavClient = mavClient;
 		this.preferences = pref;
 
-        events = new DroneEvents(this, handler);
+		events = new DroneEvents(this, handler);
 		state = new State(this, clock, handler);
 		heartbeat = new HeartBeat(this, handler);
 		parameters = new Parameters(this, handler);
 
-        RC = new RC(this);
-        GPS = new GPS(this);
-        this.type = new Type(this);
-        this.speed = new Speed(this);
-        this.battery = new Battery(this);
-        this.radio = new Radio(this);
-        this.home = new Home(this);
-        this.mission = new Mission(this);
-        this.missionStats = new MissionStats(this);
-        this.streamRates = new StreamRates(this);
-        this.altitude = new Altitude(this);
-        this.orientation = new Orientation(this);
-        this.navigation = new Navigation(this);
-        this.guidedPoint =  new GuidedPoint(this);
-        this.calibrationSetup = new Calibration(this);
-        this.waypointManager = new WaypointManager(this);
-        this.mag = new Magnetometer(this);
-        this.footprints = new CameraFootprints(this);
+		RC = new RC(this);
+		GPS = new GPS(this);
+		this.type = new Type(this);
+		this.speed = new Speed(this);
+		this.battery = new Battery(this);
+		this.radio = new Radio(this);
+		this.home = new Home(this);
+		this.mission = new Mission(this);
+		this.missionStats = new MissionStats(this);
+		this.streamRates = new StreamRates(this);
+		this.altitude = new Altitude(this);
+		this.orientation = new Orientation(this);
+		this.navigation = new Navigation(this);
+		this.guidedPoint = new GuidedPoint(this);
+		this.calibrationSetup = new Calibration(this);
+		this.waypointManager = new WaypointManager(this);
+		this.mag = new Magnetometer(this);
+		this.footprints = new CameraFootprints(this);
 
-        loadVehicleProfile();
+		loadVehicleProfile();
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class DroneImpl implements Drone {
 			double climb) {
 		this.altitude.setAltitude(altitude);
 		speed.setGroundAndAirSpeeds(groundSpeed, airSpeed, climb);
-	    notifyDroneEvent(DroneInterfaces.DroneEventsType.SPEED);
+		notifyDroneEvent(DroneInterfaces.DroneEventsType.SPEED);
 	}
 
 	@Override
@@ -123,7 +123,7 @@ public class DroneImpl implements Drone {
 
 	@Override
 	public void notifyDroneEvent(final DroneInterfaces.DroneEventsType event) {
-        events.notifyDroneEvent(event);
+		events.notifyDroneEvent(event);
 	}
 
 	@Override
@@ -270,7 +270,7 @@ public class DroneImpl implements Drone {
 	public Magnetometer getMagnetometer() {
 		return mag;
 	}
-	
+
 	public CameraFootprints getCameraFootprints() {
 		return footprints;
 	}

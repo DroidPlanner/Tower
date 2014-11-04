@@ -28,7 +28,7 @@ public class StructureScanner extends SpatialCoordItem {
 	SurveyData survey = new SurveyData();
 
 	public StructureScanner(Mission mission, Coord3D coord) {
-		super(mission,coord);
+		super(mission, coord);
 	}
 
 	public StructureScanner(MissionItem item) {
@@ -41,20 +41,21 @@ public class StructureScanner extends SpatialCoordItem {
 		packROI(list);
 		packCircles(list);
 		if (crossHatch) {
-			packHatch(list);			
+			packHatch(list);
 		}
 		return list;
 	}
 
 	private void packROI(List<msg_mission_item> list) {
-		RegionOfInterest roi = new RegionOfInterest(mission, new Coord3D(
-				coordinate, new Altitude(0.0)));
+		RegionOfInterest roi = new RegionOfInterest(mission, new Coord3D(coordinate, new Altitude(
+				0.0)));
 		list.addAll(roi.packMissionItem());
 	}
 
 	private void packCircles(List<msg_mission_item> list) {
-		for (double altitude = coordinate.getAltitude().valueInMeters(); altitude <= getTopHeight().valueInMeters(); altitude += heightStep.valueInMeters()) {
-			Circle circle = new Circle(mission, new Coord3D(coordinate,	new Altitude(altitude)));
+		for (double altitude = coordinate.getAltitude().valueInMeters(); altitude <= getTopHeight()
+				.valueInMeters(); altitude += heightStep.valueInMeters()) {
+			Circle circle = new Circle(mission, new Coord3D(coordinate, new Altitude(altitude)));
 			circle.setRadius(radius.valueInMeters());
 			list.addAll(circle.packMissionItem());
 		}
@@ -63,23 +64,22 @@ public class StructureScanner extends SpatialCoordItem {
 	private void packHatch(List<msg_mission_item> list) {
 		Polygon polygon = new Polygon();
 		for (double angle = 0; angle <= 360; angle += 10) {
-			polygon.addPoint(GeoTools.newCoordFromBearingAndDistance(coordinate,
-					angle, radius.valueInMeters()));
+			polygon.addPoint(GeoTools.newCoordFromBearingAndDistance(coordinate, angle,
+					radius.valueInMeters()));
 		}
 
-		Coord2D corner = GeoTools.newCoordFromBearingAndDistance(coordinate,
-				-45, radius.valueInMeters()*2);
-		
-		
+		Coord2D corner = GeoTools.newCoordFromBearingAndDistance(coordinate, -45,
+				radius.valueInMeters() * 2);
+
 		survey.setAltitude(getTopHeight());
-		
+
 		try {
 			survey.update(0.0, survey.getAltitude(), survey.getOverlap(), survey.getSidelap());
 			GridBuilder grid = new GridBuilder(polygon, survey, corner);
 			for (Coord2D point : grid.generate(false).gridPoints) {
 				list.add(Survey.packSurveyPoint(point, getTopHeight()));
 			}
-			
+
 			survey.update(90.0, survey.getAltitude(), survey.getOverlap(), survey.getSidelap());
 			GridBuilder grid2 = new GridBuilder(polygon, survey, corner);
 			for (Coord2D point : grid2.generate(false).gridPoints) {
@@ -98,10 +98,11 @@ public class StructureScanner extends SpatialCoordItem {
 			}
 			if (msg_mission_item.command == MAV_CMD.MAV_CMD_NAV_LOITER_TURNS) {
 				for (double angle = 0; angle <= 360; angle += 12) {
-					path.add(GeoTools.newCoordFromBearingAndDistance(coordinate,angle, radius.valueInMeters()));
+					path.add(GeoTools.newCoordFromBearingAndDistance(coordinate, angle,
+							radius.valueInMeters()));
 				}
 			}
-			
+
 		}
 		return path;
 
@@ -115,11 +116,10 @@ public class StructureScanner extends SpatialCoordItem {
 	public MissionItemType getType() {
 		return MissionItemType.CYLINDRICAL_SURVEY;
 	}
-	
-
 
 	private Altitude getTopHeight() {
-		return new Altitude(coordinate.getAltitude().valueInMeters()+ (numberOfSteps-1)*heightStep.valueInMeters());
+		return new Altitude(coordinate.getAltitude().valueInMeters() + (numberOfSteps - 1)
+				* heightStep.valueInMeters());
 	}
 
 	public Altitude getEndAltitude() {
@@ -151,11 +151,11 @@ public class StructureScanner extends SpatialCoordItem {
 	}
 
 	public void setAltitudeStep(int newValue) {
-		heightStep = new Altitude(newValue);		
+		heightStep = new Altitude(newValue);
 	}
 
 	public void setNumberOfSteps(int newValue) {
-		numberOfSteps = newValue;	
+		numberOfSteps = newValue;
 	}
 
 	public void setCamera(CameraInfo cameraInfo) {

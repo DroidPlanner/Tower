@@ -69,23 +69,25 @@ public class Parameter implements Comparable<Parameter>, Serializable {
 		return format;
 	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Parameter)) return false;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof Parameter))
+			return false;
 
-        Parameter parameter = (Parameter) o;
+		Parameter parameter = (Parameter) o;
 
-        return (name == null ? parameter.name == null : name.equals(parameter.name));
-    }
+		return (name == null ? parameter.name == null : name.equals(parameter.name));
+	}
 
-    @Override
-    public int hashCode() {
-        return name != null ? name.hashCode() : 0;
-    }
+	@Override
+	public int hashCode() {
+		return name != null ? name.hashCode() : 0;
+	}
 
-    @Override
-    public int compareTo(Parameter another) {
-        return name.compareTo(another.name);
-    }
+	@Override
+	public int compareTo(Parameter another) {
+		return name.compareTo(another.name);
+	}
 }

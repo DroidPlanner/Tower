@@ -181,7 +181,7 @@ public class DroneInterfaces {
 		 * 'Follow' mode has been disabled.
 		 */
 		FOLLOW_STOP,
-		
+
 		/**
 		 * 'Follow' state has been updated.
 		 */
@@ -214,13 +214,13 @@ public class DroneInterfaces {
 		/**
 		 * Warn that the drone has no gps signal
 		 */
-		WARNING_NO_GPS, 
-		
+		WARNING_NO_GPS,
+
 		/**
 		 * New magnetometer data has been received
 		 */
 		MAGNETOMETER,
-		
+
 		/**
 		 * The drone camera footprints has been updated
 		 */
@@ -263,7 +263,7 @@ public class DroneInterfaces {
 
 		void removeCallbacks(Runnable thread);
 
-        void post(Runnable thread);
+		void post(Runnable thread);
 
 		void postDelayed(Runnable thread, long timeout);
 

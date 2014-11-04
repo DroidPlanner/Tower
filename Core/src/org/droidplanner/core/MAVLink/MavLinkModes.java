@@ -33,12 +33,12 @@ public class MavLinkModes {
 		msg.seq = 0;
 		msg.current = 2; // TODO use guided mode enum
 		msg.frame = MAV_FRAME.MAV_FRAME_GLOBAL;
-		msg.command =  91; // MAV_CMD_NAV_VELOCITY
+		msg.command = 91; // MAV_CMD_NAV_VELOCITY
 		msg.param1 = 0; // TODO use correct parameter
 		msg.param2 = 0; // TODO use correct parameter
 		msg.param3 = 0; // TODO use correct parameter
 		msg.param4 = 0; // TODO use correct parameter
-		msg.x = (float) (xVel );
+		msg.x = (float) (xVel);
 		msg.y = (float) (yVel);
 		msg.z = (float) (zVel);
 		msg.autocontinue = 1; // TODO use correct parameter

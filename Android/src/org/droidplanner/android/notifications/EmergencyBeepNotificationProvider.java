@@ -13,7 +13,7 @@ public class EmergencyBeepNotificationProvider implements NotificationHandler.No
 	private SoundPool mPool;
 	private int beepBeep;
 
-	public EmergencyBeepNotificationProvider(Context context){
+	public EmergencyBeepNotificationProvider(Context context) {
 		mPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 		beepBeep = mPool.load(context, R.raw.beep_beep, 1);
 	}
@@ -23,10 +23,10 @@ public class EmergencyBeepNotificationProvider implements NotificationHandler.No
 
 	}
 
-    @Override
-    public void onTerminate() {
-        mPool.release();
-    }
+	@Override
+	public void onTerminate() {
+		mPool.release();
+	}
 
 	@Override
 	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {

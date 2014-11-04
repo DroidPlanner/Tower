@@ -266,19 +266,16 @@ public abstract class InfoBarItem {
 		 * This is the layout resource id for the popup window.
 		 */
 		protected static final int sPopupWindowLayoutId = R.layout.popup_info_power;
-		
-		
+
 		/**
 		 * This popup is used to show additional signal info.
 		 */
 		private PopupWindow mPopup;
 
-
 		private TextView currentView;
 
-
 		private TextView mAhView;
-		
+
 		public BatteryInfo(Context context, View parentView, Drone drone) {
 			super(context, parentView, drone, R.id.bar_battery);
 		}
@@ -307,7 +304,7 @@ public abstract class InfoBarItem {
 
 			updateItemView(context, drone);
 		}
-		
+
 		@Override
 		public void updateItemView(Context context, Drone drone) {
 
@@ -320,14 +317,16 @@ public abstract class InfoBarItem {
 				currentView.setText(sDefaultValue);
 				mAhView.setText(sDefaultValue);
 			} else {
-				infoUpdate = String.format(Locale.ENGLISH,"%2.1fv\n%2.0f%%", drone.getBattery().getBattVolt(), drone.getBattery().getBattRemain());
+				infoUpdate = String.format(Locale.ENGLISH, "%2.1fv\n%2.0f%%", drone.getBattery()
+						.getBattVolt(), drone.getBattery().getBattRemain());
 
-				currentView.setText(String.format("Current %2.1f A", drone.getBattery().getBattCurrent()));
+				currentView.setText(String.format("Current %2.1f A", drone.getBattery()
+						.getBattCurrent()));
 				Double discharge = drone.getBattery().getBattDischarge();
 				if (discharge == null) {
-					mAhView.setText("Discharge "+sDefaultValue+" mAh");
-				}else{
-					mAhView.setText(String.format("Discharge %2.0f mAh", discharge));					
+					mAhView.setText("Discharge " + sDefaultValue + " mAh");
+				} else {
+					mAhView.setText(String.format("Discharge %2.0f mAh", discharge));
 				}
 			}
 
@@ -401,9 +400,9 @@ public abstract class InfoBarItem {
 
 			if (drone == null) {
 				setDefaultValues();
-			}else if (!drone.getRadio().isValid()){
+			} else if (!drone.getRadio().isValid()) {
 				setDefaultValues();
-			}else{
+			} else {
 				setValuesFromRadio(drone);
 			}
 
@@ -411,14 +410,14 @@ public abstract class InfoBarItem {
 		}
 
 		private void setValuesFromRadio(final Drone drone) {
-			((TextView) mItemView).setText(String.format(Locale.ENGLISH,"%d%%", drone.getRadio().getSignalStrength()));
+			((TextView) mItemView).setText(String.format(Locale.ENGLISH, "%d%%", drone.getRadio()
+					.getSignalStrength()));
 
 			mRssiView.setText(String.format("RSSI %2.0f dB", drone.getRadio().getRssi()));
-			mRemRssiView.setText(String.format("RemRSSI %2.0f dB", drone.getRadio()
-					.getRemRssi()));
+			mRemRssiView.setText(String.format("RemRSSI %2.0f dB", drone.getRadio().getRemRssi()));
 			mNoiseView.setText(String.format("Noise %2.0f dB", drone.getRadio().getNoise()));
-			mRemNoiseView.setText(String.format("RemNoise %2.0f dB", drone.getRadio()
-					.getRemNoise()));
+			mRemNoiseView.setText(String
+					.format("RemNoise %2.0f dB", drone.getRadio().getRemNoise()));
 			mFadeView.setText(String.format("Fade %2.0f dB", drone.getRadio().getFadeMargin()));
 			mRemFadeView.setText(String.format("RemFade %2.0f dB", drone.getRadio()
 					.getRemFadeMargin()));
@@ -471,22 +470,24 @@ public abstract class InfoBarItem {
 			mModeAdapter = new ModeAdapter(context, R.layout.spinner_drop_down);
 			modesSpinner.setAdapter(mModeAdapter);
 
-			modesSpinner.setOnSpinnerItemSelectedListener(new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {
-                @Override
-                public void onSpinnerItemSelected(Spinner parent, int position) {
-                    if (mDrone != null) {
-                        final ApmModes newMode = (ApmModes) parent.getItemAtPosition(position);
-                        mDrone.getState().changeFlightMode(newMode);
+			modesSpinner
+					.setOnSpinnerItemSelectedListener(new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {
+						@Override
+						public void onSpinnerItemSelected(Spinner parent, int position) {
+							if (mDrone != null) {
+								final ApmModes newMode = (ApmModes) parent
+										.getItemAtPosition(position);
+								mDrone.getState().changeFlightMode(newMode);
 
-                        //Record the attempt to change flight modes
-                        final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                                .setCategory(GAUtils.Category.FLIGHT)
-                                .setAction("Flight mode changed")
-                                .setLabel(newMode.getName());
-                        GAUtils.sendEvent(eventBuilder);
-                    }
-                }
-            });
+								// Record the attempt to change flight modes
+								final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+										.setCategory(GAUtils.Category.FLIGHT)
+										.setAction("Flight mode changed")
+										.setLabel(newMode.getName());
+								GAUtils.sendEvent(eventBuilder);
+							}
+						}
+					});
 
 			updateItemView(context, drone);
 		}
@@ -512,9 +513,9 @@ public abstract class InfoBarItem {
 			}
 
 			if (mDrone != null) {
-                modesSpinner.forcedSetSelection(mModeAdapter.getPosition(mDrone.getState()
-                        .getMode()));
-            }
+				modesSpinner.forcedSetSelection(mModeAdapter.getPosition(mDrone.getState()
+						.getMode()));
+			}
 		}
 	}
 

@@ -28,8 +28,8 @@ public class CameraInfo {
 
 	@Override
 	public String toString() {
-		return "Camera:"+name+" ImageWidth:" + sensorWidth + " ImageHeight:" + sensorHeight + " FocalLength:"
-				+ focalLength + " Overlap:" + overlap + " Sidelap:" + sidelap
+		return "Camera:" + name + " ImageWidth:" + sensorWidth + " ImageHeight:" + sensorHeight
+				+ " FocalLength:" + focalLength + " Overlap:" + overlap + " Sidelap:" + sidelap
 				+ " isInLandscapeOrientation:" + isInLandscapeOrientation;
 
 	}

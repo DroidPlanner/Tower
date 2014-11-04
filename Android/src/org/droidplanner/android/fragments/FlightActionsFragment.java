@@ -16,64 +16,61 @@ import android.view.ViewGroup;
 
 public class FlightActionsFragment extends Fragment implements OnDroneListener {
 
-    interface SlidingUpHeader{
-        boolean isSlidingUpPanelEnabled(Drone drone);
-    }
+	interface SlidingUpHeader {
+		boolean isSlidingUpPanelEnabled(Drone drone);
+	}
 
-    private SlidingUpHeader header;
+	private SlidingUpHeader header;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_flight_actions_bar, container, false);
-    }
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_flight_actions_bar, container, false);
+	}
 
-    @Override
-    public void onStart(){
-        super.onStart();
+	@Override
+	public void onStart() {
+		super.onStart();
 
-        Drone drone = ((DroidPlannerApp)getActivity().getApplication()).getDrone();
-        selectActionsBar(drone.getType());
-        drone.addDroneListener(this);
-    }
+		Drone drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
+		selectActionsBar(drone.getType());
+		drone.addDroneListener(this);
+	}
 
-    @Override
-    public void onStop(){
-        super.onStop();
+	@Override
+	public void onStop() {
+		super.onStop();
 
-        Drone drone = ((DroidPlannerApp)getActivity().getApplication()).getDrone();
-        drone.removeDroneListener(this);
-    }
+		Drone drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
+		drone.removeDroneListener(this);
+	}
 
-    @Override
-    public void onDroneEvent(DroneEventsType event, Drone drone) {
-        switch(event){
-            case TYPE:
-                final int droneType = drone.getType();
-                selectActionsBar(droneType);
-                break;
-        }
-    }
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		switch (event) {
+		case TYPE:
+			final int droneType = drone.getType();
+			selectActionsBar(droneType);
+			break;
+		}
+	}
 
-    private void selectActionsBar(int droneType) {
-        final FragmentManager fm = getChildFragmentManager();
+	private void selectActionsBar(int droneType) {
+		final FragmentManager fm = getChildFragmentManager();
 
-        Fragment actionsBarFragment;
-        if(Type.isCopter(droneType)){
-            actionsBarFragment = new CopterFlightActionsFragment();
-        }
-        else if(Type.isPlane(droneType)){
-            actionsBarFragment = new PlaneFlightActionsFragment();
-        }
-        else{
-            actionsBarFragment = new GenericActionsFragment();
-        }
+		Fragment actionsBarFragment;
+		if (Type.isCopter(droneType)) {
+			actionsBarFragment = new CopterFlightActionsFragment();
+		} else if (Type.isPlane(droneType)) {
+			actionsBarFragment = new PlaneFlightActionsFragment();
+		} else {
+			actionsBarFragment = new GenericActionsFragment();
+		}
 
-        fm.beginTransaction().replace(R.id.flight_actions_bar, actionsBarFragment).commit();
-        header = (SlidingUpHeader) actionsBarFragment;
-    }
+		fm.beginTransaction().replace(R.id.flight_actions_bar, actionsBarFragment).commit();
+		header = (SlidingUpHeader) actionsBarFragment;
+	}
 
-    public boolean isSlidingUpPanelEnabled(Drone drone){
-        return header != null && header.isSlidingUpPanelEnabled(drone);
-    }
+	public boolean isSlidingUpPanelEnabled(Drone drone) {
+		return header != null && header.isSlidingUpPanelEnabled(drone);
+	}
 }
