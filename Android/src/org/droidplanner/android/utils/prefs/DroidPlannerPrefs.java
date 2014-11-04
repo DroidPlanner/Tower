@@ -3,10 +3,7 @@ package org.droidplanner.android.utils.prefs;
 import java.util.UUID;
 
 import org.droidplanner.R;
-import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.file.IO.VehicleProfileReader;
-import org.droidplanner.core.drone.profiles.VehicleProfile;
-import org.droidplanner.core.firmware.FirmwareType;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -26,7 +23,7 @@ import com.ox3dr.services.android.lib.drone.connection.ConnectionType;
  * 
  * 
  */
-public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preferences {
+public class DroidPlannerPrefs {
 
 	/*
 	 * Default preference value

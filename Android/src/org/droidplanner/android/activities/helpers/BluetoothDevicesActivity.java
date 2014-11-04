@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.services.DroidPlannerService;
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.app.Activity;
@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,17 +128,18 @@ public class BluetoothDevicesActivity extends FragmentActivity {
 
 			// Retrieve the selected bluetooth device
 			final BluetoothDevice device = (BluetoothDevice) parent.getItemAtPosition(position);
-			
+
 			// Stores the mac address in the shared preferences,
 			// so the bluetooth client can retrieve it on connection.
             final Context context = getApplicationContext();
 			DroidPlannerPrefs mAppPrefs = new DroidPlannerPrefs(context);
 			mAppPrefs.setBluetoothDeviceAddress(device.getAddress() + ";" + device.getName());
-			
+
 
 			// Toggle the drone connection
-            startService(new Intent(context, DroidPlannerService.class).setAction
-                    (DroidPlannerService.ACTION_TOGGLE_DRONE_CONNECTION));
+            LocalBroadcastManager.getInstance(context)
+                    .sendBroadcast(new Intent(DroidPlannerApp.ACTION_TOGGLE_DRONE_CONNECTION)
+                    .putExtra(DroidPlannerApp.EXTRA_ESTABLISH_CONNECTION, true));
 
 			// Finish the activity
 			finish();

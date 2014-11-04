@@ -18,18 +18,14 @@ dependencies {
 
     compile 'com.android.support:support-v4:20.0.0'
 
-    compile project(':Core')
-    compile project(':Mavlink')
     compile project(':Libraries:HorizontalVariableListView:HorizontalVariableListView')
     compile project(':Libraries:3DR-Services-Library:lib')
 
-    compile files('libs/usbseriallibrary.jar')
     compile files('libs/j2xx.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
     compile files('libs/jeromq-0.3.4.jar')
 
     compile project(':Libraries:PebbleKit')
-    compile project(':Libraries:usb-serial-for-android:UsbSerialLibrary')
 }
 
 android {
