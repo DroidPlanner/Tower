@@ -11,6 +11,7 @@ import com.ox3dr.services.android.lib.drone.property.Parameters;
 import com.ox3dr.services.android.lib.drone.property.Mission;
 import com.ox3dr.services.android.lib.drone.property.State;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
+import com.ox3dr.services.android.lib.drone.property.Type;
 
 /**
 * Interface used to access the drone properties.
@@ -76,8 +77,12 @@ interface IDroidPlannerApi {
         Mission getMission();
 
         /**
+        * Retrieves the type property of the connected drone.
+        */
+        Type getType();
+
+        /**
         * Checks if we have access to the connected drone.
-        * @param droneId id of the drone whose access to check.
         */
         boolean isConnected();
 
