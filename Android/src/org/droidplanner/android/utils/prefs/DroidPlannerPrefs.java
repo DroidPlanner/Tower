@@ -46,8 +46,12 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	public static final boolean DEFAULT_TTS_WARNING_LOST_SIGNAL = true;
 	public static final boolean DEFAULT_TTS_WARNING_LOW_SIGNAL = false;
 	public static final boolean DEFAULT_TTS_WARNING_AUTOPILOT_WARNING = true;
+    private static final String DEFAULT_USB_BAUD_RATE = "57600";
+    private static final String DEFAULT_TCP_SERVER_IP = "192.168.40.100";
+    private static final String DEFAULT_TCP_SERVER_PORT = "5763";
+    private static final String DEFAULT_UDP_SERVER_PORT = "14550";
 
-	// Public for legacy usage
+    // Public for legacy usage
 	public SharedPreferences prefs;
 	private Context context;
 
@@ -176,7 +180,56 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
      */
     public int getConnectionParameterType(){
         return Integer.parseInt(prefs.getString(context.getString(R.string
-                        .pref_connection_type_key), DEFAULT_CONNECTION_TYPE));
+                .pref_connection_type_key), DEFAULT_CONNECTION_TYPE));
+    }
+
+    public void setUsbBaudRate(int baudRate){
+        prefs.edit().putString(context.getString(R.string.pref_baud_type_key),
+                String.valueOf(baudRate)).apply();
+    }
+
+    public int getUsbBaudRate(){
+        return Integer.parseInt(prefs.getString(context.getString(R.string.pref_baud_type_key),
+                DEFAULT_USB_BAUD_RATE));
+    }
+
+    public void setTcpServerIp(String serverIp){
+        prefs.edit().putString(context.getString(R.string.pref_server_ip_key), serverIp).apply();
+    }
+
+    public String getTcpServerIp(){
+        return prefs.getString(context.getString(R.string.pref_server_ip_key),
+                DEFAULT_TCP_SERVER_IP);
+    }
+
+    public void setTcpServerPort(int serverPort){
+        prefs.edit().putString(context.getString(R.string.pref_server_port_key),
+                String.valueOf(serverPort)).apply();
+    }
+
+    public int getTcpServerPort(){
+        return Integer.parseInt(prefs.getString(context.getString(R.string.pref_server_port_key),
+                DEFAULT_TCP_SERVER_PORT));
+    }
+
+    public void setUdpServerPort(int serverPort){
+        prefs.edit().putString(context.getString(R.string.pref_udp_server_port_key),
+                String.valueOf(serverPort)).apply();
+    }
+
+    public int getUdpServerPort(){
+        return Integer.parseInt(prefs.getString(context.getString(R.string
+                        .pref_udp_server_port_key), DEFAULT_UDP_SERVER_PORT));
+    }
+
+    public String getBluetoothDeviceAddress() {
+        return prefs.getString(context.getString(R.string.pref_bluetooth_device_address_key), null);
+    }
+
+    public void setBluetoothDeviceAddress(String newAddress) {
+        final SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(context.getString(R.string.pref_bluetooth_device_address_key), newAddress)
+                .apply();
     }
 
 	/**
@@ -246,16 +299,6 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	public boolean isGuidedModeOnLongPressEnabled() {
 		return prefs
 				.getBoolean("pref_guided_mode_on_long_press", DEFAULT_GUIDED_MODE_ON_LONG_PRESS);
-	}
-
-	public String getBluetoothDeviceAddress() {
-		return prefs.getString(context.getString(R.string.pref_bluetooth_device_address_key), null);
-	}
-
-	public void setBluetoothDeviceAddress(String newAddress) {
-		final SharedPreferences.Editor editor = prefs.edit();
-		editor.putString(context.getString(R.string.pref_bluetooth_device_address_key), newAddress)
-				.apply();
 	}
 
 	/**

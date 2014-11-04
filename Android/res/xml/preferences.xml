@@ -273,7 +273,7 @@
                         android:defaultValue=""
                         android:dialogMessage="@string/pref_forget_bluetooth_device_address_confirm"
                         android:gravity="center"
-                        android:key="pref_bluetooth_device_address"
+                        android:key="@string/pref_bluetooth_device_address_key"
                         android:positiveButtonText="@string/pref_bluetooth_forget"
                         android:title="@string/pref_forget_bluetooth_device_address" />
                 </PreferenceCategory>
