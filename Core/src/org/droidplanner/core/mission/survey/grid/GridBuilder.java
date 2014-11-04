@@ -32,8 +32,8 @@ public class GridBuilder {
 		this.lineDist = distance;
 		this.wpDistance = distance;
 	}
-	
-	public void setAngle(double newAngle){
+
+	public void setAngle(double newAngle) {
 		angle = newAngle;
 	}
 

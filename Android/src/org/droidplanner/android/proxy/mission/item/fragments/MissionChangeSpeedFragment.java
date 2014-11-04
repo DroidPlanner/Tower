@@ -25,14 +25,13 @@ public class MissionChangeSpeedFragment extends MissionDetailFragment implements
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CHANGE_SPEED));
 
 		ChangeSpeed item = (ChangeSpeed) getMissionItems().get(0);
-		
+
 		final NumericWheelAdapter adapter = new NumericWheelAdapter(getActivity()
-				.getApplicationContext(), R.layout.wheel_text_centered, 1,
-                20, "%d m/s");
+				.getApplicationContext(), R.layout.wheel_text_centered, 1, 20, "%d m/s");
 		final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.picker1);
 		cardAltitudePicker.setViewAdapter(adapter);
-        cardAltitudePicker.addChangingListener(this);
+		cardAltitudePicker.addChangingListener(this);
 		cardAltitudePicker.setCurrentValue((int) item.getSpeed().valueInMetersPerSecond());
 	}
 
@@ -40,10 +39,10 @@ public class MissionChangeSpeedFragment extends MissionDetailFragment implements
 	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
 		switch (wheel.getId()) {
 		case R.id.picker1:
-            for(MissionItem missionItem : getMissionItems()) {
-            	ChangeSpeed item = (ChangeSpeed) missionItem;
-                item.setSpeed(new Speed(newValue));
-            }
+			for (MissionItem missionItem : getMissionItems()) {
+				ChangeSpeed item = (ChangeSpeed) missionItem;
+				item.setSpeed(new Speed(newValue));
+			}
 			break;
 		}
 	}

@@ -6,7 +6,6 @@ import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.variables.GuidedPoint;
 import org.droidplanner.core.drone.variables.State;
-import org.droidplanner.core.drone.variables.Type;
 import org.droidplanner.core.gcs.follow.FollowAlgorithm.FollowModes;
 import org.droidplanner.core.gcs.location.Location;
 import org.droidplanner.core.gcs.location.Location.LocationFinder;
@@ -15,11 +14,9 @@ import org.droidplanner.core.gcs.roi.ROIEstimator;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.model.Drone;
 
-import com.MAVLink.Messages.ApmModes;
-
 public class Follow implements OnDroneListener, LocationReceiver {
 
-	/** Set of return value for the 'toggleFollowMeState' method.*/
+	/** Set of return value for the 'toggleFollowMeState' method. */
 	public enum FollowStates {
 		FOLLOW_INVALID_STATE, FOLLOW_DRONE_NOT_ARMED, FOLLOW_DRONE_DISCONNECTED, FOLLOW_START, FOLLOW_RUNNING, FOLLOW_END
 	}
@@ -59,7 +56,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 				}
 			} else {
 				state = FollowStates.FOLLOW_DRONE_DISCONNECTED;
-				
+
 			}
 		}
 	}
@@ -76,9 +73,9 @@ public class Follow implements OnDroneListener, LocationReceiver {
 			state = FollowStates.FOLLOW_END;
 			MavLinkROI.resetROI(drone);
 
-            if(GuidedPoint.isGuidedMode(drone)) {
-                drone.getGuidedPoint().pauseAtCurrentLocation();
-            }
+			if (GuidedPoint.isGuidedMode(drone)) {
+				drone.getGuidedPoint().pauseAtCurrentLocation();
+			}
 
 			drone.notifyDroneEvent(DroneEventsType.FOLLOW_STOP);
 		}
@@ -112,14 +109,13 @@ public class Follow implements OnDroneListener, LocationReceiver {
 	public void onLocationChanged(Location location) {
 		if (location.isAccurate()) {
 			state = FollowStates.FOLLOW_RUNNING;
-            followAlgorithm.processNewLocation(location);
-            roiEstimator.onLocationChanged(location);
-		}
-		else {
+			followAlgorithm.processNewLocation(location);
+			roiEstimator.onLocationChanged(location);
+		} else {
 			state = FollowStates.FOLLOW_START;
 		}
 
-			drone.notifyDroneEvent(DroneEventsType.FOLLOW_UPDATE);
+		drone.notifyDroneEvent(DroneEventsType.FOLLOW_UPDATE);
 	}
 
 	public void setType(FollowModes item) {

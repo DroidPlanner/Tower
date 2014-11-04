@@ -23,9 +23,9 @@ public class ParameterWriter {
 				return false;
 			}
 
-            if(!filename.endsWith(FileList.PARAM_FILENAME_EXT)){
-                filename += FileList.PARAM_FILENAME_EXT;
-            }
+			if (!filename.endsWith(FileList.PARAM_FILENAME_EXT)) {
+				filename += FileList.PARAM_FILENAME_EXT;
+			}
 
 			FileOutputStream out = FileStream.getParameterFileStream(filename);
 

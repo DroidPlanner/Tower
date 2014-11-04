@@ -22,11 +22,11 @@ import java.util.Arrays;
 
 import org.apache.commons.math3.Field;
 import org.apache.commons.math3.FieldElement;
-import org.apache.commons.math3.exception.ZeroException;
-import org.apache.commons.math3.exception.NullArgumentException;
-import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.commons.math3.exception.DimensionMismatchException;
+import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.exception.NumberIsTooLargeException;
+import org.apache.commons.math3.exception.OutOfRangeException;
+import org.apache.commons.math3.exception.ZeroException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 
 /**

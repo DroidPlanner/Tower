@@ -49,16 +49,16 @@ public class Speed extends DroneVariable {
 		checkCollisionIsImminent();
 	}
 
-	public org.droidplanner.core.helpers.units.Speed getSpeedParameter(){
+	public org.droidplanner.core.helpers.units.Speed getSpeedParameter() {
 		Parameter param = myDrone.getParameters().getParameter("WPNAV_SPEED");
-		if (param == null ) {
-			return null;			
-		}else{
-			return new org.droidplanner.core.helpers.units.Speed(param.value/100);
+		if (param == null) {
+			return null;
+		} else {
+			return new org.droidplanner.core.helpers.units.Speed(param.value / 100);
 		}
-			
+
 	}
-	
+
 	/**
 	 * if drone will crash in 2 seconds at constant climb rate and climb rate <
 	 * -3 m/s and altitude > 1 meter

@@ -1,5 +1,18 @@
 package org.droidplanner.android.activities;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.droidplanner.R;
+import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
+import org.droidplanner.android.dialogs.openfile.OpenTLogDialog;
+import org.droidplanner.android.fragments.LocatorListFragment;
+import org.droidplanner.android.fragments.LocatorMapFragment;
+import org.droidplanner.android.utils.file.IO.TLogReader;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.geoTools.GeoTools;
+
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -13,316 +26,306 @@ import android.widget.TextView;
 
 import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
 
-import org.droidplanner.R;
-import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
-import org.droidplanner.android.dialogs.openfile.OpenTLogDialog;
-import org.droidplanner.android.fragments.LocatorListFragment;
-import org.droidplanner.android.fragments.LocatorMapFragment;
-import org.droidplanner.android.utils.file.IO.TLogReader;
-import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.helpers.geoTools.GeoTools;
-
-import java.util.LinkedList;
-import java.util.List;
-
 /**
- * This implements the map locator activity. The map locator activity allows the user to find
- * a lost drone using last known GPS positions from the tlogs.
+ * This implements the map locator activity. The map locator activity allows the
+ * user to find a lost drone using last known GPS positions from the tlogs.
  */
-public class LocatorActivity extends DrawerNavigationUI implements LocatorListFragment
-        .OnLocatorListListener, LocationListener {
+public class LocatorActivity extends DrawerNavigationUI implements
+		LocatorListFragment.OnLocatorListListener, LocationListener {
 
-    private static final String STATE_LAST_SELECTED_POSITION = "STATE_LAST_SELECTED_POSITION";
+	private static final String STATE_LAST_SELECTED_POSITION = "STATE_LAST_SELECTED_POSITION";
 
-    private final static List<msg_global_position_int> lastPositions = new
-            LinkedList<msg_global_position_int>();
+	private final static List<msg_global_position_int> lastPositions = new LinkedList<msg_global_position_int>();
 
-    /*
-    View widgets.
-     */
-    private FragmentManager fragmentManager;
+	/*
+	 * View widgets.
+	 */
+	private FragmentManager fragmentManager;
 
-    private LocatorMapFragment locatorMapFragment;
-    private LocatorListFragment locatorListFragment;
-    private LinearLayout statusView;
-    private TextView latView, lonView, distanceView, azimuthView;
+	private LocatorMapFragment locatorMapFragment;
+	private LocatorListFragment locatorListFragment;
+	private LinearLayout statusView;
+	private TextView latView, lonView, distanceView, azimuthView;
 
-    private msg_global_position_int selectedMsg;
-    private Coord2D lastGCSPosition;
-    private float lastGCSBearingTo = Float.MAX_VALUE;
-    private double lastGCSAzimuth = Double.MAX_VALUE;
+	private msg_global_position_int selectedMsg;
+	private Coord2D lastGCSPosition;
+	private float lastGCSBearingTo = Float.MAX_VALUE;
+	private double lastGCSAzimuth = Double.MAX_VALUE;
 
+	public List<msg_global_position_int> getLastPositions() {
+		return lastPositions;
+	}
 
-    public List<msg_global_position_int> getLastPositions() {
-        return lastPositions;
-    }
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_locator);
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_locator);
+		fragmentManager = getSupportFragmentManager();
 
-        fragmentManager = getSupportFragmentManager();
+		locatorMapFragment = ((LocatorMapFragment) fragmentManager
+				.findFragmentById(R.id.mapFragment));
+		locatorListFragment = (LocatorListFragment) fragmentManager
+				.findFragmentById(R.id.locatorListFragment);
 
-        locatorMapFragment = ((LocatorMapFragment) fragmentManager
-                .findFragmentById(R.id.mapFragment));
-        locatorListFragment = (LocatorListFragment) fragmentManager
-                .findFragmentById(R.id.locatorListFragment);
+		statusView = (LinearLayout) findViewById(R.id.statusView);
+		latView = (TextView) findViewById(R.id.latView);
+		lonView = (TextView) findViewById(R.id.lonView);
+		distanceView = (TextView) findViewById(R.id.distanceView);
+		azimuthView = (TextView) findViewById(R.id.azimuthView);
 
-        statusView = (LinearLayout) findViewById(R.id.statusView);
-        latView = (TextView) findViewById(R.id.latView);
-        lonView = (TextView) findViewById(R.id.lonView);
-        distanceView = (TextView) findViewById(R.id.distanceView);
-        azimuthView = (TextView) findViewById(R.id.azimuthView);
+		final ImageButton resetMapBearing = (ImageButton) findViewById(R.id.map_orientation_button);
+		resetMapBearing.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (locatorMapFragment != null) {
+					locatorMapFragment.updateMapBearing(0);
+				}
+			}
+		});
 
-        final ImageButton resetMapBearing = (ImageButton) findViewById(R.id.map_orientation_button);
-        resetMapBearing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(locatorMapFragment != null) {
-                    locatorMapFragment.updateMapBearing(0);
-                }
-            }
-        });
+		final ImageButton zoomToFit = (ImageButton) findViewById(R.id.zoom_to_fit_button);
+		zoomToFit.setVisibility(View.VISIBLE);
+		zoomToFit.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (locatorMapFragment != null) {
+					locatorMapFragment.zoomToFit();
+				}
+			}
+		});
 
-        final ImageButton zoomToFit = (ImageButton) findViewById(R.id.zoom_to_fit_button);
-        zoomToFit.setVisibility(View.VISIBLE);
-        zoomToFit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(locatorMapFragment != null){
-                    locatorMapFragment.zoomToFit();
-                }
-            }
-        });
+		ImageButton mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
+		mGoToMyLocation.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				locatorMapFragment.goToMyLocation();
+			}
+		});
+		mGoToMyLocation.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				locatorMapFragment.setAutoPanMode(AutoPanMode.USER);
+				return true;
+			}
+		});
 
-        ImageButton mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
-        mGoToMyLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                locatorMapFragment.goToMyLocation();
-            }
-        });
-        mGoToMyLocation.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                locatorMapFragment.setAutoPanMode(AutoPanMode.USER);
-                return true;
-            }
-        });
+		ImageButton mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
+		mGoToDroneLocation.setVisibility(View.GONE);
 
-        ImageButton mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
-        mGoToDroneLocation.setVisibility(View.GONE);
+		// clear prev state if this is a fresh start
+		if (savedInstanceState == null) {
+			// fresh start
+			lastPositions.clear();
+		}
+	}
 
-        // clear prev state if this is a fresh start
-        if(savedInstanceState == null) {
-            // fresh start
-            lastPositions.clear();
-        }
-    }
+	@Override
+	public void onResume() {
+		super.onResume();
+		locatorMapFragment.setLocationReceiver(this);
+	}
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        locatorMapFragment.setLocationReceiver(this);
-    }
+	@Override
+	public void onPause() {
+		super.onPause();
+		locatorMapFragment.setLocationReceiver(null);
+	}
 
-    @Override
-    public void onPause(){
-        super.onPause();
-        locatorMapFragment.setLocationReceiver(null);
-    }
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+		final int lastSelectedPosition = lastPositions.indexOf(selectedMsg);
+		outState.putInt(STATE_LAST_SELECTED_POSITION, lastSelectedPosition);
+	}
 
-        final int lastSelectedPosition = lastPositions.indexOf(selectedMsg);
-        outState.putInt(STATE_LAST_SELECTED_POSITION, lastSelectedPosition);
-    }
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
+		final int lastSelectedPosition = savedInstanceState
+				.getInt(STATE_LAST_SELECTED_POSITION, -1);
+		if (lastSelectedPosition != -1 && lastSelectedPosition < lastPositions.size())
+			setSelectedMsg(lastPositions.get(lastSelectedPosition));
+	}
 
-        final int lastSelectedPosition = savedInstanceState.getInt(STATE_LAST_SELECTED_POSITION, -1);
-        if(lastSelectedPosition != -1 && lastSelectedPosition < lastPositions.size())
-            setSelectedMsg(lastPositions.get(lastSelectedPosition));
-    }
+	@Override
+	protected int getNavigationDrawerEntryId() {
+		return R.id.navigation_locator;
+	}
 
-    @Override
-    protected int getNavigationDrawerEntryId() {
-        return R.id.navigation_locator;
-    }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.menu_locator, menu);
+		return true;
+	}
 
-        getMenuInflater().inflate(R.menu.menu_locator, menu);
-        return true;
-    }
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_open_tlog_file:
+			openLogFile();
+			return true;
 
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_open_tlog_file:
-                openLogFile();
-                return true;
+		default:
+			return super.onMenuItemSelected(featureId, item);
+		}
+	}
 
-            default:
-                return super.onMenuItemSelected(featureId, item);
-        }
-    }
+	private void openLogFile() {
+		OpenFileDialog tlogDialog = new OpenTLogDialog() {
+			@Override
+			public void tlogFileLoaded(TLogReader reader) {
+				loadLastPositions(reader.getLogEvents());
+				locatorMapFragment.zoomToFit();
+			}
+		};
+		tlogDialog.openDialog(this);
+	}
 
-    private void openLogFile() {
-        OpenFileDialog tlogDialog = new OpenTLogDialog() {
-            @Override
-            public void tlogFileLoaded(TLogReader reader) {
-                loadLastPositions(reader.getLogEvents());
-                locatorMapFragment.zoomToFit();
-            }
-        };
-        tlogDialog.openDialog(this);
-    }
+	/*
+	 * Copy all messages with non-zero coords -> lastPositions and reverse the
+	 * list (most recent first)
+	 */
+	private void loadLastPositions(List<TLogReader.Event> logEvents) {
+		lastPositions.clear();
 
-    /*
-    Copy all messages with non-zero coords -> lastPositions and reverse the list (most recent first)
-     */
-    private void loadLastPositions(List<TLogReader.Event> logEvents) {
-        lastPositions.clear();
+		for (TLogReader.Event event : logEvents) {
+			final msg_global_position_int message = (msg_global_position_int) event
+					.getMavLinkMessage();
+			if (message.lat != 0 || message.lon != 0)
+				lastPositions.add(0, message);
+		}
 
-        for (TLogReader.Event event : logEvents) {
-            final msg_global_position_int message = (msg_global_position_int) event.getMavLinkMessage();
-            if(message.lat != 0 || message.lon != 0)
-                lastPositions.add(0, message);
-        }
+		setSelectedMsg(null);
+		locatorListFragment.notifyDataSetChanged();
 
-        setSelectedMsg(null);
-        locatorListFragment.notifyDataSetChanged();
+		updateInfo();
+	}
 
-        updateInfo();
-    }
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		updateMapPadding();
+	}
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        updateMapPadding();
-    }
+	private void updateMapPadding() {
+		int bottomPadding = 0;
 
-    private void updateMapPadding() {
-        int bottomPadding = 0;
+		if (lastPositions.size() > 0) {
+			bottomPadding = locatorListFragment.getView().getHeight();
+		}
 
-        if(lastPositions.size() > 0) {
-            bottomPadding = locatorListFragment.getView().getHeight();
-        }
+		locatorMapFragment.setMapPadding(0, 0, 0, bottomPadding);
+	}
 
-        locatorMapFragment.setMapPadding(0, 0, 0, bottomPadding);
-    }
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		locatorMapFragment.saveCameraPosition();
+	}
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        locatorMapFragment.saveCameraPosition();
-    }
+	@Override
+	public void onItemClick(msg_global_position_int msg) {
+		setSelectedMsg(msg);
 
-    @Override
-    public void onItemClick(msg_global_position_int msg) {
-        setSelectedMsg(msg);
+		locatorMapFragment.zoomToFit();
+		updateInfo();
+	}
 
-        locatorMapFragment.zoomToFit();
-        updateInfo();
-    }
+	public void setSelectedMsg(msg_global_position_int msg) {
+		selectedMsg = msg;
 
-    public void setSelectedMsg(msg_global_position_int msg) {
-        selectedMsg = msg;
+		final Coord2D msgCoord;
+		if (msg != null)
+			msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
+		else
+			msgCoord = new Coord2D(0, 0);
+		locatorMapFragment.updateLastPosition(msgCoord);
+	}
 
-        final Coord2D msgCoord;
-        if(msg != null)
-            msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
-        else
-            msgCoord = new Coord2D(0, 0);
-        locatorMapFragment.updateLastPosition(msgCoord);
-    }
+	private void updateInfo() {
+		if (selectedMsg != null) {
+			statusView.setVisibility(View.VISIBLE);
 
-    private void updateInfo() {
-        if(selectedMsg != null) {
-            statusView.setVisibility(View.VISIBLE);
+			// coords
+			final Coord2D msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
 
-            // coords
-            final Coord2D msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
+			// distance
+			if (lastGCSPosition == null || lastGCSPosition.isEmpty()) {
+				// unknown
+				distanceView.setText(R.string.status_waiting_for_gps, TextView.BufferType.NORMAL);
+				azimuthView.setText("");
+			} else {
+				String distance = String.format("Distance: %.01fm",
+						GeoTools.getDistance(lastGCSPosition, msgCoord).valueInMeters());
+				if (lastGCSBearingTo != Float.MAX_VALUE) {
+					final String bearing = String.format(" @ %.0f°", lastGCSBearingTo);
+					distance += bearing;
+				}
+				distanceView.setText(distance);
 
-            // distance
-            if(lastGCSPosition == null || lastGCSPosition.isEmpty()) {
-                // unknown
-                distanceView.setText(R.string.status_waiting_for_gps, TextView.BufferType.NORMAL);
-                azimuthView.setText("");
-            } else {
-                String distance = String.format("Distance: %.01fm", GeoTools.getDistance(lastGCSPosition, msgCoord).valueInMeters());
-                if(lastGCSBearingTo != Float.MAX_VALUE) {
-                    final String bearing = String.format(" @ %.0f°", lastGCSBearingTo);
-                    distance += bearing;
-                }
-                distanceView.setText(distance);
+				if (lastGCSAzimuth != Double.MAX_VALUE) {
+					final String azimuth = String.format("Heading: %.0f°", lastGCSAzimuth);
+					azimuthView.setText(azimuth);
+				}
+			}
 
-                if(lastGCSAzimuth != Double.MAX_VALUE) {
-                    final String azimuth = String.format("Heading: %.0f°", lastGCSAzimuth);
-                    azimuthView.setText(azimuth);
-                }
-            }
+			latView.setText(String.format("Latitude: %f°", msgCoord.getLat()));
+			lonView.setText(String.format("Longitude: %f°", msgCoord.getLng()));
+		} else {
+			statusView.setVisibility(View.INVISIBLE);
+			latView.setText("");
+			lonView.setText("");
+			distanceView.setText("");
+			azimuthView.setText("");
+		}
+	}
 
-            latView.setText(String.format("Latitude: %f°", msgCoord.getLat()));
-            lonView.setText(String.format("Longitude: %f°", msgCoord.getLng()));
-        } else {
-            statusView.setVisibility(View.INVISIBLE);
-            latView.setText("");
-            lonView.setText("");
-            distanceView.setText("");
-            azimuthView.setText("");
-        }
-    }
+	private static Coord2D coordFromMsgGlobalPositionInt(msg_global_position_int msg) {
+		double lat = msg.lat;
+		lat /= 1E7;
 
-    private static Coord2D coordFromMsgGlobalPositionInt(msg_global_position_int msg) {
-        double lat = msg.lat;
-        lat /= 1E7;
+		double lon = msg.lon;
+		lon /= 1E7;
 
-        double lon = msg.lon;
-        lon /= 1E7;
+		return new Coord2D(lat, lon);
+	}
 
-        return new Coord2D(lat, lon);
-    }
+	@Override
+	public void onLocationChanged(Location location) {
+		lastGCSPosition = new Coord2D(location.getLatitude(), location.getLongitude());
+		lastGCSAzimuth = location.getBearing();
 
-    @Override
-    public void onLocationChanged(Location location) {
-        lastGCSPosition = new Coord2D(location.getLatitude(), location.getLongitude());
-        lastGCSAzimuth = location.getBearing();
+		if (selectedMsg != null) {
+			final Coord2D msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
 
-        if(selectedMsg != null) {
-            final Coord2D msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
+			final Location target = new Location(location);
+			target.setLatitude(msgCoord.getLat());
+			target.setLongitude(msgCoord.getLng());
 
-            final Location target = new Location(location);
-            target.setLatitude(msgCoord.getLat());
-            target.setLongitude(msgCoord.getLng());
+			lastGCSBearingTo = Math.round(location.bearingTo(target));
+			lastGCSBearingTo = (lastGCSBearingTo + 360) % 360;
+		} else {
+			lastGCSBearingTo = Float.MAX_VALUE;
+		}
 
-            lastGCSBearingTo = Math.round(location.bearingTo(target));
-            lastGCSBearingTo = (lastGCSBearingTo + 360) % 360;
-        } else {
-            lastGCSBearingTo = Float.MAX_VALUE;
-        }
+		updateInfo();
+	}
 
-        updateInfo();
-    }
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+	}
 
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {   }
+	@Override
+	public void onProviderEnabled(String provider) {
+	}
 
-    @Override
-    public void onProviderEnabled(String provider) {
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-    }
+	@Override
+	public void onProviderDisabled(String provider) {
+	}
 
 }

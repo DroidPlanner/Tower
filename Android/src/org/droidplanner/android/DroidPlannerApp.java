@@ -56,10 +56,10 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 				handler.removeCallbacks(thread);
 			}
 
-            @Override
-            public void post(Runnable thread){
-                handler.post(thread);
-            }
+			@Override
+			public void post(Runnable thread) {
+				handler.post(thread);
+			}
 
 			@Override
 			public void postDelayed(Runnable thread, long timeout) {
@@ -122,11 +122,11 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 		return drone;
 	}
 
-    public Follow getFollowMe() {
-        return followMe;
-    }
+	public Follow getFollowMe() {
+		return followMe;
+	}
 
-    public MissionProxy getMissionProxy() {
-        return missionProxy;
-    }
+	public MissionProxy getMissionProxy() {
+		return missionProxy;
+	}
 }

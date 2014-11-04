@@ -32,7 +32,7 @@ public class CameraTrigger extends MissionCMD {
 		List<msg_mission_item> list = super.packMissionItem();
 		msg_mission_item mavMsg = list.get(0);
 		mavMsg.command = MAV_CMD.MAV_CMD_DO_SET_CAM_TRIGG_DIST;
-		mavMsg.param1 = (float) distance.valueInMeters() ;
+		mavMsg.param1 = (float) distance.valueInMeters();
 		return list;
 	}
 

@@ -15,12 +15,12 @@ public class Footprint {
 
 	public Footprint(CameraInfo camera, msg_camera_feedback msg) {
 		System.out.println(msg);
-		center = new Coord2D(msg.lat/1E7,msg.lng/1E7);
+		center = new Coord2D(msg.lat / 1E7, msg.lng / 1E7);
 		float yaw = msg.yaw;
-		vertex.add(GeoTools.newCoordFromBearingAndDistance(center, yaw-60, 30));
-		vertex.add(GeoTools.newCoordFromBearingAndDistance(center, yaw+60, 30));
-		vertex.add(GeoTools.newCoordFromBearingAndDistance(center, yaw+120, 30));
-		vertex.add(GeoTools.newCoordFromBearingAndDistance(center, yaw-120, 30));
+		vertex.add(GeoTools.newCoordFromBearingAndDistance(center, yaw - 60, 30));
+		vertex.add(GeoTools.newCoordFromBearingAndDistance(center, yaw + 60, 30));
+		vertex.add(GeoTools.newCoordFromBearingAndDistance(center, yaw + 120, 30));
+		vertex.add(GeoTools.newCoordFromBearingAndDistance(center, yaw - 120, 30));
 	}
 
 	public Coord2D getCenter() {
@@ -29,6 +29,6 @@ public class Footprint {
 
 	public List<Coord2D> getVertex() {
 		return vertex;
-	}	
+	}
 
 }

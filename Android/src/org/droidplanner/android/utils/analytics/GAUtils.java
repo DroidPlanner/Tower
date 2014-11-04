@@ -23,7 +23,8 @@ public class GAUtils {
 	private static final String LOG_TAG = GAUtils.class.getSimpleName();
 
 	// Not instantiable
-	private GAUtils() {}
+	private GAUtils() {
+	}
 
 	/**
 	 * List the analytics categories used in the app.
@@ -35,35 +36,35 @@ public class GAUtils {
 		 */
 		public static final String FLIGHT = "Flight";
 
-        /**
-         * Category for analytics data related to the editor screen.
-         */
-        public static final String EDITOR = "Editor";
+		/**
+		 * Category for analytics data related to the editor screen.
+		 */
+		public static final String EDITOR = "Editor";
 
-        /**
-         * Category for measuring failsafe events.
-         */
-        public static final String FAILSAFE = "Failsafe";
+		/**
+		 * Category for measuring failsafe events.
+		 */
+		public static final String FAILSAFE = "Failsafe";
 
 		/**
 		 * Category for analytics related to mavlink connection events.
 		 */
 		public static final String MAVLINK_CONNECTION = "Mavlink connection";
 
-        /**
-         * Category for droneshare analytics
-         */
-        public static final String DRONESHARE = "Droneshare";
+		/**
+		 * Category for droneshare analytics
+		 */
+		public static final String DRONESHARE = "Droneshare";
 
-        /**
-         * Category for mission planning, and editing.
-         */
-        public static final String MISSION_PLANNING = "Mission planning";
+		/**
+		 * Category for mission planning, and editing.
+		 */
+		public static final String MISSION_PLANNING = "Mission planning";
 
-        /**
-         * Category for analytics data related to the preference dialogs.
-         */
-        public static final String PREFERENCE_DIALOGS = "Preference Dialogs";
+		/**
+		 * Category for analytics data related to the preference dialogs.
+		 */
+		public static final String PREFERENCE_DIALOGS = "Preference Dialogs";
 	}
 
 	/**
@@ -131,11 +132,11 @@ public class GAUtils {
 		}
 	}
 
-    public static void sendEvent(HitBuilders.SocialBuilder socialBuilder){
-        if(socialBuilder != null){
-            sendHit(socialBuilder.build());
-        }
-    }
+	public static void sendEvent(HitBuilders.SocialBuilder socialBuilder) {
+		if (socialBuilder != null) {
+			sendHit(socialBuilder.build());
+		}
+	}
 
 	public static void sendTiming(HitBuilders.TimingBuilder timingBuilder) {
 		if (timingBuilder != null) {

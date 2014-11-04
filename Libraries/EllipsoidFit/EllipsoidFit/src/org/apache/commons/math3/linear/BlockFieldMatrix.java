@@ -21,8 +21,8 @@ import java.io.Serializable;
 
 import org.apache.commons.math3.Field;
 import org.apache.commons.math3.FieldElement;
-import org.apache.commons.math3.exception.NoDataException;
 import org.apache.commons.math3.exception.DimensionMismatchException;
+import org.apache.commons.math3.exception.NoDataException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.MathUtils;

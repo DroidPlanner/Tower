@@ -13,7 +13,7 @@ import com.MAVLink.Messages.enums.MAV_FRAME;
 
 public class Takeoff extends MissionCMD {
 
-    public static final double DEFAULT_TAKEOFF_ALTITUDE = 10.0;
+	public static final double DEFAULT_TAKEOFF_ALTITUDE = 10.0;
 
 	private Altitude finishedAlt = new Altitude(10);
 

@@ -21,13 +21,13 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import org.apache.commons.math3.analysis.UnivariateFunction;
-import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.NumberIsTooLargeException;
 import org.apache.commons.math3.exception.MathArithmeticException;
+import org.apache.commons.math3.exception.NullArgumentException;
+import org.apache.commons.math3.exception.NumberIsTooLargeException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
-import org.apache.commons.math3.util.MathUtils;
 import org.apache.commons.math3.util.FastMath;
+import org.apache.commons.math3.util.MathUtils;
 
 /**
  * This class implements the {@link RealVector} interface with a double array.

@@ -77,11 +77,11 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 		}
 	}
 
-    @Override
-    public void onStart(){
-        super.onStart();
-        zoomToFit();
-    }
+	@Override
+	public void onStart() {
+		super.onStart();
+		zoomToFit();
+	}
 
 	@Override
 	public void onMapClick(Coord2D point) {
@@ -128,13 +128,13 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 		if (homeCoord != null && !homeCoord.isEmpty())
 			visibleCoords.add(homeCoord);
 
-        zoomToFit(visibleCoords);
+		zoomToFit(visibleCoords);
 	}
 
-    public void zoomToFit(List<Coord2D> itemsToFit){
-        if(!itemsToFit.isEmpty()){
-            mMapFragment.zoomToFit(itemsToFit);
-        }
-    }
+	public void zoomToFit(List<Coord2D> itemsToFit) {
+		if (!itemsToFit.isEmpty()) {
+			mMapFragment.zoomToFit(itemsToFit);
+		}
+	}
 
 }

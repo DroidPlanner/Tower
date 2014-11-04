@@ -20,16 +20,16 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-public class ModeFollowFragment extends ModeGuidedFragment implements
-		OnItemSelectedListener, OnDroneListener {
+public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSelectedListener,
+		OnDroneListener {
 
 	private Follow followMe;
 	private Spinner spinner;
 	private ArrayAdapter<FollowModes> adapter;
 
-    private CardWheelHorizontalView mRadiusWheel;
+	private CardWheelHorizontalView mRadiusWheel;
 
-    @Override
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		DroidPlannerApp app = (DroidPlannerApp) getActivity().getApplication();
 		followMe = app.getFollowMe();
@@ -40,54 +40,54 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 
 	@Override
 	public void onViewCreated(View parentView, Bundle savedInstanceState) {
-        super.onViewCreated(parentView, savedInstanceState);
+		super.onViewCreated(parentView, savedInstanceState);
 
-        final Context context = getActivity().getApplicationContext();
+		final Context context = getActivity().getApplicationContext();
 
 		final NumericWheelAdapter radiusAdapter = new NumericWheelAdapter(context,
-                R.layout.wheel_text_centered, 0, 200, "%d m");
+				R.layout.wheel_text_centered, 0, 200, "%d m");
 
-        mRadiusWheel = (CardWheelHorizontalView) parentView.findViewById(R.id.radius_spinner);
-        mRadiusWheel.setViewAdapter(radiusAdapter);
-        updateCurrentRadius();
-        mRadiusWheel.addChangingListener(this);
+		mRadiusWheel = (CardWheelHorizontalView) parentView.findViewById(R.id.radius_spinner);
+		mRadiusWheel.setViewAdapter(radiusAdapter);
+		updateCurrentRadius();
+		mRadiusWheel.addChangingListener(this);
 
 		spinner = (Spinner) parentView.findViewById(R.id.follow_type_spinner);
 		adapter = new ArrayAdapter<FollowModes>(getActivity(),
 				android.R.layout.simple_spinner_item, FollowModes.values());
 		spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
+		spinner.setOnItemSelectedListener(this);
 
-        drone.addDroneListener(this);
+		drone.addDroneListener(this);
 	}
 
-    @Override
-    public void onDestroyView(){
-        super.onDestroyView();
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
 
-        if(mRadiusWheel != null){
-            mRadiusWheel.removeChangingListener(this);
-        }
-    }
+		if (mRadiusWheel != null) {
+			mRadiusWheel.removeChangingListener(this);
+		}
+	}
 
-    @Override
-    public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue){
-        switch(cardWheel.getId()){
-            case R.id.radius_spinner:
-                followMe.changeRadius(newValue);
-                break;
+	@Override
+	public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+		switch (cardWheel.getId()) {
+		case R.id.radius_spinner:
+			followMe.changeRadius(newValue);
+			break;
 
-            default:
-                super.onChanged(cardWheel, oldValue, newValue);
-                break;
-        }
-    }
+		default:
+			super.onChanged(cardWheel, oldValue, newValue);
+			break;
+		}
+	}
 
-    private void updateCurrentRadius(){
-        if(mRadiusWheel != null){
-            mRadiusWheel.setCurrentValue((int) followMe.getRadius().valueInMeters());
-        }
-    }
+	private void updateCurrentRadius() {
+		if (mRadiusWheel != null) {
+			mRadiusWheel.setCurrentValue((int) followMe.getRadius().valueInMeters());
+		}
+	}
 
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

@@ -23,11 +23,11 @@ public class EndpointSorter {
 
 	public void sortGrid(Coord2D lastpnt, boolean sort) throws Exception {
 		while (grid.size() > 0) {
-			if (sort) {				
+			if (sort) {
 				LineCoord2D closestLine = LineTools.findClosestLineToPoint(lastpnt, grid);
 				Coord2D secondWp = processOneGridLine(closestLine, lastpnt, sort);
 				lastpnt = secondWp;
-			}else{
+			} else {
 				LineCoord2D closestLine = grid.get(0);
 				Coord2D secondWp = processOneGridLine(closestLine, lastpnt, sort);
 				lastpnt = secondWp;
@@ -46,7 +46,7 @@ public class EndpointSorter {
 		updateCameraLocations(firstWP, secondWp);
 		gridPoints.add(firstWP);
 		gridPoints.add(secondWp);
-		
+
 		if (cameraLocations.size() > MAX_NUMBER_OF_CAMERAS) {
 			throw new Exception("Too many camera positions");
 		}

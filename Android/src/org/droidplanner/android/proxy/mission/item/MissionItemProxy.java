@@ -116,7 +116,7 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 			}
 			break;
 		case CYLINDRICAL_SURVEY:
-			StructureScanner survey = (StructureScanner)mMissionItem;
+			StructureScanner survey = (StructureScanner) mMissionItem;
 			pathPoints.addAll(survey.getPath());
 			break;
 		case TAKEOFF:

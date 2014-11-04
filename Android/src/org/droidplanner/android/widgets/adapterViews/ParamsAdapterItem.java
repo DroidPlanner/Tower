@@ -114,20 +114,20 @@ public class ParamsAdapterItem implements Serializable {
 		}
 	}
 
-    @Override
-    public String toString(){
-        String toString = "";
+	@Override
+	public String toString() {
+		String toString = "";
 
-        final Parameter param = getParameter();
-        if (param != null) {
-            toString = param.name + ": ";
-        }
+		final Parameter param = getParameter();
+		if (param != null) {
+			toString = param.name + ": ";
+		}
 
-        final ParameterMetadata metadata = getMetadata();
-        if(metadata != null){
-            toString += metadata.getDisplayName();
-        }
+		final ParameterMetadata metadata = getMetadata();
+		if (metadata != null) {
+			toString += metadata.getDisplayName();
+		}
 
-        return toString;
-    }
+		return toString;
+	}
 }

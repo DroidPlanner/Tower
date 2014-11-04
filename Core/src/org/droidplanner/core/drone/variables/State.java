@@ -85,9 +85,15 @@ public class State extends DroneVariable {
 			myDrone.notifyDroneEvent(DroneEventsType.ARMING);
 			if (newState) {
 				myDrone.getWaypointManager().getWaypoints();
-			}else{
+			} else {
 				if (mode == ApmModes.ROTOR_RTL || mode == ApmModes.ROTOR_LAND) {
-					changeFlightMode(ApmModes.ROTOR_LOITER);  // When disarming set the mode back to loiter so we can do a takeoff in the future.					
+					changeFlightMode(ApmModes.ROTOR_LOITER); // When disarming
+																// set the mode
+																// back to
+																// loiter so we
+																// can do a
+																// takeoff in
+																// the future.
 				}
 			}
 		}

@@ -25,14 +25,13 @@ public class MissionCameraTriggerFragment extends MissionDetailFragment implemen
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CAMERA_TRIGGER));
 
 		CameraTrigger item = (CameraTrigger) getMissionItems().get(0);
-		
+
 		final NumericWheelAdapter adapter = new NumericWheelAdapter(getActivity()
-				.getApplicationContext(), R.layout.wheel_text_centered, 0,
-                100, "%d m");
+				.getApplicationContext(), R.layout.wheel_text_centered, 0, 100, "%d m");
 		final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.picker1);
 		cardAltitudePicker.setViewAdapter(adapter);
-        cardAltitudePicker.addChangingListener(this);
+		cardAltitudePicker.addChangingListener(this);
 		cardAltitudePicker.setCurrentValue((int) item.getTriggerDistance().valueInMeters());
 	}
 
@@ -40,10 +39,10 @@ public class MissionCameraTriggerFragment extends MissionDetailFragment implemen
 	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
 		switch (wheel.getId()) {
 		case R.id.picker1:
-            for(MissionItem missionItem : getMissionItems()) {
-            	CameraTrigger item = (CameraTrigger) missionItem;
-                item.setTriggerDistance(new Length(newValue));
-            }
+			for (MissionItem missionItem : getMissionItems()) {
+				CameraTrigger item = (CameraTrigger) missionItem;
+				item.setTriggerDistance(new Length(newValue));
+			}
 			break;
 		}
 	}

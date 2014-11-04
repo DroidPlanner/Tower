@@ -34,20 +34,22 @@ public class MissionSelection {
 		notifySelectionUpdate();
 	}
 
-    /**
-     * Removes the mission items in the given list from the selected list.
-     * @param itemList list of mission items to remove from the selected list.
-     */
-    public void removeItemsFromSelection(List<MissionItemProxy> itemList){
-        if(itemList == null || itemList.isEmpty()){
-            return;
-        }
+	/**
+	 * Removes the mission items in the given list from the selected list.
+	 * 
+	 * @param itemList
+	 *            list of mission items to remove from the selected list.
+	 */
+	public void removeItemsFromSelection(List<MissionItemProxy> itemList) {
+		if (itemList == null || itemList.isEmpty()) {
+			return;
+		}
 
-        for(MissionItemProxy item : itemList){
-            mSelectedItems.remove(item);
-        }
-        notifySelectionUpdate();
-    }
+		for (MissionItemProxy item : itemList) {
+			mSelectedItems.remove(item);
+		}
+		notifySelectionUpdate();
+	}
 
 	/**
 	 * Selects only the given mission items renders. TODO: check the mission

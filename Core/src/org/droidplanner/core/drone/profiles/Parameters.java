@@ -52,7 +52,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 
 	public void refreshParameters() {
 		parameters.clear();
-        parameterList.clear();
+		parameterList.clear();
 
 		if (parameterListener != null)
 			parameterListener.onBeginReceivingParameters();
@@ -60,9 +60,9 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 		resetWatchdog();
 	}
 
-    public List<Parameter> getParametersList(){
-        return parameterList;
-    }
+	public List<Parameter> getParametersList() {
+		return parameterList;
+	}
 
 	/**
 	 * Try to process a Mavlink message if it is a parameter related message
@@ -92,7 +92,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 
 		// Are all parameters here? Notify the listener with the parameters
 		if (parameters.size() >= m_value.param_count) {
-            parameterList.clear();
+			parameterList.clear();
 			for (int key : parameters.keySet()) {
 				parameterList.add(parameters.get(key));
 			}

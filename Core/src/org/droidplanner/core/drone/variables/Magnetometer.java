@@ -47,7 +47,7 @@ public class Magnetometer extends DroneVariable {
 		if (paramX == null || paramY == null || paramZ == null) {
 			return null;
 		}
-		return new int[]{(int) paramX.value,(int) paramY.value,(int) paramZ.value};
+		return new int[] { (int) paramX.value, (int) paramY.value, (int) paramZ.value };
 
 	}
 }

@@ -53,10 +53,11 @@ public class Survey extends MissionItem {
 			List<msg_mission_item> list = new ArrayList<msg_mission_item>();
 			build();
 
-			list.addAll((new CameraTrigger(mission, surveyData.getLongitudinalPictureDistance())).packMissionItem());
+			list.addAll((new CameraTrigger(mission, surveyData.getLongitudinalPictureDistance()))
+					.packMissionItem());
 			packGridPoints(list);
 			list.addAll((new CameraTrigger(mission, new Length(0.0)).packMissionItem()));
-			
+
 			return list;
 		} catch (Exception e) {
 			return new ArrayList<msg_mission_item>();
@@ -65,7 +66,7 @@ public class Survey extends MissionItem {
 
 	private void packGridPoints(List<msg_mission_item> list) {
 		for (Coord2D point : grid.gridPoints) {
-			msg_mission_item mavMsg = packSurveyPoint(point,surveyData.getAltitude());
+			msg_mission_item mavMsg = packSurveyPoint(point, surveyData.getAltitude());
 			list.add(mavMsg);
 		}
 	}

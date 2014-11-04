@@ -1,5 +1,9 @@
 package org.droidplanner.android.widgets.adapterViews;
 
+import java.util.List;
+
+import org.droidplanner.R;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
-
-import org.droidplanner.R;
-
-import java.util.List;
 
 /**
  * MissionItem Adapter for the MissionItem horizontal list view. This adapter
