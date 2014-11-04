@@ -13,6 +13,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.SparseBooleanArray;
 
+import com.ox3dr.services.android.lib.drone.connection.ConnectionType;
+
 /**
  * Provides structured access to Droidplanner preferences
  * 
@@ -30,7 +32,7 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	 * Default preference value
 	 */
 	public static final boolean DEFAULT_USAGE_STATISTICS = true;
-	public static final String DEFAULT_CONNECTION_TYPE = Utils.ConnectionType.USB.name();
+	public static final String DEFAULT_CONNECTION_TYPE = String.valueOf(ConnectionType.TYPE_USB);
 	private static final boolean DEFAULT_KEEP_SCREEN_ON = false;
 	private static final boolean DEFAULT_MAX_VOLUME_ON_START = false;
 	private static final boolean DEFAULT_PERMANENT_NOTIFICATION = true;
@@ -164,13 +166,18 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 				DEFAULT_USAGE_STATISTICS);
 	}
 
-	/**
-	 * @return the selected mavlink connection type.
-	 */
-	public String getMavLinkConnectionType() {
-		return prefs.getString(context.getString(R.string.pref_connection_type_key),
-				DEFAULT_CONNECTION_TYPE);
-	}
+    public void setConnectionParameterType(int connectionType){
+        prefs.edit().putString(context.getString(R.string.pref_connection_type_key),
+                String.valueOf(connectionType)).apply();
+    }
+
+    /**
+     * @return the selected mavlink connection type.
+     */
+    public int getConnectionParameterType(){
+        return Integer.parseInt(prefs.getString(context.getString(R.string
+                        .pref_connection_type_key), DEFAULT_CONNECTION_TYPE));
+    }
 
 	/**
 	 * @return true if the device screen should stay on.

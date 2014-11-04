@@ -4,9 +4,9 @@
     <!-- Contains preferences related to the app. -->
     <PreferenceCategory android:title="@string/app_settings" >
         <ListPreference
-            android:defaultValue="USB"
+            android:defaultValue="0"
             android:entries="@array/TelemetryConnectionTypes"
-            android:entryValues="@array/TelemetryConnectionTypes"
+            android:entryValues="@array/TelemetryConnectionTypesValues"
             android:key="@string/pref_connection_type_key"
             android:summary="@string/pref_connection_type_summary"
             android:title="@string/pref_connection_type" />

@@ -16,6 +16,7 @@ import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.DirectoryPath;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.variables.HeartBeat;
@@ -53,6 +54,7 @@ import android.widget.Toast;
 import com.getpebble.android.kit.PebbleKit;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
+import com.ox3dr.services.android.lib.drone.connection.ConnectionType;
 
 /**
  * Implements the application settings screen.
@@ -87,6 +89,7 @@ public class SettingsFragment extends PreferenceFragment implements
 	private final Handler mHandler = new Handler();
 
     private DroidPlannerApp dpApp;
+    private DroidPlannerPrefs dpPrefs;
 
     @Override
     public void onAttach(Activity activity){
@@ -102,7 +105,8 @@ public class SettingsFragment extends PreferenceFragment implements
 		initSummaryPerPrefs();
 
 		final Context context = getActivity().getApplicationContext();
-		final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        dpPrefs = new DroidPlannerPrefs(context);
+		final SharedPreferences sharedPref = dpPrefs.prefs;
 
 		setupPeriodicControls();
 
@@ -143,8 +147,7 @@ public class SettingsFragment extends PreferenceFragment implements
 			updateMapSettingsPreference(defaultProviderName);
 		}
 
-		// update the summary for the preferences in the mDefaultSummaryPrefs
-		// hash table.
+		// update the summary for the preferences in the mDefaultSummaryPrefs hash table.
 		for (String prefKey : mDefaultSummaryPrefs) {
 			final Preference pref = findPreference(prefKey);
 			if (pref != null) {
@@ -205,6 +208,7 @@ public class SettingsFragment extends PreferenceFragment implements
 		updateMavlinkVersionPreference(null);
 		setupPebblePreference();
 		setDronesharePreferencesListeners();
+        setupConnectionPreferences();
 	}
 
 	/**
@@ -256,6 +260,51 @@ public class SettingsFragment extends PreferenceFragment implements
 					});
 		}
 	}
+
+    private void setupConnectionPreferences(){
+        ListPreference connectionTypePref = (ListPreference) findPreference(getString(R.string
+                .pref_connection_type_key));
+        if(connectionTypePref != null){
+            int defaultConnectionType = dpPrefs.getConnectionParameterType();
+            updateConnectionPreferenceSummary(connectionTypePref, defaultConnectionType);
+            connectionTypePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int connectionType = Integer.parseInt((String)newValue);
+                    updateConnectionPreferenceSummary(preference, connectionType);
+                    return false;
+                }
+            });
+        }
+    }
+
+    private void updateConnectionPreferenceSummary(Preference preference, int connectionType){
+        String connectionName;
+        switch(connectionType){
+            case ConnectionType.TYPE_USB:
+                connectionName = "USB";
+                break;
+
+            case ConnectionType.TYPE_UDP:
+                connectionName = "UDP";
+                break;
+
+            case ConnectionType.TYPE_TCP:
+                connectionName = "TCP";
+                break;
+
+            case ConnectionType.TYPE_BLUETOOTH:
+                connectionName = "BLUETOOTH";
+                break;
+
+            default:
+                connectionName = null;
+                break;
+        }
+
+        if(connectionName != null)
+            preference.setSummary(connectionName);
+    }
 
 	/**
 	 * Pebble Install Button. When clicked, will check for pebble if pebble is
@@ -314,7 +363,6 @@ public class SettingsFragment extends PreferenceFragment implements
 	private void initSummaryPerPrefs() {
 		mDefaultSummaryPrefs.clear();
 
-		mDefaultSummaryPrefs.add(getString(R.string.pref_connection_type_key));
 		mDefaultSummaryPrefs.add(getString(R.string.pref_baud_type_key));
 		mDefaultSummaryPrefs.add(getString(R.string.pref_server_port_key));
 		mDefaultSummaryPrefs.add(getString(R.string.pref_server_ip_key));
