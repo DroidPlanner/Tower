@@ -1,7 +1,10 @@
 package org.droidplanner.android.api;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.ox3dr.services.android.lib.drone.property.Altitude;
@@ -17,6 +20,8 @@ import com.ox3dr.services.android.lib.drone.property.Type;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 import com.ox3dr.services.android.lib.model.IDroidPlannerApi;
 
+import org.droidplanner.android.DroidPlannerApp;
+
 /**
  * Created by fhuya on 11/4/14.
  */
@@ -24,10 +29,12 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
 
     private static final String TAG = DroneApi.class.getSimpleName();
 
+    private final LocalBroadcastManager lbm;
     private IDroidPlannerApi dpApi;
 
-    public DroneApi(IDroidPlannerApi dpApi){
+    public DroneApi(Context context, IDroidPlannerApi dpApi){
         this.dpApi = dpApi;
+        lbm = LocalBroadcastManager.getInstance(context);
     }
 
     private void handleRemoteException(RemoteException e){
@@ -176,6 +183,16 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
         return null;
     }
 
+    public void connect(){
+        lbm.sendBroadcast(new Intent(DroidPlannerApp.ACTION_TOGGLE_DRONE_CONNECTION)
+        .putExtra(DroidPlannerApp.EXTRA_ESTABLISH_CONNECTION, true));
+    }
+
+    public void disconnect(){
+        lbm.sendBroadcast(new Intent(DroidPlannerApp.ACTION_TOGGLE_DRONE_CONNECTION)
+                .putExtra(DroidPlannerApp.EXTRA_ESTABLISH_CONNECTION, false));
+    }
+
     @Override
     public boolean isConnected()  {
         if(isApiValid()){
@@ -237,6 +254,17 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
         if(isApiValid()){
             try {
                 dpApi.sendMission(mission);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
+    public void arm(boolean arm)  {
+        if(isApiValid()){
+            try {
+                dpApi.arm(arm);
             } catch (RemoteException e) {
                 handleRemoteException(e);
             }

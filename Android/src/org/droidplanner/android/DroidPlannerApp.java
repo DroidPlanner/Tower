@@ -112,7 +112,7 @@ public class DroidPlannerApp extends Application {
 
 	private Thread.UncaughtExceptionHandler exceptionHandler;
 
-    private final DroneApi droneApi = new DroneApi(null);
+    private DroneApi droneApi;
 
 	private IDroidPlannerServices ox3drServices;
 	private IDroidPlannerApi dpApi;
@@ -124,6 +124,7 @@ public class DroidPlannerApp extends Application {
 		super.onCreate();
 		final Context context = getApplicationContext();
 
+        droneApi = new DroneApi(context, dpApi);
 		dpPrefs = new DroidPlannerPrefs(context);
 
 		exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
