@@ -117,4 +117,10 @@ interface IDroidPlannerApi {
         * @param mission mission to upload to the drone.
         */
         oneway void sendMission(in Mission mission);
+
+        /**
+        * Arm or disarm the connected drone.
+        * @param arm true to arm, false to disarm.
+        */
+        oneway void arm(boolean arm);
 }
