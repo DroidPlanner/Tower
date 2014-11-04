@@ -7,7 +7,23 @@ public class Event {
 
     private static final String CLAZZ_NAME = Event.class.getName();
 
-    public static final String EVENT_CALIBRATION_MAG = CLAZZ_NAME + ".CALIBRATION_MAG";
+    /**
+     * Signals the start of magnetometer calibration.
+     */
+    public static final String EVENT_CALIBRATION_MAG_STARTED = CLAZZ_NAME + "" +
+            ".CALIBRATION_MAG_STARTED";
+
+    /**
+     * Signals a magnetometer calibration fitness update.
+     */
+    public static final String EVENT_CALIBRATION_MAG_ESTIMATION = CLAZZ_NAME + "" +
+            ".CALIBRATION_MAG_ESTIMATION";
+
+    /**
+     * Signals completion of the magnetometer calibration.
+     */
+    public static final String EVENT_CALIBRATION_MAG_COMPLETED = CLAZZ_NAME + "" +
+            ".CALIBRATION_MAG_COMPLETED";
 
     public static final String EVENT_CALIBRATION_IMU = CLAZZ_NAME + ".CALIBRATION_IMU";
 

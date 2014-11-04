@@ -129,5 +129,10 @@ interface IDroidPlannerApi {
         * Start the magnetometer calibration process.
         * @param startPoints points to start the calibration with.
         */
-        oneway void startMagnetometerCalibration(List<Point3D> startPoints);
+        oneway void startMagnetometerCalibration(in List<Point3D> startPoints);
+
+        /**
+        * Stop the magnetometer calibration is one if running.
+        */
+        oneway void stopMagnetometerCalibration();
 }
