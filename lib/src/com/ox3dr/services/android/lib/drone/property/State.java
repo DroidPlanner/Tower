@@ -14,12 +14,15 @@ public class State implements Parcelable {
     private String calibrationStatus;
     private VehicleMode vehicleMode;
     private String failsafeWarning;
+    private final int mavlinkVersion;
 
-    public State(VehicleMode mode, boolean armed, boolean flying, String failsafeWarning){
+    public State(VehicleMode mode, boolean armed, boolean flying, String failsafeWarning,
+                 int mavlinkVersion){
         this.vehicleMode = mode;
         this.armed = armed;
         this.isFlying = flying;
         this.failsafeWarning = failsafeWarning;
+        this.mavlinkVersion = mavlinkVersion;
     }
 
     public boolean isArmed() {
@@ -58,6 +61,10 @@ public class State implements Parcelable {
         return this.calibrationStatus;
     }
 
+    public int getMavlinkVersion() {
+        return mavlinkVersion;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -70,6 +77,7 @@ public class State implements Parcelable {
         dest.writeString(this.calibrationStatus);
         dest.writeParcelable(this.vehicleMode, 0);
         dest.writeString(this.failsafeWarning);
+        dest.writeInt(this.mavlinkVersion);
     }
 
     private State(Parcel in) {
@@ -78,6 +86,7 @@ public class State implements Parcelable {
         this.calibrationStatus = in.readString();
         this.vehicleMode = in.readParcelable(VehicleMode.class.getClassLoader());
         this.failsafeWarning = in.readString();
+        this.mavlinkVersion = in.readInt();
     }
 
     public static final Creator<State> CREATOR = new Creator<State>() {
