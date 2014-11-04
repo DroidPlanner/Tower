@@ -12,6 +12,7 @@ import com.ox3dr.services.android.lib.drone.property.Mission;
 import com.ox3dr.services.android.lib.drone.property.State;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 import com.ox3dr.services.android.lib.drone.property.Type;
+import com.ox3dr.services.android.lib.coordinate.Point3D;
 
 /**
 * Interface used to access the drone properties.
@@ -123,4 +124,10 @@ interface IDroidPlannerApi {
         * @param arm true to arm, false to disarm.
         */
         oneway void arm(boolean arm);
+
+        /**
+        * Start the magnetometer calibration process.
+        * @param startPoints points to start the calibration with.
+        */
+        oneway void startMagnetometerCalibration(List<Point3D> startPoints);
 }
