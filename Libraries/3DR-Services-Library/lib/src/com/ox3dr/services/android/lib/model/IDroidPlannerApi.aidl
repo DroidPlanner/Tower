@@ -16,6 +16,7 @@ import com.ox3dr.services.android.lib.coordinate.Point3D;
 import com.ox3dr.services.android.lib.drone.property.Signal;
 import com.ox3dr.services.android.lib.drone.property.GuidedState;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.ox3dr.services.android.lib.gcs.follow.FollowState;
 
 /**
 * Interface used to access the drone properties.
@@ -99,6 +100,11 @@ interface IDroidPlannerApi {
         * Retrieves the guided state of the connected drone.
         */
         GuidedState getGuidedState();
+
+        /**
+        * Retrieves the follow-me state of the connected drone.
+        */
+        FollowState getFollowState();
 
         /*** Oneway method calls ***/
 
@@ -185,4 +191,15 @@ interface IDroidPlannerApi {
         * @param zVel vertical velocity.
         */
         oneway void setGuidedVelocity(double xVel, double yVel, double zVel);
+
+        /**
+        * Enables follow-me if disabled.
+        * @param followMode follow-me mode to use.
+        */
+        oneway void enableFollowMe(in FollowMode followMode);
+
+        /**
+        * Disables follow me is enabled.
+        */
+        oneway void disableFollowMe();
 }

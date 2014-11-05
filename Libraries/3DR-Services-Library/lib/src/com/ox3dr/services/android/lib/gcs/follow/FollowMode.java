@@ -1,9 +1,12 @@
 package com.ox3dr.services.android.lib.gcs.follow;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by fhuya on 11/5/14.
  */
-public class FollowMode {
+public class FollowMode implements Parcelable {
 
     public static final int TYPE_LEASH = 0;
     public static final int TYPE_LEAD = 1;
@@ -14,12 +17,10 @@ public class FollowMode {
 
     private final int followType;
     private final String typeLabel;
-    private final double radius;
 
-    public FollowMode(int followType, String typeLabel, double radius) {
+    public FollowMode(int followType, String typeLabel) {
         this.followType = followType;
         this.typeLabel = typeLabel;
-        this.radius = radius;
     }
 
     public int getFollowType() {
@@ -30,7 +31,29 @@ public class FollowMode {
         return typeLabel;
     }
 
-    public double getRadius() {
-        return radius;
+    @Override
+    public int describeContents() {
+        return 0;
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.followType);
+        dest.writeString(this.typeLabel);
+    }
+
+    private FollowMode(Parcel in) {
+        this.followType = in.readInt();
+        this.typeLabel = in.readString();
+    }
+
+    public static final Parcelable.Creator<FollowMode> CREATOR = new Parcelable.Creator<FollowMode>() {
+        public FollowMode createFromParcel(Parcel source) {
+            return new FollowMode(source);
+        }
+
+        public FollowMode[] newArray(int size) {
+            return new FollowMode[size];
+        }
+    };
 }
