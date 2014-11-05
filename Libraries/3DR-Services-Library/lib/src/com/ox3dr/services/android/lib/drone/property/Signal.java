@@ -63,6 +63,14 @@ public class Signal implements Parcelable {
         return remnoise;
     }
 
+    public double getFadeMargin() {
+        return rssi - noise;
+    }
+
+    public double getRemFadeMargin() {
+        return remrssi - remnoise;
+    }
+
     @Override
     public int describeContents() {
         return 0;
