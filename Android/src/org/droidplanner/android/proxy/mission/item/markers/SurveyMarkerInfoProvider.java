@@ -22,8 +22,9 @@ public class SurveyMarkerInfoProvider {
 	}
 
 	private void updateMarkerInfoList() {
-		for (Coord2D point : mSurvey.polygon.getPoints()) {
-			mPolygonMarkers.add(new PolygonMarkerInfo(point));
+		List<Coord2D> points = mSurvey.polygon.getPoints();
+		for (Coord2D point : points) {
+			mPolygonMarkers.add(new PolygonMarkerInfo(point,mSurvey, points.indexOf(point)));
 		}
 	}
 
