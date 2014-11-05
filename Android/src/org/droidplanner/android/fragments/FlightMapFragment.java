@@ -121,8 +121,8 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	@Override
 	public void onMapLongClick(LatLong coord) {
 		if (drone.isConnected()) {
-			if (drone.getGuidedPoint().isInitialized()) {
-				drone.getGuidedPoint().newGuidedCoord(coord);
+			if (drone.getGuidedState().isInitialized()) {
+				drone.sendGuidedPoint(coord, false);
 			} else {
 				if (guidedModeOnLongPress) {
 					GuidedDialog dialog = new GuidedDialog();

@@ -10,12 +10,14 @@ import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.ox3dr.services.android.lib.coordinate.LatLongAlt;
 import com.ox3dr.services.android.lib.coordinate.Point3D;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.property.Altitude;
 import com.ox3dr.services.android.lib.drone.property.Attitude;
 import com.ox3dr.services.android.lib.drone.property.Battery;
 import com.ox3dr.services.android.lib.drone.property.Gps;
+import com.ox3dr.services.android.lib.drone.property.GuidedState;
 import com.ox3dr.services.android.lib.drone.property.Home;
 import com.ox3dr.services.android.lib.drone.property.Mission;
 import com.ox3dr.services.android.lib.drone.property.Parameters;
@@ -278,6 +280,18 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     }
 
     @Override
+    public GuidedState getGuidedState(){
+        if(isApiValid()){
+            try {
+                return dpApi.getGuidedState();
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+        return null;
+    }
+
+    @Override
     public void changeVehicleMode(VehicleMode newMode)  {
         if(isApiValid()){
             try {
@@ -383,6 +397,28 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
         if(isApiValid()){
             try {
                 dpApi.sendIMUCalibrationAck(step);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
+    public void doGuidedTakeoff(double altitude) {
+        if(isApiValid()){
+            try {
+                dpApi.doGuidedTakeoff(altitude);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
+    public void sendGuidedPoint(LatLongAlt point, boolean force) {
+        if(isApiValid()){
+            try {
+                dpApi.sendGuidedPoint(point, force);
             } catch (RemoteException e) {
                 handleRemoteException(e);
             }
