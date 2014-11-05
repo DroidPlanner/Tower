@@ -1,6 +1,9 @@
 package org.droidplanner.android.fragments.mode;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +12,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+
+import com.ox3dr.services.android.lib.drone.event.Event;
 
 import org.droidplanner.R;
 import org.droidplanner.android.api.services.DroidPlannerApi;
@@ -22,6 +27,18 @@ import org.droidplanner.core.model.Drone;
 
 public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSelectedListener,
 		OnDroneListener {
+
+    private static final IntentFilter eventFilter = new IntentFilter(Event.EVENT_FOLLOW_UPDATE);
+
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(Event.EVENT_FOLLOW_UPDATE.equals(action)){
+
+            }
+        }
+    };
 
 	private Follow followMe;
 	private Spinner spinner;
