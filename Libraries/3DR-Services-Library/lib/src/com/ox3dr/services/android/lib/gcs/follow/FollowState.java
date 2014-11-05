@@ -17,9 +17,9 @@ public class FollowState implements Parcelable {
 
     private final int state;
     private final double radius;
-    private final FollowMode mode;
+    private final FollowType mode;
 
-    public FollowState(int state, double radius, FollowMode mode) {
+    public FollowState(int state, double radius, FollowType mode) {
         this.state = state;
         this.radius = radius;
         this.mode = mode;
@@ -33,7 +33,7 @@ public class FollowState implements Parcelable {
         return radius;
     }
 
-    public FollowMode getMode() {
+    public FollowType getMode() {
         return mode;
     }
 
@@ -52,7 +52,7 @@ public class FollowState implements Parcelable {
     private FollowState(Parcel in) {
         this.state = in.readInt();
         this.radius = in.readDouble();
-        this.mode = in.readParcelable(FollowMode.class.getClassLoader());
+        this.mode = in.readParcelable(FollowType.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<FollowState> CREATOR = new Parcelable.Creator<FollowState>() {
