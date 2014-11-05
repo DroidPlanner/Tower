@@ -188,7 +188,9 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 
     public static void forceSendGuidedPoint(Drone drone, Coord2D coord, double altitudeInMeters){
         drone.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
-        MavLinkModes.setGuidedMode(drone, coord.getLat(), coord.getLng(), altitudeInMeters);
+        if (coord!=null) {
+        	MavLinkModes.setGuidedMode(drone, coord.getLat(), coord.getLng(), altitudeInMeters);			
+		}
     }
 
 	private static double getDroneAltConstrained(Drone drone) {
