@@ -10,7 +10,7 @@ import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.ox3dr.services.android.lib.coordinate.LatLongAlt;
+import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.coordinate.Point3D;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.property.Altitude;
@@ -415,10 +415,32 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     }
 
     @Override
-    public void sendGuidedPoint(LatLongAlt point, boolean force) {
+    public void sendGuidedPoint(LatLong point, boolean force) {
         if(isApiValid()){
             try {
                 dpApi.sendGuidedPoint(point, force);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
+    public void setGuidedAltitude(double altitude){
+        if(isApiValid()){
+            try {
+                dpApi.setGuidedAltitude(altitude);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
+    public void setGuidedVelocity(double xVel, double yVel, double zVel)  {
+        if(isApiValid()){
+            try {
+                dpApi.setGuidedVelocity(xVel, yVel, zVel);
             } catch (RemoteException e) {
                 handleRemoteException(e);
             }

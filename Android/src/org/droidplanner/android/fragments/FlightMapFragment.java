@@ -137,7 +137,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	@Override
 	public void onForcedGuidedPoint(LatLng coord) {
 		try {
-			drone.getGuidedPoint().forcedGuidedCoordinate(DroneHelper.LatLngToCoord(coord));
+			drone.sendGuidedPoint(DroneHelper.LatLngToCoord(coord), true);
 		} catch (Exception e) {
 			Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
 		}
@@ -153,12 +153,12 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 
 	@Override
 	public void onMarkerDragEnd(MarkerInfo markerInfo) {
-		drone.getGuidedPoint().newGuidedCoord(markerInfo.getPosition());
+		drone.sendGuidedPoint(markerInfo.getPosition(), false);
 	}
 
 	@Override
 	public boolean onMarkerClick(MarkerInfo markerInfo) {
-		drone.getGuidedPoint().newGuidedCoord(markerInfo.getPosition());
+		drone.sendGuidedPoint(markerInfo.getPosition(), false);
 		return true;
 	}
 

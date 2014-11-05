@@ -6,17 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-import org.droidplanner.core.drone.variables.GuidedPoint;
-import org.droidplanner.core.model.Drone;
 
 public class ModeGuidedFragment extends ApiListenerFragment implements
 		CardWheelHorizontalView.OnCardWheelChangedListener {
-
-	protected Drone drone;
 
 	private CardWheelHorizontalView mAltitudeWheel;
 
@@ -35,12 +31,6 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
 		mAltitudeWheel = (CardWheelHorizontalView) parentView.findViewById(R.id.altitude_spinner);
 		mAltitudeWheel.setViewAdapter(altitudeAdapter);
 
-		if (drone != null) {
-			final int initialValue = (int) Math.max(drone.getGuidedPoint().getAltitude()
-					.valueInMeters(), GuidedPoint.getMinAltitude(drone));
-			mAltitudeWheel.setCurrentValue(initialValue);
-		}
-
 		mAltitudeWheel.addChangingListener(this);
 	}
 
@@ -56,18 +46,18 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
 	public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
 		switch (cardWheel.getId()) {
 		case R.id.altitude_spinner:
-			if (drone != null)
-				drone.getGuidedPoint().changeGuidedAltitude(newValue);
+			final DroneApi droneApi = getDroneApi();
+			if (droneApi.isConnected())
+				droneApi.setGuidedAltitude(newValue);
 			break;
 		}
 	}
 
 	@Override
-	public void onApiConnected(DroidPlannerApi api) {
-		drone = api.getDrone();
+	public void onApiConnected(DroneApi api) {
 		if (mAltitudeWheel != null) {
-			final int initialValue = (int) Math.max(drone.getGuidedPoint().getAltitude()
-					.valueInMeters(), GuidedPoint.getMinAltitude(drone));
+			final int initialValue = (int) Math.max(api.getGuidedState().getCoordinate()
+					.getAltitude(), 2f);
 			mAltitudeWheel.setCurrentValue(initialValue);
 		}
 	}
