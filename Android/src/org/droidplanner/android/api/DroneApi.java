@@ -7,6 +7,7 @@ import android.os.RemoteException;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.ox3dr.services.android.lib.coordinate.Point3D;
 import com.ox3dr.services.android.lib.drone.property.Altitude;
 import com.ox3dr.services.android.lib.drone.property.Attitude;
 import com.ox3dr.services.android.lib.drone.property.Battery;
@@ -21,6 +22,8 @@ import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 import com.ox3dr.services.android.lib.model.IDroidPlannerApi;
 
 import org.droidplanner.android.DroidPlannerApp;
+
+import java.util.List;
 
 /**
  * Created by fhuya on 11/4/14.
@@ -265,6 +268,28 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
         if(isApiValid()){
             try {
                 dpApi.arm(arm);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
+    public void startMagnetometerCalibration(List<Point3D> startPoints) {
+        if(isApiValid()){
+            try {
+                dpApi.startMagnetometerCalibration(startPoints);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
+    public void stopMagnetometerCalibration() {
+        if(isApiValid()){
+            try {
+                dpApi.stopMagnetometerCalibration();
             } catch (RemoteException e) {
                 handleRemoteException(e);
             }

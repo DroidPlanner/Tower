@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,24 +14,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ox3dr.services.android.lib.coordinate.Point3D;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.event.Extra;
 
 import org.droidplanner.R;
 import org.droidplanner.android.api.DroneApi;
-import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.widgets.scatterplot.ScatterPlot;
-import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.drone.variables.helpers.MagnetometerCalibration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import ellipsoidFit.FitPoints;
-import ellipsoidFit.ThreeSpacePoint;
-
 public class FragmentSetupMAG extends ApiListenerFragment {
+
+    private static final int MIN_POINTS_COUNT = 250;
 
 	private static final int CALIBRATION_IDLE = 0;
 	private static final int CALIBRATION_IN_PROGRESS = 1;
@@ -62,20 +59,33 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 				buttonStep.setEnabled(false);
 			}
             else if(Event.EVENT_CALIBRATION_MAG_STARTED.equals(action)){
+                inProgressPoints = intent.getParcelableArrayListExtra(Extra
+                        .EXTRA_CALIBRATION_MAG_POINTS);
 
+                setCalibrationStatus(CALIBRATION_IN_PROGRESS);
             }
             else if(Event.EVENT_CALIBRATION_MAG_ESTIMATION.equals(action)){
 
-                final int pointsCount = points.size();
+                inProgressPoints = intent.getParcelableArrayListExtra(Extra
+                        .EXTRA_CALIBRATION_MAG_POINTS);
+
+                final int pointsCount = inProgressPoints == null ? 0 : inProgressPoints.size();
                 if (pointsCount == 0) {
                     return;
                 }
 
-                if (pointsCount < MagnetometerCalibration.MIN_POINTS_COUNT) {
+                final double fitness = intent.getDoubleExtra(Extra.EXTRA_CALIBRATION_MAG_FITNESS,
+                        0);
+                final double[] fitCenter = intent.getDoubleArrayExtra(Extra
+                        .EXTRA_CALIBRATION_MAG_FIT_CENTER);
+                final double[] fitRadii = intent.getDoubleArrayExtra(Extra
+                        .EXTRA_CALIBRATION_MAG_FIT_RADII);
+
+                if (pointsCount < MIN_POINTS_COUNT) {
                     calibrationFitness.setIndeterminate(true);
                     calibrationProgress.setText("0 / 100");
                 } else {
-                    final int progress = (int) (ellipsoidFit.getFitness() * 100);
+                    final int progress = (int) (fitness * 100);
                     calibrationFitness.setIndeterminate(false);
                     calibrationFitness.setMax(100);
                     calibrationFitness.setProgress(progress);
@@ -84,27 +94,25 @@ public class FragmentSetupMAG extends ApiListenerFragment {
                 }
 
                 // Grab the last point
-                final ThreeSpacePoint point = points.get(pointsCount - 1);
+                final Point3D point = inProgressPoints.get(pointsCount - 1);
 
                 plot1.addData((float) point.x);
                 plot1.addData((float) point.z);
-                if (ellipsoidFit.center.isNaN() || ellipsoidFit.radii.isNaN()) {
+                if (fitCenter == null || fitRadii == null) {
                     plot1.updateSphere(null);
                 } else {
-                    plot1.updateSphere(new int[] { (int) ellipsoidFit.center.getEntry(0),
-                            (int) ellipsoidFit.center.getEntry(2), (int) ellipsoidFit.radii.getEntry(0),
-                            (int) ellipsoidFit.radii.getEntry(2) });
+                    plot1.updateSphere(new int[] { (int) fitCenter[0],  (int) fitCenter[2],
+                            (int) fitRadii[0],  (int) fitRadii[2] });
                 }
                 plot1.invalidate();
 
                 plot2.addData((float) point.y);
                 plot2.addData((float) point.z);
-                if (ellipsoidFit.center.isNaN() || ellipsoidFit.radii.isNaN()) {
+                if (fitCenter == null || fitRadii == null) {
                     plot2.updateSphere(null);
                 } else {
-                    plot2.updateSphere(new int[] { (int) ellipsoidFit.center.getEntry(1),
-                            (int) ellipsoidFit.center.getEntry(2), (int) ellipsoidFit.radii.getEntry(1),
-                            (int) ellipsoidFit.radii.getEntry(2) });
+                    plot2.updateSphere(new int[] { (int) fitCenter[1],  (int) fitCenter[2],
+                            (int) fitRadii[1],  (int) fitRadii[2]  });
                 }
                 plot2.invalidate();
 
@@ -112,8 +120,9 @@ public class FragmentSetupMAG extends ApiListenerFragment {
             else if(Event.EVENT_CALIBRATION_MAG_COMPLETED.equals(action)){
                 double[] offsets = intent.getDoubleArrayExtra(Extra.EXTRA_CALIBRATION_MAG_OFFSETS);
                 if(offsets != null) {
-                    Log.d("MAG", "Calibration Finished: " + offsets.toString());
-                    Toast.makeText(getActivity(), "Calibration Finished: " + offsets.toString(),
+                    String offsetsSummary = Arrays.toString(offsets);
+                    Log.d("MAG", "Calibration Finished: " + offsetsSummary);
+                    Toast.makeText(getActivity(), "Calibration Finished: " + offsetsSummary,
                             Toast.LENGTH_LONG).show();
                 }
 
@@ -129,6 +138,9 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 	private ScatterPlot plot1, plot2;
 
 	private int calibrationStatus = CALIBRATION_IDLE;
+
+    private List<Point3D> startPoints;
+    private ArrayList<Point3D> inProgressPoints;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -180,12 +192,12 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 			setCalibrationStatus(calibrationStatus);
 
 			if (calibrationStatus == CALIBRATION_IN_PROGRESS) {
-				final ArrayList<ParcelableThreeSpacePoint> loadedPoints = savedInstanceState
+				final ArrayList<Point3D> loadedPoints = savedInstanceState
 						.getParcelableArrayList(EXTRA_CALIBRATION_POINTS);
 				if (loadedPoints != null && !loadedPoints.isEmpty()) {
 					startPoints = loadedPoints;
 
-					for (ParcelableThreeSpacePoint point : loadedPoints) {
+					for (Point3D point : loadedPoints) {
 						final double x = point.x;
 						final double y = point.y;
 						final double z = point.z;
@@ -210,30 +222,20 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 
 		outState.putInt(EXTRA_CALIBRATION_STATUS, calibrationStatus);
 
-		if (calibration != null) {
-			final List<ThreeSpacePoint> fitPoints = calibration.getPoints();
-			final int pointsCount = fitPoints.size();
-			if (pointsCount > 0) {
-				final ArrayList<ParcelableThreeSpacePoint> savedPoints = new ArrayList<ParcelableThreeSpacePoint>(
-						pointsCount);
-				for (ThreeSpacePoint point : fitPoints) {
-					savedPoints.add(new ParcelableThreeSpacePoint(point));
-				}
-
-				outState.putParcelableArrayList(EXTRA_CALIBRATION_POINTS, savedPoints);
-			}
+		if (getDroneApi().isConnected() && inProgressPoints != null && !inProgressPoints.isEmpty()){
+				outState.putParcelableArrayList(EXTRA_CALIBRATION_POINTS, inProgressPoints);
 		}
 	}
 
 	private void pauseCalibration() {
-		if (calibration != null) {
-			calibration.stop();
+		if (getDroneApi().isConnected()) {
+			getDroneApi().stopMagnetometerCalibration();
 		}
 	}
 
 	private void cancelCalibration() {
-		if (calibration != null) {
-			calibration.stop();
+        if (getDroneApi().isConnected()) {
+            getDroneApi().stopMagnetometerCalibration();
 			if (calibrationStatus == CALIBRATION_IN_PROGRESS) {
 				setCalibrationStatus(CALIBRATION_IDLE);
 			}
@@ -288,23 +290,11 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 	}
 
 	public void startCalibration() {
-		DroidPlannerApi dpApi = getDroneApi();
-		if (calibration != null && dpApi != null) {
-			if (dpApi.getDrone().getMagnetometer().getOffsets() == null) {
-				Toast.makeText(getActivity(), " Please load the parameters before calibrating",
-						Toast.LENGTH_LONG).show();
-			}
-
-			calibration.start(startPoints);
+		DroneApi dpApi = getDroneApi();
+		if (dpApi.isConnected()) {
+            dpApi.startMagnetometerCalibration(startPoints);
 			startPoints = null;
-
-			setCalibrationStatus(CALIBRATION_IN_PROGRESS);
 		}
-	}
-
-	@Override
-	public void newEstimation(FitPoints ellipsoidFit, List<ThreeSpacePoint> points) {
-
 	}
 
 	public static CharSequence getTitle(Context context) {
@@ -313,25 +303,6 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 
 	@Override
 	public void onApiConnected(DroneApi api) {
-		calibration = new MagnetometerCalibration(api.getDrone(), this,
-				new DroneInterfaces.Handler() {
-					private final Handler handler = new Handler();
-
-					@Override
-					public void removeCallbacks(Runnable thread) {
-						this.handler.removeCallbacks(thread);
-					}
-
-					@Override
-					public void post(Runnable thread) {
-						this.handler.post(thread);
-					}
-
-					@Override
-					public void postDelayed(Runnable thread, long timeout) {
-						this.handler.postDelayed(thread, timeout);
-					}
-				});
 
 		if (api.isConnected() && !api.getState().isFlying()) {
 			buttonStep.setEnabled(true);
@@ -350,6 +321,5 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 	public void onApiDisconnected() {
 		getBroadcastManager().unregisterReceiver(broadcastReceiver);
 		pauseCalibration();
-		calibration = null;
 	}
 }
