@@ -15,6 +15,7 @@ import com.ox3dr.services.android.lib.drone.property.Type;
 import com.ox3dr.services.android.lib.coordinate.Point3D;
 import com.ox3dr.services.android.lib.drone.property.Signal;
 import com.ox3dr.services.android.lib.drone.property.GuidedState;
+import com.ox3dr.services.android.lib.coordinate.LatLongAlt;
 
 /**
 * Interface used to access the drone properties.
