@@ -6,6 +6,7 @@ import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
+import org.droidplanner.android.proxy.mission.item.markers.PolygonMarkerInfo;
 import org.droidplanner.android.proxy.mission.item.markers.SurveyMarkerInfoProvider;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
@@ -70,10 +71,12 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	}
 
 	private void checkForWaypointMarker(MarkerInfo markerInfo) {
-		if (!(markerInfo instanceof SurveyMarkerInfoProvider)
-				&& (markerInfo instanceof MissionItemMarkerInfo)) {
+		if ((markerInfo instanceof MissionItemMarkerInfo)) {
 			missionProxy.move(((MissionItemMarkerInfo) markerInfo).getMarkerOrigin(),
 					markerInfo.getPosition());
+		}else if ((markerInfo instanceof PolygonMarkerInfo)) {
+			PolygonMarkerInfo marker = (PolygonMarkerInfo) markerInfo;
+			missionProxy.movePolygonPoint(marker.getSurvey(), marker.getIndex(), markerInfo.getPosition());
 		}
 	}
 
