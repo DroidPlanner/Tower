@@ -1,20 +1,20 @@
 package org.droidplanner.android.graphic.map;
 
 import org.droidplanner.R;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.core.drone.variables.Home;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.model.Drone;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.ox3dr.services.android.lib.drone.property.Home;
+
 public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 
 	private Home home;
 
-	public GraphicHome(Drone drone) {
+	public GraphicHome(DroneApi drone) {
 		home = drone.getHome();
 	}
 
@@ -38,13 +38,13 @@ public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 	}
 
 	@Override
-	public Coord2D getPosition() {
-		return home.getCoord();
+	public com.ox3dr.services.android.lib.coordinate.LatLong getPosition() {
+		return home.getCoordinate();
 	}
 
 	@Override
 	public String getSnippet() {
-		return "Home " + home.getAltitude();
+		return "Home " + home.getCoordinate().getAltitude();
 	}
 
 	@Override

@@ -1,15 +1,16 @@
 package org.droidplanner.android.proxy.mission.item.markers;
 
+import com.ox3dr.services.android.lib.coordinate.LatLong;
+
 import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 /**
  */
 public class PolygonMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
 
-	private final Coord2D mPoint;
+	private final LatLong mPoint;
 
-	public PolygonMarkerInfo(Coord2D point) {
+	public PolygonMarkerInfo(LatLong point) {
 		mPoint = point;
 	}
 
@@ -24,7 +25,7 @@ public class PolygonMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
 	}
 
 	@Override
-	public Coord2D getPosition() {
+	public com.ox3dr.services.android.lib.coordinate.LatLong getPosition() {
 		return mPoint;
 	}
 

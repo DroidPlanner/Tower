@@ -1,6 +1,7 @@
 package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.dialogs.GuidedDialog;
 import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
 import org.droidplanner.android.maps.DPMap;
@@ -8,11 +9,11 @@ import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.model.Drone;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -22,10 +23,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.ox3dr.services.android.lib.drone.event.Event;
 
 public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
-		DPMap.OnMarkerClickListener, DPMap.OnMarkerDragListener, GuidedDialogListener,
-		OnDroneListener {
+		DPMap.OnMarkerClickListener, DPMap.OnMarkerDragListener, GuidedDialogListener {
 
 	private static final int MAX_TOASTS_FOR_LOCATION_PRESS = 3;
 
@@ -40,6 +42,21 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
      * enable the behavior.
      */
     private static boolean didZoomOnUserLocation = false;
+
+
+    private static final IntentFilter eventFilter = new IntentFilter(Event.EVENT_ARMING);
+
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(Event.EVENT_ARMING.equals(action)){
+                if (drone.getState().isArmed()) {
+                    mMapFragment.clearFlightPath();
+                }
+            }
+        }
+    };
 
 	private DroidPlannerPrefs mAppPrefs;
 
@@ -89,9 +106,21 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 		return true;
 	}
 
+    @Override
+    public void onApiConnected(DroneApi droneApi){
+        super.onApiConnected(droneApi);
+        getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
+    }
+
+    @Override
+    public void onApiDisconnected(){
+        super.onApiDisconnected();
+        getBroadcastManager().unregisterReceiver(eventReceiver);
+    }
+
 	@Override
-	public void onMapLongClick(Coord2D coord) {
-		if (drone.getMavClient().isConnected()) {
+	public void onMapLongClick(LatLong coord) {
+		if (drone.isConnected()) {
 			if (drone.getGuidedPoint().isInitialized()) {
 				drone.getGuidedPoint().newGuidedCoord(coord);
 			} else {
@@ -134,22 +163,6 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		switch (event) {
-		case ARMING:
-			// Clear the previous flight path when arming.
-			if (drone.getState().isArmed()) {
-				mMapFragment.clearFlightPath();
-			}
-			break;
-		default:
-			break;
-
-		}
-		super.onDroneEvent(event, drone);
-	}
-
-	@Override
 	protected boolean isMissionDraggable() {
 		return false;
 	}
@@ -169,8 +182,9 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	public void goToDroneLocation() {
 		super.goToDroneLocation();
 
-		if (!this.drone.getGps().isPositionValid())
+		if (!this.drone.getGps().isValid())
 			return;
+
 		final int pressCount = mAppPrefs.prefs.getInt(PREF_DRONE_LOCATION_FIRST_PRESS,
 				DEFAULT_DRONE_LOCATION_FIRST_PRESS);
 		if (pressCount < MAX_TOASTS_FOR_LOCATION_PRESS) {

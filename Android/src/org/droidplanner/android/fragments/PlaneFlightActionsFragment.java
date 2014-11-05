@@ -13,6 +13,7 @@ import com.google.android.gms.analytics.HitBuilders;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.analytics.GAUtils;
@@ -238,7 +239,7 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
 	}
 
 	@Override
-	public boolean isSlidingUpPanelEnabled(DroidPlannerApi api) {
+	public boolean isSlidingUpPanelEnabled(DroneApi api) {
 		final State droneState = api.getState();
 		return api.isConnected() && droneState.isArmed();
 	}

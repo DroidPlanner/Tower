@@ -13,6 +13,8 @@ import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 
+import com.ox3dr.services.android.lib.coordinate.LatLong;
+
 /**
  * Template class and factory for a mission item's marker source.
  */
@@ -76,12 +78,12 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo 
 	}
 
 	@Override
-	public Coord2D getPosition() {
+	public com.ox3dr.services.android.lib.coordinate.LatLong getPosition() {
 		return ((SpatialCoordItem) mMarkerOrigin.getMissionItem()).getCoordinate();
 	}
 
 	@Override
-	public void setPosition(Coord2D coord) {
+	public void setPosition(LatLong coord) {
 		((SpatialCoordItem) mMarkerOrigin.getMissionItem()).setPosition(coord);
 	}
 

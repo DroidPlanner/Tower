@@ -3,10 +3,10 @@ package org.droidplanner.android.fragments;
 import android.location.LocationListener;
 import android.widget.Toast;
 
+import com.ox3dr.services.android.lib.coordinate.LatLong;
+
 import org.droidplanner.android.graphic.map.GraphicLocator;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.gcs.location.Location;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import java.util.Collections;
 
@@ -29,15 +29,15 @@ public class LocatorMapFragment extends DroneMap {
         return false;
     }
 
-    public void updateLastPosition(Coord2D lastPosition) {
+    public void updateLastPosition(LatLong lastPosition) {
         graphicLocator.setLastPosition(lastPosition);
         mMapFragment.updateMarker(graphicLocator);
     }
 
     public void zoomToFit() {
         // add lastPosition
-        final Coord2D lastPosition = graphicLocator.getPosition();
-        if(lastPosition != null && !lastPosition.isEmpty()) {
+        final LatLong lastPosition = graphicLocator.getPosition();
+        if(lastPosition != null && lastPosition.getLongitude() != 0 && lastPosition.getLatitude() != 0) {
             mMapFragment.zoomToFitMyLocation(Collections.singletonList(lastPosition));
         }
         else{

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
@@ -15,13 +15,12 @@ import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.model.Drone;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -30,9 +29,54 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public abstract class DroneMap extends ApiListenerFragment implements OnDroneListener {
+import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.ox3dr.services.android.lib.drone.event.Event;
+import com.ox3dr.services.android.lib.drone.property.Gps;
+
+public abstract class DroneMap extends ApiListenerFragment {
 
 	private final static String TAG = DroneMap.class.getSimpleName();
+
+    private static final IntentFilter eventFilter = new IntentFilter();
+    static {
+        eventFilter.addAction(Event.EVENT_MISSION_UPDATE);
+        eventFilter.addAction(Event.EVENT_GPS);
+        eventFilter.addAction(Event.EVENT_GUIDED_POINT);
+        eventFilter.addAction(Event.EVENT_HEARTBEAT_FIRST);
+        eventFilter.addAction(Event.EVENT_HEARTBEAT_RESTORED);
+        eventFilter.addAction(Event.EVENT_HEARTBEAT_TIMEOUT);
+        eventFilter.addAction(Event.EVENT_DISCONNECTED);
+    }
+
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(Event.EVENT_MISSION_UPDATE.equals(action)){
+                postUpdate();
+            }
+            else if(Event.EVENT_GPS.equals(action)){
+                mMapFragment.updateMarker(graphicDrone);
+                mMapFragment.updateDroneLeashPath(guided);
+                final Gps droneGps = drone.getGps();
+                if (droneGps.isValid()) {
+                    mMapFragment.addFlightPathPoint(droneGps.getPosition());
+                }
+            }
+            else if(Event.EVENT_GUIDED_POINT.equals(action)){
+                mMapFragment.updateMarker(guided);
+                mMapFragment.updateDroneLeashPath(guided);
+            }
+            else if(Event.EVENT_HEARTBEAT_FIRST.equals(action)
+                    || Event.EVENT_HEARTBEAT_RESTORED.equals(action)){
+                mMapFragment.updateMarker(graphicDrone);
+            }
+            else if(Event.EVENT_DISCONNECTED.equals(action)
+                    || Event.EVENT_HEARTBEAT_TIMEOUT.equals(action)){
+                mMapFragment.updateMarker(graphicDrone);
+            }
+        }
+    };
 
 	private final Handler mHandler = new Handler();
 
@@ -92,7 +136,7 @@ public abstract class DroneMap extends ApiListenerFragment implements OnDroneLis
 	public GraphicGuided guided;
 
 	protected MissionProxy missionProxy;
-	public Drone drone;
+	public DroneApi drone;
 
 	protected Context context;
 
@@ -112,10 +156,10 @@ public abstract class DroneMap extends ApiListenerFragment implements OnDroneLis
 	}
 
     @Override
-    public void onApiConnected(DroidPlannerApi api){
-            api.addDroneListener(this);
+    public void onApiConnected(DroneApi api){
+        getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 
-            drone = api.getDrone();
+            drone = api;
             missionProxy = api.getMissionProxy();
 
             home = new GraphicHome(drone);
@@ -127,7 +171,7 @@ public abstract class DroneMap extends ApiListenerFragment implements OnDroneLis
 
     @Override
     public void onApiDisconnected(){
-        getDroneApi().removeDroneListener(this);
+        getBroadcastManager().unregisterReceiver(eventReceiver);
     }
 
 	private void updateMapFragment() {
@@ -177,40 +221,6 @@ public abstract class DroneMap extends ApiListenerFragment implements OnDroneLis
         context = activity.getApplicationContext();
     }
 
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		switch (event) {
-		case MISSION_UPDATE:
-			postUpdate();
-			break;
-
-		case GPS:
-			mMapFragment.updateMarker(graphicDrone);
-			mMapFragment.updateDroneLeashPath(guided);
-			if (drone.getGps().isPositionValid()) {
-				mMapFragment.addFlightPathPoint(drone.getGps().getPosition());
-			}
-			break;
-
-		case GUIDEDPOINT:
-			mMapFragment.updateMarker(guided);
-			mMapFragment.updateDroneLeashPath(guided);
-			break;
-
-		case HEARTBEAT_RESTORED:
-		case HEARTBEAT_FIRST:
-			mMapFragment.updateMarker(graphicDrone);
-			break;
-
-		case DISCONNECTED:
-		case HEARTBEAT_TIMEOUT:
-			mMapFragment.updateMarker(graphicDrone);
-			break;
-		default:
-			break;
-		}
-	}
-
 	public final void postUpdate() {
 		mHandler.post(mUpdateMap);
 	}
@@ -243,7 +253,7 @@ public abstract class DroneMap extends ApiListenerFragment implements OnDroneLis
 		mMapFragment.saveCameraPosition();
 	}
 
-	public List<Coord2D> projectPathIntoMap(List<Coord2D> path) {
+	public List<LatLong> projectPathIntoMap(List<LatLong> path) {
 		return mMapFragment.projectPathIntoMap(path);
 	}
 

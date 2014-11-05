@@ -1,5 +1,9 @@
 package org.droidplanner.android.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -8,15 +12,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.ox3dr.services.android.lib.drone.event.Event;
+import com.ox3dr.services.android.lib.drone.property.Altitude;
+import com.ox3dr.services.android.lib.drone.property.Attitude;
+import com.ox3dr.services.android.lib.drone.property.Speed;
+
 import org.droidplanner.R;
-import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.widgets.AttitudeIndicator;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.model.Drone;
 
-public class TelemetryFragment extends ApiListenerFragment implements OnDroneListener {
+public class TelemetryFragment extends ApiListenerFragment {
+
+	private final static IntentFilter eventFilter = new IntentFilter();
+	static {
+		eventFilter.addAction(Event.EVENT_ATTITUDE);
+		eventFilter.addAction(Event.EVENT_SPEED);
+	}
+
+	private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final String action = intent.getAction();
+			final DroneApi droneApi = getDroneApi();
+			if (Event.EVENT_ATTITUDE.equals(action)) {
+				onOrientationUpdate(droneApi.getAttitude());
+			} else if (Event.EVENT_SPEED.equals(action)) {
+				onSpeedAltitudeAndClimbRateUpdate(droneApi.getSpeed(), droneApi.getAltitude());
+			}
+		}
+	};
 
 	private AttitudeIndicator attitudeIndicator;
 	private TextView roll;
@@ -57,36 +82,19 @@ public class TelemetryFragment extends ApiListenerFragment implements OnDroneLis
 	}
 
 	@Override
-	public void onApiConnected(DroidPlannerApi api) {
-		api.addDroneListener(this);
+	public void onApiConnected(DroneApi api) {
+		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 	}
 
 	@Override
 	public void onApiDisconnected() {
-		getDroneApi().removeDroneListener(this);
+		getBroadcastManager().unregisterReceiver(eventReceiver);
 	}
 
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		switch (event) {
-		case NAVIGATION:
-			break;
-		case ATTITUDE:
-			onOrientationUpdate(drone);
-			break;
-		case SPEED:
-			onSpeedAltitudeAndClimbRateUpdate(drone);
-			break;
-		default:
-			break;
-		}
-
-	}
-
-	public void onOrientationUpdate(Drone drone) {
-		float r = (float) drone.getOrientation().getRoll();
-		float p = (float) drone.getOrientation().getPitch();
-		float y = (float) drone.getOrientation().getYaw();
+	public void onOrientationUpdate(Attitude droneAttitude) {
+		float r = (float) droneAttitude.getRoll();
+		float p = (float) droneAttitude.getPitch();
+		float y = (float) droneAttitude.getYaw();
 
 		if (!headingModeFPV & y < 0) {
 			y = 360 + y;
@@ -100,16 +108,14 @@ public class TelemetryFragment extends ApiListenerFragment implements OnDroneLis
 
 	}
 
-	public void onSpeedAltitudeAndClimbRateUpdate(Drone drone) {
-		airSpeed.setText(String.format("%3.1f", drone.getSpeed().getAirSpeed()
-				.valueInMetersPerSecond()));
-		groundSpeed.setText(String.format("%3.1f", drone.getSpeed().getGroundSpeed()
-				.valueInMetersPerSecond()));
-		climbRate.setText(String.format("%3.1f", drone.getSpeed().getVerticalSpeed()
-				.valueInMetersPerSecond()));
-		double alt = drone.getAltitude().getAltitude();
-		double targetAlt = drone.getAltitude().getTargetAltitude();
-		altitude.setText(String.format("%3.1f", alt));
+	public void onSpeedAltitudeAndClimbRateUpdate(Speed speed, Altitude altitude) {
+		airSpeed.setText(String.format("%3.1f", speed.getAirSpeed()));
+		groundSpeed.setText(String.format("%3.1f", speed.getGroundSpeed()));
+		climbRate.setText(String.format("%3.1f", speed.getVerticalSpeed()));
+		double alt = altitude.getAltitude();
+		double targetAlt = altitude.getTargetAltitude();
+
+		this.altitude.setText(String.format("%3.1f", alt));
 		targetAltitude.setText(String.format("%3.1f", targetAlt));
 	}
 

@@ -1,9 +1,8 @@
 package org.droidplanner.android.graphic.map;
 
 import org.droidplanner.R;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.model.Drone;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -11,10 +10,10 @@ import android.graphics.BitmapFactory;
 
 public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
-	private Drone drone;
+	private DroneApi droneApi;
 
-	public GraphicDrone(Drone drone) {
-		this.drone = drone;
+	public GraphicDrone(DroneApi drone) {
+		this.droneApi = drone;
 	}
 
 	@Override
@@ -28,13 +27,13 @@ public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 	}
 
 	@Override
-	public Coord2D getPosition() {
-		return drone.getGps().getPosition();
+	public com.ox3dr.services.android.lib.coordinate.LatLong getPosition() {
+		return droneApi.getGps().getPosition();
 	}
 
 	@Override
 	public Bitmap getIcon(Resources res) {
-		if (drone.isConnectionAlive()) {
+		if (droneApi.isConnected()) {
 			return BitmapFactory.decodeResource(res, R.drawable.quad);
 		}
 		return BitmapFactory.decodeResource(res, R.drawable.quad_disconnect);
@@ -53,10 +52,10 @@ public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
 	@Override
 	public float getRotation() {
-		return (float) drone.getOrientation().getYaw();
+		return (float) droneApi.getAttitude().getYaw();
 	}
 
 	public boolean isValid() {
-		return drone.getGps().isPositionValid();
+		return droneApi.getGps().isValid();
 	}
 }

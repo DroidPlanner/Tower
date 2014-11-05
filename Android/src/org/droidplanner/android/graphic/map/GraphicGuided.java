@@ -16,6 +16,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.ox3dr.services.android.lib.coordinate.LatLong;
+
 public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSource {
 
 	private final static String TAG = GraphicGuided.class.getSimpleName();
@@ -56,12 +58,12 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSo
 	}
 
 	@Override
-	public Coord2D getPosition() {
+	public com.ox3dr.services.android.lib.coordinate.LatLong getPosition() {
 		return guidedPoint.getCoord();
 	}
 
 	@Override
-	public void setPosition(Coord2D coord) {
+	public void setPosition(LatLong coord) {
 		try {
 			guidedPoint.forcedGuidedCoordinate(coord);
 		} catch (Exception e) {

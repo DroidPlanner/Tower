@@ -9,8 +9,7 @@ import android.widget.Button;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.android.api.services.DroidPlannerApi;
-import org.droidplanner.core.model.Drone;
+import org.droidplanner.android.api.DroneApi;
 
 /**
  * Provides action buttons functionality for generic drone type.
@@ -42,7 +41,7 @@ public class GenericActionsFragment extends Fragment implements View.OnClickList
     }
 
     @Override
-    public boolean isSlidingUpPanelEnabled(DroidPlannerApi api) {
+    public boolean isSlidingUpPanelEnabled(DroneApi api) {
         return false;
     }
 }

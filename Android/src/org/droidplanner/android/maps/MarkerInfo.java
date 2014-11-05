@@ -52,10 +52,10 @@ public interface MarkerInfo {
 
 	/**
 	 * Updates the marker info's position.
-	 * 
-	 * @param coord
-	 *            position update.
-	 */
+	 *
+     * @param coord
+     *            position update.
+     */
 	void setPosition(LatLong coord);
 
 	/**
@@ -124,7 +124,7 @@ public interface MarkerInfo {
 		}
 
 		@Override
-		public LatLong getPosition() {
+		public com.ox3dr.services.android.lib.coordinate.LatLong getPosition() {
 			return null;
 		}
 

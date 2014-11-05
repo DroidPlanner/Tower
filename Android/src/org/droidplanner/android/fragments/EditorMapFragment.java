@@ -3,16 +3,13 @@ package org.droidplanner.android.fragments;
 import java.util.List;
 
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
-import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
 import org.droidplanner.android.proxy.mission.item.markers.SurveyMarkerInfoProvider;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,7 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-@SuppressLint("UseSparseArrays")
+import com.ox3dr.services.android.lib.coordinate.LatLong;
+
 public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
 		DPMap.OnMarkerDragListener, DPMap.OnMapClickListener, DPMap.OnMarkerClickListener {
 
@@ -39,7 +37,7 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	}
 
 	@Override
-	public void onMapLongClick(Coord2D point) {
+	public void onMapLongClick(LatLong point) {
 	}
 
 	@Override
@@ -54,7 +52,7 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 
 	private void checkForWaypointMarkerMoving(MarkerInfo markerInfo) {
 		if (SpatialCoordItem.class.isInstance(markerInfo)) {
-			Coord2D position = markerInfo.getPosition();
+			LatLong position = markerInfo.getPosition();
 
 			// update marker source
 			SpatialCoordItem waypoint = (SpatialCoordItem) markerInfo;
@@ -79,13 +77,13 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	}
 
     @Override
-    public void onApiConnected(DroidPlannerApi api){
+    public void onApiConnected(DroneApi api){
         super.onApiConnected(api);
         zoomToFit();
     }
 
 	@Override
-	public void onMapClick(Coord2D point) {
+	public void onMapClick(LatLong point) {
 		editorListener.onMapClick(point);
 	}
 
@@ -127,17 +125,17 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 
 	public void zoomToFit() {
 		// get visible mission coords
-		final List<Coord2D> visibleCoords = missionProxy.getVisibleCoords();
+		final List<LatLong> visibleCoords = missionProxy.getVisibleCoords();
 
 		// add home coord if visible
-		final Coord2D homeCoord = drone.getHome().getCoord();
-		if (homeCoord != null && !homeCoord.isEmpty())
+		final LatLong homeCoord = drone.getHome().getCoordinate();
+		if (homeCoord != null && homeCoord.getLongitude() != 0 && homeCoord.getLatitude() != 0)
 			visibleCoords.add(homeCoord);
 
         zoomToFit(visibleCoords);
 	}
 
-    public void zoomToFit(List<Coord2D> itemsToFit){
+    public void zoomToFit(List<LatLong> itemsToFit){
         if(!itemsToFit.isEmpty()){
             mMapFragment.zoomToFit(itemsToFit);
         }
