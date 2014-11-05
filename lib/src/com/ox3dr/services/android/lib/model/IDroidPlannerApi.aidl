@@ -199,6 +199,12 @@ interface IDroidPlannerApi {
         oneway void enableFollowMe(in FollowMode followMode);
 
         /**
+        * Sets the follow-me radius.
+        * @param radius radius in meters.
+        */
+        oneway void setFollowMeRadius(double radius);
+
+        /**
         * Disables follow me is enabled.
         */
         oneway void disableFollowMe();
