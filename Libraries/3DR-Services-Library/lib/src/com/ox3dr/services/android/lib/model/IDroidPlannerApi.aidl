@@ -14,6 +14,7 @@ import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 import com.ox3dr.services.android.lib.drone.property.Type;
 import com.ox3dr.services.android.lib.coordinate.Point3D;
 import com.ox3dr.services.android.lib.drone.property.Signal;
+import com.ox3dr.services.android.lib.drone.property.GuidedState;
 
 /**
 * Interface used to access the drone properties.
@@ -93,6 +94,11 @@ interface IDroidPlannerApi {
         */
         boolean isConnected();
 
+        /**
+        * Retrieves the guided state of the connected drone.
+        */
+        GuidedState getGuidedState();
+
         /*** Oneway method calls ***/
 
         /**
@@ -151,4 +157,17 @@ interface IDroidPlannerApi {
         * Send an imu calibration acknowledgement.
         */
         oneway void sendIMUCalibrationAck(int step);
+
+        /**
+        * Perform a guided take off.
+        * @param altitude altitude in meters
+        */
+        oneway void doGuidedTakeoff(double altitude);
+
+        /**
+        * Send a guided point to the connected drone.
+        * @param point guided point location
+        * @param force true to enable guided mode is required.
+        */
+        oneway void sendGuidedPoint(in LatLongAlt point, boolean force);
 }
