@@ -603,4 +603,10 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void updatePolygonsPaths(List<List<Coord2D>> paths) {
+		// TODO Auto-generated method stub
+		
+	}
 }

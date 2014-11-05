@@ -32,6 +32,9 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	public static final int DRONE_LEASH_DEFAULT_COLOR = Color.WHITE;
 	public static final int DRONE_LEASH_DEFAULT_WIDTH = 2;
 
+	public static final int POLYGONS_PATH_DEFAULT_COLOR = Color.RED;
+	public static final int POLYGONS_PATH_DEFAULT_WIDTH = 4;
+	
 	public static final String PREF_LAT = "pref_map_lat";
 	public static final float DEFAULT_LATITUDE = 37.8575523f;
 
@@ -343,6 +346,12 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 *            source to use to draw the mission path
 	 */
 	public void updateMissionPath(PathSource pathSource);
+	
+	/**
+	 * Updates the polygons on the map.
+	 * 
+	 */
+    public void updatePolygonsPaths(List<List<Coord2D>> paths);
 
 	/**
 	 * Zoom to fit coordinates on map

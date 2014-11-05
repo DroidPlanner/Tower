@@ -599,4 +599,14 @@ public class MissionProxy implements DPMap.PathSource {
         refresh();
         return (float) bearing;
     }
+
+	public List<List<Coord2D>> getPolygonsPath() {
+		ArrayList<List<Coord2D>> polygonPaths = new ArrayList<List<Coord2D>>();
+		for (MissionItem item : mMission.getItems()) {
+			if (item instanceof Survey) {
+				polygonPaths.add(((Survey)item).polygon.getPoints());
+			}
+		}
+		return polygonPaths;
+	}
 }

@@ -54,6 +54,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
@@ -109,6 +111,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
 	protected boolean useMarkerClickAsMapClick = false;
     private boolean isMapLayoutFinished = false;
+
+	private List<Polygon> polygonsPaths = new ArrayList<Polygon>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -515,6 +519,27 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         }
 
         missionPath.setPoints(pathPoints);
+    }
+    
+    
+    @Override
+    public void updatePolygonsPaths(List<List<Coord2D>> paths){
+        for (Polygon poly : polygonsPaths) {
+			poly.remove();
+		}
+        
+        for (List<Coord2D> contour : paths) {
+        	PolygonOptions pathOptions = new PolygonOptions();
+            pathOptions.strokeColor(POLYGONS_PATH_DEFAULT_COLOR).strokeWidth(
+                    POLYGONS_PATH_DEFAULT_WIDTH);
+            final List<LatLng> pathPoints = new ArrayList<LatLng>(contour.size());
+			for (Coord2D coord : contour) {
+		            pathPoints.add(DroneHelper.CoordToLatLang(coord));
+			}
+			pathOptions.addAll(pathPoints);
+			polygonsPaths.add(getMap().addPolygon(pathOptions));
+		}
+        
     }
 
     /**
