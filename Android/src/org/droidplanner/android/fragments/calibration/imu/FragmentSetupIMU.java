@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +22,8 @@ import com.ox3dr.services.android.lib.drone.property.State;
 
 import org.droidplanner.R;
 import org.droidplanner.android.api.DroneApi;
-import org.droidplanner.android.api.model.DPDrone;
-import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.notifications.TTSNotificationProvider;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.variables.Calibration;
 
 public class FragmentSetupIMU extends ApiListenerFragment  {
 
@@ -39,6 +34,7 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
     private static final IntentFilter intentFilter = new IntentFilter();
     static {
         intentFilter.addAction(Event.EVENT_CALIBRATION_IMU);
+        intentFilter.addAction(Event.EVENT_CALIBRATION_IMU_ERROR);
         intentFilter.addAction(Event.EVENT_CALIBRATION_IMU_TIMEOUT);
         intentFilter.addAction(Event.EVENT_CONNECTED);
         intentFilter.addAction(Event.EVENT_DISCONNECTED);
@@ -64,29 +60,21 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
                 btnStep.setEnabled(false);
                 resetCalibration();
             }
-            else if(Event.EVENT_CALIBRATION_TIMEOUT.equals(action)){
-                //TODO: move the calibration logic to the 3dr services layer.
-                if (drone != null) {
-				/*
-				 * here we will check if we are in calibration mode but if at
-				 * the same time 'msg' is empty - then it is actually not doing
-				 * calibration what we should do is to reset the calibration
-				 * flag and re-trigger the HEARBEAT_TIMEOUT this however should
-				 * not be happening
-				 */
-                    final Calibration calibration = drone.getCalibrationSetup();
-                    if (calibration.isCalibrating() && TextUtils.isEmpty(msg)) {
-                        calibration.setCalibrating(false);
-                        drone.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
-                    } else {
-                        relayInstructions(msg);
-                    }
+            else if (Event.EVENT_CALIBRATION_IMU_TIMEOUT.equals(action)) {
+				if (getDroneApi().isConnected()) {
+					String message = intent.getStringExtra(Extra.EXTRA_CALIBRATION_IMU_MESSAGE);
+					if (message != null)
+						relayInstructions(message);
+				}
+			}
+            else if(Event.EVENT_CALIBRATION_IMU_ERROR.equals(action)){
+                String message = intent.getStringExtra(Extra.EXTRA_CALIBRATION_IMU_MESSAGE);
+                if(message != null){
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
                 }
             }
         }
     };
-
-    private String msg;
 
     private long updateTimestamp;
 
@@ -304,7 +292,7 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
 		else if (message.contains("Calibration"))
 			calibration_step = 7;
 
-		msg = message.replace("any key.", "'Next'");
+		String msg = message.replace("any key.", "'Next'");
         relayInstructions(msg);
 
 		textViewStep.setText(msg);
