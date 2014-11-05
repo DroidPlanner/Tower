@@ -15,7 +15,7 @@ import com.ox3dr.services.android.lib.drone.property.Type;
 import com.ox3dr.services.android.lib.coordinate.Point3D;
 import com.ox3dr.services.android.lib.drone.property.Signal;
 import com.ox3dr.services.android.lib.drone.property.GuidedState;
-import com.ox3dr.services.android.lib.coordinate.LatLongAlt;
+import com.ox3dr.services.android.lib.coordinate.LatLong;
 
 /**
 * Interface used to access the drone properties.
@@ -170,5 +170,19 @@ interface IDroidPlannerApi {
         * @param point guided point location
         * @param force true to enable guided mode is required.
         */
-        oneway void sendGuidedPoint(in LatLongAlt point, boolean force);
+        oneway void sendGuidedPoint(in LatLong point, boolean force);
+
+        /**
+        * Set the altitude for the guided point.
+        * @param altitude altitude in meters
+        */
+        oneway void setGuidedAltitude(double altitude);
+
+        /**
+        * Set the guided velocity.
+        * @param xVel velocity in the north direction
+        * @param yVel velocity in the east direction
+        * @param zVel vertical velocity.
+        */
+        oneway void setGuidedVelocity(double xVel, double yVel, double zVel);
 }
