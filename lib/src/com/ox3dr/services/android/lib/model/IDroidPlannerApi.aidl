@@ -110,7 +110,7 @@ interface IDroidPlannerApi {
         /**
         * Return a list of support follow modes on the connected drone.
         */
-        FollowMode[] getFollowModes();
+        FollowType[] getFollowTypes();
 
         /*** Oneway method calls ***/
 
