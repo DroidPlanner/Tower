@@ -1,13 +1,17 @@
 package org.droidplanner.android.api;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.ox3dr.services.android.lib.coordinate.Point3D;
+import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.property.Altitude;
 import com.ox3dr.services.android.lib.drone.property.Attitude;
 import com.ox3dr.services.android.lib.drone.property.Battery;
@@ -24,6 +28,7 @@ import com.ox3dr.services.android.lib.model.IDroidPlannerApi;
 import org.droidplanner.android.DroidPlannerApp;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by fhuya on 11/4/14.
@@ -32,8 +37,29 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
 
     private static final String TAG = DroneApi.class.getSimpleName();
 
+    private final static IntentFilter intentFilter = new IntentFilter(Event.EVENT_STATE);
+
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(Event.EVENT_STATE.equals(action)){
+                if(getState().isFlying())
+                    startTimer();
+                else
+                    stopTimer();
+            }
+        }
+    };
+
     private final LocalBroadcastManager lbm;
     private IDroidPlannerApi dpApi;
+
+    // flightTimer
+    // ----------------
+    private long startTime = 0;
+    private long elapsedFlightTime = 0;
+    private AtomicBoolean isTimerRunning = new AtomicBoolean(false);
 
     public DroneApi(Context context, IDroidPlannerApi dpApi){
         this.dpApi = dpApi;
@@ -50,6 +76,34 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
 
     public void setDpApi(IDroidPlannerApi dpApi) {
         this.dpApi = dpApi;
+    }
+
+    public void resetFlightTimer() {
+        elapsedFlightTime = 0;
+        startTime = SystemClock.elapsedRealtime();
+        isTimerRunning.set(true);
+    }
+
+    public void startTimer() {
+        if(isTimerRunning.compareAndSet(false, true))
+            startTime = SystemClock.elapsedRealtime();
+    }
+
+    public void stopTimer() {
+        if(isTimerRunning.compareAndSet(true, false)) {
+            // lets calc the final elapsed timer
+            elapsedFlightTime += SystemClock.elapsedRealtime() - startTime;
+            startTime = SystemClock.elapsedRealtime();
+        }
+    }
+
+    public long getFlightTime() {
+        if (getState().isFlying()) {
+            // calc delta time since last checked
+            elapsedFlightTime += SystemClock.elapsedRealtime() - startTime;
+            startTime = SystemClock.elapsedRealtime();
+        }
+        return elapsedFlightTime / 1000;
     }
 
     @Override

@@ -1,39 +1,58 @@
 package org.droidplanner.android.activities.helpers;
 
 import android.app.ActionBar;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.ox3dr.services.android.lib.drone.event.Event;
+
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.api.services.DroidPlannerApi;
-import org.droidplanner.android.api.services.DroidPlannerService;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
-import org.droidplanner.core.MAVLink.MavLinkROI;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.model.Drone;
 
 /**
  * Parent class for the app activity classes.
  */
-public abstract class SuperUI extends FragmentActivity implements OnDroneListener,
-		DroidPlannerApp.ApiListener {
+public abstract class SuperUI extends FragmentActivity implements DroidPlannerApp.ApiListener {
+
+    private static final IntentFilter superIntentFilter = new IntentFilter();
+    static {
+        superIntentFilter.addAction(Event.EVENT_CONNECTED);
+        superIntentFilter.addAction(Event.EVENT_DISCONNECTED);
+    }
+
+    private final BroadcastReceiver superReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(Event.EVENT_CONNECTED.equals(action)){
+                onDroneConnected();
+            }
+            else if(Event.EVENT_DISCONNECTED.equals(action)){
+                onDroneDisconnected();
+            }
+        }
+    };
 
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoBarActionProvider infoBar;
+    private LocalBroadcastManager lbm;
 
 	/**
 	 * Handle to the app preferences.
@@ -46,7 +65,9 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+        final Context context = getApplicationContext();
 		dpApp = (DroidPlannerApp) getApplication();
+        lbm = LocalBroadcastManager.getInstance(context);
 
 		ActionBar actionBar = getActionBar();
 		if (actionBar != null) {
@@ -54,7 +75,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 			actionBar.setHomeButtonEnabled(true);
 		}
 
-		mAppPrefs = new DroidPlannerPrefs(getApplicationContext());
+		mAppPrefs = new DroidPlannerPrefs(context);
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -70,27 +91,51 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 		screenOrientation.unlock();
-		Utils.updateUILanguage(getApplicationContext());
+		Utils.updateUILanguage(context);
 	}
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        lbm = null;
+    }
+
+    protected LocalBroadcastManager getBroadcastManager(){
+        return lbm;
+    }
+
 	@Override
-	public void onApiConnected(DroidPlannerApi api) {
+	public void onApiConnected(DroneApi api) {
 		invalidateOptionsMenu();
 
-		api.addDroneListener(SuperUI.this);
-		api.getMavClient().queryConnectionState();
+        getBroadcastManager().registerReceiver(superReceiver, superIntentFilter);
+        if(api.isConnected())
+            onDroneConnected();
+        else
+            onDroneDisconnected();
+
 		api.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
 	}
 
 	@Override
 	public void onApiDisconnected() {
-		dpApp.getApi().removeDroneListener(this);
+        getBroadcastManager().unregisterReceiver(superReceiver);
 
 		if (infoBar != null) {
 			infoBar.setDrone(null);
 			infoBar = null;
 		}
 	}
+
+    private void onDroneConnected(){
+        invalidateOptionsMenu();
+        screenOrientation.requestLock();
+    }
+
+    private void onDroneDisconnected(){
+        invalidateOptionsMenu();
+        screenOrientation.unlock();
+    }
 
 	@Override
 	protected void onStart() {
@@ -119,19 +164,6 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 			infoBar.onDroneEvent(event, drone);
 		}
 
-		switch (event) {
-		case CONNECTED:
-			invalidateOptionsMenu();
-			screenOrientation.requestLock();
-			break;
-
-		case DISCONNECTED:
-			invalidateOptionsMenu();
-			screenOrientation.unlock();
-			break;
-		default:
-			break;
-		}
 	}
 
 	@Override
@@ -257,7 +289,10 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	}
 
 	public void toggleDroneConnection() {
-		startService(new Intent(getApplicationContext(), DroidPlannerService.class)
-				.setAction(DroidPlannerService.ACTION_TOGGLE_DRONE_CONNECTION));
+        final DroneApi droneApi = dpApp.getDroneApi();
+		if(droneApi.isConnected())
+            droneApi.disconnect();
+        else
+            droneApi.connect();
 	}
 }
