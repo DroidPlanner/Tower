@@ -21,6 +21,7 @@ import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.event.Extra;
 
 import org.droidplanner.R;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.api.model.DPDrone;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
@@ -155,7 +156,7 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
     }
 
     @Override
-    public void onApiConnected(DroidPlannerApi api) {
+    public void onApiConnected(DroneApi api) {
         DPDrone dpDrone = getDPDrone();
         if (dpDrone != null && dpDrone.isConnected() && !dpDrone.getState().isFlying()) {
             btnStep.setEnabled(true);
