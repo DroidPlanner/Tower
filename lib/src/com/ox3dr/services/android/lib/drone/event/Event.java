@@ -27,6 +27,8 @@ public class Event {
 
     public static final String EVENT_CALIBRATION_IMU = CLAZZ_NAME + ".CALIBRATION_IMU";
 
+    public static final String EVENT_CALIBRATION_IMU_ERROR = CLAZZ_NAME + ".CALIBRATION_IMU_ERROR";
+
     public static final String EVENT_CALIBRATION_IMU_TIMEOUT = CLAZZ_NAME + "" +
             ".CALIBRATION_IMU_TIMEOUT";
 
