@@ -10,7 +10,7 @@ import org.droidplanner.android.utils.prefs.AutoPanMode;
 import android.graphics.Color;
 import android.location.LocationListener;
 
-import com.ox3dr.services.android.lib.coordinate.LatLng;
+import com.ox3dr.services.android.lib.coordinate.LatLong;
 
 /**
  * Defines the functionality expected from the map providers.
@@ -47,7 +47,7 @@ public interface DPMap {
 	public static final int DEFAULT_ZOOM_LEVEL = 17;
 
 	interface PathSource {
-		public List<LatLng> getPathPoints();
+		public List<LatLong> getPathPoints();
 	}
 
 	/**
@@ -60,7 +60,7 @@ public interface DPMap {
 		 * @param coord
 		 *            location where the map was clicked.
 		 */
-		void onMapClick(LatLng coord);
+		void onMapClick(LatLong coord);
 	}
 
 	/**
@@ -73,7 +73,7 @@ public interface DPMap {
 		 * @param coord
 		 *            location where the map was long clicked.
 		 */
-		void onMapLongClick(LatLng coord);
+		void onMapLongClick(LatLong coord);
 	}
 
 	/**
@@ -131,7 +131,7 @@ public interface DPMap {
 	 * @param coord
 	 *            drone's coordinate
 	 */
-	public void addFlightPathPoint(LatLng coord);
+	public void addFlightPathPoint(LatLong coord);
 
 	/**
 	 * Remove all markers from the map.
@@ -146,7 +146,7 @@ public interface DPMap {
 	/**
 	 * @return the map center coordinates.
 	 */
-	public LatLng getMapCenter();
+	public LatLong getMapCenter();
 
 	/**
 	 * @return the map current zoom level.
@@ -188,7 +188,7 @@ public interface DPMap {
 	 */
 	public void loadCameraPosition();
 
-	public List<LatLng> projectPathIntoMap(List<LatLng> pathPoints);
+	public List<LatLong> projectPathIntoMap(List<LatLong> pathPoints);
 
 	/**
 	 * Remove the markers whose info is in the list from the map.
@@ -279,7 +279,7 @@ public interface DPMap {
 	 * @param zoomLevel
 	 *            zoom level for the map
 	 */
-	public void updateCamera(LatLng coord, float zoomLevel);
+	public void updateCamera(LatLong coord, float zoomLevel);
 
     /**
      * Updates the map's bearing.
@@ -349,13 +349,13 @@ public interface DPMap {
 	 * @param coords
 	 *            to be displayed
 	 */
-	public void zoomToFit(List<LatLng> coords);
+	public void zoomToFit(List<LatLong> coords);
 
     /**
      * Zoom to fit my location and the given coordinates on map
      * @param coords
      */
-    public void zoomToFitMyLocation(List<LatLng> coords);
+    public void zoomToFitMyLocation(List<LatLong> coords);
     
     /**
      * Ignore marker clicks on the map and instead report the event as a mapClick

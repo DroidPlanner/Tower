@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.helpers.GPS;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.helpers.LocalMapTileProvider;
 import org.droidplanner.android.utils.GoogleApiClientManager;
 import org.droidplanner.android.utils.GoogleApiClientManager.GoogleApiClientTask;
@@ -23,13 +23,17 @@ import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +61,9 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.ox3dr.services.android.lib.drone.event.Event;
+import com.ox3dr.services.android.lib.drone.property.Gps;
 
 public class GoogleMapFragment extends SupportMapFragment implements DPMap, LocationListener {
 
@@ -75,6 +82,24 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     private static final float USER_LOCATION_UPDATE_MIN_DISPLACEMENT = 15; // m
 
     private static final float GO_TO_MY_LOCATION_ZOOM = 19f;
+
+    private static final IntentFilter eventFilter = new IntentFilter(Event.EVENT_GPS);
+
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final DroneApi droneApi = getDroneApi();
+            if(!droneApi.isConnected())
+                return;
+
+            Gps droneGps = droneApi.getGps();
+            if (mPanMode.get() == AutoPanMode.DRONE && droneGps.isValid()) {
+                final float currentZoomLevel = getMap().getCameraPosition().zoom;
+                final LatLong droneLocation = droneGps.getPosition();
+                updateCamera(droneLocation, currentZoomLevel);
+            }
+        }
+    };
 
     private final HashBiMap<MarkerInfo, Marker> mBiMarkersMap = new HashBiMap<MarkerInfo, Marker>();
 
@@ -215,7 +240,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     }
 
     @Override
-    public com.ox3dr.services.android.lib.coordinate.LatLng getMapCenter() {
+    public LatLong getMapCenter() {
         return DroneHelper.LatLngToCoord(getMap().getCameraPosition().target);
     }
 
@@ -243,17 +268,16 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         setAutoPanMode(currentMode, target);
     }
 
-    private DroidPlannerApi getDPApi(){
-        return dpApp.getApi();
+    private DroneApi getDroneApi(){
+        return dpApp.getDroneApi();
     }
 
     private void setAutoPanMode(AutoPanMode current, AutoPanMode update) {
         if (mPanMode.compareAndSet(current, update)) {
             switch (current) {
                 case DRONE:
-                    DroidPlannerApi dpApi = getDPApi();
-                    if(dpApi != null)
-                        dpApi.removeDroneListener(this);
+                    LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
+                            .unregisterReceiver(eventReceiver);
                     break;
 
                 case USER:
@@ -269,9 +293,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
             switch (update) {
                 case DRONE:
-                    DroidPlannerApi dpApi = getDPApi();
-                    if(dpApi != null)
-                        dpApi.addDroneListener(this);
+                    LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver
+                            (eventReceiver, eventFilter);
                     break;
 
                 case USER:
@@ -293,7 +316,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     }
 
     @Override
-    public void addFlightPathPoint(com.ox3dr.services.android.lib.coordinate.LatLng coord) {
+    public void addFlightPathPoint(LatLong coord) {
         final LatLng position = DroneHelper.CoordToLatLang(coord);
 
         if (maxFlightPathSize > 0) {
@@ -330,7 +353,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     @Override
     public void updateMarker(MarkerInfo markerInfo, boolean isDraggable) {
         // if the drone hasn't received a gps signal yet
-        final com.ox3dr.services.android.lib.coordinate.LatLng coord = markerInfo.getPosition();
+        final LatLong coord = markerInfo.getPosition();
         if (coord == null) {
             return;
         }
@@ -406,13 +429,13 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     }
 
     @Override
-    public List<com.ox3dr.services.android.lib.coordinate.LatLng> projectPathIntoMap(List<com.ox3dr.services.android.lib.coordinate.LatLng> path) {
-        List<com.ox3dr.services.android.lib.coordinate.LatLng> coords = new ArrayList<com.ox3dr.services.android.lib.coordinate.LatLng>();
+    public List<LatLong> projectPathIntoMap(List<LatLong> path) {
+        List<LatLong> coords = new ArrayList<LatLong>();
         Projection projection = getMap().getProjection();
 
-        for (com.ox3dr.services.android.lib.coordinate.LatLng point : path) {
+        for (LatLong point : path) {
             LatLng coord = projection.fromScreenLocation(new Point((int) point
-                    .getX(), (int) point.getY()));
+                    .getLatitude(), (int) point.getLongitude()));
             coords.add(DroneHelper.LatLngToCoord(coord));
         }
 
@@ -479,7 +502,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     }
 
     @Override
-    public void updateCamera(com.ox3dr.services.android.lib.coordinate.LatLng coord, float zoomLevel) {
+    public void updateCamera(LatLong coord, float zoomLevel) {
         if (coord != null) {
             getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(
                     DroneHelper.CoordToLatLang(coord), zoomLevel));
@@ -495,9 +518,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
     @Override
     public void updateDroneLeashPath(PathSource pathSource) {
-        List<Coord2D> pathCoords = pathSource.getPathPoints();
+        List<LatLong> pathCoords = pathSource.getPathPoints();
         final List<LatLng> pathPoints = new ArrayList<LatLng>(pathCoords.size());
-        for (Coord2D coord : pathCoords) {
+        for (LatLong coord : pathCoords) {
             pathPoints.add(DroneHelper.CoordToLatLang(coord));
         }
 
@@ -514,9 +537,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
     @Override
     public void updateMissionPath(PathSource pathSource) {
-        List<Coord2D> pathCoords = pathSource.getPathPoints();
+        List<LatLong> pathCoords = pathSource.getPathPoints();
         final List<LatLng> pathPoints = new ArrayList<LatLng>(pathCoords.size());
-        for (Coord2D coord : pathCoords) {
+        for (LatLong coord : pathCoords) {
             pathPoints.add(DroneHelper.CoordToLatLang(coord));
         }
 
@@ -585,10 +608,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     }
 
     @Override
-    public void zoomToFit(List<Coord2D> coords) {
+    public void zoomToFit(List<LatLong> coords) {
         if (!coords.isEmpty()) {
             final List<LatLng> points = new ArrayList<LatLng>();
-            for (Coord2D coord : coords)
+            for (LatLong coord : coords)
                 points.add(DroneHelper.CoordToLatLang(coord));
 
             final LatLngBounds bounds = getBounds(points);
@@ -609,14 +632,14 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     }
 
     @Override
-    public void zoomToFitMyLocation(final List<Coord2D> coords) {
+    public void zoomToFitMyLocation(final List<LatLong> coords) {
         mGApiClientMgr.addTask(mGApiClientMgr.new GoogleApiClientTask() {
             @Override
             protected void doRun() {
                 final Location myLocation = LocationServices.FusedLocationApi.getLastLocation
                         (getGoogleApiClient());
                 if (myLocation != null) {
-                    final List<Coord2D> updatedCoords = new ArrayList<Coord2D>(coords);
+                    final List<LatLong> updatedCoords = new ArrayList<LatLong>(coords);
                     updatedCoords.add(DroneHelper.LocationToCoord(myLocation));
                     zoomToFit(updatedCoords);
                 } else {
@@ -635,18 +658,18 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
     @Override
     public void goToDroneLocation() {
-        DroidPlannerApi dpApi = getDPApi();
-        if(dpApi == null)
+        DroneApi dpApi = getDroneApi();
+        if(!dpApi.isConnected())
             return;
 
-        GPS gps = dpApi.getGps();
-        if(!gps.isPositionValid()){
+        Gps gps = dpApi.getGps();
+        if(!gps.isValid()){
             Toast.makeText(getActivity().getApplicationContext(), R.string.drone_no_location, Toast.LENGTH_SHORT).show();
             return;
         }
 
         final float currentZoomLevel = getMap().getCameraPosition().zoom;
-        final Coord2D droneLocation = gps.getPosition();
+        final LatLong droneLocation = gps.getPosition();
         updateCamera(droneLocation, (int) currentZoomLevel);
     }
 
@@ -786,30 +809,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
     private boolean isMapLayoutFinished() {
         return getMap() != null && getView() != null && getView().getWidth() > 0;
-    }
-
-    /**
-     * Used to monitor drone gps location updates if autopan is enabled.
-     * {@inheritDoc}
-     *
-     * @param event
-     *            event type
-     * @param drone
-     *            drone state
-     */
-    @Override
-    public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
-        switch (event) {
-            case GPS:
-                if (mPanMode.get() == AutoPanMode.DRONE && drone.getGps().isPositionValid()) {
-                    final float currentZoomLevel = getMap().getCameraPosition().zoom;
-                    final Coord2D droneLocation = drone.getGps().getPosition();
-                    updateCamera(droneLocation, currentZoomLevel);
-                }
-                break;
-            default:
-                break;
-        }
     }
 
     @Override

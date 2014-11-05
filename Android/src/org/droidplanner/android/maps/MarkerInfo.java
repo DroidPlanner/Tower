@@ -1,9 +1,9 @@
 package org.droidplanner.android.maps;
 
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+
+import com.ox3dr.services.android.lib.coordinate.LatLong;
 
 /**
  * Defines the methods expected from a MarkerInfo instance. The marker info
@@ -48,7 +48,7 @@ public interface MarkerInfo {
 	/**
 	 * @return marker's map coordinate.
 	 */
-	Coord2D getPosition();
+	LatLong getPosition();
 
 	/**
 	 * Updates the marker info's position.
@@ -56,7 +56,7 @@ public interface MarkerInfo {
 	 * @param coord
 	 *            position update.
 	 */
-	void setPosition(Coord2D coord);
+	void setPosition(LatLong coord);
 
 	/**
 	 * @return marker's rotation.
@@ -124,12 +124,12 @@ public interface MarkerInfo {
 		}
 
 		@Override
-		public Coord2D getPosition() {
+		public LatLong getPosition() {
 			return null;
 		}
 
 		@Override
-		public void setPosition(Coord2D coord) {
+		public void setPosition(LatLong coord) {
 		}
 
 		@Override
