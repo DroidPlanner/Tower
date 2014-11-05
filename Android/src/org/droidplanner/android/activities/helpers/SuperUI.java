@@ -159,14 +159,6 @@ public abstract class SuperUI extends FragmentActivity implements DroidPlannerAp
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		if (infoBar != null) {
-			infoBar.onDroneEvent(event, drone);
-		}
-
-	}
-
-	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Reset the previous info bar
 		if (infoBar != null) {
@@ -182,8 +174,8 @@ public abstract class SuperUI extends FragmentActivity implements DroidPlannerAp
 			infoBar = (InfoBarActionProvider) infoBarItem.getActionProvider();
 
 		// Configure the info bar action provider if we're connected
-		DroidPlannerApi dpApi = dpApp.getApi();
-		if (dpApi != null && dpApi.isConnected()) {
+		DroneApi dpApi = dpApp.getDroneApi();
+		if (dpApi.isConnected()) {
 			menu.setGroupEnabled(R.id.menu_group_connected, true);
 			menu.setGroupVisible(R.id.menu_group_connected, true);
 
@@ -200,7 +192,7 @@ public abstract class SuperUI extends FragmentActivity implements DroidPlannerAp
 			toggleConnectionItem.setTitle(R.string.menu_disconnect);
 
 			if (infoBar != null) {
-				infoBar.setDrone(dpApi.getDrone());
+				infoBar.setDrone(dpApi);
 			}
 		} else {
 			menu.setGroupEnabled(R.id.menu_group_connected, false);

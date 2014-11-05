@@ -6,18 +6,16 @@ import java.util.Set;
 
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.gcs.location.Location;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.model.Drone;
 
 import android.graphics.Color;
 import android.location.LocationListener;
 
+import com.ox3dr.services.android.lib.coordinate.LatLng;
+
 /**
  * Defines the functionality expected from the map providers.
  */
-public interface DPMap extends DroneInterfaces.OnDroneListener {
+public interface DPMap {
 
 	public static final String PACKAGE_NAME = DPMap.class.getPackage().getName();
 
@@ -49,7 +47,7 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	public static final int DEFAULT_ZOOM_LEVEL = 17;
 
 	interface PathSource {
-		public List<Coord2D> getPathPoints();
+		public List<LatLng> getPathPoints();
 	}
 
 	/**
@@ -62,7 +60,7 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 		 * @param coord
 		 *            location where the map was clicked.
 		 */
-		void onMapClick(Coord2D coord);
+		void onMapClick(LatLng coord);
 	}
 
 	/**
@@ -75,7 +73,7 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 		 * @param coord
 		 *            location where the map was long clicked.
 		 */
-		void onMapLongClick(Coord2D coord);
+		void onMapLongClick(LatLng coord);
 	}
 
 	/**
@@ -133,7 +131,7 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 * @param coord
 	 *            drone's coordinate
 	 */
-	public void addFlightPathPoint(Coord2D coord);
+	public void addFlightPathPoint(LatLng coord);
 
 	/**
 	 * Remove all markers from the map.
@@ -148,7 +146,7 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	/**
 	 * @return the map center coordinates.
 	 */
-	public Coord2D getMapCenter();
+	public LatLng getMapCenter();
 
 	/**
 	 * @return the map current zoom level.
@@ -190,7 +188,7 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 */
 	public void loadCameraPosition();
 
-	public List<Coord2D> projectPathIntoMap(List<Coord2D> pathPoints);
+	public List<LatLng> projectPathIntoMap(List<LatLng> pathPoints);
 
 	/**
 	 * Remove the markers whose info is in the list from the map.
@@ -281,7 +279,7 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 * @param zoomLevel
 	 *            zoom level for the map
 	 */
-	public void updateCamera(Coord2D coord, float zoomLevel);
+	public void updateCamera(LatLng coord, float zoomLevel);
 
     /**
      * Updates the map's bearing.
@@ -351,13 +349,13 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 * @param coords
 	 *            to be displayed
 	 */
-	public void zoomToFit(List<Coord2D> coords);
+	public void zoomToFit(List<LatLng> coords);
 
     /**
      * Zoom to fit my location and the given coordinates on map
      * @param coords
      */
-    public void zoomToFitMyLocation(List<Coord2D> coords);
+    public void zoomToFitMyLocation(List<LatLng> coords);
     
     /**
      * Ignore marker clicks on the map and instead report the event as a mapClick

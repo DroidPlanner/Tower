@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.helpers.GPS;
 import org.droidplanner.android.helpers.LocalMapTileProvider;
 import org.droidplanner.android.utils.GoogleApiClientManager;
 import org.droidplanner.android.utils.GoogleApiClientManager.GoogleApiClientTask;
@@ -21,10 +21,6 @@ import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.utils.collection.HashBiMap;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.core.drone.variables.GPS;
-import org.droidplanner.core.model.Drone;
-import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.app.Activity;
 import android.content.Context;
@@ -219,7 +215,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     }
 
     @Override
-    public Coord2D getMapCenter() {
+    public com.ox3dr.services.android.lib.coordinate.LatLng getMapCenter() {
         return DroneHelper.LatLngToCoord(getMap().getCameraPosition().target);
     }
 
@@ -297,7 +293,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     }
 
     @Override
-    public void addFlightPathPoint(Coord2D coord) {
+    public void addFlightPathPoint(com.ox3dr.services.android.lib.coordinate.LatLng coord) {
         final LatLng position = DroneHelper.CoordToLatLang(coord);
 
         if (maxFlightPathSize > 0) {
@@ -334,7 +330,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     @Override
     public void updateMarker(MarkerInfo markerInfo, boolean isDraggable) {
         // if the drone hasn't received a gps signal yet
-        final Coord2D coord = markerInfo.getPosition();
+        final com.ox3dr.services.android.lib.coordinate.LatLng coord = markerInfo.getPosition();
         if (coord == null) {
             return;
         }
@@ -410,11 +406,11 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     }
 
     @Override
-    public List<Coord2D> projectPathIntoMap(List<Coord2D> path) {
-        List<Coord2D> coords = new ArrayList<Coord2D>();
+    public List<com.ox3dr.services.android.lib.coordinate.LatLng> projectPathIntoMap(List<com.ox3dr.services.android.lib.coordinate.LatLng> path) {
+        List<com.ox3dr.services.android.lib.coordinate.LatLng> coords = new ArrayList<com.ox3dr.services.android.lib.coordinate.LatLng>();
         Projection projection = getMap().getProjection();
 
-        for (Coord2D point : path) {
+        for (com.ox3dr.services.android.lib.coordinate.LatLng point : path) {
             LatLng coord = projection.fromScreenLocation(new Point((int) point
                     .getX(), (int) point.getY()));
             coords.add(DroneHelper.LatLngToCoord(coord));
@@ -483,7 +479,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     }
 
     @Override
-    public void updateCamera(Coord2D coord, float zoomLevel) {
+    public void updateCamera(com.ox3dr.services.android.lib.coordinate.LatLng coord, float zoomLevel) {
         if (coord != null) {
             getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(
                     DroneHelper.CoordToLatLang(coord), zoomLevel));

@@ -19,6 +19,7 @@ import com.ox3dr.services.android.lib.drone.property.Gps;
 import com.ox3dr.services.android.lib.drone.property.Home;
 import com.ox3dr.services.android.lib.drone.property.Mission;
 import com.ox3dr.services.android.lib.drone.property.Parameters;
+import com.ox3dr.services.android.lib.drone.property.Signal;
 import com.ox3dr.services.android.lib.drone.property.Speed;
 import com.ox3dr.services.android.lib.drone.property.State;
 import com.ox3dr.services.android.lib.drone.property.Type;
@@ -64,6 +65,7 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     public DroneApi(Context context, IDroidPlannerApi dpApi){
         this.dpApi = dpApi;
         lbm = LocalBroadcastManager.getInstance(context);
+        lbm.registerReceiver(broadcastReceiver, intentFilter);
     }
 
     private void handleRemoteException(RemoteException e){
@@ -229,6 +231,19 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     }
 
     @Override
+    public Signal getSignal() {
+        if(isApiValid()){
+            try {
+                return dpApi.getSignal();
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+
+        return null;
+    }
+
+    @Override
     public Type getType()  {
         if(isApiValid()){
             try {
@@ -282,6 +297,8 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
                 handleRemoteException(e);
             }
         }
+
+        lbm.unregisterReceiver(broadcastReceiver);
     }
 
     @Override

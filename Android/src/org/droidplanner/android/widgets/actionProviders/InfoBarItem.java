@@ -1,7 +1,5 @@
 package org.droidplanner.android.widgets.actionProviders;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 
 import org.droidplanner.R;
@@ -27,6 +25,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.ox3dr.services.android.lib.drone.property.Battery;
 import com.ox3dr.services.android.lib.drone.property.Gps;
 import com.ox3dr.services.android.lib.drone.property.Home;
+import com.ox3dr.services.android.lib.drone.property.Signal;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 
 /**
@@ -420,7 +419,7 @@ public abstract class InfoBarItem {
 
 			if (!droneApi.isConnected()) {
 				setDefaultValues();
-			}else if (!droneApi.getRadio().isValid()){
+			}else if (!droneApi.getSignal().isValid()){
 				setDefaultValues();
 			}else{
 				setValuesFromRadio(droneApi);
@@ -429,18 +428,18 @@ public abstract class InfoBarItem {
 			mPopup.update();
 		}
 
-		private void setValuesFromRadio(final DroneApi drone) {
-			((TextView) mItemView).setText(String.format(Locale.ENGLISH,"%d%%", drone.getRadio().getSignalStrength()));
+		private void setValuesFromRadio(final DroneApi droneApi) {
+            Signal droneSignal = droneApi.getSignal();
+			((TextView) mItemView).setText(String.format(Locale.ENGLISH, "%d%%",
+                    MathUtil.getSignalStrength(droneSignal.getFadeMargin(),
+                            droneSignal.getRemFadeMargin())));
 
-			mRssiView.setText(String.format("RSSI %2.0f dB", drone.getRadio().getRssi()));
-			mRemRssiView.setText(String.format("RemRSSI %2.0f dB", drone.getRadio()
-					.getRemRssi()));
-			mNoiseView.setText(String.format("Noise %2.0f dB", drone.getRadio().getNoise()));
-			mRemNoiseView.setText(String.format("RemNoise %2.0f dB", drone.getRadio()
-					.getRemNoise()));
-			mFadeView.setText(String.format("Fade %2.0f dB", drone.getRadio().getFadeMargin()));
-			mRemFadeView.setText(String.format("RemFade %2.0f dB", drone.getRadio()
-					.getRemFadeMargin()));
+			mRssiView.setText(String.format("RSSI %2.0f dB", droneSignal.getRssi()));
+			mRemRssiView.setText(String.format("RemRSSI %2.0f dB", droneSignal.getRemrssi()));
+			mNoiseView.setText(String.format("Noise %2.0f dB", droneSignal.getNoise()));
+			mRemNoiseView.setText(String.format("RemNoise %2.0f dB", droneSignal.getRemnoise()));
+			mFadeView.setText(String.format("Fade %2.0f dB", droneSignal.getFadeMargin()));
+			mRemFadeView.setText(String.format("RemFade %2.0f dB", droneSignal.getRemFadeMargin()));
 		}
 
 		private void setDefaultValues() {

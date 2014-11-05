@@ -13,6 +13,9 @@ public class MathUtil {
      */
     private static final double RADIUS_OF_EARTH = 6378137.0;
 
+    public static final int SIGNAL_MAX_FADE_MARGIN = 50;
+    public static final int SIGNAL_MIN_FADE_MARGIN = 6;
+
     /**
      * Computes the distance between two coordinates
      *
@@ -41,5 +44,27 @@ public class MathUtil {
         double tmp = Math.cos(Math.toRadians(from.getLatitude()))
                 * Math.cos(Math.toRadians(to.getLatitude()));
         return Math.toDegrees(2.0 * Math.asin(Math.sqrt(latitudeH + tmp * lontitudeH)));
+    }
+
+    /**
+     * Signal Strength in percentage
+     *
+     * @return percentage
+     */
+    public static int getSignalStrength(double fadeMargin, double remFadeMargin) {
+        return (int) (MathUtil.Normalize(Math.min(fadeMargin, remFadeMargin),
+                SIGNAL_MIN_FADE_MARGIN, SIGNAL_MAX_FADE_MARGIN) * 100);
+    }
+
+    private static double Constrain(double value, double min, double max) {
+        value = Math.max(value, min);
+        value = Math.min(value, max);
+        return value;
+    }
+
+    public static double Normalize(double value, double min, double max) {
+        value = Constrain(value, min, max);
+        return (value - min) / (max - min);
+
     }
 }
