@@ -13,6 +13,7 @@ import com.ox3dr.services.android.lib.drone.property.State;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 import com.ox3dr.services.android.lib.drone.property.Type;
 import com.ox3dr.services.android.lib.coordinate.Point3D;
+import com.ox3dr.services.android.lib.drone.property.Signal;
 
 /**
 * Interface used to access the drone properties.
@@ -76,6 +77,11 @@ interface IDroidPlannerApi {
         * @param droneId id of the drone whose property to retrieve.
         */
         Mission getMission();
+
+        /**
+        * Retrieves the signal level between the connected drone and the GCS.
+        */
+        Signal getSignal();
 
         /**
         * Retrieves the type property of the connected drone.
