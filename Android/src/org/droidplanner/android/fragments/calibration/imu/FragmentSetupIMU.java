@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.event.Extra;
+import com.ox3dr.services.android.lib.drone.property.State;
 
 import org.droidplanner.R;
 import org.droidplanner.android.api.DroneApi;
@@ -38,7 +39,7 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
     private static final IntentFilter intentFilter = new IntentFilter();
     static {
         intentFilter.addAction(Event.EVENT_CALIBRATION_IMU);
-        intentFilter.addAction(Event.EVENT_CALIBRATION_TIMEOUT);
+        intentFilter.addAction(Event.EVENT_CALIBRATION_IMU_TIMEOUT);
         intentFilter.addAction(Event.EVENT_CONNECTED);
         intentFilter.addAction(Event.EVENT_DISCONNECTED);
     }
@@ -157,11 +158,11 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
 
     @Override
     public void onApiConnected(DroneApi api) {
-        DPDrone dpDrone = getDPDrone();
-        if (dpDrone != null && dpDrone.isConnected() && !dpDrone.getState().isFlying()) {
+        State droneState = api.getState();
+        if (api.isConnected() && !droneState.isFlying()) {
             btnStep.setEnabled(true);
-            if (dpDrone.getState().isCalibrating()) {
-                processMAVMessage(dpDrone.getState().getCalibrationStatus(), false);
+            if (droneState.isCalibrating()) {
+                processMAVMessage(droneState.getCalibrationStatus(), false);
             }
             else{
                 resetCalibration();
@@ -257,20 +258,16 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
     }
 
 	private void sendAck(int step) {
-        DroidPlannerApi dpApi = getDroneApi();
-		if (dpApi != null) {
-			dpApi.getDrone().getCalibrationSetup().sendAckk(step);
+        DroneApi dpApi = getDroneApi();
+		if (dpApi.isConnected()) {
+			dpApi.sendIMUCalibrationAck(step);
 		}
 	}
 
 	private void startCalibration() {
-        DroidPlannerApi dpApi = getDroneApi();
-		if (dpApi != null) {
-			boolean isCalibrating = dpApi.getDrone().getCalibrationSetup().startCalibration();
-            if(!isCalibrating){
-                Toast.makeText(getActivity(), R.string.failed_start_calibration_message,
-                        Toast.LENGTH_LONG).show();
-            }
+        DroneApi dpApi = getDroneApi();
+		if (dpApi.isConnected()) {
+			dpApi.startIMUCalibration();
 		}
 	}
 

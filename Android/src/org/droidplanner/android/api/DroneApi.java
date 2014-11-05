@@ -297,6 +297,28 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     }
 
     @Override
+    public void startIMUCalibration() {
+        if(isApiValid()){
+            try {
+                dpApi.startIMUCalibration();
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
+    public void sendIMUCalibrationAck(int step)  {
+        if(isApiValid()){
+            try {
+                dpApi.sendIMUCalibrationAck(step);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
     public IBinder asBinder() {
         throw new UnsupportedOperationException();
     }
