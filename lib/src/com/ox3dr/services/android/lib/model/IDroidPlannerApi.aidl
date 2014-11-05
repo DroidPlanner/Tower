@@ -135,4 +135,14 @@ interface IDroidPlannerApi {
         * Stop the magnetometer calibration is one if running.
         */
         oneway void stopMagnetometerCalibration();
+
+        /**
+        * Start the imu calibration.
+        */
+        oneway void startIMUCalibration();
+
+        /**
+        * Send an imu calibration acknowledgement.
+        */
+        oneway void sendIMUCalibrationAck(int step);
 }
