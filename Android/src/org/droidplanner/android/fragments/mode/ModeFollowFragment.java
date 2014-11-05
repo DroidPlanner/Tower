@@ -14,8 +14,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.ox3dr.services.android.lib.drone.event.Event;
+import com.ox3dr.services.android.lib.gcs.follow.FollowType;
 
 import org.droidplanner.R;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
@@ -25,8 +27,7 @@ import org.droidplanner.core.gcs.follow.Follow;
 import org.droidplanner.core.gcs.follow.FollowAlgorithm.FollowModes;
 import org.droidplanner.core.model.Drone;
 
-public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSelectedListener,
-		OnDroneListener {
+public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSelectedListener{
 
     private static final IntentFilter eventFilter = new IntentFilter(Event.EVENT_FOLLOW_UPDATE);
 
@@ -40,9 +41,8 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
         }
     };
 
-	private Follow followMe;
 	private Spinner spinner;
-	private ArrayAdapter<FollowModes> adapter;
+	private ArrayAdapter<FollowType> adapter;
 
 	private CardWheelHorizontalView mRadiusWheel;
 
@@ -66,8 +66,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 		mRadiusWheel.addChangingListener(this);
 
 		spinner = (Spinner) parentView.findViewById(R.id.follow_type_spinner);
-		adapter = new ArrayAdapter<FollowModes>(getActivity(),
-				android.R.layout.simple_spinner_item, FollowModes.values());
+		adapter = new ArrayAdapter<FollowType>(getActivity(), android.R.layout.simple_spinner_item);
 		spinner.setAdapter(adapter);
 		spinner.setOnItemSelectedListener(this);
 	}
@@ -82,17 +81,17 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	}
 
 	@Override
-	public void onApiConnected(DroidPlannerApi api) {
+	public void onApiConnected(DroneApi api) {
 		super.onApiConnected(api);
-		followMe = api.getFollowMe();
-		api.addDroneListener(this);
+
+        adapter.addAll(api.getFollowModes());
+		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 	}
 
 	@Override
 	public void onApiDisconnected() {
 		super.onApiDisconnected();
-		getDroneApi().removeDroneListener(this);
-		followMe = null;
+		getBroadcastManager().unregisterReceiver(eventReceiver);
 	}
 
 	@Override
