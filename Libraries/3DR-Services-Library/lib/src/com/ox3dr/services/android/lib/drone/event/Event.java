@@ -7,6 +7,12 @@ public class Event {
 
     private static final String CLAZZ_NAME = Event.class.getName();
 
+    public static final String EVENT_ARMING = CLAZZ_NAME + ".ARMING";
+
+    public static final String EVENT_ATTITUDE = CLAZZ_NAME + ".ATTITUDE";
+
+    public static final String EVENT_AUTOPILOT_FAILSAFE = CLAZZ_NAME + ".AUTOPILOT_FAILSAFE";
+
     /**
      * Signals the start of magnetometer calibration.
      */
@@ -36,6 +42,14 @@ public class Event {
 
     public static final String EVENT_DISCONNECTED = CLAZZ_NAME + ".DISCONNECTED";
 
+    public static final String EVENT_FOLLOW_START = CLAZZ_NAME + ".FOLLOW_START";
+
+    public static final String EVENT_FOLLOW_STOP = CLAZZ_NAME + ".FOLLOW_STOP";
+
+    public static final String EVENT_FOLLOW_UPDATE = CLAZZ_NAME + ".FOLLOW_UPDATE";
+
+    public static final String EVENT_GUIDED_POINT = CLAZZ_NAME + ".GUIDED_POINT";
+
     public static final String EVENT_PARAMETERS_REFRESH_STARTED = CLAZZ_NAME +
             ".PARAMETERS_REFRESH_STARTED";
 
@@ -52,11 +66,6 @@ public class Event {
 
     public static final String EVENT_RADIO = CLAZZ_NAME + ".RADIO";
 
-    public static final String EVENT_ARMING = CLAZZ_NAME + ".ARMING";
-
-    public static final String EVENT_AUTOPILOT_FAILSAFE = CLAZZ_NAME + ".AUTOPILOT_FAILSAFE";
-
-    public static final String EVENT_ATTITUDE = CLAZZ_NAME + ".ATTITUDE";
     public static final String EVENT_SPEED = CLAZZ_NAME + ".SPEED";
     public static final String EVENT_BATTERY = CLAZZ_NAME + ".BATTERY";
     public static final String EVENT_STATE = CLAZZ_NAME + ".STATE";
