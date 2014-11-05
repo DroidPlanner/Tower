@@ -17,7 +17,7 @@ import com.ox3dr.services.android.lib.drone.property.Signal;
 import com.ox3dr.services.android.lib.drone.property.GuidedState;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.gcs.follow.FollowState;
-import com.ox3dr.services.android.lib.gcs.follow.FollowMode;
+import com.ox3dr.services.android.lib.gcs.follow.FollowType;
 
 /**
 * Interface used to access the drone properties.
@@ -202,7 +202,7 @@ interface IDroidPlannerApi {
         * Enables follow-me if disabled.
         * @param followMode follow-me mode to use.
         */
-        oneway void enableFollowMe(in FollowMode followMode);
+        oneway void enableFollowMe(in FollowType followMode);
 
         /**
         * Sets the follow-me radius.

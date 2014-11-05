@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Created by fhuya on 11/5/14.
  */
-public class FollowMode implements Parcelable {
+public class FollowType implements Parcelable {
 
     public static final int TYPE_LEASH = 0;
     public static final int TYPE_LEAD = 1;
@@ -18,7 +18,7 @@ public class FollowMode implements Parcelable {
     private final int followType;
     private final String typeLabel;
 
-    public FollowMode(int followType, String typeLabel) {
+    public FollowType(int followType, String typeLabel) {
         this.followType = followType;
         this.typeLabel = typeLabel;
     }
@@ -42,18 +42,18 @@ public class FollowMode implements Parcelable {
         dest.writeString(this.typeLabel);
     }
 
-    private FollowMode(Parcel in) {
+    private FollowType(Parcel in) {
         this.followType = in.readInt();
         this.typeLabel = in.readString();
     }
 
-    public static final Parcelable.Creator<FollowMode> CREATOR = new Parcelable.Creator<FollowMode>() {
-        public FollowMode createFromParcel(Parcel source) {
-            return new FollowMode(source);
+    public static final Parcelable.Creator<FollowType> CREATOR = new Parcelable.Creator<FollowType>() {
+        public FollowType createFromParcel(Parcel source) {
+            return new FollowType(source);
         }
 
-        public FollowMode[] newArray(int size) {
-            return new FollowMode[size];
+        public FollowType[] newArray(int size) {
+            return new FollowType[size];
         }
     };
 }
