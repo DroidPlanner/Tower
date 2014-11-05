@@ -7,20 +7,20 @@ import android.os.Parcelable;
 /**
  * Stores latitude and longitude in degrees.
  */
-public class LatLng implements Parcelable {
+public class LatLong implements Parcelable {
 
     /**
      * Stores latitude, and longitude in degrees
      */
     private PointF mLatLng;
 
-    protected LatLng(){}
+    protected LatLong(){}
 
-    public LatLng(float latitude, float longitude){
+    public LatLong(float latitude, float longitude){
         mLatLng = new PointF(latitude, longitude);
     }
 
-    public LatLng(LatLng copy){
+    public LatLong(LatLong copy){
         this(copy.getLatitude(), copy.getLongitude());
     }
 
@@ -41,9 +41,9 @@ public class LatLng implements Parcelable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof LatLng)) return false;
+        if (!(o instanceof LatLong)) return false;
 
-        LatLng latLng = (LatLng) o;
+        LatLong latLng = (LatLong) o;
 
         return mLatLng.equals(latLng.mLatLng);
     }
@@ -55,7 +55,7 @@ public class LatLng implements Parcelable {
 
     @Override
     public String toString() {
-        return "LatLng{" +
+        return "LatLong{" +
                 "mLatLng=" + mLatLng +
                 '}';
     }
@@ -75,17 +75,17 @@ public class LatLng implements Parcelable {
         this.mLatLng = in.readParcelable(PointF.class.getClassLoader());
     }
 
-    protected LatLng(Parcel in) {
+    protected LatLong(Parcel in) {
         readFromParcel(in);
     }
 
-    public static final Parcelable.Creator<LatLng> CREATOR = new Parcelable.Creator<LatLng>() {
-        public LatLng createFromParcel(Parcel source) {
-            return new LatLng(source);
+    public static final Parcelable.Creator<LatLong> CREATOR = new Parcelable.Creator<LatLong>() {
+        public LatLong createFromParcel(Parcel source) {
+            return new LatLong(source);
         }
 
-        public LatLng[] newArray(int size) {
-            return new LatLng[size];
+        public LatLong[] newArray(int size) {
+            return new LatLong[size];
         }
     };
 }
