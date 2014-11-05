@@ -17,6 +17,7 @@ import com.ox3dr.services.android.lib.drone.property.Signal;
 import com.ox3dr.services.android.lib.drone.property.GuidedState;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.gcs.follow.FollowState;
+import com.ox3dr.services.android.lib.gcs.follow.FollowMode;
 
 /**
 * Interface used to access the drone properties.
