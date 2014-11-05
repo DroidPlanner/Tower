@@ -3,7 +3,7 @@ package com.ox3dr.services.android.lib.drone.property;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.ox3dr.services.android.lib.coordinate.LatLng;
+import com.ox3dr.services.android.lib.coordinate.LatLong;
 
 /**
  * Stores GPS information.
@@ -20,9 +20,9 @@ public class Gps implements Parcelable {
     private final float mGpsEph;
     private final int mSatCount;
     private final int mFixType;
-    private final LatLng mPosition;
+    private final LatLong mPosition;
 
-    public Gps(LatLng position, float gpsEph, int satCount, int fixType){
+    public Gps(LatLong position, float gpsEph, int satCount, int fixType){
         mPosition = position;
         mGpsEph = gpsEph;
         mSatCount = satCount;
@@ -30,7 +30,7 @@ public class Gps implements Parcelable {
     }
 
     public Gps(float latitude, float longitude, float gpsEph, int satCount, int fixType){
-        this(new LatLng(latitude, longitude), gpsEph, satCount, fixType);
+        this(new LatLong(latitude, longitude), gpsEph, satCount, fixType);
     }
 
     public boolean isValid(){
@@ -62,7 +62,7 @@ public class Gps implements Parcelable {
         }
     }
 
-    public LatLng getPosition(){
+    public LatLong getPosition(){
         return mPosition;
     }
 
@@ -115,7 +115,7 @@ public class Gps implements Parcelable {
         this.mGpsEph = in.readFloat();
         this.mSatCount = in.readInt();
         this.mFixType = in.readInt();
-        this.mPosition = in.readParcelable(LatLng.class.getClassLoader());
+        this.mPosition = in.readParcelable(LatLong.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Gps> CREATOR = new Parcelable.Creator<Gps>() {

@@ -3,7 +3,7 @@ package com.ox3dr.services.android.lib.drone.property;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.ox3dr.services.android.lib.coordinate.LatLngAlt;
+import com.ox3dr.services.android.lib.coordinate.LatLongAlt;
 
 /**
  * Location from which the drone took off.
@@ -13,20 +13,20 @@ public class Home implements Parcelable {
     /**
      * Lauch pad 3D coordinate.
      */
-    private final LatLngAlt mCoordinate;
+    private final LatLongAlt mCoordinate;
 
     public Home(float latitude, float longitude, float altitude){
-        mCoordinate = new LatLngAlt(latitude, longitude, altitude);
+        mCoordinate = new LatLongAlt(latitude, longitude, altitude);
     }
 
-    public Home(LatLngAlt coordinate){
+    public Home(LatLongAlt coordinate){
         mCoordinate = coordinate;
     }
 
     /**
      * @return the launch pad 3D coordinate.
      */
-    public LatLngAlt getCoordinate(){
+    public LatLongAlt getCoordinate(){
         return mCoordinate;
     }
 
@@ -69,7 +69,7 @@ public class Home implements Parcelable {
     }
 
     private Home(Parcel in) {
-        this.mCoordinate = in.readParcelable(LatLngAlt.class.getClassLoader());
+        this.mCoordinate = in.readParcelable(LatLongAlt.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Home> CREATOR = new Parcelable.Creator<Home>() {

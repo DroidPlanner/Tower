@@ -5,19 +5,19 @@ import android.os.Parcel;
 /**
  * Stores latitude, longitude, and altitude information for a coordinate.
  */
-public class LatLngAlt extends LatLng {
+public class LatLongAlt extends LatLong {
 
     /**
      * Stores the altitude in meters.
      */
     private float mAltitude;
 
-    public LatLngAlt(float latitude, float longitude, float altitude) {
+    public LatLongAlt(float latitude, float longitude, float altitude) {
         super(latitude, longitude);
         mAltitude = altitude;
     }
 
-    public LatLngAlt(LatLngAlt copy) {
+    public LatLongAlt(LatLongAlt copy) {
         this(copy.getLatitude(), copy.getLongitude(), copy.getAltitude());
     }
 
@@ -31,10 +31,10 @@ public class LatLngAlt extends LatLng {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof LatLngAlt)) return false;
+        if (!(o instanceof LatLongAlt)) return false;
         if (!super.equals(o)) return false;
 
-        LatLngAlt latLngAlt = (LatLngAlt) o;
+        LatLongAlt latLngAlt = (LatLongAlt) o;
 
         return Float.compare(latLngAlt.mAltitude, mAltitude) == 0;
     }
@@ -48,7 +48,7 @@ public class LatLngAlt extends LatLng {
 
     @Override
     public String toString() {
-        return "LatLngAlt{" +
+        return "LatLongAlt{" +
                 "mAltitude=" + mAltitude +
                 '}';
     }
@@ -65,20 +65,20 @@ public class LatLngAlt extends LatLng {
         mAltitude = in.readFloat();
     }
 
-    protected LatLngAlt(Parcel in) {
+    protected LatLongAlt(Parcel in) {
         readFromParcel(in);
     }
 
-    public static final Creator<LatLngAlt> CREATOR = new Creator<LatLngAlt>() {
+    public static final Creator<LatLongAlt> CREATOR = new Creator<LatLongAlt>() {
 
         @Override
-        public LatLngAlt createFromParcel(Parcel source) {
-            return new LatLngAlt(source);
+        public LatLongAlt createFromParcel(Parcel source) {
+            return new LatLongAlt(source);
         }
 
         @Override
-        public LatLngAlt[] newArray(int size) {
-            return new LatLngAlt[size];
+        public LatLongAlt[] newArray(int size) {
+            return new LatLongAlt[size];
         }
     };
 }
