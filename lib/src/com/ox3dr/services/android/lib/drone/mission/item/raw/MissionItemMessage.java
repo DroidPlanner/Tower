@@ -75,7 +75,7 @@ public class MissionItemMessage extends MissionItem {
     private byte autocontinue;
 
     public MissionItemMessage() {
-        super(MissionItemType.RAW_MESSAGE, "Raw Message");
+        super(MissionItemType.RAW_MESSAGE);
     }
 
     public int getMessageId(){

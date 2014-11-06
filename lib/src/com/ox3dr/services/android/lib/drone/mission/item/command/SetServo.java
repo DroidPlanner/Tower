@@ -14,7 +14,7 @@ public class SetServo extends MissionItem implements MissionItem.Command {
     private int channel;
 
     public SetServo(){
-        super(MissionItemType.SET_SERVO, "Set Servo");
+        super(MissionItemType.SET_SERVO);
     }
 
     public int getPwm() {

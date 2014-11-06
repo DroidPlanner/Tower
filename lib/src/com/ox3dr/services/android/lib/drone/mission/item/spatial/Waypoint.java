@@ -16,7 +16,7 @@ public class Waypoint extends BaseSpatialItem {
     private boolean orbitCCW;
 
     public Waypoint(){
-        super(MissionItemType.WAYPOINT, "Waypoint");
+        super(MissionItemType.WAYPOINT);
     }
 
     public double getDelay() {

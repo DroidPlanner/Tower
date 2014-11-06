@@ -20,20 +20,14 @@ public abstract class MissionItem implements Parcelable, Serializable {
         void setCoordinate(LatLongAlt coordinate);
     }
 
-    private final int type;
-    private final String label;
+    private final MissionItemType type;
 
-    protected MissionItem(int type, String label) {
+    protected MissionItem(MissionItemType type) {
         this.type = type;
-        this.label = label;
     }
 
-    public int getType() {
+    public MissionItemType getType() {
         return type;
-    }
-
-    public String getLabel(){
-        return label;
     }
 
     @Override

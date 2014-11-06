@@ -10,7 +10,7 @@ import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 public class Land extends BaseSpatialItem {
 
     public Land(){
-        super(MissionItemType.LAND, "Land");
+        super(MissionItemType.LAND);
     }
 
     public static final Creator<Land> CREATOR = new Creator<Land>() {

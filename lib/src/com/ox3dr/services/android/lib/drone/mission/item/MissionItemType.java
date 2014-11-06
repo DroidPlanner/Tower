@@ -1,26 +1,133 @@
 package com.ox3dr.services.android.lib.drone.mission.item;
 
+import com.ox3dr.services.android.lib.drone.mission.item.command.CameraTrigger;
+import com.ox3dr.services.android.lib.drone.mission.item.command.ChangeSpeed;
+import com.ox3dr.services.android.lib.drone.mission.item.command.EpmGripper;
+import com.ox3dr.services.android.lib.drone.mission.item.command.ReturnToLaunch;
+import com.ox3dr.services.android.lib.drone.mission.item.command.SetServo;
+import com.ox3dr.services.android.lib.drone.mission.item.command.Takeoff;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
+import com.ox3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
+import com.ox3dr.services.android.lib.drone.mission.item.spatial.Circle;
+import com.ox3dr.services.android.lib.drone.mission.item.spatial.Land;
+import com.ox3dr.services.android.lib.drone.mission.item.spatial.RegionOfInterest;
+import com.ox3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
+import com.ox3dr.services.android.lib.drone.mission.item.spatial.StructureScanner;
+import com.ox3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
+
 /**
  * /**
  * List of mission item types.
  */
-public class MissionItemType {
+public enum MissionItemType {
 
-    public static final int INVALID_TYPE = -1;
+    CAMERA_TRIGGER("Camera Trigger") {
+        @Override
+        public MissionItem getNewItem() {
+            return new CameraTrigger();
+        }
+    },
 
-    public static final int CAMERA_TRIGGER = 0;
-    public static final int RAW_MESSAGE = 1;
+    RAW_MESSAGE("Raw Message") {
+        @Override
+        public MissionItem getNewItem() {
+            return new MissionItemMessage();
+        }
+    },
 
-    public static final int CHANGE_SPEED = 2;
-    public static final int EPM_GRIPPER = 3;
-    public static final int RETURN_TO_LAUNCH = 4;
-    public static final int SET_SERVO = 5;
-    public static final int TAKEOFF = 6;
-    public static final int CIRCLE = 7;
-    public static final int LAND = 8;
-    public static final int REGION_OF_INTEREST = 9;
-    public static final int SPLINE_WAYPOINT = 10;
-    public static final int STRUCTURE_SCANNER = 11;
-    public static final int WAYPOINT = 12;
-    public static final int SURVEY = 13;
+    CHANGE_SPEED("Change Speed") {
+        @Override
+        public MissionItem getNewItem() {
+            return new ChangeSpeed();
+        }
+    },
+
+    EPM_GRIPPER("EPM Gripper") {
+        @Override
+        public MissionItem getNewItem() {
+            return new EpmGripper();
+        }
+    },
+
+    RETURN_TO_LAUNCH("Return to Launch") {
+        @Override
+        public MissionItem getNewItem() {
+            return new ReturnToLaunch();
+        }
+    },
+
+    SET_SERVO("Set Servo") {
+        @Override
+        public MissionItem getNewItem() {
+            return new SetServo();
+        }
+    },
+
+    TAKEOFF("Takeoff") {
+        @Override
+        public MissionItem getNewItem() {
+            return new Takeoff();
+        }
+    },
+
+    CIRCLE("Circle") {
+        @Override
+        public MissionItem getNewItem() {
+            return new Circle();
+        }
+    },
+
+    LAND("Land") {
+        @Override
+        public MissionItem getNewItem() {
+            return new Land();
+        }
+    },
+
+    REGION_OF_INTEREST("Region of Interest") {
+        @Override
+        public MissionItem getNewItem() {
+            return new RegionOfInterest();
+        }
+    },
+
+    SPLINE_WAYPOINT("Spline Waypoint") {
+        @Override
+        public MissionItem getNewItem() {
+            return new SplineWaypoint();
+        }
+    },
+
+    STRUCTURE_SCANNER("Structure Scanner") {
+        @Override
+        public MissionItem getNewItem() {
+            return new StructureScanner();
+        }
+    },
+
+    WAYPOINT("Waypoint") {
+        @Override
+        public MissionItem getNewItem() {
+            return new Waypoint();
+        }
+    },
+
+    SURVEY("Survey") {
+        @Override
+        public MissionItem getNewItem() {
+            return new Survey();
+        }
+    };
+
+    private final String label;
+
+    private MissionItemType(String label){
+        this.label = label;
+    }
+
+    public String getLabel(){
+        return this.label;
+    }
+
+    public abstract MissionItem getNewItem();
 }
