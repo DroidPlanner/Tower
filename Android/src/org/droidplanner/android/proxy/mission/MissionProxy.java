@@ -1,5 +1,9 @@
 package org.droidplanner.android.proxy.mission;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +18,6 @@ import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.geoTools.spline.SplinePath;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
-import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.Takeoff;
@@ -25,6 +28,9 @@ import org.droidplanner.core.mission.waypoints.Waypoint;
 import org.droidplanner.core.util.Pair;
 
 import com.google.android.gms.analytics.HitBuilders;
+import com.ox3dr.services.android.lib.drone.event.Event;
+import com.ox3dr.services.android.lib.drone.property.Mission;
+import com.ox3dr.services.android.lib.drone.property.MissionItemMessage;
 
 /**
  * This class is used to render a {@link org.droidplanner.core.mission.Mission}
@@ -39,21 +45,19 @@ public class MissionProxy implements DPMap.PathSource {
 	 */
 	private final List<MissionItemProxy> mMissionItems = new ArrayList<MissionItemProxy>();
 
+    private final LocalBroadcastManager lbm;
+
 	public MissionSelection selection = new MissionSelection();
 
-	public MissionProxy(Mission mission) {
+	public MissionProxy(Context context, Mission mission) {
 		mMission = mission;
+        lbm = LocalBroadcastManager.getInstance(context);
 		refresh();
 	}
 
-	/**
-	 * Provides access to the class' mission instance.
-	 * 
-	 * @return {@link org.droidplanner.core.mission.Mission} object
-	 */
-	public Mission getMission() {
-		return mMission;
-	}
+    private void notifyMissionUpdate(){
+        lbm.sendBroadcast(new Intent(Event.EVENT_MISSION_UPDATE));
+    }
 
 	public List<MissionItemProxy> getItems() {
 		return mMissionItems;
@@ -82,8 +86,8 @@ public class MissionProxy implements DPMap.PathSource {
 		selection.mSelectedItems.clear();
 		mMissionItems.clear();
 
-		for (MissionItem item : mMission.getItems()) {
-			mMissionItems.add(new MissionItemProxy(this, item));
+		for (MissionItemMessage item : mMission.getMissionItemMessages()) {
+			mMissionItems.add(MissionItemProxy.newInstance(this, item));
 		}
 
 		selection.notifySelectionUpdate();
@@ -109,8 +113,10 @@ public class MissionProxy implements DPMap.PathSource {
 	public void removeItem(MissionItemProxy item) {
 		mMissionItems.remove(item);
 		selection.mSelectedItems.remove(item);
-		mMission.removeWaypoint(item.getMissionItem());
-		selection.notifySelectionUpdate();
+		mMission.removeMissionItemMessage(item.getMissionItemMessage());
+
+        selection.notifySelectionUpdate();
+        notifyMissionUpdate();
 	}
 
 	/**
@@ -120,16 +126,16 @@ public class MissionProxy implements DPMap.PathSource {
 	 *            list of items to remove
 	 */
 	public void removeItemList(List<MissionItemProxy> items) {
-
-		final List<MissionItem> toRemove = new ArrayList<MissionItem>(items.size());
 		for (MissionItemProxy item : items) {
-			toRemove.add(item.getMissionItem());
+            MissionItemMessage itemMessage = item.getMissionItemMessage();
+			mMission.removeMissionItemMessage(itemMessage);
 		}
 
 		mMissionItems.removeAll(items);
 		selection.mSelectedItems.removeAll(items);
-		mMission.removeWaypoints(toRemove);
+
 		selection.notifySelectionUpdate();
+        notifyMissionUpdate();
 	}
 
 	/**
