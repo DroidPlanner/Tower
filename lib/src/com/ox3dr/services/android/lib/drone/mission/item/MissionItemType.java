@@ -22,4 +22,5 @@ public class MissionItemType {
     public static final int SPLINE_WAYPOINT = 10;
     public static final int STRUCTURE_SCANNER = 11;
     public static final int WAYPOINT = 12;
+    public static final int SURVEY = 13;
 }
