@@ -4,10 +4,12 @@ import android.graphics.PointF;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Stores latitude and longitude in degrees.
  */
-public class LatLong implements Parcelable {
+public class LatLong implements Parcelable, Serializable {
 
     /**
      * Stores latitude, and longitude in degrees
@@ -65,16 +67,12 @@ public class LatLong implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(this.mLatLng, 0);
-    }
-
-    protected LatLong(Parcel in) {
-        this.mLatLng = in.readParcelable(PointF.class.getClassLoader());
+        dest.writeSerializable(this);
     }
 
     public static final Parcelable.Creator<LatLong> CREATOR = new Parcelable.Creator<LatLong>() {
         public LatLong createFromParcel(Parcel source) {
-            return new LatLong(source);
+            return (LatLong) source.readSerializable();
         }
 
         public LatLong[] newArray(int size) {

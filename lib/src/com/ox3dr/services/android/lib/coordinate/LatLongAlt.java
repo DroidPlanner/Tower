@@ -52,28 +52,4 @@ public class LatLongAlt extends LatLong {
                 "mAltitude=" + mAltitude +
                 '}';
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeFloat(mAltitude);
-    }
-
-    protected LatLongAlt(Parcel in) {
-        super(in);
-        mAltitude = in.readFloat();
-    }
-
-    public static final Creator<LatLongAlt> CREATOR = new Creator<LatLongAlt>() {
-
-        @Override
-        public LatLongAlt createFromParcel(Parcel source) {
-            return new LatLongAlt(source);
-        }
-
-        @Override
-        public LatLongAlt[] newArray(int size) {
-            return new LatLongAlt[size];
-        }
-    };
 }
