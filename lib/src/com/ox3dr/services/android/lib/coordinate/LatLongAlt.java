@@ -59,14 +59,9 @@ public class LatLongAlt extends LatLong {
         dest.writeFloat(mAltitude);
     }
 
-    @Override
-    protected void readFromParcel(Parcel in) {
-        super.readFromParcel(in);
-        mAltitude = in.readFloat();
-    }
-
     protected LatLongAlt(Parcel in) {
-        readFromParcel(in);
+        super(in);
+        mAltitude = in.readFloat();
     }
 
     public static final Creator<LatLongAlt> CREATOR = new Creator<LatLongAlt>() {

@@ -14,8 +14,6 @@ public class LatLong implements Parcelable {
      */
     private PointF mLatLng;
 
-    protected LatLong(){}
-
     public LatLong(float latitude, float longitude){
         mLatLng = new PointF(latitude, longitude);
     }
@@ -71,12 +69,8 @@ public class LatLong implements Parcelable {
         dest.writeParcelable(this.mLatLng, 0);
     }
 
-    protected void readFromParcel(Parcel in){
-        this.mLatLng = in.readParcelable(PointF.class.getClassLoader());
-    }
-
     protected LatLong(Parcel in) {
-        readFromParcel(in);
+        this.mLatLng = in.readParcelable(PointF.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<LatLong> CREATOR = new Parcelable.Creator<LatLong>() {
