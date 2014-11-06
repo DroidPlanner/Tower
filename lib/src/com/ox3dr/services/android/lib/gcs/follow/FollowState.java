@@ -37,6 +37,10 @@ public class FollowState implements Parcelable {
         return mode;
     }
 
+    public boolean isEnabled(){
+        return state == STATE_RUNNING || state == STATE_START;
+    }
+
     @Override
     public int describeContents() {
         return 0;
