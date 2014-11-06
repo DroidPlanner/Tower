@@ -12,11 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.MAVLink.Messages.ApmModes;
 import com.google.android.gms.analytics.HitBuilders;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.property.Altitude;
 import com.ox3dr.services.android.lib.drone.property.State;
+import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.FlightActivity;
@@ -71,7 +71,6 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     };
 
     private MissionProxy missionProxy;
-    private Follow followMe;
 
     private View mDisconnectedButtons;
     private View mDisarmedButtons;
@@ -169,22 +168,24 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                 break;
 
             case R.id.mc_land:
-                getDroneApi().changeVehicleMode(ApmModes.ROTOR_LAND);
-                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_LAND.getName());
+                getDroneApi().changeVehicleMode(VehicleMode.COPTER_LAND);
+                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode
+                        .COPTER_LAND.getLabel());
                 break;
 
             case R.id.mc_takeoff:
-                getDroneApi().getState().doTakeoff(new Altitude(TAKEOFF_ALTITUDE));
+                getDroneApi().doGuidedTakeoff(TAKEOFF_ALTITUDE);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Takeoff");
                 break;
 
             case R.id.mc_homeBtn:
-                getDroneApi().changeVehicleMode(ApmModes.ROTOR_RTL);
-                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_RTL.getName());
+                getDroneApi().changeVehicleMode(VehicleMode.COPTER_RTL);
+                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode.COPTER_RTL
+                        .getLabel());
                 break;
 
             case R.id.mc_pause:
-                if (followMe.isEnabled()) {
+                if (getDroneApi().getFollowState()) {
                     followMe.toggleFollowMeState();
                 }
 
