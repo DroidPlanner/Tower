@@ -214,8 +214,4 @@ interface IDroidPlannerApi {
         * Disables follow me is enabled.
         */
         oneway void disableFollowMe();
-
-        oneway void testLatLong(LatLong value);
-
-        oneway void testLatLongAlt(LatLongAlt value);
 }
