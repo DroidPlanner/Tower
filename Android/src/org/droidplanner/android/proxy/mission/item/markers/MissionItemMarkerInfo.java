@@ -114,7 +114,7 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo 
 	private String getIconDetail() {
 		try {
 			final MissionProxy missionProxy = mMarkerOrigin.getMissionProxy();
-			if (missionProxy.getAltitudeDiffFromPreviousItem(mMarkerOrigin).valueInMeters() == 0) {
+			if (missionProxy.getAltitudeDiffFromPreviousItem(mMarkerOrigin) == 0) {
 				return null;
 			} else {
 				return null; // altitude.toString();

@@ -152,12 +152,13 @@ public class EditorListFragment extends ApiListenerFragment implements OnItemLon
 
 	@Override
 	public void onClick(View v) {
+        //TODO: replace functionality with drag and drop.
 		if (v == leftArrow) {
-			missionProxy.moveSelection(false);
+//			missionProxy.moveSelection(false);
 			adapter.notifyDataSetChanged();
 		}
 		if (v == rightArrow) {
-			missionProxy.moveSelection(true);
+//			missionProxy.moveSelection(true);
 			adapter.notifyDataSetChanged();
 		}
 	}

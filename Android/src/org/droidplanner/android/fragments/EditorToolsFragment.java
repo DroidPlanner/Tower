@@ -1,7 +1,7 @@
 package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
@@ -99,7 +99,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 	}
 
     @Override
-    public void onApiConnected(DroidPlannerApi api) {
+    public void onApiConnected(DroneApi api) {
         mMissionProxy = api.getMissionProxy();
         setToolAndUpdateView(tool);
     }

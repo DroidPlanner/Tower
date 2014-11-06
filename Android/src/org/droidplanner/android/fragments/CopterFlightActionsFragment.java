@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.ox3dr.services.android.lib.drone.event.Event;
+import com.ox3dr.services.android.lib.drone.event.Extra;
 import com.ox3dr.services.android.lib.drone.property.State;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 import com.ox3dr.services.android.lib.gcs.follow.FollowState;
@@ -47,6 +48,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
         eventFilter.addAction(Event.EVENT_FOLLOW_START);
         eventFilter.addAction(Event.EVENT_FOLLOW_STOP);
         eventFilter.addAction(Event.EVENT_FOLLOW_UPDATE);
+        eventFilter.addAction(Event.EVENT_MISSION_DRONIE_CREATED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -105,6 +107,16 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                         GAUtils.sendEvent(eventBuilder);
 
                         Toast.makeText(getActivity(), eventLabel, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+            else if(Event.EVENT_MISSION_DRONIE_CREATED.equals(action)){
+                //Get the bearing of the dronie mission.
+                float bearing = intent.getFloatExtra(Extra.EXTRA_MISSION_DRONIE_BEARING, -1);
+                if(bearing >= 0){
+                    final FlightActivity flightActivity = (FlightActivity) getActivity();
+                    if(flightActivity != null){
+                        flightActivity.updateMapBearing(bearing);
                     }
                 }
             }
@@ -276,13 +288,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                 getString(R.string.pref_dronie_creation_message), new YesNoDialog.Listener() {
             @Override
             public void onYes() {
-                final float bearing = missionProxy.makeAndUploadDronie();
-                if(bearing >= 0){
-                    final FlightActivity flightActivity = (FlightActivity) getActivity();
-                    if(flightActivity != null){
-                        flightActivity.updateMapBearing(bearing);
-                    }
-                }
+                missionProxy.makeAndUploadDronie(getDroneApi());
             }
 
             @Override

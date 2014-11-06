@@ -8,17 +8,6 @@ import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.helpers.geoTools.GeoTools;
-import org.droidplanner.core.helpers.units.Length;
-import org.droidplanner.core.mission.MissionItem;
-import org.droidplanner.core.mission.commands.Takeoff;
-import org.droidplanner.core.mission.survey.Survey;
-import org.droidplanner.core.mission.survey.grid.Grid;
-import org.droidplanner.core.mission.waypoints.Circle;
-import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
-import org.droidplanner.core.mission.waypoints.SplineWaypoint;
-import org.droidplanner.core.mission.waypoints.StructureScanner;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -27,12 +16,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.ox3dr.services.android.lib.drone.mission.item.command.Takeoff;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
+import com.ox3dr.services.android.lib.drone.mission.item.spatial.Circle;
+import com.ox3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
+import com.ox3dr.services.android.lib.drone.mission.item.spatial.StructureScanner;
+
 /**
  * This class is responsible for providing logic to access and interpret the
- * {@link org.droidplanner.core.mission.MissionItem} class on the Android layer,
+ * {@link com.ox3dr.services.android.lib.drone.mission.item.MissionItem} class on the Android layer,
  * as well as providing methods for rendering it on the Android UI.
  */
-public class MissionItemProxy implements Comparable<MissionItemProxy> {
+public class MissionItemProxy {
 
 	/**
 	 * This is the mission item object this class is built around.
@@ -67,7 +65,7 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 	/**
 	 * Provides access to the mission item instance.
 	 * 
-	 * @return {@link org.droidplanner.core.mission.MissionItem} object
+	 * @return {@link com.ox3dr.services.android.lib.drone.mission.item.MissionItem} object
 	 */
 	public MissionItem getMissionItem() {
 		return mMissionItem;
@@ -87,16 +85,16 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 	 *            point
 	 * @return the set of points/coords making up this mission item.
 	 */
-	public List<Coord2D> getPath(Coord2D previousPoint) {
-		List<Coord2D> pathPoints = new ArrayList<Coord2D>();
+	public List<LatLong> getPath(LatLong previousPoint) {
+		List<LatLong> pathPoints = new ArrayList<LatLong>();
 		switch (mMissionItem.getType()) {
-		case LAND:
-		case WAYPOINT:
-		case SPLINE_WAYPOINT:
-			pathPoints.add(((SpatialCoordItem) mMissionItem).getCoordinate());
+		case MissionItemType.LAND:
+		case MissionItemType.WAYPOINT:
+		case MissionItemType.SPLINE_WAYPOINT:
+			pathPoints.add(((MissionItem.SpatialItem) mMissionItem).getCoordinate());
 			break;
 
-		case CIRCLE:
+		case MissionItemType.CIRCLE:
 			for (int i = 0; i <= 360; i += 10) {
 				Circle circle = (Circle) mMissionItem;
 				double startHeading = 0;
@@ -109,17 +107,17 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 			}
 			break;
 
-		case SURVEY:
+		case MissionItemType.SURVEY:
 			Grid grid = ((Survey) mMissionItem).grid;
 			if (grid != null) {
 				pathPoints.addAll(grid.gridPoints);
 			}
 			break;
-		case CYLINDRICAL_SURVEY:
+		case MissionItemType.STRUCTURE_SCANNER:
 			StructureScanner survey = (StructureScanner)mMissionItem;
 			pathPoints.addAll(survey.getPath());
 			break;
-		case TAKEOFF:
+		case MissionItemType.TAKEOFF:
 			break;
 		default:
 			break;
@@ -136,22 +134,21 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 		TextView nameView = (TextView) view.findViewById(R.id.rowNameView);
 		TextView altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
 
-		nameView.setText(String.format("%3d", mMissionItem.getMission().getOrder(mMissionItem)));
+		nameView.setText(String.format("%3d", mMission.getOrder(this)));
 
 		final int leftDrawable = mMissionItem instanceof SplineWaypoint ? R.drawable.ic_mission_spline_wp
 				: R.drawable.ic_mission_wp;
 		altitudeView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, 0, 0, 0);
 
-		if (mMissionItem instanceof SpatialCoordItem) {
-			SpatialCoordItem waypoint = (SpatialCoordItem) mMissionItem;
-			altitudeView.setText(String.format("%3.0fm", waypoint.getCoordinate().getAltitude()
-					.valueInMeters()));
+		if (mMissionItem instanceof MissionItem.SpatialItem) {
+			MissionItem.SpatialItem waypoint = (MissionItem.SpatialItem) mMissionItem;
+			altitudeView.setText(String.format("%3.0fm", waypoint.getCoordinate().getAltitude()));
 
 			try {
-				Length diff = waypoint.getMission().getAltitudeDiffFromPreviousItem(waypoint);
-				if (diff.valueInMeters() > 0) {
+				double diff = mMission.getAltitudeDiffFromPreviousItem(this);
+				if (diff > 0) {
 					altitudeView.setTextColor(Color.RED);
-				} else if (diff.valueInMeters() < 0) {
+				} else if (diff < 0) {
 					altitudeView.setTextColor(Color.BLUE);
 				}
 			} catch (Exception e) {
@@ -161,7 +158,7 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 			altitudeView.setText(((Survey) mMissionItem).surveyData.getAltitude().toString());
 
 		} else if (mMissionItem instanceof Takeoff) {
-			altitudeView.setText(((Takeoff) mMissionItem).getFinishedAlt().toString());
+			altitudeView.setText(String.valueOf(((Takeoff) mMissionItem).getTakeoffAltitude()));
 		} else {
 			altitudeView.setText("");
 		}
@@ -184,10 +181,5 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 		 * distanceFromPrevPoint)); } else { distanceView.setText("-"); }
 		 */
 		return view;
-	}
-
-	@Override
-	public int compareTo(MissionItemProxy another) {
-		return mMissionItem.compareTo(another.mMissionItem);
 	}
 }

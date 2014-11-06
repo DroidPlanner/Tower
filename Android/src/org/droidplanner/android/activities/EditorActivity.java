@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
-import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
@@ -25,17 +25,11 @@ import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.file.IO.MissionReader;
 import org.droidplanner.android.utils.file.IO.MissionWriter;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.helpers.units.Length;
-import org.droidplanner.core.helpers.units.Speed;
-import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.model.Drone;
-import org.droidplanner.core.util.Pair;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.util.Pair;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
 import android.view.Menu;
@@ -49,8 +43,10 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.google.android.gms.analytics.HitBuilders;
+import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.ox3dr.services.android.lib.drone.property.Speed;
 
 /**
  * This implements the map editor activity. The map editor activity allows the
@@ -69,7 +65,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
     /**
 	 * Used to provide access and interact with the
-	 * {@link org.droidplanner.core.mission.Mission} object on the Android
+	 * {@link org.droidplanner.android.proxy.mission.MissionProxy} object on the Android
 	 * layer.
 	 */
 	private MissionProxy missionProxy;
@@ -157,7 +153,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
     @Override
-    public void onApiConnected(DroidPlannerApi api){
+    public void onApiConnected(DroneApi api){
         super.onApiConnected(api);
 
         missionProxy = api.getMissionProxy();
@@ -351,7 +347,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	@Override
-	public void onMapClick(Coord2D point) {
+	public void onMapClick(LatLong point) {
         enableMultiEdit(false);
 
         if(missionProxy == null) return;
@@ -472,8 +468,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	@Override
-	public void onPathFinished(List<Coord2D> path) {
-		List<Coord2D> points = planningMapFragment.projectPathIntoMap(path);
+	public void onPathFinished(List<LatLong> path) {
+		List<LatLong> points = planningMapFragment.projectPathIntoMap(path);
 		switch (getTool()) {
 		case DRAW:
 			if (mIsSplineEnabled) {
@@ -505,7 +501,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public void onWaypointTypeChanged(MissionItemType newType, List<Pair<MissionItemProxy,
-            MissionItemProxy>> oldNewItemsList) {
+                MissionItemProxy>> oldNewItemsList) {
 		missionProxy.replaceAll(oldNewItemsList);
 	}
 

@@ -6,29 +6,28 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerDialogFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
-import org.droidplanner.core.mission.MissionItem;
-import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.commands.MissionCMD;
-import org.droidplanner.core.mission.survey.Survey;
-import org.droidplanner.core.mission.waypoints.StructureScanner;
-import org.droidplanner.core.util.Pair;
 
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
+import com.ox3dr.services.android.lib.drone.mission.item.spatial.StructureScanner;
 
 public class MissionDetailFragment extends ApiListenerDialogFragment implements SpinnerSelfSelect
         .OnSpinnerItemSelectedListener {
@@ -38,15 +37,13 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
 	protected static final int MIN_ALTITUDE = -200; // meter
 	protected static final int MAX_ALTITUDE = +200; // meters
 
-    public static final List<MissionItemType> typeWithNoMuliEditSupport = new
-            ArrayList<MissionItemType>();
-    {
-        typeWithNoMuliEditSupport.add(MissionItemType.LAND);
-        typeWithNoMuliEditSupport.add(MissionItemType.TAKEOFF);
-        typeWithNoMuliEditSupport.add(MissionItemType.SURVEY);
-        typeWithNoMuliEditSupport.add(MissionItemType.RTL);
-        typeWithNoMuliEditSupport.add(MissionItemType.CYLINDRICAL_SURVEY);
-    }
+    public static final int[] typeWithNoMuliEditSupport =    {
+        MissionItemType.LAND,
+        MissionItemType.TAKEOFF,
+        MissionItemType.SURVEY,
+        MissionItemType.RETURN_TO_LAUNCH,
+        MissionItemType.STRUCTURE_SCANNER
+    };
 
     public interface OnMissionDetailListener {
 		/**
@@ -66,7 +63,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
          *                         and the new mission item proxy.
 		 */
 		public void onWaypointTypeChanged(MissionItemType newType, List<Pair<MissionItemProxy,
-                MissionItemProxy>> oldNewItemsList);
+                        MissionItemProxy>> oldNewItemsList);
 	}
 
 	protected int getResource(){
@@ -81,46 +78,46 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
     private final List<MissionItem> mSelectedItems = new ArrayList<MissionItem>();
     private final List<MissionItemProxy> mSelectedProxies = new ArrayList<MissionItemProxy>();
 
-	public static MissionDetailFragment newInstance(MissionItemType itemType) {
+	public static MissionDetailFragment newInstance(int itemType) {
 		MissionDetailFragment fragment;
 		switch (itemType) {
-		case LAND:
+		case MissionItemType.LAND:
 			fragment = new MissionLandFragment();
 			break;
-		case CIRCLE:
+		case MissionItemType.CIRCLE:
 			fragment = new MissionCircleFragment();
 			break;
-		case CHANGE_SPEED:
+		case MissionItemType.CHANGE_SPEED:
 			fragment = new MissionChangeSpeedFragment();
 			break;
-		case ROI:
+		case MissionItemType.REGION_OF_INTEREST:
 			fragment = new MissionRegionOfInterestFragment();
 			break;
-		case RTL:
+		case MissionItemType.RETURN_TO_LAUNCH:
 			fragment = new MissionRTLFragment();
 			break;
-		case SURVEY:
+		case MissionItemType.SURVEY:
 			fragment = new MissionSurveyFragment();
 			break;
-		case TAKEOFF:
+		case MissionItemType.TAKEOFF:
 			fragment = new MissionTakeoffFragment();
 			break;
-		case WAYPOINT:
+		case MissionItemType.WAYPOINT:
 			fragment = new MissionWaypointFragment();
 			break;
-		case SPLINE_WAYPOINT:
+		case MissionItemType.SPLINE_WAYPOINT:
 			fragment = new MissionSplineWaypointFragment();
 			break;
-		case CYLINDRICAL_SURVEY:
+		case MissionItemType.STRUCTURE_SCANNER:
 			fragment = new MissionStructureScannerFragment();
 			break;
-		case CAMERA_TRIGGER:
+		case MissionItemType.CAMERA_TRIGGER:
 			fragment = new MissionCameraTriggerFragment();
 			break;
-		case EPM_GRIPPER:
+		case MissionItemType.EPM_GRIPPER:
 			fragment = new MissionEpmGrabberFragment();
 			break;
-		case SET_SERVO:
+		case MissionItemType.SET_SERVO:
 			fragment = new SetServoFragment();
 			break;
 		default:

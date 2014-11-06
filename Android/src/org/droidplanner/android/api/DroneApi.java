@@ -13,13 +13,13 @@ import android.util.Log;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.coordinate.Point3D;
 import com.ox3dr.services.android.lib.drone.event.Event;
+import com.ox3dr.services.android.lib.drone.mission.Mission;
 import com.ox3dr.services.android.lib.drone.property.Altitude;
 import com.ox3dr.services.android.lib.drone.property.Attitude;
 import com.ox3dr.services.android.lib.drone.property.Battery;
 import com.ox3dr.services.android.lib.drone.property.Gps;
 import com.ox3dr.services.android.lib.drone.property.GuidedState;
 import com.ox3dr.services.android.lib.drone.property.Home;
-import com.ox3dr.services.android.lib.drone.property.Mission;
 import com.ox3dr.services.android.lib.drone.property.Parameters;
 import com.ox3dr.services.android.lib.drone.property.Signal;
 import com.ox3dr.services.android.lib.drone.property.Speed;
@@ -31,6 +31,7 @@ import com.ox3dr.services.android.lib.gcs.follow.FollowType;
 import com.ox3dr.services.android.lib.model.IDroidPlannerApi;
 
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.proxy.mission.MissionProxy;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -42,7 +43,13 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
 
     private static final String TAG = DroneApi.class.getSimpleName();
 
-    private final static IntentFilter intentFilter = new IntentFilter(Event.EVENT_STATE);
+    private final static IntentFilter intentFilter = new IntentFilter();
+    static {
+        intentFilter.addAction(Event.EVENT_STATE);
+        intentFilter.addAction(Event.EVENT_MISSION_DRONIE_CREATED);
+        intentFilter.addAction(Event.EVENT_MISSION_UPDATE);
+    }
+
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -54,10 +61,15 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
                 else
                     stopTimer();
             }
+            else if(Event.EVENT_MISSION_DRONIE_CREATED.equals(action)
+                    || Event.EVENT_MISSION_UPDATE.equals(action)){
+                missionProxy.load(getMission());
+            }
         }
     };
 
     private final LocalBroadcastManager lbm;
+    private final MissionProxy missionProxy;
     private IDroidPlannerApi dpApi;
 
     // flightTimer
@@ -68,6 +80,11 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
 
     public DroneApi(Context context, IDroidPlannerApi dpApi){
         this.dpApi = dpApi;
+
+        this.missionProxy = new MissionProxy(context);
+        if(isApiValid())
+            this.missionProxy.load(getMission());
+
         lbm = LocalBroadcastManager.getInstance(context);
         lbm.registerReceiver(broadcastReceiver, intentFilter);
     }
@@ -110,6 +127,10 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
             startTime = SystemClock.elapsedRealtime();
         }
         return elapsedFlightTime / 1000;
+    }
+
+    public MissionProxy getMissionProxy(){
+        return this.missionProxy;
     }
 
     @Override
@@ -368,6 +389,17 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
         if(isApiValid()){
             try {
                 dpApi.sendMission(mission);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
+    public void generateDronie() {
+        if(isApiValid()){
+            try {
+                dpApi.generateDronie();
             } catch (RemoteException e) {
                 handleRemoteException(e);
             }
