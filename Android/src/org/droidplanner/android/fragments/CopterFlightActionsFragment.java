@@ -14,9 +14,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.ox3dr.services.android.lib.drone.event.Event;
-import com.ox3dr.services.android.lib.drone.property.Altitude;
 import com.ox3dr.services.android.lib.drone.property.State;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
+import com.ox3dr.services.android.lib.gcs.follow.FollowState;
+import com.ox3dr.services.android.lib.gcs.follow.FollowType;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.FlightActivity;
@@ -66,6 +67,46 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                     || Event.EVENT_FOLLOW_UPDATE.equals(action)){
                 updateFlightModeButtons();
                 updateFollowButton();
+
+                final FollowState followState = getDroneApi().getFollowState();
+                if(followState != null){
+                    String eventLabel = null;
+                    switch (followState.getState()) {
+                        case FollowState.STATE_START:
+                            eventLabel = "FollowMe enabled";
+                            break;
+
+                        case FollowState.STATE_RUNNING:
+                            eventLabel = "FollowMe running";
+                            break;
+
+                        case FollowState.STATE_END:
+                            eventLabel = "FollowMe disabled";
+                            break;
+
+                        case FollowState.STATE_INVALID:
+                            eventLabel = "FollowMe error: invalid state";
+                            break;
+
+                        case FollowState.STATE_DRONE_DISCONNECTED:
+                            eventLabel = "FollowMe error: drone not connected";
+                            break;
+
+                        case FollowState.STATE_DRONE_NOT_ARMED:
+                            eventLabel = "FollowMe error: drone not armed";
+                            break;
+                    }
+
+                    if (eventLabel != null) {
+                        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                                .setCategory(GAUtils.Category.FLIGHT)
+                                .setAction(ACTION_FLIGHT_ACTION_BUTTON)
+                                .setLabel(eventLabel);
+                        GAUtils.sendEvent(eventBuilder);
+
+                        Toast.makeText(getActivity(), eventLabel, Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         }
     };
@@ -210,40 +251,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                 if(droneApi.getFollowState().isEnabled())
                     droneApi.disableFollowMe();
                 else
-                    droneApi.enableFollowMe();
-                followMe.toggleFollowMeState();
-                String eventLabel = null;
-
-                switch (followMe.getState()) {
-                    case FOLLOW_START:
-                        eventLabel = "FollowMe enabled";
-                        break;
-
-                    case FOLLOW_RUNNING:
-                        eventLabel = "FollowMe running";
-                        break;
-
-                    case FOLLOW_END:
-                        eventLabel = "FollowMe disabled";
-                        break;
-
-                    case FOLLOW_INVALID_STATE:
-                        eventLabel = "FollowMe error: invalid state";
-                        break;
-
-                    case FOLLOW_DRONE_DISCONNECTED:
-                        eventLabel = "FollowMe error: drone not connected";
-                        break;
-
-                    case FOLLOW_DRONE_NOT_ARMED:
-                        eventLabel = "FollowMe error: drone not armed";
-                        break;
-                }
-
-                if (eventLabel != null) {
-                    eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(eventLabel);
-                    Toast.makeText(getActivity(), eventLabel, Toast.LENGTH_SHORT).show();
-                }
+                    droneApi.enableFollowMe(FollowType.TYPE_LEASH);
                 break;
 
             case R.id.mc_dronieBtn:
@@ -294,8 +302,8 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                     @Override
                     public void onYes() {
                         DroneApi droneApi = getDroneApi();
-                        droneApi.doTakeoff(new Altitude(TAKEOFF_ALTITUDE));
-                        droneApi.changeVehicleMode(ApmModes.ROTOR_AUTO);
+                        droneApi.doGuidedTakeoff(TAKEOFF_ALTITUDE);
+                        droneApi.changeVehicleMode(VehicleMode.COPTER_AUTO);
                     }
 
                     @Override
@@ -331,23 +339,25 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     private void updateFlightModeButtons() {
         resetFlightModeButtons();
 
-        final ApmModes flightMode = getDroneApi().getState().getMode();
+        final VehicleMode flightMode = getDroneApi().getState().getVehicleMode();
         switch (flightMode) {
-            case ROTOR_AUTO:
+            case COPTER_AUTO:
                 autoBtn.setActivated(true);
                 break;
 
-            case ROTOR_GUIDED:
-                if (getDroneApi().getGuidedPoint().isInitialized() && !followMe.isEnabled()) {
+            case COPTER_GUIDED:
+                final DroneApi droneApi = getDroneApi();
+                if (droneApi.getGuidedState().isInitialized()
+                        && !droneApi.getFollowState().isEnabled()) {
                     pauseBtn.setActivated(true);
                 }
                 break;
 
-            case ROTOR_RTL:
+            case COPTER_RTL:
                 homeBtn.setActivated(true);
                 break;
 
-            case ROTOR_LAND:
+            case COPTER_LAND:
                 landBtn.setActivated(true);
                 break;
             default:
@@ -363,14 +373,16 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     }
 
     private void updateFollowButton() {
-        switch (followMe.getState()) {
-            case FOLLOW_START:
+        switch (getDroneApi().getFollowState().getState()) {
+            case FollowState.STATE_START:
                 followBtn.setBackgroundColor(Color.RED);
                 break;
-            case FOLLOW_RUNNING:
+
+            case FollowState.STATE_RUNNING:
                 followBtn.setActivated(true);
                 followBtn.setBackgroundResource(R.drawable.flight_action_row_bg_selector);
                 break;
+
             default:
                 followBtn.setActivated(false);
                 followBtn.setBackgroundResource(R.drawable.flight_action_row_bg_selector);
