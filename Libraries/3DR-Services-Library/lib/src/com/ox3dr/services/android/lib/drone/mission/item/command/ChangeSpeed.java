@@ -13,7 +13,7 @@ public class ChangeSpeed extends MissionItem implements MissionItem.Command {
     private double speed;
 
     public ChangeSpeed(){
-        super(MissionItemType.CHANGE_SPEED, "Change Speed");
+        super(MissionItemType.CHANGE_SPEED);
     }
 
     public double getSpeed() {

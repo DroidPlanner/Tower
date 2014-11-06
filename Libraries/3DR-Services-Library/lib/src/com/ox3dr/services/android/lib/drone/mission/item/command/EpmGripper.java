@@ -13,7 +13,7 @@ public class EpmGripper extends MissionItem implements MissionItem.Command {
     private boolean release;
 
     public EpmGripper(){
-        super(MissionItemType.EPM_GRIPPER, "EPM Gripper");
+        super(MissionItemType.EPM_GRIPPER);
     }
 
     public boolean isRelease() {
