@@ -18,7 +18,7 @@ public class Takeoff extends MissionItem implements MissionItem.Command {
     private double takeoffAltitude;
 
     public Takeoff(){
-        super(MissionItemType.TAKEOFF);
+        super(MissionItemType.TAKEOFF, "Takeoff");
     }
 
     public double getTakeoffAltitude() {

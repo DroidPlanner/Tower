@@ -13,7 +13,7 @@ public class Circle extends BaseSpatialItem {
     private int turns = 1;
 
     public Circle() {
-        super(MissionItemType.CIRCLE);
+        super(MissionItemType.CIRCLE, "Circle");
     }
 
     public double getRadius() {

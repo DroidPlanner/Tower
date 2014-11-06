@@ -13,7 +13,7 @@ public class ReturnToLaunch extends MissionItem implements MissionItem.Command{
     private double returnAltitude;
 
     public ReturnToLaunch(){
-        super(MissionItemType.RETURN_TO_LAUNCH);
+        super(MissionItemType.RETURN_TO_LAUNCH, "Return to Launch");
     }
 
     public double getReturnAltitude() {

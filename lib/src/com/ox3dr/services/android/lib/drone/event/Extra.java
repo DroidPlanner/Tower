@@ -45,6 +45,9 @@ public class Extra {
      */
     public static final String EXTRA_MAVLINK_VERSION = CLAZZ_NAME + ".MAVLINK_VERSION";
 
+    public static final String EXTRA_MISSION_DRONIE_BEARING = CLAZZ_NAME + "" +
+            ".MISSION_DRONIE_BEARING";
+
     public static final String EXTRA_PARAMETERS_COUNT = CLAZZ_NAME + ".PARAMETERS_COUNT";
     public static final String EXTRA_PARAMETER_INDEX = CLAZZ_NAME + ".PARAMETER_INDEX";
 }

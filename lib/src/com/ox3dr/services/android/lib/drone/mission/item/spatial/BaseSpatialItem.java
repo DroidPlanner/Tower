@@ -10,8 +10,8 @@ public abstract class BaseSpatialItem extends MissionItem implements MissionItem
 
     protected LatLongAlt coordinate;
 
-    protected BaseSpatialItem(int type) {
-        super(type);
+    protected BaseSpatialItem(int type, String label) {
+        super(type, label);
     }
 
     @Override
