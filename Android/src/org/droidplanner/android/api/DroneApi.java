@@ -440,6 +440,10 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
         }
     }
 
+	public void pauseAtCurrentLocation() {
+		sendGuidedPoint(getGps().getPosition(), true);
+	}
+
     @Override
     public void sendGuidedPoint(LatLong point, boolean force) {
         if(isApiValid()){

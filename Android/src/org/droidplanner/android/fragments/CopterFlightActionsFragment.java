@@ -185,25 +185,32 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                 break;
 
             case R.id.mc_pause:
-                if (getDroneApi().getFollowState()) {
-                    followMe.toggleFollowMeState();
+                if (getDroneApi().getFollowState().isEnabled()) {
+                    getDroneApi().disableFollowMe();
                 }
 
-                getDroneApi().getGuidedPoint().pauseAtCurrentLocation();
+                getDroneApi().pauseAtCurrentLocation();
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Pause");
                 break;
 
             case R.id.mc_autoBtn:
-                getDroneApi().changeVehicleMode(ApmModes.ROTOR_AUTO);
-                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_AUTO.getName());
+                getDroneApi().changeVehicleMode(VehicleMode.COPTER_AUTO);
+                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode
+                        .COPTER_AUTO.getLabel());
                 break;
 
             case R.id.mc_TakeoffInAutoBtn:
                 getTakeOffInAutoConfirmation();
-                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.ROTOR_AUTO.getName());
+                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode.COPTER_AUTO
+                        .getLabel());
                 break;
 
             case R.id.mc_follow:
+                DroneApi droneApi = getDroneApi();
+                if(droneApi.getFollowState().isEnabled())
+                    droneApi.disableFollowMe();
+                else
+                    droneApi.enableFollowMe();
                 followMe.toggleFollowMeState();
                 String eventLabel = null;
 
