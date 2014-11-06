@@ -4,8 +4,6 @@ package com.ox3dr.services.android.lib.model;
 import com.ox3dr.services.android.lib.model.IDroidPlannerApiCallback;
 import com.ox3dr.services.android.lib.model.IDroidPlannerApi;
 import com.ox3dr.services.android.lib.drone.connection.ConnectionParameter;
-import com.ox3dr.services.android.lib.coordinate.LatLong;
-import com.ox3dr.services.android.lib.coordinate.LatLongAlt;
 
 /**
 * Used to establish connection with a drone.
@@ -22,8 +20,4 @@ interface IDroidPlannerServices {
     * @return IDroidPlannerApi object used to interact with the connected drone.
     */
     IDroidPlannerApi connectToDrone(in ConnectionParameter params, IDroidPlannerApiCallback callback);
-
-    oneway void testLatLong(in LatLong value);
-
-    oneway void testLatLongAlt(in LatLongAlt value);
 }
