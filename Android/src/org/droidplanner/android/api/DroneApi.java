@@ -26,6 +26,8 @@ import com.ox3dr.services.android.lib.drone.property.Speed;
 import com.ox3dr.services.android.lib.drone.property.State;
 import com.ox3dr.services.android.lib.drone.property.Type;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
+import com.ox3dr.services.android.lib.gcs.follow.FollowState;
+import com.ox3dr.services.android.lib.gcs.follow.FollowType;
 import com.ox3dr.services.android.lib.model.IDroidPlannerApi;
 
 import org.droidplanner.android.DroidPlannerApp;
@@ -292,6 +294,30 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     }
 
     @Override
+    public FollowState getFollowState() {
+        if(isApiValid()){
+            try {
+                return dpApi.getFollowState();
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public FollowType[] getFollowTypes() {
+        if(isApiValid()){
+            try {
+                return dpApi.getFollowTypes();
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+        return new FollowType[0];
+    }
+
+    @Override
     public void changeVehicleMode(VehicleMode newMode)  {
         if(isApiValid()){
             try {
@@ -441,6 +467,39 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
         if(isApiValid()){
             try {
                 dpApi.setGuidedVelocity(xVel, yVel, zVel);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
+    public void enableFollowMe(FollowType followMode)  {
+        if(isApiValid()){
+            try {
+                dpApi.enableFollowMe(followMode);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
+    public void setFollowMeRadius(double radius){
+        if(isApiValid()){
+            try {
+                dpApi.setFollowMeRadius(radius);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
+    public void disableFollowMe() {
+        if(isApiValid()){
+            try {
+                dpApi.disableFollowMe();
             } catch (RemoteException e) {
                 handleRemoteException(e);
             }

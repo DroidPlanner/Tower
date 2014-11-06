@@ -14,32 +14,30 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.ox3dr.services.android.lib.drone.event.Event;
+import com.ox3dr.services.android.lib.gcs.follow.FollowState;
 import com.ox3dr.services.android.lib.gcs.follow.FollowType;
 
 import org.droidplanner.R;
 import org.droidplanner.android.api.DroneApi;
-import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.gcs.follow.Follow;
-import org.droidplanner.core.gcs.follow.FollowAlgorithm.FollowModes;
-import org.droidplanner.core.model.Drone;
 
-public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSelectedListener{
+public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSelectedListener {
 
-    private static final IntentFilter eventFilter = new IntentFilter(Event.EVENT_FOLLOW_UPDATE);
+	private static final IntentFilter eventFilter = new IntentFilter(Event.EVENT_FOLLOW_UPDATE);
 
-    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            if(Event.EVENT_FOLLOW_UPDATE.equals(action)){
-
-            }
-        }
-    };
+	private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final String action = intent.getAction();
+			if (Event.EVENT_FOLLOW_UPDATE.equals(action)) {
+				final FollowState followState = getDroneApi().getFollowState();
+				if (followState != null) {
+					spinner.setSelection(adapter.getPosition(followState.getMode()));
+				}
+			}
+		}
+	};
 
 	private Spinner spinner;
 	private ArrayAdapter<FollowType> adapter;
@@ -84,7 +82,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	public void onApiConnected(DroneApi api) {
 		super.onApiConnected(api);
 
-        adapter.addAll(api.getFollowModes());
+		adapter.addAll(api.getFollowTypes());
 		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 	}
 
@@ -98,8 +96,9 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
 		switch (cardWheel.getId()) {
 		case R.id.radius_spinner:
-			if (followMe != null)
-				followMe.changeRadius(newValue);
+			final DroneApi droneApi = getDroneApi();
+			if (droneApi.isConnected())
+				droneApi.setFollowMeRadius(newValue);
 			break;
 
 		default:
@@ -109,15 +108,17 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	}
 
 	private void updateCurrentRadius() {
-		if (mRadiusWheel != null && followMe != null) {
-			mRadiusWheel.setCurrentValue((int) followMe.getRadius().valueInMeters());
+		final DroneApi droneApi = getDroneApi();
+		if (mRadiusWheel != null && droneApi.isConnected()) {
+			mRadiusWheel.setCurrentValue((int) droneApi.getFollowState().getRadius());
 		}
 	}
 
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		if (followMe != null) {
-			followMe.setType(adapter.getItem(position));
+		final DroneApi droneApi = getDroneApi();
+		if (droneApi.isConnected()) {
+			droneApi.enableFollowMe(adapter.getItem(position));
 			updateCurrentRadius();
 		}
 	}
@@ -125,18 +126,4 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
-
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		switch (event) {
-		case FOLLOW_CHANGE_TYPE:
-			if (followMe != null)
-				spinner.setSelection(adapter.getPosition(followMe.getType()));
-			break;
-		default:
-			break;
-		}
-
-	}
-
 }
