@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 
 /**
  * Message encoding a mission item. This message is emitted to announce
@@ -73,6 +74,9 @@ public class MissionItemMessage extends MissionItem {
      */
     private byte autocontinue;
 
+    public MissionItemMessage(){
+        super(MissionItemType.RAW_MESSAGE);
+    }
 
     public int getMessageId(){
         return MAVLINK_MSG_ID_MISSION_ITEM;
@@ -235,6 +239,7 @@ public class MissionItemMessage extends MissionItem {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeInt(this.sysId);
         dest.writeInt(this.compId);
         dest.writeFloat(this.param1);
@@ -253,9 +258,8 @@ public class MissionItemMessage extends MissionItem {
         dest.writeByte(this.autocontinue);
     }
 
-    @Override
-    protected void readFromParcel(Parcel in){
-        super.readFromParcel(in);
+    private MissionItemMessage(Parcel in) {
+        super(in);
         this.sysId = in.readInt();
         this.compId = in.readInt();
         this.param1 = in.readFloat();
@@ -272,10 +276,6 @@ public class MissionItemMessage extends MissionItem {
         this.frame = in.readByte();
         this.current = in.readByte();
         this.autocontinue = in.readByte();
-    }
-
-    private MissionItemMessage(Parcel in) {
-        readFromParcel(in);
     }
 
     public static final Parcelable.Creator<MissionItemMessage> CREATOR = new Parcelable.Creator<MissionItemMessage>() {

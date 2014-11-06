@@ -58,7 +58,6 @@ public class LatLong implements Parcelable {
                 '}';
     }
 
-
     @Override
     public int describeContents() {
         return 0;

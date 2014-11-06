@@ -3,14 +3,24 @@ package com.ox3dr.services.android.lib.drone.mission.item;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.ox3dr.services.android.lib.coordinate.LatLongAlt;
+
 /**
  * Created by fhuya on 11/5/14.
  */
 public class MissionItem implements Parcelable {
 
-    private int type;
+    public interface Command {}
 
-    protected MissionItem(){}
+    public interface SpatialItem {
+        LatLongAlt getCoordinate();
+    }
+
+    private final int type;
+
+    private MissionItem(){
+        this.type = MissionItemType.INVALID_TYPE;
+    }
 
     protected MissionItem(int type) {
         this.type = type;
@@ -25,17 +35,13 @@ public class MissionItem implements Parcelable {
         return 0;
     }
 
-    protected void readFromParcel(Parcel in){
-        this.type = in.readInt();
-    }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.type);
     }
 
-    private MissionItem(Parcel in) {
-        readFromParcel(in);
+    protected MissionItem(Parcel in) {
+        this.type = in.readInt();
     }
 
     public static final Creator<MissionItem> CREATOR = new Creator<MissionItem>() {
