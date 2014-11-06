@@ -30,13 +30,6 @@ public class Mission implements Parcelable {
     }
 
     @Override
-    public String toString() {
-        return "Mission{" +
-                "missionItemsList=" + missionItemsList +
-                '}';
-    }
-
-    @Override
     public int describeContents() {
         return 0;
     }
@@ -44,9 +37,6 @@ public class Mission implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeTypedList(missionItemsList);
-    }
-
-    public Mission() {
     }
 
     private Mission(Parcel in) {
