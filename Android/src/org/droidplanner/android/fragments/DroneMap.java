@@ -76,6 +76,8 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 			}
 
 			mMapFragment.updateMissionPath(missionProxy);
+			
+			mMapFragment.updatePolygonsPaths(missionProxy.getPolygonsPath());
 
 			mHandler.removeCallbacks(this);
 		}
