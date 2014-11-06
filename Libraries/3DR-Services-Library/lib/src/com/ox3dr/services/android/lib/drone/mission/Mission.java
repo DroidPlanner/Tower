@@ -21,12 +21,24 @@ public class Mission implements Parcelable, Serializable {
         missionItemsList.add(missionItem);
     }
 
+    public void addMissionItem(int index, MissionItem missionItem){
+        missionItemsList.add(index, missionItem);
+    }
+
     public void removeMissionItem(MissionItem missionItem){
         missionItemsList.remove(missionItem);
     }
 
+    public void removeMissionItem(int index){
+        missionItemsList.remove(index);
+    }
+
     public void clear(){
         missionItemsList.clear();
+    }
+
+    public MissionItem getMissionItem(int index){
+        return missionItemsList.get(index);
     }
 
     public List<MissionItem> getMissionItems(){
