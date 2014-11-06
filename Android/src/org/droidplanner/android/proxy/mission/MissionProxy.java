@@ -510,6 +510,16 @@ public class MissionProxy implements DPMap.PathSource {
 		mMission.notifyMissionUpdate();
 	}
 
+	public void movePolygonPoint(Survey survey, int index, Coord2D position) {
+		survey.polygon.movePoint(position, index);
+		try {
+			survey.build();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		mMission.notifyMissionUpdate();
+	}
+
 	public List<Coord2D> getVisibleCoords() {
 		final List<Coord2D> coords = new ArrayList<Coord2D>();
 
@@ -599,4 +609,14 @@ public class MissionProxy implements DPMap.PathSource {
         refresh();
         return (float) bearing;
     }
+
+	public List<List<Coord2D>> getPolygonsPath() {
+		ArrayList<List<Coord2D>> polygonPaths = new ArrayList<List<Coord2D>>();
+		for (MissionItem item : mMission.getItems()) {
+			if (item instanceof Survey) {
+				polygonPaths.add(((Survey)item).polygon.getPoints());
+			}
+		}
+		return polygonPaths;
+	}
 }

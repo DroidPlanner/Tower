@@ -320,15 +320,20 @@ public abstract class InfoBarItem {
 				currentView.setText(sDefaultValue);
 				mAhView.setText(sDefaultValue);
 			} else {
-				infoUpdate = String.format(Locale.ENGLISH,"%2.1fv\n%2.0f%%", drone.getBattery().getBattVolt(), drone.getBattery().getBattRemain());
 
-				currentView.setText(String.format("Current %2.1f A", drone.getBattery().getBattCurrent()));
 				Double discharge = drone.getBattery().getBattDischarge();
+				String dischargeText;
 				if (discharge == null) {
-					mAhView.setText("Discharge "+sDefaultValue+" mAh");
+					dischargeText = sDefaultValue;
 				}else{
-					mAhView.setText(String.format("Discharge %2.0f mAh", discharge));					
+					dischargeText = String.format(Locale.ENGLISH, "%2.0f mAh", discharge);					
 				}
+				
+				mAhView.setText(String.format(Locale.ENGLISH,"Remaining %2.0f%%", drone.getBattery().getBattRemain()));
+				currentView.setText(String.format("Current %2.1f A", drone.getBattery().getBattCurrent()));
+				
+				infoUpdate = String.format(Locale.ENGLISH,"%2.1fv\n", drone.getBattery().getBattVolt());
+				infoUpdate = infoUpdate.concat(dischargeText);
 			}
 
 			mPopup.update();
