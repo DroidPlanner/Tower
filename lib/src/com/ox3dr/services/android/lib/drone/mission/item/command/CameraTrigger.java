@@ -24,26 +24,10 @@ public class CameraTrigger extends MissionItem implements MissionItem.Command {
         this.triggerDistance = triggerDistance;
     }
 
-    @Override
-    public int describeContents(){
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags){
-        super.writeToParcel(dest, flags);
-        dest.writeDouble(triggerDistance);
-    }
-
-    protected CameraTrigger(Parcel in){
-        super(in);
-        this.triggerDistance = in.readDouble();
-    }
-
     public static final Creator<CameraTrigger> CREATOR = new Creator<CameraTrigger>() {
         @Override
         public CameraTrigger createFromParcel(Parcel source) {
-            return new CameraTrigger(source);
+            return (CameraTrigger) source.readSerializable();
         }
 
         @Override

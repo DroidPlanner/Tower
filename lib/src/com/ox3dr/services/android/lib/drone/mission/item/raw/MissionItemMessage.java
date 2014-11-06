@@ -74,7 +74,7 @@ public class MissionItemMessage extends MissionItem {
      */
     private byte autocontinue;
 
-    public MissionItemMessage(){
+    public MissionItemMessage() {
         super(MissionItemType.RAW_MESSAGE);
     }
 
@@ -237,50 +237,9 @@ public class MissionItemMessage extends MissionItem {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeInt(this.sysId);
-        dest.writeInt(this.compId);
-        dest.writeFloat(this.param1);
-        dest.writeFloat(this.param2);
-        dest.writeFloat(this.param3);
-        dest.writeFloat(this.param4);
-        dest.writeFloat(this.x);
-        dest.writeFloat(this.y);
-        dest.writeFloat(this.z);
-        dest.writeInt(this.seq);
-        dest.writeInt(this.command);
-        dest.writeByte(this.target_system);
-        dest.writeByte(this.target_component);
-        dest.writeByte(this.frame);
-        dest.writeByte(this.current);
-        dest.writeByte(this.autocontinue);
-    }
-
-    private MissionItemMessage(Parcel in) {
-        super(in);
-        this.sysId = in.readInt();
-        this.compId = in.readInt();
-        this.param1 = in.readFloat();
-        this.param2 = in.readFloat();
-        this.param3 = in.readFloat();
-        this.param4 = in.readFloat();
-        this.x = in.readFloat();
-        this.y = in.readFloat();
-        this.z = in.readFloat();
-        this.seq = in.readInt();
-        this.command = in.readInt();
-        this.target_system = in.readByte();
-        this.target_component = in.readByte();
-        this.frame = in.readByte();
-        this.current = in.readByte();
-        this.autocontinue = in.readByte();
-    }
-
     public static final Parcelable.Creator<MissionItemMessage> CREATOR = new Parcelable.Creator<MissionItemMessage>() {
         public MissionItemMessage createFromParcel(Parcel source) {
-            return new MissionItemMessage(source);
+            return (MissionItemMessage) source.readSerializable();
         }
 
         public MissionItemMessage[] newArray(int size) {
