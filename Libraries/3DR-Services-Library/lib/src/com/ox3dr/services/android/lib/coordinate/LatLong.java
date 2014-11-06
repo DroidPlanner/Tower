@@ -4,20 +4,22 @@ import android.graphics.PointF;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Stores latitude and longitude in degrees.
  */
-public class LatLong implements Parcelable {
+public class LatLong implements Parcelable, Serializable {
 
     /**
      * Stores latitude, and longitude in degrees
      */
-    private PointF mLatLng;
-
-    protected LatLong(){}
+    private final float latitude;
+    private final float longitude;
 
     public LatLong(float latitude, float longitude){
-        mLatLng = new PointF(latitude, longitude);
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public LatLong(LatLong copy){
@@ -28,14 +30,14 @@ public class LatLong implements Parcelable {
      * @return the latitude in degrees
      */
     public float getLatitude(){
-        return mLatLng.x;
+        return latitude;
     }
 
     /**
      * @return the longitude in degrees
      */
     public float getLongitude(){
-        return mLatLng.y;
+        return longitude;
     }
 
     @Override
@@ -43,23 +45,28 @@ public class LatLong implements Parcelable {
         if (this == o) return true;
         if (!(o instanceof LatLong)) return false;
 
-        LatLong latLng = (LatLong) o;
+        LatLong latLong = (LatLong) o;
 
-        return mLatLng.equals(latLng.mLatLng);
+        if (Float.compare(latLong.latitude, latitude) != 0) return false;
+        if (Float.compare(latLong.longitude, longitude) != 0) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return mLatLng.hashCode();
+        int result = (latitude != +0.0f ? Float.floatToIntBits(latitude) : 0);
+        result = 31 * result + (longitude != +0.0f ? Float.floatToIntBits(longitude) : 0);
+        return result;
     }
 
     @Override
     public String toString() {
         return "LatLong{" +
-                "mLatLng=" + mLatLng +
+                "latitude=" + latitude +
+                ", longitude=" + longitude +
                 '}';
     }
-
 
     @Override
     public int describeContents() {
@@ -68,20 +75,12 @@ public class LatLong implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(this.mLatLng, 0);
-    }
-
-    protected void readFromParcel(Parcel in){
-        this.mLatLng = in.readParcelable(PointF.class.getClassLoader());
-    }
-
-    protected LatLong(Parcel in) {
-        readFromParcel(in);
+        dest.writeSerializable(this);
     }
 
     public static final Parcelable.Creator<LatLong> CREATOR = new Parcelable.Creator<LatLong>() {
         public LatLong createFromParcel(Parcel source) {
-            return new LatLong(source);
+            return (LatLong) source.readSerializable();
         }
 
         public LatLong[] newArray(int size) {

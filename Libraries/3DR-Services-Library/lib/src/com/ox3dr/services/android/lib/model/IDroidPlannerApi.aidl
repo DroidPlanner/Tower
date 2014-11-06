@@ -8,7 +8,7 @@ import com.ox3dr.services.android.lib.drone.property.Attitude;
 import com.ox3dr.services.android.lib.drone.property.Altitude;
 import com.ox3dr.services.android.lib.drone.property.Battery;
 import com.ox3dr.services.android.lib.drone.property.Parameters;
-import com.ox3dr.services.android.lib.drone.property.Mission;
+import com.ox3dr.services.android.lib.drone.mission.Mission;
 import com.ox3dr.services.android.lib.drone.property.State;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 import com.ox3dr.services.android.lib.drone.property.Type;
