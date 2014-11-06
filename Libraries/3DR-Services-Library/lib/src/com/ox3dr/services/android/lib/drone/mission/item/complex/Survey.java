@@ -11,7 +11,7 @@ import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 public class Survey extends MissionItem {
 
     public Survey(){
-        super(MissionItemType.SURVEY);
+        super(MissionItemType.SURVEY, "Survey");
     }
 
     public static final Creator<Survey> CREATOR = new Creator<Survey>() {

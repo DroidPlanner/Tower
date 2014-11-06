@@ -15,7 +15,7 @@ public class StructureScanner extends BaseSpatialItem {
     private boolean crossHatch = false;
 
     public StructureScanner(){
-        super(MissionItemType.STRUCTURE_SCANNER);
+        super(MissionItemType.STRUCTURE_SCANNER, "Structure Scanner");
     }
 
     public double getRadius() {

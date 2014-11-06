@@ -13,7 +13,7 @@ public class CameraTrigger extends MissionItem implements MissionItem.Command {
     private double triggerDistance;
 
     public CameraTrigger(){
-        super(MissionItemType.CAMERA_TRIGGER);
+        super(MissionItemType.CAMERA_TRIGGER, "Camera Trigger");
     }
 
     public double getTriggerDistance() {

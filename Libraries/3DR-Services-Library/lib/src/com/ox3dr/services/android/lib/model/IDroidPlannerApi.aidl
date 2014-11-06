@@ -145,6 +145,11 @@ interface IDroidPlannerApi {
         oneway void sendMission(in Mission mission);
 
         /**
+        * Create a dronie mission, and upload it to the connected drone.
+        */
+        oneway void generateDronie();
+
+        /**
         * Arm or disarm the connected drone.
         * @param arm true to arm, false to disarm.
         */

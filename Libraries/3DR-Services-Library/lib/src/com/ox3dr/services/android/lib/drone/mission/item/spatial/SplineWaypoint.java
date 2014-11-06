@@ -16,7 +16,7 @@ public class SplineWaypoint extends BaseSpatialItem {
     private double delay;
 
     public SplineWaypoint(){
-        super(MissionItemType.SPLINE_WAYPOINT);
+        super(MissionItemType.SPLINE_WAYPOINT, "Spline Waypoint");
     }
 
     public double getDelay() {

@@ -52,6 +52,9 @@ public class Event {
 
     public static final String EVENT_MISSION_UPDATE = CLAZZ_NAME + ".MISSION_UPDATE";
 
+    public static final String EVENT_MISSION_DRONIE_CREATED = CLAZZ_NAME + "" +
+            ".MISSION_DRONIE_CREATED";
+
     public static final String EVENT_PARAMETERS_REFRESH_STARTED = CLAZZ_NAME +
             ".PARAMETERS_REFRESH_STARTED";
 

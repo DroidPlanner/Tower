@@ -21,13 +21,19 @@ public abstract class MissionItem implements Parcelable, Serializable {
     }
 
     private final int type;
+    private final String label;
 
-    protected MissionItem(int type) {
+    protected MissionItem(int type, String label) {
         this.type = type;
+        this.label = label;
     }
 
     public int getType() {
         return type;
+    }
+
+    public String getLabel(){
+        return label;
     }
 
     @Override

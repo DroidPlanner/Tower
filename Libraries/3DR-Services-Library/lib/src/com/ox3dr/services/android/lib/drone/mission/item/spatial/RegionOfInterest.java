@@ -10,7 +10,7 @@ import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 public class RegionOfInterest extends BaseSpatialItem {
 
     public RegionOfInterest(){
-        super(MissionItemType.REGION_OF_INTEREST);
+        super(MissionItemType.REGION_OF_INTEREST, "Region of Interest");
     }
 
     public static final Creator<RegionOfInterest> CREATOR = new Creator<RegionOfInterest>() {
