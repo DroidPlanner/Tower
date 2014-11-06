@@ -14,8 +14,8 @@ public class LatLong implements Parcelable, Serializable {
     /**
      * Stores latitude, and longitude in degrees
      */
-    private final float latitude;
-    private final float longitude;
+    private float latitude;
+    private float longitude;
 
     public LatLong(float latitude, float longitude){
         this.latitude = latitude;
@@ -38,6 +38,14 @@ public class LatLong implements Parcelable, Serializable {
      */
     public float getLongitude(){
         return longitude;
+    }
+
+    public void setLatitude(float latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(float longitude) {
+        this.longitude = longitude;
     }
 
     @Override

@@ -29,6 +29,10 @@ public class LatLongAlt extends LatLong {
         return mAltitude;
     }
 
+    public void setAltitude(float altitude) {
+        this.mAltitude = altitude;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
