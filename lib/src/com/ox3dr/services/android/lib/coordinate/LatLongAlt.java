@@ -1,6 +1,7 @@
 package com.ox3dr.services.android.lib.coordinate;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Stores latitude, longitude, and altitude information for a coordinate.
@@ -52,4 +53,15 @@ public class LatLongAlt extends LatLong {
                 "mAltitude=" + mAltitude +
                 '}';
     }
+
+    public static final Parcelable.Creator<LatLongAlt> CREATOR = new Parcelable.Creator<LatLongAlt>
+            () {
+        public LatLongAlt createFromParcel(Parcel source) {
+            return (LatLongAlt) source.readSerializable();
+        }
+
+        public LatLongAlt[] newArray(int size) {
+            return new LatLongAlt[size];
+        }
+    };
 }
