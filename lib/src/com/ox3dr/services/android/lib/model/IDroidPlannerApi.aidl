@@ -122,7 +122,7 @@ interface IDroidPlannerApi {
         /**
         * Retrieves an updated copy of the passed mission item.
         */
-        void updateComplexMissionItem(inout MissionItem item);
+        MissionItem updateComplexMissionItem(in MissionItem item);
 
         /*** Oneway method calls ***/
 
