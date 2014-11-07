@@ -1,20 +1,25 @@
-package com.ox3dr.services.android.lib.drone.mission.item.spatial;
+package com.ox3dr.services.android.lib.drone.mission.item.complex;
 
 import android.os.Parcel;
 
+import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
-import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
+import com.ox3dr.services.android.lib.drone.mission.item.spatial.BaseSpatialItem;
+
+import java.util.List;
 
 /**
  *
  */
-public class StructureScanner extends BaseSpatialItem {
+public class StructureScanner extends BaseSpatialItem implements MissionItem.ComplexItem {
 
     private double radius = 10;
     private double heightStep = 5;
     private int stepsCount = 2;
     private boolean crossHatch = false;
-    private CameraDetail cameraDetail;
+    private SurveyDetail surveyDetail;
+    private List<LatLong> path;
 
     public StructureScanner(){
         super(MissionItemType.STRUCTURE_SCANNER);
@@ -52,12 +57,12 @@ public class StructureScanner extends BaseSpatialItem {
         this.crossHatch = crossHatch;
     }
 
-    public CameraDetail getCameraDetail() {
-        return cameraDetail;
+    public SurveyDetail getSurveyDetail() {
+        return surveyDetail;
     }
 
-    public void setCameraDetail(CameraDetail cameraDetail) {
-        this.cameraDetail = cameraDetail;
+    public void setSurveyDetail(SurveyDetail surveyDetail) {
+        this.surveyDetail = surveyDetail;
     }
 
     public static final Creator<StructureScanner> CREATOR = new Creator<StructureScanner>() {
@@ -71,4 +76,12 @@ public class StructureScanner extends BaseSpatialItem {
             return new StructureScanner[size];
         }
     };
+
+    public List<LatLong> getPath() {
+        return path;
+    }
+
+    public void setPath(List<LatLong> points){
+        this.path = points;
+    }
 }

@@ -3,9 +3,11 @@ package com.ox3dr.services.android.lib.drone.mission.item;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.coordinate.LatLongAlt;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by fhuya on 11/5/14.
@@ -18,6 +20,9 @@ public abstract class MissionItem implements Parcelable, Serializable {
         LatLongAlt getCoordinate();
 
         void setCoordinate(LatLongAlt coordinate);
+    }
+
+    public interface ComplexItem {
     }
 
     private final MissionItemType type;

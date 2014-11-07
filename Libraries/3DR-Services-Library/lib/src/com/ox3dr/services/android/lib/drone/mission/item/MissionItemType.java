@@ -12,7 +12,7 @@ import com.ox3dr.services.android.lib.drone.mission.item.spatial.Circle;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.Land;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.RegionOfInterest;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
-import com.ox3dr.services.android.lib.drone.mission.item.spatial.StructureScanner;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
 
 /**
