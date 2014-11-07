@@ -207,7 +207,7 @@ interface IDroidPlannerApi {
         * Enables follow-me if disabled.
         * @param followMode follow-me mode to use.
         */
-        oneway void enableFollowMe(int followType);
+        oneway void enableFollowMe(in FollowType followType);
 
         /**
         * Sets the follow-me radius.
