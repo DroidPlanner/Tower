@@ -20,6 +20,8 @@ import com.ox3dr.services.android.lib.gcs.follow.FollowState;
 import com.ox3dr.services.android.lib.gcs.follow.FollowType;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 
 /**
 * Interface used to access the drone properties.
@@ -120,9 +122,11 @@ interface IDroidPlannerApi {
         CameraDetail[] getCameraDetails();
 
         /**
-        * Retrieves an updated copy of the passed mission item.
+        * Retrieves an updated copy of the passed survey.
         */
-        MissionItem updateComplexMissionItem(in MissionItem item);
+        Survey updateSurveyMissionItem(in Survey survey);
+
+        StructureScanner updateStructureScanner(in StructureScanner);
 
         /*** Oneway method calls ***/
 
