@@ -216,7 +216,7 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
                     dpApi.disableFollowMe();
                 }
                 else {
-                    dpApi.enableFollowMe(followMe.getState());
+                    dpApi.enableFollowMe(followMe.getMode());
                 }
 				break;
 

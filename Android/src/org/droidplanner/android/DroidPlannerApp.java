@@ -23,6 +23,7 @@ import com.ox3dr.services.android.lib.model.IDroidPlannerServices;
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
 import org.droidplanner.android.api.DPApiCallback;
 import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.IO.ExceptionWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -117,6 +118,7 @@ public class DroidPlannerApp extends Application {
 	private IDroidPlannerApi dpApi;
 
 	private DroidPlannerPrefs dpPrefs;
+    private NotificationHandler notificationHandler;
 
 	@Override
 	public void onCreate() {
@@ -125,6 +127,7 @@ public class DroidPlannerApp extends Application {
 
         droneApi = new DroneApi(context, dpApi);
 		dpPrefs = new DroidPlannerPrefs(context);
+        notificationHandler = new NotificationHandler(context, droneApi);
 
 		exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
 		Thread.setDefaultUncaughtExceptionHandler(dpExceptionHandler);
@@ -134,10 +137,6 @@ public class DroidPlannerApp extends Application {
 
 		GAUtils.initGATracker(this);
 		GAUtils.startNewSession(context);
-
-		// Any time the application is started, do a quick scan to see if we
-		// need any uploads
-		startService(UploaderService.createIntent(this));
 	}
 
 	public DroneApi getDroneApi(){

@@ -1,30 +1,52 @@
 package org.droidplanner.android.notifications;
 
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.model.Drone;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.analytics.HitBuilders;
+import com.ox3dr.services.android.lib.drone.event.Event;
 
 /**
  * This class handles DroidPlanner's status bar, and audible notifications. It
  * also provides support for the Android Wear functionality.
  */
-public class NotificationHandler implements DroneInterfaces.OnDroneListener {
+public class NotificationHandler {
 
 	/**
 	 * Defines the methods that need to be supported by Droidplanner's
 	 * notification provider types (i.e: audible (text to speech), status bar).
 	 */
-	interface NotificationProvider extends DroneInterfaces.OnDroneListener {
+	interface NotificationProvider {
         /**
          * Release resources used by the provider.
          */
         void onTerminate();
 	}
+
+    private final static IntentFilter eventFilter = new IntentFilter(Event.EVENT_AUTOPILOT_FAILSAFE);
+
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(Event.EVENT_AUTOPILOT_FAILSAFE.equals(action)){
+                final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                        .setCategory(GAUtils.Category.FAILSAFE)
+                        .setAction("Autopilot warning")
+                        .setLabel(droneApi.getState().getFailsafeWarning());
+                GAUtils.sendEvent(eventBuilder);
+            }
+        }
+    };
 
 	/**
 	 * Handles Droidplanner's audible notifications.
@@ -46,29 +68,19 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	 */
 	private final EmergencyBeepNotificationProvider mBeepNotification;
 
-	public NotificationHandler(Context context, DroidPlannerApi dpApi) {
+    private final Context context;
+    private final DroneApi droneApi;
+
+	public NotificationHandler(Context context, DroneApi dpApi) {
+        this.context = context;
+        this.droneApi = dpApi;
+
 		mTtsNotification = new TTSNotificationProvider(context);
 		mStatusBarNotification = new StatusBarNotificationProvider(context);
 		mPebbleNotification = new PebbleNotificationProvider(context, dpApi);
 		mBeepNotification = new EmergencyBeepNotificationProvider(context);
-	}
 
-	@Override
-	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
-		mTtsNotification.onDroneEvent(event, drone);
-		mStatusBarNotification.onDroneEvent(event, drone);
-		mPebbleNotification.onDroneEvent(event, drone);
-		mBeepNotification.onDroneEvent(event, drone);
-
-        switch(event){
-            case AUTOPILOT_WARNING:
-                final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                        .setCategory(GAUtils.Category.FAILSAFE)
-                        .setAction("Autopilot warning")
-                        .setLabel(drone.getState().getWarning());
-                GAUtils.sendEvent(eventBuilder);
-                break;
-        }
+        LocalBroadcastManager.getInstance(context).registerReceiver(eventReceiver, eventFilter);
 	}
 
     /**
@@ -80,5 +92,7 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
         mStatusBarNotification.onTerminate();
         mPebbleNotification.onTerminate();
         mBeepNotification.onTerminate();
+
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(eventReceiver);
     }
 }

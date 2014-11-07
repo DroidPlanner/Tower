@@ -510,7 +510,7 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     }
 
     @Override
-    public void enableFollowMe(int followType)  {
+    public void enableFollowMe(FollowType followType)  {
         if(isApiValid()){
             try {
                 dpApi.enableFollowMe(followType);
