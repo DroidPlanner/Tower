@@ -1,24 +1,44 @@
 package org.droidplanner.android.fragments.mode;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.MAVLink.Messages.ApmModes;
+import com.ox3dr.services.android.lib.drone.event.Event;
+import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
-import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.model.Drone;
 
 /**
  * Implements the flight/apm mode panel description.
  */
-public class FlightModePanel extends ApiListenerFragment implements OnDroneListener {
+public class FlightModePanel extends ApiListenerFragment{
+
+    private final static IntentFilter eventFilter = new IntentFilter();
+    static {
+        eventFilter.addAction(Event.EVENT_CONNECTED);
+        eventFilter.addAction(Event.EVENT_DISCONNECTED);
+        eventFilter.addAction(Event.EVENT_VEHICLE_MODE);
+        eventFilter.addAction(Event.EVENT_TYPE_UPDATED);
+        eventFilter.addAction(Event.EVENT_FOLLOW_START);
+        eventFilter.addAction(Event.EVENT_FOLLOW_STOP);
+    }
+
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onModeUpdate(getDroneApi().getState().getVehicleMode());
+        }
+    };
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -26,101 +46,83 @@ public class FlightModePanel extends ApiListenerFragment implements OnDroneListe
 	}
 
 	@Override
-	public void onApiConnected(DroidPlannerApi api) {
-		api.addDroneListener(this);
-
+	public void onApiConnected(DroneApi api) {
 		// Update the mode info panel based on the current mode.
-		onModeUpdate(api.getState().getMode());
+		onModeUpdate(api.getState().getVehicleMode());
+        getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 	}
 
 	@Override
 	public void onApiDisconnected() {
-		getDroneApi().removeDroneListener(this);
+        getBroadcastManager().unregisterReceiver(eventReceiver);
 	}
 
-	@Override
-	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
-		switch (event) {
-		case CONNECTED:
-		case DISCONNECTED:
-		case MODE:
-		case TYPE:
-		case FOLLOW_START:
-		case FOLLOW_STOP:
-			// Update the mode info panel
-			onModeUpdate(drone.getState().getMode());
-			break;
-		default:
-			break;
-		}
-	}
-
-	private void onModeUpdate(ApmModes mode) {
+	private void onModeUpdate(VehicleMode mode) {
 		// Update the info panel fragment
-		final DroidPlannerApi dpApi = getDroneApi();
+		final DroneApi dpApi = getDroneApi();
 		Fragment infoPanel;
 		if (dpApi == null || !dpApi.isConnected()) {
 			infoPanel = new ModeDisconnectedFragment();
 		} else {
 			switch (mode) {
-			case ROTOR_RTL:
-			case FIXED_WING_RTL:
+			case COPTER_RTL:
+			case PLANE_RTL:
 			case ROVER_RTL:
 				infoPanel = new ModeRTLFragment();
 				break;
 
-			case ROTOR_AUTO:
-			case FIXED_WING_AUTO:
+			case COPTER_AUTO:
+			case PLANE_AUTO:
 			case ROVER_AUTO:
 				infoPanel = new ModeAutoFragment();
 				break;
 
-			case ROTOR_LAND:
+			case COPTER_LAND:
 				infoPanel = new ModeLandFragment();
 				break;
 
-			case ROTOR_LOITER:
-			case FIXED_WING_LOITER:
+			case COPTER_LOITER:
+			case PLANE_LOITER:
 				infoPanel = new ModeLoiterFragment();
 				break;
 
-			case ROTOR_STABILIZE:
-			case FIXED_WING_STABILIZE:
+			case COPTER_STABILIZE:
+			case PLANE_STABILIZE:
 				infoPanel = new ModeStabilizeFragment();
 				break;
 
-			case ROTOR_ACRO:
+			case COPTER_ACRO:
 				infoPanel = new ModeAcroFragment();
 				break;
 
-			case ROTOR_ALT_HOLD:
+			case COPTER_ALT_HOLD:
 				infoPanel = new ModeAltholdFragment();
 				break;
 
-			case ROTOR_CIRCLE:
-			case FIXED_WING_CIRCLE:
+			case COPTER_CIRCLE:
+			case PLANE_CIRCLE:
 				infoPanel = new ModeCircleFragment();
 				break;
 
-			case ROTOR_GUIDED:
-			case FIXED_WING_GUIDED:
+			case COPTER_GUIDED:
+			case PLANE_GUIDED:
 			case ROVER_GUIDED:
-				if (dpApi.getFollowMe().isEnabled()) {
+				if (dpApi.getFollowState().isEnabled()) {
 					infoPanel = new ModeFollowFragment();
 				} else {
 					infoPanel = new ModeGuidedFragment();
 				}
 				break;
 
-			case ROTOR_TOY:
+			case COPTER_DRIFT:
 				infoPanel = new ModeDriftFragment();
 				break;
 
-			case ROTOR_SPORT:
+			case COPTER_SPORT:
 				infoPanel = new ModeSportFragment();
 				break;
 
-			case ROTOR_POSHOLD:
+			case COPTER_POSHOLD:
 				infoPanel = new ModePosHoldFragment();
 				break;
 

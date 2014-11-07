@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.MissionSelection;
@@ -16,6 +17,10 @@ import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.widgets.adapterViews.MissionItemProxyView;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +30,18 @@ import android.widget.AbsListView;
 import android.widget.ImageButton;
 
 public class EditorListFragment extends ApiListenerFragment implements OnItemLongClickListener,
-		OnItemClickListener, OnDroneListener, MissionSelection.OnSelectionUpdateListener, OnClickListener {
+		OnItemClickListener, MissionSelection.OnSelectionUpdateListener, OnClickListener {
+
+    private final static IntentFilter eventFilter = new IntentFilter(MissionProxy
+            .ACTION_MISSION_PROXY_UPDATE);
+
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            adapter.notifyDataSetChanged();
+            updateViewVisibility();
+        }
+    };
 
 	private HListView list;
 	private MissionProxy missionProxy;
@@ -33,7 +49,6 @@ public class EditorListFragment extends ApiListenerFragment implements OnItemLon
 	private OnEditorInteraction editorListener;
 	private ImageButton leftArrow;
 	private ImageButton rightArrow;
-	private Drone drone;
 
     @Override
     public void onAttach(Activity activity){
@@ -70,30 +85,21 @@ public class EditorListFragment extends ApiListenerFragment implements OnItemLon
 	}
 
     @Override
-    public void onApiConnected(DroidPlannerApi dpApi) {
-        drone = dpApi.getDrone();
+    public void onApiConnected(DroneApi dpApi) {
         missionProxy = dpApi.getMissionProxy();
 
         adapter = new MissionItemProxyView(getActivity(), missionProxy.getItems());
         list.setAdapter(adapter);
 
-        dpApi.addDroneListener(this);
         missionProxy.selection.addSelectionUpdateListener(this);
+        getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
 
     @Override
     public void onApiDisconnected() {
-        drone.removeDroneListener(this);
+        getBroadcastManager().unregisterReceiver(eventReceiver);
         missionProxy.selection.removeSelectionUpdateListener(this);
     }
-
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		if (event == DroneEventsType.MISSION_UPDATE) {
-			adapter.notifyDataSetChanged();
-			updateViewVisibility();
-		}
-	}
 
 	/**
 	 * Updates the fragment view visibility based on the count of stored mission

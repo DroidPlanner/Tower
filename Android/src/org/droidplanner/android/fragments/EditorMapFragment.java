@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
 
 public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
 		DPMap.OnMarkerDragListener, DPMap.OnMapClickListener, DPMap.OnMarkerClickListener {
@@ -51,12 +52,14 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	}
 
 	private void checkForWaypointMarkerMoving(MarkerInfo markerInfo) {
-		if (SpatialCoordItem.class.isInstance(markerInfo)) {
+		if (markerInfo instanceof MissionItem.SpatialItem) {
 			LatLong position = markerInfo.getPosition();
 
 			// update marker source
-			SpatialCoordItem waypoint = (SpatialCoordItem) markerInfo;
-			waypoint.setPosition(position);
+			MissionItem.SpatialItem waypoint = (MissionItem.SpatialItem) markerInfo;
+            LatLong waypointPosition = waypoint.getCoordinate();
+            waypointPosition.setLatitude(position.getLatitude());
+            waypointPosition.setLongitude(position.getLongitude());
 
 			// update flight path
 			mMapFragment.updateMissionPath(missionProxy);

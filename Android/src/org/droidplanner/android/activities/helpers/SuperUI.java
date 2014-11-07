@@ -246,7 +246,7 @@ public abstract class SuperUI extends FragmentActivity implements DroidPlannerAp
 		}
 
 		case R.id.menu_load_mission:
-			drone.getWaypointManager().getWaypoints();
+			dpApi.loadWaypoints();
 			return true;
 		case R.id.menu_triggerCamera:
 			dpApi.triggerCamera();

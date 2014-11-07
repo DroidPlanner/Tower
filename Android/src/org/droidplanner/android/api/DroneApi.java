@@ -581,6 +581,39 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     }
 
     @Override
+    public void triggerCamera()  {
+        if(isApiValid()){
+            try {
+                dpApi.triggerCamera();
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
+    public void epmCommand(boolean release) {
+        if(isApiValid()){
+            try {
+                dpApi.epmCommand(release);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
+    public void loadWaypoints() {
+        if(isApiValid()){
+            try {
+                dpApi.loadWaypoints();
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
     public IBinder asBinder() {
         throw new UnsupportedOperationException();
     }
