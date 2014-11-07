@@ -18,6 +18,7 @@ import com.ox3dr.services.android.lib.drone.property.GuidedState;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.gcs.follow.FollowState;
 import com.ox3dr.services.android.lib.gcs.follow.FollowType;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraInfo;
 
 /**
 * Interface used to access the drone properties.
@@ -111,6 +112,11 @@ interface IDroidPlannerApi {
         * Return a list of support follow modes on the connected drone.
         */
         FollowType[] getFollowTypes();
+
+        /**
+        * Return the set of camera information available for the connected drone.
+        */
+        CameraInfo[] getCameraInfos();
 
         /*** Oneway method calls ***/
 
