@@ -114,7 +114,7 @@ public abstract class SuperUI extends FragmentActivity implements DroidPlannerAp
         else
             onDroneDisconnected();
 
-		api.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
+        lbm.sendBroadcast(new Intent(MissionProxy.ACTION_MISSION_PROXY_UPDATE));
 	}
 
 	@Override
@@ -213,14 +213,13 @@ public abstract class SuperUI extends FragmentActivity implements DroidPlannerAp
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		DroidPlannerApi dpApi = dpApp.getApi();
-		Drone drone = dpApi.getDrone();
+		final DroneApi dpApi = dpApp.getDroneApi();
 
 		switch (item.getItemId()) {
 		case R.id.menu_send_mission: {
 			final MissionProxy missionProxy = dpApi.getMissionProxy();
-			if (missionProxy.getItems().isEmpty() || dpApi.getMission().hasTakeoffAndLandOrRTL()) {
-				missionProxy.sendMissionToAPM();
+			if (missionProxy.getItems().isEmpty() || missionProxy.hasTakeoffAndLandOrRTL()) {
+				missionProxy.sendMissionToAPM(dpApi);
 			} else {
 				YesNoWithPrefsDialog dialog = YesNoWithPrefsDialog.newInstance(
 						getApplicationContext(), "Mission Upload",
@@ -230,12 +229,12 @@ public abstract class SuperUI extends FragmentActivity implements DroidPlannerAp
 							@Override
 							public void onYes() {
 								missionProxy.addTakeOffAndRTL();
-								missionProxy.sendMissionToAPM();
+								missionProxy.sendMissionToAPM(dpApi);
 							}
 
 							@Override
 							public void onNo() {
-								missionProxy.sendMissionToAPM();
+								missionProxy.sendMissionToAPM(dpApi);
 							}
 						}, getString(R.string.pref_auto_insert_mission_takeoff_rtl_land_key));
 
@@ -250,13 +249,13 @@ public abstract class SuperUI extends FragmentActivity implements DroidPlannerAp
 			drone.getWaypointManager().getWaypoints();
 			return true;
 		case R.id.menu_triggerCamera:
-			MavLinkROI.triggerCamera(drone);
+			dpApi.triggerCamera();
 			return true;
 		case R.id.menu_epm_grab:
-			MavLinkROI.empCommand(drone, false);
+			dpApi.epmCommand(false);
 			return true;
 		case R.id.menu_epm_release:
-			MavLinkROI.empCommand(drone, true);
+			dpApi.epmCommand(true);
 			return true;
 
 		case android.R.id.home:

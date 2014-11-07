@@ -249,6 +249,14 @@ public class MissionProxy implements DPMap.PathSource {
         takeoff.setTakeoffAltitude(10);
         addMissionItem(takeoff);
 	}
+    public boolean hasTakeoffAndLandOrRTL() {
+        if (mMissionItems.size() >= 2) {
+            if (isFirstItemTakeoff() && isLastItemLandOrRTL()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public boolean isFirstItemTakeoff(){
         return !mMissionItems.isEmpty() && mMissionItems.get(0).getMissionItem().getType() ==
