@@ -126,7 +126,7 @@ interface IDroidPlannerApi {
         */
         Survey updateSurveyMissionItem(in Survey survey);
 
-        StructureScanner updateStructureScanner(in StructureScanner);
+        StructureScanner updateStructureScanner(in StructureScanner item);
 
         /*** Oneway method calls ***/
 
