@@ -1,12 +1,13 @@
 package org.droidplanner.android.proxy.mission.item.markers;
 
+import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.mission.survey.Survey;
 
 /**
  *
@@ -22,7 +23,7 @@ public class SurveyMarkerInfoProvider {
 	}
 
 	private void updateMarkerInfoList() {
-		for (Coord2D point : mSurvey.polygon.getPoints()) {
+		for (LatLong point : mSurvey.polygon.getPoints()) {
 			mPolygonMarkers.add(new PolygonMarkerInfo(point));
 		}
 	}

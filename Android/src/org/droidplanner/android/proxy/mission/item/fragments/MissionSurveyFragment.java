@@ -1,33 +1,49 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
+import com.ox3dr.services.android.lib.drone.property.Altitude;
+
 import org.droidplanner.R;
 import org.droidplanner.R.id;
-import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.CamerasAdapter;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
-import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.helpers.units.Altitude;
-import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.survey.CameraInfo;
-import org.droidplanner.core.mission.survey.Survey;
-import org.droidplanner.core.model.Drone;
 
 import java.util.List;
 
 public class MissionSurveyFragment extends MissionDetailFragment implements
 		CardWheelHorizontalView.OnCardWheelChangedListener,
-		SpinnerSelfSelect.OnSpinnerItemSelectedListener, DroneInterfaces.OnDroneListener {
+		SpinnerSelfSelect.OnSpinnerItemSelectedListener{
 
 	private static final String TAG = MissionSurveyFragment.class.getSimpleName();
+
+    private static final IntentFilter eventFilter = new IntentFilter(MissionProxy
+            .ACTION_MISSION_PROXY_UPDATE);
+
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(MissionProxy.ACTION_MISSION_PROXY_UPDATE.equals(action)){
+                updateViews();
+            }
+        }
+    };
 
 	private CardWheelHorizontalView mOverlapPicker;
 	private CardWheelHorizontalView mAnglePicker;
@@ -56,20 +72,19 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	}
 
 	@Override
-	public void onApiConnected(DroidPlannerApi api) {
+	public void onApiConnected(DroneApi api) {
 		super.onApiConnected(api);
 
         final View view = getView();
         final Context context = getActivity().getApplicationContext();
 
         cameraAdapter = new CamerasAdapter(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item);
+                android.R.layout.simple_spinner_dropdown_item, api.getCameraDetails());
 
         cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
         cameraSpinner.setAdapter(cameraAdapter);
 		cameraSpinner.setOnSpinnerItemSelectedListener(this);
-        cameraAdapter.setTitle(getMissionItems().get(0).surveyData.getCameraName());
-        
+
 		mAnglePicker = (CardWheelHorizontalView) view.findViewById(id.anglePicker);
 		mAnglePicker.setViewAdapter(new NumericWheelAdapter(context, R.layout.wheel_text_centered,
 				0, 180, "%dº"));
@@ -105,26 +120,25 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 
         typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
 
-		api.addDroneListener(this);
+		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 	}
 
 	@Override
 	public void onApiDisconnected() {
 		super.onApiDisconnected();
-		getDroneApi().removeDroneListener(this);
+		getBroadcastManager().unregisterReceiver(eventReceiver);
 	}
 
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position) {
 		if (spinner.getId() == id.cameraFileSpinner) {
-			CameraInfo cameraInfo = cameraAdapter.getCamera(position);
-			cameraAdapter.setTitle(cameraInfo.name);
+			CameraDetail cameraInfo = cameraAdapter.getItem(position);
 			for (Survey survey : getMissionItems()) {
 				survey.setCameraInfo(cameraInfo);
 			}
 
 			onChanged(mAnglePicker, 0, 0);
-	        getMissionProxy().getMission().notifyMissionUpdate();
+	        getMissionProxy().notifyMissionUpdate();
 		}
 	}
 	
@@ -152,18 +166,6 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		}
 	}
 	
-	@Override
-	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
-		switch (event) {
-		case MISSION_UPDATE:
-			updateViews();
-			break;
-		default:
-			break;
-		}
-
-	}
-
 	private void updateViews() {
 		updateTextViews();
 		updateSeekBars();

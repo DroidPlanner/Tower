@@ -8,6 +8,7 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.StructureScanner;
 
 import org.droidplanner.R;
@@ -38,13 +39,11 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 		final View view = getView();
 		final Context context = getActivity().getApplicationContext();
 
-		Log.d("DEBUG", "onViewCreated");
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.STRUCTURE_SCANNER));
 
 		cameraAdapter = new CamerasAdapter(getActivity(),
-				android.R.layout.simple_spinner_dropdown_item);
-		SpinnerSelfSelect cameraSpinner = (SpinnerSelfSelect) view
-				.findViewById(id.cameraFileSpinner);
+				android.R.layout.simple_spinner_dropdown_item, api.getCameraDetails());
+		SpinnerSelfSelect cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
 		cameraSpinner.setAdapter(cameraAdapter);
 		cameraSpinner.setOnSpinnerItemSelectedListener(this);
 
@@ -77,7 +76,6 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 
 		// Use the first one as reference.
 		final StructureScanner firstItem = getMissionItems().get(0);
-		cameraAdapter.setTitle(firstItem.getCamera());
 		radiusPicker.setCurrentValue((int) firstItem.getRadius());
 		startAltitudeStepPicker.setCurrentValue((int) firstItem.getCoordinate().getAltitude());
 		endAltitudeStepPicker.setCurrentValue((int) firstItem.getHeightStep());
@@ -128,8 +126,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position) {
 		if (spinner.getId() == id.cameraFileSpinner) {
-			CameraInfo cameraInfo = cameraAdapter.getCamera(position);
-			cameraAdapter.setTitle(cameraInfo.name);
+			CameraDetail cameraInfo = cameraAdapter.getItem(position);
 			for (StructureScanner scan : getMissionItems()) {
 				scan.setCamera(cameraInfo);
 			}

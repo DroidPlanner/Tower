@@ -14,6 +14,7 @@ import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.coordinate.Point3D;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.mission.Mission;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.ox3dr.services.android.lib.drone.property.Altitude;
 import com.ox3dr.services.android.lib.drone.property.Attitude;
 import com.ox3dr.services.android.lib.drone.property.Battery;
@@ -363,6 +364,18 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
             }
         }
         return new FollowType[0];
+    }
+
+    @Override
+    public CameraDetail[] getCameraDetails()  {
+        if(isApiValid()){
+            try {
+                return dpApi.getCameraDetails();
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+        return new CameraDetail[0];
     }
 
     @Override
