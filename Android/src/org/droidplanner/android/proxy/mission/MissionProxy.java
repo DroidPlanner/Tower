@@ -7,7 +7,6 @@ import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.droidplanner.android.api.DroneApi;
@@ -20,7 +19,6 @@ import org.droidplanner.android.utils.analytics.GAUtils;
 import com.google.android.gms.analytics.HitBuilders;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.coordinate.LatLongAlt;
-import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.mission.Mission;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem.SpatialItem;
@@ -37,6 +35,11 @@ import com.ox3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
  */
 public class MissionProxy implements DPMap.PathSource {
 
+    private static final String CLAZZ_NAME = MissionProxy.class.getName();
+
+    public static final String ACTION_MISSION_PROXY_UPDATE = CLAZZ_NAME + "" +
+            ".ACTION_MISSION_PROXY_UPDATE";
+
     private static final double DEFAULT_ALTITUDE = 20; //meters
 
 	/**
@@ -52,8 +55,8 @@ public class MissionProxy implements DPMap.PathSource {
         lbm = LocalBroadcastManager.getInstance(context);
 	}
 
-    private void notifyMissionUpdate(){
-        lbm.sendBroadcast(new Intent(Event.EVENT_MISSION_UPDATE));
+    public void notifyMissionUpdate(){
+        lbm.sendBroadcast(new Intent(ACTION_MISSION_PROXY_UPDATE));
     }
 
 	public List<MissionItemProxy> getItems() {
@@ -137,7 +140,7 @@ public class MissionProxy implements DPMap.PathSource {
 	 *            2D points making up the survey
 	 */
 	public void addSurveyPolygon(List<LatLong> points) {
-		Survey survey = new Survey(mMission, points);
+		Survey survey = new Survey();
 		mMissionItems.add(new MissionItemProxy(this, survey));
 
 		try {
@@ -256,7 +259,8 @@ public class MissionProxy implements DPMap.PathSource {
         final int itemsCount = mMissionItems.size();
         if(itemsCount == 0) return false;
 
-        final int itemType = mMissionItems.get(itemsCount -1).getMissionItem().getType();
+        final MissionItemType itemType = mMissionItems.get(itemsCount -1).getMissionItem()
+                .getType();
         return itemType == MissionItemType.RETURN_TO_LAUNCH || itemType == MissionItemType.LAND;
     }
 
@@ -554,7 +558,7 @@ public class MissionProxy implements DPMap.PathSource {
                 else
                     missionItemsList += ", ";
 
-                missionItemsList += itemProxy.getMissionItem().getLabel();
+                missionItemsList += itemProxy.getMissionItem().getType().getLabel();
 
                 mission.addMissionItem(itemProxy.getMissionItem());
             }

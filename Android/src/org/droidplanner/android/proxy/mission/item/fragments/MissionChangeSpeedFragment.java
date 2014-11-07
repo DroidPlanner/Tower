@@ -1,16 +1,17 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-import org.droidplanner.core.helpers.units.Speed;
-import org.droidplanner.core.mission.MissionItem;
-import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.commands.ChangeSpeed;
 
 import android.os.Bundle;
 import android.view.View;
+
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.ox3dr.services.android.lib.drone.mission.item.command.ChangeSpeed;
+import com.ox3dr.services.android.lib.drone.property.Speed;
 
 public class MissionChangeSpeedFragment extends MissionDetailFragment implements
 		CardWheelHorizontalView.OnCardWheelChangedListener {
@@ -21,7 +22,7 @@ public class MissionChangeSpeedFragment extends MissionDetailFragment implements
 	}
 
     @Override
-    public void onApiConnected(DroidPlannerApi api){
+    public void onApiConnected(DroneApi api){
         super.onApiConnected(api);
 
         final View view = getView();
@@ -36,7 +37,7 @@ public class MissionChangeSpeedFragment extends MissionDetailFragment implements
         cardAltitudePicker.addChangingListener(this);
 
         ChangeSpeed item = (ChangeSpeed) getMissionItems().get(0);
-        cardAltitudePicker.setCurrentValue((int) item.getSpeed().valueInMetersPerSecond());
+        cardAltitudePicker.setCurrentValue((int) item.getSpeed());
     }
 
 	@Override
@@ -45,7 +46,7 @@ public class MissionChangeSpeedFragment extends MissionDetailFragment implements
 		case R.id.picker1:
             for(MissionItem missionItem : getMissionItems()) {
             	ChangeSpeed item = (ChangeSpeed) missionItem;
-                item.setSpeed(new Speed(newValue));
+                item.setSpeed(newValue);
             }
 			break;
 		}

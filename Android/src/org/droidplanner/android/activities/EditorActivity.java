@@ -564,7 +564,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 referenceType = proxyType;
             }
             else if (referenceType != proxyType || MissionDetailFragment
-                    .typeWithNoMuliEditSupport.contains(referenceType)) {
+                    .typeWithNoMultiEditSupport.contains(referenceType)) {
                     //Return a generic mission detail.
                     return new MissionDetailFragment();
                 }

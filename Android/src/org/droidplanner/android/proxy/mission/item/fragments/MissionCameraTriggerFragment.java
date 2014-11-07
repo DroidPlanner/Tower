@@ -1,16 +1,16 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-import org.droidplanner.core.helpers.units.Length;
-import org.droidplanner.core.mission.MissionItem;
-import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.commands.CameraTrigger;
 
 import android.os.Bundle;
 import android.view.View;
+
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.ox3dr.services.android.lib.drone.mission.item.command.CameraTrigger;
 
 public class MissionCameraTriggerFragment extends MissionDetailFragment implements
 		CardWheelHorizontalView.OnCardWheelChangedListener {
@@ -21,7 +21,7 @@ public class MissionCameraTriggerFragment extends MissionDetailFragment implemen
 	}
 
 	@Override
-	public void onApiConnected(DroidPlannerApi api) {
+	public void onApiConnected(DroneApi api) {
 		super.onApiConnected(api);
 
         final View view = getView();
@@ -36,7 +36,7 @@ public class MissionCameraTriggerFragment extends MissionDetailFragment implemen
 				.findViewById(R.id.picker1);
 		cardAltitudePicker.setViewAdapter(adapter);
         cardAltitudePicker.addChangingListener(this);
-		cardAltitudePicker.setCurrentValue((int) item.getTriggerDistance().valueInMeters());
+		cardAltitudePicker.setCurrentValue((int) item.getTriggerDistance());
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class MissionCameraTriggerFragment extends MissionDetailFragment implemen
 		case R.id.picker1:
             for(MissionItem missionItem : getMissionItems()) {
             	CameraTrigger item = (CameraTrigger) missionItem;
-                item.setTriggerDistance(new Length(newValue));
+                item.setTriggerDistance(newValue);
             }
 			break;
 		}

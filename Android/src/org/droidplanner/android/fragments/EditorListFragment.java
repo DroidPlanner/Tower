@@ -9,15 +9,11 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
-import org.droidplanner.android.api.services.DroidPlannerApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.widgets.adapterViews.MissionItemProxyView;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.model.Drone;
 
 import android.app.Activity;
 import android.os.Bundle;

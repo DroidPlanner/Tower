@@ -6,10 +6,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.droidplanner.R;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerDialogFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
+import org.droidplanner.android.utils.UnitUtil;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 
 import android.app.Activity;
@@ -37,13 +39,15 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
 	protected static final int MIN_ALTITUDE = -200; // meter
 	protected static final int MAX_ALTITUDE = +200; // meters
 
-    public static final int[] typeWithNoMuliEditSupport =    {
-        MissionItemType.LAND,
-        MissionItemType.TAKEOFF,
-        MissionItemType.SURVEY,
-        MissionItemType.RETURN_TO_LAUNCH,
-        MissionItemType.STRUCTURE_SCANNER
-    };
+    public static final List<MissionItemType> typeWithNoMultiEditSupport = new
+            ArrayList<MissionItemType>();
+    static {
+        typeWithNoMultiEditSupport.add(MissionItemType.LAND);
+        typeWithNoMultiEditSupport.add(MissionItemType.TAKEOFF);
+        typeWithNoMultiEditSupport.add(MissionItemType.SURVEY);
+        typeWithNoMultiEditSupport.add(MissionItemType.RETURN_TO_LAUNCH);
+        typeWithNoMultiEditSupport.add(MissionItemType.STRUCTURE_SCANNER);
+    }
 
     public interface OnMissionDetailListener {
 		/**
@@ -78,46 +82,46 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
     private final List<MissionItem> mSelectedItems = new ArrayList<MissionItem>();
     private final List<MissionItemProxy> mSelectedProxies = new ArrayList<MissionItemProxy>();
 
-	public static MissionDetailFragment newInstance(int itemType) {
+	public static MissionDetailFragment newInstance(MissionItemType itemType) {
 		MissionDetailFragment fragment;
 		switch (itemType) {
-		case MissionItemType.LAND:
+		case LAND:
 			fragment = new MissionLandFragment();
 			break;
-		case MissionItemType.CIRCLE:
+		case CIRCLE:
 			fragment = new MissionCircleFragment();
 			break;
-		case MissionItemType.CHANGE_SPEED:
+		case CHANGE_SPEED:
 			fragment = new MissionChangeSpeedFragment();
 			break;
-		case MissionItemType.REGION_OF_INTEREST:
+		case REGION_OF_INTEREST:
 			fragment = new MissionRegionOfInterestFragment();
 			break;
-		case MissionItemType.RETURN_TO_LAUNCH:
+		case RETURN_TO_LAUNCH:
 			fragment = new MissionRTLFragment();
 			break;
-		case MissionItemType.SURVEY:
+		case SURVEY:
 			fragment = new MissionSurveyFragment();
 			break;
-		case MissionItemType.TAKEOFF:
+		case TAKEOFF:
 			fragment = new MissionTakeoffFragment();
 			break;
-		case MissionItemType.WAYPOINT:
+		case WAYPOINT:
 			fragment = new MissionWaypointFragment();
 			break;
-		case MissionItemType.SPLINE_WAYPOINT:
+		case SPLINE_WAYPOINT:
 			fragment = new MissionSplineWaypointFragment();
 			break;
-		case MissionItemType.STRUCTURE_SCANNER:
+		case STRUCTURE_SCANNER:
 			fragment = new MissionStructureScannerFragment();
 			break;
-		case MissionItemType.CAMERA_TRIGGER:
+		case CAMERA_TRIGGER:
 			fragment = new MissionCameraTriggerFragment();
 			break;
-		case MissionItemType.EPM_GRIPPER:
+		case EPM_GRIPPER:
 			fragment = new MissionEpmGrabberFragment();
 			break;
-		case MissionItemType.SET_SERVO:
+		case SET_SERVO:
 			fragment = new SetServoFragment();
 			break;
 		default:
@@ -134,7 +138,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
 	}
 
     @Override
-    public void onApiConnected(DroidPlannerApi api) {
+    public void onApiConnected(DroneApi api) {
         mMissionProxy = api.getMissionProxy();
 
         mSelectedProxies.clear();
@@ -163,7 +167,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
             
             if ((currentItem instanceof StructureScanner)) {
                 list.clear();
-                list.add(MissionItemType.CYLINDRICAL_SURVEY);
+                list.add(MissionItemType.STRUCTURE_SCANNER);
             }
 
             if (mMissionProxy.getItems().indexOf(itemProxy) != 0) {
@@ -172,16 +176,16 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
 
             if (mMissionProxy.getItems().indexOf(itemProxy) != (mMissionProxy.getItems().size() - 1)) {
                 list.remove(MissionItemType.LAND);
-                list.remove(MissionItemType.RTL);
+                list.remove(MissionItemType.RETURN_TO_LAUNCH);
             }
 
-            if (currentItem instanceof MissionCMD) {
+            if (currentItem instanceof MissionItem.Command) {
                 list.remove(MissionItemType.LAND);
                 list.remove(MissionItemType.SPLINE_WAYPOINT);
                 list.remove(MissionItemType.CIRCLE);
-                list.remove(MissionItemType.ROI);
+                list.remove(MissionItemType.REGION_OF_INTEREST);
                 list.remove(MissionItemType.WAYPOINT);
-                list.remove(MissionItemType.CYLINDRICAL_SURVEY);
+                list.remove(MissionItemType.STRUCTURE_SCANNER);
             }
 
             final TextView waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
@@ -193,8 +197,8 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
             final TextView distanceView = (TextView) view.findViewById(R.id.DistanceValue);
             if (distanceView != null) {
                 try {
-                    distanceView.setText(mMissionProxy.getDistanceFromLastWaypoint(itemProxy)
-                            .toString());
+                    distanceView.setText(UnitUtil.MetricUtil.distanceToString(mMissionProxy
+                            .getDistanceFromLastWaypoint(itemProxy)));
                 } catch (IllegalArgumentException e) {
                     Log.w(TAG, e.getMessage(), e);
                 }
@@ -207,7 +211,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
         }
         else if(mSelectedProxies.size() > 1){
             //Remove the mission item types that don't apply to multiple items.
-            list.removeAll(typeWithNoMuliEditSupport);
+            list.removeAll(typeWithNoMultiEditSupport);
         }
         else{
             //Invalid state. We should not have been able to get here.
@@ -279,7 +283,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
                 final MissionItem oldItem = missionItemProxy.getMissionItem();
                 if (oldItem.getType() != selectedType) {
                     updatesList.add(Pair.create(missionItemProxy, new MissionItemProxy(
-                            mMissionProxy, selectedType.getNewItem(oldItem))));
+                            mMissionProxy, selectedType.getNewItem())));
                 }
             }
 

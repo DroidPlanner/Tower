@@ -23,7 +23,6 @@ import com.ox3dr.services.android.lib.model.IDroidPlannerServices;
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
 import org.droidplanner.android.api.DPApiCallback;
 import org.droidplanner.android.api.DroneApi;
-import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.IO.ExceptionWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;

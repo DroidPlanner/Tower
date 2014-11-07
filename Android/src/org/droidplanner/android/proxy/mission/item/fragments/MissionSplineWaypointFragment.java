@@ -1,17 +1,18 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-import org.droidplanner.core.helpers.units.Altitude;
-import org.droidplanner.core.mission.MissionItem;
-import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.ox3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
+import com.ox3dr.services.android.lib.drone.property.Altitude;
 
 /**
  * This class renders the detail view for a spline waypoint mission item.
@@ -25,7 +26,7 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment impleme
 	}
 
     @Override
-    public void onApiConnected(DroidPlannerApi api){
+    public void onApiConnected(DroneApi api){
         super.onApiConnected(api);
 
         final View view = getView();
@@ -49,7 +50,7 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment impleme
 
         SplineWaypoint item = (SplineWaypoint) getMissionItems().get(0);
         delayPicker.setCurrentValue((int) item.getDelay());
-        altitudePicker.setCurrentValue((int) item.getCoordinate().getAltitude().valueInMeters());
+        altitudePicker.setCurrentValue((int) item.getCoordinate().getAltitude());
     }
 
 	@Override
@@ -57,7 +58,7 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment impleme
 		switch (wheel.getId()) {
 		case R.id.altitudePicker:
             for(MissionItem item: getMissionItems()) {
-                ((SplineWaypoint)item).setAltitude(new Altitude(newValue));
+                ((SplineWaypoint)item).getCoordinate().setAltitude(newValue);
             }
 			break;
 

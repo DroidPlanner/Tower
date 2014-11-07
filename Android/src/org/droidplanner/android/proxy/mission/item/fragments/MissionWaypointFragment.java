@@ -1,17 +1,18 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.services.DroidPlannerApi;
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-import org.droidplanner.core.helpers.units.Altitude;
-import org.droidplanner.core.mission.MissionItem;
-import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.waypoints.Waypoint;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.ox3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
+import com.ox3dr.services.android.lib.drone.property.Altitude;
 
 public class MissionWaypointFragment extends MissionDetailFragment implements
 		CardWheelHorizontalView.OnCardWheelChangedListener {
@@ -22,7 +23,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 	}
 
     @Override
-    public void onApiConnected(DroidPlannerApi api){
+    public void onApiConnected(DroneApi api){
         super.onApiConnected(api);
 
         final View view = getView();
@@ -47,7 +48,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 
         final Waypoint item = (Waypoint) getMissionItems().get(0);
         delayPicker.setCurrentValue((int) item.getDelay());
-        altitudePicker.setCurrentValue((int) item.getCoordinate().getAltitude().valueInMeters());
+        altitudePicker.setCurrentValue((int) item.getCoordinate().getAltitude());
     }
 
 	@Override
@@ -55,7 +56,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 		switch (wheel.getId()) {
 		case R.id.altitudePicker:
             for(MissionItem item: getMissionItems()) {
-                ((Waypoint)item).setAltitude(new Altitude(newValue));
+                ((Waypoint)item).getCoordinate().setAltitude(newValue);
             }
 			break;
 

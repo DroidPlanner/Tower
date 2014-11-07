@@ -12,7 +12,7 @@ import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.android.utils.file.FileList;
 import org.droidplanner.android.utils.file.FileManager;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.ox3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
 
 /**
  * Read msg_mission_item list as...
@@ -26,10 +26,10 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
  */
 public class MissionReader implements OpenFileDialog.FileReader {
 
-	private List<msg_mission_item> msgMissionItems;
+	private List<MissionItemMessage> msgMissionItems;
 
 	public MissionReader() {
-		this.msgMissionItems = new ArrayList<msg_mission_item>();
+		this.msgMissionItems = new ArrayList<MissionItemMessage>();
 	}
 
 	public boolean openMission(String file) {
@@ -56,7 +56,7 @@ public class MissionReader implements OpenFileDialog.FileReader {
 		return true;
 	}
 
-	public List<msg_mission_item> getMsgMissionItems() {
+	public List<MissionItemMessage> getMsgMissionItems() {
 		return msgMissionItems;
 	}
 
@@ -69,22 +69,22 @@ public class MissionReader implements OpenFileDialog.FileReader {
 			// parse line (TAB delimited)
 			final String[] RowData = line.split("\t");
 
-			final msg_mission_item msg = new msg_mission_item();
-			msg.seq = Short.parseShort(RowData[0]);
-			msg.current = Byte.parseByte(RowData[1]);
-			msg.frame = Byte.parseByte(RowData[2]);
-			msg.command = Short.parseShort(RowData[3]);
+			final MissionItemMessage msg = new MissionItemMessage();
+			msg.setSeq(Short.parseShort(RowData[0]));
+			msg.setCurrent(Byte.parseByte(RowData[1]));
+			msg.setFrame(Byte.parseByte(RowData[2]));
+			msg.setCommand(Short.parseShort(RowData[3]));
 
-			msg.param1 = Float.parseFloat(RowData[4]);
-			msg.param2 = Float.parseFloat(RowData[5]);
-			msg.param3 = Float.parseFloat(RowData[6]);
-			msg.param4 = Float.parseFloat(RowData[7]);
+			msg.setParam1(Float.parseFloat(RowData[4]));
+			msg.setParam2(Float.parseFloat(RowData[5]));
+			msg.setParam3(Float.parseFloat(RowData[6]));
+			msg.setParam4(Float.parseFloat(RowData[7]));
 
-			msg.x = Float.parseFloat(RowData[8]);
-			msg.y = Float.parseFloat(RowData[9]);
-			msg.z = Float.parseFloat(RowData[10]);
+			msg.setX(Float.parseFloat(RowData[8]));
+			msg.setY(Float.parseFloat(RowData[9]));
+			msg.setZ(Float.parseFloat(RowData[10]));
 
-			msg.autocontinue = Byte.parseByte(RowData[11]);
+			msg.setAutocontinue(Byte.parseByte(RowData[11]));
 
 			msgMissionItems.add(msg);
 		}

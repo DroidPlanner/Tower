@@ -1,10 +1,11 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
-import org.droidplanner.core.mission.MissionItemType;
 
 import android.os.Bundle;
 import android.view.View;
+
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 
 public class MissionEpmGrabberFragment extends MissionDetailFragment {
 

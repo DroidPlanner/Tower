@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.droidplanner.R;
 import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
-import org.droidplanner.core.parameters.ParameterMetadata;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -20,7 +19,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.three_dr.services.android.lib.drone.property.Parameter;
+import com.ox3dr.services.android.lib.drone.property.Parameter;
 
 public class DialogParameterInfo {
 

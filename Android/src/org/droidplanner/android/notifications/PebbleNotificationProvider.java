@@ -2,19 +2,23 @@ package org.droidplanner.android.notifications;
 
 import java.util.UUID;
 
-import org.droidplanner.android.api.services.DroidPlannerApi;
-import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.gcs.follow.Follow;
-import org.droidplanner.core.gcs.follow.FollowAlgorithm.FollowModes;
-import org.droidplanner.core.model.Drone;
-
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
-import com.MAVLink.Messages.ApmModes;
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.PebbleKit.PebbleDataReceiver;
 import com.getpebble.android.kit.util.PebbleDictionary;
+import com.ox3dr.services.android.lib.drone.event.Event;
+import com.ox3dr.services.android.lib.drone.property.State;
+import com.ox3dr.services.android.lib.drone.property.VehicleMode;
+import com.ox3dr.services.android.lib.gcs.follow.FollowState;
+import com.ox3dr.services.android.lib.gcs.follow.FollowType;
+
+import org.droidplanner.android.api.DroneApi;
 
 public class PebbleNotificationProvider implements NotificationHandler.NotificationProvider {
 
@@ -26,7 +30,65 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 	private static final UUID DP_UUID = UUID.fromString("79a2893d-fc7d-48c4-bc9a-34854d94ef6e");
 	private static final String EXPECTED_APP_VERSION = "three";
 
-	/**
+    private final static IntentFilter eventFilter = new IntentFilter();
+    static {
+        eventFilter.addAction(Event.EVENT_CONNECTED);
+        eventFilter.addAction(Event.EVENT_VEHICLE_MODE);
+        eventFilter.addAction(Event.EVENT_BATTERY);
+        eventFilter.addAction(Event.EVENT_SPEED);
+        eventFilter.addAction(Event.EVENT_FOLLOW_UPDATE);
+    }
+
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(Event.EVENT_CONNECTED.equals(action)){
+                PebbleKit.startAppOnPebble(applicationContext, DP_UUID);
+            }
+            else if(Event.EVENT_VEHICLE_MODE.equals(action)
+                    || Event.EVENT_BATTERY.equals(action)
+                    ||Event.EVENT_SPEED.equals(action)){
+                sendDataToWatchIfTimeHasElapsed(dpApi);
+            }
+            else if(Event.EVENT_FOLLOW_UPDATE.equals(action)){
+                sendDataToWatchIfTimeHasElapsed(dpApi);
+
+                FollowState followState = dpApi.getFollowState();
+                if(followState != null) {
+                    String eventLabel = null;
+                    switch (followState.getState()) {
+                        case FollowState.STATE_START:
+                        case FollowState.STATE_RUNNING:
+                            eventLabel = "FollowMe enabled";
+                            break;
+
+                        case FollowState.STATE_END:
+                            eventLabel = "FollowMe disabled";
+                            break;
+
+                        case FollowState.STATE_INVALID:
+                            eventLabel = "FollowMe error: invalid state";
+                            break;
+
+                        case FollowState.STATE_DRONE_DISCONNECTED:
+                            eventLabel = "FollowMe error: drone not connected";
+                            break;
+
+                        case FollowState.STATE_DRONE_NOT_ARMED:
+                            eventLabel = "FollowMe error: drone not armed";
+                            break;
+                    }
+
+                    if (eventLabel != null) {
+                        Toast.makeText(applicationContext, eventLabel, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }
+    };
+
+    /**
 	 * Application context.
 	 */
 	private final Context applicationContext;
@@ -34,17 +96,20 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
     /**
      * Handle to the dp api
      */
-    private final DroidPlannerApi dpApi;
+    private final DroneApi dpApi;
 
 	long timeWhenLastTelemSent = System.currentTimeMillis();
 	private PebbleDataReceiver datahandler;
 
-	public PebbleNotificationProvider(Context context, DroidPlannerApi dpApi) {
+	public PebbleNotificationProvider(Context context, DroneApi dpApi) {
         this.dpApi = dpApi;
 		applicationContext = context;
 		PebbleKit.startAppOnPebble(applicationContext, DP_UUID);
 		datahandler = new PebbleReceiverHandler(DP_UUID);
 		PebbleKit.registerReceivedDataHandler(applicationContext, datahandler);
+
+        LocalBroadcastManager.getInstance(applicationContext).registerReceiver(eventReceiver,
+                eventFilter);
 	}
 
     @Override
@@ -53,29 +118,7 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 			applicationContext.unregisterReceiver(datahandler);
 			datahandler = null;
 		}
-	}
-
-	@Override
-	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
-		switch (event) {
-		case CONNECTED:
-			PebbleKit.startAppOnPebble(applicationContext, DP_UUID);
-			break;
-		case MODE:
-			sendDataToWatchIfTimeHasElapsed(drone);
-			break;
-		case BATTERY:
-			sendDataToWatchIfTimeHasElapsed(drone);
-			break;
-		case SPEED:
-			sendDataToWatchIfTimeHasElapsed(drone);
-			break;
-		case FOLLOW_CHANGE_TYPE:
-			sendDataToWatchIfTimeHasElapsed(drone);
-			break;
-		default:
-			break;
-		}
+        LocalBroadcastManager.getInstance(applicationContext).unregisterReceiver(eventReceiver);
 	}
 
 	/**
@@ -86,7 +129,7 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 	 * 
 	 * @param drone
 	 */
-	public void sendDataToWatchIfTimeHasElapsed(Drone drone) {
+	public void sendDataToWatchIfTimeHasElapsed(DroneApi drone) {
 		if (System.currentTimeMillis() - timeWhenLastTelemSent > 500) {
 			sendDataToWatchNow(drone);
 			timeWhenLastTelemSent = System.currentTimeMillis();
@@ -100,30 +143,35 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 	 * 
 	 * @param drone
 	 */
-	public void sendDataToWatchNow(Drone drone) {
-		Follow followMe = dpApi.getFollowMe();
+	public void sendDataToWatchNow(DroneApi drone) {
+        final FollowState followState = drone.getFollowState();
+        final State droneState = drone.getState();
+        if(followState == null || droneState == null)
+            return;
+
 		PebbleDictionary data = new PebbleDictionary();
 
-		String mode = drone.getState().getMode().getName();
-		if (!drone.getState().isArmed())
-			mode = "Disarmed";
-		else if (followMe.isEnabled() && "Guided".equals(mode))
-			mode = "Follow";
-		else if (drone.getGuidedPoint().isIdle() && !followMe.isEnabled() && "Guided".equals(mode))
-			mode = "Paused";
-		data.addString(KEY_MODE, mode);
+		VehicleMode mode = droneState.getVehicleMode();
+        String modeLabel = mode.getLabel();
+		if (!droneState.isArmed())
+			modeLabel = "Disarmed";
+		else if (followState.isEnabled())
+			modeLabel = "Follow";
+		else if (drone.getGuidedState().isIdle())
+			modeLabel = "Paused";
 
-		FollowModes type = followMe.getType();
+		data.addString(KEY_MODE, modeLabel);
+
+		FollowType type = followState.getMode();
 		if (type != null) {
-			data.addString(KEY_FOLLOW_TYPE, type.toString());
+			data.addString(KEY_FOLLOW_TYPE, type.getTypeLabel());
 		} else
 			data.addString(KEY_FOLLOW_TYPE, "none");
 
-		String bat = "Bat:" + Double.toString(roundToOneDecimal(drone.getBattery().getBattVolt()))
+		String bat = "Bat:" + Double.toString(roundToOneDecimal(drone.getBattery().getBatteryVoltage()))
 				+ "V";
-		String speed = "Speed: "
-				+ Double.toString(roundToOneDecimal(drone.getSpeed().getAirSpeed()
-						.valueInMetersPerSecond()));
+		String speed = "Speed: " + Double.toString(roundToOneDecimal(
+                drone.getSpeed().getAirSpeed()));
 		String altitude = "Alt: "
 				+ Double.toString(roundToOneDecimal(drone.getAltitude().getAltitude()));
 		String telem = bat + "\n" + altitude + "\n" + speed;
@@ -152,40 +200,18 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 
 		@Override
 		public void receiveData(Context context, int transactionId, PebbleDictionary data) {
-			Follow followMe = dpApi.getFollowMe();
+			FollowState followMe = dpApi.getFollowState();
 			PebbleKit.sendAckToPebble(applicationContext, transactionId);
 			int request = (data.getInteger(KEY_PEBBLE_REQUEST).intValue());
 			switch (request) {
 
 			case KEY_REQUEST_MODE_FOLLOW:
-				followMe.toggleFollowMeState();
-				String eventLabel = null;
-				switch (followMe.getState()) {
-				case FOLLOW_START:
-				case FOLLOW_RUNNING:
-					eventLabel = "FollowMe enabled";
-					break;
-
-				case FOLLOW_END:
-					eventLabel = "FollowMe disabled";
-					break;
-
-				case FOLLOW_INVALID_STATE:
-					eventLabel = "FollowMe error: invalid state";
-					break;
-
-				case FOLLOW_DRONE_DISCONNECTED:
-					eventLabel = "FollowMe error: drone not connected";
-					break;
-
-				case FOLLOW_DRONE_NOT_ARMED:
-					eventLabel = "FollowMe error: drone not armed";
-					break;
-				}
-
-				if (eventLabel != null) {
-					Toast.makeText(applicationContext, eventLabel, Toast.LENGTH_SHORT).show();
-				}
+                if(followMe.isEnabled()){
+                    dpApi.disableFollowMe();
+                }
+                else {
+                    dpApi.enableFollowMe(followMe.getState());
+                }
 				break;
 
 			case KEY_REQUEST_CYCLE_FOLLOW_TYPE:
@@ -193,11 +219,11 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 				break;
 
 			case KEY_REQUEST_PAUSE:
-				dpApi.getGuidedPoint().pauseAtCurrentLocation();
+				dpApi.pauseAtCurrentLocation();
 				break;
 
 			case KEY_REQUEST_MODE_RTL:
-				dpApi.getState().changeFlightMode(ApmModes.ROTOR_RTL);
+				dpApi.changeVehicleMode(VehicleMode.COPTER_RTL);
 				break;
 			}
 		}

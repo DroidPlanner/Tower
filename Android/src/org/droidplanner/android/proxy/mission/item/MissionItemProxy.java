@@ -88,13 +88,13 @@ public class MissionItemProxy {
 	public List<LatLong> getPath(LatLong previousPoint) {
 		List<LatLong> pathPoints = new ArrayList<LatLong>();
 		switch (mMissionItem.getType()) {
-		case MissionItemType.LAND:
-		case MissionItemType.WAYPOINT:
-		case MissionItemType.SPLINE_WAYPOINT:
+		case LAND:
+		case WAYPOINT:
+		case SPLINE_WAYPOINT:
 			pathPoints.add(((MissionItem.SpatialItem) mMissionItem).getCoordinate());
 			break;
 
-		case MissionItemType.CIRCLE:
+		case CIRCLE:
 			for (int i = 0; i <= 360; i += 10) {
 				Circle circle = (Circle) mMissionItem;
 				double startHeading = 0;
@@ -107,17 +107,17 @@ public class MissionItemProxy {
 			}
 			break;
 
-		case MissionItemType.SURVEY:
+		case SURVEY:
 			Grid grid = ((Survey) mMissionItem).grid;
 			if (grid != null) {
 				pathPoints.addAll(grid.gridPoints);
 			}
 			break;
-		case MissionItemType.STRUCTURE_SCANNER:
+		case STRUCTURE_SCANNER:
 			StructureScanner survey = (StructureScanner)mMissionItem;
 			pathPoints.addAll(survey.getPath());
 			break;
-		case MissionItemType.TAKEOFF:
+		case TAKEOFF:
 			break;
 		default:
 			break;

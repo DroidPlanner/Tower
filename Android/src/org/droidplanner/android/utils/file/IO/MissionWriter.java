@@ -9,7 +9,7 @@ import org.droidplanner.android.utils.file.FileList;
 import org.droidplanner.android.utils.file.FileManager;
 import org.droidplanner.android.utils.file.FileStream;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.ox3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
 
 /**
  * Write msg_mission_item list as...
@@ -22,11 +22,11 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
  * 
  */
 public class MissionWriter {
-	public static boolean write(List<msg_mission_item> msgMissionItems) {
+	public static boolean write(List<MissionItemMessage> msgMissionItems) {
 		return write(msgMissionItems, FileStream.getWaypointFilename("waypoints"));
 	}
 
-	public static boolean write(List<msg_mission_item> msgMissionItems, String filename) {
+	public static boolean write(List<MissionItemMessage> msgMissionItems, String filename) {
 		try {
 			if (!FileManager.isExternalStorageAvailable())
 				return false;
@@ -52,10 +52,10 @@ public class MissionWriter {
 	}
 
 	private static void writeMissionItems(FileOutputStream out,
-			List<msg_mission_item> msgMissionItems) throws IOException {
+			List<MissionItemMessage> msgMissionItems) throws IOException {
 		// for all msgs...
 		for (int i = 0, msgMissionItemsSize = msgMissionItems.size(); i < msgMissionItemsSize; i++) {
-			final msg_mission_item msg = msgMissionItems.get(i);
+			final MissionItemMessage msg = msgMissionItems.get(i);
 
 			// write msg (TAB delimited)
 			out.write(String.format(Locale.ENGLISH,
@@ -63,8 +63,8 @@ public class MissionWriter {
 					i,
 					i == 0 ? 1 : 0, // set CURRENT_WP = 1 for 'home' - msg[0], 0
 									// for all others
-					msg.frame, msg.command, msg.param1, msg.param2, msg.param3, msg.param4, msg.x,
-					msg.y, msg.z, msg.autocontinue).getBytes());
+					msg.getFrame(), msg.getCommand(), msg.getParam1(), msg.getParam2(), msg.getParam3(), msg.getParam4(), msg.getX(),
+					msg.getY(), msg.getZ(), msg.getAutocontinue()).getBytes());
 		}
 	}
 }
