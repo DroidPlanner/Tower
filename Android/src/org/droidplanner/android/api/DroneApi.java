@@ -41,14 +41,25 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlannerApi {
 
+    private static final String CLAZZ_NAME = DroneApi.class.getName();
     private static final String TAG = DroneApi.class.getSimpleName();
+
+    public static final int COLLISION_SECONDS_BEFORE_COLLISION = 2;
+    public static final double COLLISION_DANGEROUS_SPEED_METERS_PER_SECOND = -3.0;
+    public static final double COLLISION_SAFE_ALTITUDE_METERS = 1.0;
 
     private final static IntentFilter intentFilter = new IntentFilter();
     static {
         intentFilter.addAction(Event.EVENT_STATE);
         intentFilter.addAction(Event.EVENT_MISSION_DRONIE_CREATED);
         intentFilter.addAction(Event.EVENT_MISSION_UPDATE);
+        intentFilter.addAction(Event.EVENT_SPEED);
     }
+
+    public static final String ACTION_GROUND_COLLISION_IMMINENT = CLAZZ_NAME +
+            "ACTION_GROUND_COLLISION_IMMINENT";
+    public static final String EXTRA_IS_GROUND_COLLISION_IMMINENT =
+            "extra_is_ground_collision_imminent";
 
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -65,8 +76,24 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
                     || Event.EVENT_MISSION_UPDATE.equals(action)){
                 missionProxy.load(getMission());
             }
+            else if(Event.EVENT_SPEED.equals(action)){
+                checkForGroundCollision();
+            }
         }
     };
+
+    private void checkForGroundCollision() {
+        double verticalSpeed = getSpeed().getVerticalSpeed();
+        double altitude = getAltitude().getAltitude();
+
+        boolean isCollisionImminent = altitude
+                + (verticalSpeed * COLLISION_SECONDS_BEFORE_COLLISION) < 0
+                && verticalSpeed < COLLISION_DANGEROUS_SPEED_METERS_PER_SECOND
+                && altitude > COLLISION_SAFE_ALTITUDE_METERS;
+
+        lbm.sendBroadcast(new Intent(ACTION_GROUND_COLLISION_IMMINENT)
+        .putExtra(EXTRA_IS_GROUND_COLLISION_IMMINENT, isCollisionImminent));
+    }
 
     private final LocalBroadcastManager lbm;
     private final MissionProxy missionProxy;

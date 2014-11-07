@@ -1,11 +1,5 @@
 package org.droidplanner.android.notifications;
 
-import org.droidplanner.android.api.DroneApi;
-import org.droidplanner.android.api.services.DroidPlannerApi;
-import org.droidplanner.android.utils.analytics.GAUtils;
-import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.model.Drone;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +8,9 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.ox3dr.services.android.lib.drone.event.Event;
+
+import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.utils.analytics.GAUtils;
 
 /**
  * This class handles DroidPlanner's status bar, and audible notifications. It
@@ -26,27 +23,26 @@ public class NotificationHandler {
 	 * notification provider types (i.e: audible (text to speech), status bar).
 	 */
 	interface NotificationProvider {
-        /**
-         * Release resources used by the provider.
-         */
-        void onTerminate();
+		/**
+		 * Release resources used by the provider.
+		 */
+		void onTerminate();
 	}
 
-    private final static IntentFilter eventFilter = new IntentFilter(Event.EVENT_AUTOPILOT_FAILSAFE);
+	private final static IntentFilter eventFilter = new IntentFilter(Event.EVENT_AUTOPILOT_FAILSAFE);
 
-    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            if(Event.EVENT_AUTOPILOT_FAILSAFE.equals(action)){
-                final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                        .setCategory(GAUtils.Category.FAILSAFE)
-                        .setAction("Autopilot warning")
-                        .setLabel(droneApi.getState().getFailsafeWarning());
-                GAUtils.sendEvent(eventBuilder);
-            }
-        }
-    };
+	private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final String action = intent.getAction();
+			if (Event.EVENT_AUTOPILOT_FAILSAFE.equals(action)) {
+				final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+						.setCategory(GAUtils.Category.FAILSAFE).setAction("Autopilot warning")
+						.setLabel(droneApi.getState().getFailsafeWarning());
+				GAUtils.sendEvent(eventBuilder);
+			}
+		}
+	};
 
 	/**
 	 * Handles Droidplanner's audible notifications.
@@ -68,31 +64,31 @@ public class NotificationHandler {
 	 */
 	private final EmergencyBeepNotificationProvider mBeepNotification;
 
-    private final Context context;
-    private final DroneApi droneApi;
+	private final Context context;
+	private final DroneApi droneApi;
 
 	public NotificationHandler(Context context, DroneApi dpApi) {
-        this.context = context;
-        this.droneApi = dpApi;
+		this.context = context;
+		this.droneApi = dpApi;
 
 		mTtsNotification = new TTSNotificationProvider(context, droneApi);
-		mStatusBarNotification = new StatusBarNotificationProvider(context);
+		mStatusBarNotification = new StatusBarNotificationProvider(context, droneApi);
 		mPebbleNotification = new PebbleNotificationProvider(context, dpApi);
 		mBeepNotification = new EmergencyBeepNotificationProvider(context);
 
-        LocalBroadcastManager.getInstance(context).registerReceiver(eventReceiver, eventFilter);
+		LocalBroadcastManager.getInstance(context).registerReceiver(eventReceiver, eventFilter);
 	}
 
-    /**
-     * Release resources used by the notification handler.
-     * After calling this method, this object should no longer be used.
-     */
-    public void terminate(){
-        mTtsNotification.onTerminate();
-        mStatusBarNotification.onTerminate();
-        mPebbleNotification.onTerminate();
-        mBeepNotification.onTerminate();
+	/**
+	 * Release resources used by the notification handler. After calling this
+	 * method, this object should no longer be used.
+	 */
+	public void terminate() {
+		mTtsNotification.onTerminate();
+		mStatusBarNotification.onTerminate();
+		mPebbleNotification.onTerminate();
+		mBeepNotification.onTerminate();
 
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(eventReceiver);
-    }
+		LocalBroadcastManager.getInstance(context).unregisterReceiver(eventReceiver);
+	}
 }
