@@ -3,9 +3,10 @@ package com.ox3dr.services.android.lib.drone.mission.item.spatial;
 import android.os.Parcel;
 
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 
 /**
- * TODO: not complete yet.
+ *
  */
 public class StructureScanner extends BaseSpatialItem {
 
@@ -13,6 +14,7 @@ public class StructureScanner extends BaseSpatialItem {
     private double heightStep = 5;
     private int stepsCount = 2;
     private boolean crossHatch = false;
+    private CameraDetail cameraDetail;
 
     public StructureScanner(){
         super(MissionItemType.STRUCTURE_SCANNER);
@@ -48,6 +50,14 @@ public class StructureScanner extends BaseSpatialItem {
 
     public void setCrossHatch(boolean crossHatch) {
         this.crossHatch = crossHatch;
+    }
+
+    public CameraDetail getCameraDetail() {
+        return cameraDetail;
+    }
+
+    public void setCameraDetail(CameraDetail cameraDetail) {
+        this.cameraDetail = cameraDetail;
     }
 
     public static final Creator<StructureScanner> CREATOR = new Creator<StructureScanner>() {
