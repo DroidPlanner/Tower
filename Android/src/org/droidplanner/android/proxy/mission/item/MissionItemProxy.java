@@ -117,8 +117,7 @@ public class MissionItemProxy {
 			StructureScanner survey = (StructureScanner)mMissionItem;
 			pathPoints.addAll(survey.getPath());
 			break;
-		case TAKEOFF:
-			break;
+
 		default:
 			break;
 		}

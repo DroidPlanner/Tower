@@ -128,7 +128,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 		if (spinner.getId() == id.cameraFileSpinner) {
 			CameraDetail cameraInfo = cameraAdapter.getItem(position);
 			for (StructureScanner scan : getMissionItems()) {
-				scan.setCamera(cameraInfo);
+				scan.setCameraDetail(cameraInfo);
 			}
 			getMissionProxy().notifyMissionUpdate();
 		}
