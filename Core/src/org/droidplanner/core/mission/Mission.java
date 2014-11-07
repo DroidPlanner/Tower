@@ -127,12 +127,13 @@ public class Mission extends DroneVariable {
 	 * @return the altitude of the last added mission item.
 	 */
 	public Altitude getLastAltitude() {
-		Altitude alt;
+		Altitude alt = defaultAlt;
 		try {
 			SpatialCoordItem lastItem = (SpatialCoordItem) items.get(items.size() - 1);
-			alt = lastItem.getCoordinate().getAltitude();
+			if (!(lastItem instanceof RegionOfInterest)) {
+				alt = lastItem.getCoordinate().getAltitude();
+			}
 		} catch (Exception e) {
-			alt = defaultAlt;
 		}
 		return alt;
 	}

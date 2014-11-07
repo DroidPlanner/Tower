@@ -21,7 +21,7 @@ import org.droidplanner.core.mission.waypoints.Waypoint;
 public enum MissionItemType {
 	WAYPOINT("Waypoint"), SPLINE_WAYPOINT("Spline Waypoint"), TAKEOFF("Takeoff"), RTL(
 			"Return to Launch"), LAND("Land"), CIRCLE("Circle"), ROI("Region of Interest"), SURVEY(
-			"Survey"), CYLINDRICAL_SURVEY("Structure Scan"), CHANGE_SPEED("Change Speed"), CAMERA_TRIGGER("Camera Trigger"), EPM_GRIPPER("EPM"), SET_SERVO("Set Servo"), CONDITION_YAW("Condition Yaw");
+			"Survey"), CYLINDRICAL_SURVEY("Structure Scan"), CHANGE_SPEED("Change Speed"), CAMERA_TRIGGER("Camera Trigger"), EPM_GRIPPER("EPM"), SET_SERVO("Set Servo"), CONDITION_YAW("Set Yaw");
 
 	private final String name;
 

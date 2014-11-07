@@ -181,7 +181,7 @@
     <string name="waypointType_RTL">Return To Launch</string>
     <string name="waypointType_Land">Land</string>
     <string name="waypointType_Change_Speed">Change Speed</string>
-    <string name="waypointType_Condition_Yaw">Condition Yaw</string>
+    <string name="waypointType_Condition_Yaw">Set Yaw</string>
     <string name="waypointType_Camera_Trigger">Camera Trigger</string>
     <string name="waypointType_Set_Servo">Set Servo</string>
     <string name="waypointType_EPM">EPM</string>
