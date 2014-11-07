@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Created by fhuya on 11/6/14.
  */
-public class CameraInfo implements Parcelable {
+public class CameraDetail implements Parcelable {
 
     private final String name;
     private final double sensorWidth;
@@ -17,9 +17,9 @@ public class CameraInfo implements Parcelable {
     private final double sidelap;
     private final boolean isInLandscapeOrientation;
 
-    public CameraInfo(String name, double sensorWidth, double sensorHeight, double sensorResolution,
-                      double focalLength, double overlap, double sidelap,
-                      boolean isInLandscapeOrientation) {
+    public CameraDetail(String name, double sensorWidth, double sensorHeight, double sensorResolution,
+                        double focalLength, double overlap, double sidelap,
+                        boolean isInLandscapeOrientation) {
         this.name = name;
         this.sensorWidth = sensorWidth;
         this.sensorHeight = sensorHeight;
@@ -65,9 +65,9 @@ public class CameraInfo implements Parcelable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CameraInfo)) return false;
+        if (!(o instanceof CameraDetail)) return false;
 
-        CameraInfo that = (CameraInfo) o;
+        CameraDetail that = (CameraDetail) o;
 
         if (Double.compare(that.focalLength, focalLength) != 0) return false;
         if (isInLandscapeOrientation != that.isInLandscapeOrientation) return false;
@@ -104,7 +104,7 @@ public class CameraInfo implements Parcelable {
 
     @Override
     public String toString() {
-        return "CameraInfo{" +
+        return "CameraDetail{" +
                 "name='" + name + '\'' +
                 ", sensorWidth=" + sensorWidth +
                 ", sensorHeight=" + sensorHeight +
@@ -133,7 +133,7 @@ public class CameraInfo implements Parcelable {
         dest.writeByte(isInLandscapeOrientation ? (byte) 1 : (byte) 0);
     }
 
-    private CameraInfo(Parcel in) {
+    private CameraDetail(Parcel in) {
         this.name = in.readString();
         this.sensorWidth = in.readDouble();
         this.sensorHeight = in.readDouble();
@@ -144,13 +144,13 @@ public class CameraInfo implements Parcelable {
         this.isInLandscapeOrientation = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<CameraInfo> CREATOR = new Parcelable.Creator<CameraInfo>() {
-        public CameraInfo createFromParcel(Parcel source) {
-            return new CameraInfo(source);
+    public static final Parcelable.Creator<CameraDetail> CREATOR = new Parcelable.Creator<CameraDetail>() {
+        public CameraDetail createFromParcel(Parcel source) {
+            return new CameraDetail(source);
         }
 
-        public CameraInfo[] newArray(int size) {
-            return new CameraInfo[size];
+        public CameraDetail[] newArray(int size) {
+            return new CameraDetail[size];
         }
     };
 }
