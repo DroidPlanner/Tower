@@ -8,6 +8,8 @@ import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
+import org.droidplanner.android.utils.MathUtil;
+import org.droidplanner.android.utils.UnitUtil;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -20,10 +22,10 @@ import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.ox3dr.services.android.lib.drone.mission.item.command.Takeoff;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.Circle;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
-import com.ox3dr.services.android.lib.drone.mission.item.spatial.StructureScanner;
 
 /**
  * This class is responsible for providing logic to access and interpret the
@@ -99,8 +101,8 @@ public class MissionItemProxy {
 				Circle circle = (Circle) mMissionItem;
 				double startHeading = 0;
 				if (previousPoint != null) {
-					startHeading = GeoTools.getHeadingFromCoordinates(circle.getCoordinate(),
-							previousPoint);
+					startHeading = MathUtil.getHeadingFromCoordinates(circle.getCoordinate(),
+                            previousPoint);
 				}
 				pathPoints.add(GeoTools.newCoordFromBearingAndDistance(circle.getCoordinate(),
 						startHeading + i, circle.getRadius()));
@@ -108,9 +110,9 @@ public class MissionItemProxy {
 			break;
 
 		case SURVEY:
-			Grid grid = ((Survey) mMissionItem).grid;
-			if (grid != null) {
-				pathPoints.addAll(grid.gridPoints);
+            List<LatLong> gridPoints = ((Survey)mMissionItem).getGridPoints();
+			if (gridPoints != null && !gridPoints.isEmpty()) {
+				pathPoints.addAll(gridPoints);
 			}
 			break;
 		case STRUCTURE_SCANNER:
@@ -154,7 +156,9 @@ public class MissionItemProxy {
 				// Do nothing when last item doesn't have an altitude
 			}
 		} else if (mMissionItem instanceof Survey) {
-			altitudeView.setText(((Survey) mMissionItem).surveyData.getAltitude().toString());
+            String altitude = UnitUtil.MetricUtil.distanceToString(((Survey) mMissionItem)
+                    .getSurveyDetail().getAltitude());
+			altitudeView.setText(altitude);
 
 		} else if (mMissionItem instanceof Takeoff) {
 			altitudeView.setText(String.valueOf(((Takeoff) mMissionItem).getTakeoffAltitude()));
