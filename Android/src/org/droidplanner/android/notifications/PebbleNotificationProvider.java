@@ -1,5 +1,9 @@
 package org.droidplanner.android.notifications;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import android.content.BroadcastReceiver;
@@ -201,6 +205,8 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 		@Override
 		public void receiveData(Context context, int transactionId, PebbleDictionary data) {
 			FollowState followMe = dpApi.getFollowState();
+            if(followMe == null)
+                return ;
 			PebbleKit.sendAckToPebble(applicationContext, transactionId);
 			int request = (data.getInteger(KEY_PEBBLE_REQUEST).intValue());
 			switch (request) {
@@ -215,7 +221,10 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 				break;
 
 			case KEY_REQUEST_CYCLE_FOLLOW_TYPE:
-				followMe.cycleType();
+                List<FollowType> followTypes = Arrays.asList(FollowType.values());
+                int currentTypeIndex = followTypes.indexOf(followMe.getMode());
+                int nextTypeIndex = currentTypeIndex++ % followTypes.size();
+                dpApi.enableFollowMe(followTypes.get(nextTypeIndex));
 				break;
 
 			case KEY_REQUEST_PAUSE:
