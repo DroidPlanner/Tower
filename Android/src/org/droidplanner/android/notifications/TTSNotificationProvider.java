@@ -152,6 +152,8 @@ public class TTSNotificationProvider implements OnInitListener,
 		this.droneApi = droneApi;
 		tts = new TextToSpeech(context, this);
 		mAppPrefs = new DroidPlannerPrefs(context);
+
+        LocalBroadcastManager.getInstance(context).registerReceiver(eventReceiver, eventFilter);
 	}
 
 	private void scheduleWatchdog() {
@@ -246,7 +248,7 @@ public class TTSNotificationProvider implements OnInitListener,
 		eventFilter.addAction(Event.EVENT_HEARTBEAT_TIMEOUT);
 		eventFilter.addAction(Event.EVENT_HEARTBEAT_RESTORED);
 		eventFilter.addAction(Event.EVENT_DISCONNECTED);
-		eventFilter.addAction(Event.EVENT_MISSION_WP_UPDATE);
+		eventFilter.addAction(Event.EVENT_MISSION_ITEM_UPDATE);
 		eventFilter.addAction(Event.EVENT_FOLLOW_START);
 		eventFilter.addAction(Event.EVENT_AUTOPILOT_FAILSAFE);
 		eventFilter.addAction(Event.EVENT_WARNING_400FT_EXCEEDED);
@@ -297,8 +299,8 @@ public class TTSNotificationProvider implements OnInitListener,
             else if(Event.EVENT_DISCONNECTED.equals(action)){
                 handler.removeCallbacks(watchdogCallback);
             }
-            else if(Event.EVENT_MISSION_WP_UPDATE.equals(action)){
-                speak("Going for waypoint " + droneApi.getMissionStats().getCurrentWP());
+            else if(Event.EVENT_MISSION_ITEM_UPDATE.equals(action)){
+                speak("Going for waypoint " + droneApi.getMission().getCurrentMissionItem());
             }
             else if(Event.EVENT_FOLLOW_START.equals(action)){
                 speak("Following");
@@ -389,5 +391,7 @@ public class TTSNotificationProvider implements OnInitListener,
 		if (tts != null) {
 			tts.shutdown();
 		}
+
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(eventReceiver);
 	}
 }

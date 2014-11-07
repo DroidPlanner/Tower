@@ -75,7 +75,7 @@ public class NotificationHandler {
         this.context = context;
         this.droneApi = dpApi;
 
-		mTtsNotification = new TTSNotificationProvider(context);
+		mTtsNotification = new TTSNotificationProvider(context, droneApi);
 		mStatusBarNotification = new StatusBarNotificationProvider(context);
 		mPebbleNotification = new PebbleNotificationProvider(context, dpApi);
 		mBeepNotification = new EmergencyBeepNotificationProvider(context);
