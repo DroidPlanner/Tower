@@ -25,6 +25,15 @@ public class StructureScanner extends BaseSpatialItem implements MissionItem.Com
         super(MissionItemType.STRUCTURE_SCANNER);
     }
 
+    public void copy(StructureScanner source){
+        this.radius = source.radius;
+        this.heightStep = source.heightStep;
+        this.stepsCount = source.stepsCount;
+        this.crossHatch = source.crossHatch;
+        this.surveyDetail = source.surveyDetail;
+        this.path = source.path;
+    }
+
     public double getRadius() {
         return radius;
     }
