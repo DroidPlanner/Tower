@@ -17,9 +17,18 @@ public class Survey extends MissionItem implements MissionItem.ComplexItem {
     private double polygonArea;
     private List<LatLong> polygonPoints;
     private List<LatLong> gridPoints;
+    private boolean isValid;
 
     public Survey(){
         super(MissionItemType.SURVEY);
+    }
+
+    public void copy(Survey source){
+        this.surveyDetail = source.surveyDetail;
+        this.polygonArea = source.polygonArea;
+        this.polygonPoints = source.polygonPoints;
+        this.gridPoints = source.gridPoints;
+        this.isValid = source.isValid;
     }
 
     public SurveyDetail getSurveyDetail() {
@@ -52,6 +61,14 @@ public class Survey extends MissionItem implements MissionItem.ComplexItem {
 
     public void setGridPoints(List<LatLong> gridPoints) {
         this.gridPoints = gridPoints;
+    }
+
+    public boolean isValid() {
+        return isValid;
+    }
+
+    public void setValid(boolean isValid) {
+        this.isValid = isValid;
     }
 
     public static final Creator<Survey> CREATOR = new Creator<Survey>() {
