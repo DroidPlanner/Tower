@@ -118,6 +118,11 @@ interface IDroidPlannerApi {
         */
         CameraDetail[] getCameraDetails();
 
+        /**
+        * Retrieves an updated copy of the passed mission item.
+        */
+        void updateComplexMissionItem(inout MissionItem item);
+
         /*** Oneway method calls ***/
 
         /**
