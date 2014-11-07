@@ -55,6 +55,11 @@ public class Event {
     public static final String EVENT_MISSION_DRONIE_CREATED = CLAZZ_NAME + "" +
             ".MISSION_DRONIE_CREATED";
 
+    public static final String EVENT_MISSION_SENT = CLAZZ_NAME + ".MISSION_SENT";
+    public static final String EVENT_MISSION_RECEIVED = CLAZZ_NAME + ".MISSION_RECEIVED";
+
+    public static final String EVENT_MISSION_ITEM_UPDATE = CLAZZ_NAME + ".MISSION_ITEM_UPDATE";
+
     public static final String EVENT_PARAMETERS_REFRESH_STARTED = CLAZZ_NAME +
             ".PARAMETERS_REFRESH_STARTED";
 
@@ -78,5 +83,11 @@ public class Event {
     public static final String EVENT_GPS = CLAZZ_NAME + ".GPS";
     public static final String EVENT_HEARTBEAT_FIRST = CLAZZ_NAME + ".HEARTBEAT_FIRST";
     public static final String EVENT_HEARTBEAT_RESTORED = CLAZZ_NAME + ".HEARTBEAT_RESTORED";
+
+    public static final String EVENT_WARNING_400FT_EXCEEDED = CLAZZ_NAME + "" +
+            ".WARNING_400FT_EXCEEDED";
+    public static final String EVENT_WARNING_SIGNAL_WEAK = CLAZZ_NAME + ".WARNING_SIGNAL_WEAK";
+
+    public static final String EVENT_WARNING_NO_GPS = CLAZZ_NAME + ".WARNING_NO_GPS";
 
 }
