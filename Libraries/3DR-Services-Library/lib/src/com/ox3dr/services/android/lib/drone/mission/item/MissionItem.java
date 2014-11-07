@@ -3,7 +3,6 @@ package com.ox3dr.services.android.lib.drone.mission.item;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.coordinate.LatLongAlt;
 
 import java.io.Serializable;
