@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class Mission implements Parcelable, Serializable {
 
+    private short currentMissionItem;
     private final List<MissionItem> missionItemsList = new ArrayList<MissionItem>();
 
     public void addMissionItem(MissionItem missionItem){
@@ -43,6 +44,14 @@ public class Mission implements Parcelable, Serializable {
 
     public List<MissionItem> getMissionItems(){
         return missionItemsList;
+    }
+
+    public short getCurrentMissionItem() {
+        return currentMissionItem;
+    }
+
+    public void setCurrentMissionItem(short currentMissionItem) {
+        this.currentMissionItem = currentMissionItem;
     }
 
     @Override
