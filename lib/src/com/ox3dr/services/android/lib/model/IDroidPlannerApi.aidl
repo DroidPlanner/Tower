@@ -219,4 +219,9 @@ interface IDroidPlannerApi {
         * Disables follow me is enabled.
         */
         oneway void disableFollowMe();
+
+        /**
+        * Enables drone-share upload for the data of the connected drone.
+        */
+        oneway void enableDroneShare(String username, String password, boolean isEnabled);
 }
