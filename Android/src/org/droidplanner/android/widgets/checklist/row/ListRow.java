@@ -1,7 +1,7 @@
 package org.droidplanner.android.widgets.checklist.row;
 
+import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.widgets.checklist.CheckListItem;
-import org.droidplanner.core.model.Drone;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,23 +60,23 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 		listener = mListener;
 	}
 
-	protected void getDroneVariable(Drone mDrone, CheckListItem mListItem) {
+	protected void getDroneVariable(DroneApi mDrone, CheckListItem mListItem) {
 		String sys_tag = mListItem.getSys_tag();
 
 		if (sys_tag.equalsIgnoreCase("SYS_BATTREM_LVL")) {
-			mListItem.setSys_value(mDrone.getBattery().getBattRemain());
+			mListItem.setSys_value(mDrone.getBattery().getBatteryRemain());
 		} else if (sys_tag.equalsIgnoreCase("SYS_BATTVOL_LVL")) {
-			mListItem.setSys_value(mDrone.getBattery().getBattVolt());
+			mListItem.setSys_value(mDrone.getBattery().getBatteryVoltage());
 		} else if (sys_tag.equalsIgnoreCase("SYS_BATTCUR_LVL")) {
-			mListItem.setSys_value(mDrone.getBattery().getBattCurrent());
+			mListItem.setSys_value(mDrone.getBattery().getBatteryCurrent());
 		} else if (sys_tag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
-			mListItem.setSys_value(mDrone.getGps().getSatCount());
+			mListItem.setSys_value(mDrone.getGps().getSatellitesCount());
 		} else if (sys_tag.equalsIgnoreCase("SYS_ARM_STATE")) {
 			mListItem.setSys_activated(mDrone.getState().isArmed());
 		} else if (sys_tag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
 			mListItem.setSys_activated(mDrone.getState().isWarning());
 		} else if (sys_tag.equalsIgnoreCase("SYS_CONNECTION_STATE")) {
-			mListItem.setSys_activated(mDrone.getMavClient().isConnected());
+			mListItem.setSys_activated(mDrone.isConnected());
 		}
 	}
 

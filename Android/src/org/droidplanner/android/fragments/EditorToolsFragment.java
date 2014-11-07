@@ -168,12 +168,13 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 					mMissionProxy.getItems().size() - 1);
 			switch (lastMissionItem.getMissionItem().getType()) {
 			case LAND:
-			case RTL:
+			case RETURN_TO_LAUNCH:
 				tool = EditorTools.NONE;
 				mEditorRadioGroup.clearCheck();
 				Toast.makeText(getActivity(), getString(R.string.editor_err_land_rtl_added),
 						Toast.LENGTH_SHORT).show();
-				return;
+                break;
+
 			default:
 				break;
 			}

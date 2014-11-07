@@ -258,9 +258,8 @@ public class SettingsFragment extends PreferenceFragment implements
 					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 						@Override
 						public boolean onPreferenceChange(Preference preference, Object newValue) {
-							if ((Boolean) newValue) {
-								context.startService(UploaderService.createIntent(context));
-							}
+                            dpApp.getDroneApi().enableDroneShare(dpPrefs.getDroneshareLogin(),
+                                    dpPrefs.getDronesharePassword(), (Boolean) newValue);
 							return true;
 						}
 					});
@@ -272,9 +271,8 @@ public class SettingsFragment extends PreferenceFragment implements
 					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 						@Override
 						public boolean onPreferenceChange(Preference preference, Object newValue) {
-							if (!newValue.toString().isEmpty()) {
-								context.startService(UploaderService.createIntent(context));
-							}
+                            dpApp.getDroneApi().enableDroneShare(newValue.toString(),
+                                    dpPrefs.getDronesharePassword(), dpPrefs.getDroneshareEnabled());
 							return true;
 						}
 					});
@@ -286,9 +284,8 @@ public class SettingsFragment extends PreferenceFragment implements
 					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 						@Override
 						public boolean onPreferenceChange(Preference preference, Object newValue) {
-							if (!newValue.toString().isEmpty()) {
-								context.startService(UploaderService.createIntent(context));
-							}
+                            dpApp.getDroneApi().enableDroneShare(dpPrefs.getDroneshareLogin(),
+                                    newValue.toString(), dpPrefs.getDroneshareEnabled());
 							return true;
 						}
 					});

@@ -570,6 +570,17 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     }
 
     @Override
+    public void enableDroneShare(String username, String password, boolean isEnabled) {
+        if(isApiValid()){
+            try {
+                dpApi.enableDroneShare(username, password, isEnabled);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
     public IBinder asBinder() {
         throw new UnsupportedOperationException();
     }

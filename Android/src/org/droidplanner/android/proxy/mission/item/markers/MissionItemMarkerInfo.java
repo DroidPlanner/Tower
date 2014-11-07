@@ -7,13 +7,12 @@ import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.MarkerWithText;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 
 import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
 
 /**
  * Template class and factory for a mission item's marker source.
@@ -32,7 +31,7 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo 
 			markerInfos.add(new LoiterMarkerInfo(origin));
 			break;
 
-		case ROI:
+		case REGION_OF_INTEREST:
 			markerInfos.add(new ROIMarkerInfo(origin));
 			break;
 
@@ -44,7 +43,7 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo 
 			markerInfos.add(new SplineWaypointMarkerInfo(origin));
 			break;
 
-		case CYLINDRICAL_SURVEY:
+		case STRUCTURE_SCANNER:
 			markerInfos.add(new StructureScannerMarkerInfoProvider(origin));
 			break;
 			
@@ -79,12 +78,15 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo 
 
 	@Override
 	public com.ox3dr.services.android.lib.coordinate.LatLong getPosition() {
-		return ((SpatialCoordItem) mMarkerOrigin.getMissionItem()).getCoordinate();
+		return ((MissionItem.SpatialItem) mMarkerOrigin.getMissionItem()).getCoordinate();
 	}
 
 	@Override
 	public void setPosition(LatLong coord) {
-		((SpatialCoordItem) mMarkerOrigin.getMissionItem()).setPosition(coord);
+		LatLong coordinate = ((MissionItem.SpatialItem) mMarkerOrigin.getMissionItem())
+                .getCoordinate();
+        coordinate.setLatitude(coord.getLatitude());
+        coordinate.setLongitude(coord.getLongitude());
 	}
 
 	@Override
