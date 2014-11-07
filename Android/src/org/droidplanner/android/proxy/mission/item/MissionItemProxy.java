@@ -8,7 +8,6 @@ import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
-import org.droidplanner.android.utils.MathUtil;
 import org.droidplanner.android.utils.UnitUtil;
 
 import android.content.Context;
@@ -26,6 +25,7 @@ import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanne
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.Circle;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
+import com.ox3dr.services.android.lib.util.MathUtil;
 
 /**
  * This class is responsible for providing logic to access and interpret the
@@ -104,7 +104,7 @@ public class MissionItemProxy {
 					startHeading = MathUtil.getHeadingFromCoordinates(circle.getCoordinate(),
                             previousPoint);
 				}
-				pathPoints.add(GeoTools.newCoordFromBearingAndDistance(circle.getCoordinate(),
+				pathPoints.add(MathUtil.newCoordFromBearingAndDistance(circle.getCoordinate(),
 						startHeading + i, circle.getRadius()));
 			}
 			break;
