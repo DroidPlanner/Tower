@@ -6,25 +6,19 @@ import android.os.Parcelable;
 /**
  * Created by fhuya on 11/5/14.
  */
-public class FollowType implements Parcelable {
+public enum FollowType implements Parcelable {
 
-    public static final int TYPE_LEASH = 0;
-    public static final int TYPE_LEAD = 1;
-    public static final int TYPE_RIGHT = 2;
-    public static final int TYPE_LEFT = 3;
-    public static final int TYPE_CIRCLE = 4;
-    public static final int TYPE_ABOVE = 5;
+    LEASH("Leash"),
+    LEAD("Lead"),
+    RIGHT("Right"),
+    LEFT("Left"),
+    CIRCLE("Circle"),
+    ABOVE("Above");
 
-    private final int followType;
     private final String typeLabel;
 
-    public FollowType(int followType, String typeLabel) {
-        this.followType = followType;
+    private FollowType(String typeLabel) {
         this.typeLabel = typeLabel;
-    }
-
-    public int getFollowType() {
-        return followType;
     }
 
     public String getTypeLabel() {
@@ -38,18 +32,12 @@ public class FollowType implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.followType);
-        dest.writeString(this.typeLabel);
-    }
-
-    private FollowType(Parcel in) {
-        this.followType = in.readInt();
-        this.typeLabel = in.readString();
+        dest.writeString(name());
     }
 
     public static final Parcelable.Creator<FollowType> CREATOR = new Parcelable.Creator<FollowType>() {
         public FollowType createFromParcel(Parcel source) {
-            return new FollowType(source);
+            return FollowType.valueOf(source.readString());
         }
 
         public FollowType[] newArray(int size) {
