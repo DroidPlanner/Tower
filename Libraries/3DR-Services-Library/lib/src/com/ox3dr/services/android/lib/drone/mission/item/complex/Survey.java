@@ -5,6 +5,7 @@ import android.os.Parcel;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.ox3dr.services.android.lib.util.MathUtil;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class Survey extends MissionItem implements MissionItem.ComplexItem {
     private double polygonArea;
     private List<LatLong> polygonPoints;
     private List<LatLong> gridPoints;
+    private List<LatLong> cameraLocations;
     private boolean isValid;
 
     public Survey(){
@@ -28,6 +30,7 @@ public class Survey extends MissionItem implements MissionItem.ComplexItem {
         this.polygonArea = source.polygonArea;
         this.polygonPoints = source.polygonPoints;
         this.gridPoints = source.gridPoints;
+        this.cameraLocations = source.cameraLocations;
         this.isValid = source.isValid;
     }
 
@@ -69,6 +72,26 @@ public class Survey extends MissionItem implements MissionItem.ComplexItem {
 
     public void setValid(boolean isValid) {
         this.isValid = isValid;
+    }
+
+    public double getLength() {
+        return MathUtil.getPolylineLength(gridPoints);
+    }
+
+    public int getNumberOfLines() {
+        return gridPoints.size() / 2;
+    }
+
+    public List<LatLong> getCameraLocations() {
+        return cameraLocations;
+    }
+
+    public void setCameraLocations(List<LatLong> cameraLocations) {
+        this.cameraLocations = cameraLocations;
+    }
+
+    public int getCameraCount() {
+        return getCameraLocations().size();
     }
 
     public static final Creator<Survey> CREATOR = new Creator<Survey>() {

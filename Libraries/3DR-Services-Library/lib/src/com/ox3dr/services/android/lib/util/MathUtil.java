@@ -293,4 +293,23 @@ public class MathUtil {
         return (new LatLong((float)Math.toDegrees(lat2), (float)Math.toDegrees(lon2)));
     }
 
+    /**
+     * Total length of the polyline in meters
+     *
+     * @param gridPoints
+     * @return
+     */
+    public static double getPolylineLength(List<LatLong> gridPoints) {
+        double lenght = 0;
+        for (int i = 1; i < gridPoints.size(); i++) {
+            final LatLong to = gridPoints.get(i - 1);
+            if (to == null) {
+                continue;
+            }
+
+            lenght += getDistance(gridPoints.get(i), to);
+        }
+        return lenght;
+    }
+
 }
