@@ -56,6 +56,32 @@ public class SurveyDetail implements Parcelable, Serializable {
         this.cameraDetail = cameraDetail;
     }
 
+    public double getLateralFootPrint() {
+        return altitude * cameraDetail.getSensorLateralSize()
+                / cameraDetail.getFocalLength();
+
+    }
+
+    public double getLongitudinalFootPrint() {
+        return altitude * cameraDetail.getSensorLongitudinalSize()
+                / cameraDetail.getFocalLength();
+    }
+
+    public double getGroundResolution() {
+        return ((altitude * cameraDetail.getSensorLateralSize() / cameraDetail.getFocalLength()
+                        * (altitude * cameraDetail.getSensorLongitudinalSize()
+                /  cameraDetail.getFocalLength()) / (cameraDetail.getSensorResolution() * 1000)))
+                / 10000;
+    }
+
+    public double getLongitudinalPictureDistance() {
+        return getLongitudinalFootPrint() * (1 - overlap * .01);
+    }
+
+    public double getLateralPictureDistance() {
+        return getLateralFootPrint() * (1 - sidelap * .01);
+    }
+
     @Override
     public int describeContents() {
         return 0;
