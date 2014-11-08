@@ -193,24 +193,25 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		boolean setDefault = true;
 		List<Survey> surveyList = getMissionItems();
 		if (!surveyList.isEmpty()) {
-			SurveyDetail surveyDetail = surveyList.get(0).getSurveyDetail();
+            Survey survey = surveyList.get(0);
+			SurveyDetail surveyDetail = survey.getSurveyDetail();
 			try {
 				footprintTextView.setText(getString(R.string.footprint) + ": "
 						+ surveyDetail.getLateralFootPrint() + " x"
-						+ survey.surveyData.getLongitudinalFootPrint());
+						+ surveyDetail.getLongitudinalFootPrint());
 				groundResolutionTextView.setText(getString(R.string.ground_resolution) + ": "
-						+ survey.surveyData.getGroundResolution() + "/px");
+						+ surveyDetail.getGroundResolution() + "/px");
 				distanceTextView.setText(getString(R.string.distance_between_pictures) + ": "
-						+ survey.surveyData.getLongitudinalPictureDistance());
+						+ surveyDetail.getLongitudinalPictureDistance());
 				distanceBetweenLinesTextView.setText(getString(R.string.distance_between_lines)
-						+ ": " + survey.surveyData.getLateralPictureDistance());
-				areaTextView.setText(getString(R.string.area) + ": " + survey.polygon.getArea());
+						+ ": " + surveyDetail.getLateralPictureDistance());
+				areaTextView.setText(getString(R.string.area) + ": " + survey.getPolygonArea());
 				lengthView.setText(getString(R.string.mission_length) + ": "
-						+ survey.grid.getLength());
+						+ survey.getGridLength());
 				numberOfPicturesView.setText(getString(R.string.pictures) + ": "
-						+ survey.grid.getCameraCount());
+						+ survey.getCameraCount());
 				numberOfStripsView.setText(getString(R.string.number_of_strips) + ": "
-						+ survey.grid.getNumberOfLines());
+						+ survey.getNumberOfLines());
 
 				setDefault = false;
 			} catch (Exception e) {

@@ -9,6 +9,7 @@ import android.widget.Spinner;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
 
 import org.droidplanner.R;
 import org.droidplanner.R.id;
@@ -127,7 +128,9 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 		if (spinner.getId() == id.cameraFileSpinner) {
 			CameraDetail cameraInfo = cameraAdapter.getItem(position);
 			for (StructureScanner scan : getMissionItems()) {
-				scan.setCameraDetail(cameraInfo);
+                SurveyDetail surveyDetail = new SurveyDetail();
+                surveyDetail.setCameraDetail(cameraInfo);
+				scan.setSurveyDetail(surveyDetail);
 			}
 			getMissionProxy().notifyMissionUpdate();
 		}
