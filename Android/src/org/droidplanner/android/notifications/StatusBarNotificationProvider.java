@@ -4,7 +4,6 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.api.DroneApi;
-import org.droidplanner.android.utils.MathUtil;
 import org.droidplanner.android.utils.TextUtils;
 import org.droidplanner.android.utils.UnitUtil;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -23,6 +22,7 @@ import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.property.Battery;
 import com.ox3dr.services.android.lib.drone.property.Gps;
 import com.ox3dr.services.android.lib.drone.property.Signal;
+import com.ox3dr.services.android.lib.util.MathUtil;
 
 /**
  * Implements DroidPlanner's status bar notifications.
@@ -171,7 +171,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
         Signal droneSignal = drone.getSignal();
 		mInboxBuilder.setLine(4, TextUtils.normal("Signal:   ",
 				TextUtils.bold(String.format("%d%%", MathUtil.getSignalStrength(droneSignal
-                                .getFadeMargin(), droneSignal.getRemFadeMargin())))));
+                        .getFadeMargin(), droneSignal.getRemFadeMargin())))));
 	}
 
 	private void updateHome(DroneApi drone) {
@@ -210,7 +210,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		long seconds = timeInSeconds % 60;
 
 		mInboxBuilder.setLine(2, TextUtils.normal("Air Time:   ",
-						TextUtils.bold(String.format("%02d:%02d", minutes, seconds))));
+                TextUtils.bold(String.format("%02d:%02d", minutes, seconds))));
 	}
 
 	private void updateFlightMode(DroneApi drone) {
@@ -235,7 +235,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		}
 
 		NotificationManagerCompat.from(mContext).notify(NOTIFICATION_ID,
-				mNotificationBuilder.build());
+                mNotificationBuilder.build());
 	}
 
 	/**

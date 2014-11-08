@@ -1,7 +1,6 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -9,7 +8,7 @@ import android.widget.Spinner;
 
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
-import com.ox3dr.services.android.lib.drone.mission.item.spatial.StructureScanner;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 
 import org.droidplanner.R;
 import org.droidplanner.R.id;

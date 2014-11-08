@@ -13,7 +13,6 @@ import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
-import org.droidplanner.android.utils.MathUtil;
 import org.droidplanner.android.utils.analytics.GAUtils;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -28,6 +27,7 @@ import com.ox3dr.services.android.lib.drone.mission.item.command.Takeoff;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
+import com.ox3dr.services.android.lib.util.MathUtil;
 
 /**
  * This class is used as a wrapper to {@link com.ox3dr.services.android.lib.drone.mission.Mission}
@@ -139,15 +139,11 @@ public class MissionProxy implements DPMap.PathSource {
 	 * @param points
 	 *            2D points making up the survey
 	 */
-	public void addSurveyPolygon(List<LatLong> points) {
+	public void addSurveyPolygon(DroneApi droneApi, List<LatLong> points) {
 		Survey survey = new Survey();
+        survey.setPolygonPoints(points);
 		mMissionItems.add(new MissionItemProxy(this, survey));
-
-		try {
-			survey.build();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        droneApi.updateSurveyMissionItem(survey);
 	}
 
 	/**
@@ -413,7 +409,7 @@ public class MissionProxy implements DPMap.PathSource {
         MissionItem previous = mMissionItems.get(index - 1).getMissionItem();
         if(previous instanceof MissionItem.SpatialItem){
             return MathUtil.getDistance(((MissionItem.SpatialItem) waypoint).getCoordinate(),
-                    ((MissionItem.SpatialItem)previous).getCoordinate());
+                    ((MissionItem.SpatialItem) previous).getCoordinate());
         }
 
 		return 0;

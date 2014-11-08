@@ -4,7 +4,6 @@ import java.util.Locale;
 
 import org.droidplanner.R;
 import org.droidplanner.android.api.DroneApi;
-import org.droidplanner.android.utils.MathUtil;
 import org.droidplanner.android.utils.UnitUtil;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -27,6 +26,7 @@ import com.ox3dr.services.android.lib.drone.property.Gps;
 import com.ox3dr.services.android.lib.drone.property.Home;
 import com.ox3dr.services.android.lib.drone.property.Signal;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
+import com.ox3dr.services.android.lib.util.MathUtil;
 
 /**
  * Set of actions supported by the info bar

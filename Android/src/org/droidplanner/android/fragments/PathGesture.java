@@ -9,8 +9,8 @@ import android.gesture.GestureOverlayView.OnGestureListener;
 import android.view.MotionEvent;
 
 import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.ox3dr.services.android.lib.util.MathUtil;
 
-import org.droidplanner.android.utils.MathUtil;
 
 public class PathGesture implements OnGestureListener {
 

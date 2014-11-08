@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
 import com.ox3dr.services.android.lib.drone.property.Altitude;
 
 import org.droidplanner.R;
@@ -134,7 +135,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		if (spinner.getId() == id.cameraFileSpinner) {
 			CameraDetail cameraInfo = cameraAdapter.getItem(position);
 			for (Survey survey : getMissionItems()) {
-				survey.setCameraInfo(cameraInfo);
+				survey.getSurveyDetail().setCameraDetail(cameraInfo);
 			}
 
 			onChanged(mAnglePicker, 0, 0);
@@ -149,18 +150,24 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		case R.id.altitudePicker:
 		case R.id.overlapPicker:
 		case R.id.sidelapPicker:
+            DroneApi droneApi = getDroneApi();
 			try {
 				for (Survey survey : getMissionItems()) {
-					survey.update(mAnglePicker.getCurrentValue(),
-							new Altitude(mAltitudePicker.getCurrentValue()),
-							mOverlapPicker.getCurrentValue(), mSidelapPicker.getCurrentValue());
+                    SurveyDetail surveyDetail = new SurveyDetail();
+                    surveyDetail.setAltitude(mAltitudePicker.getCurrentValue());
+                    surveyDetail.setAngle(mAnglePicker.getCurrentValue());
+                    surveyDetail.setOverlap(mOverlapPicker.getCurrentValue());
+                    surveyDetail.setSidelap(mSidelapPicker.getCurrentValue());
 
-					survey.build();
+                    survey.setSurveyDetail(surveyDetail);
+                    droneApi.updateSurveyMissionItem(survey);
+                    if(survey.isValid())
+                        mAltitudePicker.setBackgroundResource(R.drawable.bg_cell_white);
+                    else
+                        mAltitudePicker.setBackgroundColor(Color.RED);
 				}
-				mAltitudePicker.setBackgroundResource(R.drawable.bg_cell_white);
 			} catch (Exception e) {
 				Log.e(TAG, "Error while building the survey.", e);
-				mAltitudePicker.setBackgroundColor(Color.RED);
 			}
 			break;
 		}
@@ -174,11 +181,11 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	private void updateSeekBars() {
 		List<Survey> surveyList = getMissionItems();
 		if (!surveyList.isEmpty()) {
-			Survey survey = surveyList.get(0);
-			mAnglePicker.setCurrentValue(survey.surveyData.getAngle().intValue());
-			mOverlapPicker.setCurrentValue((int) survey.surveyData.getOverlap());
-			mSidelapPicker.setCurrentValue((int) survey.surveyData.getSidelap());
-			mAltitudePicker.setCurrentValue((int) survey.surveyData.getAltitude().valueInMeters());
+			SurveyDetail surveyDetail = surveyList.get(0).getSurveyDetail();
+			mAnglePicker.setCurrentValue((int) surveyDetail.getAngle());
+			mOverlapPicker.setCurrentValue((int) surveyDetail.getOverlap());
+			mSidelapPicker.setCurrentValue((int) surveyDetail.getSidelap());
+			mAltitudePicker.setCurrentValue((int) surveyDetail.getAltitude());
 		}
 	}
 	
@@ -186,11 +193,10 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		boolean setDefault = true;
 		List<Survey> surveyList = getMissionItems();
 		if (!surveyList.isEmpty()) {
-			Survey survey = surveyList.get(0);
-			Context context = getActivity();
+			SurveyDetail surveyDetail = surveyList.get(0).getSurveyDetail();
 			try {
 				footprintTextView.setText(getString(R.string.footprint) + ": "
-						+ survey.surveyData.getLateralFootPrint() + " x"
+						+ surveyDetail.getLateralFootPrint() + " x"
 						+ survey.surveyData.getLongitudinalFootPrint());
 				groundResolutionTextView.setText(getString(R.string.ground_resolution) + ": "
 						+ survey.surveyData.getGroundResolution() + "/px");

@@ -15,6 +15,8 @@ import com.ox3dr.services.android.lib.coordinate.Point3D;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.mission.Mission;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.ox3dr.services.android.lib.drone.property.Altitude;
 import com.ox3dr.services.android.lib.drone.property.Attitude;
 import com.ox3dr.services.android.lib.drone.property.Battery;
@@ -376,6 +378,36 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
             }
         }
         return new CameraDetail[0];
+    }
+
+    //TODO: check if it actually works
+    @Override
+    public Survey updateSurveyMissionItem(Survey survey) {
+        if(isApiValid()){
+            try {
+                Survey updated = dpApi.updateSurveyMissionItem(survey);
+                if(updated != null)
+                    survey.copy(updated);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+        return null;
+    }
+
+    //TODO: check if it actually works
+    @Override
+    public StructureScanner updateStructureScanner(StructureScanner item) {
+        if(isApiValid()){
+            try {
+                StructureScanner updated = dpApi.updateStructureScanner(item);
+                if(updated != null)
+                    item.copy(updated);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+        return null;
     }
 
     @Override

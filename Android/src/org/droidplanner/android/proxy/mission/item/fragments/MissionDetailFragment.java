@@ -28,8 +28,8 @@ import android.widget.TextView;
 
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
-import com.ox3dr.services.android.lib.drone.mission.item.spatial.StructureScanner;
 
 public class MissionDetailFragment extends ApiListenerDialogFragment implements SpinnerSelfSelect
         .OnSpinnerItemSelectedListener {

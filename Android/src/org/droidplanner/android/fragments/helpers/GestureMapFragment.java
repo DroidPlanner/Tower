@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.R;
-import org.droidplanner.android.utils.MathUtil;
 
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGestureListener;
@@ -16,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.ox3dr.services.android.lib.util.MathUtil;
 
 public class GestureMapFragment extends Fragment implements OnGestureListener {
 	private static final int TOLERANCE = 15;
