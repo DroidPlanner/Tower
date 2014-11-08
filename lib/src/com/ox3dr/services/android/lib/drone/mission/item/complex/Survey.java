@@ -74,7 +74,7 @@ public class Survey extends MissionItem implements MissionItem.ComplexItem {
         this.isValid = isValid;
     }
 
-    public double getLength() {
+    public double getGridLength() {
         return MathUtil.getPolylineLength(gridPoints);
     }
 
