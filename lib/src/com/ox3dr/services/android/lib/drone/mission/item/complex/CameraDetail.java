@@ -62,6 +62,22 @@ public class CameraDetail implements Parcelable {
         return isInLandscapeOrientation;
     }
 
+    public Double getSensorLateralSize() {
+        if (isInLandscapeOrientation) {
+            return sensorWidth;
+        } else {
+            return sensorHeight;
+        }
+    }
+
+    public Double getSensorLongitudinalSize() {
+        if (isInLandscapeOrientation) {
+            return sensorHeight;
+        } else {
+            return sensorWidth;
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
