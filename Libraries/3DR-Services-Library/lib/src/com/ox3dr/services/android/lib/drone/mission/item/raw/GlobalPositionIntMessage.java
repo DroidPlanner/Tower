@@ -14,6 +14,7 @@ public class GlobalPositionIntMessage extends MissionItem {
 
     private static final int MAVLINK_MSG_ID_GLOBAL_POSITION_INT = 33;
 
+    public static final int MSG_ID = MAVLINK_MSG_ID_GLOBAL_POSITION_INT;
     private  int sysid;
     private int compid;
 

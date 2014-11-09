@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by fhuya on 11/7/14.
  */
-public class MathUtil {
+public class MathUtils {
 
     /**
      * Radius of the earth in meters.
@@ -55,7 +55,7 @@ public class MathUtil {
      * @return percentage
      */
     public static int getSignalStrength(double fadeMargin, double remFadeMargin) {
-        return (int) (MathUtil.Normalize(Math.min(fadeMargin, remFadeMargin),
+        return (int) (MathUtils.Normalize(Math.min(fadeMargin, remFadeMargin),
                 SIGNAL_MIN_FADE_MARGIN, SIGNAL_MAX_FADE_MARGIN) * 100);
     }
 
