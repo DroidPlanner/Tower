@@ -30,13 +30,11 @@ import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanne
 interface IDroidPlannerApi {
     /**
         * Retrieves the gps property of the connected drone.
-        * @param droneId id of the drone whose property to retrieve.
         */
         Gps getGps();
 
         /**
         * Retrieves the state property of the connected drone.
-        * @param droneId id of the drone whose property to retrieve.
         */
         State getState();
 
@@ -47,45 +45,43 @@ interface IDroidPlannerApi {
 
         /**
         * Retrieves the parameters property of the connected drone.
-        * @param droneId id of the drone whose property to retrieve.
         */
         Parameters getParameters();
 
         /**
         * Retrieves the speed property of the connected drone.
-        * @param droneId id of the drone whose property to retrieve.
         */
         Speed getSpeed();
 
         /**
         * Retrieves the attitude property of the connected drone.
-        * @param droneId id of the drone whose property to retrieve.
         */
         Attitude getAttitude();
 
         /**
         * Retrieves the home property of the connected drone.
-        * @param droneId id of the drone whose property to retrieve.
         */
         Home getHome();
 
         /**
         * Retrieves the battery property of the connected drone.
-        * @param droneId id of the drone whose property to retrieve.
         */
         Battery getBattery();
 
         /**
         * Retrieves the altitude property of the connected drone.
-        * @param droneId id of the drone whose property to retrieve.
         */
         Altitude getAltitude();
 
         /**
         * Retrieves the mission property of the connected drone.
-        * @param droneId id of the drone whose property to retrieve.
         */
         Mission getMission();
+
+        /**
+        * Retrieves the set of raw mission items.
+        */
+        MissionItemMessage[] getRawMissionItems();
 
         /**
         * Retrieves the signal level between the connected drone and the GCS.
