@@ -1,4 +1,4 @@
-// ITlogApi.aidl
+// ITLogApi.aidl
 package com.ox3dr.services.android.lib.model;
 
 import com.ox3dr.services.android.lib.drone.mission.item.raw.GlobalPositionIntMessage;
