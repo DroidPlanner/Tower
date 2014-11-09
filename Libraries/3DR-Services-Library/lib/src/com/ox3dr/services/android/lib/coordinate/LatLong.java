@@ -1,6 +1,5 @@
 package com.ox3dr.services.android.lib.coordinate;
 
-import android.graphics.PointF;
 import android.os.Parcel;
 import android.os.Parcelable;
 
