@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           package="org.droidplanner"
-          android:versionCode="108"
+          android:versionCode="300"
           android:versionName="please run version.sh to get the version name">
 
     <uses-sdk
@@ -26,6 +26,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+    <uses-permission
+        android:name="com.ox3dr.services.android.lib.permission.ACCESS_3DR_SERVICES_API" />
 
     <uses-feature android:name="android.hardware.screen.portrait"/>
 

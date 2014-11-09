@@ -57,7 +57,7 @@ public class DroidPlannerApp extends Application {
 			ACTION_TOGGLE_DRONE_CONNECTION);
 
 	private final AtomicInteger apiBindingState = new AtomicInteger(API_UNBOUND);
-	private final DPApiCallback dpCallback = new DPApiCallback(this);
+	private DPApiCallback dpCallback;
 
 	private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 		@Override
@@ -80,13 +80,14 @@ public class DroidPlannerApp extends Application {
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			ox3drServices = IDroidPlannerServices.Stub.asInterface(service);
+            notifyApiConnected();
 		}
 
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
 			notifyApiDisconnected();
-			dpApi = null;
 			ox3drServices = null;
+            droneApi.setDpApi(null);
 		}
 	};
 
@@ -127,6 +128,7 @@ public class DroidPlannerApp extends Application {
 		super.onCreate();
 		final Context context = getApplicationContext();
 
+        dpCallback = new DPApiCallback(this);
         droneApi = new DroneApi(context, dpApi);
 		dpPrefs = new DroidPlannerPrefs(context);
         notificationHandler = new NotificationHandler(context, droneApi);
@@ -161,7 +163,7 @@ public class DroidPlannerApp extends Application {
 		if (listener == null)
 			return;
 
-		if (dpApi != null)
+		if (ox3drServices != null)
 				listener.onApiConnected(droneApi);
 
 		apiListeners.add(listener);
@@ -202,7 +204,7 @@ public class DroidPlannerApp extends Application {
 	}
 
 	private void connectToDrone() {
-		if (ox3drServices == null || isDpApiConnected())
+		if (!isDpApiConnected() || droneApi.isConnected())
 			return;
 
 		// Retrieve the connection parameters.
@@ -215,7 +217,6 @@ public class DroidPlannerApp extends Application {
 		try {
 			dpApi = ox3drServices.connectToDrone(connParams, dpCallback);
             droneApi.setDpApi(dpApi);
-			notifyApiConnected();
 		} catch (RemoteException e) {
 			Log.e(TAG, "Unable to retrieve a droidplanner api connection.", e);
 		}
@@ -231,13 +232,12 @@ public class DroidPlannerApp extends Application {
 			Log.e(TAG, "Error while disconnecting from the droidplanner api", e);
 		}
 
-		notifyApiDisconnected();
         droneApi.setDpApi(null);
 		dpApi = null;
 	}
 
 	public boolean isDpApiConnected() {
-		return dpApi != null;
+		return ox3drServices != null;
 	}
 
 	private ConnectionParameter retrieveConnectionParameters() {

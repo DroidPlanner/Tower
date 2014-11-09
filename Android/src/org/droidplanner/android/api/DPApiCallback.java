@@ -33,7 +33,7 @@ public final class DPApiCallback extends IDroidPlannerApiCallback.Stub {
 
 	public DPApiCallback(DroidPlannerApp app) {
 		appRef = new WeakReference<DroidPlannerApp>(app);
-		lbm = LocalBroadcastManager.getInstance(app.getApplicationContext());
+		lbm = LocalBroadcastManager.getInstance(app);
 	}
 
 	private DroidPlannerApp getApplication() {

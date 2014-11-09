@@ -98,7 +98,8 @@ public class EditorListFragment extends ApiListenerFragment implements OnItemLon
     @Override
     public void onApiDisconnected() {
         getBroadcastManager().unregisterReceiver(eventReceiver);
-        missionProxy.selection.removeSelectionUpdateListener(this);
+        if(missionProxy != null)
+            missionProxy.selection.removeSelectionUpdateListener(this);
     }
 
 	/**

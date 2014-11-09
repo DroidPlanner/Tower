@@ -303,7 +303,7 @@ public class SettingsFragment extends PreferenceFragment implements
 						public boolean onPreferenceChange(Preference preference, Object newValue) {
 							int connectionType = Integer.parseInt((String) newValue);
 							updateConnectionPreferenceSummary(preference, connectionType);
-							return false;
+							return true;
 						}
 					});
 		}

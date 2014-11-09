@@ -145,7 +145,7 @@ public abstract class InfoBarItem {
 			if (mItemView != null) {
 
 				final String update;
-				if (!droneApi.isConnected()) {
+				if (droneApi == null || !droneApi.isConnected()) {
 					update = "--";
 				} else{
                     Gps droneGps = droneApi.getGps();
@@ -331,7 +331,7 @@ public abstract class InfoBarItem {
 				return;
 
 			String infoUpdate;
-			if (!droneApi.isConnected()) {
+			if (droneApi == null || !droneApi.isConnected()) {
 				infoUpdate = sDefaultValue;
 				currentView.setText(sDefaultValue);
 				mAhView.setText(sDefaultValue);
@@ -417,7 +417,7 @@ public abstract class InfoBarItem {
 			if (mItemView == null)
 				return;
 
-			if (!droneApi.isConnected()) {
+			if (droneApi == null || !droneApi.isConnected()) {
 				setDefaultValues();
 			}else if (!droneApi.getSignal().isValid()){
 				setDefaultValues();

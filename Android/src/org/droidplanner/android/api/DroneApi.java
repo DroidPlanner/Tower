@@ -144,6 +144,8 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
 
     public void setDpApi(IDroidPlannerApi dpApi) {
         this.dpApi = dpApi;
+        if(isApiValid())
+            this.missionProxy.load(getMission());
     }
 
     public void resetFlightTimer() {
