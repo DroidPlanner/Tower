@@ -9,9 +9,9 @@ import com.ox3dr.services.android.lib.drone.mission.item.raw.GlobalPositionIntMe
 interface ITLogApi {
 
     /**
-        * Loads global position int message from a tlog file.
-            */
-                GlobalPositionIntMessage[] loadGlobalPositionIntMessages(String filename);
+    * Loads global position int message from a tlog file.
+    */
+    GlobalPositionIntMessage[] loadGlobalPositionIntMessages(String filename);
 
-                }
+}
 

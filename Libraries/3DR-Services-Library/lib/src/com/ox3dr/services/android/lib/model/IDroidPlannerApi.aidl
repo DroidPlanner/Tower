@@ -134,12 +134,14 @@ interface IDroidPlannerApi {
         oneway void changeVehicleMode(in VehicleMode newMode);
 
         /**
-        * Asynchronous call used to stop listening to updates for the drone instance whose id is
-        * connected by 'droneId'.
-        * If no other clients is listening to the drone instance, connection with the underlying
-        * vehicle will be broken.
+        * Asynchronous call used to establish connection with the device.
         */
-        oneway void disconnectFromDrone();
+        oneway void connect();
+
+        /**
+        * Asynchronous call used to break connection with the device.
+        */
+        oneway void disconnect();
 
         /**
         * Refresh the parameters for the connected drone.
