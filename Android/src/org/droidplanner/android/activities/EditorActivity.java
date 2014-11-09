@@ -46,6 +46,7 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.ox3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
 import com.ox3dr.services.android.lib.drone.property.Speed;
 
 /**
@@ -259,9 +260,11 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		OpenFileDialog missionDialog = new OpenMissionDialog() {
 			@Override
 			public void waypointFileLoaded(MissionReader reader) {
-                DroidPlannerApi dpApi = dpApp.getApi();
-                if(dpApi != null) {
-                        dpApi.getMission().onMissionLoaded(reader.getMsgMissionItems());
+                DroneApi dpApi = dpApp.getDroneApi();
+                if(dpApi != null && dpApi.isConnected()) {
+                    List<MissionItemMessage> msgMissionItems = reader.getMsgMissionItems();
+                    dpApi.setRawMissionItems(msgMissionItems.toArray(new
+                            MissionItemMessage[msgMissionItems.size()]), false);
                 }
 
 				planningMapFragment.zoomToFit();

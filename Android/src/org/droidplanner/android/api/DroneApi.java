@@ -17,6 +17,7 @@ import com.ox3dr.services.android.lib.drone.mission.Mission;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
+import com.ox3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
 import com.ox3dr.services.android.lib.drone.property.Altitude;
 import com.ox3dr.services.android.lib.drone.property.Attitude;
 import com.ox3dr.services.android.lib.drone.property.Battery;
@@ -457,10 +458,21 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     }
 
     @Override
-    public void sendMission(Mission mission)  {
+    public void setMission(Mission mission, boolean pushToDrone)  {
         if(isApiValid()){
             try {
-                dpApi.sendMission(mission);
+                dpApi.setMission(mission, pushToDrone);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    @Override
+    public void setRawMissionItems(MissionItemMessage[] missionItems, boolean pushToDrone) {
+        if(isApiValid()){
+            try {
+                dpApi.setRawMissionItems(missionItems, pushToDrone);
             } catch (RemoteException e) {
                 handleRemoteException(e);
             }

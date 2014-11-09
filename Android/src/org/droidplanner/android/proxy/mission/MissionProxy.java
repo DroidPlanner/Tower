@@ -568,7 +568,7 @@ public class MissionProxy implements DPMap.PathSource {
             }
         }
 
-        droneApi.sendMission(mission);
+        droneApi.setMission(mission, true);
 
         missionItemsList += "]";
 
