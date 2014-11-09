@@ -19,6 +19,7 @@ import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.gcs.follow.FollowState;
 import com.ox3dr.services.android.lib.gcs.follow.FollowType;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.ox3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
@@ -155,10 +156,18 @@ interface IDroidPlannerApi {
         oneway void writeParameters(in Parameters parameters);
 
         /**
-        * Upload the given mission to the connected drone.
+        * Update the mission property for the drone model in memory.
         * @param mission mission to upload to the drone.
+        * @param pushToDrone if true, upload the mission to the connected device.
         */
-        oneway void sendMission(in Mission mission);
+        oneway void setMission(in Mission mission, boolean pushToDrone);
+
+        /**
+        * Update the mission items for the drone model in memory.
+        * @param missionItems Set of missionItemMessage
+        * @param pushToDrone if true, upload the mission to the connected device.
+        */
+        oneway void setRawMissionItems(in MissionItemMessage[] missionItems, boolean pushToDrone);
 
         /**
         * Create a dronie mission, and upload it to the connected drone.
