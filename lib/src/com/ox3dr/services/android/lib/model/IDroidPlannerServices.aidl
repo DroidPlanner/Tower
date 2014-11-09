@@ -1,6 +1,7 @@
 // IDroidPlannerServices.aidl
 package com.ox3dr.services.android.lib.model;
 
+import com.ox3dr.services.android.lib.model.ITlogApi;
 import com.ox3dr.services.android.lib.model.IDroidPlannerApiCallback;
 import com.ox3dr.services.android.lib.model.IDroidPlannerApi;
 import com.ox3dr.services.android.lib.drone.connection.ConnectionParameter;
@@ -20,4 +21,9 @@ interface IDroidPlannerServices {
     * @return IDroidPlannerApi object used to interact with the connected drone.
     */
     IDroidPlannerApi connectToDrone(in ConnectionParameter params, IDroidPlannerApiCallback callback);
+
+    /**
+    * Get access to the tlog api.
+    */
+    ITlogApi getTlogApi();
 }

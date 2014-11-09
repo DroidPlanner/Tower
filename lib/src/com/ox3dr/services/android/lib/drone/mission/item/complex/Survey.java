@@ -5,7 +5,7 @@ import android.os.Parcel;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
-import com.ox3dr.services.android.lib.util.MathUtil;
+import com.ox3dr.services.android.lib.util.MathUtils;
 
 import java.util.List;
 
@@ -75,7 +75,7 @@ public class Survey extends MissionItem implements MissionItem.ComplexItem {
     }
 
     public double getGridLength() {
-        return MathUtil.getPolylineLength(gridPoints);
+        return MathUtils.getPolylineLength(gridPoints);
     }
 
     public int getNumberOfLines() {
