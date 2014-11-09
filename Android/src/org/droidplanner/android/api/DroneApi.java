@@ -57,6 +57,7 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
         intentFilter.addAction(Event.EVENT_STATE);
         intentFilter.addAction(Event.EVENT_MISSION_DRONIE_CREATED);
         intentFilter.addAction(Event.EVENT_MISSION_UPDATE);
+        intentFilter.addAction(Event.EVENT_MISSION_RECEIVED);
         intentFilter.addAction(Event.EVENT_SPEED);
     }
 
@@ -77,7 +78,8 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
                     stopTimer();
             }
             else if(Event.EVENT_MISSION_DRONIE_CREATED.equals(action)
-                    || Event.EVENT_MISSION_UPDATE.equals(action)){
+                    || Event.EVENT_MISSION_UPDATE.equals(action)
+                    || Event.EVENT_MISSION_RECEIVED.equals(action)){
                 missionProxy.load(getMission());
             }
             else if(Event.EVENT_SPEED.equals(action)){
@@ -122,6 +124,10 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
 
     private void handleRemoteException(RemoteException e){
         Log.e(TAG, e.getMessage(), e);
+    }
+
+    public double getSpeedParameter(){
+        return 0;
     }
 
     private boolean isApiValid(){
@@ -284,6 +290,18 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
             }
         }
         return null;
+    }
+
+    @Override
+    public MissionItemMessage[] getRawMissionItems() {
+        if(isApiValid()){
+            try {
+                return dpApi.getRawMissionItems();
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+        return new MissionItemMessage[0];
     }
 
     @Override

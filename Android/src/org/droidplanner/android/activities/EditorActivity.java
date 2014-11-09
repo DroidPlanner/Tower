@@ -1,5 +1,6 @@
 package org.droidplanner.android.activities;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.droidplanner.R;
@@ -26,7 +27,10 @@ import org.droidplanner.android.utils.file.IO.MissionReader;
 import org.droidplanner.android.utils.file.IO.MissionWriter;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.util.Pair;
@@ -45,6 +49,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.ox3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
 import com.ox3dr.services.android.lib.drone.property.Speed;
@@ -279,18 +284,18 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 FileStream.getWaypointFilename("waypoints"), new EditInputDialog.Listener() {
                     @Override
                     public void onOk(CharSequence input) {
-                        DroidPlannerApi dpApi = dpApp.getApi();
-                        if(dpApi != null) {
-                                final List<msg_mission_item> missionItems = dpApi.getMission()
-                                        .getMsgMissionItems();
-                                if (MissionWriter.write(missionItems, input.toString())) {
+                        DroneApi dpApi = dpApp.getDroneApi();
+                        if(dpApi != null && dpApi.isConnected()) {
+                                final MissionItemMessage[] missionItems = dpApi.getRawMissionItems();
+                                if (MissionWriter.write(Arrays.asList(missionItems),
+                                        input.toString())) {
                                     Toast.makeText(context, R.string.file_saved_success, Toast.LENGTH_SHORT).show();
 
                                     final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
                                             .setCategory(GAUtils.Category.MISSION_PLANNING)
                                             .setAction("Mission saved to file")
                                             .setLabel("Mission items count")
-                                            .setValue(missionItems.size());
+                                            .setValue(missionItems.length);
                                     GAUtils.sendEvent(eventBuilder);
 
                                     return;
@@ -313,41 +318,41 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		planningMapFragment.saveCameraPosition();
 	}
 
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		super.onDroneEvent(event, drone);
+    private static final IntentFilter eventFilter = new IntentFilter();
+    static {
+        eventFilter.addAction(MissionProxy.ACTION_MISSION_PROXY_UPDATE);
+        eventFilter.addAction(Event.EVENT_MISSION_RECEIVED);
+    }
 
-		switch (event) {
-		case MISSION_UPDATE:
-            if(missionProxy != null) {
-                Length missionLength = missionProxy.getMissionLength();
-                Speed speedParameter = drone.getSpeed().getSpeedParameter();
-                String infoString = "Distance " + missionLength;
-                if (speedParameter != null) {
-                    int time = (int) (missionLength.valueInMeters() / speedParameter
-                            .valueInMetersPerSecond());
-                    infoString = infoString
-                            + String.format(", Flight time: %02d:%02d", time / 60, time % 60);
-                }
-                infoView.setText(infoString);
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(MissionProxy.ACTION_MISSION_PROXY_UPDATE.equals(action)){
+                if(missionProxy != null) {
+                    double missionLength = missionProxy.getMissionLength();
+                    double speedParameter = dpApp.getDroneApi().getSpeed().getSpeedParameter();
+                    String infoString = "Distance " + missionLength;
+                    if (speedParameter > 0) {
+                        int time = (int) (missionLength / speedParameter);
+                        infoString = infoString
+                                + String.format(", Flight time: %02d:%02d", time / 60, time % 60);
+                    }
+                    infoView.setText(infoString);
 
-                // Remove detail window if item is removed
-                if (missionProxy.selection.getSelected().isEmpty() && itemDetailFragment != null) {
-                    removeItemDetail();
+                    // Remove detail window if item is removed
+                    if (missionProxy.selection.getSelected().isEmpty() && itemDetailFragment != null) {
+                        removeItemDetail();
+                    }
                 }
             }
-			break;
-
-		case MISSION_RECEIVED:
-			if (planningMapFragment != null) {
-				planningMapFragment.zoomToFit();
-			}
-			break;
-
-		default:
-			break;
-		}
-	}
+            else if(Event.EVENT_MISSION_RECEIVED.equals(action)){
+                if (planningMapFragment != null) {
+                    planningMapFragment.zoomToFit();
+                }
+            }
+        }
+    };
 
 	@Override
 	public void onMapClick(LatLong point) {
@@ -484,7 +489,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 		case POLY:
 			if (path.size() > 2) {
-				missionProxy.addSurveyPolygon(points);
+				missionProxy.addSurveyPolygon(dpApp.getDroneApi(), points);
 			} else {
 				editorToolsFragment.setTool(EditorTools.POLY);
 				return;
