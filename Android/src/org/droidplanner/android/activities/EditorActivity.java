@@ -52,7 +52,6 @@ import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.ox3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
-import com.ox3dr.services.android.lib.drone.property.Speed;
 
 /**
  * This implements the map editor activity. The map editor activity allows the
@@ -331,7 +330,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             if(MissionProxy.ACTION_MISSION_PROXY_UPDATE.equals(action)){
                 if(missionProxy != null) {
                     double missionLength = missionProxy.getMissionLength();
-                    double speedParameter = dpApp.getDroneApi().getSpeed().getSpeedParameter();
+                    double speedParameter = dpApp.getDroneApi().getSpeedParameter();
                     String infoString = "Distance " + missionLength;
                     if (speedParameter > 0) {
                         int time = (int) (missionLength / speedParameter);

@@ -24,6 +24,7 @@ import com.ox3dr.services.android.lib.drone.property.Battery;
 import com.ox3dr.services.android.lib.drone.property.Gps;
 import com.ox3dr.services.android.lib.drone.property.GuidedState;
 import com.ox3dr.services.android.lib.drone.property.Home;
+import com.ox3dr.services.android.lib.drone.property.Parameter;
 import com.ox3dr.services.android.lib.drone.property.Parameters;
 import com.ox3dr.services.android.lib.drone.property.Signal;
 import com.ox3dr.services.android.lib.drone.property.Speed;
@@ -127,6 +128,13 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     }
 
     public double getSpeedParameter(){
+        Parameters params = getParameters();
+        if(params != null) {
+            Parameter speedParam = params.getParameter("WPNAV_SPEED");
+            if(speedParam != null)
+                return speedParam.getValue();
+        }
+
         return 0;
     }
 
