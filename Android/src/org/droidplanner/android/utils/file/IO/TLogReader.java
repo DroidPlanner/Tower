@@ -1,8 +1,7 @@
 package org.droidplanner.android.utils.file.IO;
 
-import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.MAVLinkPacket;
-import com.MAVLink.Parser;
+import com.ox3dr.services.android.lib.drone.mission.item.raw.GlobalPositionIntMessage;
+import com.ox3dr.services.android.lib.model.ITlogApi;
 
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.utils.file.DirectoryPath;
@@ -32,9 +31,9 @@ public class TLogReader implements OpenFileDialog.FileReader {
     public static class Event
     {
         private long timestamp;
-        private MAVLinkMessage mavLinkMessage;
+        private GlobalPositionIntMessage mavLinkMessage;
 
-        public Event(long timestamp, MAVLinkMessage mavLinkMessage) {
+        public Event(long timestamp, GlobalPositionIntMessage mavLinkMessage) {
             this.timestamp = timestamp;
             this.mavLinkMessage = mavLinkMessage;
         }
@@ -43,7 +42,7 @@ public class TLogReader implements OpenFileDialog.FileReader {
             return timestamp;
         }
 
-        public MAVLinkMessage getMavLinkMessage() {
+        public GlobalPositionIntMessage getMavLinkMessage() {
             return mavLinkMessage;
         }
     }
@@ -54,7 +53,7 @@ public class TLogReader implements OpenFileDialog.FileReader {
     private final List<Event> logEvents = new LinkedList<Event>();
 
 
-    public TLogReader(int msgFilter) {
+    public TLogReader(ITLogApi tlogApi, int msgFilter) {
         this.msgFilter = msgFilter;
     }
 
