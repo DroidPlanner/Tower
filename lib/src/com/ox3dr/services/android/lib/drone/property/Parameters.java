@@ -2,6 +2,7 @@ package com.ox3dr.services.android.lib.drone.property;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,18 @@ public class Parameters implements Parcelable {
 
     public List<Parameter> getParameters(){
         return parametersList;
+    }
+
+    public Parameter getParameter(String name){
+        if(TextUtils.isEmpty(name))
+            return null;
+
+        for(Parameter param: parametersList){
+            if(param.getName().equalsIgnoreCase(name))
+                return param;
+        }
+
+        return null;
     }
 
     @Override
