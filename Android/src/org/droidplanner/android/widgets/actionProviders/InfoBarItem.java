@@ -26,7 +26,7 @@ import com.ox3dr.services.android.lib.drone.property.Gps;
 import com.ox3dr.services.android.lib.drone.property.Home;
 import com.ox3dr.services.android.lib.drone.property.Signal;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
-import com.ox3dr.services.android.lib.util.MathUtil;
+import com.ox3dr.services.android.lib.util.MathUtils;
 
 /**
  * Set of actions supported by the info bar
@@ -117,7 +117,7 @@ public abstract class InfoBarItem {
                     final Gps droneGps = droneApi.getGps();
                     final Home droneHome = droneApi.getHome();
                     if(droneGps.isValid() && droneHome.isValid()) {
-                        double distanceToHome = MathUtil.getDistance(droneHome.getCoordinate(),
+                        double distanceToHome = MathUtils.getDistance(droneHome.getCoordinate(),
                                 droneGps.getPosition());
                         update = String.format("Home\n%s", UnitUtil.MetricUtil.distanceToString
                                 (distanceToHome));
@@ -431,7 +431,7 @@ public abstract class InfoBarItem {
 		private void setValuesFromRadio(final DroneApi droneApi) {
             Signal droneSignal = droneApi.getSignal();
 			((TextView) mItemView).setText(String.format(Locale.ENGLISH, "%d%%",
-                    MathUtil.getSignalStrength(droneSignal.getFadeMargin(),
+                    MathUtils.getSignalStrength(droneSignal.getFadeMargin(),
                             droneSignal.getRemFadeMargin())));
 
 			mRssiView.setText(String.format("RSSI %2.0f dB", droneSignal.getRssi()));

@@ -22,7 +22,7 @@ import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.property.Battery;
 import com.ox3dr.services.android.lib.drone.property.Gps;
 import com.ox3dr.services.android.lib.drone.property.Signal;
-import com.ox3dr.services.android.lib.util.MathUtil;
+import com.ox3dr.services.android.lib.util.MathUtils;
 
 /**
  * Implements DroidPlanner's status bar notifications.
@@ -170,7 +170,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 
         Signal droneSignal = drone.getSignal();
 		mInboxBuilder.setLine(4, TextUtils.normal("Signal:   ",
-				TextUtils.bold(String.format("%d%%", MathUtil.getSignalStrength(droneSignal
+				TextUtils.bold(String.format("%d%%", MathUtils.getSignalStrength(droneSignal
                         .getFadeMargin(), droneSignal.getRemFadeMargin())))));
 	}
 
@@ -179,7 +179,8 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 			return;
 
 		mInboxBuilder.setLine(0, TextUtils.normal("Home:   ", TextUtils.bold(
-                UnitUtil.MetricUtil.distanceToString(MathUtil.getDistance(drone.getHome().getCoordinate(),
+                UnitUtil.MetricUtil.distanceToString(MathUtils.getDistance(drone.getHome()
+                                .getCoordinate(),
                         drone.getGps().getPosition())))));
 	}
 

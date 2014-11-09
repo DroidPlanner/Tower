@@ -25,7 +25,7 @@ import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanne
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.Circle;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
-import com.ox3dr.services.android.lib.util.MathUtil;
+import com.ox3dr.services.android.lib.util.MathUtils;
 
 /**
  * This class is responsible for providing logic to access and interpret the
@@ -101,10 +101,10 @@ public class MissionItemProxy {
 				Circle circle = (Circle) mMissionItem;
 				double startHeading = 0;
 				if (previousPoint != null) {
-					startHeading = MathUtil.getHeadingFromCoordinates(circle.getCoordinate(),
+					startHeading = MathUtils.getHeadingFromCoordinates(circle.getCoordinate(),
                             previousPoint);
 				}
-				pathPoints.add(MathUtil.newCoordFromBearingAndDistance(circle.getCoordinate(),
+				pathPoints.add(MathUtils.newCoordFromBearingAndDistance(circle.getCoordinate(),
 						startHeading + i, circle.getRadius()));
 			}
 			break;

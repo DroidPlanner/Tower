@@ -1,7 +1,10 @@
 package org.droidplanner.android.utils.file.IO;
 
+import android.os.RemoteException;
+import android.util.Log;
+
 import com.ox3dr.services.android.lib.drone.mission.item.raw.GlobalPositionIntMessage;
-import com.ox3dr.services.android.lib.model.ITlogApi;
+import com.ox3dr.services.android.lib.model.ITLogApi;
 
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.utils.file.DirectoryPath;
@@ -26,20 +29,15 @@ import java.util.List;
  */
 public class TLogReader implements OpenFileDialog.FileReader {
 
+    private static final String TAG = TLogReader.class.getSimpleName();
     public static final int MSGFILTER_NONE = -1;
 
     public static class Event
     {
-        private long timestamp;
         private GlobalPositionIntMessage mavLinkMessage;
 
-        public Event(long timestamp, GlobalPositionIntMessage mavLinkMessage) {
-            this.timestamp = timestamp;
+        public Event(GlobalPositionIntMessage mavLinkMessage) {
             this.mavLinkMessage = mavLinkMessage;
-        }
-
-        public long getTimestamp() {
-            return timestamp;
         }
 
         public GlobalPositionIntMessage getMavLinkMessage() {
@@ -49,11 +47,13 @@ public class TLogReader implements OpenFileDialog.FileReader {
 
     private static final int TIMESTAMP_SIZE = Long.SIZE / Byte.SIZE;
 
+    private final ITLogApi tlogApi;
     private final int msgFilter;
     private final List<Event> logEvents = new LinkedList<Event>();
 
 
     public TLogReader(ITLogApi tlogApi, int msgFilter) {
+        this.tlogApi = tlogApi;
         this.msgFilter = msgFilter;
     }
 
@@ -66,51 +66,16 @@ public class TLogReader implements OpenFileDialog.FileReader {
             return false;
         }
 
-        final Parser parser = new Parser();
-        DataInputStream in = null;
         try {
-            // open file
-            in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
-
-            // read events, filter (if specified)
-            long timestamp;
-            long prevTimestamp = 0;
-            while(in.available() > 0) {
-                // read timestamp
-                timestamp = in.readLong() / 1000;
-
-                // read packet
-                MAVLinkPacket packet;
-                while((packet = parser.mavlink_parse_char(in.readUnsignedByte())) == null);
-
-                if(msgFilter == MSGFILTER_NONE || packet.msgid == msgFilter) {
-                    if((timestamp - prevTimestamp) > 60000) {
-                        logEvents.add(new Event(timestamp, packet.unpack()));
-                        prevTimestamp = timestamp;
-                    }
-                }
+            GlobalPositionIntMessage[] positionMsgs = tlogApi.loadGlobalPositionIntMessages(file);
+            for(GlobalPositionIntMessage msg : positionMsgs){
+                logEvents.add(new Event(msg));
             }
-
-        } catch (EOFException e) {
-            // NOP - file may be incomplete - take what we have
-            // fall thru...
-        } catch (Exception e) {
-            e.printStackTrace();
+            return true;
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getMessage(), e);
             return false;
         }
-        finally {
-            // close file
-            if(in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    // NOP
-                }
-            }
-        }
-
-        return true;
     }
 
     @Override

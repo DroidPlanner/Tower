@@ -27,7 +27,7 @@ public abstract class OpenFileDialog implements OnClickListener {
 	protected abstract void onDataLoaded(FileReader reader);
 
 	private String[] itemList;
-	private Context context;
+	protected Context context;
 	private FileReader reader;
 
 	public void openDialog(Context context) {

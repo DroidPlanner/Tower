@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ox3dr.services.android.lib.coordinate.LatLong;
-import com.ox3dr.services.android.lib.util.MathUtil;
+import com.ox3dr.services.android.lib.util.MathUtils;
 
 public class GestureMapFragment extends Fragment implements OnGestureListener {
 	private static final int TOLERANCE = 15;
@@ -65,7 +65,7 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 		overlay.setEnabled(false);
 		List<LatLong> path = decodeGesture();
 		if (path.size() > 1) {
-			path = MathUtil.simplify(path, toleranceInPixels);
+			path = MathUtils.simplify(path, toleranceInPixels);
 		}
 		listener.onPathFinished(path);
 	}

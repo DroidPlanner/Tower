@@ -19,7 +19,7 @@ import com.ox3dr.services.android.lib.drone.connection.ConnectionParameter;
 import com.ox3dr.services.android.lib.drone.connection.ConnectionType;
 import com.ox3dr.services.android.lib.model.IDroidPlannerApi;
 import com.ox3dr.services.android.lib.model.IDroidPlannerServices;
-import com.ox3dr.services.android.lib.model.ITlogApi;
+import com.ox3dr.services.android.lib.model.ITLogApi;
 
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
 import org.droidplanner.android.api.DPApiCallback;
@@ -117,7 +117,7 @@ public class DroidPlannerApp extends Application {
 
 	private IDroidPlannerServices ox3drServices;
 	private IDroidPlannerApi dpApi;
-    private ITlogApi tlogApi;
+    private ITLogApi tlogApi;
 
 	private DroidPlannerPrefs dpPrefs;
     private NotificationHandler notificationHandler;
@@ -145,10 +145,10 @@ public class DroidPlannerApp extends Application {
         return droneApi;
     }
 
-    public ITlogApi getTlogApi(){
+    public ITLogApi getTlogApi(){
         if(tlogApi == null){
             try {
-                tlogApi = ox3drServices.getTlogApi();
+                tlogApi = ox3drServices.getTLogApi();
             } catch (RemoteException e) {
                 return null;
             }

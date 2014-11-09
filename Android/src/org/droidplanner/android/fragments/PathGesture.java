@@ -9,7 +9,7 @@ import android.gesture.GestureOverlayView.OnGestureListener;
 import android.view.MotionEvent;
 
 import com.ox3dr.services.android.lib.coordinate.LatLong;
-import com.ox3dr.services.android.lib.util.MathUtil;
+import com.ox3dr.services.android.lib.util.MathUtils;
 
 
 public class PathGesture implements OnGestureListener {
@@ -52,7 +52,7 @@ public class PathGesture implements OnGestureListener {
 		view.setEnabled(false);
 		List<LatLong> path = decodeGesture();
 		if (path.size() > 1) {
-			path = MathUtil.simplify(path, toleranceInPixels);
+			path = MathUtils.simplify(path, toleranceInPixels);
 		}
 		listener.onPathFinished(path);
 	}

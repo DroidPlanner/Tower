@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.drone.mission.item.raw.GlobalPositionIntMessage;
-import com.ox3dr.services.android.lib.util.MathUtil;
+import com.ox3dr.services.android.lib.util.MathUtils;
 
 import org.droidplanner.R;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
@@ -259,7 +259,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
                 azimuthView.setText("");
             } else {
                 String distance = String.format("Distance: %.01fm",
-                        MathUtil.getDistance(lastGCSPosition, msgCoord));
+                        MathUtils.getDistance(lastGCSPosition, msgCoord));
                 if(lastGCSBearingTo != Float.MAX_VALUE) {
                     final String bearing = String.format(" @ %.0f°", lastGCSBearingTo);
                     distance += bearing;

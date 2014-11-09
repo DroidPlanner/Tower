@@ -27,7 +27,7 @@ import com.ox3dr.services.android.lib.drone.mission.item.command.Takeoff;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
-import com.ox3dr.services.android.lib.util.MathUtil;
+import com.ox3dr.services.android.lib.util.MathUtils;
 
 /**
  * This class is used as a wrapper to {@link com.ox3dr.services.android.lib.drone.mission.Mission}
@@ -408,7 +408,7 @@ public class MissionProxy implements DPMap.PathSource {
 
         MissionItem previous = mMissionItems.get(index - 1).getMissionItem();
         if(previous instanceof MissionItem.SpatialItem){
-            return MathUtil.getDistance(((MissionItem.SpatialItem) waypoint).getCoordinate(),
+            return MathUtils.getDistance(((MissionItem.SpatialItem) waypoint).getCoordinate(),
                     ((MissionItem.SpatialItem) previous).getCoordinate());
         }
 
@@ -494,7 +494,7 @@ public class MissionProxy implements DPMap.PathSource {
 					}
 				}
 
-				pathPoints.addAll(MathUtil.SplinePath.process(splinePoints));
+				pathPoints.addAll(MathUtils.SplinePath.process(splinePoints));
 			} else {
 				for (MissionItemProxy missionItemProxy : bucket) {
 					pathPoints.addAll(missionItemProxy.getPath(lastPoint));
@@ -592,7 +592,7 @@ public class MissionProxy implements DPMap.PathSource {
         double length = 0;
 		if (points.size()>1) {
 			for (int i = 1; i < points.size(); i++) {
-				length += MathUtil.getDistance(points.get(i-1), points.get(i));
+				length += MathUtils.getDistance(points.get(i-1), points.get(i));
 			}
 		}
 
