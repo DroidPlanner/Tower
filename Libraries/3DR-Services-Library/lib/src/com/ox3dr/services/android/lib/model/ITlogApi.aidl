@@ -6,7 +6,7 @@ import com.ox3dr.services.android.lib.drone.mission.item.raw.GlobalPositionIntMe
 /**
 * Used to access tlog related functionality.
 */
-interface ITlogApi {
+interface ITLogApi {
 
     /**
     * Loads global position int message from a tlog file.
