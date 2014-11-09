@@ -11,16 +11,22 @@ import com.ox3dr.services.android.lib.drone.connection.ConnectionParameter;
 */
 interface IDroidPlannerServices {
     /**
-    * Used to establish connection with a drone, or retrieve an existing drone
-    * instance whose connection parameters match the passed one.
-    * The 'callback' argument must be non-null, and allows to receive updates about the connected
+    * Used to register with a drone instance whose connection parameters match the passed one.
+    * The 'callback' argument must be non-null, and allows to receive updates about the
     * drone instance.
     *
     * @param params ConnectionParameter object
     * @param callback Client callback instance
-    * @return IDroidPlannerApi object used to interact with the connected drone.
+    * @return IDroidPlannerApi object used to interact with the drone.
     */
-    IDroidPlannerApi connectToDrone(in ConnectionParameter params, IDroidPlannerApiCallback callback);
+    IDroidPlannerApi registerWithDrone(in ConnectionParameter params, IDroidPlannerApiCallback callback);
+
+    /**
+    * Used to unregsiter from the drone instance whose connection parameters match the passed one.
+    * @param params ConnectionParameter object
+    * @param callback client callback instance.
+    */
+    void unregisterFromDrone(in ConnectionParameter params, IDroidPlannerApiCallback callback);
 
     /**
     * Get access to the tlog api.
