@@ -46,7 +46,8 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
             final String action = intent.getAction();
             if(Event.EVENT_CALIBRATION_IMU.equals(action)){
                 String message = intent.getStringExtra(Extra.EXTRA_CALIBRATION_IMU_MESSAGE);
-                processMAVMessage(message, true);
+                if(message != null)
+                    processMAVMessage(message, true);
             }
             else if(Event.EVENT_CONNECTED.equals(action)){
                 if(calibration_step == 0) {
