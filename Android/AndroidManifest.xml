@@ -74,10 +74,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"/>
 
-        <service android:name=".android.communication.service.MAVLinkService"/>
-        <service android:name=".android.communication.service.UploaderService"/>
-        <service android:name=".android.api.services.DroidPlannerService"/>
-
         <activity
             android:name=".android.activities.FlightActivity"
             android:launchMode="singleTask"
@@ -89,15 +85,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
-            <!-- USB connection  intent -->
-            <intent-filter>
-                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"/>
-            </intent-filter>
-
-            <meta-data
-                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
-                android:resource="@xml/device_filter"/>
         </activity>
         <activity
             android:name=".android.activities.EditorActivity"
@@ -150,13 +137,6 @@
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar"/>
 
-        <receiver
-            android:name=".android.communication.service.NetworkConnectivityReceiver"
-            android:enabled="false">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>
