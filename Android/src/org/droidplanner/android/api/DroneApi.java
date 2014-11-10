@@ -75,6 +75,8 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
         intentFilter.addAction(Event.EVENT_MISSION_UPDATE);
         intentFilter.addAction(Event.EVENT_MISSION_RECEIVED);
         intentFilter.addAction(Event.EVENT_SPEED);
+        intentFilter.addAction(Event.EVENT_CONNECTED);
+        intentFilter.addAction(DPApiCallback.ACTION_DRONE_CONNECTION_FAILED);
     }
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -89,7 +91,8 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
             }
             else if(Event.EVENT_MISSION_DRONIE_CREATED.equals(action)
                     || Event.EVENT_MISSION_UPDATE.equals(action)
-                    || Event.EVENT_MISSION_RECEIVED.equals(action)){
+                    || Event.EVENT_MISSION_RECEIVED.equals(action)
+                    || Event.EVENT_CONNECTED.equals(action)){
                 missionProxy.load(getMission());
             }
             else if(Event.EVENT_SPEED.equals(action)){
@@ -102,6 +105,9 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
                     connect();
                 else
                     disconnect();
+            }
+            else if(DPApiCallback.ACTION_DRONE_CONNECTION_FAILED.equals(action)){
+                disconnect();
             }
         }
     };
