@@ -1,5 +1,8 @@
 package org.droidplanner.android.widgets.adapterViews;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.ox3dr.services.android.lib.drone.property.Parameter;
 
 import java.io.Serializable;
@@ -10,7 +13,7 @@ import java.util.Map;
 /**
  * Date: 2013-12-09 Time: 1:32 AM
  */
-public class ParamsAdapterItem implements Serializable {
+public class ParamsAdapterItem implements Parcelable {
 	public enum Validation {
 		NA, INVALID, VALID
 	}
@@ -116,4 +119,34 @@ public class ParamsAdapterItem implements Serializable {
 
         return toString;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.parameter, 0);
+        dest.writeString(this.dirtyValue);
+        dest.writeInt(this.validation == null ? -1 : this.validation.ordinal());
+    }
+
+    private ParamsAdapterItem(Parcel in) {
+        this.parameter = in.readParcelable(Parameter.class.getClassLoader());
+        this.dirtyValue = in.readString();
+        int tmpValidation = in.readInt();
+        this.validation = tmpValidation == -1 ? null : Validation.values()[tmpValidation];
+    }
+
+    public static final Creator<ParamsAdapterItem> CREATOR = new Creator<ParamsAdapterItem>() {
+        public ParamsAdapterItem createFromParcel(Parcel source) {
+            return new ParamsAdapterItem(source);
+        }
+
+        public ParamsAdapterItem[] newArray(int size) {
+            return new ParamsAdapterItem[size];
+        }
+    };
 }

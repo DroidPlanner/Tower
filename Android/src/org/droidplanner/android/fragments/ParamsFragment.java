@@ -114,8 +114,8 @@ public class ParamsFragment extends ApiListenerListFragment {
 		if (savedInstanceState != null) {
 			// load adapter items
 			@SuppressWarnings("unchecked")
-			final ArrayList<ParamsAdapterItem> pwms = (ArrayList<ParamsAdapterItem>) savedInstanceState
-					.getSerializable(ADAPTER_ITEMS);
+			final ArrayList<ParamsAdapterItem> pwms = savedInstanceState.getParcelableArrayList
+                    (ADAPTER_ITEMS);
 			adapter = new ParamsAdapter(getActivity(), R.layout.row_params, pwms);
 
 		} else {
@@ -260,7 +260,7 @@ public class ParamsFragment extends ApiListenerListFragment {
 		// save adapter items
 		final ArrayList<ParamsAdapterItem> pwms = new ArrayList<ParamsAdapterItem>(adapter
                 .getOriginalValues());
-		outState.putSerializable(ADAPTER_ITEMS, pwms);
+		outState.putParcelableArrayList(ADAPTER_ITEMS, pwms);
 	}
 
 	@Override
