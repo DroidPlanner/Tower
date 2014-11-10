@@ -50,6 +50,10 @@ public class Parameter implements Parcelable, Comparable<Parameter> {
         return value;
     }
 
+    public String getDisplayValue(){
+        return formatter.format(value);
+    }
+
     public void setValue(double value){
         this.value = value;
     }
