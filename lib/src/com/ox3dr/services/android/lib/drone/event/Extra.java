@@ -48,6 +48,9 @@ public class Extra {
      */
     public static final String EXTRA_MAVLINK_VERSION = CLAZZ_NAME + ".MAVLINK_VERSION";
 
+    public static final String EXTRA_MISSION_CURRENT_WAYPOINT = CLAZZ_NAME + "" +
+            ".MISSION_CURRENT_WAYPOINT";
+
     public static final String EXTRA_MISSION_DRONIE_BEARING = CLAZZ_NAME + "" +
             ".MISSION_DRONIE_BEARING";
 
