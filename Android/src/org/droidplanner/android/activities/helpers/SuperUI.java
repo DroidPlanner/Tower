@@ -125,6 +125,8 @@ public abstract class SuperUI extends FragmentActivity implements DroidPlannerAp
 			infoBar.setDrone(null);
 			infoBar = null;
 		}
+
+        onDroneDisconnected();
 	}
 
     private void onDroneConnected(){

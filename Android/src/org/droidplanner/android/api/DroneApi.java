@@ -75,7 +75,6 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
         intentFilter.addAction(Event.EVENT_MISSION_UPDATE);
         intentFilter.addAction(Event.EVENT_MISSION_RECEIVED);
         intentFilter.addAction(Event.EVENT_SPEED);
-        intentFilter.addAction(ACTION_TOGGLE_DRONE_CONNECTION);
     }
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -142,6 +141,11 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
         dpPrefs = new DroidPlannerPrefs(context);
         this.missionProxy = new MissionProxy(context);
         lbm = LocalBroadcastManager.getInstance(context);
+
+        resetFlightTimer();
+
+        context.registerReceiver(broadcastReceiver,
+                new IntentFilter(ACTION_TOGGLE_DRONE_CONNECTION));
     }
 
     private void handleRemoteException(RemoteException e){
@@ -161,6 +165,7 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
 
         try {
             dpApi = dpApp.get3drServices().registerWithDrone(connParams, dpCallback);
+            lbm.registerReceiver(broadcastReceiver, intentFilter);
         } catch (RemoteException e) {
             Log.e(TAG, "Unable to retrieve a droidplanner api connection.", e);
         }
@@ -173,6 +178,7 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
             return; // Nothing to do. It's already disconnected.
 
         try {
+            lbm.unregisterReceiver(broadcastReceiver);
             dpApp.get3drServices().unregisterFromDrone(retrieveConnectionParameters(), dpCallback);
         } catch (RemoteException e) {
             Log.e(TAG, "Error while disconnecting from the droidplanner api", e);
@@ -446,6 +452,7 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
         if(isApiValid()){
             try {
                 dpApi.disconnect();
+                lbm.sendBroadcast(new Intent(Event.EVENT_DISCONNECTED));
             } catch (RemoteException e) {
                 handleRemoteException(e);
             }

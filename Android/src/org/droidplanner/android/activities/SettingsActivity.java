@@ -32,5 +32,6 @@ public class SettingsActivity extends DrawerNavigationUI {
 
 	@Override
 	public void onApiConnected() {
+        super.onApiConnected();
 	}
 }

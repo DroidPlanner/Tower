@@ -348,6 +348,10 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     private void updateFlightModeButtons() {
         resetFlightModeButtons();
 
+        State droneState = getDroneApi().getState();
+        if(droneState == null)
+            return;
+
         final VehicleMode flightMode = getDroneApi().getState().getVehicleMode();
         if(flightMode == null)
             return;
@@ -385,7 +389,11 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     }
 
     private void updateFollowButton() {
-        switch (getDroneApi().getFollowState().getState()) {
+        FollowState followState = getDroneApi().getFollowState();
+        if(followState == null)
+            return;
+
+        switch (followState.getState()) {
             case FollowState.STATE_START:
                 followBtn.setBackgroundColor(Color.RED);
                 break;
