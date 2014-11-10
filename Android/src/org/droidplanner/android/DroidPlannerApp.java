@@ -38,7 +38,14 @@ public class DroidPlannerApp extends Application {
 	private static final int API_UNBOUND = 0;
 	private static final int API_BOUND = 1;
 
-	public interface ApiListener {
+    public void reconnect() {
+        if (apiBindingState.compareAndSet(API_UNBOUND, API_BOUND)) {
+            bindService(new Intent(IDroidPlannerServices.class.getName()), ox3drServicesConnection,
+                    Context.BIND_AUTO_CREATE);
+        }
+    }
+
+    public interface ApiListener {
 		void onApiConnected();
 
 		void onApiDisconnected();
@@ -55,6 +62,7 @@ public class DroidPlannerApp extends Application {
 
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
+            apiBindingState.set(API_UNBOUND);
 			notifyApiDisconnected();
 			ox3drServices = null;
 		}
@@ -136,10 +144,7 @@ public class DroidPlannerApp extends Application {
 		apiListeners.add(listener);
 
 		handler.removeCallbacks(disconnectionTask);
-		if (apiBindingState.compareAndSet(API_UNBOUND, API_BOUND)) {
-			bindService(new Intent(IDroidPlannerServices.class.getName()), ox3drServicesConnection,
-					Context.BIND_AUTO_CREATE);
-		}
+		reconnect();
 	}
 
 	public void removeApiListener(ApiListener listener) {

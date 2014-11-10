@@ -46,9 +46,6 @@ public final class DPApiCallback extends IDroidPlannerApiCallback.Stub {
 
 	@Override
 	public void onConnectionFailed(ConnectionResult result) throws RemoteException {
-		Toast.makeText(getApplication().getApplicationContext(),
-				"Connection failed: " + result.getErrorMessage(), Toast.LENGTH_LONG).show();
-
 		lbm.sendBroadcast(new Intent(ACTION_DRONE_CONNECTION_FAILED).putExtra(
                 EXTRA_CONNECTION_FAILED_ERROR_CODE, result.getErrorCode()).putExtra(
                 EXTRA_CONNECTION_FAILED_ERROR_MESSAGE, result.getErrorMessage()));

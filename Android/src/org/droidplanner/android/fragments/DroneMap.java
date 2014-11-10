@@ -62,7 +62,7 @@ public abstract class DroneMap extends ApiListenerFragment {
                 mMapFragment.updateMarker(graphicDrone);
                 mMapFragment.updateDroneLeashPath(guided);
                 final Gps droneGps = drone.getGps();
-                if (droneGps.isValid()) {
+                if (droneGps != null && droneGps.isValid()) {
                     mMapFragment.addFlightPathPoint(droneGps.getPosition());
                 }
             }
