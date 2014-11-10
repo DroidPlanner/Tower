@@ -6,6 +6,7 @@ import com.ox3dr.services.android.lib.drone.mission.item.command.EpmGripper;
 import com.ox3dr.services.android.lib.drone.mission.item.command.ReturnToLaunch;
 import com.ox3dr.services.android.lib.drone.mission.item.command.SetServo;
 import com.ox3dr.services.android.lib.drone.mission.item.command.Takeoff;
+import com.ox3dr.services.android.lib.drone.mission.item.command.YawCondition;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.ox3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.Circle;
@@ -116,6 +117,13 @@ public enum MissionItemType {
         @Override
         public MissionItem getNewItem() {
             return new Survey();
+        }
+    },
+
+    YAW_CONDITION("Set Yaw"){
+        @Override
+        public MissionItem getNewItem(){
+            return new YawCondition();
         }
     };
 
