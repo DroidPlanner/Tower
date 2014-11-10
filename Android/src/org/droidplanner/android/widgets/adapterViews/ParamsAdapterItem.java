@@ -38,7 +38,13 @@ public class ParamsAdapterItem implements Parcelable {
 
 		try {
 			final double dval = formatter.parse(dirtyValue).doubleValue();
-			return new Parameter(parameter.getName(), dval, parameter.getType());
+            Parameter copy = new Parameter(parameter.getName(), dval, parameter.getType());
+            copy.setDescription(parameter.getDescription());
+            copy.setUnits(parameter.getUnits());
+            copy.setDisplayName(parameter.getDisplayName());
+            copy.setRange(parameter.getRange());
+            copy.setValues(parameter.getValues());
+			return copy;
 
 		} catch (ParseException e) {
 			return parameter;
@@ -47,7 +53,7 @@ public class ParamsAdapterItem implements Parcelable {
 
 	public void setDirtyValue(String value) {
 		// dirty if different from original value, set validation if dirty
-		dirtyValue = (Double.toString(parameter.getValue()).equals(value)) ? null : value;
+		dirtyValue = (parameter.getDisplayValue().equals(value)) ? null : value;
 		if (dirtyValue != null)
 			validation = validateValue(dirtyValue);
 	}
