@@ -5,7 +5,6 @@ import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.ox3dr.services.android.lib.drone.mission.item.command.Takeoff;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 
@@ -18,8 +17,8 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
 	}
 
 	@Override
-	public void onApiConnected(DroneApi api) {
-		super.onApiConnected(api);
+	public void onApiConnected() {
+		super.onApiConnected();
 
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.TAKEOFF));
 

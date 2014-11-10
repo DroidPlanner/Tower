@@ -14,6 +14,8 @@ import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapte
 public class ModeGuidedFragment extends ApiListenerFragment implements
 		CardWheelHorizontalView.OnCardWheelChangedListener {
 
+    private static final float DEFAULT_ALTITUDE = 2f;
+
 	private CardWheelHorizontalView mAltitudeWheel;
 
 	@Override
@@ -54,10 +56,14 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
 	}
 
 	@Override
-	public void onApiConnected(DroneApi api) {
+	public void onApiConnected() {
 		if (mAltitudeWheel != null) {
-			final int initialValue = (int) Math.max(api.getGuidedState().getCoordinate()
-					.getAltitude(), 2f);
+            DroneApi drone = getDroneApi();
+
+			final int initialValue = (int) Math.max(drone == null
+                    ? DEFAULT_ALTITUDE
+                    : drone.getGuidedState().getCoordinate().getAltitude(),
+                    DEFAULT_ALTITUDE);
 			mAltitudeWheel.setCurrentValue(initialValue);
 		}
 	}

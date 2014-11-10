@@ -1,7 +1,6 @@
 package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.dialogs.GuidedDialog;
 import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
 import org.droidplanner.android.maps.DPMap;
@@ -107,8 +106,8 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	}
 
     @Override
-    public void onApiConnected(DroneApi droneApi){
-        super.onApiConnected(droneApi);
+    public void onApiConnected(){
+        super.onApiConnected();
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
 

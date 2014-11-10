@@ -1,7 +1,6 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 
@@ -23,8 +22,8 @@ public class SetServoFragment extends MissionDetailFragment implements
 	}
 
 	@Override
-	public void onApiConnected(DroneApi droneApi) {
-		super.onApiConnected(droneApi);
+	public void onApiConnected() {
+		super.onApiConnected();
 
         final View view = getView();
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SET_SERVO));

@@ -3,7 +3,6 @@ package org.droidplanner.android.fragments;
 import java.util.List;
 
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
-import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
@@ -80,8 +79,8 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	}
 
     @Override
-    public void onApiConnected(DroneApi api){
-        super.onApiConnected(api);
+    public void onApiConnected(){
+        super.onApiConnected();
         zoomToFit();
     }
 

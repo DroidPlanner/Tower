@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
-import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.MissionSelection;
@@ -85,8 +84,8 @@ public class EditorListFragment extends ApiListenerFragment implements OnItemLon
 	}
 
     @Override
-    public void onApiConnected(DroneApi dpApi) {
-        missionProxy = dpApi.getMissionProxy();
+    public void onApiConnected() {
+        missionProxy = getDroneApi().getMissionProxy();
 
         adapter = new MissionItemProxyView(getActivity(), missionProxy.getItems());
         list.setAdapter(adapter);

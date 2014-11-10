@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerDialogFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
@@ -138,8 +137,8 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
 	}
 
     @Override
-    public void onApiConnected(DroneApi api) {
-        mMissionProxy = api.getMissionProxy();
+    public void onApiConnected() {
+        mMissionProxy = getDroneApi().getMissionProxy();
 
         mSelectedProxies.clear();
         mSelectedProxies.addAll(mMissionProxy.selection.getSelected());

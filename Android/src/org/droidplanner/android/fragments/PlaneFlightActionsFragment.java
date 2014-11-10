@@ -193,7 +193,7 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
 	}
 
 	@Override
-	public void onApiConnected(DroneApi dpApi) {
+	public void onApiConnected() {
 		setupButtonsByFlightState();
 		updateFlightModeButtons();
 		updateFollowButton();

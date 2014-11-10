@@ -156,11 +156,11 @@ public abstract class DroneMap extends ApiListenerFragment {
 	}
 
     @Override
-    public void onApiConnected(DroneApi api){
+    public void onApiConnected(){
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 
-            drone = api;
-            missionProxy = api.getMissionProxy();
+            drone = getDroneApi();
+            missionProxy = drone.getMissionProxy();
 
             home = new GraphicHome(drone);
             graphicDrone = new GraphicDrone(drone);

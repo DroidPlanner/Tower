@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.api.DPApiCallback;
-import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.widgets.checklist.CheckListAdapter;
 import org.droidplanner.android.widgets.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
@@ -82,8 +81,8 @@ public class ChecklistFragment extends ApiListenerFragment implements OnXmlParse
 	}
 
     @Override
-    public void onApiConnected(DroneApi api){
-        sysLink = new CheckListSysLink(api);
+    public void onApiConnected(){
+        sysLink = new CheckListSysLink(getDroneApi());
         getBroadcastManager().registerReceiver(broadcastReceiver, intentFilter);
     }
 

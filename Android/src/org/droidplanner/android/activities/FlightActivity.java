@@ -241,9 +241,9 @@ public class FlightActivity extends DrawerNavigationUI {
 	}
 
     @Override
-    public void onApiConnected(DroneApi api){
-        super.onApiConnected(api);
-        enableSlidingUpPanel(api);
+    public void onApiConnected(){
+        super.onApiConnected();
+        enableSlidingUpPanel(dpApp.getDroneApi());
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
 

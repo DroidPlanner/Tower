@@ -105,11 +105,11 @@ public abstract class SuperUI extends FragmentActivity implements DroidPlannerAp
     }
 
 	@Override
-	public void onApiConnected(DroneApi api) {
+	public void onApiConnected() {
 		invalidateOptionsMenu();
 
         getBroadcastManager().registerReceiver(superReceiver, superIntentFilter);
-        if(api.isConnected())
+        if(dpApp.getDroneApi().isConnected())
             onDroneConnected();
         else
             onDroneDisconnected();

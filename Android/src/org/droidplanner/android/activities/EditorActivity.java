@@ -158,10 +158,10 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
     @Override
-    public void onApiConnected(DroneApi api){
-        super.onApiConnected(api);
+    public void onApiConnected(){
+        super.onApiConnected();
 
-        missionProxy = api.getMissionProxy();
+        missionProxy = dpApp.getDroneApi().getMissionProxy();
         if(missionProxy != null)
             missionProxy.selection.addSelectionUpdateListener(this);
     }

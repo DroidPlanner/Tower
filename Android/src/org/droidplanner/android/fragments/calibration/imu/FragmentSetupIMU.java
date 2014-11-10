@@ -145,9 +145,10 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
     }
 
     @Override
-    public void onApiConnected(DroneApi api) {
-        State droneState = api.getState();
-        if (api.isConnected() && !droneState.isFlying()) {
+    public void onApiConnected() {
+        DroneApi drone = getDroneApi();
+        State droneState = drone.getState();
+        if (drone.isConnected() && !droneState.isFlying()) {
             btnStep.setEnabled(true);
             if (droneState.isCalibrating()) {
                 processMAVMessage(droneState.getCalibrationStatus(), false);

@@ -113,7 +113,7 @@ public abstract class InfoBarItem {
 		public void updateItemView(final Context context, final DroneApi droneApi) {
 			if (mItemView != null) {
 				String update = "--";
-                if(droneApi.isConnected()) {
+                if(droneApi != null && droneApi.isConnected()) {
                     final Gps droneGps = droneApi.getGps();
                     final Home droneHome = droneApi.getHome();
                     if(droneGps.isValid() && droneHome.isValid()) {
@@ -216,7 +216,8 @@ public abstract class InfoBarItem {
 				@Override
 				public void run() {
 					mHandler.removeCallbacks(this);
-					if (!FlightTimeInfo.this.droneApi.isConnected())
+					if (FlightTimeInfo.this.droneApi == null || !FlightTimeInfo.this.droneApi
+                            .isConnected())
 						return;
 
 					if (mItemView != null) {
@@ -237,7 +238,8 @@ public abstract class InfoBarItem {
 			popupView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if (FlightTimeInfo.this.droneApi.isConnected()) {
+					if (FlightTimeInfo.this.droneApi != null && FlightTimeInfo.this.droneApi
+                            .isConnected()) {
 						FlightTimeInfo.this.droneApi.resetFlightTimer();
 					}
 					mPopup.dismiss();
@@ -264,7 +266,7 @@ public abstract class InfoBarItem {
 				return;
 
 			mHandler.removeCallbacks(mFlightTimeUpdater);
-			if (drone.isConnected()) {
+			if (drone != null && drone.isConnected()) {
 				mFlightTimeUpdater.run();
 			} else {
 				((TextView) mItemView).setText("--:--");
@@ -492,7 +494,7 @@ public abstract class InfoBarItem {
 			modesSpinner.setOnSpinnerItemSelectedListener(new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {
                 @Override
                 public void onSpinnerItemSelected(Spinner parent, int position) {
-                    if (mDroneApi.isConnected()) {
+                    if (mDroneApi != null && mDroneApi.isConnected()) {
                         final VehicleMode newMode = (VehicleMode) parent.getItemAtPosition
                                 (position);
                         mDroneApi.changeVehicleMode(newMode);
@@ -518,7 +520,8 @@ public abstract class InfoBarItem {
 				return;
 
 			final SpinnerSelfSelect modesSpinner = (SpinnerSelfSelect) mItemView;
-			final int droneType = !drone.isConnected() ? -1 : drone.getType().getDroneType();
+			final int droneType = drone == null || !drone.isConnected() ? -1 : drone.getType()
+                    .getDroneType();
 			if (droneType != mLastDroneType) {
 				final VehicleMode[] flightModes = droneType == -1
                         ? new VehicleMode[0]
@@ -531,7 +534,7 @@ public abstract class InfoBarItem {
 				mLastDroneType = droneType;
 			}
 
-			if (mDroneApi.isConnected()) {
+			if (mDroneApi != null && mDroneApi.isConnected()) {
                 modesSpinner.forcedSetSelection(mModeAdapter.getPosition(mDroneApi.getState()
                         .getVehicleMode()));
             }

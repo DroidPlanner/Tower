@@ -35,7 +35,6 @@ import com.ox3dr.services.android.lib.gcs.follow.FollowState;
 import com.ox3dr.services.android.lib.gcs.follow.FollowType;
 import com.ox3dr.services.android.lib.model.IDroidPlannerApi;
 
-import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 
 import java.util.List;
@@ -53,6 +52,15 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     public static final double COLLISION_DANGEROUS_SPEED_METERS_PER_SECOND = -3.0;
     public static final double COLLISION_SAFE_ALTITUDE_METERS = 1.0;
 
+    public static final String ACTION_TOGGLE_DRONE_CONNECTION = CLAZZ_NAME + "" +
+            ".ACTION_TOGGLE_DRONE_CONNECTION";
+    public static final String EXTRA_ESTABLISH_CONNECTION = "extra_establish_connection";
+
+    public static final String ACTION_GROUND_COLLISION_IMMINENT = CLAZZ_NAME +
+            ".ACTION_GROUND_COLLISION_IMMINENT";
+    public static final String EXTRA_IS_GROUND_COLLISION_IMMINENT =
+            "extra_is_ground_collision_imminent";
+
     private final static IntentFilter intentFilter = new IntentFilter();
     static {
         intentFilter.addAction(Event.EVENT_STATE);
@@ -60,13 +68,8 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
         intentFilter.addAction(Event.EVENT_MISSION_UPDATE);
         intentFilter.addAction(Event.EVENT_MISSION_RECEIVED);
         intentFilter.addAction(Event.EVENT_SPEED);
+        intentFilter.addAction(ACTION_TOGGLE_DRONE_CONNECTION);
     }
-
-    public static final String ACTION_GROUND_COLLISION_IMMINENT = CLAZZ_NAME +
-            "ACTION_GROUND_COLLISION_IMMINENT";
-    public static final String EXTRA_IS_GROUND_COLLISION_IMMINENT =
-            "extra_is_ground_collision_imminent";
-
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -85,6 +88,14 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
             }
             else if(Event.EVENT_SPEED.equals(action)){
                 checkForGroundCollision();
+            }
+            else if(ACTION_TOGGLE_DRONE_CONNECTION.equals(action)){
+                boolean connect = intent.getBooleanExtra(EXTRA_ESTABLISH_CONNECTION,
+                        !isConnected());
+                if(connect)
+                    connect();
+                else
+                    disconnect();
             }
         }
     };
@@ -112,15 +123,10 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     private long elapsedFlightTime = 0;
     private AtomicBoolean isTimerRunning = new AtomicBoolean(false);
 
-    public DroneApi(Context context, IDroidPlannerApi dpApi){
-        this.dpApi = dpApi;
-
+    public DroneApi(Context context){
         this.missionProxy = new MissionProxy(context);
-        if(isApiValid())
-            this.missionProxy.load(getMission());
 
         lbm = LocalBroadcastManager.getInstance(context);
-        lbm.registerReceiver(broadcastReceiver, intentFilter);
     }
 
     private void handleRemoteException(RemoteException e){
@@ -144,8 +150,12 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
 
     public void setDpApi(IDroidPlannerApi dpApi) {
         this.dpApi = dpApi;
-        if(isApiValid())
-            this.missionProxy.load(getMission());
+        if(isApiValid()) {
+            lbm.registerReceiver(broadcastReceiver, intentFilter);
+//            this.missionProxy.load(getMission());
+        }
+        else
+            lbm.unregisterReceiver(broadcastReceiver);
     }
 
     public void resetFlightTimer() {
@@ -168,7 +178,8 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     }
 
     public long getFlightTime() {
-        if (getState().isFlying()) {
+        State droneState = getState();
+        if (droneState != null && droneState.isFlying()) {
             // calc delta time since last checked
             elapsedFlightTime += SystemClock.elapsedRealtime() - startTime;
             startTime = SystemClock.elapsedRealtime();
@@ -340,13 +351,23 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     }
 
     public void connect(){
-        lbm.sendBroadcast(new Intent(DroidPlannerApp.ACTION_TOGGLE_DRONE_CONNECTION)
-        .putExtra(DroidPlannerApp.EXTRA_ESTABLISH_CONNECTION, true));
+        if(isApiValid()){
+            try {
+                dpApi.connect();
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
     }
 
     public void disconnect(){
-        lbm.sendBroadcast(new Intent(DroidPlannerApp.ACTION_TOGGLE_DRONE_CONNECTION)
-                .putExtra(DroidPlannerApp.EXTRA_ESTABLISH_CONNECTION, false));
+        if(isApiValid()){
+            try {
+                dpApi.disconnect();
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
     }
 
     @Override
@@ -448,19 +469,6 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
                 handleRemoteException(e);
             }
         }
-    }
-
-    @Override
-    public void disconnectFromDrone()  {
-        if(isApiValid()){
-            try {
-                dpApi.disconnectFromDrone();
-            } catch (RemoteException e) {
-                handleRemoteException(e);
-            }
-        }
-
-        lbm.unregisterReceiver(broadcastReceiver);
     }
 
     @Override

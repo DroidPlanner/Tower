@@ -24,13 +24,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.RemoteException;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,8 +43,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.internal.is;
-import com.ox3dr.services.android.lib.model.IDroidPlannerApi;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.event.Extra;
 import com.ox3dr.services.android.lib.drone.property.Parameter;
@@ -239,10 +234,10 @@ public class ParamsFragment extends ApiListenerListFragment {
     }
 
     @Override
-    public void onApiConnected(DroneApi api) {
-        Parameters droneParams = api.getParameters();
+    public void onApiConnected() {
+        Parameters droneParams = getDroneApi().getParameters();
 
-        if(adapter.isEmpty()) {
+        if(adapter.isEmpty() && droneParams != null) {
             List<Parameter> parametersList = droneParams.getParameters();
             if (!parametersList.isEmpty())
                 loadAdapter(parametersList);

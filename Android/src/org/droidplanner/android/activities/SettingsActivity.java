@@ -5,7 +5,6 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.fragments.SettingsFragment;
 
 /**
@@ -32,6 +31,6 @@ public class SettingsActivity extends DrawerNavigationUI {
 	}
 
 	@Override
-	public void onApiConnected(DroneApi api) {
+	public void onApiConnected() {
 	}
 }

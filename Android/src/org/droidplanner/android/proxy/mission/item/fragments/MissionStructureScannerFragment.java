@@ -13,7 +13,6 @@ import com.ox3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
 
 import org.droidplanner.R;
 import org.droidplanner.R.id;
-import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.CamerasAdapter;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
@@ -33,8 +32,8 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 	}
 
 	@Override
-	public void onApiConnected(DroneApi api) {
-		super.onApiConnected(api);
+	public void onApiConnected() {
+		super.onApiConnected();
 
 		final View view = getView();
 		final Context context = getActivity().getApplicationContext();
@@ -42,7 +41,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.STRUCTURE_SCANNER));
 
 		cameraAdapter = new CamerasAdapter(getActivity(),
-				android.R.layout.simple_spinner_dropdown_item, api.getCameraDetails());
+				android.R.layout.simple_spinner_dropdown_item, getDroneApi().getCameraDetails());
 		SpinnerSelfSelect cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
 		cameraSpinner.setAdapter(cameraAdapter);
 		cameraSpinner.setOnSpinnerItemSelectedListener(this);

@@ -79,10 +79,10 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	}
 
 	@Override
-	public void onApiConnected(DroneApi api) {
-		super.onApiConnected(api);
+	public void onApiConnected() {
+		super.onApiConnected();
 
-		adapter.addAll(api.getFollowTypes());
+		adapter.addAll(getDroneApi().getFollowTypes());
 		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 	}
 

@@ -14,7 +14,6 @@ import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
-import com.ox3dr.services.android.lib.drone.property.Altitude;
 
 import org.droidplanner.R;
 import org.droidplanner.R.id;
@@ -73,14 +72,14 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	}
 
 	@Override
-	public void onApiConnected(DroneApi api) {
-		super.onApiConnected(api);
+	public void onApiConnected() {
+		super.onApiConnected();
 
         final View view = getView();
         final Context context = getActivity().getApplicationContext();
 
         cameraAdapter = new CamerasAdapter(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item, api.getCameraDetails());
+                android.R.layout.simple_spinner_dropdown_item, getDroneApi().getCameraDetails());
 
         cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
         cameraSpinner.setAdapter(cameraAdapter);
@@ -207,9 +206,9 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 						+ ": " + surveyDetail.getLateralPictureDistance());
 				areaTextView.setText(getString(R.string.area) + ": " + survey.getPolygonArea());
 				lengthView.setText(getString(R.string.mission_length) + ": "
-						+ survey.getGridLength());
+                        + survey.getGridLength());
 				numberOfPicturesView.setText(getString(R.string.pictures) + ": "
-						+ survey.getCameraCount());
+                        + survey.getCameraCount());
 				numberOfStripsView.setText(getString(R.string.number_of_strips) + ": "
 						+ survey.getNumberOfLines());
 

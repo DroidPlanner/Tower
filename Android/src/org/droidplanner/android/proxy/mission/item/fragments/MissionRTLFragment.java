@@ -1,10 +1,6 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
-
-import android.os.Bundle;
-import android.view.View;
 
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 
@@ -16,8 +12,8 @@ public class MissionRTLFragment extends MissionDetailFragment {
 	}
 
 	@Override
-    public void onApiConnected(DroneApi api){
-        super.onApiConnected(api);
+    public void onApiConnected(){
+        super.onApiConnected();
         typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.RETURN_TO_LAUNCH));
     }
 

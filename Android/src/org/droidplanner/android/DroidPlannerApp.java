@@ -1,23 +1,19 @@
 package org.droidplanner.android;
 
 import android.app.Application;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.ox3dr.services.android.lib.drone.connection.ConnectionParameter;
 import com.ox3dr.services.android.lib.drone.connection.ConnectionType;
-import com.ox3dr.services.android.lib.model.IDroidPlannerApi;
 import com.ox3dr.services.android.lib.model.IDroidPlannerServices;
 import com.ox3dr.services.android.lib.model.ITLogApi;
 
@@ -37,49 +33,25 @@ public class DroidPlannerApp extends Application {
 
 	private static final long DELAY_TO_DISCONNECTION = 60000l; // ms
 
-	private static final String CLAZZ_NAME = DroidPlannerApp.class.getName();
 	private static final String TAG = DroidPlannerApp.class.getSimpleName();
-
-	public static final String ACTION_TOGGLE_DRONE_CONNECTION = CLAZZ_NAME
-			+ ".ACTION_TOGGLE_DRONE_CONNECTION";
-	public static final String EXTRA_ESTABLISH_CONNECTION = "extra_establish_connection";
 
 	private static final int API_UNBOUND = 0;
 	private static final int API_BOUND = 1;
 
 	public interface ApiListener {
-		void onApiConnected(DroneApi api);
+		void onApiConnected();
 
 		void onApiDisconnected();
 	}
 
-	private final static IntentFilter intentFilter = new IntentFilter(
-			ACTION_TOGGLE_DRONE_CONNECTION);
-
 	private final AtomicInteger apiBindingState = new AtomicInteger(API_UNBOUND);
 	private DPApiCallback dpCallback;
-
-	private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			final String action = intent.getAction();
-			if (ACTION_TOGGLE_DRONE_CONNECTION.equals(action)) {
-				if (ox3drServices != null) {
-					boolean connectionState = intent.getBooleanExtra(EXTRA_ESTABLISH_CONNECTION,
-							!isDpApiConnected());
-					if (connectionState)
-						connectToDrone();
-					else
-						disconnectFromDrone();
-				}
-			}
-		}
-	};
 
 	private final ServiceConnection ox3drServicesConnection = new ServiceConnection() {
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			ox3drServices = IDroidPlannerServices.Stub.asInterface(service);
+            registerWithDrone();
             notifyApiConnected();
 		}
 
@@ -87,7 +59,7 @@ public class DroidPlannerApp extends Application {
 		public void onServiceDisconnected(ComponentName name) {
 			notifyApiDisconnected();
 			ox3drServices = null;
-            droneApi.setDpApi(null);
+            unregisterFromDrone();
 		}
 	};
 
@@ -96,6 +68,7 @@ public class DroidPlannerApp extends Application {
 		public void run() {
 			if (apiBindingState.compareAndSet(API_BOUND, API_UNBOUND)) {
 				notifyApiDisconnected();
+                unregisterFromDrone();
 				unbindService(ox3drServicesConnection);
 			}
 		}
@@ -117,7 +90,6 @@ public class DroidPlannerApp extends Application {
     private DroneApi droneApi;
 
 	private IDroidPlannerServices ox3drServices;
-	private IDroidPlannerApi dpApi;
     private ITLogApi tlogApi;
 
 	private DroidPlannerPrefs dpPrefs;
@@ -129,15 +101,12 @@ public class DroidPlannerApp extends Application {
 		final Context context = getApplicationContext();
 
         dpCallback = new DPApiCallback(this);
-        droneApi = new DroneApi(context, dpApi);
+        droneApi = new DroneApi(context);
 		dpPrefs = new DroidPlannerPrefs(context);
         notificationHandler = new NotificationHandler(context, droneApi);
 
 		exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
 		Thread.setDefaultUncaughtExceptionHandler(dpExceptionHandler);
-
-		final LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
-		lbm.registerReceiver(broadcastReceiver, intentFilter);
 
 		GAUtils.initGATracker(this);
 		GAUtils.startNewSession(context);
@@ -163,8 +132,8 @@ public class DroidPlannerApp extends Application {
 		if (listener == null)
 			return;
 
-		if (ox3drServices != null)
-				listener.onApiConnected(droneApi);
+		if (is3drServicesConnected())
+            listener.onApiConnected();
 
 		apiListeners.add(listener);
 
@@ -188,11 +157,11 @@ public class DroidPlannerApp extends Application {
 	}
 
 	private void notifyApiConnected() {
-		if (apiListeners.isEmpty() || !isDpApiConnected())
+		if (apiListeners.isEmpty() || !is3drServicesConnected())
 			return;
 
 			for (ApiListener listener : apiListeners)
-				listener.onApiConnected(droneApi);
+				listener.onApiConnected();
 	}
 
 	private void notifyApiDisconnected() {
@@ -203,8 +172,8 @@ public class DroidPlannerApp extends Application {
 			listener.onApiDisconnected();
 	}
 
-	private void connectToDrone() {
-		if (!isDpApiConnected() || droneApi.isConnected())
+	private void registerWithDrone() {
+		if (!is3drServicesConnected() || droneApi.isConnected())
 			return;
 
 		// Retrieve the connection parameters.
@@ -215,28 +184,26 @@ public class DroidPlannerApp extends Application {
 		}
 
 		try {
-			dpApi = ox3drServices.connectToDrone(connParams, dpCallback);
-            droneApi.setDpApi(dpApi);
+            droneApi.setDpApi(ox3drServices.registerWithDrone(connParams, dpCallback));
 		} catch (RemoteException e) {
 			Log.e(TAG, "Unable to retrieve a droidplanner api connection.", e);
 		}
 	}
 
-	private void disconnectFromDrone() {
-		if (!isDpApiConnected())
+	private void unregisterFromDrone() {
+        droneApi.setDpApi(null);
+
+		if (!is3drServicesConnected())
 			return; // Nothing to do. It's already disconnected.
 
 		try {
-			dpApi.disconnectFromDrone();
+			ox3drServices.unregisterFromDrone(retrieveConnectionParameters(), dpCallback);
 		} catch (RemoteException e) {
 			Log.e(TAG, "Error while disconnecting from the droidplanner api", e);
 		}
-
-        droneApi.setDpApi(null);
-		dpApi = null;
 	}
 
-	public boolean isDpApiConnected() {
+	private boolean is3drServicesConnected() {
 		return ox3drServices != null;
 	}
 

@@ -105,9 +105,9 @@ public class SettingsFragment extends PreferenceFragment implements
 				else
 					updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
 			} else if (Event.EVENT_TYPE_UPDATED.equals(action)) {
-				if (dpApp.isDpApiConnected()) {
-					updateFirmwareVersionPreference(dpApp.getDroneApi().getType()
-							.getFirmwareVersion());
+                DroneApi drone = dpApp.getDroneApi();
+				if (drone.isConnected()) {
+					updateFirmwareVersionPreference(drone.getType().getFirmwareVersion());
 				} else
 					updateFirmwareVersionPreference(null);
 			}
@@ -603,17 +603,22 @@ public class SettingsFragment extends PreferenceFragment implements
 	}
 
 	@Override
-	public void onApiConnected(DroneApi api) {
-		State droneState = api.getState();
-		Type droneType = api.getType();
-		final int mavlinkVersion = droneState.getMavlinkVersion();
+	public void onApiConnected() {
+        DroneApi drone = dpApp.getDroneApi();
+		State droneState = drone.getState();
+		Type droneType = drone.getType();
+		final int mavlinkVersion = droneState == null
+                ? State.INVALID_MAVLINK_VERSION
+                :droneState.getMavlinkVersion();
+
 		if (mavlinkVersion != State.INVALID_MAVLINK_VERSION) {
 			updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
 		} else {
 			updateMavlinkVersionPreference(null);
 		}
 
-		updateFirmwareVersionPreference(droneType.getFirmwareVersion());
+        String firmwareVersion = droneType == null ? null : droneType.getFirmwareVersion();
+		updateFirmwareVersionPreference(firmwareVersion);
 
 		LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(
 				broadcastReceiver, intentFilter);

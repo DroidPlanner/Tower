@@ -44,9 +44,10 @@ public class FlightActionsFragment extends ApiListenerFragment {
 	}
 
 	@Override
-	public void onApiConnected(DroneApi api) {
-        if(api.isConnected())
-		selectActionsBar(api.getType().getDroneType());
+	public void onApiConnected() {
+        DroneApi drone = getDroneApi();
+        if(drone.isConnected())
+		    selectActionsBar(drone.getType().getDroneType());
         else{
             selectActionsBar(-1);
         }

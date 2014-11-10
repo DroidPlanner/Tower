@@ -302,9 +302,9 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 	}
 
 	@Override
-	public void onApiConnected(DroneApi api) {
-
-		if (api.isConnected() && !api.getState().isFlying()) {
+	public void onApiConnected() {
+        DroneApi drone = getDroneApi();
+		if (drone.isConnected() && !drone.getState().isFlying()) {
 			buttonStep.setEnabled(true);
 		} else {
 			cancelCalibration();

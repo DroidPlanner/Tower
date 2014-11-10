@@ -1,17 +1,14 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 
-import android.os.Bundle;
 import android.view.View;
 
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.ox3dr.services.android.lib.drone.mission.item.command.ChangeSpeed;
-import com.ox3dr.services.android.lib.drone.property.Speed;
 
 public class MissionChangeSpeedFragment extends MissionDetailFragment implements
 		CardWheelHorizontalView.OnCardWheelChangedListener {
@@ -22,8 +19,8 @@ public class MissionChangeSpeedFragment extends MissionDetailFragment implements
 	}
 
     @Override
-    public void onApiConnected(DroneApi api){
-        super.onApiConnected(api);
+    public void onApiConnected(){
+        super.onApiConnected();
 
         final View view = getView();
         typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CHANGE_SPEED));

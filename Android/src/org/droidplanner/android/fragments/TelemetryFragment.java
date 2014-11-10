@@ -82,7 +82,7 @@ public class TelemetryFragment extends ApiListenerFragment {
 	}
 
 	@Override
-	public void onApiConnected(DroneApi api) {
+	public void onApiConnected() {
 		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 	}
 

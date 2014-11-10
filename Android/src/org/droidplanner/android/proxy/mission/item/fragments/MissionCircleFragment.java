@@ -5,10 +5,8 @@ import android.view.View;
 
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.Circle;
-import com.ox3dr.services.android.lib.drone.property.Altitude;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
@@ -24,8 +22,8 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 	}
 
 	@Override
-	public void onApiConnected(DroneApi api) {
-		super.onApiConnected(api);
+	public void onApiConnected() {
+		super.onApiConnected();
 
 		final View view = getView();
 		final Context context = getActivity().getApplicationContext();

@@ -12,10 +12,10 @@ import com.ox3dr.services.android.lib.drone.property.Home;
 
 public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 
-	private Home home;
+	private DroneApi drone;
 
 	public GraphicHome(DroneApi drone) {
-		home = drone.getHome();
+		this.drone = drone;
 	}
 
 	@Override
@@ -24,7 +24,8 @@ public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 	}
 
 	public boolean isValid() {
-		return home.isValid();
+        Home droneHome = drone.getHome();
+		return droneHome != null && droneHome.isValid();
 	}
 
 	@Override
@@ -39,12 +40,16 @@ public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 
 	@Override
 	public com.ox3dr.services.android.lib.coordinate.LatLong getPosition() {
-		return home.getCoordinate();
+        Home droneHome = drone.getHome();
+        if(droneHome == null) return null;
+
+		return droneHome.getCoordinate();
 	}
 
 	@Override
 	public String getSnippet() {
-		return "Home " + home.getCoordinate().getAltitude();
+        Home droneHome = drone.getHome();
+		return "Home " + (droneHome == null ? "N/A" : droneHome.getCoordinate().getAltitude());
 	}
 
 	@Override
@@ -54,6 +59,6 @@ public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 
 	@Override
 	public boolean isVisible() {
-		return home.isValid();
+		return isValid();
 	}
 }

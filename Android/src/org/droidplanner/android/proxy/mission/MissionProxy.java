@@ -83,6 +83,9 @@ public class MissionProxy implements DPMap.PathSource {
 	 * object.
 	 */
 	public void load(Mission mission) {
+        if(mission == null)
+            return;
+
 		selection.mSelectedItems.clear();
 		mMissionItems.clear();
 

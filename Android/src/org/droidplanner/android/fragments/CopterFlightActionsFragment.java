@@ -185,8 +185,8 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     }
 
     @Override
-    public void onApiConnected(DroneApi api) {
-        missionProxy = api.getMissionProxy();
+    public void onApiConnected() {
+        missionProxy = getDroneApi().getMissionProxy();
 
         setupButtonsByFlightState();
         updateFlightModeButtons();
@@ -346,6 +346,9 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
         resetFlightModeButtons();
 
         final VehicleMode flightMode = getDroneApi().getState().getVehicleMode();
+        if(flightMode == null)
+            return;
+
         switch (flightMode) {
             case COPTER_AUTO:
                 autoBtn.setActivated(true);
