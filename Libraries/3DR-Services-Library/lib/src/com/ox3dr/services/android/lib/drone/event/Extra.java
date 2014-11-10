@@ -7,6 +7,9 @@ public class Extra {
 
     private static final String CLAZZ_NAME = Extra.class.getName();
 
+    public static final String EXTRA_AUTOPILOT_FAILSAFE_MESSAGE = CLAZZ_NAME + "" +
+            ".AUTOPILOT_FAILSAFE_MESSAGE";
+
     public static final String EXTRA_CALIBRATION_IMU_MESSAGE = CLAZZ_NAME +
             ".CALIBRATION_IMU_MESSAGE";
 

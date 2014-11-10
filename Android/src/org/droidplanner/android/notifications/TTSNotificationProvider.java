@@ -9,11 +9,13 @@ import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.widget.Toast;
 
 import com.ox3dr.services.android.lib.drone.event.Event;
+import com.ox3dr.services.android.lib.drone.event.Extra;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 
 import org.droidplanner.R;
@@ -311,8 +313,8 @@ public class TTSNotificationProvider implements OnInitListener,
                 }
             }
             else if(Event.EVENT_AUTOPILOT_FAILSAFE.equals(action)){
-                String warning = droneApi.getState().getFailsafeWarning();
-                if (droneApi.getState().isWarning() && mAppPrefs.getWarningOnAutopilotWarning()) {
+                String warning = intent.getStringExtra(Extra.EXTRA_AUTOPILOT_FAILSAFE_MESSAGE);
+                if (!TextUtils.isEmpty(warning) && mAppPrefs.getWarningOnAutopilotWarning()) {
                     speak(warning);
                 }
             }

@@ -8,6 +8,7 @@ import android.os.Parcelable;
  */
 public class Type implements Parcelable {
 
+    public static final int TYPE_UNKNOWN = -1;
     public static final int TYPE_PLANE = 1;
     public static final int TYPE_COPTER = 2;
     public static final int TYPE_ROVER = 10;
@@ -49,10 +50,10 @@ public class Type implements Parcelable {
                 firmware = Firmware.APM_ROVER;
                 break;
 
+            case TYPE_UNKNOWN:
             default:
                 firmware = null;
-                throw new IllegalArgumentException("Unexpected drone type parameter (" + droneType +
-                        ")");
+                break;
         }
     }
 

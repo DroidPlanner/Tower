@@ -18,7 +18,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -29,13 +31,18 @@ import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.ox3dr.services.android.lib.drone.event.Event;
-import com.ox3dr.services.android.lib.drone.property.State;
+import com.ox3dr.services.android.lib.drone.event.Extra;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public class FlightActivity extends DrawerNavigationUI {
 
     private static final String TAG = FlightActivity.class.getSimpleName();
 	private static final int GOOGLE_PLAY_SERVICES_REQUEST_CODE = 101;
+
+    /**
+     * Determines how long the failsafe view is visible for.
+     */
+    private static final long WARNING_VIEW_DISPLAY_TIMEOUT = 10000l; //ms
 
     private static final IntentFilter eventFilter = new IntentFilter();
     static {
@@ -52,7 +59,8 @@ public class FlightActivity extends DrawerNavigationUI {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if(Event.EVENT_AUTOPILOT_FAILSAFE.equals(action)){
-                onWarningChanged(dpApp.getDroneApi());
+                String warning = intent.getStringExtra(Extra.EXTRA_AUTOPILOT_FAILSAFE_MESSAGE);
+                onWarningChanged(warning);
             }
             else if(Event.EVENT_ARMING.equals(action)
                     || Event.EVENT_CONNECTED.equals(action)
@@ -97,7 +105,20 @@ public class FlightActivity extends DrawerNavigationUI {
         public void onPanelHidden(View view) {}
     };
 
+    private final Runnable hideWarningView = new Runnable() {
+        @Override
+        public void run() {
+            handler.removeCallbacks(this);
+
+            if(warningView != null && warningView.getVisibility() != View.GONE)
+                warningView.setVisibility(View.GONE);
+        }
+    };
+
+    private final Handler handler = new Handler();
+
 	private FragmentManager fragmentManager;
+
 	private TextView warningView;
 
 	private FlightMapFragment mapFragment;
@@ -383,13 +404,13 @@ public class FlightActivity extends DrawerNavigationUI {
         }
     }
 
-	public void onWarningChanged(DroneApi drone) {
-        State droneState = drone.getState();
-		if (droneState.isWarning()) {
-			warningView.setText(droneState.getFailsafeWarning());
+	public void onWarningChanged(String warning) {
+		if (!TextUtils.isEmpty(warning)) {
+            handler.removeCallbacks(hideWarningView);
+
+			warningView.setText(warning);
 			warningView.setVisibility(View.VISIBLE);
-		} else {
-			warningView.setVisibility(View.GONE);
+            handler.postDelayed(hideWarningView, WARNING_VIEW_DISPLAY_TIMEOUT);
 		}
 	}
 

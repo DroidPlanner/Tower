@@ -141,11 +141,15 @@ public class InfoBarActionProvider extends ActionProvider {
 	public void setDrone(DroneApi droneApi) {
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(mContext);
         if(droneApi == null) {
-            if(mDroneApi != null)
+            if(mDroneApi != null) {
                 lbm.unregisterReceiver(eventReceiver);
+                updateInfoBar();
+            }
         }
-        else
+        else {
+            updateInfoBar();
             lbm.registerReceiver(eventReceiver, eventFilter);
+        }
 
         mDroneApi = droneApi;
 	}

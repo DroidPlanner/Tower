@@ -154,7 +154,7 @@ public abstract class InfoBarItem {
                                 .getSatellitesCount(), droneGps.getGpsEph());
                     } else {
                         update = String.format(Locale.ENGLISH, "Satellite\n%d, %s", droneGps
-                                .getSatellitesCount(), droneGps.getFixType());
+                                .getSatellitesCount(), droneGps.getFixStatus());
                     }
                 }
 
