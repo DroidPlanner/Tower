@@ -15,7 +15,7 @@ public class Home implements Parcelable {
      */
     private final LatLongAlt mCoordinate;
 
-    public Home(float latitude, float longitude, float altitude){
+    public Home(double latitude, double longitude, double altitude){
         mCoordinate = new LatLongAlt(latitude, longitude, altitude);
     }
 

@@ -290,7 +290,7 @@ public class MathUtils {
                 + Math.atan2(Math.sin(brng) * Math.sin(dr) * Math.cos(lat1),
                 Math.cos(dr) - Math.sin(lat1) * Math.sin(lat2));
 
-        return (new LatLong((float)Math.toDegrees(lat2), (float)Math.toDegrees(lon2)));
+        return (new LatLong(Math.toDegrees(lat2), Math.toDegrees(lon2)));
     }
 
     /**
