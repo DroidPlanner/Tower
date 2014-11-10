@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by fhuya on 10/28/14.
  */
-public class Parameter implements Parcelable {
+public class Parameter implements Parcelable, Comparable<Parameter> {
 
     public static final int RANGE_LOW = 0;
     public static final int RANGE_HIGH = 1;
@@ -201,4 +201,9 @@ public class Parameter implements Parcelable {
             return new Parameter[size];
         }
     };
+
+    @Override
+    public int compareTo(Parameter another) {
+        return name.compareTo(another.name);
+    }
 }
