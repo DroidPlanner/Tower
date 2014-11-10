@@ -31,7 +31,8 @@ public class FlightActionsFragment extends ApiListenerFragment {
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
 			if (Event.EVENT_TYPE_UPDATED.equals(action)) {
-				selectActionsBar(getDroneApi().getType().getDroneType());
+                Type type = getDroneApi().getType();
+				selectActionsBar(type == null ? -1 : type.getDroneType());
 			}
 		}
 	};

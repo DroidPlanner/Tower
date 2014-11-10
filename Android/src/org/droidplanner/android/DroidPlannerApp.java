@@ -45,13 +45,11 @@ public class DroidPlannerApp extends Application {
 	}
 
 	private final AtomicInteger apiBindingState = new AtomicInteger(API_UNBOUND);
-	private DPApiCallback dpCallback;
 
 	private final ServiceConnection ox3drServicesConnection = new ServiceConnection() {
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			ox3drServices = IDroidPlannerServices.Stub.asInterface(service);
-            registerWithDrone();
             notifyApiConnected();
 		}
 
@@ -59,7 +57,6 @@ public class DroidPlannerApp extends Application {
 		public void onServiceDisconnected(ComponentName name) {
 			notifyApiDisconnected();
 			ox3drServices = null;
-            unregisterFromDrone();
 		}
 	};
 
@@ -68,7 +65,6 @@ public class DroidPlannerApp extends Application {
 		public void run() {
 			if (apiBindingState.compareAndSet(API_BOUND, API_UNBOUND)) {
 				notifyApiDisconnected();
-                unregisterFromDrone();
 				unbindService(ox3drServicesConnection);
 			}
 		}
@@ -92,7 +88,6 @@ public class DroidPlannerApp extends Application {
 	private IDroidPlannerServices ox3drServices;
     private ITLogApi tlogApi;
 
-	private DroidPlannerPrefs dpPrefs;
     private NotificationHandler notificationHandler;
 
 	@Override
@@ -100,9 +95,8 @@ public class DroidPlannerApp extends Application {
 		super.onCreate();
 		final Context context = getApplicationContext();
 
-        dpCallback = new DPApiCallback(this);
-        droneApi = new DroneApi(context);
-		dpPrefs = new DroidPlannerPrefs(context);
+        droneApi = new DroneApi(this);
+
         notificationHandler = new NotificationHandler(context, droneApi);
 
 		exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
@@ -126,6 +120,10 @@ public class DroidPlannerApp extends Application {
         }
 
         return tlogApi;
+    }
+
+    public IDroidPlannerServices get3drServices(){
+        return ox3drServices;
     }
 
 	public void addApiListener(ApiListener listener) {
@@ -172,82 +170,7 @@ public class DroidPlannerApp extends Application {
 			listener.onApiDisconnected();
 	}
 
-	private void registerWithDrone() {
-		if (!is3drServicesConnected() || droneApi.isConnected())
-			return;
-
-		// Retrieve the connection parameters.
-		final ConnectionParameter connParams = retrieveConnectionParameters();
-		if (connParams == null) {
-			Log.e(TAG, "Invalid connection parameters");
-			return;
-		}
-
-		try {
-            droneApi.setDpApi(ox3drServices.registerWithDrone(connParams, dpCallback));
-		} catch (RemoteException e) {
-			Log.e(TAG, "Unable to retrieve a droidplanner api connection.", e);
-		}
-	}
-
-	private void unregisterFromDrone() {
-        droneApi.setDpApi(null);
-
-		if (!is3drServicesConnected())
-			return; // Nothing to do. It's already disconnected.
-
-		try {
-			ox3drServices.unregisterFromDrone(retrieveConnectionParameters(), dpCallback);
-		} catch (RemoteException e) {
-			Log.e(TAG, "Error while disconnecting from the droidplanner api", e);
-		}
-	}
-
-	private boolean is3drServicesConnected() {
+	public boolean is3drServicesConnected() {
 		return ox3drServices != null;
-	}
-
-	private ConnectionParameter retrieveConnectionParameters() {
-		final int connectionType = dpPrefs.getConnectionParameterType();
-		Bundle extraParams = new Bundle();
-
-		ConnectionParameter connParams;
-		switch (connectionType) {
-		case ConnectionType.TYPE_USB:
-			extraParams.putInt(ConnectionType.EXTRA_USB_BAUD_RATE, dpPrefs.getUsbBaudRate());
-			connParams = new ConnectionParameter(connectionType, extraParams);
-			break;
-
-		case ConnectionType.TYPE_UDP:
-			extraParams.putInt(ConnectionType.EXTRA_UDP_SERVER_PORT, dpPrefs.getUdpServerPort());
-			connParams = new ConnectionParameter(connectionType, extraParams);
-			break;
-
-		case ConnectionType.TYPE_TCP:
-			extraParams.putString(ConnectionType.EXTRA_TCP_SERVER_IP, dpPrefs.getTcpServerIp());
-			extraParams.putInt(ConnectionType.EXTRA_TCP_SERVER_PORT, dpPrefs.getTcpServerPort());
-			connParams = new ConnectionParameter(connectionType, extraParams);
-			break;
-
-		case ConnectionType.TYPE_BLUETOOTH:
-			String btAddress = dpPrefs.getBluetoothDeviceAddress();
-			if (TextUtils.isEmpty(btAddress)) {
-				connParams = null;
-				startActivity(new Intent(getApplicationContext(), BluetoothDevicesActivity.class)
-						.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-
-			} else {
-				extraParams.putString(ConnectionType.EXTRA_BLUETOOTH_ADDRESS, btAddress);
-				connParams = new ConnectionParameter(connectionType, extraParams);
-			}
-			break;
-
-		default:
-			Log.e(TAG, "Unrecognized connection type: " + connectionType);
-			connParams = null;
-			break;
-		}
-
-		return connParams;
 	}
 }

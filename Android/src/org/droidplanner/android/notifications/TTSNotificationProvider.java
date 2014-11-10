@@ -244,7 +244,7 @@ public class TTSNotificationProvider implements OnInitListener,
 		eventFilter.addAction(Event.EVENT_BATTERY);
 		eventFilter.addAction(Event.EVENT_VEHICLE_MODE);
 		eventFilter.addAction(Event.EVENT_MISSION_SENT);
-		eventFilter.addAction(Event.EVENT_GPS);
+		eventFilter.addAction(Event.EVENT_GPS_STATE);
 		eventFilter.addAction(Event.EVENT_MISSION_RECEIVED);
 		eventFilter.addAction(Event.EVENT_HEARTBEAT_FIRST);
 		eventFilter.addAction(Event.EVENT_HEARTBEAT_TIMEOUT);
@@ -275,7 +275,7 @@ public class TTSNotificationProvider implements OnInitListener,
 			} else if (Event.EVENT_MISSION_SENT.equals(action)) {
 				Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT).show();
 				speak("Waypoints saved to Drone");
-			} else if (Event.EVENT_GPS.equals(action)) {
+			} else if (Event.EVENT_GPS_STATE.equals(action)) {
 				speakGpsMode(droneApi.getGps().getFixType());
 			} else if (Event.EVENT_MISSION_RECEIVED.equals(action)) {
 				Toast.makeText(context, "Waypoints received from Drone", Toast.LENGTH_SHORT).show();

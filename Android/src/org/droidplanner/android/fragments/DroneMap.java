@@ -51,6 +51,9 @@ public abstract class DroneMap extends ApiListenerFragment {
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if(!isResumed())
+                return;
+
             final String action = intent.getAction();
             if(Event.EVENT_MISSION_UPDATE.equals(action)){
                 postUpdate();

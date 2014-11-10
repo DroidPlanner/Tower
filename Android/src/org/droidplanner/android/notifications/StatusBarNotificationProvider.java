@@ -92,6 +92,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
         eventFilter.addAction(Event.EVENT_CONNECTED);
         eventFilter.addAction(Event.EVENT_BATTERY);
         eventFilter.addAction(Event.EVENT_GPS);
+        eventFilter.addAction(Event.EVENT_GPS_STATE);
         eventFilter.addAction(Event.EVENT_HOME);
         eventFilter.addAction(Event.EVENT_RADIO);
         eventFilter.addAction(Event.EVENT_STATE);
@@ -125,8 +126,10 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
                 updateRadio(droneApi);
             }
             else if(Event.EVENT_GPS.equals(action)){
-                updateGps(droneApi);
                 updateHome(droneApi);
+            }
+            else if(Event.EVENT_GPS_STATE.equals(action)){
+                updateGps(droneApi);
             }
             else if(Event.EVENT_BATTERY.equals(action)){
                 updateBattery(droneApi);

@@ -55,7 +55,8 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
                     ||Event.EVENT_SPEED.equals(action)){
                 sendDataToWatchIfTimeHasElapsed(dpApi);
             }
-            else if(Event.EVENT_FOLLOW_UPDATE.equals(action)){
+            else if((Event.EVENT_FOLLOW_START.equals(action)
+                    || Event.EVENT_FOLLOW_STOP.equals(action))) {
                 sendDataToWatchIfTimeHasElapsed(dpApi);
 
                 FollowState followState = dpApi.getFollowState();
