@@ -106,7 +106,7 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 		paramTag.setAppearance(item);
 
 		final EditText valueView = paramTag.getValueView();
-		valueView.setText(Double.toString(param.getValue()));
+		valueView.setText(param.getDisplayValue());
 
 		// attach listeners
 		paramTag.getNameView().setOnClickListener(paramTag);
