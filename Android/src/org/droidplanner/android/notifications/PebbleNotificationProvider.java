@@ -156,6 +156,9 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 		PebbleDictionary data = new PebbleDictionary();
 
 		VehicleMode mode = droneState.getVehicleMode();
+        if(mode == null)
+            return;
+
         String modeLabel = mode.getLabel();
 		if (!droneState.isArmed())
 			modeLabel = "Disarmed";
