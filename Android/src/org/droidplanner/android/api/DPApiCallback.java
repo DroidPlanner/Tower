@@ -28,6 +28,9 @@ public final class DPApiCallback extends IDroidPlannerApiCallback.Stub {
 
 	public static final String EXTRA_CONNECTION_FAILED_ERROR_MESSAGE = "extra_connection_failed_error_message";
 
+    private final static Intent eventIntent = new Intent(ACTION_DRONE_EVENT);
+    private final static Intent connectionFailedIntent = new Intent(ACTION_DRONE_CONNECTION_FAILED);
+
 	private final WeakReference<DroidPlannerApp> appRef;
 	private final LocalBroadcastManager lbm;
 
@@ -46,14 +49,18 @@ public final class DPApiCallback extends IDroidPlannerApiCallback.Stub {
 
 	@Override
 	public void onConnectionFailed(ConnectionResult result) throws RemoteException {
-		lbm.sendBroadcast(new Intent(ACTION_DRONE_CONNECTION_FAILED).putExtra(
-                EXTRA_CONNECTION_FAILED_ERROR_CODE, result.getErrorCode()).putExtra(
-                EXTRA_CONNECTION_FAILED_ERROR_MESSAGE, result.getErrorMessage()));
+		lbm.sendBroadcast(connectionFailedIntent
+                .putExtra(EXTRA_CONNECTION_FAILED_ERROR_CODE, result.getErrorCode())
+                .putExtra(EXTRA_CONNECTION_FAILED_ERROR_MESSAGE, result.getErrorMessage()));
 	}
 
 	@Override
 	public void onDroneEvent(String event, Bundle eventExtras) throws RemoteException {
-		lbm.sendBroadcast(new Intent(ACTION_DRONE_EVENT));
-		lbm.sendBroadcast(new Intent(event).putExtras(eventExtras));
+		lbm.sendBroadcast(eventIntent);
+
+        final Intent droneIntent = new Intent(event);
+        if(eventExtras != null)
+            droneIntent.putExtras(eventExtras);
+		lbm.sendBroadcast(droneIntent);
 	}
 }
