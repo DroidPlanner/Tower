@@ -17,19 +17,19 @@ public class Gps implements Parcelable {
     private final static int LOCK_2D_TYPE = 2;
     private final static int LOCK_3D_TYPE = 3;
 
-    private final float mGpsEph;
+    private final double mGpsEph;
     private final int mSatCount;
     private final int mFixType;
     private final LatLong mPosition;
 
-    public Gps(LatLong position, float gpsEph, int satCount, int fixType){
+    public Gps(LatLong position, double gpsEph, int satCount, int fixType){
         mPosition = position;
         mGpsEph = gpsEph;
         mSatCount = satCount;
         mFixType = fixType;
     }
 
-    public Gps(float latitude, float longitude, float gpsEph, int satCount, int fixType){
+    public Gps(double latitude, double longitude, double gpsEph, int satCount, int fixType){
         this(new LatLong(latitude, longitude), gpsEph, satCount, fixType);
     }
 
@@ -37,7 +37,7 @@ public class Gps implements Parcelable {
         return mPosition != null;
     }
 
-    public float getGpsEph(){
+    public double getGpsEph(){
         return mGpsEph;
     }
 
@@ -74,14 +74,20 @@ public class Gps implements Parcelable {
         Gps gps = (Gps) o;
 
         if (mFixType != gps.mFixType) return false;
-        if (Float.compare(gps.mGpsEph, mGpsEph) != 0) return false;
+        if (Double.compare(gps.mGpsEph, mGpsEph) != 0) return false;
         if (mSatCount != gps.mSatCount) return false;
-        return !(mPosition != null ? !mPosition.equals(gps.mPosition) : gps.mPosition != null);
+        if (mPosition != null ? !mPosition.equals(gps.mPosition) : gps.mPosition != null)
+            return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = (mGpsEph != +0.0f ? Float.floatToIntBits(mGpsEph) : 0);
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(mGpsEph);
+        result = (int) (temp ^ (temp >>> 32));
         result = 31 * result + mSatCount;
         result = 31 * result + mFixType;
         result = 31 * result + (mPosition != null ? mPosition.hashCode() : 0);
@@ -105,14 +111,14 @@ public class Gps implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeFloat(this.mGpsEph);
+        dest.writeDouble(this.mGpsEph);
         dest.writeInt(this.mSatCount);
         dest.writeInt(this.mFixType);
         dest.writeParcelable(this.mPosition, 0);
     }
 
     private Gps(Parcel in) {
-        this.mGpsEph = in.readFloat();
+        this.mGpsEph = in.readDouble();
         this.mSatCount = in.readInt();
         this.mFixType = in.readInt();
         this.mPosition = in.readParcelable(LatLong.class.getClassLoader());

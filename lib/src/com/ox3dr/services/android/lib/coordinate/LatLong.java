@@ -13,10 +13,10 @@ public class LatLong implements Parcelable, Serializable {
     /**
      * Stores latitude, and longitude in degrees
      */
-    private float latitude;
-    private float longitude;
+    private double latitude;
+    private double longitude;
 
-    public LatLong(float latitude, float longitude){
+    public LatLong(double latitude, double longitude){
         this.latitude = latitude;
         this.longitude = longitude;
     }
@@ -28,26 +28,26 @@ public class LatLong implements Parcelable, Serializable {
     /**
      * @return the latitude in degrees
      */
-    public float getLatitude(){
+    public double getLatitude(){
         return latitude;
     }
 
     /**
      * @return the longitude in degrees
      */
-    public float getLongitude(){
+    public double getLongitude(){
         return longitude;
     }
 
-    public void setLatitude(float latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public void setLongitude(float longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public LatLong dot(float scalar) {
+    public LatLong dot(double scalar) {
         return new LatLong(latitude * scalar, longitude * scalar);
     }
 
@@ -64,8 +64,8 @@ public class LatLong implements Parcelable, Serializable {
     }
 
     public static LatLong sum(LatLong... toBeAdded) {
-        float latitude = 0;
-        float longitude = 0;
+        double latitude = 0;
+        double longitude = 0;
         for (LatLong coord : toBeAdded) {
             latitude += coord.latitude;
             longitude += coord.longitude;
@@ -80,16 +80,20 @@ public class LatLong implements Parcelable, Serializable {
 
         LatLong latLong = (LatLong) o;
 
-        if (Float.compare(latLong.latitude, latitude) != 0) return false;
-        if (Float.compare(latLong.longitude, longitude) != 0) return false;
+        if (Double.compare(latLong.latitude, latitude) != 0) return false;
+        if (Double.compare(latLong.longitude, longitude) != 0) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = (latitude != +0.0f ? Float.floatToIntBits(latitude) : 0);
-        result = 31 * result + (longitude != +0.0f ? Float.floatToIntBits(longitude) : 0);
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(latitude);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(longitude);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 

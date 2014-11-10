@@ -11,9 +11,9 @@ public class LatLongAlt extends LatLong {
     /**
      * Stores the altitude in meters.
      */
-    private float mAltitude;
+    private double mAltitude;
 
-    public LatLongAlt(float latitude, float longitude, float altitude) {
+    public LatLongAlt(double latitude, double longitude, double altitude) {
         super(latitude, longitude);
         mAltitude = altitude;
     }
@@ -25,7 +25,7 @@ public class LatLongAlt extends LatLong {
     /**
      * @return the altitude in meters
      */
-    public float getAltitude() {
+    public double getAltitude() {
         return mAltitude;
     }
 
@@ -39,15 +39,19 @@ public class LatLongAlt extends LatLong {
         if (!(o instanceof LatLongAlt)) return false;
         if (!super.equals(o)) return false;
 
-        LatLongAlt latLngAlt = (LatLongAlt) o;
+        LatLongAlt that = (LatLongAlt) o;
 
-        return Float.compare(latLngAlt.mAltitude, mAltitude) == 0;
+        if (Double.compare(that.mAltitude, mAltitude) != 0) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (mAltitude != +0.0f ? Float.floatToIntBits(mAltitude) : 0);
+        long temp;
+        temp = Double.doubleToLongBits(mAltitude);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 
