@@ -164,6 +164,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         missionProxy = dpApp.getDroneApi().getMissionProxy();
         if(missionProxy != null)
             missionProxy.selection.addSelectionUpdateListener(this);
+
+        getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
 
     @Override
@@ -172,6 +174,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
         if(missionProxy != null)
             missionProxy.selection.removeSelectionUpdateListener(this);
+
+        getBroadcastManager().unregisterReceiver(eventReceiver);
     }
 
 	@Override
@@ -331,7 +335,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 if(missionProxy != null) {
                     double missionLength = missionProxy.getMissionLength();
                     double speedParameter = dpApp.getDroneApi().getSpeedParameter();
-                    String infoString = "Distance " + missionLength;
+                    String infoString = String.format("Distance %02.2fm", missionLength);
                     if (speedParameter > 0) {
                         int time = (int) (missionLength / speedParameter);
                         infoString = infoString

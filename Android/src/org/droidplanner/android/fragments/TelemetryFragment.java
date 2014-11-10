@@ -109,14 +109,19 @@ public class TelemetryFragment extends ApiListenerFragment {
 	}
 
 	public void onSpeedAltitudeAndClimbRateUpdate(Speed speed, Altitude altitude) {
-		airSpeed.setText(String.format("%3.1f", speed.getAirSpeed()));
-		groundSpeed.setText(String.format("%3.1f", speed.getGroundSpeed()));
-		climbRate.setText(String.format("%3.1f", speed.getVerticalSpeed()));
-		double alt = altitude.getAltitude();
-		double targetAlt = altitude.getTargetAltitude();
+        if(speed != null) {
+            airSpeed.setText(String.format("%3.1f", speed.getAirSpeed()));
+            groundSpeed.setText(String.format("%3.1f", speed.getGroundSpeed()));
+            climbRate.setText(String.format("%3.1f", speed.getVerticalSpeed()));
+        }
 
-		this.altitude.setText(String.format("%3.1f", alt));
-		targetAltitude.setText(String.format("%3.1f", targetAlt));
+        if(altitude != null) {
+            double alt = altitude.getAltitude();
+            double targetAlt = altitude.getTargetAltitude();
+
+            this.altitude.setText(String.format("%3.1f", alt));
+            targetAltitude.setText(String.format("%3.1f", targetAlt));
+        }
 	}
 
 }

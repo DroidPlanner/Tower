@@ -302,7 +302,8 @@ public class TTSNotificationProvider implements OnInitListener,
                 handler.removeCallbacks(watchdogCallback);
             }
             else if(Event.EVENT_MISSION_ITEM_UPDATE.equals(action)){
-                speak("Going for waypoint " + droneApi.getMission().getCurrentMissionItem());
+                int currentWaypoint = intent.getIntExtra(Extra.EXTRA_MISSION_CURRENT_WAYPOINT, 0);
+                speak("Going for waypoint " + currentWaypoint);
             }
             else if(Event.EVENT_FOLLOW_START.equals(action)){
                 speak("Following");

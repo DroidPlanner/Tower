@@ -52,6 +52,7 @@ public class FlightActivity extends DrawerNavigationUI {
         eventFilter.addAction(Event.EVENT_DISCONNECTED);
         eventFilter.addAction(Event.EVENT_STATE);
         eventFilter.addAction(Event.EVENT_FOLLOW_START);
+        eventFilter.addAction(Event.EVENT_MISSION_DRONIE_CREATED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -74,6 +75,11 @@ public class FlightActivity extends DrawerNavigationUI {
                         !mSlidingPanel.isPanelExpanded()){
                     mSlidingPanel.expandPanel();
                 }
+            }
+            else if(Event.EVENT_MISSION_DRONIE_CREATED.equals(action)){
+                float dronieBearing = intent.getFloatExtra(Extra.EXTRA_MISSION_DRONIE_BEARING,  -1);
+                if(dronieBearing != -1)
+                    updateMapBearing(dronieBearing);
             }
         }
     };
