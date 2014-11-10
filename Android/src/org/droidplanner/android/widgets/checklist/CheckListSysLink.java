@@ -1,5 +1,9 @@
 package org.droidplanner.android.widgets.checklist;
 
+import com.ox3dr.services.android.lib.drone.property.Battery;
+import com.ox3dr.services.android.lib.drone.property.Gps;
+import com.ox3dr.services.android.lib.drone.property.State;
+
 import org.droidplanner.android.api.DroneApi;
 
 public class CheckListSysLink {
@@ -13,19 +17,34 @@ public class CheckListSysLink {
 		if (mSysTag == null)
 			return;
 
-		if (mSysTag.equalsIgnoreCase("SYS_BATTREM_LVL")) {
-			mListItem.setSys_value(droneApi.getBattery().getBatteryRemain());
-		} else if (mSysTag.equalsIgnoreCase("SYS_BATTVOL_LVL")) {
-			mListItem.setSys_value(droneApi.getBattery().getBatteryVoltage());
-		} else if (mSysTag.equalsIgnoreCase("SYS_BATTCUR_LVL")) {
-			mListItem.setSys_value(droneApi.getBattery().getBatteryCurrent());
-		} else if (mSysTag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
-			mListItem.setSys_value(droneApi.getGps().getSatellitesCount());
-		} else if (mSysTag.equalsIgnoreCase("SYS_ARM_STATE")) {
-			mListItem.setSys_activated(droneApi.getState().isArmed());
-		} else if (mSysTag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
-			mListItem.setSys_activated(droneApi.getState().isWarning());
-		} else if (mSysTag.equalsIgnoreCase("SYS_CONNECTION_STATE")) {
+		Battery batt = droneApi.getBattery();
+		if (batt != null) {
+			if (mSysTag.equalsIgnoreCase("SYS_BATTREM_LVL")) {
+				mListItem.setSys_value(batt.getBatteryRemain());
+			} else if (mSysTag.equalsIgnoreCase("SYS_BATTVOL_LVL")) {
+				mListItem.setSys_value(batt.getBatteryVoltage());
+			} else if (mSysTag.equalsIgnoreCase("SYS_BATTCUR_LVL")) {
+				mListItem.setSys_value(batt.getBatteryCurrent());
+			}
+		}
+
+		Gps gps = droneApi.getGps();
+		if (gps != null) {
+			if (mSysTag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
+				mListItem.setSys_value(gps.getSatellitesCount());
+			}
+		}
+
+		State state = droneApi.getState();
+		if (state != null) {
+			if (mSysTag.equalsIgnoreCase("SYS_ARM_STATE")) {
+				mListItem.setSys_activated(state.isArmed());
+			} else if (mSysTag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
+				mListItem.setSys_activated(state.isWarning());
+			}
+		}
+
+		if (mSysTag.equalsIgnoreCase("SYS_CONNECTION_STATE")) {
 			mListItem.setSys_activated(droneApi.isConnected());
 		}
 	}

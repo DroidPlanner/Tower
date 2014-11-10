@@ -263,10 +263,13 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
             case R.id.mc_follow:
                 DroneApi droneApi = getDroneApi();
-                if(droneApi.getFollowState().isEnabled())
-                    droneApi.disableFollowMe();
-                else
-                    droneApi.enableFollowMe(FollowType.LEASH);
+                FollowState followState = droneApi.getFollowState();
+                if(followState != null) {
+                    if (followState.isEnabled())
+                        droneApi.disableFollowMe();
+                    else
+                        droneApi.enableFollowMe(FollowType.LEASH);
+                }
                 break;
 
             case R.id.mc_dronieBtn:

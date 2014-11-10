@@ -92,11 +92,13 @@ public class ChecklistFragment extends ApiListenerFragment implements OnXmlParse
     }
 
 	public void onInfoUpdate() {
-		for (CheckListItem item : checklistItems) {
-			if (item.getSys_tag() != null) {
-				sysLink.getSystemData(item, item.getSys_tag());
-			}
-		}
+        if(checklistItems != null && !checklistItems.isEmpty()) {
+            for (CheckListItem item : checklistItems) {
+                if (item.getSys_tag() != null) {
+                    sysLink.getSystemData(item, item.getSys_tag());
+                }
+            }
+        }
 		if (listAdapter != null)
 			listAdapter.notifyDataSetChanged();
 	}

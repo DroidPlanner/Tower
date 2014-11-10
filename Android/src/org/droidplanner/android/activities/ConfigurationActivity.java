@@ -103,5 +103,7 @@ public class ConfigurationActivity extends DrawerNavigationUI {
     }
 
     @Override
-    public void onApiConnected() {}
+    public void onApiConnected() {
+        super.onApiConnected();
+    }
 }
