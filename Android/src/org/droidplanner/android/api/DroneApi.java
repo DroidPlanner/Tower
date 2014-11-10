@@ -114,13 +114,18 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     };
 
     private void checkForGroundCollision() {
-        double verticalSpeed = getSpeed().getVerticalSpeed();
-        double altitude = getAltitude().getAltitude();
+        Speed speed = getSpeed();
+        Altitude altitude = getAltitude();
+        if(speed == null || altitude == null)
+            return;
 
-        boolean isCollisionImminent = altitude
+        double verticalSpeed = speed.getVerticalSpeed();
+        double altitudeValue = altitude.getAltitude();
+
+        boolean isCollisionImminent = altitudeValue
                 + (verticalSpeed * COLLISION_SECONDS_BEFORE_COLLISION) < 0
                 && verticalSpeed < COLLISION_DANGEROUS_SPEED_METERS_PER_SECOND
-                && altitude > COLLISION_SAFE_ALTITUDE_METERS;
+                && altitudeValue > COLLISION_SAFE_ALTITUDE_METERS;
 
         lbm.sendBroadcast(new Intent(ACTION_GROUND_COLLISION_IMMINENT)
         .putExtra(EXTRA_IS_GROUND_COLLISION_IMMINENT, isCollisionImminent));
