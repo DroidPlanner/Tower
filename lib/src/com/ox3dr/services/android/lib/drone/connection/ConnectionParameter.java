@@ -41,10 +41,24 @@ public class ConnectionParameter implements Parcelable {
 
     @Override
     public String toString() {
-        return "ConnectionParameter{" +
+        String toString = "ConnectionParameter{" +
                 "connectionType=" + connectionType +
-                ", paramsBundle=" + paramsBundle +
-                '}';
+                ", paramsBundle=[";
+
+        if(paramsBundle != null && !paramsBundle.isEmpty()) {
+            boolean isFirst = true;
+            for(String key: paramsBundle.keySet()){
+                if(isFirst)
+                    isFirst = false;
+                else
+                    toString += ", ";
+
+                toString += key + "=" + paramsBundle.get(key);
+            }
+        }
+
+        toString += "]}";
+        return toString;
     }
 
     @Override
