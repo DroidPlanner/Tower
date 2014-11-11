@@ -6,11 +6,13 @@ import android.os.Parcelable;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 
+import java.io.Serializable;
+
 /**
  * Message encoding a mission item. This message is emitted to announce
  * the presence of a mission item and to set a mission item on the system.
  */
-public class MissionItemMessage extends MissionItem {
+public class MissionItemMessage implements Parcelable, Serializable {
 
     private static final int MAVLINK_MSG_ID_MISSION_ITEM = 39;
 
@@ -74,9 +76,7 @@ public class MissionItemMessage extends MissionItem {
      */
     private byte autocontinue;
 
-    public MissionItemMessage() {
-        super(MissionItemType.RAW_MESSAGE);
-    }
+    public MissionItemMessage() {}
 
     public int getMessageId(){
         return MAVLINK_MSG_ID_MISSION_ITEM;
@@ -235,6 +235,11 @@ public class MissionItemMessage extends MissionItem {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeSerializable(this);
     }
 
     public static final Parcelable.Creator<MissionItemMessage> CREATOR = new Parcelable.Creator<MissionItemMessage>() {
