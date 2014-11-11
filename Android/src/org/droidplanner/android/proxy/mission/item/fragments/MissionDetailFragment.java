@@ -10,7 +10,7 @@ import org.droidplanner.android.fragments.helpers.ApiListenerDialogFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
-import org.droidplanner.android.utils.UnitUtil;
+import org.droidplanner.android.utils.unit.UnitManager;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 
 import android.app.Activity;
@@ -196,7 +196,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
             final TextView distanceView = (TextView) view.findViewById(R.id.DistanceValue);
             if (distanceView != null) {
                 try {
-                    distanceView.setText(UnitUtil.MetricUtil.distanceToString(mMissionProxy
+                    distanceView.setText(UnitManager.getUnitProvider().distanceToString(mMissionProxy
                             .getDistanceFromLastWaypoint(itemProxy)));
                 } catch (IllegalArgumentException e) {
                     Log.w(TAG, e.getMessage(), e);

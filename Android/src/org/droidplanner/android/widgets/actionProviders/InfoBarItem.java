@@ -4,9 +4,9 @@ import java.util.Locale;
 
 import org.droidplanner.R;
 import org.droidplanner.android.api.DroneApi;
-import org.droidplanner.android.utils.UnitUtil;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.android.utils.unit.UnitManager;
 import org.droidplanner.android.widgets.spinners.ModeAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 
@@ -119,8 +119,8 @@ public abstract class InfoBarItem {
                     if(droneGps.isValid() && droneHome.isValid()) {
                         double distanceToHome = MathUtils.getDistance(droneHome.getCoordinate(),
                                 droneGps.getPosition());
-                        update = String.format("Home\n%s", UnitUtil.MetricUtil.distanceToString
-                                (distanceToHome));
+                        update = String.format("Home\n%s", UnitManager.getUnitProvider()
+                                .distanceToString(distanceToHome));
                     }
                 }
 				((TextView) mItemView).setText(update);

@@ -161,6 +161,8 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
 
         context.registerReceiver(broadcastReceiver,
                 new IntentFilter(ACTION_TOGGLE_DRONE_CONNECTION));
+
+        registerWithDrone();
     }
 
     private void handleRemoteException(RemoteException e){
@@ -224,7 +226,15 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     }
 
     private boolean isApiValid(){
-        return dpApi != null;
+        return registerWithDrone();
+    }
+
+    private boolean isApiValid(Runnable toDoWhenApiIsValid){
+        boolean isValid = registerWithDrone();
+        if(!isValid && toDoWhenApiIsValid != null)
+            onConnectedTasks.add(toDoWhenApiIsValid);
+
+        return isValid;
     }
 
     public void resetFlightTimer() {
@@ -419,42 +429,60 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
         return null;
     }
 
+    private boolean registerWithDrone(){
+        if(!dpApp.is3drServicesConnected()) {
+            dpApp.reconnect();
+            return false;
+        }
+
+        if (dpApi != null)
+            return true;
+
+        // Retrieve the connection parameters.
+        final ConnectionParameter connParams = retrieveConnectionParameters();
+        if (connParams == null) {
+            throw new IllegalArgumentException("Invalid connection parameters: " + connParams);
+        }
+
+        try {
+            dpApi = dpApp.get3drServices().registerWithDrone(connParams, dpCallback);
+            lbm.registerReceiver(broadcastReceiver, intentFilter);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Unable to retrieve a droidplanner api connection.", e);
+            dpApp.reconnect();
+            return false;
+        }        
+        
+        return true;
+    }
+
+    private void unregisterFromDrone(){
+        dpApi = null;
+
+        if (!dpApp.is3drServicesConnected())
+            return; // Nothing to do. It's already disconnected.
+
+        try {
+            lbm.unregisterReceiver(broadcastReceiver);
+            dpApp.get3drServices().unregisterFromDrone(retrieveConnectionParameters(), dpCallback);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error while disconnecting from the droidplanner api", e);
+        }
+    }
+
+    private final Runnable connectTask = new Runnable() {
+        @Override
+        public void run() {
+            connect();
+        }
+    };
+
 	public void connect() {
-		if (!dpApp.is3drServicesConnected()) {
-			onConnectedTasks.add(new Runnable() {
-				@Override
-				public void run() {
-					connect();
-				}
-			});
-
-			dpApp.reconnect();
-			return;
-		}
-
-		if (isApiValid())
-			return;
-
-		// Retrieve the connection parameters.
-		final ConnectionParameter connParams = retrieveConnectionParameters();
-		if (connParams == null) {
-			Log.e(TAG, "Invalid connection parameters");
-			return;
-		}
-
+        if(isApiValid(connectTask))
 		try {
-			dpApi = dpApp.get3drServices().registerWithDrone(connParams, dpCallback);
-			lbm.registerReceiver(broadcastReceiver, intentFilter);
+			dpApi.connect();
 		} catch (RemoteException e) {
-			Log.e(TAG, "Unable to retrieve a droidplanner api connection.", e);
-		}
-
-		if (isApiValid()) {
-			try {
-				dpApi.connect();
-			} catch (RemoteException e) {
-				handleRemoteException(e);
-			}
+			handleRemoteException(e);
 		}
 	}
 
@@ -466,18 +494,6 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
             } catch (RemoteException e) {
                 handleRemoteException(e);
             }
-        }
-
-        dpApi = null;
-
-        if (!dpApp.is3drServicesConnected())
-            return; // Nothing to do. It's already disconnected.
-
-        try {
-            lbm.unregisterReceiver(broadcastReceiver);
-            dpApp.get3drServices().unregisterFromDrone(retrieveConnectionParameters(), dpCallback);
-        } catch (RemoteException e) {
-            Log.e(TAG, "Error while disconnecting from the droidplanner api", e);
         }
     }
 

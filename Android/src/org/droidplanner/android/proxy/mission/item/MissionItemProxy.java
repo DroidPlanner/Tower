@@ -8,7 +8,7 @@ import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
-import org.droidplanner.android.utils.UnitUtil;
+import org.droidplanner.android.utils.unit.UnitManager;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -156,7 +156,7 @@ public class MissionItemProxy {
 				// Do nothing when last item doesn't have an altitude
 			}
 		} else if (mMissionItem instanceof Survey) {
-            String altitude = UnitUtil.MetricUtil.distanceToString(((Survey) mMissionItem)
+            String altitude = UnitManager.getUnitProvider().distanceToString(((Survey) mMissionItem)
                     .getSurveyDetail().getAltitude());
 			altitudeView.setText(altitude);
 

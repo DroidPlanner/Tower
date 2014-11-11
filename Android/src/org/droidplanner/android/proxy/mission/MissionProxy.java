@@ -24,7 +24,9 @@ import com.ox3dr.services.android.lib.drone.mission.item.MissionItem.SpatialItem
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.ox3dr.services.android.lib.drone.mission.item.command.ReturnToLaunch;
 import com.ox3dr.services.android.lib.drone.mission.item.command.Takeoff;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
 import com.ox3dr.services.android.lib.util.MathUtils;
@@ -145,8 +147,9 @@ public class MissionProxy implements DPMap.PathSource {
 	public void addSurveyPolygon(DroneApi droneApi, List<LatLong> points) {
 		Survey survey = new Survey();
         survey.setPolygonPoints(points);
-		mMissionItems.add(new MissionItemProxy(this, survey));
         droneApi.updateSurveyMissionItem(survey);
+
+        addMissionItem(survey);
 	}
 
 	/**

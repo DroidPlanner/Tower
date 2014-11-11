@@ -39,7 +39,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 
     private static final IntentFilter eventFilter = new IntentFilter();
     static {
-        eventFilter.addAction(Event.EVENT_MISSION_UPDATE);
+        eventFilter.addAction(MissionProxy.ACTION_MISSION_PROXY_UPDATE);
         eventFilter.addAction(Event.EVENT_GPS);
         eventFilter.addAction(Event.EVENT_GUIDED_POINT);
         eventFilter.addAction(Event.EVENT_HEARTBEAT_FIRST);
@@ -55,7 +55,7 @@ public abstract class DroneMap extends ApiListenerFragment {
                 return;
 
             final String action = intent.getAction();
-            if(Event.EVENT_MISSION_UPDATE.equals(action)){
+            if(MissionProxy.ACTION_MISSION_PROXY_UPDATE.equals(action)){
                 postUpdate();
             }
             else if(Event.EVENT_GPS.equals(action)){

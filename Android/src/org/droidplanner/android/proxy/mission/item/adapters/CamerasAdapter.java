@@ -23,4 +23,11 @@ public class CamerasAdapter extends ArrayAdapter<CameraDetail> {
 		return view;
 	}
 
+    @Override
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        TextView view = (TextView) super.getDropDownView(position, convertView, parent);
+        view.setText(getItem(position).getName());
+        return view;
+    }
+
 }

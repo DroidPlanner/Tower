@@ -5,8 +5,8 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.utils.TextUtils;
-import org.droidplanner.android.utils.UnitUtil;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.android.utils.unit.UnitManager;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -190,7 +190,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
             if(droneGps != null && droneGps.isValid() && droneHome != null && droneHome.isValid()) {
                 double distanceToHome = MathUtils.getDistance(droneHome.getCoordinate(),
                         droneGps.getPosition());
-                update = String.format("Home\n%s", UnitUtil.MetricUtil.distanceToString
+                update = String.format("Home\n%s", UnitManager.getUnitProvider().distanceToString
                         (distanceToHome));
             }
 		mInboxBuilder.setLine(0, TextUtils.normal("Home:   ", update));

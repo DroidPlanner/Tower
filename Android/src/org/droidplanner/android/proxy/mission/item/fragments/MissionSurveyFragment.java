@@ -20,6 +20,8 @@ import org.droidplanner.R.id;
 import org.droidplanner.android.api.DroneApi;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.CamerasAdapter;
+import org.droidplanner.android.utils.unit.UnitManager;
+import org.droidplanner.android.utils.unit.UnitProvider;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
@@ -138,7 +140,6 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 			}
 
 			onChanged(mAnglePicker, 0, 0);
-	        getMissionProxy().notifyMissionUpdate();
 		}
 	}
 	
@@ -152,27 +153,35 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
             DroneApi droneApi = getDroneApi();
 			try {
 				for (Survey survey : getMissionItems()) {
-                    SurveyDetail surveyDetail = new SurveyDetail();
+                    SurveyDetail surveyDetail = survey.getSurveyDetail();
                     surveyDetail.setAltitude(mAltitudePicker.getCurrentValue());
                     surveyDetail.setAngle(mAnglePicker.getCurrentValue());
                     surveyDetail.setOverlap(mOverlapPicker.getCurrentValue());
                     surveyDetail.setSidelap(mSidelapPicker.getCurrentValue());
 
-                    survey.setSurveyDetail(surveyDetail);
                     droneApi.updateSurveyMissionItem(survey);
-                    if(survey.isValid())
-                        mAltitudePicker.setBackgroundResource(R.drawable.bg_cell_white);
-                    else
-                        mAltitudePicker.setBackgroundColor(Color.RED);
+                    checkIfValid(survey);
 				}
 			} catch (Exception e) {
 				Log.e(TAG, "Error while building the survey.", e);
 			}
+
+            getMissionProxy().notifyMissionUpdate();
 			break;
 		}
 	}
-	
-	private void updateViews() {
+
+    private void checkIfValid(Survey survey) {
+        if(mAltitudePicker == null)
+            return;
+
+        if(survey.isValid())
+            mAltitudePicker.setBackgroundResource(R.drawable.bg_cell_white);
+        else
+            mAltitudePicker.setBackgroundColor(Color.RED);
+    }
+
+    private void updateViews() {
 		updateTextViews();
 		updateSeekBars();
 	}
@@ -180,11 +189,14 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	private void updateSeekBars() {
 		List<Survey> surveyList = getMissionItems();
 		if (!surveyList.isEmpty()) {
-			SurveyDetail surveyDetail = surveyList.get(0).getSurveyDetail();
+            Survey survey = surveyList.get(0);
+			SurveyDetail surveyDetail = survey.getSurveyDetail();
 			mAnglePicker.setCurrentValue((int) surveyDetail.getAngle());
 			mOverlapPicker.setCurrentValue((int) surveyDetail.getOverlap());
 			mSidelapPicker.setCurrentValue((int) surveyDetail.getSidelap());
 			mAltitudePicker.setCurrentValue((int) surveyDetail.getAltitude());
+
+            checkIfValid(survey);
 		}
 	}
 	
@@ -195,22 +207,39 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
             Survey survey = surveyList.get(0);
 			SurveyDetail surveyDetail = survey.getSurveyDetail();
 			try {
-				footprintTextView.setText(getString(R.string.footprint) + ": "
-						+ surveyDetail.getLateralFootPrint() + " x"
-						+ surveyDetail.getLongitudinalFootPrint());
-				groundResolutionTextView.setText(getString(R.string.ground_resolution) + ": "
-						+ surveyDetail.getGroundResolution() + "/px");
-				distanceTextView.setText(getString(R.string.distance_between_pictures) + ": "
-						+ surveyDetail.getLongitudinalPictureDistance());
-				distanceBetweenLinesTextView.setText(getString(R.string.distance_between_lines)
-						+ ": " + surveyDetail.getLateralPictureDistance());
-				areaTextView.setText(getString(R.string.area) + ": " + survey.getPolygonArea());
-				lengthView.setText(getString(R.string.mission_length) + ": "
-                        + survey.getGridLength());
-				numberOfPicturesView.setText(getString(R.string.pictures) + ": "
-                        + survey.getCameraCount());
-				numberOfStripsView.setText(getString(R.string.number_of_strips) + ": "
-						+ survey.getNumberOfLines());
+                UnitProvider unitProvider = UnitManager.getUnitProvider();
+
+				footprintTextView.setText(String.format("%s: %s x %s",
+                        getString(R.string.footprint),
+                        unitProvider.distanceToString(surveyDetail.getLateralFootPrint()),
+                        unitProvider.distanceToString(surveyDetail
+                                .getLongitudinalFootPrint())));
+
+				groundResolutionTextView.setText(String.format("%s: %s /px",
+                        getString(R.string.ground_resolution),
+                        unitProvider.areaToString(surveyDetail.getGroundResolution())));
+
+				distanceTextView.setText(String.format("%s: %s",
+                        getString(R.string.distance_between_pictures),
+                        unitProvider.distanceToString(surveyDetail
+                                .getLongitudinalPictureDistance())));
+
+				distanceBetweenLinesTextView.setText(String.format("%s: %s",
+                        getString(R.string.distance_between_lines),
+                        unitProvider.distanceToString(surveyDetail
+                                .getLateralPictureDistance())));
+
+				areaTextView.setText(String.format("%s: %s", getString(R.string.area),
+                        unitProvider.areaToString(survey.getPolygonArea())));
+
+				lengthView.setText(String.format("%s: %s", getString(R.string.mission_length),
+                        unitProvider.distanceToString(survey.getGridLength())));
+
+				numberOfPicturesView.setText(String.format("%s: %d", getString(R.string.pictures),
+                        survey.getCameraCount()));
+
+				numberOfStripsView.setText(String.format("%s: %d", getString(R.string.number_of_strips),
+                        survey.getNumberOfLines()));
 
 				setDefault = false;
 			} catch (Exception e) {
