@@ -15,8 +15,8 @@ public class MissionEpmGrabberFragment extends MissionDetailFragment {
 	}
 
 	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
+	public void onApiConnected() {
+        super.onApiConnected();
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.EPM_GRIPPER));
 	}
 }

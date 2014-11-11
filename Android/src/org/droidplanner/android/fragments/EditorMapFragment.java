@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.ox3dr.services.android.lib.drone.property.Home;
 
 public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
 		DPMap.OnMarkerDragListener, DPMap.OnMapClickListener, DPMap.OnMarkerClickListener {
@@ -130,9 +131,12 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 		final List<LatLong> visibleCoords = missionProxy.getVisibleCoords();
 
 		// add home coord if visible
-		final LatLong homeCoord = drone.getHome().getCoordinate();
-		if (homeCoord != null && homeCoord.getLongitude() != 0 && homeCoord.getLatitude() != 0)
-			visibleCoords.add(homeCoord);
+        Home home = drone.getHome();
+        if(home != null ) {
+            final LatLong homeCoord = drone.getHome().getCoordinate();
+            if (homeCoord != null && homeCoord.getLongitude() != 0 && homeCoord.getLatitude() != 0)
+                visibleCoords.add(homeCoord);
+        }
 
         zoomToFit(visibleCoords);
 	}

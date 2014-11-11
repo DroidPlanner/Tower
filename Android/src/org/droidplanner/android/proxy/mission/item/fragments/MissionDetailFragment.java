@@ -281,8 +281,16 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
             for (MissionItemProxy missionItemProxy : mSelectedProxies) {
                 final MissionItem oldItem = missionItemProxy.getMissionItem();
                 if (oldItem.getType() != selectedType) {
+                    final MissionItem newItem = selectedType.getNewItem();
+
+                    if(oldItem instanceof MissionItem.SpatialItem && newItem instanceof
+                            MissionItem.SpatialItem){
+                        ((MissionItem.SpatialItem) newItem).setCoordinate(((MissionItem
+                                .SpatialItem)oldItem).getCoordinate());
+                    }
+
                     updatesList.add(Pair.create(missionItemProxy, new MissionItemProxy(
-                            mMissionProxy, selectedType.getNewItem())));
+                            mMissionProxy, newItem)));
                 }
             }
 

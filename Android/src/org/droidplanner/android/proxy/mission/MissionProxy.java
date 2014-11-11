@@ -205,8 +205,7 @@ public class MissionProxy implements DPMap.PathSource {
 	}
 
 	/**
-	 * Add a waypoint generated around the passed 2D point. TODO: replace
-	 * Coord2D with library's classes such as android.graphics.Point
+	 * Add a waypoint generated around the passed 2D point.
 	 * 
 	 * @param point
 	 *            point used to generate the mission waypoint

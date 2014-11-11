@@ -7,6 +7,10 @@ import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.widgets.button.RadioButtonCenter;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +19,8 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import com.ox3dr.services.android.lib.drone.event.Event;
 
 /**
  * This fragment implements and displays the 'tools' used in the editor window
@@ -38,6 +44,21 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
 		public void editorToolLongClicked(EditorTools tools);
 	}
+
+    private static final IntentFilter eventFilter = new IntentFilter();
+    static {
+        eventFilter.addAction(Event.EVENT_MISSION_RECEIVED);
+    }
+
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(Event.EVENT_MISSION_RECEIVED.equals(action)){
+                setTool(tool, false);
+            }
+        }
+    };
 
 	/**
 	 * The marker tool should be set by default.
@@ -101,10 +122,12 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
     public void onApiConnected() {
         mMissionProxy = getDroneApi().getMissionProxy();
         setToolAndUpdateView(tool);
+        getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
 
     @Override
     public void onApiDisconnected() {
+        getBroadcastManager().unregisterReceiver(eventReceiver);
         mMissionProxy = null;
     }
 
