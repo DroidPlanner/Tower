@@ -3,10 +3,12 @@ package com.ox3dr.services.android.lib.drone.mission.item.complex;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Created by fhuya on 11/6/14.
  */
-public class CameraDetail implements Parcelable {
+public class CameraDetail implements Parcelable, Serializable {
 
     private final String name;
     private final double sensorWidth;
