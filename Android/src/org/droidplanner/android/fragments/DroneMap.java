@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -194,6 +195,9 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		case DISCONNECTED:
 		case HEARTBEAT_TIMEOUT:
 			mMapFragment.updateMarker(graphicDrone);
+			break;
+		case FOOTPRINT:
+			mMapFragment.addCameraFootprint(drone.getCameraFootprints().getLastFootprint());
 			break;
 		default:
 			break;

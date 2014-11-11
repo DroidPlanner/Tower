@@ -21,6 +21,7 @@ import org.droidplanner.android.utils.collection.HashBiMap;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.model.Drone;
+import org.droidplanner.core.survey.Footprint;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
@@ -78,6 +79,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     private static final float USER_LOCATION_UPDATE_MIN_DISPLACEMENT = 15; // m
 
     private static final float GO_TO_MY_LOCATION_ZOOM = 19f;
+
 
     private final HashBiMap<MarkerInfo, Marker> mBiMarkersMap = new HashBiMap<MarkerInfo, Marker>();
 
@@ -542,7 +544,20 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         
     }
 
-    /**
+	@Override
+	public void addCameraFootprint(Footprint footprintToBeDraw) {
+		PolygonOptions pathOptions = new PolygonOptions();
+		pathOptions.strokeColor(FOOTPRINT_DEFAULT_COLOR).strokeWidth(FOOTPRINT_DEFAULT_WIDTH);
+		pathOptions.fillColor(FOOTPRINT_FILL_COLOR);
+
+		for (Coord2D vertex : footprintToBeDraw.getVertex()) {
+			pathOptions.add(DroneHelper.CoordToLatLang(vertex));
+		}
+		getMap().addPolygon(pathOptions);
+
+	}
+
+	/**
      * Save the map camera state on a preference file
      * http://stackoverflow.com/questions
      * /16697891/google-maps-android-api-v2-restoring
