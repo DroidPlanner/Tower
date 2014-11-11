@@ -7,10 +7,12 @@ import android.os.Parcelable;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 
+import java.io.Serializable;
+
 /**
  * Created by fhuya on 11/8/14.
  */
-public class GlobalPositionIntMessage extends MissionItem {
+public class GlobalPositionIntMessage implements Parcelable, Serializable {
 
     private static final int MAVLINK_MSG_ID_GLOBAL_POSITION_INT = 33;
 
@@ -54,10 +56,6 @@ public class GlobalPositionIntMessage extends MissionItem {
      * Compass heading in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
      */
     private short hdg;
-
-    public GlobalPositionIntMessage(){
-        super(MissionItemType.RAW_MESSAGE);
-    }
 
     public int getMessageId(){
         return MAVLINK_MSG_ID_GLOBAL_POSITION_INT;
@@ -171,6 +169,10 @@ public class GlobalPositionIntMessage extends MissionItem {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeSerializable(this);
     }
 
     public static final Parcelable.Creator<GlobalPositionIntMessage> CREATOR = new Parcelable

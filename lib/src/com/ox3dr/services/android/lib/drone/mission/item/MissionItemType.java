@@ -22,17 +22,24 @@ import com.ox3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
  */
 public enum MissionItemType {
 
-    CAMERA_TRIGGER("Camera Trigger") {
+    WAYPOINT("Waypoint") {
         @Override
         public MissionItem getNewItem() {
-            return new CameraTrigger();
+            return new Waypoint();
         }
     },
 
-    RAW_MESSAGE("Raw Message") {
+    SPLINE_WAYPOINT("Spline Waypoint") {
         @Override
         public MissionItem getNewItem() {
-            return new MissionItemMessage();
+            return new SplineWaypoint();
+        }
+    },
+
+    TAKEOFF("Takeoff") {
+        @Override
+        public MissionItem getNewItem() {
+            return new Takeoff();
         }
     },
 
@@ -40,6 +47,13 @@ public enum MissionItemType {
         @Override
         public MissionItem getNewItem() {
             return new ChangeSpeed();
+        }
+    },
+
+    CAMERA_TRIGGER("Camera Trigger") {
+        @Override
+        public MissionItem getNewItem() {
+            return new CameraTrigger();
         }
     },
 
@@ -57,17 +71,10 @@ public enum MissionItemType {
         }
     },
 
-    SET_SERVO("Set Servo") {
+    LAND("Land") {
         @Override
         public MissionItem getNewItem() {
-            return new SetServo();
-        }
-    },
-
-    TAKEOFF("Takeoff") {
-        @Override
-        public MissionItem getNewItem() {
-            return new Takeoff();
+            return new Land();
         }
     },
 
@@ -78,13 +85,6 @@ public enum MissionItemType {
         }
     },
 
-    LAND("Land") {
-        @Override
-        public MissionItem getNewItem() {
-            return new Land();
-        }
-    },
-
     REGION_OF_INTEREST("Region of Interest") {
         @Override
         public MissionItem getNewItem() {
@@ -92,10 +92,10 @@ public enum MissionItemType {
         }
     },
 
-    SPLINE_WAYPOINT("Spline Waypoint") {
+    SURVEY("Survey") {
         @Override
         public MissionItem getNewItem() {
-            return new SplineWaypoint();
+            return new Survey();
         }
     },
 
@@ -106,17 +106,10 @@ public enum MissionItemType {
         }
     },
 
-    WAYPOINT("Waypoint") {
+    SET_SERVO("Set Servo") {
         @Override
         public MissionItem getNewItem() {
-            return new Waypoint();
-        }
-    },
-
-    SURVEY("Survey") {
-        @Override
-        public MissionItem getNewItem() {
-            return new Survey();
+            return new SetServo();
         }
     },
 
