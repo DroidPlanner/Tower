@@ -36,7 +36,8 @@ public class InfoBarActionProvider extends ActionProvider {
         eventFilter.addAction(Event.EVENT_CONNECTED);
         eventFilter.addAction(Event.EVENT_DISCONNECTED);
         eventFilter.addAction(Event.EVENT_GPS);
-        eventFilter.addAction(Event.EVENT_GPS_STATE);
+        eventFilter.addAction(Event.EVENT_GPS_COUNT);
+        eventFilter.addAction(Event.EVENT_GPS_FIX);
         eventFilter.addAction(Event.EVENT_HOME);
         eventFilter.addAction(Event.EVENT_RADIO);
         eventFilter.addAction(Event.EVENT_STATE);
@@ -67,7 +68,7 @@ public class InfoBarActionProvider extends ActionProvider {
                 if (mHomeInfo != null)
                     mHomeInfo.updateItemView(mContext, mDrone);
             }
-            else if(Event.EVENT_GPS_STATE.equals(action)){
+            else if(Event.EVENT_GPS_COUNT.equals(action) || Event.EVENT_GPS_FIX.equals(action)){
                 if (mGpsInfo != null)
                     mGpsInfo.updateItemView(mContext, mDrone);
             }

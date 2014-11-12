@@ -332,12 +332,13 @@ public abstract class InfoBarItem {
 				return;
 
 			String infoUpdate;
-			if (drone == null || !drone.isConnected()) {
+            Battery droneBattery;
+			if (drone == null || !drone.isConnected() || ((droneBattery = drone.getBattery()) ==
+                    null)) {
 				infoUpdate = sDefaultValue;
 				currentView.setText(sDefaultValue);
 				mAhView.setText(sDefaultValue);
 			} else {
-                Battery droneBattery = drone.getBattery();
 
                 Double discharge = droneBattery.getBatteryDischarge();
                 String dischargeText;
