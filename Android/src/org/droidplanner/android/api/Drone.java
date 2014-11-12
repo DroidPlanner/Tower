@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by fhuya on 11/4/14.
  */
-public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlannerApi, DroidPlannerApp.ApiListener {
+public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlannerApi {
 
     private static final String CLAZZ_NAME = Drone.class.getName();
     private static final String TAG = Drone.class.getSimpleName();
@@ -61,10 +61,6 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
     public static final int COLLISION_SECONDS_BEFORE_COLLISION = 2;
     public static final double COLLISION_DANGEROUS_SPEED_METERS_PER_SECOND = -3.0;
     public static final double COLLISION_SAFE_ALTITUDE_METERS = 1.0;
-
-    public static final String ACTION_TOGGLE_DRONE_CONNECTION = CLAZZ_NAME + "" +
-            ".ACTION_TOGGLE_DRONE_CONNECTION";
-    public static final String EXTRA_ESTABLISH_CONNECTION = "extra_establish_connection";
 
     public static final String ACTION_GROUND_COLLISION_IMMINENT = CLAZZ_NAME +
             ".ACTION_GROUND_COLLISION_IMMINENT";
@@ -100,14 +96,6 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
             }
             else if(Event.EVENT_SPEED.equals(action)){
                 checkForGroundCollision();
-            }
-            else if(ACTION_TOGGLE_DRONE_CONNECTION.equals(action)){
-                boolean connect = intent.getBooleanExtra(EXTRA_ESTABLISH_CONNECTION,
-                        !isConnected());
-                if(connect)
-                    connect();
-                else
-                    disconnect();
             }
             else if(DPApiCallback.ACTION_DRONE_CONNECTION_FAILED.equals(action)){
                 disconnect();
@@ -151,20 +139,30 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
 
     public Drone(DroidPlannerApp dpApp){
         this.dpApp = dpApp;
-        dpApp.addApiListener(this);
         dpCallback = new DPApiCallback(dpApp);
 
         final Context context = dpApp.getApplicationContext();
         dpPrefs = new DroidPlannerPrefs(context);
         this.missionProxy = new MissionProxy(context, this);
         lbm = LocalBroadcastManager.getInstance(context);
+    }
 
+    public void start(){
         resetFlightTimer();
-
-        context.registerReceiver(broadcastReceiver,
-                new IntentFilter(ACTION_TOGGLE_DRONE_CONNECTION));
-
         registerWithDrone();
+        lbm.registerReceiver(broadcastReceiver, intentFilter);
+
+        if(onConnectedTasks.isEmpty())
+            return;
+
+        for(Runnable tasks: onConnectedTasks)
+            tasks.run();
+    }
+
+    public void terminate(){
+        disconnect();
+        lbm.unregisterReceiver(broadcastReceiver);
+        unregisterFromDrone();
     }
 
     private void handleRemoteException(RemoteException e){
@@ -434,7 +432,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
 
     private boolean registerWithDrone(){
         if(!dpApp.is3drServicesConnected()) {
-            dpApp.reconnect();
+            dpApp.connect();
             return false;
         }
 
@@ -449,10 +447,9 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
 
         try {
             dpApi = dpApp.get3drServices().registerWithDrone(connParams, dpCallback);
-            lbm.registerReceiver(broadcastReceiver, intentFilter);
         } catch (RemoteException e) {
             Log.e(TAG, "Unable to retrieve a droidplanner api connection.", e);
-            dpApp.reconnect();
+            dpApp.connect();
             return false;
         }        
         
@@ -466,7 +463,6 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
             return; // Nothing to do. It's already disconnected.
 
         try {
-            lbm.unregisterReceiver(broadcastReceiver);
             dpApp.get3drServices().unregisterFromDrone(retrieveConnectionParameters(), dpCallback);
         } catch (RemoteException e) {
             Log.e(TAG, "Error while disconnecting from the droidplanner api", e);
@@ -861,19 +857,5 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
     @Override
     public IBinder asBinder() {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void onApiConnected() {
-        if(onConnectedTasks.isEmpty())
-            return;
-        
-        for(Runnable tasks: onConnectedTasks)
-            tasks.run();
-    }
-
-    @Override
-    public void onApiDisconnected() {
-        disconnect();
     }
 }

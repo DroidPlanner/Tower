@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
@@ -138,8 +139,8 @@ public class BluetoothDevicesActivity extends FragmentActivity {
 
 			// Toggle the drone connection
             LocalBroadcastManager.getInstance(context)
-                    .sendBroadcast(new Intent(Drone.ACTION_TOGGLE_DRONE_CONNECTION)
-                    .putExtra(Drone.EXTRA_ESTABLISH_CONNECTION, true));
+                    .sendBroadcast(new Intent(DroidPlannerApp.ACTION_TOGGLE_DRONE_CONNECTION)
+                    .putExtra(DroidPlannerApp.EXTRA_ESTABLISH_CONNECTION, true));
 
 			// Finish the activity
 			finish();

@@ -1,6 +1,7 @@
 package org.droidplanner.android.notifications;
 
 import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.utils.TextUtils;
@@ -80,8 +81,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 				FlightActivity.class), 0);
 
 		mToggleConnectionIntent = PendingIntent
-                .getBroadcast(mContext, 0, new Intent(mContext, Drone.class)
-                        .setAction(Drone.ACTION_TOGGLE_DRONE_CONNECTION), 0);
+                .getBroadcast(mContext, 0, new Intent(DroidPlannerApp.ACTION_TOGGLE_DRONE_CONNECTION), 0);
 
         LocalBroadcastManager.getInstance(context).registerReceiver(eventReceiver, eventFilter);
 	}
