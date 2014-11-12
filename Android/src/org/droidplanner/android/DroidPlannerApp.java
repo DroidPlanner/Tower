@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class DroidPlannerApp extends Application {
 
-	private static final long DELAY_TO_DISCONNECTION = 60000l; // ms
+	private static final long DELAY_TO_DISCONNECTION = 30000l; // ms
 
     private static final String CLAZZ_NAME = DroidPlannerApp.class.getName();
 	private static final String TAG = DroidPlannerApp.class.getSimpleName();
@@ -160,7 +160,7 @@ public class DroidPlannerApp extends Application {
 		}
 
 		if (apiListeners.isEmpty() && apiBindingState.get() != API_UNBOUND) {
-            // Wait a minute, then disconnect the service binding.
+            // Wait 30s, then disconnect the service binding.
             handler.postDelayed(disconnectionTask, DELAY_TO_DISCONNECTION);
 		}
 	}
