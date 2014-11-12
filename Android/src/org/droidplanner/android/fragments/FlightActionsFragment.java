@@ -58,7 +58,8 @@ public class FlightActionsFragment extends ApiListenerFragment {
 	@Override
 	public void onApiDisconnected() {
 		getBroadcastManager().unregisterReceiver(eventReceiver);
-        selectActionsBar(-1);
+        if(isResumed())
+            selectActionsBar(-1);
 	}
 
 	private void selectActionsBar(int droneType) {
