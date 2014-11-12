@@ -5,6 +5,7 @@ import java.util.Locale;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Area;
 import org.droidplanner.core.helpers.units.Length;
+import org.droidplanner.core.survey.CameraInfo;
 
 public class SurveyData {
 	private Altitude altitude = new Altitude(50.0);

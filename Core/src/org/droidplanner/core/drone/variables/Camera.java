@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneVariable;
-import org.droidplanner.core.mission.survey.CameraInfo;
 import org.droidplanner.core.model.Drone;
+import org.droidplanner.core.survey.CameraInfo;
 import org.droidplanner.core.survey.Footprint;
 
 import com.MAVLink.Messages.ardupilotmega.msg_camera_feedback;

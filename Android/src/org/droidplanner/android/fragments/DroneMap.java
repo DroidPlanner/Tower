@@ -18,8 +18,8 @@ import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Altitude;
-import org.droidplanner.core.mission.survey.CameraInfo;
 import org.droidplanner.core.model.Drone;
+import org.droidplanner.core.survey.CameraInfo;
 import org.droidplanner.core.survey.Footprint;
 
 import com.MAVLink.Messages.ardupilotmega.msg_camera_feedback;

@@ -8,7 +8,6 @@ import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.math.MathUtil;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
-import org.droidplanner.core.mission.survey.CameraInfo;
 
 import com.MAVLink.Messages.ardupilotmega.msg_camera_feedback;
 

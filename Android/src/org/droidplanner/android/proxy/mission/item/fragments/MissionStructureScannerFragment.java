@@ -10,8 +10,8 @@ import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapte
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.survey.CameraInfo;
 import org.droidplanner.core.mission.waypoints.StructureScanner;
+import org.droidplanner.core.survey.CameraInfo;
 
 import android.content.Context;
 import android.os.Bundle;

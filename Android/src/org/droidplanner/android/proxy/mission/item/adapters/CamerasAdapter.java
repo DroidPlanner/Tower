@@ -2,7 +2,7 @@ package org.droidplanner.android.proxy.mission.item.adapters;
 
 import org.droidplanner.R;
 import org.droidplanner.android.utils.file.help.CameraInfoLoader;
-import org.droidplanner.core.mission.survey.CameraInfo;
+import org.droidplanner.core.survey.CameraInfo;
 
 import android.content.Context;
 import android.view.View;

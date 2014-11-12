@@ -6,7 +6,6 @@ import junit.framework.TestCase;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Altitude;
-import org.droidplanner.core.mission.survey.CameraInfo;
 
 import com.MAVLink.Messages.ardupilotmega.msg_camera_feedback;
 
