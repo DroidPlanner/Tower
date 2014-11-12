@@ -120,6 +120,11 @@ interface IDroidPlannerApi {
         CameraDetail[] getCameraDetails();
 
         /**
+        * Return the last camera footprint available for the connected drone.
+        */
+        FootPrint getLastCameraFootPrint();
+
+        /**
         * Return the set of camera footprints available for the connected drone.
         */
         FootPrint[] getCameraFootPrints();
