@@ -21,17 +21,18 @@ public class Footprint {
 	private double meanGSD;
 
 	public Footprint(CameraInfo camera, Altitude altitude) {
-		this(camera, getFakeCameraMessage(altitude));
+		this(camera,new Coord2D(0,0),(float) altitude.valueInMeters(),0,0,0);
 	}
 
 	public Footprint(CameraInfo camera, msg_camera_feedback msg) {
-		Coord2D center = new Coord2D(msg.lat / 1E7, msg.lng / 1E7);
-		double[][] dcm = MathUtil.dcmFromEuler(Math.toRadians(msg.roll), Math.toRadians(msg.pitch), Math.toRadians(msg.yaw));
+		this(camera, new Coord2D(msg.lat / 1E7, msg.lng / 1E7), msg.alt_rel, msg.pitch, msg.roll, msg.yaw);
+	}
+
+	public Footprint(CameraInfo camera, Coord2D center, double alt, double pitch, double roll, double yaw) {
 		double sx = camera.getSensorLateralSize() / 2;
 		double sy = camera.getSensorLongitudinalSize() / 2;
 		double f = camera.focalLength;
-		float alt = msg.alt_rel;
-
+		double[][] dcm = MathUtil.dcmFromEuler(Math.toRadians(pitch), Math.toRadians(-roll+180), Math.toRadians(-yaw));
 		vertex.add(cameraFrameToLocalFrame(new Coord2D(-sx, -sy), dcm, alt, f, center));
 		vertex.add(cameraFrameToLocalFrame(new Coord2D(+sx, -sy), dcm, alt, f, center));
 		vertex.add(cameraFrameToLocalFrame(new Coord2D(+sx, +sy), dcm, alt, f, center));
@@ -55,16 +56,7 @@ public class Footprint {
 
 		return GeoTools.moveCoordinate(center, x, y);
 	}
-
-	private static msg_camera_feedback getFakeCameraMessage(Altitude altitude) {
-		msg_camera_feedback msg = new msg_camera_feedback();
-		msg.alt_rel = (float) altitude.valueInMeters();
-		msg.pitch = 0;
-		msg.roll = 0;
-		msg.yaw = 0;
-		return msg;
-	}
-
+	
 	public Length getLateralSize() {
 		return new Length(
 				(GeoTools.getDistance(vertex.get(0), vertex.get(1)).valueInMeters() + GeoTools
