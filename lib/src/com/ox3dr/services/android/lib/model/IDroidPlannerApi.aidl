@@ -119,11 +119,14 @@ interface IDroidPlannerApi {
         CameraDetail[] getCameraDetails();
 
         /**
-        * Retrieves an updated copy of the passed survey.
+        * Builds the given survey mission item.
         */
-        Survey updateSurveyMissionItem(in Survey survey);
+        Survey buildSurvey(in Survey survey);
 
-        StructureScanner updateStructureScanner(in StructureScanner item);
+        /**
+        * Builds the given structure scanner mission item.
+        */
+        StructureScanner buildStructureScanner(in StructureScanner item);
 
         /*** Oneway method calls ***/
 
