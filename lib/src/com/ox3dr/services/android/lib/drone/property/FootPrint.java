@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by fhuya on 11/11/14.
@@ -13,9 +14,9 @@ import java.util.ArrayList;
 public class FootPrint implements Parcelable {
 
     private final LatLong center;
-    private final ArrayList<LatLong> vertex;
+    private List<LatLong> vertex = new ArrayList<LatLong>();
 
-    public FootPrint(LatLong center, ArrayList<LatLong> vertex) {
+    public FootPrint(LatLong center, List<LatLong> vertex) {
         this.center = center;
         this.vertex = vertex;
     }
@@ -24,7 +25,7 @@ public class FootPrint implements Parcelable {
         return center;
     }
 
-    public ArrayList<LatLong> getVertex() {
+    public List<LatLong> getVertex() {
         return vertex;
     }
 
@@ -36,15 +37,15 @@ public class FootPrint implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(this.center, 0);
-        dest.writeSerializable(this.vertex);
+        dest.writeTypedList(vertex);
     }
 
     private FootPrint(Parcel in) {
         this.center = in.readParcelable(LatLong.class.getClassLoader());
-        this.vertex = (ArrayList<LatLong>) in.readSerializable();
+        in.readTypedList(vertex, LatLong.CREATOR);
     }
 
-    public static final Parcelable.Creator<FootPrint> CREATOR = new Parcelable.Creator<FootPrint>() {
+    public static final Creator<FootPrint> CREATOR = new Creator<FootPrint>() {
         public FootPrint createFromParcel(Parcel source) {
             return new FootPrint(source);
         }
