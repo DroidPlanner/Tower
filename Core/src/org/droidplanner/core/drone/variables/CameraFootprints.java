@@ -3,9 +3,8 @@ package org.droidplanner.core.drone.variables;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.mission.survey.CameraInfo;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.survey.Footprint;
