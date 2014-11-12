@@ -11,11 +11,11 @@ import org.droidplanner.core.survey.Footprint;
 
 import com.MAVLink.Messages.ardupilotmega.msg_camera_feedback;
 
-public class CameraFootprints extends DroneVariable {
+public class Camera extends DroneVariable {
 	private CameraInfo camera = new CameraInfo();
 	private List<Footprint> footprints = new ArrayList<Footprint>();
 
-	public CameraFootprints(Drone myDrone) {
+	public Camera(Drone myDrone) {
 		super(myDrone);
 	}
 
@@ -26,6 +26,17 @@ public class CameraFootprints extends DroneVariable {
 
 	public Footprint getLastFootprint() {
 		return footprints.get(footprints.size()-1);
+	}
+	
+	public CameraInfo getCamera(){
+		return camera;
+	}
+
+	public Footprint getCurrentFieldOfView() {
+		return new Footprint(camera, myDrone .getGps()
+				.getPosition(), myDrone.getAltitude().getAltitude(), myDrone.getOrientation()
+				.getPitch(), myDrone.getOrientation().getRoll(), myDrone.getOrientation()
+				.getYaw());
 	}
 
 }
