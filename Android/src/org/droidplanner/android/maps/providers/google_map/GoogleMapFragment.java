@@ -550,7 +550,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 		pathOptions.strokeColor(FOOTPRINT_DEFAULT_COLOR).strokeWidth(FOOTPRINT_DEFAULT_WIDTH);
 		pathOptions.fillColor(FOOTPRINT_FILL_COLOR);
 
-		for (Coord2D vertex : footprintToBeDraw.getVertex()) {
+		for (Coord2D vertex : footprintToBeDraw.getVertexInGlobalFrame()) {
 			pathOptions.add(DroneHelper.CoordToLatLang(vertex));
 		}
 		getMap().addPolygon(pathOptions);
