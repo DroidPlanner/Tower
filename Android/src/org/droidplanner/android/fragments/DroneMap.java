@@ -46,6 +46,7 @@ public abstract class DroneMap extends ApiListenerFragment {
         eventFilter.addAction(Event.EVENT_HEARTBEAT_RESTORED);
         eventFilter.addAction(Event.EVENT_HEARTBEAT_TIMEOUT);
         eventFilter.addAction(Event.EVENT_DISCONNECTED);
+        eventFilter.addAction(Event.EVENT_FOOTPRINT);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -77,6 +78,9 @@ public abstract class DroneMap extends ApiListenerFragment {
             else if(Event.EVENT_DISCONNECTED.equals(action)
                     || Event.EVENT_HEARTBEAT_TIMEOUT.equals(action)){
                 mMapFragment.updateMarker(graphicDrone);
+            }
+            else if(Event.EVENT_FOOTPRINT.equals(action)) {
+                mMapFragment.addCameraFootprint(drone.getCameraFootprints().getLastFootprint());
             }
         }
     };
@@ -127,6 +131,8 @@ public abstract class DroneMap extends ApiListenerFragment {
 			}
 
 			mMapFragment.updateMissionPath(missionProxy);
+			
+			mMapFragment.updatePolygonsPaths(missionProxy.getPolygonsPath());
 
 			mHandler.removeCallbacks(this);
 		}

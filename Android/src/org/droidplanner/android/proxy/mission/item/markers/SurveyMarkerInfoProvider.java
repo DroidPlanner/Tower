@@ -24,9 +24,10 @@ public class SurveyMarkerInfoProvider {
 
 	private void updateMarkerInfoList() {
         List<LatLong> points = mSurvey.getPolygonPoints();
-        if(points != null && !points.isEmpty()) {
-            for (LatLong point : points) {
-                mPolygonMarkers.add(new PolygonMarkerInfo(point));
+        if(points != null) {
+            final int pointsCount = points.size();
+            for (int i = 0; i < pointsCount; i++) {
+                mPolygonMarkers.add(new PolygonMarkerInfo(points.get(i), mSurvey, i));
             }
         }
 	}

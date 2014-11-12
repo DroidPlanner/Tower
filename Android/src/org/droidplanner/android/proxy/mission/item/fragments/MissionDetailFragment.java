@@ -123,6 +123,9 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
 		case SET_SERVO:
 			fragment = new SetServoFragment();
 			break;
+		case CONDITION_YAW:
+			fragment = new MissionConditionYawFragment();
+			break;
 		default:
 			fragment = null;
 			break;

@@ -31,6 +31,13 @@ public interface DPMap {
 	public static final int DRONE_LEASH_DEFAULT_COLOR = Color.WHITE;
 	public static final int DRONE_LEASH_DEFAULT_WIDTH = 2;
 
+	public static final int POLYGONS_PATH_DEFAULT_COLOR = Color.RED;
+	public static final int POLYGONS_PATH_DEFAULT_WIDTH = 4;
+	
+	public static final int FOOTPRINT_DEFAULT_COLOR = 0;
+	public static final int FOOTPRINT_DEFAULT_WIDTH = 2;
+	public static final int FOOTPRINT_FILL_COLOR = Color.argb(80, 0, 0, 200);
+	
 	public static final String PREF_LAT = "pref_map_lat";
 	public static final float DEFAULT_LATITUDE = 37.8575523f;
 
@@ -132,6 +139,12 @@ public interface DPMap {
 	 *            drone's coordinate
 	 */
 	public void addFlightPathPoint(LatLong coord);
+
+	/**
+	 * Draw the footprint of the camera in the ground
+	 * @param footprintToBeDraw
+	 */
+	public void addCameraFootprint(Footprint footprintToBeDraw);
 
 	/**
 	 * Remove all markers from the map.
@@ -342,6 +355,12 @@ public interface DPMap {
 	 *            source to use to draw the mission path
 	 */
 	public void updateMissionPath(PathSource pathSource);
+	
+	/**
+	 * Updates the polygons on the map.
+	 * 
+	 */
+    public void updatePolygonsPaths(List<List<LatLong>> paths);
 
 	/**
 	 * Zoom to fit coordinates on map

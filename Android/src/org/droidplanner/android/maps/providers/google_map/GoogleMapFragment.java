@@ -57,6 +57,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
@@ -132,6 +134,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
 	protected boolean useMarkerClickAsMapClick = false;
     private boolean isMapLayoutFinished = false;
+
+	private List<Polygon> polygonsPaths = new ArrayList<Polygon>();
 
     protected DroidPlannerApp dpApp;
 
@@ -552,8 +556,42 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
         missionPath.setPoints(pathPoints);
     }
+    
+    
+    @Override
+    public void updatePolygonsPaths(List<List<Coord2D>> paths){
+        for (Polygon poly : polygonsPaths) {
+			poly.remove();
+		}
+        
+        for (List<Coord2D> contour : paths) {
+        	PolygonOptions pathOptions = new PolygonOptions();
+            pathOptions.strokeColor(POLYGONS_PATH_DEFAULT_COLOR).strokeWidth(
+                    POLYGONS_PATH_DEFAULT_WIDTH);
+            final List<LatLng> pathPoints = new ArrayList<LatLng>(contour.size());
+			for (Coord2D coord : contour) {
+		            pathPoints.add(DroneHelper.CoordToLatLang(coord));
+			}
+			pathOptions.addAll(pathPoints);
+			polygonsPaths.add(getMap().addPolygon(pathOptions));
+		}
+        
+    }
 
-    /**
+	@Override
+	public void addCameraFootprint(Footprint footprintToBeDraw) {
+		PolygonOptions pathOptions = new PolygonOptions();
+		pathOptions.strokeColor(FOOTPRINT_DEFAULT_COLOR).strokeWidth(FOOTPRINT_DEFAULT_WIDTH);
+		pathOptions.fillColor(FOOTPRINT_FILL_COLOR);
+
+		for (Coord2D vertex : footprintToBeDraw.getVertex()) {
+			pathOptions.add(DroneHelper.CoordToLatLang(vertex));
+		}
+		getMap().addPolygon(pathOptions);
+
+	}
+
+	/**
      * Save the map camera state on a preference file
      * http://stackoverflow.com/questions
      * /16697891/google-maps-android-api-v2-restoring

@@ -406,8 +406,7 @@ public class MissionProxy implements DPMap.PathSource {
         return 0;
 	}
 
-	public double getDistanceFromLastWaypoint(MissionItemProxy waypointRender)
-			throws IllegalArgumentException {
+	public double getDistanceFromLastWaypoint(MissionItemProxy waypointRender) {
         if(mMissionItems.size() < 2)
             return 0;
 
@@ -537,7 +536,17 @@ public class MissionProxy implements DPMap.PathSource {
 	}
 
 	public List<LatLong> getVisibleCoords() {
-		return getVisibleCoords(mMissionItems);
+        return getVisibleCoords(mMissionItems);
+    }
+    
+	public void movePolygonPoint(Survey survey, int index, Coord2D position) {
+		survey.polygon.movePoint(position, index);
+		try {
+			survey.build();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		mMission.notifyMissionUpdate();
 	}
 
     public static List<LatLong> getVisibleCoords(List<MissionItemProxy> mipList){
@@ -615,4 +624,14 @@ public class MissionProxy implements DPMap.PathSource {
     public void makeAndUploadDronie(DroneApi droneApi) {
         droneApi.generateDronie();
     }
+
+	public List<List<Coord2D>> getPolygonsPath() {
+		ArrayList<List<Coord2D>> polygonPaths = new ArrayList<List<Coord2D>>();
+		for (MissionItem item : mMission.getItems()) {
+			if (item instanceof Survey) {
+				polygonPaths.add(((Survey)item).polygon.getPoints());
+			}
+		}
+		return polygonPaths;
+	}
 }
