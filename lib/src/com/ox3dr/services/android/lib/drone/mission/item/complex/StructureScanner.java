@@ -7,6 +7,7 @@ import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.BaseSpatialItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public class StructureScanner extends BaseSpatialItem implements MissionItem.Com
     private double heightStep = 5;
     private int stepsCount = 2;
     private boolean crossHatch = false;
-    private SurveyDetail surveyDetail;
+    private SurveyDetail surveyDetail = new SurveyDetail();
     private List<LatLong> path;
 
     public StructureScanner(){

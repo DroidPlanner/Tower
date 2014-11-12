@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class Survey extends MissionItem implements MissionItem.ComplexItem {
 
-    private SurveyDetail surveyDetail;
+    private SurveyDetail surveyDetail = new SurveyDetail();
     private double polygonArea;
     private List<LatLong> polygonPoints;
     private List<LatLong> gridPoints;
