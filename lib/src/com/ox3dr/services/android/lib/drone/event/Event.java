@@ -48,6 +48,8 @@ public class Event {
 
     public static final String EVENT_FOLLOW_UPDATE = CLAZZ_NAME + ".FOLLOW_UPDATE";
 
+    public static final String EVENT_FOOTPRINT = CLAZZ_NAME + ".FOOTPRINT";
+
     public static final String EVENT_GUIDED_POINT = CLAZZ_NAME + ".GUIDED_POINT";
 
     public static final String EVENT_MISSION_UPDATE = CLAZZ_NAME + ".MISSION_UPDATE";
