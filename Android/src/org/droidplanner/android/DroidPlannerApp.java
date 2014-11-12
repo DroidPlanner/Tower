@@ -10,7 +10,9 @@ import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.support.v4.content.LocalBroadcastManager;
 
+import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.model.IDroidPlannerServices;
 import com.ox3dr.services.android.lib.model.ITLogApi;
 
@@ -37,9 +39,6 @@ public class DroidPlannerApp extends Application {
             ".ACTION_TOGGLE_DRONE_CONNECTION";
     public static final String EXTRA_ESTABLISH_CONNECTION = "extra_establish_connection";
 
-    private final static IntentFilter intentFilter = new IntentFilter
-            (ACTION_TOGGLE_DRONE_CONNECTION);
-
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -51,6 +50,12 @@ public class DroidPlannerApp extends Application {
                     drone.connect();
                 else
                     drone.disconnect();
+            }
+            else if(Event.EVENT_CONNECTED.equals(action)){
+                handler.removeCallbacks(disconnectionTask);
+            }
+            else if(Event.EVENT_DISCONNECTED.equals(action)){
+                shouldWeTerminate();
             }
         }
     };
@@ -117,7 +122,13 @@ public class DroidPlannerApp extends Application {
 		GAUtils.initGATracker(this);
 		GAUtils.startNewSession(context);
 
-        registerReceiver(broadcastReceiver, intentFilter);
+        registerReceiver(broadcastReceiver, new IntentFilter(ACTION_TOGGLE_DRONE_CONNECTION));
+
+        final IntentFilter droneConnectionFilter = new IntentFilter();
+        droneConnectionFilter.addAction(Event.EVENT_CONNECTED);
+        droneConnectionFilter.addAction(Event.EVENT_DISCONNECTED);
+        LocalBroadcastManager.getInstance(context).registerReceiver(broadcastReceiver,
+                droneConnectionFilter);
 	}
 
 	public Drone getDrone(){
@@ -159,11 +170,15 @@ public class DroidPlannerApp extends Application {
 			listener.onApiDisconnected();
 		}
 
-		if (apiListeners.isEmpty() && apiBindingState.get() != API_UNBOUND) {
+		shouldWeTerminate();
+	}
+
+    private void shouldWeTerminate(){
+        if (apiListeners.isEmpty() && apiBindingState.get() != API_UNBOUND && !drone.isConnected()) {
             // Wait 30s, then disconnect the service binding.
             handler.postDelayed(disconnectionTask, DELAY_TO_DISCONNECTION);
-		}
-	}
+        }
+    }
 
 	private void notifyApiConnected() {
 		if (apiListeners.isEmpty() || !is3drServicesConnected())
