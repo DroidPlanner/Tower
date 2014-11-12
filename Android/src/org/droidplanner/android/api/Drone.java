@@ -25,6 +25,7 @@ import com.ox3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
 import com.ox3dr.services.android.lib.drone.property.Altitude;
 import com.ox3dr.services.android.lib.drone.property.Attitude;
 import com.ox3dr.services.android.lib.drone.property.Battery;
+import com.ox3dr.services.android.lib.drone.property.FootPrint;
 import com.ox3dr.services.android.lib.drone.property.Gps;
 import com.ox3dr.services.android.lib.drone.property.GuidedState;
 import com.ox3dr.services.android.lib.drone.property.Home;
@@ -51,10 +52,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by fhuya on 11/4/14.
  */
-public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlannerApi, DroidPlannerApp.ApiListener {
+public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlannerApi, DroidPlannerApp.ApiListener {
 
-    private static final String CLAZZ_NAME = DroneApi.class.getName();
-    private static final String TAG = DroneApi.class.getSimpleName();
+    private static final String CLAZZ_NAME = Drone.class.getName();
+    private static final String TAG = Drone.class.getSimpleName();
 
     public static final int COLLISION_SECONDS_BEFORE_COLLISION = 2;
     public static final double COLLISION_DANGEROUS_SPEED_METERS_PER_SECOND = -3.0;
@@ -147,7 +148,7 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     
     private final LinkedList<Runnable> onConnectedTasks = new LinkedList<Runnable>(); 
 
-    public DroneApi(DroidPlannerApp dpApp){
+    public Drone(DroidPlannerApp dpApp){
         this.dpApp = dpApp;
         dpApp.addApiListener(this);
         dpCallback = new DPApiCallback(dpApp);
@@ -167,6 +168,7 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
 
     private void handleRemoteException(RemoteException e){
         Log.e(TAG, e.getMessage(), e);
+        registerWithDrone();
     }
 
     private ConnectionParameter retrieveConnectionParameters() {
@@ -555,6 +557,30 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
             }
         }
         return new CameraDetail[0];
+    }
+
+    @Override
+    public FootPrint getLastCameraFootPrint() {
+        if(isApiValid()){
+            try {
+                return dpApi.getLastCameraFootPrint();
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public FootPrint[] getCameraFootPrints() {
+        if(isApiValid()){
+            try {
+                return dpApi.getCameraFootPrints();
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+        return new FootPrint[0];
     }
 
     @Override

@@ -1,9 +1,8 @@
 package org.droidplanner.android.notifications;
 
 import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.FlightActivity;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.utils.TextUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.unit.UnitManager;
@@ -70,19 +69,19 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 	 */
 	private final DroidPlannerPrefs mAppPrefs;
 
-    private final DroneApi droneApi;
+    private final Drone drone;
 
-	StatusBarNotificationProvider(Context context, DroneApi api) {
+	StatusBarNotificationProvider(Context context, Drone api) {
 		mContext = context;
-        this.droneApi = api;
+        this.drone = api;
 		mAppPrefs = new DroidPlannerPrefs(context);
 
 		mNotificationIntent = PendingIntent.getActivity(mContext, 0, new Intent(mContext,
 				FlightActivity.class), 0);
 
 		mToggleConnectionIntent = PendingIntent
-                .getBroadcast(mContext, 0, new Intent(mContext, DroneApi.class)
-                        .setAction(DroneApi.ACTION_TOGGLE_DRONE_CONNECTION), 0);
+                .getBroadcast(mContext, 0, new Intent(mContext, Drone.class)
+                        .setAction(Drone.ACTION_TOGGLE_DRONE_CONNECTION), 0);
 
         LocalBroadcastManager.getInstance(context).registerReceiver(eventReceiver, eventFilter);
 	}
@@ -118,34 +117,34 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
                         .setOngoing(mAppPrefs.isNotificationPermanent())
                         .setSmallIcon(R.drawable.ic_launcher);
 
-                updateFlightMode(droneApi);
-                updateDroneState(droneApi);
-                updateBattery(droneApi);
-                updateGps(droneApi);
-                updateHome(droneApi);
-                updateRadio(droneApi);
+                updateFlightMode(drone);
+                updateDroneState(drone);
+                updateBattery(drone);
+                updateGps(drone);
+                updateHome(drone);
+                updateRadio(drone);
             }
             else if(Event.EVENT_GPS.equals(action)){
-                updateHome(droneApi);
+                updateHome(drone);
             }
             else if(Event.EVENT_GPS_STATE.equals(action)){
-                updateGps(droneApi);
+                updateGps(drone);
             }
             else if(Event.EVENT_BATTERY.equals(action)){
-                updateBattery(droneApi);
+                updateBattery(drone);
             }
             else if(Event.EVENT_HOME.equals(action)){
-                updateHome(droneApi);
+                updateHome(drone);
             }
             else if(Event.EVENT_RADIO.equals(action)){
-                updateRadio(droneApi);
+                updateRadio(drone);
             }
             else if(Event.EVENT_STATE.equals(action)){
-                updateDroneState(droneApi);
+                updateDroneState(drone);
             }
             else if(Event.EVENT_VEHICLE_MODE.equals(action)
                     || Event.EVENT_TYPE_UPDATED.equals(action)){
-                updateFlightMode(droneApi);
+                updateFlightMode(drone);
             }
             else if(Event.EVENT_DISCONNECTED.equals(action)){
                 mInboxBuilder = null;
@@ -170,7 +169,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
         }
     };
 
-	private void updateRadio(DroneApi drone) {
+	private void updateRadio(Drone drone) {
 		if (mInboxBuilder == null)
 			return;
 
@@ -180,13 +179,13 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		mInboxBuilder.setLine(4, TextUtils.normal("Signal:   ",	TextUtils.bold(update)));
 	}
 
-	private void updateHome(DroneApi drone) {
+	private void updateHome(Drone drone) {
 		if (mInboxBuilder == null)
 			return;
 
         String update = "--";
-            final Gps droneGps = droneApi.getGps();
-            final Home droneHome = droneApi.getHome();
+            final Gps droneGps = this.drone.getGps();
+            final Home droneHome = this.drone.getHome();
             if(droneGps != null && droneGps.isValid() && droneHome != null && droneHome.isValid()) {
                 double distanceToHome = MathUtils.getDistance(droneHome.getCoordinate(),
                         droneGps.getPosition());
@@ -196,7 +195,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		mInboxBuilder.setLine(0, TextUtils.normal("Home:   ", update));
 	}
 
-	private void updateGps(DroneApi drone) {
+	private void updateGps(Drone drone) {
 		if (mInboxBuilder == null)
 			return;
 
@@ -206,7 +205,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		mInboxBuilder.setLine(1, TextUtils.normal("Satellite:   ", TextUtils.bold(update)));
 	}
 
-	private void updateBattery(DroneApi drone) {
+	private void updateBattery(Drone drone) {
 		if (mInboxBuilder == null)
 			return;
 
@@ -218,7 +217,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		mInboxBuilder.setLine(3, TextUtils.normal("Battery:   ", TextUtils.bold(update)));
 	}
 
-	private void updateDroneState(DroneApi drone) {
+	private void updateDroneState(Drone drone) {
 		if (mInboxBuilder == null)
 			return;
 
@@ -230,7 +229,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
                 TextUtils.bold(String.format("%02d:%02d", minutes, seconds))));
 	}
 
-	private void updateFlightMode(DroneApi drone) {
+	private void updateFlightMode(Drone drone) {
 		if (mNotificationBuilder == null)
 			return;
 

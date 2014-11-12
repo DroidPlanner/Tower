@@ -1,7 +1,7 @@
 package org.droidplanner.android.widgets.actionProviders;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.BatteryInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.FlightModesInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.FlightTimeInfo;
@@ -52,7 +52,7 @@ public class InfoBarActionProvider extends ActionProvider {
 
             if(Event.EVENT_BATTERY.equals(action)){
                 if (mBatteryInfo != null)
-                    mBatteryInfo.updateItemView(mContext, mDroneApi);
+                    mBatteryInfo.updateItemView(mContext, mDrone);
             }
             else if(Event.EVENT_CONNECTED.equals(action)){
                 updateInfoBar();
@@ -65,30 +65,30 @@ public class InfoBarActionProvider extends ActionProvider {
             }
             else if(Event.EVENT_GPS.equals(action) || Event.EVENT_HOME.equals(action)){
                 if (mHomeInfo != null)
-                    mHomeInfo.updateItemView(mContext, mDroneApi);
+                    mHomeInfo.updateItemView(mContext, mDrone);
             }
             else if(Event.EVENT_GPS_STATE.equals(action)){
                 if (mGpsInfo != null)
-                    mGpsInfo.updateItemView(mContext, mDroneApi);
+                    mGpsInfo.updateItemView(mContext, mDrone);
             }
             else if(Event.EVENT_RADIO.equals(action)){
                 if (mSignalInfo != null)
-                    mSignalInfo.updateItemView(mContext, mDroneApi);
+                    mSignalInfo.updateItemView(mContext, mDrone);
             }
             else if(Event.EVENT_STATE.equals(action)){
                 if (mFlightTimeInfo != null)
-                    mFlightTimeInfo.updateItemView(mContext, mDroneApi);
+                    mFlightTimeInfo.updateItemView(mContext, mDrone);
             }
             else if(Event.EVENT_VEHICLE_MODE.equals(action) || Event.EVENT_TYPE_UPDATED.equals(action)){
                 if (mFlightModesInfo != null)
-                    mFlightModesInfo.updateItemView(mContext, mDroneApi);
+                    mFlightModesInfo.updateItemView(mContext, mDrone);
             }
             else{
                 updateExtra = false;
             }
 
             if (mPhoneExtraInfo != null && updateExtra) {
-                mPhoneExtraInfo.updateItemView(mContext, mDroneApi);
+                mPhoneExtraInfo.updateItemView(mContext, mDrone);
             }
         }
     };
@@ -101,7 +101,7 @@ public class InfoBarActionProvider extends ActionProvider {
 	/**
 	 * Handle to the drone api.
 	 */
-	private DroneApi mDroneApi;
+	private Drone mDrone;
 
 	/**
 	 * Action provider's view.
@@ -138,12 +138,12 @@ public class InfoBarActionProvider extends ActionProvider {
 	/**
 	 * This is used to update the current drone state.
 	 * 
-	 * @param droneApi
+	 * @param drone
 	 */
-	public void setDrone(DroneApi droneApi) {
+	public void setDrone(Drone drone) {
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(mContext);
-        if(droneApi == null) {
-            if(mDroneApi != null) {
+        if(drone == null) {
+            if(mDrone != null) {
                 lbm.unregisterReceiver(eventReceiver);
                 updateInfoBar();
             }
@@ -153,20 +153,20 @@ public class InfoBarActionProvider extends ActionProvider {
             lbm.registerReceiver(eventReceiver, eventFilter);
         }
 
-        mDroneApi = droneApi;
+        mDrone = drone;
 	}
 
 	/**
 	 * Go through the list of action bar item, and initialize their view.
 	 */
 	private void setupActionView() {
-		mHomeInfo = new HomeInfo(mContext, mView, mDroneApi);
-		mGpsInfo = new GpsInfo(mContext, mView, mDroneApi);
-		mBatteryInfo = new BatteryInfo(mContext, mView, mDroneApi);
-		mFlightTimeInfo = new FlightTimeInfo(mContext, mView, mDroneApi);
-		mSignalInfo = new SignalInfo(mContext, mView, mDroneApi);
-		mFlightModesInfo = new FlightModesInfo(mContext, mView, mDroneApi);
-		mPhoneExtraInfo = new PhoneExtraInfo(mContext, mView, mDroneApi);
+		mHomeInfo = new HomeInfo(mContext, mView, mDrone);
+		mGpsInfo = new GpsInfo(mContext, mView, mDrone);
+		mBatteryInfo = new BatteryInfo(mContext, mView, mDrone);
+		mFlightTimeInfo = new FlightTimeInfo(mContext, mView, mDrone);
+		mSignalInfo = new SignalInfo(mContext, mView, mDrone);
+		mFlightModesInfo = new FlightModesInfo(mContext, mView, mDrone);
+		mPhoneExtraInfo = new PhoneExtraInfo(mContext, mView, mDrone);
 	}
 
 	/**
@@ -174,24 +174,24 @@ public class InfoBarActionProvider extends ActionProvider {
 	 */
 	private void updateInfoBar() {
 		if (mHomeInfo != null)
-			mHomeInfo.updateItemView(mContext, mDroneApi);
+			mHomeInfo.updateItemView(mContext, mDrone);
 
 		if (mGpsInfo != null)
-			mGpsInfo.updateItemView(mContext, mDroneApi);
+			mGpsInfo.updateItemView(mContext, mDrone);
 
 		if (mBatteryInfo != null)
-			mBatteryInfo.updateItemView(mContext, mDroneApi);
+			mBatteryInfo.updateItemView(mContext, mDrone);
 
 		if (mFlightTimeInfo != null)
-			mFlightTimeInfo.updateItemView(mContext, mDroneApi);
+			mFlightTimeInfo.updateItemView(mContext, mDrone);
 
 		if (mSignalInfo != null)
-			mSignalInfo.updateItemView(mContext, mDroneApi);
+			mSignalInfo.updateItemView(mContext, mDrone);
 
 		if (mFlightModesInfo != null)
-			mFlightModesInfo.updateItemView(mContext, mDroneApi);
+			mFlightModesInfo.updateItemView(mContext, mDrone);
 
 		if (mPhoneExtraInfo != null)
-			mPhoneExtraInfo.updateItemView(mContext, mDroneApi);
+			mPhoneExtraInfo.updateItemView(mContext, mDrone);
 	}
 }

@@ -18,7 +18,7 @@ import com.ox3dr.services.android.lib.drone.property.Attitude;
 import com.ox3dr.services.android.lib.drone.property.Speed;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.widgets.AttitudeIndicator;
 
@@ -34,11 +34,11 @@ public class TelemetryFragment extends ApiListenerFragment {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
-			final DroneApi droneApi = getDroneApi();
+			final Drone drone = getDrone();
 			if (Event.EVENT_ATTITUDE.equals(action)) {
-				onOrientationUpdate(droneApi.getAttitude());
+				onOrientationUpdate(drone.getAttitude());
 			} else if (Event.EVENT_SPEED.equals(action)) {
-				onSpeedAltitudeAndClimbRateUpdate(droneApi.getSpeed(), droneApi.getAltitude());
+				onSpeedAltitudeAndClimbRateUpdate(drone.getSpeed(), drone.getAltitude());
 			}
 		}
 	};

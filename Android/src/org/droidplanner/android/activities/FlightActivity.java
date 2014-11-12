@@ -3,7 +3,7 @@ package org.droidplanner.android.activities;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.dialogs.DroneshareDialog;
 import org.droidplanner.android.fragments.FlightActionsFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
@@ -67,7 +67,7 @@ public class FlightActivity extends DrawerNavigationUI {
                     || Event.EVENT_CONNECTED.equals(action)
                     || Event.EVENT_DISCONNECTED.equals(action)
                     || Event.EVENT_STATE.equals(action)){
-                enableSlidingUpPanel(dpApp.getDroneApi());
+                enableSlidingUpPanel(dpApp.getDrone());
             }
             else if(Event.EVENT_FOLLOW_START.equals(action)){
                 //Extend the sliding drawer if collapsed.
@@ -270,7 +270,7 @@ public class FlightActivity extends DrawerNavigationUI {
     @Override
     public void onApiConnected(){
         super.onApiConnected();
-        enableSlidingUpPanel(dpApp.getDroneApi());
+        enableSlidingUpPanel(dpApp.getDrone());
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
 
@@ -386,7 +386,7 @@ public class FlightActivity extends DrawerNavigationUI {
         mLocationButtonsContainer.requestLayout();
 	}
 
-    private void enableSlidingUpPanel(DroneApi api){
+    private void enableSlidingUpPanel(Drone api){
         if (mSlidingPanel == null || api == null) {
             return;
         }

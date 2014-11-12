@@ -18,7 +18,7 @@ import com.ox3dr.services.android.lib.drone.event.Event;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.proxy.mission.MissionProxy;
@@ -109,7 +109,7 @@ public abstract class SuperUI extends FragmentActivity implements DroidPlannerAp
 		invalidateOptionsMenu();
 
         getBroadcastManager().registerReceiver(superReceiver, superIntentFilter);
-        if(dpApp.getDroneApi().isConnected())
+        if(dpApp.getDrone().isConnected())
             onDroneConnected();
         else
             onDroneDisconnected();
@@ -176,7 +176,7 @@ public abstract class SuperUI extends FragmentActivity implements DroidPlannerAp
 			infoBar = (InfoBarActionProvider) infoBarItem.getActionProvider();
 
 		// Configure the info bar action provider if we're connected
-		DroneApi dpApi = dpApp.getDroneApi();
+		Drone dpApi = dpApp.getDrone();
 		if (dpApi.isConnected()) {
 			menu.setGroupEnabled(R.id.menu_group_connected, true);
 			menu.setGroupVisible(R.id.menu_group_connected, true);
@@ -215,7 +215,7 @@ public abstract class SuperUI extends FragmentActivity implements DroidPlannerAp
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		final DroneApi dpApi = dpApp.getDroneApi();
+		final Drone dpApi = dpApp.getDrone();
 
 		switch (item.getItemId()) {
 		case R.id.menu_send_mission: {
@@ -282,10 +282,10 @@ public abstract class SuperUI extends FragmentActivity implements DroidPlannerAp
 	}
 
 	public void toggleDroneConnection() {
-        final DroneApi droneApi = dpApp.getDroneApi();
-		if(droneApi.isConnected())
-            droneApi.disconnect();
+        final Drone drone = dpApp.getDrone();
+		if(drone.isConnected())
+            drone.disconnect();
         else
-            droneApi.connect();
+            drone.connect();
 	}
 }

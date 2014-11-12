@@ -14,7 +14,7 @@ import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 
 /**
@@ -35,7 +35,7 @@ public class FlightModePanel extends ApiListenerFragment{
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            onModeUpdate(getDroneApi());
+            onModeUpdate(getDrone());
         }
     };
 
@@ -47,7 +47,7 @@ public class FlightModePanel extends ApiListenerFragment{
 	@Override
 	public void onApiConnected() {
 		// Update the mode info panel based on the current mode.
-		onModeUpdate(getDroneApi());
+		onModeUpdate(getDrone());
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 	}
 
@@ -56,9 +56,9 @@ public class FlightModePanel extends ApiListenerFragment{
         getBroadcastManager().unregisterReceiver(eventReceiver);
 	}
 
-	private void onModeUpdate(DroneApi dpApi) {
+	private void onModeUpdate(Drone dpApi) {
 		// Update the info panel fragment
-		dpApi = getDroneApi();
+		dpApi = getDrone();
 		Fragment infoPanel;
 		if (dpApi == null || !dpApi.isConnected()) {
 			infoPanel = new ModeDisconnectedFragment();

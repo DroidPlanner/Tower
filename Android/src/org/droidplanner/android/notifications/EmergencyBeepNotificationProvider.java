@@ -9,19 +9,19 @@ import android.media.SoundPool;
 import android.support.v4.content.LocalBroadcastManager;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 
 public class EmergencyBeepNotificationProvider implements NotificationHandler.NotificationProvider {
 
 	private static final IntentFilter eventFilter = new IntentFilter(
-			DroneApi.ACTION_GROUND_COLLISION_IMMINENT);
+			Drone.ACTION_GROUND_COLLISION_IMMINENT);
 
 	private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
-			if (DroneApi.ACTION_GROUND_COLLISION_IMMINENT.equals(action)) {
-				if (intent.getBooleanExtra(DroneApi.EXTRA_IS_GROUND_COLLISION_IMMINENT, false)) {
+			if (Drone.ACTION_GROUND_COLLISION_IMMINENT.equals(action)) {
+				if (intent.getBooleanExtra(Drone.EXTRA_IS_GROUND_COLLISION_IMMINENT, false)) {
 					mPool.play(beepBeep, 1f, 1f, 1, 1, 1f);
 				} else {
 					mPool.stop(beepBeep);

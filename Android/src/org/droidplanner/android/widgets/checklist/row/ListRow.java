@@ -1,6 +1,6 @@
 package org.droidplanner.android.widgets.checklist.row;
 
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.widgets.checklist.CheckListItem;
 
 import android.view.LayoutInflater;
@@ -60,7 +60,7 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 		listener = mListener;
 	}
 
-	protected void getDroneVariable(DroneApi mDrone, CheckListItem mListItem) {
+	protected void getDroneVariable(Drone mDrone, CheckListItem mListItem) {
 		String sys_tag = mListItem.getSys_tag();
 
 		if (sys_tag.equalsIgnoreCase("SYS_BATTREM_LVL")) {

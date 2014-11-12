@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
@@ -80,7 +80,7 @@ public abstract class DroneMap extends ApiListenerFragment {
                 mMapFragment.updateMarker(graphicDrone);
             }
             else if(Event.EVENT_FOOTPRINT.equals(action)) {
-                mMapFragment.addCameraFootprint(drone.getCameraFootprints().getLastFootprint());
+                mMapFragment.addCameraFootprint(drone.getLastCameraFootPrint());
             }
         }
     };
@@ -145,7 +145,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 	public GraphicGuided guided;
 
 	protected MissionProxy missionProxy;
-	public DroneApi drone;
+	public Drone drone;
 
 	protected Context context;
 
@@ -168,7 +168,7 @@ public abstract class DroneMap extends ApiListenerFragment {
     public void onApiConnected(){
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 
-            drone = getDroneApi();
+            drone = getDrone();
             missionProxy = drone.getMissionProxy();
 
             home = new GraphicHome(drone);

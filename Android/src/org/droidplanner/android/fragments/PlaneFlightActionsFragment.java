@@ -21,7 +21,7 @@ import com.ox3dr.services.android.lib.gcs.follow.FollowType;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.analytics.GAUtils;
 
@@ -69,7 +69,7 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
 
                 if((Event.EVENT_FOLLOW_START.equals(action)
                         || Event.EVENT_FOLLOW_STOP.equals(action))) {
-                    final FollowState followState = getDroneApi().getFollowState();
+                    final FollowState followState = getDrone().getFollowState();
                     if (followState != null) {
                         String eventLabel = null;
                         switch (followState.getState()) {
@@ -142,7 +142,7 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
 	}
 
 	private void updateFollowButton() {
-		switch (getDroneApi().getFollowState().getState()) {
+		switch (getDrone().getFollowState().getState()) {
 		case FollowState.STATE_START:
 			followBtn.setBackgroundColor(Color.RED);
 			break;
@@ -160,15 +160,15 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
 	private void updateFlightModeButtons() {
 		resetFlightModeButtons();
 
-		final DroneApi droneApi = getDroneApi();
-		final VehicleMode flightMode = droneApi.getState().getVehicleMode();
+		final Drone drone = getDrone();
+		final VehicleMode flightMode = drone.getState().getVehicleMode();
 		switch (flightMode) {
 		case PLANE_AUTO:
 			autoBtn.setActivated(true);
 			break;
 
 		case PLANE_GUIDED:
-			if (droneApi.getGuidedState().isInitialized() && !droneApi.getFollowState().isEnabled()) {
+			if (drone.getGuidedState().isInitialized() && !drone.getFollowState().isEnabled()) {
 				pauseBtn.setActivated(true);
 			}
 			break;
@@ -186,7 +186,7 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
 	}
 
 	private void setupButtonsByFlightState() {
-		if (getDroneApi().isConnected()) {
+		if (getDrone().isConnected()) {
 			mDisconnectedButtons.setVisibility(View.GONE);
 			mConnectedButtons.setVisibility(View.VISIBLE);
 		} else {
@@ -210,7 +210,7 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
 
 	@Override
 	public void onClick(View v) {
-        final DroneApi droneApi = getDroneApi();
+        final Drone drone = getDrone();
 		HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
 				.setCategory(GAUtils.Category.FLIGHT);
 
@@ -220,31 +220,31 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
 			break;
 
 		case R.id.mc_homeBtn:
-			droneApi.changeVehicleMode(VehicleMode.PLANE_RTL);
+			drone.changeVehicleMode(VehicleMode.PLANE_RTL);
 			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON)
                     .setLabel(VehicleMode.PLANE_RTL.getLabel());
 			break;
 
 		case R.id.mc_pause:
-			if (droneApi.getFollowState().isEnabled()) {
-				droneApi.disableFollowMe();
+			if (drone.getFollowState().isEnabled()) {
+				drone.disableFollowMe();
 			}
 
-			droneApi.pauseAtCurrentLocation();
+			drone.pauseAtCurrentLocation();
 			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Pause");
 			break;
 
 		case R.id.mc_autoBtn:
-			droneApi.changeVehicleMode(VehicleMode.PLANE_AUTO);
+			drone.changeVehicleMode(VehicleMode.PLANE_AUTO);
 			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON)
                     .setLabel(VehicleMode.PLANE_AUTO.getLabel());
 			break;
 
 		case R.id.mc_follow:
-            if(droneApi.getFollowState().isEnabled())
-                droneApi.disableFollowMe();
+            if(drone.getFollowState().isEnabled())
+                drone.disableFollowMe();
             else
-                droneApi.enableFollowMe(FollowType.LEASH);
+                drone.enableFollowMe(FollowType.LEASH);
 			break;
 
 		default:
@@ -258,7 +258,7 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
 	}
 
 	@Override
-	public boolean isSlidingUpPanelEnabled(DroneApi api) {
+	public boolean isSlidingUpPanelEnabled(Drone api) {
 		final State droneState = api.getState();
 		return api.isConnected() && droneState.isArmed();
 	}

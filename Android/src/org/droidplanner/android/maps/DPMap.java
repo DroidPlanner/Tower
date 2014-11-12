@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.location.LocationListener;
 
 import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.ox3dr.services.android.lib.drone.property.FootPrint;
 
 /**
  * Defines the functionality expected from the map providers.
@@ -144,7 +145,7 @@ public interface DPMap {
 	 * Draw the footprint of the camera in the ground
 	 * @param footprintToBeDraw
 	 */
-	public void addCameraFootprint(Footprint footprintToBeDraw);
+	public void addCameraFootprint(FootPrint footprintToBeDraw);
 
 	/**
 	 * Remove all markers from the map.

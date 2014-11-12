@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenParameterDialog;
@@ -71,8 +71,8 @@ public class ParamsFragment extends ApiListenerListFragment {
                 startProgress();
             }
             else if(Event.EVENT_PARAMETERS_REFRESH_ENDED.equals(action)){
-                if(getDroneApi().isConnected()) {
-                        loadAdapter(getDroneApi().getParameters().getParameters());
+                if(getDrone().isConnected()) {
+                        loadAdapter(getDrone().getParameters().getParameters());
                 }
                 stopProgress();
             }
@@ -88,8 +88,8 @@ public class ParamsFragment extends ApiListenerListFragment {
                 stopProgress();
             }
             else if(Event.EVENT_TYPE_UPDATED.equals(action)){
-                if(getDroneApi().isConnected())
-                    loadAdapter(getDroneApi().getParameters().getParameters());
+                if(getDrone().isConnected())
+                    loadAdapter(getDrone().getParameters().getParameters());
             }
         }
     };
@@ -235,7 +235,7 @@ public class ParamsFragment extends ApiListenerListFragment {
 
     @Override
     public void onApiConnected() {
-        Parameters droneParams = getDroneApi().getParameters();
+        Parameters droneParams = getDrone().getParameters();
 
         if(adapter.isEmpty() && droneParams != null) {
             List<Parameter> parametersList = droneParams.getParameters();
@@ -338,16 +338,16 @@ public class ParamsFragment extends ApiListenerListFragment {
 	}
 
 	private void refreshParameters() {
-		if (getDroneApi().isConnected()) {
-			getDroneApi().refreshParameters();
+		if (getDrone().isConnected()) {
+			getDrone().refreshParameters();
 		} else {
 			Toast.makeText(getActivity(), R.string.msg_connect_first, Toast.LENGTH_SHORT).show();
 		}
 	}
 
 	private void writeModifiedParametersToDrone() {
-        final DroneApi droneApi = getDroneApi();
-        if(!droneApi.isConnected())
+        final Drone drone = getDrone();
+        if(!drone.isConnected())
             return;
 
         final int adapterCount = adapter.getCount();
@@ -363,7 +363,7 @@ public class ParamsFragment extends ApiListenerListFragment {
 
         final int parametersCount = parametersList.size();
 		if (parametersCount > 0) {
-            droneApi.writeParameters(new Parameters(parametersList));
+            drone.writeParameters(new Parameters(parametersList));
             adapter.notifyDataSetChanged();
             Toast.makeText(getActivity(),
                     parametersCount + " " + getString(R.string.msg_parameters_written_to_drone),

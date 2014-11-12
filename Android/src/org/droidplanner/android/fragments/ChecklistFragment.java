@@ -82,7 +82,7 @@ public class ChecklistFragment extends ApiListenerFragment implements OnXmlParse
 
     @Override
     public void onApiConnected(){
-        sysLink = new CheckListSysLink(getDroneApi());
+        sysLink = new CheckListSysLink(getDrone());
         getBroadcastManager().registerReceiver(broadcastReceiver, intentFilter);
     }
 

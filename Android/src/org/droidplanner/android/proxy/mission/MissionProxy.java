@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
@@ -24,10 +24,8 @@ import com.ox3dr.services.android.lib.drone.mission.item.MissionItem.SpatialItem
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.ox3dr.services.android.lib.drone.mission.item.command.ReturnToLaunch;
 import com.ox3dr.services.android.lib.drone.mission.item.command.Takeoff;
-import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
-import com.ox3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
 import com.ox3dr.services.android.lib.util.MathUtils;
@@ -51,13 +49,13 @@ public class MissionProxy implements DPMap.PathSource {
 	private final List<MissionItemProxy> mMissionItems = new ArrayList<MissionItemProxy>();
 
     private final LocalBroadcastManager lbm;
-    private final DroneApi droneApi;
+    private final Drone drone;
 
 	public MissionSelection selection = new MissionSelection();
 
-	public MissionProxy(Context context, DroneApi droneApi) {
+	public MissionProxy(Context context, Drone drone) {
         lbm = LocalBroadcastManager.getInstance(context);
-        this.droneApi = droneApi;
+        this.drone = drone;
 	}
 
     public void notifyMissionUpdate(){
@@ -238,10 +236,10 @@ public class MissionProxy implements DPMap.PathSource {
 
 	private void addMissionItem(MissionItem missionItem) {
         if(missionItem instanceof Survey){
-            droneApi.buildSurvey((Survey)missionItem);
+            drone.buildSurvey((Survey) missionItem);
         }
         else if(missionItem instanceof StructureScanner){
-            droneApi.buildStructureScanner((StructureScanner) missionItem);
+            drone.buildStructureScanner((StructureScanner) missionItem);
         }
 
 		mMissionItems.add(new MissionItemProxy(this, missionItem));
@@ -541,7 +539,7 @@ public class MissionProxy implements DPMap.PathSource {
     
 	public void movePolygonPoint(Survey survey, int index, LatLong position) {
         survey.getPolygonPoints().get(index).set(position);
-        this.droneApi.buildSurvey(survey);
+        this.drone.buildSurvey(survey);
 
 		notifyMissionUpdate();
 	}
@@ -568,7 +566,7 @@ public class MissionProxy implements DPMap.PathSource {
         return coords;
     }
 
-    public void sendMissionToAPM(DroneApi droneApi){
+    public void sendMissionToAPM(Drone drone){
         final Mission mission = new Mission();
         final int missionItemsCount = mMissionItems.size();
 
@@ -587,7 +585,7 @@ public class MissionProxy implements DPMap.PathSource {
             }
         }
 
-        droneApi.setMission(mission, true);
+        drone.setMission(mission, true);
 
         missionItemsList += "]";
 
@@ -618,8 +616,8 @@ public class MissionProxy implements DPMap.PathSource {
         return length;
 	}
 
-    public void makeAndUploadDronie(DroneApi droneApi) {
-        droneApi.generateDronie();
+    public void makeAndUploadDronie(Drone drone) {
+        drone.generateDronie();
     }
 
 	public List<List<LatLong>> getPolygonsPath() {

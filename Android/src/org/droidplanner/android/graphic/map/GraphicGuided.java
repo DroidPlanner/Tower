@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.maps.DPMap.PathSource;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.MarkerWithText;
@@ -21,18 +21,18 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSo
 
 	private final static String TAG = GraphicGuided.class.getSimpleName();
 
-    private final DroneApi droneApi;
+    private final Drone drone;
 
-	public GraphicGuided(DroneApi droneApi) {
-        this.droneApi = droneApi;
+	public GraphicGuided(Drone drone) {
+        this.drone = drone;
 	}
 
 	@Override
 	public List<LatLong> getPathPoints() {
 		List<LatLong> path = new ArrayList<LatLong>();
-        GuidedState guidedPoint = droneApi.getGuidedState();
+        GuidedState guidedPoint = drone.getGuidedState();
 		if (guidedPoint != null && guidedPoint.isActive()) {
-            Gps gps = droneApi.getGps();
+            Gps gps = drone.getGps();
 			if (gps != null && gps.isValid()) {
 				path.add(gps.getPosition());
 			}
@@ -43,7 +43,7 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSo
 
 	@Override
 	public boolean isVisible() {
-        GuidedState guidedPoint = droneApi.getGuidedState();
+        GuidedState guidedPoint = drone.getGuidedState();
 		return guidedPoint != null && guidedPoint.isActive();
 	}
 
@@ -59,14 +59,14 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSo
 
 	@Override
 	public com.ox3dr.services.android.lib.coordinate.LatLong getPosition() {
-        GuidedState guidedPoint = droneApi.getGuidedState();
+        GuidedState guidedPoint = drone.getGuidedState();
 		return guidedPoint == null ? null : guidedPoint.getCoordinate();
 	}
 
 	@Override
 	public void setPosition(LatLong coord) {
 		try {
-			droneApi.sendGuidedPoint(coord, true);
+			drone.sendGuidedPoint(coord, true);
 		} catch (Exception e) {
 			Log.e(TAG, "Unable to update guided point position.", e);
 		}

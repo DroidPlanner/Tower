@@ -15,13 +15,13 @@ import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.property.Type;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 
 public class FlightActionsFragment extends ApiListenerFragment {
 
 	interface SlidingUpHeader {
-		boolean isSlidingUpPanelEnabled(DroneApi api);
+		boolean isSlidingUpPanelEnabled(Drone api);
 	}
 
 	private static final IntentFilter eventFilter = new IntentFilter(Event.EVENT_TYPE_UPDATED);
@@ -31,7 +31,7 @@ public class FlightActionsFragment extends ApiListenerFragment {
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
 			if (Event.EVENT_TYPE_UPDATED.equals(action)) {
-                Type type = getDroneApi().getType();
+                Type type = getDrone().getType();
 				selectActionsBar(type == null ? -1 : type.getDroneType());
 			}
 		}
@@ -46,7 +46,7 @@ public class FlightActionsFragment extends ApiListenerFragment {
 
 	@Override
 	public void onApiConnected() {
-        DroneApi drone = getDroneApi();
+        Drone drone = getDrone();
         if(drone.isConnected())
 		    selectActionsBar(drone.getType().getDroneType());
         else{
@@ -83,7 +83,7 @@ public class FlightActionsFragment extends ApiListenerFragment {
 		header = (SlidingUpHeader) actionsBarFragment;
 	}
 
-	public boolean isSlidingUpPanelEnabled(DroneApi api) {
+	public boolean isSlidingUpPanelEnabled(Drone api) {
 		return header != null && header.isSlidingUpPanelEnabled(api);
 	}
 }

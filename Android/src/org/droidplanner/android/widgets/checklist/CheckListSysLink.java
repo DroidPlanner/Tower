@@ -4,20 +4,20 @@ import com.ox3dr.services.android.lib.drone.property.Battery;
 import com.ox3dr.services.android.lib.drone.property.Gps;
 import com.ox3dr.services.android.lib.drone.property.State;
 
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 
 public class CheckListSysLink {
-	private DroneApi droneApi;
+	private Drone drone;
 
-	public CheckListSysLink(DroneApi droneApi) {
-		this.droneApi = droneApi;
+	public CheckListSysLink(Drone drone) {
+		this.drone = drone;
 	}
 
 	public void getSystemData(CheckListItem mListItem, String mSysTag) {
 		if (mSysTag == null)
 			return;
 
-		Battery batt = droneApi.getBattery();
+		Battery batt = drone.getBattery();
 		if (batt != null) {
 			if (mSysTag.equalsIgnoreCase("SYS_BATTREM_LVL")) {
 				mListItem.setSys_value(batt.getBatteryRemain());
@@ -28,14 +28,14 @@ public class CheckListSysLink {
 			}
 		}
 
-		Gps gps = droneApi.getGps();
+		Gps gps = drone.getGps();
 		if (gps != null) {
 			if (mSysTag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
 				mListItem.setSys_value(gps.getSatellitesCount());
 			}
 		}
 
-		State state = droneApi.getState();
+		State state = drone.getState();
 		if (state != null) {
 			if (mSysTag.equalsIgnoreCase("SYS_ARM_STATE")) {
 				mListItem.setSys_activated(state.isArmed());
@@ -45,7 +45,7 @@ public class CheckListSysLink {
 		}
 
 		if (mSysTag.equalsIgnoreCase("SYS_CONNECTION_STATE")) {
-			mListItem.setSys_activated(droneApi.isConnected());
+			mListItem.setSys_activated(drone.isConnected());
 		}
 	}
 
@@ -64,23 +64,23 @@ public class CheckListSysLink {
 	}
 
 	private void doSysArm(CheckListItem checkListItem) {
-		if (droneApi.isConnected()) {
-			if (checkListItem.isSys_activated() && !droneApi.getState().isArmed()) {
-				droneApi.arm(true);
+		if (drone.isConnected()) {
+			if (checkListItem.isSys_activated() && !drone.getState().isArmed()) {
+				drone.arm(true);
 			} else {
-				droneApi.arm(false);
+				drone.arm(false);
 			}
 		}
 	}
 
 	private void doSysConnect(CheckListItem checkListItem) {
 		boolean activated = checkListItem.isSys_activated();
-		boolean connected = droneApi.isConnected();
+		boolean connected = drone.isConnected();
 		if (activated != connected) {
 			if (connected)
-				droneApi.disconnect();
+				drone.disconnect();
 			else
-				droneApi.connect();
+				drone.connect();
 		}
 	}
 

@@ -5,25 +5,17 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.text.TextUtils;
-import android.util.Log;
 
-import com.ox3dr.services.android.lib.drone.connection.ConnectionParameter;
-import com.ox3dr.services.android.lib.drone.connection.ConnectionType;
 import com.ox3dr.services.android.lib.model.IDroidPlannerServices;
 import com.ox3dr.services.android.lib.model.ITLogApi;
 
-import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
-import org.droidplanner.android.api.DPApiCallback;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.IO.ExceptionWriter;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +83,7 @@ public class DroidPlannerApp extends Application {
 
 	private Thread.UncaughtExceptionHandler exceptionHandler;
 
-    private DroneApi droneApi;
+    private Drone drone;
 
 	private IDroidPlannerServices ox3drServices;
     private ITLogApi tlogApi;
@@ -103,9 +95,9 @@ public class DroidPlannerApp extends Application {
 		super.onCreate();
 		final Context context = getApplicationContext();
 
-        droneApi = new DroneApi(this);
+        drone = new Drone(this);
 
-        notificationHandler = new NotificationHandler(context, droneApi);
+        notificationHandler = new NotificationHandler(context, drone);
 
 		exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
 		Thread.setDefaultUncaughtExceptionHandler(dpExceptionHandler);
@@ -114,8 +106,8 @@ public class DroidPlannerApp extends Application {
 		GAUtils.startNewSession(context);
 	}
 
-	public DroneApi getDroneApi(){
-        return droneApi;
+	public Drone getDrone(){
+        return drone;
     }
 
     public ITLogApi getTlogApi(){

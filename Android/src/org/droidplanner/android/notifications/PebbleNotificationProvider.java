@@ -1,8 +1,6 @@
 package org.droidplanner.android.notifications;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,7 +20,7 @@ import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 import com.ox3dr.services.android.lib.gcs.follow.FollowState;
 import com.ox3dr.services.android.lib.gcs.follow.FollowType;
 
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 
 public class PebbleNotificationProvider implements NotificationHandler.NotificationProvider {
 
@@ -101,12 +99,12 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
     /**
      * Handle to the dp api
      */
-    private final DroneApi dpApi;
+    private final Drone dpApi;
 
 	long timeWhenLastTelemSent = System.currentTimeMillis();
 	private PebbleDataReceiver datahandler;
 
-	public PebbleNotificationProvider(Context context, DroneApi dpApi) {
+	public PebbleNotificationProvider(Context context, Drone dpApi) {
         this.dpApi = dpApi;
 		applicationContext = context;
 		PebbleKit.startAppOnPebble(applicationContext, DP_UUID);
@@ -134,7 +132,7 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 	 * 
 	 * @param drone
 	 */
-	public void sendDataToWatchIfTimeHasElapsed(DroneApi drone) {
+	public void sendDataToWatchIfTimeHasElapsed(Drone drone) {
 		if (System.currentTimeMillis() - timeWhenLastTelemSent > 500) {
 			sendDataToWatchNow(drone);
 			timeWhenLastTelemSent = System.currentTimeMillis();
@@ -148,7 +146,7 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 	 * 
 	 * @param drone
 	 */
-	public void sendDataToWatchNow(DroneApi drone) {
+	public void sendDataToWatchNow(Drone drone) {
         final FollowState followState = drone.getFollowState();
         final State droneState = drone.getState();
         if(followState == null || droneState == null)

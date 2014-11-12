@@ -42,7 +42,7 @@ import com.ox3dr.services.android.lib.drone.property.Type;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.DirectoryPath;
@@ -105,7 +105,7 @@ public class SettingsFragment extends PreferenceFragment implements
 				else
 					updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
 			} else if (Event.EVENT_TYPE_UPDATED.equals(action)) {
-                DroneApi drone = dpApp.getDroneApi();
+                Drone drone = dpApp.getDrone();
 				if (drone.isConnected()) {
 					updateFirmwareVersionPreference(drone.getType().getFirmwareVersion());
 				} else
@@ -258,7 +258,7 @@ public class SettingsFragment extends PreferenceFragment implements
 					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 						@Override
 						public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            dpApp.getDroneApi().enableDroneShare(dpPrefs.getDroneshareLogin(),
+                            dpApp.getDrone().enableDroneShare(dpPrefs.getDroneshareLogin(),
                                     dpPrefs.getDronesharePassword(), (Boolean) newValue);
 							return true;
 						}
@@ -271,7 +271,7 @@ public class SettingsFragment extends PreferenceFragment implements
 					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 						@Override
 						public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            dpApp.getDroneApi().enableDroneShare(newValue.toString(),
+                            dpApp.getDrone().enableDroneShare(newValue.toString(),
                                     dpPrefs.getDronesharePassword(), dpPrefs.getDroneshareEnabled());
 							return true;
 						}
@@ -284,7 +284,7 @@ public class SettingsFragment extends PreferenceFragment implements
 					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 						@Override
 						public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            dpApp.getDroneApi().enableDroneShare(dpPrefs.getDroneshareLogin(),
+                            dpApp.getDrone().enableDroneShare(dpPrefs.getDroneshareLogin(),
                                     newValue.toString(), dpPrefs.getDroneshareEnabled());
 							return true;
 						}
@@ -604,7 +604,7 @@ public class SettingsFragment extends PreferenceFragment implements
 
 	@Override
 	public void onApiConnected() {
-        DroneApi drone = dpApp.getDroneApi();
+        Drone drone = dpApp.getDrone();
 		State droneState = drone.getState();
 		Type droneType = drone.getType();
 		final int mavlinkVersion = droneState == null

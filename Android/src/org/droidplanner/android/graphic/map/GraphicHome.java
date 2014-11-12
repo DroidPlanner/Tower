@@ -1,7 +1,7 @@
 package org.droidplanner.android.graphic.map;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.maps.MarkerInfo;
 
 import android.content.res.Resources;
@@ -12,9 +12,9 @@ import com.ox3dr.services.android.lib.drone.property.Home;
 
 public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 
-	private DroneApi drone;
+	private Drone drone;
 
-	public GraphicHome(DroneApi drone) {
+	public GraphicHome(Drone drone) {
 		this.drone = drone;
 	}
 

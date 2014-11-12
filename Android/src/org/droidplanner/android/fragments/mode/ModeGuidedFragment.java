@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.ox3dr.services.android.lib.drone.property.GuidedState;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
@@ -50,9 +50,9 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
 	public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
 		switch (cardWheel.getId()) {
 		case R.id.altitude_spinner:
-			final DroneApi droneApi = getDroneApi();
-			if (droneApi.isConnected())
-				droneApi.setGuidedAltitude(newValue);
+			final Drone drone = getDrone();
+			if (drone.isConnected())
+				drone.setGuidedAltitude(newValue);
 			break;
 		}
 	}
@@ -60,7 +60,7 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
 	@Override
 	public void onApiConnected() {
 		if (mAltitudeWheel != null) {
-            GuidedState guidedState = getDroneApi().getGuidedState();
+            GuidedState guidedState = getDrone().getGuidedState();
 
 			final int initialValue = (int) Math.max(guidedState == null
                     ? DEFAULT_ALTITUDE

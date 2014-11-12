@@ -21,7 +21,7 @@ import com.ox3dr.services.android.lib.drone.event.Extra;
 import com.ox3dr.services.android.lib.drone.property.State;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.notifications.TTSNotificationProvider;
 
@@ -62,7 +62,7 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
                 resetCalibration();
             }
             else if (Event.EVENT_CALIBRATION_IMU_TIMEOUT.equals(action)) {
-				if (getDroneApi().isConnected()) {
+				if (getDrone().isConnected()) {
 					String message = intent.getStringExtra(Extra.EXTRA_CALIBRATION_IMU_MESSAGE);
 					if (message != null)
 						relayInstructions(message);
@@ -147,7 +147,7 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
 
     @Override
     public void onApiConnected() {
-        DroneApi drone = getDroneApi();
+        Drone drone = getDrone();
         State droneState = drone.getState();
         if (drone.isConnected() && !droneState.isFlying()) {
             btnStep.setEnabled(true);
@@ -248,14 +248,14 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
     }
 
 	private void sendAck(int step) {
-        DroneApi dpApi = getDroneApi();
+        Drone dpApi = getDrone();
 		if (dpApi.isConnected()) {
 			dpApi.sendIMUCalibrationAck(step);
 		}
 	}
 
 	private void startCalibration() {
-        DroneApi dpApi = getDroneApi();
+        Drone dpApi = getDrone();
 		if (dpApi.isConnected()) {
 			dpApi.startIMUCalibration();
 		}

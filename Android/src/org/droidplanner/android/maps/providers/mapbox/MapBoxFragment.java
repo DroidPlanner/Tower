@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
@@ -54,6 +54,7 @@ import com.mapbox.mapboxsdk.views.MapViewListener;
 import com.mapbox.mapboxsdk.views.util.Projection;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.drone.event.Event;
+import com.ox3dr.services.android.lib.drone.property.FootPrint;
 import com.ox3dr.services.android.lib.drone.property.Gps;
 
 /**
@@ -66,11 +67,11 @@ public class MapBoxFragment extends Fragment implements DPMap {
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            final DroneApi droneApi = getDroneApi();
-            if(!droneApi.isConnected())
+            final Drone drone = getDroneApi();
+            if(!drone.isConnected())
                 return;
 
-            Gps droneGps = droneApi.getGps();
+            Gps droneGps = drone.getGps();
             if (mPanMode.get() == AutoPanMode.DRONE && droneGps.isValid()) {
                 final float currentZoomLevel = getMapZoomLevel();
                 final LatLong droneLocation = droneGps.getPosition();
@@ -193,8 +194,8 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		mMapView = (MapView) view.findViewById(R.id.mapbox_mapview);
 	}
 
-    private DroneApi getDroneApi(){
-        return dpApp.getDroneApi();
+    private Drone getDroneApi(){
+        return dpApp.getDrone();
     }
 
 	@Override
@@ -290,7 +291,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
 	}
 
     @Override
-    public void addCameraFootprint(Footprint footprintToBeDraw) {
+    public void addCameraFootprint(FootPrint footprintToBeDraw) {
         //TODO: to be implemented.
     }
 
@@ -340,7 +341,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
 	@Override
 	public void goToDroneLocation() {
-        DroneApi dpApi = getDroneApi();
+        Drone dpApi = getDroneApi();
         if(!dpApi.isConnected())
             return;
 

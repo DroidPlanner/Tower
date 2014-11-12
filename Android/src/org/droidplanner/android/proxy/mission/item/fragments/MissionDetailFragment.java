@@ -141,7 +141,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
 
     @Override
     public void onApiConnected() {
-        mMissionProxy = getDroneApi().getMissionProxy();
+        mMissionProxy = getDrone().getMissionProxy();
 
         mSelectedProxies.clear();
         mSelectedProxies.addAll(mMissionProxy.selection.getSelected());

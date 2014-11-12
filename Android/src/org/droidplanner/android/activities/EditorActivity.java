@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
@@ -161,7 +161,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     public void onApiConnected(){
         super.onApiConnected();
 
-        missionProxy = dpApp.getDroneApi().getMissionProxy();
+        missionProxy = dpApp.getDrone().getMissionProxy();
         if(missionProxy != null)
             missionProxy.selection.addSelectionUpdateListener(this);
 
@@ -268,7 +268,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		OpenFileDialog missionDialog = new OpenMissionDialog() {
 			@Override
 			public void waypointFileLoaded(MissionReader reader) {
-                DroneApi dpApi = dpApp.getDroneApi();
+                Drone dpApi = dpApp.getDrone();
                 if(dpApi != null && dpApi.isConnected()) {
                     List<MissionItemMessage> msgMissionItems = reader.getMsgMissionItems();
                     dpApi.setRawMissionItems(msgMissionItems.toArray(new
@@ -287,7 +287,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 FileStream.getWaypointFilename("waypoints"), new EditInputDialog.Listener() {
                     @Override
                     public void onOk(CharSequence input) {
-                        DroneApi dpApi = dpApp.getDroneApi();
+                        Drone dpApi = dpApp.getDrone();
                         if(dpApi != null && dpApi.isConnected()) {
                                 final MissionItemMessage[] missionItems = dpApi.getRawMissionItems();
                                 if (MissionWriter.write(Arrays.asList(missionItems),
@@ -334,7 +334,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             if(MissionProxy.ACTION_MISSION_PROXY_UPDATE.equals(action)){
                 if(missionProxy != null) {
                     double missionLength = missionProxy.getMissionLength();
-                    double speedParameter = dpApp.getDroneApi().getSpeedParameter();
+                    double speedParameter = dpApp.getDrone().getSpeedParameter();
                     String infoString = String.format("Distance %02.2fm", missionLength);
                     if (speedParameter > 0) {
                         int time = (int) (missionLength / speedParameter);

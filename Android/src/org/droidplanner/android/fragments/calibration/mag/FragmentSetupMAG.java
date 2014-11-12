@@ -19,7 +19,7 @@ import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.event.Extra;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.widgets.scatterplot.ScatterPlot;
 
@@ -222,20 +222,20 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 
 		outState.putInt(EXTRA_CALIBRATION_STATUS, calibrationStatus);
 
-		if (getDroneApi().isConnected() && inProgressPoints != null && !inProgressPoints.isEmpty()){
+		if (getDrone().isConnected() && inProgressPoints != null && !inProgressPoints.isEmpty()){
 				outState.putParcelableArrayList(EXTRA_CALIBRATION_POINTS, inProgressPoints);
 		}
 	}
 
 	private void pauseCalibration() {
-		if (getDroneApi().isConnected()) {
-			getDroneApi().stopMagnetometerCalibration();
+		if (getDrone().isConnected()) {
+			getDrone().stopMagnetometerCalibration();
 		}
 	}
 
 	private void cancelCalibration() {
-        if (getDroneApi().isConnected()) {
-            getDroneApi().stopMagnetometerCalibration();
+        if (getDrone().isConnected()) {
+            getDrone().stopMagnetometerCalibration();
 			if (calibrationStatus == CALIBRATION_IN_PROGRESS) {
 				setCalibrationStatus(CALIBRATION_IDLE);
 			}
@@ -290,7 +290,7 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 	}
 
 	public void startCalibration() {
-		DroneApi dpApi = getDroneApi();
+		Drone dpApi = getDrone();
 		if (dpApi.isConnected()) {
             dpApi.startMagnetometerCalibration(startPoints);
 			startPoints = null;
@@ -303,7 +303,7 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 
 	@Override
 	public void onApiConnected() {
-        DroneApi drone = getDroneApi();
+        Drone drone = getDrone();
 		if (drone.isConnected() && !drone.getState().isFlying()) {
 			buttonStep.setEnabled(true);
 		} else {

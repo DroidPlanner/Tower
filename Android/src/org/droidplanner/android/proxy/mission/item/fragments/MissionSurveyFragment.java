@@ -17,7 +17,7 @@ import com.ox3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
 
 import org.droidplanner.R;
 import org.droidplanner.R.id;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.CamerasAdapter;
 import org.droidplanner.android.utils.unit.UnitManager;
@@ -81,7 +81,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
         final Context context = getActivity().getApplicationContext();
 
         cameraAdapter = new CamerasAdapter(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item, getDroneApi().getCameraDetails());
+                android.R.layout.simple_spinner_dropdown_item, getDrone().getCameraDetails());
 
         cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
         cameraSpinner.setAdapter(cameraAdapter);
@@ -150,7 +150,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		case R.id.altitudePicker:
 		case R.id.overlapPicker:
 		case R.id.sidelapPicker:
-            DroneApi droneApi = getDroneApi();
+            Drone drone = getDrone();
 			try {
 				for (Survey survey : getMissionItems()) {
                     SurveyDetail surveyDetail = survey.getSurveyDetail();
@@ -159,7 +159,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
                     surveyDetail.setOverlap(mOverlapPicker.getCurrentValue());
                     surveyDetail.setSidelap(mSidelapPicker.getCurrentValue());
 
-                    droneApi.buildSurvey(survey);
+                    drone.buildSurvey(survey);
                     checkIfValid(survey);
 				}
 			} catch (Exception e) {

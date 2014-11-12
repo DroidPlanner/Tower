@@ -19,7 +19,7 @@ import com.ox3dr.services.android.lib.drone.event.Extra;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
@@ -97,7 +97,7 @@ public class TTSNotificationProvider implements OnInitListener,
 	private class Watchdog implements Runnable {
 
 		private final StringBuilder mMessageBuilder = new StringBuilder();
-		private DroneApi drone;
+		private Drone drone;
 
 		public void run() {
 			handler.removeCallbacks(watchdogCallback);
@@ -110,7 +110,7 @@ public class TTSNotificationProvider implements OnInitListener,
 			}
 		}
 
-		private void speakPeriodic(DroneApi drone) {
+		private void speakPeriodic(Drone drone) {
 			// Drop the message if the previous one is not done yet.
 			if (mIsPeriodicStatusStarted.compareAndSet(false, true)) {
 				final SparseBooleanArray speechPrefs = mAppPrefs.getPeriodicSpeechPrefs();
@@ -140,18 +140,18 @@ public class TTSNotificationProvider implements OnInitListener,
 			}
 		}
 
-		public void setDrone(DroneApi drone) {
+		public void setDrone(Drone drone) {
 			this.drone = drone;
 		}
 	}
 
 	public final Watchdog watchdogCallback = new Watchdog();
 
-	private final DroneApi droneApi;
+	private final Drone drone;
 
-	TTSNotificationProvider(Context context, DroneApi droneApi) {
+	TTSNotificationProvider(Context context, Drone drone) {
 		this.context = context;
-		this.droneApi = droneApi;
+		this.drone = drone;
 		tts = new TextToSpeech(context, this);
 		mAppPrefs = new DroidPlannerPrefs(context);
 
@@ -267,32 +267,32 @@ public class TTSNotificationProvider implements OnInitListener,
 
 			final String action = intent.getAction();
 			if (Event.EVENT_ARMING.equals(action)) {
-				speakArmedState(droneApi.getState().isArmed());
+				speakArmedState(drone.getState().isArmed());
 			} else if (Event.EVENT_BATTERY.equals(action)) {
-				batteryDischargeNotification(droneApi.getBattery().getBatteryRemain());
+				batteryDischargeNotification(drone.getBattery().getBatteryRemain());
 			} else if (Event.EVENT_VEHICLE_MODE.equals(action)) {
-				speakMode(droneApi.getState().getVehicleMode());
+				speakMode(drone.getState().getVehicleMode());
 			} else if (Event.EVENT_MISSION_SENT.equals(action)) {
 				Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT).show();
 				speak("Waypoints saved to Drone");
 			} else if (Event.EVENT_GPS_STATE.equals(action)) {
-				speakGpsMode(droneApi.getGps().getFixType());
+				speakGpsMode(drone.getGps().getFixType());
 			} else if (Event.EVENT_MISSION_RECEIVED.equals(action)) {
 				Toast.makeText(context, "Waypoints received from Drone", Toast.LENGTH_SHORT).show();
 				speak("Waypoints received");
 			} else if (Event.EVENT_HEARTBEAT_FIRST.equals(action)) {
-				watchdogCallback.setDrone(droneApi);
+				watchdogCallback.setDrone(drone);
 				scheduleWatchdog();
 				speak("Connected");
 			} else if (Event.EVENT_HEARTBEAT_TIMEOUT.equals(action)) {
-				if (!droneApi.getState().isCalibrating()
+				if (!drone.getState().isCalibrating()
 						&& mAppPrefs.getWarningOnLostOrRestoredSignal()) {
 					speak("Data link lost, check connection.");
 					handler.removeCallbacks(watchdogCallback);
 				}
 			}
             else if(Event.EVENT_HEARTBEAT_RESTORED.equals(action)){
-                watchdogCallback.setDrone(droneApi);
+                watchdogCallback.setDrone(drone);
                 scheduleWatchdog();
                 if (mAppPrefs.getWarningOnLostOrRestoredSignal()) {
                     speak("Data link restored");

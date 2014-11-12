@@ -9,7 +9,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.google.android.gms.analytics.HitBuilders;
 import com.ox3dr.services.android.lib.drone.event.Event;
 
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.utils.analytics.GAUtils;
 
 /**
@@ -38,7 +38,7 @@ public class NotificationHandler {
 			if (Event.EVENT_AUTOPILOT_FAILSAFE.equals(action)) {
 				final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
 						.setCategory(GAUtils.Category.FAILSAFE).setAction("Autopilot warning")
-						.setLabel(droneApi.getState().getFailsafeWarning());
+						.setLabel(drone.getState().getFailsafeWarning());
 				GAUtils.sendEvent(eventBuilder);
 			}
 		}
@@ -65,14 +65,14 @@ public class NotificationHandler {
 	private final EmergencyBeepNotificationProvider mBeepNotification;
 
 	private final Context context;
-	private final DroneApi droneApi;
+	private final Drone drone;
 
-	public NotificationHandler(Context context, DroneApi dpApi) {
+	public NotificationHandler(Context context, Drone dpApi) {
 		this.context = context;
-		this.droneApi = dpApi;
+		this.drone = dpApi;
 
-		mTtsNotification = new TTSNotificationProvider(context, droneApi);
-		mStatusBarNotification = new StatusBarNotificationProvider(context, droneApi);
+		mTtsNotification = new TTSNotificationProvider(context, drone);
+		mStatusBarNotification = new StatusBarNotificationProvider(context, drone);
 		mPebbleNotification = new PebbleNotificationProvider(context, dpApi);
 		mBeepNotification = new EmergencyBeepNotificationProvider(context);
 

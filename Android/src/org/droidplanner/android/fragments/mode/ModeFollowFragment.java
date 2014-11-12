@@ -18,7 +18,7 @@ import com.ox3dr.services.android.lib.gcs.follow.FollowState;
 import com.ox3dr.services.android.lib.gcs.follow.FollowType;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.DroneApi;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 
@@ -31,7 +31,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
 			if (Event.EVENT_FOLLOW_UPDATE.equals(action)) {
-				final FollowState followState = getDroneApi().getFollowState();
+				final FollowState followState = getDrone().getFollowState();
 				if (followState != null) {
 					spinner.setSelection(adapter.getPosition(followState.getMode()));
 				}
@@ -82,7 +82,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	public void onApiConnected() {
 		super.onApiConnected();
 
-		adapter.addAll(getDroneApi().getFollowTypes());
+		adapter.addAll(getDrone().getFollowTypes());
 		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 	}
 
@@ -96,9 +96,9 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
 		switch (cardWheel.getId()) {
 		case R.id.radius_spinner:
-			final DroneApi droneApi = getDroneApi();
-			if (droneApi.isConnected())
-				droneApi.setFollowMeRadius(newValue);
+			final Drone drone = getDrone();
+			if (drone.isConnected())
+				drone.setFollowMeRadius(newValue);
 			break;
 
 		default:
@@ -108,17 +108,17 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	}
 
 	private void updateCurrentRadius() {
-		final DroneApi droneApi = getDroneApi();
-		if (mRadiusWheel != null && droneApi.isConnected()) {
-			mRadiusWheel.setCurrentValue((int) droneApi.getFollowState().getRadius());
+		final Drone drone = getDrone();
+		if (mRadiusWheel != null && drone.isConnected()) {
+			mRadiusWheel.setCurrentValue((int) drone.getFollowState().getRadius());
 		}
 	}
 
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		final DroneApi droneApi = getDroneApi();
-		if (droneApi.isConnected()) {
-			droneApi.enableFollowMe(adapter.getItem(position));
+		final Drone drone = getDrone();
+		if (drone.isConnected()) {
+			drone.enableFollowMe(adapter.getItem(position));
 			updateCurrentRadius();
 		}
 	}

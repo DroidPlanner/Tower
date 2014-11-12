@@ -85,7 +85,7 @@ public class EditorListFragment extends ApiListenerFragment implements OnItemLon
 
     @Override
     public void onApiConnected() {
-        missionProxy = getDroneApi().getMissionProxy();
+        missionProxy = getDrone().getMissionProxy();
 
         adapter = new MissionItemProxyView(getActivity(), missionProxy.getItems());
         list.setAdapter(adapter);
