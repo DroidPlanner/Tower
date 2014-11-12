@@ -10,6 +10,12 @@ import com.ox3dr.services.android.lib.drone.connection.ConnectionParameter;
 * Used to establish connection with a drone.
 */
 interface IDroidPlannerServices {
+
+    /**
+    * Ping the 3DR Services to make sure it's still up and connected.
+    */
+    boolean ping();
+
     /**
     * Used to register with a drone instance whose connection parameters match the passed one.
     * The 'callback' argument must be non-null, and allows to receive updates about the
