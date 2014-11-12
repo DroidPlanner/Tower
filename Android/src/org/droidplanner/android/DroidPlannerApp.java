@@ -17,6 +17,7 @@ import com.ox3dr.services.android.lib.model.IDroidPlannerServices;
 import com.ox3dr.services.android.lib.model.ITLogApi;
 
 import org.droidplanner.android.api.Drone;
+import org.droidplanner.android.api.ServiceManager;
 import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.IO.ExceptionWriter;
@@ -96,9 +97,8 @@ public class DroidPlannerApp extends Application {
 
 	private Thread.UncaughtExceptionHandler exceptionHandler;
 
-	private Drone drone;
-	private IDroidPlannerServices ox3drServices;
-	private ITLogApi tlogApi;
+
+    private ServiceManager serviceMgr;
 	private NotificationHandler notificationHandler;
 
 	@Override
@@ -106,7 +106,7 @@ public class DroidPlannerApp extends Application {
 		super.onCreate();
 		final Context context = getApplicationContext();
 
-		drone = new Drone(this);
+        serviceMgr = new ServiceManager(context);
 
 		exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
 		Thread.setDefaultUncaughtExceptionHandler(dpExceptionHandler);
@@ -123,37 +123,17 @@ public class DroidPlannerApp extends Application {
 				droneConnectionFilter);
 	}
 
-	public Drone getDrone() {
-		return drone;
-	}
-
-	public ITLogApi getTlogApi() {
-		if (tlogApi == null) {
-			try {
-				tlogApi = ox3drServices.getTLogApi();
-			} catch (RemoteException e) {
-				return null;
-			}
-		}
-
-		return tlogApi;
-	}
-
-	public IDroidPlannerServices get3drServices() {
-		return ox3drServices;
-	}
-
 	public void addApiListener(ApiListener listener) {
 		if (listener == null)
 			return;
 
-		if (is3drServicesConnected())
+		if (serviceMgr.isServiceConnected())
 			listener.onApiConnected();
 
 		apiListeners.add(listener);
 
 		handler.removeCallbacks(disconnectionTask);
-		connect();
+		serviceMgr.connect();
 	}
 
 	public void removeApiListener(ApiListener listener) {
@@ -188,21 +168,11 @@ public class DroidPlannerApp extends Application {
 			listener.onApiDisconnected();
 	}
 
-	public boolean is3drServicesConnected() {
-		return ox3drServices != null;
-	}
 
-	public void connect() {
-		bindService(new Intent(IDroidPlannerServices.class.getName()), ox3drServicesConnection,
-				Context.BIND_AUTO_CREATE);
-	}
 
 	public void disconnect() {
 		notifyApiDisconnected();
 		notificationHandler.terminate();
-		drone.terminate();
 
-		ox3drServices = null;
-		unbindService(ox3drServicesConnection);
 	}
 }
