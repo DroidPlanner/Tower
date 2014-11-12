@@ -25,6 +25,11 @@ public class LatLong implements Parcelable, Serializable {
         this(copy.getLatitude(), copy.getLongitude());
     }
 
+    public void set(LatLong update){
+        this.latitude = update.latitude;
+        this.longitude = update.longitude;
+    }
+
     /**
      * @return the latitude in degrees
      */

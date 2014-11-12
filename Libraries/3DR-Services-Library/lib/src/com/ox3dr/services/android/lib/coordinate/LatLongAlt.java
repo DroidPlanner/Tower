@@ -22,6 +22,11 @@ public class LatLongAlt extends LatLong {
         this(copy.getLatitude(), copy.getLongitude(), copy.getAltitude());
     }
 
+    public void set(LatLongAlt source){
+        super.set(source);
+        this.mAltitude = source.mAltitude;
+    }
+
     /**
      * @return the altitude in meters
      */
