@@ -82,7 +82,7 @@ interface IDroidPlannerApi {
         /**
         * Process the given set of mission items.
         */
-        MissionItemMessage[] processMissionItems(MissionItem[] missionItems);
+        MissionItemMessage[] processMissionItems(in MissionItem[] missionItems);
 
         /**
         * Retrieves the signal level between the connected drone and the GCS.
