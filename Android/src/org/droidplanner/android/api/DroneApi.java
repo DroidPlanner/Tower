@@ -441,7 +441,7 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
         // Retrieve the connection parameters.
         final ConnectionParameter connParams = retrieveConnectionParameters();
         if (connParams == null) {
-            throw new IllegalArgumentException("Invalid connection parameters: " + connParams);
+            throw new IllegalArgumentException("Invalid connection parameters.");
         }
 
         try {
@@ -558,10 +558,10 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     }
 
     @Override
-    public Survey updateSurveyMissionItem(Survey survey) {
+    public Survey buildSurvey(Survey survey) {
         if(isApiValid()){
             try {
-                Survey updated = dpApi.updateSurveyMissionItem(survey);
+                Survey updated = dpApi.buildSurvey(survey);
                 if(updated != null)
                     survey.copy(updated);
             } catch (RemoteException e) {
@@ -572,10 +572,10 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
     }
 
     @Override
-    public StructureScanner updateStructureScanner(StructureScanner item) {
+    public StructureScanner buildStructureScanner(StructureScanner item) {
         if(isApiValid()){
             try {
-                StructureScanner updated = dpApi.updateStructureScanner(item);
+                StructureScanner updated = dpApi.buildStructureScanner(item);
                 if(updated != null)
                     item.copy(updated);
             } catch (RemoteException e) {

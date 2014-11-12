@@ -238,10 +238,10 @@ public class MissionProxy implements DPMap.PathSource {
 
 	private void addMissionItem(MissionItem missionItem) {
         if(missionItem instanceof Survey){
-            droneApi.updateSurveyMissionItem((Survey)missionItem);
+            droneApi.buildSurvey((Survey)missionItem);
         }
         else if(missionItem instanceof StructureScanner){
-            droneApi.updateStructureScanner((StructureScanner) missionItem);
+            droneApi.buildStructureScanner((StructureScanner) missionItem);
         }
 
 		mMissionItems.add(new MissionItemProxy(this, missionItem));

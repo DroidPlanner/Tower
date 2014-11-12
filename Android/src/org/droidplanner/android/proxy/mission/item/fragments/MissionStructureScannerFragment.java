@@ -88,7 +88,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
         DroneApi droneApi = getDroneApi();
 		for (StructureScanner item : getMissionItems()) {
             item.setCrossHatch(isChecked);
-            droneApi.updateStructureScanner(item);
+            droneApi.buildStructureScanner(item);
         }
 
 		MissionProxy missionProxy = getMissionProxy();
@@ -104,7 +104,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 		case R.id.radiusPicker: {
 			for (StructureScanner item : getMissionItems()) {
                 item.setRadius(newValue);
-                droneApi.updateStructureScanner(item);
+                droneApi.buildStructureScanner(item);
             }
 			break;
 		}
@@ -112,7 +112,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 		case R.id.startAltitudePicker: {
 			for (StructureScanner item : getMissionItems()) {
                 item.getCoordinate().setAltitude(newValue);
-                droneApi.updateStructureScanner(item);
+                droneApi.buildStructureScanner(item);
             }
 			break;
 		}
@@ -120,14 +120,14 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 		case R.id.heightStepPicker:
 			for (StructureScanner item : getMissionItems()) {
                 item.setHeightStep(newValue);
-                droneApi.updateStructureScanner(item);
+                droneApi.buildStructureScanner(item);
             }
 			break;
 
 		case R.id.stepsPicker:
 			for (StructureScanner item : getMissionItems()) {
                 item.setStepsCount(newValue);
-                droneApi.updateStructureScanner(item);
+                droneApi.buildStructureScanner(item);
             }
 			break;
 		}
@@ -146,7 +146,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 			for (StructureScanner scan : getMissionItems()) {
                 SurveyDetail surveyDetail = scan.getSurveyDetail();
                 surveyDetail.setCameraDetail(cameraInfo);
-                droneApi.updateStructureScanner(scan);
+                droneApi.buildStructureScanner(scan);
 			}
 
 			getMissionProxy().notifyMissionUpdate();

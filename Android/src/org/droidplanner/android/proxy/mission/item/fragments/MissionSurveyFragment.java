@@ -159,7 +159,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
                     surveyDetail.setOverlap(mOverlapPicker.getCurrentValue());
                     surveyDetail.setSidelap(mSidelapPicker.getCurrentValue());
 
-                    droneApi.updateSurveyMissionItem(survey);
+                    droneApi.buildSurvey(survey);
                     checkIfValid(survey);
 				}
 			} catch (Exception e) {
