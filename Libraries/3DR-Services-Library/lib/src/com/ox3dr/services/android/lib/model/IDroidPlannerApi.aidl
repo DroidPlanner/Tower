@@ -12,6 +12,7 @@ import com.ox3dr.services.android.lib.drone.mission.Mission;
 import com.ox3dr.services.android.lib.drone.property.State;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 import com.ox3dr.services.android.lib.drone.property.Type;
+import com.ox3dr.services.android.lib.drone.property.FootPrint;
 import com.ox3dr.services.android.lib.coordinate.Point3D;
 import com.ox3dr.services.android.lib.drone.property.Signal;
 import com.ox3dr.services.android.lib.drone.property.GuidedState;
@@ -117,6 +118,16 @@ interface IDroidPlannerApi {
         * Return the set of camera information available for the connected drone.
         */
         CameraDetail[] getCameraDetails();
+
+        /**
+        * Return the last camera footprint available for the connected drone.
+        */
+        FootPrint getLastCameraFootPrint();
+
+        /**
+        * Return the set of camera footprints available for the connected drone.
+        */
+        FootPrint[] getCameraFootPrints();
 
         /**
         * Builds the given survey mission item.
