@@ -559,17 +559,17 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     
     
     @Override
-    public void updatePolygonsPaths(List<List<Coord2D>> paths){
+    public void updatePolygonsPaths(List<List<LatLong>> paths){
         for (Polygon poly : polygonsPaths) {
 			poly.remove();
 		}
         
-        for (List<Coord2D> contour : paths) {
+        for (List<LatLong> contour : paths) {
         	PolygonOptions pathOptions = new PolygonOptions();
             pathOptions.strokeColor(POLYGONS_PATH_DEFAULT_COLOR).strokeWidth(
                     POLYGONS_PATH_DEFAULT_WIDTH);
             final List<LatLng> pathPoints = new ArrayList<LatLng>(contour.size());
-			for (Coord2D coord : contour) {
+			for (LatLong coord : contour) {
 		            pathPoints.add(DroneHelper.CoordToLatLang(coord));
 			}
 			pathOptions.addAll(pathPoints);
@@ -584,7 +584,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 		pathOptions.strokeColor(FOOTPRINT_DEFAULT_COLOR).strokeWidth(FOOTPRINT_DEFAULT_WIDTH);
 		pathOptions.fillColor(FOOTPRINT_FILL_COLOR);
 
-		for (Coord2D vertex : footprintToBeDraw.getVertex()) {
+		for (LatLong vertex : footprintToBeDraw.getVertex()) {
 			pathOptions.add(DroneHelper.CoordToLatLang(vertex));
 		}
 		getMap().addPolygon(pathOptions);

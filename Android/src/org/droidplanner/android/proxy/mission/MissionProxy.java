@@ -539,14 +539,11 @@ public class MissionProxy implements DPMap.PathSource {
         return getVisibleCoords(mMissionItems);
     }
     
-	public void movePolygonPoint(Survey survey, int index, Coord2D position) {
-		survey.polygon.movePoint(position, index);
-		try {
-			survey.build();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		mMission.notifyMissionUpdate();
+	public void movePolygonPoint(Survey survey, int index, LatLong position) {
+        survey.getPolygonPoints().get(index).set(position);
+        this.droneApi.buildSurvey(survey);
+
+		notifyMissionUpdate();
 	}
 
     public static List<LatLong> getVisibleCoords(List<MissionItemProxy> mipList){
@@ -625,11 +622,12 @@ public class MissionProxy implements DPMap.PathSource {
         droneApi.generateDronie();
     }
 
-	public List<List<Coord2D>> getPolygonsPath() {
-		ArrayList<List<Coord2D>> polygonPaths = new ArrayList<List<Coord2D>>();
-		for (MissionItem item : mMission.getItems()) {
+	public List<List<LatLong>> getPolygonsPath() {
+		ArrayList<List<LatLong>> polygonPaths = new ArrayList<List<LatLong>>();
+		for (MissionItemProxy itemProxy : mMissionItems) {
+            MissionItem item = itemProxy.getMissionItem();
 			if (item instanceof Survey) {
-				polygonPaths.add(((Survey)item).polygon.getPoints());
+				polygonPaths.add(((Survey)item).getPolygonPoints());
 			}
 		}
 		return polygonPaths;

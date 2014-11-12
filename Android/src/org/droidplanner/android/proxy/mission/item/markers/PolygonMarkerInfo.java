@@ -9,7 +9,7 @@ import org.droidplanner.android.maps.MarkerInfo;
  */
 public class PolygonMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
 
-	private final LatLong mPoint;
+	private LatLong mPoint;
     private final Survey survey;
     private final int polygonIndex;
 
@@ -44,7 +44,7 @@ public class PolygonMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
 	}
 
 	@Override
-	public void setPosition(Coord2D coord) {
+	public void setPosition(LatLong coord) {
 		mPoint = coord;
 	}
 	

@@ -289,7 +289,12 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		mFlightPath.addPoint(DroneHelper.CoordToLatLng(coord));
 	}
 
-	@Override
+    @Override
+    public void addCameraFootprint(Footprint footprintToBeDraw) {
+        //TODO: to be implemented.
+    }
+
+    @Override
 	public void clearMarkers() {
 		resetMarkersOverlay();
 		mBiMarkersMap.clear();
@@ -593,7 +598,12 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		}
 	}
 
-	@Override
+    @Override
+    public void updatePolygonsPaths(List<List<LatLong>> paths) {
+
+    }
+
+    @Override
 	public void zoomToFit(List<LatLong> coords) {
 		if (coords.isEmpty()) {
 			return;
