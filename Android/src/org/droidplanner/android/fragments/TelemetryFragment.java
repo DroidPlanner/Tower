@@ -92,6 +92,9 @@ public class TelemetryFragment extends ApiListenerFragment {
 	}
 
 	public void onOrientationUpdate(Attitude droneAttitude) {
+        if(droneAttitude == null)
+            return;
+
 		float r = (float) droneAttitude.getRoll();
 		float p = (float) droneAttitude.getPitch();
 		float y = (float) droneAttitude.getYaw();

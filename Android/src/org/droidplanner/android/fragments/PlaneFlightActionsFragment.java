@@ -259,7 +259,6 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
 
 	@Override
 	public boolean isSlidingUpPanelEnabled(Drone api) {
-		final State droneState = api.getState();
-		return api.isConnected() && droneState.isArmed();
+		return api.isConnected() && api.getState().isArmed();
 	}
 }

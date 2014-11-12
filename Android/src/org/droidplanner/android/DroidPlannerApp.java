@@ -23,64 +23,56 @@ import org.droidplanner.android.utils.file.IO.ExceptionWriter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class DroidPlannerApp extends Application {
 
 	private static final long DELAY_TO_DISCONNECTION = 30000l; // ms
 
-    private static final String CLAZZ_NAME = DroidPlannerApp.class.getName();
+	private static final String CLAZZ_NAME = DroidPlannerApp.class.getName();
 	private static final String TAG = DroidPlannerApp.class.getSimpleName();
 
-	private static final int API_UNBOUND = 0;
-	private static final int API_BOUND = 1;
+	public static final String ACTION_TOGGLE_DRONE_CONNECTION = CLAZZ_NAME
+			+ ".ACTION_TOGGLE_DRONE_CONNECTION";
+	public static final String EXTRA_ESTABLISH_CONNECTION = "extra_establish_connection";
 
-    public static final String ACTION_TOGGLE_DRONE_CONNECTION = CLAZZ_NAME +
-            ".ACTION_TOGGLE_DRONE_CONNECTION";
-    public static final String EXTRA_ESTABLISH_CONNECTION = "extra_establish_connection";
+	private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final String action = intent.getAction();
+			if (ACTION_TOGGLE_DRONE_CONNECTION.equals(action)) {
+				boolean connect = intent.getBooleanExtra(EXTRA_ESTABLISH_CONNECTION,
+						!drone.isConnected());
+				if (connect)
+					drone.connect();
+				else
+					drone.disconnect();
+			} else if (Event.EVENT_CONNECTED.equals(action)) {
+				handler.removeCallbacks(disconnectionTask);
+			} else if (Event.EVENT_DISCONNECTED.equals(action)) {
+				shouldWeTerminate();
+			}
+		}
+	};
 
-    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            if(ACTION_TOGGLE_DRONE_CONNECTION.equals(action)){
-                boolean connect = intent.getBooleanExtra(EXTRA_ESTABLISH_CONNECTION,
-                        !drone.isConnected());
-                if(connect)
-                    drone.connect();
-                else
-                    drone.disconnect();
-            }
-            else if(Event.EVENT_CONNECTED.equals(action)){
-                handler.removeCallbacks(disconnectionTask);
-            }
-            else if(Event.EVENT_DISCONNECTED.equals(action)){
-                shouldWeTerminate();
-            }
-        }
-    };
-
-    public interface ApiListener {
+	public interface ApiListener {
 		void onApiConnected();
 
 		void onApiDisconnected();
 	}
-
-	private final AtomicInteger apiBindingState = new AtomicInteger(API_UNBOUND);
 
 	private final ServiceConnection ox3drServicesConnection = new ServiceConnection() {
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			ox3drServices = IDroidPlannerServices.Stub.asInterface(service);
 
-            drone.start();
-            notificationHandler = new NotificationHandler(getApplicationContext(), drone);
-            notifyApiConnected();
+			drone.start();
+			notificationHandler = new NotificationHandler(getApplicationContext(), drone);
+			notifyApiConnected();
 		}
 
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
-            disconnect();
+			disconnect();
 		}
 	};
 
@@ -104,17 +96,17 @@ public class DroidPlannerApp extends Application {
 
 	private Thread.UncaughtExceptionHandler exceptionHandler;
 
-    private Drone drone;
+	private Drone drone;
 	private IDroidPlannerServices ox3drServices;
-    private ITLogApi tlogApi;
-    private NotificationHandler notificationHandler;
+	private ITLogApi tlogApi;
+	private NotificationHandler notificationHandler;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		final Context context = getApplicationContext();
 
-        drone = new Drone(this);
+		drone = new Drone(this);
 
 		exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
 		Thread.setDefaultUncaughtExceptionHandler(dpExceptionHandler);
@@ -122,41 +114,41 @@ public class DroidPlannerApp extends Application {
 		GAUtils.initGATracker(this);
 		GAUtils.startNewSession(context);
 
-        registerReceiver(broadcastReceiver, new IntentFilter(ACTION_TOGGLE_DRONE_CONNECTION));
+		registerReceiver(broadcastReceiver, new IntentFilter(ACTION_TOGGLE_DRONE_CONNECTION));
 
-        final IntentFilter droneConnectionFilter = new IntentFilter();
-        droneConnectionFilter.addAction(Event.EVENT_CONNECTED);
-        droneConnectionFilter.addAction(Event.EVENT_DISCONNECTED);
-        LocalBroadcastManager.getInstance(context).registerReceiver(broadcastReceiver,
-                droneConnectionFilter);
+		final IntentFilter droneConnectionFilter = new IntentFilter();
+		droneConnectionFilter.addAction(Event.EVENT_CONNECTED);
+		droneConnectionFilter.addAction(Event.EVENT_DISCONNECTED);
+		LocalBroadcastManager.getInstance(context).registerReceiver(broadcastReceiver,
+				droneConnectionFilter);
 	}
 
-	public Drone getDrone(){
-        return drone;
-    }
+	public Drone getDrone() {
+		return drone;
+	}
 
-    public ITLogApi getTlogApi(){
-        if(tlogApi == null){
-            try {
-                tlogApi = ox3drServices.getTLogApi();
-            } catch (RemoteException e) {
-                return null;
-            }
-        }
+	public ITLogApi getTlogApi() {
+		if (tlogApi == null) {
+			try {
+				tlogApi = ox3drServices.getTLogApi();
+			} catch (RemoteException e) {
+				return null;
+			}
+		}
 
-        return tlogApi;
-    }
+		return tlogApi;
+	}
 
-    public IDroidPlannerServices get3drServices(){
-        return ox3drServices;
-    }
+	public IDroidPlannerServices get3drServices() {
+		return ox3drServices;
+	}
 
 	public void addApiListener(ApiListener listener) {
 		if (listener == null)
 			return;
 
 		if (is3drServicesConnected())
-            listener.onApiConnected();
+			listener.onApiConnected();
 
 		apiListeners.add(listener);
 
@@ -173,19 +165,19 @@ public class DroidPlannerApp extends Application {
 		shouldWeTerminate();
 	}
 
-    private void shouldWeTerminate(){
-        if (apiListeners.isEmpty() && apiBindingState.get() != API_UNBOUND && !drone.isConnected()) {
-            // Wait 30s, then disconnect the service binding.
-            handler.postDelayed(disconnectionTask, DELAY_TO_DISCONNECTION);
-        }
-    }
+	private void shouldWeTerminate() {
+		if (apiListeners.isEmpty() && !drone.isConnected()) {
+			// Wait 30s, then disconnect the service binding.
+			handler.postDelayed(disconnectionTask, DELAY_TO_DISCONNECTION);
+		}
+	}
 
 	private void notifyApiConnected() {
 		if (apiListeners.isEmpty() || !is3drServicesConnected())
 			return;
 
-			for (ApiListener listener : apiListeners)
-				listener.onApiConnected();
+		for (ApiListener listener : apiListeners)
+			listener.onApiConnected();
 	}
 
 	private void notifyApiDisconnected() {
@@ -200,21 +192,17 @@ public class DroidPlannerApp extends Application {
 		return ox3drServices != null;
 	}
 
-    public void connect() {
-        if (apiBindingState.compareAndSet(API_UNBOUND, API_BOUND)) {
-            bindService(new Intent(IDroidPlannerServices.class.getName()), ox3drServicesConnection,
-                    Context.BIND_AUTO_CREATE);
-        }
-    }
+	public void connect() {
+		bindService(new Intent(IDroidPlannerServices.class.getName()), ox3drServicesConnection,
+				Context.BIND_AUTO_CREATE);
+	}
 
-    public void disconnect(){
-        if (apiBindingState.compareAndSet(API_BOUND, API_UNBOUND)) {
-            notifyApiDisconnected();
-            notificationHandler.terminate();
-            drone.terminate();
+	public void disconnect() {
+		notifyApiDisconnected();
+		notificationHandler.terminate();
+		drone.terminate();
 
-            ox3drServices = null;
-            unbindService(ox3drServicesConnection);
-        }
-    }
+		ox3drServices = null;
+		unbindService(ox3drServicesConnection);
+	}
 }

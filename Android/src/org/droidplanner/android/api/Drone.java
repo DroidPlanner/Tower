@@ -122,6 +122,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
     private final LocalBroadcastManager lbm;
     private final MissionProxy missionProxy;
     private IDroidPlannerApi dpApi;
+    private ConnectionParameter connectionParams;
 
     // flightTimer
     // ----------------
@@ -434,17 +435,23 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
             return false;
         }
 
-        if (dpApi != null)
-            return true;
 
         // Retrieve the connection parameters.
         final ConnectionParameter connParams = retrieveConnectionParameters();
         if (connParams == null) {
-            throw new IllegalArgumentException("Invalid connection parameters.");
+            return false;
         }
+
+        if(this.connectionParams != null && !this.connectionParams.equals(connParams)){
+            unregisterFromDrone();
+        }
+
+        if (dpApi != null)
+            return true;
 
         try {
             dpApi = dpApp.get3drServices().registerWithDrone(connParams, dpCallback);
+            this.connectionParams = connParams;
         } catch (RemoteException e) {
             Log.e(TAG, "Unable to retrieve a droidplanner api connection.", e);
             dpApp.connect();
@@ -461,7 +468,8 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
             return; // Nothing to do. It's already disconnected.
 
         try {
-            dpApp.get3drServices().unregisterFromDrone(retrieveConnectionParameters(), dpCallback);
+            if(this.connectionParams != null)
+                dpApp.get3drServices().unregisterFromDrone(this.connectionParams, dpCallback);
         } catch (RemoteException e) {
             Log.e(TAG, "Error while disconnecting from the droidplanner api", e);
         }
