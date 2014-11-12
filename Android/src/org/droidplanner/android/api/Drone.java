@@ -18,6 +18,7 @@ import com.ox3dr.services.android.lib.drone.connection.ConnectionParameter;
 import com.ox3dr.services.android.lib.drone.connection.ConnectionType;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.mission.Mission;
+import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
@@ -395,10 +396,10 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
     }
 
     @Override
-    public MissionItemMessage[] getRawMissionItems() {
+    public MissionItemMessage[] processMissionItems(MissionItem[] missionItems) {
         if(isApiValid()){
             try {
-                return dpApi.getRawMissionItems();
+                return dpApi.processMissionItems(missionItems);
             } catch (RemoteException e) {
                 handleRemoteException(e);
             }

@@ -16,6 +16,9 @@ import android.widget.Toast;
 
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.event.Extra;
+import com.ox3dr.services.android.lib.drone.property.Battery;
+import com.ox3dr.services.android.lib.drone.property.Gps;
+import com.ox3dr.services.android.lib.drone.property.State;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 
 import org.droidplanner.R;
@@ -266,17 +269,25 @@ public class TTSNotificationProvider implements OnInitListener,
 				return;
 
 			final String action = intent.getAction();
+            State droneState = drone.getState();
+
 			if (Event.EVENT_ARMING.equals(action)) {
-				speakArmedState(drone.getState().isArmed());
+                if(droneState != null)
+				    speakArmedState(droneState.isArmed());
 			} else if (Event.EVENT_BATTERY.equals(action)) {
-				batteryDischargeNotification(drone.getBattery().getBatteryRemain());
+                Battery droneBattery = drone.getBattery();
+                if(droneBattery != null)
+				    batteryDischargeNotification(droneBattery.getBatteryRemain());
 			} else if (Event.EVENT_VEHICLE_MODE.equals(action)) {
-				speakMode(drone.getState().getVehicleMode());
+                if(droneState != null)
+				    speakMode(droneState.getVehicleMode());
 			} else if (Event.EVENT_MISSION_SENT.equals(action)) {
 				Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT).show();
 				speak("Waypoints saved to Drone");
 			} else if (Event.EVENT_GPS_STATE.equals(action)) {
-				speakGpsMode(drone.getGps().getFixType());
+                Gps droneGps = drone.getGps();
+                if(droneGps != null)
+				    speakGpsMode(droneGps.getFixType());
 			} else if (Event.EVENT_MISSION_RECEIVED.equals(action)) {
 				Toast.makeText(context, "Waypoints received from Drone", Toast.LENGTH_SHORT).show();
 				speak("Waypoints received");
@@ -285,7 +296,7 @@ public class TTSNotificationProvider implements OnInitListener,
 				scheduleWatchdog();
 				speak("Connected");
 			} else if (Event.EVENT_HEARTBEAT_TIMEOUT.equals(action)) {
-				if (!drone.getState().isCalibrating()
+				if (droneState != null && !droneState.isCalibrating()
 						&& mAppPrefs.getWarningOnLostOrRestoredSignal()) {
 					speak("Data link lost, check connection.");
 					handler.removeCallbacks(watchdogCallback);

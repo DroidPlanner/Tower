@@ -271,8 +271,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 Drone dpApi = dpApp.getDrone();
                 if(dpApi != null && dpApi.isConnected()) {
                     List<MissionItemMessage> msgMissionItems = reader.getMsgMissionItems();
-                    dpApi.setRawMissionItems(msgMissionItems.toArray(new
-                            MissionItemMessage[msgMissionItems.size()]), false);
+                    dpApi.setRawMissionItems(msgMissionItems
+                            .toArray(new MissionItemMessage[msgMissionItems.size()]), false);
                 }
 
 				planningMapFragment.zoomToFit();
@@ -282,37 +282,43 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	private void saveMissionFile() {
-        final Context context = getApplicationContext();
-        final EditInputDialog dialog = EditInputDialog.newInstance(context, getString(R.string.label_enter_filename),
-                FileStream.getWaypointFilename("waypoints"), new EditInputDialog.Listener() {
-                    @Override
-                    public void onOk(CharSequence input) {
-                        Drone dpApi = dpApp.getDrone();
-                        if(dpApi != null && dpApi.isConnected()) {
-                                final MissionItemMessage[] missionItems = dpApi.getRawMissionItems();
-                                if (MissionWriter.write(Arrays.asList(missionItems),
-                                        input.toString())) {
-                                    Toast.makeText(context, R.string.file_saved_success, Toast.LENGTH_SHORT).show();
+		final Context context = getApplicationContext();
+		final EditInputDialog dialog = EditInputDialog.newInstance(context,
+				getString(R.string.label_enter_filename),
+				FileStream.getWaypointFilename("waypoints"), new EditInputDialog.Listener() {
+					@Override
+					public void onOk(CharSequence input) {
+						Drone drone = dpApp.getDrone();
 
-                                    final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                                            .setCategory(GAUtils.Category.MISSION_PLANNING)
-                                            .setAction("Mission saved to file")
-                                            .setLabel("Mission items count")
-                                            .setValue(missionItems.length);
-                                    GAUtils.sendEvent(eventBuilder);
+						if (drone != null && drone.isConnected()) {
+							final MissionItemMessage[] missionItems = missionProxy
+									.processMissionItems();
 
-                                    return;
-                                }
-                        }
+							if (MissionWriter.write(Arrays.asList(missionItems), input.toString())) {
+								Toast.makeText(context, R.string.file_saved_success,
+										Toast.LENGTH_SHORT).show();
 
-                        Toast.makeText(context, R.string.file_saved_error, Toast.LENGTH_SHORT).show();
-                    }
+								final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+										.setCategory(GAUtils.Category.MISSION_PLANNING)
+										.setAction("Mission saved to file")
+										.setLabel("Mission items count")
+										.setValue(missionItems.length);
+								GAUtils.sendEvent(eventBuilder);
 
-                    @Override
-                    public void onCancel() {}
-                });
+								return;
+							}
+						}
 
-        dialog.show(getSupportFragmentManager(), "Mission filename");
+						Toast.makeText(context, R.string.file_saved_error, Toast.LENGTH_SHORT)
+								.show();
+					}
+
+					@Override
+					public void onCancel() {
+					}
+				});
+
+		dialog.show(getSupportFragmentManager(), "Mission filename");
 	}
 
 	@Override

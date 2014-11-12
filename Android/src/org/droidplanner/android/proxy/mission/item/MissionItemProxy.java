@@ -53,6 +53,13 @@ public class MissionItemProxy {
 		mMission = mission;
 		mMissionItem = missionItem;
 		mMarkerInfos = MissionItemMarkerInfo.newInstance(this);
+
+        if(mMissionItem instanceof Survey){
+            mMission.getDrone().buildSurvey((Survey) mMissionItem);
+        }
+        else if(mMissionItem instanceof StructureScanner){
+            mMission.getDrone().buildStructureScanner((StructureScanner) mMissionItem);
+        }
 	}
 
 	/**

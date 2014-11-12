@@ -26,6 +26,7 @@ import com.ox3dr.services.android.lib.drone.mission.item.command.ReturnToLaunch;
 import com.ox3dr.services.android.lib.drone.mission.item.command.Takeoff;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
+import com.ox3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
 import com.ox3dr.services.android.lib.util.MathUtils;
@@ -46,7 +47,7 @@ public class MissionProxy implements DPMap.PathSource {
 	/**
 	 * Stores all the mission item renders for this mission render.
 	 */
-	private final List<MissionItemProxy> mMissionItems = new ArrayList<MissionItemProxy>();
+	private final List<MissionItemProxy> missionItemProxies = new ArrayList<MissionItemProxy>();
 
     private final LocalBroadcastManager lbm;
     private final Drone drone;
@@ -63,8 +64,20 @@ public class MissionProxy implements DPMap.PathSource {
     }
 
 	public List<MissionItemProxy> getItems() {
-		return mMissionItems;
+		return missionItemProxies;
 	}
+
+    private MissionItem[] getMissionItems(){
+        List<MissionItem> missionItems = new ArrayList<MissionItem>(missionItemProxies.size());
+        for(MissionItemProxy mip : missionItemProxies)
+            missionItems.add(mip.getMissionItem());
+
+        return missionItems.toArray(new MissionItem[missionItems.size()]);
+    }
+
+    public Drone getDrone(){
+        return this.drone;
+    }
 
 	/**
 	 * @return the map markers corresponding to this mission's command set.
@@ -72,7 +85,7 @@ public class MissionProxy implements DPMap.PathSource {
 	public List<MarkerInfo> getMarkersInfos() {
 		List<MarkerInfo> markerInfos = new ArrayList<MarkerInfo>();
 
-		for (MissionItemProxy itemProxy : mMissionItems) {
+		for (MissionItemProxy itemProxy : missionItemProxies) {
 			List<MarkerInfo> itemMarkerInfos = itemProxy.getMarkerInfos();
 			if (itemMarkerInfos != null && !itemMarkerInfos.isEmpty()) {
 				markerInfos.addAll(itemMarkerInfos);
@@ -80,6 +93,10 @@ public class MissionProxy implements DPMap.PathSource {
 		}
 		return markerInfos;
 	}
+
+    public MissionItemMessage[] processMissionItems(){
+        return this.drone.processMissionItems(getMissionItems());
+    }
 
 	/**
 	 * Update the state for this object based on the state of the Mission
@@ -90,10 +107,10 @@ public class MissionProxy implements DPMap.PathSource {
             return;
 
 		selection.mSelectedItems.clear();
-		mMissionItems.clear();
+		missionItemProxies.clear();
 
 		for (MissionItem item : mission.getMissionItems()) {
-			mMissionItems.add(new MissionItemProxy(this, item));
+			missionItemProxies.add(new MissionItemProxy(this, item));
 		}
 
 		selection.notifySelectionUpdate();
@@ -108,7 +125,7 @@ public class MissionProxy implements DPMap.PathSource {
 	 * @return true if this mission render contains the passed argument
 	 */
 	public boolean contains(MissionItemProxy item) {
-		return mMissionItems.contains(item);
+		return missionItemProxies.contains(item);
 	}
 
 	/**
@@ -118,24 +135,10 @@ public class MissionProxy implements DPMap.PathSource {
 	 *            item to remove
 	 */
 	public void removeItem(MissionItemProxy item) {
-		mMissionItems.remove(item);
+		missionItemProxies.remove(item);
 		selection.mSelectedItems.remove(item);
 
         selection.notifySelectionUpdate();
-        notifyMissionUpdate();
-	}
-
-	/**
-	 * Removes a set of mission items from the mission' set.
-	 * 
-	 * @param items
-	 *            list of items to remove
-	 */
-	public void removeItemList(List<MissionItemProxy> items) {
-		mMissionItems.removeAll(items);
-		selection.mSelectedItems.removeAll(items);
-
-		selection.notifySelectionUpdate();
         notifyMissionUpdate();
 	}
 
@@ -170,8 +173,8 @@ public class MissionProxy implements DPMap.PathSource {
 	}
 
     private double getLastAltitude(){
-        if(!mMissionItems.isEmpty()) {
-            MissionItem lastItem = mMissionItems.get(mMissionItems.size() - 1).getMissionItem();
+        if(!missionItemProxies.isEmpty()) {
+            MissionItem lastItem = missionItemProxies.get(missionItemProxies.size() - 1).getMissionItem();
             if (lastItem instanceof MissionItem.SpatialItem)
                 return ((MissionItem.SpatialItem) lastItem).getCoordinate().getAltitude();
         }
@@ -200,7 +203,7 @@ public class MissionProxy implements DPMap.PathSource {
 
 	private void addMissionItems(List<MissionItem> missionItems) {
 		for (MissionItem missionItem : missionItems) {
-			mMissionItems.add(new MissionItemProxy(this, missionItem));
+			missionItemProxies.add(new MissionItemProxy(this, missionItem));
 		}
 
         notifyMissionUpdate();
@@ -235,19 +238,12 @@ public class MissionProxy implements DPMap.PathSource {
 	}
 
 	private void addMissionItem(MissionItem missionItem) {
-        if(missionItem instanceof Survey){
-            drone.buildSurvey((Survey) missionItem);
-        }
-        else if(missionItem instanceof StructureScanner){
-            drone.buildStructureScanner((StructureScanner) missionItem);
-        }
-
-		mMissionItems.add(new MissionItemProxy(this, missionItem));
+		missionItemProxies.add(new MissionItemProxy(this, missionItem));
         notifyMissionUpdate();
 	}
 
     private void addMissionItem(int index, MissionItem missionItem){
-        mMissionItems.add(index, new MissionItemProxy(this, missionItem));
+        missionItemProxies.add(index, new MissionItemProxy(this, missionItem));
         notifyMissionUpdate();
     }
 
@@ -257,7 +253,7 @@ public class MissionProxy implements DPMap.PathSource {
         addMissionItem(takeoff);
 	}
     public boolean hasTakeoffAndLandOrRTL() {
-        if (mMissionItems.size() >= 2) {
+        if (missionItemProxies.size() >= 2) {
             if (isFirstItemTakeoff() && isLastItemLandOrRTL()) {
                 return true;
             }
@@ -266,15 +262,15 @@ public class MissionProxy implements DPMap.PathSource {
     }
 
     public boolean isFirstItemTakeoff(){
-        return !mMissionItems.isEmpty() && mMissionItems.get(0).getMissionItem().getType() ==
+        return !missionItemProxies.isEmpty() && missionItemProxies.get(0).getMissionItem().getType() ==
                 MissionItemType.TAKEOFF;
     }
 
     public boolean isLastItemLandOrRTL(){
-        final int itemsCount = mMissionItems.size();
+        final int itemsCount = missionItemProxies.size();
         if(itemsCount == 0) return false;
 
-        final MissionItemType itemType = mMissionItems.get(itemsCount -1).getMissionItem()
+        final MissionItemType itemType = missionItemProxies.get(itemsCount -1).getMissionItem()
                 .getType();
         return itemType == MissionItemType.RETURN_TO_LAUNCH || itemType == MissionItemType.LAND;
     }
@@ -282,8 +278,8 @@ public class MissionProxy implements DPMap.PathSource {
     public void addTakeOffAndRTL(){
         if(!isFirstItemTakeoff()){
             double defaultAlt = Takeoff.DEFAULT_TAKEOFF_ALTITUDE;
-            if(!mMissionItems.isEmpty()){
-                MissionItem firstItem = mMissionItems.get(0).getMissionItem();
+            if(!missionItemProxies.isEmpty()){
+                MissionItem firstItem = missionItemProxies.get(0).getMissionItem();
                 if(firstItem instanceof MissionItem.SpatialItem)
                     defaultAlt = ((MissionItem.SpatialItem)firstItem).getCoordinate().getAltitude();
             }
@@ -306,7 +302,7 @@ public class MissionProxy implements DPMap.PathSource {
 	 * @return order of the given argument
 	 */
 	public int getOrder(MissionItemProxy item) {
-        return mMissionItems.indexOf(item) + 1;
+        return missionItemProxies.indexOf(item) + 1;
 	}
 
 	/**
@@ -318,12 +314,12 @@ public class MissionProxy implements DPMap.PathSource {
 	 *            new mission item render
 	 */
 	public void replace(MissionItemProxy oldItem, MissionItemProxy newItem) {
-		final int index = mMissionItems.indexOf(oldItem);
+		final int index = missionItemProxies.indexOf(oldItem);
 		if (index == -1)
 			return;
 
-		mMissionItems.remove(index);
-		mMissionItems.add(index, newItem);
+		missionItemProxies.remove(index);
+		missionItemProxies.add(index, newItem);
 
 		if (selection.selectionContains(oldItem)) {
 			selection.removeItemFromSelection(oldItem);
@@ -348,14 +344,14 @@ public class MissionProxy implements DPMap.PathSource {
 
         for(int i = 0; i < pairSize; i++){
             final MissionItemProxy oldItem = oldNewList.get(i).first;
-            final int index = mMissionItems.indexOf(oldItem);
+            final int index = missionItemProxies.indexOf(oldItem);
             if(index == -1){
                 continue;
             }
 
             final MissionItemProxy newItem = oldNewList.get(i).second;
-            mMissionItems.remove(index);
-            mMissionItems.add(index, newItem);
+            missionItemProxies.remove(index);
+            missionItemProxies.add(index, newItem);
 
             if(selection.selectionContains(oldItem)){
                 selectionsToRemove.add(oldItem);
@@ -374,16 +370,17 @@ public class MissionProxy implements DPMap.PathSource {
 	 * Reverse the order of the mission items renders.
 	 */
 	public void reverse() {
-		Collections.reverse(mMissionItems);
+		Collections.reverse(missionItemProxies);
 	}
 
 	public void clear() {
         selection.clearSelection();
-		removeItemList(mMissionItems);
+        missionItemProxies.clear();
+        notifyMissionUpdate();
 	}
 
 	public double getAltitudeDiffFromPreviousItem(MissionItemProxy waypointRender) {
-        final int itemsCount = mMissionItems.size();
+        final int itemsCount = missionItemProxies.size();
         if(itemsCount < 2)
             return 0;
 
@@ -391,11 +388,11 @@ public class MissionProxy implements DPMap.PathSource {
 		if (!(waypoint instanceof MissionItem.SpatialItem))
 			return 0;
 
-        final int index = mMissionItems.indexOf(waypointRender);
+        final int index = missionItemProxies.indexOf(waypointRender);
         if(index == -1 || index == 0)
             return 0;
 
-		MissionItem previous = mMissionItems.get(index - 1).getMissionItem();
+		MissionItem previous = missionItemProxies.get(index - 1).getMissionItem();
 		if (previous instanceof MissionItem.SpatialItem) {
 			return ((MissionItem.SpatialItem)waypoint).getCoordinate().getAltitude()
 					- ((MissionItem.SpatialItem) previous).getCoordinate().getAltitude();
@@ -405,18 +402,18 @@ public class MissionProxy implements DPMap.PathSource {
 	}
 
 	public double getDistanceFromLastWaypoint(MissionItemProxy waypointRender) {
-        if(mMissionItems.size() < 2)
+        if(missionItemProxies.size() < 2)
             return 0;
 
 		MissionItem waypoint = waypointRender.getMissionItem();
 		if (!(waypoint instanceof MissionItem.SpatialItem))
 			return 0;
 
-        final int index = mMissionItems.indexOf(waypointRender);
+        final int index = missionItemProxies.indexOf(waypointRender);
         if(index == -1 || index == 0)
             return 0;
 
-        MissionItem previous = mMissionItems.get(index - 1).getMissionItem();
+        MissionItem previous = missionItemProxies.get(index - 1).getMissionItem();
         if(previous instanceof MissionItem.SpatialItem){
             return MathUtils.getDistance(((MissionItem.SpatialItem) waypoint).getCoordinate(),
                     ((MissionItem.SpatialItem) previous).getCoordinate());
@@ -427,7 +424,7 @@ public class MissionProxy implements DPMap.PathSource {
 
 	@Override
 	public List<LatLong> getPathPoints() {
-		if (mMissionItems.isEmpty()) {
+		if (missionItemProxies.isEmpty()) {
 			return Collections.emptyList();
 		}
 
@@ -436,7 +433,7 @@ public class MissionProxy implements DPMap.PathSource {
 
 		boolean isSpline = false;
 		List<MissionItemProxy> currentBucket = new ArrayList<MissionItemProxy>();
-		for (MissionItemProxy missionItemProxy : mMissionItems) {
+		for (MissionItemProxy missionItemProxy : missionItemProxies) {
 
 			if (missionItemProxy.getMissionItem() instanceof SplineWaypoint) {
 				if (!isSpline) {
@@ -520,7 +517,9 @@ public class MissionProxy implements DPMap.PathSource {
 	}
 
 	public void removeSelection(MissionSelection missionSelection) {
-		removeItemList(missionSelection.mSelectedItems);
+        missionItemProxies.removeAll(missionSelection.mSelectedItems);
+        missionSelection.clearSelection();
+        notifyMissionUpdate();
 	}
 
 	public void move(MissionItemProxy item, LatLong position) {
@@ -529,12 +528,15 @@ public class MissionProxy implements DPMap.PathSource {
             SpatialItem spatialItem = (SpatialItem) missionItem;
             spatialItem.setCoordinate(new LatLongAlt(position.getLatitude(),
                     position.getLongitude(), spatialItem.getCoordinate().getAltitude()));
+
+            if(spatialItem instanceof StructureScanner)
+                this.drone.buildStructureScanner((StructureScanner) spatialItem);
             notifyMissionUpdate();
         }
 	}
 
 	public List<LatLong> getVisibleCoords() {
-        return getVisibleCoords(mMissionItems);
+        return getVisibleCoords(missionItemProxies);
     }
     
 	public void movePolygonPoint(Survey survey, int index, LatLong position) {
@@ -568,12 +570,12 @@ public class MissionProxy implements DPMap.PathSource {
 
     public void sendMissionToAPM(Drone drone){
         final Mission mission = new Mission();
-        final int missionItemsCount = mMissionItems.size();
+        final int missionItemsCount = missionItemProxies.size();
 
         String missionItemsList = "[";
         if(missionItemsCount > 0){
             boolean isFirst = true;
-            for(MissionItemProxy itemProxy: mMissionItems){
+            for(MissionItemProxy itemProxy: missionItemProxies){
                 if(isFirst)
                     isFirst = false;
                 else
@@ -622,7 +624,7 @@ public class MissionProxy implements DPMap.PathSource {
 
 	public List<List<LatLong>> getPolygonsPath() {
 		ArrayList<List<LatLong>> polygonPaths = new ArrayList<List<LatLong>>();
-		for (MissionItemProxy itemProxy : mMissionItems) {
+		for (MissionItemProxy itemProxy : missionItemProxies) {
             MissionItem item = itemProxy.getMissionItem();
 			if (item instanceof Survey) {
 				polygonPaths.add(((Survey)item).getPolygonPoints());
