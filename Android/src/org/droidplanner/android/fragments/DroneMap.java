@@ -17,7 +17,13 @@ import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.units.Altitude;
+import org.droidplanner.core.mission.survey.CameraInfo;
 import org.droidplanner.core.model.Drone;
+import org.droidplanner.core.survey.Footprint;
+
+import com.MAVLink.Messages.ardupilotmega.msg_camera_feedback;
+import com.google.android.gms.internal.ln;
 
 import android.app.Activity;
 import android.content.Context;
@@ -94,6 +100,8 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 	public Drone drone;
 
 	protected Context context;
+
+	private CameraInfo camera = new CameraInfo();
 
 	protected abstract boolean isMissionDraggable();
 
@@ -182,6 +190,14 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 			}
 			break;
 
+		case ATTITUDE:
+			if (drone.getGps().isPositionValid()) {
+				mMapFragment.updateRealTimeFootprint(new Footprint(camera, drone.getGps()
+						.getPosition(), drone.getAltitude().getAltitude(), drone.getOrientation()
+						.getPitch(), drone.getOrientation().getRoll(), drone.getOrientation()
+						.getYaw()));
+			}
+			break;
 		case GUIDEDPOINT:
 			mMapFragment.updateMarker(guided);
 			mMapFragment.updateDroneLeashPath(guided);

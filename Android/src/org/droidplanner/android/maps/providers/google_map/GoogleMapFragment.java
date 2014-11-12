@@ -116,6 +116,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
 	private List<Polygon> polygonsPaths = new ArrayList<Polygon>();
 
+	private Polygon footprintPoly;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
                              Bundle bundle) {
@@ -525,6 +527,26 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     
     
     @Override
+	public void updateRealTimeFootprint(Footprint footprint) {
+    	if (footprintPoly == null) {
+    		PolygonOptions pathOptions = new PolygonOptions();
+    		pathOptions.strokeColor(FOOTPRINT_DEFAULT_COLOR).strokeWidth(FOOTPRINT_DEFAULT_WIDTH);
+    		pathOptions.fillColor(FOOTPRINT_FILL_COLOR);
+
+    		for (Coord2D vertex : footprint.getVertexInGlobalFrame()) {
+    			pathOptions.add(DroneHelper.CoordToLatLang(vertex));
+    		}
+    		footprintPoly = getMap().addPolygon(pathOptions);
+    	}else{
+    		List<LatLng> list = new ArrayList<LatLng>();
+    		for (Coord2D vertex : footprint.getVertexInGlobalFrame()) {
+    			list.add(DroneHelper.CoordToLatLang(vertex));
+    		}
+    		footprintPoly.setPoints(list);
+    	}
+	}
+
+	@Override
     public void updatePolygonsPaths(List<List<Coord2D>> paths){
         for (Polygon poly : polygonsPaths) {
 			poly.remove();
