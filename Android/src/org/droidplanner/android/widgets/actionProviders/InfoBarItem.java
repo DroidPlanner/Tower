@@ -212,26 +212,25 @@ public abstract class InfoBarItem {
 
 			mHandler = new Handler();
 
-			mFlightTimeUpdater = new Runnable() {
-				@Override
-				public void run() {
-					mHandler.removeCallbacks(this);
-					if (FlightTimeInfo.this.drone == null || !FlightTimeInfo.this.drone
-                            .isConnected())
-						return;
+            mFlightTimeUpdater = new Runnable() {
+                @Override
+                public void run() {
+                    mHandler.removeCallbacks(this);
+                    if (drone == null || !drone.isConnected())
+                        return;
 
-					if (mItemView != null) {
-						long timeInSeconds = FlightTimeInfo.this.drone.getFlightTime();
-						long minutes = timeInSeconds / 60;
-						long seconds = timeInSeconds % 60;
+                    if (mItemView != null) {
+                        long timeInSeconds = drone.getFlightTime();
+                        long minutes = timeInSeconds / 60;
+                        long seconds = timeInSeconds % 60;
 
-						((TextView) mItemView).setText(String.format("Air Time\n%02d:%02d",
-								minutes, seconds));
-					}
+                        ((TextView) mItemView).setText(String.format("Air Time\n%02d:%02d",
+                                minutes, seconds));
+                    }
 
-					mHandler.postDelayed(this, FLIGHT_TIMER_PERIOD);
-				}
-			};
+                    mHandler.postDelayed(this, FLIGHT_TIMER_PERIOD);
+                }
+            };
 
 			mPopup = initPopupWindow(context, sPopupWindowLayoutId);
 			final View popupView = mPopup.getContentView();

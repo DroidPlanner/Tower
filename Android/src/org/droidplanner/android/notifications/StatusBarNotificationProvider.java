@@ -13,10 +13,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.property.Battery;
@@ -38,6 +40,13 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 	 * Android status bar's notification id.
 	 */
 	private static final int NOTIFICATION_ID = 1;
+
+    /**
+     * This is the period for the flight time update.
+     */
+    protected final static long FLIGHT_TIMER_PERIOD = 1000l; // 1 second
+
+    private final Handler mHandler = new Handler();
 
 	/**
 	 * Application context.
@@ -169,6 +178,29 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
         }
     };
 
+    /**
+     * Runnable used to update the drone flight time.
+     */
+    protected final Runnable mFlightTimeUpdater = new Runnable() {
+        @Override
+        public void run() {
+            mHandler.removeCallbacks(this);
+            if (drone == null || !drone.isConnected())
+                return;
+
+            if(mInboxBuilder != null) {
+                long timeInSeconds = drone.getFlightTime();
+                long minutes = timeInSeconds / 60;
+                long seconds = timeInSeconds % 60;
+
+                mInboxBuilder.setLine(2, TextUtils.normal("Air Time:   ",
+                        TextUtils.bold(String.format("%02d:%02d", minutes, seconds))));
+            }
+
+            mHandler.postDelayed(this, FLIGHT_TIMER_PERIOD);
+        }
+    };
+
 	private void updateRadio(Drone drone) {
 		if (mInboxBuilder == null)
 			return;
@@ -221,12 +253,10 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		if (mInboxBuilder == null)
 			return;
 
-		long timeInSeconds = drone.getFlightTime();
-		long minutes = timeInSeconds / 60;
-		long seconds = timeInSeconds % 60;
-
-		mInboxBuilder.setLine(2, TextUtils.normal("Air Time:   ",
-                TextUtils.bold(String.format("%02d:%02d", minutes, seconds))));
+        mHandler.removeCallbacks(mFlightTimeUpdater);
+        if (drone != null && drone.isConnected()) {
+            mFlightTimeUpdater.run();
+        }
 	}
 
 	private void updateFlightMode(Drone drone) {
