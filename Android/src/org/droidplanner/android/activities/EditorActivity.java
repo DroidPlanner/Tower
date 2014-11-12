@@ -492,7 +492,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 		case POLY:
 			if (path.size() > 2) {
-				missionProxy.addSurveyPolygon(dpApp.getDroneApi(), points);
+				missionProxy.addSurveyPolygon(points);
 			} else {
 				editorToolsFragment.setTool(EditorTools.POLY);
 				return;

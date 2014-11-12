@@ -25,6 +25,7 @@ import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.ox3dr.services.android.lib.drone.mission.item.command.ReturnToLaunch;
 import com.ox3dr.services.android.lib.drone.mission.item.command.Takeoff;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
+import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
@@ -50,11 +51,13 @@ public class MissionProxy implements DPMap.PathSource {
 	private final List<MissionItemProxy> mMissionItems = new ArrayList<MissionItemProxy>();
 
     private final LocalBroadcastManager lbm;
+    private final DroneApi droneApi;
 
 	public MissionSelection selection = new MissionSelection();
 
-	public MissionProxy(Context context) {
+	public MissionProxy(Context context, DroneApi droneApi) {
         lbm = LocalBroadcastManager.getInstance(context);
+        this.droneApi = droneApi;
 	}
 
     public void notifyMissionUpdate(){
@@ -144,11 +147,9 @@ public class MissionProxy implements DPMap.PathSource {
 	 * @param points
 	 *            2D points making up the survey
 	 */
-	public void addSurveyPolygon(DroneApi droneApi, List<LatLong> points) {
+	public void addSurveyPolygon(List<LatLong> points) {
 		Survey survey = new Survey();
         survey.setPolygonPoints(points);
-        droneApi.updateSurveyMissionItem(survey);
-
         addMissionItem(survey);
 	}
 
@@ -236,6 +237,13 @@ public class MissionProxy implements DPMap.PathSource {
 	}
 
 	private void addMissionItem(MissionItem missionItem) {
+        if(missionItem instanceof Survey){
+            droneApi.updateSurveyMissionItem((Survey)missionItem);
+        }
+        else if(missionItem instanceof StructureScanner){
+            droneApi.updateStructureScanner((StructureScanner) missionItem);
+        }
+
 		mMissionItems.add(new MissionItemProxy(this, missionItem));
         notifyMissionUpdate();
 	}

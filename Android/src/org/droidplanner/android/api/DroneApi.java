@@ -154,7 +154,7 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
 
         final Context context = dpApp.getApplicationContext();
         dpPrefs = new DroidPlannerPrefs(context);
-        this.missionProxy = new MissionProxy(context);
+        this.missionProxy = new MissionProxy(context, this);
         lbm = LocalBroadcastManager.getInstance(context);
 
         resetFlightTimer();
@@ -557,7 +557,6 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
         return new CameraDetail[0];
     }
 
-    //TODO: check if it actually works
     @Override
     public Survey updateSurveyMissionItem(Survey survey) {
         if(isApiValid()){
@@ -572,7 +571,6 @@ public class DroneApi implements com.ox3dr.services.android.lib.model.IDroidPlan
         return null;
     }
 
-    //TODO: check if it actually works
     @Override
     public StructureScanner updateStructureScanner(StructureScanner item) {
         if(isApiValid()){

@@ -191,10 +191,12 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		if (!surveyList.isEmpty()) {
             Survey survey = surveyList.get(0);
 			SurveyDetail surveyDetail = survey.getSurveyDetail();
-			mAnglePicker.setCurrentValue((int) surveyDetail.getAngle());
-			mOverlapPicker.setCurrentValue((int) surveyDetail.getOverlap());
-			mSidelapPicker.setCurrentValue((int) surveyDetail.getSidelap());
-			mAltitudePicker.setCurrentValue((int) surveyDetail.getAltitude());
+            if(surveyDetail != null) {
+                mAnglePicker.setCurrentValue((int) surveyDetail.getAngle());
+                mOverlapPicker.setCurrentValue((int) surveyDetail.getOverlap());
+                mSidelapPicker.setCurrentValue((int) surveyDetail.getSidelap());
+                mAltitudePicker.setCurrentValue((int) surveyDetail.getAltitude());
+            }
 
             checkIfValid(survey);
 		}

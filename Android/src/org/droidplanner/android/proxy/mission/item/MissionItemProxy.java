@@ -115,6 +115,7 @@ public class MissionItemProxy {
 				pathPoints.addAll(gridPoints);
 			}
 			break;
+
 		case STRUCTURE_SCANNER:
 			StructureScanner survey = (StructureScanner)mMissionItem;
 			pathPoints.addAll(survey.getPath());
