@@ -16,7 +16,7 @@ dependencies {
         transitive=true
     }
 
-    compile 'com.android.support:support-v4:21.0.0'
+    compile 'com.android.support:support-v4:20.0.0'
 
     compile project(':Libraries:HorizontalVariableListView:HorizontalVariableListView')
     compile project(':3DRServicesClient:lib')
