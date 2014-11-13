@@ -47,6 +47,9 @@ public class DroidPlannerApp extends Application implements ServiceListener {
     static {
         droneEventFilter.addAction(Event.EVENT_CONNECTED);
         droneEventFilter.addAction(Event.EVENT_DISCONNECTED);
+        droneEventFilter.addAction(Event.EVENT_MISSION_DRONIE_CREATED);
+        droneEventFilter.addAction(Event.EVENT_MISSION_UPDATE);
+        droneEventFilter.addAction(Event.EVENT_MISSION_RECEIVED);
     }
 
 	private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {

@@ -67,9 +67,6 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
     private final static IntentFilter intentFilter = new IntentFilter();
     static {
         intentFilter.addAction(Event.EVENT_STATE);
-        intentFilter.addAction(Event.EVENT_MISSION_DRONIE_CREATED);
-        intentFilter.addAction(Event.EVENT_MISSION_UPDATE);
-        intentFilter.addAction(Event.EVENT_MISSION_RECEIVED);
         intentFilter.addAction(Event.EVENT_SPEED);
         intentFilter.addAction(DPApiCallback.ACTION_DRONE_CONNECTION_FAILED);
     }
