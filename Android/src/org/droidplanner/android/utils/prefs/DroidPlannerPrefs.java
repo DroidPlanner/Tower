@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.util.SparseBooleanArray;
 
 import com.ox3dr.services.android.lib.drone.connection.ConnectionType;
+import com.ox3dr.services.android.lib.drone.connection.StreamRates;
 
 /**
  * Provides structured access to Droidplanner preferences
@@ -322,4 +323,23 @@ public class DroidPlannerPrefs {
 				context.getString(R.string.pref_tts_warning_autopilot_warnings_key),
 				DEFAULT_TTS_WARNING_AUTOPILOT_WARNING);
 	}
+
+    public StreamRates getStreamRates() {
+        StreamRates rates = new StreamRates();
+
+        rates.setExtendedStatus(Integer.parseInt(prefs.getString(
+                "pref_mavlink_stream_rate_ext_stat", "2")));
+        rates.setExtra1(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra1", "10")));
+        rates.setExtra2(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra2", "2")));
+        rates.setExtra3(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra3", "2")));
+        rates.setPosition(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_position",
+                "3")));
+        rates.setRcChannels(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_rc_channels",
+                "5")));
+        rates.setRawSensors(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_raw_sensors",
+                "2")));
+        rates.setRawController(Integer.parseInt(prefs.getString(
+                "pref_mavlink_stream_rate_raw_controller", "3")));
+        return rates;
+    }
 }
