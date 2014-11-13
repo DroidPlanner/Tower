@@ -86,7 +86,9 @@ public class DroidPlannerApp extends Application implements ServiceListener {
 
     @Override
     public void onServiceDisconnected() {
-        disconnect();
+        notifyApiDisconnected();
+        notificationHandler.terminate();
+        lbm.unregisterReceiver(broadcastReceiver);
     }
 
     public interface ApiListener {
@@ -98,7 +100,7 @@ public class DroidPlannerApp extends Application implements ServiceListener {
 	private final Runnable disconnectionTask = new Runnable() {
 		@Override
 		public void run() {
-			disconnect();
+            serviceMgr.disconnect(DroidPlannerApp.this);
 		}
 	};
 
@@ -188,13 +190,6 @@ public class DroidPlannerApp extends Application implements ServiceListener {
 
 		for (ApiListener listener : apiListeners)
 			listener.onApiDisconnected();
-	}
-
-	public void disconnect() {
-		notifyApiDisconnected();
-		notificationHandler.terminate();
-        lbm.unregisterReceiver(broadcastReceiver);
-        serviceMgr.disconnect(this);
 	}
 
     public void connectToDrone(){
