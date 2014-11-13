@@ -141,7 +141,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
 
     @Override
     public void onApiConnected() {
-        mMissionProxy = getDrone().getMissionProxy();
+        mMissionProxy = getMissionProxy();
 
         mSelectedProxies.clear();
         mSelectedProxies.addAll(mMissionProxy.selection.getSelected());
@@ -236,10 +236,6 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(getResource(), container, false);
 	}
-
-    protected MissionProxy getMissionProxy(){
-        return mMissionProxy;
-    }
 
     protected List<? extends MissionItem> getMissionItems(){
         return mSelectedItems;

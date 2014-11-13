@@ -1,5 +1,6 @@
 package org.droidplanner.android.api;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -29,20 +30,10 @@ public final class DPApiCallback extends IDroidPlannerApiCallback.Stub {
 
 	public static final String EXTRA_CONNECTION_FAILED_ERROR_MESSAGE = "extra_connection_failed_error_message";
 
-	private final WeakReference<DroidPlannerApp> appRef;
 	private final LocalBroadcastManager lbm;
 
-	public DPApiCallback(DroidPlannerApp app) {
-		appRef = new WeakReference<DroidPlannerApp>(app);
-		lbm = LocalBroadcastManager.getInstance(app);
-	}
-
-	private DroidPlannerApp getApplication() {
-		final DroidPlannerApp app = appRef.get();
-		if (app == null)
-			throw new IllegalStateException("Lost reference to application.");
-
-		return app;
+	public DPApiCallback(Context context) {
+		lbm = LocalBroadcastManager.getInstance(context);
 	}
 
 	@Override
@@ -54,7 +45,7 @@ public final class DPApiCallback extends IDroidPlannerApiCallback.Stub {
 
 	@Override
 	public void onDroneEvent(String event, Bundle eventExtras) throws RemoteException {
-		lbm.sendBroadcast(new Intent(ACTION_DRONE_EVENT).putExtra(EXTRA_DRONE_EVENT, event));
+		lbm.sendBroadcast(new Intent(ACTION_DRONE_EVENT));
 
         final Intent droneIntent = new Intent(event);
         if(eventExtras != null)

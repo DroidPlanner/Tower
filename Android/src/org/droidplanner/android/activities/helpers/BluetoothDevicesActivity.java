@@ -138,9 +138,7 @@ public class BluetoothDevicesActivity extends FragmentActivity {
 
 
 			// Toggle the drone connection
-            LocalBroadcastManager.getInstance(context)
-                    .sendBroadcast(new Intent(DroidPlannerApp.ACTION_TOGGLE_DRONE_CONNECTION)
-                    .putExtra(DroidPlannerApp.EXTRA_ESTABLISH_CONNECTION, true));
+            DroidPlannerApp.connectToDrone(context);
 
 			// Finish the activity
 			finish();

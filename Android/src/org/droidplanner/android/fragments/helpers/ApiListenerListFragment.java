@@ -6,6 +6,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.api.Drone;
+import org.droidplanner.android.proxy.mission.MissionProxy;
 
 /**
  * Provides access to the DroidPlannerApi to its derived class.
@@ -16,6 +17,7 @@ public abstract class ApiListenerListFragment extends ListFragment implements
 	private DroidPlannerApp dpApp;
 	private LocalBroadcastManager broadcastManager;
 
+    protected MissionProxy getMissionProxy(){ return dpApp.getMissionProxy();}
 	protected Drone getDrone() {
 		return dpApp.getDrone();
 	}

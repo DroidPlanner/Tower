@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.api.DPApiCallback;
+import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.widgets.checklist.CheckListAdapter;
 import org.droidplanner.android.widgets.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
@@ -82,7 +84,7 @@ public class ChecklistFragment extends ApiListenerFragment implements OnXmlParse
 
     @Override
     public void onApiConnected(){
-        sysLink = new CheckListSysLink(getDrone());
+        sysLink = new CheckListSysLink(getActivity().getApplicationContext(), getDrone());
         getBroadcastManager().registerReceiver(broadcastReceiver, intentFilter);
     }
 

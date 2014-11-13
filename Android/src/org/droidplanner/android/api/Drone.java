@@ -9,13 +9,12 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.coordinate.Point3D;
 import com.ox3dr.services.android.lib.drone.connection.ConnectionParameter;
-import com.ox3dr.services.android.lib.drone.connection.ConnectionType;
+import com.ox3dr.services.android.lib.drone.connection.ConnectionResult;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.mission.Mission;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
@@ -41,13 +40,11 @@ import com.ox3dr.services.android.lib.gcs.follow.FollowState;
 import com.ox3dr.services.android.lib.gcs.follow.FollowType;
 import com.ox3dr.services.android.lib.model.IDroidPlannerApi;
 
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
-import org.droidplanner.android.proxy.mission.MissionProxy;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -87,11 +84,6 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
                 else
                     stopTimer();
             }
-            else if(Event.EVENT_MISSION_DRONIE_CREATED.equals(action)
-                    || Event.EVENT_MISSION_UPDATE.equals(action)
-                    || Event.EVENT_MISSION_RECEIVED.equals(action)){
-                missionProxy.load(getMission());
-            }
             else if(Event.EVENT_SPEED.equals(action)){
                 checkForGroundCollision();
             }
@@ -100,6 +92,46 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
             }
         }
     };
+
+    private final Runnable connectTask = new Runnable() {
+        @Override
+        public void run() {
+            connect();
+        }
+    };
+
+    private final LocalBroadcastManager lbm;
+    private IDroidPlannerApi dpApi;
+    private ConnectionParameter connectionParams;
+
+    // flightTimer
+    // ----------------
+    private long startTime = 0;
+    private long elapsedFlightTime = 0;
+    private AtomicBoolean isTimerRunning = new AtomicBoolean(false);
+
+    private final ServiceManager serviceMgr;
+    private final DPApiCallback dpCallback;
+    
+    private final LinkedList<Runnable> onConnectedTasks = new LinkedList<Runnable>();
+
+    public Drone(Context context, ServiceManager serviceManager){
+        this.serviceMgr = serviceManager;
+        dpCallback = new DPApiCallback(context);
+        lbm = LocalBroadcastManager.getInstance(context);
+    }
+
+	public void updateConnectionParameter(ConnectionParameter connParams) {
+        if(connParams == null)
+            return;
+
+		if (connParams.equals(this.connectionParams))
+			return;
+
+		unregisterFromDrone();
+		this.connectionParams = connParams;
+		registerWithDrone();
+	}
 
     private void checkForGroundCollision() {
         Speed speed = getSpeed();
@@ -116,34 +148,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
                 && altitudeValue > COLLISION_SAFE_ALTITUDE_METERS;
 
         lbm.sendBroadcast(new Intent(ACTION_GROUND_COLLISION_IMMINENT)
-        .putExtra(EXTRA_IS_GROUND_COLLISION_IMMINENT, isCollisionImminent));
-    }
-
-    private final LocalBroadcastManager lbm;
-    private final MissionProxy missionProxy;
-    private IDroidPlannerApi dpApi;
-    private ConnectionParameter connectionParams;
-
-    // flightTimer
-    // ----------------
-    private long startTime = 0;
-    private long elapsedFlightTime = 0;
-    private AtomicBoolean isTimerRunning = new AtomicBoolean(false);
-
-    private final DroidPlannerPrefs dpPrefs;
-    private final DroidPlannerApp dpApp;
-    private final DPApiCallback dpCallback;
-    
-    private final LinkedList<Runnable> onConnectedTasks = new LinkedList<Runnable>(); 
-
-    public Drone(DroidPlannerApp dpApp){
-        this.dpApp = dpApp;
-        dpCallback = new DPApiCallback(dpApp);
-
-        final Context context = dpApp.getApplicationContext();
-        dpPrefs = new DroidPlannerPrefs(context);
-        this.missionProxy = new MissionProxy(context, this);
-        lbm = LocalBroadcastManager.getInstance(context);
+                .putExtra(EXTRA_IS_GROUND_COLLISION_IMMINENT, isCollisionImminent));
     }
 
     public void start(){
@@ -167,51 +172,6 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
     private void handleRemoteException(RemoteException e){
         Log.e(TAG, e.getMessage(), e);
         registerWithDrone();
-    }
-
-    private ConnectionParameter retrieveConnectionParameters() {
-        final int connectionType = dpPrefs.getConnectionParameterType();
-        Bundle extraParams = new Bundle();
-
-        ConnectionParameter connParams;
-        switch (connectionType) {
-            case ConnectionType.TYPE_USB:
-                extraParams.putInt(ConnectionType.EXTRA_USB_BAUD_RATE, dpPrefs.getUsbBaudRate());
-                connParams = new ConnectionParameter(connectionType, extraParams);
-                break;
-
-            case ConnectionType.TYPE_UDP:
-                extraParams.putInt(ConnectionType.EXTRA_UDP_SERVER_PORT, dpPrefs.getUdpServerPort());
-                connParams = new ConnectionParameter(connectionType, extraParams);
-                break;
-
-            case ConnectionType.TYPE_TCP:
-                extraParams.putString(ConnectionType.EXTRA_TCP_SERVER_IP, dpPrefs.getTcpServerIp());
-                extraParams.putInt(ConnectionType.EXTRA_TCP_SERVER_PORT, dpPrefs.getTcpServerPort());
-                connParams = new ConnectionParameter(connectionType, extraParams);
-                break;
-
-            case ConnectionType.TYPE_BLUETOOTH:
-                String btAddress = dpPrefs.getBluetoothDeviceAddress();
-                if (TextUtils.isEmpty(btAddress)) {
-                    connParams = null;
-                    dpApp.startActivity(new Intent(dpApp.getApplicationContext(),
-                            BluetoothDevicesActivity.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-
-                } else {
-                    extraParams.putString(ConnectionType.EXTRA_BLUETOOTH_ADDRESS, btAddress);
-                    connParams = new ConnectionParameter(connectionType, extraParams);
-                }
-                break;
-
-            default:
-                Log.e(TAG, "Unrecognized connection type: " + connectionType);
-                connParams = null;
-                break;
-        }
-
-        return connParams;
     }
 
     public double getSpeedParameter(){
@@ -264,10 +224,6 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
             startTime = SystemClock.elapsedRealtime();
         }
         return elapsedFlightTime / 1000;
-    }
-
-    public MissionProxy getMissionProxy(){
-        return this.missionProxy;
     }
 
     @Override
@@ -430,31 +386,23 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
     }
 
     private boolean registerWithDrone(){
-        if(!dpApp.is3drServicesConnected()) {
-            dpApp.connect();
+        if(!serviceMgr.isServiceConnected()) {
+            serviceMgr.connect();
             return false;
         }
-
 
         // Retrieve the connection parameters.
-        final ConnectionParameter connParams = retrieveConnectionParameters();
-        if (connParams == null) {
-            return false;
-        }
-
-        if(this.connectionParams != null && !this.connectionParams.equals(connParams)){
-            unregisterFromDrone();
-        }
-
         if (dpApi != null)
             return true;
 
+        if(this.connectionParams == null)
+            return false;
+
         try {
-            dpApi = dpApp.get3drServices().registerWithDrone(connParams, dpCallback);
-            this.connectionParams = connParams;
+            dpApi = serviceMgr.get3drServices().registerWithDrone(this.connectionParams, dpCallback);
         } catch (RemoteException e) {
             Log.e(TAG, "Unable to retrieve a droidplanner api connection.", e);
-            dpApp.connect();
+            serviceMgr.connect();
             return false;
         }        
         
@@ -464,29 +412,21 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
     private void unregisterFromDrone(){
         dpApi = null;
 
-        if (!dpApp.is3drServicesConnected())
+        if (!serviceMgr.isServiceConnected())
             return; // Nothing to do. It's already disconnected.
 
         try {
             if(this.connectionParams != null)
-                dpApp.get3drServices().unregisterFromDrone(this.connectionParams, dpCallback);
+                serviceMgr.get3drServices().unregisterFromDrone(this.connectionParams, dpCallback);
         } catch (RemoteException e) {
             Log.e(TAG, "Error while disconnecting from the droidplanner api", e);
         }
     }
 
-    private final Runnable connectTask = new Runnable() {
-        @Override
-        public void run() {
-            connect();
-        }
-    };
-
 	public void connect() {
         if(isApiValid(connectTask))
 		try {
 			dpApi.connect();
-            missionProxy.load(getMission());
             lbm.sendBroadcast(new Intent(Event.EVENT_CONNECTED));
 		} catch (RemoteException e) {
 			handleRemoteException(e);
@@ -494,6 +434,8 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
 	}
 
     public void disconnect(){
+        onConnectedTasks.clear();
+
         if(isApiValid()){
             try {
                 dpApi.disconnect();

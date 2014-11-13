@@ -189,7 +189,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
     @Override
     public void onApiConnected() {
-        missionProxy = getDrone().getMissionProxy();
+        missionProxy = getMissionProxy();
 
         setupButtonsByFlightState();
         updateFlightModeButtons();

@@ -219,7 +219,7 @@ public abstract class SuperUI extends FragmentActivity implements DroidPlannerAp
 
 		switch (item.getItemId()) {
 		case R.id.menu_send_mission: {
-			final MissionProxy missionProxy = dpApi.getMissionProxy();
+			final MissionProxy missionProxy = dpApp.getMissionProxy();
 			if (missionProxy.getItems().isEmpty() || missionProxy.hasTakeoffAndLandOrRTL()) {
 				missionProxy.sendMissionToAPM(dpApi);
 			} else {
@@ -284,8 +284,8 @@ public abstract class SuperUI extends FragmentActivity implements DroidPlannerAp
 	public void toggleDroneConnection() {
         final Drone drone = dpApp.getDrone();
 		if(drone.isConnected())
-            drone.disconnect();
+            dpApp.disconnectFromDrone();
         else
-            drone.connect();
+            dpApp.connectToDrone();
 	}
 }

@@ -169,7 +169,7 @@ public abstract class DroneMap extends ApiListenerFragment {
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 
             drone = getDrone();
-            missionProxy = drone.getMissionProxy();
+            missionProxy = getMissionProxy();
 
             home = new GraphicHome(drone);
             graphicDrone = new GraphicDrone(drone);

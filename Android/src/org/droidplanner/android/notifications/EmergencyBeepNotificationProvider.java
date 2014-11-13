@@ -9,6 +9,7 @@ import android.media.SoundPool;
 import android.support.v4.content.LocalBroadcastManager;
 
 import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.api.Drone;
 
 public class EmergencyBeepNotificationProvider implements NotificationHandler.NotificationProvider {

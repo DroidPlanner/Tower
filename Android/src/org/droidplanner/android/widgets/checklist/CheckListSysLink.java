@@ -1,15 +1,20 @@
 package org.droidplanner.android.widgets.checklist;
 
+import android.content.Context;
+
 import com.ox3dr.services.android.lib.drone.property.Battery;
 import com.ox3dr.services.android.lib.drone.property.Gps;
 import com.ox3dr.services.android.lib.drone.property.State;
 
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.api.Drone;
 
 public class CheckListSysLink {
+    private Context context;
 	private Drone drone;
 
-	public CheckListSysLink(Drone drone) {
+	public CheckListSysLink(Context context, Drone drone) {
+        this.context = context;
 		this.drone = drone;
 	}
 
@@ -78,9 +83,9 @@ public class CheckListSysLink {
 		boolean connected = drone.isConnected();
 		if (activated != connected) {
 			if (connected)
-				drone.disconnect();
+				DroidPlannerApp.disconnectFromDrone(context);
 			else
-				drone.connect();
+				DroidPlannerApp.connectToDrone(context);
 		}
 	}
 

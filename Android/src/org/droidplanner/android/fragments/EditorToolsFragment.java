@@ -120,7 +120,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
     @Override
     public void onApiConnected() {
-        mMissionProxy = getDrone().getMissionProxy();
+        mMissionProxy = getMissionProxy();
         setToolAndUpdateView(tool);
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
