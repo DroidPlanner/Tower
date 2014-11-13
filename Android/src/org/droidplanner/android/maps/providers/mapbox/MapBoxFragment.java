@@ -616,4 +616,10 @@ public class MapBoxFragment extends Fragment implements DPMap {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void updateRealTimeFootprint(Footprint footprint) {
+		// TODO Auto-generated method stub
+		
+	}
 }

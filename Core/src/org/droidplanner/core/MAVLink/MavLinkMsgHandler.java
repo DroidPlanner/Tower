@@ -125,7 +125,7 @@ public class MavLinkMsgHandler {
 			}
 			break;
 		case msg_camera_feedback.MAVLINK_MSG_ID_CAMERA_FEEDBACK:
-			drone.getCameraFootprints().newImageLocation((msg_camera_feedback) msg);
+			drone.getCamera().newImageLocation((msg_camera_feedback) msg);
 			break;
 		default:
 			break;

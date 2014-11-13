@@ -3,7 +3,7 @@ package org.droidplanner.android.utils.file.IO;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.droidplanner.core.mission.survey.CameraInfo;
+import org.droidplanner.core.survey.CameraInfo;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 

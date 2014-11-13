@@ -76,7 +76,7 @@ public class Map implements OnDroneListener {
 			break;
 		case FOOTPRINT:
 			ArrayList<Coordinate> corners = new ArrayList<Coordinate>();
-			for (Coord2D vertex : drone.getCameraFootprints().getLastFootprint().getVertex()) {
+			for (Coord2D vertex : drone.getCamera().getLastFootprint().getVertex()) {
 				corners.add(new Coordinate(vertex.getLat(), vertex.getLng()));
 			}			
 			map.addMapPolygon(new MapPolygonImpl(corners));

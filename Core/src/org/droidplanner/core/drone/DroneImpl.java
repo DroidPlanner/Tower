@@ -7,7 +7,7 @@ import org.droidplanner.core.drone.profiles.VehicleProfile;
 import org.droidplanner.core.drone.variables.Altitude;
 import org.droidplanner.core.drone.variables.Battery;
 import org.droidplanner.core.drone.variables.Calibration;
-import org.droidplanner.core.drone.variables.CameraFootprints;
+import org.droidplanner.core.drone.variables.Camera;
 import org.droidplanner.core.drone.variables.GPS;
 import org.droidplanner.core.drone.variables.GuidedPoint;
 import org.droidplanner.core.drone.variables.HeartBeat;
@@ -50,7 +50,7 @@ public class DroneImpl implements Drone {
 	private final Calibration calibrationSetup;
 	private final WaypointManager waypointManager;
 	private final Magnetometer mag;
-	private final CameraFootprints footprints;
+	private final Camera footprints;
 	private final State state;
 	private final HeartBeat heartbeat;
 	private final Parameters parameters;
@@ -85,7 +85,7 @@ public class DroneImpl implements Drone {
         this.calibrationSetup = new Calibration(this);
         this.waypointManager = new WaypointManager(this);
         this.mag = new Magnetometer(this);
-        this.footprints = new CameraFootprints(this);
+        this.footprints = new Camera(this);
 
         loadVehicleProfile();
 	}
@@ -271,7 +271,7 @@ public class DroneImpl implements Drone {
 		return mag;
 	}
 	
-	public CameraFootprints getCameraFootprints() {
+	public Camera getCamera() {
 		return footprints;
 	}
 }

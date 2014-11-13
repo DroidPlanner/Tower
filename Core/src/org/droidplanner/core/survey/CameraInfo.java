@@ -1,4 +1,4 @@
-package org.droidplanner.core.mission.survey;
+package org.droidplanner.core.survey;
 
 public class CameraInfo {
 	public String name = "Canon SX260";
