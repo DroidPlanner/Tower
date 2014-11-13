@@ -16,10 +16,10 @@ dependencies {
         transitive=true
     }
 
-    compile 'com.android.support:support-v4:20.0.0'
+    compile 'com.android.support:support-v4:21.0.0'
 
     compile project(':Libraries:HorizontalVariableListView:HorizontalVariableListView')
-    compile project(':Libraries:3DR-Services-Library:lib')
+    compile project(':3DRServicesClient:lib')
 
     compile files('libs/j2xx.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
@@ -30,7 +30,7 @@ dependencies {
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.0.1"
+    buildToolsVersion "21.1.1"
 
     defaultConfig {
         applicationId 'org.droidplanner'

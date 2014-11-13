@@ -4,4 +4,11 @@ include ':Android'
 //Library projects
 include ':Libraries:HorizontalVariableListView:HorizontalVariableListView'
 include ':Libraries:PebbleKit'
-include ':Libraries:3DR-Services-Library:lib'
+
+include ':3DRServicesClient:lib'
+project(':3DRServicesClient:lib').projectDir = new File('libraries/3DRServicesClient/lib')
+
+include ':3DR-Services-Library:lib'
+project(':3DR-Services-Library:lib').projectDir = new File
+        ('Libraries/3DRServicesClient/libraries/3DR-Services-Library/lib')
+

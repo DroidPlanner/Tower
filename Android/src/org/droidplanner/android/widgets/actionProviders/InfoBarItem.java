@@ -3,7 +3,6 @@ package org.droidplanner.android.widgets.actionProviders;
 import java.util.Locale;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.unit.UnitManager;
@@ -21,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
+import com.o3dr.android.client.Drone;
 import com.ox3dr.services.android.lib.drone.property.Battery;
 import com.ox3dr.services.android.lib.drone.property.Gps;
 import com.ox3dr.services.android.lib.drone.property.Home;

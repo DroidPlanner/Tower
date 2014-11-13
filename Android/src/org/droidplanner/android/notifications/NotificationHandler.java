@@ -7,9 +7,9 @@ import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.analytics.HitBuilders;
+import com.o3dr.android.client.Drone;
 import com.ox3dr.services.android.lib.drone.event.Event;
 
-import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.utils.analytics.GAUtils;
 
 /**

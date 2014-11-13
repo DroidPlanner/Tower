@@ -3,7 +3,6 @@ package org.droidplanner.android.notifications;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.FlightActivity;
-import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.utils.TextUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.unit.UnitManager;
@@ -19,6 +18,7 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.o3dr.android.client.Drone;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.property.Battery;
 import com.ox3dr.services.android.lib.drone.property.Gps;

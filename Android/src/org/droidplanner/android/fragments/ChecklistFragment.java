@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.api.DPApiCallback;
-import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.widgets.checklist.CheckListAdapter;
 import org.droidplanner.android.widgets.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
@@ -26,6 +24,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+
+import com.o3dr.android.client.DPApiCallback;
 
 public class ChecklistFragment extends ApiListenerFragment implements OnXmlParserError,
 		OnCheckListItemUpdateListener {

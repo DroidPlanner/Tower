@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.maps.DPMap.PathSource;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.MarkerWithText;
@@ -13,6 +12,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.o3dr.android.client.Drone;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.drone.property.Gps;
 import com.ox3dr.services.android.lib.drone.property.GuidedState;

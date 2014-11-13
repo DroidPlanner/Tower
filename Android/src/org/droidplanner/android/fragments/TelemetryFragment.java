@@ -12,13 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.o3dr.android.client.Drone;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.property.Altitude;
 import com.ox3dr.services.android.lib.drone.property.Attitude;
 import com.ox3dr.services.android.lib.drone.property.Speed;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.widgets.AttitudeIndicator;
 

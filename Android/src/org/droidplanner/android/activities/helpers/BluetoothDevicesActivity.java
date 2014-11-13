@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.app.Activity;

@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.helpers.LocalMapTileProvider;
 import org.droidplanner.android.utils.GoogleApiClientManager;
 import org.droidplanner.android.utils.GoogleApiClientManager.GoogleApiClientTask;
@@ -63,6 +62,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.o3dr.android.client.Drone;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.property.FootPrint;

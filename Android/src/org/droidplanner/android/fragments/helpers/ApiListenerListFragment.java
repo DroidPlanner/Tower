@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.o3dr.android.client.Drone;
+
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 
 /**

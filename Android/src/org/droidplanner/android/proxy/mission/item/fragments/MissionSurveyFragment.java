@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.o3dr.android.client.Drone;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
@@ -17,7 +18,6 @@ import com.ox3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
 
 import org.droidplanner.R;
 import org.droidplanner.R.id;
-import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.CamerasAdapter;
 import org.droidplanner.android.utils.unit.UnitManager;

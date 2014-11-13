@@ -7,9 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.o3dr.android.client.Drone;
+
 import org.droidplanner.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.android.api.Drone;
 
 /**
  * Provides action buttons functionality for generic drone type.

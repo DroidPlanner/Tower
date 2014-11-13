@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.utils.analytics.GAUtils;
 
 import com.google.android.gms.analytics.HitBuilders;
+import com.o3dr.android.client.Drone;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.coordinate.LatLongAlt;
 import com.ox3dr.services.android.lib.drone.mission.Mission;

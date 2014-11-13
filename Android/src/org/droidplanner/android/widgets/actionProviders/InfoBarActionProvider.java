@@ -1,7 +1,6 @@
 package org.droidplanner.android.widgets.actionProviders;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.BatteryInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.FlightModesInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.FlightTimeInfo;
@@ -20,6 +19,7 @@ import android.view.ActionProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.o3dr.android.client.Drone;
 import com.ox3dr.services.android.lib.drone.event.Event;
 
 /**

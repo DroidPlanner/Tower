@@ -14,6 +14,7 @@ import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.widget.Toast;
 
+import com.o3dr.android.client.Drone;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.event.Extra;
 import com.ox3dr.services.android.lib.drone.property.Battery;
@@ -22,7 +23,6 @@ import com.ox3dr.services.android.lib.drone.property.State;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 

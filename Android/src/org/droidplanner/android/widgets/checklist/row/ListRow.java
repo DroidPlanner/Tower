@@ -1,6 +1,5 @@
 package org.droidplanner.android.widgets.checklist.row;
 
-import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.widgets.checklist.CheckListItem;
 
 import android.view.LayoutInflater;
@@ -9,6 +8,8 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.CheckBox;
 import android.widget.Toast;
+
+import com.o3dr.android.client.Drone;
 
 public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickListener {
 	protected final CheckListItem checkListItem;

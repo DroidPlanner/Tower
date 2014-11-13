@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
+import com.o3dr.android.client.Drone;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.event.Extra;
 import com.ox3dr.services.android.lib.drone.property.State;
@@ -24,7 +25,6 @@ import com.ox3dr.services.android.lib.gcs.follow.FollowType;
 import org.droidplanner.R;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;

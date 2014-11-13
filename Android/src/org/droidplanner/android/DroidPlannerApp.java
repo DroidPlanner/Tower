@@ -11,18 +11,16 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.ServiceListener;
+import com.o3dr.android.client.ServiceManager;
 import com.ox3dr.services.android.lib.drone.connection.ConnectionParameter;
-import com.ox3dr.services.android.lib.drone.connection.ConnectionResult;
 import com.ox3dr.services.android.lib.drone.connection.ConnectionType;
 import com.ox3dr.services.android.lib.drone.connection.StreamRates;
 import com.ox3dr.services.android.lib.drone.event.Event;
-import com.ox3dr.services.android.lib.drone.mission.Mission;
 import com.ox3dr.services.android.lib.model.ITLogApi;
 
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
-import org.droidplanner.android.api.Drone;
-import org.droidplanner.android.api.ServiceListener;
-import org.droidplanner.android.api.ServiceManager;
 import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.analytics.GAUtils;

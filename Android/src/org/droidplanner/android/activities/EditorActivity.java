@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
-import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
@@ -48,6 +47,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
+import com.o3dr.android.client.Drone;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;

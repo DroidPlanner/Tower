@@ -3,7 +3,6 @@ package org.droidplanner.android.activities;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.droidplanner.R;
-import org.droidplanner.android.api.Drone;
 import org.droidplanner.android.dialogs.DroneshareDialog;
 import org.droidplanner.android.fragments.FlightActionsFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
@@ -30,6 +29,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.o3dr.android.client.Drone;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.event.Extra;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
