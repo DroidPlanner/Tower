@@ -11,10 +11,12 @@ public class ConnectionParameter implements Parcelable {
 
     private final int connectionType;
     private final Bundle paramsBundle;
+    private final StreamRates streamRates;
 
-    public ConnectionParameter(int connectionType, Bundle paramsBundle){
+    public ConnectionParameter(int connectionType, Bundle paramsBundle, StreamRates streamRates){
         this.connectionType = connectionType;
         this.paramsBundle = paramsBundle;
+        this.streamRates = streamRates;
     }
 
     public int getConnectionType() {
@@ -23,6 +25,10 @@ public class ConnectionParameter implements Parcelable {
 
     public Bundle getParamsBundle() {
         return paramsBundle;
+    }
+
+    public StreamRates getStreamRates() {
+        return streamRates;
     }
 
     @Override
@@ -57,7 +63,7 @@ public class ConnectionParameter implements Parcelable {
             }
         }
 
-        toString += "]}";
+        toString += "], streamRates=[" + this.streamRates.toString() + "]}";
         return toString;
     }
 
@@ -70,11 +76,13 @@ public class ConnectionParameter implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.connectionType);
         dest.writeBundle(paramsBundle);
+        dest.writeParcelable(this.streamRates, 0);
     }
 
     private ConnectionParameter(Parcel in) {
         this.connectionType = in.readInt();
         paramsBundle = in.readBundle();
+        this.streamRates = in.readParcelable(StreamRates.class.getClassLoader());
     }
 
     public static final Creator<ConnectionParameter> CREATOR = new Creator<ConnectionParameter>() {
