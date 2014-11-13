@@ -75,7 +75,6 @@ public class ServiceManager {
         try {
             return ox3drServices != null && ox3drServices.ping();
         } catch (RemoteException e) {
-            disconnect();
             return false;
         }
     }
