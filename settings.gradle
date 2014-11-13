@@ -1,2 +1,3 @@
 include ':lib'
-include ':libraries:3DR-Services-Library:lib'
+include ':3DR-Services-Library:lib'
+project(':3DR-Services-Library:lib').projectDir = new File('libraries/3DR-Services-Library/lib')
