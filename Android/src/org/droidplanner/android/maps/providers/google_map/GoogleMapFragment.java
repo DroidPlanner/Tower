@@ -95,9 +95,13 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
             if(!drone.isConnected())
                 return;
 
+            GoogleMap map = getMap();
             Gps droneGps = drone.getGps();
+            if(map == null || droneGps == null)
+                return;
+
             if (mPanMode.get() == AutoPanMode.DRONE && droneGps.isValid()) {
-                final float currentZoomLevel = getMap().getCameraPosition().zoom;
+                final float currentZoomLevel = map.getCameraPosition().zoom;
                 final LatLong droneLocation = droneGps.getPosition();
                 updateCamera(droneLocation, currentZoomLevel);
             }
@@ -226,12 +230,20 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     public void onStart() {
         super.onStart();
         mGApiClientMgr.start();
+
+        if(mPanMode.get() == AutoPanMode.DRONE){
+            LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
+                    .registerReceiver(eventReceiver, eventFilter);
+        }
+
         setupMap();
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
+                .unregisterReceiver(eventReceiver);
         mGApiClientMgr.stop();
     }
 
