@@ -164,7 +164,8 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
     }
 
     public void terminate(){
-        disconnect();
+        onConnectedTasks.clear();
+
         lbm.unregisterReceiver(broadcastReceiver);
         unregisterFromDrone();
     }
