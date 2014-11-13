@@ -18,7 +18,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.property.Battery;
@@ -34,7 +33,7 @@ import com.ox3dr.services.android.lib.util.MathUtils;
  */
 public class StatusBarNotificationProvider implements NotificationHandler.NotificationProvider {
 
-	private static final String LOG_TAG = StatusBarNotificationProvider.class.getSimpleName();
+	private static final String TAG = StatusBarNotificationProvider.class.getSimpleName();
 
 	/**
 	 * Android status bar's notification id.
@@ -307,7 +306,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 
 		public void setLine(int index, CharSequence content) {
 			if (index >= mLines.length || index < 0) {
-				Log.w(LOG_TAG, "Invalid index (" + index + ") for inbox content.");
+				Log.w(TAG, "Invalid index (" + index + ") for inbox content.");
 				return;
 			}
 

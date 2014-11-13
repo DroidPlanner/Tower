@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.ActionProvider;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,8 @@ import com.ox3dr.services.android.lib.drone.event.Event;
  * list of DroneEvent listeners.
  */
 public class InfoBarActionProvider extends ActionProvider {
+
+    private static final String TAG = InfoBarActionProvider.class.getSimpleName();
 
     private final static IntentFilter eventFilter = new IntentFilter();
     static {

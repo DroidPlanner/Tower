@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.ox3dr.services.android.lib.model.IDroidPlannerServices;
 import com.ox3dr.services.android.lib.model.ITLogApi;
@@ -20,7 +21,10 @@ import java.util.Set;
  */
 public class ServiceManager {
 
+    private static final String TAG = ServiceManager.class.getSimpleName();
+
     private final ServiceConnection ox3drServicesConnection = new ServiceConnection() {
+
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             ox3drServices = IDroidPlannerServices.Stub.asInterface(service);
@@ -95,6 +99,7 @@ public class ServiceManager {
     }
 
     public void connect(ServiceListener listener) {
+        Log.d(TAG, "Connect called.");
         if(listener == null) return;
 
         if(isServiceConnected()) {
@@ -108,6 +113,7 @@ public class ServiceManager {
     }
 
     public void disconnect(ServiceListener listener){
+        Log.d(TAG, "Disconnect called.");
         if(listener == null) return;
 
         serviceListeners.remove(listener);

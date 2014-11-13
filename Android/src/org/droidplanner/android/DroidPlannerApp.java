@@ -149,7 +149,7 @@ public class DroidPlannerApp extends Application implements ServiceListener {
 		if (isServiceConnected)
 			listener.onApiConnected();
 
-        if(apiListeners.isEmpty() || !isServiceConnected) {
+        if(apiListeners.isEmpty() && !isServiceConnected) {
             handler.removeCallbacks(disconnectionTask);
             serviceMgr.connect(this);
         }
@@ -193,6 +193,7 @@ public class DroidPlannerApp extends Application implements ServiceListener {
 		notifyApiDisconnected();
 		notificationHandler.terminate();
         lbm.unregisterReceiver(broadcastReceiver);
+        serviceMgr.disconnect(this);
 	}
 
     public void connectToDrone(){
