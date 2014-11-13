@@ -14,6 +14,8 @@ public class Parameters implements Parcelable {
 
     private List<Parameter> parametersList = new ArrayList<Parameter>();
 
+    public Parameters(){}
+
     public Parameters(List<Parameter> parameterList) {
         this.parametersList = parameterList;
     }
@@ -32,6 +34,10 @@ public class Parameters implements Parcelable {
         }
 
         return null;
+    }
+
+    public void setParametersList(List<Parameter> parametersList) {
+        this.parametersList = parametersList;
     }
 
     @Override

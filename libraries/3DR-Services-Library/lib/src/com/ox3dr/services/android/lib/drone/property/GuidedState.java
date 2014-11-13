@@ -14,8 +14,10 @@ public class GuidedState implements Parcelable {
     public static final int STATE_IDLE = 1;
     public static final int STATE_ACTIVE = 2;
 
-    private final int state;
-    private final LatLongAlt coordinate;
+    private int state;
+    private LatLongAlt coordinate;
+
+    public GuidedState(){}
 
     public GuidedState(int state, LatLongAlt coordinate) {
         this.state = state;
@@ -36,6 +38,14 @@ public class GuidedState implements Parcelable {
 
     public LatLongAlt getCoordinate(){
         return coordinate;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public void setCoordinate(LatLongAlt coordinate) {
+        this.coordinate = coordinate;
     }
 
     @Override

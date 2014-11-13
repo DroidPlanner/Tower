@@ -8,16 +8,34 @@ import android.os.Parcelable;
  */
 public class Battery implements Parcelable {
 
-    private final double batteryVoltage;
-    private final double batteryRemain;
-    private final double batteryCurrent;
-    private final Double batteryDischarge;
+    private double batteryVoltage;
+    private double batteryRemain;
+    private double batteryCurrent;
+    private Double batteryDischarge;
+
+    public Battery(){}
 
     public Battery(double batteryVoltage, double batteryRemain, double batteryCurrent,
                    Double batteryDischarge) {
         this.batteryVoltage = batteryVoltage;
         this.batteryRemain = batteryRemain;
         this.batteryCurrent = batteryCurrent;
+        this.batteryDischarge = batteryDischarge;
+    }
+
+    public void setBatteryVoltage(double batteryVoltage) {
+        this.batteryVoltage = batteryVoltage;
+    }
+
+    public void setBatteryRemain(double batteryRemain) {
+        this.batteryRemain = batteryRemain;
+    }
+
+    public void setBatteryCurrent(double batteryCurrent) {
+        this.batteryCurrent = batteryCurrent;
+    }
+
+    public void setBatteryDischarge(Double batteryDischarge) {
         this.batteryDischarge = batteryDischarge;
     }
 

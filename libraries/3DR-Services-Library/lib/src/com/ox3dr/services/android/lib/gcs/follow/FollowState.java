@@ -15,13 +15,27 @@ public class FollowState implements Parcelable {
     public static final int STATE_RUNNING = 4;
     public static final int STATE_END = 5;
 
-    private final int state;
-    private final double radius;
-    private final FollowType mode;
+    private int state;
+    private double radius;
+    private FollowType mode;
+
+    public FollowState(){}
 
     public FollowState(int state, double radius, FollowType mode) {
         this.state = state;
         this.radius = radius;
+        this.mode = mode;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+
+    public void setMode(FollowType mode) {
         this.mode = mode;
     }
 

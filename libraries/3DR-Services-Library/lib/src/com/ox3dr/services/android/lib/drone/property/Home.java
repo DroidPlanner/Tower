@@ -13,7 +13,9 @@ public class Home implements Parcelable {
     /**
      * Lauch pad 3D coordinate.
      */
-    private final LatLongAlt mCoordinate;
+    private LatLongAlt mCoordinate;
+
+    public Home(){}
 
     public Home(double latitude, double longitude, double altitude){
         mCoordinate = new LatLongAlt(latitude, longitude, altitude);
@@ -28,6 +30,10 @@ public class Home implements Parcelable {
      */
     public LatLongAlt getCoordinate(){
         return mCoordinate;
+    }
+
+    public void setCoordinate(LatLongAlt mCoordinate) {
+        this.mCoordinate = mCoordinate;
     }
 
     public boolean isValid(){
