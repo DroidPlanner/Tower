@@ -191,8 +191,12 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 			break;
 
 		case ATTITUDE:
-			if (drone.getGps().isPositionValid()) {
-				mMapFragment.updateRealTimeFootprint(drone.getCamera().getCurrentFieldOfView());
+			if (((DroidPlannerApp) getActivity().getApplication()).getPreferences()
+					.isRealtimeFootprintsEnabled()) {
+				if (drone.getGps().isPositionValid()) {
+					mMapFragment.updateRealTimeFootprint(drone.getCamera().getCurrentFieldOfView());
+				}
+
 			}
 			break;
 		case GUIDEDPOINT:
@@ -210,7 +214,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 			mMapFragment.updateMarker(graphicDrone);
 			break;
 		case FOOTPRINT:
-			mMapFragment.addCameraFootprint(drone.getCamera().getLastFootprint());
+				mMapFragment.addCameraFootprint(drone.getCamera().getLastFootprint());
 			break;
 		default:
 			break;
