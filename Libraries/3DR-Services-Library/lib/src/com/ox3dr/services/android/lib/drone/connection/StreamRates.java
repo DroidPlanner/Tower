@@ -17,6 +17,8 @@ public class StreamRates implements Parcelable {
     private int rawSensors;
     private int rawController;
 
+    public StreamRates(){}
+
     public int getExtendedStatus() {
         return extendedStatus;
     }
