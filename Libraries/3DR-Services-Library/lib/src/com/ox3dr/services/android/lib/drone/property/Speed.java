@@ -8,13 +8,27 @@ import android.os.Parcelable;
  */
 public class Speed implements Parcelable {
 
-    private final double verticalSpeed; // m/s
-    private final double groundSpeed; // m/s
-    private final double airSpeed; // m/s
+    private double verticalSpeed; // m/s
+    private double groundSpeed; // m/s
+    private double airSpeed; // m/s
+
+    public Speed(){}
 
     public Speed(double verticalSpeed, double groundSpeed, double airSpeed) {
         this.verticalSpeed = verticalSpeed;
         this.groundSpeed = groundSpeed;
+        this.airSpeed = airSpeed;
+    }
+
+    public void setVerticalSpeed(double verticalSpeed) {
+        this.verticalSpeed = verticalSpeed;
+    }
+
+    public void setGroundSpeed(double groundSpeed) {
+        this.groundSpeed = groundSpeed;
+    }
+
+    public void setAirSpeed(double airSpeed) {
         this.airSpeed = airSpeed;
     }
 

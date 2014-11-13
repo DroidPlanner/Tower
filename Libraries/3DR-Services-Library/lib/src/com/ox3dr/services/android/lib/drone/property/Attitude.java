@@ -8,13 +8,27 @@ import android.os.Parcelable;
  */
 public class Attitude implements Parcelable {
 
-    private final double roll;
-    private final double pitch;
-    private final double yaw;
+    private  double roll;
+    private  double pitch;
+    private  double yaw;
+
+    public Attitude(){}
 
     public Attitude(double roll, double pitch, double yaw) {
         this.roll = roll;
         this.pitch = pitch;
+        this.yaw = yaw;
+    }
+
+    public void setRoll(double roll) {
+        this.roll = roll;
+    }
+
+    public void setPitch(double pitch) {
+        this.pitch = pitch;
+    }
+
+    public void setYaw(double yaw) {
         this.yaw = yaw;
     }
 
