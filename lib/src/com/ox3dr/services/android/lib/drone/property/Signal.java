@@ -11,14 +11,16 @@ public class Signal implements Parcelable {
     public static final int MAX_FADE_MARGIN = 50;
     public static final int MIN_FADE_MARGIN = 6;
 
-    private final boolean isValid;
-    private final int rxerrors;
-    private final int fixed;
-    private final int txbuf;
-    private final double rssi;
-    private final double remrssi;
-    private final double noise;
-    private final double remnoise;
+    private boolean isValid;
+    private int rxerrors;
+    private int fixed;
+    private int txbuf;
+    private double rssi;
+    private double remrssi;
+    private double noise;
+    private double remnoise;
+
+    public Signal(){}
 
     public Signal(boolean isValid, int rxerrors, int fixed, int txbuf, double rssi, double remrssi, double noise, double remnoise) {
         this.isValid = isValid;
@@ -28,6 +30,38 @@ public class Signal implements Parcelable {
         this.rssi = rssi;
         this.remrssi = remrssi;
         this.noise = noise;
+        this.remnoise = remnoise;
+    }
+
+    public void setValid(boolean isValid) {
+        this.isValid = isValid;
+    }
+
+    public void setRxerrors(int rxerrors) {
+        this.rxerrors = rxerrors;
+    }
+
+    public void setFixed(int fixed) {
+        this.fixed = fixed;
+    }
+
+    public void setTxbuf(int txbuf) {
+        this.txbuf = txbuf;
+    }
+
+    public void setRssi(double rssi) {
+        this.rssi = rssi;
+    }
+
+    public void setRemrssi(double remrssi) {
+        this.remrssi = remrssi;
+    }
+
+    public void setNoise(double noise) {
+        this.noise = noise;
+    }
+
+    public void setRemnoise(double remnoise) {
         this.remnoise = remnoise;
     }
 

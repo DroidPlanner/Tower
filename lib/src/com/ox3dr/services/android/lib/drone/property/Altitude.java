@@ -8,8 +8,10 @@ import android.os.Parcelable;
  */
 public class Altitude implements Parcelable {
 
-    private final double altitude;
-    private final double targetAltitude;
+    private double altitude;
+    private double targetAltitude;
+
+    public Altitude(){}
 
     public Altitude(double altitude, double targetAltitude) {
         this.altitude = altitude;
@@ -22,6 +24,14 @@ public class Altitude implements Parcelable {
 
     public double getTargetAltitude() {
         return targetAltitude;
+    }
+
+    public void setAltitude(double altitude) {
+        this.altitude = altitude;
+    }
+
+    public void setTargetAltitude(double targetAltitude) {
+        this.targetAltitude = targetAltitude;
     }
 
     @Override

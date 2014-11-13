@@ -13,11 +13,21 @@ import java.util.List;
  */
 public class FootPrint implements Parcelable {
 
-    private final LatLong center;
+    private LatLong center;
     private List<LatLong> vertex = new ArrayList<LatLong>();
+
+    public FootPrint(){}
 
     public FootPrint(LatLong center, List<LatLong> vertex) {
         this.center = center;
+        this.vertex = vertex;
+    }
+
+    public void setCenter(LatLong center) {
+        this.center = center;
+    }
+
+    public void setVertex(List<LatLong> vertex) {
         this.vertex = vertex;
     }
 

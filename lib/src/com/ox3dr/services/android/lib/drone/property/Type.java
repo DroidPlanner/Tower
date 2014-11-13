@@ -29,9 +29,11 @@ public class Type implements Parcelable {
         }
     }
 
-    private final int droneType;
-    private final String firmwareVersion;
-    private final Firmware firmware;
+    private int droneType;
+    private String firmwareVersion;
+    private Firmware firmware;
+
+    public Type(){}
 
     public Type(int droneType, String firmwareVersion){
         this.droneType = droneType;
@@ -69,6 +71,17 @@ public class Type implements Parcelable {
         return firmwareVersion;
     }
 
+    public void setDroneType(int droneType) {
+        this.droneType = droneType;
+    }
+
+    public void setFirmwareVersion(String firmwareVersion) {
+        this.firmwareVersion = firmwareVersion;
+    }
+
+    public void setFirmware(Firmware firmware) {
+        this.firmware = firmware;
+    }
 
     @Override
     public int describeContents() {

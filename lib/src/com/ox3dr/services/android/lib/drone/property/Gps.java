@@ -17,10 +17,12 @@ public class Gps implements Parcelable {
     private final static int LOCK_2D_TYPE = 2;
     private final static int LOCK_3D_TYPE = 3;
 
-    private final double mGpsEph;
-    private final int mSatCount;
-    private final int mFixType;
-    private final LatLong mPosition;
+    private double mGpsEph;
+    private int mSatCount;
+    private int mFixType;
+    private LatLong mPosition;
+
+    public Gps(){}
 
     public Gps(LatLong position, double gpsEph, int satCount, int fixType){
         mPosition = position;
@@ -64,6 +66,22 @@ public class Gps implements Parcelable {
 
     public LatLong getPosition(){
         return mPosition;
+    }
+
+    public void setGpsEph(double mGpsEph) {
+        this.mGpsEph = mGpsEph;
+    }
+
+    public void setSatCount(int mSatCount) {
+        this.mSatCount = mSatCount;
+    }
+
+    public void setFixType(int mFixType) {
+        this.mFixType = mFixType;
+    }
+
+    public void setPosition(LatLong mPosition) {
+        this.mPosition = mPosition;
     }
 
     @Override
