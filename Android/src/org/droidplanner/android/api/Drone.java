@@ -237,7 +237,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
             }
         }
 
-        return null;
+        return new Gps();
     }
 
     @Override
@@ -250,7 +250,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
             }
         }
 
-        return null;
+        return new State();
     }
 
     @Override
@@ -274,7 +274,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
                 handleRemoteException(e);
             }
         }
-        return null;
+        return new Parameters();
     }
 
     @Override
@@ -286,7 +286,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
                 handleRemoteException(e);
             }
         }
-        return null;
+        return new Speed();
     }
 
     @Override
@@ -298,7 +298,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
                 handleRemoteException(e);
             }
         }
-        return null;
+        return new Attitude();
     }
 
     @Override
@@ -310,7 +310,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
                 handleRemoteException(e);
             }
         }
-        return null;
+        return new Home();
     }
 
     @Override
@@ -322,7 +322,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
                 handleRemoteException(e);
             }
         }
-        return null;
+        return new Battery();
     }
 
     @Override
@@ -334,7 +334,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
                 handleRemoteException(e);
             }
         }
-        return null;
+        return new Altitude();
     }
 
     @Override
@@ -346,7 +346,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
                 handleRemoteException(e);
             }
         }
-        return null;
+        return new Mission();
     }
 
     @Override
@@ -371,7 +371,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
             }
         }
 
-        return null;
+        return new Signal();
     }
 
     @Override
@@ -383,7 +383,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
                 handleRemoteException(e);
             }
         }
-        return null;
+        return new Type();
     }
 
     private boolean registerWithDrone(){
@@ -468,7 +468,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
                 handleRemoteException(e);
             }
         }
-        return null;
+        return new GuidedState();
     }
 
     @Override
@@ -480,7 +480,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
                 handleRemoteException(e);
             }
         }
-        return null;
+        return new FollowState();
     }
 
     @Override
@@ -516,7 +516,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
                 handleRemoteException(e);
             }
         }
-        return null;
+        return new FootPrint();
     }
 
     @Override
@@ -542,7 +542,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
                 handleRemoteException(e);
             }
         }
-        return null;
+        return survey;
     }
 
     @Override
@@ -556,7 +556,7 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
                 handleRemoteException(e);
             }
         }
-        return null;
+        return item;
     }
 
     @Override
