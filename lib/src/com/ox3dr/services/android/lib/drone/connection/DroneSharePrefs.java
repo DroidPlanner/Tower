@@ -11,11 +11,14 @@ public class DroneSharePrefs implements Parcelable {
     private final String username;
     private final String password;
     private final boolean isEnabled;
+    private final boolean enableLiveUpload;
 
-    public DroneSharePrefs(String username, String password, boolean isEnabled) {
+    public DroneSharePrefs(String username, String password, boolean isEnabled,
+                           boolean enableLiveUpload) {
         this.username = username;
         this.password = password;
         this.isEnabled = isEnabled;
+        this.enableLiveUpload = enableLiveUpload;
     }
 
     public String getUsername() {
@@ -30,6 +33,10 @@ public class DroneSharePrefs implements Parcelable {
         return isEnabled;
     }
 
+    public boolean isLiveUploadEnabled() {
+        return enableLiveUpload;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -37,6 +44,7 @@ public class DroneSharePrefs implements Parcelable {
 
         DroneSharePrefs that = (DroneSharePrefs) o;
 
+        if (enableLiveUpload != that.enableLiveUpload) return false;
         if (isEnabled != that.isEnabled) return false;
         if (password != null ? !password.equals(that.password) : that.password != null)
             return false;
@@ -51,6 +59,7 @@ public class DroneSharePrefs implements Parcelable {
         int result = username != null ? username.hashCode() : 0;
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (isEnabled ? 1 : 0);
+        result = 31 * result + (enableLiveUpload ? 1 : 0);
         return result;
     }
 
@@ -60,6 +69,7 @@ public class DroneSharePrefs implements Parcelable {
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", isEnabled=" + isEnabled +
+                ", enableLiveUpload=" + enableLiveUpload +
                 '}';
     }
 
@@ -73,15 +83,17 @@ public class DroneSharePrefs implements Parcelable {
         dest.writeString(this.username);
         dest.writeString(this.password);
         dest.writeByte(isEnabled ? (byte) 1 : (byte) 0);
+        dest.writeByte(enableLiveUpload ? (byte) 1 : (byte) 0);
     }
 
     private DroneSharePrefs(Parcel in) {
         this.username = in.readString();
         this.password = in.readString();
         this.isEnabled = in.readByte() != 0;
+        this.enableLiveUpload = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<DroneSharePrefs> CREATOR = new Parcelable.Creator<DroneSharePrefs>() {
+    public static final Creator<DroneSharePrefs> CREATOR = new Creator<DroneSharePrefs>() {
         public DroneSharePrefs createFromParcel(Parcel source) {
             return new DroneSharePrefs(source);
         }
