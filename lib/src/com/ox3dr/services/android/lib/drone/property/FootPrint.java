@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.ox3dr.services.android.lib.util.MathUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,30 +14,40 @@ import java.util.List;
  */
 public class FootPrint implements Parcelable {
 
-    private LatLong center;
+    private double meanGSD;
     private List<LatLong> vertex = new ArrayList<LatLong>();
 
     public FootPrint(){}
 
-    public FootPrint(LatLong center, List<LatLong> vertex) {
-        this.center = center;
+    public FootPrint(double meanGSD, List<LatLong> vertex) {
+        this.meanGSD = meanGSD;
         this.vertex = vertex;
     }
 
-    public void setCenter(LatLong center) {
-        this.center = center;
+    public void setMeanGSD(double meanGSD) {
+        this.meanGSD = meanGSD;
     }
 
     public void setVertex(List<LatLong> vertex) {
         this.vertex = vertex;
     }
 
-    public LatLong getCenter() {
-        return center;
+    public double getMeanGSD() {
+        return meanGSD;
     }
 
-    public List<LatLong> getVertex() {
+    public List<LatLong> getVertexInGlobalFrame() {
         return vertex;
+    }
+
+    public double getLateralSize() {
+        return  (MathUtils.getDistance(vertex.get(0), vertex.get(1))
+                + MathUtils.getDistance(vertex.get(2), vertex.get(3))) / 2;
+    }
+
+    public double getLongitudinalSize() {
+        return (MathUtils.getDistance(vertex.get(0), vertex.get(3))
+                + MathUtils.getDistance(vertex.get(1), vertex.get(2))) / 2;
     }
 
     @Override
@@ -46,12 +57,12 @@ public class FootPrint implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(this.center, 0);
+        dest.writeDouble(this.meanGSD);
         dest.writeTypedList(vertex);
     }
 
     private FootPrint(Parcel in) {
-        this.center = in.readParcelable(LatLong.class.getClassLoader());
+        this.meanGSD = in.readDouble();
         in.readTypedList(vertex, LatLong.CREATOR);
     }
 
