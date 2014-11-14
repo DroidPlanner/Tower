@@ -12,11 +12,14 @@ public class ConnectionParameter implements Parcelable {
     private final int connectionType;
     private final Bundle paramsBundle;
     private final StreamRates streamRates;
+    private final DroneSharePrefs droneSharePrefs;
 
-    public ConnectionParameter(int connectionType, Bundle paramsBundle, StreamRates streamRates){
+    public ConnectionParameter(int connectionType, Bundle paramsBundle, StreamRates streamRates,
+                               DroneSharePrefs droneSharePrefs){
         this.connectionType = connectionType;
         this.paramsBundle = paramsBundle;
         this.streamRates = streamRates;
+        this.droneSharePrefs = droneSharePrefs;
     }
 
     public int getConnectionType() {
@@ -29,6 +32,10 @@ public class ConnectionParameter implements Parcelable {
 
     public StreamRates getStreamRates() {
         return streamRates;
+    }
+
+    public DroneSharePrefs getDroneSharePrefs() {
+        return droneSharePrefs;
     }
 
     @Override
@@ -51,10 +58,10 @@ public class ConnectionParameter implements Parcelable {
                 "connectionType=" + connectionType +
                 ", paramsBundle=[";
 
-        if(paramsBundle != null && !paramsBundle.isEmpty()) {
+        if (paramsBundle != null && !paramsBundle.isEmpty()) {
             boolean isFirst = true;
-            for(String key: paramsBundle.keySet()){
-                if(isFirst)
+            for (String key : paramsBundle.keySet()) {
+                if (isFirst)
                     isFirst = false;
                 else
                     toString += ", ";
@@ -63,7 +70,8 @@ public class ConnectionParameter implements Parcelable {
             }
         }
 
-        toString += "], streamRates=[" + this.streamRates.toString() + "]}";
+        toString += "], streamRates=[" + this.streamRates.toString()
+                + "], droneSharePrefs=[" + this.droneSharePrefs + "]}";
         return toString;
     }
 
@@ -77,12 +85,14 @@ public class ConnectionParameter implements Parcelable {
         dest.writeInt(this.connectionType);
         dest.writeBundle(paramsBundle);
         dest.writeParcelable(this.streamRates, 0);
+        dest.writeParcelable(this.droneSharePrefs, 0);
     }
 
     private ConnectionParameter(Parcel in) {
         this.connectionType = in.readInt();
         paramsBundle = in.readBundle();
         this.streamRates = in.readParcelable(StreamRates.class.getClassLoader());
+        this.droneSharePrefs = in.readParcelable(DroneSharePrefs.class.getClassLoader());
     }
 
     public static final Creator<ConnectionParameter> CREATOR = new Creator<ConnectionParameter>() {
