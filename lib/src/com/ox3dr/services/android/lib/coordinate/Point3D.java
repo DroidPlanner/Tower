@@ -43,7 +43,7 @@ public class Point3D implements Parcelable {
         this.z = in.readDouble();
     }
 
-    public static final Parcelable.Creator<Point3D> CREATOR = new Parcelable.Creator<Point3D>() {
+    public static final Creator<Point3D> CREATOR = new Creator<Point3D>() {
         public Point3D createFromParcel(Parcel source) {
             return new Point3D(source);
         }
