@@ -296,8 +296,7 @@ public class TTSNotificationProvider implements OnInitListener,
 				scheduleWatchdog();
 				speak("Connected");
 			} else if (Event.EVENT_HEARTBEAT_TIMEOUT.equals(action)) {
-				if (droneState != null && !droneState.isCalibrating()
-						&& mAppPrefs.getWarningOnLostOrRestoredSignal()) {
+				if (mAppPrefs.getWarningOnLostOrRestoredSignal()) {
 					speak("Data link lost, check connection.");
 					handler.removeCallbacks(watchdogCallback);
 				}
@@ -404,6 +403,7 @@ public class TTSNotificationProvider implements OnInitListener,
 	public void onTerminate() {
 		if (tts != null) {
 			tts.shutdown();
+            tts = null;
 		}
 
         LocalBroadcastManager.getInstance(context).unregisterReceiver(eventReceiver);

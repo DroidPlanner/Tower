@@ -169,7 +169,8 @@ public class MissionItemProxy {
 			altitudeView.setText(altitude);
 
 		} else if (mMissionItem instanceof Takeoff) {
-			altitudeView.setText(String.valueOf(((Takeoff) mMissionItem).getTakeoffAltitude()));
+			altitudeView.setText(UnitManager.getUnitProvider().distanceToString(((Takeoff) mMissionItem)
+                    .getTakeoffAltitude()));
 		} else {
 			altitudeView.setText("");
 		}
