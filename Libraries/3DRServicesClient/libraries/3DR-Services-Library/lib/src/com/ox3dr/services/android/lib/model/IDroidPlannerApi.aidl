@@ -130,6 +130,11 @@ interface IDroidPlannerApi {
         FootPrint[] getCameraFootPrints();
 
         /**
+        *
+        */
+        FootPrint getCurrentFieldOfView();
+
+        /**
         * Builds the given survey mission item.
         */
         Survey buildSurvey(in Survey survey);

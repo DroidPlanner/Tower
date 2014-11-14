@@ -524,6 +524,18 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
     }
 
     @Override
+    public FootPrint getCurrentFieldOfView()  {
+        if(isApiValid()){
+            try {
+                return dpApi.getCurrentFieldOfView();
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+        return new FootPrint();
+    }
+
+    @Override
     public Survey buildSurvey(Survey survey) {
         if(isApiValid()){
             try {
