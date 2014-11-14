@@ -278,6 +278,11 @@ public class DroidPlannerPrefs {
 		return prefs.getBoolean(context.getString(R.string.pref_ui_language_english_key),
 				DEFAULT_PREF_UI_LANGUAGE);
 	}
+	
+	public boolean isRealtimeFootprintsEnabled() {
+		return prefs.getBoolean(context.getString(R.string.pref_ui_realtime_footprints_key),
+				false);
+	}
 
 	public String getMapProviderName() {
 		return prefs.getString(context.getString(R.string.pref_maps_providers_key), null);

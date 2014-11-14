@@ -48,6 +48,12 @@
                     android:key="@string/pref_map_provider_settings_key"
                     android:summary="@string/pref_map_provider_settings_summary"
                     android:title="@string/pref_map_provider_settings_title" />
+                
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="@string/pref_ui_realtime_footprints_key"
+                    android:summary="@string/pref_ui_realtime_footprints_summary"
+                    android:title="@string/pref_ui_realtime_footprints_title" />
             </PreferenceCategory>
             <PreferenceCategory android:title="@string/pref_title_notifications" >
                 <CheckBoxPreference

@@ -382,5 +382,7 @@ public interface DPMap {
      * @param skip if it should skip further events
      */
     public void skipMarkerClickEvents(boolean skip);
+
+	public void updateRealTimeFootprint(Footprint footprint);
     
 }
