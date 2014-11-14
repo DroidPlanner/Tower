@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.ox3dr.services.android.lib.model.IDroidPlannerServices;
 import com.ox3dr.services.android.lib.model.ITLogApi;
@@ -20,6 +21,8 @@ import java.util.Set;
 public class ServiceManager {
 
     private static final String TAG = ServiceManager.class.getSimpleName();
+
+    private final Intent serviceIntent = new Intent(IDroidPlannerServices.class.getName());
 
     private final ServiceConnection ox3drServicesConnection = new ServiceConnection() {
 
@@ -121,8 +124,12 @@ public class ServiceManager {
     }
 
     protected void connect(){
-        context.bindService(new Intent(IDroidPlannerServices.class.getName()),
-                ox3drServicesConnection, Context.BIND_AUTO_CREATE);
+        if(!is3DRServicesInstalled()) {
+            context.bindService(serviceIntent, ox3drServicesConnection, Context.BIND_AUTO_CREATE);
+        }
+        else{
+            promptFor3DRServicesInstall();
+        }
     }
 
 	protected void disconnect() {
@@ -132,4 +139,12 @@ public class ServiceManager {
 
 		notifyServiceDisconnected();
 	}
+
+    private boolean is3DRServicesInstalled(){
+        return context.getPackageManager().resolveService(serviceIntent, 0) != null;
+    }
+
+    private void promptFor3DRServicesInstall(){
+        Toast.makeText(context, "Please install 3DR Services.", Toast.LENGTH_LONG).show();
+    }
 }
