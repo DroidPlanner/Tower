@@ -16,6 +16,7 @@ import com.o3dr.android.client.ServiceListener;
 import com.o3dr.android.client.ServiceManager;
 import com.ox3dr.services.android.lib.drone.connection.ConnectionParameter;
 import com.ox3dr.services.android.lib.drone.connection.ConnectionType;
+import com.ox3dr.services.android.lib.drone.connection.DroneSharePrefs;
 import com.ox3dr.services.android.lib.drone.connection.StreamRates;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.model.ITLogApi;
@@ -66,6 +67,9 @@ public class DroidPlannerApp extends Application implements ServiceListener {
 			}
             else if (Event.EVENT_CONNECTED.equals(action)) {
                 handler.removeCallbacks(disconnectionTask);
+                if(notificationHandler == null) {
+                    notificationHandler = new NotificationHandler(getApplicationContext(), serviceMgr.getDrone());
+                }
             }
             else if (Event.EVENT_DISCONNECTED.equals(action)) {
                 shouldWeTerminate();
@@ -242,23 +246,29 @@ public class DroidPlannerApp extends Application implements ServiceListener {
         final int connectionType = dpPrefs.getConnectionParameterType();
         final StreamRates rates = dpPrefs.getStreamRates();
         Bundle extraParams = new Bundle();
+        final DroneSharePrefs droneSharePrefs = new DroneSharePrefs(dpPrefs.getDroneshareLogin(),
+                dpPrefs.getDronesharePassword(), dpPrefs.getDroneshareEnabled(),
+                dpPrefs.getLiveUploadEnabled());
 
         ConnectionParameter connParams;
         switch (connectionType) {
             case ConnectionType.TYPE_USB:
                 extraParams.putInt(ConnectionType.EXTRA_USB_BAUD_RATE, dpPrefs.getUsbBaudRate());
-                connParams = new ConnectionParameter(connectionType, extraParams, rates);
+                connParams = new ConnectionParameter(connectionType, extraParams, rates,
+                        droneSharePrefs);
                 break;
 
             case ConnectionType.TYPE_UDP:
                 extraParams.putInt(ConnectionType.EXTRA_UDP_SERVER_PORT, dpPrefs.getUdpServerPort());
-                connParams = new ConnectionParameter(connectionType, extraParams, rates);
+                connParams = new ConnectionParameter(connectionType, extraParams, rates,
+                        droneSharePrefs);
                 break;
 
             case ConnectionType.TYPE_TCP:
                 extraParams.putString(ConnectionType.EXTRA_TCP_SERVER_IP, dpPrefs.getTcpServerIp());
                 extraParams.putInt(ConnectionType.EXTRA_TCP_SERVER_PORT, dpPrefs.getTcpServerPort());
-                connParams = new ConnectionParameter(connectionType, extraParams, rates);
+                connParams = new ConnectionParameter(connectionType, extraParams, rates,
+                        droneSharePrefs);
                 break;
 
             case ConnectionType.TYPE_BLUETOOTH:
@@ -271,7 +281,8 @@ public class DroidPlannerApp extends Application implements ServiceListener {
 
                 } else {
                     extraParams.putString(ConnectionType.EXTRA_BLUETOOTH_ADDRESS, btAddress);
-                    connParams = new ConnectionParameter(connectionType, extraParams, rates);
+                    connParams = new ConnectionParameter(connectionType, extraParams, rates,
+                            droneSharePrefs);
                 }
                 break;
 

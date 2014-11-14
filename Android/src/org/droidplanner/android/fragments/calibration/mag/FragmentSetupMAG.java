@@ -15,12 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.coordinate.Point3D;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.event.Extra;
 
 import org.droidplanner.R;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
+import org.droidplanner.android.utils.Point3D;
 import org.droidplanner.android.widgets.scatterplot.ScatterPlot;
 
 import java.util.ArrayList;
@@ -59,17 +59,22 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 				buttonStep.setEnabled(false);
 			}
             else if(Event.EVENT_CALIBRATION_MAG_STARTED.equals(action)){
-                inProgressPoints = intent.getParcelableArrayListExtra(Extra
-                        .EXTRA_CALIBRATION_MAG_POINTS);
+                double[] pointsX = intent.getDoubleArrayExtra(Extra.EXTRA_CALIBRATION_MAG_POINTS_X);
+                double[] pointsY = intent.getDoubleArrayExtra(Extra.EXTRA_CALIBRATION_MAG_POINTS_Y);
+                double[] pointsZ = intent.getDoubleArrayExtra(Extra.EXTRA_CALIBRATION_MAG_POINTS_Z);
+
+                inProgressPoints = Point3D.fromDoubleArrays(pointsX, pointsY, pointsZ);
 
                 setCalibrationStatus(CALIBRATION_IN_PROGRESS);
             }
             else if(Event.EVENT_CALIBRATION_MAG_ESTIMATION.equals(action)){
+                double[] pointsX = intent.getDoubleArrayExtra(Extra.EXTRA_CALIBRATION_MAG_POINTS_X);
+                double[] pointsY = intent.getDoubleArrayExtra(Extra.EXTRA_CALIBRATION_MAG_POINTS_Y);
+                double[] pointsZ = intent.getDoubleArrayExtra(Extra.EXTRA_CALIBRATION_MAG_POINTS_Z);
 
-                inProgressPoints = intent.getParcelableArrayListExtra(Extra
-                        .EXTRA_CALIBRATION_MAG_POINTS);
+                inProgressPoints = Point3D.fromDoubleArrays(pointsX, pointsY, pointsZ);
 
-                final int pointsCount = inProgressPoints == null ? 0 : inProgressPoints.size();
+                final int pointsCount = inProgressPoints == null ? 0 : inProgressPoints.length;
                 if (pointsCount == 0) {
                     return;
                 }
@@ -94,7 +99,7 @@ public class FragmentSetupMAG extends ApiListenerFragment {
                 }
 
                 // Grab the last point
-                final Point3D point = inProgressPoints.get(pointsCount - 1);
+                final Point3D point = inProgressPoints[pointsCount - 1];
 
                 plot1.addData((float) point.x);
                 plot1.addData((float) point.z);
@@ -139,8 +144,8 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 
 	private int calibrationStatus = CALIBRATION_IDLE;
 
-    private List<Point3D> startPoints;
-    private ArrayList<Point3D> inProgressPoints;
+    private Point3D[] startPoints;
+    private Point3D[] inProgressPoints;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -192,9 +197,9 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 			setCalibrationStatus(calibrationStatus);
 
 			if (calibrationStatus == CALIBRATION_IN_PROGRESS) {
-				final ArrayList<Point3D> loadedPoints = savedInstanceState
-						.getParcelableArrayList(EXTRA_CALIBRATION_POINTS);
-				if (loadedPoints != null && !loadedPoints.isEmpty()) {
+				final Point3D[] loadedPoints = (Point3D[]) savedInstanceState
+						.getParcelableArray(EXTRA_CALIBRATION_POINTS);
+				if (loadedPoints != null && loadedPoints.length > 0) {
 					startPoints = loadedPoints;
 
 					for (Point3D point : loadedPoints) {
@@ -222,8 +227,8 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 
 		outState.putInt(EXTRA_CALIBRATION_STATUS, calibrationStatus);
 
-		if (getDrone().isConnected() && inProgressPoints != null && !inProgressPoints.isEmpty()){
-				outState.putParcelableArrayList(EXTRA_CALIBRATION_POINTS, inProgressPoints);
+		if (getDrone().isConnected() && inProgressPoints != null && inProgressPoints.length > 0){
+				outState.putParcelableArray(EXTRA_CALIBRATION_POINTS, inProgressPoints);
 		}
 	}
 
@@ -292,7 +297,8 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 	public void startCalibration() {
 		Drone dpApi = getDrone();
 		if (dpApi.isConnected()) {
-            dpApi.startMagnetometerCalibration(startPoints);
+            double[][] result = Point3D.fromPoint3Ds(startPoints);
+            dpApi.startMagnetometerCalibration(result[0], result[1], result[2]);
 			startPoints = null;
 		}
 	}

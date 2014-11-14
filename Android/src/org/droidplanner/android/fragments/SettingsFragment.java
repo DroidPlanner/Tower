@@ -241,55 +241,7 @@ public class SettingsFragment extends PreferenceFragment implements
 
 		updateMavlinkVersionPreference(null);
 		setupPebblePreference();
-		setDronesharePreferencesListeners();
 		setupConnectionPreferences();
-	}
-
-	/**
-	 * When a droneshare preference is updated, the listener will kick start the
-	 * droneshare uploader service to see if any action is needed.
-	 */
-	private void setDronesharePreferencesListeners() {
-		final Context context = getActivity().getApplicationContext();
-
-		CheckBoxPreference dshareTogglePref = (CheckBoxPreference) findPreference(getString(R.string.pref_dshare_enabled_key));
-		if (dshareTogglePref != null) {
-			dshareTogglePref
-					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-						@Override
-						public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            dpApp.getDrone().enableDroneShare(dpPrefs.getDroneshareLogin(),
-                                    dpPrefs.getDronesharePassword(), (Boolean) newValue);
-							return true;
-						}
-					});
-		}
-
-		EditTextPreference dshareUsernamePref = (EditTextPreference) findPreference(getString(R.string.pref_dshare_username_key));
-		if (dshareUsernamePref != null) {
-			dshareUsernamePref
-					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-						@Override
-						public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            dpApp.getDrone().enableDroneShare(newValue.toString(),
-                                    dpPrefs.getDronesharePassword(), dpPrefs.getDroneshareEnabled());
-							return true;
-						}
-					});
-		}
-
-		EditTextPreference dsharePasswordPref = (EditTextPreference) findPreference(getString(R.string.pref_dshare_password_key));
-		if (dsharePasswordPref != null) {
-			dsharePasswordPref
-					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-						@Override
-						public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            dpApp.getDrone().enableDroneShare(dpPrefs.getDroneshareLogin(),
-                                    newValue.toString(), dpPrefs.getDroneshareEnabled());
-							return true;
-						}
-					});
-		}
 	}
 
 	private void setupConnectionPreferences() {
