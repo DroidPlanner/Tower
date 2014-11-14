@@ -2,6 +2,9 @@ package com.ox3dr.services.android.lib.drone.connection;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by fhuya on 11/14/14.
@@ -35,6 +38,10 @@ public class DroneSharePrefs implements Parcelable {
 
     public boolean isLiveUploadEnabled() {
         return enableLiveUpload;
+    }
+
+    public boolean areLoginCredentialsSet(){
+        return !TextUtils.isEmpty(username) && !TextUtils.isEmpty(password);
     }
 
     @Override
