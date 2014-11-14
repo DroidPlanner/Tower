@@ -3,10 +3,12 @@ package com.ox3dr.services.android.lib.coordinate;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Created by fhuya on 11/4/14.
  */
-public class Point3D implements Parcelable {
+public class Point3D implements Parcelable, Serializable {
 
     public final double x;
     public final double y;
