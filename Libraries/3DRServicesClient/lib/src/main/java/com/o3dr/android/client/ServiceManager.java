@@ -1,9 +1,12 @@
 package com.o3dr.android.client;
 
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
@@ -124,7 +127,7 @@ public class ServiceManager {
     }
 
     protected void connect(){
-        if(!is3DRServicesInstalled()) {
+        if(is3DRServicesInstalled()) {
             context.bindService(serviceIntent, ox3drServicesConnection, Context.BIND_AUTO_CREATE);
         }
         else{
@@ -145,6 +148,24 @@ public class ServiceManager {
     }
 
     private void promptFor3DRServicesInstall(){
-        Toast.makeText(context, "Please install 3DR Services.", Toast.LENGTH_LONG).show();
+        AlertDialog prompt = new AlertDialog.Builder(context)
+                .setTitle("Install 3DR Services!")
+                .setMessage("3DR Services must be installed on the device to use this app.")
+                .setPositiveButton("Install", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        context.startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("market://details?id=org.droidplanner.services.android")));
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .create();
+
+        prompt.show();
     }
 }
