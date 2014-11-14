@@ -173,8 +173,10 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 		} else
 			data.addString(KEY_FOLLOW_TYPE, "none");
 
-		String bat = "Bat:" + Double.toString(roundToOneDecimal(drone.getBattery().getBatteryVoltage()))
-				+ "V";
+        Double battVoltage = drone.getBattery().getBatteryVoltage();
+        if(battVoltage != null)
+            battVoltage = 0.0;
+		String bat = "Bat:" + Double.toString(roundToOneDecimal(battVoltage))	+ "V";
 		String speed = "Speed: " + Double.toString(roundToOneDecimal(
                 drone.getSpeed().getAirSpeed()));
 		String altitude = "Alt: "
