@@ -80,15 +80,16 @@ public class DroidPlannerApp extends Application implements ServiceListener {
 
     @Override
     public void onServiceConnected() {
-        notificationHandler = new NotificationHandler(getApplicationContext(), serviceMgr.getDrone());
-        lbm.registerReceiver(broadcastReceiver, droneEventFilter);
+        if(notificationHandler == null) {
+            notificationHandler = new NotificationHandler(getApplicationContext(), serviceMgr.getDrone());
+        }
+
         notifyApiConnected();
     }
 
     @Override
     public void onServiceDisconnected() {
         notifyApiDisconnected();
-        notificationHandler.terminate();
         lbm.unregisterReceiver(broadcastReceiver);
     }
 
@@ -102,6 +103,11 @@ public class DroidPlannerApp extends Application implements ServiceListener {
 		@Override
 		public void run() {
             serviceMgr.disconnect(DroidPlannerApp.this);
+
+            if(notificationHandler != null) {
+                notificationHandler.terminate();
+                notificationHandler = null;
+            }
 		}
 	};
 
@@ -132,6 +138,7 @@ public class DroidPlannerApp extends Application implements ServiceListener {
 
         dpPrefs = new DroidPlannerPrefs(context);
         lbm = LocalBroadcastManager.getInstance(context);
+        lbm.registerReceiver(broadcastReceiver, droneEventFilter);
 
         serviceMgr = new ServiceManager(context);
         missionProxy = new MissionProxy(context, serviceMgr.getDrone());
