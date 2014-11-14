@@ -11,7 +11,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.ox3dr.services.android.lib.coordinate.LatLong;
-import com.ox3dr.services.android.lib.coordinate.Point3D;
 import com.ox3dr.services.android.lib.drone.connection.ConnectionParameter;
 import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.mission.Mission;
@@ -641,10 +640,11 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
     }
 
     @Override
-    public void startMagnetometerCalibration(List<Point3D> startPoints) {
+    public void startMagnetometerCalibration(double[] startPointsX, double[] startPointsY,
+                                             double[] startPointsZ) {
         if(isApiValid()){
             try {
-                dpApi.startMagnetometerCalibration(startPoints);
+                dpApi.startMagnetometerCalibration(startPointsX, startPointsY, startPointsZ);
             } catch (RemoteException e) {
                 handleRemoteException(e);
             }
@@ -759,17 +759,6 @@ public class Drone implements com.ox3dr.services.android.lib.model.IDroidPlanner
         if(isApiValid()){
             try {
                 dpApi.disableFollowMe();
-            } catch (RemoteException e) {
-                handleRemoteException(e);
-            }
-        }
-    }
-
-    @Override
-    public void enableDroneShare(String username, String password, boolean isEnabled) {
-        if(isApiValid()){
-            try {
-                dpApi.enableDroneShare(username, password, isEnabled);
             } catch (RemoteException e) {
                 handleRemoteException(e);
             }

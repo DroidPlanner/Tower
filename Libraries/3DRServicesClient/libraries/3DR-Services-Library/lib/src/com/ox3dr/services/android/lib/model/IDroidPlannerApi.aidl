@@ -13,7 +13,6 @@ import com.ox3dr.services.android.lib.drone.property.State;
 import com.ox3dr.services.android.lib.drone.property.VehicleMode;
 import com.ox3dr.services.android.lib.drone.property.Type;
 import com.ox3dr.services.android.lib.drone.property.FootPrint;
-import com.ox3dr.services.android.lib.coordinate.Point3D;
 import com.ox3dr.services.android.lib.drone.property.Signal;
 import com.ox3dr.services.android.lib.drone.property.GuidedState;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
@@ -201,7 +200,7 @@ interface IDroidPlannerApi {
         * Start the magnetometer calibration process.
         * @param startPoints points to start the calibration with.
         */
-        oneway void startMagnetometerCalibration(in List<Point3D> startPoints);
+        oneway void startMagnetometerCalibration(in double[] pointsX, in double[] pointsY, in double[] pointsZ);
 
         /**
         * Stop the magnetometer calibration is one if running.
@@ -261,11 +260,6 @@ interface IDroidPlannerApi {
         * Disables follow me is enabled.
         */
         oneway void disableFollowMe();
-
-        /**
-        * Enables drone-share upload for the data of the connected drone.
-        */
-        oneway void enableDroneShare(String username, String password, boolean isEnabled);
 
         oneway void triggerCamera();
 
