@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
@@ -14,6 +15,7 @@ import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -47,6 +49,7 @@ public abstract class DroneMap extends ApiListenerFragment {
         eventFilter.addAction(Event.EVENT_HEARTBEAT_TIMEOUT);
         eventFilter.addAction(Event.EVENT_DISCONNECTED);
         eventFilter.addAction(Event.EVENT_FOOTPRINT);
+        eventFilter.addAction(Event.EVENT_ATTITUDE);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -81,6 +84,14 @@ public abstract class DroneMap extends ApiListenerFragment {
             }
             else if(Event.EVENT_FOOTPRINT.equals(action)) {
                 mMapFragment.addCameraFootprint(drone.getLastCameraFootPrint());
+            }
+            else if(Event.EVENT_ATTITUDE.equals(action)){
+                if (mAppPrefs.isRealtimeFootprintsEnabled()) {
+                    if (drone.getGps().isValid()) {
+                        mMapFragment.updateRealTimeFootprint(drone.getCurrentFieldOfView());
+                    }
+
+                }
             }
         }
     };
@@ -140,6 +151,8 @@ public abstract class DroneMap extends ApiListenerFragment {
 
 	protected DPMap mMapFragment;
 
+    protected DroidPlannerPrefs mAppPrefs;
+
 	private GraphicHome home;
 	public GraphicDrone graphicDrone;
 	public GraphicGuided guided;
@@ -154,6 +167,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
 		final View view = inflater.inflate(R.layout.fragment_drone_map, viewGroup, false);
+        mAppPrefs = new DroidPlannerPrefs(context);
         updateMapFragment();
         return view;
 	}

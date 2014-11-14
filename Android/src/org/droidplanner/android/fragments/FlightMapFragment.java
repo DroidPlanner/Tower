@@ -57,15 +57,11 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
         }
     };
 
-	private DroidPlannerPrefs mAppPrefs;
-
 	private boolean guidedModeOnLongPress;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
-
-		mAppPrefs = new DroidPlannerPrefs(context);
 
 		mMapFragment.setOnMapLongClickListener(this);
 		mMapFragment.setOnMarkerDragListener(this);
