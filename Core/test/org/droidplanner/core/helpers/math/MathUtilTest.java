@@ -18,5 +18,16 @@ public class MathUtilTest extends TestCase {
 	public void testIfCanCreateObject() {
 		assertNotNull(new MathUtil());
 	}
+	
+	public void testDCMmatrix(){
+		double [][] dcm = MathUtil.dcmFromEuler(0,0,0);
+		double [][] expected = new double[][] {{1,0,0},{0,1,0},{0,0,1}};
+		
+		for (int i = 0; i < dcm.length; i++) {
+			for (int j = 0; j < dcm.length; j++) {
+				assertEquals(expected[i][j], dcm[i][j],1e-10);
+			}
+		}
+	}
 
 }

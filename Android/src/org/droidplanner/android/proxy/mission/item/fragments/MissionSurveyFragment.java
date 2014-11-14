@@ -12,9 +12,9 @@ import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.survey.CameraInfo;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.model.Drone;
+import org.droidplanner.core.survey.CameraInfo;
 
 import android.content.Context;
 import android.graphics.Color;

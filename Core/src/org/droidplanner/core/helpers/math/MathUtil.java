@@ -37,4 +37,32 @@ public class MathUtil {
 	public static Length hypot(Length altDelta, Length distDelta) {
 		return new Length(Math.hypot(altDelta.valueInMeters(), distDelta.valueInMeters()));
 	}
+	
+	/** 
+	 * Create a rotation matrix given some euler angles
+	 * this is based on http://gentlenav.googlecode.com/files/EulerAngles.pdf 
+	 */
+	public static double [][] dcmFromEuler(double roll, double pitch, double yaw)
+	{
+		double dcm[][] = new double[3][3];
+		
+	    double cp = Math.cos(pitch);
+	    double sp = Math.sin(pitch);
+	    double sr = Math.sin(roll);
+	    double cr = Math.cos(roll);
+	    double sy = Math.sin(yaw);
+	    double cy = Math.cos(yaw);
+
+	    dcm[0][0] = cp * cy;
+	    dcm[1][0] = (sr * sp * cy) - (cr * sy);
+	    dcm[2][0] = (cr * sp * cy) + (sr * sy);
+	    dcm[0][1] = cp * sy;
+	    dcm[1][1] = (sr * sp * sy) + (cr * cy);
+	    dcm[2][1] = (cr * sp * sy) - (sr * cy);
+	    dcm[0][2] = -sp;
+	    dcm[1][2] = sr * cp;
+	    dcm[2][2] = cr * cp;
+	    
+	    return dcm;
+	}
 }

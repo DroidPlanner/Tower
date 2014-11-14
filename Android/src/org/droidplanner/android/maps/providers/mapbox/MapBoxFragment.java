@@ -19,6 +19,7 @@ import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.model.Drone;
+import org.droidplanner.core.survey.Footprint;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -606,6 +607,18 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
 	@Override
 	public void updatePolygonsPaths(List<List<Coord2D>> paths) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addCameraFootprint(Footprint footprintToBeDraw) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateRealTimeFootprint(Footprint footprint) {
 		// TODO Auto-generated method stub
 		
 	}
