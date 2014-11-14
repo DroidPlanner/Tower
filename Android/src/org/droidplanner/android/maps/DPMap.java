@@ -383,6 +383,6 @@ public interface DPMap {
      */
     public void skipMarkerClickEvents(boolean skip);
 
-	public void updateRealTimeFootprint(Footprint footprint);
+	public void updateRealTimeFootprint(FootPrint footprint);
     
 }
