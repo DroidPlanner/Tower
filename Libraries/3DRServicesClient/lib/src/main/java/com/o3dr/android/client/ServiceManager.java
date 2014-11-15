@@ -110,7 +110,10 @@ public class ServiceManager {
             listener.onServiceConnected();
         }
         else {
-            connect();
+            if(is3DRServicesInstalled())
+                connect();
+            else
+                promptFor3DRServicesInstall();
         }
 
         serviceListeners.add(listener);
@@ -130,9 +133,6 @@ public class ServiceManager {
     protected void connect(){
         if(is3DRServicesInstalled()) {
             context.bindService(serviceIntent, ox3drServicesConnection, Context.BIND_AUTO_CREATE);
-        }
-        else{
-            promptFor3DRServicesInstall();
         }
     }
 
