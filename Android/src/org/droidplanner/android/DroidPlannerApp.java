@@ -46,9 +46,6 @@ public class DroidPlannerApp extends Application implements ServiceListener {
     static {
         droneEventFilter.addAction(Event.EVENT_CONNECTED);
         droneEventFilter.addAction(Event.EVENT_DISCONNECTED);
-        droneEventFilter.addAction(Event.EVENT_MISSION_DRONIE_CREATED);
-        droneEventFilter.addAction(Event.EVENT_MISSION_UPDATE);
-        droneEventFilter.addAction(Event.EVENT_MISSION_RECEIVED);
     }
 
 	private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -74,11 +71,6 @@ public class DroidPlannerApp extends Application implements ServiceListener {
             else if (Event.EVENT_DISCONNECTED.equals(action)) {
                 shouldWeTerminate();
             }
-            else if(Event.EVENT_MISSION_DRONIE_CREATED.equals(action)
-                    || Event.EVENT_MISSION_UPDATE.equals(action)
-                    || Event.EVENT_MISSION_RECEIVED.equals(action)){
-                missionProxy.load(getDrone().getMission());
-            }
 		}
 	};
 
@@ -94,7 +86,6 @@ public class DroidPlannerApp extends Application implements ServiceListener {
     @Override
     public void onServiceDisconnected() {
         notifyApiDisconnected();
-        lbm.unregisterReceiver(broadcastReceiver);
     }
 
     public interface ApiListener {
@@ -133,7 +124,6 @@ public class DroidPlannerApp extends Application implements ServiceListener {
     private MissionProxy missionProxy;
     private DroidPlannerPrefs dpPrefs;
 	private NotificationHandler notificationHandler;
-    private LocalBroadcastManager lbm;
 
 	@Override
 	public void onCreate() {
@@ -141,8 +131,7 @@ public class DroidPlannerApp extends Application implements ServiceListener {
 		final Context context = getApplicationContext();
 
         dpPrefs = new DroidPlannerPrefs(context);
-        lbm = LocalBroadcastManager.getInstance(context);
-        lbm.registerReceiver(broadcastReceiver, droneEventFilter);
+        LocalBroadcastManager.getInstance(context).registerReceiver(broadcastReceiver, droneEventFilter);
 
         serviceMgr = new ServiceManager(context);
         missionProxy = new MissionProxy(context, serviceMgr.getDrone());

@@ -1,7 +1,9 @@
 package org.droidplanner.android.proxy.mission;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Pair;
 
@@ -18,6 +20,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
 import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.coordinate.LatLongAlt;
+import com.ox3dr.services.android.lib.drone.event.Event;
 import com.ox3dr.services.android.lib.drone.mission.Mission;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem.SpatialItem;
@@ -44,6 +47,25 @@ public class MissionProxy implements DPMap.PathSource {
 
     private static final double DEFAULT_ALTITUDE = 20; //meters
 
+    private static final IntentFilter eventFilter = new IntentFilter();
+    static {
+        eventFilter.addAction(Event.EVENT_MISSION_DRONIE_CREATED);
+        eventFilter.addAction(Event.EVENT_MISSION_UPDATE);
+        eventFilter.addAction(Event.EVENT_MISSION_RECEIVED);
+    }
+
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(Event.EVENT_MISSION_DRONIE_CREATED.equals(action)
+                    || Event.EVENT_MISSION_UPDATE.equals(action)
+                    || Event.EVENT_MISSION_RECEIVED.equals(action)){
+                load(drone.getMission());
+            }
+        }
+    };
+
 	/**
 	 * Stores all the mission item renders for this mission render.
 	 */
@@ -55,8 +77,9 @@ public class MissionProxy implements DPMap.PathSource {
 	public MissionSelection selection = new MissionSelection();
 
 	public MissionProxy(Context context, Drone drone) {
-        lbm = LocalBroadcastManager.getInstance(context);
         this.drone = drone;
+        lbm = LocalBroadcastManager.getInstance(context);
+        lbm.registerReceiver(eventReceiver, eventFilter);
 	}
 
     public void notifyMissionUpdate(){
