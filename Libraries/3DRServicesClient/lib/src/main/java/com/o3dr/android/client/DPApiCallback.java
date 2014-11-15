@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.ox3dr.services.android.lib.drone.connection.ConnectionResult;
-import com.ox3dr.services.android.lib.model.IDroidPlannerApiCallback;
+import com.o3dr.services.android.lib.drone.connection.ConnectionResult;
+import com.o3dr.services.android.lib.model.IDroidPlannerApiCallback;
 
 /**
  * Created by fhuya on 10/29/14.
