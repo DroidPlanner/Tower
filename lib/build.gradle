@@ -5,7 +5,7 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "com.ox3dr.services.android.lib"
+        applicationId "com.o3dr.services.android.lib"
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 2
