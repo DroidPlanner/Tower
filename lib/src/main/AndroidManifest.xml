@@ -4,7 +4,7 @@
     <application>
         <activity
             android:name=".utils.InstallServiceDialog"
-            android:theme="@style/Theme.Base.AppCompat.Dialog.Light.FixedSize"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
             android:noHistory="true"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"/>
