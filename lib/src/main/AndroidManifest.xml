@@ -1,6 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.o3dr.android.client">
 
-
+    <application>
+        <activity
+            android:name=".utils.InstallServiceDialog"
+            android:theme="@style/Theme.Base.AppCompat.Dialog.Light.FixedSize"
+            android:noHistory="true"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"/>
+    </application>
 
 </manifest>
