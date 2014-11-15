@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
-import com.ox3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
 
 import java.io.Serializable;
 import java.util.ArrayList;

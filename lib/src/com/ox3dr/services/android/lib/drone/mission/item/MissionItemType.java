@@ -8,7 +8,6 @@ import com.ox3dr.services.android.lib.drone.mission.item.command.SetServo;
 import com.ox3dr.services.android.lib.drone.mission.item.command.Takeoff;
 import com.ox3dr.services.android.lib.drone.mission.item.command.YawCondition;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
-import com.ox3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.Circle;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.Land;
 import com.ox3dr.services.android.lib.drone.mission.item.spatial.RegionOfInterest;

@@ -19,10 +19,11 @@ import com.ox3dr.services.android.lib.coordinate.LatLong;
 import com.ox3dr.services.android.lib.gcs.follow.FollowState;
 import com.ox3dr.services.android.lib.gcs.follow.FollowType;
 import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
-import com.ox3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
+import com.ox3dr.services.android.lib.model.IDroidPlannerApiCallback;
+import com.ox3dr.services.android.lib.drone.connection.ConnectionParameter;
 
 /**
 * Interface used to access the drone properties.
@@ -77,11 +78,6 @@ interface IDroidPlannerApi {
         * Retrieves the mission property of the connected drone.
         */
         Mission getMission();
-
-        /**
-        * Process the given set of mission items.
-        */
-        MissionItemMessage[] processMissionItems(in MissionItem[] missionItems);
 
         /**
         * Retrieves the signal level between the connected drone and the GCS.
@@ -154,7 +150,7 @@ interface IDroidPlannerApi {
         /**
         * Asynchronous call used to establish connection with the device.
         */
-        oneway void connect();
+        oneway void connect(in ConnectionParameter params, IDroidPlannerApiCallback callback);
 
         /**
         * Asynchronous call used to break connection with the device.
@@ -177,13 +173,6 @@ interface IDroidPlannerApi {
         * @param pushToDrone if true, upload the mission to the connected device.
         */
         oneway void setMission(in Mission mission, boolean pushToDrone);
-
-        /**
-        * Update the mission items for the drone model in memory.
-        * @param missionItems Set of missionItemMessage
-        * @param pushToDrone if true, upload the mission to the connected device.
-        */
-        oneway void setRawMissionItems(in MissionItemMessage[] missionItems, boolean pushToDrone);
 
         /**
         * Create a dronie mission, and upload it to the connected drone.
