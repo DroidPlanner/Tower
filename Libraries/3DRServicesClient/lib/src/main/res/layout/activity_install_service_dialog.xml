@@ -41,6 +41,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@android:string/cancel"
+            android:textAllCaps="true"
             android:layout_weight="1"
             android:gravity="center"/>
 
@@ -51,6 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/install_service_dialog_install_button"
+            android:textAllCaps="true"
             android:gravity="center"/>
         </LinearLayout>
 
