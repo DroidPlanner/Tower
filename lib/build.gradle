@@ -25,7 +25,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:21.0.0'
+    compile 'com.android.support:support-v4:20.0.0'
     compile 'com.android.support:appcompat-v7:21.0.0'
 
     compile project(':3DR-Services-Library:lib')
