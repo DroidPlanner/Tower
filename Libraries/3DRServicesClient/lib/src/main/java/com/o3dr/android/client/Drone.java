@@ -84,6 +84,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
     private IDroidPlannerApi dpApi;
 
     private Runnable onConnectedTask;
+    private ConnectionParameter connectionParameter;
 
     // flightTimer
     // ----------------
@@ -330,6 +331,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         if (isApiValid()) {
             try {
                 dpApi.connect(connParams, dpCallback);
+                this.connectionParameter = connParams;
                 lbm.sendBroadcast(new Intent(Event.EVENT_CONNECTED));
             } catch (RemoteException e) {
                 handleRemoteException(e);
@@ -341,6 +343,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
                 public void run() {
                     try {
                         dpApi.connect(connParams, dpCallback);
+                        connectionParameter = connParams;
                         lbm.sendBroadcast(new Intent(Event.EVENT_CONNECTED));
                     } catch (RemoteException e) {
                         handleRemoteException(e);
@@ -356,6 +359,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         if (isApiValid()) {
             try {
                 dpApi.disconnect();
+                this.connectionParameter = null;
                 lbm.sendBroadcast(new Intent(Event.EVENT_DISCONNECTED));
             } catch (RemoteException e) {
                 handleRemoteException(e);
@@ -447,6 +451,10 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
             }
         }
         return new FootPrint[0];
+    }
+
+    public ConnectionParameter getConnectionParameter(){
+        return this.connectionParameter;
     }
 
     @Override
