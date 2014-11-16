@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
 
 public class AdapterMissionItems extends ArrayAdapter<MissionItemType> {
 

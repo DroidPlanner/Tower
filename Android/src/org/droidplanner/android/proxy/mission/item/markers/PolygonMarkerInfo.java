@@ -1,7 +1,7 @@
 package org.droidplanner.android.proxy.mission.item.markers;
 
-import com.ox3dr.services.android.lib.coordinate.LatLong;
-import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 
 import org.droidplanner.android.maps.MarkerInfo;
 
@@ -39,7 +39,7 @@ public class PolygonMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
 	}
 
 	@Override
-	public com.ox3dr.services.android.lib.coordinate.LatLong getPosition() {
+	public com.o3dr.services.android.lib.coordinate.LatLong getPosition() {
 		return mPoint;
 	}
 

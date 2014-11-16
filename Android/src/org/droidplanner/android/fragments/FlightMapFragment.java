@@ -22,8 +22,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.ox3dr.services.android.lib.coordinate.LatLong;
-import com.ox3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.event.Event;
 
 public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
 		DPMap.OnMarkerClickListener, DPMap.OnMarkerDragListener, GuidedDialogListener {

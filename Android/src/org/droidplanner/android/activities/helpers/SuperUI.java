@@ -15,7 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.event.Event;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;

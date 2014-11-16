@@ -15,12 +15,12 @@ import android.util.SparseBooleanArray;
 import android.widget.Toast;
 
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.drone.event.Event;
-import com.ox3dr.services.android.lib.drone.event.Extra;
-import com.ox3dr.services.android.lib.drone.property.Battery;
-import com.ox3dr.services.android.lib.drone.property.Gps;
-import com.ox3dr.services.android.lib.drone.property.State;
-import com.ox3dr.services.android.lib.drone.property.VehicleMode;
+import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.event.Extra;
+import com.o3dr.services.android.lib.drone.property.Battery;
+import com.o3dr.services.android.lib.drone.property.Gps;
+import com.o3dr.services.android.lib.drone.property.State;
+import com.o3dr.services.android.lib.drone.property.VehicleMode;
 
 import org.droidplanner.R;
 import org.droidplanner.android.fragments.SettingsFragment;

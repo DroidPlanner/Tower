@@ -1,6 +1,6 @@
 package org.droidplanner.android.dialogs.openfile;
 
-import com.ox3dr.services.android.lib.drone.mission.item.raw.GlobalPositionIntMessage;
+import com.o3dr.services.android.lib.drone.mission.item.raw.GlobalPositionIntMessage;
 
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.utils.file.IO.TLogReader;

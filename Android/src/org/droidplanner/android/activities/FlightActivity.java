@@ -30,8 +30,8 @@ import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.drone.event.Event;
-import com.ox3dr.services.android.lib.drone.event.Extra;
+import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.event.Extra;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public class FlightActivity extends DrawerNavigationUI {

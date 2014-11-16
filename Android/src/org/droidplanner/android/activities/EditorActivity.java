@@ -48,10 +48,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.coordinate.LatLong;
-import com.ox3dr.services.android.lib.drone.event.Event;
-import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
-import com.ox3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
 
 /**
  * This implements the map editor activity. The map editor activity allows the

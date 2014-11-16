@@ -34,11 +34,11 @@ import com.getpebble.android.kit.PebbleKit;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.drone.connection.ConnectionType;
-import com.ox3dr.services.android.lib.drone.event.Event;
-import com.ox3dr.services.android.lib.drone.event.Extra;
-import com.ox3dr.services.android.lib.drone.property.State;
-import com.ox3dr.services.android.lib.drone.property.Type;
+import com.o3dr.services.android.lib.drone.connection.ConnectionType;
+import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.event.Extra;
+import com.o3dr.services.android.lib.drone.property.State;
+import com.o3dr.services.android.lib.drone.property.Type;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;

@@ -3,7 +3,7 @@ package org.droidplanner.android.widgets.adapterViews;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.ox3dr.services.android.lib.drone.property.Parameter;
+import com.o3dr.services.android.lib.drone.property.Parameter;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;

@@ -7,9 +7,9 @@ import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapte
 import android.content.Context;
 import android.view.View;
 
-import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
-import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
-import com.ox3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
 
 public class MissionWaypointFragment extends MissionDetailFragment implements
 		CardWheelHorizontalView.OnCardWheelChangedListener {

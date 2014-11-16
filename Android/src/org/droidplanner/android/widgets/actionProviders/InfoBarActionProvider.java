@@ -20,7 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.event.Event;
 
 /**
  * This implements the info bar displayed on the action bar after connection

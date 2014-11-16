@@ -63,10 +63,10 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.coordinate.LatLong;
-import com.ox3dr.services.android.lib.drone.event.Event;
-import com.ox3dr.services.android.lib.drone.property.FootPrint;
-import com.ox3dr.services.android.lib.drone.property.Gps;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.property.FootPrint;
+import com.o3dr.services.android.lib.drone.property.Gps;
 
 public class GoogleMapFragment extends SupportMapFragment implements DPMap, LocationListener {
 

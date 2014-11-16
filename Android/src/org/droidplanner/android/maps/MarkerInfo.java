@@ -3,7 +3,7 @@ package org.droidplanner.android.maps;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 
-import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLong;
 
 /**
  * Defines the methods expected from a MarkerInfo instance. The marker info
@@ -124,7 +124,7 @@ public interface MarkerInfo {
 		}
 
 		@Override
-		public com.ox3dr.services.android.lib.coordinate.LatLong getPosition() {
+		public LatLong getPosition() {
 			return null;
 		}
 

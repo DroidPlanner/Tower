@@ -6,9 +6,9 @@ import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapte
 
 import android.view.View;
 
-import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
-import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
-import com.ox3dr.services.android.lib.drone.mission.item.command.CameraTrigger;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.command.CameraTrigger;
 
 public class MissionCameraTriggerFragment extends MissionDetailFragment implements
 		CardWheelHorizontalView.OnCardWheelChangedListener {

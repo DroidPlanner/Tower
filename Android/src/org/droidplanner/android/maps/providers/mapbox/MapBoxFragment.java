@@ -52,10 +52,10 @@ import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.views.MapViewListener;
 import com.mapbox.mapboxsdk.views.util.Projection;
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.coordinate.LatLong;
-import com.ox3dr.services.android.lib.drone.event.Event;
-import com.ox3dr.services.android.lib.drone.property.FootPrint;
-import com.ox3dr.services.android.lib.drone.property.Gps;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.property.FootPrint;
+import com.o3dr.services.android.lib.drone.property.Gps;
 
 /**
  * MapBox implementation of the DPMap interface.

@@ -8,7 +8,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.event.Event;
 
 import org.droidplanner.android.utils.analytics.GAUtils;
 
@@ -84,11 +84,10 @@ public class NotificationHandler {
 	 * method, this object should no longer be used.
 	 */
 	public void terminate() {
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(eventReceiver);
 		mTtsNotification.onTerminate();
 		mStatusBarNotification.onTerminate();
 		mPebbleNotification.onTerminate();
 		mBeepNotification.onTerminate();
-
-		LocalBroadcastManager.getInstance(context).unregisterReceiver(eventReceiver);
 	}
 }

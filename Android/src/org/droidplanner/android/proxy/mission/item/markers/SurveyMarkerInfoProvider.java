@@ -1,7 +1,7 @@
 package org.droidplanner.android.proxy.mission.item.markers;
 
-import com.ox3dr.services.android.lib.coordinate.LatLong;
-import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 
 import java.util.ArrayList;
 import java.util.List;

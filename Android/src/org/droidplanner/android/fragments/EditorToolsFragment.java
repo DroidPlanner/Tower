@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.ox3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.event.Event;
 
 /**
  * This fragment implements and displays the 'tools' used in the editor window

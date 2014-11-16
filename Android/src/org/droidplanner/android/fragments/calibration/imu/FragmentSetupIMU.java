@@ -17,9 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.drone.event.Event;
-import com.ox3dr.services.android.lib.drone.event.Extra;
-import com.ox3dr.services.android.lib.drone.property.State;
+import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.event.Extra;
+import com.o3dr.services.android.lib.drone.property.State;
 
 import org.droidplanner.R;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;

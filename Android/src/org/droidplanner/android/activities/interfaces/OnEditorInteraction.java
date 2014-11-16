@@ -1,6 +1,6 @@
 package org.droidplanner.android.activities.interfaces;
 
-import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLong;
 
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 

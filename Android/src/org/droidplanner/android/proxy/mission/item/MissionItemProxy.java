@@ -17,19 +17,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.ox3dr.services.android.lib.coordinate.LatLong;
-import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
-import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
-import com.ox3dr.services.android.lib.drone.mission.item.command.Takeoff;
-import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
-import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
-import com.ox3dr.services.android.lib.drone.mission.item.spatial.Circle;
-import com.ox3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
-import com.ox3dr.services.android.lib.util.MathUtils;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.command.Takeoff;
+import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
+import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
+import com.o3dr.services.android.lib.drone.mission.item.spatial.Circle;
+import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
+import com.o3dr.services.android.lib.util.MathUtils;
 
 /**
  * This class is responsible for providing logic to access and interpret the
- * {@link com.ox3dr.services.android.lib.drone.mission.item.MissionItem} class on the Android layer,
+ * {@link com.o3dr.services.android.lib.drone.mission.item.MissionItem} class on the Android layer,
  * as well as providing methods for rendering it on the Android UI.
  */
 public class MissionItemProxy {
@@ -74,7 +74,7 @@ public class MissionItemProxy {
 	/**
 	 * Provides access to the mission item instance.
 	 * 
-	 * @return {@link com.ox3dr.services.android.lib.drone.mission.item.MissionItem} object
+	 * @return {@link com.o3dr.services.android.lib.drone.mission.item.MissionItem} object
 	 */
 	public MissionItem getMissionItem() {
 		return mMissionItem;

@@ -15,12 +15,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.drone.event.Event;
-import com.ox3dr.services.android.lib.drone.event.Extra;
-import com.ox3dr.services.android.lib.drone.property.State;
-import com.ox3dr.services.android.lib.drone.property.VehicleMode;
-import com.ox3dr.services.android.lib.gcs.follow.FollowState;
-import com.ox3dr.services.android.lib.gcs.follow.FollowType;
+import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.event.Extra;
+import com.o3dr.services.android.lib.drone.property.State;
+import com.o3dr.services.android.lib.drone.property.VehicleMode;
+import com.o3dr.services.android.lib.gcs.follow.FollowState;
+import com.o3dr.services.android.lib.gcs.follow.FollowType;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.FlightActivity;

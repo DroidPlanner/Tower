@@ -28,7 +28,7 @@
 
     <!--
     The values below should match the connection type constants in
-    com.ox3dr.services.android.lib.drone.connection.ConnectionType
+    com.o3dr.services.android.lib.drone.connection.ConnectionType
     -->
     <string-array name="TelemetryConnectionTypesValues">
         <item name="USB">0</item>

@@ -3,7 +3,7 @@ package org.droidplanner.android.fragments;
 import android.location.LocationListener;
 import android.widget.Toast;
 
-import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLong;
 
 import org.droidplanner.android.graphic.map.GraphicLocator;
 import org.droidplanner.android.utils.prefs.AutoPanMode;

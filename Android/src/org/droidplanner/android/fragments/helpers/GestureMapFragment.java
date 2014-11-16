@@ -14,8 +14,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ox3dr.services.android.lib.coordinate.LatLong;
-import com.ox3dr.services.android.lib.util.MathUtils;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.util.MathUtils;
 
 public class GestureMapFragment extends Fragment implements OnGestureListener {
 	private static final int TOLERANCE = 15;

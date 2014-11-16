@@ -4,7 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLong;
 
 import org.droidplanner.R;
 import org.droidplanner.android.maps.MarkerInfo;
@@ -24,7 +24,7 @@ public class GraphicLocator extends MarkerInfo.SimpleMarkerInfo {
 	}
 
 	@Override
-	public com.ox3dr.services.android.lib.coordinate.LatLong getPosition() {
+	public LatLong getPosition() {
 		return lastPosition;
 	}
 

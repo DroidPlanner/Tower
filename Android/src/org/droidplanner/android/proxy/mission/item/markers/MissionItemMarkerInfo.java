@@ -11,8 +11,8 @@ import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 
-import com.ox3dr.services.android.lib.coordinate.LatLong;
-import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 
 /**
  * Template class and factory for a mission item's marker source.
@@ -77,7 +77,7 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo 
 	}
 
 	@Override
-	public com.ox3dr.services.android.lib.coordinate.LatLong getPosition() {
+	public com.o3dr.services.android.lib.coordinate.LatLong getPosition() {
 		return ((MissionItem.SpatialItem) mMarkerOrigin.getMissionItem()).getCoordinate();
 	}
 

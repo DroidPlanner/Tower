@@ -3,8 +3,8 @@ package org.droidplanner.android.utils.file.IO;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.ox3dr.services.android.lib.drone.mission.item.raw.GlobalPositionIntMessage;
-import com.ox3dr.services.android.lib.model.ITLogApi;
+import com.o3dr.services.android.lib.drone.mission.item.raw.GlobalPositionIntMessage;
+import com.o3dr.services.android.lib.model.ITLogApi;
 
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.utils.file.DirectoryPath;

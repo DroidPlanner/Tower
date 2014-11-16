@@ -9,7 +9,7 @@ import org.droidplanner.android.utils.file.FileList;
 import org.droidplanner.android.utils.file.FileManager;
 import org.droidplanner.android.utils.file.FileStream;
 
-import com.ox3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
+import com.o3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
 
 /**
  * Write msg_mission_item list as...

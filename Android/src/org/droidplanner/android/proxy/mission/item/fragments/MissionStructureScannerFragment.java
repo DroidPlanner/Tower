@@ -7,10 +7,10 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
-import com.ox3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
-import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
-import com.ox3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
+import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
+import com.o3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
 
 import org.droidplanner.R;
 import org.droidplanner.R.id;

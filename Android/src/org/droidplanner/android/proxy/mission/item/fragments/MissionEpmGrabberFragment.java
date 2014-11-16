@@ -5,7 +5,7 @@ import org.droidplanner.R;
 import android.os.Bundle;
 import android.view.View;
 
-import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
 
 public class MissionEpmGrabberFragment extends MissionDetailFragment {
 

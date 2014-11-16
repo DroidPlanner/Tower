@@ -10,8 +10,8 @@ import org.droidplanner.android.utils.prefs.AutoPanMode;
 import android.graphics.Color;
 import android.location.LocationListener;
 
-import com.ox3dr.services.android.lib.coordinate.LatLong;
-import com.ox3dr.services.android.lib.drone.property.FootPrint;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.property.FootPrint;
 
 /**
  * Defines the functionality expected from the map providers.

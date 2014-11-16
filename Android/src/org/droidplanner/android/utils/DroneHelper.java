@@ -5,7 +5,7 @@ import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.mapbox.mapboxsdk.api.ILatLng;
-import com.ox3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLong;
 
 public class DroneHelper {
 	static public LatLng CoordToLatLang(LatLong coord) {

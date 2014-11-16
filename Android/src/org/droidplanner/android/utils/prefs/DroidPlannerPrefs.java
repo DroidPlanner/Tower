@@ -9,8 +9,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.SparseBooleanArray;
 
-import com.ox3dr.services.android.lib.drone.connection.ConnectionType;
-import com.ox3dr.services.android.lib.drone.connection.StreamRates;
+import com.o3dr.services.android.lib.drone.connection.ConnectionType;
+import com.o3dr.services.android.lib.drone.connection.StreamRates;
 
 /**
  * Provides structured access to Droidplanner preferences

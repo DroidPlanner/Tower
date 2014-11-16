@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.ox3dr.services.android.lib.drone.mission.item.raw.GlobalPositionIntMessage;
+import com.o3dr.services.android.lib.drone.mission.item.raw.GlobalPositionIntMessage;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.LocatorActivity;

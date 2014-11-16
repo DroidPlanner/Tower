@@ -14,9 +14,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.drone.event.Event;
-import com.ox3dr.services.android.lib.gcs.follow.FollowState;
-import com.ox3dr.services.android.lib.gcs.follow.FollowType;
+import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.gcs.follow.FollowState;
+import com.o3dr.services.android.lib.gcs.follow.FollowType;
 
 import org.droidplanner.R;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;

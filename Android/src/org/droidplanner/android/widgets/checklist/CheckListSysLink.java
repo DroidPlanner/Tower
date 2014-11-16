@@ -3,9 +3,9 @@ package org.droidplanner.android.widgets.checklist;
 import android.content.Context;
 
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.drone.property.Battery;
-import com.ox3dr.services.android.lib.drone.property.Gps;
-import com.ox3dr.services.android.lib.drone.property.State;
+import com.o3dr.services.android.lib.drone.property.Battery;
+import com.o3dr.services.android.lib.drone.property.Gps;
+import com.o3dr.services.android.lib.drone.property.State;
 
 import org.droidplanner.android.DroidPlannerApp;
 

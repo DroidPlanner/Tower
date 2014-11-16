@@ -11,9 +11,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ox3dr.services.android.lib.coordinate.LatLong;
-import com.ox3dr.services.android.lib.drone.mission.item.raw.GlobalPositionIntMessage;
-import com.ox3dr.services.android.lib.util.MathUtils;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.mission.item.raw.GlobalPositionIntMessage;
+import com.o3dr.services.android.lib.util.MathUtils;
 
 import org.droidplanner.R;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;

@@ -19,14 +19,14 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.drone.event.Event;
-import com.ox3dr.services.android.lib.drone.property.Battery;
-import com.ox3dr.services.android.lib.drone.property.Gps;
-import com.ox3dr.services.android.lib.drone.property.Home;
-import com.ox3dr.services.android.lib.drone.property.Signal;
-import com.ox3dr.services.android.lib.drone.property.State;
-import com.ox3dr.services.android.lib.drone.property.VehicleMode;
-import com.ox3dr.services.android.lib.util.MathUtils;
+import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.property.Battery;
+import com.o3dr.services.android.lib.drone.property.Gps;
+import com.o3dr.services.android.lib.drone.property.Home;
+import com.o3dr.services.android.lib.drone.property.Signal;
+import com.o3dr.services.android.lib.drone.property.State;
+import com.o3dr.services.android.lib.drone.property.VehicleMode;
+import com.o3dr.services.android.lib.util.MathUtils;
 
 /**
  * Implements DroidPlanner's status bar notifications.

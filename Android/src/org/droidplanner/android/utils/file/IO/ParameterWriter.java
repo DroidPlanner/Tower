@@ -1,6 +1,6 @@
 package org.droidplanner.android.utils.file.IO;
 
-import com.ox3dr.services.android.lib.drone.property.Parameter;
+import com.o3dr.services.android.lib.drone.property.Parameter;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

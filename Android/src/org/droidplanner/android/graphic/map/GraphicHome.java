@@ -8,7 +8,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.drone.property.Home;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.property.Home;
 
 public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 
@@ -39,7 +40,7 @@ public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 	}
 
 	@Override
-	public com.ox3dr.services.android.lib.coordinate.LatLong getPosition() {
+	public LatLong getPosition() {
         Home droneHome = drone.getHome();
         if(droneHome == null) return null;
 

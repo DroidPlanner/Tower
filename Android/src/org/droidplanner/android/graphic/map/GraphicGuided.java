@@ -13,9 +13,9 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.coordinate.LatLong;
-import com.ox3dr.services.android.lib.drone.property.Gps;
-import com.ox3dr.services.android.lib.drone.property.GuidedState;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.property.Gps;
+import com.o3dr.services.android.lib.drone.property.GuidedState;
 
 public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSource {
 
@@ -58,7 +58,7 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSo
 	}
 
 	@Override
-	public com.ox3dr.services.android.lib.coordinate.LatLong getPosition() {
+	public LatLong getPosition() {
         GuidedState guidedPoint = drone.getGuidedState();
 		return guidedPoint == null ? null : guidedPoint.getCoordinate();
 	}

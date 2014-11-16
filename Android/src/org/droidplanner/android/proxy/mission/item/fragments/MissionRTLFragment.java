@@ -2,7 +2,7 @@ package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
 
-import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
 
 public class MissionRTLFragment extends MissionDetailFragment {
 

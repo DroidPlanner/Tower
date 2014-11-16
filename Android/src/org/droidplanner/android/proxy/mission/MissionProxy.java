@@ -18,24 +18,23 @@ import org.droidplanner.android.utils.analytics.GAUtils;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
-import com.ox3dr.services.android.lib.coordinate.LatLong;
-import com.ox3dr.services.android.lib.coordinate.LatLongAlt;
-import com.ox3dr.services.android.lib.drone.event.Event;
-import com.ox3dr.services.android.lib.drone.mission.Mission;
-import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
-import com.ox3dr.services.android.lib.drone.mission.item.MissionItem.SpatialItem;
-import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
-import com.ox3dr.services.android.lib.drone.mission.item.command.ReturnToLaunch;
-import com.ox3dr.services.android.lib.drone.mission.item.command.Takeoff;
-import com.ox3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
-import com.ox3dr.services.android.lib.drone.mission.item.complex.Survey;
-import com.ox3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
-import com.ox3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
-import com.ox3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
-import com.ox3dr.services.android.lib.util.MathUtils;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLongAlt;
+import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.mission.Mission;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem.SpatialItem;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.command.ReturnToLaunch;
+import com.o3dr.services.android.lib.drone.mission.item.command.Takeoff;
+import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
+import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
+import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
+import com.o3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
+import com.o3dr.services.android.lib.util.MathUtils;
 
 /**
- * This class is used as a wrapper to {@link com.ox3dr.services.android.lib.drone.mission.Mission}
+ * This class is used as a wrapper to {@link com.o3dr.services.android.lib.drone.mission.Mission}
  * object on the Android side.
  */
 public class MissionProxy implements DPMap.PathSource {
@@ -116,10 +115,6 @@ public class MissionProxy implements DPMap.PathSource {
 		}
 		return markerInfos;
 	}
-
-    public MissionItemMessage[] processMissionItems(){
-        return this.drone.processMissionItems(getMissionItems());
-    }
 
 	/**
 	 * Update the state for this object based on the state of the Mission

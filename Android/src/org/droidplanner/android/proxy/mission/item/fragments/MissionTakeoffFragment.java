@@ -1,8 +1,8 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
-import com.ox3dr.services.android.lib.drone.mission.item.MissionItem;
-import com.ox3dr.services.android.lib.drone.mission.item.MissionItemType;
-import com.ox3dr.services.android.lib.drone.mission.item.command.Takeoff;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.command.Takeoff;
 
 import org.droidplanner.R;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
