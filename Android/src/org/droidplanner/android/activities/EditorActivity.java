@@ -1,6 +1,5 @@
 package org.droidplanner.android.activities;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.droidplanner.R;
@@ -23,7 +22,6 @@ import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragme
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.file.IO.MissionReader;
-import org.droidplanner.android.utils.file.IO.MissionWriter;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 
 import android.content.BroadcastReceiver;
@@ -51,7 +49,6 @@ import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.event.Event;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
-import com.o3dr.services.android.lib.drone.mission.item.raw.MissionItemMessage;
 
 /**
  * This implements the map editor activity. The map editor activity allows the
@@ -268,13 +265,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		OpenFileDialog missionDialog = new OpenMissionDialog() {
 			@Override
 			public void waypointFileLoaded(MissionReader reader) {
-                Drone dpApi = dpApp.getDrone();
-                if(dpApi != null && dpApi.isConnected()) {
-                    List<MissionItemMessage> msgMissionItems = reader.getMsgMissionItems();
-                    dpApi.setRawMissionItems(msgMissionItems
-                            .toArray(new MissionItemMessage[msgMissionItems.size()]), false);
-                }
-
+                missionProxy.readMissionFromFile(reader);
 				planningMapFragment.zoomToFit();
 			}
 		};
@@ -288,25 +279,17 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 				FileStream.getWaypointFilename("waypoints"), new EditInputDialog.Listener() {
 					@Override
 					public void onOk(CharSequence input) {
-						Drone drone = dpApp.getDrone();
+						if (missionProxy.writeMissionToFile(input.toString())) {
+							Toast.makeText(context, R.string.file_saved_success, Toast.LENGTH_SHORT)
+									.show();
 
-						if (drone != null && drone.isConnected()) {
-							final MissionItemMessage[] missionItems = missionProxy
-									.processMissionItems();
+							final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+									.setCategory(GAUtils.Category.MISSION_PLANNING)
+									.setAction("Mission saved to file")
+									.setLabel("Mission items count");
+							GAUtils.sendEvent(eventBuilder);
 
-							if (MissionWriter.write(Arrays.asList(missionItems), input.toString())) {
-								Toast.makeText(context, R.string.file_saved_success,
-										Toast.LENGTH_SHORT).show();
-
-								final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-										.setCategory(GAUtils.Category.MISSION_PLANNING)
-										.setAction("Mission saved to file")
-										.setLabel("Mission items count")
-										.setValue(missionItems.length);
-								GAUtils.sendEvent(eventBuilder);
-
-								return;
-							}
+							return;
 						}
 
 						Toast.makeText(context, R.string.file_saved_error, Toast.LENGTH_SHORT)

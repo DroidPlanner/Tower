@@ -8,6 +8,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,6 +16,8 @@ import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.utils.analytics.GAUtils;
+import org.droidplanner.android.utils.file.IO.MissionReader;
+import org.droidplanner.android.utils.file.IO.MissionWriter;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
@@ -586,8 +589,21 @@ public class MissionProxy implements DPMap.PathSource {
         return coords;
     }
 
-    public void sendMissionToAPM(Drone drone){
+    private Mission generateMission(){
         final Mission mission = new Mission();
+
+        if(!missionItemProxies.isEmpty()){
+            for(MissionItemProxy itemProxy: missionItemProxies){
+                mission.addMissionItem(itemProxy.getMissionItem());
+            }
+        }
+
+        return mission;
+    }
+
+    public void sendMissionToAPM(Drone drone){
+        drone.setMission(generateMission(), true);
+
         final int missionItemsCount = missionItemProxies.size();
 
         String missionItemsList = "[";
@@ -600,12 +616,8 @@ public class MissionProxy implements DPMap.PathSource {
                     missionItemsList += ", ";
 
                 missionItemsList += itemProxy.getMissionItem().getType().getLabel();
-
-                mission.addMissionItem(itemProxy.getMissionItem());
             }
         }
-
-        drone.setMission(mission, true);
 
         missionItemsList += "]";
 
@@ -650,4 +662,19 @@ public class MissionProxy implements DPMap.PathSource {
 		}
 		return polygonPaths;
 	}
+
+    public boolean writeMissionToFile(String filename) {
+        return MissionWriter.write(generateMission(), filename);
+    }
+
+    public boolean readMissionFromFile(MissionReader reader){
+        if(reader == null)
+            return false;
+
+        Mission mission = reader.getMission();
+        drone.setMission(mission, false);
+
+        load(mission);
+        return true;
+    }
 }

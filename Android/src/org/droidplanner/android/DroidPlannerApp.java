@@ -205,7 +205,7 @@ public class DroidPlannerApp extends Application implements ServiceListener {
             return;
 
         boolean isDroneConnected = drone.isConnected();
-        if(!connParams.equals(drone.getConnectionParameters()) && isDroneConnected) {
+        if(!connParams.equals(drone.getConnectionParameter()) && isDroneConnected) {
             drone.disconnect();
             isDroneConnected = false;
         }
@@ -225,8 +225,6 @@ public class DroidPlannerApp extends Application implements ServiceListener {
     }
 
     public void disconnectFromDrone(){
-        final Drone drone = getDrone();
-
         if(drone.isConnected())
             drone.disconnect();
     }
