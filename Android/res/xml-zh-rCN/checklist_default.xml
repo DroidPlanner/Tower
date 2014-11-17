@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preflightcheck
+    title="Pre-Flight Checklist"
+    type="APM"
+    version="1" >
+
+    <category label="使用者检查清单" >
+        <check_item
+            description="确认相机已连接且打开电源"
+            editable="yes"
+            mandatory="yes"
+            title="相机已连接并打开电源" />
+    </category>
+    <category label="控制面板" >
+        <check_item
+            description="确认控制面板在正确的方向"
+            editable="yes"
+            mandatory="yes"
+            title="副翼(Aileron)" />
+        <check_item
+            description="确认控制面板在正确的方向"
+            editable="yes"
+            mandatory="yes"
+            title="升降舵(Elevator)" />
+        <check_item
+            description="确认控制面板在正确的方向"
+            editable="yes"
+            mandatory="yes"
+            title="方向舵(Rudder)" />
+    </category>
+    <category label="系统检查清单" >
+        <switch_item
+            description="数传连线状况"
+            editable="yes"
+            mandatory="yes"
+            system_tag="SYS_CONNECTION_STATE"
+            title="连接数传" />
+
+        <value_item
+            description="显示预设高度"
+            editable="yes"
+            mandatory="yes"
+            minimum_val="10"
+            nominal_val="20"
+            system_tag="SYS_DEF_ALT"
+            title="预设高度 "
+            unit="%0.2fm" />
+
+        <level_item
+            description="显示GPS卫星数量"
+            editable="no"
+            mandatory="yes"
+            maximum_val="8"
+            minimum_val="5"
+            nominal_val="6"
+            system_tag="SYS_GPS3D_LVL"
+            title="GPS(3D) Sats"
+            unit="%.0f Sats." />
+        <level_item
+            description="显示电池电量"
+            editable="no"
+            mandatory="yes"
+            maximum_val="100"
+            minimum_val="75"
+            nominal_val="80"
+            system_tag="SYS_BATTREM_LVL"
+            title="电池电量"
+            unit="%.1f%%" />
+        <level_item
+            description="显示电池电压数"
+            editable="no"
+            mandatory="yes"
+            maximum_val="13"
+            minimum_val="10.5"
+            nominal_val="11.1"
+            system_tag="SYS_BATTVOL_LVL"
+            title="电池电压数"
+            unit="%.1fV" />
+        <level_item
+            description="显示电池电流数"
+            editable="no"
+            mandatory="yes"
+            maximum_val="20"
+            minimum_val="5"
+            nominal_val="10"
+            system_tag="SYS_BATTCUR_LVL"
+            title="电池电流数"
+            unit="%.1fA" />
+    </category>
+
+</preflightcheck>
