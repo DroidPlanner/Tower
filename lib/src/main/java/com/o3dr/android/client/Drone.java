@@ -145,7 +145,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
     }
 
     private boolean isApiValid() {
-        return dpApi != null;
+        return dpApi != null && isConnected();
     }
 
     public void resetFlightTimer() {
@@ -368,12 +368,10 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
 
     @Override
     public boolean isConnected() {
-        if (isApiValid()) {
-            try {
-                return dpApi.isConnected();
-            } catch (RemoteException e) {
-                handleRemoteException(e);
-            }
+        try {
+            return dpApi != null && dpApi.isConnected();
+        } catch (RemoteException e) {
+            handleRemoteException(e);
         }
         return false;
     }
