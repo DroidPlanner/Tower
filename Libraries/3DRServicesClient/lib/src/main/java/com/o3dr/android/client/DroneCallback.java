@@ -12,9 +12,9 @@ import com.o3dr.services.android.lib.model.IDroidPlannerApiCallback;
 /**
  * Created by fhuya on 10/29/14.
  */
-public final class DPApiCallback extends IDroidPlannerApiCallback.Stub {
+public final class DroneCallback extends IDroidPlannerApiCallback.Stub {
 
-	private static final String CLAZZ_NAME = DPApiCallback.class.getName();
+	private static final String CLAZZ_NAME = DroneCallback.class.getName();
 
 	public static final String ACTION_DRONE_EVENT = CLAZZ_NAME + ".ACTION_DRONE_EVENT";
     public static final String EXTRA_DRONE_EVENT = "extra_drone_event";
@@ -28,7 +28,7 @@ public final class DPApiCallback extends IDroidPlannerApiCallback.Stub {
 
 	private final LocalBroadcastManager lbm;
 
-	public DPApiCallback(Context context) {
+	public DroneCallback(Context context) {
 		lbm = LocalBroadcastManager.getInstance(context);
 	}
 

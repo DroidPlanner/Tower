@@ -60,7 +60,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
     static {
         intentFilter.addAction(Event.EVENT_STATE);
         intentFilter.addAction(Event.EVENT_SPEED);
-        intentFilter.addAction(DPApiCallback.ACTION_DRONE_CONNECTION_FAILED);
+        intentFilter.addAction(DroneCallback.ACTION_DRONE_CONNECTION_FAILED);
     }
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -74,7 +74,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
                     stopTimer();
             } else if (Event.EVENT_SPEED.equals(action)) {
                 checkForGroundCollision();
-            } else if (DPApiCallback.ACTION_DRONE_CONNECTION_FAILED.equals(action)) {
+            } else if (DroneCallback.ACTION_DRONE_CONNECTION_FAILED.equals(action)) {
                 disconnect();
             }
         }
