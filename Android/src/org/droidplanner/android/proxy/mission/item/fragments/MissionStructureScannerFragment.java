@@ -10,8 +10,8 @@ import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapte
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.survey.CameraInfo;
 import org.droidplanner.core.mission.waypoints.StructureScanner;
+import org.droidplanner.core.survey.CameraInfo;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -55,7 +55,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment
 		cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
         cameraSpinner.setAdapter(cameraAdapter);
         cameraSpinner.setOnSpinnerItemSelectedListener(this);
-        cameraSpinner.setSelection(0);
+        cameraAdapter.setTitle(firstItem.getCamera());
 
 		radiusPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.radiusPicker);
@@ -125,7 +125,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment
 	
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position) {
-		if (spinner.equals(cameraSpinner)) {
+		if (spinner.getId() == id.cameraFileSpinner) {
 			CameraInfo cameraInfo = cameraAdapter.getCamera(position);
 			cameraAdapter.setTitle(cameraInfo.name);
 			for (StructureScanner scan : missionItems) {

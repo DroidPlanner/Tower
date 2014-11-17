@@ -11,11 +11,11 @@ import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.survey.CameraInfo;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.survey.SurveyData;
 import org.droidplanner.core.mission.survey.grid.GridBuilder;
 import org.droidplanner.core.polygon.Polygon;
+import org.droidplanner.core.survey.CameraInfo;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
@@ -160,7 +160,10 @@ public class StructureScanner extends SpatialCoordItem {
 
 	public void setCamera(CameraInfo cameraInfo) {
 		survey.setCameraInfo(cameraInfo);
-		
+	}
+
+	public String getCamera() {
+		return survey.getCameraName();
 	}
 
 }

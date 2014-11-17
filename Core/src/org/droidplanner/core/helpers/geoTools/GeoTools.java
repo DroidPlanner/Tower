@@ -34,7 +34,7 @@ public class GeoTools {
 		return (Math.hypot((p1.getX() - p2.getX()), (p1.getY() - p2.getY())));
 	}
 
-	public static Double metersTolat(double meters) {
+	private static Double metersTolat(double meters) {
 		return Math.toDegrees(meters / RADIUS_OF_EARTH);
 	}
 
@@ -72,7 +72,25 @@ public class GeoTools {
 
 		return (new Coord2D(Math.toDegrees(lat2), Math.toDegrees(lon2)));
 	}
-
+	
+	/**
+	 * Offset a coordinate by a local distance
+	 * @param original location in WGS84
+	 * @param xMeters Offset distance in the east direction
+	 * @param yMeters Offset distance in the north direction
+	 * @return new coordinate with the offset
+	 */
+	public static Coord2D moveCoordinate(Coord2D origin, double xMeters, double yMeters) {
+		double lon = origin.getLng();
+		double lat = origin.getLat();
+		double lon1 = Math.toRadians(lon);
+		double lat1 = Math.toRadians(lat);
+		
+		double lon2 = lon1+ Math.toRadians(metersTolat(xMeters));
+		double lat2 = lat1+ Math.toRadians(metersTolat(yMeters));		
+		return (new Coord2D(Math.toDegrees(lat2), Math.toDegrees(lon2)));
+	}	
+	
 	/**
 	 * Calculates the arc between two points
 	 * http://en.wikipedia.org/wiki/Haversine_formula
@@ -132,6 +150,10 @@ public class GeoTools {
 				Math.cos(fLat) * Math.sin(tLat) - Math.sin(fLat) * Math.cos(tLat)
 						* Math.cos(tLng - fLng)));
 
+		return warpToPositiveAngle(degree);
+	}
+
+	public static double warpToPositiveAngle(double degree) {
 		if (degree >= 0) {
 			return degree;
 		} else {

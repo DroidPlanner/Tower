@@ -9,7 +9,7 @@ import org.droidplanner.core.drone.profiles.VehicleProfile;
 import org.droidplanner.core.drone.variables.Altitude;
 import org.droidplanner.core.drone.variables.Battery;
 import org.droidplanner.core.drone.variables.Calibration;
-import org.droidplanner.core.drone.variables.CameraFootprints;
+import org.droidplanner.core.drone.variables.Camera;
 import org.droidplanner.core.drone.variables.GPS;
 import org.droidplanner.core.drone.variables.GuidedPoint;
 import org.droidplanner.core.drone.variables.Home;
@@ -100,5 +100,5 @@ public interface Drone {
 
 	public void setFirmwareVersion(String message);
 
-	public CameraFootprints getCameraFootprints();
+	public Camera getCamera();
 }

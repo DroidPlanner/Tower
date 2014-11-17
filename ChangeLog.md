@@ -9,6 +9,23 @@ All the changes are logged below (preferable with the pull request numbers in pa
 
 # Releases
 
+## Droidplanner v2.8.5
+* Camera footprints (#1265, #1266, #1270)
+
+## Droidplanner v2.8.4
+* Implemented "set yaw" (#1251, #1263)
+* Fix on guided mode (#1256, #1220)
+* Fix issues on survey polygons (#1257)
+* Fix minor UI on Editor altitudes (#1261, #1258)
+* Show mAh by default on the infoBar (#1262, #1259)
+
+## Droidplanner v2.8.3
+* EPM support (#1242)
+* Do set servo (#1247)
+* Fix camera selection in editor (#1246)
+* Drone locator progress bar fix (#1249)
+* Minor follow-me UI update (#1241)
+
 ## Droidplanner v2.8.2
 * Allow negative altitudes (#1231)
 * Improved Structure Scanner (#1234, #1237)

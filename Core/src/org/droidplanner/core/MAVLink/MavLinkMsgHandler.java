@@ -3,6 +3,8 @@ package org.droidplanner.core.MAVLink;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.model.Drone;
 
+import android.util.Log;
+
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_attitude;
@@ -11,6 +13,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
 import com.MAVLink.Messages.ardupilotmega.msg_gps_raw_int;
 import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_current;
+import com.MAVLink.Messages.ardupilotmega.msg_mount_status;
 import com.MAVLink.Messages.ardupilotmega.msg_nav_controller_output;
 import com.MAVLink.Messages.ardupilotmega.msg_radio;
 import com.MAVLink.Messages.ardupilotmega.msg_raw_imu;
@@ -125,7 +128,11 @@ public class MavLinkMsgHandler {
 			}
 			break;
 		case msg_camera_feedback.MAVLINK_MSG_ID_CAMERA_FEEDBACK:
-			drone.getCameraFootprints().newImageLocation((msg_camera_feedback) msg);
+			drone.getCamera().newImageLocation((msg_camera_feedback) msg);
+			break;
+		case msg_mount_status.MAVLINK_MSG_ID_MOUNT_STATUS:
+			drone.getCamera().updateMountOrientation(((msg_mount_status) msg));
+			Log.d("mount", ((msg_mount_status) msg).toString());
 			break;
 		default:
 			break;
