@@ -1,10 +1,8 @@
 package org.droidplanner.android.utils.file.IO;
 
-import android.os.RemoteException;
-import android.util.Log;
-
-import com.o3dr.services.android.lib.drone.mission.item.raw.GlobalPositionIntMessage;
-import com.o3dr.services.android.lib.model.ITLogApi;
+import com.MAVLink.Messages.MAVLinkMessage;
+import com.MAVLink.Messages.MAVLinkPacket;
+import com.MAVLink.Parser;
 
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.utils.file.DirectoryPath;
@@ -34,26 +32,30 @@ public class TLogReader implements OpenFileDialog.FileReader {
 
     public static class Event
     {
-        private GlobalPositionIntMessage mavLinkMessage;
+        private long timestamp;
+        private MAVLinkMessage mavLinkMessage;
 
-        public Event(GlobalPositionIntMessage mavLinkMessage) {
+        public Event(long timestamp, MAVLinkMessage mavLinkMessage) {
+            this.timestamp = timestamp;
             this.mavLinkMessage = mavLinkMessage;
         }
 
-        public GlobalPositionIntMessage getMavLinkMessage() {
+        public long getTimestamp() {
+            return timestamp;
+        }
+
+        public MAVLinkMessage getMavLinkMessage() {
             return mavLinkMessage;
         }
     }
 
     private static final int TIMESTAMP_SIZE = Long.SIZE / Byte.SIZE;
 
-    private final ITLogApi tlogApi;
     private final int msgFilter;
     private final List<Event> logEvents = new LinkedList<Event>();
 
 
-    public TLogReader(ITLogApi tlogApi, int msgFilter) {
-        this.tlogApi = tlogApi;
+    public TLogReader(int msgFilter) {
         this.msgFilter = msgFilter;
     }
 
@@ -66,16 +68,51 @@ public class TLogReader implements OpenFileDialog.FileReader {
             return false;
         }
 
+        final Parser parser = new Parser();
+        DataInputStream in = null;
         try {
-            GlobalPositionIntMessage[] positionMsgs = tlogApi.loadGlobalPositionIntMessages(file);
-            for(GlobalPositionIntMessage msg : positionMsgs){
-                logEvents.add(new Event(msg));
+            // open file
+            in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
+
+            // read events, filter (if specified)
+            long timestamp;
+            long prevTimestamp = 0;
+            while(in.available() > 0) {
+                // read timestamp
+                timestamp = in.readLong() / 1000;
+
+                // read packet
+                MAVLinkPacket packet;
+                while((packet = parser.mavlink_parse_char(in.readUnsignedByte())) == null);
+
+                if(msgFilter == MSGFILTER_NONE || packet.msgid == msgFilter) {
+                    if((timestamp - prevTimestamp) > 60000) {
+                        logEvents.add(new Event(timestamp, packet.unpack()));
+                        prevTimestamp = timestamp;
             }
-            return true;
-        } catch (RemoteException e) {
-            Log.e(TAG, e.getMessage(), e);
+                }
+            }
+
+        } catch (EOFException e) {
+            // NOP - file may be incomplete - take what we have
+            // fall thru...
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
+        finally {
+            // close file
+            if(in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    // NOP
+                }
+            }
+        }
+
+        return true;
     }
 
     @Override

@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.o3dr.services.android.lib.drone.mission.item.raw.GlobalPositionIntMessage;
+import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.LocatorActivity;
@@ -25,7 +25,7 @@ public class LocatorListFragment extends Fragment implements OnItemClickListener
 	private OnLocatorListListener listener;
 
 	public interface OnLocatorListListener {
-		void onItemClick(GlobalPositionIntMessage message);
+		void onItemClick(msg_global_position_int message);
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class LocatorListFragment extends Fragment implements OnItemClickListener
 
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-		final GlobalPositionIntMessage message = (GlobalPositionIntMessage) adapter
+		final msg_global_position_int message = (msg_global_position_int) adapter
 				.getItemAtPosition(position);
 		listener.onItemClick(message);
 	}

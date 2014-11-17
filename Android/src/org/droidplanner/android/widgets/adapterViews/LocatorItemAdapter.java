@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.o3dr.services.android.lib.drone.mission.item.raw.GlobalPositionIntMessage;
+import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
 
 import org.droidplanner.R;
 
@@ -18,18 +18,18 @@ import java.util.List;
  * updates the content of the list view item's view based on the mission item
  * type.
  */
-public class LocatorItemAdapter extends ArrayAdapter<GlobalPositionIntMessage> {
+public class LocatorItemAdapter extends ArrayAdapter<msg_global_position_int> {
 
 	private final LayoutInflater inflater;
 
-	public LocatorItemAdapter(Context context, List<GlobalPositionIntMessage> list) {
+	public LocatorItemAdapter(Context context, List<msg_global_position_int> list) {
 		super(context, 0, list);
 		inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		final GlobalPositionIntMessage item = getItem(position);
+		final msg_global_position_int item = getItem(position);
 
 		final View view;
 		if (convertView != null) {
@@ -45,10 +45,9 @@ public class LocatorItemAdapter extends ArrayAdapter<GlobalPositionIntMessage> {
 
 		titleView.setText(String.valueOf(position + 1));
 
-        int timeBootMs = item.getTime_boot_ms();
-		final int min = timeBootMs / 60000;
-		final int sec = (timeBootMs % 60000) / 1000;
-		final int fsec = (timeBootMs % 1000) / 100;
+		final int min = item.time_boot_ms / 60000;
+		final int sec = (item.time_boot_ms % 60000) / 1000;
+		final int fsec = (item.time_boot_ms % 1000) / 100;
 		timeView.setText(String.format("%dm%02d.%01ds", min, sec, fsec));
 
 		return view;

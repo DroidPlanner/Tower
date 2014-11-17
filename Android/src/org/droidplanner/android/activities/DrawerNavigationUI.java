@@ -145,8 +145,8 @@ public abstract class DrawerNavigationUI extends SuperUI {
         setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mEditor, new Intent(context,
                 EditorActivity.class));
 
-//        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mLocator, new Intent(context,
-//                LocatorActivity.class));
+        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mLocator, new Intent(context,
+                LocatorActivity.class));
 
         setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mSettings, new Intent(context,
                 SettingsActivity.class));
@@ -205,7 +205,7 @@ public abstract class DrawerNavigationUI extends SuperUI {
     private static class NavDrawerViewHolder {
         final TextView mFlightData;
         final TextView mEditor;
-//        final TextView mLocator;
+        final TextView mLocator;
 
         final TextView mSettings;
 
@@ -216,7 +216,7 @@ public abstract class DrawerNavigationUI extends SuperUI {
         private NavDrawerViewHolder(View containerView){
             mFlightData = (TextView) containerView.findViewById(R.id.navigation_flight_data);
             mEditor = (TextView) containerView.findViewById(R.id.navigation_editor);
-//            mLocator = (TextView) containerView.findViewById(R.id.navigation_locator);
+            mLocator = (TextView) containerView.findViewById(R.id.navigation_locator);
             mSettings = (TextView) containerView.findViewById(R.id.navigation_settings);
             mParams = (TextView) containerView.findViewById(R.id.navigation_params);
             mChecklist = (TextView) containerView.findViewById(R.id.navigation_checklist);
