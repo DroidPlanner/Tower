@@ -1,0 +1,13 @@
+pymavlink/tools/
+pymavlink/examples/
+pymavlink/generator/C/
+pymavlink/generator/lib/
+pymavlink/generator/javascript/
+pymavlink/generator/CS/
+pymavlink/generator/javascriptMakefile
+pymavlink/generator/*.*
+!pymavlink/generator/mavgen.py
+!pymavlink/generator/mavgen_java.py
+
+pymavlink/APM_Mavtest
+pymavlink/*.*
