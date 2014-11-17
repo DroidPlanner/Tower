@@ -162,21 +162,23 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
 
 		final Drone drone = getDrone();
 		final VehicleMode flightMode = drone.getState().getVehicleMode();
-		switch (flightMode) {
-		case PLANE_AUTO:
-			autoBtn.setActivated(true);
-			break;
+        if(flightMode != null) {
+            switch (flightMode) {
+                case PLANE_AUTO:
+                    autoBtn.setActivated(true);
+                    break;
 
-		case PLANE_GUIDED:
-			if (drone.getGuidedState().isInitialized() && !drone.getFollowState().isEnabled()) {
-				pauseBtn.setActivated(true);
-			}
-			break;
+                case PLANE_GUIDED:
+                    if (drone.getGuidedState().isInitialized() && !drone.getFollowState().isEnabled()) {
+                        pauseBtn.setActivated(true);
+                    }
+                    break;
 
-		case PLANE_RTL:
-			homeBtn.setActivated(true);
-			break;
-		}
+                case PLANE_RTL:
+                    homeBtn.setActivated(true);
+                    break;
+            }
+        }
 	}
 
 	private void resetFlightModeButtons() {

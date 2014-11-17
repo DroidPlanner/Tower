@@ -357,6 +357,9 @@ public class TTSNotificationProvider implements OnInitListener,
 	}
 
 	private void speakMode(VehicleMode mode) {
+        if(mode == null)
+            return;
+
 		String modeString = "Mode ";
 		switch (mode) {
 		case PLANE_FLY_BY_WIRE_A:
