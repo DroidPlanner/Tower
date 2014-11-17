@@ -328,7 +328,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
             dpCallback) {
         this.serviceMgr.addServiceListener(this);
 
-        if (isApiValid()) {
+        if (dpApi != null) {
             try {
                 dpApi.connect(connParams, dpCallback);
                 this.connectionParameter = connParams;
@@ -354,7 +354,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
     public void disconnect() {
         onConnectedTask = null;
 
-        if (isApiValid()) {
+        if (dpApi != null) {
             try {
                 dpApi.disconnect();
                 this.connectionParameter = null;
