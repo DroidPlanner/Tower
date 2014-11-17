@@ -1,5 +1,7 @@
 package org.droidplanner.core.helpers.coordinates;
 
+import org.droidplanner.core.helpers.geoTools.GeoTools;
+
 public class Coord2D {
 	private double latitude; // aka x
 	private double longitude; // aka y
@@ -70,5 +72,18 @@ public class Coord2D {
 			longitude += coord.longitude;
 		}
 		return new Coord2D(latitude, longitude);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Coord2D) {
+			return equals((Coord2D) obj);
+		}else{
+			return super.equals(obj);
+		}
+	}
+
+	public boolean equals(Coord2D obj) {
+		return GeoTools.getDistance(this, obj).valueInMeters()<1e-6;
 	}
 }

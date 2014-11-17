@@ -35,6 +35,7 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_permanent_notification_key">pref_permanent_notification</string>
     <string name="pref_ui_gps_hdop_key">pref_ui_gps_hdop</string>
     <string name="pref_ui_language_english_key">pref_ui_language_english</string>
+    <string name="pref_ui_realtime_footprints_key">pref_ui_realtime_footprints_key</string>
     <string name="pref_dshare_username_key">dshare_username</string>
     <string name="pref_dshare_password_key">dshare_password</string>
     <string name="pref_dshare_enabled_key">dshare_enabled</string>

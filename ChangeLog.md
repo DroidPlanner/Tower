@@ -9,6 +9,9 @@ All the changes are logged below (preferable with the pull request numbers in pa
 
 # Releases
 
+## Droidplanner v2.8.5
+* Camera footprints (#1265, #1266, #1270)
+
 ## Droidplanner v2.8.4
 * Implemented "set yaw" (#1251, #1263)
 * Fix on guided mode (#1256, #1220)
