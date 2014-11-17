@@ -332,7 +332,6 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
             try {
                 dpApi.connect(connParams, dpCallback);
                 this.connectionParameter = connParams;
-                lbm.sendBroadcast(new Intent(Event.EVENT_CONNECTED));
             } catch (RemoteException e) {
                 handleRemoteException(e);
             }
@@ -344,7 +343,6 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
                     try {
                         dpApi.connect(connParams, dpCallback);
                         connectionParameter = connParams;
-                        lbm.sendBroadcast(new Intent(Event.EVENT_CONNECTED));
                     } catch (RemoteException e) {
                         handleRemoteException(e);
                     }
@@ -360,7 +358,6 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
             try {
                 dpApi.disconnect();
                 this.connectionParameter = null;
-                lbm.sendBroadcast(new Intent(Event.EVENT_DISCONNECTED));
             } catch (RemoteException e) {
                 handleRemoteException(e);
             }
