@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.widgets.checklist.CheckListAdapter;
 import org.droidplanner.android.widgets.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
@@ -25,18 +24,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
-import com.o3dr.android.client.DPApiCallback;
+import com.o3dr.android.client.DroneCallback;
 
 public class ChecklistFragment extends ApiListenerFragment implements OnXmlParserError,
 		OnCheckListItemUpdateListener {
 
-    private final static IntentFilter intentFilter = new IntentFilter(DPApiCallback.ACTION_DRONE_EVENT);
+    private final static IntentFilter intentFilter = new IntentFilter(DroneCallback.ACTION_DRONE_EVENT);
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if(DPApiCallback.ACTION_DRONE_EVENT.equals(action)){
+            if(DroneCallback.ACTION_DRONE_EVENT.equals(action)){
                 onInfoUpdate();
             }
         }

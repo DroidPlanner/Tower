@@ -12,7 +12,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.o3dr.android.client.DPApiCallback;
+import com.o3dr.android.client.DroneCallback;
 import com.o3dr.android.client.Drone;
 import com.o3dr.android.client.ServiceListener;
 import com.o3dr.android.client.ServiceManager;
@@ -47,7 +47,7 @@ public class DroidPlannerApp extends Application implements ServiceListener {
     static {
         droneEventFilter.addAction(Event.EVENT_CONNECTED);
         droneEventFilter.addAction(Event.EVENT_DISCONNECTED);
-        droneEventFilter.addAction(DPApiCallback.ACTION_DRONE_CONNECTION_FAILED);
+        droneEventFilter.addAction(DroneCallback.ACTION_DRONE_CONNECTION_FAILED);
     }
 
 	private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -72,8 +72,8 @@ public class DroidPlannerApp extends Application implements ServiceListener {
             else if (Event.EVENT_DISCONNECTED.equals(action)) {
                 shouldWeTerminate();
             }
-            else if(DPApiCallback.ACTION_DRONE_CONNECTION_FAILED.equals(action)){
-                String errorMsg = intent.getStringExtra(DPApiCallback
+            else if(DroneCallback.ACTION_DRONE_CONNECTION_FAILED.equals(action)){
+                String errorMsg = intent.getStringExtra(DroneCallback
                         .EXTRA_CONNECTION_FAILED_ERROR_MESSAGE);
                 Toast.makeText(getApplicationContext(), "Connection failed: " + errorMsg,
                         Toast.LENGTH_LONG).show();
@@ -130,7 +130,7 @@ public class DroidPlannerApp extends Application implements ServiceListener {
 
     private ServiceManager serviceMgr;
     private Drone drone;
-    private DPApiCallback dpApiCallback;
+    private DroneCallback droneCallback;
 
     private MissionProxy missionProxy;
     private DroidPlannerPrefs dpPrefs;
@@ -146,7 +146,7 @@ public class DroidPlannerApp extends Application implements ServiceListener {
 
         serviceMgr = new ServiceManager(context);
         drone = new Drone(context, serviceMgr);
-        dpApiCallback = new DPApiCallback(context);
+        droneCallback = new DroneCallback(context);
 
         missionProxy = new MissionProxy(context, this.drone);
 
@@ -219,7 +219,7 @@ public class DroidPlannerApp extends Application implements ServiceListener {
         }
 
         if(!isDroneConnected)
-            drone.connect(connParams, this.dpApiCallback);
+            drone.connect(connParams, this.droneCallback);
     }
 
     public static void connectToDrone(Context context){
