@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.o3dr.android.client.DPApiCallback;
 import com.o3dr.android.client.Drone;
@@ -46,6 +47,7 @@ public class DroidPlannerApp extends Application implements ServiceListener {
     static {
         droneEventFilter.addAction(Event.EVENT_CONNECTED);
         droneEventFilter.addAction(Event.EVENT_DISCONNECTED);
+        droneEventFilter.addAction(DPApiCallback.ACTION_DRONE_CONNECTION_FAILED);
     }
 
 	private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -69,6 +71,12 @@ public class DroidPlannerApp extends Application implements ServiceListener {
             }
             else if (Event.EVENT_DISCONNECTED.equals(action)) {
                 shouldWeTerminate();
+            }
+            else if(DPApiCallback.ACTION_DRONE_CONNECTION_FAILED.equals(action)){
+                String errorMsg = intent.getStringExtra(DPApiCallback
+                        .EXTRA_CONNECTION_FAILED_ERROR_MESSAGE);
+                Toast.makeText(getApplicationContext(), "Connection failed: " + errorMsg,
+                        Toast.LENGTH_LONG).show();
             }
 		}
 	};
