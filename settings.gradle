@@ -12,3 +12,6 @@ include ':3DR-Services-Library:lib'
 project(':3DR-Services-Library:lib').projectDir = new File
         ('Libraries/3DRServicesClient/libraries/3DR-Services-Library/lib')
 
+include ':Mavlink'
+project(':Mavlink').projectDir = new File('Libraries/3DRServicesClient/libraries/Mavlink')
+
