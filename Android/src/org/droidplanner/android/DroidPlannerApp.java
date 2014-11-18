@@ -130,7 +130,6 @@ public class DroidPlannerApp extends Application implements ServiceListener {
 
     private ServiceManager serviceMgr;
     private Drone drone;
-    private DroneCallback droneCallback;
 
     private MissionProxy missionProxy;
     private DroidPlannerPrefs dpPrefs;
@@ -146,7 +145,6 @@ public class DroidPlannerApp extends Application implements ServiceListener {
 
         serviceMgr = new ServiceManager(context);
         drone = new Drone(context, serviceMgr);
-        droneCallback = new DroneCallback(context);
 
         missionProxy = new MissionProxy(context, this.drone);
 
@@ -219,7 +217,7 @@ public class DroidPlannerApp extends Application implements ServiceListener {
         }
 
         if(!isDroneConnected)
-            drone.connect(connParams, this.droneCallback);
+            drone.connect(connParams);
     }
 
     public static void connectToDrone(Context context){
