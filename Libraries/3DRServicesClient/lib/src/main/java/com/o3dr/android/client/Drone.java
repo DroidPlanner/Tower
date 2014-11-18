@@ -123,17 +123,20 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
     }
 
     private void start() throws RemoteException {
-        this.dpApi = serviceMgr.get3drServices().acquireDroidPlannerApi(this.droneCallback);
+        if(serviceMgr.isServiceConnected()) {
+            this.dpApi = serviceMgr.get3drServices().acquireDroidPlannerApi(this.droneCallback);
 
-        resetFlightTimer();
-        lbm.registerReceiver(broadcastReceiver, intentFilter);
+            resetFlightTimer();
+            lbm.registerReceiver(broadcastReceiver, intentFilter);
+        }
     }
 
     private void terminate() {
         lbm.unregisterReceiver(broadcastReceiver);
         this.dpApi = null;
         try {
-            serviceMgr.get3drServices().releaseDroidPlannerApi(this.droneCallback);
+            if(serviceMgr.isServiceConnected())
+                serviceMgr.get3drServices().releaseDroidPlannerApi(this.droneCallback);
         } catch (RemoteException e) {
             Log.e(TAG, e.getMessage(), e);
         }
