@@ -101,7 +101,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 
         mAltitudePicker = (CardWheelHorizontalView) view.findViewById(R.id.altitudePicker);
         mAltitudePicker.setViewAdapter(new NumericWheelAdapter(context,
-                R.layout.wheel_text_centered, 5, 200, "%d m"));
+                R.layout.wheel_text_centered, 0, 200, "%d m"));
 
 		areaTextView = (TextView) view.findViewById(id.areaTextView);
 		distanceBetweenLinesTextView = (TextView) view

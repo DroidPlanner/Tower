@@ -1,22 +1,5 @@
 package org.droidplanner.android.fragments;
 
-import java.util.List;
-import java.util.Set;
-
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
-import org.droidplanner.android.graphic.map.GraphicDrone;
-import org.droidplanner.android.graphic.map.GraphicGuided;
-import org.droidplanner.android.graphic.map.GraphicHome;
-import org.droidplanner.android.maps.DPMap;
-import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.android.maps.providers.DPMapProvider;
-import org.droidplanner.android.proxy.mission.MissionProxy;
-import org.droidplanner.android.utils.Utils;
-import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -35,80 +18,90 @@ import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.event.Event;
 import com.o3dr.services.android.lib.drone.property.Gps;
 
+import org.droidplanner.R;
+import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
+import org.droidplanner.android.graphic.map.GraphicDrone;
+import org.droidplanner.android.graphic.map.GraphicGuided;
+import org.droidplanner.android.graphic.map.GraphicHome;
+import org.droidplanner.android.maps.DPMap;
+import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.utils.Utils;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+
+import java.util.List;
+import java.util.Set;
+
 public abstract class DroneMap extends ApiListenerFragment {
 
 	private final static String TAG = DroneMap.class.getSimpleName();
 
-    private static final IntentFilter eventFilter = new IntentFilter();
-    static {
-        eventFilter.addAction(MissionProxy.ACTION_MISSION_PROXY_UPDATE);
-        eventFilter.addAction(Event.EVENT_GPS);
-        eventFilter.addAction(Event.EVENT_GUIDED_POINT);
-        eventFilter.addAction(Event.EVENT_HEARTBEAT_FIRST);
-        eventFilter.addAction(Event.EVENT_HEARTBEAT_RESTORED);
-        eventFilter.addAction(Event.EVENT_HEARTBEAT_TIMEOUT);
-        eventFilter.addAction(Event.EVENT_DISCONNECTED);
-        eventFilter.addAction(Event.EVENT_FOOTPRINT);
-        eventFilter.addAction(Event.EVENT_ATTITUDE);
-    }
+	private static final IntentFilter eventFilter = new IntentFilter();
+	static {
+		eventFilter.addAction(MissionProxy.ACTION_MISSION_PROXY_UPDATE);
+		eventFilter.addAction(Event.EVENT_GPS);
+		eventFilter.addAction(Event.EVENT_GUIDED_POINT);
+		eventFilter.addAction(Event.EVENT_HEARTBEAT_FIRST);
+		eventFilter.addAction(Event.EVENT_HEARTBEAT_RESTORED);
+		eventFilter.addAction(Event.EVENT_HEARTBEAT_TIMEOUT);
+		eventFilter.addAction(Event.EVENT_DISCONNECTED);
+		eventFilter.addAction(Event.EVENT_FOOTPRINT);
+		eventFilter.addAction(Event.EVENT_ATTITUDE);
+	}
 
-    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(!isResumed())
-                return;
+	private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (!isResumed())
+				return;
 
-            final String action = intent.getAction();
-            if(MissionProxy.ACTION_MISSION_PROXY_UPDATE.equals(action)){
-                postUpdate();
-            }
-            else if(Event.EVENT_GPS.equals(action)){
-                mMapFragment.updateMarker(graphicDrone);
-                mMapFragment.updateDroneLeashPath(guided);
-                final Gps droneGps = drone.getGps();
-                if (droneGps != null && droneGps.isValid()) {
-                    mMapFragment.addFlightPathPoint(droneGps.getPosition());
-                }
-            }
-            else if(Event.EVENT_GUIDED_POINT.equals(action)){
-                mMapFragment.updateMarker(guided);
-                mMapFragment.updateDroneLeashPath(guided);
-            }
-            else if(Event.EVENT_HEARTBEAT_FIRST.equals(action)
-                    || Event.EVENT_HEARTBEAT_RESTORED.equals(action)){
-                mMapFragment.updateMarker(graphicDrone);
-            }
-            else if(Event.EVENT_DISCONNECTED.equals(action)
-                    || Event.EVENT_HEARTBEAT_TIMEOUT.equals(action)){
-                mMapFragment.updateMarker(graphicDrone);
-            }
-            else if(Event.EVENT_FOOTPRINT.equals(action)) {
-                mMapFragment.addCameraFootprint(drone.getLastCameraFootPrint());
-            }
-            else if(Event.EVENT_ATTITUDE.equals(action)){
-                if (mAppPrefs.isRealtimeFootprintsEnabled()) {
-                    if (drone.getGps().isValid()) {
-                        mMapFragment.updateRealTimeFootprint(drone.getCurrentFieldOfView());
-                    }
+			final String action = intent.getAction();
+			if (MissionProxy.ACTION_MISSION_PROXY_UPDATE.equals(action)) {
+				postUpdate();
+			} else if (Event.EVENT_GPS.equals(action)) {
+				mMapFragment.updateMarker(graphicDrone);
+				mMapFragment.updateDroneLeashPath(guided);
+				final Gps droneGps = drone.getGps();
+				if (droneGps != null && droneGps.isValid()) {
+					mMapFragment.addFlightPathPoint(droneGps.getPosition());
+				}
+			} else if (Event.EVENT_GUIDED_POINT.equals(action)) {
+				mMapFragment.updateMarker(guided);
+				mMapFragment.updateDroneLeashPath(guided);
+			} else if (Event.EVENT_HEARTBEAT_FIRST.equals(action)
+					|| Event.EVENT_HEARTBEAT_RESTORED.equals(action)) {
+				mMapFragment.updateMarker(graphicDrone);
+			} else if (Event.EVENT_DISCONNECTED.equals(action)
+					|| Event.EVENT_HEARTBEAT_TIMEOUT.equals(action)) {
+				mMapFragment.updateMarker(graphicDrone);
+			} else if (Event.EVENT_FOOTPRINT.equals(action)) {
+				mMapFragment.addCameraFootprint(drone.getLastCameraFootPrint());
+			} else if (Event.EVENT_ATTITUDE.equals(action)) {
+				if (mAppPrefs.isRealtimeFootprintsEnabled()) {
+					if (drone.getGps().isValid()) {
+						mMapFragment.updateRealTimeFootprint(drone.getCurrentFieldOfView());
+					}
 
-                }
-            }
-        }
-    };
+				}
+			}
+		}
+	};
 
 	private final Handler mHandler = new Handler();
 
 	private final Runnable mUpdateMap = new Runnable() {
 		@Override
 		public void run() {
-            if(getActivity() == null && mMapFragment == null)
-                return;
+			if (getActivity() == null && mMapFragment == null)
+				return;
 
 			final List<MarkerInfo> missionMarkerInfos = missionProxy.getMarkersInfos();
 
 			final boolean isThereMissionMarkers = !missionMarkerInfos.isEmpty();
 			final boolean isHomeValid = home.isValid();
-            final boolean isGuidedVisible = guided.isVisible();
+			final boolean isGuidedVisible = guided.isVisible();
 
 			// Get the list of markers currently on the map.
 			final Set<MarkerInfo> markersOnTheMap = mMapFragment.getMarkerInfoList();
@@ -118,9 +111,9 @@ public abstract class DroneMap extends ApiListenerFragment {
 					markersOnTheMap.remove(home);
 				}
 
-                if(isGuidedVisible){
-                    markersOnTheMap.remove(guided);
-                }
+				if (isGuidedVisible) {
+					markersOnTheMap.remove(guided);
+				}
 
 				if (isThereMissionMarkers) {
 					markersOnTheMap.removeAll(missionMarkerInfos);
@@ -133,16 +126,16 @@ public abstract class DroneMap extends ApiListenerFragment {
 				mMapFragment.updateMarker(home);
 			}
 
-            if(isGuidedVisible){
-                mMapFragment.updateMarker(guided);
-            }
+			if (isGuidedVisible) {
+				mMapFragment.updateMarker(guided);
+			}
 
 			if (isThereMissionMarkers) {
 				mMapFragment.updateMarkers(missionMarkerInfos, isMissionDraggable());
 			}
 
 			mMapFragment.updateMissionPath(missionProxy);
-			
+
 			mMapFragment.updatePolygonsPaths(missionProxy.getPolygonsPath());
 
 			mHandler.removeCallbacks(this);
@@ -151,7 +144,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 
 	protected DPMap mMapFragment;
 
-    protected DroidPlannerPrefs mAppPrefs;
+	protected DroidPlannerPrefs mAppPrefs;
 
 	private GraphicHome home;
 	public GraphicDrone graphicDrone;
@@ -167,9 +160,9 @@ public abstract class DroneMap extends ApiListenerFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
 		final View view = inflater.inflate(R.layout.fragment_drone_map, viewGroup, false);
-        mAppPrefs = new DroidPlannerPrefs(context);
-        updateMapFragment();
-        return view;
+		mAppPrefs = new DroidPlannerPrefs(context);
+		updateMapFragment();
+		return view;
 	}
 
 	@Override
@@ -178,24 +171,27 @@ public abstract class DroneMap extends ApiListenerFragment {
 		mHandler.removeCallbacksAndMessages(null);
 	}
 
-    @Override
-    public void onApiConnected(){
-        getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
+	@Override
+	public void onApiConnected() {
+		if (mMapFragment != null)
+			mMapFragment.clearMarkers();
 
-            drone = getDrone();
-            missionProxy = getMissionProxy();
+		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 
-            home = new GraphicHome(drone);
-            graphicDrone = new GraphicDrone(drone);
-            guided = new GraphicGuided(drone);
+		drone = getDrone();
+		missionProxy = getMissionProxy();
 
-            postUpdate();
-    }
+		home = new GraphicHome(drone);
+		graphicDrone = new GraphicDrone(drone);
+		guided = new GraphicGuided(drone);
 
-    @Override
-    public void onApiDisconnected(){
-        getBroadcastManager().unregisterReceiver(eventReceiver);
-    }
+		postUpdate();
+	}
+
+	@Override
+	public void onApiDisconnected() {
+		getBroadcastManager().unregisterReceiver(eventReceiver);
+	}
 
 	private void updateMapFragment() {
 		// Add the map fragment instance (based on user preference)
@@ -232,17 +228,17 @@ public abstract class DroneMap extends ApiListenerFragment {
 		updateMapFragment();
 	}
 
-    @Override
-    public void onStop(){
-        super.onStop();
-        mHandler.removeCallbacksAndMessages(null);
-    }
+	@Override
+	public void onStop() {
+		super.onStop();
+		mHandler.removeCallbacksAndMessages(null);
+	}
 
-    @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-        context = activity.getApplicationContext();
-    }
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		context = activity.getApplicationContext();
+	}
 
 	public final void postUpdate() {
 		mHandler.post(mUpdateMap);
@@ -301,19 +297,23 @@ public abstract class DroneMap extends ApiListenerFragment {
 		mMapFragment.goToDroneLocation();
 	}
 
-    /**
-     * Update the map rotation.
-     * @param bearing
-     */
-    public void updateMapBearing(float bearing){
-        mMapFragment.updateCameraBearing(bearing);
-    }
+	/**
+	 * Update the map rotation.
+	 * 
+	 * @param bearing
+	 */
+	public void updateMapBearing(float bearing) {
+		mMapFragment.updateCameraBearing(bearing);
+	}
 
-    /**
-     * Ignore marker clicks on the map and instead report the event as a mapClick
-     * @param skip if it should skip further events
-     */
-    public void skipMarkerClickEvents(boolean skip){
-    	mMapFragment.skipMarkerClickEvents(skip);
-    }
+	/**
+	 * Ignore marker clicks on the map and instead report the event as a
+	 * mapClick
+	 * 
+	 * @param skip
+	 *            if it should skip further events
+	 */
+	public void skipMarkerClickEvents(boolean skip) {
+		mMapFragment.skipMarkerClickEvents(skip);
+	}
 }
