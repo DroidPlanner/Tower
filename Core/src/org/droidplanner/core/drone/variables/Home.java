@@ -56,8 +56,8 @@ public class Home extends DroneVariable {
 		mavMsg.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT;
 		mavMsg.current = 0;
 		mavMsg.frame = MAV_FRAME.MAV_FRAME_GLOBAL;
-		mavMsg.target_component = 1;
-		mavMsg.target_system = 1;
+		mavMsg.target_system = myDrone.getSysid();
+		mavMsg.target_component = myDrone.getCompid();
 		if (isValid()) {
 			mavMsg.x = (float) getCoord().getLat();
 			mavMsg.y = (float) getCoord().getLng();

@@ -37,6 +37,10 @@ public interface Drone {
 
 	public GPS getGps();
 
+	public byte getSysid();
+
+	public byte getCompid();
+
 	public int getMavlinkVersion();
 
 	public boolean isConnectionAlive();
