@@ -25,8 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
-import com.o3dr.android.client.DroneCallback;
-
 public class ChecklistFragment extends ApiListenerFragment implements OnXmlParserError,
 		OnCheckListItemUpdateListener {
 
