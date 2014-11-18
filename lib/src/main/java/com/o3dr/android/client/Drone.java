@@ -1,17 +1,15 @@
 package com.o3dr.android.client;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.IBinder;
+import android.os.Bundle;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.os.SystemClock;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.o3dr.android.client.interfaces.DroneListener;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.connection.ConnectionParameter;
+import com.o3dr.services.android.lib.drone.connection.ConnectionResult;
 import com.o3dr.services.android.lib.drone.event.Event;
 import com.o3dr.services.android.lib.drone.mission.Mission;
 import com.o3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
@@ -36,13 +34,13 @@ import com.o3dr.services.android.lib.gcs.follow.FollowType;
 import com.o3dr.services.android.lib.model.IDroidPlannerApi;
 import com.o3dr.services.android.lib.model.IDroidPlannerApiCallback;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by fhuya on 11/4/14.
  */
-public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerApi,
-        ServiceListener {
+public class Drone {
 
     private static final String CLAZZ_NAME = Drone.class.getName();
     private static final String TAG = Drone.class.getSimpleName();
@@ -56,38 +54,14 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
     public static final String EXTRA_IS_GROUND_COLLISION_IMMINENT =
             "extra_is_ground_collision_imminent";
 
-    private final static IntentFilter intentFilter = new IntentFilter();
+    private final ConcurrentLinkedQueue<DroneListener> droneListeners = new
+            ConcurrentLinkedQueue<DroneListener>();
 
-    static {
-        intentFilter.addAction(Event.EVENT_STATE);
-        intentFilter.addAction(Event.EVENT_SPEED);
-        intentFilter.addAction(DroneCallback.ACTION_DRONE_CONNECTION_FAILED);
-    }
-
-    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            if (Event.EVENT_STATE.equals(action)) {
-                if (getState().isFlying())
-                    startTimer();
-                else
-                    stopTimer();
-            } else if (Event.EVENT_SPEED.equals(action)) {
-                checkForGroundCollision();
-            } else if (DroneCallback.ACTION_DRONE_CONNECTION_FAILED.equals(action)) {
-                disconnect();
-            }
-        }
-    };
-
-
+    private final Handler handler;
     private final ServiceManager serviceMgr;
-    private final LocalBroadcastManager lbm;
     private final DroneCallback droneCallback;
     private IDroidPlannerApi dpApi;
 
-    private Runnable onConnectedTask;
     private ConnectionParameter connectionParameter;
 
     // flightTimer
@@ -96,12 +70,39 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
     private long elapsedFlightTime = 0;
     private AtomicBoolean isTimerRunning = new AtomicBoolean(false);
 
-    public Drone(Context context, ServiceManager serviceManager) {
+    public Drone(ServiceManager serviceManager, Handler handler) {
+        this.handler = handler;
         this.serviceMgr = serviceManager;
-        this.droneCallback = new DroneCallback(context);
-        lbm = LocalBroadcastManager.getInstance(context);
+        this.droneCallback = new DroneCallback(this);
+        start();
+    }
 
-        this.serviceMgr.addServiceListener(this);
+    private void start() {
+        if (!serviceMgr.isServiceConnected())
+            throw new IllegalStateException("Service manager must be connected.");
+
+        try {
+            this.dpApi = serviceMgr.get3drServices().acquireDroidPlannerApi();
+        } catch (RemoteException e) {
+            throw new IllegalStateException("Unable to retrieve a valid drone handle.");
+        }
+
+        requestEventUpdates(this.droneCallback);
+        resetFlightTimer();
+    }
+
+    public void destroy() {
+        removeEventUpdates(this.droneCallback);
+
+        try {
+            if (serviceMgr.isServiceConnected())
+                serviceMgr.get3drServices().releaseDroidPlannerApi(this.dpApi);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+
+        this.dpApi = null;
+        droneListeners.clear();
     }
 
     private void checkForGroundCollision() {
@@ -118,32 +119,15 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
                 && verticalSpeed < COLLISION_DANGEROUS_SPEED_METERS_PER_SECOND
                 && altitudeValue > COLLISION_SAFE_ALTITUDE_METERS;
 
-        lbm.sendBroadcast(new Intent(ACTION_GROUND_COLLISION_IMMINENT)
-                .putExtra(EXTRA_IS_GROUND_COLLISION_IMMINENT, isCollisionImminent));
-    }
-
-    private void start() throws RemoteException {
-        if(serviceMgr.isServiceConnected()) {
-            this.dpApi = serviceMgr.get3drServices().acquireDroidPlannerApi(this.droneCallback);
-
-            resetFlightTimer();
-            lbm.registerReceiver(broadcastReceiver, intentFilter);
-        }
-    }
-
-    private void terminate() {
-        lbm.unregisterReceiver(broadcastReceiver);
-        this.dpApi = null;
-        try {
-            if(serviceMgr.isServiceConnected())
-                serviceMgr.get3drServices().releaseDroidPlannerApi(this.droneCallback);
-        } catch (RemoteException e) {
-            Log.e(TAG, e.getMessage(), e);
-        }
+        Bundle extrasBundle = new Bundle(1);
+        extrasBundle.putBoolean(EXTRA_IS_GROUND_COLLISION_IMMINENT, isCollisionImminent);
+        notifyDroneEvent(ACTION_GROUND_COLLISION_IMMINENT, extrasBundle);
     }
 
     private void handleRemoteException(RemoteException e) {
-        serviceMgr.handleRemoteException(e);
+        final String errorMsg = e.getMessage();
+        Log.e(TAG, errorMsg, e);
+        notifyDroneServiceInterrupted(errorMsg);
     }
 
     public double getSpeedParameter() {
@@ -186,7 +170,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return elapsedFlightTime / 1000;
     }
 
-    @Override
+
     public Gps getGps() {
         if (isApiValid()) {
             try {
@@ -199,7 +183,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new Gps();
     }
 
-    @Override
+
     public State getState() {
         if (isApiValid()) {
             try {
@@ -212,7 +196,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new State();
     }
 
-    @Override
+
     public VehicleMode[] getAllVehicleModes() {
         if (isApiValid()) {
             try {
@@ -224,7 +208,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new VehicleMode[0];
     }
 
-    @Override
+
     public Parameters getParameters() {
         if (isApiValid()) {
             try {
@@ -236,7 +220,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new Parameters();
     }
 
-    @Override
+
     public Speed getSpeed() {
         if (isApiValid()) {
             try {
@@ -248,7 +232,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new Speed();
     }
 
-    @Override
+
     public Attitude getAttitude() {
         if (isApiValid()) {
             try {
@@ -260,7 +244,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new Attitude();
     }
 
-    @Override
+
     public Home getHome() {
         if (isApiValid()) {
             try {
@@ -272,7 +256,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new Home();
     }
 
-    @Override
+
     public Battery getBattery() {
         if (isApiValid()) {
             try {
@@ -284,7 +268,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new Battery();
     }
 
-    @Override
+
     public Altitude getAltitude() {
         if (isApiValid()) {
             try {
@@ -296,7 +280,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new Altitude();
     }
 
-    @Override
+
     public Mission getMission() {
         if (isApiValid()) {
             try {
@@ -308,7 +292,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new Mission();
     }
 
-    @Override
+
     public Signal getSignal() {
         if (isApiValid()) {
             try {
@@ -321,7 +305,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new Signal();
     }
 
-    @Override
+
     public Type getType() {
         if (isApiValid()) {
             try {
@@ -342,24 +326,9 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
                 handleRemoteException(e);
             }
         }
-        else{
-            onConnectedTask = new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        dpApi.connect(connParams);
-                        connectionParameter = connParams;
-                    } catch (RemoteException e) {
-                        handleRemoteException(e);
-                    }
-                }
-            };
-        }
     }
 
     public void disconnect() {
-        onConnectedTask = null;
-
         if (isApiValid()) {
             try {
                 dpApi.disconnect();
@@ -370,11 +339,11 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    private boolean isApiValid(){
+    private boolean isApiValid() {
         return dpApi != null;
     }
 
-    @Override
+
     public boolean isConnected() {
         try {
             return isApiValid() && dpApi.isConnected();
@@ -384,7 +353,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return false;
     }
 
-    @Override
+
     public GuidedState getGuidedState() {
         if (isApiValid()) {
             try {
@@ -396,7 +365,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new GuidedState();
     }
 
-    @Override
+
     public FollowState getFollowState() {
         if (isApiValid()) {
             try {
@@ -408,7 +377,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new FollowState();
     }
 
-    @Override
+
     public FollowType[] getFollowTypes() {
         if (isApiValid()) {
             try {
@@ -420,7 +389,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new FollowType[0];
     }
 
-    @Override
+
     public CameraDetail[] getCameraDetails() {
         if (isApiValid()) {
             try {
@@ -432,7 +401,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new CameraDetail[0];
     }
 
-    @Override
+
     public FootPrint getLastCameraFootPrint() {
         if (isApiValid()) {
             try {
@@ -444,7 +413,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new FootPrint();
     }
 
-    @Override
+
     public FootPrint[] getCameraFootPrints() {
         if (isApiValid()) {
             try {
@@ -456,11 +425,11 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new FootPrint[0];
     }
 
-    public ConnectionParameter getConnectionParameter(){
+    public ConnectionParameter getConnectionParameter() {
         return this.connectionParameter;
     }
 
-    @Override
+
     public FootPrint getCurrentFieldOfView() {
         if (isApiValid()) {
             try {
@@ -472,7 +441,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return new FootPrint();
     }
 
-    @Override
+
     public Survey buildSurvey(Survey survey) {
         if (isApiValid()) {
             try {
@@ -486,7 +455,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return survey;
     }
 
-    @Override
+
     public StructureScanner buildStructureScanner(StructureScanner item) {
         if (isApiValid()) {
             try {
@@ -500,7 +469,40 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         return item;
     }
 
-    @Override
+    public void registerDroneListener(DroneListener listener){
+        if(listener == null)
+            return;
+
+        droneListeners.add(listener);
+    }
+
+    private void requestEventUpdates(IDroidPlannerApiCallback callback) {
+        if(isApiValid()){
+            try {
+                this.dpApi.requestEventUpdates(callback);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
+    public void unregisterDroneListener(DroneListener listener){
+        if(listener == null)
+            return;
+
+        droneListeners.remove(listener);
+    }
+
+    private void removeEventUpdates(IDroidPlannerApiCallback callback) {
+        if(isApiValid()){
+            try {
+                this.dpApi.removeEventUpdates(callback);
+            } catch (RemoteException e) {
+                handleRemoteException(e);
+            }
+        }
+    }
+
     public void changeVehicleMode(VehicleMode newMode) {
         if (isApiValid()) {
             try {
@@ -511,7 +513,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void refreshParameters() {
         if (isApiValid()) {
             try {
@@ -522,7 +524,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void writeParameters(Parameters parameters) {
         if (isApiValid()) {
             try {
@@ -533,7 +535,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void setMission(Mission mission, boolean pushToDrone) {
         if (isApiValid()) {
             try {
@@ -544,7 +546,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void generateDronie() {
         if (isApiValid()) {
             try {
@@ -555,7 +557,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void arm(boolean arm) {
         if (isApiValid()) {
             try {
@@ -566,7 +568,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void startMagnetometerCalibration(double[] startPointsX, double[] startPointsY,
                                              double[] startPointsZ) {
         if (isApiValid()) {
@@ -578,7 +580,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void stopMagnetometerCalibration() {
         if (isApiValid()) {
             try {
@@ -589,7 +591,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void startIMUCalibration() {
         if (isApiValid()) {
             try {
@@ -600,7 +602,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void sendIMUCalibrationAck(int step) {
         if (isApiValid()) {
             try {
@@ -611,7 +613,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void doGuidedTakeoff(double altitude) {
         if (isApiValid()) {
             try {
@@ -626,7 +628,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         sendGuidedPoint(getGps().getPosition(), true);
     }
 
-    @Override
+
     public void sendGuidedPoint(LatLong point, boolean force) {
         if (isApiValid()) {
             try {
@@ -637,7 +639,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void setGuidedAltitude(double altitude) {
         if (isApiValid()) {
             try {
@@ -648,7 +650,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void setGuidedVelocity(double xVel, double yVel, double zVel) {
         if (isApiValid()) {
             try {
@@ -659,7 +661,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void enableFollowMe(FollowType followType) {
         if (isApiValid()) {
             try {
@@ -670,7 +672,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void setFollowMeRadius(double radius) {
         if (isApiValid()) {
             try {
@@ -681,7 +683,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void disableFollowMe() {
         if (isApiValid()) {
             try {
@@ -692,7 +694,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void triggerCamera() {
         if (isApiValid()) {
             try {
@@ -703,7 +705,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void epmCommand(boolean release) {
         if (isApiValid()) {
             try {
@@ -714,7 +716,7 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
+
     public void loadWaypoints() {
         if (isApiValid()) {
             try {
@@ -725,26 +727,51 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         }
     }
 
-    @Override
-    public IBinder asBinder() {
-        throw new UnsupportedOperationException();
-    }
+    void notifyDroneConnectionFailed(final ConnectionResult result) {
+        if(droneListeners.isEmpty())
+            return;
 
-    @Override
-    public void onServiceConnected() {
-        try {
-            start();
-            if(onConnectedTask != null) {
-                onConnectedTask.run();
-                onConnectedTask = null;
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for(DroneListener listener : droneListeners)
+                    listener.onDroneConnectionFailed(result);
             }
-        } catch (RemoteException e) {
-            handleRemoteException(e);
-        }
+        });
     }
 
-    @Override
-    public void onServiceDisconnected() {
-        terminate();
+    void notifyDroneEvent(final String event, final Bundle extras) {
+        if (Event.EVENT_STATE.equals(event)) {
+            if (getState().isFlying())
+                startTimer();
+            else
+                stopTimer();
+        } else if (Event.EVENT_SPEED.equals(event)) {
+            checkForGroundCollision();
+        }
+
+        if(droneListeners.isEmpty())
+            return;
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for(DroneListener listener : droneListeners)
+                    listener.onDroneEvent(event, extras);
+            }
+        });
+    }
+
+    void notifyDroneServiceInterrupted(final String errorMsg) {
+        if(droneListeners.isEmpty())
+            return;
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for(DroneListener listener : droneListeners)
+                    listener.onDroneServiceInterrupted(errorMsg);
+            }
+        });
     }
 }
