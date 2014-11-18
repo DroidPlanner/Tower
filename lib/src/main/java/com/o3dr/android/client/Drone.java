@@ -742,10 +742,6 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
 
     @Override
     public void onServiceDisconnected() {
-        try {
-            terminate();
-        } catch (RemoteException e) {
-            handleRemoteException(e);
-        }
+        terminate();
     }
 }
