@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.connection.ConnectionParameter;
@@ -128,10 +129,14 @@ public class Drone implements com.o3dr.services.android.lib.model.IDroidPlannerA
         lbm.registerReceiver(broadcastReceiver, intentFilter);
     }
 
-    private void terminate() throws RemoteException {
+    private void terminate() {
         lbm.unregisterReceiver(broadcastReceiver);
         this.dpApi = null;
-        serviceMgr.get3drServices().releaseDroidPlannerApi(this.droneCallback);
+        try {
+            serviceMgr.get3drServices().releaseDroidPlannerApi(this.droneCallback);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
     }
 
     private void handleRemoteException(RemoteException e) {
