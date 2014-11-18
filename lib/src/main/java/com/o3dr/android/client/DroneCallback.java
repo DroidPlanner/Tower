@@ -12,7 +12,7 @@ import com.o3dr.services.android.lib.model.IDroidPlannerApiCallback;
 /**
  * Created by fhuya on 10/29/14.
  */
-public final class DroneCallback extends IDroidPlannerApiCallback.Stub {
+final class DroneCallback extends IDroidPlannerApiCallback.Stub {
 
     private final Drone drone;
 
