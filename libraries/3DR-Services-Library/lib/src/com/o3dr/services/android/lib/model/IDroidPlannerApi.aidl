@@ -23,6 +23,7 @@ import com.o3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.o3dr.services.android.lib.drone.connection.ConnectionParameter;
+import com.o3dr.services.android.lib.model.IDroidPlannerApiCallback;
 
 /**
 * Interface used to access the drone properties.
@@ -139,6 +140,18 @@ interface IDroidPlannerApi {
         StructureScanner buildStructureScanner(in StructureScanner item);
 
         /*** Oneway method calls ***/
+
+        /**
+        * Register a listener to receive drone events.
+        * @param callback the drone event listener to register.
+        */
+        oneway void requestEventUpdates(IDroidPlannerApiCallback callback);
+
+        /**
+        * Removes a drone events listener.
+        * @param callback the drone event listener to remove.
+        */
+        oneway void removeEventUpdates(IDroidPlannerApiCallback callback);
 
         /**
         * Change the vehicle mode for the connected drone.
