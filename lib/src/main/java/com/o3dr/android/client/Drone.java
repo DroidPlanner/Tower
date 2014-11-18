@@ -74,10 +74,9 @@ public class Drone {
         this.handler = handler;
         this.serviceMgr = serviceManager;
         this.droneCallback = new DroneCallback(this);
-        start();
     }
 
-    private void start() {
+    public void start() {
         if (!serviceMgr.isServiceConnected())
             throw new IllegalStateException("Service manager must be connected.");
 
