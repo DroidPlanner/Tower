@@ -11,8 +11,8 @@ import com.MAVLink.Messages.enums.MAV_CMD;
 public class MavLinkROI {
 	public static void setROI(Drone drone, Coord3D coord) {
 		msg_command_long msg = new msg_command_long();
-		msg.target_system = 1;
-		msg.target_component = 1;
+		msg.target_system = drone.getSysid();
+		msg.target_component = drone.getCompid();
 		msg.command = MAV_CMD.MAV_CMD_DO_SET_ROI;
 
 		msg.param5 = (float) coord.getX();
@@ -24,8 +24,8 @@ public class MavLinkROI {
 
 	public static void resetROI(Drone drone) {
 		msg_command_long msg = new msg_command_long();
-		msg.target_system = 1;
-		msg.target_component = 1;
+		msg.target_system = drone.getSysid();
+		msg.target_component = drone.getCompid();
 		msg.command = MAV_CMD.MAV_CMD_DO_SET_ROI;
 
 		msg.param5 = (float) 0.0;
@@ -37,16 +37,16 @@ public class MavLinkROI {
 	
 	public static void triggerCamera(Drone drone){
 		msg_digicam_control msg = new msg_digicam_control();
-		msg.target_system = 1;
-		msg.target_component = 1;
+		msg.target_system = drone.getSysid();
+		msg.target_component = drone.getCompid();
 		msg.shot = 1;
 		drone.getMavClient().sendMavPacket(msg.pack());
 	}
 	
 	public static void empCommand(Drone drone, boolean release) {
 		msg_command_long msg = new msg_command_long();
-		msg.target_system = 1;
-		msg.target_component = 1;
+		msg.target_system = drone.getSysid();
+		msg.target_component = drone.getCompid();
 		msg.command = EpmGripper.MAV_CMD_DO_GRIPPER;
 		msg.param2 = release ? EpmGripper.GRIPPER_ACTION_RELEASE : EpmGripper.GRIPPER_ACTION_GRAB;
 

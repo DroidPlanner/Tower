@@ -74,8 +74,6 @@ public class Survey extends MissionItem {
 	public static msg_mission_item packSurveyPoint(Coord2D point, Length altitude) {
 		msg_mission_item mavMsg = new msg_mission_item();
 		mavMsg.autocontinue = 1;
-		mavMsg.target_component = 1;
-		mavMsg.target_system = 1;
 		mavMsg.frame = MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT;
 		mavMsg.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT;
 		mavMsg.x = (float) point.getX();

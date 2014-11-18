@@ -132,6 +132,16 @@ public class DroneImpl implements Drone {
 	}
 
 	@Override
+	public byte getSysid() {
+		return heartbeat.getSysid();
+	}
+
+	@Override
+	public byte getCompid() {
+		return heartbeat.getCompid();
+	}
+
+	@Override
 	public int getMavlinkVersion() {
 		return heartbeat.getMavlinkVersion();
 	}

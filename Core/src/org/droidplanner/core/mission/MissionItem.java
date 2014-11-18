@@ -29,8 +29,6 @@ public abstract class MissionItem implements Comparable<MissionItem> {
 		msg_mission_item mavMsg = new msg_mission_item();
 		list.add(mavMsg);
 		mavMsg.autocontinue = 1;
-		mavMsg.target_component = 1;
-		mavMsg.target_system = 1;
 		mavMsg.frame = MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT;
 		return list;
 	}
