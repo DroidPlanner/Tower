@@ -22,7 +22,6 @@ import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
-import com.o3dr.services.android.lib.model.IDroidPlannerApiCallback;
 import com.o3dr.services.android.lib.drone.connection.ConnectionParameter;
 
 /**
@@ -150,7 +149,7 @@ interface IDroidPlannerApi {
         /**
         * Asynchronous call used to establish connection with the device.
         */
-        oneway void connect(in ConnectionParameter params, IDroidPlannerApiCallback callback);
+        oneway void connect(in ConnectionParameter params);
 
         /**
         * Asynchronous call used to break connection with the device.

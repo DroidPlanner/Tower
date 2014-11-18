@@ -2,6 +2,7 @@
 package com.o3dr.services.android.lib.model;
 
 import com.o3dr.services.android.lib.model.IDroidPlannerApi;
+import com.o3dr.services.android.lib.model.IDroidPlannerApiCallback;
 
 /**
 * Used to establish connection with a drone.
@@ -14,11 +15,18 @@ interface IDroidPlannerServices {
     boolean ping();
 
     /**
-    * Retrieve an handle to the droidplanner api.
+    * Acquire an handle to the droidplanner api.
     *
-    * @param tag used to retrieve an existing handle if it exists.
+    * @param callback callback used to receive drone events.
     * @return IDroidPlannerApi object used to interact with the drone.
     */
-    IDroidPlannerApi getDroidPlannerApi(String tag);
+    IDroidPlannerApi acquireDroidPlannerApi(IDroidPlannerApiCallback callback);
+
+    /**
+    * Release the handle to the droidplanner api.
+    *
+    * @param callback callback used to receive droidplanner api events.
+    */
+    void releaseDroidPlannerApi(IDroidPlannerApiCallback callback);
 
 }
