@@ -80,6 +80,9 @@ public class Drone {
         if (!serviceMgr.isServiceConnected())
             throw new IllegalStateException("Service manager must be connected.");
 
+        if(isStarted())
+            return;
+
         try {
             this.dpApi = serviceMgr.get3drServices().acquireDroidPlannerApi();
         } catch (RemoteException e) {
@@ -94,7 +97,7 @@ public class Drone {
         removeEventUpdates(this.droneCallback);
 
         try {
-            if (serviceMgr.isServiceConnected())
+            if (isStarted() && serviceMgr.isServiceConnected())
                 serviceMgr.get3drServices().releaseDroidPlannerApi(this.dpApi);
         } catch (RemoteException e) {
             Log.e(TAG, e.getMessage(), e);
@@ -171,7 +174,7 @@ public class Drone {
 
 
     public Gps getGps() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getGps();
             } catch (RemoteException e) {
@@ -184,7 +187,7 @@ public class Drone {
 
 
     public State getState() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getState();
             } catch (RemoteException e) {
@@ -197,7 +200,7 @@ public class Drone {
 
 
     public VehicleMode[] getAllVehicleModes() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getAllVehicleModes();
             } catch (RemoteException e) {
@@ -209,7 +212,7 @@ public class Drone {
 
 
     public Parameters getParameters() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getParameters();
             } catch (RemoteException e) {
@@ -221,7 +224,7 @@ public class Drone {
 
 
     public Speed getSpeed() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getSpeed();
             } catch (RemoteException e) {
@@ -233,7 +236,7 @@ public class Drone {
 
 
     public Attitude getAttitude() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getAttitude();
             } catch (RemoteException e) {
@@ -245,7 +248,7 @@ public class Drone {
 
 
     public Home getHome() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getHome();
             } catch (RemoteException e) {
@@ -257,7 +260,7 @@ public class Drone {
 
 
     public Battery getBattery() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getBattery();
             } catch (RemoteException e) {
@@ -269,7 +272,7 @@ public class Drone {
 
 
     public Altitude getAltitude() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getAltitude();
             } catch (RemoteException e) {
@@ -281,7 +284,7 @@ public class Drone {
 
 
     public Mission getMission() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getMission();
             } catch (RemoteException e) {
@@ -293,7 +296,7 @@ public class Drone {
 
 
     public Signal getSignal() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getSignal();
             } catch (RemoteException e) {
@@ -306,7 +309,7 @@ public class Drone {
 
 
     public Type getType() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getType();
             } catch (RemoteException e) {
@@ -317,7 +320,7 @@ public class Drone {
     }
 
     public void connect(final ConnectionParameter connParams) {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.connect(connParams);
                 this.connectionParameter = connParams;
@@ -328,7 +331,7 @@ public class Drone {
     }
 
     public void disconnect() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.disconnect();
                 this.connectionParameter = null;
@@ -338,14 +341,14 @@ public class Drone {
         }
     }
 
-    private boolean isApiValid() {
+    public boolean isStarted() {
         return dpApi != null;
     }
 
 
     public boolean isConnected() {
         try {
-            return isApiValid() && dpApi.isConnected();
+            return isStarted() && dpApi.isConnected();
         } catch (RemoteException e) {
             handleRemoteException(e);
         }
@@ -354,7 +357,7 @@ public class Drone {
 
 
     public GuidedState getGuidedState() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getGuidedState();
             } catch (RemoteException e) {
@@ -366,7 +369,7 @@ public class Drone {
 
 
     public FollowState getFollowState() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getFollowState();
             } catch (RemoteException e) {
@@ -378,7 +381,7 @@ public class Drone {
 
 
     public FollowType[] getFollowTypes() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getFollowTypes();
             } catch (RemoteException e) {
@@ -390,7 +393,7 @@ public class Drone {
 
 
     public CameraDetail[] getCameraDetails() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getCameraDetails();
             } catch (RemoteException e) {
@@ -402,7 +405,7 @@ public class Drone {
 
 
     public FootPrint getLastCameraFootPrint() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getLastCameraFootPrint();
             } catch (RemoteException e) {
@@ -414,7 +417,7 @@ public class Drone {
 
 
     public FootPrint[] getCameraFootPrints() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getCameraFootPrints();
             } catch (RemoteException e) {
@@ -430,7 +433,7 @@ public class Drone {
 
 
     public FootPrint getCurrentFieldOfView() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 return dpApi.getCurrentFieldOfView();
             } catch (RemoteException e) {
@@ -442,7 +445,7 @@ public class Drone {
 
 
     public Survey buildSurvey(Survey survey) {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 Survey updated = dpApi.buildSurvey(survey);
                 if (updated != null)
@@ -456,7 +459,7 @@ public class Drone {
 
 
     public StructureScanner buildStructureScanner(StructureScanner item) {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 StructureScanner updated = dpApi.buildStructureScanner(item);
                 if (updated != null)
@@ -476,7 +479,7 @@ public class Drone {
     }
 
     private void requestEventUpdates(IDroidPlannerApiCallback callback) {
-        if(isApiValid()){
+        if(isStarted()){
             try {
                 this.dpApi.requestEventUpdates(callback);
             } catch (RemoteException e) {
@@ -493,7 +496,7 @@ public class Drone {
     }
 
     private void removeEventUpdates(IDroidPlannerApiCallback callback) {
-        if(isApiValid()){
+        if(isStarted()){
             try {
                 this.dpApi.removeEventUpdates(callback);
             } catch (RemoteException e) {
@@ -503,7 +506,7 @@ public class Drone {
     }
 
     public void changeVehicleMode(VehicleMode newMode) {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.changeVehicleMode(newMode);
             } catch (RemoteException e) {
@@ -514,7 +517,7 @@ public class Drone {
 
 
     public void refreshParameters() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.refreshParameters();
             } catch (RemoteException e) {
@@ -525,7 +528,7 @@ public class Drone {
 
 
     public void writeParameters(Parameters parameters) {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.writeParameters(parameters);
             } catch (RemoteException e) {
@@ -536,7 +539,7 @@ public class Drone {
 
 
     public void setMission(Mission mission, boolean pushToDrone) {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.setMission(mission, pushToDrone);
             } catch (RemoteException e) {
@@ -547,7 +550,7 @@ public class Drone {
 
 
     public void generateDronie() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.generateDronie();
             } catch (RemoteException e) {
@@ -558,7 +561,7 @@ public class Drone {
 
 
     public void arm(boolean arm) {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.arm(arm);
             } catch (RemoteException e) {
@@ -570,7 +573,7 @@ public class Drone {
 
     public void startMagnetometerCalibration(double[] startPointsX, double[] startPointsY,
                                              double[] startPointsZ) {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.startMagnetometerCalibration(startPointsX, startPointsY, startPointsZ);
             } catch (RemoteException e) {
@@ -581,7 +584,7 @@ public class Drone {
 
 
     public void stopMagnetometerCalibration() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.stopMagnetometerCalibration();
             } catch (RemoteException e) {
@@ -592,7 +595,7 @@ public class Drone {
 
 
     public void startIMUCalibration() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.startIMUCalibration();
             } catch (RemoteException e) {
@@ -603,7 +606,7 @@ public class Drone {
 
 
     public void sendIMUCalibrationAck(int step) {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.sendIMUCalibrationAck(step);
             } catch (RemoteException e) {
@@ -614,7 +617,7 @@ public class Drone {
 
 
     public void doGuidedTakeoff(double altitude) {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.doGuidedTakeoff(altitude);
             } catch (RemoteException e) {
@@ -629,7 +632,7 @@ public class Drone {
 
 
     public void sendGuidedPoint(LatLong point, boolean force) {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.sendGuidedPoint(point, force);
             } catch (RemoteException e) {
@@ -640,7 +643,7 @@ public class Drone {
 
 
     public void setGuidedAltitude(double altitude) {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.setGuidedAltitude(altitude);
             } catch (RemoteException e) {
@@ -651,7 +654,7 @@ public class Drone {
 
 
     public void setGuidedVelocity(double xVel, double yVel, double zVel) {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.setGuidedVelocity(xVel, yVel, zVel);
             } catch (RemoteException e) {
@@ -662,7 +665,7 @@ public class Drone {
 
 
     public void enableFollowMe(FollowType followType) {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.enableFollowMe(followType);
             } catch (RemoteException e) {
@@ -673,7 +676,7 @@ public class Drone {
 
 
     public void setFollowMeRadius(double radius) {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.setFollowMeRadius(radius);
             } catch (RemoteException e) {
@@ -684,7 +687,7 @@ public class Drone {
 
 
     public void disableFollowMe() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.disableFollowMe();
             } catch (RemoteException e) {
@@ -695,7 +698,7 @@ public class Drone {
 
 
     public void triggerCamera() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.triggerCamera();
             } catch (RemoteException e) {
@@ -706,7 +709,7 @@ public class Drone {
 
 
     public void epmCommand(boolean release) {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.epmCommand(release);
             } catch (RemoteException e) {
@@ -717,7 +720,7 @@ public class Drone {
 
 
     public void loadWaypoints() {
-        if (isApiValid()) {
+        if (isStarted()) {
             try {
                 dpApi.loadWaypoints();
             } catch (RemoteException e) {
