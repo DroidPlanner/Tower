@@ -3,7 +3,7 @@ package org.droidplanner.android.widgets.checklist.listadapter;
 import java.util.HashMap;
 import java.util.List;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.widgets.checklist.row.ListRow_Interface;
 
 import android.graphics.Typeface;

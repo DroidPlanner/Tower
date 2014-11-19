@@ -6,7 +6,7 @@ import android.view.View;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.Circle;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;

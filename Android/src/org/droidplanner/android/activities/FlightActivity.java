@@ -2,7 +2,7 @@ package org.droidplanner.android.activities;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.DroneshareDialog;
 import org.droidplanner.android.fragments.FlightActionsFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;

@@ -1,6 +1,6 @@
 package org.droidplanner.android.dialogs.openfile;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 
 import android.content.Context;
 import android.graphics.Color;

@@ -1,6 +1,6 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 
 import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
 

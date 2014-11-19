@@ -3,7 +3,7 @@ package org.droidplanner.android.fragments.helpers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGestureListener;

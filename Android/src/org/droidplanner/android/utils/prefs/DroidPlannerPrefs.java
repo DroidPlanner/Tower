@@ -2,7 +2,7 @@ package org.droidplanner.android.utils.prefs;
 
 import java.util.UUID;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 
 import android.content.Context;
 import android.content.SharedPreferences;

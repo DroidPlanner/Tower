@@ -3,7 +3,7 @@ package org.droidplanner.android.graphic.map;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.maps.DPMap.PathSource;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.MarkerWithText;

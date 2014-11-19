@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="org.droidplanner"
+          package="org.droidplanner.android"
           android:versionCode="113"
           android:versionName="please run version.sh to get the version name">
 
@@ -54,7 +54,7 @@
         android:required="true"/>
 
     <application
-        android:name=".android.DroidPlannerApp"
+        android:name=".DroidPlannerApp"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
@@ -72,7 +72,7 @@
             android:value="@integer/google_play_services_version"/>
 
         <activity
-            android:name=".android.activities.FlightActivity"
+            android:name=".activities.FlightActivity"
             android:launchMode="singleTask"
             android:theme="@style/CustomActionBarTheme.Transparent">
 
@@ -84,7 +84,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".android.activities.EditorActivity"
+            android:name=".activities.EditorActivity"
             android:label="@string/editor"
             android:launchMode="singleTop"
             android:theme="@style/CustomActionBarTheme.Transparent"
@@ -99,22 +99,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".android.activities.ConfigurationActivity"
+            android:name=".activities.ConfigurationActivity"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop"
             android:theme="@style/Theme.PageIndicatorDefaults"
             android:label="@string/menu_drone_setup"/>
 
         <activity
-            android:name=".android.activities.SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:launchMode="singleTop"
             android:label="@string/settings"/>
 
         <activity
-            android:name=".android.activities.helpers.MapPreferencesActivity"
+            android:name=".activities.helpers.MapPreferencesActivity"
             android:launchMode="singleTop"
             android:label="@string/activity_title_map_provider_preferences"
-            android:parentActivityName=".android.activities.SettingsActivity">
+            android:parentActivityName=".activities.SettingsActivity">
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -122,13 +122,13 @@
         </activity>
 
         <activity
-            android:name=".android.activities.LocatorActivity"
+            android:name=".activities.LocatorActivity"
             android:label="@string/locator"
             android:launchMode="singleTop"
             android:theme="@style/CustomActionBarTheme.Transparent"/>
 
         <activity
-            android:name=".android.activities.helpers.BluetoothDevicesActivity"
+            android:name=".activities.helpers.BluetoothDevicesActivity"
             android:noHistory="true"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"

@@ -9,7 +9,7 @@ import android.widget.Button;
 
 import com.o3dr.android.client.Drone;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
 
 /**

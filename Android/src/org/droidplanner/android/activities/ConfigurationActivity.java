@@ -1,6 +1,6 @@
 package org.droidplanner.android.activities;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.ChecklistFragment;
 import org.droidplanner.android.fragments.ParamsFragment;
 import org.droidplanner.android.fragments.SensorSetupFragment;

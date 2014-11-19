@@ -1,6 +1,6 @@
 package org.droidplanner.android.maps.providers.mapbox;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.maps.providers.MapProviderPreferences;
 

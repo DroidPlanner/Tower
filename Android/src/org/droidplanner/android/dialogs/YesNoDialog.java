@@ -9,7 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.TextView;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 
 public class YesNoDialog extends DialogFragment {
 

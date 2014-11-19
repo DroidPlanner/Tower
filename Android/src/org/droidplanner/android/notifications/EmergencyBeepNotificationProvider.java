@@ -10,7 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.o3dr.android.client.Drone;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 
 public class EmergencyBeepNotificationProvider implements NotificationHandler.NotificationProvider {
 

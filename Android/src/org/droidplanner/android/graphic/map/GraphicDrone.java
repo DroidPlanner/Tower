@@ -1,6 +1,6 @@
 package org.droidplanner.android.graphic.map;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.maps.MarkerInfo;
 
 import android.content.res.Resources;

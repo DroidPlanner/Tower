@@ -1,6 +1,6 @@
 package org.droidplanner.android.notifications;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.utils.TextUtils;

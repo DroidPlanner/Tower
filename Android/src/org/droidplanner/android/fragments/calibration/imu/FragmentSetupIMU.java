@@ -21,7 +21,7 @@ import com.o3dr.services.android.lib.drone.event.Event;
 import com.o3dr.services.android.lib.drone.event.Extra;
 import com.o3dr.services.android.lib.drone.property.State;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.notifications.TTSNotificationProvider;
 

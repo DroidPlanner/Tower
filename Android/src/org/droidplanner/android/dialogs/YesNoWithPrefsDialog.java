@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 

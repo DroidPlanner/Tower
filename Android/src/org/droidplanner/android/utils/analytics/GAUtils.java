@@ -2,8 +2,8 @@ package org.droidplanner.android.utils.analytics;
 
 import java.util.Map;
 
-import org.droidplanner.BuildConfig;
-import org.droidplanner.R;
+import org.droidplanner.android.BuildConfig;
+import org.droidplanner.android.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 

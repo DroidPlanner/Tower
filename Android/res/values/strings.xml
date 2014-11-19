@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Do not translate the following strings -->
-    <string name="app_title">DroidPlanner</string>
+    <string name="app_title">DroidPlanner 3</string>
 
     <!-- Generic strings -->
     <string name="settings">Settings</string>

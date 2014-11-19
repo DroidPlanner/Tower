@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 
 /**
  * Created by fhuya on 10/14/14.

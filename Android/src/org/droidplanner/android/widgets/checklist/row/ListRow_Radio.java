@@ -2,7 +2,7 @@ package org.droidplanner.android.widgets.checklist.row;
 
 import java.util.List;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.widgets.checklist.CheckListItem;
 
 import android.view.LayoutInflater;

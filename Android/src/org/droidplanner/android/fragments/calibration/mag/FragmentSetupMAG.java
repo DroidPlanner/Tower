@@ -18,7 +18,7 @@ import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.event.Event;
 import com.o3dr.services.android.lib.drone.event.Extra;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.Point3D;
 import org.droidplanner.android.widgets.scatterplot.ScatterPlot;

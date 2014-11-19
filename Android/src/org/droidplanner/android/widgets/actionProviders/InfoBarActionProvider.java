@@ -1,6 +1,6 @@
 package org.droidplanner.android.widgets.actionProviders;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.BatteryInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.FlightModesInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.FlightTimeInfo;

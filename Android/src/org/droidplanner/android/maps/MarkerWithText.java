@@ -1,6 +1,6 @@
 package org.droidplanner.android.maps;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 
 import android.content.Context;
 import android.content.res.Resources;

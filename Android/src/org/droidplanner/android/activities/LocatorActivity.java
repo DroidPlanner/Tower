@@ -15,7 +15,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.util.MathUtils;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenTLogDialog;
 import org.droidplanner.android.fragments.LocatorListFragment;

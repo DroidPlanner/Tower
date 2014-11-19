@@ -40,7 +40,7 @@ import com.o3dr.services.android.lib.drone.event.Extra;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.Type;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
 import org.droidplanner.android.maps.providers.DPMapProvider;

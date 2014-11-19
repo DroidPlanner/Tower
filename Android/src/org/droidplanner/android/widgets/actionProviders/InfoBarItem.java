@@ -2,7 +2,7 @@ package org.droidplanner.android.widgets.actionProviders;
 
 import java.util.Locale;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.unit.UnitManager;
