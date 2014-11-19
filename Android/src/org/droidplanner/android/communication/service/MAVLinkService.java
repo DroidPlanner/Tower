@@ -15,7 +15,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.MAVLink.Messages.MAVLinkPacket;
+import com.MAVLink.MAVLinkPacket;
 import com.google.android.gms.analytics.HitBuilders;
 
 /**

@@ -15,9 +15,9 @@ import org.droidplanner.core.mission.survey.grid.GridBuilder;
 import org.droidplanner.core.polygon.Polygon;
 import org.droidplanner.core.survey.CameraInfo;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import com.MAVLink.Messages.enums.MAV_CMD;
-import com.MAVLink.Messages.enums.MAV_FRAME;
+import com.MAVLink.common.msg_mission_item;
+import com.MAVLink.enums.MAV_CMD;
+import com.MAVLink.enums.MAV_FRAME;
 
 public class Survey extends MissionItem {
 

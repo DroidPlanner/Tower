@@ -1,5 +1,13 @@
 package org.droidplanner.android.fragments;
 
+import it.sephiroth.android.library.widget.AdapterView;
+import it.sephiroth.android.library.widget.AdapterView.OnItemClickListener;
+import it.sephiroth.android.library.widget.HListView;
+
+import org.droidplanner.R;
+import org.droidplanner.android.activities.LocatorActivity;
+import org.droidplanner.android.widgets.adapterViews.LocatorItemAdapter;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,15 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
-
-import org.droidplanner.R;
-import org.droidplanner.android.activities.LocatorActivity;
-import org.droidplanner.android.widgets.adapterViews.LocatorItemAdapter;
-
-import it.sephiroth.android.library.widget.AdapterView;
-import it.sephiroth.android.library.widget.AdapterView.OnItemClickListener;
-import it.sephiroth.android.library.widget.HListView;
+import com.MAVLink.common.msg_global_position_int;
 
 public class LocatorListFragment extends Fragment implements OnItemClickListener {
 

@@ -2,8 +2,8 @@ package org.droidplanner.core.MAVLink;
 
 import org.droidplanner.core.MAVLink.MAVLinkStreams.MAVLinkOutputStream;
 
-import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
-import com.MAVLink.Messages.enums.MAV_DATA_STREAM;
+import com.MAVLink.common.msg_request_data_stream;
+import com.MAVLink.enums.MAV_DATA_STREAM;
 
 public class MavLinkStreamRates {
 

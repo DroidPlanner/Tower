@@ -3,7 +3,7 @@ package com.MAVLink.Messages;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.MAVLink.Messages.enums.MAV_TYPE;
+import com.MAVLink.enums.MAV_TYPE;
 
 public enum ApmModes {
 	FIXED_WING_MANUAL (0,"Manual",MAV_TYPE.MAV_TYPE_FIXED_WING),

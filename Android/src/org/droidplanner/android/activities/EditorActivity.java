@@ -49,7 +49,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.common.msg_mission_item;
 import com.google.android.gms.analytics.HitBuilders;
 
 /**

@@ -2,7 +2,7 @@ package org.droidplanner.core.MAVLink;
 
 import org.droidplanner.core.model.Drone;
 
-import com.MAVLink.Messages.ardupilotmega.msg_rc_channels_override;
+import com.MAVLink.common.msg_rc_channels_override;
 
 public class MavLinkRC {
 	public static void sendRcOverrideMsg(Drone drone, int[] rcOutputs) {

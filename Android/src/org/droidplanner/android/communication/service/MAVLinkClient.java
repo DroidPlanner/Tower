@@ -1,5 +1,7 @@
 package org.droidplanner.android.communication.service;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.droidplanner.R;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
 import org.droidplanner.core.MAVLink.connection.MavLinkConnection;
@@ -13,10 +15,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.widget.Toast;
 
+import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.MAVLinkPacket;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Provide a common class for some ease of use functionality

@@ -17,13 +17,8 @@ import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.survey.CameraInfo;
-import org.droidplanner.core.survey.Footprint;
-
-import com.MAVLink.Messages.ardupilotmega.msg_camera_feedback;
-import com.google.android.gms.internal.ln;
 
 import android.app.Activity;
 import android.content.Context;
@@ -31,7 +26,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
