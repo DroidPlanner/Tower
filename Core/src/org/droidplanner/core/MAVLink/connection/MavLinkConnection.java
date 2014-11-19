@@ -13,9 +13,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.droidplanner.core.model.Logger;
 
+import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Parser;
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.MAVLinkPacket;
 
 /**
  * Base for mavlink connection implementations.

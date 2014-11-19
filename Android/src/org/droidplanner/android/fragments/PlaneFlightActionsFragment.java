@@ -1,5 +1,14 @@
 package org.droidplanner.android.fragments;
 
+import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.utils.analytics.GAUtils;
+import org.droidplanner.core.drone.DroneInterfaces;
+import org.droidplanner.core.drone.variables.State;
+import org.droidplanner.core.gcs.follow.Follow;
+import org.droidplanner.core.model.Drone;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,15 +20,6 @@ import android.widget.Toast;
 
 import com.MAVLink.Messages.ApmModes;
 import com.google.android.gms.analytics.HitBuilders;
-
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.android.utils.analytics.GAUtils;
-import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.drone.variables.State;
-import org.droidplanner.core.gcs.follow.Follow;
-import org.droidplanner.core.model.Drone;
 
 /**
  * Provides functionality for flight action buttons specific to planes.

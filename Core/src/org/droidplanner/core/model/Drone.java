@@ -25,7 +25,7 @@ import org.droidplanner.core.drone.variables.StreamRates;
 import org.droidplanner.core.firmware.FirmwareType;
 import org.droidplanner.core.mission.Mission;
 
-import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
+import com.MAVLink.common.msg_heartbeat;
 
 public interface Drone {
 
@@ -41,7 +41,7 @@ public interface Drone {
 
 	public boolean isConnectionAlive();
 
-	public void onHeartbeat(msg_heartbeat msg);
+	public void onHeartbeat(msg_heartbeat msg_heart);
 
 	public State getState();
 

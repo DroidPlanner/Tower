@@ -1,5 +1,7 @@
 package org.droidplanner.android.utils;
 
+import java.util.concurrent.LinkedBlockingQueue;
+
 import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -8,8 +10,6 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
-
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Handles the lifecycle for the google api client. Also takes care of running submitted tasks

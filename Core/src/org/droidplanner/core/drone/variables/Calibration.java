@@ -6,7 +6,7 @@ import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.ardupilotmega.msg_statustext;
+import com.MAVLink.common.msg_statustext;
 
 public class Calibration extends DroneVariable {
 	private Drone myDrone;

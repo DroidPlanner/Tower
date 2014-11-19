@@ -9,7 +9,7 @@ import org.droidplanner.core.helpers.math.MathUtil;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 
-import com.MAVLink.Messages.ardupilotmega.msg_camera_feedback;
+import com.MAVLink.ardupilotmega.msg_camera_feedback;
 
 public class Footprint {
 	/**

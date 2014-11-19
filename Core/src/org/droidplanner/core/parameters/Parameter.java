@@ -3,7 +3,7 @@ package org.droidplanner.core.parameters;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 
-import com.MAVLink.Messages.ardupilotmega.msg_param_value;
+import com.MAVLink.common.msg_param_value;
 
 public class Parameter implements Comparable<Parameter>, Serializable {
 

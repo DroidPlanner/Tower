@@ -6,7 +6,7 @@ import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.model.Drone;
 
-import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
+import com.MAVLink.common.msg_heartbeat;
 
 public class HeartBeat extends DroneVariable implements OnDroneListener {
 

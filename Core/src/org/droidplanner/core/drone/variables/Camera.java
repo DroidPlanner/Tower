@@ -10,8 +10,8 @@ import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.survey.CameraInfo;
 import org.droidplanner.core.survey.Footprint;
 
-import com.MAVLink.Messages.ardupilotmega.msg_camera_feedback;
-import com.MAVLink.Messages.ardupilotmega.msg_mount_status;
+import com.MAVLink.ardupilotmega.msg_camera_feedback;
+import com.MAVLink.ardupilotmega.msg_mount_status;
 
 public class Camera extends DroneVariable {
 	private CameraInfo camera = new CameraInfo();

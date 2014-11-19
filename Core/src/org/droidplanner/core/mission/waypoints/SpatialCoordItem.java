@@ -8,7 +8,7 @@ import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.common.msg_mission_item;
 
 public abstract class SpatialCoordItem extends MissionItem {
 
