@@ -36,8 +36,8 @@ android {
         applicationId 'org.droidplanner.android'
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 113
-        versionName getGitVersion()
+        versionCode 114
+        versionName "alpha v3.0.4"
     }
 
     sourceSets {
