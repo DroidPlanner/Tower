@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
+import com.MAVLink.common.msg_global_position_int;
 
 import org.droidplanner.android.R;
 

@@ -1,5 +1,7 @@
 package org.droidplanner.android.widgets;
 
+import java.util.Arrays;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -7,8 +9,6 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.widget.ProgressBar;
-
-import java.util.Arrays;
 
 /**
  * Created by fhuya on 9/25/14.
