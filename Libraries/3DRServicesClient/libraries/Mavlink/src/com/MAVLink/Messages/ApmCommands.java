@@ -2,7 +2,7 @@ package com.MAVLink.Messages;
 
 import java.util.ArrayList;
 
-import com.MAVLink.Messages.enums.MAV_CMD;
+import com.MAVLink.enums.MAV_CMD;
 
 public enum ApmCommands {	
 
