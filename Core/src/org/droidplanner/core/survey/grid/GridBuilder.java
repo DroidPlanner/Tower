@@ -1,11 +1,11 @@
-package org.droidplanner.core.mission.survey.grid;
+package org.droidplanner.core.survey.grid;
 
 import java.util.List;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.geoTools.LineCoord2D;
-import org.droidplanner.core.mission.survey.SurveyData;
 import org.droidplanner.core.polygon.Polygon;
+import org.droidplanner.core.survey.SurveyData;
 
 public class GridBuilder {
 

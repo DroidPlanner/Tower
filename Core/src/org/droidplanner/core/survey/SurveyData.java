@@ -1,4 +1,4 @@
-package org.droidplanner.core.mission.survey;
+package org.droidplanner.core.survey;
 
 import java.util.Locale;
 
