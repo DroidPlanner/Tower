@@ -1,4 +1,4 @@
-package org.droidplanner.core.mission.survey.grid;
+package org.droidplanner.core.survey.grid;
 
 import java.util.List;
 
