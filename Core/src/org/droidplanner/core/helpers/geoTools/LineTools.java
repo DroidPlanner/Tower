@@ -23,6 +23,11 @@ public class LineTools {
 	 */
 	public static Coord2D FindLineIntersection(LineCoord2D first, LineCoord2D second)
 			throws Exception {
+		return FindLineIntersection(first, second, false);
+	}
+
+	public static Coord2D FindLineIntersection(LineCoord2D first, LineCoord2D second,
+			boolean projectIntersetion) throws Exception {
 		double denom = ((first.getEnd().getX() - first.getStart().getX()) * (second.getEnd().getY() - second
 				.getStart().getY()))
 				- ((first.getEnd().getY() - first.getStart().getY()) * (second.getEnd().getX() - second
@@ -39,8 +44,11 @@ public class LineTools {
 				- ((first.getStart().getX() - second.getStart().getX()) * (first.getEnd().getY() - first
 						.getStart().getY()));
 		double s = numer2 / denom;
-		if ((r < 0 || r > 1) || (s < 0 || s > 1))
-			throw new Exception("No Intersection");
+		if (!projectIntersetion) {
+			if ((r < 0 || r > 1) || (s < 0 || s > 1)){
+				throw new Exception("No Intersection");				
+			}
+		}
 		// Find intersection point
 		double x = first.getStart().getX()
 				+ (r * (first.getEnd().getX() - first.getStart().getX()));
@@ -73,6 +81,12 @@ public class LineTools {
 			}
 		}
 		return answer;
+	}
+
+	public static LineCoord2D getParallelLineToTheLeft(LineCoord2D line, double offset) {
+		Coord2D start = GeoTools.newCoordFromBearingAndDistance(line.getStart(),line.getHeading()+90,offset);
+		Coord2D end = GeoTools.newCoordFromBearingAndDistance(line.getEnd(),line.getHeading()+90,offset);
+		return new LineCoord2D(start,end);
 	}
 
 }
