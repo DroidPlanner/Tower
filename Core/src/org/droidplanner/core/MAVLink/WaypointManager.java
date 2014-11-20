@@ -279,8 +279,8 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 		 */
 		writeIndex = msg.seq;
 		msg_mission_item item = mission.get(writeIndex);
-		item.sysid = myDrone.getSysid();
-		item.compid = myDrone.getCompid();
+		item.target_system = myDrone.getSysid();
+		item.target_component = myDrone.getCompid();
 		myDrone.getMavClient().sendMavPacket(item.pack());
 
 		if (writeIndex + 1 >= mission.size()) {
