@@ -1,5 +1,7 @@
 package org.droidplanner.android.dialogs;
 
+import org.droidplanner.R;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,8 +9,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-
-import org.droidplanner.R;
 
 /**
  * Created by fhuya on 10/14/14.

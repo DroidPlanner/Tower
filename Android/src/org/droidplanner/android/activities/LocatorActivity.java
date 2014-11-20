@@ -11,7 +11,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
+import com.MAVLink.common.msg_global_position_int;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.util.MathUtils;
 
