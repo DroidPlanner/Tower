@@ -12,7 +12,7 @@ import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.android.utils.file.FileList;
 import org.droidplanner.android.utils.file.FileManager;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.common.msg_mission_item;
 
 /**
  * Read msg_mission_item list as...

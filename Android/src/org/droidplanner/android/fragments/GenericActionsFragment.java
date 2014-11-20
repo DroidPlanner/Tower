@@ -1,15 +1,15 @@
 package org.droidplanner.android.fragments;
 
+import org.droidplanner.R;
+import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.core.model.Drone;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
-import org.droidplanner.R;
-import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.core.model.Drone;
 
 /**
  * Provides action buttons functionality for generic drone type.

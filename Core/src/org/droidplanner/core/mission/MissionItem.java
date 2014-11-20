@@ -3,8 +3,8 @@ package org.droidplanner.core.mission;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import com.MAVLink.Messages.enums.MAV_FRAME;
+import com.MAVLink.common.msg_mission_item;
+import com.MAVLink.enums.MAV_FRAME;
 
 public abstract class MissionItem implements Comparable<MissionItem> {
 

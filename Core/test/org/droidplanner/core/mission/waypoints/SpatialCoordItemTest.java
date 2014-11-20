@@ -6,8 +6,8 @@ import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.Mission;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import com.MAVLink.Messages.enums.MAV_FRAME;
+import com.MAVLink.common.msg_mission_item;
+import com.MAVLink.enums.MAV_FRAME;
 
 public class SpatialCoordItemTest extends TestCase {
 

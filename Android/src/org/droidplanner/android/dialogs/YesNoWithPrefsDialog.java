@@ -1,20 +1,19 @@
 package org.droidplanner.android.dialogs;
 
+import org.droidplanner.R;
+import org.droidplanner.android.utils.analytics.GAUtils;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
-
-import org.droidplanner.R;
-import org.droidplanner.android.utils.analytics.GAUtils;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 /**
  * Provides a yes/no (ok/cancel) dialog with the option to permanently disable

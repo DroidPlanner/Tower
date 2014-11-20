@@ -2,9 +2,9 @@ package org.droidplanner.core.MAVLink;
 
 import org.droidplanner.core.model.Drone;
 
-import com.MAVLink.Messages.ardupilotmega.msg_command_long;
-import com.MAVLink.Messages.enums.MAV_CMD;
-import com.MAVLink.Messages.enums.MAV_COMPONENT;
+import com.MAVLink.common.msg_command_long;
+import com.MAVLink.enums.MAV_CMD;
+import com.MAVLink.enums.MAV_COMPONENT;
 
 public class MavLinkArm {
 

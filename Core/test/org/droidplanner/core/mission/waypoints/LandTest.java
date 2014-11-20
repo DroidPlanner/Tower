@@ -6,8 +6,8 @@ import junit.framework.TestCase;
 
 import org.droidplanner.core.mission.Mission;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import com.MAVLink.Messages.enums.MAV_CMD;
+import com.MAVLink.common.msg_mission_item;
+import com.MAVLink.enums.MAV_CMD;
 
 public class LandTest extends TestCase {
 

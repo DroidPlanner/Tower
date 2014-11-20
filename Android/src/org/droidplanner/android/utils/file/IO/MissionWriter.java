@@ -9,7 +9,7 @@ import org.droidplanner.android.utils.file.FileList;
 import org.droidplanner.android.utils.file.FileManager;
 import org.droidplanner.android.utils.file.FileStream;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.common.msg_mission_item;
 
 /**
  * Write msg_mission_item list as...

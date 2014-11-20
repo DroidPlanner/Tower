@@ -8,7 +8,6 @@ import org.droidplanner.R;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.variables.Calibration;
 import org.droidplanner.core.model.Drone;
 
 import android.content.BroadcastReceiver;

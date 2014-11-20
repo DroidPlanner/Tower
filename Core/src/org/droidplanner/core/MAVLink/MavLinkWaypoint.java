@@ -2,12 +2,12 @@ package org.droidplanner.core.MAVLink;
 
 import org.droidplanner.core.model.Drone;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_count;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_request;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_request_list;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_set_current;
-import com.MAVLink.Messages.enums.MAV_MISSION_RESULT;
+import com.MAVLink.common.msg_mission_ack;
+import com.MAVLink.common.msg_mission_count;
+import com.MAVLink.common.msg_mission_request;
+import com.MAVLink.common.msg_mission_request_list;
+import com.MAVLink.common.msg_mission_set_current;
+import com.MAVLink.enums.MAV_MISSION_RESULT;
 
 public class MavLinkWaypoint {
 

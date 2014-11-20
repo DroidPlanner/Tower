@@ -26,7 +26,7 @@ import org.droidplanner.core.firmware.FirmwareType;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.model.Drone;
 
-import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
+import com.MAVLink.common.msg_heartbeat;
 
 public class DroneImpl implements Drone {
 

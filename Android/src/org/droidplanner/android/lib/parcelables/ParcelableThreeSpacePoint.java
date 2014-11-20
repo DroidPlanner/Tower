@@ -2,7 +2,6 @@ package org.droidplanner.android.lib.parcelables;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import ellipsoidFit.ThreeSpacePoint;
 
 /**

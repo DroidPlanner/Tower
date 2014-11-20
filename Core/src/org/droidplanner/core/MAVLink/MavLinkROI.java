@@ -4,9 +4,9 @@ import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.mission.commands.EpmGripper;
 import org.droidplanner.core.model.Drone;
 
-import com.MAVLink.Messages.ardupilotmega.msg_command_long;
-import com.MAVLink.Messages.ardupilotmega.msg_digicam_control;
-import com.MAVLink.Messages.enums.MAV_CMD;
+import com.MAVLink.ardupilotmega.msg_digicam_control;
+import com.MAVLink.common.msg_command_long;
+import com.MAVLink.enums.MAV_CMD;
 
 public class MavLinkROI {
 	public static void setROI(Drone drone, Coord3D coord) {

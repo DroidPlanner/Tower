@@ -1,7 +1,7 @@
 package org.droidplanner.core.MAVLink;
 
+import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.MAVLinkPacket;
 
 public class MAVLinkStreams {
 

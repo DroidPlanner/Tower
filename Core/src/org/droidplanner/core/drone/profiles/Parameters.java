@@ -14,7 +14,7 @@ import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.parameters.Parameter;
 
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.ardupilotmega.msg_param_value;
+import com.MAVLink.common.msg_param_value;
 
 /**
  * Class to manage the communication of parameters to the MAV.
