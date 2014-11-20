@@ -3,9 +3,9 @@ package org.droidplanner.core.MAVLink;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.parameters.Parameter;
 
-import com.MAVLink.Messages.ardupilotmega.msg_param_request_list;
-import com.MAVLink.Messages.ardupilotmega.msg_param_request_read;
-import com.MAVLink.Messages.ardupilotmega.msg_param_set;
+import com.MAVLink.common.msg_param_request_list;
+import com.MAVLink.common.msg_param_request_read;
+import com.MAVLink.common.msg_param_set;
 
 public class MavLinkParameters {
 	public static void requestParametersList(Drone drone) {

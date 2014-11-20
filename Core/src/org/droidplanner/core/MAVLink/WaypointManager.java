@@ -11,12 +11,12 @@ import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_count;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_current;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item_reached;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_request;
+import com.MAVLink.common.msg_mission_ack;
+import com.MAVLink.common.msg_mission_count;
+import com.MAVLink.common.msg_mission_current;
+import com.MAVLink.common.msg_mission_item;
+import com.MAVLink.common.msg_mission_item_reached;
+import com.MAVLink.common.msg_mission_request;
 
 /**
  * Class to manage the communication of waypoints to the MAV.

@@ -12,7 +12,7 @@ import org.droidplanner.desktop.communication.Connection;
 import org.droidplanner.desktop.location.FakeLocation;
 
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.MAVLinkPacket;
+import com.MAVLink.MAVLinkPacket;
 
 public class Logic implements Runnable {
 	public Drone drone;

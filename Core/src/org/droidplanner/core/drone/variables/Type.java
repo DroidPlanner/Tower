@@ -6,7 +6,7 @@ import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.firmware.FirmwareType;
 import org.droidplanner.core.model.Drone;
 
-import com.MAVLink.Messages.enums.MAV_TYPE;
+import com.MAVLink.enums.MAV_TYPE;
 
 public class Type extends DroneVariable implements DroneInterfaces.OnDroneListener{
 

@@ -10,13 +10,11 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
-import org.droidplanner.core.survey.Footprint;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
 import org.openstreetmap.gui.jmapviewer.MapMarkerIcon;
 import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
-import org.openstreetmap.gui.jmapviewer.MapRectangleImpl;
 import org.openstreetmap.gui.jmapviewer.OsmFileCacheTileLoader;
 import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
 
@@ -76,7 +74,7 @@ public class Map implements OnDroneListener {
 			break;
 		case FOOTPRINT:
 			ArrayList<Coordinate> corners = new ArrayList<Coordinate>();
-			for (Coord2D vertex : drone.getCamera().getLastFootprint().getVertex()) {
+			for (Coord2D vertex : drone.getCamera().getLastFootprint().getVertexInGlobalFrame()) {
 				corners.add(new Coordinate(vertex.getLat(), vertex.getLng()));
 			}			
 			map.addMapPolygon(new MapPolygonImpl(corners));

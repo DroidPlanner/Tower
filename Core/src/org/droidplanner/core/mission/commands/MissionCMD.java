@@ -5,7 +5,7 @@ import java.util.List;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.common.msg_mission_item;
 
 public abstract class MissionCMD extends MissionItem {
 

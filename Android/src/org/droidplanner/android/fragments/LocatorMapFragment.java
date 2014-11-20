@@ -1,14 +1,13 @@
 package org.droidplanner.android.fragments;
 
-import android.location.LocationListener;
-import android.widget.Toast;
+import java.util.Collections;
 
 import org.droidplanner.android.graphic.map.GraphicLocator;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.gcs.location.Location;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
-import java.util.Collections;
+import android.location.LocationListener;
+import android.widget.Toast;
 
 public class LocatorMapFragment extends DroneMap {
 

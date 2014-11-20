@@ -1,12 +1,10 @@
 package org.droidplanner.core.drone;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.model.Drone;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class DroneEvents extends DroneVariable {
 

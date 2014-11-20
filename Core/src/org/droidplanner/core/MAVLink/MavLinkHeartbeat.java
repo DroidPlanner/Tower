@@ -2,10 +2,10 @@ package org.droidplanner.core.MAVLink;
 
 import org.droidplanner.core.model.Drone;
 
-import com.MAVLink.Messages.MAVLinkPacket;
-import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
-import com.MAVLink.Messages.enums.MAV_AUTOPILOT;
-import com.MAVLink.Messages.enums.MAV_TYPE;
+import com.MAVLink.MAVLinkPacket;
+import com.MAVLink.common.msg_heartbeat;
+import com.MAVLink.enums.MAV_AUTOPILOT;
+import com.MAVLink.enums.MAV_TYPE;
 
 /**
  * This class contains logic used to send an heartbeat to a

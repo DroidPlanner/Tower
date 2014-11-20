@@ -3,10 +3,10 @@ package org.droidplanner.core.MAVLink;
 import org.droidplanner.core.model.Drone;
 
 import com.MAVLink.Messages.ApmModes;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
-import com.MAVLink.Messages.enums.MAV_CMD;
-import com.MAVLink.Messages.enums.MAV_FRAME;
+import com.MAVLink.common.msg_mission_item;
+import com.MAVLink.common.msg_set_mode;
+import com.MAVLink.enums.MAV_CMD;
+import com.MAVLink.enums.MAV_FRAME;
 
 public class MavLinkModes {
 	public static void setGuidedMode(Drone drone, double latitude, double longitude, double d) {

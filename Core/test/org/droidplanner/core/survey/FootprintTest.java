@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Altitude;
 
-import com.MAVLink.Messages.ardupilotmega.msg_camera_feedback;
+import com.MAVLink.ardupilotmega.msg_camera_feedback;
 
 public class FootprintTest extends TestCase {
 
