@@ -7,14 +7,14 @@ android {
     defaultConfig {
         applicationId "com.o3dr.android.client"
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 20
         versionCode 1
         versionName "1.0"
     }
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:21.0.2'
+    compile 'com.android.support:support-v4:20.0.0'
 
     compile project(':Mavlink')
     compile project(':3DR-Services-Library:lib')
