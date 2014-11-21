@@ -15,10 +15,6 @@ public class DroneHelper {
         return new LatLong((float)point.latitude, (float) point.longitude);
     }
 
-    public static LatLong ILatLngToCoord(ILatLng point) {
-        return new LatLong((float) point.getLatitude(), (float) point.getLongitude());
-    }
-
 	public static LatLong LocationToCoord(Location location) {
 		return new LatLong((float) location.getLatitude(), (float) location.getLongitude());
 	}
