@@ -23,8 +23,8 @@ public class MavLinkModes {
 		msg.y = (float) longitude;
 		msg.z = (float) d;
 		msg.autocontinue = 1; // TODO use correct parameter
-		msg.target_system = 1;
-		msg.target_component = 1;
+		msg.target_system = drone.getSysid();
+		msg.target_component = drone.getCompid();
 		drone.getMavClient().sendMavPacket(msg.pack());
 	}
 
@@ -42,14 +42,14 @@ public class MavLinkModes {
 		msg.y = (float) (yVel);
 		msg.z = (float) (zVel);
 		msg.autocontinue = 1; // TODO use correct parameter
-		msg.target_system = 1;
-		msg.target_component = 1;
+		msg.target_system = drone.getSysid();
+		msg.target_component = drone.getCompid();
 		drone.getMavClient().sendMavPacket(msg.pack());
 	}
 
 	public static void changeFlightMode(Drone drone, ApmModes mode) {
 		msg_set_mode msg = new msg_set_mode();
-		msg.target_system = 1;
+		msg.target_system = drone.getSysid();
 		msg.base_mode = 1; // TODO use meaningful constant
 		msg.custom_mode = mode.getNumber();
 		drone.getMavClient().sendMavPacket(msg.pack());
