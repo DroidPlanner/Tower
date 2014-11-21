@@ -7,20 +7,9 @@ android {
     defaultConfig {
         applicationId "com.o3dr.android.client"
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 20
         versionCode 1
         versionName "1.0"
-    }
-    buildTypes {
-        release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    //FIXME: remove this after lint errors have been taken care of
-    lintOptions {
-        abortOnError false
     }
 }
 
