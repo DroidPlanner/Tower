@@ -82,8 +82,8 @@ public class MagnetometerCalibration implements OnDroneListener {
         }
 
         this.fitRunner = Executors.newSingleThreadExecutor();
-        MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 0, 0, 0, 0, 0, 0, REFRESH_RATE,
-                0);
+        MavLinkStreamRates.setupStreamRates(drone.getMavClient(), drone.getSysid(), drone.getCompid(),
+				0, 0, 0, 0, 0, 0, REFRESH_RATE, 0);
         drone.addDroneListener(this);
     }
 
@@ -106,8 +106,8 @@ public class MagnetometerCalibration implements OnDroneListener {
                 @Override
                 public void run() {
                     fit();
-                    MavLinkStreamRates.setupStreamRates(drone.getMavClient(), 0, 0, 0, 0, 0, 0,
-                            REFRESH_RATE, 0);
+                    MavLinkStreamRates.setupStreamRates(drone.getMavClient(), drone.getSysid(), drone.getCompid(),
+							0, 0, 0, 0, 0, 0, REFRESH_RATE, 0);
                 }
             });
 			break;

@@ -18,8 +18,6 @@ public class SpatialCoordItemTest extends TestCase {
 		msg_mission_item mavMsg = item.packMissionItem().get(0);
 
 		assertEquals(1, mavMsg.autocontinue);
-		assertEquals(1, mavMsg.target_component);
-		assertEquals(1, mavMsg.target_system);
 		assertEquals(MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavMsg.frame);
 		assertEquals(0.1f, mavMsg.x);
 		assertEquals(1f, mavMsg.y);
