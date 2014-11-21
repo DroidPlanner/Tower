@@ -11,21 +11,10 @@ android {
         versionCode 1
         versionName "1.0"
     }
-    buildTypes {
-        release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    //FIXME: remove this after lint errors have been taken care of
-    lintOptions {
-        abortOnError false
-    }
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:20.0.0'
+    compile 'com.android.support:support-v4:21.0.2'
 
     compile project(':Mavlink')
     compile project(':3DR-Services-Library:lib')
