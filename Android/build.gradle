@@ -71,6 +71,44 @@ android {
         abortOnError false
     }
 
+    signingConfigs {
+        release {
+            storeFile getAppKeystoreFile()
+            storePassword getAppKeystorePassword()
+            keyAlias getAppKey()
+            keyPassword getAppKeyPassword()
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            signingConfig signingConfigs.release
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def file = output.outputFile
+                    if (file != null && file.name.endsWith('.apk')) {
+                        def versionCode = defaultConfig.versionCode
+                        output.outputFile = new File(file.parent,
+                                "droidplanner_3-release.${versionCode}.apk")
+                    }
+                }
+            }
+        }
+
+        debug {
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def file = output.outputFile
+                    if (file != null && file.name.endsWith('.apk')) {
+                        def versionCode = defaultConfig.versionCode
+                        output.outputFile = new File(file.parent,
+                                "droidplanner_3-debug.${versionCode}.apk")
+                    }
+                }
+            }
+        }
+    }
 }
 
 /**
@@ -86,3 +124,24 @@ def getGitVersion(){
         return "please update version name manually"
     }
 }
+
+def getAppKeystoreFile() {
+    def filePath = System.getenv("ANDROID_DP3_KEYSTORE")
+    return filePath ? file(filePath) : null
+}
+
+def getAppKeystorePassword(){
+    def password = System.getenv("ANDROID_DP3_KEYSTORE_PWD")
+    return password ?: ""
+}
+
+def getAppKeyPassword() {
+    def password = System.getenv("ANDROID_DP3_KEY_PWD")
+    return password ?: ""
+}
+
+def getAppKey() {
+    def alias = System.getenv("ANDROID_DP3_KEYALIAS")
+    return alias ?: ""
+}
+
