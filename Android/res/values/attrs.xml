@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="FillBar">
-        <attr name="percentage" format="float" />
-    </declare-styleable>
-
     <declare-styleable name="ViewPagerIndicator">
         <!-- Style of the tab indicator's tabs. -->
         <attr name="vpiTabPageIndicatorStyle" format="reference"/>

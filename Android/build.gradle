@@ -8,14 +8,6 @@ dependencies {
     compile files('libs/droneapi-java.jar')
     compile 'com.google.android.gms:play-services:5.0.89'
     compile 'com.sothree.slidinguppanel:library:2.0.2'
-
-    compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:0.4.0@aar'){
-        transitive=true
-    }
-    compile ('com.cocoahero.android:geojson:1.0.0@aar'){
-        transitive=true
-    }
-
     compile 'com.android.support:support-v4:20.0.0'
 
     compile project(':Libraries:HorizontalVariableListView:HorizontalVariableListView')
