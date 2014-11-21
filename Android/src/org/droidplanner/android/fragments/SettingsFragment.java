@@ -92,9 +92,9 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		final String mapsProvidersPrefKey = getString(R.string.pref_maps_providers_key);
 		final ListPreference mapsProvidersPref = (ListPreference) findPreference(mapsProvidersPrefKey);
 		if (mapsProvidersPref != null) {
-			// FIXME: Restore Mapbox map provider when feature complete.
-			final DPMapProvider[] providers = { DPMapProvider.GOOGLE_MAP };// DPMapProvider.values();
+			final DPMapProvider[] providers = DPMapProvider.values();
 			final int providersCount = providers.length;
+
 			final CharSequence[] providersNames = new CharSequence[providersCount];
 			final CharSequence[] providersNamesValues = new CharSequence[providersCount];
 			for (int i = 0; i < providersCount; i++) {
@@ -103,10 +103,8 @@ public class SettingsFragment extends DpPreferenceFragment implements
 				providersNames[i] = providerName.toLowerCase(Locale.ENGLISH).replace('_', ' ');
 			}
 
-			// final String defaultProviderName =
-			// sharedPref.getString(mapsProvidersPrefKey,
-			// DPMapProvider.DEFAULT_MAP_PROVIDER.name());
-			final String defaultProviderName = DPMapProvider.DEFAULT_MAP_PROVIDER.name();
+			final String defaultProviderName = sharedPref.getString(mapsProvidersPrefKey,
+			DPMapProvider.DEFAULT_MAP_PROVIDER.name());
 
 			mapsProvidersPref.setEntries(providersNames);
 			mapsProvidersPref.setEntryValues(providersNamesValues);
@@ -125,8 +123,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
 			updateMapSettingsPreference(defaultProviderName);
 		}
 
-		// update the summary for the preferences in the mDefaultSummaryPrefs
-		// hash table.
+		// update the summary for the preferences in the mDefaultSummaryPrefs hash table.
 		for (String prefKey : mDefaultSummaryPrefs) {
 			final Preference pref = findPreference(prefKey);
 			if (pref != null) {
