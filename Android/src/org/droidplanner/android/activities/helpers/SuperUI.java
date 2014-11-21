@@ -259,13 +259,6 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 			toggleDroneConnection();
 			return true;
 
-		case R.id.menu_map_type_hybrid:
-		case R.id.menu_map_type_normal:
-		case R.id.menu_map_type_terrain:
-		case R.id.menu_map_type_satellite:
-			setMapTypeFromItemId(item.getItemId());
-			return true;
-
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
@@ -287,28 +280,4 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		}
 		drone.getMavClient().toggleConnectionState();
 	}
-
-	private void setMapTypeFromItemId(int itemId) {
-		final String mapType;
-		switch (itemId) {
-		case R.id.menu_map_type_hybrid:
-			mapType = GoogleMapFragment.MAP_TYPE_HYBRID;
-			break;
-		case R.id.menu_map_type_normal:
-			mapType = GoogleMapFragment.MAP_TYPE_NORMAL;
-			break;
-		case R.id.menu_map_type_terrain:
-			mapType = GoogleMapFragment.MAP_TYPE_TERRAIN;
-			break;
-		default:
-			mapType = GoogleMapFragment.MAP_TYPE_SATELLITE;
-			break;
-		}
-
-		PreferenceManager.getDefaultSharedPreferences(this).edit()
-				.putString(GoogleMapFragment.PREF_MAP_TYPE, mapType).commit();
-
-		// drone.notifyMapTypeChanged();
-	}
-
 }

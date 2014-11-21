@@ -9,6 +9,12 @@ All the changes are logged below (preferable with the pull request numbers in pa
 
 # Releases
 
+## Droidplanner v2.8.6
+* Update MAVLink library (#1277)
+* Update Chinese translation (#1273)
+* Fix desktop project (#1274)
+* Added S100 to the avaliable cameraInfo files (#1271)
+
 ## Droidplanner v2.8.5
 * Camera footprints (#1265, #1266, #1270)
 
