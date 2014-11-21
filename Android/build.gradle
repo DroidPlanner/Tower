@@ -80,33 +80,21 @@ android {
         }
     }
 
-    buildTypes {
-        release {
-            minifyEnabled true
-            signingConfig signingConfigs.release
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    def file = output.outputFile
-                    if (file != null && file.name.endsWith('.apk')) {
-                        def versionCode = defaultConfig.versionCode
-                        output.outputFile = new File(file.parent,
-                                "droidplanner_3-release.${versionCode}.apk")
-                    }
-                }
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def file = output.outputFile
+            if (file != null && file.name.endsWith('.apk')) {
+                def buildType = variant.buildType.getName()
+                def versionCode = defaultConfig.versionCode
+                output.outputFile = new File(file.parent,
+                        "droidplanner_3-${buildType}.${versionCode}.apk")
             }
         }
+    }
 
-        debug {
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    def file = output.outputFile
-                    if (file != null && file.name.endsWith('.apk')) {
-                        def versionCode = defaultConfig.versionCode
-                        output.outputFile = new File(file.parent,
-                                "droidplanner_3-debug.${versionCode}.apk")
-                    }
-                }
-            }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
         }
     }
 }
