@@ -1,21 +1,5 @@
 package org.droidplanner.android.activities.helpers;
 
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.dialogs.YesNoDialog;
-import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
-import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
-import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
-import org.droidplanner.android.proxy.mission.MissionProxy;
-import org.droidplanner.android.utils.Utils;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
-import org.droidplanner.core.MAVLink.MavLinkROI;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.gcs.GCSHeartbeat;
-import org.droidplanner.core.model.Drone;
-
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
@@ -24,8 +8,27 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+
+import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.activities.interfaces.PhysicalDeviceEvents;
+import org.droidplanner.android.dialogs.YesNoDialog;
+import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
+import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
+import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.utils.Utils;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.android.utils.rc.RCConstants;
+import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
+import org.droidplanner.core.MAVLink.MavLinkROI;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.gcs.GCSHeartbeat;
+import org.droidplanner.core.model.Drone;
 
 /**
  * Parent class for the app activity classes.
@@ -38,6 +41,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
     private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoBarActionProvider infoBar;
 	private GCSHeartbeat gcsHeartbeat;
+	private PhysicalDeviceEvents gcListener;
 	public DroidPlannerApp app;
 	public Drone drone;
 
@@ -280,4 +284,24 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		}
 		drone.getMavClient().toggleConnectionState();
 	}
+
+	@Override
+	public boolean onGenericMotionEvent(MotionEvent event) {
+        if (RCConstants.isPhysicalDeviceEvent(event)) {
+            if (gcListener != null)
+                gcListener.physicalJoyMoved(event);
+            return true;
+        }
+        return super.onGenericMotionEvent(event);
+	}
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if(RCConstants.isPhysicalDeviceEvent(event))
+            return true;
+        return super.onKeyUp(keyCode, event);
+    }
+
+    public void registerPhysicalDeviceEventListener(PhysicalDeviceEvents gcListener) {
+        this.gcListener = gcListener;
+    }
 }

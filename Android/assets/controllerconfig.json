@@ -1,0 +1,26 @@
+{
+  "mDoubleAxisRemap": [
+    {
+      "mDestination": 2,
+      "mIncrementAxis": 14,
+      "mDecrementAxis": 11
+    }
+  ],
+  "mSingleAxisRemap": [
+    {
+      "mMultiplierReversed": 1,
+      "mSourceAxis": 0,
+      "mDestination": 3
+    },
+    {
+      "mMultiplierReversed": 1,
+      "mSourceAxis": 12,
+      "mDestination": 0
+    },
+    {
+      "mMultiplierReversed": -1,
+      "mSourceAxis": 13,
+      "mDestination": 1
+    }
+  ]
+}

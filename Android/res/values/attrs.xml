@@ -36,5 +36,10 @@
         <attr name="android:text" />
         <attr name="android:orientation" />
     </declare-styleable>
-
+    
+    <declare-styleable name="GameControllerChannel">
+        <attr name="title" format="string"/>
+        <attr name="value" format="integer"/>
+    </declare-styleable>
+    
 </resources>

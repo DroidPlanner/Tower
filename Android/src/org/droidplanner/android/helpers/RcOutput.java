@@ -1,16 +1,16 @@
 package org.droidplanner.android.helpers;
 
-import java.util.Arrays;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import org.droidplanner.core.MAVLink.MavLinkRC;
 import org.droidplanner.core.model.Drone;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import java.util.Arrays;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class RcOutput {
 	private static final int DISABLE_OVERRIDE = 0;
@@ -83,12 +83,8 @@ public class RcOutput {
 		return (scheduleTaskExecutor != null);
 	}
 
-	public void setRcChannel(int ch, double value) {
-		if (value > +1)
-			value = +1;
-		if (value < -1)
-			value = -1;
-		rcOutputs[ch] = (int) (value * RC_RANGE + RC_TRIM);
-	}
+    public void setRcChannel(int ch, float value) {
+        rcOutputs[ch] = (int) value;
+    }
 
 }

@@ -3,6 +3,7 @@ package org.droidplanner.android.activities;
 import org.droidplanner.R;
 import org.droidplanner.android.fragments.ChecklistFragment;
 import org.droidplanner.android.fragments.ParamsFragment;
+import org.droidplanner.android.fragments.RcControlSetupFragment;
 import org.droidplanner.android.fragments.SensorSetupFragment;
 
 import android.content.Intent;
@@ -76,7 +77,11 @@ public class ConfigurationActivity extends DrawerNavigationUI {
             case R.id.navigation_calibration:
                 fragment = new SensorSetupFragment();
                 break;
-
+			
+			case R.id.navigation_rc:
+                fragment = new RcControlSetupFragment();
+                break;
+				
             case R.id.navigation_checklist:
                 fragment = new ChecklistFragment();
                 break;
@@ -96,6 +101,9 @@ public class ConfigurationActivity extends DrawerNavigationUI {
         }
         else if(fragment instanceof ChecklistFragment){
             return R.id.navigation_checklist;
+        }
+		else if(fragment instanceof RcControlSetupFragment){
+            return R.id.navigation_rc;
         }
         else {
             return R.id.navigation_params;

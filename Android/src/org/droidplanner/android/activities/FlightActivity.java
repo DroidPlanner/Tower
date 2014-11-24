@@ -1,18 +1,5 @@
 package org.droidplanner.android.activities;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.droidplanner.R;
-import org.droidplanner.android.dialogs.DroneshareDialog;
-import org.droidplanner.android.fragments.FlightActionsFragment;
-import org.droidplanner.android.fragments.FlightMapFragment;
-import org.droidplanner.android.fragments.TelemetryFragment;
-import org.droidplanner.android.fragments.mode.FlightModePanel;
-import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.model.Drone;
-
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -28,6 +15,20 @@ import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+import org.droidplanner.R;
+import org.droidplanner.android.dialogs.DroneshareDialog;
+import org.droidplanner.android.fragments.FlightActionsFragment;
+import org.droidplanner.android.fragments.FlightMapFragment;
+import org.droidplanner.android.fragments.RcFragment;
+import org.droidplanner.android.fragments.TelemetryFragment;
+import org.droidplanner.android.fragments.mode.FlightModePanel;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.model.Drone;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @SuppressWarnings("deprecation")
 public class FlightActivity extends DrawerNavigationUI implements OnDroneListener {
@@ -74,6 +75,8 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 	private View mLocationButtonsContainer;
 	private ImageButton mGoToMyLocation;
 	private ImageButton mGoToDroneLocation;
+
+	private RcFragment rcFragment;
 
     @Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -243,7 +246,7 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 	/**
 	 * Ensures that the device has the correct version of the Google Play
 	 * Services.
-	 * 
+	 *
 	 * @return true if the Google Play Services binary is valid
 	 */
 	private boolean isGooglePlayServicesValid(boolean showErrorDialog) {
@@ -318,9 +321,11 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 			onWarningChanged(drone);
 			break;
 
+        case DISCONNECTED:
+            if(rcFragment != null)
+                toggleRcControls();
         case ARMING:
         case CONNECTED:
-        case DISCONNECTED:
         case STATE:
             enableSlidingUpPanel(drone);
             break;
@@ -370,5 +375,15 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 			warningView.setVisibility(View.GONE);
 		}
 	}
+
+    public void toggleRcControls() {
+        if (rcFragment == null) {
+            rcFragment = new RcFragment();
+            fragmentManager.beginTransaction().add(R.id.containerRc, rcFragment).commit();
+        } else {
+            fragmentManager.beginTransaction().remove(rcFragment).commit();
+            rcFragment = null;
+        }
+    }
 
 }

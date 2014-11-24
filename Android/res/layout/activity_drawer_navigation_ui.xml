@@ -95,6 +95,16 @@
                     android:text="@string/screen_checklist"
                     />
                 
+				<TextView
+                    style="@style/navigationDrawerEntry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/navigation_rc"
+                    android:drawableLeft="@drawable/ic_control_active"
+                    android:drawableStart="@drawable/ic_control_active"
+                    android:text="@string/screen_rc"
+                    />
+			
                 <TextView
                     style="@style/navigationDrawerEntry"
                     android:layout_width="match_parent"
