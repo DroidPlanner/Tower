@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.ResolveInfo;
 import android.os.IBinder;
 import android.os.RemoteException;
 
@@ -91,7 +92,12 @@ public class ServiceManager {
 	}
 
     private boolean is3DRServicesInstalled(){
-        return context.getPackageManager().resolveService(serviceIntent, 0) != null;
+        final ResolveInfo info = context.getPackageManager().resolveService(serviceIntent, 0);
+        if(info == null)
+            return false;
+
+        this.serviceIntent.setClassName(info.serviceInfo.packageName, info.serviceInfo.name);
+        return true;
     }
 
     private void promptFor3DRServicesInstall(){
