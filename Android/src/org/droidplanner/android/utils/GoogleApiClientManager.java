@@ -8,6 +8,7 @@ import android.os.HandlerThread;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
 
@@ -176,8 +177,20 @@ public class GoogleApiClientManager {
      * Activates the google api client manager.
      */
     public void start(){
-        initializeDriverThread();
-        initializeBgHandler();
+        if(isGooglePlayServicesValid()) {
+            initializeDriverThread();
+            initializeBgHandler();
+        }
+        else{
+            Log.e(TAG, "Google Play Services is unavailable.");
+        }
+    }
+
+    private boolean isGooglePlayServicesValid(){
+        // Check for the google play services is available
+        final int playStatus = GooglePlayServicesUtil
+                .isGooglePlayServicesAvailable(mContext);
+        return playStatus == ConnectionResult.SUCCESS;
     }
 
     /**
@@ -185,12 +198,17 @@ public class GoogleApiClientManager {
      * After calling this method, start() needs to be called again to use that manager again.
      */
     public void stop(){
-        destroyBgHandler();
-        destroyDriverThread();
+        if(isGooglePlayServicesValid()) {
+            destroyBgHandler();
+            destroyDriverThread();
 
-        mTaskQueue.clear();
-        if(mGoogleApiClient.isConnected() || mGoogleApiClient.isConnecting()){
-            mGoogleApiClient.disconnect();
+            mTaskQueue.clear();
+            if (mGoogleApiClient.isConnected() || mGoogleApiClient.isConnecting()) {
+                mGoogleApiClient.disconnect();
+            }
+        }
+        else{
+            Log.e(TAG, "Google Play Services is unavailable.");
         }
     }
 
