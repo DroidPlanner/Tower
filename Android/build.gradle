@@ -28,8 +28,8 @@ android {
         applicationId 'org.droidplanner.android'
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 305
-        versionName "alpha v3.0.5"
+        versionCode 306
+        versionName "alpha v3.0.6"
     }
 
     sourceSets {
