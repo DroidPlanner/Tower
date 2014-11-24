@@ -68,12 +68,20 @@ public class FusedLocation implements LocationFinder, com.google.android.gms.loc
 	public void enableLocationUpdates() {
         mSpeedReadings = 0;
         mTotalSpeed = 0f;
-        gApiMgr.addTask(requestLocationUpdate);
+        try {
+            gApiMgr.addTask(requestLocationUpdate);
+        }catch(IllegalStateException e){
+            Log.e(TAG, "Unable to request location updates.");
+        }
 	}
 
 	@Override
 	public void disableLocationUpdates() {
-        gApiMgr.addTask(removeLocationUpdate);
+        try {
+            gApiMgr.addTask(removeLocationUpdate);
+        }catch(IllegalStateException e){
+            Log.e(TAG, "Unable to disable location updates.");
+        }
 	}
 
 	@Override
