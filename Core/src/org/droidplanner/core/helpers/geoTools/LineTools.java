@@ -83,9 +83,11 @@ public class LineTools {
 		return answer;
 	}
 
-	public static LineCoord2D getParallelLineToTheLeft(LineCoord2D line, double offset) {
-		Coord2D start = GeoTools.newCoordFromBearingAndDistance(line.getStart(),line.getHeading()+90,offset);
-		Coord2D end = GeoTools.newCoordFromBearingAndDistance(line.getEnd(),line.getHeading()+90,offset);
+	public static LineCoord2D getParallelLine(LineCoord2D line, double offset,
+			boolean leftHanded) {
+		int angle = leftHanded ? 90 : -90;
+		Coord2D start = GeoTools.newCoordFromBearingAndDistance(line.getStart(),line.getHeading()+angle,offset);
+		Coord2D end = GeoTools.newCoordFromBearingAndDistance(line.getEnd(),line.getHeading()+angle,offset);
 		return new LineCoord2D(start,end);
 	}
 

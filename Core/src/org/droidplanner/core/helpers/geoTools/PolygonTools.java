@@ -8,14 +8,14 @@ import org.droidplanner.core.polygon.Polygon;
 
 public class PolygonTools {
 
-	public static Polygon offsetPolygon(Polygon polygon) throws Exception {
+	public static Polygon offsetPolygon(Polygon polygon, int offset) throws Exception {
 		if (!PolygonTools.isSimplePolygon(polygon)) {
 			throw new Exception("Complex Polygon");
 		}
 
 		ArrayList<LineCoord2D> offsetLines = new ArrayList<LineCoord2D>();
 		for (LineCoord2D line : polygon.getLines()) {
-			offsetLines.add(LineTools.getParallelLineToTheLeft(line, 10));
+			offsetLines.add(LineTools.getParallelLine(line, offset,PolygonTools.isClockWisePolygon(polygon)));
 		}
 
 		ArrayList<Coord2D> path = new ArrayList<Coord2D>();

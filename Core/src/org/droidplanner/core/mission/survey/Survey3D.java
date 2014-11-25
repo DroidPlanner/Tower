@@ -34,7 +34,7 @@ public class Survey3D extends MissionItem {
 
 	public List<Coord2D> getPath() {
 		try {
-			List<Coord2D> path = PolygonTools.offsetPolygon(polygon).getPoints();
+			List<Coord2D> path = PolygonTools.offsetPolygon(polygon, 10).getPoints();
 			return path;
 		} catch (Exception e) {
 			return new ArrayList<Coord2D>();
