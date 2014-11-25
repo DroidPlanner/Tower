@@ -56,4 +56,13 @@ public class PolygonTools {
 		}
 		return true;
 	}
+
+	public static boolean isClockWisePolygon(Polygon polygon) {
+		double sum = 0;
+		for (LineCoord2D line : polygon.getLines()) {
+			sum += (line.getEnd().getX() - line.getStart().getX())
+					/ (line.getEnd().getY() + line.getStart().getY());
+		}
+		return sum > 0 ? false : true;
+	}
 }

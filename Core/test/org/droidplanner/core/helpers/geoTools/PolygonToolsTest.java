@@ -28,4 +28,22 @@ public class PolygonToolsTest extends TestCase {
 
 		assertFalse(PolygonTools.isSimplePolygon(polygon));
 	}
+	
+	public void testIsCWPolygon() {
+		Polygon polygonCCW = new Polygon();
+		polygonCCW.addPoint(new Coord2D(0, 0));
+		polygonCCW.addPoint(new Coord2D(0, 1));
+		polygonCCW.addPoint(new Coord2D(1, 1));
+		polygonCCW.addPoint(new Coord2D(1, 0));
+
+		assertFalse(PolygonTools.isClockWisePolygon(polygonCCW));
+		
+		Polygon polygonCW = new Polygon();
+		polygonCW.addPoint(new Coord2D(1, 0));
+		polygonCW.addPoint(new Coord2D(1, 1));
+		polygonCW.addPoint(new Coord2D(0, 1));
+		polygonCW.addPoint(new Coord2D(0, 0));
+		
+		assertTrue(PolygonTools.isClockWisePolygon(polygonCW));
+	}
 }
