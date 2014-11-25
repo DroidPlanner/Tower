@@ -51,7 +51,7 @@ public class MissionSurvey3DFragment extends MissionDetailFragment implements
 		cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
 		cameraSpinner.setAdapter(cameraAdapter);
 		cameraSpinner.setOnSpinnerItemSelectedListener(this);
-		cameraAdapter.setTitle(firstItem.getCamera().name);
+		cameraAdapter.setTitle(firstItem.getCamera());
 
 		startAltitudeStepPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.startAltitudePicker);

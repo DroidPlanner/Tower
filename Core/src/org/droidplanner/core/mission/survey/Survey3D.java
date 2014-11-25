@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.geoTools.PolygonTools;
-import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.polygon.Polygon;
 import org.droidplanner.core.survey.CameraInfo;
+import org.droidplanner.core.survey.SurveyData;
 
 import com.MAVLink.common.msg_mission_item;
 import com.MAVLink.enums.MAV_CMD;
@@ -20,7 +20,7 @@ import com.MAVLink.enums.MAV_FRAME;
 public class Survey3D extends MissionItem {
 
 	public Polygon polygon = new Polygon();
-	private CameraInfo camera = new CameraInfo();
+	public SurveyData surveyData = new SurveyData();
 
 	public Survey3D(Mission mission, List<Coord2D> points) {
 		super(mission);
@@ -28,7 +28,7 @@ public class Survey3D extends MissionItem {
 	}
 
 	public void setCameraInfo(CameraInfo camera) {
-		this.camera = camera;
+		surveyData.setCameraInfo(camera);
 		mission.notifyMissionUpdate();
 	}
 
@@ -45,7 +45,7 @@ public class Survey3D extends MissionItem {
 	public List<msg_mission_item> packMissionItem() {
 		List<msg_mission_item> list = new ArrayList<msg_mission_item>();
 		for (Coord2D point: getPath()) {
-			list.add(packSurveyPoint(point, new Altitude(0)));			
+			list.add(packSurveyPoint(point, surveyData.getAltitude()));			
 		}
 		return list;
 	}
@@ -77,8 +77,8 @@ public class Survey3D extends MissionItem {
 		return MissionItemType.SURVEY3D;
 	}
 
-	public CameraInfo getCamera() {
-		return camera;
+	public String getCamera() {
+		return surveyData.getCameraName();
 	}
 
 }
