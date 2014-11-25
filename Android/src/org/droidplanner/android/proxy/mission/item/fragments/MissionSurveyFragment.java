@@ -12,6 +12,7 @@ import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.MissionItemType;
+import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.survey.Survey2D;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.survey.CameraInfo;
@@ -122,7 +123,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		if (spinner.getId() == id.cameraFileSpinner) {
 			CameraInfo cameraInfo = cameraAdapter.getCamera(position);
 			cameraAdapter.setTitle(cameraInfo.name);
-			for (Survey2D survey : surveyList) {
+			for (Survey survey : surveyList) {
 				survey.setCameraInfo(cameraInfo);
 			}
 

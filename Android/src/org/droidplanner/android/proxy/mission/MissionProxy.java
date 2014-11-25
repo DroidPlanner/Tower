@@ -18,6 +18,7 @@ import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.Takeoff;
+import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.survey.Survey2D;
 import org.droidplanner.core.mission.survey.Survey3D;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
@@ -511,7 +512,7 @@ public class MissionProxy implements DPMap.PathSource {
 		mMission.notifyMissionUpdate();
 	}
 
-	public void movePolygonPoint(Survey2D survey, int index, Coord2D position) {
+	public void movePolygonPoint(Survey survey, int index, Coord2D position) {
 		survey.polygon.movePoint(position, index);
 		try {
 			survey.build();
@@ -614,10 +615,8 @@ public class MissionProxy implements DPMap.PathSource {
 	public List<List<Coord2D>> getPolygonsPath() {
 		ArrayList<List<Coord2D>> polygonPaths = new ArrayList<List<Coord2D>>();
 		for (MissionItem item : mMission.getItems()) {
-			if (item instanceof Survey2D) {
-				polygonPaths.add(((Survey2D)item).polygon.getPoints());
-			}else if (item instanceof Survey3D) {
-				polygonPaths.add(((Survey3D)item).polygon.getPoints());
+			if (item instanceof Survey) {
+				polygonPaths.add(((Survey)item).polygon.getPoints());
 			}
 			
 		}

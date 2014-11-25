@@ -7,37 +7,23 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
-import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.commands.CameraTrigger;
-import org.droidplanner.core.polygon.Polygon;
-import org.droidplanner.core.survey.CameraInfo;
-import org.droidplanner.core.survey.SurveyData;
 import org.droidplanner.core.survey.grid.Grid;
 import org.droidplanner.core.survey.grid.GridBuilder;
 
 import com.MAVLink.common.msg_mission_item;
-import com.MAVLink.enums.MAV_CMD;
-import com.MAVLink.enums.MAV_FRAME;
 
-public class Survey2D extends MissionItem {
+public class Survey2D extends Survey {
 
-	public Polygon polygon = new Polygon();
-	public SurveyData surveyData = new SurveyData();
 	public Grid grid;
 
 	public Survey2D(Mission mission, List<Coord2D> points) {
-		super(mission);
-		polygon.addPoints(points);
+		super(mission, points);
 	}
 
 	public void update(double angle, Altitude altitude, double overlap, double sidelap) {
 		surveyData.update(angle, altitude, overlap, sidelap);
-		mission.notifyMissionUpdate();
-	}
-
-	public void setCameraInfo(CameraInfo camera) {
-		surveyData.setCameraInfo(camera);
 		mission.notifyMissionUpdate();
 	}
 
@@ -70,27 +56,6 @@ public class Survey2D extends MissionItem {
 			msg_mission_item mavMsg = packSurveyPoint(point,surveyData.getAltitude());
 			list.add(mavMsg);
 		}
-	}
-
-	public static msg_mission_item packSurveyPoint(Coord2D point, Length altitude) {
-		msg_mission_item mavMsg = new msg_mission_item();
-		mavMsg.autocontinue = 1;
-		mavMsg.frame = MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT;
-		mavMsg.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT;
-		mavMsg.x = (float) point.getX();
-		mavMsg.y = (float) point.getY();
-		mavMsg.z = (float) altitude.valueInMeters();
-		mavMsg.param1 = 0f;
-		mavMsg.param2 = 0f;
-		mavMsg.param3 = 0f;
-		mavMsg.param4 = 0f;
-		return mavMsg;
-	}
-
-	@Override
-	public void unpackMAVMessage(msg_mission_item mavMsg) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
