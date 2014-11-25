@@ -19,6 +19,7 @@ import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.survey.Survey3D;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.Waypoint;
@@ -139,11 +140,11 @@ public class MissionProxy implements DPMap.PathSource {
 	 *            2D points making up the survey
 	 */
 	public void addSurveyPolygon(List<Coord2D> points) {
-		Survey survey = new Survey(mMission, points);
+		Survey3D survey = new Survey3D(mMission, points);
 		mMissionItems.add(new MissionItemProxy(this, survey));
 		mMission.addMissionItem(survey);
 		try {
-			survey.build();
+			//survey.build();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -615,7 +616,10 @@ public class MissionProxy implements DPMap.PathSource {
 		for (MissionItem item : mMission.getItems()) {
 			if (item instanceof Survey) {
 				polygonPaths.add(((Survey)item).polygon.getPoints());
+			}else if (item instanceof Survey3D) {
+				polygonPaths.add(((Survey3D)item).polygon.getPoints());
 			}
+			
 		}
 		return polygonPaths;
 	}

@@ -89,6 +89,9 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 		case SURVEY:
 			fragment = new MissionSurveyFragment();
 			break;
+		case SURVEY3D:
+			fragment = new MissionSurvey3DFragment();
+			break;
 		case TAKEOFF:
 			fragment = new MissionTakeoffFragment();
 			break;

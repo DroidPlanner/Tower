@@ -14,11 +14,14 @@ import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.survey.Survey3D;
 import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.StructureScanner;
 import org.droidplanner.core.survey.grid.Grid;
+
+import com.MAVLink.common.msg_mission_item;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -114,6 +117,9 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 			if (grid != null) {
 				pathPoints.addAll(grid.gridPoints);
 			}
+			break;
+		case SURVEY3D:
+			pathPoints.addAll(((Survey3D) mMissionItem).getPath());
 			break;
 		case CYLINDRICAL_SURVEY:
 			StructureScanner survey = (StructureScanner)mMissionItem;
