@@ -16,13 +16,12 @@ import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.Land;
 import org.droidplanner.core.mission.waypoints.RegionOfInterest;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
-import org.droidplanner.core.mission.waypoints.StructureScanner;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 
 public enum MissionItemType {
 	WAYPOINT("Waypoint"), SPLINE_WAYPOINT("Spline Waypoint"), TAKEOFF("Takeoff"), RTL(
-			"Return to Launch"), LAND("Land"), CIRCLE("Circle"), ROI("Region of Interest"), SURVEY(
-			"Survey"), CYLINDRICAL_SURVEY("Structure Scan"), CHANGE_SPEED("Change Speed"), CAMERA_TRIGGER("Camera Trigger"), EPM_GRIPPER("EPM"), SET_SERVO("Set Servo"), CONDITION_YAW("Set Yaw"), SURVEY3D("Survey3D");
+			"Return to Launch"), LAND("Land"), CIRCLE("Circle"), ROI("Region of Interest"), SURVEY2D(
+			"Survey"), CHANGE_SPEED("Change Speed"), CAMERA_TRIGGER("Camera Trigger"), EPM_GRIPPER("EPM"), SET_SERVO("Set Servo"), CONDITION_YAW("Set Yaw"), SURVEY3D("Survey3D");
 
 	private final String name;
 
@@ -56,12 +55,10 @@ public enum MissionItemType {
 			return new Circle(referenceItem);
 		case ROI:
 			return new RegionOfInterest(referenceItem);
-		case SURVEY:
+		case SURVEY2D:
 			return new Survey2D(referenceItem.getMission(), Collections.<Coord2D> emptyList());
 		case SURVEY3D:
 			return new Survey3D(referenceItem.getMission(), Collections.<Coord2D> emptyList());
-		case CYLINDRICAL_SURVEY:
-			return new StructureScanner(referenceItem);
 		case SET_SERVO:
 			return new SetServo(referenceItem);
 		case CONDITION_YAW:

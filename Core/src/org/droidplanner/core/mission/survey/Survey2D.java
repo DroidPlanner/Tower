@@ -60,7 +60,7 @@ public class Survey2D extends Survey {
 
 	@Override
 	public MissionItemType getType() {
-		return MissionItemType.SURVEY;
+		return MissionItemType.SURVEY2D;
 	}
 
 }

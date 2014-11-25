@@ -19,10 +19,7 @@ import org.droidplanner.core.mission.survey.Survey3D;
 import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
-import org.droidplanner.core.mission.waypoints.StructureScanner;
 import org.droidplanner.core.survey.grid.Grid;
-
-import com.MAVLink.common.msg_mission_item;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -113,7 +110,7 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 			}
 			break;
 
-		case SURVEY:
+		case SURVEY2D:
 			Grid grid = ((Survey2D) mMissionItem).grid;
 			if (grid != null) {
 				pathPoints.addAll(grid.gridPoints);
@@ -121,10 +118,6 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 			break;
 		case SURVEY3D:
 			pathPoints.addAll(((Survey3D) mMissionItem).getPath());
-			break;
-		case CYLINDRICAL_SURVEY:
-			StructureScanner survey = (StructureScanner)mMissionItem;
-			pathPoints.addAll(survey.getPath());
 			break;
 		case TAKEOFF:
 			break;

@@ -115,7 +115,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
         mAltitudePicker.addChangingListener(this);
 
 
-        typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
+        typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY2D));
 	}
 
 	@Override
