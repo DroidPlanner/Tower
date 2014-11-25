@@ -2,23 +2,23 @@ package org.droidplanner.android.proxy.mission.item.markers;
 
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.survey.Survey2D;
 
 /**
  */
 public class PolygonMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
 
 	private Coord2D mPoint;
-	private Survey survey;
+	private Survey2D survey;
 	private int polygonIndex;
 
-	public PolygonMarkerInfo(Coord2D point, Survey mSurvey, int index) {
+	public PolygonMarkerInfo(Coord2D point, Survey2D mSurvey, int index) {
 		mPoint = point;
 		survey = mSurvey;
 		polygonIndex = index;
 	}
 	
-	public Survey getSurvey(){
+	public Survey2D getSurvey(){
 		return survey;
 	}
 

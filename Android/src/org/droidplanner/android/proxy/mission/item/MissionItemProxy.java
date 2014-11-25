@@ -13,7 +13,7 @@ import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.commands.Takeoff;
-import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.survey.Survey2D;
 import org.droidplanner.core.mission.survey.Survey3D;
 import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
@@ -113,7 +113,7 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 			break;
 
 		case SURVEY:
-			Grid grid = ((Survey) mMissionItem).grid;
+			Grid grid = ((Survey2D) mMissionItem).grid;
 			if (grid != null) {
 				pathPoints.addAll(grid.gridPoints);
 			}
@@ -163,8 +163,8 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 			} catch (Exception e) {
 				// Do nothing when last item doesn't have an altitude
 			}
-		} else if (mMissionItem instanceof Survey) {
-			altitudeView.setText(((Survey) mMissionItem).surveyData.getAltitude().toString());
+		} else if (mMissionItem instanceof Survey2D) {
+			altitudeView.setText(((Survey2D) mMissionItem).surveyData.getAltitude().toString());
 
 		} else if (mMissionItem instanceof Takeoff) {
 			altitudeView.setText(((Takeoff) mMissionItem).getFinishedAlt().toString());

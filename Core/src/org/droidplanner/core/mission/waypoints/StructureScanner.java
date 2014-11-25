@@ -11,7 +11,7 @@ import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.survey.Survey2D;
 import org.droidplanner.core.polygon.Polygon;
 import org.droidplanner.core.survey.CameraInfo;
 import org.droidplanner.core.survey.SurveyData;
@@ -77,13 +77,13 @@ public class StructureScanner extends SpatialCoordItem {
 			survey.update(0.0, survey.getAltitude(), survey.getOverlap(), survey.getSidelap());
 			GridBuilder grid = new GridBuilder(polygon, survey, corner);
 			for (Coord2D point : grid.generate(false).gridPoints) {
-				list.add(Survey.packSurveyPoint(point, getTopHeight()));
+				list.add(Survey2D.packSurveyPoint(point, getTopHeight()));
 			}
 			
 			survey.update(90.0, survey.getAltitude(), survey.getOverlap(), survey.getSidelap());
 			GridBuilder grid2 = new GridBuilder(polygon, survey, corner);
 			for (Coord2D point : grid2.generate(false).gridPoints) {
-				list.add(Survey.packSurveyPoint(point, getTopHeight()));
+				list.add(Survey2D.packSurveyPoint(point, getTopHeight()));
 			}
 		} catch (Exception e) { // Should never fail, since it has good polygons
 		}

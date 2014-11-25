@@ -10,7 +10,7 @@ import org.droidplanner.core.mission.commands.EpmGripper;
 import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.SetServo;
 import org.droidplanner.core.mission.commands.Takeoff;
-import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.survey.Survey2D;
 import org.droidplanner.core.mission.survey.Survey3D;
 import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.Land;
@@ -57,7 +57,7 @@ public enum MissionItemType {
 		case ROI:
 			return new RegionOfInterest(referenceItem);
 		case SURVEY:
-			return new Survey(referenceItem.getMission(), Collections.<Coord2D> emptyList());
+			return new Survey2D(referenceItem.getMission(), Collections.<Coord2D> emptyList());
 		case SURVEY3D:
 			return new Survey3D(referenceItem.getMission(), Collections.<Coord2D> emptyList());
 		case CYLINDRICAL_SURVEY:

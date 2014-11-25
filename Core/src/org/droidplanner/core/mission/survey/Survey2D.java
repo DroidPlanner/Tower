@@ -20,13 +20,13 @@ import com.MAVLink.common.msg_mission_item;
 import com.MAVLink.enums.MAV_CMD;
 import com.MAVLink.enums.MAV_FRAME;
 
-public class Survey extends MissionItem {
+public class Survey2D extends MissionItem {
 
 	public Polygon polygon = new Polygon();
 	public SurveyData surveyData = new SurveyData();
 	public Grid grid;
 
-	public Survey(Mission mission, List<Coord2D> points) {
+	public Survey2D(Mission mission, List<Coord2D> points) {
 		super(mission);
 		polygon.addPoints(points);
 	}

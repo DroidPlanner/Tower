@@ -6,18 +6,18 @@ import java.util.List;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.survey.Survey2D;
 
 /**
  *
  */
 public class SurveyMarkerInfoProvider {
 
-	private final Survey mSurvey;
+	private final Survey2D mSurvey;
 	private final List<MarkerInfo> mPolygonMarkers = new ArrayList<MarkerInfo>();
 
 	protected SurveyMarkerInfoProvider(MissionItemProxy origin) {
-		mSurvey = (Survey) origin.getMissionItem();
+		mSurvey = (Survey2D) origin.getMissionItem();
 		updateMarkerInfoList();
 	}
 

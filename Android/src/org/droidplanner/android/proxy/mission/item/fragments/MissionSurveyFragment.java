@@ -12,7 +12,7 @@ import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.survey.Survey2D;
 import org.droidplanner.core.model.Drone;
 import org.droidplanner.core.survey.CameraInfo;
 
@@ -46,7 +46,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	public TextView lengthView;
 	private CamerasAdapter cameraAdapter;
 
-	private List<Survey> surveyList;
+	private List<Survey2D> surveyList;
 
 	@Override
 	protected int getResource() {
@@ -71,7 +71,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		final Context context = getActivity().getApplicationContext();
 
 
-		this.surveyList = ((List<Survey>) getMissionItems());
+		this.surveyList = ((List<Survey2D>) getMissionItems());
 
 		cameraAdapter = new CamerasAdapter(getActivity(),
 				android.R.layout.simple_spinner_dropdown_item);
@@ -122,7 +122,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		if (spinner.getId() == id.cameraFileSpinner) {
 			CameraInfo cameraInfo = cameraAdapter.getCamera(position);
 			cameraAdapter.setTitle(cameraInfo.name);
-			for (Survey survey : surveyList) {
+			for (Survey2D survey : surveyList) {
 				survey.setCameraInfo(cameraInfo);
 			}
 
@@ -139,7 +139,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		case R.id.overlapPicker:
 		case R.id.sidelapPicker:
 			try {
-				for (Survey survey : surveyList) {
+				for (Survey2D survey : surveyList) {
 					survey.update(mAnglePicker.getCurrentValue(),
 							new Altitude(mAltitudePicker.getCurrentValue()),
 							mOverlapPicker.getCurrentValue(), mSidelapPicker.getCurrentValue());

@@ -14,7 +14,7 @@ import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.commands.MissionCMD;
-import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.survey.Survey2D;
 import org.droidplanner.core.mission.waypoints.StructureScanner;
 import org.droidplanner.core.util.Pair;
 
@@ -163,7 +163,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
             final MissionItemProxy itemProxy = mSelectedProxies.get(0);
             final MissionItem currentItem = itemProxy.getMissionItem();
 
-            if ((currentItem instanceof Survey)) {
+            if ((currentItem instanceof Survey2D)) {
                 list.clear();
                 list.add(MissionItemType.SURVEY);
             } else {
