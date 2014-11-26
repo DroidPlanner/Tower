@@ -16,6 +16,7 @@ import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.commands.MissionCMD;
 import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.survey.Survey;
@@ -419,6 +420,12 @@ public class MissionProxy implements DPMap.PathSource {
 		boolean isSpline = false;
 		List<MissionItemProxy> currentBucket = new ArrayList<MissionItemProxy>();
 		for (MissionItemProxy missionItemProxy : mMissionItems) {
+
+            MissionItem missionItem = missionItemProxy.getMissionItem();
+            if(missionItem instanceof MissionCMD){
+                //Skip commands
+                continue;
+            }
 
 			if (missionItemProxy.getMissionItem() instanceof SplineWaypoint) {
 				if (!isSpline) {
