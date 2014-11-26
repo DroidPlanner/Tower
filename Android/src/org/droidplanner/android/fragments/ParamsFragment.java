@@ -3,6 +3,7 @@ package org.droidplanner.android.fragments;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.droidplanner.R;
@@ -97,7 +98,7 @@ public class ParamsFragment extends ListFragment implements
 
             final List<Parameter> parametersList = drone.getParameters().getParametersList();
             if(!parametersList.isEmpty()) {
-                loadAdapter(parametersList);
+                loadAdapter(parametersList, false);
             }
 		}
 		setListAdapter(adapter);
@@ -359,7 +360,7 @@ public class ParamsFragment extends ListFragment implements
 			@Override
 			public void parameterFileLoaded(List<Parameter> parameters) {
                 openedParamsFilename = getSelectedFilename();
-				loadAdapter(parameters);
+				loadAdapter(parameters, true);
 			}
 		};
 		dialog.openDialog(getActivity());
@@ -408,17 +409,26 @@ public class ParamsFragment extends ListFragment implements
 
 	@Override
 	public void onEndReceivingParameters(List<Parameter> parameters) {
-        loadAdapter(parameters);
+        loadAdapter(parameters, false);
 		stopProgress();
 	}
 
-    private void loadAdapter(List<Parameter> parameters){
+    private void loadAdapter(List<Parameter> parameters, boolean isUpdate){
         if(parameters == null || parameters.isEmpty()){
             return;
         }
 
-        Set<Parameter> prunedParameters = new TreeSet<Parameter>(parameters);
-        adapter.loadParameters(drone, prunedParameters);
+        TreeMap<String, Parameter> prunedParameters = new TreeMap<>();
+        for(Parameter parameter: parameters){
+            prunedParameters.put(parameter.name, parameter);
+        }
+
+        if(isUpdate){
+            adapter.updateParameters(prunedParameters);
+        }
+        else {
+            adapter.loadParameters(drone, prunedParameters);
+        }
 
         if(mParamsFilter != null && mParamsFilter.getVisibility() == View.VISIBLE){
             mParamsFilter.setText("");
