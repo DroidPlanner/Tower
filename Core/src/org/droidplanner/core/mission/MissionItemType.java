@@ -1,8 +1,5 @@
 package org.droidplanner.core.mission;
 
-import java.util.Collections;
-
-import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.mission.commands.CameraTrigger;
 import org.droidplanner.core.mission.commands.ChangeSpeed;
 import org.droidplanner.core.mission.commands.ConditionYaw;
@@ -21,7 +18,7 @@ import org.droidplanner.core.mission.waypoints.Waypoint;
 public enum MissionItemType {
 	WAYPOINT("Waypoint"), SPLINE_WAYPOINT("Spline Waypoint"), TAKEOFF("Takeoff"), RTL(
 			"Return to Launch"), LAND("Land"), CIRCLE("Circle"), ROI("Region of Interest"), SURVEY2D(
-			"Survey"), CHANGE_SPEED("Change Speed"), CAMERA_TRIGGER("Camera Trigger"), EPM_GRIPPER("EPM"), SET_SERVO("Set Servo"), CONDITION_YAW("Set Yaw"), SURVEY3D("Survey3D");
+			"Survey"), CHANGE_SPEED("Change Speed"), CAMERA_TRIGGER("Camera Trigger"), EPM_GRIPPER("EPM"), SET_SERVO("Set Servo"), CONDITION_YAW("Set Yaw"), SURVEY3D("Structure Scanner");
 
 	private final String name;
 
@@ -56,9 +53,9 @@ public enum MissionItemType {
 		case ROI:
 			return new RegionOfInterest(referenceItem);
 		case SURVEY2D:
-			return new Survey2D(referenceItem.getMission(), Collections.<Coord2D> emptyList());
+			return new Survey2D(referenceItem);
 		case SURVEY3D:
-			return new Survey3D(referenceItem.getMission(), Collections.<Coord2D> emptyList());
+			return new Survey3D(referenceItem);
 		case SET_SERVO:
 			return new SetServo(referenceItem);
 		case CONDITION_YAW:

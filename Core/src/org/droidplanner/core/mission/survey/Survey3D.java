@@ -6,14 +6,19 @@ import java.util.List;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.geoTools.PolygonTools;
 import org.droidplanner.core.mission.Mission;
+import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 
 import com.MAVLink.common.msg_mission_item;
 
 public class Survey3D extends Survey {
 
-	public Survey3D(Mission mission, List<Coord2D> points) {
-		super(mission, points);
+	public Survey3D(MissionItem item) {
+		super(item);
+	}
+
+	public Survey3D(Mission mMission, List<Coord2D> points) {
+		super(mMission, points);
 	}
 
 	public List<Coord2D> getPath() {

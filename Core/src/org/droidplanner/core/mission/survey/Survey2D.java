@@ -7,6 +7,7 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
+import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.commands.CameraTrigger;
 import org.droidplanner.core.survey.grid.Grid;
@@ -18,8 +19,12 @@ public class Survey2D extends Survey {
 
 	public Grid grid;
 
-	public Survey2D(Mission mission, List<Coord2D> points) {
-		super(mission, points);
+	public Survey2D(MissionItem item) {
+		super(item);
+	}
+	
+	public Survey2D(Mission mMission, List<Coord2D> points) {
+		super(mMission, points);
 	}
 
 	public void update(double angle, Altitude altitude, double overlap, double sidelap) {

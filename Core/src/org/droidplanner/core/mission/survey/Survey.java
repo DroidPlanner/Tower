@@ -25,6 +25,10 @@ public abstract class Survey extends MissionItem {
 	
 	protected Survey(MissionItem item) {
 		super(item);
+		if (item instanceof Survey) {
+			polygon = ((Survey) item).polygon;
+			surveyData = ((Survey) item).surveyData;
+		}
 	}
 	
 	protected Survey(Mission mission, List<Coord2D> points) {
