@@ -189,7 +189,7 @@
     <string name="waypointType_Loiter">Loiter</string>
     <string name="waypointType_ROI">Region of Interest</string>
     <string name="waypointType_Survey">Survey Polygon</string>
-    <string name="waypointType_BuildingMapper">Structure Scan</string>
+    <string name="waypointType_structureScanner">Structure Scan</string>
 
     <!-- Waypoint info -->
     <string name="waypointInfo_Land">Land vehicle at the current location. You must manually exit Auto mode to disarm motors.</string>

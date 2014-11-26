@@ -41,12 +41,9 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo 
 		case SPLINE_WAYPOINT:
 			markerInfos.add(new SplineWaypointMarkerInfo(origin));
 			break;
-
-		case CYLINDRICAL_SURVEY:
-			markerInfos.add(new StructureScannerMarkerInfoProvider(origin));
-			break;
 			
-		case SURVEY:
+		case SURVEY2D:
+		case SURVEY3D:
 			markerInfos.addAll(new SurveyMarkerInfoProvider(origin).getMarkersInfos());
 			break;
 

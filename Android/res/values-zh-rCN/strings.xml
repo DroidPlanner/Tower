@@ -189,7 +189,7 @@
     <string name="waypointType_Loiter">悬停</string>
     <string name="waypointType_ROI">兴趣区域</string>
     <string name="waypointType_Survey">勘测多边形</string>
-    <string name="waypointType_BuildingMapper">结构扫描</string>
+    <string name="waypointType_structureScanner">结构扫描</string>
 
     <!-- Waypoint info -->
     <string name="waypointInfo_Land">在当前位置降落模型。你必须手动退出自动模式来锁定电机。</string>

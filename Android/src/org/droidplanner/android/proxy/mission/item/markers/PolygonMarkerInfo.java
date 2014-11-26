@@ -34,7 +34,7 @@ public class PolygonMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
 
 	@Override
 	public float getAnchorV() {
-		return 0.5f;
+		return 1.0f;
 	}
 
 	@Override
