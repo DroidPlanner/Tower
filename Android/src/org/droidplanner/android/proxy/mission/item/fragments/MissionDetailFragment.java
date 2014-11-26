@@ -165,7 +165,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
                 list.add(MissionItemType.SURVEY3D);
             } else {
                 list.remove(MissionItemType.SURVEY2D);
-                list.add(MissionItemType.SURVEY3D);
+                list.remove(MissionItemType.SURVEY3D);
             }
             
             if (mMissionProxy.getItems().indexOf(itemProxy) != 0) {

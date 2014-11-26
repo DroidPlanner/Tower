@@ -129,6 +129,8 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 
 			onChanged(mAnglePicker, 0, 0);
 	        getMissionProxy().getMission().notifyMissionUpdate();
+		}else{
+			super.onSpinnerItemSelected(spinner,position);
 		}
 	}
 	

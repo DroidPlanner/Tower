@@ -100,6 +100,8 @@ public class MissionSurvey3DFragment extends MissionDetailFragment implements
 				scan.setCameraInfo(cameraInfo);
 			}
 			getMissionProxy().getMission().notifyMissionUpdate();
+		}else{
+			super.onSpinnerItemSelected(spinner,position);
 		}
 	}
 
