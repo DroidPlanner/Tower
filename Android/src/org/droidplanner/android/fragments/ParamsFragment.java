@@ -56,6 +56,8 @@ public class ParamsFragment extends ListFragment implements
     private static final String PREF_PARAMS_FILTER_ON = "pref_params_filter_on";
     private static final boolean DEFAULT_PARAMS_FILTER_ON = true;
 
+    private static final String EXTRA_OPENED_PARAMS_FILENAME = "extra_opened_params_filename";
+
     private ProgressDialog progressDialog;
 
     private ProgressBar mLoadingProgress;
@@ -64,6 +66,11 @@ public class ParamsFragment extends ListFragment implements
 	private Drone drone;
     private DroidPlannerPrefs mPrefs;
 	private ParamsAdapter adapter;
+
+    /**
+     * If the parameters were loaded from a file, the filename is stored here.
+     */
+    private String openedParamsFilename;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +84,8 @@ public class ParamsFragment extends ListFragment implements
 
 		// create adapter
 		if (savedInstanceState != null) {
+            this.openedParamsFilename = savedInstanceState.getString(EXTRA_OPENED_PARAMS_FILENAME);
+
 			// load adapter items
 			@SuppressWarnings("unchecked")
 			final ArrayList<ParamsAdapterItem> pwms = (ArrayList<ParamsAdapterItem>) savedInstanceState
@@ -239,6 +248,8 @@ public class ParamsFragment extends ListFragment implements
 		final ArrayList<ParamsAdapterItem> pwms = new ArrayList<ParamsAdapterItem>(adapter
                 .getOriginalValues());
 		outState.putSerializable(ADAPTER_ITEMS, pwms);
+
+        outState.putString(EXTRA_OPENED_PARAMS_FILENAME, this.openedParamsFilename);
 	}
 
 	@Override
@@ -348,6 +359,7 @@ public class ParamsFragment extends ListFragment implements
 		OpenFileDialog dialog = new OpenParameterDialog() {
 			@Override
 			public void parameterFileLoaded(List<Parameter> parameters) {
+                openedParamsFilename = getSelectedFilename();
 				loadAdapter(parameters, true);
 			}
 		};
@@ -356,8 +368,12 @@ public class ParamsFragment extends ListFragment implements
 
 	private void saveParametersToFile() {
         final Context context = getActivity().getApplicationContext();
+        final String defaultFilename = TextUtils.isEmpty(openedParamsFilename)
+                ? FileStream.getParameterFilename("Parameters-")
+                : openedParamsFilename;
+
         final EditInputDialog dialog = EditInputDialog.newInstance(context,
-                getString(R.string.label_enter_filename), FileStream.getParameterFilename("Parameters-"),
+                getString(R.string.label_enter_filename), defaultFilename,
                 new EditInputDialog.Listener() {
                     @Override
                     public void onOk(CharSequence input) {
