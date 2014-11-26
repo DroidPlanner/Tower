@@ -44,8 +44,8 @@ public class MissionReader implements OpenFileDialog.FileReader {
 				in.close();
 				return false;
 			}
-			parseLines(reader);
 
+			parseLines(reader);
 			in.close();
 
 		} catch (Exception e) {
