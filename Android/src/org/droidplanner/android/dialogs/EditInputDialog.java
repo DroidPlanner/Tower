@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
@@ -54,7 +55,7 @@ public class EditInputDialog extends YesNoDialog {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         CharSequence input = mEditText.getText();
-                        if(input == null) input = mEditText.getHint();
+                        if(TextUtils.isEmpty(input)) input = mEditText.getHint();
 
                         mListener.onOk(input);
                     }
