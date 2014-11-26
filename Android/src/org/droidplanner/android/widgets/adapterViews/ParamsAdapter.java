@@ -124,23 +124,51 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 		return view;
 	}
 
-	public void loadParameters(Drone drone, Set<Parameter> parameters) {
+    public void updateParameters(Map<String, Parameter> parameters){
+        if(parameters == null || parameters.isEmpty())
+            return;
+
+        final int parametersCount = getCount();
+        for(int i = 0; i < parametersCount; i++){
+            ParamsAdapterItem item = getItem(i);
+            Parameter update = parameters.remove(item.getParameter().name);
+            if(update != null){
+                item.setDirtyValue(update.getValue());
+            }
+        }
+
+        if(!parameters.isEmpty()){
+            for(Map.Entry<String, Parameter> entry : parameters.entrySet()){
+                addParameter(entry.getKey(), entry.getValue(), true);
+            }
+        }
+
+        notifyDataSetChanged();
+    }
+
+	public void loadParameters(Drone drone, Map<String, Parameter> parameters) {
 		loadMetadataInternal(drone);
 
 		clear();
-		for (Parameter parameter : parameters) {
-            addParameter(parameter);
+		for (Map.Entry<String, Parameter> entry : parameters.entrySet()) {
+            addParameter(entry.getKey(), entry.getValue());
         }
 	}
 
-	private void addParameter(Parameter parameter) {
-		try {
-			Parameter.checkParameterName(parameter.name);
-            add(new ParamsAdapterItem(parameter, getMetadata(parameter.name)));
-		} catch (Exception ex) {
-			// eat it
-		}
+	private void addParameter(String name, Parameter parameter) {
+		addParameter(name, parameter, false);
 	}
+
+    private void addParameter(String name, Parameter parameter, boolean isDirty){
+        try {
+            Parameter.checkParameterName(name);
+            ParamsAdapterItem item = new ParamsAdapterItem(parameter, getMetadata(name));
+            item.setDirtyValue(parameter.getValue(), isDirty);
+            add(item);
+        } catch (Exception ex) {
+            // eat it
+        }
+    }
 
 	public void loadMetadata(Drone drone) {
 		loadMetadataInternal(drone);
