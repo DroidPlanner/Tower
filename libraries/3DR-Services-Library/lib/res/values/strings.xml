@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="permission_group_3dr_services_label">3DR Services</string>
-    <string name="permission_group_3dr_services_description">Groups the set of 3DR Services permissions.</string>
-    <string name="permission_access_3dr_services_api_label">Access 3DR Services Api</string>
-    <string name="permission_access_3dr_services_api_description">Provides access to the 3DR Services Api</string>
-</resources>
