@@ -301,7 +301,7 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 		@Override
 		public void afterTextChanged(Editable editable) {
 			// During reload text may change as valueView looses focus
-			// after underlying data has been evalidated - avoid this
+			// after underlying data has been invalidated - avoid this
 			if (position >= getCount())
 				return;
 
@@ -315,9 +315,7 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 		public void onFocusChange(View view, boolean hasFocus) {
 			if (!hasFocus) {
 				// refresh value on leaving view - show results of rounding etc.
-				valueView.setText(formatter.format(getValue()));
 				focusView = null;
-
 			} else {
 				focusView = view;
 			}
