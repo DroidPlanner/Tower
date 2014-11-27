@@ -31,6 +31,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.util.Pair;
+import android.text.TextUtils;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
 import android.view.Menu;
@@ -63,7 +64,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	 * and recreated.
 	 */
 	private static final String ITEM_DETAIL_TAG = "Item Detail Window";
+
     private static final String EXTRA_IS_SPLINE_ENABLED = "extra_is_spline_enabled";
+    private static final String EXTRA_OPENED_MISSION_FILENAME = "extra_opened_mission_filename";
 
     /**
 	 * Used to provide access and interact with the
@@ -88,6 +91,11 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	private TextView infoView;
 
     private boolean mMultiEditEnabled;
+
+    /**
+     * If the mission was loaded from a file, the filename is stored here.
+     */
+    private String openedMissionFilename;
 
 	/**
 	 * This view hosts the mission item detail fragment. On phone, or device
@@ -139,6 +147,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
         if(savedInstanceState != null){
             mIsSplineEnabled = savedInstanceState.getBoolean(EXTRA_IS_SPLINE_ENABLED);
+            openedMissionFilename = savedInstanceState.getString(EXTRA_OPENED_MISSION_FILENAME);
         }
 
 		// Retrieve the item detail fragment using its tag
@@ -229,7 +238,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     @Override
     public void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
+
         outState.putBoolean(EXTRA_IS_SPLINE_ENABLED, mIsSplineEnabled);
+        outState.putString(EXTRA_OPENED_MISSION_FILENAME, openedMissionFilename);
     }
 
     @Override
@@ -265,6 +276,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		OpenFileDialog missionDialog = new OpenMissionDialog() {
 			@Override
 			public void waypointFileLoaded(MissionReader reader) {
+                openedMissionFilename = getSelectedFilename();
                 missionProxy.readMissionFromFile(reader);
 				planningMapFragment.zoomToFit();
 			}
@@ -274,9 +286,12 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	private void saveMissionFile() {
 		final Context context = getApplicationContext();
-		final EditInputDialog dialog = EditInputDialog.newInstance(context,
-				getString(R.string.label_enter_filename),
-				FileStream.getWaypointFilename("waypoints"), new EditInputDialog.Listener() {
+        final String defaultFilename = TextUtils.isEmpty(openedMissionFilename)
+                ? FileStream.getWaypointFilename("waypoints")
+                : openedMissionFilename;
+
+        final EditInputDialog dialog = EditInputDialog.newInstance(context, getString(R.string.label_enter_filename),
+                defaultFilename, new EditInputDialog.Listener() {
 					@Override
 					public void onOk(CharSequence input) {
 						if (missionProxy.writeMissionToFile(input.toString())) {

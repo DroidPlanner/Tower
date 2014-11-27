@@ -120,21 +120,50 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 		return view;
 	}
 
+    public void updateParameters(Map<String, Parameter> parameters){
+        if(parameters == null || parameters.isEmpty())
+            return;
+
+        final int parametersCount = getCount();
+        for(int i = 0; i < parametersCount; i++){
+            ParamsAdapterItem item = getItem(i);
+            Parameter update = parameters.remove(item.getParameter().name);
+            if(update != null){
+                item.setDirtyValue(update.getValue());
+            }
+        }
+
+        if(!parameters.isEmpty()){
+            for(Map.Entry<String, Parameter> entry : parameters.entrySet()){
+                addParameter(entry.getKey(), entry.getValue(), true);
+            }
+        }
+
+        notifyDataSetChanged();
+    }
+    
 	public void loadParameters(Set<Parameter> parameters) {
 		clear();
-		for (Parameter parameter : parameters) {
-            addParameter(parameter);
+		for (Map.Entry<String, Parameter> entry : parameters.entrySet()) {
+            addParameter(entry.getKey(), entry.getValue());
         }
 	}
 
-	private void addParameter(Parameter parameter) {
-		try {
-			Parameter.checkParameterName(parameter.getName());
-            add(new ParamsAdapterItem(parameter));
-		} catch (Exception ex) {
-			// eat it
-		}
-	}
+    private void addParameter(String name, Parameter parameter) {
+        addParameter(name, parameter, false);
+    }
+
+    private void addParameter(String name, Parameter parameter, boolean isDirty){
+        try {
+            Parameter.checkParameterName(name);
+            ParamsAdapterItem item = new ParamsAdapterItem(parameter);
+            item.setDirtyValue(parameter.getValue(), isDirty);
+            add(item);
+        } catch (Exception ex) {
+            // eat it
+        }
+    }
+
 
 	private String getDescription(Parameter parameter) {
 		String desc = "";
@@ -235,7 +264,7 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 		@Override
 		public void afterTextChanged(Editable editable) {
 			// During reload text may change as valueView looses focus
-			// after underlying data has been evalidated - avoid this
+			// after underlying data has been invalidated - avoid this
 			if (position >= getCount())
 				return;
 
@@ -249,9 +278,7 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 		public void onFocusChange(View view, boolean hasFocus) {
 			if (!hasFocus) {
 				// refresh value on leaving view - show results of rounding etc.
-				valueView.setText(formatter.format(getValue()));
 				focusView = null;
-
 			} else {
 				focusView = view;
 			}

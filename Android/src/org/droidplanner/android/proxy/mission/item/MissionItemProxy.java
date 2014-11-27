@@ -151,7 +151,13 @@ public class MissionItemProxy {
 
 		if (mMissionItem instanceof MissionItem.SpatialItem) {
 			MissionItem.SpatialItem waypoint = (MissionItem.SpatialItem) mMissionItem;
-			altitudeView.setText(String.format("%3.0fm", waypoint.getCoordinate().getAltitude()));
+            double altitude = waypoint.getCoordinate().getAltitude();
+			altitudeView.setText(UnitManager.getUnitProvider().distanceToString(altitude));
+            
+            if(altitude < 0)
+                altitudeView.setTextColor(Color.YELLOW);
+            else
+                altitudeView.setTextColor(Color.WHITE);
 
 			try {
 				double diff = mMission.getAltitudeDiffFromPreviousItem(this);
@@ -164,13 +170,23 @@ public class MissionItemProxy {
 				// Do nothing when last item doesn't have an altitude
 			}
 		} else if (mMissionItem instanceof Survey) {
-            String altitude = UnitManager.getUnitProvider().distanceToString(((Survey) mMissionItem)
-                    .getSurveyDetail().getAltitude());
-			altitudeView.setText(altitude);
+            double altitude = ((Survey) mMissionItem).getSurveyDetail().getAltitude();
+            String formattedAltitude = UnitManager.getUnitProvider().distanceToString(altitude);
+			altitudeView.setText(formattedAltitude);
+
+            if(altitude < 0)
+                altitudeView.setTextColor(Color.YELLOW);
+            else
+                altitudeView.setTextColor(Color.WHITE);
 
 		} else if (mMissionItem instanceof Takeoff) {
-			altitudeView.setText(UnitManager.getUnitProvider().distanceToString(((Takeoff) mMissionItem)
-                    .getTakeoffAltitude()));
+            double altitude = ((Takeoff) mMissionItem).getTakeoffAltitude();
+			altitudeView.setText(UnitManager.getUnitProvider().distanceToString(altitude));
+
+            if(altitude < 0)
+                altitudeView.setTextColor(Color.YELLOW);
+            else
+                altitudeView.setTextColor(Color.WHITE);
 		} else {
 			altitudeView.setText("");
 		}
