@@ -460,7 +460,7 @@ public class MissionProxy implements DPMap.PathSource {
 		for (MissionItemProxy missionItemProxy : missionItemProxies) {
 
             MissionItem missionItem = missionItemProxy.getMissionItem();
-            if(missionItem instanceof MissionCMD){
+            if(missionItem instanceof MissionItem.Command){
                 //Skip commands
                 continue;
             }

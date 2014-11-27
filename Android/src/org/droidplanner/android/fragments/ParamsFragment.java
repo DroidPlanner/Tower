@@ -75,7 +75,7 @@ public class ParamsFragment extends ApiListenerListFragment {
             }
             else if(Event.EVENT_PARAMETERS_REFRESH_ENDED.equals(action)){
                 if(getDrone().isConnected()) {
-                        loadAdapter(getDrone().getParameters().getParameters());
+                        loadAdapter(getDrone().getParameters().getParameters(), false);
                 }
                 stopProgress();
             }
@@ -92,7 +92,7 @@ public class ParamsFragment extends ApiListenerListFragment {
             }
             else if(Event.EVENT_TYPE_UPDATED.equals(action)){
                 if(getDrone().isConnected())
-                    loadAdapter(getDrone().getParameters().getParameters());
+                    loadAdapter(getDrone().getParameters().getParameters(), false);
             }
         }
     };
@@ -432,7 +432,7 @@ public class ParamsFragment extends ApiListenerListFragment {
 
         TreeMap<String, Parameter> prunedParameters = new TreeMap<>();
         for(Parameter parameter: parameters){
-            prunedParameters.put(parameter.name, parameter);
+            prunedParameters.put(parameter.getName(), parameter);
         }
 
         if(isUpdate){

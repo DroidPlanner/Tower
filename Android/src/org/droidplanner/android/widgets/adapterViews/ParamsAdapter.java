@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.droidplanner.R;
@@ -127,9 +128,9 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
         final int parametersCount = getCount();
         for(int i = 0; i < parametersCount; i++){
             ParamsAdapterItem item = getItem(i);
-            Parameter update = parameters.remove(item.getParameter().name);
+            Parameter update = parameters.remove(item.getParameter().getName());
             if(update != null){
-                item.setDirtyValue(update.getValue());
+                item.setDirtyValue(update.getDisplayValue());
             }
         }
 
@@ -142,7 +143,7 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
         notifyDataSetChanged();
     }
     
-	public void loadParameters(Set<Parameter> parameters) {
+	public void loadParameters(Map<String, Parameter> parameters) {
 		clear();
 		for (Map.Entry<String, Parameter> entry : parameters.entrySet()) {
             addParameter(entry.getKey(), entry.getValue());
@@ -157,7 +158,7 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
         try {
             Parameter.checkParameterName(name);
             ParamsAdapterItem item = new ParamsAdapterItem(parameter);
-            item.setDirtyValue(parameter.getValue(), isDirty);
+            item.setDirtyValue(parameter.getDisplayValue(), isDirty);
             add(item);
         } catch (Exception ex) {
             // eat it
