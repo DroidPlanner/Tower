@@ -10,6 +10,7 @@ import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragme
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
+import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.commands.Takeoff;
@@ -144,8 +145,12 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 
 		if (mMissionItem instanceof SpatialCoordItem) {
 			SpatialCoordItem waypoint = (SpatialCoordItem) mMissionItem;
-			altitudeView.setText(String.format("%3.0fm", waypoint.getCoordinate().getAltitude()
-					.valueInMeters()));
+            Altitude altitude = waypoint.getCoordinate().getAltitude();
+			altitudeView.setText(altitude.toString());
+            if(altitude.valueInMeters() < 0)
+                altitudeView.setTextColor(Color.YELLOW);
+            else
+                altitudeView.setTextColor(Color.WHITE);
 
 			try {
 				Length diff = waypoint.getMission().getAltitudeDiffFromPreviousItem(waypoint);
@@ -158,10 +163,20 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 				// Do nothing when last item doesn't have an altitude
 			}
 		} else if (mMissionItem instanceof Survey) {
-			altitudeView.setText(((Survey) mMissionItem).surveyData.getAltitude().toString());
+            Altitude altitude = ((Survey) mMissionItem).surveyData.getAltitude();
+			altitudeView.setText(altitude.toString());
+            if(altitude.valueInMeters() < 0)
+                altitudeView.setTextColor(Color.YELLOW);
+            else
+                altitudeView.setTextColor(Color.WHITE);
 
 		} else if (mMissionItem instanceof Takeoff) {
-			altitudeView.setText(((Takeoff) mMissionItem).getFinishedAlt().toString());
+            Altitude altitude = ((Takeoff) mMissionItem).getFinishedAlt();
+			altitudeView.setText(altitude.toString());
+            if(altitude.valueInMeters() < 0)
+                altitudeView.setTextColor(Color.YELLOW);
+            else
+                altitudeView.setTextColor(Color.WHITE);
 		} else {
 			altitudeView.setText("");
 		}

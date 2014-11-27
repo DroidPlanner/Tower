@@ -29,6 +29,7 @@ public abstract class OpenFileDialog implements OnClickListener {
 	private String[] itemList;
 	private Context context;
 	private FileReader reader;
+    private String selectedFilename;
 
 	public void openDialog(Context context) {
 		this.context = context;
@@ -45,9 +46,14 @@ public abstract class OpenFileDialog implements OnClickListener {
 		dialog.create().show();
 	}
 
+    public String getSelectedFilename(){
+        return this.selectedFilename;
+    }
+
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
-        final String filename = reader.getPath() + itemList[which];
+        this.selectedFilename = itemList[which];
+        final String filename = reader.getPath() + this.selectedFilename;
         new OpenFileAsyncTask(this).execute(filename);
 	}
 
