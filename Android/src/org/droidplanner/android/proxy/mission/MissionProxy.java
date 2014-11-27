@@ -459,7 +459,13 @@ public class MissionProxy implements DPMap.PathSource {
 		List<MissionItemProxy> currentBucket = new ArrayList<MissionItemProxy>();
 		for (MissionItemProxy missionItemProxy : missionItemProxies) {
 
-			if (missionItemProxy.getMissionItem() instanceof SplineWaypoint) {
+            MissionItem missionItem = missionItemProxy.getMissionItem();
+            if(missionItem instanceof MissionItem.Command){
+                //Skip commands
+                continue;
+            }
+
+			if (missionItem instanceof SplineWaypoint) {
 				if (!isSpline) {
 					if (!currentBucket.isEmpty()) {
 						// Get the last item from the current bucket. It will

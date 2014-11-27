@@ -52,11 +52,22 @@ public class ParamsAdapterItem implements Parcelable {
 	}
 
 	public void setDirtyValue(String value) {
-		// dirty if different from original value, set validation if dirty
-		dirtyValue = (parameter.getDisplayValue().equals(value)) ? null : value;
-		if (dirtyValue != null)
-			validation = validateValue(dirtyValue);
+		
+		setDirtyValue(value, false);
 	}
+
+    public void setDirtyValue(String value, boolean force){
+        if(force){
+            dirtyValue = value;
+        }
+        else{
+            // dirty if different from original value, set validation if dirty
+            dirtyValue = (parameter.getDisplayValue().equals(value)) ? null : value;
+        }
+
+        if (dirtyValue != null)
+            validation = validateValue(dirtyValue);
+    }
 
 	public void commit() {
 		try {

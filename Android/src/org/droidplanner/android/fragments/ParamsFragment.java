@@ -3,6 +3,7 @@ package org.droidplanner.android.fragments;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.droidplanner.android.R;
@@ -56,6 +57,8 @@ public class ParamsFragment extends ApiListenerListFragment {
     private static final String PREF_PARAMS_FILTER_ON = "pref_params_filter_on";
     private static final boolean DEFAULT_PARAMS_FILTER_ON = true;
 
+    private static final String EXTRA_OPENED_PARAMS_FILENAME = "extra_opened_params_filename";
+
     private final static IntentFilter intentFilter = new IntentFilter();
     static {
         intentFilter.addAction(Event.EVENT_PARAMETERS_REFRESH_STARTED);
@@ -72,7 +75,7 @@ public class ParamsFragment extends ApiListenerListFragment {
             }
             else if(Event.EVENT_PARAMETERS_REFRESH_ENDED.equals(action)){
                 if(getDrone().isConnected()) {
-                        loadAdapter(getDrone().getParameters().getParameters());
+                        loadAdapter(getDrone().getParameters().getParameters(), false);
                 }
                 stopProgress();
             }
@@ -89,7 +92,7 @@ public class ParamsFragment extends ApiListenerListFragment {
             }
             else if(Event.EVENT_TYPE_UPDATED.equals(action)){
                 if(getDrone().isConnected())
-                    loadAdapter(getDrone().getParameters().getParameters());
+                    loadAdapter(getDrone().getParameters().getParameters(), false);
             }
         }
     };
@@ -102,6 +105,11 @@ public class ParamsFragment extends ApiListenerListFragment {
     private DroidPlannerPrefs mPrefs;
 	private ParamsAdapter adapter;
 
+    /**
+     * If the parameters were loaded from a file, the filename is stored here.
+     */
+    private String openedParamsFilename;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -112,6 +120,8 @@ public class ParamsFragment extends ApiListenerListFragment {
 
 		// create adapter
 		if (savedInstanceState != null) {
+            this.openedParamsFilename = savedInstanceState.getString(EXTRA_OPENED_PARAMS_FILENAME);
+
 			// load adapter items
 			@SuppressWarnings("unchecked")
 			final ArrayList<ParamsAdapterItem> pwms = savedInstanceState.getParcelableArrayList
@@ -240,7 +250,7 @@ public class ParamsFragment extends ApiListenerListFragment {
         if(adapter.isEmpty() && droneParams != null) {
             List<Parameter> parametersList = droneParams.getParameters();
             if (!parametersList.isEmpty())
-                loadAdapter(parametersList);
+                loadAdapter(parametersList, false);
         }
 
         toggleParameterFilter(isParameterFilterVisible(), false);
@@ -261,6 +271,8 @@ public class ParamsFragment extends ApiListenerListFragment {
 		final ArrayList<ParamsAdapterItem> pwms = new ArrayList<ParamsAdapterItem>(adapter
                 .getOriginalValues());
 		outState.putParcelableArrayList(ADAPTER_ITEMS, pwms);
+        
+        outState.putString(EXTRA_OPENED_PARAMS_FILENAME, this.openedParamsFilename);
 	}
 
 	@Override
@@ -375,7 +387,8 @@ public class ParamsFragment extends ApiListenerListFragment {
 		OpenFileDialog dialog = new OpenParameterDialog() {
 			@Override
 			public void parameterFileLoaded(List<Parameter> parameters) {
-				loadAdapter(parameters);
+                openedParamsFilename = getSelectedFilename();
+				loadAdapter(parameters, true);
 			}
 		};
 		dialog.openDialog(getActivity());
@@ -383,8 +396,12 @@ public class ParamsFragment extends ApiListenerListFragment {
 
 	private void saveParametersToFile() {
         final Context context = getActivity().getApplicationContext();
+        final String defaultFilename = TextUtils.isEmpty(openedParamsFilename)
+                ? FileStream.getParameterFilename("Parameters-")
+                : openedParamsFilename;
+
         final EditInputDialog dialog = EditInputDialog.newInstance(context,
-                getString(R.string.label_enter_filename), FileStream.getParameterFilename("Parameters-"),
+                getString(R.string.label_enter_filename), defaultFilename,
                 new EditInputDialog.Listener() {
                     @Override
                     public void onOk(CharSequence input) {
@@ -408,13 +425,22 @@ public class ParamsFragment extends ApiListenerListFragment {
         dialog.show(getChildFragmentManager(), "Parameters filename");
 	}
 
-    private void loadAdapter(List<Parameter> parameters){
+    private void loadAdapter(List<Parameter> parameters, boolean isUpdate){
         if(parameters == null || parameters.isEmpty()){
             return;
         }
 
-        Set<Parameter> prunedParameters = new TreeSet<Parameter>(parameters);
-        adapter.loadParameters(prunedParameters);
+        TreeMap<String, Parameter> prunedParameters = new TreeMap<>();
+        for(Parameter parameter: parameters){
+            prunedParameters.put(parameter.getName(), parameter);
+        }
+
+        if(isUpdate){
+            adapter.updateParameters(prunedParameters);
+        }
+        else {
+            adapter.loadParameters(prunedParameters);
+        }
 
         if(mParamsFilter != null && mParamsFilter.getVisibility() == View.VISIBLE){
             mParamsFilter.setText("");
