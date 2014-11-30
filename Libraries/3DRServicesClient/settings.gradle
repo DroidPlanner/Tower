@@ -1,4 +1,0 @@
-include ':lib'
-
-include ':Mavlink'
-project(':Mavlink').projectDir = new File('libraries/Mavlink')

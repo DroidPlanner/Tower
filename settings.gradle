@@ -5,9 +5,3 @@ include ':Android'
 include ':Libraries:HorizontalVariableListView:HorizontalVariableListView'
 include ':Libraries:PebbleKit'
 
-include ':3DRServicesClient:lib'
-project(':3DRServicesClient:lib').projectDir = new File('libraries/3DRServicesClient/lib')
-
-include ':Mavlink'
-project(':Mavlink').projectDir = new File('Libraries/3DRServicesClient/libraries/Mavlink')
-
