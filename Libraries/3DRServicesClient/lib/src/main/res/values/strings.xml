@@ -1,6 +1,0 @@
-<resources>
-
-    <string name="install_service_dialog_title">Install 3DR Services!</string>
-    <string name="install_service_dialog_message">3DR Services must be installed on the device to use this app.</string>
-    <string name="install_service_dialog_install_button">Install</string>
-</resources>

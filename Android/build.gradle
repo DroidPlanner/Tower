@@ -2,6 +2,9 @@ apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 dependencies {
@@ -10,8 +13,10 @@ dependencies {
     compile 'com.sothree.slidinguppanel:library:2.0.2'
     compile 'com.android.support:support-v4:20.0.0'
 
+    compile(name:'3dr_services_client-release.1.0', ext:'aar')
+    compile(name:'3dr_services_library-release.2.0.2', ext:'aar')
+
     compile project(':Libraries:HorizontalVariableListView:HorizontalVariableListView')
-    compile project(':3DRServicesClient:lib')
 
     compile files('libs/j2xx.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
