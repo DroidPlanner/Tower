@@ -325,6 +325,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
 
     @Override
     public void onDroneServiceInterrupted(String errorMsg){
-        Log.e(TAG, errorMsg);
+        if(errorMsg != null)
+            Log.e(TAG, errorMsg);
     }
 }
