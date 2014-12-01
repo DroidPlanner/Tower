@@ -1,6 +1,9 @@
 # Releases Notes
 These notes document what was removed from a Release Candidate (RC), which is build from a corresponding version of the program. These are not comulative between program versions (they can be between RCs), and express the diff from the master branch.
 
+## Droidplanner v2.8.6 RC3
+* Removed MAG calibration and drone locator
+
 ## Droidplanner v2.7.12 RC1
 * On the DroneSetup pane removed the Tuning, Radio and Calibration Fragments
 * Removed un-finished buttons on the Circle mode fragment
