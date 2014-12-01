@@ -55,15 +55,16 @@ public class SensorSetupFragment extends Fragment {
             switch(i){
                 case 0:
                 default:
-                	return new FragmentSetupMAG();
-                case 1:
+//                	return new FragmentSetupMAG();
+//                case 1:
                 	return new FragmentSetupIMU();
             }
         }
 
         @Override
         public int getCount() {
-            return 2;
+        	return 1;
+        	//return 2;
         }
 
         @Override
@@ -71,8 +72,8 @@ public class SensorSetupFragment extends Fragment {
             switch(position){
                 case 0:
                 default:
-                	return FragmentSetupMAG.getTitle(context);
-                case 1:
+//                	return FragmentSetupMAG.getTitle(context);
+//                case 1:
                 	return FragmentSetupIMU.getTitle(context);
             }
         }
