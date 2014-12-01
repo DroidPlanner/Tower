@@ -14,7 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.gcs.follow.FollowState;
 import com.o3dr.services.android.lib.gcs.follow.FollowType;
 
@@ -24,13 +24,13 @@ import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapte
 
 public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSelectedListener {
 
-	private static final IntentFilter eventFilter = new IntentFilter(Event.EVENT_FOLLOW_UPDATE);
+	private static final IntentFilter eventFilter = new IntentFilter(AttributeEvent.FOLLOW_UPDATE);
 
 	private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
-			if (Event.EVENT_FOLLOW_UPDATE.equals(action)) {
+			if (AttributeEvent.FOLLOW_UPDATE.equals(action)) {
 				final FollowState followState = getDrone().getFollowState();
 				if (followState != null) {
 					spinner.setSelection(adapter.getPosition(followState.getMode()));
@@ -82,7 +82,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	public void onApiConnected() {
 		super.onApiConnected();
 
-		adapter.addAll(getDrone().getFollowTypes());
+		adapter.addAll(FollowType.values());
 		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 	}
 

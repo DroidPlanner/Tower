@@ -7,10 +7,11 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 
 import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
+import com.o3dr.services.android.lib.drone.property.CameraProxy;
 
 import org.droidplanner.R;
 import org.droidplanner.R.id;
@@ -20,6 +21,7 @@ import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 
+import java.util.Collections;
 import java.util.List;
 
 public class MissionStructureScannerFragment extends MissionDetailFragment implements
@@ -41,8 +43,12 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.STRUCTURE_SCANNER));
 
+        CameraProxy camera = getDrone().getCamera();
+        List<CameraDetail> cameraDetails = camera == null
+                ? Collections.<CameraDetail>emptyList()
+                :  camera.getAvailableCameraInfos();
 		cameraAdapter = new CamerasAdapter(getActivity(),
-				android.R.layout.simple_spinner_dropdown_item, getDrone().getCameraDetails());
+                android.R.layout.simple_spinner_dropdown_item, cameraDetails);
 		SpinnerSelfSelect cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
 		cameraSpinner.setAdapter(cameraAdapter);
 		cameraSpinner.setOnSpinnerItemSelectedListener(this);

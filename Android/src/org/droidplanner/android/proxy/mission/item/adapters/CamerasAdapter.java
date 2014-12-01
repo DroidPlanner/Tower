@@ -16,6 +16,10 @@ public class CamerasAdapter extends ArrayAdapter<CameraDetail> {
 		super(context, resource, cameraDetails);
 	}
 
+    public CamerasAdapter(Context context, int resource, List<CameraDetail> cameraDetails){
+        super(context, resource, cameraDetails);
+    }
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		TextView view = (TextView) super.getView(position, convertView, parent);

@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 
 import org.droidplanner.R;
@@ -24,12 +24,12 @@ public class FlightModePanel extends ApiListenerFragment{
 
     private final static IntentFilter eventFilter = new IntentFilter();
     static {
-        eventFilter.addAction(Event.EVENT_CONNECTED);
-        eventFilter.addAction(Event.EVENT_DISCONNECTED);
-        eventFilter.addAction(Event.EVENT_VEHICLE_MODE);
-        eventFilter.addAction(Event.EVENT_TYPE_UPDATED);
-        eventFilter.addAction(Event.EVENT_FOLLOW_START);
-        eventFilter.addAction(Event.EVENT_FOLLOW_STOP);
+        eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
+        eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+        eventFilter.addAction(AttributeEvent.STATE_VEHICLE_MODE);
+        eventFilter.addAction(AttributeEvent.TYPE_UPDATED);
+        eventFilter.addAction(AttributeEvent.FOLLOW_START);
+        eventFilter.addAction(AttributeEvent.FOLLOW_STOP);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {

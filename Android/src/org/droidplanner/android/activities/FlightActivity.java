@@ -30,8 +30,8 @@ import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.drone.event.Event;
-import com.o3dr.services.android.lib.drone.event.Extra;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public class FlightActivity extends DrawerNavigationUI {
@@ -46,38 +46,39 @@ public class FlightActivity extends DrawerNavigationUI {
 
     private static final IntentFilter eventFilter = new IntentFilter();
     static {
-        eventFilter.addAction(Event.EVENT_AUTOPILOT_FAILSAFE);
-        eventFilter.addAction(Event.EVENT_ARMING);
-        eventFilter.addAction(Event.EVENT_CONNECTED);
-        eventFilter.addAction(Event.EVENT_DISCONNECTED);
-        eventFilter.addAction(Event.EVENT_STATE);
-        eventFilter.addAction(Event.EVENT_FOLLOW_START);
-        eventFilter.addAction(Event.EVENT_MISSION_DRONIE_CREATED);
+        eventFilter.addAction(AttributeEvent.AUTOPILOT_FAILSAFE);
+        eventFilter.addAction(AttributeEvent.STATE_ARMING);
+        eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
+        eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+        eventFilter.addAction(AttributeEvent.STATE_UPDATED);
+        eventFilter.addAction(AttributeEvent.FOLLOW_START);
+        eventFilter.addAction(AttributeEvent.MISSION_DRONIE_CREATED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if(Event.EVENT_AUTOPILOT_FAILSAFE.equals(action)){
-                String warning = intent.getStringExtra(Extra.EXTRA_AUTOPILOT_FAILSAFE_MESSAGE);
+            if(AttributeEvent.AUTOPILOT_FAILSAFE.equals(action)){
+                String warning = intent.getStringExtra(AttributeEventExtra
+                        .EXTRA_AUTOPILOT_FAILSAFE_MESSAGE);
                 onWarningChanged(warning);
             }
-            else if(Event.EVENT_ARMING.equals(action)
-                    || Event.EVENT_CONNECTED.equals(action)
-                    || Event.EVENT_DISCONNECTED.equals(action)
-                    || Event.EVENT_STATE.equals(action)){
+            else if(AttributeEvent.STATE_ARMING.equals(action)
+                    || AttributeEvent.STATE_CONNECTED.equals(action)
+                    || AttributeEvent.STATE_DISCONNECTED.equals(action)
+                    || AttributeEvent.STATE_UPDATED.equals(action)){
                 enableSlidingUpPanel(dpApp.getDrone());
             }
-            else if(Event.EVENT_FOLLOW_START.equals(action)){
+            else if(AttributeEvent.FOLLOW_START.equals(action)){
                 //Extend the sliding drawer if collapsed.
                 if(!mSlidingPanelCollapsing.get() && mSlidingPanel.isSlidingEnabled() &&
                         !mSlidingPanel.isPanelExpanded()){
                     mSlidingPanel.expandPanel();
                 }
             }
-            else if(Event.EVENT_MISSION_DRONIE_CREATED.equals(action)){
-                float dronieBearing = intent.getFloatExtra(Extra.EXTRA_MISSION_DRONIE_BEARING,  -1);
+            else if(AttributeEvent.MISSION_DRONIE_CREATED.equals(action)){
+                float dronieBearing = intent.getFloatExtra(AttributeEventExtra.EXTRA_MISSION_DRONIE_BEARING,  -1);
                 if(dronieBearing != -1)
                     updateMapBearing(dronieBearing);
             }

@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.gcs.follow.FollowState;
@@ -43,32 +43,32 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
 
     private static final IntentFilter eventFilter = new IntentFilter();
     static {
-        eventFilter.addAction(Event.EVENT_CONNECTED);
-        eventFilter.addAction(Event.EVENT_DISCONNECTED);
-        eventFilter.addAction(Event.EVENT_STATE);
-        eventFilter.addAction(Event.EVENT_VEHICLE_MODE);
-        eventFilter.addAction(Event.EVENT_FOLLOW_START);
-        eventFilter.addAction(Event.EVENT_FOLLOW_STOP);
-        eventFilter.addAction(Event.EVENT_FOLLOW_UPDATE);
+        eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
+        eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+        eventFilter.addAction(AttributeEvent.STATE_UPDATED);
+        eventFilter.addAction(AttributeEvent.STATE_VEHICLE_MODE);
+        eventFilter.addAction(AttributeEvent.FOLLOW_START);
+        eventFilter.addAction(AttributeEvent.FOLLOW_STOP);
+        eventFilter.addAction(AttributeEvent.FOLLOW_UPDATE);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if (Event.EVENT_CONNECTED.equals(action) || Event.EVENT_DISCONNECTED.equals(action)
-                    || Event.EVENT_STATE.equals(action)) {
+            if (AttributeEvent.STATE_CONNECTED.equals(action) || AttributeEvent.STATE_DISCONNECTED.equals(action)
+                    || AttributeEvent.STATE_UPDATED.equals(action)) {
                 setupButtonsByFlightState();
-            } else if (Event.EVENT_VEHICLE_MODE.equals(action)) {
+            } else if (AttributeEvent.STATE_VEHICLE_MODE.equals(action)) {
                 updateFlightModeButtons();
-            } else if (Event.EVENT_FOLLOW_START.equals(action)
-                    || Event.EVENT_FOLLOW_STOP.equals(action)
-                    || Event.EVENT_FOLLOW_UPDATE.equals(action)) {
+            } else if (AttributeEvent.FOLLOW_START.equals(action)
+                    || AttributeEvent.FOLLOW_STOP.equals(action)
+                    || AttributeEvent.FOLLOW_UPDATE.equals(action)) {
                 updateFlightModeButtons();
                 updateFollowButton();
 
-                if((Event.EVENT_FOLLOW_START.equals(action)
-                        || Event.EVENT_FOLLOW_STOP.equals(action))) {
+                if((AttributeEvent.FOLLOW_START.equals(action)
+                        || AttributeEvent.FOLLOW_STOP.equals(action))) {
                     final FollowState followState = getDrone().getFollowState();
                     if (followState != null) {
                         String eventLabel = null;

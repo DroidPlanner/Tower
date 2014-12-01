@@ -9,8 +9,8 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
-import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.command.SetServo;
 
 public class SetServoFragment extends MissionDetailFragment implements

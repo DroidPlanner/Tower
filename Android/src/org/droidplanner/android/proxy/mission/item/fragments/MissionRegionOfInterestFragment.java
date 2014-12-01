@@ -3,7 +3,7 @@ package org.droidplanner.android.proxy.mission.item.fragments;
 import android.view.View;
 
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
-import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.RegionOfInterest;
 
 import org.droidplanner.R;

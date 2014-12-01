@@ -16,12 +16,12 @@ import com.o3dr.android.client.Drone;
 import com.o3dr.android.client.ServiceManager;
 import com.o3dr.android.client.interfaces.DroneListener;
 import com.o3dr.android.client.interfaces.ServiceListener;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.connection.ConnectionParameter;
 import com.o3dr.services.android.lib.drone.connection.ConnectionResult;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 import com.o3dr.services.android.lib.drone.connection.DroneSharePrefs;
 import com.o3dr.services.android.lib.drone.connection.StreamRates;
-import com.o3dr.services.android.lib.drone.event.Event;
 
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
 import org.droidplanner.android.notifications.NotificationHandler;
@@ -305,13 +305,13 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
 
     @Override
     public void onDroneEvent(String event, Bundle extras){
-        if (Event.EVENT_CONNECTED.equals(event)) {
+        if (AttributeEvent.STATE_CONNECTED.equals(event)) {
             handler.removeCallbacks(disconnectionTask);
             if(notificationHandler == null) {
                 notificationHandler = new NotificationHandler(getApplicationContext(), drone);
             }
         }
-        else if (Event.EVENT_DISCONNECTED.equals(event)) {
+        else if (AttributeEvent.STATE_DISCONNECTED.equals(event)) {
             shouldWeTerminate();
         }
 

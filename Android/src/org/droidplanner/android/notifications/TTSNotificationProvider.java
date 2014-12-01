@@ -15,8 +15,8 @@ import android.util.SparseBooleanArray;
 import android.widget.Toast;
 
 import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.drone.event.Event;
-import com.o3dr.services.android.lib.drone.event.Extra;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.o3dr.services.android.lib.drone.property.Battery;
 import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.State;
@@ -243,22 +243,22 @@ public class TTSNotificationProvider implements OnInitListener,
 
 	private final static IntentFilter eventFilter = new IntentFilter();
 	static {
-		eventFilter.addAction(Event.EVENT_ARMING);
-		eventFilter.addAction(Event.EVENT_BATTERY);
-		eventFilter.addAction(Event.EVENT_VEHICLE_MODE);
-		eventFilter.addAction(Event.EVENT_MISSION_SENT);
-		eventFilter.addAction(Event.EVENT_GPS_FIX);
-		eventFilter.addAction(Event.EVENT_MISSION_RECEIVED);
-		eventFilter.addAction(Event.EVENT_HEARTBEAT_FIRST);
-		eventFilter.addAction(Event.EVENT_HEARTBEAT_TIMEOUT);
-		eventFilter.addAction(Event.EVENT_HEARTBEAT_RESTORED);
-		eventFilter.addAction(Event.EVENT_DISCONNECTED);
-		eventFilter.addAction(Event.EVENT_MISSION_ITEM_UPDATE);
-		eventFilter.addAction(Event.EVENT_FOLLOW_START);
-		eventFilter.addAction(Event.EVENT_AUTOPILOT_FAILSAFE);
-		eventFilter.addAction(Event.EVENT_WARNING_400FT_EXCEEDED);
-		eventFilter.addAction(Event.EVENT_WARNING_SIGNAL_WEAK);
-		eventFilter.addAction(Event.EVENT_WARNING_NO_GPS);
+		eventFilter.addAction(AttributeEvent.STATE_ARMING);
+		eventFilter.addAction(AttributeEvent.BATTERY_UPDATED);
+		eventFilter.addAction(AttributeEvent.STATE_VEHICLE_MODE);
+		eventFilter.addAction(AttributeEvent.MISSION_SENT);
+		eventFilter.addAction(AttributeEvent.GPS_FIX);
+		eventFilter.addAction(AttributeEvent.MISSION_RECEIVED);
+		eventFilter.addAction(AttributeEvent.HEARTBEAT_FIRST);
+		eventFilter.addAction(AttributeEvent.HEARTBEAT_TIMEOUT);
+		eventFilter.addAction(AttributeEvent.HEARTBEAT_RESTORED);
+		eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+		eventFilter.addAction(AttributeEvent.MISSION_ITEM_UPDATED);
+		eventFilter.addAction(AttributeEvent.FOLLOW_START);
+		eventFilter.addAction(AttributeEvent.AUTOPILOT_FAILSAFE);
+		eventFilter.addAction(AttributeEvent.ALTITUDE_400FT_EXCEEDED);
+		eventFilter.addAction(AttributeEvent.SIGNAL_WEAK);
+		eventFilter.addAction(AttributeEvent.WARNING_NO_GPS);
 
 	}
 
@@ -271,70 +271,70 @@ public class TTSNotificationProvider implements OnInitListener,
 			final String action = intent.getAction();
             State droneState = drone.getState();
 
-			if (Event.EVENT_ARMING.equals(action)) {
+			if (AttributeEvent.STATE_ARMING.equals(action)) {
                 if(droneState != null)
 				    speakArmedState(droneState.isArmed());
-			} else if (Event.EVENT_BATTERY.equals(action)) {
+			} else if (AttributeEvent.BATTERY_UPDATED.equals(action)) {
                 Battery droneBattery = drone.getBattery();
                 if(droneBattery != null)
 				    batteryDischargeNotification(droneBattery.getBatteryRemain());
-			} else if (Event.EVENT_VEHICLE_MODE.equals(action)) {
+			} else if (AttributeEvent.STATE_VEHICLE_MODE.equals(action)) {
                 if(droneState != null)
 				    speakMode(droneState.getVehicleMode());
-			} else if (Event.EVENT_MISSION_SENT.equals(action)) {
+			} else if (AttributeEvent.MISSION_SENT.equals(action)) {
 				Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT).show();
 				speak("Waypoints saved to Drone");
-			} else if (Event.EVENT_GPS_FIX.equals(action)) {
+			} else if (AttributeEvent.GPS_FIX.equals(action)) {
                 Gps droneGps = drone.getGps();
                 if(droneGps != null)
 				    speakGpsMode(droneGps.getFixType());
-			} else if (Event.EVENT_MISSION_RECEIVED.equals(action)) {
+			} else if (AttributeEvent.MISSION_RECEIVED.equals(action)) {
 				Toast.makeText(context, "Waypoints received from Drone", Toast.LENGTH_SHORT).show();
 				speak("Waypoints received");
-			} else if (Event.EVENT_HEARTBEAT_FIRST.equals(action)) {
+			} else if (AttributeEvent.HEARTBEAT_FIRST.equals(action)) {
 				watchdogCallback.setDrone(drone);
 				scheduleWatchdog();
 				speak("Connected");
-			} else if (Event.EVENT_HEARTBEAT_TIMEOUT.equals(action)) {
+			} else if (AttributeEvent.HEARTBEAT_TIMEOUT.equals(action)) {
 				if (mAppPrefs.getWarningOnLostOrRestoredSignal()) {
 					speak("Data link lost, check connection.");
 					handler.removeCallbacks(watchdogCallback);
 				}
 			}
-            else if(Event.EVENT_HEARTBEAT_RESTORED.equals(action)){
+            else if(AttributeEvent.HEARTBEAT_RESTORED.equals(action)){
                 watchdogCallback.setDrone(drone);
                 scheduleWatchdog();
                 if (mAppPrefs.getWarningOnLostOrRestoredSignal()) {
                     speak("Data link restored");
                 }
             }
-            else if(Event.EVENT_DISCONNECTED.equals(action)){
+            else if(AttributeEvent.STATE_DISCONNECTED.equals(action)){
                 handler.removeCallbacks(watchdogCallback);
             }
-            else if(Event.EVENT_MISSION_ITEM_UPDATE.equals(action)){
-                int currentWaypoint = intent.getIntExtra(Extra.EXTRA_MISSION_CURRENT_WAYPOINT, 0);
+            else if(AttributeEvent.MISSION_ITEM_UPDATED.equals(action)){
+                int currentWaypoint = intent.getIntExtra(AttributeEventExtra.EXTRA_MISSION_CURRENT_WAYPOINT, 0);
                 speak("Going for waypoint " + currentWaypoint);
             }
-            else if(Event.EVENT_FOLLOW_START.equals(action)){
+            else if(AttributeEvent.FOLLOW_START.equals(action)){
                 speak("Following");
             }
-            else if(Event.EVENT_WARNING_400FT_EXCEEDED.equals(action)){
+            else if(AttributeEvent.ALTITUDE_400FT_EXCEEDED.equals(action)){
                 if (mAppPrefs.getWarningOn400ftExceeded()) {
                     speak("warning, 400 feet exceeded");
                 }
             }
-            else if(Event.EVENT_AUTOPILOT_FAILSAFE.equals(action)){
-                String warning = intent.getStringExtra(Extra.EXTRA_AUTOPILOT_FAILSAFE_MESSAGE);
+            else if(AttributeEvent.AUTOPILOT_FAILSAFE.equals(action)){
+                String warning = intent.getStringExtra(AttributeEventExtra.EXTRA_AUTOPILOT_FAILSAFE_MESSAGE);
                 if (!TextUtils.isEmpty(warning) && mAppPrefs.getWarningOnAutopilotWarning()) {
                     speak(warning);
                 }
             }
-            else if(Event.EVENT_WARNING_SIGNAL_WEAK.equals(action)){
+            else if(AttributeEvent.SIGNAL_WEAK.equals(action)){
                 if (mAppPrefs.getWarningOnLowSignalStrength()) {
                     speak("Warning, weak signal");
                 }
             }
-            else if(Event.EVENT_WARNING_NO_GPS.equals(action)){
+            else if(AttributeEvent.WARNING_NO_GPS.equals(action)){
                 speak("Error, no gps lock yet");
             }
 		}

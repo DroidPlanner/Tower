@@ -34,9 +34,9 @@ import com.getpebble.android.kit.PebbleKit;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
-import com.o3dr.services.android.lib.drone.event.Event;
-import com.o3dr.services.android.lib.drone.event.Extra;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.Type;
 
@@ -83,28 +83,28 @@ public class SettingsFragment extends PreferenceFragment implements
 
 	private static final IntentFilter intentFilter = new IntentFilter();
 	static {
-		intentFilter.addAction(Event.EVENT_DISCONNECTED);
-		intentFilter.addAction(Event.EVENT_STATE);
-		intentFilter.addAction(Event.EVENT_HEARTBEAT_FIRST);
-		intentFilter.addAction(Event.EVENT_HEARTBEAT_RESTORED);
-		intentFilter.addAction(Event.EVENT_TYPE_UPDATED);
+		intentFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+		intentFilter.addAction(AttributeEvent.STATE_UPDATED);
+		intentFilter.addAction(AttributeEvent.HEARTBEAT_FIRST);
+		intentFilter.addAction(AttributeEvent.HEARTBEAT_RESTORED);
+		intentFilter.addAction(AttributeEvent.TYPE_UPDATED);
 	}
 
 	private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
-			if (Event.EVENT_DISCONNECTED.equals(action)) {
+			if (AttributeEvent.STATE_DISCONNECTED.equals(action)) {
 				updateMavlinkVersionPreference(null);
 				updateFirmwareVersionPreference(null);
-			} else if (Event.EVENT_HEARTBEAT_FIRST.equals(action)
-					|| Event.EVENT_HEARTBEAT_RESTORED.equals(action)) {
-				int mavlinkVersion = intent.getIntExtra(Extra.EXTRA_MAVLINK_VERSION, -1);
+			} else if (AttributeEvent.HEARTBEAT_FIRST.equals(action)
+					|| AttributeEvent.HEARTBEAT_RESTORED.equals(action)) {
+				int mavlinkVersion = intent.getIntExtra(AttributeEventExtra.EXTRA_MAVLINK_VERSION, -1);
 				if (mavlinkVersion == -1)
 					updateMavlinkVersionPreference(null);
 				else
 					updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
-			} else if (Event.EVENT_TYPE_UPDATED.equals(action)) {
+			} else if (AttributeEvent.TYPE_UPDATED.equals(action)) {
                 Drone drone = dpApp.getDrone();
 				if (drone.isConnected()) {
 					updateFirmwareVersionPreference(drone.getType().getFirmwareVersion());

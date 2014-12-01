@@ -11,10 +11,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
+import com.o3dr.services.android.lib.drone.property.CameraProxy;
 
 import org.droidplanner.R;
 import org.droidplanner.R.id;
@@ -26,6 +27,7 @@ import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 
+import java.util.Collections;
 import java.util.List;
 
 public class MissionSurveyFragment extends MissionDetailFragment implements
@@ -80,8 +82,12 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
         final View view = getView();
         final Context context = getActivity().getApplicationContext();
 
+        CameraProxy camera = getDrone().getCamera();
+        List<CameraDetail> cameraDetails = camera == null
+                ? Collections.<CameraDetail>emptyList()
+                :  camera.getAvailableCameraInfos();
         cameraAdapter = new CamerasAdapter(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item, getDrone().getCameraDetails());
+                android.R.layout.simple_spinner_dropdown_item, cameraDetails);
 
         cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
         cameraSpinner.setAdapter(cameraAdapter);
