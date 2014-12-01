@@ -102,6 +102,7 @@ public class MissionSurvey3DFragment extends MissionDetailFragment implements
 			getMissionProxy().getMission().notifyMissionUpdate();
 		}else{
 			super.onSpinnerItemSelected(spinner,position);
+			getMissionProxy().getMission().notifyMissionUpdate();
 		}
 	}
 
