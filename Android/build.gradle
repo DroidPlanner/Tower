@@ -13,8 +13,8 @@ dependencies {
     compile 'com.sothree.slidinguppanel:library:2.0.2'
     compile 'com.android.support:support-v4:20.0.0'
 
-    compile(name:'3dr_services_client-release.2.1.2', ext:'aar')
-    compile(name:'3dr_services_library-release.2.0.10', ext:'aar')
+    compile(name:'3dr_services_client-release.2.1.4', ext:'aar')
+    compile(name:'3dr_services_library-release.2.0.11', ext:'aar')
 
     compile project(':Libraries:HorizontalVariableListView:HorizontalVariableListView')
 
