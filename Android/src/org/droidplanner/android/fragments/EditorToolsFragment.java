@@ -20,7 +20,8 @@ import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+
 
 /**
  * This fragment implements and displays the 'tools' used in the editor window
@@ -47,14 +48,14 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
     private static final IntentFilter eventFilter = new IntentFilter();
     static {
-        eventFilter.addAction(Event.EVENT_MISSION_RECEIVED);
+        eventFilter.addAction(AttributeEvent.MISSION_RECEIVED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if(Event.EVENT_MISSION_RECEIVED.equals(action)){
+            if(AttributeEvent.MISSION_RECEIVED.equals(action)){
                 setTool(tool, false);
             }
         }

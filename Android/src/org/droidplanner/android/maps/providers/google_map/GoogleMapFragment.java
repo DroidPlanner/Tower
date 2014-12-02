@@ -64,7 +64,7 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
-import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.property.FootPrint;
 import com.o3dr.services.android.lib.drone.property.Gps;
 
@@ -86,7 +86,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
     private static final float GO_TO_MY_LOCATION_ZOOM = 19f;
 
-    private static final IntentFilter eventFilter = new IntentFilter(Event.EVENT_GPS);
+    private static final IntentFilter eventFilter = new IntentFilter(AttributeEvent.GPS_POSITION);
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override

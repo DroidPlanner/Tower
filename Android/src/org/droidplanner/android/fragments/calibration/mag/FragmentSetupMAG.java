@@ -15,17 +15,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.drone.event.Event;
-import com.o3dr.services.android.lib.drone.event.Extra;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.Point3D;
 import org.droidplanner.android.widgets.scatterplot.ScatterPlot;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class FragmentSetupMAG extends ApiListenerFragment {
 
@@ -40,37 +38,37 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 
 	private static final IntentFilter intentFilter = new IntentFilter();
 	static {
-		intentFilter.addAction(Event.EVENT_CONNECTED);
-		intentFilter.addAction(Event.EVENT_DISCONNECTED);
-        intentFilter.addAction(Event.EVENT_CALIBRATION_MAG_STARTED);
-        intentFilter.addAction(Event.EVENT_CALIBRATION_MAG_ESTIMATION);
-        intentFilter.addAction(Event.EVENT_CALIBRATION_MAG_COMPLETED);
+		intentFilter.addAction(AttributeEvent.STATE_CONNECTED);
+		intentFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+        intentFilter.addAction(AttributeEvent.CALIBRATION_MAG_STARTED);
+        intentFilter.addAction(AttributeEvent.CALIBRATION_MAG_ESTIMATION);
+        intentFilter.addAction(AttributeEvent.CALIBRATION_MAG_COMPLETED);
 	}
 
 	private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
-			if (Event.EVENT_CONNECTED.equals(action)) {
+			if (AttributeEvent.STATE_CONNECTED.equals(action)) {
 				buttonStep.setEnabled(true);
 			}
-            else if (Event.EVENT_DISCONNECTED.equals(action)) {
+            else if (AttributeEvent.STATE_DISCONNECTED.equals(action)) {
 				cancelCalibration();
 				buttonStep.setEnabled(false);
 			}
-            else if(Event.EVENT_CALIBRATION_MAG_STARTED.equals(action)){
-                double[] pointsX = intent.getDoubleArrayExtra(Extra.EXTRA_CALIBRATION_MAG_POINTS_X);
-                double[] pointsY = intent.getDoubleArrayExtra(Extra.EXTRA_CALIBRATION_MAG_POINTS_Y);
-                double[] pointsZ = intent.getDoubleArrayExtra(Extra.EXTRA_CALIBRATION_MAG_POINTS_Z);
+            else if(AttributeEvent.CALIBRATION_MAG_STARTED.equals(action)){
+                double[] pointsX = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_X);
+                double[] pointsY = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_Y);
+                double[] pointsZ = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_Z);
 
                 inProgressPoints = Point3D.fromDoubleArrays(pointsX, pointsY, pointsZ);
 
                 setCalibrationStatus(CALIBRATION_IN_PROGRESS);
             }
-            else if(Event.EVENT_CALIBRATION_MAG_ESTIMATION.equals(action)){
-                double[] pointsX = intent.getDoubleArrayExtra(Extra.EXTRA_CALIBRATION_MAG_POINTS_X);
-                double[] pointsY = intent.getDoubleArrayExtra(Extra.EXTRA_CALIBRATION_MAG_POINTS_Y);
-                double[] pointsZ = intent.getDoubleArrayExtra(Extra.EXTRA_CALIBRATION_MAG_POINTS_Z);
+            else if(AttributeEvent.CALIBRATION_MAG_ESTIMATION.equals(action)){
+                double[] pointsX = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_X);
+                double[] pointsY = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_Y);
+                double[] pointsZ = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_Z);
 
                 inProgressPoints = Point3D.fromDoubleArrays(pointsX, pointsY, pointsZ);
 
@@ -79,11 +77,11 @@ public class FragmentSetupMAG extends ApiListenerFragment {
                     return;
                 }
 
-                final double fitness = intent.getDoubleExtra(Extra.EXTRA_CALIBRATION_MAG_FITNESS,
+                final double fitness = intent.getDoubleExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_FITNESS,
                         0);
-                final double[] fitCenter = intent.getDoubleArrayExtra(Extra
+                final double[] fitCenter = intent.getDoubleArrayExtra(AttributeEventExtra
                         .EXTRA_CALIBRATION_MAG_FIT_CENTER);
-                final double[] fitRadii = intent.getDoubleArrayExtra(Extra
+                final double[] fitRadii = intent.getDoubleArrayExtra(AttributeEventExtra
                         .EXTRA_CALIBRATION_MAG_FIT_RADII);
 
                 if (pointsCount < MIN_POINTS_COUNT) {
@@ -122,8 +120,8 @@ public class FragmentSetupMAG extends ApiListenerFragment {
                 plot2.invalidate();
 
             }
-            else if(Event.EVENT_CALIBRATION_MAG_COMPLETED.equals(action)){
-                double[] offsets = intent.getDoubleArrayExtra(Extra.EXTRA_CALIBRATION_MAG_OFFSETS);
+            else if(AttributeEvent.CALIBRATION_MAG_COMPLETED.equals(action)){
+                double[] offsets = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_OFFSETS);
                 if(offsets != null) {
                     String offsetsSummary = Arrays.toString(offsets);
                     Log.d("MAG", "Calibration Finished: " + offsetsSummary);

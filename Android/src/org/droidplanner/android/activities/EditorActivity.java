@@ -48,8 +48,8 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
-import com.o3dr.services.android.lib.drone.event.Event;
-import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 
 /**
  * This implements the map editor activity. The map editor activity allows the
@@ -328,7 +328,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     private static final IntentFilter eventFilter = new IntentFilter();
     static {
         eventFilter.addAction(MissionProxy.ACTION_MISSION_PROXY_UPDATE);
-        eventFilter.addAction(Event.EVENT_MISSION_RECEIVED);
+        eventFilter.addAction(AttributeEvent.MISSION_RECEIVED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -353,7 +353,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                     }
                 }
             }
-            else if(Event.EVENT_MISSION_RECEIVED.equals(action)){
+            else if(AttributeEvent.MISSION_RECEIVED.equals(action)){
                 if (planningMapFragment != null) {
                     planningMapFragment.zoomToFit();
                 }

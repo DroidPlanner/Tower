@@ -1,7 +1,7 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
-import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.command.Takeoff;
 
 import org.droidplanner.android.R;

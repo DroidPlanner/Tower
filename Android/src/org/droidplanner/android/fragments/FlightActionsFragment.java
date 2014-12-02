@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.property.Type;
 
 import org.droidplanner.android.R;
@@ -24,13 +24,13 @@ public class FlightActionsFragment extends ApiListenerFragment {
 		boolean isSlidingUpPanelEnabled(Drone api);
 	}
 
-	private static final IntentFilter eventFilter = new IntentFilter(Event.EVENT_TYPE_UPDATED);
+	private static final IntentFilter eventFilter = new IntentFilter(AttributeEvent.TYPE_UPDATED);
 
 	private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
-			if (Event.EVENT_TYPE_UPDATED.equals(action)) {
+			if (AttributeEvent.TYPE_UPDATED.equals(action)) {
                 Type type = getDrone().getType();
 				selectActionsBar(type == null ? -1 : type.getDroneType());
 			}

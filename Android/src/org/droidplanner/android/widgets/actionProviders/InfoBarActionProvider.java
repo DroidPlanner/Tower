@@ -20,7 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 
 /**
  * This implements the info bar displayed on the action bar after connection
@@ -35,17 +35,17 @@ public class InfoBarActionProvider extends ActionProvider {
 
     private final static IntentFilter eventFilter = new IntentFilter();
     static {
-        eventFilter.addAction(Event.EVENT_BATTERY);
-        eventFilter.addAction(Event.EVENT_CONNECTED);
-        eventFilter.addAction(Event.EVENT_DISCONNECTED);
-        eventFilter.addAction(Event.EVENT_GPS);
-        eventFilter.addAction(Event.EVENT_GPS_COUNT);
-        eventFilter.addAction(Event.EVENT_GPS_FIX);
-        eventFilter.addAction(Event.EVENT_HOME);
-        eventFilter.addAction(Event.EVENT_RADIO);
-        eventFilter.addAction(Event.EVENT_STATE);
-        eventFilter.addAction(Event.EVENT_VEHICLE_MODE);
-        eventFilter.addAction(Event.EVENT_TYPE_UPDATED);
+        eventFilter.addAction(AttributeEvent.BATTERY_UPDATED);
+        eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
+        eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+        eventFilter.addAction(AttributeEvent.GPS_POSITION);
+        eventFilter.addAction(AttributeEvent.GPS_COUNT);
+        eventFilter.addAction(AttributeEvent.GPS_FIX);
+        eventFilter.addAction(AttributeEvent.HOME_UPDATED);
+        eventFilter.addAction(AttributeEvent.SIGNAL_UPDATED);
+        eventFilter.addAction(AttributeEvent.STATE_UPDATED);
+        eventFilter.addAction(AttributeEvent.STATE_VEHICLE_MODE);
+        eventFilter.addAction(AttributeEvent.TYPE_UPDATED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -54,36 +54,36 @@ public class InfoBarActionProvider extends ActionProvider {
             final String action = intent.getAction();
             boolean updateExtra = true;
 
-            if(Event.EVENT_BATTERY.equals(action)){
+            if(AttributeEvent.BATTERY_UPDATED.equals(action)){
                 if (mBatteryInfo != null)
                     mBatteryInfo.updateItemView(mContext, mDrone);
             }
-            else if(Event.EVENT_CONNECTED.equals(action)){
+            else if(AttributeEvent.STATE_CONNECTED.equals(action)){
                 updateInfoBar();
                 updateExtra = false;
             }
-            else if(Event.EVENT_DISCONNECTED.equals(action)){
+            else if(AttributeEvent.STATE_DISCONNECTED.equals(action)){
                 setDrone(null);
                 updateInfoBar();
                 updateExtra = false;
             }
-            else if(Event.EVENT_GPS.equals(action) || Event.EVENT_HOME.equals(action)){
+            else if(AttributeEvent.GPS_POSITION.equals(action) || AttributeEvent.HOME_UPDATED.equals(action)){
                 if (mHomeInfo != null)
                     mHomeInfo.updateItemView(mContext, mDrone);
             }
-            else if(Event.EVENT_GPS_COUNT.equals(action) || Event.EVENT_GPS_FIX.equals(action)){
+            else if(AttributeEvent.GPS_COUNT.equals(action) || AttributeEvent.GPS_FIX.equals(action)){
                 if (mGpsInfo != null)
                     mGpsInfo.updateItemView(mContext, mDrone);
             }
-            else if(Event.EVENT_RADIO.equals(action)){
+            else if(AttributeEvent.SIGNAL_UPDATED.equals(action)){
                 if (mSignalInfo != null)
                     mSignalInfo.updateItemView(mContext, mDrone);
             }
-            else if(Event.EVENT_STATE.equals(action)){
+            else if(AttributeEvent.STATE_UPDATED.equals(action)){
                 if (mFlightTimeInfo != null)
                     mFlightTimeInfo.updateItemView(mContext, mDrone);
             }
-            else if(Event.EVENT_VEHICLE_MODE.equals(action) || Event.EVENT_TYPE_UPDATED.equals(action)){
+            else if(AttributeEvent.STATE_VEHICLE_MODE.equals(action) || AttributeEvent.TYPE_UPDATED.equals(action)){
                 if (mFlightModesInfo != null)
                     mFlightModesInfo.updateItemView(mContext, mDrone);
             }

@@ -3,6 +3,7 @@ package org.droidplanner.android.utils.file.IO;
 import android.util.Log;
 
 import com.o3dr.services.android.lib.drone.mission.Mission;
+import com.o3dr.services.android.lib.util.ParcelableUtils;
 
 import org.droidplanner.android.utils.file.FileList;
 import org.droidplanner.android.utils.file.FileManager;
@@ -31,9 +32,8 @@ public class MissionWriter {
 			}
 
 			final FileOutputStream out = FileStream.getWaypointFileStream(filename);
-			final ObjectOutputStream objectOut = new ObjectOutputStream(out);
-			objectOut.writeObject(mission);
-			objectOut.close();
+            byte[] missionBytes = ParcelableUtils.marshall(mission);
+            out.write(missionBytes);
 			out.close();
 
 		} catch (Exception e) {

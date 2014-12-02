@@ -3,7 +3,7 @@ package org.droidplanner.android.proxy.mission.item.fragments;
 import android.content.Context;
 import android.view.View;
 
-import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.Circle;
 
 import org.droidplanner.android.R;

@@ -1,5 +1,6 @@
 package org.droidplanner.android.widgets.actionProviders;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.droidplanner.android.R;
@@ -527,9 +528,7 @@ public abstract class InfoBarItem {
 			final int droneType = drone == null || !drone.isConnected() ? -1 : drone.getType()
                     .getDroneType();
 			if (droneType != mLastDroneType) {
-				final VehicleMode[] flightModes = droneType == -1
-                        ? new VehicleMode[0]
-                        : drone.getAllVehicleModes();
+				final List<VehicleMode> flightModes = VehicleMode.getVehicleModePerDroneType(droneType);
 
 				mModeAdapter.clear();
 				mModeAdapter.addAll(flightModes);

@@ -15,7 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.DroidPlannerApp;
@@ -33,18 +33,18 @@ public abstract class SuperUI extends FragmentActivity implements DroidPlannerAp
 
     private static final IntentFilter superIntentFilter = new IntentFilter();
     static {
-        superIntentFilter.addAction(Event.EVENT_CONNECTED);
-        superIntentFilter.addAction(Event.EVENT_DISCONNECTED);
+        superIntentFilter.addAction(AttributeEvent.STATE_CONNECTED);
+        superIntentFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
     }
 
     private final BroadcastReceiver superReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if(Event.EVENT_CONNECTED.equals(action)){
+            if(AttributeEvent.STATE_CONNECTED.equals(action)){
                 onDroneConnected();
             }
-            else if(Event.EVENT_DISCONNECTED.equals(action)){
+            else if(AttributeEvent.STATE_DISCONNECTED.equals(action)){
                 onDroneDisconnected();
             }
         }
