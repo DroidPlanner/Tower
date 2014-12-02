@@ -430,7 +430,7 @@ public class ParamsFragment extends ApiListenerListFragment {
             return;
         }
 
-        TreeMap<String, Parameter> prunedParameters = new TreeMap<>();
+        TreeMap<String, Parameter> prunedParameters = new TreeMap<String, Parameter>();
         for(Parameter parameter: parameters){
             prunedParameters.put(parameter.getName(), parameter);
         }
