@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="org.droidplanner.android"
-          android:versionCode="306"
-          android:versionName="alpha v3.0.6">
-
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="21"/>
+          package="org.droidplanner.android">
 
     <supports-screens
         android:requiresSmallestWidthDp="320"/>
 
-    <permission
-        android:name=".permission.MAPS_RECEIVE"
-        android:protectionLevel="signature"/>
-
-    <uses-permission android:name=".permission.MAPS_RECEIVE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>

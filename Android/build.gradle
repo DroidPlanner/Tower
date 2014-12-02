@@ -33,8 +33,8 @@ android {
         applicationId 'org.droidplanner.android'
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 306
-        versionName "alpha v3.0.6"
+        versionCode 307
+        versionName "alpha v3.0.7"
     }
 
     sourceSets {
@@ -111,22 +111,22 @@ def getGitVersion(){
 }
 
 def getAppKeystoreFile() {
-    def filePath = System.getenv("ANDROID_DP3_KEYSTORE")
+    def filePath = System.getenv("ANDROID_3DR_SERVICES_KEYSTORE")
     return filePath ? file(filePath) : null
 }
 
 def getAppKeystorePassword(){
-    def password = System.getenv("ANDROID_DP3_KEYSTORE_PWD")
+    def password = System.getenv("ANDROID_3DR_SERVICES_KEYSTORE_PWD")
     return password ?: ""
 }
 
 def getAppKeyPassword() {
-    def password = System.getenv("ANDROID_DP3_KEY_PWD")
+    def password = System.getenv("ANDROID_3DR_SERVICES_KEY_PWD")
     return password ?: ""
 }
 
 def getAppKey() {
-    def alias = System.getenv("ANDROID_DP3_KEYALIAS")
+    def alias = System.getenv("ANDROID_3DR_SERVICES_KEYALIAS")
     return alias ?: ""
 }
 
