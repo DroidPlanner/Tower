@@ -15,7 +15,8 @@ import android.view.ViewGroup;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
-import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.property.CameraProxy;
 import com.o3dr.services.android.lib.drone.property.Gps;
 
 import org.droidplanner.R;
@@ -41,14 +42,14 @@ public abstract class DroneMap extends ApiListenerFragment {
 	private static final IntentFilter eventFilter = new IntentFilter();
 	static {
 		eventFilter.addAction(MissionProxy.ACTION_MISSION_PROXY_UPDATE);
-		eventFilter.addAction(Event.EVENT_GPS);
-		eventFilter.addAction(Event.EVENT_GUIDED_POINT);
-		eventFilter.addAction(Event.EVENT_HEARTBEAT_FIRST);
-		eventFilter.addAction(Event.EVENT_HEARTBEAT_RESTORED);
-		eventFilter.addAction(Event.EVENT_HEARTBEAT_TIMEOUT);
-		eventFilter.addAction(Event.EVENT_DISCONNECTED);
-		eventFilter.addAction(Event.EVENT_FOOTPRINT);
-		eventFilter.addAction(Event.EVENT_ATTITUDE);
+		eventFilter.addAction(AttributeEvent.GPS_POSITION);
+		eventFilter.addAction(AttributeEvent.GUIDED_POINT_UPDATED);
+		eventFilter.addAction(AttributeEvent.HEARTBEAT_FIRST);
+		eventFilter.addAction(AttributeEvent.HEARTBEAT_RESTORED);
+		eventFilter.addAction(AttributeEvent.HEARTBEAT_TIMEOUT);
+		eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+		eventFilter.addAction(AttributeEvent.CAMERA_FOOTPRINTS_UPDATED);
+		eventFilter.addAction(AttributeEvent.ATTITUDE_UPDATED);
 	}
 
 	private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -60,28 +61,32 @@ public abstract class DroneMap extends ApiListenerFragment {
 			final String action = intent.getAction();
 			if (MissionProxy.ACTION_MISSION_PROXY_UPDATE.equals(action)) {
 				postUpdate();
-			} else if (Event.EVENT_GPS.equals(action)) {
+			} else if (AttributeEvent.GPS_POSITION.equals(action)) {
 				mMapFragment.updateMarker(graphicDrone);
 				mMapFragment.updateDroneLeashPath(guided);
 				final Gps droneGps = drone.getGps();
 				if (droneGps != null && droneGps.isValid()) {
 					mMapFragment.addFlightPathPoint(droneGps.getPosition());
 				}
-			} else if (Event.EVENT_GUIDED_POINT.equals(action)) {
+			} else if (AttributeEvent.GUIDED_POINT_UPDATED.equals(action)) {
 				mMapFragment.updateMarker(guided);
 				mMapFragment.updateDroneLeashPath(guided);
-			} else if (Event.EVENT_HEARTBEAT_FIRST.equals(action)
-					|| Event.EVENT_HEARTBEAT_RESTORED.equals(action)) {
+			} else if (AttributeEvent.HEARTBEAT_FIRST.equals(action)
+					|| AttributeEvent.HEARTBEAT_RESTORED.equals(action)) {
 				mMapFragment.updateMarker(graphicDrone);
-			} else if (Event.EVENT_DISCONNECTED.equals(action)
-					|| Event.EVENT_HEARTBEAT_TIMEOUT.equals(action)) {
+			} else if (AttributeEvent.STATE_DISCONNECTED.equals(action)
+					|| AttributeEvent.HEARTBEAT_TIMEOUT.equals(action)) {
 				mMapFragment.updateMarker(graphicDrone);
-			} else if (Event.EVENT_FOOTPRINT.equals(action)) {
-				mMapFragment.addCameraFootprint(drone.getLastCameraFootPrint());
-			} else if (Event.EVENT_ATTITUDE.equals(action)) {
+			} else if (AttributeEvent.CAMERA_FOOTPRINTS_UPDATED.equals(action)) {
+                CameraProxy camera = drone.getCamera();
+                if(camera != null && camera.getLastFootPrint() != null)
+				    mMapFragment.addCameraFootprint(camera.getLastFootPrint());
+			} else if (AttributeEvent.ATTITUDE_UPDATED.equals(action)) {
 				if (mAppPrefs.isRealtimeFootprintsEnabled()) {
 					if (drone.getGps().isValid()) {
-						mMapFragment.updateRealTimeFootprint(drone.getCurrentFieldOfView());
+                        CameraProxy camera = drone.getCamera();
+                        if(camera != null && camera.getCurrentFieldOfView() != null)
+						    mMapFragment.updateRealTimeFootprint(camera.getCurrentFieldOfView());
 					}
 
 				}

@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.o3dr.services.android.lib.coordinate.LatLong;
-import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 
 public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
 		DPMap.OnMarkerClickListener, DPMap.OnMarkerDragListener, GuidedDialogListener {
@@ -43,13 +43,13 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
     private static boolean didZoomOnUserLocation = false;
 
 
-    private static final IntentFilter eventFilter = new IntentFilter(Event.EVENT_ARMING);
+    private static final IntentFilter eventFilter = new IntentFilter(AttributeEvent.STATE_ARMING);
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if(Event.EVENT_ARMING.equals(action)){
+            if(AttributeEvent.STATE_ARMING.equals(action)){
                 if (drone.getState().isArmed()) {
                     mMapFragment.clearFlightPath();
                 }

@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.property.Altitude;
 import com.o3dr.services.android.lib.drone.property.Attitude;
 import com.o3dr.services.android.lib.drone.property.Speed;
@@ -26,8 +26,8 @@ public class TelemetryFragment extends ApiListenerFragment {
 
 	private final static IntentFilter eventFilter = new IntentFilter();
 	static {
-		eventFilter.addAction(Event.EVENT_ATTITUDE);
-		eventFilter.addAction(Event.EVENT_SPEED);
+		eventFilter.addAction(AttributeEvent.ATTITUDE_UPDATED);
+		eventFilter.addAction(AttributeEvent.SPEED_UPDATED);
 	}
 
 	private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -35,9 +35,9 @@ public class TelemetryFragment extends ApiListenerFragment {
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
 			final Drone drone = getDrone();
-			if (Event.EVENT_ATTITUDE.equals(action)) {
+			if (AttributeEvent.ATTITUDE_UPDATED.equals(action)) {
 				onOrientationUpdate(drone.getAttitude());
-			} else if (Event.EVENT_SPEED.equals(action)) {
+			} else if (AttributeEvent.SPEED_UPDATED.equals(action)) {
 				onSpeedAltitudeAndClimbRateUpdate(drone.getSpeed(), drone.getAltitude());
 			}
 		}

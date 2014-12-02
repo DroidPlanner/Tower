@@ -44,8 +44,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.drone.event.Event;
-import com.o3dr.services.android.lib.drone.event.Extra;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.o3dr.services.android.lib.drone.property.Parameter;
 import com.o3dr.services.android.lib.drone.property.Parameters;
 
@@ -61,36 +61,36 @@ public class ParamsFragment extends ApiListenerListFragment {
 
     private final static IntentFilter intentFilter = new IntentFilter();
     static {
-        intentFilter.addAction(Event.EVENT_PARAMETERS_REFRESH_STARTED);
-        intentFilter.addAction(Event.EVENT_PARAMETERS_REFRESH_ENDED);
-        intentFilter.addAction(Event.EVENT_PARAMETERS_RECEIVED);
+        intentFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_STARTED);
+        intentFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_ENDED);
+        intentFilter.addAction(AttributeEvent.PARAMETERS_RECEIVED);
     }
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if(Event.EVENT_PARAMETERS_REFRESH_STARTED.equals(action)){
+            if(AttributeEvent.PARAMETERS_REFRESH_STARTED.equals(action)){
                 startProgress();
             }
-            else if(Event.EVENT_PARAMETERS_REFRESH_ENDED.equals(action)){
+            else if(AttributeEvent.PARAMETERS_REFRESH_ENDED.equals(action)){
                 if(getDrone().isConnected()) {
                         loadAdapter(getDrone().getParameters().getParameters(), false);
                 }
                 stopProgress();
             }
-            else if(Event.EVENT_PARAMETERS_RECEIVED.equals(action)){
+            else if(AttributeEvent.PARAMETERS_RECEIVED.equals(action)){
                 final int defaultValue = -1;
-                int index = intent.getIntExtra(Extra.EXTRA_PARAMETER_INDEX, defaultValue);
-                int count = intent.getIntExtra(Extra.EXTRA_PARAMETERS_COUNT, defaultValue);
+                int index = intent.getIntExtra(AttributeEventExtra.EXTRA_PARAMETER_INDEX, defaultValue);
+                int count = intent.getIntExtra(AttributeEventExtra.EXTRA_PARAMETERS_COUNT, defaultValue);
 
                 if(index != defaultValue && count != defaultValue)
                     updateProgress(index, count);
             }
-            else if(Event.EVENT_DISCONNECTED.equals(action)){
+            else if(AttributeEvent.STATE_DISCONNECTED.equals(action)){
                 stopProgress();
             }
-            else if(Event.EVENT_TYPE_UPDATED.equals(action)){
+            else if(AttributeEvent.TYPE_UPDATED.equals(action)){
                 if(getDrone().isConnected())
                     loadAdapter(getDrone().getParameters().getParameters(), false);
             }

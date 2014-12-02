@@ -7,7 +7,7 @@ import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapte
 import android.view.View;
 
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
-import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.command.ChangeSpeed;
 
 public class MissionChangeSpeedFragment extends MissionDetailFragment implements

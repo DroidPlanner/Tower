@@ -23,11 +23,11 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
-import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.mission.Mission;
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem.SpatialItem;
-import com.o3dr.services.android.lib.drone.mission.item.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.command.ReturnToLaunch;
 import com.o3dr.services.android.lib.drone.mission.item.command.Takeoff;
 import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
@@ -52,18 +52,18 @@ public class MissionProxy implements DPMap.PathSource {
 
     private static final IntentFilter eventFilter = new IntentFilter();
     static {
-        eventFilter.addAction(Event.EVENT_MISSION_DRONIE_CREATED);
-        eventFilter.addAction(Event.EVENT_MISSION_UPDATE);
-        eventFilter.addAction(Event.EVENT_MISSION_RECEIVED);
+        eventFilter.addAction(AttributeEvent.MISSION_DRONIE_CREATED);
+        eventFilter.addAction(AttributeEvent.MISSION_UPDATED);
+        eventFilter.addAction(AttributeEvent.MISSION_RECEIVED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if(Event.EVENT_MISSION_DRONIE_CREATED.equals(action)
-                    || Event.EVENT_MISSION_UPDATE.equals(action)
-                    || Event.EVENT_MISSION_RECEIVED.equals(action)){
+            if(AttributeEvent.MISSION_DRONIE_CREATED.equals(action)
+                    || AttributeEvent.MISSION_UPDATED.equals(action)
+                    || AttributeEvent.MISSION_RECEIVED.equals(action)){
                 load(drone.getMission());
             }
         }

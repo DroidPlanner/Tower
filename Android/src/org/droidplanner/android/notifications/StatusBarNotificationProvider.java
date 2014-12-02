@@ -19,7 +19,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.property.Battery;
 import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.Home;
@@ -96,17 +96,17 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 
     private static final IntentFilter eventFilter = new IntentFilter();
     static {
-        eventFilter.addAction(Event.EVENT_CONNECTED);
-        eventFilter.addAction(Event.EVENT_BATTERY);
-        eventFilter.addAction(Event.EVENT_GPS);
-        eventFilter.addAction(Event.EVENT_GPS_FIX);
-        eventFilter.addAction(Event.EVENT_GPS_COUNT);
-        eventFilter.addAction(Event.EVENT_HOME);
-        eventFilter.addAction(Event.EVENT_RADIO);
-        eventFilter.addAction(Event.EVENT_STATE);
-        eventFilter.addAction(Event.EVENT_VEHICLE_MODE);
-        eventFilter.addAction(Event.EVENT_TYPE_UPDATED);
-        eventFilter.addAction(Event.EVENT_DISCONNECTED);
+        eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
+        eventFilter.addAction(AttributeEvent.BATTERY_UPDATED);
+        eventFilter.addAction(AttributeEvent.GPS_POSITION);
+        eventFilter.addAction(AttributeEvent.GPS_FIX);
+        eventFilter.addAction(AttributeEvent.GPS_COUNT);
+        eventFilter.addAction(AttributeEvent.HOME_UPDATED);
+        eventFilter.addAction(AttributeEvent.SIGNAL_UPDATED);
+        eventFilter.addAction(AttributeEvent.STATE_UPDATED);
+        eventFilter.addAction(AttributeEvent.STATE_VEHICLE_MODE);
+        eventFilter.addAction(AttributeEvent.TYPE_UPDATED);
+        eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -114,7 +114,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
         public void onReceive(Context context, Intent intent) {
             boolean showNotification = true;
             final String action = intent.getAction();
-            if(Event.EVENT_CONNECTED.equals(action)){
+            if(AttributeEvent.STATE_CONNECTED.equals(action)){
                 final String summaryText = mContext.getString(R.string.connected);
 
                 mInboxBuilder = new InboxStyleBuilder().setSummary(summaryText);
@@ -133,29 +133,29 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
                 updateHome(drone);
                 updateRadio(drone);
             }
-            else if(Event.EVENT_GPS.equals(action)){
+            else if(AttributeEvent.GPS_POSITION.equals(action)){
                 updateHome(drone);
             }
-            else if(Event.EVENT_GPS_FIX.equals(action) || Event.EVENT_GPS_COUNT.equals(action)){
+            else if(AttributeEvent.GPS_FIX.equals(action) || AttributeEvent.GPS_COUNT.equals(action)){
                 updateGps(drone);
             }
-            else if(Event.EVENT_BATTERY.equals(action)){
+            else if(AttributeEvent.BATTERY_UPDATED.equals(action)){
                 updateBattery(drone);
             }
-            else if(Event.EVENT_HOME.equals(action)){
+            else if(AttributeEvent.HOME_UPDATED.equals(action)){
                 updateHome(drone);
             }
-            else if(Event.EVENT_RADIO.equals(action)){
+            else if(AttributeEvent.SIGNAL_UPDATED.equals(action)){
                 updateRadio(drone);
             }
-            else if(Event.EVENT_STATE.equals(action)){
+            else if(AttributeEvent.STATE_UPDATED.equals(action)){
                 updateDroneState(drone);
             }
-            else if(Event.EVENT_VEHICLE_MODE.equals(action)
-                    || Event.EVENT_TYPE_UPDATED.equals(action)){
+            else if(AttributeEvent.STATE_VEHICLE_MODE.equals(action)
+                    || AttributeEvent.TYPE_UPDATED.equals(action)){
                 updateFlightMode(drone);
             }
-            else if(Event.EVENT_DISCONNECTED.equals(action)){
+            else if(AttributeEvent.STATE_DISCONNECTED.equals(action)){
                 mInboxBuilder = null;
 
                 if (mNotificationBuilder != null) {

@@ -15,7 +15,7 @@ import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.PebbleKit.PebbleDataReceiver;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.drone.event.Event;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.gcs.follow.FollowState;
@@ -33,27 +33,27 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 
     private final static IntentFilter eventFilter = new IntentFilter();
     static {
-        eventFilter.addAction(Event.EVENT_CONNECTED);
-        eventFilter.addAction(Event.EVENT_VEHICLE_MODE);
-        eventFilter.addAction(Event.EVENT_BATTERY);
-        eventFilter.addAction(Event.EVENT_SPEED);
-        eventFilter.addAction(Event.EVENT_FOLLOW_UPDATE);
+        eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
+        eventFilter.addAction(AttributeEvent.STATE_VEHICLE_MODE);
+        eventFilter.addAction(AttributeEvent.BATTERY_UPDATED);
+        eventFilter.addAction(AttributeEvent.SPEED_UPDATED);
+        eventFilter.addAction(AttributeEvent.FOLLOW_UPDATE);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if(Event.EVENT_CONNECTED.equals(action)){
+            if(AttributeEvent.STATE_CONNECTED.equals(action)){
                 PebbleKit.startAppOnPebble(applicationContext, DP_UUID);
             }
-            else if(Event.EVENT_VEHICLE_MODE.equals(action)
-                    || Event.EVENT_BATTERY.equals(action)
-                    ||Event.EVENT_SPEED.equals(action)){
+            else if(AttributeEvent.STATE_VEHICLE_MODE.equals(action)
+                    || AttributeEvent.BATTERY_UPDATED.equals(action)
+                    ||AttributeEvent.SPEED_UPDATED.equals(action)){
                 sendDataToWatchIfTimeHasElapsed(dpApi);
             }
-            else if((Event.EVENT_FOLLOW_START.equals(action)
-                    || Event.EVENT_FOLLOW_STOP.equals(action))) {
+            else if((AttributeEvent.FOLLOW_START.equals(action)
+                    || AttributeEvent.FOLLOW_STOP.equals(action))) {
                 sendDataToWatchIfTimeHasElapsed(dpApi);
 
                 FollowState followState = dpApi.getFollowState();
