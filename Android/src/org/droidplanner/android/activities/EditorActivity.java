@@ -216,6 +216,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		super.onResume();
 		editorToolsFragment.setToolAndUpdateView(getTool());
 		setupTool(getTool());
+		missionListFragment.editorToolChanged(getTool());
 	}
 
     @Override
@@ -385,6 +386,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	@Override
 	public void editorToolChanged(EditorTools tools) {
 		missionProxy.selection.clearSelection();
+		missionListFragment.editorToolChanged(tools);
 		setupTool(tools);
 	}
 

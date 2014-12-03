@@ -129,10 +129,14 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 		return pathPoints;
 	}
 
-	public View getListViewItemView(Context context, ViewGroup parent) {
+	public View getListViewItemView(Context context, ViewGroup parent, boolean deleteDrawable) {
 		final LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		final View view = inflater.inflate(R.layout.fragment_editor_list_item, parent, false);
+		
+		if (deleteDrawable){
+			view.setBackground(context.getResources().getDrawable(R.drawable.buton_mission_default_del));
+		}
 
 		TextView nameView = (TextView) view.findViewById(R.id.rowNameView);
 		TextView altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
