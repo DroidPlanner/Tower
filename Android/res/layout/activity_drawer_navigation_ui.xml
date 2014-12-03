@@ -104,6 +104,16 @@
                     android:drawableStart="@drawable/ic_action_gear"
                     android:text="@string/screen_cal"
                     />
+                
+                <TextView
+                    style="@style/navigationDrawerEntry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/navigation_ssh"
+                    android:drawableLeft="@drawable/ic_action_gear"
+                    android:drawableStart="@drawable/ic_action_gear"
+                    android:text="@string/screen_ssh"
+                    />
 
             </LinearLayout>
         </ScrollView>

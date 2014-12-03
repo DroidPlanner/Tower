@@ -20,6 +20,7 @@
     <!-- Drone Setup tabs -->
     <string name="screen_tuning">Tuning</string>
     <string name="screen_cal">Calibration</string>
+    <string name="screen_ssh">SSH</string>
     <string name="screen_checklist">Checklist</string>
     <string name="screen_rc">Radio</string>
     <string name="screen_parameters">Parameters</string>

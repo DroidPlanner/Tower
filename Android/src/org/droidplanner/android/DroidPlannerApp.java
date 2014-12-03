@@ -5,6 +5,7 @@ import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.gcs.location.FusedLocation;
 import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.ssh.TermSettings;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
@@ -18,7 +19,9 @@ import org.droidplanner.core.gcs.follow.Follow;
 import org.droidplanner.core.model.Drone;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.SystemClock;
+import android.view.inputmethod.InputMethodManager;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 
@@ -128,5 +131,5 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 
     public MissionProxy getMissionProxy() {
         return missionProxy;
-    }
+    }    
 }

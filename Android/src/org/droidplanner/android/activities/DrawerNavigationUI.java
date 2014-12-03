@@ -162,6 +162,10 @@ public abstract class DrawerNavigationUI extends SuperUI {
         setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mParams, new Intent(context,
                 ConfigurationActivity.class).putExtra(ConfigurationActivity
                 .EXTRA_CONFIG_SCREEN_ID, R.id.navigation_params));
+        
+        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mSSH, new Intent(context,
+                ConfigurationActivity.class).putExtra(ConfigurationActivity
+                .EXTRA_CONFIG_SCREEN_ID, R.id.navigation_ssh));
 
     }
 
@@ -212,6 +216,7 @@ public abstract class DrawerNavigationUI extends SuperUI {
         final TextView mParams;
         final TextView mChecklist;
         final TextView mCalibration;
+        final TextView mSSH;
 
         private NavDrawerViewHolder(View containerView){
             mFlightData = (TextView) containerView.findViewById(R.id.navigation_flight_data);
@@ -221,6 +226,7 @@ public abstract class DrawerNavigationUI extends SuperUI {
             mParams = (TextView) containerView.findViewById(R.id.navigation_params);
             mChecklist = (TextView) containerView.findViewById(R.id.navigation_checklist);
             mCalibration = (TextView) containerView.findViewById(R.id.navigation_calibration);
+            mSSH = (TextView) containerView.findViewById(R.id.navigation_ssh);
         }
     }
 }
