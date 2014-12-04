@@ -8,19 +8,23 @@ import org.droidplanner.android.fragments.FlightActionsFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
 import org.droidplanner.android.fragments.TelemetryFragment;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
+import org.droidplanner.android.ssh.TermSettings;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.model.Drone;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
@@ -79,7 +83,7 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_flight);
-
+		
 		fragmentManager = getSupportFragmentManager();
 
         mSlidingPanel = (SlidingUpPanelLayout) findViewById(R.id.slidingPanelContainer);
@@ -370,5 +374,4 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 			warningView.setVisibility(View.GONE);
 		}
 	}
-
 }

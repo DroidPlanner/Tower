@@ -4,6 +4,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.fragments.ChecklistFragment;
 import org.droidplanner.android.fragments.ParamsFragment;
 import org.droidplanner.android.fragments.SensorSetupFragment;
+import org.droidplanner.android.ssh.EmulatorViewFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -80,7 +81,9 @@ public class ConfigurationActivity extends DrawerNavigationUI {
             case R.id.navigation_checklist:
                 fragment = new ChecklistFragment();
                 break;
-
+            case R.id.navigation_ssh:
+            	fragment = new EmulatorViewFragment();
+            	break;
             case R.id.navigation_params:
             default:
                 fragment = new ParamsFragment();
@@ -96,6 +99,9 @@ public class ConfigurationActivity extends DrawerNavigationUI {
         }
         else if(fragment instanceof ChecklistFragment){
             return R.id.navigation_checklist;
+        }
+        else if(fragment instanceof EmulatorViewFragment){
+        	return R.id.navigation_ssh;
         }
         else {
             return R.id.navigation_params;
