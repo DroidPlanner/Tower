@@ -295,6 +295,12 @@ public class SettingsFragment extends DpPreferenceFragment implements
 
 		mDefaultSummaryPrefs.add(getString(R.string.pref_connection_type_key));
 		mDefaultSummaryPrefs.add(getString(R.string.pref_baud_type_key));
+
+		mDefaultSummaryPrefs.add(getString(R.string.pref_ssh_port_key));
+		mDefaultSummaryPrefs.add(getString(R.string.pref_ssh_ip_key));
+		mDefaultSummaryPrefs.add(getString(R.string.pref_ssh_user_key));
+		mDefaultSummaryPrefs.add(getString(R.string.pref_ssh_pass_key));
+
 		mDefaultSummaryPrefs.add(getString(R.string.pref_server_port_key));
 		mDefaultSummaryPrefs.add(getString(R.string.pref_server_ip_key));
 		mDefaultSummaryPrefs.add(getString(R.string.pref_udp_server_port_key));

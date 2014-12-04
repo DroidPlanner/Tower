@@ -19,6 +19,7 @@ package org.droidplanner.android.ssh;
 import java.io.IOException;
 
 import org.droidplanner.R;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -248,14 +249,26 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
         }
     };
 
-	String ip = new String("11.0.0.1");
+	protected DroidPlannerPrefs prefs;
+
+	String ip = "";
 	int port = 22;
-	String user = new String("root");
+	String user = new String("");
 	String passwd = new String("");
     
+	private void configSSH(Context context){
+		prefs = new DroidPlannerPrefs(context);
+		ip = prefs.prefs.getString("pref_ssh_ip", "11.0.0.1");
+		port = Integer.parseInt(prefs.prefs.getString("pref_ssh_port", "22"));
+		user = prefs.prefs.getString("pref_ssh_user", "root");
+		passwd = prefs.prefs.getString("pref_ssh_pass", "");		
+	}
+	
     public EmulatorView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
+        configSSH(context);
+		
 		commonConstructor();
 		WindowManager windowManager = (WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);
 		DisplayMetrics metrics = new DisplayMetrics();
@@ -265,6 +278,8 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
     
     public EmulatorView(Context context, AttributeSet attrs, int defStyle) {
         super(context,  attrs, defStyle);
+        configSSH(context);
+
         commonConstructor();
         WindowManager windowManager = (WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);
 		DisplayMetrics metrics = new DisplayMetrics();

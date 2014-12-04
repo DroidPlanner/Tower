@@ -100,7 +100,12 @@
     <string name="pref_server_ip">Server IP</string>
     <string name="pref_server_port">Server Port</string>
     <string name="pref_server_udp">UDP connection</string>
+    <string name="pref_ssh">SSH connection</string>
     <string name="pref_udp_server_port">UDP Server Port</string>
+    <string name="pref_ssh_port">SSH Port</string>
+    <string name="pref_ssh_ip">SSH IP</string>
+    <string name="pref_ssh_user">SSH User</string>
+    <string name="pref_ssh_pass">SSH Password</string>
     <string name="about">About</string>
     <string name="version">Version</string>
     <string name="storage_folder">Storage Folder</string>
