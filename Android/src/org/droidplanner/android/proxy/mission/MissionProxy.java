@@ -560,7 +560,7 @@ public class MissionProxy implements DPMap.PathSource {
                     position.getLongitude(), spatialItem.getCoordinate().getAltitude()));
 
             if(spatialItem instanceof StructureScanner)
-                this.drone.buildStructureScanner((StructureScanner) spatialItem);
+                this.drone.buildComplexMissionItem((StructureScanner) spatialItem);
             notifyMissionUpdate();
         }
 	}
@@ -571,7 +571,7 @@ public class MissionProxy implements DPMap.PathSource {
     
 	public void movePolygonPoint(Survey survey, int index, LatLong position) {
         survey.getPolygonPoints().get(index).set(position);
-        this.drone.buildSurvey(survey);
+        this.drone.buildComplexMissionItem(survey);
 
 		notifyMissionUpdate();
 	}

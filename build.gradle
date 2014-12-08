@@ -21,23 +21,6 @@ def getMavenRepoUrl(){
     return hasProperty('COM_O3DR_MAVEN_REPO_URL') ? COM_O3DR_MAVEN_REPO_URL : ''
 }
 
-def getAppKeystoreFile() {
-    def filePath = hasProperty('ORG_DROIDPLANNER_ANDROID_KEYSTORE') ? ORG_DROIDPLANNER_ANDROID_KEYSTORE : null
-    return filePath ? file(filePath) : null
-}
-
-def getAppKeystorePassword(){
-    return hasProperty('ORG_DROIDPLANNER_ANDROID_KEYSTORE_PWD') ? ORG_DROIDPLANNER_ANDROID_KEYSTORE_PWD : ''
-}
-
-def getAppKeyPassword() {
-    return hasProperty('ORG_DROIDPLANNER_ANDROID_KEY_PWD') ? ORG_DROIDPLANNER_ANDROID_KEY_PWD : ''
-}
-
-def getAppKey() {
-    return hasProperty('ORG_DROIDPLANNER_ANDROID_KEY_ALIAS') ? ORG_DROIDPLANNER_ANDROID_KEY_ALIAS : ''
-}
-
 allprojects {
     repositories {
         jcenter()

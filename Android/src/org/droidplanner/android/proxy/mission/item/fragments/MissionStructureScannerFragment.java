@@ -94,7 +94,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
         Drone drone = getDrone();
 		for (StructureScanner item : getMissionItems()) {
             item.setCrossHatch(isChecked);
-            drone.buildStructureScanner(item);
+            drone.buildComplexMissionItem(item);
         }
 
 		MissionProxy missionProxy = getMissionProxy();
@@ -110,7 +110,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 		case R.id.radiusPicker: {
 			for (StructureScanner item : getMissionItems()) {
                 item.setRadius(newValue);
-                drone.buildStructureScanner(item);
+                drone.buildComplexMissionItem(item);
             }
 			break;
 		}
@@ -118,7 +118,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 		case R.id.startAltitudePicker: {
 			for (StructureScanner item : getMissionItems()) {
                 item.getCoordinate().setAltitude(newValue);
-                drone.buildStructureScanner(item);
+                drone.buildComplexMissionItem(item);
             }
 			break;
 		}
@@ -126,14 +126,14 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 		case R.id.heightStepPicker:
 			for (StructureScanner item : getMissionItems()) {
                 item.setHeightStep(newValue);
-                drone.buildStructureScanner(item);
+                drone.buildComplexMissionItem(item);
             }
 			break;
 
 		case R.id.stepsPicker:
 			for (StructureScanner item : getMissionItems()) {
                 item.setStepsCount(newValue);
-                drone.buildStructureScanner(item);
+                drone.buildComplexMissionItem(item);
             }
 			break;
 		}
@@ -152,7 +152,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 			for (StructureScanner scan : getMissionItems()) {
                 SurveyDetail surveyDetail = scan.getSurveyDetail();
                 surveyDetail.setCameraDetail(cameraInfo);
-                drone.buildStructureScanner(scan);
+                drone.buildComplexMissionItem(scan);
 			}
 
 			getMissionProxy().notifyMissionUpdate();

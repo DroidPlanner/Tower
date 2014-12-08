@@ -5,9 +5,7 @@ dependencies {
     compile 'com.sothree.slidinguppanel:library:2.0.2'
     compile 'com.android.support:support-v4:20.0.0'
 
-    compile 'com.o3dr:3dr-services-client:2.1.6'
-    compile 'com.o3dr:3dr-services-library:2.0.13'
-    compile 'com.o3dr:mavlink:0.0.1'
+    compile 'com.o3dr:3dr-services-lib:2.1.8'
 
     compile files('libs/droneapi-java.jar')
     compile files('libs/j2xx.jar')
@@ -101,4 +99,21 @@ def getGitVersion(){
         //Unable to find 'git'
         return "please update version name manually"
     }
+}
+
+def getAppKeystoreFile() {
+    def filePath = hasProperty('ORG_DROIDPLANNER_ANDROID_KEYSTORE') ? ORG_DROIDPLANNER_ANDROID_KEYSTORE : null
+    return filePath ? file(filePath) : null
+}
+
+def getAppKeystorePassword(){
+    return hasProperty('ORG_DROIDPLANNER_ANDROID_KEYSTORE_PWD') ? ORG_DROIDPLANNER_ANDROID_KEYSTORE_PWD : ''
+}
+
+def getAppKeyPassword() {
+    return hasProperty('ORG_DROIDPLANNER_ANDROID_KEY_PWD') ? ORG_DROIDPLANNER_ANDROID_KEY_PWD : ''
+}
+
+def getAppKey() {
+    return hasProperty('ORG_DROIDPLANNER_ANDROID_KEY_ALIAS') ? ORG_DROIDPLANNER_ANDROID_KEY_ALIAS : ''
 }
