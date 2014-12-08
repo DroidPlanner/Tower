@@ -82,6 +82,10 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 
 		// Use the first one as reference.
 		final StructureScanner firstItem = getMissionItems().get(0);
+
+        final int cameraSelection = cameraAdapter.getPosition(firstItem.getSurveyDetail().getCameraDetail());
+        cameraSpinner.setSelection(Math.max(cameraSelection, 0));
+
 		radiusPicker.setCurrentValue((int) firstItem.getRadius());
 		startAltitudeStepPicker.setCurrentValue((int) firstItem.getCoordinate().getAltitude());
 		endAltitudeStepPicker.setCurrentValue((int) firstItem.getHeightStep());

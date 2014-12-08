@@ -59,11 +59,11 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	public TextView distanceTextView;
 	public TextView footprintTextView;
 	public TextView groundResolutionTextView;
-	public SpinnerSelfSelect cameraSpinner;
 	public TextView numberOfPicturesView;
 	public TextView numberOfStripsView;
 	public TextView lengthView;
 	private CamerasAdapter cameraAdapter;
+    private SpinnerSelfSelect cameraSpinner;
 
 	@Override
 	protected int getResource() {
@@ -119,6 +119,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		numberOfStripsView = (TextView) view.findViewById(id.numberOfStripsTextView);
 		lengthView = (TextView) view.findViewById(id.lengthTextView);
 
+        updateCamera();
 		updateViews();
 		
         mAnglePicker.addChangingListener(this);
@@ -192,7 +193,17 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		updateSeekBars();
 	}
 
-	private void updateSeekBars() {
+    private void updateCamera() {
+        List<Survey> surveyList = getMissionItems();
+        if (!surveyList.isEmpty()) {
+            Survey survey = surveyList.get(0);
+            final int cameraSelection = cameraAdapter.getPosition(survey.getSurveyDetail()
+                    .getCameraDetail());
+            cameraSpinner.setSelection(Math.max(cameraSelection, 0));
+        }
+    }
+
+    private void updateSeekBars() {
 		List<Survey> surveyList = getMissionItems();
 		if (!surveyList.isEmpty()) {
             Survey survey = surveyList.get(0);
