@@ -1,9 +1,11 @@
 apply plugin: 'com.android.application'
 
 dependencies {
-    compile 'com.google.android.gms:play-services:5.0.89'
+    compile 'com.google.android.gms:play-services-maps:6.5.87'
+    compile 'com.google.android.gms:play-services-location:6.5.87'
+
     compile 'com.sothree.slidinguppanel:library:2.0.2'
-    compile 'com.android.support:support-v4:20.0.0'
+    compile 'com.android.support:support-v4:21.0.2'
 
     compile 'com.o3dr:3dr-services-lib:2.1.8'
 
