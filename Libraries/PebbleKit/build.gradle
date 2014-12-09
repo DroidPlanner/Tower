@@ -1,9 +1,5 @@
 apply plugin: 'com.android.library'
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     compile 'com.google.guava:guava:17.0'
 }
