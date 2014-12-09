@@ -138,7 +138,7 @@
     </style>
 
 	<!-- style the list navigation -->
-	<style name="DropDownItem" parent="@android:style/Widget.Holo.Light.DropDownItem.Spinner">
+	<style name="DropDownItem" parent="Widget.AppCompat.DropDownItem.Spinner">
 		<item name="android:textSize">18sp</item>
 		<item name="android:minWidth">120dp</item>
 	    <item name="android:textStyle">bold</item>

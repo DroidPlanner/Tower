@@ -30,10 +30,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.view.ActionMode;
 import android.util.Pair;
 import android.text.TextUtils;
-import android.view.ActionMode;
-import android.view.ActionMode.Callback;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,7 +56,7 @@ import com.o3dr.services.android.lib.drone.mission.MissionItemType;
  */
 public class EditorActivity extends DrawerNavigationUI implements OnPathFinishedListener,
 		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener, OnEditorInteraction,
-		Callback, MissionSelection.OnSelectionUpdateListener, OnClickListener, OnLongClickListener {
+        ActionMode.Callback, MissionSelection.OnSelectionUpdateListener, OnClickListener, OnLongClickListener {
 
 	/**
 	 * Used to retrieve the item detail window when the activity is destroyed,
@@ -257,7 +256,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_open_mission:
 			openMissionFile();
@@ -268,7 +267,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 			return true;
 
 		default:
-			return super.onMenuItemSelected(featureId, item);
+			return super.onOptionsItemSelected(item);
 		}
 	}
 
@@ -642,7 +641,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		} else {
 			editorToolsFragment.setTool(EditorTools.NONE);
 			missionListFragment.updateChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
-			contextualActionBar = startActionMode(this);
+			contextualActionBar = startSupportActionMode(this);
 			missionProxy.selection.setSelectionTo(item);
 		}
 		return true;

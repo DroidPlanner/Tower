@@ -163,14 +163,14 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_open_tlog_file:
                 openLogFile();
                 return true;
 
             default:
-                return super.onMenuItemSelected(featureId, item);
+                return super.onOptionsItemSelected(item);
         }
     }
 

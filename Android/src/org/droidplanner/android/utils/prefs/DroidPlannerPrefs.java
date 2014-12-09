@@ -333,17 +333,17 @@ public class DroidPlannerPrefs {
 
         rates.setExtendedStatus(Integer.parseInt(prefs.getString(
                 "pref_mavlink_stream_rate_ext_stat", "2")));
-        rates.setExtra1(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra1", "10")));
+        rates.setExtra1(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra1", "2")));
         rates.setExtra2(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra2", "2")));
         rates.setExtra3(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra3", "2")));
         rates.setPosition(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_position",
-                "3")));
+                "2")));
         rates.setRcChannels(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_rc_channels",
-                "5")));
+                "2")));
         rates.setRawSensors(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_raw_sensors",
                 "2")));
         rates.setRawController(Integer.parseInt(prefs.getString(
-                "pref_mavlink_stream_rate_raw_controller", "3")));
+                "pref_mavlink_stream_rate_raw_controller", "2")));
         return rates;
     }
 }

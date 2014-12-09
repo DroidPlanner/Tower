@@ -165,7 +165,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
                             .setContentIntent(mNotificationIntent)
                             .setContentTitle(mContext.getString(R.string.disconnected))
                             .setOngoing(false).setContentText("")
-                            .setSmallIcon(R.drawable.ic_launcher_bw);
+                            .setSmallIcon(R.drawable.ic_launcher);
                 }
             }
             else{

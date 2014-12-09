@@ -14,8 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
-import android.view.ActionProvider;
+import android.support.v4.view.ActionProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 
