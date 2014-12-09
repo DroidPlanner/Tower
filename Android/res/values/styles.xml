@@ -166,7 +166,7 @@
         <item name="android:gravity">left</item>
 	</style>
 
-    <style name="CustomActionBarTheme.Dialog" parent="@android:style/Theme.Holo.Light.Dialog">
+    <style name="CustomActionBarTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
        <item name="android:popupMenuStyle">@style/MyPopupMenu</item>
         <item name="android:itemTextAppearance">@style/myCustomMenuTextApearance</item>
     </style>
