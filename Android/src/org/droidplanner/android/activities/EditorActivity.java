@@ -77,7 +77,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	/*
 	 * View widgets.
 	 */
-	private EditorMapFragment planningMapFragment;
 	private GestureMapFragment gestureMapFragment;
 	private EditorToolsFragment editorToolsFragment;
 	private MissionDetailFragment itemDetailFragment;
@@ -114,8 +113,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 		fragmentManager = getSupportFragmentManager();
 
-		planningMapFragment = ((EditorMapFragment) fragmentManager
-				.findFragmentById(R.id.mapFragment));
 		gestureMapFragment = ((GestureMapFragment) fragmentManager
 				.findFragmentById(R.id.gestureMapFragment));
 		editorToolsFragment = (EditorToolsFragment) fragmentManager
@@ -185,6 +182,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public void onClick(View v) {
+        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
+
 		switch (v.getId()) {
 		case R.id.map_orientation_button:
 			if(planningMapFragment != null) {
@@ -215,6 +214,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public boolean onLongClick(View view) {
+        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
+
 		switch (view.getId()) {
 		case R.id.drone_location_button:
 			planningMapFragment.setAutoPanMode(AutoPanMode.DRONE);
@@ -277,7 +278,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 			public void waypointFileLoaded(MissionReader reader) {
                 openedMissionFilename = getSelectedFilename();
                 missionProxy.readMissionFromFile(reader);
-				planningMapFragment.zoomToFit();
+                gestureMapFragment.getMapFragment().zoomToFit();
 			}
 		};
 		missionDialog.openDialog(this);
@@ -321,7 +322,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
-		planningMapFragment.saveCameraPosition();
+        gestureMapFragment.getMapFragment().saveCameraPosition();
 	}
 
     private static final IntentFilter eventFilter = new IntentFilter();
@@ -353,6 +354,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 }
             }
             else if(AttributeEvent.MISSION_RECEIVED.equals(action)){
+                final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
                 if (planningMapFragment != null) {
                     planningMapFragment.zoomToFit();
                 }
@@ -394,6 +396,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	private void setupTool(EditorTools tool) {
+        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
         if(planningMapFragment != null)
 		    planningMapFragment.skipMarkerClickEvents(false);
 
@@ -486,6 +489,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public void onPathFinished(List<LatLong> path) {
+        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
 		List<LatLong> points = planningMapFragment.projectPathIntoMap(path);
 		switch (getTool()) {
 		case DRAW:
@@ -524,6 +528,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
+
 		switch (item.getItemId()) {
 		case R.id.menu_action_multi_edit:
             if(mMultiEditEnabled){
@@ -599,7 +605,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public void onDestroyActionMode(ActionMode arg0) {
-		missionListFragment.updateChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         if(missionProxy != null)
             missionProxy.selection.clearSelection();
 
@@ -640,7 +645,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 			}
 		} else {
 			editorToolsFragment.setTool(EditorTools.NONE);
-			missionListFragment.updateChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 			contextualActionBar = startSupportActionMode(this);
 			missionProxy.selection.setSelectionTo(item);
 		}
@@ -683,6 +687,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		}
 
         if(zoomToFit) {
+            final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
             List<MissionItemProxy> selected = missionProxy.selection.getSelected();
             if (selected.isEmpty()) {
                 planningMapFragment.zoomToFit();
@@ -705,8 +710,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	public void onSelectionUpdate(List<MissionItemProxy> selected) {
 		final boolean isEmpty = selected.isEmpty();
 
-		missionListFragment.setArrowsVisibility(!isEmpty);
-
 		if (isEmpty) {
 			removeItemDetail();
 		} else {
@@ -717,6 +720,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 			}
 		}
 
+        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
         if(planningMapFragment != null)
 		    planningMapFragment.postUpdate();
 	}

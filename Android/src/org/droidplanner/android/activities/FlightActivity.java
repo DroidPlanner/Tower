@@ -353,10 +353,10 @@ public class FlightActivity extends DrawerNavigationUI {
 	 */
 	private void setupMapFragment() {
 		if (mapFragment == null && isGooglePlayServicesValid(true)) {
-			mapFragment = (FlightMapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
+			mapFragment = (FlightMapFragment) fragmentManager.findFragmentById(R.id.flight_map_fragment);
 			if (mapFragment == null) {
 				mapFragment = new FlightMapFragment();
-				fragmentManager.beginTransaction().add(R.id.mapFragment, mapFragment).commit();
+				fragmentManager.beginTransaction().add(R.id.flight_map_fragment, mapFragment).commit();
 			}
 		}
 	}
