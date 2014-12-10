@@ -377,17 +377,6 @@
         <item name="android:textColor">@drawable/vpi__light_theme</item>
     </style>
 
-    <!-- Listview styles -->
-    <style name="myHListView">
-        <item name="dividerWidth">5dp</item>
-        <item name="stackFromRight">false</item>
-        <item name="measureWithChild">0</item>
-        <item name="android:smoothScrollbar">true</item>
-        <item name="android:scrollingCache">false</item>
-        <item name="android:footerDividersEnabled">false</item>
-        <item name="android:headerDividersEnabled">false</item>
-    </style>
-
     <!-- Editor window widget styles -->
     <style name="editorToggleStyle">
         <item name="android:background">@drawable/button_editor</item>

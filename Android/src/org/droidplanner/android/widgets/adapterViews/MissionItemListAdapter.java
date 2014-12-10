@@ -73,13 +73,14 @@ public class MissionItemListAdapter extends RecyclerView.Adapter<MissionItemList
         container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(editorListener != null)
                 editorListener.onItemClick(proxy, true);
             }
         });
         container.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                return editorListener.onItemLongClick(proxy);
+                return editorListener != null && editorListener.onItemLongClick(proxy);
             }
         });
 
