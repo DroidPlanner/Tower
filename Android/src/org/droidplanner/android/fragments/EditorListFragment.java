@@ -1,11 +1,16 @@
 package org.droidplanner.android.fragments;
 
-import it.sephiroth.android.library.widget.AdapterView;
-import it.sephiroth.android.library.widget.AdapterView.OnItemClickListener;
-import it.sephiroth.android.library.widget.AdapterView.OnItemLongClickListener;
-import it.sephiroth.android.library.widget.HListView;
-
-import java.util.List;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
@@ -13,23 +18,11 @@ import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
-import org.droidplanner.android.widgets.adapterViews.MissionItemProxyView;
+import org.droidplanner.android.widgets.adapterViews.MissionItemListAdapter;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.ImageButton;
+import java.util.List;
 
-public class EditorListFragment extends ApiListenerFragment implements OnItemLongClickListener,
-		OnItemClickListener, MissionSelection.OnSelectionUpdateListener, OnClickListener {
+public class EditorListFragment extends ApiListenerFragment implements MissionSelection.OnSelectionUpdateListener {
 
     private final static IntentFilter eventFilter = new IntentFilter(MissionProxy
             .ACTION_MISSION_PROXY_UPDATE);
@@ -37,22 +30,21 @@ public class EditorListFragment extends ApiListenerFragment implements OnItemLon
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            adapter.notifyDataSetChanged();
+            recyclerAdapter.notifyDataSetChanged();
             updateViewVisibility();
         }
     };
 
-	private HListView list;
-	private MissionProxy missionProxy;
-	private MissionItemProxyView adapter;
-	private OnEditorInteraction editorListener;
-	private ImageButton leftArrow;
-	private ImageButton rightArrow;
+    private MissionProxy missionProxy;
+    private OnEditorInteraction editorListener;
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter recyclerAdapter;
 
     @Override
-    public void onAttach(Activity activity){
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if(!(activity instanceof OnEditorInteraction)){
+        if (!(activity instanceof OnEditorInteraction)) {
             throw new IllegalStateException("Parent activity must implement " +
                     OnEditorInteraction.class.getName());
         }
@@ -60,35 +52,39 @@ public class EditorListFragment extends ApiListenerFragment implements OnItemLon
         editorListener = (OnEditorInteraction) (activity);
     }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_editor_list, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_editor_list, container, false);
+    }
 
-		list = (HListView) view.findViewById(R.id.mission_item_list);
-		list.setOnItemClickListener(this);
-		list.setOnItemLongClickListener(this);
-		list.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-		leftArrow = (ImageButton) view.findViewById(R.id.listLeftArrow);
-		rightArrow = (ImageButton) view.findViewById(R.id.listRightArrow);
-		leftArrow.setOnClickListener(this);
-		rightArrow.setOnClickListener(this);
+        recyclerView = (RecyclerView) view.findViewById(R.id.mission_item_recycler_view);
 
-		return view;
-	}
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        recyclerView.setHasFixedSize(true);
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		updateViewVisibility();
-	}
+        //use a linear layout manager
+        final RecyclerView.LayoutManager recyclerLayoutMgr = new LinearLayoutManager(getActivity()
+                .getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(recyclerLayoutMgr);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateViewVisibility();
+    }
 
     @Override
     public void onApiConnected() {
         missionProxy = getMissionProxy();
 
-        adapter = new MissionItemProxyView(getActivity(), missionProxy.getItems());
-        list.setAdapter(adapter);
+        recyclerAdapter = new MissionItemListAdapter(missionProxy, editorListener);
+        recyclerView.setAdapter(recyclerAdapter);
 
         missionProxy.selection.addSelectionUpdateListener(this);
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
@@ -97,80 +93,27 @@ public class EditorListFragment extends ApiListenerFragment implements OnItemLon
     @Override
     public void onApiDisconnected() {
         getBroadcastManager().unregisterReceiver(eventReceiver);
-        if(missionProxy != null)
+        if (missionProxy != null)
             missionProxy.selection.removeSelectionUpdateListener(this);
     }
 
-	/**
-	 * Updates the fragment view visibility based on the count of stored mission
-	 * items.
-	 */
-	public void updateViewVisibility() {
-		View view = getView();
-		if (adapter != null && view != null) {
-			if (adapter.getCount() > 0)
-				view.setVisibility(View.VISIBLE);
-			else
-				view.setVisibility(View.INVISIBLE);
-			editorListener.onListVisibilityChanged();
-		}
-	}
+    /**
+     * Updates the fragment view visibility based on the count of stored mission
+     * items.
+     */
+    public void updateViewVisibility() {
+        View view = getView();
+        if (recyclerAdapter != null && view != null) {
+            if (recyclerAdapter.getItemCount() > 0)
+                view.setVisibility(View.VISIBLE);
+            else
+                view.setVisibility(View.INVISIBLE);
+            editorListener.onListVisibilityChanged();
+        }
+    }
 
-	@Override
-	public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-		MissionItemProxy missionItem = (MissionItemProxy) adapter.getItemAtPosition(position);
-		editorListener.onItemClick(missionItem, true);
-	}
-
-	@Override
-	public boolean onItemLongClick(AdapterView<?> adapter, View view, int position, long id) {
-		MissionItemProxy missionItem = (MissionItemProxy) adapter.getItemAtPosition(position);
-		return editorListener.onItemLongClick(missionItem);
-	}
-
-	public void setArrowsVisibility(boolean visible) {
-		if (visible) {
-			leftArrow.setVisibility(View.VISIBLE);
-			rightArrow.setVisibility(View.VISIBLE);
-		} else {
-			leftArrow.setVisibility(View.INVISIBLE);
-			rightArrow.setVisibility(View.INVISIBLE);
-		}
-	}
-
-	/**
-	 * Updates the choice mode of the listview containing the mission items.
-	 * 
-	 * @param choiceMode
-	 */
-	public void updateChoiceMode(int choiceMode) {
-		switch (choiceMode) {
-		case AbsListView.CHOICE_MODE_SINGLE:
-		case AbsListView.CHOICE_MODE_MULTIPLE:
-			list.setChoiceMode(choiceMode);
-			break;
-		}
-	}
-
-	@Override
-	public void onClick(View v) {
-        //TODO: replace functionality with drag and drop.
-		if (v == leftArrow) {
-//			missionProxy.moveSelection(false);
-			adapter.notifyDataSetChanged();
-		}
-		if (v == rightArrow) {
-//			missionProxy.moveSelection(true);
-			adapter.notifyDataSetChanged();
-		}
-	}
-
-	@Override
-	public void onSelectionUpdate(List<MissionItemProxy> selected) {
-		list.clearChoices();
-		for (MissionItemProxy item : selected) {
-			list.setItemChecked(adapter.getPosition(item), true);
-		}
-		adapter.notifyDataSetChanged();
-	}
+    @Override
+    public void onSelectionUpdate(List<MissionItemProxy> selected) {
+        recyclerAdapter.notifyDataSetChanged();
+    }
 }

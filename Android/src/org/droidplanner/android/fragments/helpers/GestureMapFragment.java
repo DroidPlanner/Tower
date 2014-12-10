@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.EditorMapFragment;
 
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGestureListener;
@@ -30,6 +31,7 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 
 	private GestureOverlayView overlay;
 	private OnPathFinishedListener listener;
+    private EditorMapFragment mapFragment;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,10 +45,21 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 		return view;
 	}
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
+        mapFragment = ((EditorMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.editor_map_fragment));
+    }
+
 	private int scaleDpToPixels(double value) {
 		final float scale = getResources().getDisplayMetrics().density;
 		return (int) Math.round(value * scale);
 	}
+
+    public EditorMapFragment getMapFragment(){
+        return mapFragment;
+    }
 
 	public void enableGestureDetection() {
 		overlay.setEnabled(true);

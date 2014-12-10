@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.mission.Mission;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.command.Takeoff;
 import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
@@ -69,6 +70,8 @@ public class MissionItemProxy {
 	public MissionProxy getMissionProxy() {
 		return mMission;
 	}
+
+    public MissionProxy getMission(){return mMission;}
 
 	/**
 	 * Provides access to the mission item instance.
@@ -132,81 +135,5 @@ public class MissionItemProxy {
 		}
 
 		return pathPoints;
-	}
-
-	public View getListViewItemView(Context context, ViewGroup parent) {
-		final LayoutInflater inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		final View view = inflater.inflate(R.layout.fragment_editor_list_item, parent, false);
-
-		TextView nameView = (TextView) view.findViewById(R.id.rowNameView);
-		TextView altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
-
-		nameView.setText(String.format("%3d", mMission.getOrder(this)));
-
-		final int leftDrawable = mMissionItem instanceof SplineWaypoint ? R.drawable.ic_mission_spline_wp
-				: R.drawable.ic_mission_wp;
-		altitudeView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, 0, 0, 0);
-
-		if (mMissionItem instanceof MissionItem.SpatialItem) {
-			MissionItem.SpatialItem waypoint = (MissionItem.SpatialItem) mMissionItem;
-            double altitude = waypoint.getCoordinate().getAltitude();
-			altitudeView.setText(UnitManager.getUnitProvider().distanceToString(altitude));
-            
-            if(altitude < 0)
-                altitudeView.setTextColor(Color.YELLOW);
-            else
-                altitudeView.setTextColor(Color.WHITE);
-
-			try {
-				double diff = mMission.getAltitudeDiffFromPreviousItem(this);
-				if (diff > 0) {
-					altitudeView.setTextColor(Color.RED);
-				} else if (diff < 0) {
-					altitudeView.setTextColor(Color.BLUE);
-				}
-			} catch (Exception e) {
-				// Do nothing when last item doesn't have an altitude
-			}
-		} else if (mMissionItem instanceof Survey) {
-            double altitude = ((Survey) mMissionItem).getSurveyDetail().getAltitude();
-            String formattedAltitude = UnitManager.getUnitProvider().distanceToString(altitude);
-			altitudeView.setText(formattedAltitude);
-
-            if(altitude < 0)
-                altitudeView.setTextColor(Color.YELLOW);
-            else
-                altitudeView.setTextColor(Color.WHITE);
-
-		} else if (mMissionItem instanceof Takeoff) {
-            double altitude = ((Takeoff) mMissionItem).getTakeoffAltitude();
-			altitudeView.setText(UnitManager.getUnitProvider().distanceToString(altitude));
-
-            if(altitude < 0)
-                altitudeView.setTextColor(Color.YELLOW);
-            else
-                altitudeView.setTextColor(Color.WHITE);
-		} else {
-			altitudeView.setText("");
-		}
-
-		/*
-		 * if (waypoint.getCmd().showOnMap()) {
-		 * altitudeView.setText(String.format(Locale.ENGLISH, "%3.0fm",
-		 * waypoint.getHeight())); } else { altitudeView.setText("-"); }
-		 */
-		// TODO fix the numbering
-		// nameView.setText(String.format("%3d", waypoint.getOrder()));
-
-		/*
-		 * typeView.setText(waypoint.getCmd().getName());
-		 * descView.setText(setupDescription(waypoint));
-		 * 
-		 * double distanceFromPrevPoint = waypoint.getDistanceFromPrevPoint();
-		 * if(distanceFromPrevPoint != waypoint.UNKNOWN_DISTANCE) {
-		 * distanceView.setText(String.format(Locale.ENGLISH, "%4.0fm",
-		 * distanceFromPrevPoint)); } else { distanceView.setText("-"); }
-		 */
-		return view;
 	}
 }
