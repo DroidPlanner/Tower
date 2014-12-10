@@ -1,26 +1,5 @@
 package org.droidplanner.android.maps.providers.google_map;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
-
-import org.droidplanner.android.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.helpers.LocalMapTileProvider;
-import org.droidplanner.android.utils.GoogleApiClientManager;
-import org.droidplanner.android.utils.GoogleApiClientManager.GoogleApiClientTask;
-import org.droidplanner.android.maps.DPMap;
-import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.android.maps.providers.DPMapProvider;
-import org.droidplanner.android.utils.DroneHelper;
-import org.droidplanner.android.utils.collection.HashBiMap;
-import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -37,7 +16,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationListener;
@@ -47,6 +25,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
@@ -67,6 +46,26 @@ import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.property.FootPrint;
 import com.o3dr.services.android.lib.drone.property.Gps;
+
+import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.R;
+import org.droidplanner.android.helpers.LocalMapTileProvider;
+import org.droidplanner.android.maps.DPMap;
+import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.utils.DroneHelper;
+import org.droidplanner.android.utils.GoogleApiClientManager;
+import org.droidplanner.android.utils.GoogleApiClientManager.GoogleApiClientTask;
+import org.droidplanner.android.utils.collection.HashBiMap;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class GoogleMapFragment extends SupportMapFragment implements DPMap, LocationListener {
 
@@ -112,8 +111,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
     private DroidPlannerPrefs mAppPrefs;
 
-    private final LinkedList<Runnable> onMapLaidOutTasks = new LinkedList<Runnable>();
-
     private final AtomicReference<AutoPanMode> mPanMode = new AtomicReference<AutoPanMode>(
             AutoPanMode.DISABLED);
 
@@ -138,7 +135,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     private android.location.LocationListener mLocationListener;
 
     protected boolean useMarkerClickAsMapClick = false;
-    private boolean isMapLayoutFinished = false;
 
     private List<Polygon> polygonsPaths = new ArrayList<Polygon>();
 
@@ -201,30 +197,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
             maxFlightPathSize = args.getInt(EXTRA_MAX_FLIGHT_PATH_SIZE);
         }
 
-        isMapLayoutFinished = false;
-        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (view.getWidth() > 0) {
-                    isMapLayoutFinished = true;
-                    view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-
-                    if (!onMapLaidOutTasks.isEmpty()) {
-                        for (Runnable task : onMapLaidOutTasks) {
-                            task.run();
-                        }
-                    }
-                }
-            }
-        });
-
         return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        isMapLayoutFinished = false;
     }
 
     @Override
@@ -640,22 +613,14 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         // Make sure the map is initialized
         MapsInitializer.initialize(getActivity().getApplicationContext());
 
-        if (isMapLayoutFinished) {
-            setupMapUI();
-            setupMapOverlay();
-            setupMapListeners();
-        } else {
-            postOnMapLaidOutTask(new Runnable() {
-                @Override
-                public void run() {
-                    setupMap();
-                }
-            });
-        }
-    }
-
-    private void postOnMapLaidOutTask(Runnable task) {
-        onMapLaidOutTasks.offer(task);
+        getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                setupMapUI();
+                setupMapOverlay();
+                setupMapListeners();
+            }
+        });
     }
 
     @Override
@@ -666,18 +631,13 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
                 points.add(DroneHelper.CoordToLatLang(coord));
 
             final LatLngBounds bounds = getBounds(points);
-            if (isMapLayoutFinished) {
-                CameraUpdate animation = CameraUpdateFactory.newLatLngBounds(bounds, 100);
-                getMap().animateCamera(animation);
-            } else {
-                postOnMapLaidOutTask(new Runnable() {
-                    @Override
-                    public void run() {
-                        CameraUpdate animation = CameraUpdateFactory.newLatLngBounds(bounds, 100);
-                        getMap().animateCamera(animation);
-                    }
-                });
-            }
+            getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    CameraUpdate animation = CameraUpdateFactory.newLatLngBounds(bounds, 100);
+                    getMap().animateCamera(animation);
+                }
+            });
         }
     }
 
@@ -850,8 +810,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     }
 
     public double getMapRotation() {
-        if (isMapLayoutFinished) {
-            return getMap().getCameraPosition().bearing;
+        GoogleMap map = getMap();
+        if (map != null) {
+            return map.getCameraPosition().bearing;
         } else {
             return 0;
         }
