@@ -616,9 +616,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                setupMapUI();
-                setupMapOverlay();
-                setupMapListeners();
+                setupMapUI(googleMap);
+                setupMapOverlay(googleMap);
+                setupMapListeners(googleMap);
             }
         });
     }
@@ -683,7 +683,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         updateCamera(droneLocation, (int) currentZoomLevel);
     }
 
-    private void setupMapListeners() {
+    private void setupMapListeners(GoogleMap googleMap) {
         final GoogleMap.OnMapClickListener onMapClickListener = new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -692,9 +692,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
                 }
             }
         };
-        getMap().setOnMapClickListener(onMapClickListener);
+        googleMap.setOnMapClickListener(onMapClickListener);
 
-        getMap().setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+        googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
                 if (mMapLongClickListener != null) {
@@ -703,7 +703,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
             }
         });
 
-        getMap().setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+        googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
             public void onMarkerDragStart(Marker marker) {
                 if (mMarkerDragListener != null) {
@@ -732,7 +732,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
             }
         });
 
-        getMap().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 if (useMarkerClickAsMapClick) {
@@ -747,25 +747,25 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         });
     }
 
-    private void setupMapUI() {
-        getMap().setMyLocationEnabled(true);
-        UiSettings mUiSettings = getMap().getUiSettings();
+    private void setupMapUI(GoogleMap map) {
+        map.setMyLocationEnabled(true);
+        UiSettings mUiSettings = map.getUiSettings();
         mUiSettings.setMyLocationButtonEnabled(false);
         mUiSettings.setCompassEnabled(false);
         mUiSettings.setTiltGesturesEnabled(false);
         mUiSettings.setZoomControlsEnabled(false);
     }
 
-    private void setupMapOverlay() {
+    private void setupMapOverlay(GoogleMap map) {
         if (mAppPrefs.isOfflineMapEnabled()) {
-            setupOfflineMapOverlay();
+            setupOfflineMapOverlay(map);
         } else {
-            setupOnlineMapOverlay();
+            setupOnlineMapOverlay(map);
         }
     }
 
-    private void setupOnlineMapOverlay() {
-        getMap().setMapType(getMapType());
+    private void setupOnlineMapOverlay(GoogleMap map) {
+        map.setMapType(getMapType());
     }
 
     private int getMapType() {
@@ -787,18 +787,22 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         }
     }
 
-    private void setupOfflineMapOverlay() {
-        getMap().setMapType(GoogleMap.MAP_TYPE_NONE);
-        TileOverlay tileOverlay = getMap().addTileOverlay(new TileOverlayOptions()
+    private void setupOfflineMapOverlay(GoogleMap map) {
+        map.setMapType(GoogleMap.MAP_TYPE_NONE);
+        TileOverlay tileOverlay = map.addTileOverlay(new TileOverlayOptions()
                 .tileProvider(new LocalMapTileProvider()));
         tileOverlay.setZIndex(-1);
         tileOverlay.clearTileCache();
     }
 
     protected void clearMap() {
-        GoogleMap mMap = getMap();
-        mMap.clear();
-        setupMapOverlay();
+        getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                googleMap.clear();
+                setupMapOverlay(googleMap);
+            }
+        });
     }
 
     private LatLngBounds getBounds(List<LatLng> pointsList) {
