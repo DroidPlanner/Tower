@@ -1,14 +1,17 @@
 package org.droidplanner.android.fragments;
 
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.widgets.button.RadioButtonCenter;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,11 +20,15 @@ import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+
+
 /**
  * This fragment implements and displays the 'tools' used in the editor window
  * to switch between different type of waypoints creation.
  */
-public class EditorToolsFragment extends Fragment implements OnClickListener, OnLongClickListener {
+public class EditorToolsFragment extends ApiListenerFragment implements OnClickListener,
+        OnLongClickListener {
 
 	/**
 	 * Used as key to retrieve the last selected tool from the bundle passed on
@@ -39,6 +46,21 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 		public void editorToolLongClicked(EditorTools tools);
 	}
 
+    private static final IntentFilter eventFilter = new IntentFilter();
+    static {
+        eventFilter.addAction(AttributeEvent.MISSION_RECEIVED);
+    }
+
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(AttributeEvent.MISSION_RECEIVED.equals(action)){
+                setTool(tool, false);
+            }
+        }
+    };
+
 	/**
 	 * The marker tool should be set by default.
 	 */
@@ -46,7 +68,7 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 
 	private OnEditorToolSelected listener;
 	private RadioGroup mEditorRadioGroup;
-	private EditorTools tool = EditorTools.NONE;
+	private EditorTools tool = DEFAULT_TOOL;
 	private MissionProxy mMissionProxy;
 
 	@Override
@@ -73,15 +95,10 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 			vv.setOnLongClickListener(this);
 		}
 
-		if (savedInstanceState == null) {
-			setToolAndUpdateView(DEFAULT_TOOL);
-		} else {
-			// Retrieve the tool that was last selected before the fragment was
-			// destroyed.
-			final String toolName = savedInstanceState.getString(STATE_SELECTED_TOOL,
-					DEFAULT_TOOL.name());
-			final EditorTools savedTool = EditorTools.valueOf(toolName);
-			setToolAndUpdateView(savedTool);
+		if (savedInstanceState != null) {
+			// Retrieve the tool that was last selected before the fragment was destroyed.
+			final String toolName = savedInstanceState.getString(STATE_SELECTED_TOOL, tool.name());
+			tool = EditorTools.valueOf(toolName);
 		}
 	}
 
@@ -93,8 +110,6 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 					+ OnEditorToolSelected.class.getName());
 		}
 
-		mMissionProxy = ((DroidPlannerApp) activity.getApplication()).getMissionProxy();
-
 		listener = (OnEditorToolSelected) activity;
 	}
 
@@ -104,7 +119,20 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 		listener = null;
 	}
 
-	@Override
+    @Override
+    public void onApiConnected() {
+        mMissionProxy = getMissionProxy();
+        setToolAndUpdateView(tool);
+        getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
+    }
+
+    @Override
+    public void onApiDisconnected() {
+        getBroadcastManager().unregisterReceiver(eventReceiver);
+        mMissionProxy = null;
+    }
+
+    @Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
 
@@ -157,18 +185,19 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 	 *            true to notify listeners, false otherwise.
 	 */
 	private void setTool(EditorTools tool, boolean notifyListeners) {
-		if (mMissionProxy.getItems().size() > 0 && tool != EditorTools.TRASH
-				&& tool != EditorTools.NONE) {
+		if (mMissionProxy != null && mMissionProxy.getItems().size() > 0 && tool != EditorTools
+                .TRASH	&& tool != EditorTools.NONE) {
 			MissionItemProxy lastMissionItem = mMissionProxy.getItems().get(
 					mMissionProxy.getItems().size() - 1);
 			switch (lastMissionItem.getMissionItem().getType()) {
 			case LAND:
-			case RTL:
+			case RETURN_TO_LAUNCH:
 				tool = EditorTools.NONE;
 				mEditorRadioGroup.clearCheck();
 				Toast.makeText(getActivity(), getString(R.string.editor_err_land_rtl_added),
 						Toast.LENGTH_SHORT).show();
-				return;
+                break;
+
 			default:
 				break;
 			}

@@ -1,37 +1,56 @@
 package org.droidplanner.android.widgets.checklist;
 
-import org.droidplanner.core.MAVLink.MavLinkArm;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.helpers.units.Altitude;
-import org.droidplanner.core.model.Drone;
+import android.content.Context;
+
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.property.Battery;
+import com.o3dr.services.android.lib.drone.property.Gps;
+import com.o3dr.services.android.lib.drone.property.State;
+
+import org.droidplanner.android.DroidPlannerApp;
 
 public class CheckListSysLink {
+    private Context context;
 	private Drone drone;
 
-	public CheckListSysLink(Drone mDrone) {
-		this.drone = mDrone;
+	public CheckListSysLink(Context context, Drone drone) {
+        this.context = context;
+		this.drone = drone;
 	}
 
 	public void getSystemData(CheckListItem mListItem, String mSysTag) {
 		if (mSysTag == null)
 			return;
 
-		if (mSysTag.equalsIgnoreCase("SYS_BATTREM_LVL")) {
-			mListItem.setSys_value(drone.getBattery().getBattRemain());
-		} else if (mSysTag.equalsIgnoreCase("SYS_BATTVOL_LVL")) {
-			mListItem.setSys_value(drone.getBattery().getBattVolt());
-		} else if (mSysTag.equalsIgnoreCase("SYS_BATTCUR_LVL")) {
-			mListItem.setSys_value(drone.getBattery().getBattCurrent());
-		} else if (mSysTag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
-			mListItem.setSys_value(drone.getGps().getSatCount());
-		} else if (mSysTag.equalsIgnoreCase("SYS_DEF_ALT")) {
-			mListItem.setSys_value(drone.getMission().getDefaultAlt().valueInMeters());
-		} else if (mSysTag.equalsIgnoreCase("SYS_ARM_STATE")) {
-			mListItem.setSys_activated(drone.getState().isArmed());
-		} else if (mSysTag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
-			mListItem.setSys_activated(drone.getState().isWarning());
-		} else if (mSysTag.equalsIgnoreCase("SYS_CONNECTION_STATE")) {
-			mListItem.setSys_activated(drone.getMavClient().isConnected());
+		Battery batt = drone.getBattery();
+		if (batt != null) {
+			if (mSysTag.equalsIgnoreCase("SYS_BATTREM_LVL")) {
+				mListItem.setSys_value(batt.getBatteryRemain());
+			} else if (mSysTag.equalsIgnoreCase("SYS_BATTVOL_LVL")) {
+				mListItem.setSys_value(batt.getBatteryVoltage());
+			} else if (mSysTag.equalsIgnoreCase("SYS_BATTCUR_LVL")) {
+				mListItem.setSys_value(batt.getBatteryCurrent());
+			}
+		}
+
+		Gps gps = drone.getGps();
+		if (gps != null) {
+			if (mSysTag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
+				mListItem.setSys_value(gps.getSatellitesCount());
+			}
+		}
+
+		State state = drone.getState();
+		if (state != null) {
+			if (mSysTag.equalsIgnoreCase("SYS_ARM_STATE")) {
+				mListItem.setSys_activated(state.isArmed());
+			} else if (mSysTag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
+				mListItem.setSys_activated(state.isWarning());
+			}
+		}
+
+		if (mSysTag.equalsIgnoreCase("SYS_CONNECTION_STATE")) {
+			mListItem.setSys_activated(drone.isConnected());
 		}
 	}
 
@@ -46,32 +65,27 @@ public class CheckListSysLink {
 		} else if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_ARM_STATE")) {
 			doSysArm(checkListItem);
 
-		} else if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_DEF_ALT")) {
-			doDefAlt(checkListItem);
-
 		}
 	}
 
-	private void doDefAlt(CheckListItem checkListItem) {
-		drone.getMission().setDefaultAlt(new Altitude(checkListItem.getFloatValue()));
-	}
-
 	private void doSysArm(CheckListItem checkListItem) {
-		if (drone.getMavClient().isConnected()) {
+		if (drone.isConnected()) {
 			if (checkListItem.isSys_activated() && !drone.getState().isArmed()) {
-				drone.notifyDroneEvent(DroneEventsType.ARMING_STARTED);
-				MavLinkArm.sendArmMessage(drone, true);
+				drone.arm(true);
 			} else {
-				MavLinkArm.sendArmMessage(drone, false);
+				drone.arm(false);
 			}
 		}
 	}
 
 	private void doSysConnect(CheckListItem checkListItem) {
 		boolean activated = checkListItem.isSys_activated();
-		boolean connected = drone.getMavClient().isConnected();
+		boolean connected = drone.isConnected();
 		if (activated != connected) {
-			drone.getMavClient().toggleConnectionState();
+			if (connected)
+				DroidPlannerApp.disconnectFromDrone(context);
+			else
+				DroidPlannerApp.connectToDrone(context);
 		}
 	}
 

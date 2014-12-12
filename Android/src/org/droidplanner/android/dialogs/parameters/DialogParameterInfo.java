@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
-import org.droidplanner.core.parameters.Parameter;
-import org.droidplanner.core.parameters.ParameterMetadata;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -21,7 +19,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.o3dr.services.android.lib.drone.property.Parameter;
+
 public class DialogParameterInfo {
+
+    private final static DecimalFormat formatter = (DecimalFormat) DecimalFormat.getInstance();
+    static {
+        formatter.applyPattern("0.###");
+    }
 
 	public static AlertDialog build(ParamsAdapterItem item, EditText valueView, Context context) {
 		final View view = buildView(item, context);
@@ -29,7 +34,7 @@ public class DialogParameterInfo {
 		final AlertDialog dialog = new AlertDialog.Builder(context).setView(view).create();
 
 		// spinner's onItemSelcted impl needs ref to Dialog interface
-		buildValueSpinner(dialog, view, item.getMetadata(), valueView, context);
+		buildValueSpinner(dialog, view, item.getParameter(), valueView, context);
 
 		return dialog;
 	}
@@ -38,15 +43,15 @@ public class DialogParameterInfo {
 		final LayoutInflater inflater = LayoutInflater.from(context);
 		final View view = inflater.inflate(R.layout.fragment_parameters_info, null);
 
-		final ParameterMetadata metadata = item.getMetadata();
-		setTextView(view, R.id.displayNameView, metadata.getDisplayName());
-		setTextView(view, R.id.nameView, metadata.getName());
-		setTextView(view, R.id.descView, metadata.getDescription());
+		final Parameter parameter = item.getParameter();
+		setTextView(view, R.id.displayNameView, parameter.getDisplayName());
+		setTextView(view, R.id.nameView, parameter.getName());
+		setTextView(view, R.id.descView, parameter.getDescription());
 
-		setTextLayout(view, R.id.unitsLayout, R.id.unitsView, metadata.getUnits());
-		setTextLayout(view, R.id.rangeLayout, R.id.rangeView, formatRange(metadata.getRange()));
+		setTextLayout(view, R.id.unitsLayout, R.id.unitsView, parameter.getUnits());
+		setTextLayout(view, R.id.rangeLayout, R.id.rangeView, formatRange(parameter.getRange()));
 
-		setTextLayout(view, R.id.valuesLayout, R.id.valuesView, metadata.getValues());
+		setTextLayout(view, R.id.valuesLayout, R.id.valuesView, parameter.getValues());
 
 		return view;
 	}
@@ -81,18 +86,17 @@ public class DialogParameterInfo {
 	}
 
 	private static void buildValueSpinner(final DialogInterface dialogInterface, View view,
-			ParameterMetadata metadata, final EditText valueView, Context context) {
+			Parameter parameter, final EditText valueView, Context context) {
 		// bail if nothing to do
-		if (metadata.getValues() == null)
+		if (parameter.getValues() == null)
 			return;
 
 		try {
-			final Map<Double, String> valueMap = metadata.parseValues();
+			final Map<Double, String> valueMap = parameter.parseValues();
 			final List<Double> values = new ArrayList<Double>(valueMap.keySet());
 			final List<String> strings = new ArrayList<String>();
 
 			// get current dirty value
-			final DecimalFormat formatter = Parameter.getFormat();
 			final double dirtyValue = formatter.parse(valueView.getText().toString()).doubleValue();
 
 			// build value / string collections

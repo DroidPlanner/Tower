@@ -17,12 +17,27 @@
         <item name="Drift">Drift</item>
         <item name="Sport">Sport</item>
     </string-array>
+
+
     <string-array name="TelemetryConnectionTypes">
         <item name="USB">USB</item>
         <item name="TCP">TCP</item>
         <item name="UDP">UDP</item>
         <item name="BLUETOOTH">BLUETOOTH</item>
     </string-array>
+
+    <!--
+    The values below should match the connection type constants in
+    com.o3dr.services.android.lib.drone.connection.ConnectionType
+    -->
+    <string-array name="TelemetryConnectionTypesValues">
+        <item name="USB">0</item>
+        <item name="TCP">2</item>
+        <item name="UDP">1</item>
+        <item name="BLUETOOTH">3</item>
+    </string-array>
+
+
     <string-array name="MapTypes">
         <item>@string/menu_map_type_satellite</item>
         <item>@string/menu_map_type_hybrid</item>
@@ -95,11 +110,6 @@
     <string-array name="Setup_Sensor_Menu">
         <item>@string/setup_imu_title</item>
         <item>@string/setup_mag_title</item>
-    </string-array>
-    <string-array name="VehicleType">
-        <item>ArduCopter</item>
-        <item>ArduPlane</item>
-        <item>ArduRover</item>
     </string-array>
     <string-array name="FligthMode_CopterV3_1">
         <item>0;Stabilize</item>

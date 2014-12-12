@@ -1,10 +1,5 @@
 package org.droidplanner.android.fragments;
 
-import org.droidplanner.R;
-import org.droidplanner.android.fragments.calibration.imu.FragmentSetupIMU;
-import org.droidplanner.android.fragments.calibration.mag.FragmentSetupMAG;
-import org.droidplanner.android.widgets.viewPager.TabPageIndicator;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +9,11 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.calibration.imu.FragmentSetupIMU;
+import org.droidplanner.android.fragments.calibration.mag.FragmentSetupMAG;
+import org.droidplanner.android.widgets.viewPager.TabPageIndicator;
 
 /**
  * Used to calibrate the drone's compass and accelerometer.

@@ -6,28 +6,24 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenParameterDialog;
 import org.droidplanner.android.dialogs.parameters.DialogParameterInfo;
+import org.droidplanner.android.fragments.helpers.ApiListenerListFragment;
 import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.file.IO.ParameterWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.adapterViews.ParamsAdapter;
 import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
-import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.model.Drone;
-import org.droidplanner.core.parameters.Parameter;
-import org.droidplanner.core.parameters.ParameterMetadata;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -47,8 +43,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ParamsFragment extends ListFragment implements
-		DroneInterfaces.OnParameterManagerListener, OnDroneListener {
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
+import com.o3dr.services.android.lib.drone.property.Parameter;
+import com.o3dr.services.android.lib.drone.property.Parameters;
+
+public class ParamsFragment extends ApiListenerListFragment {
 
 	static final String TAG = ParamsFragment.class.getSimpleName();
 
@@ -58,12 +59,49 @@ public class ParamsFragment extends ListFragment implements
 
     private static final String EXTRA_OPENED_PARAMS_FILENAME = "extra_opened_params_filename";
 
+    private final static IntentFilter intentFilter = new IntentFilter();
+    static {
+        intentFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_STARTED);
+        intentFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_ENDED);
+        intentFilter.addAction(AttributeEvent.PARAMETERS_RECEIVED);
+    }
+
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(AttributeEvent.PARAMETERS_REFRESH_STARTED.equals(action)){
+                startProgress();
+            }
+            else if(AttributeEvent.PARAMETERS_REFRESH_ENDED.equals(action)){
+                if(getDrone().isConnected()) {
+                        loadAdapter(getDrone().getParameters().getParameters(), false);
+                }
+                stopProgress();
+            }
+            else if(AttributeEvent.PARAMETERS_RECEIVED.equals(action)){
+                final int defaultValue = -1;
+                int index = intent.getIntExtra(AttributeEventExtra.EXTRA_PARAMETER_INDEX, defaultValue);
+                int count = intent.getIntExtra(AttributeEventExtra.EXTRA_PARAMETERS_COUNT, defaultValue);
+
+                if(index != defaultValue && count != defaultValue)
+                    updateProgress(index, count);
+            }
+            else if(AttributeEvent.STATE_DISCONNECTED.equals(action)){
+                stopProgress();
+            }
+            else if(AttributeEvent.TYPE_UPDATED.equals(action)){
+                if(getDrone().isConnected())
+                    loadAdapter(getDrone().getParameters().getParameters(), false);
+            }
+        }
+    };
+
     private ProgressDialog progressDialog;
 
     private ProgressBar mLoadingProgress;
     private EditText mParamsFilter;
 
-	private Drone drone;
     private DroidPlannerPrefs mPrefs;
 	private ParamsAdapter adapter;
 
@@ -78,9 +116,7 @@ public class ParamsFragment extends ListFragment implements
 
         setHasOptionsMenu(true);
 
-        final DroidPlannerApp dpApp = (DroidPlannerApp) getActivity().getApplication();
-        drone = dpApp.getDrone();
-        mPrefs = dpApp.getPreferences();
+        mPrefs = new DroidPlannerPrefs(getActivity().getApplicationContext());
 
 		// create adapter
 		if (savedInstanceState != null) {
@@ -88,18 +124,13 @@ public class ParamsFragment extends ListFragment implements
 
 			// load adapter items
 			@SuppressWarnings("unchecked")
-			final ArrayList<ParamsAdapterItem> pwms = (ArrayList<ParamsAdapterItem>) savedInstanceState
-					.getSerializable(ADAPTER_ITEMS);
+			final ArrayList<ParamsAdapterItem> pwms = savedInstanceState.getParcelableArrayList
+                    (ADAPTER_ITEMS);
 			adapter = new ParamsAdapter(getActivity(), R.layout.row_params, pwms);
 
 		} else {
 			// empty adapter
 			adapter = new ParamsAdapter(getActivity(), R.layout.row_params);
-
-            final List<Parameter> parametersList = drone.getParameters().getParametersList();
-            if(!parametersList.isEmpty()) {
-                loadAdapter(parametersList, false);
-            }
 		}
 		setListAdapter(adapter);
 
@@ -213,32 +244,24 @@ public class ParamsFragment extends ListFragment implements
     }
 
     @Override
-	public void onStart() {
-		super.onStart();
-		drone.addDroneListener(this);
-		drone.getParameters().setParameterListener(this);
-        toggleParameterFilter(isParameterFilterVisible(), false);
-	}
+    public void onApiConnected() {
+        Parameters droneParams = getDrone().getParameters();
 
-	@Override
-	public void onStop() {
-		super.onStop();
-		drone.removeDroneListener(this);
-		drone.getParameters().setParameterListener(null);
-	}
-
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-        switch(event){
-            case TYPE:
-                adapter.loadMetadata(drone);
-                break;
-
-            case DISCONNECTED:
-                stopProgress();
-                break;
+        if(adapter.isEmpty() && droneParams != null) {
+            List<Parameter> parametersList = droneParams.getParameters();
+            if (!parametersList.isEmpty())
+                loadAdapter(parametersList, false);
         }
-	}
+
+        toggleParameterFilter(isParameterFilterVisible(), false);
+
+        getBroadcastManager().registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void onApiDisconnected() {
+        getBroadcastManager().unregisterReceiver(broadcastReceiver);
+    }
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
@@ -247,8 +270,8 @@ public class ParamsFragment extends ListFragment implements
 		// save adapter items
 		final ArrayList<ParamsAdapterItem> pwms = new ArrayList<ParamsAdapterItem>(adapter
                 .getOriginalValues());
-		outState.putSerializable(ADAPTER_ITEMS, pwms);
-
+		outState.putParcelableArrayList(ADAPTER_ITEMS, pwms);
+        
         outState.putString(EXTRA_OPENED_PARAMS_FILENAME, this.openedParamsFilename);
 	}
 
@@ -315,44 +338,49 @@ public class ParamsFragment extends ListFragment implements
     }
 
     private boolean isParameterFilterVisible(){
-        return mPrefs.prefs.getBoolean(PREF_PARAMS_FILTER_ON,
-                DEFAULT_PARAMS_FILTER_ON);
+        return mPrefs.prefs.getBoolean(PREF_PARAMS_FILTER_ON, DEFAULT_PARAMS_FILTER_ON);
     }
 
 	private void showInfo(int position, EditText valueView) {
 		final ParamsAdapterItem item = adapter.getItem(position);
-		final ParameterMetadata metadata = item.getMetadata();
-		if (metadata == null || !metadata.hasInfo())
+		if (!item.getParameter().hasInfo())
 			return;
 
 		DialogParameterInfo.build(item, valueView, getActivity()).show();
 	}
 
 	private void refreshParameters() {
-		if (drone.getMavClient().isConnected()) {
-			drone.getParameters().refreshParameters();
+		if (getDrone().isConnected()) {
+			getDrone().refreshParameters();
 		} else {
 			Toast.makeText(getActivity(), R.string.msg_connect_first, Toast.LENGTH_SHORT).show();
 		}
 	}
 
 	private void writeModifiedParametersToDrone() {
-		int written = 0;
-		for (int i = 0; i < adapter.getCount(); i++) {
+        final Drone drone = getDrone();
+        if(!drone.isConnected())
+            return;
+
+        final int adapterCount = adapter.getCount();
+        List<Parameter> parametersList = new ArrayList<Parameter>(adapterCount);
+		for (int i = 0; i < adapterCount; i++) {
 			final ParamsAdapterItem item = adapter.getItem(i);
 			if (!item.isDirty())
 				continue;
 
-			drone.getParameters().sendParameter(item.getParameter());
+            parametersList.add(item.getParameter());
 			item.commit();
-
-			written++;
 		}
-		if (written > 0)
-			adapter.notifyDataSetChanged();
-		Toast.makeText(getActivity(),
-				written + " " + getString(R.string.msg_parameters_written_to_drone),
-				Toast.LENGTH_SHORT).show();
+
+        final int parametersCount = parametersList.size();
+		if (parametersCount > 0) {
+            drone.writeParameters(new Parameters(parametersList));
+            adapter.notifyDataSetChanged();
+            Toast.makeText(getActivity(),
+                    parametersCount + " " + getString(R.string.msg_parameters_written_to_drone),
+                    Toast.LENGTH_SHORT).show();
+        }
 	}
 
 	private void openParametersFromFile() {
@@ -397,22 +425,6 @@ public class ParamsFragment extends ListFragment implements
         dialog.show(getChildFragmentManager(), "Parameters filename");
 	}
 
-	@Override
-	public void onBeginReceivingParameters() {
-		startProgress();
-	}
-
-	@Override
-	public void onParameterReceived(Parameter parameter, int index, int count) {
-        updateProgress(index, count);
-	}
-
-	@Override
-	public void onEndReceivingParameters(List<Parameter> parameters) {
-        loadAdapter(parameters, false);
-		stopProgress();
-	}
-
     private void loadAdapter(List<Parameter> parameters, boolean isUpdate){
         if(parameters == null || parameters.isEmpty()){
             return;
@@ -420,14 +432,14 @@ public class ParamsFragment extends ListFragment implements
 
         TreeMap<String, Parameter> prunedParameters = new TreeMap<String, Parameter>();
         for(Parameter parameter: parameters){
-            prunedParameters.put(parameter.name, parameter);
+            prunedParameters.put(parameter.getName(), parameter);
         }
 
         if(isUpdate){
             adapter.updateParameters(prunedParameters);
         }
         else {
-            adapter.loadParameters(drone, prunedParameters);
+            adapter.loadParameters(prunedParameters);
         }
 
         if(mParamsFilter != null && mParamsFilter.getVisibility() == View.VISIBLE){

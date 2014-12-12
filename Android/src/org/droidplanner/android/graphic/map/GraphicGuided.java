@@ -3,46 +3,48 @@ package org.droidplanner.android.graphic.map;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.maps.DPMap.PathSource;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.MarkerWithText;
-import org.droidplanner.core.drone.variables.GPS;
-import org.droidplanner.core.drone.variables.GuidedPoint;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.model.Drone;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.property.Gps;
+import com.o3dr.services.android.lib.drone.property.GuidedState;
+
 public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSource {
 
 	private final static String TAG = GraphicGuided.class.getSimpleName();
 
-	private GuidedPoint guidedPoint;
-	private GPS gps;
+    private final Drone drone;
 
 	public GraphicGuided(Drone drone) {
-		guidedPoint = drone.getGuidedPoint();
-		gps = drone.getGps();
+        this.drone = drone;
 	}
 
 	@Override
-	public List<Coord2D> getPathPoints() {
-		List<Coord2D> path = new ArrayList<Coord2D>();
-		if (guidedPoint.isActive()) {
-			if (gps.isPositionValid()) {
+	public List<LatLong> getPathPoints() {
+		List<LatLong> path = new ArrayList<LatLong>();
+        GuidedState guidedPoint = drone.getGuidedState();
+		if (guidedPoint != null && guidedPoint.isActive()) {
+            Gps gps = drone.getGps();
+			if (gps != null && gps.isValid()) {
 				path.add(gps.getPosition());
 			}
-			path.add(guidedPoint.getCoord());
+			path.add(guidedPoint.getCoordinate());
 		}
 		return path;
 	}
 
 	@Override
 	public boolean isVisible() {
-		return guidedPoint.isActive();
+        GuidedState guidedPoint = drone.getGuidedState();
+		return guidedPoint != null && guidedPoint.isActive();
 	}
 
 	@Override
@@ -56,14 +58,15 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSo
 	}
 
 	@Override
-	public Coord2D getPosition() {
-		return guidedPoint.getCoord();
+	public LatLong getPosition() {
+        GuidedState guidedPoint = drone.getGuidedState();
+		return guidedPoint == null ? null : guidedPoint.getCoordinate();
 	}
 
 	@Override
-	public void setPosition(Coord2D coord) {
+	public void setPosition(LatLong coord) {
 		try {
-			guidedPoint.forcedGuidedCoordinate(coord);
+			drone.sendGuidedPoint(coord, true);
 		} catch (Exception e) {
 			Log.e(TAG, "Unable to update guided point position.", e);
 		}

@@ -8,10 +8,7 @@ import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
 import org.droidplanner.android.proxy.mission.item.markers.PolygonMarkerInfo;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,7 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-@SuppressLint("UseSparseArrays")
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.property.Home;
+
 public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
 		DPMap.OnMarkerDragListener, DPMap.OnMapClickListener, DPMap.OnMarkerClickListener {
 
@@ -38,7 +38,7 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	}
 
 	@Override
-	public void onMapLongClick(Coord2D point) {
+	public void onMapLongClick(LatLong point) {
 	}
 
 	@Override
@@ -52,12 +52,14 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	}
 
 	private void checkForWaypointMarkerMoving(MarkerInfo markerInfo) {
-		if (SpatialCoordItem.class.isInstance(markerInfo)) {
-			Coord2D position = markerInfo.getPosition();
+		if (markerInfo instanceof MissionItem.SpatialItem) {
+			LatLong position = markerInfo.getPosition();
 
 			// update marker source
-			SpatialCoordItem waypoint = (SpatialCoordItem) markerInfo;
-			waypoint.setPosition(position);
+			MissionItem.SpatialItem waypoint = (MissionItem.SpatialItem) markerInfo;
+            LatLong waypointPosition = waypoint.getCoordinate();
+            waypointPosition.setLatitude(position.getLatitude());
+            waypointPosition.setLongitude(position.getLongitude());
 
 			// update flight path
 			mMapFragment.updateMissionPath(missionProxy);
@@ -80,19 +82,24 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	}
 
     @Override
-    public void onStart(){
-        super.onStart();
+    public void onApiConnected(){
+        super.onApiConnected();
         zoomToFit();
     }
 
 	@Override
-	public void onMapClick(Coord2D point) {
+	public void onMapClick(LatLong point) {
 		editorListener.onMapClick(point);
 	}
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
+        if(!(activity instanceof OnEditorInteraction)){
+            throw new IllegalStateException("Parent activity must implement " +
+                    OnEditorInteraction.class.getName());
+        }
+
 		editorListener = (OnEditorInteraction) activity;
 	}
 
@@ -123,17 +130,20 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 
 	public void zoomToFit() {
 		// get visible mission coords
-		final List<Coord2D> visibleCoords = missionProxy.getVisibleCoords();
+		final List<LatLong> visibleCoords = missionProxy.getVisibleCoords();
 
 		// add home coord if visible
-		final Coord2D homeCoord = drone.getHome().getCoord();
-		if (homeCoord != null && !homeCoord.isEmpty())
-			visibleCoords.add(homeCoord);
+        Home home = drone.getHome();
+        if(home != null ) {
+            final LatLong homeCoord = drone.getHome().getCoordinate();
+            if (homeCoord != null && homeCoord.getLongitude() != 0 && homeCoord.getLatitude() != 0)
+                visibleCoords.add(homeCoord);
+        }
 
         zoomToFit(visibleCoords);
 	}
 
-    public void zoomToFit(List<Coord2D> itemsToFit){
+    public void zoomToFit(List<LatLong> itemsToFit){
         if(!itemsToFit.isEmpty()){
             mMapFragment.zoomToFit(itemsToFit);
         }

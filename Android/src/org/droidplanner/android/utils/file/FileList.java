@@ -5,7 +5,7 @@ import java.io.FilenameFilter;
 
 public class FileList {
 
-    public static final String WAYPOINT_FILENAME_EXT = ".txt";
+    public static final String WAYPOINT_FILENAME_EXT = ".dpwp";
 
     public static final String PARAM_FILENAME_EXT = ".param";
 

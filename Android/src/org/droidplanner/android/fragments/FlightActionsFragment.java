@@ -1,12 +1,9 @@
 package org.droidplanner.android.fragments;
 
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.drone.variables.Type;
-import org.droidplanner.core.model.Drone;
-
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,66 +11,81 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class FlightActionsFragment extends Fragment implements OnDroneListener {
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.property.Type;
 
-    interface SlidingUpHeader{
-        boolean isSlidingUpPanelEnabled(Drone drone);
-    }
+import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 
-    private SlidingUpHeader header;
+public class FlightActionsFragment extends ApiListenerFragment {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_flight_actions_bar, container, false);
-    }
+	interface SlidingUpHeader {
+		boolean isSlidingUpPanelEnabled(Drone api);
+	}
 
-    @Override
-    public void onStart(){
-        super.onStart();
+	private static final IntentFilter eventFilter = new IntentFilter(AttributeEvent.TYPE_UPDATED);
 
-        Drone drone = ((DroidPlannerApp)getActivity().getApplication()).getDrone();
-        selectActionsBar(drone.getType());
-        drone.addDroneListener(this);
-    }
+	private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final String action = intent.getAction();
+			if (AttributeEvent.TYPE_UPDATED.equals(action)) {
+                Type type = getDrone().getType();
+				selectActionsBar(type == null ? -1 : type.getDroneType());
+			}
+		}
+	};
 
-    @Override
-    public void onStop(){
-        super.onStop();
+	private SlidingUpHeader header;
 
-        Drone drone = ((DroidPlannerApp)getActivity().getApplication()).getDrone();
-        drone.removeDroneListener(this);
-    }
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_flight_actions_bar, container, false);
+	}
 
-    @Override
-    public void onDroneEvent(DroneEventsType event, Drone drone) {
-        switch(event){
-            case TYPE:
-                final int droneType = drone.getType();
-                selectActionsBar(droneType);
-                break;
-        }
-    }
-
-    private void selectActionsBar(int droneType) {
-        final FragmentManager fm = getChildFragmentManager();
-
-        Fragment actionsBarFragment;
-        if(Type.isCopter(droneType)){
-            actionsBarFragment = new CopterFlightActionsFragment();
-        }
-        else if(Type.isPlane(droneType)){
-            actionsBarFragment = new PlaneFlightActionsFragment();
-        }
+	@Override
+	public void onApiConnected() {
+        Drone drone = getDrone();
+        if(drone.isConnected())
+		    selectActionsBar(drone.getType().getDroneType());
         else{
-            actionsBarFragment = new GenericActionsFragment();
+            selectActionsBar(-1);
         }
+		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
+	}
 
-        fm.beginTransaction().replace(R.id.flight_actions_bar, actionsBarFragment).commit();
-        header = (SlidingUpHeader) actionsBarFragment;
-    }
+	@Override
+	public void onApiDisconnected() {
+		getBroadcastManager().unregisterReceiver(eventReceiver);
+        if(isResumed())
+            selectActionsBar(-1);
+	}
 
-    public boolean isSlidingUpPanelEnabled(Drone drone){
-        return header != null && header.isSlidingUpPanelEnabled(drone);
-    }
+	private void selectActionsBar(int droneType) {
+		final FragmentManager fm = getChildFragmentManager();
+
+		Fragment actionsBarFragment;
+		switch (droneType) {
+		case Type.TYPE_COPTER:
+			actionsBarFragment = new CopterFlightActionsFragment();
+			break;
+
+		case Type.TYPE_PLANE:
+			actionsBarFragment = new PlaneFlightActionsFragment();
+			break;
+
+		case Type.TYPE_ROVER:
+		default:
+			actionsBarFragment = new GenericActionsFragment();
+			break;
+		}
+
+		fm.beginTransaction().replace(R.id.flight_actions_bar, actionsBarFragment).commit();
+		header = (SlidingUpHeader) actionsBarFragment;
+	}
+
+	public boolean isSlidingUpPanelEnabled(Drone api) {
+		return header != null && header.isSlidingUpPanelEnabled(api);
+	}
 }

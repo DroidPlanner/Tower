@@ -1,17 +1,17 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-import org.droidplanner.core.mission.MissionItem;
-import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.commands.SetServo;
 
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.mission.item.command.SetServo;
 
 public class SetServoFragment extends MissionDetailFragment implements
 		CardWheelHorizontalView.OnCardWheelChangedListener, TextWatcher {
@@ -22,24 +22,23 @@ public class SetServoFragment extends MissionDetailFragment implements
 	}
 
 	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		typeSpinner.setSelection(commandAdapter
-				.getPosition(MissionItemType.SET_SERVO));
+	public void onApiConnected() {
+		super.onApiConnected();
+
+        final View view = getView();
+		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SET_SERVO));
 
 		SetServo item = (SetServo) getMissionItems().get(0);
 
 		final NumericWheelAdapter adapter = new NumericWheelAdapter(
-				getActivity().getApplicationContext(),
-				R.layout.wheel_text_centered, 1, 8, "%d");
+				getActivity().getApplicationContext(),	R.layout.wheel_text_centered, 1, 8, "%d");
 		final CardWheelHorizontalView cardChannelPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.picker1);
-		final EditText pwmEditText = (EditText) view
-				.findViewById(R.id.PwmEditText);
+		final EditText pwmEditText = (EditText) view.findViewById(R.id.PwmEditText);
 
 		cardChannelPicker.setViewAdapter(adapter);
 		cardChannelPicker.addChangingListener(this);
-		cardChannelPicker.setCurrentValue((int) item.getChannel());
+		cardChannelPicker.setCurrentValue(item.getChannel());
 
 		pwmEditText.setText(Integer.toString(item.getPwm()));
 		pwmEditText.addTextChangedListener(this);

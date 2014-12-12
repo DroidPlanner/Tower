@@ -5,36 +5,48 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.helpers.ApiListenerDialogFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
+import org.droidplanner.android.utils.unit.UnitManager;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
-import org.droidplanner.core.mission.MissionItem;
-import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.commands.MissionCMD;
-import org.droidplanner.core.mission.survey.Survey;
-import org.droidplanner.core.mission.waypoints.StructureScanner;
-import org.droidplanner.core.util.Pair;
 
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class MissionDetailFragment extends DialogFragment implements SpinnerSelfSelect.OnSpinnerItemSelectedListener {
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
+import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
+
+public class MissionDetailFragment extends ApiListenerDialogFragment implements SpinnerSelfSelect
+        .OnSpinnerItemSelectedListener {
 
 	private static final String TAG = MissionDetailFragment.class.getSimpleName();
 
 	protected static final int MIN_ALTITUDE = -200; // meter
 	protected static final int MAX_ALTITUDE = +200; // meters
+
+    public static final List<MissionItemType> typeWithNoMultiEditSupport = new
+            ArrayList<MissionItemType>();
+    static {
+        typeWithNoMultiEditSupport.add(MissionItemType.LAND);
+        typeWithNoMultiEditSupport.add(MissionItemType.TAKEOFF);
+        typeWithNoMultiEditSupport.add(MissionItemType.SURVEY);
+        typeWithNoMultiEditSupport.add(MissionItemType.RETURN_TO_LAUNCH);
+        typeWithNoMultiEditSupport.add(MissionItemType.STRUCTURE_SCANNER);
+    }
 
     public interface OnMissionDetailListener {
 		/**
@@ -49,11 +61,12 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 		/**
 		 * Notifies the listener that the mission item proxy was changed.
 		 *
+         * @param newType the new selected mission item type
          * @param oldNewItemsList a list of pairs containing the previous,
          *                         and the new mission item proxy.
 		 */
-		public void onWaypointTypeChanged(List<Pair<MissionItemProxy,
-                MissionItemProxy>> oldNewItemsList);
+		public void onWaypointTypeChanged(MissionItemType newType, List<Pair<MissionItemProxy,
+                        MissionItemProxy>> oldNewItemsList);
 	}
 
 	protected int getResource(){
@@ -65,8 +78,8 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 	private OnMissionDetailListener mListener;
 
     private MissionProxy mMissionProxy;
-    private List<MissionItem> mSelectedItems;
-    private List<MissionItemProxy> mSelectedProxies;
+    private final List<MissionItem> mSelectedItems = new ArrayList<MissionItem>();
+    private final List<MissionItemProxy> mSelectedProxies = new ArrayList<MissionItemProxy>();
 
 	public static MissionDetailFragment newInstance(MissionItemType itemType) {
 		MissionDetailFragment fragment;
@@ -80,10 +93,10 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 		case CHANGE_SPEED:
 			fragment = new MissionChangeSpeedFragment();
 			break;
-		case ROI:
+		case REGION_OF_INTEREST:
 			fragment = new MissionRegionOfInterestFragment();
 			break;
-		case RTL:
+		case RETURN_TO_LAUNCH:
 			fragment = new MissionRTLFragment();
 			break;
 		case SURVEY:
@@ -98,7 +111,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 		case SPLINE_WAYPOINT:
 			fragment = new MissionSplineWaypointFragment();
 			break;
-		case CYLINDRICAL_SURVEY:
+		case STRUCTURE_SCANNER:
 			fragment = new MissionStructureScannerFragment();
 			break;
 		case CAMERA_TRIGGER:
@@ -110,7 +123,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 		case SET_SERVO:
 			fragment = new SetServoFragment();
 			break;
-		case CONDITION_YAW:
+		case YAW_CONDITION:
 			fragment = new MissionConditionYawFragment();
 			break;
 		default:
@@ -126,41 +139,28 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 		setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 	}
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mMissionProxy = ((DroidPlannerApp) getActivity().getApplication()).getMissionProxy();
-		mSelectedProxies = new ArrayList<MissionItemProxy>(mMissionProxy.selection.getSelected());
-		if (mSelectedProxies.isEmpty()) {
-			return null;
-		}
+    @Override
+    public void onApiConnected() {
+        mMissionProxy = getMissionProxy();
 
-        mSelectedItems = new ArrayList<MissionItem>(mSelectedProxies.size());
+        mSelectedProxies.clear();
+        mSelectedProxies.addAll(mMissionProxy.selection.getSelected());
+
+        mSelectedItems.clear();
         for(MissionItemProxy mip : mSelectedProxies){
             mSelectedItems.add(mip.getMissionItem());
         }
 
-		return inflater.inflate(getResource(), container, false);
-	}
+        final View view = getView();
+        if(view == null) return;
 
-    protected MissionProxy getMissionProxy(){
-        return mMissionProxy;
-    }
-
-    protected List<? extends MissionItem> getMissionItems(){
-        return mSelectedItems;
-    }
-
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		
-		List<MissionItemType> list = new LinkedList<MissionItemType>(Arrays.asList(MissionItemType.values()));
+        List<MissionItemType> list = new LinkedList<MissionItemType>(Arrays.asList(MissionItemType.values()));
 
         if(mSelectedProxies.size() == 1) {
             final MissionItemProxy itemProxy = mSelectedProxies.get(0);
             final MissionItem currentItem = itemProxy.getMissionItem();
 
-            if ((currentItem instanceof Survey)) {
+            if (currentItem instanceof Survey) {
                 list.clear();
                 list.add(MissionItemType.SURVEY);
             } else {
@@ -169,7 +169,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
             
             if ((currentItem instanceof StructureScanner)) {
                 list.clear();
-                list.add(MissionItemType.CYLINDRICAL_SURVEY);
+                list.add(MissionItemType.STRUCTURE_SCANNER);
             }
 
             if (mMissionProxy.getItems().indexOf(itemProxy) != 0) {
@@ -178,16 +178,16 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 
             if (mMissionProxy.getItems().indexOf(itemProxy) != (mMissionProxy.getItems().size() - 1)) {
                 list.remove(MissionItemType.LAND);
-                list.remove(MissionItemType.RTL);
+                list.remove(MissionItemType.RETURN_TO_LAUNCH);
             }
 
-            if (currentItem instanceof MissionCMD) {
+            if (currentItem instanceof MissionItem.Command) {
                 list.remove(MissionItemType.LAND);
                 list.remove(MissionItemType.SPLINE_WAYPOINT);
                 list.remove(MissionItemType.CIRCLE);
-                list.remove(MissionItemType.ROI);
+                list.remove(MissionItemType.REGION_OF_INTEREST);
                 list.remove(MissionItemType.WAYPOINT);
-                list.remove(MissionItemType.CYLINDRICAL_SURVEY);
+                list.remove(MissionItemType.STRUCTURE_SCANNER);
             }
 
             final TextView waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
@@ -199,8 +199,8 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
             final TextView distanceView = (TextView) view.findViewById(R.id.DistanceValue);
             if (distanceView != null) {
                 try {
-                    distanceView.setText(mMissionProxy.getDistanceFromLastWaypoint(itemProxy)
-                            .toString());
+                    distanceView.setText(UnitManager.getUnitProvider().distanceToString(mMissionProxy
+                            .getDistanceFromLastWaypoint(itemProxy)));
                 } catch (IllegalArgumentException e) {
                     Log.w(TAG, e.getMessage(), e);
                 }
@@ -213,25 +213,33 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
         }
         else if(mSelectedProxies.size() > 1){
             //Remove the mission item types that don't apply to multiple items.
-            list.remove(MissionItemType.TAKEOFF);
-            list.remove(MissionItemType.LAND);
-            list.remove(MissionItemType.RTL);
-            list.remove(MissionItemType.SURVEY);
-            list.remove(MissionItemType.CYLINDRICAL_SURVEY);
+            list.removeAll(typeWithNoMultiEditSupport);
         }
         else{
             //Invalid state. We should not have been able to get here.
             throw new IllegalStateException("Mission Detail Fragment cannot be shown when no " +
                     "mission items is selected.");
         }
-		
-		commandAdapter = new AdapterMissionItems(getActivity(),
-				android.R.layout.simple_list_item_1, list.toArray(new MissionItemType[list.size()]));
 
-		typeSpinner = (SpinnerSelfSelect) view.findViewById(R.id.spinnerWaypointType);
-		typeSpinner.setAdapter(commandAdapter);
+        commandAdapter = new AdapterMissionItems(getActivity(),
+                android.R.layout.simple_list_item_1, list.toArray(new MissionItemType[list.size()]));
+
+        typeSpinner = (SpinnerSelfSelect) view.findViewById(R.id.spinnerWaypointType);
+        typeSpinner.setAdapter(commandAdapter);
         typeSpinner.setOnSpinnerItemSelectedListener(this);
+    }
+
+    @Override
+    public void onApiDisconnected() {}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		return inflater.inflate(getResource(), container, false);
 	}
+
+    protected List<? extends MissionItem> getMissionItems(){
+        return mSelectedItems;
+    }
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -250,7 +258,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
 		mListener = null;
 	}
 
-	@Override
+    @Override
 	public void onDismiss(DialogInterface dialog) {
 		super.onDismiss(dialog);
 		if (mListener != null) {
@@ -263,7 +271,7 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
         final MissionItemType selectedType = commandAdapter.getItem(position);
 
         try {
-            if (mSelectedProxies == null || mSelectedProxies.isEmpty())
+            if (mSelectedProxies.isEmpty())
                 return;
 
             final List<Pair<MissionItemProxy, MissionItemProxy>> updatesList = new ArrayList<Pair<MissionItemProxy, MissionItemProxy>>(
@@ -272,13 +280,21 @@ public class MissionDetailFragment extends DialogFragment implements SpinnerSelf
             for (MissionItemProxy missionItemProxy : mSelectedProxies) {
                 final MissionItem oldItem = missionItemProxy.getMissionItem();
                 if (oldItem.getType() != selectedType) {
+                    final MissionItem newItem = selectedType.getNewItem();
+
+                    if(oldItem instanceof MissionItem.SpatialItem && newItem instanceof
+                            MissionItem.SpatialItem){
+                        ((MissionItem.SpatialItem) newItem).setCoordinate(((MissionItem
+                                .SpatialItem)oldItem).getCoordinate());
+                    }
+
                     updatesList.add(Pair.create(missionItemProxy, new MissionItemProxy(
-                            mMissionProxy, selectedType.getNewItem(oldItem))));
+                            mMissionProxy, newItem)));
                 }
             }
 
             if(!updatesList.isEmpty()) {
-                mListener.onWaypointTypeChanged(updatesList);
+                mListener.onWaypointTypeChanged(selectedType, updatesList);
                 dismiss();
             }
         } catch (IllegalArgumentException e) {

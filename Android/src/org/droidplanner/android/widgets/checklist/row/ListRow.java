@@ -1,7 +1,6 @@
 package org.droidplanner.android.widgets.checklist.row;
 
 import org.droidplanner.android.widgets.checklist.CheckListItem;
-import org.droidplanner.core.model.Drone;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +8,8 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.CheckBox;
 import android.widget.Toast;
+
+import com.o3dr.android.client.Drone;
 
 public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickListener {
 	protected final CheckListItem checkListItem;
@@ -64,21 +65,19 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 		String sys_tag = mListItem.getSys_tag();
 
 		if (sys_tag.equalsIgnoreCase("SYS_BATTREM_LVL")) {
-			mListItem.setSys_value(mDrone.getBattery().getBattRemain());
+			mListItem.setSys_value(mDrone.getBattery().getBatteryRemain());
 		} else if (sys_tag.equalsIgnoreCase("SYS_BATTVOL_LVL")) {
-			mListItem.setSys_value(mDrone.getBattery().getBattVolt());
+			mListItem.setSys_value(mDrone.getBattery().getBatteryVoltage());
 		} else if (sys_tag.equalsIgnoreCase("SYS_BATTCUR_LVL")) {
-			mListItem.setSys_value(mDrone.getBattery().getBattCurrent());
+			mListItem.setSys_value(mDrone.getBattery().getBatteryCurrent());
 		} else if (sys_tag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
-			mListItem.setSys_value(mDrone.getGps().getSatCount());
-		} else if (sys_tag.equalsIgnoreCase("SYS_DEF_ALT")) {
-			mListItem.setSys_value(mDrone.getMission().getDefaultAlt().valueInMeters());
+			mListItem.setSys_value(mDrone.getGps().getSatellitesCount());
 		} else if (sys_tag.equalsIgnoreCase("SYS_ARM_STATE")) {
 			mListItem.setSys_activated(mDrone.getState().isArmed());
 		} else if (sys_tag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
 			mListItem.setSys_activated(mDrone.getState().isWarning());
 		} else if (sys_tag.equalsIgnoreCase("SYS_CONNECTION_STATE")) {
-			mListItem.setSys_activated(mDrone.getMavClient().isConnected());
+			mListItem.setSys_activated(mDrone.isConnected());
 		}
 	}
 

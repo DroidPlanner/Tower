@@ -3,7 +3,7 @@ package org.droidplanner.android.widgets.spinnerWheel;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 
 import android.content.Context;

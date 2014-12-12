@@ -27,6 +27,7 @@ import com.MAVLink.Messages.MAVLinkMessage;
  */
 public class TLogReader implements OpenFileDialog.FileReader {
 
+    private static final String TAG = TLogReader.class.getSimpleName();
     public static final int MSGFILTER_NONE = -1;
 
     public static class Event
@@ -88,7 +89,7 @@ public class TLogReader implements OpenFileDialog.FileReader {
                     if((timestamp - prevTimestamp) > 60000) {
                         logEvents.add(new Event(timestamp, packet.unpack()));
                         prevTimestamp = timestamp;
-                    }
+            }
                 }
             }
 

@@ -1,10 +1,26 @@
 package org.droidplanner.android.fragments;
 
-import java.util.List;
-import java.util.Set;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.property.CameraProxy;
+import com.o3dr.services.android.lib.drone.property.Gps;
+
+import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
 import org.droidplanner.android.graphic.map.GraphicHome;
@@ -14,36 +30,83 @@ import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.model.Drone;
-import org.droidplanner.core.survey.CameraInfo;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
-import android.app.Activity;
-import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import java.util.List;
+import java.util.Set;
 
-public abstract class DroneMap extends Fragment implements OnDroneListener {
+public abstract class DroneMap extends ApiListenerFragment {
 
 	private final static String TAG = DroneMap.class.getSimpleName();
+
+	private static final IntentFilter eventFilter = new IntentFilter();
+	static {
+		eventFilter.addAction(MissionProxy.ACTION_MISSION_PROXY_UPDATE);
+		eventFilter.addAction(AttributeEvent.GPS_POSITION);
+		eventFilter.addAction(AttributeEvent.GUIDED_POINT_UPDATED);
+		eventFilter.addAction(AttributeEvent.HEARTBEAT_FIRST);
+		eventFilter.addAction(AttributeEvent.HEARTBEAT_RESTORED);
+		eventFilter.addAction(AttributeEvent.HEARTBEAT_TIMEOUT);
+		eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+		eventFilter.addAction(AttributeEvent.CAMERA_FOOTPRINTS_UPDATED);
+		eventFilter.addAction(AttributeEvent.ATTITUDE_UPDATED);
+	}
+
+	private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (!isResumed())
+				return;
+
+			final String action = intent.getAction();
+			if (MissionProxy.ACTION_MISSION_PROXY_UPDATE.equals(action)) {
+				postUpdate();
+			} else if (AttributeEvent.GPS_POSITION.equals(action)) {
+				mMapFragment.updateMarker(graphicDrone);
+				mMapFragment.updateDroneLeashPath(guided);
+				final Gps droneGps = drone.getGps();
+				if (droneGps != null && droneGps.isValid()) {
+					mMapFragment.addFlightPathPoint(droneGps.getPosition());
+				}
+			} else if (AttributeEvent.GUIDED_POINT_UPDATED.equals(action)) {
+				mMapFragment.updateMarker(guided);
+				mMapFragment.updateDroneLeashPath(guided);
+			} else if (AttributeEvent.HEARTBEAT_FIRST.equals(action)
+					|| AttributeEvent.HEARTBEAT_RESTORED.equals(action)) {
+				mMapFragment.updateMarker(graphicDrone);
+			} else if (AttributeEvent.STATE_DISCONNECTED.equals(action)
+					|| AttributeEvent.HEARTBEAT_TIMEOUT.equals(action)) {
+				mMapFragment.updateMarker(graphicDrone);
+			} else if (AttributeEvent.CAMERA_FOOTPRINTS_UPDATED.equals(action)) {
+                CameraProxy camera = drone.getCamera();
+                if(camera != null && camera.getLastFootPrint() != null)
+				    mMapFragment.addCameraFootprint(camera.getLastFootPrint());
+			} else if (AttributeEvent.ATTITUDE_UPDATED.equals(action)) {
+				if (mAppPrefs.isRealtimeFootprintsEnabled()) {
+					if (drone.getGps().isValid()) {
+                        CameraProxy camera = drone.getCamera();
+                        if(camera != null && camera.getCurrentFieldOfView() != null)
+						    mMapFragment.updateRealTimeFootprint(camera.getCurrentFieldOfView());
+					}
+
+				}
+			}
+		}
+	};
 
 	private final Handler mHandler = new Handler();
 
 	private final Runnable mUpdateMap = new Runnable() {
 		@Override
 		public void run() {
+			if (getActivity() == null && mMapFragment == null)
+				return;
+
 			final List<MarkerInfo> missionMarkerInfos = missionProxy.getMarkersInfos();
 
 			final boolean isThereMissionMarkers = !missionMarkerInfos.isEmpty();
 			final boolean isHomeValid = home.isValid();
-            final boolean isGuidedVisible = guided.isVisible();
+			final boolean isGuidedVisible = guided.isVisible();
 
 			// Get the list of markers currently on the map.
 			final Set<MarkerInfo> markersOnTheMap = mMapFragment.getMarkerInfoList();
@@ -53,9 +116,9 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 					markersOnTheMap.remove(home);
 				}
 
-                if(isGuidedVisible){
-                    markersOnTheMap.remove(guided);
-                }
+				if (isGuidedVisible) {
+					markersOnTheMap.remove(guided);
+				}
 
 				if (isThereMissionMarkers) {
 					markersOnTheMap.removeAll(missionMarkerInfos);
@@ -68,16 +131,16 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 				mMapFragment.updateMarker(home);
 			}
 
-            if(isGuidedVisible){
-                mMapFragment.updateMarker(guided);
-            }
+			if (isGuidedVisible) {
+				mMapFragment.updateMarker(guided);
+			}
 
 			if (isThereMissionMarkers) {
 				mMapFragment.updateMarkers(missionMarkerInfos, isMissionDraggable());
 			}
 
 			mMapFragment.updateMissionPath(missionProxy);
-			
+
 			mMapFragment.updatePolygonsPaths(missionProxy.getPolygonsPath());
 
 			mHandler.removeCallbacks(this);
@@ -85,6 +148,8 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 	};
 
 	protected DPMap mMapFragment;
+
+	protected DroidPlannerPrefs mAppPrefs;
 
 	private GraphicHome home;
 	public GraphicDrone graphicDrone;
@@ -95,25 +160,13 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 
 	protected Context context;
 
-	private CameraInfo camera = new CameraInfo();
-
 	protected abstract boolean isMissionDraggable();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
 		final View view = inflater.inflate(R.layout.fragment_drone_map, viewGroup, false);
-
-		final Activity activity = getActivity();
-		final DroidPlannerApp app = ((DroidPlannerApp) activity.getApplication());
-		drone = app.getDrone();
-		missionProxy = app.getMissionProxy();
-
-		home = new GraphicHome(drone);
-		graphicDrone = new GraphicDrone(drone);
-		guided = new GraphicGuided(drone);
-
+		mAppPrefs = new DroidPlannerPrefs(context);
 		updateMapFragment();
-
 		return view;
 	}
 
@@ -123,10 +176,31 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		mHandler.removeCallbacksAndMessages(null);
 	}
 
+	@Override
+	public void onApiConnected() {
+		if (mMapFragment != null)
+			mMapFragment.clearMarkers();
+
+		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
+
+		drone = getDrone();
+		missionProxy = getMissionProxy();
+
+		home = new GraphicHome(drone);
+		graphicDrone = new GraphicDrone(drone);
+		guided = new GraphicGuided(drone);
+
+		postUpdate();
+	}
+
+	@Override
+	public void onApiDisconnected() {
+		getBroadcastManager().unregisterReceiver(eventReceiver);
+	}
+
 	private void updateMapFragment() {
 		// Add the map fragment instance (based on user preference)
-		final DPMapProvider mapProvider = Utils.getMapProvider(getActivity()
-				.getApplicationContext());
+		final DPMapProvider mapProvider = Utils.getMapProvider(context);
 
 		final FragmentManager fm = getChildFragmentManager();
 		mMapFragment = (DPMap) fm.findFragmentById(R.id.map_fragment_container);
@@ -144,17 +218,13 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 	@Override
 	public void onPause() {
 		super.onPause();
-		drone.removeDroneListener(this);
-		mHandler.removeCallbacksAndMessages(null);
 		mMapFragment.saveCameraPosition();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		drone.addDroneListener(this);
 		mMapFragment.loadCameraPosition();
-		postUpdate();
 	}
 
 	@Override
@@ -164,55 +234,15 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 	}
 
 	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		context = activity.getApplicationContext();
+	public void onStop() {
+		super.onStop();
+		mHandler.removeCallbacksAndMessages(null);
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		switch (event) {
-		case MISSION_UPDATE:
-			postUpdate();
-			break;
-
-		case GPS:
-			mMapFragment.updateMarker(graphicDrone);
-			mMapFragment.updateDroneLeashPath(guided);
-			if (drone.getGps().isPositionValid()) {
-				mMapFragment.addFlightPathPoint(drone.getGps().getPosition());
-			}
-			break;
-
-		case ATTITUDE:
-			if (((DroidPlannerApp) getActivity().getApplication()).getPreferences()
-					.isRealtimeFootprintsEnabled()) {
-				if (drone.getGps().isPositionValid()) {
-					mMapFragment.updateRealTimeFootprint(drone.getCamera().getCurrentFieldOfView());
-				}
-
-			}
-			break;
-		case GUIDEDPOINT:
-			mMapFragment.updateMarker(guided);
-			mMapFragment.updateDroneLeashPath(guided);
-			break;
-
-		case HEARTBEAT_RESTORED:
-		case HEARTBEAT_FIRST:
-			mMapFragment.updateMarker(graphicDrone);
-			break;
-
-		case DISCONNECTED:
-		case HEARTBEAT_TIMEOUT:
-			mMapFragment.updateMarker(graphicDrone);
-			break;
-		case FOOTPRINT:
-				mMapFragment.addCameraFootprint(drone.getCamera().getLastFootprint());
-			break;
-		default:
-			break;
-		}
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		context = activity.getApplicationContext();
 	}
 
 	public final void postUpdate() {
@@ -247,7 +277,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		mMapFragment.saveCameraPosition();
 	}
 
-	public List<Coord2D> projectPathIntoMap(List<Coord2D> path) {
+	public List<LatLong> projectPathIntoMap(List<LatLong> path) {
 		return mMapFragment.projectPathIntoMap(path);
 	}
 
@@ -272,19 +302,23 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		mMapFragment.goToDroneLocation();
 	}
 
-    /**
-     * Update the map rotation.
-     * @param bearing
-     */
-    public void updateMapBearing(float bearing){
-        mMapFragment.updateCameraBearing(bearing);
-    }
+	/**
+	 * Update the map rotation.
+	 * 
+	 * @param bearing
+	 */
+	public void updateMapBearing(float bearing) {
+		mMapFragment.updateCameraBearing(bearing);
+	}
 
-    /**
-     * Ignore marker clicks on the map and instead report the event as a mapClick
-     * @param skip if it should skip further events
-     */
-    public void skipMarkerClickEvents(boolean skip){
-    	mMapFragment.skipMarkerClickEvents(skip);
-    }
+	/**
+	 * Ignore marker clicks on the map and instead report the event as a
+	 * mapClick
+	 * 
+	 * @param skip
+	 *            if it should skip further events
+	 */
+	public void skipMarkerClickEvents(boolean skip) {
+		mMapFragment.skipMarkerClickEvents(skip);
+	}
 }

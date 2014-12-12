@@ -1,25 +1,49 @@
 package org.droidplanner.android.fragments;
 
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.widgets.AttitudeIndicator;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.model.Drone;
-
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class TelemetryFragment extends Fragment implements OnDroneListener {
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.property.Altitude;
+import com.o3dr.services.android.lib.drone.property.Attitude;
+import com.o3dr.services.android.lib.drone.property.Speed;
+
+import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
+import org.droidplanner.android.widgets.AttitudeIndicator;
+
+public class TelemetryFragment extends ApiListenerFragment {
+
+	private final static IntentFilter eventFilter = new IntentFilter();
+	static {
+		eventFilter.addAction(AttributeEvent.ATTITUDE_UPDATED);
+		eventFilter.addAction(AttributeEvent.SPEED_UPDATED);
+	}
+
+	private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final String action = intent.getAction();
+			final Drone drone = getDrone();
+			if (AttributeEvent.ATTITUDE_UPDATED.equals(action)) {
+				onOrientationUpdate(drone.getAttitude());
+			} else if (AttributeEvent.SPEED_UPDATED.equals(action)) {
+				onSpeedAltitudeAndClimbRateUpdate(drone.getSpeed(), drone.getAltitude());
+			}
+		}
+	};
 
 	private AttitudeIndicator attitudeIndicator;
-	private Drone drone;
 	private TextView roll;
 	private TextView yaw;
 	private TextView pitch;
@@ -45,14 +69,12 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 		altitude = (TextView) view.findViewById(R.id.altitudeValue);
 		targetAltitude = (TextView) view.findViewById(R.id.targetAltitudeValue);
 
-		drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 		return view;
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
-		drone.addDroneListener(this);
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity()
 				.getApplicationContext());
@@ -60,32 +82,22 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	}
 
 	@Override
-	public void onStop() {
-		super.onStop();
-		drone.removeDroneListener(this);
+	public void onApiConnected() {
+		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		switch (event) {
-		case NAVIGATION:
-			break;
-		case ATTITUDE:
-			onOrientationUpdate(drone);
-			break;
-		case SPEED:
-			onSpeedAltitudeAndClimbRateUpdate(drone);
-			break;
-		default:
-			break;
-		}
-
+	public void onApiDisconnected() {
+		getBroadcastManager().unregisterReceiver(eventReceiver);
 	}
 
-	public void onOrientationUpdate(Drone drone) {
-		float r = (float) drone.getOrientation().getRoll();
-		float p = (float) drone.getOrientation().getPitch();
-		float y = (float) drone.getOrientation().getYaw();
+	public void onOrientationUpdate(Attitude droneAttitude) {
+        if(droneAttitude == null)
+            return;
+
+		float r = (float) droneAttitude.getRoll();
+		float p = (float) droneAttitude.getPitch();
+		float y = (float) droneAttitude.getYaw();
 
 		if (!headingModeFPV & y < 0) {
 			y = 360 + y;
@@ -99,18 +111,20 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 
 	}
 
-	public void onSpeedAltitudeAndClimbRateUpdate(Drone drone) {
-		airSpeed.setText(String.format("%3.1f", drone.getSpeed().getAirSpeed()
-				.valueInMetersPerSecond()));
-		groundSpeed.setText(String.format("%3.1f", drone.getSpeed().getGroundSpeed()
-				.valueInMetersPerSecond()));
-		climbRate.setText(String.format("%3.1f", drone.getSpeed().getVerticalSpeed()
-				.valueInMetersPerSecond()));
-		double alt = drone.getAltitude().getAltitude();
-		double targetAlt = drone.getAltitude().getTargetAltitude();
-		altitude.setText(String.format("%3.1f", alt));
-		targetAltitude.setText(String.format("%3.1f", targetAlt));
+	public void onSpeedAltitudeAndClimbRateUpdate(Speed speed, Altitude altitude) {
+        if(speed != null) {
+            airSpeed.setText(String.format("%3.1f", speed.getAirSpeed()));
+            groundSpeed.setText(String.format("%3.1f", speed.getGroundSpeed()));
+            climbRate.setText(String.format("%3.1f", speed.getVerticalSpeed()));
+        }
 
+        if(altitude != null) {
+            double alt = altitude.getAltitude();
+            double targetAlt = altitude.getTargetAltitude();
+
+            this.altitude.setText(String.format("%3.1f", alt));
+            targetAltitude.setText(String.format("%3.1f", targetAlt));
+        }
 	}
 
 }

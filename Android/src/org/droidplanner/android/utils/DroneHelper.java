@@ -1,23 +1,22 @@
 package org.droidplanner.android.utils;
 
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-
 import android.content.res.Resources;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.o3dr.services.android.lib.coordinate.LatLong;
 
 public class DroneHelper {
-	static public LatLng CoordToLatLang(Coord2D coord) {
-		return new LatLng(coord.getLat(), coord.getLng());
+	static public LatLng CoordToLatLang(LatLong coord) {
+		return new LatLng(coord.getLatitude(), coord.getLongitude());
 	}
 
-	public static Coord2D LatLngToCoord(LatLng point) {
-		return new Coord2D(point.latitude, point.longitude);
-	}
+    public static LatLong LatLngToCoord(LatLng point) {
+        return new LatLong((float)point.latitude, (float) point.longitude);
+    }
 
-	public static Coord2D LocationToCoord(Location location) {
-		return new Coord2D(location.getLatitude(), location.getLongitude());
+	public static LatLong LocationToCoord(Location location) {
+		return new LatLong((float) location.getLatitude(), (float) location.getLongitude());
 	}
 
 	public static int scaleDpToPixels(double value, Resources res) {

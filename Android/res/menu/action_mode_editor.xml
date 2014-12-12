@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/menu_action_multi_edit"
         android:title="@string/menu_action_multi_edit"
-        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_copy"/>
 
     <item
         android:id="@+id/menu_action_reverse"
         android:title="@string/menu_action_reverse"
         android:icon="@drawable/ic_action_playback_schuffle"
-        android:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/menu_action_delete"
         android:title="@string/menu_action_delete"
         android:icon="@drawable/ic_action_trash"
-        android:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom"/>
 
 </menu>

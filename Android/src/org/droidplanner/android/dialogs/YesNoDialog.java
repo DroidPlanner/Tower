@@ -1,7 +1,5 @@
 package org.droidplanner.android.dialogs;
 
-import org.droidplanner.R;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -10,6 +8,8 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.TextView;
+
+import org.droidplanner.android.R;
 
 public class YesNoDialog extends DialogFragment {
 
