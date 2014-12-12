@@ -4,7 +4,7 @@
 
 # DroidPlanner
 
-Droidplanner is a Ground Control Station (GCS) Android app built atop [3DR Services](https://github.com/DroidPlanner/3DRServices) for UAVs
+Droidplanner is a Ground Control Station (GCS) Android app built atop [3DR Services](https://github.com/DroidPlanner/3DRServices), for UAVs
 running Ardupilot software.
 
 [![Google Play Store](https://developer.android.com/images/brand/en_app_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=org.droidplanner)
