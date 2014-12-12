@@ -17,7 +17,7 @@ For help, visit the [Droidplanner mailing list](https://groups.google.com/forum/
 
 ### Droidplanner v3 beta
 
-![Droidplanner 3.0 beta screenshot](http://api.ning.com/files/jF4-qtz-5QeFbLdQSyDzpe8jLYTd9ymmmGxqecMlK8ANxeKq1PTCk*wjca6GWxCSkCPf4byXhlbnJGVT3b4K259MJAFyycwI/Picture1.png?width=640)
+![Droidplanner 3.0 beta screenshot](https://cloud.githubusercontent.com/assets/914968/5420988/c11105e0-8211-11e4-9f07-92727d7c78ab.png)
 
 The next version of Droidplanner is under development, and we would love your help in beta testing the new version. To join the beta:
  1. Join the [Droidplanner Google+ community](https://plus.google.com/communities/109498440846585781402) or the [Droidplanner mailing list](https://groups.google.com/forum/#!forum/droidplanner) (this is required to download the beta from the Google
