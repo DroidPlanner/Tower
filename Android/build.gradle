@@ -96,7 +96,7 @@ android {
  * @return The most recent git tag to be used as version name for the app.
  */
 def getGitVersion(){
-    def cmd = "git describe --tag --dirty"
+    def cmd = "git describe --tag"
     try {
         def proc = cmd.execute()
         return proc.text.trim()
