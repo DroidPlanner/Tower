@@ -10,10 +10,10 @@ import android.text.style.StyleSpan;
 /**
  * Contains text, and formatting related functions.
  */
-public class TextUtils {
+public class SpannableUtils {
 
 	// Not instantiable
-	private TextUtils() {
+	private SpannableUtils() {
 	}
 
 	/**
