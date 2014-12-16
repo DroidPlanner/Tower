@@ -162,8 +162,12 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
 		if (isServiceConnected)
 			listener.onApiConnected();
 
-        if(apiListeners.isEmpty() && !isServiceConnected) {
-            serviceMgr.connect(this);
+        if(!isServiceConnected) {
+            try {
+                serviceMgr.connect(this);
+            }catch(IllegalStateException e){
+                //Ignore
+            }
         }
 
         apiListeners.add(listener);
