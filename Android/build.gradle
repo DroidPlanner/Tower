@@ -30,7 +30,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 310
-        versionName "alpha v3.0.10"
+        versionName getGitVersion()
     }
 
     sourceSets {
