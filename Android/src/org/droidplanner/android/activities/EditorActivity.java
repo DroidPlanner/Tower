@@ -493,15 +493,17 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		List<LatLong> points = planningMapFragment.projectPathIntoMap(path);
 		switch (getTool()) {
 		case DRAW:
-			if (mIsSplineEnabled) {
-				missionProxy.addSplineWaypoints(points);
-			} else {
-				missionProxy.addWaypoints(points);
-			}
+            if(missionProxy != null) {
+                if (mIsSplineEnabled) {
+                    missionProxy.addSplineWaypoints(points);
+                } else {
+                    missionProxy.addWaypoints(points);
+                }
+            }
 			break;
 
 		case POLY:
-			if (path.size() > 2) {
+			if (missionProxy != null && path.size() > 2) {
 				missionProxy.addSurveyPolygon(points);
 			} else {
 				editorToolsFragment.setTool(EditorTools.POLY);

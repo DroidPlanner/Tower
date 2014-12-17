@@ -189,6 +189,9 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
     }
 
     private void updateViews() {
+        if(isDetached())
+            return;
+
 		updateTextViews();
 		updateSeekBars();
 	}

@@ -29,8 +29,8 @@ android {
         applicationId 'org.droidplanner.android'
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 310
-        versionName "alpha v3.0.10"
+        versionCode 30010
+        versionName getGitVersion()
     }
 
     sourceSets {
@@ -96,7 +96,7 @@ android {
  * @return The most recent git tag to be used as version name for the app.
  */
 def getGitVersion(){
-    def cmd = "git describe --tag --dirty"
+    def cmd = "git describe --tag"
     try {
         def proc = cmd.execute()
         return proc.text.trim()

@@ -94,15 +94,13 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
             if (!drone.isConnected())
                 return;
 
-            GoogleMap map = getMap();
-            Gps droneGps = drone.getGps();
-            if (map == null || droneGps == null)
+            final Gps droneGps = drone.getGps();
+            if (droneGps == null)
                 return;
 
             if (mPanMode.get() == AutoPanMode.DRONE && droneGps.isValid()) {
-                final float currentZoomLevel = map.getCameraPosition().zoom;
                 final LatLong droneLocation = droneGps.getPosition();
-                updateCamera(droneLocation, currentZoomLevel);
+                updateCamera(droneLocation);
             }
         }
     };
@@ -492,11 +490,29 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         }
     }
 
+    private void updateCamera(final LatLong coord){
+        if(coord != null){
+            getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    final float zoomLevel = googleMap.getCameraPosition().zoom;
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(DroneHelper.CoordToLatLang(coord),
+                            zoomLevel));
+                }
+            });
+        }
+    }
+
     @Override
-    public void updateCamera(LatLong coord, float zoomLevel) {
+    public void updateCamera(final LatLong coord, final float zoomLevel) {
         if (coord != null) {
-            getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(
-                    DroneHelper.CoordToLatLang(coord), zoomLevel));
+            getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                            DroneHelper.CoordToLatLang(coord), zoomLevel));
+                }
+            });
         }
     }
 
@@ -635,7 +651,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
                     CameraUpdate animation = CameraUpdateFactory.newLatLngBounds(bounds, 100);
-                    getMap().animateCamera(animation);
+                    googleMap.animateCamera(animation);
                 }
             });
         }
@@ -820,10 +836,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         } else {
             return 0;
         }
-    }
-
-    private boolean isMapLayoutFinished() {
-        return getMap() != null && getView() != null && getView().getWidth() > 0;
     }
 
     @Override

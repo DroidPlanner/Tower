@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.property.Gps;
 
 public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
 		DPMap.OnMarkerClickListener, DPMap.OnMarkerDragListener, GuidedDialogListener {
@@ -115,7 +116,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 
 	@Override
 	public void onMapLongClick(LatLong coord) {
-		if (drone.isConnected()) {
+		if (drone != null && drone.isConnected()) {
 			if (drone.getGuidedState().isInitialized()) {
 				drone.sendGuidedPoint(coord, false);
 			} else {
@@ -177,7 +178,8 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	public void goToDroneLocation() {
 		super.goToDroneLocation();
 
-		if (!this.drone.getGps().isValid())
+        final Gps droneGps = this.drone.getGps();
+		if (droneGps == null || !droneGps.isValid())
 			return;
 
 		final int pressCount = mAppPrefs.prefs.getInt(PREF_DRONE_LOCATION_FIRST_PRESS,
