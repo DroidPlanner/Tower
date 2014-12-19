@@ -11,7 +11,7 @@ import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.command.ChangeSpeed;
 
 public class MissionChangeSpeedFragment extends MissionDetailFragment implements
-		CardWheelHorizontalView.OnCardWheelChangedListener {
+        CardWheelHorizontalView.OnCardWheelScrollListener {
 
 	@Override
 	protected int getResource() {
@@ -31,19 +31,29 @@ public class MissionChangeSpeedFragment extends MissionDetailFragment implements
         CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view.findViewById
                 (R.id.picker1);
         cardAltitudePicker.setViewAdapter(adapter);
-        cardAltitudePicker.addChangingListener(this);
+        cardAltitudePicker.addScrollListener(this);
 
         ChangeSpeed item = (ChangeSpeed) getMissionItems().get(0);
         cardAltitudePicker.setCurrentValue((int) item.getSpeed());
     }
 
-	@Override
-	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
+    @Override
+    public void onScrollingStarted(CardWheelHorizontalView cardWheel, int startValue) {
+
+    }
+
+    @Override
+    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+
+    }
+
+    @Override
+	public void onScrollingEnded(CardWheelHorizontalView wheel, int startValue, int endValue) {
 		switch (wheel.getId()) {
 		case R.id.picker1:
             for(MissionItem missionItem : getMissionItems()) {
             	ChangeSpeed item = (ChangeSpeed) missionItem;
-                item.setSpeed(newValue);
+                item.setSpeed(endValue);
             }
 			break;
 		}

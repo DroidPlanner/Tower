@@ -25,11 +25,17 @@ import android.widget.Toast;
 public class CardWheelHorizontalView extends LinearLayout implements OnWheelChangedListener,
 		OnWheelClickedListener, OnWheelScrollListener {
 
-	public interface OnCardWheelChangedListener {
-		void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue);
+    private final static String TAG = CardWheelHorizontalView.class.getSimpleName();
+
+	public interface OnCardWheelScrollListener {
+        void onScrollingStarted(CardWheelHorizontalView cardWheel, int startValue);
+
+        void onScrollingUpdate(CardWheelHorizontalView cardWheel, int oldValue, int newValue);
+
+		void onScrollingEnded(CardWheelHorizontalView cardWheel, int startValue, int endValue);
 	}
 
-	private final List<OnCardWheelChangedListener> mChangingListeners = new LinkedList<OnCardWheelChangedListener>();
+	private final List<OnCardWheelScrollListener> mScrollingListeners = new LinkedList<OnCardWheelScrollListener>();
 
 	private View mVerticalDivider;
 	private View mHorizontalDivider;
@@ -37,6 +43,8 @@ public class CardWheelHorizontalView extends LinearLayout implements OnWheelChan
 	private TextView mTitleView;
 	private EditText mNumberInputText;
 	private WheelHorizontalView mSpinnerWheel;
+
+    private int scrollingStartValue;
 
 	public CardWheelHorizontalView(Context context) {
 		this(context, null);
@@ -203,12 +211,12 @@ public class CardWheelHorizontalView extends LinearLayout implements OnWheelChan
 		return mTitleView.getText();
 	}
 
-	public void addChangingListener(OnCardWheelChangedListener listener) {
-		mChangingListeners.add(listener);
+	public void addScrollListener(OnCardWheelScrollListener listener) {
+		mScrollingListeners.add(listener);
 	}
 
-	public void removeChangingListener(OnCardWheelChangedListener listener) {
-		mChangingListeners.remove(listener);
+	public void removeChangingListener(OnCardWheelScrollListener listener) {
+		mScrollingListeners.remove(listener);
 	}
 
 	@Override
@@ -216,8 +224,8 @@ public class CardWheelHorizontalView extends LinearLayout implements OnWheelChan
 		final int oldValue = getValue(oldIndex);
 		final int newValue = getValue(newIndex);
 
-		for (OnCardWheelChangedListener listener : mChangingListeners) {
-			listener.onChanged(this, oldValue, newValue);
+		for (OnCardWheelScrollListener listener : mScrollingListeners) {
+			listener.onScrollingUpdate(this, oldValue, newValue);
 		}
 	}
 
@@ -236,10 +244,19 @@ public class CardWheelHorizontalView extends LinearLayout implements OnWheelChan
 	@Override
 	public void onScrollingStarted(AbstractWheel wheel) {
 		hideSoftInput();
+        scrollingStartValue = getCurrentValue();
+        for(OnCardWheelScrollListener listener: mScrollingListeners){
+            listener.onScrollingStarted(this, scrollingStartValue);
+        }
 	}
+
 
 	@Override
 	public void onScrollingFinished(AbstractWheel wheel) {
+        final int endValue = getCurrentValue();
+        for (OnCardWheelScrollListener listener : mScrollingListeners) {
+            listener.onScrollingEnded(this, scrollingStartValue, endValue);
+        }
 	}
 
 	private void showSoftInput(String currentValue) {

@@ -11,7 +11,7 @@ dependencies {
     compile 'com.android.support:cardview-v7:21.0.2'
     compile 'com.android.support:recyclerview-v7:21.0.2'
 
-    compile 'com.o3dr:3dr-services-lib:2.1.14'
+    compile 'com.o3dr:3dr-services-lib:2.1.17'
 
     compile files('libs/droneapi-java.jar')
     compile files('libs/j2xx.jar')
@@ -29,7 +29,7 @@ android {
         applicationId 'org.droidplanner.android'
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 30010
+        versionCode 30011
         versionName getGitVersion()
     }
 

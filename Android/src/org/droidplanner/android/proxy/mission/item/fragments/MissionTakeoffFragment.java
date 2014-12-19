@@ -9,7 +9,7 @@ import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 
 public class MissionTakeoffFragment extends MissionDetailFragment implements
-		CardWheelHorizontalView.OnCardWheelChangedListener {
+        CardWheelHorizontalView.OnCardWheelScrollListener {
 
 	@Override
 	protected int getResource() {
@@ -27,19 +27,29 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
 		CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) getView()
 				.findViewById(R.id.altitudePicker);
 		cardAltitudePicker.setViewAdapter(altitudeAdapter);
-		cardAltitudePicker.addChangingListener(this);
+		cardAltitudePicker.addScrollListener(this);
 
 		Takeoff item = (Takeoff) getMissionItems().get(0);
 		cardAltitudePicker.setCurrentValue((int) item.getTakeoffAltitude());
 	}
 
-	@Override
-	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
+    @Override
+    public void onScrollingStarted(CardWheelHorizontalView cardWheel, int startValue) {
+
+    }
+
+    @Override
+    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+
+    }
+
+    @Override
+	public void onScrollingEnded(CardWheelHorizontalView wheel, int startValue, int endValue) {
 		switch (wheel.getId()) {
 		case R.id.altitudePicker:
 			for (MissionItem missionItem : getMissionItems()) {
 				Takeoff item = (Takeoff) missionItem;
-				item.setTakeoffAltitude(newValue);
+				item.setTakeoffAltitude(endValue);
 			}
 			break;
 		}

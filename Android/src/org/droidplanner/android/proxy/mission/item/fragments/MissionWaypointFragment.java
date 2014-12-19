@@ -12,7 +12,7 @@ import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
 
 public class MissionWaypointFragment extends MissionDetailFragment implements
-		CardWheelHorizontalView.OnCardWheelChangedListener {
+        CardWheelHorizontalView.OnCardWheelScrollListener {
 
 	@Override
 	protected int getResource() {
@@ -33,7 +33,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
         CardWheelHorizontalView delayPicker = (CardWheelHorizontalView) view.findViewById(R.id
                 .waypointDelayPicker);
         delayPicker.setViewAdapter(delayAdapter);
-        delayPicker.addChangingListener(this);
+        delayPicker.addScrollListener(this);
 
 
         final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(context,
@@ -41,25 +41,35 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
         CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view.findViewById(R.id
                 .altitudePicker);
         altitudePicker.setViewAdapter(altitudeAdapter);
-        altitudePicker.addChangingListener(this);
+        altitudePicker.addScrollListener(this);
 
         final Waypoint item = (Waypoint) getMissionItems().get(0);
         delayPicker.setCurrentValue((int) item.getDelay());
         altitudePicker.setCurrentValue((int) item.getCoordinate().getAltitude());
     }
 
-	@Override
-	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
+    @Override
+    public void onScrollingStarted(CardWheelHorizontalView cardWheel, int startValue) {
+
+    }
+
+    @Override
+    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+
+    }
+
+    @Override
+	public void onScrollingEnded(CardWheelHorizontalView wheel, int startValue, int endValue) {
 		switch (wheel.getId()) {
 		case R.id.altitudePicker:
             for(MissionItem item: getMissionItems()) {
-                ((Waypoint)item).getCoordinate().setAltitude(newValue);
+                ((Waypoint)item).getCoordinate().setAltitude(endValue);
             }
 			break;
 
 		case R.id.waypointDelayPicker:
             for(MissionItem item: getMissionItems()) {
-                ((Waypoint)item).setDelay(newValue);
+                ((Waypoint)item).setDelay(endValue);
             }
 			break;
 		}

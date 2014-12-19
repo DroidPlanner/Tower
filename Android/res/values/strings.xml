@@ -212,7 +212,7 @@
     <string name="waypointInfo_SetJump">Repeat waypoint</string>
     
     <!-- Custom waypoint info -->
-    <string name="pwm">PWM:</string>
+    <string name="pwm">PWM</string>
 
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">One cannot add new waypoints after LAND or RTL</string>

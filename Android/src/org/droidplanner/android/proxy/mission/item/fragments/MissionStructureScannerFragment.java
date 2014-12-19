@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class MissionStructureScannerFragment extends MissionDetailFragment implements
-		CardWheelHorizontalView.OnCardWheelChangedListener, CompoundButton.OnCheckedChangeListener {
+        CardWheelHorizontalView.OnCardWheelScrollListener, CompoundButton.OnCheckedChangeListener {
 
 	private CamerasAdapter cameraAdapter;
 
@@ -57,25 +57,25 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 				.findViewById(R.id.radiusPicker);
 		radiusPicker.setViewAdapter(new NumericWheelAdapter(context, R.layout.wheel_text_centered,
 				2, 100, "%d m"));
-		radiusPicker.addChangingListener(this);
+		radiusPicker.addScrollListener(this);
 
 		CardWheelHorizontalView startAltitudeStepPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.startAltitudePicker);
 		startAltitudeStepPicker.setViewAdapter(new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, MIN_ALTITUDE, MAX_ALTITUDE, "%d m"));
-		startAltitudeStepPicker.addChangingListener(this);
+		startAltitudeStepPicker.addScrollListener(this);
 
 		CardWheelHorizontalView endAltitudeStepPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.heightStepPicker);
 		endAltitudeStepPicker.setViewAdapter(new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, 1, MAX_ALTITUDE, "%d m"));
-		endAltitudeStepPicker.addChangingListener(this);
+		endAltitudeStepPicker.addScrollListener(this);
 
 		CardWheelHorizontalView mNumberStepsPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.stepsPicker);
 		mNumberStepsPicker.setViewAdapter(new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, 1, 10, "%d"));
-		mNumberStepsPicker.addChangingListener(this);
+		mNumberStepsPicker.addScrollListener(this);
 
 		CheckBox checkBoxAdvanced = (CheckBox) view.findViewById(R.id.checkBoxSurveyCrossHatch);
 		checkBoxAdvanced.setOnCheckedChangeListener(this);
@@ -106,14 +106,24 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 			missionProxy.notifyMissionUpdate();
 	}
 
-	@Override
-	public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+    @Override
+    public void onScrollingStarted(CardWheelHorizontalView cardWheel, int startValue) {
+
+    }
+
+    @Override
+    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+
+    }
+
+    @Override
+	public void onScrollingEnded(CardWheelHorizontalView cardWheel, int startValue, int endValue) {
         Drone drone = getDrone();
 
 		switch (cardWheel.getId()) {
 		case R.id.radiusPicker: {
 			for (StructureScanner item : getMissionItems()) {
-                item.setRadius(newValue);
+                item.setRadius(endValue);
                 drone.buildComplexMissionItem(item);
             }
 			break;
@@ -121,7 +131,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 
 		case R.id.startAltitudePicker: {
 			for (StructureScanner item : getMissionItems()) {
-                item.getCoordinate().setAltitude(newValue);
+                item.getCoordinate().setAltitude(endValue);
                 drone.buildComplexMissionItem(item);
             }
 			break;
@@ -129,14 +139,14 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 
 		case R.id.heightStepPicker:
 			for (StructureScanner item : getMissionItems()) {
-                item.setHeightStep(newValue);
+                item.setHeightStep(endValue);
                 drone.buildComplexMissionItem(item);
             }
 			break;
 
 		case R.id.stepsPicker:
 			for (StructureScanner item : getMissionItems()) {
-                item.setStepsCount(newValue);
+                item.setStepsCount(endValue);
                 drone.buildComplexMissionItem(item);
             }
 			break;

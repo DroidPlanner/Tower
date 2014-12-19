@@ -11,7 +11,7 @@ import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.command.CameraTrigger;
 
 public class MissionCameraTriggerFragment extends MissionDetailFragment implements
-		CardWheelHorizontalView.OnCardWheelChangedListener {
+        CardWheelHorizontalView.OnCardWheelScrollListener {
 
 	@Override
 	protected int getResource() {
@@ -33,17 +33,27 @@ public class MissionCameraTriggerFragment extends MissionDetailFragment implemen
 		final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.picker1);
 		cardAltitudePicker.setViewAdapter(adapter);
-        cardAltitudePicker.addChangingListener(this);
+        cardAltitudePicker.addScrollListener(this);
 		cardAltitudePicker.setCurrentValue((int) item.getTriggerDistance());
 	}
 
-	@Override
-	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
+    @Override
+    public void onScrollingStarted(CardWheelHorizontalView cardWheel, int startValue) {
+
+    }
+
+    @Override
+    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+
+    }
+
+    @Override
+	public void onScrollingEnded(CardWheelHorizontalView wheel, int startValue, int endValue) {
 		switch (wheel.getId()) {
 		case R.id.picker1:
             for(MissionItem missionItem : getMissionItems()) {
             	CameraTrigger item = (CameraTrigger) missionItem;
-                item.setTriggerDistance(newValue);
+                item.setTriggerDistance(endValue);
             }
 			break;
 		}

@@ -61,7 +61,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 		mRadiusWheel = (CardWheelHorizontalView) parentView.findViewById(R.id.radius_spinner);
 		mRadiusWheel.setViewAdapter(radiusAdapter);
 		updateCurrentRadius();
-		mRadiusWheel.addChangingListener(this);
+		mRadiusWheel.addScrollListener(this);
 
 		spinner = (Spinner) parentView.findViewById(R.id.follow_type_spinner);
 		adapter = new ArrayAdapter<FollowType>(getActivity(), android.R.layout.simple_spinner_item);
@@ -93,7 +93,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	}
 
 	@Override
-	public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+	public void onScrollingEnded(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
 		switch (cardWheel.getId()) {
 		case R.id.radius_spinner:
 			final Drone drone = getDrone();
@@ -102,7 +102,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 			break;
 
 		default:
-			super.onChanged(cardWheel, oldValue, newValue);
+			super.onScrollingEnded(cardWheel, oldValue, newValue);
 			break;
 		}
 	}
