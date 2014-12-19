@@ -32,8 +32,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class MissionSurveyFragment extends MissionDetailFragment implements
-        CardWheelHorizontalView.OnCardWheelScrollListener,
-        SpinnerSelfSelect.OnSpinnerItemSelectedListener {
+        CardWheelHorizontalView.OnCardWheelScrollListener, SpinnerSelfSelect.OnSpinnerItemSelectedListener,
+        Drone.OnMissionItemsBuiltCallback {
 
     private static final String TAG = MissionSurveyFragment.class.getSimpleName();
 
@@ -46,17 +46,6 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
             if (MissionProxy.ACTION_MISSION_PROXY_UPDATE.equals(action)) {
                 updateViews();
             }
-        }
-    };
-
-    private final Drone.OnMissionItemsBuiltCallback<Survey> missionItemsBuiltListener = new Drone.OnMissionItemsBuiltCallback<Survey>() {
-        @Override
-        public void onMissionItemsBuilt(MissionItem.ComplexItem<Survey>[] complexItems) {
-            for (MissionItem.ComplexItem<Survey> item : complexItems) {
-                checkIfValid((Survey) item);
-            }
-
-            getMissionProxy().notifyMissionUpdate();
         }
     };
 
@@ -193,7 +182,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
                         final MissionItem.ComplexItem<Survey>[] surveys = surveyList
                                 .toArray(new MissionItem.ComplexItem[surveyList.size()]);
 
-                        drone.buildMissionItemsAsync(missionItemsBuiltListener, surveys);
+                        drone.buildMissionItemsAsync(this, surveys);
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Error while building the survey.", e);
@@ -306,4 +295,12 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
         }
     }
 
+    @Override
+    public void onMissionItemsBuilt(MissionItem.ComplexItem[] complexItems) {
+        for (MissionItem.ComplexItem<Survey> item : complexItems) {
+            checkIfValid((Survey) item);
+        }
+
+        getMissionProxy().notifyMissionUpdate();
+    }
 }
