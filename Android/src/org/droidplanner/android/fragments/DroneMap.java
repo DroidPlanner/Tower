@@ -83,10 +83,12 @@ public abstract class DroneMap extends ApiListenerFragment {
                 case AttributeEvent.HEARTBEAT_RESTORED:
                     mMapFragment.updateMarker(graphicDrone);
                     break;
+
                 case AttributeEvent.STATE_DISCONNECTED:
                 case AttributeEvent.HEARTBEAT_TIMEOUT:
                     mMapFragment.updateMarker(graphicDrone);
                     break;
+
                 case AttributeEvent.CAMERA_FOOTPRINTS_UPDATED: {
                     CameraProxy camera = drone.getAttribute(AttributeType.CAMERA);
                     if (camera != null && camera.getLastFootPrint() != null)
@@ -103,6 +105,9 @@ public abstract class DroneMap extends ApiListenerFragment {
                                 mMapFragment.updateRealTimeFootprint(camera.getCurrentFieldOfView());
                         }
 
+                    }
+                    else{
+                        mMapFragment.updateRealTimeFootprint(null);
                     }
                     break;
                 }

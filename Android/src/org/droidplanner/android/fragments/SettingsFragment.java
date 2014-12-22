@@ -87,24 +87,34 @@ public class SettingsFragment extends PreferenceFragment implements
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            final Activity activity = getActivity();
+            if(activity == null)
+                return;
+
             final String action = intent.getAction();
-            if (AttributeEvent.STATE_DISCONNECTED.equals(action)) {
-                updateMavlinkVersionPreference(null);
-                updateFirmwareVersionPreference(null);
-            } else if (AttributeEvent.HEARTBEAT_FIRST.equals(action)
-                    || AttributeEvent.HEARTBEAT_RESTORED.equals(action)) {
-                int mavlinkVersion = intent.getIntExtra(AttributeEventExtra.EXTRA_MAVLINK_VERSION, -1);
-                if (mavlinkVersion == -1)
+            switch (action) {
+                case AttributeEvent.STATE_DISCONNECTED:
                     updateMavlinkVersionPreference(null);
-                else
-                    updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
-            } else if (AttributeEvent.TYPE_UPDATED.equals(action)) {
-                Drone drone = dpApp.getDrone();
-                if (drone.isConnected()) {
-                    Type droneType = drone.getAttribute(AttributeType.TYPE);
-                    updateFirmwareVersionPreference(droneType.getFirmwareVersion());
-                } else
                     updateFirmwareVersionPreference(null);
+                    break;
+
+                case AttributeEvent.HEARTBEAT_FIRST:
+                case AttributeEvent.HEARTBEAT_RESTORED:
+                    int mavlinkVersion = intent.getIntExtra(AttributeEventExtra.EXTRA_MAVLINK_VERSION, -1);
+                    if (mavlinkVersion == -1)
+                        updateMavlinkVersionPreference(null);
+                    else
+                        updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
+                    break;
+
+                case AttributeEvent.TYPE_UPDATED:
+                    Drone drone = dpApp.getDrone();
+                    if (drone.isConnected()) {
+                        Type droneType = drone.getAttribute(AttributeType.TYPE);
+                        updateFirmwareVersionPreference(droneType.getFirmwareVersion());
+                    } else
+                        updateFirmwareVersionPreference(null);
+                    break;
             }
         }
     };
