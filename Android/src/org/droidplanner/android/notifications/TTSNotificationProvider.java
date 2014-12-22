@@ -17,8 +17,12 @@ import android.widget.Toast;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.Altitude;
 import com.o3dr.services.android.lib.drone.property.Battery;
 import com.o3dr.services.android.lib.drone.property.Gps;
+import com.o3dr.services.android.lib.drone.property.Signal;
+import com.o3dr.services.android.lib.drone.property.Speed;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 
@@ -104,8 +108,11 @@ public class TTSNotificationProvider implements OnInitListener,
 
 		public void run() {
 			handler.removeCallbacks(watchdogCallback);
-			if (drone != null && drone.isConnected() && drone.getState().isArmed()) {
-				speakPeriodic(drone);
+
+			if (drone != null) {
+                final State droneState = drone.getAttribute(AttributeType.STATE);
+                if(droneState.isConnected() && droneState.isArmed())
+				    speakPeriodic(drone);
 			}
 
 			if (statusInterval != 0) {
@@ -120,23 +127,24 @@ public class TTSNotificationProvider implements OnInitListener,
 
 				mMessageBuilder.setLength(0);
 				if (speechPrefs.get(R.string.pref_tts_periodic_bat_volt_key)) {
-					mMessageBuilder.append(String.format("battery %2.1f volts. ", drone
-							.getBattery().getBatteryVoltage()));
+                    final Battery droneBattery = drone.getAttribute(AttributeType.BATTERY);
+					mMessageBuilder.append(String.format("battery %2.1f volts. ", droneBattery.getBatteryVoltage()));
 				}
 
 				if (speechPrefs.get(R.string.pref_tts_periodic_alt_key)) {
-					mMessageBuilder.append("altitude, " + (int) (drone.getAltitude().getAltitude())
-							+ " meters. ");
+                    final Altitude altitude = drone.getAttribute(AttributeType.ALTITUDE);
+					mMessageBuilder.append("altitude, ").append((int) (altitude.getAltitude())).append(" meters. ");
 				}
 
 				if (speechPrefs.get(R.string.pref_tts_periodic_airspeed_key)) {
-					mMessageBuilder.append("airspeed, " + (int) (drone.getSpeed().getAirSpeed())
-							+ " meters per second. ");
+                    final Speed droneSpeed = drone.getAttribute(AttributeType.SPEED);
+					mMessageBuilder.append("airspeed, ").append((int) (droneSpeed.getAirSpeed()))
+                            .append(" meters per second. ");
 				}
 
 				if (speechPrefs.get(R.string.pref_tts_periodic_rssi_key)) {
-					mMessageBuilder.append("r s s i, " + (int) drone.getSignal().getRssi()
-							+ " decibels");
+                    final Signal signal = drone.getAttribute(AttributeType.SIGNAL);
+					mMessageBuilder.append("r s s i, ").append((int) signal.getRssi()).append(" decibels");
 				}
 
 				speak(mMessageBuilder.toString(), true, PERIODIC_STATUS_UTTERANCE_ID);
@@ -269,13 +277,13 @@ public class TTSNotificationProvider implements OnInitListener,
 				return;
 
 			final String action = intent.getAction();
-            State droneState = drone.getState();
+            State droneState = drone.getAttribute(AttributeType.STATE);
 
 			if (AttributeEvent.STATE_ARMING.equals(action)) {
                 if(droneState != null)
 				    speakArmedState(droneState.isArmed());
 			} else if (AttributeEvent.BATTERY_UPDATED.equals(action)) {
-                Battery droneBattery = drone.getBattery();
+                Battery droneBattery = drone.getAttribute(AttributeType.BATTERY);
                 if(droneBattery != null)
 				    batteryDischargeNotification(droneBattery.getBatteryRemain());
 			} else if (AttributeEvent.STATE_VEHICLE_MODE.equals(action)) {
@@ -285,7 +293,7 @@ public class TTSNotificationProvider implements OnInitListener,
 				Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT).show();
 				speak("Waypoints saved to Drone");
 			} else if (AttributeEvent.GPS_FIX.equals(action)) {
-                Gps droneGps = drone.getGps();
+                Gps droneGps = drone.getAttribute(AttributeType.GPS);
                 if(droneGps != null)
 				    speakGpsMode(droneGps.getFixType());
 			} else if (AttributeEvent.MISSION_RECEIVED.equals(action)) {

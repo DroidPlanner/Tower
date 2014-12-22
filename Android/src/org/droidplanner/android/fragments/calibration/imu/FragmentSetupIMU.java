@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.State;
 
 import org.droidplanner.android.R;
@@ -148,7 +149,7 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
     @Override
     public void onApiConnected() {
         Drone drone = getDrone();
-        State droneState = drone.getState();
+        State droneState = drone.getAttribute(AttributeType.STATE);
         if (drone.isConnected() && !droneState.isFlying()) {
             btnStep.setEnabled(true);
             if (droneState.isCalibrating()) {

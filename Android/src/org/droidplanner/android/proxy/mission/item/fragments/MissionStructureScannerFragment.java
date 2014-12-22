@@ -7,6 +7,7 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.mission.Mission;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
@@ -45,7 +46,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.STRUCTURE_SCANNER));
 
-        CameraProxy camera = getDrone().getCamera();
+        CameraProxy camera = getDrone().getAttribute(AttributeType.CAMERA);
         List<CameraDetail> cameraDetails = camera == null
                 ? Collections.<CameraDetail>emptyList()
                 :  camera.getAvailableCameraInfos();

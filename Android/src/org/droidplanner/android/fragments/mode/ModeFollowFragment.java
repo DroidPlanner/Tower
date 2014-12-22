@@ -15,6 +15,7 @@ import android.widget.Spinner;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.gcs.follow.FollowState;
 import com.o3dr.services.android.lib.gcs.follow.FollowType;
 
@@ -31,7 +32,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
 			if (AttributeEvent.FOLLOW_UPDATE.equals(action)) {
-				final FollowState followState = getDrone().getFollowState();
+				final FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
 				if (followState != null) {
 					spinner.setSelection(adapter.getPosition(followState.getMode()));
 				}
@@ -110,7 +111,8 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	private void updateCurrentRadius() {
 		final Drone drone = getDrone();
 		if (mRadiusWheel != null && drone.isConnected()) {
-			mRadiusWheel.setCurrentValue((int) drone.getFollowState().getRadius());
+            final FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
+			mRadiusWheel.setCurrentValue((int) followState.getRadius());
 		}
 	}
 

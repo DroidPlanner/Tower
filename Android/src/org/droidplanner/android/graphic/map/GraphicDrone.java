@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Attitude;
 import com.o3dr.services.android.lib.drone.property.Gps;
 
@@ -32,7 +33,8 @@ public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
 	@Override
 	public LatLong getPosition() {
-        return isValid() ? drone.getGps().getPosition() :  null;
+        Gps droneGps = drone.getAttribute(AttributeType.GPS);
+        return isValid() ? droneGps.getPosition() :  null;
 	}
 
 	@Override
@@ -56,12 +58,12 @@ public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
 	@Override
 	public float getRotation() {
-        Attitude attitude = drone.getAttitude();
+        Attitude attitude = drone.getAttribute(AttributeType.ATTITUDE);
 		return attitude == null ? 0 : (float) attitude.getYaw();
 	}
 
 	public boolean isValid() {
-        Gps droneGps = drone.getGps();
+        Gps droneGps = drone.getAttribute(AttributeType.GPS);
 		return droneGps != null && droneGps.isValid();
 	}
 }

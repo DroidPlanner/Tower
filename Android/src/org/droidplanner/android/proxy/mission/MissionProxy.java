@@ -15,6 +15,7 @@ import java.util.List;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
+import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.IO.MissionReader;
 import org.droidplanner.android.utils.file.IO.MissionWriter;
@@ -24,6 +25,7 @@ import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.mission.Mission;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
@@ -43,10 +45,7 @@ import com.o3dr.services.android.lib.util.MathUtils;
  */
 public class MissionProxy implements DPMap.PathSource {
 
-    private static final String CLAZZ_NAME = MissionProxy.class.getName();
-
-    public static final String ACTION_MISSION_PROXY_UPDATE = CLAZZ_NAME + "" +
-            ".ACTION_MISSION_PROXY_UPDATE";
+    public static final String ACTION_MISSION_PROXY_UPDATE = Utils.PACKAGE_NAME + ".ACTION_MISSION_PROXY_UPDATE";
 
     private static final double DEFAULT_ALTITUDE = 20; //meters
 
@@ -64,8 +63,16 @@ public class MissionProxy implements DPMap.PathSource {
             if(AttributeEvent.MISSION_DRONIE_CREATED.equals(action)
                     || AttributeEvent.MISSION_UPDATED.equals(action)
                     || AttributeEvent.MISSION_RECEIVED.equals(action)){
-                load(drone.getMission());
+                Mission droneMission = drone.getAttribute(AttributeType.MISSION);
+                load(droneMission);
             }
+        }
+    };
+
+    private final Drone.OnMissionItemsBuiltCallback missionItemsBuiltListener = new Drone.OnMissionItemsBuiltCallback() {
+        @Override
+        public void onMissionItemsBuilt(MissionItem.ComplexItem[] complexItems) {
+            notifyMissionUpdate();
         }
     };
 
@@ -552,29 +559,27 @@ public class MissionProxy implements DPMap.PathSource {
         notifyMissionUpdate();
 	}
 
-	public void move(MissionItemProxy item, LatLong position) {
+    public void move(MissionItemProxy item, LatLong position) {
         MissionItem missionItem = item.getMissionItem();
         if(missionItem instanceof SpatialItem){
             SpatialItem spatialItem = (SpatialItem) missionItem;
             spatialItem.setCoordinate(new LatLongAlt(position.getLatitude(),
                     position.getLongitude(), spatialItem.getCoordinate().getAltitude()));
 
-            if(spatialItem instanceof StructureScanner)
-                this.drone.buildComplexMissionItem((StructureScanner) spatialItem);
-            notifyMissionUpdate();
+            if(spatialItem instanceof StructureScanner){
+                this.drone.buildMissionItemsAsync(missionItemsBuiltListener, (StructureScanner) spatialItem);
+            }
         }
-	}
+    }
 
 	public List<LatLong> getVisibleCoords() {
         return getVisibleCoords(missionItemProxies);
     }
     
-	public void movePolygonPoint(Survey survey, int index, LatLong position) {
+    public void movePolygonPoint(Survey survey, int index, LatLong position) {
         survey.getPolygonPoints().get(index).set(position);
-        this.drone.buildComplexMissionItem(survey);
-
-		notifyMissionUpdate();
-	}
+        this.drone.buildMissionItemsAsync(missionItemsBuiltListener, survey);
+    }
 
     public static List<LatLong> getVisibleCoords(List<MissionItemProxy> mipList){
         final List<LatLong> coords = new ArrayList<LatLong>();

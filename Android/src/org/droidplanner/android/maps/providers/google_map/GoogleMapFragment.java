@@ -44,6 +44,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.FootPrint;
 import com.o3dr.services.android.lib.drone.property.Gps;
 
@@ -94,7 +95,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
             if (!drone.isConnected())
                 return;
 
-            final Gps droneGps = drone.getGps();
+            final Gps droneGps = drone.getAttribute(AttributeType.GPS);
             if (droneGps == null)
                 return;
 
@@ -688,7 +689,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         if (!dpApi.isConnected())
             return;
 
-        Gps gps = dpApi.getGps();
+        Gps gps = dpApi.getAttribute(AttributeType.GPS);
         if (!gps.isValid()) {
             Toast.makeText(getActivity().getApplicationContext(), R.string.drone_no_location, Toast.LENGTH_SHORT).show();
             return;

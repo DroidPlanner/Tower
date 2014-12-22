@@ -10,6 +10,10 @@ import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.Battery;
+import com.o3dr.services.android.lib.drone.property.Gps;
+import com.o3dr.services.android.lib.drone.property.State;
 
 public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickListener {
 	protected final CheckListItem checkListItem;
@@ -64,20 +68,27 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 	protected void getDroneVariable(Drone mDrone, CheckListItem mListItem) {
 		String sys_tag = mListItem.getSys_tag();
 
+        final Battery droneBattery = mDrone.getAttribute(AttributeType.BATTERY);
 		if (sys_tag.equalsIgnoreCase("SYS_BATTREM_LVL")) {
-			mListItem.setSys_value(mDrone.getBattery().getBatteryRemain());
+			mListItem.setSys_value(droneBattery.getBatteryRemain());
 		} else if (sys_tag.equalsIgnoreCase("SYS_BATTVOL_LVL")) {
-			mListItem.setSys_value(mDrone.getBattery().getBatteryVoltage());
+			mListItem.setSys_value(droneBattery.getBatteryVoltage());
 		} else if (sys_tag.equalsIgnoreCase("SYS_BATTCUR_LVL")) {
-			mListItem.setSys_value(mDrone.getBattery().getBatteryCurrent());
-		} else if (sys_tag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
-			mListItem.setSys_value(mDrone.getGps().getSatellitesCount());
-		} else if (sys_tag.equalsIgnoreCase("SYS_ARM_STATE")) {
-			mListItem.setSys_activated(mDrone.getState().isArmed());
+			mListItem.setSys_value(droneBattery.getBatteryCurrent());
+		}
+
+        final Gps droneGps = mDrone.getAttribute(AttributeType.GPS);
+        if (sys_tag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
+			mListItem.setSys_value(droneGps.getSatellitesCount());
+		}
+
+        final State droneState = mDrone.getAttribute(AttributeType.STATE);
+        if (sys_tag.equalsIgnoreCase("SYS_ARM_STATE")) {
+			mListItem.setSys_activated(droneState.isArmed());
 		} else if (sys_tag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
-			mListItem.setSys_activated(mDrone.getState().isWarning());
+			mListItem.setSys_activated(droneState.isWarning());
 		} else if (sys_tag.equalsIgnoreCase("SYS_CONNECTION_STATE")) {
-			mListItem.setSys_activated(mDrone.isConnected());
+			mListItem.setSys_activated(droneState.isConnected());
 		}
 	}
 

@@ -16,6 +16,11 @@ import com.getpebble.android.kit.PebbleKit.PebbleDataReceiver;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.Altitude;
+import com.o3dr.services.android.lib.drone.property.Battery;
+import com.o3dr.services.android.lib.drone.property.GuidedState;
+import com.o3dr.services.android.lib.drone.property.Speed;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.gcs.follow.FollowState;
@@ -56,7 +61,7 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
                     || AttributeEvent.FOLLOW_STOP.equals(action))) {
                 sendDataToWatchIfTimeHasElapsed(dpApi);
 
-                FollowState followState = dpApi.getFollowState();
+                FollowState followState = dpApi.getAttribute(AttributeType.FOLLOW_STATE);
                 if(followState != null) {
                     String eventLabel = null;
                     switch (followState.getState()) {
@@ -146,8 +151,8 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 	 * @param drone
 	 */
 	public void sendDataToWatchNow(Drone drone) {
-        final FollowState followState = drone.getFollowState();
-        final State droneState = drone.getState();
+        final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
+        final State droneState = drone.getAttribute(AttributeType.STATE);
         if(followState == null || droneState == null)
             return;
 
@@ -157,12 +162,13 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
         if(mode == null)
             return;
 
+        final GuidedState guidedState = drone.getAttribute(AttributeType.GUIDED_STATE);
         String modeLabel = mode.getLabel();
 		if (!droneState.isArmed())
 			modeLabel = "Disarmed";
 		else if (followState.isEnabled())
 			modeLabel = "Follow";
-		else if (drone.getGuidedState().isIdle())
+		else if (guidedState.isIdle())
 			modeLabel = "Paused";
 
 		data.addString(KEY_MODE, modeLabel);
@@ -173,14 +179,17 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 		} else
 			data.addString(KEY_FOLLOW_TYPE, "none");
 
-        Double battVoltage = drone.getBattery().getBatteryVoltage();
+        final Battery droneBattery = drone.getAttribute(AttributeType.BATTERY);
+        Double battVoltage = droneBattery.getBatteryVoltage();
         if(battVoltage != null)
             battVoltage = 0.0;
 		String bat = "Bat:" + Double.toString(roundToOneDecimal(battVoltage))	+ "V";
-		String speed = "Speed: " + Double.toString(roundToOneDecimal(
-                drone.getSpeed().getAirSpeed()));
-		String altitude = "Alt: "
-				+ Double.toString(roundToOneDecimal(drone.getAltitude().getAltitude()));
+
+        final Speed droneSpeed = drone.getAttribute(AttributeType.SPEED);
+		String speed = "Speed: " + Double.toString(roundToOneDecimal(droneSpeed.getAirSpeed()));
+
+        final Altitude droneAltitude = drone.getAttribute(AttributeType.ALTITUDE);
+		String altitude = "Alt: "	+ Double.toString(roundToOneDecimal(droneAltitude.getAltitude()));
 		String telem = bat + "\n" + altitude + "\n" + speed;
 		data.addString(KEY_TELEM, telem);
 
@@ -207,7 +216,7 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 
 		@Override
 		public void receiveData(Context context, int transactionId, PebbleDictionary data) {
-			FollowState followMe = dpApi.getFollowState();
+			FollowState followMe = dpApi.getAttribute(AttributeType.FOLLOW_STATE);
             if(followMe == null)
                 return ;
 			PebbleKit.sendAckToPebble(applicationContext, transactionId);

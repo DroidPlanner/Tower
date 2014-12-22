@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.CameraProxy;
 import com.o3dr.services.android.lib.drone.property.Gps;
 
@@ -59,38 +60,53 @@ public abstract class DroneMap extends ApiListenerFragment {
 				return;
 
 			final String action = intent.getAction();
-			if (MissionProxy.ACTION_MISSION_PROXY_UPDATE.equals(action)) {
-				postUpdate();
-			} else if (AttributeEvent.GPS_POSITION.equals(action)) {
-				mMapFragment.updateMarker(graphicDrone);
-				mMapFragment.updateDroneLeashPath(guided);
-				final Gps droneGps = drone.getGps();
-				if (droneGps != null && droneGps.isValid()) {
-					mMapFragment.addFlightPathPoint(droneGps.getPosition());
-				}
-			} else if (AttributeEvent.GUIDED_POINT_UPDATED.equals(action)) {
-				mMapFragment.updateMarker(guided);
-				mMapFragment.updateDroneLeashPath(guided);
-			} else if (AttributeEvent.HEARTBEAT_FIRST.equals(action)
-					|| AttributeEvent.HEARTBEAT_RESTORED.equals(action)) {
-				mMapFragment.updateMarker(graphicDrone);
-			} else if (AttributeEvent.STATE_DISCONNECTED.equals(action)
-					|| AttributeEvent.HEARTBEAT_TIMEOUT.equals(action)) {
-				mMapFragment.updateMarker(graphicDrone);
-			} else if (AttributeEvent.CAMERA_FOOTPRINTS_UPDATED.equals(action)) {
-                CameraProxy camera = drone.getCamera();
-                if(camera != null && camera.getLastFootPrint() != null)
-				    mMapFragment.addCameraFootprint(camera.getLastFootPrint());
-			} else if (AttributeEvent.ATTITUDE_UPDATED.equals(action)) {
-				if (mAppPrefs.isRealtimeFootprintsEnabled()) {
-					if (drone.getGps().isValid()) {
-                        CameraProxy camera = drone.getCamera();
-                        if(camera != null && camera.getCurrentFieldOfView() != null)
-						    mMapFragment.updateRealTimeFootprint(camera.getCurrentFieldOfView());
-					}
+            switch (action) {
+                case MissionProxy.ACTION_MISSION_PROXY_UPDATE:
+                    postUpdate();
+                    break;
+                case AttributeEvent.GPS_POSITION: {
+                    mMapFragment.updateMarker(graphicDrone);
+                    mMapFragment.updateDroneLeashPath(guided);
+                    final Gps droneGps = drone.getAttribute(AttributeType.GPS);
+                    if (droneGps != null && droneGps.isValid()) {
+                        mMapFragment.addFlightPathPoint(droneGps.getPosition());
+                    }
+                    break;
+                }
 
-				}
-			}
+                case AttributeEvent.GUIDED_POINT_UPDATED:
+                    mMapFragment.updateMarker(guided);
+                    mMapFragment.updateDroneLeashPath(guided);
+                    break;
+
+                case AttributeEvent.HEARTBEAT_FIRST:
+                case AttributeEvent.HEARTBEAT_RESTORED:
+                    mMapFragment.updateMarker(graphicDrone);
+                    break;
+                case AttributeEvent.STATE_DISCONNECTED:
+                case AttributeEvent.HEARTBEAT_TIMEOUT:
+                    mMapFragment.updateMarker(graphicDrone);
+                    break;
+                case AttributeEvent.CAMERA_FOOTPRINTS_UPDATED: {
+                    CameraProxy camera = drone.getAttribute(AttributeType.CAMERA);
+                    if (camera != null && camera.getLastFootPrint() != null)
+                        mMapFragment.addCameraFootprint(camera.getLastFootPrint());
+                    break;
+                }
+
+                case AttributeEvent.ATTITUDE_UPDATED: {
+                    if (mAppPrefs.isRealtimeFootprintsEnabled()) {
+                        final Gps droneGps = drone.getAttribute(AttributeType.GPS);
+                        if (droneGps.isValid()) {
+                            CameraProxy camera = drone.getAttribute(AttributeType.CAMERA);
+                            if (camera != null && camera.getCurrentFieldOfView() != null)
+                                mMapFragment.updateRealTimeFootprint(camera.getCurrentFieldOfView());
+                        }
+
+                    }
+                    break;
+                }
+            }
 		}
 	};
 

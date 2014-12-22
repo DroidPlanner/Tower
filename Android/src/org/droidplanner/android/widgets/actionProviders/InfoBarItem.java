@@ -22,10 +22,13 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Battery;
 import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.Home;
 import com.o3dr.services.android.lib.drone.property.Signal;
+import com.o3dr.services.android.lib.drone.property.State;
+import com.o3dr.services.android.lib.drone.property.Type;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.util.MathUtils;
 
@@ -115,8 +118,8 @@ public abstract class InfoBarItem {
 			if (mItemView != null) {
 				String update = "--";
                 if(drone != null && drone.isConnected()) {
-                    final Gps droneGps = drone.getGps();
-                    final Home droneHome = drone.getHome();
+                    final Gps droneGps = drone.getAttribute(AttributeType.GPS);
+                    final Home droneHome = drone.getAttribute(AttributeType.HOME);
                     if(droneGps.isValid() && droneHome.isValid()) {
                         double distanceToHome = MathUtils.getDistance(droneHome.getCoordinate(),
                                 droneGps.getPosition());
@@ -149,7 +152,7 @@ public abstract class InfoBarItem {
 				if (drone == null || !drone.isConnected()) {
 					update = "--";
 				} else{
-                    Gps droneGps = drone.getGps();
+                    Gps droneGps = drone.getAttribute(AttributeType.GPS);
                     if (mAppPrefs.shouldGpsHdopBeDisplayed()) {
                         update = String.format(Locale.ENGLISH, "Satellite\n%d, %.1f", droneGps
                                 .getSatellitesCount(), droneGps.getGpsEph());
@@ -334,7 +337,7 @@ public abstract class InfoBarItem {
 
 			String infoUpdate;
             Battery droneBattery;
-			if (drone == null || !drone.isConnected() || ((droneBattery = drone.getBattery()) ==
+			if (drone == null || !drone.isConnected() || ((droneBattery = drone.getAttribute(AttributeType.BATTERY)) ==
                     null)) {
 				infoUpdate = sDefaultValue;
 				currentView.setText(sDefaultValue);
@@ -426,17 +429,18 @@ public abstract class InfoBarItem {
 
 			if (drone == null || !drone.isConnected()) {
 				setDefaultValues();
-			}else if (!drone.getSignal().isValid()){
-				setDefaultValues();
-			}else{
-				setValuesFromRadio(drone);
-			}
-
+			}else {
+                final Signal droneSignal = drone.getAttribute(AttributeType.SIGNAL);
+                if (!droneSignal.isValid()) {
+                    setDefaultValues();
+                } else {
+                    setValuesFromRadio(droneSignal);
+                }
+            }
 			mPopup.update();
 		}
 
-		private void setValuesFromRadio(final Drone drone) {
-            Signal droneSignal = drone.getSignal();
+		private void setValuesFromRadio(final Signal droneSignal) {
 			((TextView) mItemView).setText(String.format(Locale.ENGLISH, "%d%%",
                     MathUtils.getSignalStrength(droneSignal.getFadeMargin(),
                             droneSignal.getRemFadeMargin())));
@@ -524,9 +528,17 @@ public abstract class InfoBarItem {
 			if (mItemView == null)
 				return;
 
+            final boolean isDroneConnected = drone != null && mDrone.isConnected();
 			final SpinnerSelfSelect modesSpinner = (SpinnerSelfSelect) mItemView;
-			final int droneType = drone == null || !drone.isConnected() ? -1 : drone.getType()
-                    .getDroneType();
+			final int droneType;
+            if(isDroneConnected){
+                Type type = mDrone.getAttribute(AttributeType.TYPE);
+                droneType = type.getDroneType();
+            }
+            else{
+                droneType = -1;
+            }
+
 			if (droneType != mLastDroneType) {
 				final List<VehicleMode> flightModes = VehicleMode.getVehicleModePerDroneType(droneType);
 
@@ -537,9 +549,9 @@ public abstract class InfoBarItem {
 				mLastDroneType = droneType;
 			}
 
-			if (mDrone != null && mDrone.isConnected()) {
-                modesSpinner.forcedSetSelection(mModeAdapter.getPosition(mDrone.getState()
-                        .getVehicleMode()));
+			if (isDroneConnected) {
+                final State droneState = mDrone.getAttribute(AttributeType.STATE);
+                modesSpinner.forcedSetSelection(mModeAdapter.getPosition(droneState.getVehicleMode()));
             }
 		}
 	}

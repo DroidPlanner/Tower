@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
@@ -82,7 +83,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
         final View view = getView();
         final Context context = getActivity().getApplicationContext();
 
-        CameraProxy camera = getDrone().getCamera();
+        CameraProxy camera = getDrone().getAttribute(AttributeType.CAMERA);
         List<CameraDetail> cameraDetails = camera == null
                 ? Collections.<CameraDetail>emptyList()
                 : camera.getAvailableCameraInfos();

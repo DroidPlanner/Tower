@@ -28,6 +28,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.Type;
@@ -100,7 +101,8 @@ public class SettingsFragment extends PreferenceFragment implements
             } else if (AttributeEvent.TYPE_UPDATED.equals(action)) {
                 Drone drone = dpApp.getDrone();
                 if (drone.isConnected()) {
-                    updateFirmwareVersionPreference(drone.getType().getFirmwareVersion());
+                    Type droneType = drone.getAttribute(AttributeType.TYPE);
+                    updateFirmwareVersionPreference(droneType.getFirmwareVersion());
                 } else
                     updateFirmwareVersionPreference(null);
             }
@@ -499,8 +501,8 @@ public class SettingsFragment extends PreferenceFragment implements
     @Override
     public void onApiConnected() {
         Drone drone = dpApp.getDrone();
-        State droneState = drone.getState();
-        Type droneType = drone.getType();
+        State droneState = drone.getAttribute(AttributeType.STATE);
+        Type droneType = drone.getAttribute(AttributeType.TYPE);
         final int mavlinkVersion = droneState == null
                 ? State.INVALID_MAVLINK_VERSION
                 : droneState.getMavlinkVersion();

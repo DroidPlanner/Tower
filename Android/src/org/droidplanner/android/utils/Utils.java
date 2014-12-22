@@ -14,6 +14,8 @@ import java.util.Locale;
  */
 public class Utils {
 
+    public static final String PACKAGE_NAME = "org.droidplanner.android";
+
 	/**
 	 * Returns the map provider selected by the user.
 	 * 

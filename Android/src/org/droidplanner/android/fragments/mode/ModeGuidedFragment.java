@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.GuidedState;
 
 import org.droidplanner.android.R;
@@ -70,7 +71,7 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
 	@Override
 	public void onApiConnected() {
 		if (mAltitudeWheel != null) {
-            GuidedState guidedState = getDrone().getGuidedState();
+            GuidedState guidedState = getDrone().getAttribute(AttributeType.GUIDED_STATE);
 
 			final int initialValue = (int) Math.max(guidedState == null
                     ? DEFAULT_ALTITUDE

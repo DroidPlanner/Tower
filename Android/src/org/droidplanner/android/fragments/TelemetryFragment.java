@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Altitude;
 import com.o3dr.services.android.lib.drone.property.Attitude;
 import com.o3dr.services.android.lib.drone.property.Speed;
@@ -35,11 +36,21 @@ public class TelemetryFragment extends ApiListenerFragment {
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
 			final Drone drone = getDrone();
-			if (AttributeEvent.ATTITUDE_UPDATED.equals(action)) {
-				onOrientationUpdate(drone.getAttitude());
-			} else if (AttributeEvent.SPEED_UPDATED.equals(action)) {
-				onSpeedAltitudeAndClimbRateUpdate(drone.getSpeed(), drone.getAltitude());
-			}
+
+            switch (action) {
+                case AttributeEvent.ATTITUDE_UPDATED:
+                    final Attitude attitude = drone.getAttribute(AttributeType.ATTITUDE);
+                    onOrientationUpdate(attitude);
+                    break;
+
+                case AttributeEvent.SPEED_UPDATED:
+                    final Speed droneSpeed = drone.getAttribute(AttributeType.SPEED);
+                    onSpeedUpdate(droneSpeed);
+
+                    final Altitude droneAltitude = drone.getAttribute(AttributeType.ALTITUDE);
+                    onAltitudeUpdate(droneAltitude);
+                    break;
+            }
 		}
 	};
 
@@ -111,13 +122,15 @@ public class TelemetryFragment extends ApiListenerFragment {
 
 	}
 
-	public void onSpeedAltitudeAndClimbRateUpdate(Speed speed, Altitude altitude) {
+	private void onSpeedUpdate(Speed speed) {
         if(speed != null) {
             airSpeed.setText(String.format("%3.1f", speed.getAirSpeed()));
             groundSpeed.setText(String.format("%3.1f", speed.getGroundSpeed()));
             climbRate.setText(String.format("%3.1f", speed.getVerticalSpeed()));
         }
+	}
 
+    private void onAltitudeUpdate(Altitude altitude){
         if(altitude != null) {
             double alt = altitude.getAltitude();
             double targetAlt = altitude.getTargetAltitude();
@@ -125,6 +138,6 @@ public class TelemetryFragment extends ApiListenerFragment {
             this.altitude.setText(String.format("%3.1f", alt));
             targetAltitude.setText(String.format("%3.1f", targetAlt));
         }
-	}
+    }
 
 }

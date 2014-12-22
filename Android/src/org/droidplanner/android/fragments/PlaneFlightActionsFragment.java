@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.GuidedState;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.gcs.follow.FollowState;
@@ -56,59 +58,65 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if (AttributeEvent.STATE_CONNECTED.equals(action) || AttributeEvent.STATE_DISCONNECTED.equals(action)
-                    || AttributeEvent.STATE_UPDATED.equals(action)) {
-                setupButtonsByFlightState();
-            } else if (AttributeEvent.STATE_VEHICLE_MODE.equals(action)) {
-                updateFlightModeButtons();
-            } else if (AttributeEvent.FOLLOW_START.equals(action)
-                    || AttributeEvent.FOLLOW_STOP.equals(action)
-                    || AttributeEvent.FOLLOW_UPDATE.equals(action)) {
-                updateFlightModeButtons();
-                updateFollowButton();
+            switch (action) {
+                case AttributeEvent.STATE_CONNECTED:
+                case AttributeEvent.STATE_DISCONNECTED:
+                case AttributeEvent.STATE_UPDATED:
+                    setupButtonsByFlightState();
+                    break;
 
-                if((AttributeEvent.FOLLOW_START.equals(action)
-                        || AttributeEvent.FOLLOW_STOP.equals(action))) {
-                    final FollowState followState = getDrone().getFollowState();
-                    if (followState != null) {
-                        String eventLabel = null;
-                        switch (followState.getState()) {
-                            case FollowState.STATE_START:
-                                eventLabel = "FollowMe enabled";
-                                break;
+                case AttributeEvent.STATE_VEHICLE_MODE:
+                    updateFlightModeButtons();
+                    break;
 
-                            case FollowState.STATE_RUNNING:
-                                eventLabel = "FollowMe running";
-                                break;
+                case AttributeEvent.FOLLOW_START:
+                case AttributeEvent.FOLLOW_STOP:
+                case AttributeEvent.FOLLOW_UPDATE:
+                    updateFlightModeButtons();
+                    updateFollowButton();
 
-                            case FollowState.STATE_END:
-                                eventLabel = "FollowMe disabled";
-                                break;
+                    if ((AttributeEvent.FOLLOW_START.equals(action) || AttributeEvent.FOLLOW_STOP.equals(action))) {
+                        final FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
+                        if (followState != null) {
+                            String eventLabel = null;
+                            switch (followState.getState()) {
+                                case FollowState.STATE_START:
+                                    eventLabel = "FollowMe enabled";
+                                    break;
 
-                            case FollowState.STATE_INVALID:
-                                eventLabel = "FollowMe error: invalid state";
-                                break;
+                                case FollowState.STATE_RUNNING:
+                                    eventLabel = "FollowMe running";
+                                    break;
 
-                            case FollowState.STATE_DRONE_DISCONNECTED:
-                                eventLabel = "FollowMe error: drone not connected";
-                                break;
+                                case FollowState.STATE_END:
+                                    eventLabel = "FollowMe disabled";
+                                    break;
 
-                            case FollowState.STATE_DRONE_NOT_ARMED:
-                                eventLabel = "FollowMe error: drone not armed";
-                                break;
-                        }
+                                case FollowState.STATE_INVALID:
+                                    eventLabel = "FollowMe error: invalid state";
+                                    break;
 
-                        if (eventLabel != null) {
-                            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                                    .setCategory(GAUtils.Category.FLIGHT)
-                                    .setAction(ACTION_FLIGHT_ACTION_BUTTON)
-                                    .setLabel(eventLabel);
-                            GAUtils.sendEvent(eventBuilder);
+                                case FollowState.STATE_DRONE_DISCONNECTED:
+                                    eventLabel = "FollowMe error: drone not connected";
+                                    break;
 
-                            Toast.makeText(getActivity(), eventLabel, Toast.LENGTH_SHORT).show();
+                                case FollowState.STATE_DRONE_NOT_ARMED:
+                                    eventLabel = "FollowMe error: drone not armed";
+                                    break;
+                            }
+
+                            if (eventLabel != null) {
+                                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                                        .setCategory(GAUtils.Category.FLIGHT)
+                                        .setAction(ACTION_FLIGHT_ACTION_BUTTON)
+                                        .setLabel(eventLabel);
+                                GAUtils.sendEvent(eventBuilder);
+
+                                Toast.makeText(getActivity(), eventLabel, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
-                }
+                    break;
             }
         }
     };
@@ -142,7 +150,8 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
 	}
 
 	private void updateFollowButton() {
-		switch (getDrone().getFollowState().getState()) {
+        final FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
+		switch (followState.getState()) {
 		case FollowState.STATE_START:
 			followBtn.setBackgroundColor(Color.RED);
 			break;
@@ -161,7 +170,8 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
 		resetFlightModeButtons();
 
 		final Drone drone = getDrone();
-		final VehicleMode flightMode = drone.getState().getVehicleMode();
+        final State droneState = drone.getAttribute(AttributeType.STATE);
+		final VehicleMode flightMode = droneState.getVehicleMode();
         if(flightMode != null) {
             switch (flightMode) {
                 case PLANE_AUTO:
@@ -169,7 +179,9 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
                     break;
 
                 case PLANE_GUIDED:
-                    if (drone.getGuidedState().isInitialized() && !drone.getFollowState().isEnabled()) {
+                    final GuidedState guidedState = drone.getAttribute(AttributeType.GUIDED_STATE);
+                    final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
+                    if (guidedState.isInitialized() && !followState.isEnabled()) {
                         pauseBtn.setActivated(true);
                     }
                     break;
@@ -227,14 +239,16 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
                     .setLabel(VehicleMode.PLANE_RTL.getLabel());
 			break;
 
-		case R.id.mc_pause:
-			if (drone.getFollowState().isEnabled()) {
-				drone.disableFollowMe();
-			}
+		case R.id.mc_pause: {
+            final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
+            if (followState.isEnabled()){
+                drone.disableFollowMe();
+            }
 
-			drone.pauseAtCurrentLocation();
-			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Pause");
-			break;
+            drone.pauseAtCurrentLocation();
+            eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Pause");
+            break;
+        }
 
 		case R.id.mc_autoBtn:
 			drone.changeVehicleMode(VehicleMode.PLANE_AUTO);
@@ -242,12 +256,14 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
                     .setLabel(VehicleMode.PLANE_AUTO.getLabel());
 			break;
 
-		case R.id.mc_follow:
-            if(drone.getFollowState().isEnabled())
+		case R.id.mc_follow: {
+            final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
+            if (followState.isEnabled()) {
                 drone.disableFollowMe();
-            else
+            } else
                 drone.enableFollowMe(FollowType.LEASH);
-			break;
+            break;
+        }
 
 		default:
 			eventBuilder = null;
@@ -260,7 +276,8 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
 	}
 
 	@Override
-	public boolean isSlidingUpPanelEnabled(Drone api) {
-		return api.isConnected() && api.getState().isArmed();
+	public boolean isSlidingUpPanelEnabled(Drone drone) {
+        final State droneState = drone.getAttribute(AttributeType.STATE);
+		return droneState.isConnected() && droneState.isArmed();
 	}
 }
