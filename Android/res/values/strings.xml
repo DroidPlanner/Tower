@@ -535,5 +535,7 @@
         dronie.</string>
     <string name="editor_multi_edit_no_waypoint_error">No waypoint(s) selected.</string>
     <string name="failed_start_calibration_message">Unable to start calibration!</string>
+    <string name="pref_advanced_menu_title">Advanced Menu</string>
+    <string name="pref_advanced_menu_summary">Enable advanced menu options.</string>
 
 </resources>

@@ -21,19 +21,29 @@
             android:id="@+id/menu_load_mission"
             app:showAsAction="never"
             android:title="@string/load_mission"/>
-        
+
         <item
-            android:id="@+id/menu_triggerCamera"
-            app:showAsAction="never"
-            android:title="Picture"/>
-        <item
-            android:id="@+id/menu_epm_release"
-            app:showAsAction="never"
-            android:title="Release"/>
-        <item
-            android:id="@+id/menu_epm_grab"
-            app:showAsAction="never"
-            android:title="Grab"/>
+            android:id="@+id/menu_advanced"
+            android:enabled="false"
+            android:visible="false"
+            android:title="Advanced"
+            app:showAsAction="never">
+            <menu>
+                <item
+                    android:id="@+id/menu_triggerCamera"
+                    app:showAsAction="never"
+                    android:title="Picture"/>
+                <item
+                    android:id="@+id/menu_epm_release"
+                    app:showAsAction="never"
+                    android:title="Release"/>
+                <item
+                    android:id="@+id/menu_epm_grab"
+                    app:showAsAction="never"
+                    android:title="Grab"/>
+            </menu>
+        </item>
+
     </group>
 
     <item

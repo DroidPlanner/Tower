@@ -37,16 +37,25 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
     static {
         superIntentFilter.addAction(AttributeEvent.STATE_CONNECTED);
         superIntentFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+        superIntentFilter.addAction(Utils.ACTION_UPDATE_OPTIONS_MENU);
     }
 
     private final BroadcastReceiver superReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if (AttributeEvent.STATE_CONNECTED.equals(action)) {
-                onDroneConnected();
-            } else if (AttributeEvent.STATE_DISCONNECTED.equals(action)) {
-                onDroneDisconnected();
+            switch (action) {
+                case AttributeEvent.STATE_CONNECTED:
+                    onDroneConnected();
+                    break;
+
+                case AttributeEvent.STATE_DISCONNECTED:
+                    onDroneDisconnected();
+                    break;
+
+                case Utils.ACTION_UPDATE_OPTIONS_MENU:
+                    invalidateOptionsMenu();
+                    break;
             }
         }
     };
@@ -181,6 +190,11 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
         if (dpApi.isConnected()) {
             menu.setGroupEnabled(R.id.menu_group_connected, true);
             menu.setGroupVisible(R.id.menu_group_connected, true);
+
+            final boolean isAdvancedEnabled = mAppPrefs.isAdvancedMenuEnabled();
+            final MenuItem advancedSubMenu = menu.findItem(R.id.menu_advanced);
+            advancedSubMenu.setEnabled(isAdvancedEnabled);
+            advancedSubMenu.setVisible(isAdvancedEnabled);
 
             final boolean areMissionMenusEnabled = enableMissionMenus();
 

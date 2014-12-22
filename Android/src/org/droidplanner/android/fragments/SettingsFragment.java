@@ -37,6 +37,7 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -128,6 +129,7 @@ public class SettingsFragment extends PreferenceFragment implements
 
     private DroidPlannerApp dpApp;
     private DroidPlannerPrefs dpPrefs;
+    private LocalBroadcastManager lbm;
 
     @Override
     public void onAttach(Activity activity) {
@@ -144,6 +146,7 @@ public class SettingsFragment extends PreferenceFragment implements
 
         final Context context = getActivity().getApplicationContext();
         dpPrefs = new DroidPlannerPrefs(context);
+        lbm = LocalBroadcastManager.getInstance(context);
         final SharedPreferences sharedPref = dpPrefs.prefs;
 
         setupPeriodicControls();
@@ -244,6 +247,21 @@ public class SettingsFragment extends PreferenceFragment implements
         updateMavlinkVersionPreference(null);
         setupPebblePreference();
         setupConnectionPreferences();
+        setupAdvancedMenuToggle();
+    }
+
+    private void setupAdvancedMenuToggle(){
+        CheckBoxPreference togglePref = (CheckBoxPreference) findPreference(getString(R.string
+                .pref_advanced_menu_toggle_key));
+        if(togglePref != null){
+            togglePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    lbm.sendBroadcast(new Intent(Utils.ACTION_UPDATE_OPTIONS_MENU));
+                    return true;
+                }
+            });
+        }
     }
 
     private void setupConnectionPreferences() {
@@ -452,14 +470,12 @@ public class SettingsFragment extends PreferenceFragment implements
             public boolean onPreferenceChange(Preference preference, final Object newValue) {
                 // Broadcast the event locally on update.
                 // A handler is used to that the current action has the time to
-                // return,
-                // and store the value in the preferences.
+                // return, and store the value in the preferences.
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
-                                new Intent(ACTION_UPDATED_STATUS_PERIOD).putExtra(
-                                        EXTRA_UPDATED_STATUS_PERIOD, (String) newValue));
+                        lbm.sendBroadcast(new Intent(ACTION_UPDATED_STATUS_PERIOD)
+                                .putExtra(EXTRA_UPDATED_STATUS_PERIOD, (String) newValue));
 
                         setupPeriodicControls();
                     }
@@ -526,13 +542,11 @@ public class SettingsFragment extends PreferenceFragment implements
         String firmwareVersion = droneType == null ? null : droneType.getFirmwareVersion();
         updateFirmwareVersionPreference(firmwareVersion);
 
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(
-                broadcastReceiver, intentFilter);
+        lbm.registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onApiDisconnected() {
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
-                .unregisterReceiver(broadcastReceiver);
+        lbm.unregisterReceiver(broadcastReceiver);
     }
 }

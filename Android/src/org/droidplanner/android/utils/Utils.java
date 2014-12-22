@@ -16,6 +16,8 @@ public class Utils {
 
     public static final String PACKAGE_NAME = "org.droidplanner.android";
 
+    public static final String ACTION_UPDATE_OPTIONS_MENU = PACKAGE_NAME + ".UPDATE_OPTIONS_MENU";
+
 	/**
 	 * Returns the map provider selected by the user.
 	 * 

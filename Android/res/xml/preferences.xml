@@ -354,6 +354,13 @@
                     android:summary="@string/pref_ui_gps_hdop_summary"
                     android:title="@string/pref_ui_gps_hdop_title" />
             </PreferenceCategory>
+            <PreferenceCategory android:title="@string/pref_misc_title">
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="@string/pref_advanced_menu_toggle_key"
+                    android:title="@string/pref_advanced_menu_title"
+                    android:summary="@string/pref_advanced_menu_summary"/>
+            </PreferenceCategory>
             <PreferenceCategory android:title="@string/pref_pebble" >
                 <Preference
                     android:key="@string/pref_pebble_install_key"
