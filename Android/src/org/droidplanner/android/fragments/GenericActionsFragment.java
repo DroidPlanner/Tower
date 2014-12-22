@@ -42,7 +42,7 @@ public class GenericActionsFragment extends Fragment implements View.OnClickList
     }
 
     @Override
-    public boolean isSlidingUpPanelEnabled(Drone api) {
+    public boolean isSlidingUpPanelEnabled(Drone drone) {
         return false;
     }
 }

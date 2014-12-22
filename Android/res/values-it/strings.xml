@@ -8,8 +8,8 @@
     <string name="app_settings">Impostazioni App</string>
     <string name="flight_data">Dati volo</string>
     <string name="editor">Editore</string>
-    <string name="send_mission">Invia missione</string>
-    <string name="load_mission">Carica missione</string>
+    <string name="upload_mission">Invia missione</string>
+    <string name="download_mission">Carica missione</string>
 
     <!-- Drone Setup tabs -->
     <string name="screen_tuning">Messa a punto</string>

@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.GuidedState;
 
@@ -30,9 +31,9 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSo
 	@Override
 	public List<LatLong> getPathPoints() {
 		List<LatLong> path = new ArrayList<LatLong>();
-        GuidedState guidedPoint = drone.getGuidedState();
+        GuidedState guidedPoint = drone.getAttribute(AttributeType.GUIDED_STATE);
 		if (guidedPoint != null && guidedPoint.isActive()) {
-            Gps gps = drone.getGps();
+            Gps gps = drone.getAttribute(AttributeType.GPS);
 			if (gps != null && gps.isValid()) {
 				path.add(gps.getPosition());
 			}
@@ -43,7 +44,7 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSo
 
 	@Override
 	public boolean isVisible() {
-        GuidedState guidedPoint = drone.getGuidedState();
+        GuidedState guidedPoint = drone.getAttribute(AttributeType.GUIDED_STATE);
 		return guidedPoint != null && guidedPoint.isActive();
 	}
 
@@ -59,7 +60,7 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSo
 
 	@Override
 	public LatLong getPosition() {
-        GuidedState guidedPoint = drone.getGuidedState();
+        GuidedState guidedPoint = drone.getAttribute(AttributeType.GUIDED_STATE);
 		return guidedPoint == null ? null : guidedPoint.getCoordinate();
 	}
 

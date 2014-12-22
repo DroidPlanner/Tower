@@ -9,8 +9,8 @@
     <string name="help">Hilfe</string>
     <string name="menu_drone_setup">Drohnen-Setup</string>
     <string name="editor">Editor</string>
-    <string name="send_mission">Mission senden</string>
-    <string name="load_mission">Mission laden</string>
+    <string name="upload_mission">Mission senden</string>
+    <string name="download_mission">Mission laden</string>
 
     <!-- Drone Setup tabs -->
     <string name="screen_tuning">Tuning</string>

@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.State;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
@@ -308,7 +310,8 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 	@Override
 	public void onApiConnected() {
         Drone drone = getDrone();
-		if (drone.isConnected() && !drone.getState().isFlying()) {
+        State droneState = drone.getAttribute(AttributeType.STATE);
+		if (droneState.isConnected() && !droneState.isFlying()) {
 			buttonStep.setEnabled(true);
 		} else {
 			cancelCalibration();

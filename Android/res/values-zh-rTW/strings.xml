@@ -8,8 +8,8 @@
     <string name="app_settings">App 設定</string>
     <string name="flight_data">飛行數據</string>
     <string name="editor">編輯器</string>
-    <string name="send_mission">發送任務</string>
-    <string name="load_mission">載入任務</string>
+    <string name="upload_mission">發送任務</string>
+    <string name="download_mission">載入任務</string>
     
     <!-- Drone Setup tabs -->
     <string name="screen_tuning">調整參數</string>

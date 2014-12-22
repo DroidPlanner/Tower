@@ -9,6 +9,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.State;
 
 import org.droidplanner.android.utils.analytics.GAUtils;
 
@@ -36,9 +38,10 @@ public class NotificationHandler {
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
 			if (AttributeEvent.AUTOPILOT_FAILSAFE.equals(action)) {
+                State droneState = drone.getAttribute(AttributeType.STATE);
 				final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
 						.setCategory(GAUtils.Category.FAILSAFE).setAction("Autopilot warning")
-						.setLabel(drone.getState().getFailsafeWarning());
+						.setLabel(droneState.getFailsafeWarning());
 				GAUtils.sendEvent(eventBuilder);
 			}
 		}

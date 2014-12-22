@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Home;
 
 public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
@@ -25,7 +26,7 @@ public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 	}
 
 	public boolean isValid() {
-        Home droneHome = drone.getHome();
+        Home droneHome = drone.getAttribute(AttributeType.HOME);
 		return droneHome != null && droneHome.isValid();
 	}
 
@@ -41,7 +42,7 @@ public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 
 	@Override
 	public LatLong getPosition() {
-        Home droneHome = drone.getHome();
+        Home droneHome = drone.getAttribute(AttributeType.HOME);
         if(droneHome == null) return null;
 
 		return droneHome.getCoordinate();
@@ -49,7 +50,7 @@ public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 
 	@Override
 	public String getSnippet() {
-        Home droneHome = drone.getHome();
+        Home droneHome = drone.getAttribute(AttributeType.HOME);
 		return "Home " + (droneHome == null ? "N/A" : droneHome.getCoordinate().getAltitude());
 	}
 

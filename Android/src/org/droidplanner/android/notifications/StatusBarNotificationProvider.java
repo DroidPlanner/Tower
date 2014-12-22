@@ -20,6 +20,7 @@ import android.util.Log;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Battery;
 import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.Home;
@@ -205,7 +206,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		if (mInboxBuilder == null)
 			return;
 
-        Signal droneSignal = drone.getSignal();
+        Signal droneSignal = drone.getAttribute(AttributeType.SIGNAL);
         String update = droneSignal == null ? "--" : String.format("%d%%", MathUtils.getSignalStrength(droneSignal
                 .getFadeMargin(), droneSignal.getRemFadeMargin()));
 		mInboxBuilder.setLine(4, SpannableUtils.normal("Signal:   ", SpannableUtils.bold(update)));
@@ -216,8 +217,8 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 			return;
 
         String update = "--";
-            final Gps droneGps = this.drone.getGps();
-            final Home droneHome = this.drone.getHome();
+            final Gps droneGps = this.drone.getAttribute(AttributeType.GPS);
+            final Home droneHome = this.drone.getAttribute(AttributeType.HOME);
             if(droneGps != null && droneGps.isValid() && droneHome != null && droneHome.isValid()) {
                 double distanceToHome = MathUtils.getDistance(droneHome.getCoordinate(),
                         droneGps.getPosition());
@@ -231,7 +232,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		if (mInboxBuilder == null)
 			return;
 
-        Gps droneGps = drone.getGps();
+      Gps droneGps = drone.getAttribute(AttributeType.GPS);
         String update = droneGps == null ? "--" : String.format(
                 "%d, %s", droneGps.getSatellitesCount(), droneGps.getFixType());
 		mInboxBuilder.setLine(1, SpannableUtils.normal("Satellite:   ", SpannableUtils.bold(update)));
@@ -241,7 +242,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		if (mInboxBuilder == null)
 			return;
 
-        Battery droneBattery = drone.getBattery();
+        Battery droneBattery = drone.getAttribute(AttributeType.BATTERY);
         String update = droneBattery == null ? "--" : String.format(
                 "%2.1fv (%2.0f%%)", droneBattery.getBatteryVoltage(),
                 droneBattery.getBatteryRemain());
@@ -263,7 +264,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 		if (mNotificationBuilder == null)
 			return;
 
-        State droneState = drone.getState();
+        State droneState = drone.getAttribute(AttributeType.STATE);
         VehicleMode mode = droneState == null ? null : droneState.getVehicleMode();
         String update = mode == null ? "--" : mode.getLabel();
 		final CharSequence modeSummary = SpannableUtils.normal("Flight Mode:  ", SpannableUtils.bold(update));

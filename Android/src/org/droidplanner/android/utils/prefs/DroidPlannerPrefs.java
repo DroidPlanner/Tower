@@ -346,4 +346,8 @@ public class DroidPlannerPrefs {
                 "pref_mavlink_stream_rate_raw_controller", "2")));
         return rates;
     }
+
+    public boolean isAdvancedMenuEnabled(){
+        return prefs.getBoolean(context.getString(R.string.pref_advanced_menu_toggle_key), false);
+    }
 }

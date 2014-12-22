@@ -4,7 +4,6 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 
-import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -15,7 +14,7 @@ import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.command.YawCondition;
 
 public class MissionConditionYawFragment extends MissionDetailFragment
-		implements CardWheelHorizontalView.OnCardWheelChangedListener,
+		implements CardWheelHorizontalView.OnCardWheelScrollListener,
 		OnCheckedChangeListener {
 
 	@Override
@@ -38,7 +37,7 @@ public class MissionConditionYawFragment extends MissionDetailFragment
 		final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.picker1);
 		cardAltitudePicker.setViewAdapter(adapter);
-		cardAltitudePicker.addChangingListener(this);
+		cardAltitudePicker.addScrollListener(this);
 		cardAltitudePicker.setCurrentValue((int) item.getAngle());
 
 		CheckBox checkBoxRelative = (CheckBox) view.findViewById(R.id.checkBox1);
@@ -46,13 +45,23 @@ public class MissionConditionYawFragment extends MissionDetailFragment
 		checkBoxRelative.setChecked(item.isRelative());
 	}
 
-	@Override
-	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
+    @Override
+    public void onScrollingStarted(CardWheelHorizontalView cardWheel, int startValue) {
+
+    }
+
+    @Override
+    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+
+    }
+
+    @Override
+	public void onScrollingEnded(CardWheelHorizontalView wheel, int startValue, int endValue) {
 		switch (wheel.getId()) {
 		case R.id.picker1:
 			for (MissionItem missionItem : getMissionItems()) {
 				YawCondition item = (YawCondition) missionItem;
-				item.setAngle(newValue);
+				item.setAngle(endValue);
 			}
 			break;
 		}

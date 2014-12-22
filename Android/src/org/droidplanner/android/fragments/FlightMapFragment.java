@@ -7,7 +7,6 @@ import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,7 +23,10 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Gps;
+import com.o3dr.services.android.lib.drone.property.GuidedState;
+import com.o3dr.services.android.lib.drone.property.State;
 
 public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
 		DPMap.OnMarkerClickListener, DPMap.OnMarkerDragListener, GuidedDialogListener {
@@ -51,7 +53,8 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if(AttributeEvent.STATE_ARMING.equals(action)){
-                if (drone.getState().isArmed()) {
+                final State droneState = drone.getAttribute(AttributeType.STATE);
+                if (droneState.isArmed()) {
                     mMapFragment.clearFlightPath();
                 }
             }
@@ -117,7 +120,8 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	@Override
 	public void onMapLongClick(LatLong coord) {
 		if (drone != null && drone.isConnected()) {
-			if (drone.getGuidedState().isInitialized()) {
+            final GuidedState guidedState = drone.getAttribute(AttributeType.GUIDED_STATE);
+			if (guidedState.isInitialized()) {
 				drone.sendGuidedPoint(coord, false);
 			} else {
 				if (guidedModeOnLongPress) {
@@ -178,7 +182,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	public void goToDroneLocation() {
 		super.goToDroneLocation();
 
-        final Gps droneGps = this.drone.getGps();
+        final Gps droneGps = this.drone.getAttribute(AttributeType.GPS);
 		if (droneGps == null || !droneGps.isValid())
 			return;
 

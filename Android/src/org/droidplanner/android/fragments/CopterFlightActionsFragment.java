@@ -17,6 +17,8 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.GuidedState;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.gcs.follow.FollowState;
@@ -75,7 +77,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
                 if((AttributeEvent.FOLLOW_START.equals(action)
                         || AttributeEvent.FOLLOW_STOP.equals(action))) {
-                    final FollowState followState = getDrone().getFollowState();
+                    final FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
                     if (followState != null) {
                         String eventLabel = null;
                         switch (followState.getState()) {
@@ -211,6 +213,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
         HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
                 .setCategory(GAUtils.Category.FLIGHT);
 
+        final Drone drone = getDrone();
         switch (v.getId()) {
             case R.id.mc_connectBtn:
                 ((SuperUI) getActivity()).toggleDroneConnection();
@@ -243,14 +246,16 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                         .getLabel());
                 break;
 
-            case R.id.mc_pause:
-                if (getDrone().getFollowState().isEnabled()) {
-                    getDrone().disableFollowMe();
+            case R.id.mc_pause: {
+                final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
+                if (followState.isEnabled()){
+                    drone.disableFollowMe();
                 }
 
-                getDrone().pauseAtCurrentLocation();
+                drone.pauseAtCurrentLocation();
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Pause");
                 break;
+            }
 
             case R.id.mc_autoBtn:
                 getDrone().changeVehicleMode(VehicleMode.COPTER_AUTO);
@@ -265,8 +270,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                 break;
 
             case R.id.mc_follow:
-                Drone drone = getDrone();
-                FollowState followState = drone.getFollowState();
+                FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
                 if(followState != null) {
                     if (followState.isEnabled())
                         drone.disableFollowMe();
@@ -354,11 +358,11 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     private void updateFlightModeButtons() {
         resetFlightModeButtons();
 
-        State droneState = getDrone().getState();
+        State droneState = getDrone().getAttribute(AttributeType.STATE);
         if(droneState == null)
             return;
 
-        final VehicleMode flightMode = getDrone().getState().getVehicleMode();
+        final VehicleMode flightMode = droneState.getVehicleMode();
         if(flightMode == null)
             return;
 
@@ -369,8 +373,9 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
             case COPTER_GUIDED:
                 final Drone drone = getDrone();
-                if (drone.getGuidedState().isInitialized()
-                        && !drone.getFollowState().isEnabled()) {
+                final GuidedState guidedState = drone.getAttribute(AttributeType.GUIDED_STATE);
+                final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
+                if (guidedState.isInitialized() && !followState.isEnabled()) {
                     pauseBtn.setActivated(true);
                 }
                 break;
@@ -395,7 +400,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     }
 
     private void updateFollowButton() {
-        FollowState followState = getDrone().getFollowState();
+        FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
         if(followState == null)
             return;
 
@@ -424,9 +429,10 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     }
 
     private void setupButtonsByFlightState() {
-        if (getDrone().isConnected()) {
-            if (getDrone().getState().isArmed()) {
-                if (getDrone().getState().isFlying()) {
+        final State droneState = getDrone().getAttribute(AttributeType.STATE);
+        if (droneState.isConnected()) {
+            if (droneState.isArmed()) {
+                if (droneState.isFlying()) {
                     setupButtonsForFlying();
                 } else {
                     setupButtonsForArmed();
@@ -460,11 +466,11 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     }
 
     @Override
-    public boolean isSlidingUpPanelEnabled(Drone api) {
-        if(!api.isConnected())
+    public boolean isSlidingUpPanelEnabled(Drone drone) {
+        if(!drone.isConnected())
             return false;
 
-        final State droneState = api.getState();
+        final State droneState = drone.getAttribute(AttributeType.STATE);
         return droneState.isArmed() && droneState.isFlying();
     }
 }

@@ -37,16 +37,25 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
     static {
         superIntentFilter.addAction(AttributeEvent.STATE_CONNECTED);
         superIntentFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+        superIntentFilter.addAction(Utils.ACTION_UPDATE_OPTIONS_MENU);
     }
 
     private final BroadcastReceiver superReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if (AttributeEvent.STATE_CONNECTED.equals(action)) {
-                onDroneConnected();
-            } else if (AttributeEvent.STATE_DISCONNECTED.equals(action)) {
-                onDroneDisconnected();
+            switch (action) {
+                case AttributeEvent.STATE_CONNECTED:
+                    onDroneConnected();
+                    break;
+
+                case AttributeEvent.STATE_DISCONNECTED:
+                    onDroneDisconnected();
+                    break;
+
+                case Utils.ACTION_UPDATE_OPTIONS_MENU:
+                    invalidateOptionsMenu();
+                    break;
             }
         }
     };
@@ -182,13 +191,18 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
             menu.setGroupEnabled(R.id.menu_group_connected, true);
             menu.setGroupVisible(R.id.menu_group_connected, true);
 
+            final boolean isAdvancedEnabled = mAppPrefs.isAdvancedMenuEnabled();
+            final MenuItem advancedSubMenu = menu.findItem(R.id.menu_advanced);
+            advancedSubMenu.setEnabled(isAdvancedEnabled);
+            advancedSubMenu.setVisible(isAdvancedEnabled);
+
             final boolean areMissionMenusEnabled = enableMissionMenus();
 
-            final MenuItem sendMission = menu.findItem(R.id.menu_send_mission);
+            final MenuItem sendMission = menu.findItem(R.id.menu_upload_mission);
             sendMission.setEnabled(areMissionMenusEnabled);
             sendMission.setVisible(areMissionMenusEnabled);
 
-            final MenuItem loadMission = menu.findItem(R.id.menu_load_mission);
+            final MenuItem loadMission = menu.findItem(R.id.menu_download_mission);
             loadMission.setEnabled(areMissionMenusEnabled);
             loadMission.setVisible(areMissionMenusEnabled);
 
@@ -223,7 +237,7 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
                 toggleDroneConnection();
                 return true;
 
-            case R.id.menu_send_mission: {
+            case R.id.menu_upload_mission: {
                 final MissionProxy missionProxy = dpApp.getMissionProxy();
                 if (missionProxy.getItems().isEmpty() || missionProxy.hasTakeoffAndLandOrRTL()) {
                     missionProxy.sendMissionToAPM(dpApi);
@@ -252,7 +266,7 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
                 return true;
             }
 
-            case R.id.menu_load_mission:
+            case R.id.menu_download_mission:
                 dpApi.loadWaypoints();
                 return true;
             case R.id.menu_triggerCamera:

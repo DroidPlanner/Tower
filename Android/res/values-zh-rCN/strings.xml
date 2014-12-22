@@ -11,8 +11,8 @@
     <string name="app_settings">应用设置</string>
     <string name="flight_data">飞行数据</string>
     <string name="editor">编辑器</string>
-    <string name="send_mission">发送任务</string>
-    <string name="load_mission">加载任务</string>
+    <string name="upload_mission">发送任务</string>
+    <string name="download_mission">加载任务</string>
 
     <!-- Map related strings -->
     <string name="mapbox_id">ne0fhyk.ighceofk</string>
@@ -211,9 +211,6 @@
     <string name="waypointInfo_ROI">设置一个位置和高度来设定飞行器指向，瞄准可选的相机。</string>
     <string name="waypointInfo_SetJump">重复航点</string>
 	
-	<!-- Custom waypoint info -->
-    <string name="pwm">PWM：</string>
-
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">在LAND或RTL后无法添加新的航点</string>
     <string name="editor_info_window">距离：200m，飞行时间：3:30s</string>

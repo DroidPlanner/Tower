@@ -11,7 +11,7 @@ import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 
 public class MissionRegionOfInterestFragment extends MissionDetailFragment implements
-		CardWheelHorizontalView.OnCardWheelChangedListener {
+        CardWheelHorizontalView.OnCardWheelScrollListener {
 
 	@Override
 	protected int getResource() {
@@ -31,18 +31,28 @@ public class MissionRegionOfInterestFragment extends MissionDetailFragment imple
 		CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.altitudePicker);
 		altitudePicker.setViewAdapter(altitudeAdapter);
-		altitudePicker.addChangingListener(this);
+		altitudePicker.addScrollListener(this);
 
 		altitudePicker.setCurrentValue((int) ((RegionOfInterest) getMissionItems().get(0))
 				.getCoordinate().getAltitude());
 	}
 
-	@Override
-	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
+    @Override
+    public void onScrollingStarted(CardWheelHorizontalView cardWheel, int startValue) {
+
+    }
+
+    @Override
+    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+
+    }
+
+    @Override
+	public void onScrollingEnded(CardWheelHorizontalView wheel, int startValue, int endValue) {
 		switch (wheel.getId()) {
 		case R.id.altitudePicker:
 			for (MissionItem missionItem : getMissionItems()) {
-				((RegionOfInterest) missionItem).getCoordinate().setAltitude(newValue);
+				((RegionOfInterest) missionItem).getCoordinate().setAltitude(endValue);
 			}
 			break;
 		}

@@ -93,25 +93,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:text="@string/channel_label" />
-        
-        <TextView
-            style="@style/ModeDetailText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:text="@string/pwm"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-        
-        <EditText 
-            android:id="@+id/PwmEditText"
+
+        <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+            android:id="@+id/pwmPicker"
+            style="@style/missionItemDetailCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:imeOptions="actionDone"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            />
-
+            android:orientation="vertical"
+            android:text="@string/pwm"/>
+        
     </LinearLayout>
 
 </RelativeLayout>

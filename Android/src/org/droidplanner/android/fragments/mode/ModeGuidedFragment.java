@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.GuidedState;
 
 import org.droidplanner.android.R;
@@ -14,7 +15,7 @@ import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 
 public class ModeGuidedFragment extends ApiListenerFragment implements
-		CardWheelHorizontalView.OnCardWheelChangedListener {
+        CardWheelHorizontalView.OnCardWheelScrollListener {
 
     private static final float DEFAULT_ALTITUDE = 2f;
 
@@ -35,7 +36,7 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
 		mAltitudeWheel = (CardWheelHorizontalView) parentView.findViewById(R.id.altitude_spinner);
 		mAltitudeWheel.setViewAdapter(altitudeAdapter);
 
-		mAltitudeWheel.addChangingListener(this);
+		mAltitudeWheel.addScrollListener(this);
 	}
 
 	@Override
@@ -46,13 +47,23 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
 		}
 	}
 
-	@Override
-	public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+    @Override
+    public void onScrollingStarted(CardWheelHorizontalView cardWheel, int startValue) {
+
+    }
+
+    @Override
+    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+
+    }
+
+    @Override
+	public void onScrollingEnded(CardWheelHorizontalView cardWheel, int startValue, int endValue) {
 		switch (cardWheel.getId()) {
 		case R.id.altitude_spinner:
 			final Drone drone = getDrone();
 			if (drone.isConnected())
-				drone.setGuidedAltitude(newValue);
+				drone.setGuidedAltitude(endValue);
 			break;
 		}
 	}
@@ -60,7 +71,7 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
 	@Override
 	public void onApiConnected() {
 		if (mAltitudeWheel != null) {
-            GuidedState guidedState = getDrone().getGuidedState();
+            GuidedState guidedState = getDrone().getAttribute(AttributeType.GUIDED_STATE);
 
 			final int initialValue = (int) Math.max(guidedState == null
                     ? DEFAULT_ALTITUDE

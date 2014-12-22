@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.property.Home;
 
@@ -133,9 +134,9 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 		final List<LatLong> visibleCoords = missionProxy.getVisibleCoords();
 
 		// add home coord if visible
-        Home home = drone.getHome();
+        Home home = drone.getAttribute(AttributeType.HOME);
         if(home != null ) {
-            final LatLong homeCoord = drone.getHome().getCoordinate();
+            final LatLong homeCoord = home.getCoordinate();
             if (homeCoord != null && homeCoord.getLongitude() != 0 && homeCoord.getLatitude() != 0)
                 visibleCoords.add(homeCoord);
         }

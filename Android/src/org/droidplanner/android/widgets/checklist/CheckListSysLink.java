@@ -3,6 +3,7 @@ package org.droidplanner.android.widgets.checklist;
 import android.content.Context;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Battery;
 import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.State;
@@ -22,7 +23,7 @@ public class CheckListSysLink {
 		if (mSysTag == null)
 			return;
 
-		Battery batt = drone.getBattery();
+		Battery batt = drone.getAttribute(AttributeType.BATTERY);
 		if (batt != null) {
 			if (mSysTag.equalsIgnoreCase("SYS_BATTREM_LVL")) {
 				mListItem.setSys_value(batt.getBatteryRemain());
@@ -33,14 +34,14 @@ public class CheckListSysLink {
 			}
 		}
 
-		Gps gps = drone.getGps();
+		Gps gps = drone.getAttribute(AttributeType.GPS);
 		if (gps != null) {
 			if (mSysTag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
 				mListItem.setSys_value(gps.getSatellitesCount());
 			}
 		}
 
-		State state = drone.getState();
+		State state = drone.getAttribute(AttributeType.STATE);
 		if (state != null) {
 			if (mSysTag.equalsIgnoreCase("SYS_ARM_STATE")) {
 				mListItem.setSys_activated(state.isArmed());
@@ -69,8 +70,9 @@ public class CheckListSysLink {
 	}
 
 	private void doSysArm(CheckListItem checkListItem) {
-		if (drone.isConnected()) {
-			if (checkListItem.isSys_activated() && !drone.getState().isArmed()) {
+        final State droneState = drone.getAttribute(AttributeType.STATE);
+		if (droneState.isConnected()) {
+			if (checkListItem.isSys_activated() && !droneState.isArmed()) {
 				drone.arm(true);
 			} else {
 				drone.arm(false);

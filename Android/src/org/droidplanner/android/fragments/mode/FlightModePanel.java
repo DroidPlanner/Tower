@@ -12,7 +12,10 @@ import android.view.ViewGroup;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
+import com.o3dr.services.android.lib.gcs.follow.FollowState;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
@@ -56,19 +59,19 @@ public class FlightModePanel extends ApiListenerFragment{
         getBroadcastManager().unregisterReceiver(eventReceiver);
 	}
 
-	private void onModeUpdate(Drone dpApi) {
+	private void onModeUpdate(Drone drone) {
 		// Update the info panel fragment
-		dpApi = getDrone();
+		drone = getDrone();
+        final State droneState = drone.getAttribute(AttributeType.STATE);
 		Fragment infoPanel;
-		if (dpApi == null || !dpApi.isConnected()) {
+		if (!droneState.isConnected()) {
 			infoPanel = new ModeDisconnectedFragment();
 		} else {
-            VehicleMode mode = dpApi.getState().getVehicleMode();
+            VehicleMode mode = droneState.getVehicleMode();
             if(mode == null){
                 infoPanel = new ModeDisconnectedFragment();
             }
             else {
-
                 switch (mode) {
                     case COPTER_RTL:
                     case PLANE_RTL:
@@ -112,7 +115,8 @@ public class FlightModePanel extends ApiListenerFragment{
                     case COPTER_GUIDED:
                     case PLANE_GUIDED:
                     case ROVER_GUIDED:
-                        if (dpApi.getFollowState().isEnabled()) {
+                        final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
+                        if (followState.isEnabled()) {
                             infoPanel = new ModeFollowFragment();
                         } else {
                             infoPanel = new ModeGuidedFragment();

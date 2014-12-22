@@ -7,7 +7,10 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.mission.Mission;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
@@ -25,7 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class MissionStructureScannerFragment extends MissionDetailFragment implements
-		CardWheelHorizontalView.OnCardWheelChangedListener, CompoundButton.OnCheckedChangeListener {
+        CardWheelHorizontalView.OnCardWheelScrollListener, CompoundButton.OnCheckedChangeListener, Drone.OnMissionItemsBuiltCallback {
 
 	private CamerasAdapter cameraAdapter;
 
@@ -43,7 +46,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.STRUCTURE_SCANNER));
 
-        CameraProxy camera = getDrone().getCamera();
+        CameraProxy camera = getDrone().getAttribute(AttributeType.CAMERA);
         List<CameraDetail> cameraDetails = camera == null
                 ? Collections.<CameraDetail>emptyList()
                 :  camera.getAvailableCameraInfos();
@@ -57,25 +60,25 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 				.findViewById(R.id.radiusPicker);
 		radiusPicker.setViewAdapter(new NumericWheelAdapter(context, R.layout.wheel_text_centered,
 				2, 100, "%d m"));
-		radiusPicker.addChangingListener(this);
+		radiusPicker.addScrollListener(this);
 
 		CardWheelHorizontalView startAltitudeStepPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.startAltitudePicker);
 		startAltitudeStepPicker.setViewAdapter(new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, MIN_ALTITUDE, MAX_ALTITUDE, "%d m"));
-		startAltitudeStepPicker.addChangingListener(this);
+		startAltitudeStepPicker.addScrollListener(this);
 
 		CardWheelHorizontalView endAltitudeStepPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.heightStepPicker);
 		endAltitudeStepPicker.setViewAdapter(new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, 1, MAX_ALTITUDE, "%d m"));
-		endAltitudeStepPicker.addChangingListener(this);
+		endAltitudeStepPicker.addScrollListener(this);
 
 		CardWheelHorizontalView mNumberStepsPicker = (CardWheelHorizontalView) view
 				.findViewById(R.id.stepsPicker);
 		mNumberStepsPicker.setViewAdapter(new NumericWheelAdapter(context,
 				R.layout.wheel_text_centered, 1, 10, "%d"));
-		mNumberStepsPicker.addChangingListener(this);
+		mNumberStepsPicker.addScrollListener(this);
 
 		CheckBox checkBoxAdvanced = (CheckBox) view.findViewById(R.id.checkBoxSurveyCrossHatch);
 		checkBoxAdvanced.setOnCheckedChangeListener(this);
@@ -93,73 +96,72 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 		checkBoxAdvanced.setChecked(firstItem.isCrossHatch());
 	}
 
+    private void submitForBuilding(){
+        final List<StructureScanner> scannerList = getMissionItems();
+        if(scannerList.isEmpty()) return;
+
+        getDrone().buildMissionItemsAsync(this, scannerList.toArray(new MissionItem.ComplexItem[scannerList.size()]));
+    }
+
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        Drone drone = getDrone();
 		for (StructureScanner item : getMissionItems()) {
             item.setCrossHatch(isChecked);
-            drone.buildComplexMissionItem(item);
         }
 
-		MissionProxy missionProxy = getMissionProxy();
-		if (missionProxy != null)
-			missionProxy.notifyMissionUpdate();
+        submitForBuilding();
 	}
 
-	@Override
-	public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
-        Drone drone = getDrone();
+    @Override
+    public void onScrollingStarted(CardWheelHorizontalView cardWheel, int startValue) {}
 
+    @Override
+    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {}
+
+    @Override
+	public void onScrollingEnded(CardWheelHorizontalView cardWheel, int startValue, int endValue) {
 		switch (cardWheel.getId()) {
 		case R.id.radiusPicker: {
 			for (StructureScanner item : getMissionItems()) {
-                item.setRadius(newValue);
-                drone.buildComplexMissionItem(item);
+                item.setRadius(endValue);
             }
 			break;
 		}
 
 		case R.id.startAltitudePicker: {
 			for (StructureScanner item : getMissionItems()) {
-                item.getCoordinate().setAltitude(newValue);
-                drone.buildComplexMissionItem(item);
+                item.getCoordinate().setAltitude(endValue);
             }
 			break;
 		}
 
 		case R.id.heightStepPicker:
 			for (StructureScanner item : getMissionItems()) {
-                item.setHeightStep(newValue);
-                drone.buildComplexMissionItem(item);
+                item.setHeightStep(endValue);
             }
 			break;
 
 		case R.id.stepsPicker:
 			for (StructureScanner item : getMissionItems()) {
-                item.setStepsCount(newValue);
-                drone.buildComplexMissionItem(item);
+                item.setStepsCount(endValue);
             }
 			break;
 		}
 
-		MissionProxy missionProxy = getMissionProxy();
-		if (missionProxy != null)
-			missionProxy.notifyMissionUpdate();
+        submitForBuilding();
 	}
 
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position) {
 		if (spinner.getId() == id.cameraFileSpinner) {
-            Drone drone = getDrone();
 
 			CameraDetail cameraInfo = cameraAdapter.getItem(position);
 			for (StructureScanner scan : getMissionItems()) {
                 SurveyDetail surveyDetail = scan.getSurveyDetail();
                 surveyDetail.setCameraDetail(cameraInfo);
-                drone.buildComplexMissionItem(scan);
 			}
 
-			getMissionProxy().notifyMissionUpdate();
+            submitForBuilding();
 		}
 	}
 
@@ -167,5 +169,12 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 	protected List<StructureScanner> getMissionItems() {
 		return (List<StructureScanner>) super.getMissionItems();
 	}
+
+    @Override
+    public void onMissionItemsBuilt(MissionItem.ComplexItem[] complexItems) {
+        MissionProxy missionProxy = getMissionProxy();
+        if (missionProxy != null)
+            missionProxy.notifyMissionUpdate();
+    }
 }
 

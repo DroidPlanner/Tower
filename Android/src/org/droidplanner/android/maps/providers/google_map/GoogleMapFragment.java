@@ -44,6 +44,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.FootPrint;
 import com.o3dr.services.android.lib.drone.property.Gps;
 
@@ -62,6 +63,7 @@ import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -94,7 +96,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
             if (!drone.isConnected())
                 return;
 
-            final Gps droneGps = drone.getGps();
+            final Gps droneGps = drone.getAttribute(AttributeType.GPS);
             if (droneGps == null)
                 return;
 
@@ -688,7 +690,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         if (!dpApi.isConnected())
             return;
 
-        Gps gps = dpApi.getGps();
+        Gps gps = dpApi.getAttribute(AttributeType.GPS);
         if (!gps.isValid()) {
             Toast.makeText(getActivity().getApplicationContext(), R.string.drone_no_location, Toast.LENGTH_SHORT).show();
             return;
@@ -857,21 +859,34 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
     @Override
     public void updateRealTimeFootprint(FootPrint footprint) {
-        if (footprintPoly == null) {
-            PolygonOptions pathOptions = new PolygonOptions();
-            pathOptions.strokeColor(FOOTPRINT_DEFAULT_COLOR).strokeWidth(FOOTPRINT_DEFAULT_WIDTH);
-            pathOptions.fillColor(FOOTPRINT_FILL_COLOR);
+        List<LatLong> pathPoints = footprint == null
+                ? Collections.<LatLong>emptyList()
+                : footprint.getVertexInGlobalFrame();
 
-            for (LatLong vertex : footprint.getVertexInGlobalFrame()) {
-                pathOptions.add(DroneHelper.CoordToLatLang(vertex));
+        if(pathPoints.isEmpty()){
+            if(footprintPoly != null) {
+                footprintPoly.remove();
+                footprintPoly = null;
             }
-            footprintPoly = getMap().addPolygon(pathOptions);
-        } else {
-            List<LatLng> list = new ArrayList<LatLng>();
-            for (LatLong vertex : footprint.getVertexInGlobalFrame()) {
-                list.add(DroneHelper.CoordToLatLang(vertex));
+        }
+        else {
+            if (footprintPoly == null) {
+                PolygonOptions pathOptions = new PolygonOptions()
+                        .strokeColor(FOOTPRINT_DEFAULT_COLOR)
+                        .strokeWidth(FOOTPRINT_DEFAULT_WIDTH)
+                        .fillColor(FOOTPRINT_FILL_COLOR);
+
+                for (LatLong vertex : pathPoints) {
+                    pathOptions.add(DroneHelper.CoordToLatLang(vertex));
+                }
+                footprintPoly = getMap().addPolygon(pathOptions);
+            } else {
+                List<LatLng> list = new ArrayList<LatLng>();
+                for (LatLong vertex : pathPoints) {
+                    list.add(DroneHelper.CoordToLatLang(vertex));
+                }
+                footprintPoly.setPoints(list);
             }
-            footprintPoly.setPoints(list);
         }
 
     }

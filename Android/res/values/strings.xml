@@ -11,11 +11,8 @@
     <string name="app_settings">App Settings</string>
     <string name="flight_data">Flight Data</string>
     <string name="editor">Editor</string>
-    <string name="send_mission">Send Mission</string>
-    <string name="load_mission">Load Mission</string>
-
-    <!-- Map related strings -->
-    <string name="mapbox_id">ne0fhyk.ighceofk</string>
+    <string name="upload_mission">Upload Mission</string>
+    <string name="download_mission">Download Mission</string>
 
     <!-- Drone Setup tabs -->
     <string name="screen_tuning">Tuning</string>
@@ -212,7 +209,7 @@
     <string name="waypointInfo_SetJump">Repeat waypoint</string>
     
     <!-- Custom waypoint info -->
-    <string name="pwm">PWM:</string>
+    <string name="pwm">PWM</string>
 
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">One cannot add new waypoints after LAND or RTL</string>
@@ -535,5 +532,7 @@
         dronie.</string>
     <string name="editor_multi_edit_no_waypoint_error">No waypoint(s) selected.</string>
     <string name="failed_start_calibration_message">Unable to start calibration!</string>
+    <string name="pref_advanced_menu_title">Advanced Menu</string>
+    <string name="pref_advanced_menu_summary">Enable advanced menu options.</string>
 
 </resources>

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.mission.Mission;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
@@ -34,7 +35,14 @@ import com.o3dr.services.android.lib.util.MathUtils;
  */
 public class MissionItemProxy {
 
-	/**
+    private final Drone.OnMissionItemsBuiltCallback missionItemBuiltListener = new Drone.OnMissionItemsBuiltCallback() {
+        @Override
+        public void onMissionItemsBuilt(MissionItem.ComplexItem[] complexItems) {
+        }
+    };
+
+
+    /**
 	 * This is the mission item object this class is built around.
 	 */
 	private final MissionItem mMissionItem;
@@ -55,10 +63,10 @@ public class MissionItemProxy {
 		mMarkerInfos = MissionItemMarkerInfo.newInstance(this);
 
         if(mMissionItem instanceof Survey){
-            mMission.getDrone().buildComplexMissionItem((Survey) mMissionItem);
+            mMission.getDrone().buildMissionItemsAsync(missionItemBuiltListener, (Survey) mMissionItem);
         }
         else if(mMissionItem instanceof StructureScanner){
-            mMission.getDrone().buildComplexMissionItem((StructureScanner) mMissionItem);
+            mMission.getDrone().buildMissionItemsAsync(missionItemBuiltListener, (StructureScanner) mMissionItem);
         }
 	}
 
