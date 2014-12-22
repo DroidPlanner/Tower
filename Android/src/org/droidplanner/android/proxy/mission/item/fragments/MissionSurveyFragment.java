@@ -120,8 +120,8 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
         numberOfStripsView = (TextView) view.findViewById(id.numberOfStripsTextView);
         lengthView = (TextView) view.findViewById(id.lengthTextView);
 
-        updateCamera();
         updateViews();
+        updateCamera();
 
         mAnglePicker.addScrollListener(this);
         mOverlapPicker.addScrollListener(this);

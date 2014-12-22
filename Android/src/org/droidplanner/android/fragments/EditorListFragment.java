@@ -24,8 +24,7 @@ import java.util.List;
 
 public class EditorListFragment extends ApiListenerFragment implements MissionSelection.OnSelectionUpdateListener {
 
-    private final static IntentFilter eventFilter = new IntentFilter(MissionProxy
-            .ACTION_MISSION_PROXY_UPDATE);
+    private final static IntentFilter eventFilter = new IntentFilter(MissionProxy.ACTION_MISSION_PROXY_UPDATE);
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
