@@ -11,11 +11,8 @@
     <string name="app_settings">App Settings</string>
     <string name="flight_data">Flight Data</string>
     <string name="editor">Editor</string>
-    <string name="send_mission">Send Mission</string>
-    <string name="load_mission">Load Mission</string>
-
-    <!-- Map related strings -->
-    <string name="mapbox_id">ne0fhyk.ighceofk</string>
+    <string name="upload_mission">Upload Mission</string>
+    <string name="download_mission">Download Mission</string>
 
     <!-- Drone Setup tabs -->
     <string name="screen_tuning">Tuning</string>

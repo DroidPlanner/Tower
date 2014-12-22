@@ -14,13 +14,13 @@
             />
 
         <item
-            android:id="@+id/menu_send_mission"
+            android:id="@+id/menu_upload_mission"
             app:showAsAction="never"
-            android:title="@string/send_mission"/>
+            android:title="@string/upload_mission"/>
         <item
-            android:id="@+id/menu_load_mission"
+            android:id="@+id/menu_download_mission"
             app:showAsAction="never"
-            android:title="@string/load_mission"/>
+            android:title="@string/download_mission"/>
 
         <item
             android:id="@+id/menu_advanced"

@@ -11,8 +11,8 @@
     <string name="app_settings">应用设置</string>
     <string name="flight_data">飞行数据</string>
     <string name="editor">编辑器</string>
-    <string name="send_mission">发送任务</string>
-    <string name="load_mission">加载任务</string>
+    <string name="upload_mission">发送任务</string>
+    <string name="download_mission">加载任务</string>
 
     <!-- Map related strings -->
     <string name="mapbox_id">ne0fhyk.ighceofk</string>

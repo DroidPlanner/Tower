@@ -198,11 +198,11 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
 
             final boolean areMissionMenusEnabled = enableMissionMenus();
 
-            final MenuItem sendMission = menu.findItem(R.id.menu_send_mission);
+            final MenuItem sendMission = menu.findItem(R.id.menu_upload_mission);
             sendMission.setEnabled(areMissionMenusEnabled);
             sendMission.setVisible(areMissionMenusEnabled);
 
-            final MenuItem loadMission = menu.findItem(R.id.menu_load_mission);
+            final MenuItem loadMission = menu.findItem(R.id.menu_download_mission);
             loadMission.setEnabled(areMissionMenusEnabled);
             loadMission.setVisible(areMissionMenusEnabled);
 
@@ -237,7 +237,7 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
                 toggleDroneConnection();
                 return true;
 
-            case R.id.menu_send_mission: {
+            case R.id.menu_upload_mission: {
                 final MissionProxy missionProxy = dpApp.getMissionProxy();
                 if (missionProxy.getItems().isEmpty() || missionProxy.hasTakeoffAndLandOrRTL()) {
                     missionProxy.sendMissionToAPM(dpApi);
@@ -266,7 +266,7 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
                 return true;
             }
 
-            case R.id.menu_load_mission:
+            case R.id.menu_download_mission:
                 dpApi.loadWaypoints();
                 return true;
             case R.id.menu_triggerCamera:
