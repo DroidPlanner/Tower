@@ -53,8 +53,8 @@ import java.util.Locale;
 /**
  * Implements the application settings screen.
  */
-public class SettingsFragment extends PreferenceFragment implements
-        OnSharedPreferenceChangeListener, DroidPlannerApp.ApiListener {
+public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener,
+        DroidPlannerApp.ApiListener {
 
     /**
      * Used as tag for logging.
@@ -67,8 +67,7 @@ public class SettingsFragment extends PreferenceFragment implements
      * Action used to broadcast updates to the period for the spoken status
      * summary.
      */
-    public static final String ACTION_UPDATED_STATUS_PERIOD = PACKAGE_NAME + ""
-            + ".ACTION_UPDATED_STATUS_PERIOD";
+    public static final String ACTION_UPDATED_STATUS_PERIOD = PACKAGE_NAME + ".ACTION_UPDATED_STATUS_PERIOD";
 
     /**
      * Used to retrieve the new period for the spoken status summary.

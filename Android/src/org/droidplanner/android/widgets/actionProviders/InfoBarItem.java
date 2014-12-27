@@ -292,7 +292,7 @@ public abstract class InfoBarItem {
 		/**
 		 * This popup is used to show additional signal info.
 		 */
-		private PopupWindow mPopup;
+		protected PopupWindow mPopup;
 
 
 		private TextView currentView;
@@ -594,7 +594,7 @@ public abstract class InfoBarItem {
 
 			mExtraInfoBarItems = new InfoBarItem[] { new HomeInfo(context, popupView, drone),
 					new GpsInfo(context, popupView, drone),
-					new BatteryInfo(context, popupView, drone),
+					new ExtraBatteryInfo(context, popupView, drone, mItemView),
 					new ExtraFlightTimeInfo(context, popupView, drone, mItemView),
 					new ExtraSignalInfo(context, popupView, drone, mItemView) };
 
@@ -621,6 +621,34 @@ public abstract class InfoBarItem {
 				infoItem.updateItemView(context, drone);
 			}
 		}
+
+        private static class ExtraBatteryInfo extends BatteryInfo {
+
+            private final View mWindowView;
+
+            public ExtraBatteryInfo(Context context, View parentView, Drone drone, View windowView) {
+                super(context, parentView, drone);
+                mWindowView = windowView;
+            }
+
+            @Override
+            protected void initItemView(Context context, final View parentView, Drone drone){
+                super.initItemView(context, parentView, drone);
+                if(mItemView == null)
+                    return;
+
+                mItemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(mPopup == null)
+                            return;
+
+                        int yLoc = mWindowView.getBottom() + mItemView.getBottom();
+                        mPopup.showAtLocation(mWindowView, Gravity.RIGHT | Gravity.TOP, 0, yLoc);
+                    }
+                });
+            }
+        }
 
 		private static class ExtraFlightTimeInfo extends FlightTimeInfo {
 
