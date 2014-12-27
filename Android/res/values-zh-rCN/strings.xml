@@ -14,9 +14,6 @@
     <string name="upload_mission">发送任务</string>
     <string name="download_mission">加载任务</string>
 
-    <!-- Map related strings -->
-    <string name="mapbox_id">ne0fhyk.ighceofk</string>
-
     <!-- Drone Setup tabs -->
     <string name="screen_tuning">调参</string>
     <string name="screen_cal">校准</string>
