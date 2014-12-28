@@ -58,8 +58,6 @@
     <string name="pref_follow_me_mode_enabled_summary">开发中</string>
     <string name="pref_heading_mode">启动FPV指向模式</string>
     <string name="pref_heading_mode_summary">改变以FPV的朝向模式（-180°至180°）</string>
-    <string name="pref_pebble">PEBBLE</string>
-    <string name="pref_pebble_install_watchapp">更新 Pebble</string>
     <string name="pref_advanced">进阶设定</string>
     <string name="pref_advanced_use_offline_maps">使用离线地图</string>
     <string name="pref_advanced_use_offline_maps_summary">使用本地储存的地图块，用于离线地图浏览</string>

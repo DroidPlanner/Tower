@@ -58,11 +58,6 @@ public class NotificationHandler {
 	private final StatusBarNotificationProvider mStatusBarNotification;
 
 	/**
-	 * Handles Pebble notification.
-	 */
-	private final PebbleNotificationProvider mPebbleNotification;
-
-	/**
 	 * Handles emergency beep notification.
 	 */
 	private final EmergencyBeepNotificationProvider mBeepNotification;
@@ -76,7 +71,6 @@ public class NotificationHandler {
 
 		mTtsNotification = new TTSNotificationProvider(context, drone);
 		mStatusBarNotification = new StatusBarNotificationProvider(context, drone);
-		mPebbleNotification = new PebbleNotificationProvider(context, dpApi);
 		mBeepNotification = new EmergencyBeepNotificationProvider(context);
 
 		LocalBroadcastManager.getInstance(context).registerReceiver(eventReceiver, eventFilter);
@@ -90,7 +84,6 @@ public class NotificationHandler {
         LocalBroadcastManager.getInstance(context).unregisterReceiver(eventReceiver);
 		mTtsNotification.onTerminate();
 		mStatusBarNotification.onTerminate();
-		mPebbleNotification.onTerminate();
 		mBeepNotification.onTerminate();
 	}
 }

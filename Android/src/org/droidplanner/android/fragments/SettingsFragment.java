@@ -22,7 +22,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.getpebble.android.kit.PebbleKit;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
@@ -244,7 +243,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         }
 
         updateMavlinkVersionPreference(null);
-        setupPebblePreference();
         setupConnectionPreferences();
         setupAdvancedMenuToggle();
     }
@@ -306,60 +304,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
         if (connectionName != null)
             preference.setSummary(connectionName);
-    }
-
-    /**
-     * Pebble Install Button. When clicked, will check for pebble if pebble is
-     * not present, error displayed. If it is, the pbw (pebble bundle) will be
-     * copied from assets to external memory (makes sure to overwrite), and
-     * sends pbw intent for pebble app to install bundle.
-     */
-    private void setupPebblePreference() {
-        final Context context = getActivity().getApplicationContext();
-
-        Preference pebblePreference = findPreference(getString(R.string.pref_pebble_install_key));
-        pebblePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference pref) {
-                if (PebbleKit.isWatchConnected(context)) {
-                    InputStream in = null;
-                    OutputStream out = null;
-                    try {
-                        in = context.getAssets().open("Pebble/DroidPlanner.pbw");
-                        File outFile = new File(DirectoryPath.getDroidPlannerPath(),
-                                "DroidPlanner.pbw");
-                        out = new FileOutputStream(outFile);
-                        byte[] buffer = new byte[1024];
-                        int read;
-                        while ((read = in.read(buffer)) != -1) {
-                            out.write(buffer, 0, read);
-                        }
-                        in.close();
-                        in = null;
-                        out.flush();
-                        out.close();
-                        out = null;
-
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.fromFile(outFile));
-                        intent.setClassName("com.getpebble.android",
-                                "com.getpebble.android.ui.UpdateActivity");
-                        startActivity(intent);
-                    } catch (IOException e) {
-                        Log.e("pebble", "Failed to copy pbw asset", e);
-                        Toast.makeText(context, "Failed to copy pbw asset", Toast.LENGTH_SHORT)
-                                .show();
-                    } catch (ActivityNotFoundException e) {
-                        Log.e("pebble", "Pebble App Not installed", e);
-                        Toast.makeText(context, "Pebble App Not installed", Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                } else {
-                    Toast.makeText(context, "No Pebble Connected", Toast.LENGTH_SHORT).show();
-                }
-                return true;
-            }
-        });
     }
 
     private void initSummaryPerPrefs() {

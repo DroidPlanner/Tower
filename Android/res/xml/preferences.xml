@@ -361,11 +361,6 @@
                     android:title="@string/pref_advanced_menu_title"
                     android:summary="@string/pref_advanced_menu_summary"/>
             </PreferenceCategory>
-            <PreferenceCategory android:title="@string/pref_pebble" >
-                <Preference
-                    android:key="@string/pref_pebble_install_key"
-                    android:title="@string/pref_pebble_install_watchapp" />
-            </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>
 
