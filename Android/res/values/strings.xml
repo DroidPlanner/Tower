@@ -58,8 +58,6 @@
     <string name="pref_follow_me_mode_enabled_summary">In development</string>
     <string name="pref_heading_mode">Enable FPV heading mode</string>
     <string name="pref_heading_mode_summary">Change heading mode to FPV (-180º to 180º)</string>
-    <string name="pref_pebble">PEBBLE</string>
-    <string name="pref_pebble_install_watchapp">Update Pebble</string>
     <string name="pref_advanced">Advanced</string>
     <string name="pref_advanced_use_offline_maps">Use offline maps</string>
     <string name="pref_advanced_use_offline_maps_summary">Use map tiles on the local storage, for offline map view</string>
