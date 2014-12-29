@@ -296,13 +296,12 @@
     <string name="tune_roll">Adattamento manuale del regolaggio Roll (rollio) and Pitch (beccheggio). Rate_P é il valore primario da variare.</string>
     <string name="dialog_box_title_altitude">Altitudine</string>
     <string name="mode_switch">Assegnare canale RC 5 ad un interruttore della radio per controllare modalità volo. Muovere l\' interruttore su ognuna posizione e selezionare la modalità volo sottostante.</string>
-    <string name="MAVLinkError">Errore MAVLink:</string>
     <string name="msg_connect_first">Si prega di collegare prima</string>
     <string name="mode1_throttle_on_right_stick">Modalità 1: Throttle su stick DESTRO</string>
     <string name="mode2_throttle_on_left_stick">Modalità 2: Throttle su stick SINISTRO</string>
     <string name="pref_map_provider_settings_summary">Impostare map provider selezionato</string>
     <string name="pref_map_provider_settings_title">Preferenza Map Provider</string>
-    <string name="pref_title_google_map">Preferenza Google Map</string>
+    <string name="pref_title_google_maps">Preferenza Google Maps</string>
     <string name="pref_title_osm">Preferenza Open Street</string>
     <string name="activity_title_map_provider_preferences">Preferenza Map Provider</string>
     <string name="pref_title_language">Lingua</string>

@@ -450,7 +450,7 @@
     <!-- Map providers -->
     <string name="pref_map_provider_settings_summary">Configure the selected map provider</string>
     <string name="pref_map_provider_settings_title">Map Provider Preferences</string>
-    <string name="pref_title_google_map">Google Map Preferences</string>
+    <string name="pref_title_google_maps">Google Maps Preferences</string>
     <string name="pref_title_osm">Open Street Map Preferences</string>
     <string name="pref_title_mapbox">MapBox Preferences</string>
     <string name="activity_title_map_provider_preferences">Map Provider Preferences</string>
@@ -461,7 +461,6 @@
     <string name="tune_roll">Manual adjustment of roll and pitch tuning. Rate_P is the primary value to adjust.</string>
     <string name="dialog_box_title_altitude">Altitude</string>
     <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
-    <string name="MAVLinkError">MAVLink Error:</string>
     <string name="msg_connect_first">Please connect first</string>
     <string name="mode1_throttle_on_right_stick">Mode 1: Throttle on RIGHT stick</string>
     <string name="mode2_throttle_on_left_stick">Mode 2: Throttle on LEFT stick</string>
@@ -470,7 +469,7 @@
     <string name="pref_title_notifications">Notifications</string>
     <string name="normal_waypoint_toggle">Normal</string>
     <string name="spline_waypoint_toggle">Spline</string>
-    <string name="mavlink_version">Mavlink Version</string>
+    <string name="mavlink_version">MAVLink Version</string>
     <string name="firmware_version">Firmware Version</string>    
     <string name="empty_content">--</string>
     <string name="usage_statistics">Usage Statistics</string>

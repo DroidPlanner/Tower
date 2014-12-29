@@ -2311,8 +2311,8 @@
       <User>Advanced</User>
     </SYSID_SW_TYPE>
     <SYSID_THISMAV>
-      <DisplayName>Mavlink version</DisplayName>
-      <Description>Allows reconising the mavlink version</Description>
+      <DisplayName>MAVLink version</DisplayName>
+      <Description>Allows reconising the MAVLink version</Description>
       <Range>1 255</Range>
       <User>Advanced</User>
     </SYSID_THISMAV>
