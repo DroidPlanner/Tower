@@ -423,7 +423,7 @@
     <!-- Map providers -->
     <string name="pref_map_provider_settings_summary">設定選擇的地圖供應商</string>
     <string name="pref_map_provider_settings_title">地圖供應商偏好設定</string>
-    <string name="pref_title_google_map">Google 地圖偏好設定</string>
+    <string name="pref_title_google_maps">Google 地圖偏好設定</string>
     <string name="pref_title_osm">開放街圖(Open Street Map)偏好設定</string>
     <string name="pref_title_mapbox">MapBox 偏好設定</string>
     <string name="activity_title_map_provider_preferences">地圖供應商偏好設定</string>

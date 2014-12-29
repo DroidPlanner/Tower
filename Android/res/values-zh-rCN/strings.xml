@@ -447,7 +447,7 @@
     <!-- Map providers -->
     <string name="pref_map_provider_settings_summary">设定选择的地图供应商</string>
     <string name="pref_map_provider_settings_title">地图供应商偏好设定</string>
-    <string name="pref_title_google_map">Google地图偏好设定</string>
+    <string name="pref_title_google_maps">Google地图偏好设定</string>
     <string name="pref_title_osm">开放街图偏好设定</string>
     <string name="pref_title_mapbox">MapBox偏好设定</string>
     <string name="activity_title_map_provider_preferences">地图供应商偏好设定</string>

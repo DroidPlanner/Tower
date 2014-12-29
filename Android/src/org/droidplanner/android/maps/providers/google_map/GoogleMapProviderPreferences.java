@@ -19,7 +19,7 @@ public class GoogleMapProviderPreferences extends MapProviderPreferences {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.preferences_google_map);
+		addPreferencesFromResource(R.xml.preferences_google_maps);
 		setupPreferences();
 	}
 

@@ -2,7 +2,7 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/pref_title_google_map" />
+    <PreferenceCategory android:title="@string/pref_title_google_maps" />
 
     <ListPreference
         android:defaultValue="@string/pref_map_type_default"
