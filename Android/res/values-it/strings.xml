@@ -301,7 +301,7 @@
     <string name="mode2_throttle_on_left_stick">Modalità 2: Throttle su stick SINISTRO</string>
     <string name="pref_map_provider_settings_summary">Impostare map provider selezionato</string>
     <string name="pref_map_provider_settings_title">Preferenza Map Provider</string>
-    <string name="pref_title_google_maps">Preferenza Google Map</string>
+    <string name="pref_title_google_maps">Preferenza Google Maps</string>
     <string name="pref_title_osm">Preferenza Open Street</string>
     <string name="activity_title_map_provider_preferences">Preferenza Map Provider</string>
     <string name="pref_title_language">Lingua</string>
