@@ -458,7 +458,6 @@
     <string name="tune_roll">手动调整roll和pitch参数。Rate_P是要调整的主要数值。</string>
     <string name="dialog_box_title_altitude">高度</string>
     <string name="mode_switch">将遥控通道5分配在你的遥控器上的开关用来控制飞行模式。移动开关到每个位置并在下方选择期望的飞行模式。</string>
-    <string name="MAVLinkError">MAVLink错误：</string>
     <string name="msg_connect_first">请首先连接</string>
     <string name="mode1_throttle_on_right_stick">日本手：油门在右边的摇杆</string>
     <string name="mode2_throttle_on_left_stick">美国手：油门在左边的摇杆</string>
@@ -467,7 +466,7 @@
     <string name="pref_title_notifications">通知</string>
     <string name="normal_waypoint_toggle">常规</string>
     <string name="spline_waypoint_toggle">曲线</string>
-    <string name="mavlink_version">Mavlink 版本</string>
+    <string name="mavlink_version">MAVLink 版本</string>
     <string name="firmware_version">固件版本</string>    
     <string name="empty_content">--</string>
     <string name="usage_statistics">使用统计</string>

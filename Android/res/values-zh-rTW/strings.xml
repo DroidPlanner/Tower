@@ -431,8 +431,7 @@
     <!-- Others (when possible move to a grouping above) -->
     <string name="tune_roll">手動調整 roll 和 pitch 參數。Rate_P 是主要調整的數值。</string>
     <string name="dialog_box_title_altitude">高度</string>
-    <string name="mode_switch">指定遙控器的第 5 頻道切換飛行模式。切換開關到每一個位置以指定下列的飛行模式。</string>
-    <string name="MAVLinkError">MAVLink 錯誤:</string>
+    <string name="mode_switch">指定遙控器的第 5 頻道切換飛行模式。切換開關到每一個位置以指定下列的飛行模式。</string>g
     <string name="msg_connect_first">請先連線</string>
     <string name="mode1_throttle_on_right_stick">模式 1(日本手):油門在右邊的遙桿</string>
     <string name="mode2_throttle_on_left_stick">模式 2(美國手):油門在左邊的遙桿</string>
@@ -441,7 +440,7 @@
     <string name="pref_title_notifications">通知</string>
     <string name="normal_waypoint_toggle">一般</string>
     <string name="spline_waypoint_toggle">非線性</string>
-    <string name="mavlink_version">Mavlink 版本</string>
+    <string name="mavlink_version">MAVLink 版本</string>
     <string name="firmware_version">韌體版本</string>
     <string name="empty_content">--</string>
     <string name="usage_statistics">統計使用習慣</string>

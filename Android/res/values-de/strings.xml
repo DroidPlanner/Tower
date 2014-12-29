@@ -401,7 +401,6 @@
     <string name="tune_roll">Manuelles Tuning der Roll- und Nickeinstellung. Rate_P ist der primär einzustellende Wert.</string>
     <string name="dialog_box_title_altitude">Höhe</string>
     <string name="mode_switch">Ordnen Sie RC Kanal 5 für die Flugmodi einem Schalter auf der Fernsteuerung zu. Bewegen Sie den Schalter in jede Position und wählen Sie den gewünschten Flugmodus weiter unten.</string>
-    <string name="MAVLinkError">MAVLink Fehler:</string>
     <string name="msg_connect_first">Bitte zuerst verbinden</string>
     <string name="mode1_throttle_on_right_stick">Mode 1: Schub auf rechtem Steuerknüppel</string>
     <string name="mode2_throttle_on_left_stick">Mode 2: Schub auf linkem Steuerknüppel</string>
@@ -465,7 +464,7 @@
     <string name="label_yes_no_dialog_dont_show">Nicht mehr anzeigen.</string>
     <string name="length_label">Länge</string>
     <string name="locator">Flugverlauf</string>
-    <string name="mavlink_version">Mavlink-Version</string>
+    <string name="mavlink_version">MAVLink-Version</string>
     <string name="menu_action_delete">Löschen</string>
     <string name="menu_action_reverse">Umkehren</string>
     <string name="menu_search_toggle">Suche ein-/ausschalten</string>
