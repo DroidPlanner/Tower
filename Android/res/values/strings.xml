@@ -230,8 +230,8 @@
     <string name="waypoint_yawoffset">Use relative offset</string>
     <string name="waypoint_distance">Distance</string>
     <string name="waypoint_homecurrent">Set Home using current position</string>
-    <string name="waypoint_longitude">Longitude:</string>
-    <string name="waypoint_latitude">Latitude:</string>
+    <string name="waypoint_longitude">Longitude: %f°</string>
+    <string name="waypoint_latitude">Latitude: %f°</string>
     <string name="waypoint_speed">Target Speed</string>
     <string name="waypoint_throttle">Throttle</string>
     <string name="waypoint_speedtype">Speed Type</string>
