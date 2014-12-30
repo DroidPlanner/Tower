@@ -538,6 +538,6 @@
     <string name="structure_scan_step_height">Step height</string>
     <string name="stucture_scanner_cross_hatch">Cross Hatch</string>
     <string name="pref_licenses">Licenses</string>
-    <string name="pref_licenses_summary">Libraries (and it's licenses) used in this project</string>
+    <string name="pref_licenses_summary">Libraries (and it\'s licenses) used in this project</string>
 
 </resources>
