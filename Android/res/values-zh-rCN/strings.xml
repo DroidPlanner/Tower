@@ -221,8 +221,8 @@
     <string name="waypoint_yawoffset">使用相对偏移</string>
     <string name="waypoint_distance">距离</string>
     <string name="waypoint_homecurrent">将当前位置设为家</string>
-    <string name="waypoint_longitude">经度：</string>
-    <string name="waypoint_latitude">纬度：</string>
+    <string name="waypoint_longitude">经度： %f°</string>
+    <string name="waypoint_latitude">纬度： %f°</string>
     <string name="waypoint_speed">目标速度</string>
     <string name="waypoint_throttle">油门</string>
     <string name="waypoint_speedtype">速度类型</string>

@@ -212,8 +212,9 @@
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">One cannot add new waypoints after LAND or RTL</string>
     <string name="editor_info_window">Distance: 0m, Flight time: 0:00</string>
-    <string name="editor_info_window_distance">Distance:</string>
-    <string name="editor_info_window_flight_time">Flight Time:</string>
+    <string name="editor_info_window_distance">Distance: %02.2fm</string>
+    <string name="editor_info_window_flight_time">Flight Time: %1$02d:%2$02d</string>
+    <string name="editor_info_window_heading">Heading: %.0f°</string>
     <string name="distance_to_home">Distance to home</string>
     <string name="loiter_time">Loiter Time</string>
     <string name="waypoint_delay">Delay before next waypoint</string>

@@ -1,6 +1,28 @@
 package org.droidplanner.android.activities;
 
-import java.util.List;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.view.ActionMode;
+import android.text.TextUtils;
+import android.util.Pair;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.analytics.HitBuilders;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
@@ -24,31 +46,7 @@ import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.file.IO.MissionReader;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.view.ActionMode;
-import android.util.Pair;
-import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
-import android.widget.AbsListView;
-import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.analytics.HitBuilders;
-import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.coordinate.LatLong;
-import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
-import com.o3dr.services.android.lib.drone.mission.MissionItemType;
+import java.util.List;
 
 /**
  * This implements the map editor activity. The map editor activity allows the
@@ -339,10 +337,11 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 if(missionProxy != null) {
                     double missionLength = missionProxy.getMissionLength();
                     double speedParameter = dpApp.getDrone().getSpeedParameter();
-                    String infoString = getString(R.string.editor_info_window_distance) + String.format(" %02.2fm", missionLength);
+                    String infoString = getString(R.string.editor_info_window_distance, missionLength);
                     if (speedParameter > 0) {
                         int time = (int) (missionLength / speedParameter);
-                        infoString += ", " + getString(R.string.editor_info_window_flight_time) + String.format(" %02d:%02d", time / 60, time % 60);
+                        infoString += ", " + getString(R.string.editor_info_window_flight_time,
+                                time / 60, time % 60);
                     }
                     infoView.setText(infoString);
 

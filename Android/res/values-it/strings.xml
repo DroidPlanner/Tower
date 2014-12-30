@@ -178,8 +178,8 @@
     <string name="waypoint_yawoffset">Uso offset relativo</string>
     <string name="waypoint_distance">Distanza</string>
     <string name="waypoint_homecurrent">Imposta Home usando posizione attuale</string>
-    <string name="waypoint_longitude">Longitudine:</string>
-    <string name="waypoint_latitude">Latitudine:</string>
+    <string name="waypoint_longitude">Longitudine: %f°</string>
+    <string name="waypoint_latitude">Latitudine: %f°</string>
     <string name="waypoint_speed">Velocità obbiettivo</string>
     <string name="waypoint_throttle">Throttle</string>
     <string name="waypoint_speedtype">Typo velocità</string>

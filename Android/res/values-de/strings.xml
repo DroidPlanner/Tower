@@ -170,8 +170,8 @@
     <string name="waypoint_yawoffset">Relativen Versatz verwenden</string>
     <string name="waypoint_distance">Distanz</string>
     <string name="waypoint_homecurrent">Start auf aktuelle Position setzen</string>
-    <string name="waypoint_longitude">Längengrad:</string>
-    <string name="waypoint_latitude">Breitengrad:</string>
+    <string name="waypoint_longitude">Längengrad: %f°</string>
+    <string name="waypoint_latitude">Breitengrad: %f°</string>
     <string name="waypoint_speed">Zielgeschwindigkeit</string>
     <string name="waypoint_throttle">Schub</string>
     <string name="waypoint_speedtype">Geschwindigkeitstyp</string>
@@ -441,8 +441,8 @@
     <string name="waypointType_Change_Speed">Geschwindigkeit ändern</string>
     <string name="waypointType_Condition_Yaw">Gierwinkel setzen</string>
     <string name="waypointType_Set_Servo">Servo setzen</string>
-    <string name="editor_info_window_distance">Distanz:</string>
-    <string name="editor_info_window_flight_time">Flugzeit:</string>
+    <string name="editor_info_window_distance">Distanz: %02.2fm</string>
+    <string name="editor_info_window_flight_time">Flugzeit: %1$02d:%2$02d</string>
     <string name="menu_action_multi_edit">Multi-Edit</string>
     <string name="mission_control_auto">Auto</string>
     <string name="mission_control_dronie">Dronie</string>
@@ -457,4 +457,5 @@
     <string name="stucture_scanner_cross_hatch">Gitterschnitt</string>
     <string name="pref_licenses">Lizenzen</string>
     <string name="pref_licenses_summary">Verwendete Bibliotheken (und deren Lizenzen)</string>
+    <string name="editor_info_window_heading">Kurs: %.0f</string>
 </resources>

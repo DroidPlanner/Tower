@@ -55,7 +55,7 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_tts_periodic_rssi_key" translatable="false">tts_periodic_rssi</string>
     <string name="pref_tts_periodic_airspeed_key" translatable="false">tts_periodic_airspeed</string>
     <string name="pref_tts_warning_solar_activity_key" translatable="false">tts_solar_activity</string>
-    <string name="pref_tts_warning_wind_speed_key">tts_wind_speed</string>
+    <string name="pref_tts_warning_wind_speed_key" translatable="false">tts_wind_speed</string>
     <string name="pref_tts_warning_400ft_ceiling_exceeded_key" translatable="false">tts_ceiling_exceeded</string>
     <string name="pref_tts_warning_low_signal_key" translatable="false">tts_low_signal</string>
     <string name="pref_tts_warning_lost_signal_key" translatable="false">tts_lost_signal</string>
