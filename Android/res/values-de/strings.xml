@@ -361,17 +361,17 @@
     <string name="pref_tts_off">aus</string>
 
     <!-- Droneshare -->
-    <string name="dsheader">Wären Sie daran interessiert die kostenlose www.Droneshare.com Service zu benutzen?</string>
-    <string name="dsinfo">Droneshare ist ein kostenloser Webservice, mit der Sie Flüge analysieren und teilen können</string>
-    <string name="create_a_new_account">Neues Account erstellen</string>
-    <string name="login_to_an_existing_account">In ein bestehendes Acount einloggen</string>
+    <string name="dsheader">Möchten Sie den kostenlosen Dienst www.Droneshare.com verwenden?</string>
+    <string name="dsinfo">Droneshare ist ein kostenloser Webservice, mit der Sie Flüge analysieren und teilen können.</string>
+    <string name="create_a_new_account">Neues Konto erstellen</string>
+    <string name="login_to_an_existing_account">Mit bestehendem Konto anmelden</string>
     <string name="username">Benutzername</string>
     <string name="password">Passwort</string>
     <string name="do_not_use_droneshare">Droneshare nicht benutzen</string>
     <string name="email_address">Email addresse</string>
-    <string name="droneshare_password">Droneshare passwort</string>
+    <string name="droneshare_password">Droneshare Passwort</string>
     <string name="enter_or_pick_a_password">Passwort auswählen oder eingeben</string>
-    <string name="if_that_user_does_not_exist_it_will_be_created">Wenn der Benutzer nicht existiert, wird er erstellt</string>
+    <string name="if_that_user_does_not_exist_it_will_be_created">Wenn der Benutzer nicht existiert, wird er erstellt.</string>
     <string name="droneshare_username">Droneshare Benutzername</string>
     <string name="droneshare_enabled">Droneshare aktiviert</string>
     <string name="do_you_want_to_use_droneshare_">Möchten sie Droneshare benutzen?</string>
