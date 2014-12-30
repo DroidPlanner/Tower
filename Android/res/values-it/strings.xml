@@ -52,7 +52,7 @@
     <string name="pref_follow_me_mode_enabled">Abilita modalità FollowMe</string>
     <string name="pref_follow_me_mode_enabled_summary">Sotto sviluppo</string>
     <string name="pref_heading_mode">Abilita orientazione FPV</string>
-    <string name="pref_heading_mode_summary">Cambia orientazione su Modalità FPV (-180º to 180º)</string>
+    <string name="pref_heading_mode_summary">Cambia orientazione su Modalità FPV (-180° to 180°)</string>
     <string name="pref_advanced">Avanzato</string>
     <string name="pref_advanced_use_offline_maps">Usare mappe offline</string>
     <string name="pref_advanced_use_offline_maps_summary">Per vista mappa offline utilizzzare piastre mappe su memoria locale</string>

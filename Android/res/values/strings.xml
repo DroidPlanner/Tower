@@ -57,7 +57,7 @@
     <string name="pref_follow_me_mode_enabled">Enable FollowMe Mode</string>
     <string name="pref_follow_me_mode_enabled_summary">In development</string>
     <string name="pref_heading_mode">Enable FPV heading mode</string>
-    <string name="pref_heading_mode_summary">Change heading mode to FPV (-180º to 180º)</string>
+    <string name="pref_heading_mode_summary">Change heading mode to FPV (-180° to 180°)</string>
     <string name="pref_advanced">Advanced</string>
     <string name="pref_advanced_use_offline_maps">Use offline maps</string>
     <string name="pref_advanced_use_offline_maps_summary">Use map tiles on the local storage, for offline map view</string>
@@ -211,7 +211,7 @@
 
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">One cannot add new waypoints after LAND or RTL</string>
-    <string name="editor_info_window">Distance: 200m, Flight time: 3:30s</string>
+    <string name="editor_info_window">Distance: 0m, Flight time: 0:00</string>
     <string name="distance_to_home">Distance to home</string>
     <string name="loiter_time">Loiter Time</string>
     <string name="waypoint_delay">Delay before next waypoint</string>
@@ -471,7 +471,7 @@
     <string name="spline_waypoint_toggle">Spline</string>
     <string name="mavlink_version">MAVLink Version</string>
     <string name="firmware_version">Firmware Version</string>    
-    <string name="empty_content">--</string>
+    <string name="empty_content" translatable="false">--</string>
     <string name="usage_statistics">Usage Statistics</string>
     <string name="pref_usage_statistics_title">Send usage statistics</string>
     <string name="pref_usage_statistics_summary">Help improve DroidPlanner by sending usage statistics.</string>
@@ -531,5 +531,13 @@
     <string name="failed_start_calibration_message">Unable to start calibration!</string>
     <string name="pref_advanced_menu_title">Advanced Menu</string>
     <string name="pref_advanced_menu_summary">Enable advanced menu options.</string>
+    <string name="editor_info_window_distance">Distance:</string>
+    <string name="editor_info_window_flight_time">Flight Time:</string>
+    <string name="structure_scan_description">Map a building</string>
+    <string name="structure_scan_start_alt">Start altitude</string>
+    <string name="structure_scan_step_height">Step height</string>
+    <string name="stucture_scanner_cross_hatch">Cross Hatch</string>
+    <string name="pref_licenses">Licenses</string>
+    <string name="pref_licenses_summary">Libraries (and it's licenses) used in this project</string>
 
 </resources>

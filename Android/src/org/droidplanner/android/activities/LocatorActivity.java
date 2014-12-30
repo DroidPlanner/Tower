@@ -258,7 +258,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
                 distanceView.setText(R.string.status_waiting_for_gps, TextView.BufferType.NORMAL);
                 azimuthView.setText("");
             } else {
-                String distance = String.format("Distance: %.01fm",
+                String distance = getString(R.string.editor_info_window_distance) + String.format(" %.01fm",
                         MathUtils.getDistance(lastGCSPosition, msgCoord));
                 if(lastGCSBearingTo != Float.MAX_VALUE) {
                     final String bearing = String.format(" @ %.0f°", lastGCSBearingTo);
@@ -272,8 +272,8 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
                 }
             }
 
-            latView.setText(String.format("Latitude: %f°", msgCoord.getLatitude()));
-            lonView.setText(String.format("Longitude: %f°", msgCoord.getLongitude()));
+            latView.setText(getString(R.string.waypoint_latitude) + String.format(" %f°", msgCoord.getLatitude()));
+            lonView.setText(getString(R.string.waypoint_longitude) + String.format(" %f°", msgCoord.getLongitude()));
         } else {
             statusView.setVisibility(View.INVISIBLE);
             latView.setText("");

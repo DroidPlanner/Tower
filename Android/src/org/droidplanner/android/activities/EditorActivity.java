@@ -339,11 +339,10 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 if(missionProxy != null) {
                     double missionLength = missionProxy.getMissionLength();
                     double speedParameter = dpApp.getDrone().getSpeedParameter();
-                    String infoString = String.format("Distance %02.2fm", missionLength);
+                    String infoString = getString(R.string.editor_info_window_distance) + String.format(" %02.2fm", missionLength);
                     if (speedParameter > 0) {
                         int time = (int) (missionLength / speedParameter);
-                        infoString = infoString
-                                + String.format(", Flight time: %02d:%02d", time / 60, time % 60);
+                        infoString += ", " + getString(R.string.editor_info_window_flight_time) + String.format(" %02d:%02d", time / 60, time % 60);
                     }
                     infoView.setText(infoString);
 

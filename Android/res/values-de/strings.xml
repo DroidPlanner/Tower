@@ -51,7 +51,7 @@
     <string name="pref_follow_me_mode_enabled">Folge-Modus (FollowMe) aktivieren</string>
     <string name="pref_follow_me_mode_enabled_summary">In Entwicklung</string>
     <string name="pref_heading_mode">FPV Kurs-Modus</string>
-    <string name="pref_heading_mode_summary">Kurs-Modus auf FPV ändern (-180º to 180º)</string>
+    <string name="pref_heading_mode_summary">Kurs-Modus auf FPV ändern (-180° to 180°)</string>
     <string name="pref_advanced">Erweitert</string>
     <string name="pref_advanced_use_offline_maps">Offline-Karten verwenden</string>
     <string name="pref_advanced_use_offline_maps_summary">Verwenden von zwischengespeichertem Kartenmaterial, für die Offline-Verwendung</string>
@@ -172,7 +172,7 @@
     <string name="waypointInfo_TakeOff">Vom Boden abheben und bis zur angegebenen Höhe steigen, bevor zum nächsten Wegpunkt weitergeflogen wird.</string>
     <string name="waypointInfo_Waypoint">Reise zu einer Position im 3D-Raum. Optionale Verzögerung (in Sekunden) um Position zu halten.</string>
     <string name="waypointInfo_CondAlt">Steigen/Sinken mit angegebener Rate. Verzögerung des Missionsstatus bis gewünschte Höhe erreicht.</string>
-    <string name="waypointInfo_CondYaw">Bedingung zur Erreichung eines Zielwinkels setzen.</string>
+    <string name="waypointInfo_CondYaw">Bedingungen zur Erreichung eines Zielwinkels setzen.</string>
     <string name="waypointInfo_CondDistance">Missionsstatus pausieren bis innerhalb der gewünschten Entfernung zum nächsten NAV-Punkt</string>
     <string name="waypointInfo_SetHome">Ändert die Startposition auf die aktuelle Position oder auf eine angegebene Position.</string>
     <string name="waypointInfo_SetSpeed">Geschwindigkeits- und/oder Schub-Sollwerte ändern. Sowohl die Geschwindigkeit als auch die Schub auf -1 setzen, wenn keine Änderungen erforderlich sind</string>
@@ -180,7 +180,7 @@
     <string name="waypointInfo_SetJump">Wegpunkt wiederholen</string>
 
     <!-- Waypoint editor -->
-    <string name="editor_info_window">Distanz: 200m, Flugzeit: 3:30s</string>
+    <string name="editor_info_window">Distanz: 0m, Flugzeit: 0:00</string>
     <string name="distance_to_home">Distanz zum Start</string>
     <string name="loiter_time">Zeit</string>
     <string name="waypoint_delay">Verzögerung vor dem nächsten Wegpunkt</string>
@@ -437,9 +437,9 @@
     <string name="pref_title_screen">Bildschirm</string>
     <string name="pref_usage_statistics_summary">Mithelfen, DroidPlanner zu verbessern, indem Nutzungsstatistiken eingesendet werden.</string>
     <string name="pref_usage_statistics_title">Nutzungsstatistiken senden</string>
-    <string name="spline_waypoint_toggle">Keil</string>
+    <string name="spline_waypoint_toggle">Kurve</string>
     <string name="usage_statistics">Nutzungsstatistiken</string>
-    <string name="waypointType_SplineWaypoint">Keilwegpunkt</string>
+    <string name="waypointType_SplineWaypoint">Kurvenwegpunkt</string>
     <string name="expandable_listview_icon_desc">Erweiterbares Listenansichtsicon</string>
     <string name="button_setup_reset">Zurücksetzen</string>
     <string name="channel_label">Kanal</string>
@@ -501,6 +501,22 @@
     <string name="waypointType_BuildingMapper">Struktur-Scan</string>
     <string name="waypointType_Camera_Trigger">Kameraauslöser</string>
     <string name="waypointType_Change_Speed">Geschwindigkeit ändern</string>
-    <string name="waypointType_Condition_Yaw">Gieren setzen</string>
+    <string name="waypointType_Condition_Yaw">Gierwinkel setzen</string>
     <string name="waypointType_Set_Servo">Servo setzen</string>
+    <string name="editor_info_window_distance">Distanz:</string>
+    <string name="editor_info_window_flight_time">Flugzeit:</string>
+    <string name="menu_action_multi_edit">Multi-Edit</string>
+    <string name="mission_control_auto">Auto</string>
+    <string name="mission_control_dronie">Dronie</string>
+    <string name="mission_control_pause">Pause</string>
+    <string name="normal_waypoint_toggle">Normal</string>
+    <string name="radius_label">Radius</string>
+    <string name="pwm">PWM</string>
+    <string name="waypointType_EPM">EPM</string>
+    <string name="structure_scan_description">Ein Gebäude abbilden</string>
+    <string name="structure_scan_start_alt">Starthöhe</string>
+    <string name="structure_scan_step_height">Erhöhungsschritt</string>
+    <string name="stucture_scanner_cross_hatch">Gitterschnitt</string>
+    <string name="pref_licenses">Lizenzen</string>
+    <string name="pref_licenses_summary">Verwendete Bibliotheken (und deren Lizenzen)</string>
 </resources>

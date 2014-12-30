@@ -98,7 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/mode_desc_rectangle"
-                android:text="Map a building" />
+                android:text="@string/structure_scan_description" />
 
             <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
                 android:id="@+id/radiusPicker"
@@ -112,21 +112,21 @@
                 style="@style/missionItemDetailCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Start altitude" />
+                android:text="@string/structure_scan_start_alt" />
 
             <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
                 android:id="@+id/heightStepPicker"
                 style="@style/missionItemDetailCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Step height" />
+                android:text="@string/structure_scan_step_height" />
 
             <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
                 android:id="@+id/stepsPicker"
                 style="@style/missionItemDetailCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Number of steps" />
+                android:text="@string/label_steps_count" />
 
             <CheckBox
                 android:id="@+id/checkBoxSurveyCrossHatch"
@@ -135,7 +135,7 @@
                 android:layout_marginLeft="8dp"
                 android:fontFamily="sans-serif-light"
                 android:padding="5dp"
-                android:text="Cross Hatch"
+                android:text="@string/stucture_scanner_cross_hatch"
                 android:textSize="20sp" />
 
             <RelativeLayout
