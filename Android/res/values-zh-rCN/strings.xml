@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>	
 <resources>
 
-    <!-- Do not translate the following strings -->
-    <string name="app_title">DroidPlanner</string>
-
     <!-- Generic strings -->
     <string name="settings">设置</string>
     <string name="help">帮助</string>
@@ -208,7 +205,7 @@
 	
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">在LAND或RTL后无法添加新的航点</string>
-    <string name="editor_info_window">距离：200m，飞行时间：3:30s</string>
+    <string name="editor_info_window">距离：0m，飞行时间：0:00s</string>
     <string name="distance_to_home">至家的距离</string>
     <string name="loiter_time">悬停时间</string>
     <string name="waypoint_delay">到下一个航点前的延迟</string>
@@ -224,8 +221,8 @@
     <string name="waypoint_yawoffset">使用相对偏移</string>
     <string name="waypoint_distance">距离</string>
     <string name="waypoint_homecurrent">将当前位置设为家</string>
-    <string name="waypoint_longitude">经度：</string>
-    <string name="waypoint_latitude">纬度：</string>
+    <string name="waypoint_longitude">经度： %f°</string>
+    <string name="waypoint_latitude">纬度： %f°</string>
     <string name="waypoint_speed">目标速度</string>
     <string name="waypoint_throttle">油门</string>
     <string name="waypoint_speedtype">速度类型</string>
@@ -358,7 +355,7 @@
     <string name="mission_control_pause">暂停</string>
     <string name="mission_control_auto">自动</string>
     <string name="mission_control_follow">跟随</string>    
-    <string name="mission_control_dronie">Drnoie</string>
+    <string name="mission_control_dronie">Dronie</string>
     <string name="mission_control_change_speed">改变速度</string>
 	<string name="mission_control_condition_yaw_angle">目标角度</string>
     <string name="mission_control_condition_yaw_relative">相对角度</string>
@@ -467,8 +464,7 @@
     <string name="normal_waypoint_toggle">常规</string>
     <string name="spline_waypoint_toggle">曲线</string>
     <string name="mavlink_version">MAVLink 版本</string>
-    <string name="firmware_version">固件版本</string>    
-    <string name="empty_content">--</string>
+    <string name="firmware_version">固件版本</string>
     <string name="usage_statistics">使用统计</string>
     <string name="pref_usage_statistics_title">发送使用统计</string>
     <string name="pref_usage_statistics_summary">发送使用统计资料能帮助DroidPlanner增进平台完成度</string>
