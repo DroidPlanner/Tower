@@ -8,9 +8,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.mission.item.command.ReturnToLaunch;
 import com.o3dr.services.android.lib.drone.mission.item.command.Takeoff;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
+import com.o3dr.services.android.lib.drone.mission.item.spatial.Circle;
+import com.o3dr.services.android.lib.drone.mission.item.spatial.Land;
+import com.o3dr.services.android.lib.drone.mission.item.spatial.RegionOfInterest;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
+import com.o3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
@@ -92,9 +97,28 @@ public class MissionItemListAdapter extends RecyclerView.Adapter<MissionItemList
 
         nameView.setText(String.format("%3d", missionProxy.getOrder(proxy)));
 
-        final int leftDrawable = missionItem instanceof SplineWaypoint
-                ? R.drawable.ic_mission_spline_wp
-                : R.drawable.ic_mission_wp;
+        int leftDrawable;
+
+        if (missionItem instanceof Takeoff) {
+            leftDrawable = R.drawable.ic_mission_takeoff_wp;
+        } else if (missionItem instanceof Waypoint) {
+            leftDrawable = R.drawable.ic_mission_wp;
+        } else if (missionItem instanceof SplineWaypoint) {
+            leftDrawable = R.drawable.ic_mission_spline_wp;
+        } else if (missionItem instanceof Circle) {
+            leftDrawable = R.drawable.ic_mission_circle_wp;
+        } else if (missionItem instanceof RegionOfInterest) {
+            leftDrawable = R.drawable.ic_mission_roi_wp;
+        } else if (missionItem instanceof ReturnToLaunch) {
+            leftDrawable = R.drawable.ic_mission_rtl_wp;
+        } else if (missionItem instanceof Survey) {
+            leftDrawable = R.drawable.ic_mission_survey_wp;
+        } else if (missionItem instanceof Land) {
+            leftDrawable = R.drawable.ic_mission_land_wp;
+        } else {
+            leftDrawable = R.drawable.ic_mission_command_wp;
+        }
+
         altitudeView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, 0, 0, 0);
 
         if (missionItem instanceof MissionItem.SpatialItem) {
