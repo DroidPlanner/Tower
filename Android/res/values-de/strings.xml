@@ -108,13 +108,13 @@
     <string name="area">Fläche</string>
     <string name="camera_">Kamera:</string>
     <string name="inner_wps">Innere Wegpunkte</string>
-    <string name="hatch_angle">Lukenwinkel:</string>
+    <string name="hatch_angle">Bahnwinkel:</string>
     <string name="flight_altitude">Flughöhe:</string>
     <string name="overlap">Überlappung:</string>
-    <string name="sidelap">Seitl. Überlappung:</string>
+    <string name="sidelap">Seitliche Überlappung:</string>
     <string name="mission_length">Raster-Länge</string>
     <string name="pictures">Bilder</string>
-    <string name="number_of_strips">Anzahl Streifen</string>
+    <string name="number_of_strips">Anzahl Bahnen</string>
     <string name="exception_draw_polygon">Polygon/Wegpunkte zeichnen</string>
     <string name="exception_draw_2_more_polygon_points">Zeichnen Sie mindestens 2 weitere Polygonpunkte</string>
     <string name="exception_draw_1_more_polygon_points">Zeichnen Sie mindestens einen weiteren Polygonpunkt</string>
