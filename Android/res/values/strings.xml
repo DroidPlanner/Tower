@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Do not translate the following strings -->
-    <string name="app_title">DroidPlanner 3</string>
+    <string name="app_title" translatable="false">DroidPlanner 3</string>
 
     <!-- Generic strings -->
     <string name="settings">Settings</string>
@@ -442,7 +442,7 @@
     <string name="do_you_want_to_use_droneshare_">Do you want to use Droneshare?</string>
     <string name="pref_dshare_username_title">Username</string>
     <string name="pref_dshare_password_title">Password</string>
-    <string name="uploader_success_message">Upload successful! Select to view...</string>
+    <string name="uploader_success_message">Upload successful! Select to view…</string>
     <string name="uploader_fail_retry_message">Will try again later</string>
     <string name="uploader_notification_title">Droneshare upload</string>
 
@@ -492,8 +492,8 @@
     <string name="pref_ui_gps_hdop_summary">Display HDOP instead of FIX in satellite info bar item</string>
     <string name="pref_ui_gps_hdop_title">Display Satellite HDOP</string>
 
-    <string name="status_disconnecting">Disconnecting...</string>
-    <string name="status_connecting">Connecting...</string>
+    <string name="status_disconnecting">Disconnecting…</string>
+    <string name="status_connecting">Connecting…</string>
 
     <!-- Help -->
     <string name="help_item_description">How to plan and fly a mission</string>

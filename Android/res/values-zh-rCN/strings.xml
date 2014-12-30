@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>	
 <resources>
 
-    <!-- Do not translate the following strings -->
-    <string name="app_title">DroidPlanner</string>
-
     <!-- Generic strings -->
     <string name="settings">设置</string>
     <string name="help">帮助</string>
