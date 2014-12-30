@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Do not translate the following strings -->
-    <string name="app_title">DroidPlanner 3</string>
+    <string name="app_title" translatable="false">DroidPlanner 3</string>
 
     <!-- Generic strings -->
     <string name="settings">Settings</string>
@@ -57,7 +57,7 @@
     <string name="pref_follow_me_mode_enabled">Enable FollowMe Mode</string>
     <string name="pref_follow_me_mode_enabled_summary">In development</string>
     <string name="pref_heading_mode">Enable FPV heading mode</string>
-    <string name="pref_heading_mode_summary">Change heading mode to FPV (-180º to 180º)</string>
+    <string name="pref_heading_mode_summary">Change heading mode to FPV (-180° to 180°)</string>
     <string name="pref_advanced">Advanced</string>
     <string name="pref_advanced_use_offline_maps">Use offline maps</string>
     <string name="pref_advanced_use_offline_maps_summary">Use map tiles on the local storage, for offline map view</string>
@@ -211,7 +211,10 @@
 
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">One cannot add new waypoints after LAND or RTL</string>
-    <string name="editor_info_window">Distance: 200m, Flight time: 3:30s</string>
+    <string name="editor_info_window">Distance: 0m, Flight time: 0:00</string>
+    <string name="editor_info_window_distance">Distance: %02.2fm</string>
+    <string name="editor_info_window_flight_time">Flight Time: %1$02d:%2$02d</string>
+    <string name="editor_info_window_heading">Heading: %.0f°</string>
     <string name="distance_to_home">Distance to home</string>
     <string name="loiter_time">Loiter Time</string>
     <string name="waypoint_delay">Delay before next waypoint</string>
@@ -227,8 +230,8 @@
     <string name="waypoint_yawoffset">Use relative offset</string>
     <string name="waypoint_distance">Distance</string>
     <string name="waypoint_homecurrent">Set Home using current position</string>
-    <string name="waypoint_longitude">Longitude:</string>
-    <string name="waypoint_latitude">Latitude:</string>
+    <string name="waypoint_longitude">Longitude: %f°</string>
+    <string name="waypoint_latitude">Latitude: %f°</string>
     <string name="waypoint_speed">Target Speed</string>
     <string name="waypoint_throttle">Throttle</string>
     <string name="waypoint_speedtype">Speed Type</string>
@@ -239,6 +242,10 @@
     <string name="waypoint_jumpto">Jump to waypoint:</string>
     <string name="waypoint_repeat">Repeat waypoint</string>
     <string name="circle_turns">Number of turns</string>
+    <string name="structure_scan_description">Map a building</string>
+    <string name="structure_scan_start_alt">Start altitude</string>
+    <string name="structure_scan_step_height">Step height</string>
+    <string name="stucture_scanner_cross_hatch">Cross Hatch</string>
 
     <string name="dlg_clear_mission_title">Clear Mission</string>
     <string name="dlg_clear_mission_confirm">Clear all waypoints from the map?</string>
@@ -468,7 +475,7 @@
     <string name="spline_waypoint_toggle">Spline</string>
     <string name="mavlink_version">MAVLink Version</string>
     <string name="firmware_version">Firmware Version</string>    
-    <string name="empty_content">--</string>
+    <string name="empty_content" translatable="false">--</string>
     <string name="usage_statistics">Usage Statistics</string>
     <string name="pref_usage_statistics_title">Send usage statistics</string>
     <string name="pref_usage_statistics_summary">Help improve DroidPlanner by sending usage statistics.</string>
@@ -483,8 +490,8 @@
     <string name="pref_ui_gps_hdop_summary">Display HDOP instead of FIX in satellite info bar item</string>
     <string name="pref_ui_gps_hdop_title">Display Satellite HDOP</string>
 
-    <string name="status_disconnecting">Disconnecting...</string>
-    <string name="status_connecting">Connecting...</string>
+    <string name="status_disconnecting">Disconnecting…</string>
+    <string name="status_connecting">Connecting…</string>
 
     <!-- Help -->
     <string name="help_item_description">How to plan and fly a mission</string>
@@ -528,5 +535,7 @@
     <string name="failed_start_calibration_message">Unable to start calibration!</string>
     <string name="pref_advanced_menu_title">Advanced Menu</string>
     <string name="pref_advanced_menu_summary">Enable advanced menu options.</string>
+    <string name="pref_licenses">Licenses</string>
+    <string name="pref_licenses_summary">Libraries (and it\'s licenses) used in this project</string>
 
 </resources>

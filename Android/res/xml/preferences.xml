@@ -406,8 +406,8 @@
             android:title="@string/storage_folder" />
 
         <PreferenceScreen
-            android:summary="Libraries (and it&apos;s licenses) used in this project"
-            android:title="Licenses" >
+            android:summary="@string/pref_licenses_summary"
+            android:title="@string/pref_licenses" >
             <Preference
                 android:enabled="false"
                 android:key="@string/pref_storage_key"

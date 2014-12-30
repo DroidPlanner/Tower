@@ -53,7 +53,7 @@
     <string name="pref_follow_me_mode_enabled">啟用 FollowMe 跟隨模式</string>
     <string name="pref_follow_me_mode_enabled_summary">開發中</string>
     <string name="pref_heading_mode">啟用 FPV 朝向模式</string>
-    <string name="pref_heading_mode_summary">改變以 FPV 的朝向模式(-180º至180º)</string>
+    <string name="pref_heading_mode_summary">改變以 FPV 的朝向模式(-180°至180°)</string>
     <string name="pref_advanced">進階</string>
     <string name="pref_advanced_use_offline_maps">使用離線地圖</string>
     <string name="pref_advanced_use_offline_maps_summary">使用本機儲存的地圖區塊當作離線地圖的資料</string>
@@ -194,7 +194,7 @@
 
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">航點無法加在降落或返航的任務之後。</string>
-    <string name="editor_info_window">距離: 200公尺, 飛行時間: 3分30秒</string>
+    <string name="editor_info_window">距離: 0公尺, 飛行時間: 0分00秒</string>
     <string name="distance_to_home">到 家 的距離</string>
     <string name="loiter_time">停懸時間</string>
     <string name="waypoint_delay">往下一個航點前的延遲時間</string>
@@ -209,8 +209,8 @@
     <string name="waypoint_yawoffset">使用相對偏移</string>
     <string name="waypoint_distance">距離</string>
     <string name="waypoint_homecurrent">以目前位置設為 家 的位置</string>
-    <string name="waypoint_longitude">經度:</string>
-    <string name="waypoint_latitude">緯度:</string>
+    <string name="waypoint_longitude">經度: %f°</string>
+    <string name="waypoint_latitude">緯度: %f°</string>
     <string name="waypoint_speed">目標速度</string>
     <string name="waypoint_throttle">油門</string>
     <string name="waypoint_speedtype">速度類型</string>
@@ -442,7 +442,6 @@
     <string name="spline_waypoint_toggle">非線性</string>
     <string name="mavlink_version">MAVLink 版本</string>
     <string name="firmware_version">韌體版本</string>
-    <string name="empty_content">--</string>
     <string name="usage_statistics">統計使用習慣</string>
     <string name="pref_usage_statistics_title">發送使用習慣統計</string>
     <string name="pref_usage_statistics_summary">發送使用習慣統計資料能幫助 DroidPlanner 增進平台完成度</string>
