@@ -120,7 +120,7 @@
             android:noHistory="true"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
-            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar"/>
+            android:theme="@style/CustomDialogTheme"/>
 
     </application>
 
