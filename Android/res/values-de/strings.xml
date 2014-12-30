@@ -326,9 +326,9 @@
     <string name="do_you_want_to_use_droneshare_">Möchten sie Droneshare benutzen?</string>
     <string name="pref_dshare_username_title">Benutzername</string>
     <string name="pref_dshare_password_title">Passwort</string>
-    <string name="uploader_success_message">Hochladung erfolgreich! Klicken um zu sehen…</string>
+    <string name="uploader_success_message">Hochladen erfolgreich! Klicken um anzuzeigen…</string>
     <string name="uploader_fail_retry_message">Wird später noch einmal versucht</string>
-    <string name="uploader_notification_title">Droneshare Hochladung</string>
+    <string name="uploader_notification_title">Droneshare Upload</string>
     <string name="pref_bluetooth">BLUETOOTH VERBINDUNG</string>
     <string name="pref_bluetooth_device_address">Bluetooth-Gerät</string>
     <string name="pref_forget_bluetooth_device_address">Bluetooth-Gerät vergessen</string>
