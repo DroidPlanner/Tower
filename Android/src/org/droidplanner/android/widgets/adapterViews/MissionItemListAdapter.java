@@ -8,14 +8,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.mission.item.command.CameraTrigger;
+import com.o3dr.services.android.lib.drone.mission.item.command.ChangeSpeed;
+import com.o3dr.services.android.lib.drone.mission.item.command.EpmGripper;
 import com.o3dr.services.android.lib.drone.mission.item.command.ReturnToLaunch;
+import com.o3dr.services.android.lib.drone.mission.item.command.SetServo;
 import com.o3dr.services.android.lib.drone.mission.item.command.Takeoff;
+import com.o3dr.services.android.lib.drone.mission.item.command.YawCondition;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.Circle;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.Land;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.RegionOfInterest;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
-import com.o3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
@@ -99,24 +103,49 @@ public class MissionItemListAdapter extends RecyclerView.Adapter<MissionItemList
 
         int leftDrawable;
 
-        if (missionItem instanceof Takeoff) {
-            leftDrawable = R.drawable.ic_mission_takeoff_wp;
-        } else if (missionItem instanceof Waypoint) {
-            leftDrawable = R.drawable.ic_mission_wp;
-        } else if (missionItem instanceof SplineWaypoint) {
-            leftDrawable = R.drawable.ic_mission_spline_wp;
-        } else if (missionItem instanceof Circle) {
-            leftDrawable = R.drawable.ic_mission_circle_wp;
-        } else if (missionItem instanceof RegionOfInterest) {
-            leftDrawable = R.drawable.ic_mission_roi_wp;
-        } else if (missionItem instanceof ReturnToLaunch) {
-            leftDrawable = R.drawable.ic_mission_rtl_wp;
-        } else if (missionItem instanceof Survey) {
-            leftDrawable = R.drawable.ic_mission_survey_wp;
-        } else if (missionItem instanceof Land) {
-            leftDrawable = R.drawable.ic_mission_land_wp;
+        // Spatial item's icons
+        if (missionItem instanceof MissionItem.SpatialItem) {
+            if (missionItem instanceof SplineWaypoint) {
+                leftDrawable = R.drawable.ic_mission_spline_wp;
+            } else if (missionItem instanceof Circle) {
+                leftDrawable = R.drawable.ic_mission_circle_wp;
+            } else if (missionItem instanceof RegionOfInterest) {
+                leftDrawable = R.drawable.ic_mission_roi_wp;
+            } else if (missionItem instanceof Land) {
+                leftDrawable = R.drawable.ic_mission_land_wp;
+            } else {
+                leftDrawable = R.drawable.ic_mission_wp;
+            }
+        // Command icons
+        } else if (missionItem instanceof MissionItem.Command) {
+            if (missionItem instanceof CameraTrigger) {
+                leftDrawable = R.drawable.ic_mission_camera_trigger_wp;
+            } else if (missionItem instanceof ChangeSpeed) {
+                leftDrawable = R.drawable.ic_mission_change_speed_wp;
+            } else if (missionItem instanceof EpmGripper) {
+                leftDrawable = R.drawable.ic_mission_epm_gripper_wp;
+            } else if (missionItem instanceof ReturnToLaunch) {
+                leftDrawable = R.drawable.ic_mission_rtl_wp;
+            } else if (missionItem instanceof SetServo) {
+                leftDrawable = R.drawable.ic_mission_set_servo_wp;
+            } else if (missionItem instanceof Takeoff) {
+                leftDrawable = R.drawable.ic_mission_takeoff_wp;
+            } else if (missionItem instanceof YawCondition) {
+                leftDrawable = R.drawable.ic_mission_yaw_cond_wp;
+            } else {
+                leftDrawable = R.drawable.ic_mission_command_wp;
+            }
+        // Complex item's icons
+        // TODO CameraDetail (inconvertible type) and StructureScanner (condition always false) WPs
+        } else if (missionItem instanceof MissionItem.ComplexItem) {
+            if (missionItem instanceof Survey) {
+                leftDrawable = R.drawable.ic_mission_survey_wp;
+            } else {
+                leftDrawable = R.drawable.ic_mission_command_wp;
+            }
+        // Fallback icon
         } else {
-            leftDrawable = R.drawable.ic_mission_command_wp;
+            leftDrawable = R.drawable.ic_mission_wp;
         }
 
         altitudeView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, 0, 0, 0);
