@@ -1,12 +1,13 @@
 package org.droidplanner.android.proxy.mission.item.adapters;
 
-import org.droidplanner.core.mission.MissionItemType;
-
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
+
 
 public class AdapterMissionItems extends ArrayAdapter<MissionItemType> {
 
@@ -17,7 +18,7 @@ public class AdapterMissionItems extends ArrayAdapter<MissionItemType> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = super.getView(position, convertView, parent);
-		((TextView) view).setText(getItem(position).getName());
+		((TextView) view).setText(getItem(position).getLabel());
 		return view;
 	}
 

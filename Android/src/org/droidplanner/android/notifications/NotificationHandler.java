@@ -1,31 +1,51 @@
 package org.droidplanner.android.notifications;
 
-import org.droidplanner.android.utils.analytics.GAUtils;
-import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.model.Drone;
-
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.analytics.HitBuilders;
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.State;
+
+import org.droidplanner.android.utils.analytics.GAUtils;
 
 /**
  * This class handles DroidPlanner's status bar, and audible notifications. It
  * also provides support for the Android Wear functionality.
  */
-public class NotificationHandler implements DroneInterfaces.OnDroneListener {
+public class NotificationHandler {
 
 	/**
 	 * Defines the methods that need to be supported by Droidplanner's
 	 * notification provider types (i.e: audible (text to speech), status bar).
 	 */
-	interface NotificationProvider extends DroneInterfaces.OnDroneListener {
-		void quickNotify(String feedback);
-
-        /**
-         * Release resources used by the provider.
-         */
-        void onTerminate();
+	interface NotificationProvider {
+		/**
+		 * Release resources used by the provider.
+		 */
+		void onTerminate();
 	}
+
+	private final static IntentFilter eventFilter = new IntentFilter(AttributeEvent.AUTOPILOT_FAILSAFE);
+
+	private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final String action = intent.getAction();
+			if (AttributeEvent.AUTOPILOT_FAILSAFE.equals(action)) {
+                State droneState = drone.getAttribute(AttributeType.STATE);
+				final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+						.setCategory(GAUtils.Category.FAILSAFE).setAction("Autopilot warning")
+						.setLabel(droneState.getFailsafeWarning());
+				GAUtils.sendEvent(eventBuilder);
+			}
+		}
+	};
 
 	/**
 	 * Handles Droidplanner's audible notifications.
@@ -38,60 +58,32 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	private final StatusBarNotificationProvider mStatusBarNotification;
 
 	/**
-	 * Handles Pebble notification.
-	 */
-	private final PebbleNotificationProvider mPebbleNotification;
-
-	/**
 	 * Handles emergency beep notification.
 	 */
 	private final EmergencyBeepNotificationProvider mBeepNotification;
 
-	public NotificationHandler(Context context) {
-		mTtsNotification = new TTSNotificationProvider(context);
-		mStatusBarNotification = new StatusBarNotificationProvider(context);
-		mPebbleNotification = new PebbleNotificationProvider(context);
+	private final Context context;
+	private final Drone drone;
+
+	public NotificationHandler(Context context, Drone dpApi) {
+		this.context = context;
+		this.drone = dpApi;
+
+		mTtsNotification = new TTSNotificationProvider(context, drone);
+		mStatusBarNotification = new StatusBarNotificationProvider(context, drone);
 		mBeepNotification = new EmergencyBeepNotificationProvider(context);
-	}
 
-	@Override
-	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
-		mTtsNotification.onDroneEvent(event, drone);
-		mStatusBarNotification.onDroneEvent(event, drone);
-		mPebbleNotification.onDroneEvent(event, drone);
-		mBeepNotification.onDroneEvent(event, drone);
-
-        switch(event){
-            case AUTOPILOT_WARNING:
-                final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                        .setCategory(GAUtils.Category.FAILSAFE)
-                        .setAction("Autopilot warning")
-                        .setLabel(drone.getState().getWarning());
-                GAUtils.sendEvent(eventBuilder);
-                break;
-        }
+		LocalBroadcastManager.getInstance(context).registerReceiver(eventReceiver, eventFilter);
 	}
 
 	/**
-	 * Sends a quick notification to the user. Uses toasts for written
-	 * notification, and speech if voice notification is enabled.
-	 * 
-	 * @param feedback
-	 *            short message to show the user.
+	 * Release resources used by the notification handler. After calling this
+	 * method, this object should no longer be used.
 	 */
-	public void quickNotify(String feedback) {
-		mTtsNotification.quickNotify(feedback);
-		mStatusBarNotification.quickNotify(feedback);
+	public void terminate() {
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(eventReceiver);
+		mTtsNotification.onTerminate();
+		mStatusBarNotification.onTerminate();
+		mBeepNotification.onTerminate();
 	}
-
-    /**
-     * Release resources used by the notification handler.
-     * After calling this method, this object should no longer be used.
-     */
-    public void terminate(){
-        mTtsNotification.onTerminate();
-        mStatusBarNotification.onTerminate();
-        mPebbleNotification.onTerminate();
-        mBeepNotification.onTerminate();
-    }
 }

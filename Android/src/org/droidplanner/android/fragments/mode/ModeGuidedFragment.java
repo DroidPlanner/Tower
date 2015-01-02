@@ -1,60 +1,87 @@
 package org.droidplanner.android.fragments.mode;
 
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-import org.droidplanner.core.drone.variables.GuidedPoint;
-import org.droidplanner.core.model.Drone;
-
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ModeGuidedFragment extends Fragment implements CardWheelHorizontalView.OnCardWheelChangedListener {
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.GuidedState;
 
-	public Drone drone;
+import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
+import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 
-    private CardWheelHorizontalView mAltitudeWheel;
+public class ModeGuidedFragment extends ApiListenerFragment implements
+        CardWheelHorizontalView.OnCardWheelScrollListener {
+
+    private static final float DEFAULT_ALTITUDE = 2f;
+
+	private CardWheelHorizontalView mAltitudeWheel;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 		return inflater.inflate(R.layout.fragment_mode_guided, container, false);
 	}
 
-    @Override
+	@Override
 	public void onViewCreated(View parentView, Bundle savedInstanceState) {
-        super.onViewCreated(parentView, savedInstanceState);
+		super.onViewCreated(parentView, savedInstanceState);
 
-        final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(getActivity()
-                .getApplicationContext(), R.layout.wheel_text_centered, 2, 200, "%d m");
+		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(getActivity()
+				.getApplicationContext(), R.layout.wheel_text_centered, 2, 200, "%d m");
 
-        mAltitudeWheel = (CardWheelHorizontalView) parentView.findViewById(R.id.altitude_spinner);
-        mAltitudeWheel.setViewAdapter(altitudeAdapter);
+		mAltitudeWheel = (CardWheelHorizontalView) parentView.findViewById(R.id.altitude_spinner);
+		mAltitudeWheel.setViewAdapter(altitudeAdapter);
 
-        final int initialValue = (int) Math.max(drone.getGuidedPoint().getAltitude()
-                        .valueInMeters(), GuidedPoint.getMinAltitude(drone));
-        mAltitudeWheel.setCurrentValue(initialValue);
-        mAltitudeWheel.addChangingListener(this);
+		mAltitudeWheel.addScrollListener(this);
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		if (mAltitudeWheel != null) {
+			mAltitudeWheel.removeChangingListener(this);
+		}
 	}
 
     @Override
-    public void onDestroyView(){
-        super.onDestroyView();
-        if(mAltitudeWheel != null) {
-            mAltitudeWheel.removeChangingListener(this);
-        }
+    public void onScrollingStarted(CardWheelHorizontalView cardWheel, int startValue) {
+
     }
 
     @Override
-    public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
-        switch(cardWheel.getId()){
-            case R.id.altitude_spinner:
-                drone.getGuidedPoint().changeGuidedAltitude(newValue);
-                break;
-        }
+    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+
     }
+
+    @Override
+	public void onScrollingEnded(CardWheelHorizontalView cardWheel, int startValue, int endValue) {
+		switch (cardWheel.getId()) {
+		case R.id.altitude_spinner:
+			final Drone drone = getDrone();
+			if (drone.isConnected())
+				drone.setGuidedAltitude(endValue);
+			break;
+		}
+	}
+
+	@Override
+	public void onApiConnected() {
+		if (mAltitudeWheel != null) {
+            GuidedState guidedState = getDrone().getAttribute(AttributeType.GUIDED_STATE);
+
+			final int initialValue = (int) Math.max(guidedState == null
+                    ? DEFAULT_ALTITUDE
+                    : guidedState.getCoordinate().getAltitude(),
+                    DEFAULT_ALTITUDE);
+			mAltitudeWheel.setCurrentValue(initialValue);
+		}
+	}
+
+	@Override
+	public void onApiDisconnected() {
+	}
 }

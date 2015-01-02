@@ -2,22 +2,24 @@ package org.droidplanner.android.activities;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.DroneshareDialog;
 import org.droidplanner.android.fragments.FlightActionsFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
 import org.droidplanner.android.fragments.TelemetryFragment;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.model.Drone;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -27,13 +29,61 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-@SuppressWarnings("deprecation")
-public class FlightActivity extends DrawerNavigationUI implements OnDroneListener {
+public class FlightActivity extends DrawerNavigationUI {
 
     private static final String TAG = FlightActivity.class.getSimpleName();
 	private static final int GOOGLE_PLAY_SERVICES_REQUEST_CODE = 101;
+
+    /**
+     * Determines how long the failsafe view is visible for.
+     */
+    private static final long WARNING_VIEW_DISPLAY_TIMEOUT = 10000l; //ms
+
+    private static final IntentFilter eventFilter = new IntentFilter();
+    static {
+        eventFilter.addAction(AttributeEvent.AUTOPILOT_FAILSAFE);
+        eventFilter.addAction(AttributeEvent.STATE_ARMING);
+        eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
+        eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+        eventFilter.addAction(AttributeEvent.STATE_UPDATED);
+        eventFilter.addAction(AttributeEvent.FOLLOW_START);
+        eventFilter.addAction(AttributeEvent.MISSION_DRONIE_CREATED);
+    }
+
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(AttributeEvent.AUTOPILOT_FAILSAFE.equals(action)){
+                String warning = intent.getStringExtra(AttributeEventExtra
+                        .EXTRA_AUTOPILOT_FAILSAFE_MESSAGE);
+                onWarningChanged(warning);
+            }
+            else if(AttributeEvent.STATE_ARMING.equals(action)
+                    || AttributeEvent.STATE_CONNECTED.equals(action)
+                    || AttributeEvent.STATE_DISCONNECTED.equals(action)
+                    || AttributeEvent.STATE_UPDATED.equals(action)){
+                enableSlidingUpPanel(dpApp.getDrone());
+            }
+            else if(AttributeEvent.FOLLOW_START.equals(action)){
+                //Extend the sliding drawer if collapsed.
+                if(!mSlidingPanelCollapsing.get() && mSlidingPanel.isSlidingEnabled() &&
+                        !mSlidingPanel.isPanelExpanded()){
+                    mSlidingPanel.expandPanel();
+                }
+            }
+            else if(AttributeEvent.MISSION_DRONIE_CREATED.equals(action)){
+                float dronieBearing = intent.getFloatExtra(AttributeEventExtra.EXTRA_MISSION_DRONIE_BEARING,  -1);
+                if(dronieBearing != -1)
+                    updateMapBearing(dronieBearing);
+            }
+        }
+    };
 
     private final AtomicBoolean mSlidingPanelCollapsing = new AtomicBoolean(false);
 
@@ -62,14 +112,27 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
         public void onPanelHidden(View view) {}
     };
 
+    private final Runnable hideWarningView = new Runnable() {
+        @Override
+        public void run() {
+            handler.removeCallbacks(this);
+
+            if(warningView != null && warningView.getVisibility() != View.GONE)
+                warningView.setVisibility(View.GONE);
+        }
+    };
+
+    private final Handler handler = new Handler();
+
 	private FragmentManager fragmentManager;
+
 	private TextView warningView;
 
 	private FlightMapFragment mapFragment;
+    private FlightActionsFragment flightActions;
 
     private SlidingUpPanelLayout mSlidingPanel;
     private View mFlightActionsView;
-    private FlightActionsFragment flightActions;
 
 	private View mLocationButtonsContainer;
 	private ImageButton mGoToMyLocation;
@@ -83,7 +146,6 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 		fragmentManager = getSupportFragmentManager();
 
         mSlidingPanel = (SlidingUpPanelLayout) findViewById(R.id.slidingPanelContainer);
-        enableSlidingUpPanel(this.drone);
 
 		warningView = (TextView) findViewById(R.id.failsafeTextView);
 
@@ -184,7 +246,8 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
         });
 
         // Add the telemetry fragment
-        Fragment telemetryFragment = fragmentManager.findFragmentById(R.id.telemetryFragment);
+        TelemetryFragment telemetryFragment = (TelemetryFragment) fragmentManager.findFragmentById
+                (R.id.telemetryFragment);
         if (telemetryFragment == null) {
             telemetryFragment = new TelemetryFragment();
             fragmentManager.beginTransaction()
@@ -193,7 +256,8 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
         }
 
         // Add the mode info panel fragment
-        Fragment flightModePanel = fragmentManager.findFragmentById(R.id.sliding_drawer_content);
+        FlightModePanel flightModePanel = (FlightModePanel) fragmentManager.findFragmentById(R.id
+                .sliding_drawer_content);
         if (flightModePanel == null) {
             flightModePanel = new FlightModePanel();
             fragmentManager.beginTransaction()
@@ -203,6 +267,20 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 
 		DroneshareDialog.perhapsShow(this);
 	}
+
+    @Override
+    public void onApiConnected(){
+        super.onApiConnected();
+        enableSlidingUpPanel(dpApp.getDrone());
+        getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
+    }
+
+    @Override
+    public void onApiDisconnected(){
+        super.onApiDisconnected();
+        enableSlidingUpPanel(dpApp.getDrone());
+        getBroadcastManager().unregisterReceiver(eventReceiver);
+    }
 
     @Override
     protected int getNavigationDrawerEntryId() {
@@ -275,10 +353,10 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 	 */
 	private void setupMapFragment() {
 		if (mapFragment == null && isGooglePlayServicesValid(true)) {
-			mapFragment = (FlightMapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
+			mapFragment = (FlightMapFragment) fragmentManager.findFragmentById(R.id.flight_map_fragment);
 			if (mapFragment == null) {
 				mapFragment = new FlightMapFragment();
-				fragmentManager.beginTransaction().add(R.id.mapFragment, mapFragment).commit();
+				fragmentManager.beginTransaction().add(R.id.flight_map_fragment, mapFragment).commit();
 			}
 		}
 	}
@@ -310,41 +388,13 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
         mLocationButtonsContainer.requestLayout();
 	}
 
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		super.onDroneEvent(event, drone);
-		switch (event) {
-		case AUTOPILOT_WARNING:
-			onWarningChanged(drone);
-			break;
-
-        case ARMING:
-        case CONNECTED:
-        case DISCONNECTED:
-        case STATE:
-            enableSlidingUpPanel(drone);
-            break;
-
-        case FOLLOW_START:
-            //Extend the sliding drawer if collapsed.
-            if(!mSlidingPanelCollapsing.get() && mSlidingPanel.isSlidingEnabled() &&
-                    !mSlidingPanel.isPanelExpanded()){
-                mSlidingPanel.expandPanel();
-            }
-            break;
-
-		default:
-			break;
-		}
-	}
-
-    private void enableSlidingUpPanel(Drone drone){
-        if (mSlidingPanel == null) {
+    private void enableSlidingUpPanel(Drone api){
+        if (mSlidingPanel == null || api == null) {
             return;
         }
 
         final boolean isEnabled = flightActions != null && flightActions.isSlidingUpPanelEnabled
-                (drone);
+                (api);
 
         if (isEnabled) {
             mSlidingPanel.setSlidingEnabled(true);
@@ -362,12 +412,13 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
         }
     }
 
-	public void onWarningChanged(Drone drone) {
-		if (drone.getState().isWarning()) {
-			warningView.setText(drone.getState().getWarning());
+	public void onWarningChanged(String warning) {
+		if (!TextUtils.isEmpty(warning)) {
+            handler.removeCallbacks(hideWarningView);
+
+			warningView.setText(warning);
 			warningView.setVisibility(View.VISIBLE);
-		} else {
-			warningView.setVisibility(View.GONE);
+            handler.postDelayed(hideWarningView, WARNING_VIEW_DISPLAY_TIMEOUT);
 		}
 	}
 

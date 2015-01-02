@@ -1,15 +1,14 @@
 package org.droidplanner.android.widgets.actionProviders;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.android.utils.unit.UnitManager;
 import org.droidplanner.android.widgets.spinners.ModeAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
-import org.droidplanner.core.model.Drone;
 
 import android.content.Context;
 import android.os.Handler;
@@ -21,8 +20,17 @@ import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.MAVLink.Messages.ApmModes;
 import com.google.android.gms.analytics.HitBuilders;
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.Battery;
+import com.o3dr.services.android.lib.drone.property.Gps;
+import com.o3dr.services.android.lib.drone.property.Home;
+import com.o3dr.services.android.lib.drone.property.Signal;
+import com.o3dr.services.android.lib.drone.property.State;
+import com.o3dr.services.android.lib.drone.property.Type;
+import com.o3dr.services.android.lib.drone.property.VehicleMode;
+import com.o3dr.services.android.lib.util.MathUtils;
 
 /**
  * Set of actions supported by the info bar
@@ -108,8 +116,17 @@ public abstract class InfoBarItem {
 		@Override
 		public void updateItemView(final Context context, final Drone drone) {
 			if (mItemView != null) {
-				String update = drone == null ? "--" : String.format("Home\n%s", drone.getHome()
-						.getDroneDistanceToHome().toString());
+				String update = "--";
+                if(drone != null && drone.isConnected()) {
+                    final Gps droneGps = drone.getAttribute(AttributeType.GPS);
+                    final Home droneHome = drone.getAttribute(AttributeType.HOME);
+                    if(droneGps.isValid() && droneHome.isValid()) {
+                        double distanceToHome = MathUtils.getDistance(droneHome.getCoordinate(),
+                                droneGps.getPosition());
+                        update = String.format("Home\n%s", UnitManager.getUnitProvider()
+                                .distanceToString(distanceToHome));
+                    }
+                }
 				((TextView) mItemView).setText(update);
 			}
 		}
@@ -132,15 +149,18 @@ public abstract class InfoBarItem {
 			if (mItemView != null) {
 
 				final String update;
-				if (drone == null) {
+				if (drone == null || !drone.isConnected()) {
 					update = "--";
-				} else if (mAppPrefs.shouldGpsHdopBeDisplayed()) {
-					update = String.format(Locale.ENGLISH, "Satellite\n%d, %.1f", drone.getGps()
-							.getSatCount(), drone.getGps().getGpsEPH());
-				} else {
-					update = String.format(Locale.ENGLISH, "Satellite\n%d, %s", drone.getGps()
-							.getSatCount(), drone.getGps().getFixType());
-				}
+				} else{
+                    Gps droneGps = drone.getAttribute(AttributeType.GPS);
+                    if (mAppPrefs.shouldGpsHdopBeDisplayed()) {
+                        update = String.format(Locale.ENGLISH, "Satellite\n%d, %.1f", droneGps
+                                .getSatellitesCount(), droneGps.getGpsEph());
+                    } else {
+                        update = String.format(Locale.ENGLISH, "Satellite\n%d, %s", droneGps
+                                .getSatellitesCount(), droneGps.getFixStatus());
+                    }
+                }
 
 				((TextView) mItemView).setText(update);
 			}
@@ -177,15 +197,15 @@ public abstract class InfoBarItem {
 		/**
 		 * Handle to the current drone state.
 		 */
-		protected Drone mDrone;
+		protected Drone drone;
 
 		/**
 		 * Runnable used to update the drone flight time.
 		 */
 		protected Runnable mFlightTimeUpdater;
 
-		public FlightTimeInfo(Context context, View parentView, Drone drone) {
-			super(context, parentView, drone, R.id.bar_propeller);
+		public FlightTimeInfo(Context context, View parentView, Drone api) {
+			super(context, parentView, api, R.id.bar_propeller);
 		}
 
 		@Override
@@ -196,33 +216,34 @@ public abstract class InfoBarItem {
 
 			mHandler = new Handler();
 
-			mFlightTimeUpdater = new Runnable() {
-				@Override
-				public void run() {
-					mHandler.removeCallbacks(this);
-					if (mDrone == null)
-						return;
+            mFlightTimeUpdater = new Runnable() {
+                @Override
+                public void run() {
+                    mHandler.removeCallbacks(this);
+                    if (drone == null || !drone.isConnected())
+                        return;
 
-					if (mItemView != null) {
-						long timeInSeconds = mDrone.getState().getFlightTime();
-						long minutes = timeInSeconds / 60;
-						long seconds = timeInSeconds % 60;
+                    if (mItemView != null) {
+                        long timeInSeconds = drone.getFlightTime();
+                        long minutes = timeInSeconds / 60;
+                        long seconds = timeInSeconds % 60;
 
-						((TextView) mItemView).setText(String.format("Air Time\n%02d:%02d",
-								minutes, seconds));
-					}
+                        ((TextView) mItemView).setText(String.format("Air Time\n%02d:%02d",
+                                minutes, seconds));
+                    }
 
-					mHandler.postDelayed(this, FLIGHT_TIMER_PERIOD);
-				}
-			};
+                    mHandler.postDelayed(this, FLIGHT_TIMER_PERIOD);
+                }
+            };
 
 			mPopup = initPopupWindow(context, sPopupWindowLayoutId);
 			final View popupView = mPopup.getContentView();
 			popupView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if (mDrone != null) {
-						mDrone.getState().resetFlightTimer();
+					if (FlightTimeInfo.this.drone != null && FlightTimeInfo.this.drone
+                            .isConnected()) {
+						FlightTimeInfo.this.drone.resetFlightTimer();
 					}
 					mPopup.dismiss();
 				}
@@ -243,12 +264,12 @@ public abstract class InfoBarItem {
 
 		@Override
 		public void updateItemView(final Context context, final Drone drone) {
-			mDrone = drone;
+			this.drone = drone;
 			if (mItemView == null)
 				return;
 
 			mHandler.removeCallbacks(mFlightTimeUpdater);
-			if (drone != null) {
+			if (drone != null && drone.isConnected()) {
 				mFlightTimeUpdater.run();
 			} else {
 				((TextView) mItemView).setText("--:--");
@@ -271,7 +292,7 @@ public abstract class InfoBarItem {
 		/**
 		 * This popup is used to show additional signal info.
 		 */
-		private PopupWindow mPopup;
+		protected PopupWindow mPopup;
 
 
 		private TextView currentView;
@@ -315,25 +336,27 @@ public abstract class InfoBarItem {
 				return;
 
 			String infoUpdate;
-			if (drone == null) {
+            Battery droneBattery;
+			if (drone == null || !drone.isConnected() || ((droneBattery = drone.getAttribute(AttributeType.BATTERY)) ==
+                    null)) {
 				infoUpdate = sDefaultValue;
 				currentView.setText(sDefaultValue);
 				mAhView.setText(sDefaultValue);
 			} else {
 
-				Double discharge = drone.getBattery().getBattDischarge();
-				String dischargeText;
-				if (discharge == null) {
-					dischargeText = sDefaultValue;
-				}else{
-					dischargeText = String.format(Locale.ENGLISH, "%2.0f mAh", discharge);					
-				}
-				
-				mAhView.setText(String.format(Locale.ENGLISH,"Remaining %2.0f%%", drone.getBattery().getBattRemain()));
-				currentView.setText(String.format("Current %2.1f A", drone.getBattery().getBattCurrent()));
-				
-				infoUpdate = String.format(Locale.ENGLISH,"%2.1fv\n", drone.getBattery().getBattVolt());
-				infoUpdate = infoUpdate.concat(dischargeText);
+                Double discharge = droneBattery.getBatteryDischarge();
+                String dischargeText;
+                if (discharge == null) {
+                    dischargeText = sDefaultValue;
+                }else{
+                    dischargeText = String.format(Locale.ENGLISH, "%2.0f mAh", discharge);
+                }
+
+                mAhView.setText(String.format(Locale.ENGLISH,"Remaining %2.0f%%", droneBattery.getBatteryRemain()));
+                currentView.setText(String.format("Current %2.1f A", droneBattery.getBatteryCurrent()));
+
+                infoUpdate = String.format(Locale.ENGLISH,"%2.1fv\n", droneBattery.getBatteryVoltage());
+                infoUpdate = infoUpdate.concat(dischargeText);
 			}
 
 			mPopup.update();
@@ -404,29 +427,30 @@ public abstract class InfoBarItem {
 			if (mItemView == null)
 				return;
 
-			if (drone == null) {
+			if (drone == null || !drone.isConnected()) {
 				setDefaultValues();
-			}else if (!drone.getRadio().isValid()){
-				setDefaultValues();
-			}else{
-				setValuesFromRadio(drone);
-			}
-
+			}else {
+                final Signal droneSignal = drone.getAttribute(AttributeType.SIGNAL);
+                if (!droneSignal.isValid()) {
+                    setDefaultValues();
+                } else {
+                    setValuesFromRadio(droneSignal);
+                }
+            }
 			mPopup.update();
 		}
 
-		private void setValuesFromRadio(final Drone drone) {
-			((TextView) mItemView).setText(String.format(Locale.ENGLISH,"%d%%", drone.getRadio().getSignalStrength()));
+		private void setValuesFromRadio(final Signal droneSignal) {
+			((TextView) mItemView).setText(String.format(Locale.ENGLISH, "%d%%",
+                    MathUtils.getSignalStrength(droneSignal.getFadeMargin(),
+                            droneSignal.getRemFadeMargin())));
 
-			mRssiView.setText(String.format("RSSI %2.0f dB", drone.getRadio().getRssi()));
-			mRemRssiView.setText(String.format("RemRSSI %2.0f dB", drone.getRadio()
-					.getRemRssi()));
-			mNoiseView.setText(String.format("Noise %2.0f dB", drone.getRadio().getNoise()));
-			mRemNoiseView.setText(String.format("RemNoise %2.0f dB", drone.getRadio()
-					.getRemNoise()));
-			mFadeView.setText(String.format("Fade %2.0f dB", drone.getRadio().getFadeMargin()));
-			mRemFadeView.setText(String.format("RemFade %2.0f dB", drone.getRadio()
-					.getRemFadeMargin()));
+			mRssiView.setText(String.format("RSSI %2.0f dB", droneSignal.getRssi()));
+			mRemRssiView.setText(String.format("RemRSSI %2.0f dB", droneSignal.getRemrssi()));
+			mNoiseView.setText(String.format("Noise %2.0f dB", droneSignal.getNoise()));
+			mRemNoiseView.setText(String.format("RemNoise %2.0f dB", droneSignal.getRemnoise()));
+			mFadeView.setText(String.format("Fade %2.0f dB", droneSignal.getFadeMargin()));
+			mRemFadeView.setText(String.format("RemFade %2.0f dB", droneSignal.getRemFadeMargin()));
 		}
 
 		private void setDefaultValues() {
@@ -479,15 +503,16 @@ public abstract class InfoBarItem {
 			modesSpinner.setOnSpinnerItemSelectedListener(new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {
                 @Override
                 public void onSpinnerItemSelected(Spinner parent, int position) {
-                    if (mDrone != null) {
-                        final ApmModes newMode = (ApmModes) parent.getItemAtPosition(position);
-                        mDrone.getState().changeFlightMode(newMode);
+                    if (mDrone != null && mDrone.isConnected()) {
+                        final VehicleMode newMode = (VehicleMode) parent.getItemAtPosition
+                                (position);
+                        mDrone.changeVehicleMode(newMode);
 
                         //Record the attempt to change flight modes
                         final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
                                 .setCategory(GAUtils.Category.FLIGHT)
                                 .setAction("Flight mode changed")
-                                .setLabel(newMode.getName());
+                                .setLabel(newMode.getLabel());
                         GAUtils.sendEvent(eventBuilder);
                     }
                 }
@@ -503,11 +528,19 @@ public abstract class InfoBarItem {
 			if (mItemView == null)
 				return;
 
+            final boolean isDroneConnected = drone != null && mDrone.isConnected();
 			final SpinnerSelfSelect modesSpinner = (SpinnerSelfSelect) mItemView;
-			final int droneType = drone == null ? -1 : drone.getType();
+			final int droneType;
+            if(isDroneConnected){
+                Type type = mDrone.getAttribute(AttributeType.TYPE);
+                droneType = type.getDroneType();
+            }
+            else{
+                droneType = -1;
+            }
+
 			if (droneType != mLastDroneType) {
-				final List<ApmModes> flightModes = droneType == -1 ? Collections
-						.<ApmModes> emptyList() : ApmModes.getModeList(droneType);
+				final List<VehicleMode> flightModes = VehicleMode.getVehicleModePerDroneType(droneType);
 
 				mModeAdapter.clear();
 				mModeAdapter.addAll(flightModes);
@@ -516,9 +549,9 @@ public abstract class InfoBarItem {
 				mLastDroneType = droneType;
 			}
 
-			if (mDrone != null) {
-                modesSpinner.forcedSetSelection(mModeAdapter.getPosition(mDrone.getState()
-                        .getMode()));
+			if (isDroneConnected) {
+                final State droneState = mDrone.getAttribute(AttributeType.STATE);
+                modesSpinner.forcedSetSelection(mModeAdapter.getPosition(droneState.getVehicleMode()));
             }
 		}
 	}
@@ -561,7 +594,7 @@ public abstract class InfoBarItem {
 
 			mExtraInfoBarItems = new InfoBarItem[] { new HomeInfo(context, popupView, drone),
 					new GpsInfo(context, popupView, drone),
-					new BatteryInfo(context, popupView, drone),
+					new ExtraBatteryInfo(context, popupView, drone, mItemView),
 					new ExtraFlightTimeInfo(context, popupView, drone, mItemView),
 					new ExtraSignalInfo(context, popupView, drone, mItemView) };
 
@@ -588,6 +621,34 @@ public abstract class InfoBarItem {
 				infoItem.updateItemView(context, drone);
 			}
 		}
+
+        private static class ExtraBatteryInfo extends BatteryInfo {
+
+            private final View mWindowView;
+
+            public ExtraBatteryInfo(Context context, View parentView, Drone drone, View windowView) {
+                super(context, parentView, drone);
+                mWindowView = windowView;
+            }
+
+            @Override
+            protected void initItemView(Context context, final View parentView, Drone drone){
+                super.initItemView(context, parentView, drone);
+                if(mItemView == null)
+                    return;
+
+                mItemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(mPopup == null)
+                            return;
+
+                        int yLoc = mWindowView.getBottom() + mItemView.getBottom();
+                        mPopup.showAtLocation(mWindowView, Gravity.RIGHT | Gravity.TOP, 0, yLoc);
+                    }
+                });
+            }
+        }
 
 		private static class ExtraFlightTimeInfo extends FlightTimeInfo {
 

@@ -1,6 +1,6 @@
 package org.droidplanner.android.fragments.mode;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

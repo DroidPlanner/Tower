@@ -2,16 +2,15 @@ package org.droidplanner.android.utils.prefs;
 
 import java.util.UUID;
 
-import org.droidplanner.R;
-import org.droidplanner.android.utils.Utils;
-import org.droidplanner.android.utils.file.IO.VehicleProfileReader;
-import org.droidplanner.core.drone.profiles.VehicleProfile;
-import org.droidplanner.core.firmware.FirmwareType;
+import org.droidplanner.android.R;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.SparseBooleanArray;
+
+import com.o3dr.services.android.lib.drone.connection.ConnectionType;
+import com.o3dr.services.android.lib.drone.connection.StreamRates;
 
 /**
  * Provides structured access to Droidplanner preferences
@@ -24,13 +23,13 @@ import android.util.SparseBooleanArray;
  * 
  * 
  */
-public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preferences {
+public class DroidPlannerPrefs {
 
 	/*
 	 * Default preference value
 	 */
 	public static final boolean DEFAULT_USAGE_STATISTICS = true;
-	public static final String DEFAULT_CONNECTION_TYPE = Utils.ConnectionType.USB.name();
+	public static final String DEFAULT_CONNECTION_TYPE = String.valueOf(ConnectionType.TYPE_USB);
 	private static final boolean DEFAULT_KEEP_SCREEN_ON = false;
 	private static final boolean DEFAULT_MAX_VOLUME_ON_START = false;
 	private static final boolean DEFAULT_PERMANENT_NOTIFICATION = true;
@@ -44,8 +43,12 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	public static final boolean DEFAULT_TTS_WARNING_LOST_SIGNAL = true;
 	public static final boolean DEFAULT_TTS_WARNING_LOW_SIGNAL = false;
 	public static final boolean DEFAULT_TTS_WARNING_AUTOPILOT_WARNING = true;
+    private static final String DEFAULT_USB_BAUD_RATE = "57600";
+    private static final String DEFAULT_TCP_SERVER_IP = "192.168.40.100";
+    private static final String DEFAULT_TCP_SERVER_PORT = "5763";
+    private static final String DEFAULT_UDP_SERVER_PORT = "14550";
 
-	// Public for legacy usage
+    // Public for legacy usage
 	public SharedPreferences prefs;
 	private Context context;
 
@@ -125,37 +128,6 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 		return r;
 	}
 
-	@Override
-	public FirmwareType getVehicleType() {
-		String str = prefs.getString("pref_vehicle_type", FirmwareType.ARDU_COPTER.toString());
-		return FirmwareType.firmwareFromString(str);
-	}
-
-	@Override
-	public VehicleProfile loadVehicleProfile(FirmwareType firmwareType) {
-		return VehicleProfileReader.load(context, firmwareType);
-	}
-
-	@Override
-	public Rates getRates() {
-		Rates rates = new Rates();
-
-		rates.extendedStatus = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_ext_stat", "0"));
-		rates.extra1 = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra1", "0"));
-		rates.extra2 = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra2", "0"));
-		rates.extra3 = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra3", "0"));
-		rates.position = Integer
-				.parseInt(prefs.getString("pref_mavlink_stream_rate_position", "0"));
-		rates.rcChannels = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_rc_channels",
-				"0"));
-		rates.rawSensors = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_raw_sensors",
-				"0"));
-		rates.rawController = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_raw_controller", "0"));
-		return rates;
-	}
-
 	/**
 	 * @return true if google analytics reporting is enabled.
 	 */
@@ -164,13 +136,67 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 				DEFAULT_USAGE_STATISTICS);
 	}
 
-	/**
-	 * @return the selected mavlink connection type.
-	 */
-	public String getMavLinkConnectionType() {
-		return prefs.getString(context.getString(R.string.pref_connection_type_key),
-				DEFAULT_CONNECTION_TYPE);
-	}
+    public void setConnectionParameterType(int connectionType){
+        prefs.edit().putString(context.getString(R.string.pref_connection_type_key),
+                String.valueOf(connectionType)).apply();
+    }
+
+    /**
+     * @return the selected mavlink connection type.
+     */
+    public int getConnectionParameterType(){
+        return Integer.parseInt(prefs.getString(context.getString(R.string
+                .pref_connection_type_key), DEFAULT_CONNECTION_TYPE));
+    }
+
+    public void setUsbBaudRate(int baudRate){
+        prefs.edit().putString(context.getString(R.string.pref_baud_type_key),
+                String.valueOf(baudRate)).apply();
+    }
+
+    public int getUsbBaudRate(){
+        return Integer.parseInt(prefs.getString(context.getString(R.string.pref_baud_type_key),
+                DEFAULT_USB_BAUD_RATE));
+    }
+
+    public void setTcpServerIp(String serverIp){
+        prefs.edit().putString(context.getString(R.string.pref_server_ip_key), serverIp).apply();
+    }
+
+    public String getTcpServerIp(){
+        return prefs.getString(context.getString(R.string.pref_server_ip_key),
+                DEFAULT_TCP_SERVER_IP);
+    }
+
+    public void setTcpServerPort(int serverPort){
+        prefs.edit().putString(context.getString(R.string.pref_server_port_key),
+                String.valueOf(serverPort)).apply();
+    }
+
+    public int getTcpServerPort(){
+        return Integer.parseInt(prefs.getString(context.getString(R.string.pref_server_port_key),
+                DEFAULT_TCP_SERVER_PORT));
+    }
+
+    public void setUdpServerPort(int serverPort){
+        prefs.edit().putString(context.getString(R.string.pref_udp_server_port_key),
+                String.valueOf(serverPort)).apply();
+    }
+
+    public int getUdpServerPort(){
+        return Integer.parseInt(prefs.getString(context.getString(R.string
+                        .pref_udp_server_port_key), DEFAULT_UDP_SERVER_PORT));
+    }
+
+    public String getBluetoothDeviceAddress() {
+        return prefs.getString(context.getString(R.string.pref_bluetooth_device_address_key), null);
+    }
+
+    public void setBluetoothDeviceAddress(String newAddress) {
+        final SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(context.getString(R.string.pref_bluetooth_device_address_key), newAddress)
+                .apply();
+    }
 
 	/**
 	 * @return true if the device screen should stay on.
@@ -241,16 +267,6 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 				.getBoolean("pref_guided_mode_on_long_press", DEFAULT_GUIDED_MODE_ON_LONG_PRESS);
 	}
 
-	public String getBluetoothDeviceAddress() {
-		return prefs.getString(context.getString(R.string.pref_bluetooth_device_address_key), null);
-	}
-
-	public void setBluetoothDeviceAddress(String newAddress) {
-		final SharedPreferences.Editor editor = prefs.edit();
-		editor.putString(context.getString(R.string.pref_bluetooth_device_address_key), newAddress)
-				.apply();
-	}
-
 	/**
 	 * Use HDOP instead of satellite count on infobar
 	 */
@@ -311,4 +327,27 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 				context.getString(R.string.pref_tts_warning_autopilot_warnings_key),
 				DEFAULT_TTS_WARNING_AUTOPILOT_WARNING);
 	}
+
+    public StreamRates getStreamRates() {
+        StreamRates rates = new StreamRates();
+
+        rates.setExtendedStatus(Integer.parseInt(prefs.getString(
+                "pref_mavlink_stream_rate_ext_stat", "2")));
+        rates.setExtra1(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra1", "2")));
+        rates.setExtra2(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra2", "2")));
+        rates.setExtra3(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra3", "2")));
+        rates.setPosition(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_position",
+                "2")));
+        rates.setRcChannels(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_rc_channels",
+                "2")));
+        rates.setRawSensors(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_raw_sensors",
+                "2")));
+        rates.setRawController(Integer.parseInt(prefs.getString(
+                "pref_mavlink_stream_rate_raw_controller", "2")));
+        return rates;
+    }
+
+    public boolean isAdvancedMenuEnabled(){
+        return prefs.getBoolean(context.getString(R.string.pref_advanced_menu_toggle_key), false);
+    }
 }

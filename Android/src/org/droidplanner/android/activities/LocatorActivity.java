@@ -1,18 +1,5 @@
 package org.droidplanner.android.activities;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import org.droidplanner.R;
-import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
-import org.droidplanner.android.dialogs.openfile.OpenTLogDialog;
-import org.droidplanner.android.fragments.LocatorListFragment;
-import org.droidplanner.android.fragments.LocatorMapFragment;
-import org.droidplanner.android.utils.file.IO.TLogReader;
-import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.helpers.geoTools.GeoTools;
-
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -25,6 +12,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.MAVLink.common.msg_global_position_int;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.util.MathUtils;
+
+import org.droidplanner.android.R;
+import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
+import org.droidplanner.android.dialogs.openfile.OpenTLogDialog;
+import org.droidplanner.android.fragments.LocatorListFragment;
+import org.droidplanner.android.fragments.LocatorMapFragment;
+import org.droidplanner.android.utils.file.IO.TLogReader;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This implements the map locator activity. The map locator activity allows the user to find
@@ -41,15 +41,13 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     /*
     View widgets.
      */
-    private FragmentManager fragmentManager;
-
     private LocatorMapFragment locatorMapFragment;
     private LocatorListFragment locatorListFragment;
     private LinearLayout statusView;
     private TextView latView, lonView, distanceView, azimuthView;
 
     private msg_global_position_int selectedMsg;
-    private Coord2D lastGCSPosition;
+    private LatLong lastGCSPosition;
     private float lastGCSBearingTo = Float.MAX_VALUE;
     private double lastGCSAzimuth = Double.MAX_VALUE;
 
@@ -63,7 +61,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_locator);
 
-        fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
         locatorMapFragment = ((LocatorMapFragment) fragmentManager
                 .findFragmentById(R.id.mapFragment));
@@ -165,14 +163,14 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_open_tlog_file:
                 openLogFile();
                 return true;
 
             default:
-                return super.onMenuItemSelected(featureId, item);
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -238,11 +236,11 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     public void setSelectedMsg(msg_global_position_int msg) {
         selectedMsg = msg;
 
-        final Coord2D msgCoord;
+        final LatLong msgCoord;
         if(msg != null)
             msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
         else
-            msgCoord = new Coord2D(0, 0);
+            msgCoord = new LatLong(0, 0);
         locatorMapFragment.updateLastPosition(msgCoord);
     }
 
@@ -251,15 +249,17 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
             statusView.setVisibility(View.VISIBLE);
 
             // coords
-            final Coord2D msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
+            final LatLong msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
 
             // distance
-            if(lastGCSPosition == null || lastGCSPosition.isEmpty()) {
+            if(lastGCSPosition == null || lastGCSPosition.getLatitude() == 0 || lastGCSPosition
+                    .getLongitude() == 0) {
                 // unknown
                 distanceView.setText(R.string.status_waiting_for_gps, TextView.BufferType.NORMAL);
                 azimuthView.setText("");
             } else {
-                String distance = String.format("Distance: %.01fm", GeoTools.getDistance(lastGCSPosition, msgCoord).valueInMeters());
+                String distance = getString(R.string.editor_info_window_distance,
+                        MathUtils.getDistance(lastGCSPosition, msgCoord));
                 if(lastGCSBearingTo != Float.MAX_VALUE) {
                     final String bearing = String.format(" @ %.0f°", lastGCSBearingTo);
                     distance += bearing;
@@ -267,13 +267,13 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
                 distanceView.setText(distance);
 
                 if(lastGCSAzimuth != Double.MAX_VALUE) {
-                    final String azimuth = String.format("Heading: %.0f°", lastGCSAzimuth);
+                    final String azimuth = getString(R.string.editor_info_window_heading, lastGCSAzimuth);
                     azimuthView.setText(azimuth);
                 }
             }
 
-            latView.setText(String.format("Latitude: %f°", msgCoord.getLat()));
-            lonView.setText(String.format("Longitude: %f°", msgCoord.getLng()));
+            latView.setText(getString(R.string.waypoint_latitude, msgCoord.getLatitude()));
+            lonView.setText(getString(R.string.waypoint_longitude, msgCoord.getLongitude()));
         } else {
             statusView.setVisibility(View.INVISIBLE);
             latView.setText("");
@@ -283,27 +283,27 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
         }
     }
 
-    private static Coord2D coordFromMsgGlobalPositionInt(msg_global_position_int msg) {
+    private static LatLong coordFromMsgGlobalPositionInt(msg_global_position_int msg) {
         double lat = msg.lat;
         lat /= 1E7;
 
         double lon = msg.lon;
         lon /= 1E7;
 
-        return new Coord2D(lat, lon);
+        return new LatLong(lat, lon);
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        lastGCSPosition = new Coord2D(location.getLatitude(), location.getLongitude());
+        lastGCSPosition = new LatLong(location.getLatitude(), location.getLongitude());
         lastGCSAzimuth = location.getBearing();
 
         if(selectedMsg != null) {
-            final Coord2D msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
+            final LatLong msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
 
             final Location target = new Location(location);
-            target.setLatitude(msgCoord.getLat());
-            target.setLongitude(msgCoord.getLng());
+            target.setLatitude(msgCoord.getLatitude());
+            target.setLongitude(msgCoord.getLongitude());
 
             lastGCSBearingTo = Math.round(location.bearingTo(target));
             lastGCSBearingTo = (lastGCSBearingTo + 360) % 360;

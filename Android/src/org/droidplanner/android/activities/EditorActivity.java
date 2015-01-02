@@ -1,9 +1,30 @@
 package org.droidplanner.android.activities;
 
-import java.util.List;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.view.ActionMode;
+import android.text.TextUtils;
+import android.util.Pair;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
+import com.google.android.gms.analytics.HitBuilders;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
+
+import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.YesNoDialog;
@@ -23,35 +44,9 @@ import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragme
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.file.IO.MissionReader;
-import org.droidplanner.android.utils.file.IO.MissionWriter;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.helpers.units.Length;
-import org.droidplanner.core.helpers.units.Speed;
-import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.model.Drone;
-import org.droidplanner.core.util.Pair;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.text.TextUtils;
-import android.view.ActionMode;
-import android.view.ActionMode.Callback;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
-import android.widget.AbsListView;
-import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.MAVLink.common.msg_mission_item;
-import com.google.android.gms.analytics.HitBuilders;
+import java.util.List;
 
 /**
  * This implements the map editor activity. The map editor activity allows the
@@ -59,7 +54,7 @@ import com.google.android.gms.analytics.HitBuilders;
  */
 public class EditorActivity extends DrawerNavigationUI implements OnPathFinishedListener,
 		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener, OnEditorInteraction,
-		Callback, MissionSelection.OnSelectionUpdateListener, OnClickListener, OnLongClickListener {
+        ActionMode.Callback, MissionSelection.OnSelectionUpdateListener, OnClickListener, OnLongClickListener {
 
 	/**
 	 * Used to retrieve the item detail window when the activity is destroyed,
@@ -72,7 +67,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
     /**
 	 * Used to provide access and interact with the
-	 * {@link org.droidplanner.core.mission.Mission} object on the Android
+	 * {@link org.droidplanner.android.proxy.mission.MissionProxy} object on the Android
 	 * layer.
 	 */
 	private MissionProxy missionProxy;
@@ -80,7 +75,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	/*
 	 * View widgets.
 	 */
-	private EditorMapFragment planningMapFragment;
 	private GestureMapFragment gestureMapFragment;
 	private EditorToolsFragment editorToolsFragment;
 	private MissionDetailFragment itemDetailFragment;
@@ -117,8 +111,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 		fragmentManager = getSupportFragmentManager();
 
-		planningMapFragment = ((EditorMapFragment) fragmentManager
-				.findFragmentById(R.id.mapFragment));
 		gestureMapFragment = ((GestureMapFragment) fragmentManager
 				.findFragmentById(R.id.gestureMapFragment));
 		editorToolsFragment = (EditorToolsFragment) fragmentManager
@@ -162,13 +154,34 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		 */
 		mContainerItemDetail = findViewById(R.id.containerItemDetail);
 
-        final DroidPlannerApp dpApp = ((DroidPlannerApp) getApplication());
-		missionProxy = dpApp.getMissionProxy();
 		gestureMapFragment.setOnPathFinishedListener(this);
 	}
 
+    @Override
+    public void onApiConnected(){
+        super.onApiConnected();
+
+        missionProxy = dpApp.getMissionProxy();
+        if(missionProxy != null)
+            missionProxy.selection.addSelectionUpdateListener(this);
+
+        getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
+    }
+
+    @Override
+    public void onApiDisconnected(){
+        super.onApiDisconnected();
+
+        if(missionProxy != null)
+            missionProxy.selection.removeSelectionUpdateListener(this);
+
+        getBroadcastManager().unregisterReceiver(eventReceiver);
+    }
+
 	@Override
 	public void onClick(View v) {
+        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
+
 		switch (v.getId()) {
 		case R.id.map_orientation_button:
 			if(planningMapFragment != null) {
@@ -199,6 +212,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public boolean onLongClick(View view) {
+        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
+
 		switch (view.getId()) {
 		case R.id.drone_location_button:
 			planningMapFragment.setAutoPanMode(AutoPanMode.DRONE);
@@ -231,18 +246,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         return R.id.navigation_editor;
     }
 
-    @Override
-	public void onStart() {
-		super.onStart();
-		missionProxy.selection.addSelectionUpdateListener(this);
-	}
-
-	@Override
-	public void onStop() {
-		super.onStop();
-		missionProxy.selection.removeSelectionUpdateListener(this);
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
@@ -252,7 +255,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_open_mission:
 			openMissionFile();
@@ -263,98 +266,105 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 			return true;
 
 		default:
-			return super.onMenuItemSelected(featureId, item);
+			return super.onOptionsItemSelected(item);
 		}
 	}
 
 	private void openMissionFile() {
-		OpenFileDialog missionDialog = new OpenMissionDialog(drone) {
+		OpenFileDialog missionDialog = new OpenMissionDialog() {
 			@Override
 			public void waypointFileLoaded(MissionReader reader) {
                 openedMissionFilename = getSelectedFilename();
-				drone.getMission().onMissionLoaded(reader.getMsgMissionItems());
-				planningMapFragment.zoomToFit();
+                missionProxy.readMissionFromFile(reader);
+                gestureMapFragment.getMapFragment().zoomToFit();
 			}
 		};
 		missionDialog.openDialog(this);
 	}
 
 	private void saveMissionFile() {
-        final Context context = getApplicationContext();
+		final Context context = getApplicationContext();
         final String defaultFilename = TextUtils.isEmpty(openedMissionFilename)
                 ? FileStream.getWaypointFilename("waypoints")
                 : openedMissionFilename;
 
         final EditInputDialog dialog = EditInputDialog.newInstance(context, getString(R.string.label_enter_filename),
                 defaultFilename, new EditInputDialog.Listener() {
-                    @Override
-                    public void onOk(CharSequence input) {
-                        final List<msg_mission_item> missionItems = drone.getMission()
-                                .getMsgMissionItems();
-                        if (MissionWriter.write( missionItems, input.toString())) {
-                            Toast.makeText(context, R.string.file_saved_success, Toast.LENGTH_SHORT).show();
+					@Override
+					public void onOk(CharSequence input) {
+						if (missionProxy.writeMissionToFile(input.toString())) {
+							Toast.makeText(context, R.string.file_saved_success, Toast.LENGTH_SHORT)
+									.show();
 
-                            final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                                    .setCategory(GAUtils.Category.MISSION_PLANNING)
-                                    .setAction("Mission saved to file")
-                                    .setLabel("Mission items count")
-                                    .setValue(missionItems.size());
-                            GAUtils.sendEvent(eventBuilder);
-                        } else {
-                            Toast.makeText(context, R.string.file_saved_error, Toast.LENGTH_SHORT).show();
-                        }
-                    }
+							final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+									.setCategory(GAUtils.Category.MISSION_PLANNING)
+									.setAction("Mission saved to file")
+									.setLabel("Mission items count");
+							GAUtils.sendEvent(eventBuilder);
 
-                    @Override
-                    public void onCancel() {}
-                });
+							return;
+						}
 
-        dialog.show(getSupportFragmentManager(), "Mission filename");
+						Toast.makeText(context, R.string.file_saved_error, Toast.LENGTH_SHORT)
+								.show();
+					}
+
+					@Override
+					public void onCancel() {
+					}
+				});
+
+		dialog.show(getSupportFragmentManager(), "Mission filename");
 	}
 
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
-		planningMapFragment.saveCameraPosition();
+        gestureMapFragment.getMapFragment().saveCameraPosition();
 	}
 
+    private static final IntentFilter eventFilter = new IntentFilter();
+    static {
+        eventFilter.addAction(MissionProxy.ACTION_MISSION_PROXY_UPDATE);
+        eventFilter.addAction(AttributeEvent.MISSION_RECEIVED);
+    }
+
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(MissionProxy.ACTION_MISSION_PROXY_UPDATE.equals(action)){
+                if(missionProxy != null) {
+                    double missionLength = missionProxy.getMissionLength();
+                    double speedParameter = dpApp.getDrone().getSpeedParameter();
+                    String infoString = getString(R.string.editor_info_window_distance, missionLength);
+                    if (speedParameter > 0) {
+                        int time = (int) (missionLength / speedParameter);
+                        infoString += ", " + getString(R.string.editor_info_window_flight_time,
+                                time / 60, time % 60);
+                    }
+                    infoView.setText(infoString);
+
+                    // Remove detail window if item is removed
+                    if (missionProxy.selection.getSelected().isEmpty() && itemDetailFragment != null) {
+                        removeItemDetail();
+                    }
+                }
+            }
+            else if(AttributeEvent.MISSION_RECEIVED.equals(action)){
+                final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
+                if (planningMapFragment != null) {
+                    planningMapFragment.zoomToFit();
+                }
+            }
+        }
+    };
+
 	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		super.onDroneEvent(event, drone);
-
-		switch (event) {
-		case MISSION_UPDATE:
-			Length missionLength = missionProxy.getMissionLength();
-			Speed speedParameter = drone.getSpeed().getSpeedParameter();
-			String infoString = "Distance " + missionLength;
-			if (speedParameter != null) {
-				int time = (int) (missionLength.valueInMeters() / speedParameter
-						.valueInMetersPerSecond());
-				infoString = infoString
-						+ String.format(", Flight time: %02d:%02d", time / 60, time % 60);
-			}
-			infoView.setText(infoString);
-
-			// Remove detail window if item is removed
-			if (missionProxy.selection.getSelected().isEmpty() && itemDetailFragment != null) {
-				removeItemDetail();
-			}
-			break;
-
-		case MISSION_RECEIVED:
-			if (planningMapFragment != null) {
-				planningMapFragment.zoomToFit();
-			}
-			break;
-
-		default:
-			break;
-		}
-	}
-
-	@Override
-	public void onMapClick(Coord2D point) {
+	public void onMapClick(LatLong point) {
         enableMultiEdit(false);
+
+        if(missionProxy == null) return;
 
 		// If an mission item is selected, unselect it.
 		missionProxy.selection.clearSelection();
@@ -367,13 +377,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 				missionProxy.addWaypoint(point);
 			}
 			break;
-		case DRAW:
-			break;
-		case POLY:
-			break;
-		case TRASH:
-			break;
-		case NONE:
+
+		default:
 			break;
 		}
 	}
@@ -384,12 +389,15 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public void editorToolChanged(EditorTools tools) {
-		missionProxy.selection.clearSelection();
+		if(missionProxy != null) missionProxy.selection.clearSelection();
 		setupTool(tools);
 	}
 
 	private void setupTool(EditorTools tool) {
-		planningMapFragment.skipMarkerClickEvents(false);
+        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
+        if(planningMapFragment != null)
+		    planningMapFragment.skipMarkerClickEvents(false);
+
 		switch (tool) {
 		case DRAW:
 			enableSplineToggle(true);
@@ -406,7 +414,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 			// Enable the spline selection toggle
 			enableSplineToggle(true);
 			gestureMapFragment.disableGestureDetection();
-			planningMapFragment.skipMarkerClickEvents(true);
+            if(planningMapFragment != null)
+			    planningMapFragment.skipMarkerClickEvents(true);
 			break;
 
 		case TRASH:
@@ -477,19 +486,22 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	}
 
 	@Override
-	public void onPathFinished(List<Coord2D> path) {
-		List<Coord2D> points = planningMapFragment.projectPathIntoMap(path);
+	public void onPathFinished(List<LatLong> path) {
+        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
+		List<LatLong> points = planningMapFragment.projectPathIntoMap(path);
 		switch (getTool()) {
 		case DRAW:
-			if (mIsSplineEnabled) {
-				missionProxy.addSplineWaypoints(points);
-			} else {
-				missionProxy.addWaypoints(points);
-			}
+            if(missionProxy != null) {
+                if (mIsSplineEnabled) {
+                    missionProxy.addSplineWaypoints(points);
+                } else {
+                    missionProxy.addWaypoints(points);
+                }
+            }
 			break;
 
 		case POLY:
-			if (path.size() > 2) {
+			if (missionProxy != null && path.size() > 2) {
 				missionProxy.addSurveyPolygon(points);
 			} else {
 				editorToolsFragment.setTool(EditorTools.POLY);
@@ -505,16 +517,19 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public void onDetailDialogDismissed(List<MissionItemProxy> itemList) {
-        missionProxy.selection.removeItemsFromSelection(itemList);
+        if(missionProxy != null) missionProxy.selection.removeItemsFromSelection(itemList);
 	}
 
 	@Override
-	public void onWaypointTypeChanged(List<Pair<MissionItemProxy, MissionItemProxy>> oldNewItemsList) {
+	public void onWaypointTypeChanged(MissionItemType newType, List<Pair<MissionItemProxy,
+                MissionItemProxy>> oldNewItemsList) {
 		missionProxy.replaceAll(oldNewItemsList);
 	}
 
 	@Override
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
+
 		switch (item.getItemId()) {
 		case R.id.menu_action_multi_edit:
             if(mMultiEditEnabled){
@@ -523,32 +538,37 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 return true;
             }
 
-			final List<MissionItemProxy> selectedProxies = missionProxy.selection.getSelected();
-            if(selectedProxies.size() >= 1){
-                showItemDetail(selectMissionDetailType(selectedProxies));
-                enableMultiEdit(true);
-            }
-            else {
-                Toast.makeText(getApplicationContext(), "No Waypoint(s) selected.", Toast.LENGTH_LONG)
-                        .show();
-            }
+            if(missionProxy != null) {
+                final List<MissionItemProxy> selectedProxies = missionProxy.selection.getSelected();
+                if (selectedProxies.size() >= 1) {
+                    showItemDetail(selectMissionDetailType(selectedProxies));
+                    enableMultiEdit(true);
+                } else {
+                    Toast.makeText(getApplicationContext(), "No Waypoint(s) selected.", Toast.LENGTH_LONG)
+                            .show();
+                }
 
-            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                    .setCategory(GAUtils.Category.EDITOR)
-                    .setAction("Action mode button")
-                    .setLabel("Multi edit");
-            GAUtils.sendEvent(eventBuilder);
+                Toast.makeText(getApplicationContext(), R.string.editor_multi_edit_no_waypoint_error,
+                        Toast.LENGTH_LONG).show();
 
+                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                        .setCategory(GAUtils.Category.EDITOR)
+                        .setAction("Action mode button")
+                        .setLabel("Multi edit");
+                GAUtils.sendEvent(eventBuilder);
+            }
             return true;
 
 		case R.id.menu_action_delete:
-			missionProxy.removeSelection(missionProxy.selection);
+            if(missionProxy != null)
+			    missionProxy.removeSelection(missionProxy.selection);
 			mode.finish();
             planningMapFragment.zoomToFit();
 			return true;
 
 		case R.id.menu_action_reverse:
-			missionProxy.reverse();
+            if(missionProxy != null)
+			    missionProxy.reverse();
 			return true;
 
 		default:
@@ -566,10 +586,11 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             if(referenceType == null){
                 referenceType = proxyType;
             }
-            else if(referenceType != proxyType){
-                //Return a generic mission detail.
-                return new MissionDetailFragment();
-            }
+            else if (referenceType != proxyType || MissionDetailFragment
+                    .typeWithNoMultiEditSupport.contains(referenceType)) {
+                    //Return a generic mission detail.
+                    return new MissionDetailFragment();
+                }
         }
 
         return MissionDetailFragment.newInstance(referenceType);
@@ -584,8 +605,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
 	@Override
 	public void onDestroyActionMode(ActionMode arg0) {
-		missionListFragment.updateChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-		missionProxy.selection.clearSelection();
+        if(missionProxy != null)
+            missionProxy.selection.clearSelection();
 
         contextualActionBar = null;
         enableMultiEdit(false);
@@ -613,6 +634,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	@Override
 	public boolean onItemLongClick(MissionItemProxy item) {
         enableMultiEdit(false);
+
+        if(missionProxy == null) return false;
+
 		if (contextualActionBar != null) {
 			if (missionProxy.selection.selectionContains(item)) {
 				missionProxy.selection.clearSelection();
@@ -621,8 +645,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 			}
 		} else {
 			editorToolsFragment.setTool(EditorTools.NONE);
-			missionListFragment.updateChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
-			contextualActionBar = startActionMode(this);
+			contextualActionBar = startSupportActionMode(this);
 			missionProxy.selection.setSelectionTo(item);
 		}
 		return true;
@@ -631,6 +654,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	@Override
 	public void onItemClick(MissionItemProxy item, boolean zoomToFit) {
         enableMultiEdit(false);
+
+        if(missionProxy == null) return;
+
 		switch (getTool()) {
 		default:
 			if (contextualActionBar != null) {
@@ -661,6 +687,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 		}
 
         if(zoomToFit) {
+            final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
             List<MissionItemProxy> selected = missionProxy.selection.getSelected();
             if (selected.isEmpty()) {
                 planningMapFragment.zoomToFit();
@@ -683,8 +710,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 	public void onSelectionUpdate(List<MissionItemProxy> selected) {
 		final boolean isEmpty = selected.isEmpty();
 
-		missionListFragment.setArrowsVisibility(!isEmpty);
-
 		if (isEmpty) {
 			removeItemDetail();
 		} else {
@@ -695,7 +720,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 			}
 		}
 
-		planningMapFragment.postUpdate();
+        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
+        if(planningMapFragment != null)
+		    planningMapFragment.postUpdate();
 	}
 
 	private void doClearMissionConfirmation() {
@@ -704,8 +731,10 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 getString(R.string.dlg_clear_mission_confirm), new YesNoDialog.Listener() {
                     @Override
                     public void onYes() {
-                        missionProxy.clear();
-                        missionProxy.addTakeoff();
+                        if(missionProxy != null) {
+                            missionProxy.clear();
+                            missionProxy.addTakeoff();
+                        }
                     }
 
                     @Override

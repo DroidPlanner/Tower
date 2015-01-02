@@ -1,16 +1,9 @@
 package org.droidplanner.android.fragments.mode;
 
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.gcs.follow.Follow;
-import org.droidplanner.core.gcs.follow.FollowAlgorithm.FollowModes;
-import org.droidplanner.core.model.Drone;
-
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,95 +13,119 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-public class ModeFollowFragment extends ModeGuidedFragment implements
-		OnItemSelectedListener, OnDroneListener {
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.gcs.follow.FollowState;
+import com.o3dr.services.android.lib.gcs.follow.FollowType;
 
-	private Follow followMe;
+import org.droidplanner.android.R;
+import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
+
+public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSelectedListener {
+
+	private static final IntentFilter eventFilter = new IntentFilter(AttributeEvent.FOLLOW_UPDATE);
+
+	private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final String action = intent.getAction();
+			if (AttributeEvent.FOLLOW_UPDATE.equals(action)) {
+				final FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
+				if (followState != null) {
+					spinner.setSelection(adapter.getPosition(followState.getMode()));
+				}
+			}
+		}
+	};
+
 	private Spinner spinner;
-	private ArrayAdapter<FollowModes> adapter;
+	private ArrayAdapter<FollowType> adapter;
 
-    private CardWheelHorizontalView mRadiusWheel;
+	private CardWheelHorizontalView mRadiusWheel;
 
-    @Override
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		DroidPlannerApp app = (DroidPlannerApp) getActivity().getApplication();
-		followMe = app.getFollowMe();
-		drone = app.getDrone();
-
 		return inflater.inflate(R.layout.fragment_mode_follow, container, false);
 	}
 
 	@Override
 	public void onViewCreated(View parentView, Bundle savedInstanceState) {
-        super.onViewCreated(parentView, savedInstanceState);
+		super.onViewCreated(parentView, savedInstanceState);
 
-        final Context context = getActivity().getApplicationContext();
+		final Context context = getActivity().getApplicationContext();
 
 		final NumericWheelAdapter radiusAdapter = new NumericWheelAdapter(context,
-                R.layout.wheel_text_centered, 0, 200, "%d m");
+				R.layout.wheel_text_centered, 0, 200, "%d m");
 
-        mRadiusWheel = (CardWheelHorizontalView) parentView.findViewById(R.id.radius_spinner);
-        mRadiusWheel.setViewAdapter(radiusAdapter);
-        updateCurrentRadius();
-        mRadiusWheel.addChangingListener(this);
+		mRadiusWheel = (CardWheelHorizontalView) parentView.findViewById(R.id.radius_spinner);
+		mRadiusWheel.setViewAdapter(radiusAdapter);
+		updateCurrentRadius();
+		mRadiusWheel.addScrollListener(this);
 
 		spinner = (Spinner) parentView.findViewById(R.id.follow_type_spinner);
-		adapter = new ArrayAdapter<FollowModes>(getActivity(),
-				android.R.layout.simple_spinner_item, FollowModes.values());
+		adapter = new ArrayAdapter<FollowType>(getActivity(), android.R.layout.simple_spinner_item);
 		spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
-
-        drone.addDroneListener(this);
+		spinner.setOnItemSelectedListener(this);
 	}
 
-    @Override
-    public void onDestroyView(){
-        super.onDestroyView();
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
 
-        if(mRadiusWheel != null){
-            mRadiusWheel.removeChangingListener(this);
-        }
-    }
+		if (mRadiusWheel != null) {
+			mRadiusWheel.removeChangingListener(this);
+		}
+	}
 
-    @Override
-    public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue){
-        switch(cardWheel.getId()){
-            case R.id.radius_spinner:
-                followMe.changeRadius(newValue);
-                break;
+	@Override
+	public void onApiConnected() {
+		super.onApiConnected();
 
-            default:
-                super.onChanged(cardWheel, oldValue, newValue);
-                break;
-        }
-    }
+		adapter.addAll(FollowType.values());
+		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
+	}
 
-    private void updateCurrentRadius(){
-        if(mRadiusWheel != null){
-            mRadiusWheel.setCurrentValue((int) followMe.getRadius().valueInMeters());
-        }
-    }
+	@Override
+	public void onApiDisconnected() {
+		super.onApiDisconnected();
+		getBroadcastManager().unregisterReceiver(eventReceiver);
+	}
+
+	@Override
+	public void onScrollingEnded(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+		switch (cardWheel.getId()) {
+		case R.id.radius_spinner:
+			final Drone drone = getDrone();
+			if (drone.isConnected())
+				drone.setFollowMeRadius(newValue);
+			break;
+
+		default:
+			super.onScrollingEnded(cardWheel, oldValue, newValue);
+			break;
+		}
+	}
+
+	private void updateCurrentRadius() {
+		final Drone drone = getDrone();
+		if (mRadiusWheel != null && drone.isConnected()) {
+            final FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
+			mRadiusWheel.setCurrentValue((int) followState.getRadius());
+		}
+	}
 
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		followMe.setType(adapter.getItem(position));
-		updateCurrentRadius();
+		final Drone drone = getDrone();
+		if (drone.isConnected()) {
+			drone.enableFollowMe(adapter.getItem(position));
+			updateCurrentRadius();
+		}
 	}
 
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
-
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		switch (event) {
-		case FOLLOW_CHANGE_TYPE:
-			spinner.setSelection(adapter.getPosition(followMe.getType()));
-			break;
-		default:
-			break;
-		}
-
-	}
-
 }

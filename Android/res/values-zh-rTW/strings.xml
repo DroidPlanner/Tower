@@ -8,8 +8,8 @@
     <string name="app_settings">App 設定</string>
     <string name="flight_data">飛行數據</string>
     <string name="editor">編輯器</string>
-    <string name="send_mission">發送任務</string>
-    <string name="load_mission">載入任務</string>
+    <string name="upload_mission">發送任務</string>
+    <string name="download_mission">載入任務</string>
     
     <!-- Drone Setup tabs -->
     <string name="screen_tuning">調整參數</string>
@@ -53,9 +53,7 @@
     <string name="pref_follow_me_mode_enabled">啟用 FollowMe 跟隨模式</string>
     <string name="pref_follow_me_mode_enabled_summary">開發中</string>
     <string name="pref_heading_mode">啟用 FPV 朝向模式</string>
-    <string name="pref_heading_mode_summary">改變以 FPV 的朝向模式(-180º至180º)</string>
-    <string name="pref_pebble">PEBBLE</string>
-    <string name="pref_pebble_install_watchapp">更新 Pebble</string>
+    <string name="pref_heading_mode_summary">改變以 FPV 的朝向模式(-180°至180°)</string>
     <string name="pref_advanced">進階</string>
     <string name="pref_advanced_use_offline_maps">使用離線地圖</string>
     <string name="pref_advanced_use_offline_maps_summary">使用本機儲存的地圖區塊當作離線地圖的資料</string>
@@ -196,7 +194,7 @@
 
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">航點無法加在降落或返航的任務之後。</string>
-    <string name="editor_info_window">距離: 200公尺, 飛行時間: 3分30秒</string>
+    <string name="editor_info_window">距離: 0公尺, 飛行時間: 0分00秒</string>
     <string name="distance_to_home">到 家 的距離</string>
     <string name="loiter_time">停懸時間</string>
     <string name="waypoint_delay">往下一個航點前的延遲時間</string>
@@ -211,8 +209,8 @@
     <string name="waypoint_yawoffset">使用相對偏移</string>
     <string name="waypoint_distance">距離</string>
     <string name="waypoint_homecurrent">以目前位置設為 家 的位置</string>
-    <string name="waypoint_longitude">經度:</string>
-    <string name="waypoint_latitude">緯度:</string>
+    <string name="waypoint_longitude">經度: %f°</string>
+    <string name="waypoint_latitude">緯度: %f°</string>
     <string name="waypoint_speed">目標速度</string>
     <string name="waypoint_throttle">油門</string>
     <string name="waypoint_speedtype">速度類型</string>
@@ -425,7 +423,7 @@
     <!-- Map providers -->
     <string name="pref_map_provider_settings_summary">設定選擇的地圖供應商</string>
     <string name="pref_map_provider_settings_title">地圖供應商偏好設定</string>
-    <string name="pref_title_google_map">Google 地圖偏好設定</string>
+    <string name="pref_title_google_maps">Google 地圖偏好設定</string>
     <string name="pref_title_osm">開放街圖(Open Street Map)偏好設定</string>
     <string name="pref_title_mapbox">MapBox 偏好設定</string>
     <string name="activity_title_map_provider_preferences">地圖供應商偏好設定</string>
@@ -433,8 +431,7 @@
     <!-- Others (when possible move to a grouping above) -->
     <string name="tune_roll">手動調整 roll 和 pitch 參數。Rate_P 是主要調整的數值。</string>
     <string name="dialog_box_title_altitude">高度</string>
-    <string name="mode_switch">指定遙控器的第 5 頻道切換飛行模式。切換開關到每一個位置以指定下列的飛行模式。</string>
-    <string name="MAVLinkError">MAVLink 錯誤:</string>
+    <string name="mode_switch">指定遙控器的第 5 頻道切換飛行模式。切換開關到每一個位置以指定下列的飛行模式。</string>g
     <string name="msg_connect_first">請先連線</string>
     <string name="mode1_throttle_on_right_stick">模式 1(日本手):油門在右邊的遙桿</string>
     <string name="mode2_throttle_on_left_stick">模式 2(美國手):油門在左邊的遙桿</string>
@@ -443,9 +440,8 @@
     <string name="pref_title_notifications">通知</string>
     <string name="normal_waypoint_toggle">一般</string>
     <string name="spline_waypoint_toggle">非線性</string>
-    <string name="mavlink_version">Mavlink 版本</string>
+    <string name="mavlink_version">MAVLink 版本</string>
     <string name="firmware_version">韌體版本</string>
-    <string name="empty_content">--</string>
     <string name="usage_statistics">統計使用習慣</string>
     <string name="pref_usage_statistics_title">發送使用習慣統計</string>
     <string name="pref_usage_statistics_summary">發送使用習慣統計資料能幫助 DroidPlanner 增進平台完成度</string>

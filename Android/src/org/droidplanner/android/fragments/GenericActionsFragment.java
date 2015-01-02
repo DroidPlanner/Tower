@@ -1,9 +1,5 @@
 package org.droidplanner.android.fragments;
 
-import org.droidplanner.R;
-import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.core.model.Drone;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,13 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.o3dr.android.client.Drone;
+
+import org.droidplanner.android.R;
+import org.droidplanner.android.activities.helpers.SuperUI;
+
 /**
  * Provides action buttons functionality for generic drone type.
  */
 public class GenericActionsFragment extends Fragment implements View.OnClickListener,
         FlightActionsFragment.SlidingUpHeader {
-
-    private Button connectBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,7 +28,7 @@ public class GenericActionsFragment extends Fragment implements View.OnClickList
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
+        Button connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
         connectBtn.setOnClickListener(this);
     }
 

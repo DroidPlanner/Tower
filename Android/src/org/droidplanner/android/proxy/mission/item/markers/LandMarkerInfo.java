@@ -1,6 +1,6 @@
 package org.droidplanner.android.proxy.mission.item.markers;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 
 /**
@@ -13,7 +13,7 @@ class LandMarkerInfo extends MissionItemMarkerInfo {
 
 	@Override
 	protected int getSelectedIconResource() {
-		return R.drawable.ic_wp_lan_selected;
+		return R.drawable.ic_wp_land_selected;
 	}
 
 	@Override

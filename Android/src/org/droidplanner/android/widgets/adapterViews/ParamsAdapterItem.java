@@ -1,32 +1,35 @@
 package org.droidplanner.android.widgets.adapterViews;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.o3dr.services.android.lib.drone.property.Parameter;
+
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Map;
 
-import org.droidplanner.core.parameters.Parameter;
-import org.droidplanner.core.parameters.ParameterMetadata;
-
 /**
  * Date: 2013-12-09 Time: 1:32 AM
  */
-public class ParamsAdapterItem implements Serializable {
+public class ParamsAdapterItem implements Parcelable {
 	public enum Validation {
 		NA, INVALID, VALID
 	}
 
-	private static final DecimalFormat formatter = Parameter.getFormat();
+    private final static DecimalFormat formatter = (DecimalFormat) DecimalFormat.getInstance();
+    static {
+        formatter.applyPattern("0.###");
+    }
 
-	private final Parameter parameter;
-	private ParameterMetadata metadata;
+	private Parameter parameter;
 
 	private String dirtyValue;
 	private Validation validation;
 
-	public ParamsAdapterItem(Parameter parameter, ParameterMetadata metadata) {
+	public ParamsAdapterItem(Parameter parameter) {
 		this.parameter = parameter;
-		this.metadata = metadata;
 	}
 
 	public Parameter getParameter() {
@@ -35,22 +38,21 @@ public class ParamsAdapterItem implements Serializable {
 
 		try {
 			final double dval = formatter.parse(dirtyValue).doubleValue();
-			return new Parameter(parameter.name, dval, parameter.type);
+            Parameter copy = new Parameter(parameter.getName(), dval, parameter.getType());
+            copy.setDescription(parameter.getDescription());
+            copy.setUnits(parameter.getUnits());
+            copy.setDisplayName(parameter.getDisplayName());
+            copy.setRange(parameter.getRange());
+            copy.setValues(parameter.getValues());
+			return copy;
 
 		} catch (ParseException e) {
 			return parameter;
 		}
 	}
 
-	public ParameterMetadata getMetadata() {
-		return metadata;
-	}
-
-	public void setMetadata(ParameterMetadata metadata) {
-		this.metadata = metadata;
-	}
-
 	public void setDirtyValue(String value) {
+		
 		setDirtyValue(value, false);
 	}
 
@@ -60,7 +62,7 @@ public class ParamsAdapterItem implements Serializable {
         }
         else{
             // dirty if different from original value, set validation if dirty
-            dirtyValue = (parameter.getValue().equals(value)) ? null : value;
+            dirtyValue = (parameter.getDisplayValue().equals(value)) ? null : value;
         }
 
         if (dirtyValue != null)
@@ -69,7 +71,7 @@ public class ParamsAdapterItem implements Serializable {
 
 	public void commit() {
 		try {
-			parameter.value = formatter.parse(dirtyValue).doubleValue();
+			parameter.setValue(formatter.parse(dirtyValue).doubleValue());
 			dirtyValue = null;
 		} catch (ParseException e) {
 			// nop
@@ -85,13 +87,10 @@ public class ParamsAdapterItem implements Serializable {
 	}
 
 	private Validation validateValue(String value) {
-		if (metadata == null) {
-			return Validation.NA;
-
-		} else if (metadata.getRange() != null) {
+		if (parameter.getRange() != null) {
 			return validateInRange(value);
 
-		} else if (metadata.getValues() != null) {
+		} else if (parameter.getValues() != null) {
 			return validateInValues(value);
 
 		} else {
@@ -102,8 +101,9 @@ public class ParamsAdapterItem implements Serializable {
 	private Validation validateInRange(String value) {
 		try {
 			final double dval = formatter.parse(value).doubleValue();
-			final double[] range = metadata.parseRange();
-			return (dval >= range[ParameterMetadata.RANGE_LOW] && dval <= range[ParameterMetadata.RANGE_HIGH]) ? Validation.VALID
+			final double[] range = parameter.parseRange();
+			return (dval >= range[Parameter.RANGE_LOW] && dval <= range[Parameter.RANGE_HIGH])
+                    ? Validation.VALID
 					: Validation.INVALID;
 		} catch (ParseException ex) {
 			return Validation.NA;
@@ -113,7 +113,7 @@ public class ParamsAdapterItem implements Serializable {
 	private Validation validateInValues(String value) {
 		try {
 			final double dval = formatter.parse(value).doubleValue();
-			final Map<Double, String> values = metadata.parseValues();
+			final Map<Double, String> values = parameter.parseValues();
 			if (values.keySet().contains(dval)) {
 				return Validation.VALID;
 			} else {
@@ -130,14 +130,40 @@ public class ParamsAdapterItem implements Serializable {
 
         final Parameter param = getParameter();
         if (param != null) {
-            toString = param.name + ": ";
-        }
-
-        final ParameterMetadata metadata = getMetadata();
-        if(metadata != null){
-            toString += metadata.getDisplayName();
+            toString = param.getName() + ": ";
+            toString += parameter.getDisplayName();
         }
 
         return toString;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.parameter, 0);
+        dest.writeString(this.dirtyValue);
+        dest.writeInt(this.validation == null ? -1 : this.validation.ordinal());
+    }
+
+    private ParamsAdapterItem(Parcel in) {
+        this.parameter = in.readParcelable(Parameter.class.getClassLoader());
+        this.dirtyValue = in.readString();
+        int tmpValidation = in.readInt();
+        this.validation = tmpValidation == -1 ? null : Validation.values()[tmpValidation];
+    }
+
+    public static final Creator<ParamsAdapterItem> CREATOR = new Creator<ParamsAdapterItem>() {
+        public ParamsAdapterItem createFromParcel(Parcel source) {
+            return new ParamsAdapterItem(source);
+        }
+
+        public ParamsAdapterItem[] newArray(int size) {
+            return new ParamsAdapterItem[size];
+        }
+    };
 }

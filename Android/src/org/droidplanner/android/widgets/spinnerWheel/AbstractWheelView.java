@@ -24,7 +24,7 @@
 
 package org.droidplanner.android.widgets.spinnerWheel;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;

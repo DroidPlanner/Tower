@@ -8,23 +8,23 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.MAVLink.Messages.ApmModes;
+import com.o3dr.services.android.lib.drone.property.VehicleMode;
 
-public class ModeAdapter extends ArrayAdapter<ApmModes> {
+public class ModeAdapter extends ArrayAdapter<VehicleMode> {
 
 	public ModeAdapter(Context context, int resource) {
 		super(context, resource);
 	}
 
-	public ModeAdapter(Context context, int resource, List<ApmModes> objects) {
+	public ModeAdapter(Context context, int resource, List<VehicleMode> objects) {
 		super(context, resource, objects);
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		final ApmModes mode = getItem(position);
+		final VehicleMode mode = getItem(position);
 		TextView view = (TextView) super.getView(position, convertView, parent);
-		view.setText(mode.getName());
+		view.setText(mode.getLabel());
 		return view;
 	}
 

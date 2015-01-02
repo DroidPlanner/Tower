@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group
         android:id="@+id/menu_group_connected"
@@ -8,36 +9,46 @@
         <item
             android:id="@+id/menu_info_bar"
             android:title="@string/menu_info_bar"
-            android:showAsAction="always"
-            android:actionProviderClass="org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider"
+            app:showAsAction="always"
+            app:actionProviderClass="org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider"
             />
 
         <item
-            android:id="@+id/menu_send_mission"
-            android:showAsAction="never"
-            android:title="@string/send_mission"/>
+            android:id="@+id/menu_upload_mission"
+            app:showAsAction="never"
+            android:title="@string/upload_mission"/>
         <item
-            android:id="@+id/menu_load_mission"
-            android:showAsAction="never"
-            android:title="@string/load_mission"/>
-        
+            android:id="@+id/menu_download_mission"
+            app:showAsAction="never"
+            android:title="@string/download_mission"/>
+
         <item
-            android:id="@+id/menu_triggerCamera"
-            android:showAsAction="never"
-            android:title="Picture"/>
-        <item
-            android:id="@+id/menu_epm_release"
-            android:showAsAction="never"
-            android:title="Release"/>
-        <item
-            android:id="@+id/menu_epm_grab"
-            android:showAsAction="never"
-            android:title="Grab"/>
+            android:id="@+id/menu_advanced"
+            android:enabled="false"
+            android:visible="false"
+            android:title="Advanced"
+            app:showAsAction="never">
+            <menu>
+                <item
+                    android:id="@+id/menu_triggerCamera"
+                    app:showAsAction="never"
+                    android:title="Picture"/>
+                <item
+                    android:id="@+id/menu_epm_release"
+                    app:showAsAction="never"
+                    android:title="Release"/>
+                <item
+                    android:id="@+id/menu_epm_grab"
+                    app:showAsAction="never"
+                    android:title="Grab"/>
+            </menu>
+        </item>
+
     </group>
 
     <item
         android:id="@+id/menu_connect"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/menu_disconnect"/>
 
 </menu>

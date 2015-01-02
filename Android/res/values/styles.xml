@@ -138,7 +138,7 @@
     </style>
 
 	<!-- style the list navigation -->
-	<style name="DropDownItem" parent="@android:style/Widget.Holo.Light.DropDownItem.Spinner">
+	<style name="DropDownItem" parent="Widget.AppCompat.DropDownItem.Spinner">
 		<item name="android:textSize">18sp</item>
 		<item name="android:minWidth">120dp</item>
 	    <item name="android:textStyle">bold</item>
@@ -166,7 +166,7 @@
         <item name="android:gravity">left</item>
 	</style>
 
-    <style name="CustomActionBarTheme.Dialog" parent="@android:style/Theme.Holo.Light.Dialog">
+    <style name="CustomActionBarTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
        <item name="android:popupMenuStyle">@style/MyPopupMenu</item>
         <item name="android:itemTextAppearance">@style/myCustomMenuTextApearance</item>
     </style>
@@ -375,17 +375,6 @@
     <style name="TextAppearance.TabPageIndicator" parent="Widget">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@drawable/vpi__light_theme</item>
-    </style>
-
-    <!-- Listview styles -->
-    <style name="myHListView">
-        <item name="dividerWidth">5dp</item>
-        <item name="stackFromRight">false</item>
-        <item name="measureWithChild">0</item>
-        <item name="android:smoothScrollbar">true</item>
-        <item name="android:scrollingCache">false</item>
-        <item name="android:footerDividersEnabled">false</item>
-        <item name="android:headerDividersEnabled">false</item>
     </style>
 
     <!-- Editor window widget styles -->

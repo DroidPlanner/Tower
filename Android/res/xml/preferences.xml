@@ -4,9 +4,9 @@
     <!-- Contains preferences related to the app. -->
     <PreferenceCategory android:title="@string/app_settings" >
         <ListPreference
-            android:defaultValue="USB"
+            android:defaultValue="0"
             android:entries="@array/TelemetryConnectionTypes"
-            android:entryValues="@array/TelemetryConnectionTypes"
+            android:entryValues="@array/TelemetryConnectionTypesValues"
             android:key="@string/pref_connection_type_key"
             android:summary="@string/pref_connection_type_summary"
             android:title="@string/pref_connection_type" />
@@ -31,7 +31,7 @@
                     android:summary="@string/pref_keep_screen_bright_summary"
                     android:title="@string/pref_keep_screen_bright" />
                 <CheckBoxPreference
-                    android:defaultValue="true"
+                    android:defaultValue="false"
                     android:key="pref_lock_screen_orientation"
                     android:summary="@string/pref_lock_screen_orientation_summary"
                     android:title="@string/pref_lock_screen_orientation" />
@@ -226,13 +226,6 @@
         <PreferenceScreen
             android:key="pref_advanced"
             android:title="@string/pref_advanced" >
-            <ListPreference
-                android:defaultValue="ArduCopter"
-                android:entries="@array/VehicleType"
-                android:entryValues="@array/VehicleType"
-                android:key="@string/pref_vehicle_type_key"
-                android:summary="@string/pref_vehicle_type_summary"
-                android:title="@string/pref_vehicle_type" />
             <PreferenceScreen
                 android:key="pref_connection"
                 android:title="@string/pref_connection" >
@@ -279,7 +272,7 @@
                         android:defaultValue=""
                         android:dialogMessage="@string/pref_forget_bluetooth_device_address_confirm"
                         android:gravity="center"
-                        android:key="pref_bluetooth_device_address"
+                        android:key="@string/pref_bluetooth_device_address_key"
                         android:positiveButtonText="@string/pref_bluetooth_forget"
                         android:title="@string/pref_forget_bluetooth_device_address" />
                 </PreferenceCategory>
@@ -361,10 +354,12 @@
                     android:summary="@string/pref_ui_gps_hdop_summary"
                     android:title="@string/pref_ui_gps_hdop_title" />
             </PreferenceCategory>
-            <PreferenceCategory android:title="@string/pref_pebble" >
-                <Preference
-                    android:key="@string/pref_pebble_install_key"
-                    android:title="@string/pref_pebble_install_watchapp" />
+            <PreferenceCategory android:title="@string/pref_misc_title">
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="@string/pref_advanced_menu_toggle_key"
+                    android:title="@string/pref_advanced_menu_title"
+                    android:summary="@string/pref_advanced_menu_summary"/>
             </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>
@@ -411,8 +406,8 @@
             android:title="@string/storage_folder" />
 
         <PreferenceScreen
-            android:summary="Libraries (and it&apos;s licenses) used in this project"
-            android:title="Licenses" >
+            android:summary="@string/pref_licenses_summary"
+            android:title="@string/pref_licenses" >
             <Preference
                 android:enabled="false"
                 android:key="@string/pref_storage_key"

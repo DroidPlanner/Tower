@@ -7,12 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.droidplanner.R;
-import org.droidplanner.android.utils.file.IO.ParameterMetadataMapReader;
-import org.droidplanner.core.drone.profiles.VehicleProfile;
-import org.droidplanner.core.model.Drone;
-import org.droidplanner.core.parameters.Parameter;
-import org.droidplanner.core.parameters.ParameterMetadata;
+import org.droidplanner.android.R;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -25,6 +20,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.o3dr.services.android.lib.drone.property.Parameter;
+
 /**
  * Date: 2013-12-08 Time: 11:00 PM
  */
@@ -34,14 +31,15 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 		void onHelp(int position, EditText valueView);
 	}
 
-	private static final DecimalFormat formatter = Parameter.getFormat();
+    private final static DecimalFormat formatter = (DecimalFormat) DecimalFormat.getInstance();
+    static {
+        formatter.applyPattern("0.###");
+    }
 
 	private final int resource;
 	private final int colorAltRow;
 
     private final LayoutInflater mInflater;
-
-	private Map<String, ParameterMetadata> metadataMap;
 
 	private View focusView;
 	private OnInfoListener onInfoListener;
@@ -102,15 +100,14 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 		// populate fields, set appearance
 		final ParamsAdapterItem item = getItem(position);
 		final Parameter param = item.getParameter();
-		final ParameterMetadata metadata = item.getMetadata();
 
 		paramTag.setPosition(position);
-		paramTag.getNameView().setText(param.name);
-		paramTag.getDescView().setText(getDescription(metadata));
+		paramTag.getNameView().setText(param.getName());
+		paramTag.getDescView().setText(getDescription(param));
 		paramTag.setAppearance(item);
 
 		final EditText valueView = paramTag.getValueView();
-		valueView.setText(param.getValue());
+		valueView.setText(param.getDisplayValue());
 
 		// attach listeners
 		paramTag.getNameView().setOnClickListener(paramTag);
@@ -131,9 +128,9 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
         final int parametersCount = getCount();
         for(int i = 0; i < parametersCount; i++){
             ParamsAdapterItem item = getItem(i);
-            Parameter update = parameters.remove(item.getParameter().name);
+            Parameter update = parameters.remove(item.getParameter().getName());
             if(update != null){
-                item.setDirtyValue(update.getValue());
+                item.setDirtyValue(update.getDisplayValue());
             }
         }
 
@@ -145,70 +142,37 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 
         notifyDataSetChanged();
     }
-
-	public void loadParameters(Drone drone, Map<String, Parameter> parameters) {
-		loadMetadataInternal(drone);
-
+    
+	public void loadParameters(Map<String, Parameter> parameters) {
 		clear();
 		for (Map.Entry<String, Parameter> entry : parameters.entrySet()) {
             addParameter(entry.getKey(), entry.getValue());
         }
 	}
 
-	private void addParameter(String name, Parameter parameter) {
-		addParameter(name, parameter, false);
-	}
+    private void addParameter(String name, Parameter parameter) {
+        addParameter(name, parameter, false);
+    }
 
     private void addParameter(String name, Parameter parameter, boolean isDirty){
         try {
             Parameter.checkParameterName(name);
-            ParamsAdapterItem item = new ParamsAdapterItem(parameter, getMetadata(name));
-            item.setDirtyValue(parameter.getValue(), isDirty);
+            ParamsAdapterItem item = new ParamsAdapterItem(parameter);
+            item.setDirtyValue(parameter.getDisplayValue(), isDirty);
             add(item);
         } catch (Exception ex) {
             // eat it
         }
     }
 
-	public void loadMetadata(Drone drone) {
-		loadMetadataInternal(drone);
 
-		for (int i = 0; i < getCount(); i++) {
-			final ParamsAdapterItem item = getItem(i);
-			item.setMetadata(getMetadata(item.getParameter().name));
-		}
-		notifyDataSetChanged();
-	}
-
-	private void loadMetadataInternal(Drone drone) {
-		metadataMap = null;
-
-		// get metadata type from profile, bail if none
-		final String metadataType;
-		final VehicleProfile profile = drone.getVehicleProfile();
-		if (profile == null || (metadataType = profile.getParameterMetadataType()) == null)
-			return;
-
-		try {
-			// load
-			metadataMap = ParameterMetadataMapReader.load(getContext(), metadataType);
-
-		} catch (Exception ex) {
-			// nop
-		}
-	}
-
-	private ParameterMetadata getMetadata(String name) {
-		return (metadataMap == null) ? null : metadataMap.get(name);
-	}
-
-	private String getDescription(ParameterMetadata metadata) {
+	private String getDescription(Parameter parameter) {
 		String desc = "";
-		if (metadata != null) {
+		if (parameter != null) {
 			// display-name (units)
-			desc = metadata.getDisplayName();
-			if (metadata.getUnits() != null)
-				desc += " (" + metadata.getUnits() + ")";
+			desc = parameter.getDisplayName();
+			if (parameter.getUnits() != null)
+				desc += " (" + parameter.getUnits() + ")";
 		}
 		return desc;
 	}

@@ -1,35 +1,39 @@
 apply plugin: 'com.android.application'
 
 dependencies {
-    compile files('libs/droneapi-java.jar')
-
     compile 'com.google.android.gms:play-services-maps:6.5.87'
     compile 'com.google.android.gms:play-services-location:6.5.87'
+
     compile 'com.sothree.slidinguppanel:library:2.0.2'
-    compile 'com.android.support:support-v4:20.0.0'
 
-    compile project(':Core')
-    compile project(':Mavlink')
-    compile project(':Libraries:HorizontalVariableListView:HorizontalVariableListView')
+    compile 'com.android.support:support-v4:21.0.3'
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:cardview-v7:21.0.2'
+    compile 'com.android.support:recyclerview-v7:21.0.2'
 
-    compile files('libs/usbseriallibrary.jar')
+    compile 'com.o3dr:3dr-services-lib:2.1.31'
+
+    compile files('libs/droneapi-java.jar')
     compile files('libs/j2xx.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
     compile files('libs/jeromq-0.3.4.jar')
-
-    compile project(':Libraries:PebbleKit')
-    compile project(':Libraries:usb-serial-for-android:UsbSerialLibrary')
 }
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId 'org.droidplanner'
+        applicationId 'org.droidplanner.android'
         minSdkVersion 14
         targetSdkVersion 21
+        versionCode 30012
         versionName getGitVersion()
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 
     sourceSets {
@@ -44,7 +48,9 @@ android {
         }
 
         // Move the tests to tests/java, tests/res, etc...
-        androidTest.setRoot('tests')
+        androidTest {
+            java.srcDirs = ['test']
+        }
 
         // Move the build types to build-types/<type>
         // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
@@ -61,13 +67,39 @@ android {
         abortOnError false
     }
 
+    signingConfigs {
+        release {
+            storeFile getAppKeystoreFile()
+            storePassword getAppKeystorePassword()
+            keyAlias getAppKey()
+            keyPassword getAppKeyPassword()
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def file = output.outputFile
+            if (file != null && file.name.endsWith('.apk')) {
+                def buildType = variant.buildType.getName()
+                def versionCode = defaultConfig.versionCode
+                output.outputFile = new File(file.parent,
+                        "droidplanner-3-${buildType}.${versionCode}.apk")
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
 }
 
 /**
  * @return The most recent git tag to be used as version name for the app.
  */
 def getGitVersion(){
-    def cmd = "git describe --tag --dirty"
+    def cmd = "git describe --tag"
     try {
         def proc = cmd.execute()
         return proc.text.trim()
@@ -75,4 +107,21 @@ def getGitVersion(){
         //Unable to find 'git'
         return "please update version name manually"
     }
+}
+
+def getAppKeystoreFile() {
+    def filePath = hasProperty('ORG_DROIDPLANNER_ANDROID_KEYSTORE') ? ORG_DROIDPLANNER_ANDROID_KEYSTORE : null
+    return filePath ? file(filePath) : null
+}
+
+def getAppKeystorePassword(){
+    return hasProperty('ORG_DROIDPLANNER_ANDROID_KEYSTORE_PWD') ? ORG_DROIDPLANNER_ANDROID_KEYSTORE_PWD : ''
+}
+
+def getAppKeyPassword() {
+    return hasProperty('ORG_DROIDPLANNER_ANDROID_KEY_PWD') ? ORG_DROIDPLANNER_ANDROID_KEY_PWD : ''
+}
+
+def getAppKey() {
+    return hasProperty('ORG_DROIDPLANNER_ANDROID_KEY_ALIAS') ? ORG_DROIDPLANNER_ANDROID_KEY_ALIAS : ''
 }

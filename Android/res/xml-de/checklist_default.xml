@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preflightcheck
+    title="Checkliste - Vor dem Flug"
+    type="APM"
+    version="1" >
+
+    <category label="Benutzer" >
+        <check_item
+            description="Sicherstellen, dass die Kamera verbunden und eingeschaltet ist"
+            editable="yes"
+            mandatory="yes"
+            title="Kamera verbunden und eingeschaltet" />
+    </category>
+    <category label="Steuerflächen" >
+        <check_item
+            description="Sicherstellen, dass die Kontrollfläche in die richtige Richtung bewegt"
+            editable="yes"
+            mandatory="yes"
+            title="Querruder" />
+        <check_item
+            description="Sicherstellen, dass die Kontrollfläche in die richtige Richtung bewegt"
+            editable="yes"
+            mandatory="yes"
+            title="Höhenruder" />
+        <check_item
+            description="Sicherstellen, dass die Kontrollfläche in die richtige Richtung bewegt"
+            editable="yes"
+            mandatory="yes"
+            title="Seitenruder" />
+    </category>
+    <category label="System" >
+        <switch_item
+            description="Status der Telemetrieverbindung"
+            editable="yes"
+            mandatory="yes"
+            system_tag="SYS_CONNECTION_STATE"
+            title="Telemetrieverbindung" />
+
+        <level_item
+            description="GPS Satelliten anzeigen"
+            editable="no"
+            mandatory="yes"
+            maximum_val="8"
+            minimum_val="5"
+            nominal_val="6"
+            system_tag="SYS_GPS3D_LVL"
+            title="GPS(3D) Satelliten"
+            unit="%.0f Sat." />
+        <level_item
+            description="Batteriestand anzeigen"
+            editable="no"
+            mandatory="yes"
+            maximum_val="100"
+            minimum_val="75"
+            nominal_val="80"
+            system_tag="SYS_BATTREM_LVL"
+            title="Batteriestand"
+            unit="%.1f%%" />
+        <level_item
+            description="Batteriespannung anzeigen"
+            editable="no"
+            mandatory="yes"
+            maximum_val="13"
+            minimum_val="10.5"
+            nominal_val="11.1"
+            system_tag="SYS_BATTVOL_LVL"
+            title="Batteriespannung"
+            unit="%.1fV" />
+        <level_item
+            description="Batteriestrom anzeigen"
+            editable="no"
+            mandatory="yes"
+            maximum_val="20"
+            minimum_val="5"
+            nominal_val="10"
+            system_tag="SYS_BATTCUR_LVL"
+            title="Batteriestrom"
+            unit="%.1fA" />
+    </category>
+
+</preflightcheck>

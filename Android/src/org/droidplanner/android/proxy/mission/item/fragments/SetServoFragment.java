@@ -1,20 +1,21 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-import org.droidplanner.core.mission.MissionItem;
-import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.commands.SetServo;
 
-import android.os.Bundle;
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
-public class SetServoFragment extends MissionDetailFragment implements
-		CardWheelHorizontalView.OnCardWheelChangedListener, TextWatcher {
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.mission.item.command.SetServo;
+
+public class SetServoFragment extends MissionDetailFragment implements CardWheelHorizontalView
+        .OnCardWheelScrollListener {
 
 	@Override
 	protected int getResource() {
@@ -22,62 +23,55 @@ public class SetServoFragment extends MissionDetailFragment implements
 	}
 
 	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		typeSpinner.setSelection(commandAdapter
-				.getPosition(MissionItemType.SET_SERVO));
+	public void onApiConnected() {
+		super.onApiConnected();
 
-		SetServo item = (SetServo) getMissionItems().get(0);
+        final View view = getView();
+		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SET_SERVO));
 
-		final NumericWheelAdapter adapter = new NumericWheelAdapter(
-				getActivity().getApplicationContext(),
-				R.layout.wheel_text_centered, 1, 8, "%d");
-		final CardWheelHorizontalView cardChannelPicker = (CardWheelHorizontalView) view
-				.findViewById(R.id.picker1);
-		final EditText pwmEditText = (EditText) view
-				.findViewById(R.id.PwmEditText);
+		final SetServo item = (SetServo) getMissionItems().get(0);
+        final Context context = getActivity().getApplicationContext();
 
+		final NumericWheelAdapter adapter = new NumericWheelAdapter(context, R.layout.wheel_text_centered, 1, 8, "%d");
+		final CardWheelHorizontalView cardChannelPicker = (CardWheelHorizontalView) view.findViewById(R.id.picker1);
 		cardChannelPicker.setViewAdapter(adapter);
-		cardChannelPicker.addChangingListener(this);
-		cardChannelPicker.setCurrentValue((int) item.getChannel());
+		cardChannelPicker.addScrollListener(this);
+		cardChannelPicker.setCurrentValue(item.getChannel());
 
-		pwmEditText.setText(Integer.toString(item.getPwm()));
-		pwmEditText.addTextChangedListener(this);
-
+        final NumericWheelAdapter pwmAdapter = new NumericWheelAdapter(context, R.layout.wheel_text_centered, 0,
+                2000, "%d");
+        final CardWheelHorizontalView pwmPicker = (CardWheelHorizontalView) view.findViewById(R.id.pwmPicker);
+        pwmPicker.setViewAdapter(pwmAdapter);
+        pwmPicker.addScrollListener(this);
+        pwmPicker.setCurrentValue(item.getPwm());
 	}
 
-	@Override
-	public void onChanged(CardWheelHorizontalView wheel, int oldValue,
-			int newValue) {
+    @Override
+    public void onScrollingStarted(CardWheelHorizontalView cardWheel, int startValue) {
+
+    }
+
+    @Override
+    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+
+    }
+
+    @Override
+	public void onScrollingEnded(CardWheelHorizontalView wheel, int startValue, int endValue) {
 		switch (wheel.getId()) {
 		case R.id.picker1:
 			for (MissionItem missionItem : getMissionItems()) {
 				SetServo item = (SetServo) missionItem;
-				item.setChannel(newValue);
+				item.setChannel(endValue);
 			}
 			break;
+
+            case R.id.pwmPicker:
+                for(MissionItem missionItem: getMissionItems()){
+                    SetServo item = (SetServo) missionItem;
+                    item.setPwm(endValue);
+                }
+                break;
 		}
-	}
-
-	@Override
-	public void afterTextChanged(Editable editable) {
-
-	}
-
-	@Override
-	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-			int arg3) {
-
-	}
-
-	@Override
-	public void onTextChanged(CharSequence s, int arg1, int arg2, int arg3) {
-		if (!s.toString().isEmpty()) {
-			for (MissionItem missionItem : getMissionItems()) {
-				SetServo item = (SetServo) missionItem;
-				item.setPwm(Integer.valueOf(s.toString()));
-			}
-		}
-
 	}
 }

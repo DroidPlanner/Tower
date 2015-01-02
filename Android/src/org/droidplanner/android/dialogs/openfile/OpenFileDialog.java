@@ -1,8 +1,6 @@
 package org.droidplanner.android.dialogs.openfile;
 
-import java.lang.ref.WeakReference;
-
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -11,6 +9,8 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
 import android.widget.Toast;
+
+import java.lang.ref.WeakReference;
 
 public abstract class OpenFileDialog implements OnClickListener {
 
@@ -27,7 +27,7 @@ public abstract class OpenFileDialog implements OnClickListener {
 	protected abstract void onDataLoaded(FileReader reader);
 
 	private String[] itemList;
-	private Context context;
+	protected Context context;
 	private FileReader reader;
     private String selectedFilename;
 

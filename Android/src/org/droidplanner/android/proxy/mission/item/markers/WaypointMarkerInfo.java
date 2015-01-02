@@ -1,6 +1,6 @@
 package org.droidplanner.android.proxy.mission.item.markers;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 
 /**
