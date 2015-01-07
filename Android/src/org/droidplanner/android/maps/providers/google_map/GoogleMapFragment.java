@@ -87,22 +87,40 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
     private static final float GO_TO_MY_LOCATION_ZOOM = 19f;
 
-    private static final IntentFilter eventFilter = new IntentFilter(AttributeEvent.GPS_POSITION);
+    private static final IntentFilter eventFilter = new IntentFilter();
+    static {
+        eventFilter.addAction(AttributeEvent.GPS_POSITION);
+        eventFilter.addAction(AttributeEvent.FOLLOW_START);
+        eventFilter.addAction(AttributeEvent.FOLLOW_STOP);
+    }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            final Drone drone = getDroneApi();
-            if (!drone.isConnected())
-                return;
+            final String action = intent.getAction();
+            switch(action){
+                case AttributeEvent.GPS_POSITION:
+                    final Drone drone = getDroneApi();
+                    if (!drone.isConnected())
+                        return;
 
-            final Gps droneGps = drone.getAttribute(AttributeType.GPS);
-            if (droneGps == null)
-                return;
+                    final Gps droneGps = drone.getAttribute(AttributeType.GPS);
+                    if (droneGps == null)
+                        return;
 
-            if (mPanMode.get() == AutoPanMode.DRONE && droneGps.isValid()) {
-                final LatLong droneLocation = droneGps.getPosition();
-                updateCamera(droneLocation);
+                    if (mPanMode.get() == AutoPanMode.DRONE && droneGps.isValid()) {
+                        final LatLong droneLocation = droneGps.getPosition();
+                        updateCamera(droneLocation);
+                    }
+                    break;
+
+                case AttributeEvent.FOLLOW_START:
+                    mGApiClientMgr.addTask(mRequestFastLocationUpdateTask);
+                    break;
+
+                case AttributeEvent.FOLLOW_STOP:
+                    mGApiClientMgr.addTask(mRequestLocationUpdateTask);
+                    break;
             }
         }
     };
@@ -117,6 +135,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     private GoogleApiClientTask mGoToMyLocationTask;
     private GoogleApiClientTask mRemoveLocationUpdateTask;
     private GoogleApiClientTask mRequestLocationUpdateTask;
+    private GoogleApiClientTask mRequestFastLocationUpdateTask;
 
     private GoogleApiClientManager mGApiClientMgr;
 
@@ -184,6 +203,20 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
                         .setFastestInterval(USER_LOCATION_UPDATE_FASTEST_INTERVAL)
                         .setInterval(USER_LOCATION_UPDATE_INTERVAL)
                         .setSmallestDisplacement(USER_LOCATION_UPDATE_MIN_DISPLACEMENT);
+                LocationServices.FusedLocationApi.requestLocationUpdates(
+                        getGoogleApiClient(), locationReq, GoogleMapFragment.this);
+
+            }
+        };
+
+        mRequestFastLocationUpdateTask = mGApiClientMgr.new GoogleApiClientTask() {
+            @Override
+            public void doRun() {
+                final LocationRequest locationReq = LocationRequest.create()
+                        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                        .setFastestInterval(0)
+                        .setInterval(0)
+                        .setSmallestDisplacement(0);
                 LocationServices.FusedLocationApi.requestLocationUpdates(
                         getGoogleApiClient(), locationReq, GoogleMapFragment.this);
 

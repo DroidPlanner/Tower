@@ -1,9 +1,13 @@
 package org.droidplanner.android.activities;
 
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.MAVLink.common.msg_global_position_int;
+import com.o3dr.android.client.data.tlog.TLogPicker;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.util.MathUtils;
 
@@ -23,6 +28,8 @@ import org.droidplanner.android.fragments.LocatorMapFragment;
 import org.droidplanner.android.utils.file.IO.TLogReader;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,10 +37,13 @@ import java.util.List;
  * This implements the map locator activity. The map locator activity allows the user to find
  * a lost drone using last known GPS positions from the tlogs.
  */
-public class LocatorActivity extends DrawerNavigationUI implements LocatorListFragment
-        .OnLocatorListListener, LocationListener {
+public class LocatorActivity extends DrawerNavigationUI implements LocatorListFragment.OnLocatorListListener,
+        LocationListener {
+
+    private static final String TAG = LocatorActivity.class.getSimpleName();
 
     private static final String STATE_LAST_SELECTED_POSITION = "STATE_LAST_SELECTED_POSITION";
+    private static final int TLOG_PICKER_REQUEST_CODE = 101;
 
     private final static List<msg_global_position_int> lastPositions = new
             LinkedList<msg_global_position_int>();
@@ -78,7 +88,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
         resetMapBearing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(locatorMapFragment != null) {
+                if (locatorMapFragment != null) {
                     locatorMapFragment.updateMapBearing(0);
                 }
             }
@@ -89,7 +99,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
         zoomToFit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(locatorMapFragment != null){
+                if (locatorMapFragment != null) {
                     locatorMapFragment.zoomToFit();
                 }
             }
@@ -114,20 +124,20 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
         mGoToDroneLocation.setVisibility(View.GONE);
 
         // clear prev state if this is a fresh start
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             // fresh start
             lastPositions.clear();
         }
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         locatorMapFragment.setLocationReceiver(this);
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         locatorMapFragment.setLocationReceiver(null);
     }
@@ -145,7 +155,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
         super.onRestoreInstanceState(savedInstanceState);
 
         final int lastSelectedPosition = savedInstanceState.getInt(STATE_LAST_SELECTED_POSITION, -1);
-        if(lastSelectedPosition != -1 && lastSelectedPosition < lastPositions.size())
+        if (lastSelectedPosition != -1 && lastSelectedPosition < lastPositions.size())
             setSelectedMsg(lastPositions.get(lastSelectedPosition));
     }
 
@@ -166,11 +176,36 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_open_tlog_file:
-                openLogFile();
+//                openLogFile();
+                TLogPicker.startTLogPicker(this, TLOG_PICKER_REQUEST_CODE);
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent returnIntent) {
+        if (requestCode != TLOG_PICKER_REQUEST_CODE || resultCode != RESULT_OK) {
+            super.onActivityResult(requestCode, resultCode, returnIntent);
+            return;
+        }
+
+        //Get the file's content uri from the incoming intent
+        Uri returnUri = returnIntent.getData();
+
+        try {
+            ParcelFileDescriptor inputFd = getContentResolver().openFileDescriptor(returnUri, "r");
+            FileDescriptor fd = inputFd.getFileDescriptor();
+
+            //TODO: put that section in an async task.
+            TLogReader tlogReader = new TLogReader(msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT);
+            tlogReader.openTLog(fd);
+            loadLastPositions(tlogReader.getLogEvents());
+            locatorMapFragment.zoomToFit();
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "File not found.");
         }
     }
 
@@ -193,7 +228,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
 
         for (TLogReader.Event event : logEvents) {
             final msg_global_position_int message = (msg_global_position_int) event.getMavLinkMessage();
-            if(message.lat != 0 || message.lon != 0)
+            if (message.lat != 0 || message.lon != 0)
                 lastPositions.add(0, message);
         }
 
@@ -212,7 +247,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     private void updateMapPadding() {
         int bottomPadding = 0;
 
-        if(lastPositions.size() > 0) {
+        if (lastPositions.size() > 0) {
             bottomPadding = locatorListFragment.getView().getHeight();
         }
 
@@ -237,7 +272,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
         selectedMsg = msg;
 
         final LatLong msgCoord;
-        if(msg != null)
+        if (msg != null)
             msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
         else
             msgCoord = new LatLong(0, 0);
@@ -245,14 +280,14 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     }
 
     private void updateInfo() {
-        if(selectedMsg != null) {
+        if (selectedMsg != null) {
             statusView.setVisibility(View.VISIBLE);
 
             // coords
             final LatLong msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
 
             // distance
-            if(lastGCSPosition == null || lastGCSPosition.getLatitude() == 0 || lastGCSPosition
+            if (lastGCSPosition == null || lastGCSPosition.getLatitude() == 0 || lastGCSPosition
                     .getLongitude() == 0) {
                 // unknown
                 distanceView.setText(R.string.status_waiting_for_gps, TextView.BufferType.NORMAL);
@@ -260,13 +295,13 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
             } else {
                 String distance = getString(R.string.editor_info_window_distance,
                         MathUtils.getDistance(lastGCSPosition, msgCoord));
-                if(lastGCSBearingTo != Float.MAX_VALUE) {
+                if (lastGCSBearingTo != Float.MAX_VALUE) {
                     final String bearing = String.format(" @ %.0f°", lastGCSBearingTo);
                     distance += bearing;
                 }
                 distanceView.setText(distance);
 
-                if(lastGCSAzimuth != Double.MAX_VALUE) {
+                if (lastGCSAzimuth != Double.MAX_VALUE) {
                     final String azimuth = getString(R.string.editor_info_window_heading, lastGCSAzimuth);
                     azimuthView.setText(azimuth);
                 }
@@ -298,7 +333,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
         lastGCSPosition = new LatLong(location.getLatitude(), location.getLongitude());
         lastGCSAzimuth = location.getBearing();
 
-        if(selectedMsg != null) {
+        if (selectedMsg != null) {
             final LatLong msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
 
             final Location target = new Location(location);
@@ -315,7 +350,8 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {   }
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
 
     @Override
     public void onProviderEnabled(String provider) {
