@@ -286,7 +286,7 @@
     <string name="title_paired_devices">Dispositivi accoppiati</string>
     <string name="title_other_devices">Altri dispositivi disponibili</string>
     <string name="button_scan">Cerca dispositivi</string>
-    <string name="scanning">Ricercando dispositivi...</string>
+    <string name="scanning">Ricercando dispositivi…</string>
     <!-- Content description -->
     <string name="expandable_listview_icon_desc">Expandable ListView icon</string>
     <!-- Others (when possible move to a grouping above) -->
@@ -326,7 +326,6 @@
     <string name="editor_info_window_heading">Direzione: %.0f°</string>
     <string name="editor_multi_edit_no_waypoint_error">Nessun waypoint selezionato.</string>
     <string name="email_address">Indirizzo Email</string>
-    <string name="empty_content" translatable="false"></string>
     <string name="enter_or_pick_a_password"></string>
     <string name="locator">Cronologia Voli</string>
     <string name="mavlink_version">Versione MAVLink</string>
@@ -412,7 +411,7 @@
     <string name="status_connecting">Connessione…</string>
     <string name="status_disconnecting">Disconnessione..</string>
     <string name="status_file_opened">File aperto</string>
-    <string name="status_waiting_for_gps">In attesa del segnale GPS...</string>
+    <string name="status_waiting_for_gps">In attesa del segnale GPS…</string>
     <string name="structure_scan_description">Mappa un edificio</string>
     <string name="structure_scan_start_alt">Altezza di inizio</string>
     <string name="structure_scan_step_height">Step altezza</string>
