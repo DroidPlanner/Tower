@@ -238,7 +238,7 @@
     <string name="setup_imu_right">Posare Drone sulla sua DESTRA assicurandosi movimenti minimi, poi premere Next.</string>
     <string name="setup_imu_nosedown">Posare il Drone con DAVANTI IN BASSO assicurandosi movimenti minimi, poi premere Next.</string>
     <string name="setup_imu_noseup">Posare il Drone con DAVANTI IN ALTO assicurandosi movimenti minimi, poi premere Next.</string>
-    <string name="setup_imu_back">Posare il Drone all'ingiù assicurandosi movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_back">Posare il Drone all\'ingiù assicurandosi movimenti minimi, poi premere Next.</string>
     <string name="setup_imu_completed">Calibrazione Accelerometro completata. Se non ha funzionato riprovare,</string>
     <string name="setup_imu_step">Per iniziare la calibrazione premere Calibra.</string>
     <string name="setup_imu_timeleft">Tempo restante prima della prossima posizione:</string>
@@ -418,7 +418,7 @@
     <string name="uploader_notification_title">Caricamento su Droneshare</string>
     <string name="uploader_success_message">Caricamento avvenuto! Seleziona per vedere…</string>
     <string name="waypointInfo_CondDistance">Non continua la missione finchè il Drone non è entro il raggio desiderato dal punto NAV.</string>
-    <string name="waypointInfo_CondAlt">Sale / scende alla velocità specificata. Non coninua la missione finché non raggiunge l'altezza voluta.</string>
+    <string name="waypointInfo_CondAlt">Sale / scende alla velocità specificata. Non coninua la missione finché non raggiunge l\'altezza voluta.</string>
     <string name="waypointInfo_CondYaw">Condizione che verifica se il drone ha raggiunto un certo angolo.</string>
     <string name="label_enter_filename">Inserisci nome File</string>
     <string name="label_steps_count">Numero di Step</string>
