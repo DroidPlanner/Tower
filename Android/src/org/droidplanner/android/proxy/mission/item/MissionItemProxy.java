@@ -51,7 +51,7 @@ public class MissionItemProxy {
     private final long stableId;
 
 	public MissionItemProxy(MissionProxy mission, MissionItem missionItem) {
-        this.stableId = System.currentTimeMillis();
+        this.stableId = System.nanoTime();
 
 		mMission = mission;
 		mMissionItem = missionItem;
