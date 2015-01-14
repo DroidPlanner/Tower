@@ -3,7 +3,6 @@ package org.droidplanner.android.notifications;
 import org.droidplanner.android.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.FlightActivity;
-import org.droidplanner.android.utils.SpannableUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.unit.UnitManager;
 
@@ -28,6 +27,7 @@ import com.o3dr.services.android.lib.drone.property.Signal;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.util.MathUtils;
+import com.o3dr.services.android.lib.util.SpannableUtils;
 
 /**
  * Implements DroidPlanner's status bar notifications.

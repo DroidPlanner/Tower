@@ -241,8 +241,7 @@ public abstract class InfoBarItem {
 			popupView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if (FlightTimeInfo.this.drone != null && FlightTimeInfo.this.drone
-                            .isConnected()) {
+					if (FlightTimeInfo.this.drone != null && FlightTimeInfo.this.drone.isConnected()) {
 						FlightTimeInfo.this.drone.resetFlightTimer();
 					}
 					mPopup.dismiss();
