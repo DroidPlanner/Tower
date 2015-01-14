@@ -17,8 +17,7 @@
 
     <org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         >
 
@@ -49,36 +48,36 @@
             android:layout_margin="8dp"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/editorInfoWindow"
-            android:layout_alignWithParentIfMissing="true" />
-    </org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout>
+            android:layout_alignWithParentIfMissing="true"/>
 
-    <fragment
-        android:id="@+id/flightActionsFragment"
-        android:name="org.droidplanner.android.fragments.EditorToolsFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/missionFragment1"
-        android:layout_centerVertical="true"
-        android:layout_below="@+id/editorInfoWindow"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_margin="5dp"
-        tools:layout="@layout/fragment_editor_tools"
-        />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_above="@+id/mission_list_fragment"
+            android:layout_below="@+id/editorInfoWindow"
+            android:layout_margin="5dp"
+            android:gravity="center">
 
-    <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:fitsSystemWindows="true"
-        >
+            <fragment
+                android:id="@+id/editor_tools_fragment"
+                android:name="org.droidplanner.android.fragments.EditorToolsFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:layout="@layout/fragment_editor_tools"
+                />
+        </LinearLayout>
 
         <fragment
-            android:id="@+id/missionFragment1"
+            android:id="@+id/mission_list_fragment"
             android:name="org.droidplanner.android.fragments.EditorListFragment"
             android:layout_width="match_parent"
             android:layout_height="@dimen/editor_mission_fragment_height"
             tools:layout="@layout/fragment_editor_list"
+            android:layout_alignParentBottom="true"
             />
-    </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
+    </org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout>
 </merge>

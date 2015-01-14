@@ -53,41 +53,46 @@ public class InfoBarActionProvider extends ActionProvider {
             final String action = intent.getAction();
             boolean updateExtra = true;
 
-            if(AttributeEvent.BATTERY_UPDATED.equals(action)){
-                if (mBatteryInfo != null)
-                    mBatteryInfo.updateItemView(mContext, mDrone);
-            }
-            else if(AttributeEvent.STATE_CONNECTED.equals(action)){
-                updateInfoBar();
-                updateExtra = false;
-            }
-            else if(AttributeEvent.STATE_DISCONNECTED.equals(action)){
-                setDrone(null);
-                updateInfoBar();
-                updateExtra = false;
-            }
-            else if(AttributeEvent.GPS_POSITION.equals(action) || AttributeEvent.HOME_UPDATED.equals(action)){
-                if (mHomeInfo != null)
-                    mHomeInfo.updateItemView(mContext, mDrone);
-            }
-            else if(AttributeEvent.GPS_COUNT.equals(action) || AttributeEvent.GPS_FIX.equals(action)){
-                if (mGpsInfo != null)
-                    mGpsInfo.updateItemView(mContext, mDrone);
-            }
-            else if(AttributeEvent.SIGNAL_UPDATED.equals(action)){
-                if (mSignalInfo != null)
-                    mSignalInfo.updateItemView(mContext, mDrone);
-            }
-            else if(AttributeEvent.STATE_UPDATED.equals(action)){
-                if (mFlightTimeInfo != null)
-                    mFlightTimeInfo.updateItemView(mContext, mDrone);
-            }
-            else if(AttributeEvent.STATE_VEHICLE_MODE.equals(action) || AttributeEvent.TYPE_UPDATED.equals(action)){
-                if (mFlightModesInfo != null)
-                    mFlightModesInfo.updateItemView(mContext, mDrone);
-            }
-            else{
-                updateExtra = false;
+            switch (action) {
+                case AttributeEvent.BATTERY_UPDATED:
+                    if (mBatteryInfo != null)
+                        mBatteryInfo.updateItemView(mContext, mDrone);
+                    break;
+                case AttributeEvent.STATE_CONNECTED:
+                    updateInfoBar();
+                    updateExtra = false;
+                    break;
+                case AttributeEvent.STATE_DISCONNECTED:
+                    setDrone(null);
+                    updateInfoBar();
+                    updateExtra = false;
+                    break;
+                case AttributeEvent.GPS_POSITION:
+                case AttributeEvent.HOME_UPDATED:
+                    if (mHomeInfo != null)
+                        mHomeInfo.updateItemView(mContext, mDrone);
+                    break;
+                case AttributeEvent.GPS_COUNT:
+                case AttributeEvent.GPS_FIX:
+                    if (mGpsInfo != null)
+                        mGpsInfo.updateItemView(mContext, mDrone);
+                    break;
+                case AttributeEvent.SIGNAL_UPDATED:
+                    if (mSignalInfo != null)
+                        mSignalInfo.updateItemView(mContext, mDrone);
+                    break;
+                case AttributeEvent.STATE_UPDATED:
+                    if (mFlightTimeInfo != null)
+                        mFlightTimeInfo.updateItemView(mContext, mDrone);
+                    break;
+                case AttributeEvent.STATE_VEHICLE_MODE:
+                case AttributeEvent.TYPE_UPDATED:
+                    if (mFlightModesInfo != null)
+                        mFlightModesInfo.updateItemView(mContext, mDrone);
+                    break;
+                default:
+                    updateExtra = false;
+                    break;
             }
 
             if (mPhoneExtraInfo != null && updateExtra) {

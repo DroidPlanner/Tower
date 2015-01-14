@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.utils.unit.UnitProvider;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
@@ -24,7 +25,6 @@ import org.droidplanner.android.R.id;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.CamerasAdapter;
 import org.droidplanner.android.utils.unit.UnitManager;
-import org.droidplanner.android.utils.unit.UnitProvider;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;

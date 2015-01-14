@@ -26,6 +26,12 @@
 
     </style>
 
+    <style name="CustomDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowTitleBackgroundStyle">@android:color/transparent</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
     <!--
    More features is added in the v19+ version of this theme. That needs to be updated if this
    one is updated

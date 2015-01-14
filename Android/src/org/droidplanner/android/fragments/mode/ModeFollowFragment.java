@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
@@ -65,7 +66,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 		mRadiusWheel.addScrollListener(this);
 
 		spinner = (Spinner) parentView.findViewById(R.id.follow_type_spinner);
-		adapter = new ArrayAdapter<FollowType>(getActivity(), android.R.layout.simple_spinner_item);
+		adapter = new FollowTypesAdapter(context);
 		spinner.setAdapter(adapter);
 		spinner.setOnItemSelectedListener(this);
 	}
@@ -82,8 +83,6 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	@Override
 	public void onApiConnected() {
 		super.onApiConnected();
-
-		adapter.addAll(FollowType.values());
 		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 	}
 
@@ -128,4 +127,34 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
+
+    private static class FollowTypesAdapter extends ArrayAdapter<FollowType> {
+
+        private final LayoutInflater inflater;
+
+        public FollowTypesAdapter(Context context) {
+            super(context, 0, FollowType.values());
+            inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent){
+            TextView view;
+            if(convertView == null){
+                view = (TextView) inflater.inflate(R.layout.list_item_follow_types, parent, false);
+            }
+            else{
+                view = (TextView) convertView;
+            }
+
+            final FollowType followType = getItem(position);
+            view.setText(followType.getTypeLabel());
+            return view;
+       }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent){
+            return getView(position, convertView, parent);
+        }
+    }
 }

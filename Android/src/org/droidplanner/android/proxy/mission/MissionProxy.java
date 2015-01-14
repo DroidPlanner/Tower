@@ -404,6 +404,15 @@ public class MissionProxy implements DPMap.PathSource {
 		Collections.reverse(missionItemProxies);
 	}
 
+    public void swap(int fromIndex, int toIndex){
+        MissionItemProxy from = missionItemProxies.get(fromIndex);
+        MissionItemProxy to = missionItemProxies.get(toIndex);
+
+        missionItemProxies.set(toIndex, from);
+        missionItemProxies.set(fromIndex, to);
+        notifyMissionUpdate();
+    }
+
 	public void clear() {
         selection.clearSelection();
         missionItemProxies.clear();
@@ -569,6 +578,8 @@ public class MissionProxy implements DPMap.PathSource {
             if(spatialItem instanceof StructureScanner){
                 this.drone.buildMissionItemsAsync(missionItemsBuiltListener, (StructureScanner) spatialItem);
             }
+
+            notifyMissionUpdate();
         }
     }
 

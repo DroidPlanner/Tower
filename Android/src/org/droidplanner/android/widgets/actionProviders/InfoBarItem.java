@@ -241,8 +241,7 @@ public abstract class InfoBarItem {
 			popupView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if (FlightTimeInfo.this.drone != null && FlightTimeInfo.this.drone
-                            .isConnected()) {
+					if (FlightTimeInfo.this.drone != null && FlightTimeInfo.this.drone.isConnected()) {
 						FlightTimeInfo.this.drone.resetFlightTimer();
 					}
 					mPopup.dismiss();
@@ -442,8 +441,7 @@ public abstract class InfoBarItem {
 
 		private void setValuesFromRadio(final Signal droneSignal) {
 			((TextView) mItemView).setText(String.format(Locale.ENGLISH, "%d%%",
-                    MathUtils.getSignalStrength(droneSignal.getFadeMargin(),
-                            droneSignal.getRemFadeMargin())));
+                    MathUtils.getSignalStrength(droneSignal.getFadeMargin(), droneSignal.getRemFadeMargin())));
 
 			mRssiView.setText(String.format("RSSI %2.0f dB", droneSignal.getRssi()));
 			mRemRssiView.setText(String.format("RemRSSI %2.0f dB", droneSignal.getRemrssi()));

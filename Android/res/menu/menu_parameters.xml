@@ -4,7 +4,7 @@
     <item
         android:id="@+id/menu_load_parameters"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_reload"
+        android:icon="@drawable/ic_refresh_black_48dp"
         android:title="@string/refresh" />
     <item
         android:id="@+id/menu_write_parameters"

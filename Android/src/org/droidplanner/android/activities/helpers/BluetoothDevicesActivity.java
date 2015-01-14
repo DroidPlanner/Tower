@@ -9,6 +9,7 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -19,6 +20,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +35,7 @@ import android.widget.TextView;
  * This is used to show the user a list of bluetooth devices to connect to.
  * @author Fredia Huya-Kouadio
  */
-public class BluetoothDevicesActivity extends FragmentActivity {
+public class BluetoothDevicesActivity extends ActionBarActivity {
 
 	/**
 	 * This tag is used for logging.

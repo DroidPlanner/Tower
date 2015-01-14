@@ -13,7 +13,7 @@ import android.widget.ProgressBar;
 /**
  * Created by fhuya on 9/25/14.
  */
-public class ProgressView extends ProgressBar {
+public class NiceProgressView extends ProgressBar {
     RectF rectF;
     Paint p;
     int start = 0;
@@ -26,28 +26,27 @@ public class ProgressView extends ProgressBar {
     final int[][] colors = {
             {224,187,63},
             {224,46,25},
-            {39,105,227},
             {51,130,49}
     };
 
-    public ProgressView(Context context) {
+    public NiceProgressView(Context context) {
         super(context);
         init();
     }
 
-    public ProgressView(Context context, AttributeSet attrs) {
+    public NiceProgressView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public ProgressView(Context context, AttributeSet attrs, int defStyle) {
+    public NiceProgressView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
 
     private void init(){
         p = new Paint();
-        p.setStrokeWidth(6);
+        p.setStrokeWidth(8);
         p.setStrokeCap(Paint.Cap.ROUND);
         p.setAntiAlias(true);
         p.setStyle(Paint.Style.STROKE);
@@ -78,7 +77,7 @@ public class ProgressView extends ProgressBar {
             reverse = !reverse;
         }
         transformColor();
-        p.setColor(Color.argb(255,currentColor[0], currentColor[1], currentColor[2]));
+        p.setColor(Color.argb(255, currentColor[0], currentColor[1], currentColor[2]));
         c.drawArc(rectF, start, maxvalue - value, false, p);
         invalidate();
     }
@@ -88,7 +87,7 @@ public class ProgressView extends ProgressBar {
         changeColors(1);
         changeColors(2);
         if(currentColor[0] == colors[nextcolor][0] && currentColor[1] == colors[nextcolor][1] && currentColor[2] == colors[nextcolor][2]){
-            if(nextcolor == 3)
+            if(nextcolor == 2)
                 nextcolor = 0;
             else
                 nextcolor++;
