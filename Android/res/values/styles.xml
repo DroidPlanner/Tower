@@ -85,7 +85,7 @@
     <style name="flightControlButton" parent="@android:style/Widget.Holo.Button.Borderless">
         <item name="android:padding">@dimen/flightControlPadding</item>
         <item name="android:textSize">@dimen/flightControlTextSize</item>
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">@android:color/black</item>
         <item name="android:adjustViewBounds">true</item>
         <item name="android:layout_width">@dimen/flight_action_width</item>
         <item name="android:layout_height">@dimen/flight_action_height</item>
