@@ -25,13 +25,13 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
+import org.droidplanner.android.utils.ReorderRecyclerView;
 import org.droidplanner.android.utils.unit.UnitManager;
 
 /**
  * Created by fhuya on 12/9/14.
  */
-public class MissionItemListAdapter extends RecyclerView.Adapter<MissionItemListAdapter
-        .ViewHolder> {
+public class MissionItemListAdapter extends ReorderRecyclerView.ReorderAdapter<MissionItemListAdapter.ViewHolder> {
 
     // Provide a reference to the views for each data item
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -55,6 +55,12 @@ public class MissionItemListAdapter extends RecyclerView.Adapter<MissionItemList
     public MissionItemListAdapter(MissionProxy missionProxy, OnEditorInteraction editorListener) {
         this.missionProxy = missionProxy;
         this.editorListener = editorListener;
+        setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position){
+        return missionProxy.getItems().get(position).getStableId();
     }
 
     @Override
@@ -63,9 +69,14 @@ public class MissionItemListAdapter extends RecyclerView.Adapter<MissionItemList
     }
 
     @Override
+    public void swapElements(int fromIndex, int toIndex) {
+        missionProxy.swap(fromIndex, toIndex);
+    }
+
+    @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout
-                .fragment_editor_list_item, parent, false);
+        final View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.fragment_editor_list_item, parent, false);
 
         final TextView nameView = (TextView) view.findViewById(R.id.rowNameView);
         final TextView altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
@@ -84,12 +95,6 @@ public class MissionItemListAdapter extends RecyclerView.Adapter<MissionItemList
             public void onClick(View v) {
                 if(editorListener != null)
                 editorListener.onItemClick(proxy, true);
-            }
-        });
-        container.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return editorListener != null && editorListener.onItemLongClick(proxy);
             }
         });
 
