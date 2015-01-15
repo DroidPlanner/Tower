@@ -448,5 +448,18 @@
         <item name="android:layout_marginBottom">4dp</item>
     </style>
 
+    <style name="Telemetry" />
+
+    <style name="Telemetry.Entry" >
+        <item name="android:textSize">@dimen/info_bar_text_size</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:drawablePadding">@dimen/info_bar_drawable_padding</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
 </resources>
 

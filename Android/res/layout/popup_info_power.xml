@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="start|center_vertical"
-        android:text=""
+        android:textColor="@android:color/black"
+        android:text="@string/empty_content"
         android:textSize="@dimen/info_bar_text_size" />
 
     <TextView
@@ -22,7 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="start|center_vertical"
-        android:text=""
+        android:textColor="@android:color/black"
+        android:text="@string/empty_content"
         android:textSize="@dimen/info_bar_text_size" />
 
 </LinearLayout>

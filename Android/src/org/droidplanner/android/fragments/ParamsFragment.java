@@ -292,7 +292,7 @@ public class ParamsFragment extends ApiListenerListFragment {
         adapter.clearFocus();
 
         switch (item.getItemId()) {
-            case R.id.menu_load_parameters:
+            case R.id.menu_download_parameters:
                 refreshParameters();
                 break;
 

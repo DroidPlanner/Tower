@@ -47,9 +47,9 @@
     <dimen name="tuning_mission_header_title_height">48dp</dimen>
 
     <!-- Dimension for the info bar -->
-    <dimen name="info_bar_text_size">12sp</dimen>
+    <dimen name="info_bar_text_size">14sp</dimen>
     <dimen name="info_bar_drawable_padding">0dp</dimen>
-    <dimen name="info_bar_flight_mode_width">90dp</dimen>
+    <dimen name="info_bar_flight_mode_width">100dp</dimen>
 
     <!-- Dimensions for the number picker dialog -->
     <dimen name="width_number_picker_dialog">192dp</dimen>
@@ -60,5 +60,8 @@
     <dimen name="slide_button_padding_top">0dp</dimen>
     <dimen name="flight_actions_container_width">360dp</dimen>
     <dimen name="flight_actions_container_height">320dp</dimen>
+
+    <dimen name="toolbar_height">112dp</dimen>
+    <dimen name="action_bar_telem_height">96dp</dimen>
 
 </resources>
