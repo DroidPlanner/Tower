@@ -82,8 +82,7 @@ android {
             if (file != null && file.name.endsWith('.apk')) {
                 def buildType = variant.buildType.getName()
                 def versionCode = defaultConfig.versionCode
-                output.outputFile = new File(file.parent,
-                        "droidplanner-3-${buildType}.${versionCode}.apk")
+                output.outputFile = new File(file.parent, "tower-${buildType}.${versionCode}.apk")
             }
         }
     }
