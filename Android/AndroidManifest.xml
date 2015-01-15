@@ -90,7 +90,6 @@
             android:name=".activities.ConfigurationActivity"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.PageIndicatorDefaults"
             android:label="@string/menu_drone_setup"/>
 
         <activity

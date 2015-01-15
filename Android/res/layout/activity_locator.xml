@@ -17,6 +17,7 @@
     <org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/toolbar_height"
         android:layout_alignParentTop="true"
         android:fitsSystemWindows="true"
         >

@@ -495,7 +495,7 @@ public abstract class InfoBarItem {
 
 			final SpinnerSelfSelect modesSpinner = (SpinnerSelfSelect) mItemView;
 
-			mModeAdapter = new ModeAdapter(context, R.layout.spinner_drop_down);
+			mModeAdapter = new ModeAdapter(context, R.layout.spinner_drop_down_flight_mode);
 			modesSpinner.setAdapter(mModeAdapter);
 
 			modesSpinner.setOnSpinnerItemSelectedListener(new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {

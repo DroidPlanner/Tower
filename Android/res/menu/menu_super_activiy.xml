@@ -6,12 +6,6 @@
         android:id="@+id/menu_group_connected"
         android:enabled="false"
         android:visible="false">
-        <item
-            android:id="@+id/menu_info_bar"
-            android:title="@string/menu_info_bar"
-            app:showAsAction="always"
-            app:actionProviderClass="org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider"
-            />
 
         <item
             android:id="@+id/menu_upload_mission"

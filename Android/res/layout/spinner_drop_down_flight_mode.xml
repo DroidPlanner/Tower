@@ -6,7 +6,10 @@
     tools:text="Sample"
     style="?android:attr/spinnerDropDownItemStyle"
     android:singleLine="true"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="48dp"
     android:ellipsize="marquee"
+    android:textColor="@android:color/black"
+    android:gravity="center"
+    android:drawablePadding="@dimen/info_bar_drawable_padding"
     android:textSize="16sp" />

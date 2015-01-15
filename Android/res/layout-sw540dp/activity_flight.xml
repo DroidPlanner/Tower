@@ -28,12 +28,14 @@
             android:id="@+id/telemetryFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toolbar_height"
             tools:layout="@layout/fragment_telemetry"
             android:fitsSystemWindows="true"/>
 
         <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toolbar_height"
             android:layout_alignParentTop="true"
             android:fitsSystemWindows="true"
             >
@@ -71,7 +73,7 @@
             android:id="@+id/flightActionsFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:layout="@layout/fragment_mission_control"
+            tools:layout="@layout/fragment_flight_actions_bar"
             android:fitsSystemWindows="true"
             />
 

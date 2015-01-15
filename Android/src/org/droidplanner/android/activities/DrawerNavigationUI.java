@@ -2,18 +2,24 @@ package org.droidplanner.android.activities;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.fragments.actionbar.ActionBarTelemFragment;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 /**
@@ -32,6 +38,11 @@ public abstract class DrawerNavigationUI extends SuperUI {
 	 */
 	private DrawerLayout mDrawerLayout;
 
+    /**
+     * Container for the activity content.
+     */
+    private FrameLayout contentLayout;
+
     private NavDrawerViewHolder mNavViewsHolder;
 
     /**
@@ -45,11 +56,10 @@ public abstract class DrawerNavigationUI extends SuperUI {
 		super.onCreate(savedInstanceState);
 
 		// Retrieve the drawer layout container.
-		mDrawerLayout = (DrawerLayout) getLayoutInflater().inflate(
-				R.layout.activity_drawer_navigation_ui, null);
+		mDrawerLayout = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_drawer_navigation_ui, null);
+        contentLayout = (FrameLayout) mDrawerLayout.findViewById(R.id.content_layout);
 
-		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-				R.string.drawer_open, R.string.drawer_close){
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,R.string.drawer_open, R.string.drawer_close){
 
             @Override
             public void onDrawerClosed(View drawerView){
@@ -61,6 +71,23 @@ public abstract class DrawerNavigationUI extends SuperUI {
         };
 
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        final Toolbar toolbar = (Toolbar) mDrawerLayout.findViewById(R.id.actionbar_toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
+
+        final FragmentManager fm = getSupportFragmentManager();
+        Fragment actionBarTelem = fm.findFragmentById(R.id.actionbar_toolbar);
+        if(actionBarTelem == null){
+            actionBarTelem = new ActionBarTelemFragment();
+            fm.beginTransaction().add(R.id.actionbar_toolbar, actionBarTelem).commit();
+        }
 	}
 
 	/**
@@ -74,7 +101,7 @@ public abstract class DrawerNavigationUI extends SuperUI {
 	@Override
 	public void setContentView(int layoutResID) {
 		final View contentView = getLayoutInflater().inflate(layoutResID, mDrawerLayout, false);
-		mDrawerLayout.addView(contentView, 0);
+		contentLayout.addView(contentView);
 		setContentView(mDrawerLayout);
 
         initNavigationDrawer();

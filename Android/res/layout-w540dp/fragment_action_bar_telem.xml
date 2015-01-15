@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="?android:attr/buttonBarStyle"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/action_bar_telem_height"
+    android:layout_gravity="center"
+    android:gravity="center_vertical|end">
+
+    <TextView
+        android:id="@+id/bar_home"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:minWidth="80dp"
+        android:layout_height="match_parent"
+        android:text="@string/empty_content"
+        android:drawableLeft="@drawable/ic_status_home"
+        android:drawableStart="@drawable/ic_status_home"
+        android:textSize="@dimen/info_bar_text_size"
+        android:drawablePadding="@dimen/info_bar_drawable_padding"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/bar_gps"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:minWidth="90dp"
+        android:layout_height="match_parent"
+        android:text="@string/empty_content"
+        android:drawableLeft="@drawable/ic_status_gps"
+        android:drawableStart="@drawable/ic_status_gps"
+        android:textSize="@dimen/info_bar_text_size"
+        android:drawablePadding="@dimen/info_bar_drawable_padding"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/bar_battery"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:minWidth="75dp"
+        android:layout_height="match_parent"
+        android:text="@string/empty_content"
+        android:drawableLeft="@drawable/ic_status_battery"
+        android:drawableStart="@drawable/ic_status_battery"
+        android:textSize="@dimen/info_bar_text_size"
+        android:drawablePadding="@dimen/info_bar_drawable_padding"
+        android:layout_weight="1"
+        />
+
+    <TextView
+        android:id="@+id/bar_signal"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:minWidth="75dp"
+        android:layout_height="match_parent"
+        android:text="@string/empty_content"
+        android:drawableLeft="@drawable/ic_status_rssi"
+        android:drawableStart="@drawable/ic_status_rssi"
+        android:textSize="@dimen/info_bar_text_size"
+        android:drawablePadding="@dimen/info_bar_drawable_padding"
+        android:layout_weight="1"
+        />
+
+    <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
+        android:id="@+id/bar_flight_mode"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="@dimen/info_bar_flight_mode_width"
+        android:layout_height="match_parent"
+        app:isSelectable="false"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        />
+
+</LinearLayout>

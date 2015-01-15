@@ -23,6 +23,7 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.widgets.AttitudeIndicator;
 
+//TODO: implement flight time telemetry.
 public class TelemetryFragment extends ApiListenerFragment {
 
 	private final static IntentFilter eventFilter = new IntentFilter();
