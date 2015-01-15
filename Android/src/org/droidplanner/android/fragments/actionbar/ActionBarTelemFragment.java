@@ -264,7 +264,11 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final Signal droneSignal = drone.getAttribute(AttributeType.SIGNAL);
         if(!drone.isConnected() || !droneSignal.isValid()){
             final String defaultValue = getString(R.string.empty_content);
+
             signalTelem.setText(defaultValue);
+            signalTelem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_signal_wifi_statusbar_null_black_24dp,
+                    0, 0, 0);
+
             rssiView.setText(defaultValue);
             remRssiView.setText(defaultValue);
             noiseView.setText(defaultValue);
@@ -273,8 +277,22 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             remFadeView.setText(defaultValue);
         }
         else{
-            signalTelem.setText(String.format(Locale.ENGLISH, "%d%%",
-                    MathUtils.getSignalStrength(droneSignal.getFadeMargin(), droneSignal.getRemFadeMargin())));
+            final int signalStrength = MathUtils.getSignalStrength(droneSignal.getFadeMargin(),
+                    droneSignal.getRemFadeMargin());
+            final int signalIcon;
+            if (signalStrength >= 100)
+                signalIcon = R.drawable.ic_signal_wifi_4_bar_black_24dp;
+            else if (signalStrength >= 75)
+                signalIcon = R.drawable.ic_signal_wifi_3_bar_black_24dp;
+            else if (signalStrength >= 50)
+                signalIcon = R.drawable.ic_signal_wifi_2_bar_black_24dp;
+            else if (signalStrength >= 25)
+                signalIcon = R.drawable.ic_signal_wifi_1_bar_black_24dp;
+            else
+                signalIcon = R.drawable.ic_signal_wifi_0_bar_black_24dp;
+
+            signalTelem.setText(String.format(Locale.ENGLISH, "%d%%", signalStrength));
+            signalTelem.setCompoundDrawablesWithIntrinsicBounds(signalIcon, 0, 0, 0);
 
             rssiView.setText(String.format("RSSI %2.0f dB", droneSignal.getRssi()));
             remRssiView.setText(String.format("RemRSSI %2.0f dB", droneSignal.getRemrssi()));
@@ -291,20 +309,35 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final Drone drone = getDrone();
 
         final String update;
+        final int gpsIcon;
         if (!drone.isConnected()) {
             update = getString(R.string.empty_content);
+            gpsIcon = R.drawable.ic_gps_off_black_24dp;
         } else {
             Gps droneGps = drone.getAttribute(AttributeType.GPS);
+            final String fixStatus = droneGps.getFixStatus();
+
             if (appPrefs.shouldGpsHdopBeDisplayed()) {
-                update = String.format(Locale.ENGLISH, "Satellite\n%d, %.1f", droneGps
-                        .getSatellitesCount(), droneGps.getGpsEph());
+                update = String.format(Locale.ENGLISH, "%.1f", droneGps.getGpsEph());
             } else {
-                update = String.format(Locale.ENGLISH, "Satellite\n%d, %s", droneGps
-                        .getSatellitesCount(), droneGps.getFixStatus());
+                update = String.format(Locale.ENGLISH, "%s", fixStatus);
+            }
+
+            switch(fixStatus){
+                case Gps.LOCK_3D:
+                    gpsIcon = R.drawable.ic_gps_fixed_black_24dp;
+                    break;
+
+                case Gps.LOCK_2D:
+                case Gps.NO_FIX:
+                default:
+                    gpsIcon = R.drawable.ic_gps_not_fixed_black_24dp;
+                    break;
             }
         }
 
         gpsTelem.setText(update);
+        gpsTelem.setCompoundDrawablesWithIntrinsicBounds(gpsIcon, 0, 0, 0);
     }
 
     private void updateHomeTelem() {
@@ -332,26 +365,30 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
 
         String update;
         Battery droneBattery;
+        final int batteryIcon;
         if (!drone.isConnected() || ((droneBattery = drone.getAttribute(AttributeType.BATTERY)) == null)) {
             update = getString(R.string.empty_content);
             currentView.setText(R.string.empty_content);
             mAhView.setText(R.string.empty_content);
+            batteryIcon = R.drawable.ic_battery_unknown_black_24dp;
         } else {
             Double discharge = droneBattery.getBatteryDischarge();
             String dischargeText;
             if (discharge == null) {
                 dischargeText = getString(R.string.empty_content);
             } else {
-                dischargeText = String.format(Locale.ENGLISH, "%2.0f mAh", discharge);
+                dischargeText = UnitManager.getUnitProvider().electricChargeToString(discharge);
             }
 
             mAhView.setText(String.format(Locale.ENGLISH, "Remaining %2.0f%%", droneBattery.getBatteryRemain()));
             currentView.setText(String.format("Current %2.1f A", droneBattery.getBatteryCurrent()));
 
             update = String.format(Locale.ENGLISH, "%2.1fv\n", droneBattery.getBatteryVoltage()).concat(dischargeText);
+            batteryIcon = R.drawable.ic_battery_std_black_24dp;
         }
 
         batteryPopup.update();
         batteryTelem.setText(update);
+        batteryTelem.setCompoundDrawablesWithIntrinsicBounds(batteryIcon, 0, 0, 0);
     }
 }
