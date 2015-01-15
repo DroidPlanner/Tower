@@ -6,11 +6,14 @@
     android:layout_height="wrap_content"
     android:fitsSystemWindows="true">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/actionbar_toolbar"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        android:background="?attr/colorPrimary"
-        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/actionbar_toolbar"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:gravity="center"
+            android:background="@drawable/telem_bar_bg"
+            app:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
 </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>

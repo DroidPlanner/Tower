@@ -34,7 +34,6 @@
    one is updated
    -->
     <style name="CustomActionBarTheme.Transparent">
-        <item name="colorPrimary">@color/transparent_light</item>
     </style>
 
     <!--  Actionbar text-->

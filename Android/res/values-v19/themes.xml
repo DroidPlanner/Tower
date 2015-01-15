@@ -5,10 +5,8 @@
     That needs to be updated if this one is updated.
     -->
     <style name="CustomActionBarTheme.Transparent">
-        <item name="colorPrimary">@color/transparent_light</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="windowActionBarOverlay">true</item>
-
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 </resources>
