@@ -37,20 +37,6 @@
         android:layout_weight="1"/>
 
     <TextView
-        android:id="@+id/bar_battery"
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="wrap_content"
-        android:minWidth="75dp"
-        android:layout_height="match_parent"
-        android:text="@string/empty_content"
-        android:drawableLeft="@drawable/ic_battery_unknown_black_24dp"
-        android:drawableStart="@drawable/ic_battery_unknown_black_24dp"
-        android:textSize="@dimen/info_bar_text_size"
-        android:drawablePadding="@dimen/info_bar_drawable_padding"
-        android:layout_weight="1"
-        />
-
-    <TextView
         android:id="@+id/bar_signal"
         style="?android:attr/buttonBarButtonStyle"
         android:layout_width="wrap_content"
@@ -64,11 +50,25 @@
         android:layout_weight="1"
         />
 
+    <TextView
+        android:id="@+id/bar_battery"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:minWidth="75dp"
+        android:layout_height="match_parent"
+        android:text="@string/empty_content"
+        android:drawableLeft="@drawable/ic_battery_unknown_black_24dp"
+        android:drawableStart="@drawable/ic_battery_unknown_black_24dp"
+        android:textSize="@dimen/info_bar_text_size"
+        android:drawablePadding="@dimen/info_bar_drawable_padding"
+        android:layout_weight="1"
+        />
+
     <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/bar_flight_mode"
         style="?android:attr/buttonBarButtonStyle"
         android:layout_width="@dimen/info_bar_flight_mode_width"
-        android:layout_height="match_parent"
+        android:layout_height="56dp"
         app:isSelectable="false"
         android:layout_margin="10dp"
         android:gravity="center"

@@ -69,12 +69,8 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                     break;
 
                 case AttributeEvent.STATE_CONNECTED:
-                    showTelemBar();
-                    updateAllTelem();
-                    break;
-
                 case AttributeEvent.STATE_DISCONNECTED:
-                    hideTelemBar();
+                    updateAllTelem();
                     break;
 
                 case AttributeEvent.GPS_POSITION:
@@ -168,12 +164,6 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
 
     @Override
     public void onApiConnected() {
-        final Drone drone = getDrone();
-        if(drone.isConnected())
-            showTelemBar();
-        else
-            hideTelemBar();
-
         flightModeTelem.setAdapter(modeAdapter);
         flightModeTelem.setOnSpinnerItemSelectedListener(new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {
             @Override
@@ -200,18 +190,6 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
     @Override
     public void onApiDisconnected() {
         getBroadcastManager().unregisterReceiver(eventReceiver);
-    }
-
-    private void showTelemBar() {
-        final View view = getView();
-        if(view != null)
-            view.setVisibility(View.VISIBLE);
-    }
-
-    private void hideTelemBar(){
-        final View view = getView();
-        if(view != null)
-            view.setVisibility(View.INVISIBLE);
     }
 
     private void updateAllTelem() {

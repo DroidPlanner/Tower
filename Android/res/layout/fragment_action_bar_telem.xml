@@ -31,15 +31,15 @@
             android:drawablePadding="@dimen/info_bar_drawable_padding"/>
 
         <TextView
-            android:id="@+id/bar_battery"
+            android:id="@+id/bar_gps"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
-            android:minWidth="75dp"
+            android:minWidth="90dp"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
             android:text="@string/empty_content"
-            android:drawableLeft="@drawable/ic_battery_unknown_black_24dp"
-            android:drawableStart="@drawable/ic_battery_unknown_black_24dp"
+            android:drawableLeft="@drawable/ic_gps_off_black_24dp"
+            android:drawableStart="@drawable/ic_gps_off_black_24dp"
             android:textSize="@dimen/info_bar_text_size"
             android:drawablePadding="@dimen/info_bar_drawable_padding"
             android:layout_weight="1"
@@ -69,27 +69,25 @@
         android:gravity="center">
 
         <TextView
-            android:id="@+id/bar_gps"
+            android:id="@+id/bar_battery"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
-            android:minWidth="90dp"
+            android:minWidth="75dp"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
             android:text="@string/empty_content"
-            android:drawableLeft="@drawable/ic_gps_off_black_24dp"
-            android:drawableStart="@drawable/ic_gps_off_black_24dp"
+            android:drawableLeft="@drawable/ic_battery_unknown_black_24dp"
+            android:drawableStart="@drawable/ic_battery_unknown_black_24dp"
             android:textSize="@dimen/info_bar_text_size"
             android:drawablePadding="@dimen/info_bar_drawable_padding"
             android:layout_weight="1"
             />
 
-
         <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
             android:id="@+id/bar_flight_mode"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="@dimen/info_bar_flight_mode_width"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
+            android:layout_height="56dp"
             app:isSelectable="false"
             android:layout_margin="10dp"
             android:gravity="center"
