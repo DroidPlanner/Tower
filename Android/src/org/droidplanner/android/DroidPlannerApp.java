@@ -309,14 +309,16 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
 
     @Override
     public void onDroneEvent(String event, Bundle extras){
-        if (AttributeEvent.STATE_CONNECTED.equals(event)) {
-            handler.removeCallbacks(disconnectionTask);
-            if(notificationHandler == null) {
-                notificationHandler = new NotificationHandler(getApplicationContext(), drone);
-            }
-        }
-        else if (AttributeEvent.STATE_DISCONNECTED.equals(event)) {
-            shouldWeTerminate();
+        switch (event) {
+            case AttributeEvent.STATE_CONNECTED:
+                handler.removeCallbacks(disconnectionTask);
+                if (notificationHandler == null) {
+                    notificationHandler = new NotificationHandler(getApplicationContext(), drone);
+                }
+                break;
+            case AttributeEvent.STATE_DISCONNECTED:
+                shouldWeTerminate();
+                break;
         }
 
         lbm.sendBroadcast(new Intent(ACTION_DRONE_EVENT).putExtra(EXTRA_DRONE_EVENT, event));

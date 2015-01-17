@@ -67,9 +67,11 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                 case AttributeEvent.STATE_UPDATED:
                     setupButtonsByFlightState();
                     break;
+
                 case AttributeEvent.STATE_VEHICLE_MODE:
                     updateFlightModeButtons();
                     break;
+
                 case AttributeEvent.FOLLOW_START:
                 case AttributeEvent.FOLLOW_STOP:
                 case AttributeEvent.FOLLOW_UPDATE:

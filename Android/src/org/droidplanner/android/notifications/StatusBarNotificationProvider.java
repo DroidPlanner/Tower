@@ -115,62 +115,67 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
         public void onReceive(Context context, Intent intent) {
             boolean showNotification = true;
             final String action = intent.getAction();
-            if(AttributeEvent.STATE_CONNECTED.equals(action)){
-                final String summaryText = mContext.getString(R.string.connected);
+            switch (action) {
+                case AttributeEvent.STATE_CONNECTED:
+                    final String summaryText = mContext.getString(R.string.connected);
 
-                mInboxBuilder = new InboxStyleBuilder().setSummary(summaryText);
-                mNotificationBuilder = new NotificationCompat.Builder(mContext)
-                        .addAction(R.drawable.ic_action_io, mContext.getText(R.string.menu_disconnect),
-                                mToggleConnectionIntent)
-                        .setContentIntent(mNotificationIntent)
-                        .setContentText(summaryText)
-                        .setOngoing(mAppPrefs.isNotificationPermanent())
-                        .setSmallIcon(R.drawable.ic_launcher);
-
-                updateFlightMode(drone);
-                updateDroneState(drone);
-                updateBattery(drone);
-                updateGps(drone);
-                updateHome(drone);
-                updateRadio(drone);
-            }
-            else if(AttributeEvent.GPS_POSITION.equals(action)){
-                updateHome(drone);
-            }
-            else if(AttributeEvent.GPS_FIX.equals(action) || AttributeEvent.GPS_COUNT.equals(action)){
-                updateGps(drone);
-            }
-            else if(AttributeEvent.BATTERY_UPDATED.equals(action)){
-                updateBattery(drone);
-            }
-            else if(AttributeEvent.HOME_UPDATED.equals(action)){
-                updateHome(drone);
-            }
-            else if(AttributeEvent.SIGNAL_UPDATED.equals(action)){
-                updateRadio(drone);
-            }
-            else if(AttributeEvent.STATE_UPDATED.equals(action)){
-                updateDroneState(drone);
-            }
-            else if(AttributeEvent.STATE_VEHICLE_MODE.equals(action)
-                    || AttributeEvent.TYPE_UPDATED.equals(action)){
-                updateFlightMode(drone);
-            }
-            else if(AttributeEvent.STATE_DISCONNECTED.equals(action)){
-                mInboxBuilder = null;
-
-                if (mNotificationBuilder != null) {
+                    mInboxBuilder = new InboxStyleBuilder().setSummary(summaryText);
                     mNotificationBuilder = new NotificationCompat.Builder(mContext)
-                            .addAction(R.drawable.ic_action_io,
-                                    mContext.getText(R.string.menu_connect), mToggleConnectionIntent)
+                            .addAction(R.drawable.ic_action_io, mContext.getText(R.string.menu_disconnect),
+                                    mToggleConnectionIntent)
                             .setContentIntent(mNotificationIntent)
-                            .setContentTitle(mContext.getString(R.string.disconnected))
-                            .setOngoing(false).setContentText("")
+                            .setContentText(summaryText)
+                            .setOngoing(mAppPrefs.isNotificationPermanent())
                             .setSmallIcon(R.drawable.ic_launcher);
-                }
-            }
-            else{
-                showNotification = false;
+
+                    updateFlightMode(drone);
+                    updateDroneState(drone);
+                    updateBattery(drone);
+                    updateGps(drone);
+                    updateHome(drone);
+                    updateRadio(drone);
+                    break;
+                case AttributeEvent.GPS_POSITION:
+                    updateHome(drone);
+                    break;
+                case AttributeEvent.GPS_FIX:
+                case AttributeEvent.GPS_COUNT:
+                    updateGps(drone);
+                    break;
+                case AttributeEvent.BATTERY_UPDATED:
+                    updateBattery(drone);
+                    break;
+                case AttributeEvent.HOME_UPDATED:
+                    updateHome(drone);
+                    break;
+                case AttributeEvent.SIGNAL_UPDATED:
+                    updateRadio(drone);
+                    break;
+                case AttributeEvent.STATE_UPDATED:
+                    updateDroneState(drone);
+                    break;
+                case AttributeEvent.STATE_VEHICLE_MODE:
+                case AttributeEvent.TYPE_UPDATED:
+                    updateFlightMode(drone);
+                    break;
+
+                case AttributeEvent.STATE_DISCONNECTED:
+                    mInboxBuilder = null;
+
+                    if (mNotificationBuilder != null) {
+                        mNotificationBuilder = new NotificationCompat.Builder(mContext)
+                                .addAction(R.drawable.ic_action_io,
+                                        mContext.getText(R.string.menu_connect), mToggleConnectionIntent)
+                                .setContentIntent(mNotificationIntent)
+                                .setContentTitle(mContext.getString(R.string.disconnected))
+                                .setOngoing(false).setContentText("")
+                                .setSmallIcon(R.drawable.ic_launcher);
+                    }
+                    break;
+
+                default:
+                    showNotification = false;
+                    break;
             }
 
             if (showNotification) {

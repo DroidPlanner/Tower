@@ -45,34 +45,38 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if(AttributeEvent.CALIBRATION_IMU.equals(action)){
-                String message = intent.getStringExtra(AttributeEventExtra.EXTRA_CALIBRATION_IMU_MESSAGE);
-                if(message != null)
-                    processMAVMessage(message, true);
-            }
-            else if(AttributeEvent.STATE_CONNECTED.equals(action)){
-                if(calibration_step == 0) {
-                    //Reset the screen, and enable the calibration button
-                    resetCalibration();
-                    btnStep.setEnabled(true);
+            switch (action) {
+                case AttributeEvent.CALIBRATION_IMU: {
+                    String message = intent.getStringExtra(AttributeEventExtra.EXTRA_CALIBRATION_IMU_MESSAGE);
+                    if (message != null)
+                        processMAVMessage(message, true);
+                    break;
                 }
-            }
-            else if(AttributeEvent.STATE_DISCONNECTED.equals(action)){
-                //Reset the screen, and disable the calibration button
-                btnStep.setEnabled(false);
-                resetCalibration();
-            }
-            else if (AttributeEvent.CALIBRATION_IMU_TIMEOUT.equals(action)) {
-				if (getDrone().isConnected()) {
-					String message = intent.getStringExtra(AttributeEventExtra.EXTRA_CALIBRATION_IMU_MESSAGE);
-					if (message != null)
-						relayInstructions(message);
-				}
-			}
-            else if(AttributeEvent.CALIBRATION_IMU_ERROR.equals(action)){
-                String message = intent.getStringExtra(AttributeEventExtra.EXTRA_CALIBRATION_IMU_MESSAGE);
-                if(message != null){
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                case AttributeEvent.STATE_CONNECTED:
+                    if (calibration_step == 0) {
+                        //Reset the screen, and enable the calibration button
+                        resetCalibration();
+                        btnStep.setEnabled(true);
+                    }
+                    break;
+                case AttributeEvent.STATE_DISCONNECTED:
+                    //Reset the screen, and disable the calibration button
+                    btnStep.setEnabled(false);
+                    resetCalibration();
+                    break;
+                case AttributeEvent.CALIBRATION_IMU_TIMEOUT:
+                    if (getDrone().isConnected()) {
+                        String message = intent.getStringExtra(AttributeEventExtra.EXTRA_CALIBRATION_IMU_MESSAGE);
+                        if (message != null)
+                            relayInstructions(message);
+                    }
+                    break;
+                case AttributeEvent.CALIBRATION_IMU_ERROR: {
+                    String message = intent.getStringExtra(AttributeEventExtra.EXTRA_CALIBRATION_IMU_MESSAGE);
+                    if (message != null) {
+                        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                    }
+                    break;
                 }
             }
         }

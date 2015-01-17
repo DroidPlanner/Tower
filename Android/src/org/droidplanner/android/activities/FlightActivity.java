@@ -59,28 +59,33 @@ public class FlightActivity extends DrawerNavigationUI {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if(AttributeEvent.AUTOPILOT_FAILSAFE.equals(action)){
-                String warning = intent.getStringExtra(AttributeEventExtra
-                        .EXTRA_AUTOPILOT_FAILSAFE_MESSAGE);
-                onWarningChanged(warning);
-            }
-            else if(AttributeEvent.STATE_ARMING.equals(action)
-                    || AttributeEvent.STATE_CONNECTED.equals(action)
-                    || AttributeEvent.STATE_DISCONNECTED.equals(action)
-                    || AttributeEvent.STATE_UPDATED.equals(action)){
-                enableSlidingUpPanel(dpApp.getDrone());
-            }
-            else if(AttributeEvent.FOLLOW_START.equals(action)){
-                //Extend the sliding drawer if collapsed.
-                if(!mSlidingPanelCollapsing.get() && mSlidingPanel.isSlidingEnabled() &&
-                        !mSlidingPanel.isPanelExpanded()){
-                    mSlidingPanel.expandPanel();
-                }
-            }
-            else if(AttributeEvent.MISSION_DRONIE_CREATED.equals(action)){
-                float dronieBearing = intent.getFloatExtra(AttributeEventExtra.EXTRA_MISSION_DRONIE_BEARING,  -1);
-                if(dronieBearing != -1)
-                    updateMapBearing(dronieBearing);
+            switch (action) {
+                case AttributeEvent.AUTOPILOT_FAILSAFE:
+                    String warning = intent.getStringExtra(AttributeEventExtra
+                            .EXTRA_AUTOPILOT_FAILSAFE_MESSAGE);
+                    onWarningChanged(warning);
+                    break;
+
+                case AttributeEvent.STATE_ARMING:
+                case AttributeEvent.STATE_CONNECTED:
+                case AttributeEvent.STATE_DISCONNECTED:
+                case AttributeEvent.STATE_UPDATED:
+                    enableSlidingUpPanel(dpApp.getDrone());
+                    break;
+
+                case AttributeEvent.FOLLOW_START:
+                    //Extend the sliding drawer if collapsed.
+                    if (!mSlidingPanelCollapsing.get() && mSlidingPanel.isSlidingEnabled() &&
+                            !mSlidingPanel.isPanelExpanded()) {
+                        mSlidingPanel.expandPanel();
+                    }
+                    break;
+
+                case AttributeEvent.MISSION_DRONIE_CREATED:
+                    float dronieBearing = intent.getFloatExtra(AttributeEventExtra.EXTRA_MISSION_DRONIE_BEARING, -1);
+                    if (dronieBearing != -1)
+                        updateMapBearing(dronieBearing);
+                    break;
             }
         }
     };
