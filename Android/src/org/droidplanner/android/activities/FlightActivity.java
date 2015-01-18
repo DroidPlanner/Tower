@@ -274,6 +274,11 @@ public class FlightActivity extends DrawerNavigationUI {
 	}
 
     @Override
+    protected int getToolbarId() {
+        return R.id.actionbar_toolbar;
+    }
+
+    @Override
     public void onApiConnected(){
         super.onApiConnected();
         enableSlidingUpPanel(dpApp.getDrone());

@@ -38,6 +38,11 @@ public class ConfigurationActivity extends DrawerNavigationUI {
 	}
 
     @Override
+    protected int getToolbarId() {
+        return R.id.actionbar_toolbar;
+    }
+
+    @Override
     protected int getNavigationDrawerEntryId() {
         return mConfigScreenId;
     }

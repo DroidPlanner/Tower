@@ -19,8 +19,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        android:layout_marginTop="@dimen/toolbar_height"
         >
+
+        <include layout="@layout/actionbar_toolbar"
+                 android:layout_alignParentTop="true"
+                 android:layout_marginLeft="10dp"
+                 android:layout_marginRight="10dp"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/actionbar_container"
+            />
 
         <TextView
             android:id="@+id/editorInfoWindow"
@@ -29,7 +37,11 @@
             android:text="@string/editor_info_window"
             style="@style/editorMissionOverviewText"
             android:visibility="visible"
-            android:layout_alignParentTop="true"
+            android:layout_below="@+id/actionbar_container"
+            android:layout_alignLeft="@+id/actionbar_container"
+            android:layout_alignStart="@+id/actionbar_container"
+            android:layout_alignRight="@+id/actionbar_container"
+            android:layout_alignEnd="@+id/actionbar_container"
             />
 
         <include
@@ -46,8 +58,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             layout="@layout/button_my_location"
-            android:layout_margin="8dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignRight="@+id/actionbar_container"
+            android:layout_alignEnd="@+id/actionbar_container"
             android:layout_below="@+id/editorInfoWindow"
             android:layout_alignWithParentIfMissing="true"/>
 
@@ -56,11 +68,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_above="@+id/mission_list_fragment"
             android:layout_below="@+id/editorInfoWindow"
-            android:layout_margin="5dp"
+            android:layout_alignLeft="@+id/actionbar_container"
+            android:layout_alignStart="@+id/actionbar_container"
             android:gravity="center">
 
             <fragment

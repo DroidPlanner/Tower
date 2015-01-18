@@ -22,10 +22,12 @@ import com.o3dr.services.android.lib.drone.connection.ConnectionResult;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 import com.o3dr.services.android.lib.drone.connection.DroneSharePrefs;
 import com.o3dr.services.android.lib.drone.connection.StreamRates;
+import com.o3dr.services.android.lib.gcs.event.GCSEvent;
 
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
 import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.IO.ExceptionWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -37,21 +39,20 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
 
 	private static final long DELAY_TO_DISCONNECTION = 30000l; // ms
 
-	private static final String CLAZZ_NAME = DroidPlannerApp.class.getName();
 	private static final String TAG = DroidPlannerApp.class.getSimpleName();
 
-	public static final String ACTION_TOGGLE_DRONE_CONNECTION = CLAZZ_NAME
+	public static final String ACTION_TOGGLE_DRONE_CONNECTION = Utils.PACKAGE_NAME
 			+ ".ACTION_TOGGLE_DRONE_CONNECTION";
 	public static final String EXTRA_ESTABLISH_CONNECTION = "extra_establish_connection";
 
-    public static final String ACTION_DRONE_CONNECTION_FAILED = CLAZZ_NAME
+    public static final String ACTION_DRONE_CONNECTION_FAILED = Utils.PACKAGE_NAME
             + ".ACTION_DRONE_CONNECTION_FAILED";
 
     public static final String EXTRA_CONNECTION_FAILED_ERROR_CODE = "extra_connection_failed_error_code";
 
     public static final String EXTRA_CONNECTION_FAILED_ERROR_MESSAGE = "extra_connection_failed_error_message";
 
-    public static final String ACTION_DRONE_EVENT = CLAZZ_NAME + ".ACTION_DRONE_EVENT";
+    public static final String ACTION_DRONE_EVENT = Utils.PACKAGE_NAME + ".ACTION_DRONE_EVENT";
     public static final String EXTRA_DRONE_EVENT = "extra_drone_event";
 
 	private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -59,15 +60,17 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
 
-			if (ACTION_TOGGLE_DRONE_CONNECTION.equals(action)) {
-				boolean connect = intent.getBooleanExtra(EXTRA_ESTABLISH_CONNECTION,
-						!drone.isConnected());
+            switch (action) {
+                case ACTION_TOGGLE_DRONE_CONNECTION:
+                    boolean connect = intent.getBooleanExtra(EXTRA_ESTABLISH_CONNECTION,
+                            !drone.isConnected());
 
-				if (connect)
-					connectToDrone();
-				else
-					disconnectFromDrone();
-			}
+                    if (connect)
+                        connectToDrone();
+                    else
+                        disconnectFromDrone();
+                    break;
+            }
 		}
 	};
 
@@ -150,7 +153,10 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
 		GAUtils.initGATracker(this);
 		GAUtils.startNewSession(context);
 
-		registerReceiver(broadcastReceiver, new IntentFilter(ACTION_TOGGLE_DRONE_CONNECTION));
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_TOGGLE_DRONE_CONNECTION);
+
+		registerReceiver(broadcastReceiver, intentFilter);
 	}
 
 	public void addApiListener(ApiListener listener) {

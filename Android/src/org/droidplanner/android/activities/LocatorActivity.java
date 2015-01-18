@@ -137,6 +137,11 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     }
 
     @Override
+    protected int getToolbarId() {
+        return R.id.actionbar_toolbar;
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         locatorMapFragment.setLocationReceiver(null);

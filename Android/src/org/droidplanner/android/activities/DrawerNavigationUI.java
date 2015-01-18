@@ -71,23 +71,6 @@ public abstract class DrawerNavigationUI extends SuperUI {
         };
 
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        final Toolbar toolbar = (Toolbar) mDrawerLayout.findViewById(R.id.actionbar_toolbar);
-        setSupportActionBar(toolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
-        }
-
-        final FragmentManager fm = getSupportFragmentManager();
-        Fragment actionBarTelem = fm.findFragmentById(R.id.actionbar_toolbar);
-        if(actionBarTelem == null){
-            actionBarTelem = new ActionBarTelemFragment();
-            fm.beginTransaction().add(R.id.actionbar_toolbar, actionBarTelem).commit();
-        }
 	}
 
 	/**
@@ -104,8 +87,29 @@ public abstract class DrawerNavigationUI extends SuperUI {
 		contentLayout.addView(contentView);
 		setContentView(mDrawerLayout);
 
+        initToolbar();
         initNavigationDrawer();
 	}
+
+    private void initToolbar() {
+        final int toolbarId = getToolbarId();
+        final Toolbar toolbar = (Toolbar) findViewById(toolbarId);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
+
+        final FragmentManager fm = getSupportFragmentManager();
+        Fragment actionBarTelem = fm.findFragmentById(toolbarId);
+        if(actionBarTelem == null){
+            actionBarTelem = new ActionBarTelemFragment();
+            fm.beginTransaction().add(toolbarId, actionBarTelem).commit();
+        }
+    }
 
     @Override
 	public void onConfigurationChanged(Configuration newConfig) {
@@ -221,6 +225,8 @@ public abstract class DrawerNavigationUI extends SuperUI {
             });
         }
     }
+
+    protected abstract int getToolbarId();
 
     protected abstract int getNavigationDrawerEntryId();
 

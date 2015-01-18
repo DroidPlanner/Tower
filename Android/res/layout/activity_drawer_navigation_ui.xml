@@ -7,22 +7,10 @@
     android:id="@+id/drawer_layout"
     >
 
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/content_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <FrameLayout
-            android:id="@+id/content_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-        <include
-            layout="@layout/actionbar_toolbar"
-            android:layout_alignParentTop="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-    </RelativeLayout>
+        android:layout_height="match_parent"/>
 
     <FrameLayout
         android:layout_width="240dp"
@@ -111,7 +99,7 @@
                     android:drawableStart="@drawable/ic_action_paste"
                     android:text="@string/screen_checklist"
                     />
-                
+
                 <TextView
                     style="@style/navigationDrawerEntry"
                     android:layout_width="match_parent"

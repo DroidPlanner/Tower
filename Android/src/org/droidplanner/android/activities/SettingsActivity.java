@@ -25,7 +25,12 @@ public class SettingsActivity extends DrawerNavigationUI {
 		}
 	}
 
-	@Override
+    @Override
+    protected int getToolbarId() {
+        return R.id.actionbar_toolbar;
+    }
+
+    @Override
 	protected int getNavigationDrawerEntryId() {
 		return R.id.navigation_settings;
 	}

@@ -227,6 +227,11 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     }
 
     @Override
+    protected int getToolbarId() {
+        return R.id.actionbar_container;
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 

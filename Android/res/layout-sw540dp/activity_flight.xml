@@ -22,21 +22,38 @@
         <FrameLayout
             android:id="@+id/flight_map_fragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
+
+        <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/actionbar_container"
+            android:fitsSystemWindows="true">
+
+            <include layout="@layout/actionbar_toolbar"/>
+        </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
 
         <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
             android:id="@+id/telemetryFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/toolbar_height"
+            android:layout_below="@+id/actionbar_container"
+            android:layout_alignLeft="@+id/actionbar_container"
+            android:layout_alignStart="@+id/actionbar_container"
             tools:layout="@layout/fragment_telemetry"
             android:fitsSystemWindows="true"/>
 
         <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/toolbar_height"
-            android:layout_alignParentTop="true"
+            android:layout_below="@+id/actionbar_container"
+            android:layout_alignLeft="@+id/actionbar_container"
+            android:layout_alignStart="@+id/actionbar_container"
+            android:layout_alignRight="@+id/actionbar_container"
+            android:layout_alignEnd="@+id/actionbar_container"
             android:fitsSystemWindows="true"
             >
 
@@ -53,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 layout="@layout/button_my_location"
-                android:layout_margin="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_gravity="center_vertical|end"/>
         </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
 
@@ -67,7 +84,7 @@
         android:focusable="false"
         android:clickable="false"
         android:gravity="center_horizontal"
-         >
+        >
 
         <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
             android:id="@+id/flightActionsFragment"
