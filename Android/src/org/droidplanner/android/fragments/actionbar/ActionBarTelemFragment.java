@@ -338,6 +338,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final Drone drone = getDrone();
 
         final View batteryPopupView = batteryPopup.getContentView();
+        final TextView dischargeView = (TextView) batteryPopupView.findViewById(R.id.bar_power_discharge);
         final TextView currentView = (TextView) batteryPopupView.findViewById(R.id.bar_power_current);
         final TextView mAhView = (TextView) batteryPopupView.findViewById(R.id.bar_power_mAh);
 
@@ -346,6 +347,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final int batteryIcon;
         if (!drone.isConnected() || ((droneBattery = drone.getAttribute(AttributeType.BATTERY)) == null)) {
             update = getString(R.string.empty_content);
+            dischargeView.setText(R.string.empty_content);
             currentView.setText(R.string.empty_content);
             mAhView.setText(R.string.empty_content);
             batteryIcon = R.drawable.ic_battery_unknown_black_24dp;
@@ -355,13 +357,14 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             if (discharge == null) {
                 dischargeText = getString(R.string.empty_content);
             } else {
-                dischargeText = UnitManager.getUnitProvider().electricChargeToString(discharge);
+                dischargeText = "Discharge " + UnitManager.getUnitProvider().electricChargeToString(discharge);
             }
 
+            dischargeView.setText(dischargeText);
             mAhView.setText(String.format(Locale.ENGLISH, "Remaining %2.0f%%", droneBattery.getBatteryRemain()));
             currentView.setText(String.format("Current %2.1f A", droneBattery.getBatteryCurrent()));
 
-            update = String.format(Locale.ENGLISH, "%2.1fv\n", droneBattery.getBatteryVoltage()).concat(dischargeText);
+            update = String.format(Locale.ENGLISH, "%2.1fv", droneBattery.getBatteryVoltage());
             batteryIcon = R.drawable.ic_battery_std_black_24dp;
         }
 

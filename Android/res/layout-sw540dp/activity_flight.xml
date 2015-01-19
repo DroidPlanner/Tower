@@ -36,7 +36,7 @@
             <include layout="@layout/actionbar_toolbar"/>
         </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
 
-        <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
+        <FrameLayout
             android:id="@+id/telemetryFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,35 +44,33 @@
             android:layout_alignLeft="@+id/actionbar_container"
             android:layout_alignStart="@+id/actionbar_container"
             tools:layout="@layout/fragment_telemetry"
-            android:fitsSystemWindows="true"/>
+            />
 
-        <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
+        <TextView
+            android:id="@+id/failsafeTextView"
+            style="@style/editorMissionOverviewText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="64dp"
+            android:background="#D8ee2d3e"
+            android:gravity="start|center_vertical"
+            android:visibility="gone"
             android:layout_below="@+id/actionbar_container"
             android:layout_alignLeft="@+id/actionbar_container"
             android:layout_alignStart="@+id/actionbar_container"
             android:layout_alignRight="@+id/actionbar_container"
             android:layout_alignEnd="@+id/actionbar_container"
-            android:fitsSystemWindows="true"
-            >
+            />
 
-            <TextView
-                android:id="@+id/failsafeTextView"
-                style="@style/editorMissionOverviewText"
-                android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:background="#D8ee2d3e"
-                android:gravity="start|center_vertical"
-                android:visibility="gone"/>
-
-            <include
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                layout="@layout/button_my_location"
-                android:layout_marginTop="8dp"
-                android:layout_gravity="center_vertical|end"/>
-        </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
+        <include
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/button_my_location"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_below="@+id/actionbar_container"
+            android:layout_alignRight="@+id/actionbar_container"
+            android:layout_alignEnd="@+id/actionbar_container"
+            />
 
     </RelativeLayout>
 
