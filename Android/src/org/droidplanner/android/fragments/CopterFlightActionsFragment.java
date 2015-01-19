@@ -434,7 +434,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
     private void setupButtonsByFlightState() {
         final State droneState = getDrone().getAttribute(AttributeType.STATE);
-        if (droneState.isConnected()) {
+        if (droneState != null && droneState.isConnected()) {
             if (droneState.isArmed()) {
                 if (droneState.isFlying()) {
                     setupButtonsForFlying();
