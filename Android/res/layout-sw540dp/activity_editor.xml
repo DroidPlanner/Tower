@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="@dimen/toolbar_height"
+        android:layout_marginTop="@dimen/action_bar_telem_height"
         android:layout_gravity="bottom"
         android:measureAllChildren="true"
         android:fitsSystemWindows="true"/>
