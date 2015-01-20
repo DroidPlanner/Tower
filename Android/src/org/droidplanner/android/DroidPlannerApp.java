@@ -21,8 +21,6 @@ import com.o3dr.services.android.lib.drone.connection.ConnectionParameter;
 import com.o3dr.services.android.lib.drone.connection.ConnectionResult;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 import com.o3dr.services.android.lib.drone.connection.DroneSharePrefs;
-import com.o3dr.services.android.lib.drone.connection.StreamRates;
-import com.o3dr.services.android.lib.gcs.event.GCSEvent;
 
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
 import org.droidplanner.android.notifications.NotificationHandler;
@@ -37,13 +35,13 @@ import java.util.List;
 
 public class DroidPlannerApp extends Application implements DroneListener, ServiceListener {
 
-	private static final long DELAY_TO_DISCONNECTION = 30000l; // ms
+    private static final long DELAY_TO_DISCONNECTION = 30000l; // ms
 
-	private static final String TAG = DroidPlannerApp.class.getSimpleName();
+    private static final String TAG = DroidPlannerApp.class.getSimpleName();
 
-	public static final String ACTION_TOGGLE_DRONE_CONNECTION = Utils.PACKAGE_NAME
-			+ ".ACTION_TOGGLE_DRONE_CONNECTION";
-	public static final String EXTRA_ESTABLISH_CONNECTION = "extra_establish_connection";
+    public static final String ACTION_TOGGLE_DRONE_CONNECTION = Utils.PACKAGE_NAME
+            + ".ACTION_TOGGLE_DRONE_CONNECTION";
+    public static final String EXTRA_ESTABLISH_CONNECTION = "extra_establish_connection";
 
     public static final String ACTION_DRONE_CONNECTION_FAILED = Utils.PACKAGE_NAME
             + ".ACTION_DRONE_CONNECTION_FAILED";
@@ -55,10 +53,10 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
     public static final String ACTION_DRONE_EVENT = Utils.PACKAGE_NAME + ".ACTION_DRONE_EVENT";
     public static final String EXTRA_DRONE_EVENT = "extra_drone_event";
 
-	private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			final String action = intent.getAction();
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
 
             switch (action) {
                 case ACTION_TOGGLE_DRONE_CONNECTION:
@@ -71,16 +69,16 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
                         disconnectFromDrone();
                     break;
             }
-		}
-	};
+        }
+    };
 
     @Override
     public void onServiceConnected() {
-        if(notificationHandler == null) {
+        if (notificationHandler == null) {
             notificationHandler = new NotificationHandler(getApplicationContext(), drone);
         }
 
-        if(!drone.isStarted()) {
+        if (!drone.isStarted()) {
             this.drone.start();
             this.drone.registerDroneListener(this);
         }
@@ -94,38 +92,38 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
     }
 
     public interface ApiListener {
-		void onApiConnected();
+        void onApiConnected();
 
-		void onApiDisconnected();
-	}
+        void onApiDisconnected();
+    }
 
-	private final Runnable disconnectionTask = new Runnable() {
-		@Override
-		public void run() {
+    private final Runnable disconnectionTask = new Runnable() {
+        @Override
+        public void run() {
             drone.destroy();
             serviceMgr.disconnect();
 
-            if(notificationHandler != null) {
+            if (notificationHandler != null) {
                 notificationHandler.terminate();
                 notificationHandler = null;
             }
-            
+
             handler.removeCallbacks(this);
-		}
-	};
+        }
+    };
 
-	private final Handler handler = new Handler();
-	private final List<ApiListener> apiListeners = new ArrayList<ApiListener>();
+    private final Handler handler = new Handler();
+    private final List<ApiListener> apiListeners = new ArrayList<ApiListener>();
 
-	private final Thread.UncaughtExceptionHandler dpExceptionHandler = new Thread.UncaughtExceptionHandler() {
-		@Override
-		public void uncaughtException(Thread thread, Throwable ex) {
-			new ExceptionWriter(ex).saveStackTraceToSD();
-			exceptionHandler.uncaughtException(thread, ex);
-		}
-	};
+    private final Thread.UncaughtExceptionHandler dpExceptionHandler = new Thread.UncaughtExceptionHandler() {
+        @Override
+        public void uncaughtException(Thread thread, Throwable ex) {
+            new ExceptionWriter(ex).saveStackTraceToSD();
+            exceptionHandler.uncaughtException(thread, ex);
+        }
+    };
 
-	private Thread.UncaughtExceptionHandler exceptionHandler;
+    private Thread.UncaughtExceptionHandler exceptionHandler;
 
     private ServiceManager serviceMgr;
     private Drone drone;
@@ -133,12 +131,12 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
     private MissionProxy missionProxy;
     private DroidPlannerPrefs dpPrefs;
     private LocalBroadcastManager lbm;
-	private NotificationHandler notificationHandler;
+    private NotificationHandler notificationHandler;
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		final Context context = getApplicationContext();
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        final Context context = getApplicationContext();
 
         dpPrefs = new DroidPlannerPrefs(context);
         lbm = LocalBroadcastManager.getInstance(context);
@@ -147,111 +145,110 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
         drone = new Drone(serviceMgr, handler);
         missionProxy = new MissionProxy(context, this.drone);
 
-		exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
-		Thread.setDefaultUncaughtExceptionHandler(dpExceptionHandler);
+        exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler(dpExceptionHandler);
 
-		GAUtils.initGATracker(this);
-		GAUtils.startNewSession(context);
+        GAUtils.initGATracker(this);
+        GAUtils.startNewSession(context);
 
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_TOGGLE_DRONE_CONNECTION);
 
-		registerReceiver(broadcastReceiver, intentFilter);
-	}
+        registerReceiver(broadcastReceiver, intentFilter);
+    }
 
-	public void addApiListener(ApiListener listener) {
-		if (listener == null)
-			return;
+    public void addApiListener(ApiListener listener) {
+        if (listener == null)
+            return;
 
         handler.removeCallbacks(disconnectionTask);
         boolean isServiceConnected = serviceMgr.isServiceConnected();
-		if (isServiceConnected)
-			listener.onApiConnected();
+        if (isServiceConnected)
+            listener.onApiConnected();
 
-        if(!isServiceConnected) {
+        if (!isServiceConnected) {
             try {
                 serviceMgr.connect(this);
-            }catch(IllegalStateException e){
+            } catch (IllegalStateException e) {
                 //Ignore
             }
         }
 
         apiListeners.add(listener);
-	}
+    }
 
-	public void removeApiListener(ApiListener listener) {
-		if (listener != null) {
-			apiListeners.remove(listener);
-			listener.onApiDisconnected();
-		}
+    public void removeApiListener(ApiListener listener) {
+        if (listener != null) {
+            apiListeners.remove(listener);
+            listener.onApiDisconnected();
+        }
 
-		shouldWeTerminate();
-	}
+        shouldWeTerminate();
+    }
 
-	private void shouldWeTerminate() {
-		if (apiListeners.isEmpty() && !drone.isConnected()) {
-			// Wait 30s, then disconnect the service binding.
-			handler.postDelayed(disconnectionTask, DELAY_TO_DISCONNECTION);
-		}
-	}
+    private void shouldWeTerminate() {
+        if (apiListeners.isEmpty() && !drone.isConnected()) {
+            // Wait 30s, then disconnect the service binding.
+            handler.postDelayed(disconnectionTask, DELAY_TO_DISCONNECTION);
+        }
+    }
 
-	private void notifyApiConnected() {
-		if (apiListeners.isEmpty())
-			return;
+    private void notifyApiConnected() {
+        if (apiListeners.isEmpty())
+            return;
 
-		for (ApiListener listener : apiListeners)
-			listener.onApiConnected();
-	}
+        for (ApiListener listener : apiListeners)
+            listener.onApiConnected();
+    }
 
-	private void notifyApiDisconnected() {
-		if (apiListeners.isEmpty())
-			return;
+    private void notifyApiDisconnected() {
+        if (apiListeners.isEmpty())
+            return;
 
-		for (ApiListener listener : apiListeners)
-			listener.onApiDisconnected();
-	}
+        for (ApiListener listener : apiListeners)
+            listener.onApiDisconnected();
+    }
 
-    public void connectToDrone(){
+    public void connectToDrone() {
         final ConnectionParameter connParams = retrieveConnectionParameters();
-        if(connParams == null)
+        if (connParams == null)
             return;
 
         boolean isDroneConnected = drone.isConnected();
-        if(!connParams.equals(drone.getConnectionParameter()) && isDroneConnected) {
+        if (!connParams.equals(drone.getConnectionParameter()) && isDroneConnected) {
             drone.disconnect();
             isDroneConnected = false;
         }
 
-        if(!isDroneConnected)
+        if (!isDroneConnected)
             drone.connect(connParams);
     }
 
-    public static void connectToDrone(Context context){
+    public static void connectToDrone(Context context) {
         context.sendBroadcast(new Intent(DroidPlannerApp.ACTION_TOGGLE_DRONE_CONNECTION)
                 .putExtra(DroidPlannerApp.EXTRA_ESTABLISH_CONNECTION, true));
     }
 
-    public static void disconnectFromDrone(Context context){
+    public static void disconnectFromDrone(Context context) {
         context.sendBroadcast(new Intent(DroidPlannerApp.ACTION_TOGGLE_DRONE_CONNECTION)
                 .putExtra(DroidPlannerApp.EXTRA_ESTABLISH_CONNECTION, false));
     }
 
-    public void disconnectFromDrone(){
-        if(drone.isConnected())
+    public void disconnectFromDrone() {
+        if (drone.isConnected())
             drone.disconnect();
     }
 
-    public Drone getDrone(){
+    public Drone getDrone() {
         return this.drone;
     }
 
-    public MissionProxy getMissionProxy(){
+    public MissionProxy getMissionProxy() {
         return this.missionProxy;
     }
 
     private ConnectionParameter retrieveConnectionParameters() {
         final int connectionType = dpPrefs.getConnectionParameterType();
-        final StreamRates rates = dpPrefs.getStreamRates();
         Bundle extraParams = new Bundle();
         final DroneSharePrefs droneSharePrefs = new DroneSharePrefs(dpPrefs.getDroneshareLogin(),
                 dpPrefs.getDronesharePassword(), dpPrefs.getDroneshareEnabled(),
@@ -261,21 +258,18 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
         switch (connectionType) {
             case ConnectionType.TYPE_USB:
                 extraParams.putInt(ConnectionType.EXTRA_USB_BAUD_RATE, dpPrefs.getUsbBaudRate());
-                connParams = new ConnectionParameter(connectionType, extraParams, rates,
-                        droneSharePrefs);
+                connParams = new ConnectionParameter(connectionType, extraParams, droneSharePrefs);
                 break;
 
             case ConnectionType.TYPE_UDP:
                 extraParams.putInt(ConnectionType.EXTRA_UDP_SERVER_PORT, dpPrefs.getUdpServerPort());
-                connParams = new ConnectionParameter(connectionType, extraParams, rates,
-                        droneSharePrefs);
+                connParams = new ConnectionParameter(connectionType, extraParams, droneSharePrefs);
                 break;
 
             case ConnectionType.TYPE_TCP:
                 extraParams.putString(ConnectionType.EXTRA_TCP_SERVER_IP, dpPrefs.getTcpServerIp());
                 extraParams.putInt(ConnectionType.EXTRA_TCP_SERVER_PORT, dpPrefs.getTcpServerPort());
-                connParams = new ConnectionParameter(connectionType, extraParams, rates,
-                        droneSharePrefs);
+                connParams = new ConnectionParameter(connectionType, extraParams, droneSharePrefs);
                 break;
 
             case ConnectionType.TYPE_BLUETOOTH:
@@ -288,8 +282,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
 
                 } else {
                     extraParams.putString(ConnectionType.EXTRA_BLUETOOTH_ADDRESS, btAddress);
-                    connParams = new ConnectionParameter(connectionType, extraParams, rates,
-                            droneSharePrefs);
+                    connParams = new ConnectionParameter(connectionType, extraParams, droneSharePrefs);
                 }
                 break;
 
@@ -303,7 +296,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
     }
 
     @Override
-    public void onDroneConnectionFailed(ConnectionResult result){
+    public void onDroneConnectionFailed(ConnectionResult result) {
         String errorMsg = result.getErrorMessage();
         Toast.makeText(getApplicationContext(), "Connection failed: " + errorMsg,
                 Toast.LENGTH_LONG).show();
@@ -314,7 +307,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
     }
 
     @Override
-    public void onDroneEvent(String event, Bundle extras){
+    public void onDroneEvent(String event, Bundle extras) {
         switch (event) {
             case AttributeEvent.STATE_CONNECTED:
                 handler.removeCallbacks(disconnectionTask);
@@ -330,20 +323,20 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
         lbm.sendBroadcast(new Intent(ACTION_DRONE_EVENT).putExtra(EXTRA_DRONE_EVENT, event));
 
         final Intent droneIntent = new Intent(event);
-        if(extras != null)
+        if (extras != null)
             droneIntent.putExtras(extras);
         lbm.sendBroadcast(droneIntent);
     }
 
     @Override
-    public void onDroneServiceInterrupted(String errorMsg){
+    public void onDroneServiceInterrupted(String errorMsg) {
         drone.destroy();
-        if(notificationHandler != null) {
+        if (notificationHandler != null) {
             notificationHandler.terminate();
             notificationHandler = null;
         }
 
-        if(!TextUtils.isEmpty(errorMsg))
+        if (!TextUtils.isEmpty(errorMsg))
             Log.e(TAG, errorMsg);
     }
 }

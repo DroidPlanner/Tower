@@ -25,17 +25,6 @@
     <string name="pref_maps_providers_summary">使用哪一家的地圖供應商</string>
     <string name="pref_maps_providers_title">地圖供應商</string>
     <string name="pref_mavlink">MAVLink</string>
-    <string name="pref_mavlink_rates">資料流速率</string>
-    <string name="pref_mavlink_rates_summary">接收無人機飛行數據的速率(以每 Hz 為單位)</string>
-    <string name="pref_mavlink_stream_rate_ext_stat">航點, GPS 原始資料, fence 資料, 目前航點等</string>
-    <string name="pref_mavlink_stream_rate_extra1">姿態</string>
-    <string name="pref_mavlink_stream_rate_extra2">VFR_Hud 資料</string>
-    <string name="pref_mavlink_stream_rate_extra3">航姿系統(AHRS), 硬體狀況, 風</string>
-    <string name="pref_mavlink_stream_rate_position">位置資料</string>
-    <string name="pref_mavlink_stream_rate_RC_override">遙控頻道覆蓋</string>
-    <string name="pref_mavlink_stream_rate_rc_channels">遙控頻道資料</string>
-    <string name="pref_mavlink_stream_rate_raw_sensors">感測器原始資料</string>
-    <string name="pref_mavlink_stream_rate_raw_controller">伺服原始資料</string>
     <string name="pref_ui">使用者界面</string>
     <string name="pref_ui_language_english">以英文作為界面語言</string>
     <string name="pref_ui_language_english_summary">使用英文為主要語言(代替系統語言)。此動作需要重新啟動app</string>

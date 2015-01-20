@@ -277,65 +277,6 @@
                         android:title="@string/pref_forget_bluetooth_device_address" />
                 </PreferenceCategory>
             </PreferenceScreen>
-            <PreferenceScreen
-                android:key="pref_mavlink_rates"
-                android:summary="@string/pref_mavlink_rates_summary"
-                android:title="@string/pref_mavlink_rates" >
-                <EditTextPreference
-                    android:defaultValue="2"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_ext_stat"
-                    android:title="@string/pref_mavlink_stream_rate_ext_stat" />
-                <EditTextPreference
-                    android:defaultValue="10"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_extra1"
-                    android:title="@string/pref_mavlink_stream_rate_extra1" />
-                <EditTextPreference
-                    android:defaultValue="2"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_extra2"
-                    android:title="@string/pref_mavlink_stream_rate_extra2" />
-                <EditTextPreference
-                    android:defaultValue="2"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_extra3"
-                    android:title="@string/pref_mavlink_stream_rate_extra3" />
-                <EditTextPreference
-                    android:defaultValue="3"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_position"
-                    android:title="@string/pref_mavlink_stream_rate_position" />
-                <EditTextPreference
-                    android:defaultValue="50"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_RC_override"
-                    android:title="@string/pref_mavlink_stream_rate_RC_override" />
-                <EditTextPreference
-                    android:defaultValue="5"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_rc_channels"
-                    android:title="@string/pref_mavlink_stream_rate_rc_channels" />
-                <EditTextPreference
-                    android:defaultValue="2"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_raw_sensors"
-                    android:title="@string/pref_mavlink_stream_rate_raw_sensors" />
-                <EditTextPreference
-                    android:defaultValue="3"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_raw_controller"
-                    android:title="@string/pref_mavlink_stream_rate_raw_controller" />
-            </PreferenceScreen>
 
             <PreferenceCategory
                 android:key="pref_flight_data"

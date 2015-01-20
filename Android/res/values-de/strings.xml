@@ -14,17 +14,6 @@
     <string name="pref_connection_type">Telemetrie-Verbindungstyp</string>
     <string name="pref_connection_type_summary">Verbindung zur Drohne wählen</string>
     <string name="pref_mavlink">MAVLink</string>
-    <string name="pref_mavlink_rates">Datenraten</string>
-    <string name="pref_mavlink_rates_summary">Rate (in Hz), mit welcher die Flugdaten von der Drohne empfangen werden</string>
-    <string name="pref_mavlink_stream_rate_ext_stat">Wegpunkte, GPS Rohdaten, Zaundaten, aktueller Wegpunkt, etc</string>
-    <string name="pref_mavlink_stream_rate_extra1">Fluglage</string>
-    <string name="pref_mavlink_stream_rate_extra2">VFR_Hud Daten</string>
-    <string name="pref_mavlink_stream_rate_extra3">AHRS, Hardware Status, Wind</string>
-    <string name="pref_mavlink_stream_rate_position">Positionsdaten</string>
-    <string name="pref_mavlink_stream_rate_RC_override">RC Übersteuerung</string>
-    <string name="pref_mavlink_stream_rate_rc_channels">RC Kanaldaten</string>
-    <string name="pref_mavlink_stream_rate_raw_sensors">Rohdaten Sensoren</string>
-    <string name="pref_mavlink_stream_rate_raw_controller">Rohdaten Kontroller</string>
     <string name="pref_ui">Benutzeroberfläche</string>
     <string name="pref_ui_language_english">Benutzeroberfläche in Englisch</string>
     <string name="pref_ui_language_english_summary">Englisch als Sprache verwenden (anstelle der Systemsprache). Erfordert ein Neustart der App.</string>

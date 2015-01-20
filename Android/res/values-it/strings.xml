@@ -24,17 +24,6 @@
     <string name="pref_maps_title">Mappe</string>
     <string name="pref_maps_providers_summary">Scegliere il Provider di mappe</string>
     <string name="pref_maps_providers_title">Provider di mappe</string>
-    <string name="pref_mavlink_rates">Frequenza di aggiornamento</string>
-    <string name="pref_mavlink_rates_summary">Frequenza di aggiornamento dati del Drone (in Hz)</string>
-    <string name="pref_mavlink_stream_rate_ext_stat">Waypoint, GPS raw,  dati GeoFence , Waypoint attuale etc</string>
-    <string name="pref_mavlink_stream_rate_extra1">Assetto</string>
-    <string name="pref_mavlink_stream_rate_extra2">Dati VFR_Hud</string>
-    <string name="pref_mavlink_stream_rate_extra3">AHRS, Stato Hardware, Vento</string>
-    <string name="pref_mavlink_stream_rate_position">Dati posizione</string>
-    <string name="pref_mavlink_stream_rate_RC_override">RC Override</string>
-    <string name="pref_mavlink_stream_rate_rc_channels">Dati canale RC</string>
-    <string name="pref_mavlink_stream_rate_raw_sensors">Sensore Raw</string>
-    <string name="pref_mavlink_stream_rate_raw_controller">Controller Raw</string>
     <string name="pref_ui">Interfaccia Utente</string>
     <string name="pref_ui_language_english">Inglese come lingua IU</string>
     <string name="pref_ui_language_english_summary">Usare inglese (al posto della lingua del sistema). Richiede riavvio dell\' App.</string>
