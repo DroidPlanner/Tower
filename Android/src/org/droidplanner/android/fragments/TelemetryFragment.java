@@ -19,8 +19,11 @@ import com.o3dr.services.android.lib.drone.property.Altitude;
 import com.o3dr.services.android.lib.drone.property.Attitude;
 import com.o3dr.services.android.lib.drone.property.Speed;
 
+import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
+import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
+import org.droidplanner.android.utils.unit.providers.speed.SpeedUnitProvider;
 import org.droidplanner.android.widgets.AttitudeIndicator;
 
 //TODO: implement flight time telemetry.
@@ -63,7 +66,6 @@ public class TelemetryFragment extends ApiListenerFragment {
 	private TextView airSpeed;
 	private TextView climbRate;
 	private TextView altitude;
-	private TextView targetAltitude;
 	private boolean headingModeFPV;
 
 	@Override
@@ -79,7 +81,6 @@ public class TelemetryFragment extends ApiListenerFragment {
 		airSpeed = (TextView) view.findViewById(R.id.airSpeedValue);
 		climbRate = (TextView) view.findViewById(R.id.climbRateValue);
 		altitude = (TextView) view.findViewById(R.id.altitudeValue);
-		targetAltitude = (TextView) view.findViewById(R.id.targetAltitudeValue);
 
 		return view;
 	}
@@ -125,19 +126,20 @@ public class TelemetryFragment extends ApiListenerFragment {
 
 	private void onSpeedUpdate(Speed speed) {
         if(speed != null) {
-            airSpeed.setText(String.format("%3.1f", speed.getAirSpeed()));
-            groundSpeed.setText(String.format("%3.1f", speed.getGroundSpeed()));
-            climbRate.setText(String.format("%3.1f", speed.getVerticalSpeed()));
+            final SpeedUnitProvider speedUnitProvider = getSpeedUnitProvider();
+
+            airSpeed.setText(speedUnitProvider.boxBaseValueToTarget(speed.getAirSpeed()).toString());
+            groundSpeed.setText(speedUnitProvider.boxBaseValueToTarget(speed.getGroundSpeed()).toString());
+            climbRate.setText(speedUnitProvider.boxBaseValueToTarget(speed.getVerticalSpeed()).toString());
         }
 	}
 
     private void onAltitudeUpdate(Altitude altitude){
         if(altitude != null) {
             double alt = altitude.getAltitude();
-            double targetAlt = altitude.getTargetAltitude();
+            LengthUnit altUnit = getLengthUnitProvider().boxBaseValueToTarget(alt);
 
-            this.altitude.setText(String.format("%3.1f", alt));
-            targetAltitude.setText(String.format("%3.1f", targetAlt));
+            this.altitude.setText(altUnit.toString());
         }
     }
 

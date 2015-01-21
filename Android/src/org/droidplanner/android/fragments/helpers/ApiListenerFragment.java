@@ -11,6 +11,8 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.unit.UnitManager;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
+import org.droidplanner.android.utils.unit.providers.speed.SpeedUnitProvider;
+import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 /**
  * Provides access to the DroidPlannerApi to its derived class.
@@ -21,6 +23,7 @@ public abstract class ApiListenerFragment extends Fragment implements DroidPlann
 	private LocalBroadcastManager broadcastManager;
 
     private LengthUnitProvider lengthUnitProvider;
+    private SpeedUnitProvider speedUnitProvider;
 
     protected MissionProxy getMissionProxy() { return dpApp.getMissionProxy(); }
 	protected Drone getDrone() {
@@ -35,6 +38,10 @@ public abstract class ApiListenerFragment extends Fragment implements DroidPlann
         return lengthUnitProvider;
     }
 
+    protected SpeedUnitProvider getSpeedUnitProvider(){
+        return speedUnitProvider;
+    }
+
     protected Context getContext(){
         return getActivity().getApplicationContext();
     }
@@ -46,7 +53,10 @@ public abstract class ApiListenerFragment extends Fragment implements DroidPlann
 
         final Context context = activity.getApplicationContext();
 		broadcastManager = LocalBroadcastManager.getInstance(context);
-        lengthUnitProvider = UnitManager.getUnitSystem(context).getLengthUnitProvider();
+
+        final UnitSystem unitSystem = UnitManager.getUnitSystem(context);
+        lengthUnitProvider = unitSystem.getLengthUnitProvider();
+        speedUnitProvider = unitSystem.getSpeedUnitProvider();
 	}
 
 	@Override
