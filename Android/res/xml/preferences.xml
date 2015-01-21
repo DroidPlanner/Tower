@@ -281,13 +281,6 @@
             <PreferenceCategory
                 android:key="pref_flight_data"
                 android:title="@string/pref_flight_data" >
-                <EditTextPreference
-                    android:defaultValue="500"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="@string/pref_max_flight_path_size_key"
-                    android:summary="@string/pref_max_flight_path_size_summary"
-                    android:title="@string/pref_max_flight_path_size" />
 
                 <CheckBoxPreference
                     android:defaultValue="false"

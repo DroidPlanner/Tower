@@ -23,9 +23,7 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_vehicle_type_key" translatable="false">pref_vehicle_type</string>
     <string name="pref_rc_quickmode_right_key" translatable="false">pref_rc_quickmode_right</string>
     <string name="pref_rc_quickmode_left_key" translatable="false">pref_rc_quickmode_left</string>
-    <string name="pref_max_flight_path_size_key" translatable="false">pref_max_flight_path_size</string>
     <string name="pref_storage_key" translatable="false">pref_storage</string>
-    <string name="pref_rc_mode_key" translatable="false">pref_rc_mode</string>
     <string name="pref_mavlink_version_key" translatable="false">pref_mavlink_version</string>
     <string name="pref_firmware_version_key" translatable="false">pref_firmware_version</string>
     <string name="pref_usage_statistics_key" translatable="false">pref_usage_statistics</string>

@@ -35,8 +35,6 @@
     <string name="pref_lock_screen_orientation">鎖定螢幕旋轉</string>
     <string name="pref_lock_screen_orientation_summary">連結無人機時，螢幕會將會鎖定在目前的旋轉方向</string>
     <string name="pref_flight_data">飛行數據</string>
-    <string name="pref_max_flight_path_size">飛行路徑尺寸</string>
-    <string name="pref_max_flight_path_size_summary">飛行路徑的尺寸, 若要關閉請設為0</string>
     <string name="pref_guided_mode_on_long_press">啟用 Guided 導引模式-長按地圖</string>
     <string name="pref_guided_mode_on_long_press_summary">長按在地圖上以進入導引模式</string>
     <string name="pref_follow_me_mode_enabled">啟用 FollowMe 跟隨模式</string>
@@ -232,7 +230,6 @@
     <string name="metadata_units">單位:</string>
     <string name="metadata_range">範圍:</string>
     <string name="lst_note_hint">按 Enter 鍵增加更多行</string>
-    <string name="set_to_zero_to_disable">(若要關閉請設為 0 )。</string>
 
     <!-- Calibration data progress -->
     <string name="progress_title_uploading">上傳校正數據</string>
@@ -422,8 +419,6 @@
     <string name="dialog_box_title_altitude">高度</string>
     <string name="mode_switch">指定遙控器的第 5 頻道切換飛行模式。切換開關到每一個位置以指定下列的飛行模式。</string>g
     <string name="msg_connect_first">請先連線</string>
-    <string name="mode1_throttle_on_right_stick">模式 1(日本手):油門在右邊的遙桿</string>
-    <string name="mode2_throttle_on_left_stick">模式 2(美國手):油門在左邊的遙桿</string>
     <string name="pref_title_language">語言</string>
     <string name="pref_title_screen">畫面</string>
     <string name="pref_title_notifications">通知</string>

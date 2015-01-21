@@ -36,8 +36,6 @@
     <string name="pref_lock_screen_orientation">锁定屏幕方向</string>
     <string name="pref_lock_screen_orientation_summary">连接无人机时，屏幕将会定在当前的旋转方向</string>
     <string name="pref_flight_data">飞行数据</string>
-    <string name="pref_max_flight_path_size">飞行路径尺寸</string>
-    <string name="pref_max_flight_path_size_summary">飞行路径的尺寸，若要关闭请设为0。</string>
     <string name="pref_guided_mode_on_long_press">长按地图启动Guided引导模式</string>
     <string name="pref_guided_mode_on_long_press_summary">长按在地图上以进入引导模式。</string>
     <string name="pref_follow_me_mode_enabled">启用Flooow Me跟随模式</string>
@@ -244,7 +242,6 @@
     <string name="metadata_units">单位：</string>
     <string name="metadata_range">范围：</string>
     <string name="lst_note_hint">添加更多行，只需点击回车</string>
-    <string name="set_to_zero_to_disable">（设为0以禁用）。</string>
 
     <!-- Calibration data progress -->
     <string name="progress_title_uploading">上传校准数据</string>
@@ -445,8 +442,6 @@
     <string name="dialog_box_title_altitude">高度</string>
     <string name="mode_switch">将遥控通道5分配在你的遥控器上的开关用来控制飞行模式。移动开关到每个位置并在下方选择期望的飞行模式。</string>
     <string name="msg_connect_first">请首先连接</string>
-    <string name="mode1_throttle_on_right_stick">日本手：油门在右边的摇杆</string>
-    <string name="mode2_throttle_on_left_stick">美国手：油门在左边的摇杆</string>
     <string name="pref_title_language">语言</string>
     <string name="pref_title_screen">界面</string>
     <string name="pref_title_notifications">通知</string>

@@ -20,12 +20,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -63,7 +65,9 @@ public class FlightActivity extends DrawerNavigationUI {
                 case AttributeEvent.AUTOPILOT_FAILSAFE:
                     String warning = intent.getStringExtra(AttributeEventExtra
                             .EXTRA_AUTOPILOT_FAILSAFE_MESSAGE);
-                    onWarningChanged(warning);
+                    final int logLevel = intent.getIntExtra(AttributeEventExtra
+                            .EXTRA_AUTOPILOT_FAILSAFE_MESSAGE_LEVEL, Log.VERBOSE);
+                    onWarningChanged(warning, logLevel);
                     break;
 
                 case AttributeEvent.STATE_ARMING:
@@ -422,14 +426,18 @@ public class FlightActivity extends DrawerNavigationUI {
         }
     }
 
-	public void onWarningChanged(String warning) {
+	public void onWarningChanged(String warning, int logLevel) {
 		if (!TextUtils.isEmpty(warning)) {
-            handler.removeCallbacks(hideWarningView);
+            if(logLevel == Log.INFO){
+                Toast.makeText(getApplicationContext(), warning, Toast.LENGTH_SHORT).show();
+            }
+            else if(logLevel == Log.WARN || logLevel == Log.ERROR) {
+                handler.removeCallbacks(hideWarningView);
 
-			warningView.setText(warning);
-			warningView.setVisibility(View.VISIBLE);
-            handler.postDelayed(hideWarningView, WARNING_VIEW_DISPLAY_TIMEOUT);
+                warningView.setText(warning);
+                warningView.setVisibility(View.VISIBLE);
+                handler.postDelayed(hideWarningView, WARNING_VIEW_DISPLAY_TIMEOUT);
+            }
 		}
 	}
-
 }

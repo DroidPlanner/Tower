@@ -24,8 +24,6 @@
     <string name="pref_lock_screen_orientation">Bildschirmorientierung sperren</string>
     <string name="pref_lock_screen_orientation_summary">Sperrt die aktuelle Bildschirmorientierung beim Verbinden</string>
     <string name="pref_flight_data">Flugdaten</string>
-    <string name="pref_max_flight_path_size">Größe des Flugpfads</string>
-    <string name="pref_max_flight_path_size_summary">Größe des Flugpfads. Zum Deaktivieren auf Null setzen.</string>
     <string name="pref_guided_mode_on_long_press">Guided Modus bei langem Drücken</string>
     <string name="pref_guided_mode_on_long_press_summary">Aktiviert den Guided Modus, wenn lang auf den Kartenausschnitt gedrückt wird.</string>
     <string name="pref_follow_me_mode_enabled">Folge-Modus (FollowMe) aktivieren</string>
@@ -186,7 +184,6 @@
     <string name="metadata_units">Einheiten:</string>
     <string name="metadata_range">Reichweite:</string>
     <string name="lst_note_hint">Um weitere Zeilen hinzuzufügen, drücken Sie die Eingabetaste</string>
-    <string name="set_to_zero_to_disable">(auf Null setzen, um zu deaktivieren).</string>
     <string name="progress_title_uploading">Lade Kalibrierungsdaten hoch</string>
     <string name="progress_desc_uploading">DroidPlanner lädt Kalibrierungsdaten auf die Drohne hoch</string>
     <string name="progress_title_downloading">Lade Kalibrierungsdaten herunter</string>
@@ -333,8 +330,6 @@
     <string name="dialog_box_title_altitude">Höhe</string>
     <string name="mode_switch">Ordnen Sie RC Kanal 5 für die Flugmodi einem Schalter auf der Fernsteuerung zu. Bewegen Sie den Schalter in jede Position und wählen Sie den gewünschten Flugmodus weiter unten.</string>
     <string name="msg_connect_first">Bitte zuerst verbinden</string>
-    <string name="mode1_throttle_on_right_stick">Mode 1: Schub auf rechtem Steuerknüppel</string>
-    <string name="mode2_throttle_on_left_stick">Mode 2: Schub auf linkem Steuerknüppel</string>
     <string name="zoom_fit">Zoom anpassen</string>
     <string name="open_mission_file">Missiondatei öffnen</string>
     <string name="save_mission_file">Missiondatei speichern</string>

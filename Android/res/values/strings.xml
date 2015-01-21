@@ -39,8 +39,6 @@
     <string name="pref_lock_screen_orientation">Lock Screen Orientation</string>
     <string name="pref_lock_screen_orientation_summary">Locks screen to the orientation which is present when connecting</string>
     <string name="pref_flight_data">Flight Data</string>
-    <string name="pref_max_flight_path_size">Flight path size</string>
-    <string name="pref_max_flight_path_size_summary">Size of the flight path, set to zero to disable.</string>
     <string name="pref_guided_mode_on_long_press">Guided Mode on long press</string>
     <string name="pref_guided_mode_on_long_press_summary">Enable entering the Guided Mode by long pressing the map.</string>
     <string name="pref_follow_me_mode_enabled">Enable FollowMe Mode</string>
@@ -257,7 +255,6 @@
     <string name="metadata_units">Units:</string>
     <string name="metadata_range">Range:</string>
     <string name="lst_note_hint">To add more rows, just press Enter</string>
-    <string name="set_to_zero_to_disable">(set to zero to disable).</string>
 
     <!-- Calibration data progress -->
     <string name="progress_title_uploading">Uploading calibration data</string>
@@ -455,8 +452,6 @@
     <string name="dialog_box_title_altitude">Altitude</string>
     <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
     <string name="msg_connect_first">Please connect first</string>
-    <string name="mode1_throttle_on_right_stick">Mode 1: Throttle on RIGHT stick</string>
-    <string name="mode2_throttle_on_left_stick">Mode 2: Throttle on LEFT stick</string>
     <string name="pref_title_language">Language</string>
     <string name="pref_title_screen">Screen</string>
     <string name="pref_title_notifications">Notifications</string>

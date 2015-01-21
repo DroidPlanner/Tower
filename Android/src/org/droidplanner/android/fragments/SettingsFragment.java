@@ -192,23 +192,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             }
         }
 
-        final String maxFlightPathSizeKey = getString(R.string.pref_max_flight_path_size_key);
-        final Preference maxFlightPathSizePref = findPreference(maxFlightPathSizeKey);
-        if (maxFlightPathSizePref != null) {
-            maxFlightPathSizePref.setSummary(sharedPref.getString(maxFlightPathSizeKey, "") + " "
-                    + getString(R.string.set_to_zero_to_disable));
-        }
-
-        final String rcModeKey = getString(R.string.pref_rc_mode_key);
-        final Preference rcModePref = findPreference(rcModeKey);
-        if (rcModePref != null) {
-            if (sharedPref.getString(rcModeKey, "MODE2").equalsIgnoreCase("MODE1")) {
-                rcModePref.setSummary(getString(R.string.mode1_throttle_on_right_stick));
-            } else {
-                rcModePref.setSummary(getString(R.string.mode2_throttle_on_left_stick));
-            }
-        }
-
         // Set the usage statistics preference
         final String usageStatKey = getString(R.string.pref_usage_statistics_key);
         final CheckBoxPreference usageStatPref = (CheckBoxPreference) findPreference(usageStatKey);
@@ -389,19 +372,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
         if (mDefaultSummaryPrefs.contains(key)) {
             preference.setSummary(sharedPreferences.getString(key, ""));
-        }
-
-        if (key.equals(getString(R.string.pref_max_flight_path_size_key))) {
-            preference.setSummary(sharedPreferences.getString(key, "") + " "
-                    + getString(R.string.set_to_zero_to_disable));
-        }
-
-        if (key.equals(getString(R.string.pref_rc_mode_key))) {
-            if (sharedPreferences.getString(key, "MODE2").equalsIgnoreCase("MODE1")) {
-                preference.setSummary(R.string.mode1_throttle_on_right_stick);
-            } else {
-                preference.setSummary(R.string.mode2_throttle_on_left_stick);
-            }
         }
     }
 
