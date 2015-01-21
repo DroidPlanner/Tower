@@ -17,6 +17,7 @@ dependencies {
     compile files('libs/j2xx.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
     compile files('libs/jeromq-0.3.4.jar')
+    compile files('libs/sius-0.3.1-SNAPSHOT.jar')
 }
 
 android {

@@ -1,10 +1,13 @@
 package org.droidplanner.android.notifications;
 
+import org.beyene.sius.unit.length.LengthUnit;
+import org.beyene.sius.unit.length.Meter;
 import org.droidplanner.android.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.unit.UnitManager;
+import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -225,10 +228,9 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
             final Gps droneGps = this.drone.getAttribute(AttributeType.GPS);
             final Home droneHome = this.drone.getAttribute(AttributeType.HOME);
             if(droneGps != null && droneGps.isValid() && droneHome != null && droneHome.isValid()) {
-                double distanceToHome = MathUtils.getDistance(droneHome.getCoordinate(),
-                        droneGps.getPosition());
-                update = String.format("Home\n%s", UnitManager.getUnitProvider().distanceToString
-                        (distanceToHome));
+                LengthUnit distanceToHome = UnitManager.getUnitSystem(mContext).getLengthUnitProvider()
+                        .boxBaseValueToTarget(MathUtils.getDistance(droneHome.getCoordinate(), droneGps.getPosition()));
+                update = String.format("Home\n%s", distanceToHome);
             }
 		mInboxBuilder.setLine(0, SpannableUtils.normal("Home:   ", update));
 	}

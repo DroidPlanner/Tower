@@ -22,7 +22,7 @@ import android.widget.Toast;
 /**
  * Wraps the horizontal spinner wheel, and its title within a view.
  */
-public class CardWheelHorizontalView extends LinearLayout implements OnWheelChangedListener,
+public class  CardWheelHorizontalView extends LinearLayout implements OnWheelChangedListener,
 		OnWheelClickedListener, OnWheelScrollListener {
 
     private final static String TAG = CardWheelHorizontalView.class.getSimpleName();

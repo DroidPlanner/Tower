@@ -11,7 +11,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.o3dr.android.client.Drone;
-import com.o3dr.android.client.utils.unit.UnitProvider;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
@@ -24,7 +23,8 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.R.id;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.CamerasAdapter;
-import org.droidplanner.android.utils.unit.UnitManager;
+import org.droidplanner.android.utils.unit.providers.area.AreaUnitProvider;
+import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
@@ -243,33 +243,31 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
             Survey survey = surveyList.get(0);
             SurveyDetail surveyDetail = survey.getSurveyDetail();
             try {
-                UnitProvider unitProvider = UnitManager.getUnitProvider();
+                final LengthUnitProvider lengthUnitProvider = getLengthUnitProvider();
+                final AreaUnitProvider areaUnitProvider = getAreaUnitProvider();
 
                 footprintTextView.setText(String.format("%s: %s x %s",
                         getString(R.string.footprint),
-                        unitProvider.distanceToString(surveyDetail.getLateralFootPrint()),
-                        unitProvider.distanceToString(surveyDetail
-                                .getLongitudinalFootPrint())));
+                        lengthUnitProvider.boxBaseValueToTarget(surveyDetail.getLateralFootPrint()),
+                        lengthUnitProvider.boxBaseValueToTarget(surveyDetail.getLongitudinalFootPrint())));
 
                 groundResolutionTextView.setText(String.format("%s: %s /px",
                         getString(R.string.ground_resolution),
-                        unitProvider.areaToString(surveyDetail.getGroundResolution())));
+                        areaUnitProvider.boxBaseValueToTarget(surveyDetail.getGroundResolution())));
 
                 distanceTextView.setText(String.format("%s: %s",
                         getString(R.string.distance_between_pictures),
-                        unitProvider.distanceToString(surveyDetail
-                                .getLongitudinalPictureDistance())));
+                        lengthUnitProvider.boxBaseValueToTarget(surveyDetail.getLongitudinalPictureDistance())));
 
                 distanceBetweenLinesTextView.setText(String.format("%s: %s",
                         getString(R.string.distance_between_lines),
-                        unitProvider.distanceToString(surveyDetail
-                                .getLateralPictureDistance())));
+                        lengthUnitProvider.boxBaseValueToTarget(surveyDetail.getLateralPictureDistance())));
 
                 areaTextView.setText(String.format("%s: %s", getString(R.string.area),
-                        unitProvider.areaToString(survey.getPolygonArea())));
+                        areaUnitProvider.boxBaseValueToTarget(survey.getPolygonArea())));
 
                 lengthView.setText(String.format("%s: %s", getString(R.string.mission_length),
-                        unitProvider.distanceToString(survey.getGridLength())));
+                        lengthUnitProvider.boxBaseValueToTarget(survey.getGridLength())));
 
                 numberOfPicturesView.setText(String.format("%s: %d", getString(R.string.pictures),
                         survey.getCameraCount()));
