@@ -53,7 +53,6 @@ public abstract class ApiListenerFragment extends Fragment implements DroidPlann
 
         final Context context = activity.getApplicationContext();
 		broadcastManager = LocalBroadcastManager.getInstance(context);
-
         final UnitSystem unitSystem = UnitManager.getUnitSystem(context);
         lengthUnitProvider = unitSystem.getLengthUnitProvider();
         speedUnitProvider = unitSystem.getSpeedUnitProvider();
@@ -62,6 +61,11 @@ public abstract class ApiListenerFragment extends Fragment implements DroidPlann
 	@Override
 	public void onStart() {
 		super.onStart();
+
+        final UnitSystem unitSystem = UnitManager.getUnitSystem(getContext());
+        lengthUnitProvider = unitSystem.getLengthUnitProvider();
+        speedUnitProvider = unitSystem.getSpeedUnitProvider();
+
 		dpApp.addApiListener(this);
 	}
 

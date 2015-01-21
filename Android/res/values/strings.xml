@@ -513,8 +513,7 @@
     <string name="dialog_confirm_take_off_in_auto_title">Take off in Auto?</string>
     <string name="dialog_confirm_take_off_in_auto_msg">Warning! The drone will now take off and start the mission.</string>
     <string name="pref_dronie_creation_title">Create dronie?</string>
-    <string name="pref_dronie_creation_message">Please stand back 8m before starting the
-        dronie.</string>
+    <string name="pref_dronie_creation_message">Please stand back 8m before starting the dronie.</string>
     <string name="editor_multi_edit_no_waypoint_error">No waypoint(s) selected.</string>
     <string name="failed_start_calibration_message">Unable to start calibration!</string>
     <string name="pref_advanced_menu_title">Advanced Menu</string>
@@ -525,5 +524,12 @@
     <string name="download">Download</string>
     <string name="import_from_device">Import from device</string>
     <string name="export_to_device">Export to device</string>
+    <string name="pref_title_local">Localization</string>
+
+    <string name="unit_system_entry_auto">Auto</string>
+    <string name="unit_system_entry_metric">Metric System</string>
+    <string name="unit_system_entry_imperial">Imperial System</string>
+    <string name="pref_unit_system_title">Unit System</string>
+    <string name="pref_unit_system_summary">Select the unit system to use throughout the app.</string>
 
 </resources>

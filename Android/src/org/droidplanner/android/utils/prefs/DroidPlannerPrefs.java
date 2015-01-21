@@ -3,6 +3,7 @@ package org.droidplanner.android.utils.prefs;
 import java.util.UUID;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -46,6 +47,7 @@ public class DroidPlannerPrefs {
     private static final String DEFAULT_TCP_SERVER_IP = "192.168.40.100";
     private static final String DEFAULT_TCP_SERVER_PORT = "5763";
     private static final String DEFAULT_UDP_SERVER_PORT = "14550";
+    private static final int DEFAULT_UNIT_SYSTEM = UnitSystem.AUTO;
 
     // Public for legacy usage
 	public SharedPreferences prefs;
@@ -146,6 +148,14 @@ public class DroidPlannerPrefs {
     public int getConnectionParameterType(){
         return Integer.parseInt(prefs.getString(context.getString(R.string
                 .pref_connection_type_key), DEFAULT_CONNECTION_TYPE));
+    }
+
+    public int getUnitSystemType() {
+        String unitSystem = prefs.getString(context.getString(R.string.pref_unit_system_key), null);
+        if(unitSystem == null)
+            return DEFAULT_UNIT_SYSTEM;
+
+        return Integer.parseInt(unitSystem);
     }
 
     public void setUsbBaudRate(int baudRate){

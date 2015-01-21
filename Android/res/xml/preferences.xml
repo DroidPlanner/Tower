@@ -15,12 +15,21 @@
         <PreferenceScreen
             android:key="pref_ui"
             android:title="@string/pref_ui" >
-            <PreferenceCategory android:title="@string/pref_title_language" >
+            <PreferenceCategory android:title="@string/pref_title_local" >
                 <CheckBoxPreference
                     android:defaultValue="false"
                     android:key="@string/pref_ui_language_english_key"
                     android:summary="@string/pref_ui_language_english_summary"
                     android:title="@string/pref_ui_language_english" />
+
+                <ListPreference
+                    android:key="@string/pref_unit_system_key"
+                    android:entries="@array/unit_systems"
+                    android:entryValues="@array/unit_system_values"
+                    android:defaultValue="0"
+                    android:title="@string/pref_unit_system_title"
+                    android:summary="@string/pref_unit_system_summary"
+                    />
             </PreferenceCategory>
             <PreferenceCategory
                 android:key="pref_connection_actions"

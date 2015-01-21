@@ -43,6 +43,10 @@ public abstract class ApiListenerDialogFragment extends DialogFragment implement
         return areaUnitProvider;
     }
 
+    protected Context getContext(){
+        return getActivity().getApplicationContext();
+    }
+
     @Override
     public void onAttach(Activity activity){
         super.onAttach(activity);
@@ -50,7 +54,6 @@ public abstract class ApiListenerDialogFragment extends DialogFragment implement
 
         final Context context = activity.getApplicationContext();
         broadcastManager = LocalBroadcastManager.getInstance(activity.getApplicationContext());
-
         final UnitSystem unitSystem = UnitManager.getUnitSystem(context);
         lengthUnitProvider = unitSystem.getLengthUnitProvider();
         areaUnitProvider = unitSystem.getAreaUnitProvider();
@@ -59,6 +62,11 @@ public abstract class ApiListenerDialogFragment extends DialogFragment implement
     @Override
     public void onStart(){
         super.onStart();
+
+        final UnitSystem unitSystem = UnitManager.getUnitSystem(getContext());
+        lengthUnitProvider = unitSystem.getLengthUnitProvider();
+        areaUnitProvider = unitSystem.getAreaUnitProvider();
+
         dpApp.addApiListener(this);
     }
 

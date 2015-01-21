@@ -228,6 +228,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         updateMavlinkVersionPreference(null);
         setupConnectionPreferences();
         setupAdvancedMenuToggle();
+        setupUnitSystemPreferences();
     }
 
     private void setupAdvancedMenuToggle(){
@@ -242,6 +243,42 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                 }
             });
         }
+    }
+
+    private void setupUnitSystemPreferences(){
+        ListPreference unitSystemPref = (ListPreference) findPreference(getString(R.string.pref_unit_system_key));
+        if(unitSystemPref != null){
+            int defaultUnitSystem = dpPrefs.getUnitSystemType();
+            updateUnitSystemSummary(unitSystemPref, defaultUnitSystem);
+            unitSystemPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int unitSystem = Integer.parseInt((String) newValue);
+                    updateUnitSystemSummary(preference, unitSystem);
+                    return true;
+                }
+            });
+        }
+    }
+
+    private void updateUnitSystemSummary(Preference preference, int unitSystemType){
+        final int summaryResId;
+        switch(unitSystemType){
+            case 0:
+            default:
+                summaryResId = R.string.unit_system_entry_auto;
+                break;
+
+            case 1:
+                summaryResId = R.string.unit_system_entry_metric;
+                break;
+
+            case 2:
+                summaryResId = R.string.unit_system_entry_imperial;
+                break;
+        }
+
+        preference.setSummary(summaryResId);
     }
 
     private void setupConnectionPreferences() {

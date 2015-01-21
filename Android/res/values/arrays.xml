@@ -239,4 +239,16 @@
         <item>@string/pref_dialog_entry_ask</item>
     </string-array>
 
+    <string-array name="unit_systems">
+        <item>@string/unit_system_entry_auto</item>
+        <item>@string/unit_system_entry_metric</item>
+        <item>@string/unit_system_entry_imperial</item>
+    </string-array>
+
+    <string-array name="unit_system_values">
+        <item name="auto">0</item>
+        <item name="metric">1</item>
+        <item name="imperial">2</item>
+    </string-array>
+
 </resources>

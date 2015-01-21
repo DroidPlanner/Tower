@@ -59,4 +59,6 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_tts_warning_lost_signal_key" translatable="false">tts_lost_signal</string>
     <string name="pref_tts_warning_autopilot_warnings_key" translatable="false">tts_autopilot_warning</string>
 
+    <string name="pref_unit_system_key" translatable="false">pref_unit_system</string>
+
 </resources>
