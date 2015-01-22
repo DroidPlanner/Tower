@@ -28,17 +28,6 @@
     <string name="pref_maps_providers_summary">Which map provider to use.</string>
     <string name="pref_maps_providers_title">Maps Providers</string>
     <string name="pref_mavlink">MAVLink</string>
-    <string name="pref_mavlink_rates">Stream Rates</string>
-    <string name="pref_mavlink_rates_summary">Rate at which flight data should be received from the drone (in Hz)</string>
-    <string name="pref_mavlink_stream_rate_ext_stat">Waypoints, GPS raw, fence data, current waypoint, etc</string>
-    <string name="pref_mavlink_stream_rate_extra1">Attitude</string>
-    <string name="pref_mavlink_stream_rate_extra2">VFR_Hud data</string>
-    <string name="pref_mavlink_stream_rate_extra3">AHRS, Hardware Status, Wind</string>
-    <string name="pref_mavlink_stream_rate_position">Position data</string>
-    <string name="pref_mavlink_stream_rate_RC_override">RC Override</string>
-    <string name="pref_mavlink_stream_rate_rc_channels">RC Channel Data</string>
-    <string name="pref_mavlink_stream_rate_raw_sensors">Raw Sensors</string>
-    <string name="pref_mavlink_stream_rate_raw_controller">Raw Controller</string>
     <string name="pref_ui">User Interface</string>
     <string name="pref_ui_language_english">English as UI Language</string>
     <string name="pref_ui_language_english_summary">Use English language (instead of system language). Requires app restart.</string>
@@ -50,8 +39,6 @@
     <string name="pref_lock_screen_orientation">Lock Screen Orientation</string>
     <string name="pref_lock_screen_orientation_summary">Locks screen to the orientation which is present when connecting</string>
     <string name="pref_flight_data">Flight Data</string>
-    <string name="pref_max_flight_path_size">Flight path size</string>
-    <string name="pref_max_flight_path_size_summary">Size of the flight path, set to zero to disable.</string>
     <string name="pref_guided_mode_on_long_press">Guided Mode on long press</string>
     <string name="pref_guided_mode_on_long_press_summary">Enable entering the Guided Mode by long pressing the map.</string>
     <string name="pref_follow_me_mode_enabled">Enable FollowMe Mode</string>
@@ -212,7 +199,7 @@
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">One cannot add new waypoints after LAND or RTL</string>
     <string name="editor_info_window">Distance: 0m, Flight time: 0:00</string>
-    <string name="editor_info_window_distance">Distance: %02.2fm</string>
+    <string name="editor_info_window_distance">Distance: %s</string>
     <string name="editor_info_window_flight_time">Flight Time: %1$02d:%2$02d</string>
     <string name="editor_info_window_heading">Heading: %.0f°</string>
     <string name="distance_to_home">Distance to home</string>
@@ -261,14 +248,13 @@
     <string name="params_click_to_refresh">Click to refresh parameters from drone</string>
     <string name="refreshing_parameters">Refreshing Parameters…</string>
     <string name="parameters_saved">Parameters saved</string>
-    <string name="msg_parameters_written_to_drone">parameters written to drone</string>
+    <string name="msg_parameters_written_to_drone">parameters uploaded to drone</string>
     <string name="metadata_value">Value:</string>
     <string name="metadata_custom_value">** Custom value **</string>
     <string name="metadata_values">Values:</string>
     <string name="metadata_units">Units:</string>
     <string name="metadata_range">Range:</string>
     <string name="lst_note_hint">To add more rows, just press Enter</string>
-    <string name="set_to_zero_to_disable">(set to zero to disable).</string>
 
     <!-- Calibration data progress -->
     <string name="progress_title_uploading">Uploading calibration data</string>
@@ -466,8 +452,6 @@
     <string name="dialog_box_title_altitude">Altitude</string>
     <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
     <string name="msg_connect_first">Please connect first</string>
-    <string name="mode1_throttle_on_right_stick">Mode 1: Throttle on RIGHT stick</string>
-    <string name="mode2_throttle_on_left_stick">Mode 2: Throttle on LEFT stick</string>
     <string name="pref_title_language">Language</string>
     <string name="pref_title_screen">Screen</string>
     <string name="pref_title_notifications">Notifications</string>
@@ -529,8 +513,7 @@
     <string name="dialog_confirm_take_off_in_auto_title">Take off in Auto?</string>
     <string name="dialog_confirm_take_off_in_auto_msg">Warning! The drone will now take off and start the mission.</string>
     <string name="pref_dronie_creation_title">Create dronie?</string>
-    <string name="pref_dronie_creation_message">Please stand back 8m before starting the
-        dronie.</string>
+    <string name="pref_dronie_creation_message">Please stand back 8m before starting the dronie.</string>
     <string name="editor_multi_edit_no_waypoint_error">No waypoint(s) selected.</string>
     <string name="failed_start_calibration_message">Unable to start calibration!</string>
     <string name="pref_advanced_menu_title">Advanced Menu</string>
@@ -541,5 +524,12 @@
     <string name="download">Download</string>
     <string name="import_from_device">Import from device</string>
     <string name="export_to_device">Export to device</string>
+    <string name="pref_title_local">Localization</string>
+
+    <string name="unit_system_entry_auto">Auto</string>
+    <string name="unit_system_entry_metric">Metric System</string>
+    <string name="unit_system_entry_imperial">Imperial System</string>
+    <string name="pref_unit_system_title">Unit System</string>
+    <string name="pref_unit_system_summary">Select the unit system to use throughout the app.</string>
 
 </resources>

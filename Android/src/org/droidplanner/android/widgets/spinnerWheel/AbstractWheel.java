@@ -557,7 +557,10 @@ public abstract class AbstractWheel extends View {
 		if (this.mViewAdapter != null) {
 			this.mViewAdapter.unregisterDataSetObserver(mDataObserver);
 		}
+
 		this.mViewAdapter = viewAdapter;
+        mCurrentItemIdx = 0;
+
 		if (this.mViewAdapter != null) {
 			this.mViewAdapter.registerDataSetObserver(mDataObserver);
 		}

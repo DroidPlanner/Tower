@@ -23,6 +23,8 @@ import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.android.utils.unit.UnitManager;
+import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 /**
  * Parent class for the app activity classes.
@@ -64,7 +66,7 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
      * Handle to the app preferences.
      */
     protected DroidPlannerPrefs mAppPrefs;
-
+    protected UnitSystem unitSystem;
     protected DroidPlannerApp dpApp;
 
     @Override
@@ -72,10 +74,12 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
         super.onCreate(savedInstanceState);
 
         final Context context = getApplicationContext();
+
         dpApp = (DroidPlannerApp) getApplication();
         lbm = LocalBroadcastManager.getInstance(context);
 
         mAppPrefs = new DroidPlannerPrefs(context);
+        unitSystem = UnitManager.getUnitSystem(context);
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -136,6 +140,8 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
     @Override
     protected void onStart() {
         super.onStart();
+
+        unitSystem = UnitManager.getUnitSystem(getApplicationContext());
         dpApp.addApiListener(this);
         maxVolumeIfEnabled();
     }

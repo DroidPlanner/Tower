@@ -24,13 +24,11 @@ public class LocatorItemAdapter extends RecyclerView.Adapter<LocatorItemAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         final View viewContainer;
-        final TextView titleView;
         final TextView timeView;
 
-        public ViewHolder(View container, TextView titleView, TextView timeView) {
+        public ViewHolder(View container, TextView timeView) {
             super(container);
             this.viewContainer = container;
-            this.titleView = titleView;
             this.timeView = timeView;
         }
     }
@@ -46,13 +44,11 @@ public class LocatorItemAdapter extends RecyclerView.Adapter<LocatorItemAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout
-                .fragment_locator_list_item, parent, false);
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_locator_list_item, parent, false);
 
-        final TextView titleView = (TextView) view.findViewById(R.id.titleView);
         final TextView timeView = (TextView) view.findViewById(R.id.timeView);
 
-        return new ViewHolder(view, titleView, timeView);
+        return new ViewHolder(view, timeView);
     }
 
     @Override
@@ -69,18 +65,16 @@ public class LocatorItemAdapter extends RecyclerView.Adapter<LocatorItemAdapter.
                     if (isSelected(position)) {
                         listener.onItemClick(msg);
                     } else {
-                            listener.onItemClick(null);
+                        listener.onItemClick(null);
                     }
                 }
             }
         });
 
-        holder.titleView.setText(String.valueOf(position + 1));
-
-        final int min = msg.time_boot_ms / 60000;
+        final int hour = msg.time_boot_ms / 3600000;
+        final int min = (msg.time_boot_ms % 3600000) / 60000;
         final int sec = (msg.time_boot_ms % 60000) / 1000;
-        final int fsec = (msg.time_boot_ms % 1000) / 100;
-        holder.timeView.setText(String.format("%dm%02d.%01ds", min, sec, fsec));
+        holder.timeView.setText(String.format("%02d:%02d:%02d", hour, min, sec));
     }
 
     @Override

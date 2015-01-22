@@ -14,17 +14,6 @@
     <string name="pref_connection_type">Telemetrie-Verbindungstyp</string>
     <string name="pref_connection_type_summary">Verbindung zur Drohne wählen</string>
     <string name="pref_mavlink">MAVLink</string>
-    <string name="pref_mavlink_rates">Datenraten</string>
-    <string name="pref_mavlink_rates_summary">Rate (in Hz), mit welcher die Flugdaten von der Drohne empfangen werden</string>
-    <string name="pref_mavlink_stream_rate_ext_stat">Wegpunkte, GPS Rohdaten, Zaundaten, aktueller Wegpunkt, etc</string>
-    <string name="pref_mavlink_stream_rate_extra1">Fluglage</string>
-    <string name="pref_mavlink_stream_rate_extra2">VFR_Hud Daten</string>
-    <string name="pref_mavlink_stream_rate_extra3">AHRS, Hardware Status, Wind</string>
-    <string name="pref_mavlink_stream_rate_position">Positionsdaten</string>
-    <string name="pref_mavlink_stream_rate_RC_override">RC Übersteuerung</string>
-    <string name="pref_mavlink_stream_rate_rc_channels">RC Kanaldaten</string>
-    <string name="pref_mavlink_stream_rate_raw_sensors">Rohdaten Sensoren</string>
-    <string name="pref_mavlink_stream_rate_raw_controller">Rohdaten Kontroller</string>
     <string name="pref_ui">Benutzeroberfläche</string>
     <string name="pref_ui_language_english">Benutzeroberfläche in Englisch</string>
     <string name="pref_ui_language_english_summary">Englisch als Sprache verwenden (anstelle der Systemsprache). Erfordert ein Neustart der App.</string>
@@ -35,8 +24,6 @@
     <string name="pref_lock_screen_orientation">Bildschirmorientierung sperren</string>
     <string name="pref_lock_screen_orientation_summary">Sperrt die aktuelle Bildschirmorientierung beim Verbinden</string>
     <string name="pref_flight_data">Flugdaten</string>
-    <string name="pref_max_flight_path_size">Größe des Flugpfads</string>
-    <string name="pref_max_flight_path_size_summary">Größe des Flugpfads. Zum Deaktivieren auf Null setzen.</string>
     <string name="pref_guided_mode_on_long_press">Guided Modus bei langem Drücken</string>
     <string name="pref_guided_mode_on_long_press_summary">Aktiviert den Guided Modus, wenn lang auf den Kartenausschnitt gedrückt wird.</string>
     <string name="pref_follow_me_mode_enabled">Folge-Modus (FollowMe) aktivieren</string>
@@ -197,7 +184,6 @@
     <string name="metadata_units">Einheiten:</string>
     <string name="metadata_range">Reichweite:</string>
     <string name="lst_note_hint">Um weitere Zeilen hinzuzufügen, drücken Sie die Eingabetaste</string>
-    <string name="set_to_zero_to_disable">(auf Null setzen, um zu deaktivieren).</string>
     <string name="progress_title_uploading">Lade Kalibrierungsdaten hoch</string>
     <string name="progress_desc_uploading">DroidPlanner lädt Kalibrierungsdaten auf die Drohne hoch</string>
     <string name="progress_title_downloading">Lade Kalibrierungsdaten herunter</string>
@@ -344,8 +330,6 @@
     <string name="dialog_box_title_altitude">Höhe</string>
     <string name="mode_switch">Ordnen Sie RC Kanal 5 für die Flugmodi einem Schalter auf der Fernsteuerung zu. Bewegen Sie den Schalter in jede Position und wählen Sie den gewünschten Flugmodus weiter unten.</string>
     <string name="msg_connect_first">Bitte zuerst verbinden</string>
-    <string name="mode1_throttle_on_right_stick">Mode 1: Schub auf rechtem Steuerknüppel</string>
-    <string name="mode2_throttle_on_left_stick">Mode 2: Schub auf linkem Steuerknüppel</string>
     <string name="zoom_fit">Zoom anpassen</string>
     <string name="open_mission_file">Missiondatei öffnen</string>
     <string name="save_mission_file">Missiondatei speichern</string>
@@ -441,7 +425,7 @@
     <string name="waypointType_Change_Speed">Geschwindigkeit ändern</string>
     <string name="waypointType_Condition_Yaw">Gierwinkel setzen</string>
     <string name="waypointType_Set_Servo">Servo setzen</string>
-    <string name="editor_info_window_distance">Distanz: %02.2fm</string>
+    <string name="editor_info_window_distance">Distanz: %s</string>
     <string name="editor_info_window_flight_time">Flugzeit: %1$02d:%2$02d</string>
     <string name="menu_action_multi_edit">Multi-Edit</string>
     <string name="mission_control_auto">Auto</string>

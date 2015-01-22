@@ -84,7 +84,7 @@ public class EditorListFragment extends ApiListenerFragment implements MissionSe
     public void onApiConnected() {
         missionProxy = getMissionProxy();
 
-        recyclerAdapter = new MissionItemListAdapter(missionProxy, editorListener);
+        recyclerAdapter = new MissionItemListAdapter(getContext(), missionProxy, editorListener);
         recyclerView.setAdapter(recyclerAdapter);
 
         missionProxy.selection.addSelectionUpdateListener(this);

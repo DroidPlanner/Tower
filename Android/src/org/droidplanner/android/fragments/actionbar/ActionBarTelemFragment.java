@@ -26,11 +26,13 @@ import com.o3dr.services.android.lib.drone.property.Type;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.util.MathUtils;
 
+import org.beyene.sius.unit.length.LengthUnit;
+import org.beyene.sius.unit.length.Meter;
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.utils.unit.UnitManager;
+import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
 import org.droidplanner.android.widgets.spinners.ModeAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 
@@ -342,6 +344,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
     }
 
     private void updateHomeTelem() {
+        final Context context = getActivity().getApplicationContext();
         final Drone drone = getDrone();
 
         String update = getString(R.string.empty_content);
@@ -349,8 +352,9 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             final Gps droneGps = drone.getAttribute(AttributeType.GPS);
             final Home droneHome = drone.getAttribute(AttributeType.HOME);
             if (droneGps.isValid() && droneHome.isValid()) {
-                double distanceToHome = MathUtils.getDistance(droneHome.getCoordinate(), droneGps.getPosition());
-                update = String.format("%s", UnitManager.getUnitProvider().distanceToString(distanceToHome));
+                LengthUnit distanceToHome = getLengthUnitProvider().boxBaseValueToTarget
+                        (MathUtils.getDistance(droneHome.getCoordinate(), droneGps.getPosition()));
+                update = String.format("%s", distanceToHome);
             }
         }
 
@@ -380,7 +384,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             if (discharge == null) {
                 dischargeText = getString(R.string.empty_content);
             } else {
-                dischargeText = "Discharge " + UnitManager.getUnitProvider().electricChargeToString(discharge);
+                dischargeText = "Discharge " + electricChargeToString(discharge);
             }
 
             dischargeView.setText(dischargeText);
@@ -394,5 +398,15 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         batteryPopup.update();
         batteryTelem.setText(update);
         batteryTelem.setCompoundDrawablesWithIntrinsicBounds(batteryIcon, 0, 0, 0);
+    }
+
+    private String electricChargeToString(double chargeInmAh) {
+        double absCharge = Math.abs(chargeInmAh);
+        if(absCharge >= 1000){
+            return String.format(Locale.US, "%2.1f Ah", chargeInmAh / 1000);
+        }
+        else{
+            return String.format(Locale.ENGLISH, "%2.0f mAh", chargeInmAh);
+        }
     }
 }

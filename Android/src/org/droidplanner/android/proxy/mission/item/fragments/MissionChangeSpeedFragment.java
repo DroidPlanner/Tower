@@ -1,61 +1,64 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
-import org.droidplanner.android.R;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-
 import android.view.View;
 
-import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.command.ChangeSpeed;
 
-public class MissionChangeSpeedFragment extends MissionDetailFragment implements
-        CardWheelHorizontalView.OnCardWheelScrollListener {
+import org.beyene.sius.unit.composition.speed.SpeedUnit;
+import org.droidplanner.android.R;
+import org.droidplanner.android.utils.unit.providers.speed.SpeedUnitProvider;
+import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.SpeedWheelAdapter;
 
-	@Override
-	protected int getResource() {
-		return R.layout.fragment_editor_detail_change_speed;
-	}
+public class MissionChangeSpeedFragment extends MissionDetailFragment implements
+        CardWheelHorizontalView.OnCardWheelScrollListener<SpeedUnit> {
 
     @Override
-    public void onApiConnected(){
+    protected int getResource() {
+        return R.layout.fragment_editor_detail_change_speed;
+    }
+
+    @Override
+    public void onApiConnected() {
         super.onApiConnected();
 
         final View view = getView();
         typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CHANGE_SPEED));
 
-        final NumericWheelAdapter adapter = new NumericWheelAdapter(getActivity()
-                .getApplicationContext(), R.layout.wheel_text_centered, 1,
-                20, "%d m/s");
-        CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view.findViewById
+        final SpeedUnitProvider speedUnitProvider = getSpeedUnitProvider();
+        final SpeedWheelAdapter adapter = new SpeedWheelAdapter(getContext(), R.layout.wheel_text_centered,
+                speedUnitProvider.boxBaseValueToTarget(1), speedUnitProvider.boxBaseValueToTarget(20));
+        CardWheelHorizontalView<SpeedUnit> cardAltitudePicker = (CardWheelHorizontalView<SpeedUnit>) view.findViewById
                 (R.id.picker1);
         cardAltitudePicker.setViewAdapter(adapter);
         cardAltitudePicker.addScrollListener(this);
 
         ChangeSpeed item = (ChangeSpeed) getMissionItems().get(0);
-        cardAltitudePicker.setCurrentValue((int) item.getSpeed());
+        cardAltitudePicker.setCurrentValue(speedUnitProvider.boxBaseValueToTarget(item.getSpeed()));
     }
 
     @Override
-    public void onScrollingStarted(CardWheelHorizontalView cardWheel, int startValue) {
-
-    }
-
-    @Override
-    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+    public void onScrollingStarted(CardWheelHorizontalView cardWheel, SpeedUnit startValue) {
 
     }
 
     @Override
-	public void onScrollingEnded(CardWheelHorizontalView wheel, int startValue, int endValue) {
-		switch (wheel.getId()) {
-		case R.id.picker1:
-            for(MissionItem missionItem : getMissionItems()) {
-            	ChangeSpeed item = (ChangeSpeed) missionItem;
-                item.setSpeed(endValue);
-            }
-			break;
-		}
-	}
+    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, SpeedUnit oldValue, SpeedUnit newValue) {
+
+    }
+
+    @Override
+    public void onScrollingEnded(CardWheelHorizontalView wheel, SpeedUnit startValue, SpeedUnit endValue) {
+        switch (wheel.getId()) {
+            case R.id.picker1:
+                double baseValue = endValue.toBase().getValue();
+                for (MissionItem missionItem : getMissionItems()) {
+                    ChangeSpeed item = (ChangeSpeed) missionItem;
+                    item.setSpeed(baseValue);
+                }
+                break;
+        }
+    }
 }

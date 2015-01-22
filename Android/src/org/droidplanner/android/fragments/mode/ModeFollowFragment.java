@@ -20,8 +20,11 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.gcs.follow.FollowState;
 import com.o3dr.services.android.lib.gcs.follow.FollowType;
 
+import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
+import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 
 public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSelectedListener {
@@ -44,7 +47,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	private Spinner spinner;
 	private ArrayAdapter<FollowType> adapter;
 
-	private CardWheelHorizontalView mRadiusWheel;
+	private CardWheelHorizontalView<LengthUnit> mRadiusWheel;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,14 +58,13 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	public void onViewCreated(View parentView, Bundle savedInstanceState) {
 		super.onViewCreated(parentView, savedInstanceState);
 
-		final Context context = getActivity().getApplicationContext();
+		final Context context = getContext();
+        final LengthUnitProvider lengthUP = getLengthUnitProvider();
+		final LengthWheelAdapter radiusAdapter = new LengthWheelAdapter(context, R.layout.wheel_text_centered,
+                lengthUP.boxBaseValueToTarget(2), lengthUP.boxBaseValueToTarget(200));
 
-		final NumericWheelAdapter radiusAdapter = new NumericWheelAdapter(context,
-				R.layout.wheel_text_centered, 0, 200, "%d m");
-
-		mRadiusWheel = (CardWheelHorizontalView) parentView.findViewById(R.id.radius_spinner);
+		mRadiusWheel = (CardWheelHorizontalView<LengthUnit>) parentView.findViewById(R.id.radius_spinner);
 		mRadiusWheel.setViewAdapter(radiusAdapter);
-		updateCurrentRadius();
 		mRadiusWheel.addScrollListener(this);
 
 		spinner = (Spinner) parentView.findViewById(R.id.follow_type_spinner);
@@ -83,6 +85,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	@Override
 	public void onApiConnected() {
 		super.onApiConnected();
+        updateCurrentRadius();
 		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 	}
 
@@ -93,12 +96,12 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	}
 
 	@Override
-	public void onScrollingEnded(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+	public void onScrollingEnded(CardWheelHorizontalView cardWheel, LengthUnit oldValue, LengthUnit newValue) {
 		switch (cardWheel.getId()) {
 		case R.id.radius_spinner:
 			final Drone drone = getDrone();
 			if (drone.isConnected())
-				drone.setFollowMeRadius(newValue);
+				drone.setFollowMeRadius(newValue.toBase().getValue());
 			break;
 
 		default:
@@ -111,7 +114,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 		final Drone drone = getDrone();
 		if (mRadiusWheel != null && drone.isConnected()) {
             final FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
-			mRadiusWheel.setCurrentValue((int) followState.getRadius());
+			mRadiusWheel.setCurrentValue((getLengthUnitProvider().boxBaseValueToTarget(followState.getRadius())));
 		}
 	}
 

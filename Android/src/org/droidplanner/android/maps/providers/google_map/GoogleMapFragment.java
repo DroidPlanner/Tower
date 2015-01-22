@@ -183,6 +183,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
                         .getLastLocation(getGoogleApiClient());
                 if (myLocation != null) {
                     updateCamera(DroneHelper.LocationToCoord(myLocation), GO_TO_MY_LOCATION_ZOOM);
+
+                    if(mLocationListener != null)
+                        mLocationListener.onLocationChanged(myLocation);
                 }
             }
         };
@@ -251,6 +254,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         super.onStop();
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
                 .unregisterReceiver(eventReceiver);
+
         mGApiClientMgr.stop();
     }
 
@@ -511,7 +515,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         mLocationListener = receiver;
 
         //Update the listener with the last received location
-        if (mLocationListener != null && isResumed()) {
+        if (mLocationListener != null) {
             mGApiClientMgr.addTask(mGApiClientMgr.new GoogleApiClientTask() {
                 @Override
                 protected void doRun() {
@@ -522,7 +526,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
                     }
                 }
             });
+            mGApiClientMgr.addTask(mRequestLocationUpdateTask);
         }
+        else if(mPanMode.get() != AutoPanMode.USER)
+            mGApiClientMgr.addTask(mRemoveLocationUpdateTask);
     }
 
     private void updateCamera(final LatLong coord){

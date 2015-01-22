@@ -25,6 +25,7 @@
 package org.droidplanner.android.widgets.spinnerWheel;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.AbstractWheelTextAdapter;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 
 import android.content.Context;
@@ -44,7 +45,7 @@ import android.widget.LinearLayout;
  * @author Yuri Kanivets
  * @author Dimitri Fedorov
  */
-public class WheelHorizontalView extends AbstractWheelView {
+public class WheelHorizontalView<T> extends AbstractWheelView {
 
 	@SuppressWarnings("unused")
 	private final String LOG_TAG = WheelHorizontalView.class.getSimpleName();
@@ -216,12 +217,12 @@ public class WheelHorizontalView extends AbstractWheelView {
 		return getBaseDimension() / mVisibleItems;
 	}
 
-	public void setViewAdapter(NumericWheelAdapter viewAdapter) {
+	public void setViewAdapter(AbstractWheelTextAdapter<T> viewAdapter) {
 		super.setViewAdapter(viewAdapter);
 	}
 
-	public NumericWheelAdapter getViewAdapter() {
-		return (NumericWheelAdapter) mViewAdapter;
+	public AbstractWheelTextAdapter<T> getViewAdapter() {
+		return (AbstractWheelTextAdapter<T>) mViewAdapter;
 	}
 
 	// --------------------------------------------------------------------------

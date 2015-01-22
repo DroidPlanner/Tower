@@ -3,6 +3,7 @@ package org.droidplanner.android.utils.prefs;
 import java.util.UUID;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,7 +11,6 @@ import android.preference.PreferenceManager;
 import android.util.SparseBooleanArray;
 
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
-import com.o3dr.services.android.lib.drone.connection.StreamRates;
 
 /**
  * Provides structured access to Droidplanner preferences
@@ -47,6 +47,7 @@ public class DroidPlannerPrefs {
     private static final String DEFAULT_TCP_SERVER_IP = "192.168.40.100";
     private static final String DEFAULT_TCP_SERVER_PORT = "5763";
     private static final String DEFAULT_UDP_SERVER_PORT = "14550";
+    private static final int DEFAULT_UNIT_SYSTEM = UnitSystem.AUTO;
 
     // Public for legacy usage
 	public SharedPreferences prefs;
@@ -147,6 +148,14 @@ public class DroidPlannerPrefs {
     public int getConnectionParameterType(){
         return Integer.parseInt(prefs.getString(context.getString(R.string
                 .pref_connection_type_key), DEFAULT_CONNECTION_TYPE));
+    }
+
+    public int getUnitSystemType() {
+        String unitSystem = prefs.getString(context.getString(R.string.pref_unit_system_key), null);
+        if(unitSystem == null)
+            return DEFAULT_UNIT_SYSTEM;
+
+        return Integer.parseInt(unitSystem);
     }
 
     public void setUsbBaudRate(int baudRate){
@@ -327,25 +336,6 @@ public class DroidPlannerPrefs {
 				context.getString(R.string.pref_tts_warning_autopilot_warnings_key),
 				DEFAULT_TTS_WARNING_AUTOPILOT_WARNING);
 	}
-
-    public StreamRates getStreamRates() {
-        StreamRates rates = new StreamRates();
-
-        rates.setExtendedStatus(Integer.parseInt(prefs.getString(
-                "pref_mavlink_stream_rate_ext_stat", "2")));
-        rates.setExtra1(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra1", "2")));
-        rates.setExtra2(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra2", "2")));
-        rates.setExtra3(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra3", "2")));
-        rates.setPosition(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_position",
-                "2")));
-        rates.setRcChannels(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_rc_channels",
-                "2")));
-        rates.setRawSensors(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_raw_sensors",
-                "2")));
-        rates.setRawController(Integer.parseInt(prefs.getString(
-                "pref_mavlink_stream_rate_raw_controller", "2")));
-        return rates;
-    }
 
     public boolean isAdvancedMenuEnabled(){
         return prefs.getBoolean(context.getString(R.string.pref_advanced_menu_toggle_key), false);

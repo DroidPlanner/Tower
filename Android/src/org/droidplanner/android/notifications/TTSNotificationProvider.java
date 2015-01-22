@@ -341,7 +341,10 @@ public class TTSNotificationProvider implements OnInitListener,
                     break;
                 case AttributeEvent.AUTOPILOT_FAILSAFE:
                     String warning = intent.getStringExtra(AttributeEventExtra.EXTRA_AUTOPILOT_FAILSAFE_MESSAGE);
-                    if (!TextUtils.isEmpty(warning) && mAppPrefs.getWarningOnAutopilotWarning()) {
+                    final int logLevel = intent.getIntExtra(AttributeEventExtra
+                            .EXTRA_AUTOPILOT_FAILSAFE_MESSAGE_LEVEL, Log.VERBOSE);
+                    if (!TextUtils.isEmpty(warning) && mAppPrefs.getWarningOnAutopilotWarning() &&
+                            (logLevel == Log.ERROR || logLevel == Log.WARN || logLevel == Log.INFO)) {
                         speak(warning);
                     }
                     break;
