@@ -12,6 +12,7 @@ import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.unit.UnitManager;
 import org.droidplanner.android.utils.unit.providers.area.AreaUnitProvider;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
+import org.droidplanner.android.utils.unit.providers.speed.SpeedUnitProvider;
 import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 /**
@@ -25,6 +26,7 @@ public abstract class ApiListenerDialogFragment extends DialogFragment implement
 
     private LengthUnitProvider lengthUnitProvider;
     private AreaUnitProvider areaUnitProvider;
+    private SpeedUnitProvider speedUnitProvider;
 
     protected MissionProxy getMissionProxy(){ return dpApp.getMissionProxy();}
     protected Drone getDrone(){
@@ -43,6 +45,10 @@ public abstract class ApiListenerDialogFragment extends DialogFragment implement
         return areaUnitProvider;
     }
 
+    protected SpeedUnitProvider getSpeedUnitProvider(){
+        return speedUnitProvider;
+    }
+
     protected Context getContext(){
         return getActivity().getApplicationContext();
     }
@@ -54,9 +60,11 @@ public abstract class ApiListenerDialogFragment extends DialogFragment implement
 
         final Context context = activity.getApplicationContext();
         broadcastManager = LocalBroadcastManager.getInstance(activity.getApplicationContext());
+
         final UnitSystem unitSystem = UnitManager.getUnitSystem(context);
         lengthUnitProvider = unitSystem.getLengthUnitProvider();
         areaUnitProvider = unitSystem.getAreaUnitProvider();
+        speedUnitProvider = unitSystem.getSpeedUnitProvider();
     }
 
     @Override
@@ -66,6 +74,7 @@ public abstract class ApiListenerDialogFragment extends DialogFragment implement
         final UnitSystem unitSystem = UnitManager.getUnitSystem(getContext());
         lengthUnitProvider = unitSystem.getLengthUnitProvider();
         areaUnitProvider = unitSystem.getAreaUnitProvider();
+        speedUnitProvider = unitSystem.getSpeedUnitProvider();
 
         dpApp.addApiListener(this);
     }

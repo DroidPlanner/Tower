@@ -19,6 +19,7 @@ import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
 import com.o3dr.services.android.lib.drone.property.CameraProxy;
 
+import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
 import org.droidplanner.android.R.id;
 import org.droidplanner.android.proxy.mission.MissionProxy;
@@ -26,6 +27,7 @@ import org.droidplanner.android.proxy.mission.item.adapters.CamerasAdapter;
 import org.droidplanner.android.utils.unit.providers.area.AreaUnitProvider;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 
@@ -50,10 +52,10 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
         }
     };
 
-    private CardWheelHorizontalView mOverlapPicker;
-    private CardWheelHorizontalView mAnglePicker;
-    private CardWheelHorizontalView mAltitudePicker;
-    private CardWheelHorizontalView mSidelapPicker;
+    private CardWheelHorizontalView<Integer> mOverlapPicker;
+    private CardWheelHorizontalView<Integer> mAnglePicker;
+    private CardWheelHorizontalView<LengthUnit> mAltitudePicker;
+    private CardWheelHorizontalView<Integer> mSidelapPicker;
 
     public TextView distanceBetweenLinesTextView;
     public TextView areaTextView;
@@ -81,38 +83,34 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
         super.onApiConnected();
 
         final View view = getView();
-        final Context context = getActivity().getApplicationContext();
+        final Context context = getContext();
 
         CameraProxy camera = getDrone().getAttribute(AttributeType.CAMERA);
         List<CameraDetail> cameraDetails = camera == null
                 ? Collections.<CameraDetail>emptyList()
                 : camera.getAvailableCameraInfos();
-        cameraAdapter = new CamerasAdapter(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item, cameraDetails);
+        cameraAdapter = new CamerasAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, cameraDetails);
 
         cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
         cameraSpinner.setAdapter(cameraAdapter);
         cameraSpinner.setOnSpinnerItemSelectedListener(this);
 
         mAnglePicker = (CardWheelHorizontalView) view.findViewById(id.anglePicker);
-        mAnglePicker.setViewAdapter(new NumericWheelAdapter(context, R.layout.wheel_text_centered,
-                0, 180, "%dº"));
+        mAnglePicker.setViewAdapter(new NumericWheelAdapter(context, R.layout.wheel_text_centered, 0, 180, "%dº"));
 
         mOverlapPicker = (CardWheelHorizontalView) view.findViewById(id.overlapPicker);
-        mOverlapPicker.setViewAdapter(new NumericWheelAdapter(context,
-                R.layout.wheel_text_centered, 0, 99, "%d %%"));
+        mOverlapPicker.setViewAdapter(new NumericWheelAdapter(context, R.layout.wheel_text_centered, 0, 99, "%d %%"));
 
         mSidelapPicker = (CardWheelHorizontalView) view.findViewById(R.id.sidelapPicker);
-        mSidelapPicker.setViewAdapter(new NumericWheelAdapter(context,
-                R.layout.wheel_text_centered, 0, 99, "%d %%"));
+        mSidelapPicker.setViewAdapter(new NumericWheelAdapter(context, R.layout.wheel_text_centered, 0, 99, "%d %%"));
 
+        final LengthUnitProvider lengthUP = getLengthUnitProvider();
         mAltitudePicker = (CardWheelHorizontalView) view.findViewById(R.id.altitudePicker);
-        mAltitudePicker.setViewAdapter(new NumericWheelAdapter(context,
-                R.layout.wheel_text_centered, 0, 200, "%d m"));
+        mAltitudePicker.setViewAdapter(new LengthWheelAdapter(context, R.layout.wheel_text_centered,
+                lengthUP.boxBaseValueToTarget(0), lengthUP.boxBaseValueToTarget(200)));
 
         areaTextView = (TextView) view.findViewById(id.areaTextView);
-        distanceBetweenLinesTextView = (TextView) view
-                .findViewById(id.distanceBetweenLinesTextView);
+        distanceBetweenLinesTextView = (TextView) view.findViewById(id.distanceBetweenLinesTextView);
         footprintTextView = (TextView) view.findViewById(id.footprintTextView);
         groundResolutionTextView = (TextView) view.findViewById(id.groundResolutionTextView);
         distanceTextView = (TextView) view.findViewById(id.distanceTextView);
@@ -152,17 +150,17 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
     }
 
     @Override
-    public void onScrollingStarted(CardWheelHorizontalView cardWheel, int startValue) {
+    public void onScrollingStarted(CardWheelHorizontalView cardWheel, Object startValue) {
 
     }
 
     @Override
-    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
+    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, Object oldValue, Object newValue) {
 
     }
 
     @Override
-    public void onScrollingEnded(CardWheelHorizontalView cardWheel, int startValue, int endValue) {
+    public void onScrollingEnded(CardWheelHorizontalView cardWheel, Object startValue, Object endValue) {
         switch (cardWheel.getId()) {
             case R.id.anglePicker:
             case R.id.altitudePicker:
@@ -174,7 +172,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
                     if (!surveyList.isEmpty()) {
                         for (final Survey survey : surveyList) {
                             SurveyDetail surveyDetail = survey.getSurveyDetail();
-                            surveyDetail.setAltitude(mAltitudePicker.getCurrentValue());
+                            surveyDetail.setAltitude(mAltitudePicker.getCurrentValue().toBase().getValue());
                             surveyDetail.setAngle(mAnglePicker.getCurrentValue());
                             surveyDetail.setOverlap(mOverlapPicker.getCurrentValue());
                             surveyDetail.setSidelap(mSidelapPicker.getCurrentValue());
@@ -214,8 +212,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
         List<Survey> surveyList = getMissionItems();
         if (!surveyList.isEmpty()) {
             Survey survey = surveyList.get(0);
-            final int cameraSelection = cameraAdapter.getPosition(survey.getSurveyDetail()
-                    .getCameraDetail());
+            final int cameraSelection = cameraAdapter.getPosition(survey.getSurveyDetail().getCameraDetail());
             cameraSpinner.setSelection(Math.max(cameraSelection, 0));
         }
     }
@@ -229,7 +226,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
                 mAnglePicker.setCurrentValue((int) surveyDetail.getAngle());
                 mOverlapPicker.setCurrentValue((int) surveyDetail.getOverlap());
                 mSidelapPicker.setCurrentValue((int) surveyDetail.getSidelap());
-                mAltitudePicker.setCurrentValue((int) surveyDetail.getAltitude());
+                mAltitudePicker.setCurrentValue(getLengthUnitProvider().boxBaseValueToTarget(surveyDetail.getAltitude()));
             }
 
             checkIfValid(survey);

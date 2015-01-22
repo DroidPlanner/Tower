@@ -3,7 +3,9 @@ package org.droidplanner.android.widgets.spinnerWheel;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.beyene.sius.unit.Unit;
 import org.droidplanner.android.R;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.AbstractWheelTextAdapter;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 
 import android.content.Context;
@@ -22,29 +24,29 @@ import android.widget.Toast;
 /**
  * Wraps the horizontal spinner wheel, and its title within a view.
  */
-public class  CardWheelHorizontalView extends LinearLayout implements OnWheelChangedListener,
+public class  CardWheelHorizontalView<T> extends LinearLayout implements OnWheelChangedListener,
 		OnWheelClickedListener, OnWheelScrollListener {
 
     private final static String TAG = CardWheelHorizontalView.class.getSimpleName();
 
-	public interface OnCardWheelScrollListener {
-        void onScrollingStarted(CardWheelHorizontalView cardWheel, int startValue);
+	public interface OnCardWheelScrollListener<T> {
+        void onScrollingStarted(CardWheelHorizontalView cardWheel, T startValue);
 
-        void onScrollingUpdate(CardWheelHorizontalView cardWheel, int oldValue, int newValue);
+        void onScrollingUpdate(CardWheelHorizontalView cardWheel, T oldValue, T newValue);
 
-		void onScrollingEnded(CardWheelHorizontalView cardWheel, int startValue, int endValue);
+		void onScrollingEnded(CardWheelHorizontalView cardWheel, T startValue, T endValue);
 	}
 
-	private final List<OnCardWheelScrollListener> mScrollingListeners = new LinkedList<OnCardWheelScrollListener>();
+	private final List<OnCardWheelScrollListener<T>> mScrollingListeners = new LinkedList<>();
 
 	private View mVerticalDivider;
 	private View mHorizontalDivider;
 
 	private TextView mTitleView;
 	private EditText mNumberInputText;
-	private WheelHorizontalView mSpinnerWheel;
+	private WheelHorizontalView<T> mSpinnerWheel;
 
-    private int scrollingStartValue;
+    private T scrollingStartValue;
 
 	public CardWheelHorizontalView(Context context) {
 		this(context, null);
@@ -72,16 +74,13 @@ public class  CardWheelHorizontalView extends LinearLayout implements OnWheelCha
 
 			// Setup the divider view
 			mVerticalDivider = inflater.inflate(R.layout.card_title_vertical_divider, this, false);
-			mHorizontalDivider = inflater.inflate(R.layout.card_title_horizontal_divider, this,
-					false);
+			mHorizontalDivider = inflater.inflate(R.layout.card_title_horizontal_divider, this,	false);
 
 			// Setup the title view
-			mTitleView = (TextView) inflater.inflate(R.layout.card_wheel_horizontal_view_title,
-					this, false);
+			mTitleView = (TextView) inflater.inflate(R.layout.card_wheel_horizontal_view_title,	this, false);
 			mTitleView.setText(a.getString(R.styleable.CardWheelHorizontalView_android_text));
 
-			final int orientation = a.getInt(
-					R.styleable.CardWheelHorizontalView_android_orientation, VERTICAL);
+			final int orientation = a.getInt(R.styleable.CardWheelHorizontalView_android_orientation, VERTICAL);
 			if (orientation == HORIZONTAL) {
 				setOrientation(HORIZONTAL);
 			} else {
@@ -91,12 +90,10 @@ public class  CardWheelHorizontalView extends LinearLayout implements OnWheelCha
 			updateTitleLayout();
 
 			// Setup the spinnerwheel view
-			final View spinnerWheelFrame = inflater.inflate(R.layout.card_wheel_horizontal_view,
-					this, false);
+			final View spinnerWheelFrame = inflater.inflate(R.layout.card_wheel_horizontal_view, this, false);
 			addView(spinnerWheelFrame);
 
-			mSpinnerWheel = (WheelHorizontalView) spinnerWheelFrame
-					.findViewById(R.id.horizontalSpinnerWheel);
+			mSpinnerWheel = (WheelHorizontalView) spinnerWheelFrame.findViewById(R.id.horizontalSpinnerWheel);
 			mSpinnerWheel.addChangingListener(this);
 			mSpinnerWheel.addClickingListener(this);
 			mSpinnerWheel.addScrollingListener(this);
@@ -120,12 +117,11 @@ public class  CardWheelHorizontalView extends LinearLayout implements OnWheelCha
 
 						final CharSequence input = v.getText();
 						if (input != null) {
-							final int update = Integer.parseInt(input.toString());
-							final int updateIndex = mSpinnerWheel.getViewAdapter().getItemIndex(
-									update);
+                            AbstractWheelTextAdapter<T> viewAdapter = mSpinnerWheel.getViewAdapter();
+							final T update = viewAdapter.parseItemText(input);
+							final int updateIndex = viewAdapter.getItemIndex(update);
 							if (updateIndex == -1) {
-								Toast.makeText(context,
-										"Entered value is outside of the allowed " + "range.",
+								Toast.makeText(context,	"Entered value is outside of the allowed range.",
 										Toast.LENGTH_LONG).show();
 							} else {
 								setCurrentItemIndex(updateIndex, true);
@@ -153,8 +149,7 @@ public class  CardWheelHorizontalView extends LinearLayout implements OnWheelCha
 
 		final int childCount = getChildCount();
 		if (mTitleView.length() > 0) {
-			final View divider = getOrientation() == VERTICAL ? mVerticalDivider
-					: mHorizontalDivider;
+			final View divider = getOrientation() == VERTICAL ? mVerticalDivider : mHorizontalDivider;
 
 			if (childCount <= 1) {
 				addView(mTitleView, 0);
@@ -177,19 +172,19 @@ public class  CardWheelHorizontalView extends LinearLayout implements OnWheelCha
 		updateTitleLayout();
 	}
 
-	public void setViewAdapter(NumericWheelAdapter adapter) {
+	public void setViewAdapter(AbstractWheelTextAdapter<T> adapter) {
 		mSpinnerWheel.setViewAdapter(adapter);
 	}
 
-	public void setCurrentValue(int value) {
+	public void setCurrentValue(T value) {
 		mSpinnerWheel.setCurrentItem(mSpinnerWheel.getViewAdapter().getItemIndex(value));
 	}
 
-	public int getCurrentValue() {
+	public T getCurrentValue() {
 		return mSpinnerWheel.getViewAdapter().getItem(mSpinnerWheel.getCurrentItem());
 	}
 
-	private int getValue(int valueIndex) {
+	private T getValue(int valueIndex) {
 		return mSpinnerWheel.getViewAdapter().getItem(valueIndex);
 	}
 
@@ -211,20 +206,20 @@ public class  CardWheelHorizontalView extends LinearLayout implements OnWheelCha
 		return mTitleView.getText();
 	}
 
-	public void addScrollListener(OnCardWheelScrollListener listener) {
+	public void addScrollListener(OnCardWheelScrollListener<T> listener) {
 		mScrollingListeners.add(listener);
 	}
 
-	public void removeChangingListener(OnCardWheelScrollListener listener) {
+	public void removeChangingListener(OnCardWheelScrollListener<T> listener) {
 		mScrollingListeners.remove(listener);
 	}
 
 	@Override
 	public void onChanged(AbstractWheel wheel, int oldIndex, int newIndex) {
-		final int oldValue = getValue(oldIndex);
-		final int newValue = getValue(newIndex);
+		final T oldValue = getValue(oldIndex);
+		final T newValue = getValue(newIndex);
 
-		for (OnCardWheelScrollListener listener : mScrollingListeners) {
+		for (OnCardWheelScrollListener<T> listener : mScrollingListeners) {
 			listener.onScrollingUpdate(this, oldValue, newValue);
 		}
 	}
@@ -232,8 +227,7 @@ public class  CardWheelHorizontalView extends LinearLayout implements OnWheelCha
 	@Override
 	public void onItemClicked(AbstractWheel wheel, int itemIndex, boolean isCurrentItem) {
 		if (isCurrentItem) {
-			final String currentValue = String.valueOf(mSpinnerWheel.getViewAdapter().getItem(
-					itemIndex));
+			final T currentValue = mSpinnerWheel.getViewAdapter().getItem(itemIndex);
 			showSoftInput(currentValue);
 		} else {
 			hideSoftInput();
@@ -245,7 +239,7 @@ public class  CardWheelHorizontalView extends LinearLayout implements OnWheelCha
 	public void onScrollingStarted(AbstractWheel wheel) {
 		hideSoftInput();
         scrollingStartValue = getCurrentValue();
-        for(OnCardWheelScrollListener listener: mScrollingListeners){
+        for(OnCardWheelScrollListener<T> listener: mScrollingListeners){
             listener.onScrollingStarted(this, scrollingStartValue);
         }
 	}
@@ -253,18 +247,21 @@ public class  CardWheelHorizontalView extends LinearLayout implements OnWheelCha
 
 	@Override
 	public void onScrollingFinished(AbstractWheel wheel) {
-        final int endValue = getCurrentValue();
-        for (OnCardWheelScrollListener listener : mScrollingListeners) {
+        final T endValue = getCurrentValue();
+        for (OnCardWheelScrollListener<T> listener : mScrollingListeners) {
             listener.onScrollingEnded(this, scrollingStartValue, endValue);
         }
 	}
 
-	private void showSoftInput(String currentValue) {
+	private void showSoftInput(T currentValue) {
 		final Context context = getContext();
-		final InputMethodManager imm = (InputMethodManager) context
-				.getSystemService(Context.INPUT_METHOD_SERVICE);
+		final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 		if (imm != null) {
-			mNumberInputText.setText(currentValue);
+            if(currentValue instanceof Unit)
+			    mNumberInputText.setText(String.valueOf(((Unit)currentValue).getValue()));
+            else{
+                mNumberInputText.setText(currentValue.toString());
+            }
 			mNumberInputText.setVisibility(VISIBLE);
 			mNumberInputText.requestFocus();
 			imm.showSoftInput(mNumberInputText, 0);
@@ -273,12 +270,10 @@ public class  CardWheelHorizontalView extends LinearLayout implements OnWheelCha
 
 	private void hideSoftInput() {
 		final Context context = getContext();
-		final InputMethodManager imm = (InputMethodManager) context
-				.getSystemService(Context.INPUT_METHOD_SERVICE);
+		final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 		if (imm != null && imm.isActive(mNumberInputText)) {
 			imm.hideSoftInputFromWindow(mNumberInputText.getWindowToken(), 0);
 			mNumberInputText.setVisibility(INVISIBLE);
 		}
 	}
-
 }

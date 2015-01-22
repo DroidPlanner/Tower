@@ -23,6 +23,7 @@ import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 
+import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.dialogs.EditInputDialog;
@@ -158,6 +159,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         if (missionProxy != null)
             missionProxy.selection.addSelectionUpdateListener(this);
 
+        updateMissionLength();
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
 
@@ -332,31 +334,42 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if (MissionProxy.ACTION_MISSION_PROXY_UPDATE.equals(action)) {
-                if (missionProxy != null) {
-                    double missionLength = missionProxy.getMissionLength();
-                    double speedParameter = dpApp.getDrone().getSpeedParameter();
-                    String infoString = getString(R.string.editor_info_window_distance, missionLength);
-                    if (speedParameter > 0) {
-                        int time = (int) (missionLength / speedParameter);
-                        infoString += ", " + getString(R.string.editor_info_window_flight_time,
-                                time / 60, time % 60);
-                    }
-                    infoView.setText(infoString);
+            switch (action) {
+                case MissionProxy.ACTION_MISSION_PROXY_UPDATE:
+                    updateMissionLength();
+                    break;
 
-                    // Remove detail window if item is removed
-                    if (missionProxy.selection.getSelected().isEmpty() && itemDetailFragment != null) {
-                        removeItemDetail();
+                case AttributeEvent.MISSION_RECEIVED:
+                    final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
+                    if (planningMapFragment != null) {
+                        planningMapFragment.zoomToFit();
                     }
-                }
-            } else if (AttributeEvent.MISSION_RECEIVED.equals(action)) {
-                final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
-                if (planningMapFragment != null) {
-                    planningMapFragment.zoomToFit();
-                }
+                    break;
             }
         }
     };
+
+    private void updateMissionLength() {
+        if (missionProxy != null) {
+
+            double missionLength = missionProxy.getMissionLength();
+            LengthUnit convertedMissionLength = unitSystem.getLengthUnitProvider().boxBaseValueToTarget
+                    (missionLength);
+            double speedParameter = dpApp.getDrone().getSpeedParameter();
+            String infoString = getString(R.string.editor_info_window_distance, convertedMissionLength.toString());
+            if (speedParameter > 0) {
+                int time = (int) (missionLength / speedParameter);
+                infoString += ", " + getString(R.string.editor_info_window_flight_time,
+                        time / 60, time % 60);
+            }
+            infoView.setText(infoString);
+
+            // Remove detail window if item is removed
+            if (missionProxy.selection.getSelected().isEmpty() && itemDetailFragment != null) {
+                removeItemDetail();
+            }
+        }
+    }
 
     @Override
     public void onMapClick(LatLong point) {

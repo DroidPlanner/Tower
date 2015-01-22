@@ -22,6 +22,7 @@ import com.o3dr.services.android.lib.drone.mission.item.spatial.Land;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.RegionOfInterest;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
 
+import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.proxy.mission.MissionProxy;
@@ -162,7 +163,9 @@ public class MissionItemListAdapter extends ReorderRecyclerView.ReorderAdapter<M
         if (missionItem instanceof MissionItem.SpatialItem) {
             MissionItem.SpatialItem waypoint = (MissionItem.SpatialItem) missionItem;
             double altitude = waypoint.getCoordinate().getAltitude();
-            altitudeView.setText(lengthUnitProvider.boxBaseValueToTarget(altitude).toString());
+            LengthUnit convertedAltitude = lengthUnitProvider.boxBaseValueToTarget(altitude);
+            LengthUnit roundedConvertedAltitude = (LengthUnit) convertedAltitude.valueOf(Math.round(convertedAltitude.getValue()));
+            altitudeView.setText(roundedConvertedAltitude.toString());
 
             if (altitude < 0)
                 altitudeView.setTextColor(Color.YELLOW);
@@ -181,8 +184,9 @@ public class MissionItemListAdapter extends ReorderRecyclerView.ReorderAdapter<M
             }
         } else if (missionItem instanceof Survey) {
             double altitude = ((Survey) missionItem).getSurveyDetail().getAltitude();
-            String formattedAltitude = lengthUnitProvider.boxBaseValueToTarget(altitude).toString();
-            altitudeView.setText(formattedAltitude);
+            LengthUnit convertedAltitude = lengthUnitProvider.boxBaseValueToTarget(altitude);
+            LengthUnit roundedConvertedAltitude = (LengthUnit) convertedAltitude.valueOf(Math.round(convertedAltitude.getValue()));
+            altitudeView.setText(roundedConvertedAltitude.toString());
 
             if (altitude < 0)
                 altitudeView.setTextColor(Color.YELLOW);
@@ -191,7 +195,9 @@ public class MissionItemListAdapter extends ReorderRecyclerView.ReorderAdapter<M
 
         } else if (missionItem instanceof Takeoff) {
             double altitude = ((Takeoff) missionItem).getTakeoffAltitude();
-            altitudeView.setText(lengthUnitProvider.boxBaseValueToTarget(altitude).toString());
+            LengthUnit convertedAltitude = lengthUnitProvider.boxBaseValueToTarget(altitude);
+            LengthUnit roundedConvertedAltitude = (LengthUnit) convertedAltitude.valueOf(Math.round(convertedAltitude.getValue()));
+            altitudeView.setText(roundedConvertedAltitude.toString());
 
             if (altitude < 0)
                 altitudeView.setTextColor(Color.YELLOW);

@@ -425,7 +425,7 @@
     <string name="waypointType_Change_Speed">Geschwindigkeit ändern</string>
     <string name="waypointType_Condition_Yaw">Gierwinkel setzen</string>
     <string name="waypointType_Set_Servo">Servo setzen</string>
-    <string name="editor_info_window_distance">Distanz: %02.2fm</string>
+    <string name="editor_info_window_distance">Distanz: %s</string>
     <string name="editor_info_window_flight_time">Flugzeit: %1$02d:%2$02d</string>
     <string name="menu_action_multi_edit">Multi-Edit</string>
     <string name="mission_control_auto">Auto</string>
