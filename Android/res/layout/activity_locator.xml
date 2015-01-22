@@ -14,37 +14,31 @@
         android:layout_centerInParent="false"
         class="org.droidplanner.android.fragments.LocatorMapFragment"/>
 
-    <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/actionbar_container"
-        android:fitsSystemWindows="true">
-
-        <include layout="@layout/actionbar_toolbar"/>
-    </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
-
     <org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/actionbar_container"
-        android:layout_alignLeft="@+id/actionbar_container"
-        android:layout_alignStart="@+id/actionbar_container"
-        android:layout_alignRight="@+id/actionbar_container"
-        android:layout_alignEnd="@+id/actionbar_container"
+        android:layout_alignParentTop="true"
         android:fitsSystemWindows="true"
         >
+
+        <include layout="@layout/actionbar_toolbar"
+                 android:layout_marginLeft="10dp"
+                 android:layout_marginRight="10dp"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_alignParentTop="true"
+                 android:id="@+id/actionbar_container"/>
 
         <LinearLayout
             android:id="@+id/statusView"
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:visibility="invisible"
-            style="@style/editorMissionOverviewText">
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/actionbar_container"
+            android:layout_alignLeft="@+id/actionbar_container"
+            android:layout_alignStart="@+id/actionbar_container"
+            android:visibility="invisible">
 
             <TextView
                 android:id="@+id/latView"
@@ -75,9 +69,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             layout="@layout/button_my_location"
+            android:layout_below="@+id/actionbar_container"
             android:layout_marginTop="8dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
+            android:layout_alignRight="@+id/actionbar_container"
+            android:layout_alignEnd="@+id/actionbar_container"
             />
     </org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout>
 

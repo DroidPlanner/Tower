@@ -1,9 +1,12 @@
 package org.droidplanner.android.activities;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +23,7 @@ import com.o3dr.android.client.data.tlog.TLogPicker;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.util.MathUtils;
 
+import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenTLogDialog;
@@ -30,6 +34,7 @@ import org.droidplanner.android.utils.prefs.AutoPanMode;
 
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
+import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,8 +50,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     private static final String STATE_LAST_SELECTED_POSITION = "STATE_LAST_SELECTED_POSITION";
     private static final int TLOG_PICKER_REQUEST_CODE = 101;
 
-    private final static List<msg_global_position_int> lastPositions = new
-            LinkedList<msg_global_position_int>();
+    private final static List<msg_global_position_int> lastPositions = new LinkedList<>();
 
     /*
     View widgets.
@@ -61,7 +65,6 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     private float lastGCSBearingTo = Float.MAX_VALUE;
     private double lastGCSAzimuth = Double.MAX_VALUE;
 
-
     public List<msg_global_position_int> getLastPositions() {
         return lastPositions;
     }
@@ -73,10 +76,8 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        locatorMapFragment = ((LocatorMapFragment) fragmentManager
-                .findFragmentById(R.id.mapFragment));
-        locatorListFragment = (LocatorListFragment) fragmentManager
-                .findFragmentById(R.id.locatorListFragment);
+        locatorMapFragment = ((LocatorMapFragment) fragmentManager.findFragmentById(R.id.mapFragment));
+        locatorListFragment = (LocatorListFragment) fragmentManager.findFragmentById(R.id.locatorListFragment);
 
         statusView = (LinearLayout) findViewById(R.id.statusView);
         latView = (TextView) findViewById(R.id.latView);
@@ -138,7 +139,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
 
     @Override
     protected int getToolbarId() {
-        return R.id.actionbar_toolbar;
+        return R.id.actionbar_container;
     }
 
     @Override
@@ -181,7 +182,6 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_open_tlog_file:
-//                openLogFile();
                 TLogPicker.startTLogPicker(this, TLOG_PICKER_REQUEST_CODE);
                 return true;
 
@@ -203,30 +203,14 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
         try {
             ParcelFileDescriptor inputFd = getContentResolver().openFileDescriptor(returnUri, "r");
             FileDescriptor fd = inputFd.getFileDescriptor();
-
-            //TODO: put that section in an async task.
-            TLogReader tlogReader = new TLogReader(msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT);
-            tlogReader.openTLog(fd);
-            loadLastPositions(tlogReader.getLogEvents());
-            locatorMapFragment.zoomToFit();
+            new OpenTLogFileAsyncTask(this).execute(fd);
         } catch (FileNotFoundException e) {
             Log.e(TAG, "File not found.");
         }
     }
 
-    private void openLogFile() {
-        OpenFileDialog tlogDialog = new OpenTLogDialog() {
-            @Override
-            public void tlogFileLoaded(TLogReader reader) {
-                loadLastPositions(reader.getLogEvents());
-                locatorMapFragment.zoomToFit();
-            }
-        };
-        tlogDialog.openDialog(this);
-    }
-
     /*
-    Copy all messages with non-zero coords -> lastPositions and reverse the list (most recent first)
+    Copy all messages with non-zero coords -> lastPositions
      */
     private void loadLastPositions(List<TLogReader.Event> logEvents) {
         lastPositions.clear();
@@ -234,7 +218,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
         for (TLogReader.Event event : logEvents) {
             final msg_global_position_int message = (msg_global_position_int) event.getMavLinkMessage();
             if (message.lat != 0 || message.lon != 0)
-                lastPositions.add(0, message);
+                lastPositions.add(message);
         }
 
         setSelectedMsg(null);
@@ -292,19 +276,19 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
             final LatLong msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
 
             // distance
-            if (lastGCSPosition == null || lastGCSPosition.getLatitude() == 0 || lastGCSPosition
-                    .getLongitude() == 0) {
+            if (lastGCSPosition == null || lastGCSPosition.getLatitude() == 0 || lastGCSPosition.getLongitude() == 0) {
                 // unknown
                 distanceView.setText(R.string.status_waiting_for_gps, TextView.BufferType.NORMAL);
                 azimuthView.setText("");
             } else {
-                String distance = getString(R.string.editor_info_window_distance,
-                        MathUtils.getDistance(lastGCSPosition, msgCoord));
+                final double distance = MathUtils.getDistance(lastGCSPosition, msgCoord);
+                final LengthUnit convertedDistance = unitSystem.getLengthUnitProvider().boxBaseValueToTarget(distance);
+                String distanceText = getString(R.string.editor_info_window_distance, convertedDistance.toString());
                 if (lastGCSBearingTo != Float.MAX_VALUE) {
                     final String bearing = String.format(" @ %.0f°", lastGCSBearingTo);
-                    distance += bearing;
+                    distanceText += bearing;
                 }
-                distanceView.setText(distance);
+                distanceView.setText(distanceText);
 
                 if (lastGCSAzimuth != Double.MAX_VALUE) {
                     final String azimuth = getString(R.string.editor_info_window_heading, lastGCSAzimuth);
@@ -364,6 +348,51 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
 
     @Override
     public void onProviderDisabled(String provider) {
+    }
+
+    private static class OpenTLogFileAsyncTask extends AsyncTask<FileDescriptor, Void, List<TLogReader.Event>>{
+
+        private final WeakReference<LocatorActivity> activityRef;
+        private final ProgressDialog progressDialog;
+
+        public OpenTLogFileAsyncTask(LocatorActivity activity){
+            activityRef = new WeakReference<>(activity);
+            progressDialog = new ProgressDialog(activity);
+            progressDialog.setTitle("Processing...");
+            progressDialog.setMessage("Please wait.");
+            progressDialog.setIndeterminate(true);
+        }
+
+        @Override
+        protected void onPreExecute(){
+            progressDialog.show();
+        }
+
+        @Override
+        protected List<TLogReader.Event> doInBackground(FileDescriptor... params) {
+            FileDescriptor fd = params[0];
+
+            TLogReader tlogReader = new TLogReader(msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT);
+            tlogReader.openTLog(fd);
+
+            return tlogReader.getLogEvents();
+        }
+
+        @Override
+        protected void onCancelled(){
+            progressDialog.dismiss();
+        }
+
+        @Override
+        protected void onPostExecute(List<TLogReader.Event> events){
+            progressDialog.dismiss();
+            final LocatorActivity activity = activityRef.get();
+            if(activity == null)
+                return;
+
+            activity.loadLastPositions(events);
+            activity.locatorMapFragment.zoomToFit();
+        }
     }
 
 }
