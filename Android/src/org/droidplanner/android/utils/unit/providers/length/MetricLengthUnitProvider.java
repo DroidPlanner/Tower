@@ -16,9 +16,7 @@ public class MetricLengthUnitProvider extends LengthUnitProvider {
         double absBase = Math.abs(base.getValue());
         if(absBase >= Constants.METER_PER_KILOMETER)
             return Operation.convert(base, UnitIdentifier.KILOMETER);
-        else if(absBase >= 0.1)
-            return base;
         else
-            return Operation.convert(base, UnitIdentifier.MILLIMETER);
+            return base;
     }
 }

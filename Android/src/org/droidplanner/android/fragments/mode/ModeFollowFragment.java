@@ -61,11 +61,10 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 		final Context context = getContext();
         final LengthUnitProvider lengthUP = getLengthUnitProvider();
 		final LengthWheelAdapter radiusAdapter = new LengthWheelAdapter(context, R.layout.wheel_text_centered,
-                lengthUP.boxBaseValueToTarget(0), lengthUP.boxBaseValueToTarget(200));
+                lengthUP.boxBaseValueToTarget(2), lengthUP.boxBaseValueToTarget(200));
 
 		mRadiusWheel = (CardWheelHorizontalView<LengthUnit>) parentView.findViewById(R.id.radius_spinner);
 		mRadiusWheel.setViewAdapter(radiusAdapter);
-		updateCurrentRadius();
 		mRadiusWheel.addScrollListener(this);
 
 		spinner = (Spinner) parentView.findViewById(R.id.follow_type_spinner);
@@ -86,6 +85,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 	@Override
 	public void onApiConnected() {
 		super.onApiConnected();
+        updateCurrentRadius();
 		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 	}
 
