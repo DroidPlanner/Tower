@@ -96,6 +96,10 @@ public class DroidPlannerPrefs {
         return !TextUtils.isEmpty(getDroneshareLogin()) && !TextUtils.isEmpty(getDronesharePassword());
 	}
 
+    public String getDroneshareApiKey(){
+        return "2d38fb2e.72afe7b3761d5ee6346c178fdd6b680f";
+    }
+
 	/**
 	 * How many times has this application been started? (will increment for
 	 * each call)

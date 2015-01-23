@@ -13,7 +13,7 @@ dependencies {
 
     compile 'com.o3dr:3dr-services-lib:2.1.49'
 
-    compile files('libs/droneapi-java.jar')
+    compile files('libs/droneapi-java-0.3-SNAPSHOT.jar')
     compile files('libs/j2xx.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
     compile files('libs/jeromq-0.3.4.jar')

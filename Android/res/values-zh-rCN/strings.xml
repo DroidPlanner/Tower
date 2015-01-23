@@ -400,25 +400,10 @@
     <string name="pref_tts_off">关闭</string>
 
     <!-- Droneshare -->
-    <string name="dsheader">你有兴趣使用免费的无人机社群服务www.Droneshare.com嘛？</string>
     <string name="dsinfo">Droneshare是一个免费的平台，你可以在平台上分析或者分享飞行数据。</string>
-    <string name="create_a_new_account">创建一个账号</string>
-    <string name="login_to_an_existing_account">登陆账号</string>
     <string name="username">使用者名称</string>
     <string name="password">密码</string>
-    <string name="do_not_use_droneshare">不适用 Droneshare</string>
     <string name="email_address">电子邮件地址</string>
-    <string name="droneshare_password">Droneshare 密码</string>
-    <string name="enter_or_pick_a_password">输入密码</string>
-    <string name="if_that_user_does_not_exist_it_will_be_created">当账号不存在时，则会产生新的账号。</string>
-    <string name="droneshare_username">Droneshare 使用者名称</string>
-    <string name="droneshare_enabled">启用 Droneshare</string>
-    <string name="do_you_want_to_use_droneshare_">你想要使用Droneshare吗？</string>
-    <string name="pref_dshare_username_title">使用者名称</string>
-    <string name="pref_dshare_password_title">密码</string>
-    <string name="uploader_success_message">上传成功！选择要查看的...</string>
-    <string name="uploader_fail_retry_message">稍后再试</string>
-    <string name="uploader_notification_title">上传至Droneshare</string>
 
     <!-- BLuetooth -->
     <string name="pref_bluetooth">蓝牙连接</string>

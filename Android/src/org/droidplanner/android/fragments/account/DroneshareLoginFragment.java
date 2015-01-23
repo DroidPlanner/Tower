@@ -1,5 +1,6 @@
-package org.droidplanner.android.dialogs;
+package org.droidplanner.android.fragments.account;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,9 +14,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.geeksville.apiproxy.LoginFailedException;
-
 import org.droidplanner.android.R;
+import org.droidplanner.android.activities.interfaces.AccountLoginListener;
 import org.droidplanner.android.utils.connection.DroneshareClient;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
@@ -27,6 +27,24 @@ public class DroneshareLoginFragment extends Fragment {
 
     private final DroneshareClient dshareClient = new DroneshareClient();
     private DroidPlannerPrefs prefs;
+
+    private AccountLoginListener loginListener;
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        if(!(activity instanceof AccountLoginListener)){
+            throw new IllegalStateException("Parent must implement " + AccountLoginListener.class.getName());
+        }
+
+        loginListener = (AccountLoginListener) activity;
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        loginListener = null;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -163,7 +181,7 @@ public class DroneshareLoginFragment extends Fragment {
                 if (isSignup) {
                     final String email = params[2];
                     final int signupResult = dshareClient.signupUser(username, password, email);
-                    switch(signupResult){
+                    switch (signupResult) {
                         case DroneshareClient.SIGNUP_SUCCESSFUL:
                             prefs.setDroneshareEmail(email);
                             prefs.setDroneshareLogin(username);
@@ -179,14 +197,14 @@ public class DroneshareLoginFragment extends Fragment {
                     }
                 } else {
                     boolean loginResult = dshareClient.login(username, password);
-                    if(loginResult){
+                    if (loginResult) {
                         prefs.setDroneshareLogin(username);
                         prefs.setDronesharePassword(password);
                     }
 
                     return Pair.create(loginResult, "Login successful!");
                 }
-            }catch(IOException e){
+            } catch (IOException e) {
                 return Pair.create(false, e.getMessage());
             }
         }
@@ -205,8 +223,10 @@ public class DroneshareLoginFragment extends Fragment {
         protected void onPostExecute(Pair<Boolean, String> result) {
             progressDialog.dismiss();
             Toast.makeText(getActivity(), result.second, Toast.LENGTH_LONG).show();
+            if(result.first)
+                loginListener.onSuccessfulLogin();
+            else
+                loginListener.onFailedLogin();
         }
-
-
     }
 }

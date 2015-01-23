@@ -413,22 +413,10 @@
     <string name="pref_tts_off">off</string>
 
     <!-- Droneshare -->
-    <string name="dsheader">Would you be interested in using the free www.Droneshare.com service?</string>
     <string name="dsinfo">Droneshare is a free web service which allows you to review, analyze and share flights.</string>
-    <string name="create_a_new_account">Create a new account</string>
-    <string name="login_to_an_existing_account">Login to an existing account</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
-    <string name="do_not_use_droneshare">Do not use Droneshare</string>
     <string name="email_address">Email address</string>
-    <string name="droneshare_password">Droneshare password</string>
-    <string name="enter_or_pick_a_password">Enter or pick a password</string>
-    <string name="if_that_user_does_not_exist_it_will_be_created">If that user does not exist, it will be created</string>
-    <string name="droneshare_username">Droneshare username</string>
-    <string name="droneshare_enabled">Droneshare enabled</string>
-    <string name="do_you_want_to_use_droneshare_">Do you want to use Droneshare?</string>
-    <string name="pref_dshare_username_title">Username</string>
-    <string name="pref_dshare_password_title">Password</string>
 
     <!-- BLuetooth -->
     <string name="pref_bluetooth">BLUETOOTH CONNECTION</string>
