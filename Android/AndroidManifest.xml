@@ -60,6 +60,11 @@
             android:value="@integer/google_play_services_version"/>
 
         <activity
+            android:name=".activities.AccountActivity"
+            android:launchMode="singleTop"
+            android:label="@string/account_label"/>
+
+        <activity
             android:name=".activities.FlightActivity"
             android:launchMode="singleTask"
             android:theme="@style/CustomActionBarTheme.Transparent">

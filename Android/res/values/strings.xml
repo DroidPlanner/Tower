@@ -414,7 +414,7 @@
 
     <!-- Droneshare -->
     <string name="dsheader">Would you be interested in using the free www.Droneshare.com service?</string>
-    <string name="dsinfo">Droneshare is a free web service which allows you to analyze and optionally share flights.</string>
+    <string name="dsinfo">Droneshare is a free web service which allows you to review, analyze and share flights.</string>
     <string name="create_a_new_account">Create a new account</string>
     <string name="login_to_an_existing_account">Login to an existing account</string>
     <string name="username">Username</string>
@@ -531,5 +531,8 @@
     <string name="unit_system_entry_imperial">Imperial System</string>
     <string name="pref_unit_system_title">Unit System</string>
     <string name="pref_unit_system_summary">Select the unit system to use throughout the app.</string>
+    <string name="account_label">Account</string>
+    <string name="label_sign_up">Sign Up</string>
+    <string name="label_login">Login</string>
 
 </resources>

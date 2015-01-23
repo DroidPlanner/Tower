@@ -214,12 +214,6 @@
                 android:summary="@string/enter_or_pick_a_password"
                 android:title="@string/pref_dshare_password_title" />
 
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="@string/pref_dshare_enabled_key"
-                android:summary="@string/do_you_want_to_use_droneshare_"
-                android:title="@string/droneshare_enabled" />
-
             <!-- FIXME: Live upload is disabled because it often causes the app to crash on disconnect -->
             <!--
                 <CheckBoxPreference

@@ -170,17 +170,15 @@ public abstract class DrawerNavigationUI extends SuperUI {
         final Context context = getApplicationContext();
         final int navDrawerEntryId = getNavigationDrawerEntryId();
 
-        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mFlightData, new Intent(context,
-                FlightActivity.class));
+        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mAccount, new Intent(context, AccountActivity.class));
 
-        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mEditor, new Intent(context,
-                EditorActivity.class));
+        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mFlightData, new Intent(context, FlightActivity.class));
 
-        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mLocator, new Intent(context,
-                LocatorActivity.class));
+        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mEditor, new Intent(context, EditorActivity.class));
 
-        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mSettings, new Intent(context,
-                SettingsActivity.class));
+        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mLocator, new Intent(context, LocatorActivity.class));
+
+        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mSettings, new Intent(context, SettingsActivity.class));
 
         setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mCalibration, new Intent(context,
                 ConfigurationActivity.class).putExtra(ConfigurationActivity
@@ -196,8 +194,7 @@ public abstract class DrawerNavigationUI extends SuperUI {
 
     }
 
-    private void setupNavigationEntry(int currentEntryId, TextView navView,
-                                      final Intent clickIntent){
+    private void setupNavigationEntry(int currentEntryId, TextView navView, final Intent clickIntent){
         if(navView == null){
             return;
         }
@@ -236,6 +233,7 @@ public abstract class DrawerNavigationUI extends SuperUI {
      * costly.
      */
     private static class NavDrawerViewHolder {
+        final TextView mAccount;
         final TextView mFlightData;
         final TextView mEditor;
         final TextView mLocator;
@@ -247,6 +245,7 @@ public abstract class DrawerNavigationUI extends SuperUI {
         final TextView mCalibration;
 
         private NavDrawerViewHolder(View containerView){
+            mAccount = (TextView) containerView.findViewById(R.id.navigation_account);
             mFlightData = (TextView) containerView.findViewById(R.id.navigation_flight_data);
             mEditor = (TextView) containerView.findViewById(R.id.navigation_editor);
             mLocator = (TextView) containerView.findViewById(R.id.navigation_locator);

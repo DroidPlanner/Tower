@@ -251,8 +251,8 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
         final int connectionType = dpPrefs.getConnectionParameterType();
         Bundle extraParams = new Bundle();
         final DroneSharePrefs droneSharePrefs = new DroneSharePrefs(dpPrefs.getDroneshareLogin(),
-                dpPrefs.getDronesharePassword(), dpPrefs.getDroneshareEnabled(),
-                dpPrefs.getLiveUploadEnabled());
+                dpPrefs.getDronesharePassword(), dpPrefs.isDroneshareEnabled(),
+                dpPrefs.isLiveUploadEnabled());
 
         ConnectionParameter connParams;
         switch (connectionType) {
