@@ -7,4 +7,6 @@ public interface AccountLoginListener {
     public void onSuccessfulLogin();
 
     public void onFailedLogin();
+
+    public void onSuccessfulLogout();
 }

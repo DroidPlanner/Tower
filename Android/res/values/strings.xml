@@ -522,5 +522,6 @@
     <string name="account_label">Account</string>
     <string name="label_sign_up">Sign Up</string>
     <string name="label_login">Login</string>
+    <string name="label_logout">Logout</string>
 
 </resources>

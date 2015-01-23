@@ -1,5 +1,6 @@
 package org.droidplanner.android.fragments.account;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -9,6 +10,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -16,6 +20,7 @@ import android.widget.TextView;
 import com.geeksville.apiproxy.rest.RESTClient;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.activities.interfaces.AccountLoginListener;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.adapterViews.UserDataAdapter;
 import org.json.JSONObject;
@@ -29,11 +34,32 @@ public class DroneshareAccountFragment extends Fragment {
 
     private static final String TAG = DroneshareAccountFragment.class.getSimpleName();
 
+    private DroidPlannerPrefs dpPrefs;
+
     private RecyclerView recyclerView;
-    UserDataAdapter userDataAdapter;
+    private UserDataAdapter userDataAdapter;
+
+    private AccountLoginListener loginListener;
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        if(!(activity instanceof AccountLoginListener)){
+            throw new IllegalStateException("Parent must implement " + AccountLoginListener.class.getName());
+        }
+
+        loginListener = (AccountLoginListener) activity;
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        loginListener = null;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_droneshare_account, container, false);
     }
 
@@ -43,7 +69,7 @@ public class DroneshareAccountFragment extends Fragment {
 
         final Context context = getActivity().getApplicationContext();
 
-        final DroidPlannerPrefs dpPrefs = new DroidPlannerPrefs(context);
+        dpPrefs = new DroidPlannerPrefs(context);
         final String username = dpPrefs.getDroneshareLogin();
         final String password = dpPrefs.getDronesharePassword();
 
@@ -98,4 +124,26 @@ public class DroneshareAccountFragment extends Fragment {
             }
         }.execute();
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_droneshare_account, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.menu_dshare_logout:
+                dpPrefs.setDronesharePassword("");
+                loginListener.onSuccessfulLogout();
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
+    }
+
 }

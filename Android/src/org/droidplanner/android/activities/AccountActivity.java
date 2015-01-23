@@ -48,6 +48,16 @@ public class AccountActivity extends DrawerNavigationUI implements AccountLoginL
 
     }
 
+    @Override
+    public void onSuccessfulLogout() {
+        Fragment currentFragment = getCurrentFragment();
+        if (!(currentFragment instanceof DroneshareLoginFragment)) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_droneshare_account, new DroneshareLoginFragment())
+                    .commit();
+        }
+    }
+
     private Fragment getCurrentFragment() {
         return getSupportFragmentManager().findFragmentById(R.id.fragment_droneshare_account);
     }
