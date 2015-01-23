@@ -36,7 +36,6 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_ui_realtime_footprints_key" translatable="false">pref_ui_realtime_footprints_key</string>
     <string name="pref_dshare_username_key" translatable="false">dshare_username</string>
     <string name="pref_dshare_password_key" translatable="false">dshare_password</string>
-    <string name="pref_dshare_enabled_key" translatable="false">dshare_enabled</string>
     <string name="pref_live_upload_enabled_key" translatable="false">pref_live_upload_enabled</string>
 
     <string name="pref_dialogs_key" translatable="false">pref_dialogs</string>

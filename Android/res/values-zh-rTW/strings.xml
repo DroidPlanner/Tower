@@ -379,25 +379,10 @@
     <string name="pref_tts_off">關閉</string>
     
     <!-- Droneshare -->
-    <string name="dsheader">你有興趣使用免費的無人機社群服務 www.Droneshare.com 嗎？</string>
     <string name="dsinfo">Droneshare 是一個免費的平台，你可以在平台上分析或者是分享飛行數據。</string>
-    <string name="create_a_new_account">創建一個帳號</string>
-    <string name="login_to_an_existing_account">登入帳號</string>
     <string name="username">使用者名稱</string>
     <string name="password">密碼</string>
-    <string name="do_not_use_droneshare">不使用 Droneshare</string>
     <string name="email_address">電子郵件</string>
-    <string name="droneshare_password">Droneshare 密碼</string>
-    <string name="enter_or_pick_a_password">輸入密碼</string>
-    <string name="if_that_user_does_not_exist_it_will_be_created">當帳號不存在時，則會產生新的帳號。</string>
-    <string name="droneshare_username">Droneshare 使用者名稱</string>
-    <string name="droneshare_enabled">啟用 Droneshare</string>
-    <string name="do_you_want_to_use_droneshare_">你想要使用 Droneshare 嗎？</string>
-    <string name="pref_dshare_username_title">使用者名稱</string>
-    <string name="pref_dshare_password_title">密碼</string>
-    <string name="uploader_success_message">上傳成功！若要檢視，請點選...</string>
-    <string name="uploader_fail_retry_message">待會再試試</string>
-    <string name="uploader_notification_title">上傳至 Droneshare</string>
 
     <!-- BLuetooth -->
     <string name="pref_bluetooth">藍芽連線</string>

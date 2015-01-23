@@ -8,6 +8,7 @@ import org.droidplanner.android.utils.unit.systems.UnitSystem;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.SparseBooleanArray;
 
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
@@ -58,7 +59,7 @@ public class DroidPlannerPrefs {
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
-	public boolean getLiveUploadEnabled() {
+	public boolean isLiveUploadEnabled() {
 		// FIXME: Disabling live upload as it often causes the app to freeze on
 		// disconnect.
 		// return
@@ -72,8 +73,7 @@ public class DroidPlannerPrefs {
 	}
 
 	public void setDroneshareLogin(String b) {
-		prefs.edit().putString(context.getString(R.string.pref_dshare_username_key), b.trim())
-				.apply();
+		prefs.edit().putString(context.getString(R.string.pref_dshare_username_key), b.trim()).apply();
 	}
 
 	public String getDroneshareEmail() {
@@ -89,17 +89,16 @@ public class DroidPlannerPrefs {
 	}
 
 	public void setDronesharePassword(String b) {
-		prefs.edit().putString(context.getString(R.string.pref_dshare_password_key), b.trim())
-				.apply();
+		prefs.edit().putString(context.getString(R.string.pref_dshare_password_key), b.trim()).apply();
 	}
 
-	public boolean getDroneshareEnabled() {
-		return prefs.getBoolean(context.getString(R.string.pref_dshare_enabled_key), true);
+	public boolean isDroneshareEnabled() {
+        return !TextUtils.isEmpty(getDroneshareLogin()) && !TextUtils.isEmpty(getDronesharePassword());
 	}
 
-	public void setDroneshareEnabled(boolean b) {
-		prefs.edit().putBoolean(context.getString(R.string.pref_dshare_enabled_key), b).apply();
-	}
+    public String getDroneshareApiKey(){
+        return "2d38fb2e.72afe7b3761d5ee6346c178fdd6b680f";
+    }
 
 	/**
 	 * How many times has this application been started? (will increment for

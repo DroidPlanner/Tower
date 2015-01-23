@@ -2,6 +2,7 @@
 
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/drawer_layout"
@@ -17,6 +18,7 @@
         android:layout_height="match_parent"
         android:id="@+id/nav_drawer_container"
         android:layout_gravity="start"
+        tools:layout_gravity=""
         android:fitsSystemWindows="true">
 
         <ScrollView
@@ -31,12 +33,28 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/navigation_account"
+                    style="@style/navigationDrawerEntry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_account_circle_grey600_24dp"
+                    android:drawableStart="@drawable/ic_account_circle_grey600_24dp"
+                    android:text="@string/account_label"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@color/light_grey"/>
+
+                <TextView
                     android:id="@+id/navigation_flight_data"
                     style="@style/navigationDrawerEntry"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_action_plane"
-                    android:drawableStart="@drawable/ic_action_plane"
+                    android:drawableLeft="@drawable/ic_flight_grey600_24dp"
+                    android:drawableStart="@drawable/ic_flight_grey600_24dp"
                     android:text="@string/flight_data"
                     />
 
@@ -45,8 +63,8 @@
                     style="@style/navigationDrawerEntry"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_action_location"
-                    android:drawableStart="@drawable/ic_action_location"
+                    android:drawableLeft="@drawable/ic_edit_grey600_24dp"
+                    android:drawableStart="@drawable/ic_edit_grey600_24dp"
                     android:text="@string/editor"/>
 
                 <TextView
@@ -54,8 +72,8 @@
                     style="@style/navigationDrawerEntry"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_action_circles"
-                    android:drawableStart="@drawable/ic_action_circles"
+                    android:drawableLeft="@drawable/ic_history_grey600_24dp"
+                    android:drawableStart="@drawable/ic_history_grey600_24dp"
                     android:text="@string/locator"/>
 
                 <View
@@ -70,8 +88,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/navigation_settings"
-                    android:drawableLeft="@drawable/ic_action_settings"
-                    android:drawableStart="@drawable/ic_action_settings"
+                    android:drawableLeft="@drawable/ic_settings_grey600_24dp"
+                    android:drawableStart="@drawable/ic_settings_grey600_24dp"
                     android:text="@string/settings"/>
 
                 <View

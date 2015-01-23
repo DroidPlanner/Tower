@@ -195,42 +195,6 @@
             </PreferenceCategory>
         </PreferenceScreen>
 
-        <!-- Droneshare preferences section -->
-        <PreferenceScreen
-            android:key="pref_mavlink_droneshare"
-            android:title="Droneshare" >
-            <EditTextPreference
-                android:defaultValue=""
-                android:dialogTitle="@string/droneshare_username"
-                android:inputType="textEmailAddress"
-                android:key="@string/pref_dshare_username_key"
-                android:summary="@string/if_that_user_does_not_exist_it_will_be_created"
-                android:title="@string/pref_dshare_username_title" />
-            <EditTextPreference
-                android:defaultValue=""
-                android:dialogTitle="@string/droneshare_password"
-                android:inputType="textPassword"
-                android:key="@string/pref_dshare_password_key"
-                android:summary="@string/enter_or_pick_a_password"
-                android:title="@string/pref_dshare_password_title" />
-
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="@string/pref_dshare_enabled_key"
-                android:summary="@string/do_you_want_to_use_droneshare_"
-                android:title="@string/droneshare_enabled" />
-
-            <!-- FIXME: Live upload is disabled because it often causes the app to crash on disconnect -->
-            <!--
-                <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="@string/pref_live_upload_enabled_key"
-                android:summary="@string/pref_live_upload_summary"
-                android:title="@string/pref_live_upload" />
-            -->
-
-        </PreferenceScreen>
-
         <!-- Advanced preferences section. -->
         <PreferenceScreen
             android:key="pref_advanced"
