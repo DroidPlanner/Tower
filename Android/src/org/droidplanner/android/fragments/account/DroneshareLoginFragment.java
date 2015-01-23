@@ -224,7 +224,7 @@ public class DroneshareLoginFragment extends Fragment {
             progressDialog.dismiss();
             Toast.makeText(getActivity(), result.second, Toast.LENGTH_LONG).show();
             if(result.first)
-                loginListener.onSuccessfulLogin();
+                loginListener.onLogin();
             else
                 loginListener.onFailedLogin();
         }

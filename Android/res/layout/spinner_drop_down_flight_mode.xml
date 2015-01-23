@@ -10,6 +10,8 @@
     android:layout_height="48dp"
     android:ellipsize="marquee"
     android:textColor="@android:color/black"
-    android:gravity="center"
+    android:gravity="start|center_vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
     android:drawablePadding="@dimen/info_bar_drawable_padding"
     android:textSize="16sp" />

@@ -34,11 +34,19 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.ViewHo
         }
     }
 
-    private final JSONArray userVehicleData;
+    private JSONArray userVehicleData;
 
-    public UserDataAdapter(JSONObject userData) {
-        JSONArray temp = userData == null ? new JSONArray() : userData.optJSONArray("vehicles");
-        userVehicleData = temp == null ? new JSONArray() : temp;
+    public UserDataAdapter() {
+        userVehicleData = new JSONArray();
+    }
+
+    public void updateUserData(JSONObject userData){
+        JSONArray temp = userData == null ? null : userData.optJSONArray("vehicles");
+        if(temp == null)
+            return;
+
+        userVehicleData = temp;
+        notifyDataSetChanged();
     }
 
     @Override

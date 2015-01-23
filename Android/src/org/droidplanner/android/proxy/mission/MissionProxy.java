@@ -17,6 +17,7 @@ import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
+import org.droidplanner.android.utils.collection.CircularQueue;
 import org.droidplanner.android.utils.file.IO.MissionReader;
 import org.droidplanner.android.utils.file.IO.MissionWriter;
 
@@ -48,6 +49,7 @@ public class MissionProxy implements DPMap.PathSource {
     public static final String ACTION_MISSION_PROXY_UPDATE = Utils.PACKAGE_NAME + ".ACTION_MISSION_PROXY_UPDATE";
 
     private static final double DEFAULT_ALTITUDE = 20; //meters
+    private static final int UNDO_BUFFER_SIZE = 10;
 
     private static final IntentFilter eventFilter = new IntentFilter();
     static {
@@ -84,6 +86,8 @@ public class MissionProxy implements DPMap.PathSource {
     private final LocalBroadcastManager lbm;
     private final Drone drone;
 
+    private final CircularQueue<Mission> undoBuffer = new CircularQueue<>(UNDO_BUFFER_SIZE);
+
 	public MissionSelection selection = new MissionSelection();
 
 	public MissionProxy(Context context, Drone drone) {
@@ -93,6 +97,9 @@ public class MissionProxy implements DPMap.PathSource {
 	}
 
     public void notifyMissionUpdate(){
+        //Store the current state of the mission.
+//        undoBuffer.add(generateMission(true));
+
         lbm.sendBroadcast(new Intent(ACTION_MISSION_PROXY_UPDATE));
     }
 
@@ -135,6 +142,7 @@ public class MissionProxy implements DPMap.PathSource {
         if(mission == null)
             return;
 
+        undoBuffer.clear();
 		selection.mSelectedItems.clear();
 		missionItemProxies.clear();
 
@@ -615,11 +623,17 @@ public class MissionProxy implements DPMap.PathSource {
     }
 
     private Mission generateMission(){
+        return generateMission(false);
+    }
+
+    private Mission generateMission(boolean isDeepCopy){
         final Mission mission = new Mission();
 
         if(!missionItemProxies.isEmpty()){
             for(MissionItemProxy itemProxy: missionItemProxies){
-                mission.addMissionItem(itemProxy.getMissionItem());
+                MissionItem sourceItem = itemProxy.getMissionItem();
+                MissionItem destItem = isDeepCopy ? sourceItem.clone() : sourceItem;
+                mission.addMissionItem(destItem);
             }
         }
 
