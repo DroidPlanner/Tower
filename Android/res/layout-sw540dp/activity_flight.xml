@@ -36,16 +36,6 @@
             <include layout="@layout/actionbar_toolbar"/>
         </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
 
-        <FrameLayout
-            android:id="@+id/telemetryFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/actionbar_container"
-            android:layout_alignLeft="@+id/actionbar_container"
-            android:layout_alignStart="@+id/actionbar_container"
-            tools:layout="@layout/fragment_telemetry"
-            />
-
         <TextView
             android:id="@+id/failsafeTextView"
             style="@style/editorMissionOverviewText"
