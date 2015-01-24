@@ -62,6 +62,7 @@ public class SetServoFragment extends MissionDetailFragment implements CardWheel
                     SetServo item = (SetServo) missionItem;
                     item.setChannel(endValue);
                 }
+                getMissionProxy().notifyMissionUpdate();
                 break;
 
             case R.id.pwmPicker:
@@ -69,6 +70,7 @@ public class SetServoFragment extends MissionDetailFragment implements CardWheel
                     SetServo item = (SetServo) missionItem;
                     item.setPwm(endValue);
                 }
+                getMissionProxy().notifyMissionUpdate();
                 break;
         }
     }

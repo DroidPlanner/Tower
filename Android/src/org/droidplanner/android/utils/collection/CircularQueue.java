@@ -19,12 +19,13 @@ public class CircularQueue<T> {
 
     private int getAndIncrementIndex(){
         int index = bufferIndex;
-        bufferIndex = bufferIndex++ % buffer.length;
+        bufferIndex = (bufferIndex + 1) % buffer.length;
         return index;
     }
 
     private int decrementAndGetIndex(){
-        return bufferIndex-- % buffer.length;
+        bufferIndex = (bufferIndex - 1) % buffer.length;
+        return bufferIndex;
     }
 
     public int capacity(){
@@ -50,6 +51,7 @@ public class CircularQueue<T> {
 
     public void add(T item) {
         buffer[getAndIncrementIndex()] = item;
+        bufferSize++;
     }
 
     public T poll() {
@@ -59,6 +61,7 @@ public class CircularQueue<T> {
         int index = decrementAndGetIndex();
         T item = buffer[index];
         buffer[index] = null;
+        bufferSize--;
         return item;
     }
 }

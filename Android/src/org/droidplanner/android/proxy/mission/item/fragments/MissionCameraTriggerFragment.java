@@ -58,6 +58,7 @@ public class MissionCameraTriggerFragment extends MissionDetailFragment implemen
                     CameraTrigger item = (CameraTrigger) missionItem;
                     item.setTriggerDistance(baseValue);
                 }
+                getMissionProxy().notifyMissionUpdate();
                 break;
         }
     }

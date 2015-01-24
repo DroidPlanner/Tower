@@ -55,6 +55,7 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
                     Takeoff item = (Takeoff) missionItem;
                     item.setTakeoffAltitude(baseValue);
                 }
+                getMissionProxy().notifyMissionUpdate();
                 break;
         }
     }

@@ -15,7 +15,7 @@
     <!-- Dimension for the editor buttons -->
     <dimen name="editor_button_width">48dp</dimen>
     <dimen name="editor_button_height">48dp</dimen>
-    <dimen name="editor_button_margin">1dp</dimen>
+    <dimen name="editor_button_margin">0dp</dimen>
 
     <!-- Dimension for the editor list items -->
     <dimen name="editor_list_item_text_size">20sp</dimen>

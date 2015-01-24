@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -120,6 +122,18 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         mMissionProxy = getMissionProxy();
         setToolAndUpdateView(tool);
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
+
+        final ImageButton buttonUndo = (ImageButton) getView().findViewById(R.id.editor_tools_undo);
+        buttonUndo.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mMissionProxy.canUndoMission())
+                    mMissionProxy.undoMission();
+                else{
+                    Toast.makeText(getContext(), "No operation left to undo.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override

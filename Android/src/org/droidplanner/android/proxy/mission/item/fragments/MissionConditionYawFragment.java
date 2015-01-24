@@ -62,6 +62,7 @@ public class MissionConditionYawFragment extends MissionDetailFragment
                     YawCondition item = (YawCondition) missionItem;
                     item.setAngle(endValue);
                 }
+                getMissionProxy().notifyMissionUpdate();
                 break;
         }
     }
@@ -72,6 +73,7 @@ public class MissionConditionYawFragment extends MissionDetailFragment
             for (MissionItem missionItem : getMissionItems()) {
                 ((YawCondition) missionItem).setRelative(isChecked);
             }
+            getMissionProxy().notifyMissionUpdate();
         }
     }
 }

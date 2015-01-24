@@ -58,6 +58,7 @@ public class MissionChangeSpeedFragment extends MissionDetailFragment implements
                     ChangeSpeed item = (ChangeSpeed) missionItem;
                     item.setSpeed(baseValue);
                 }
+                getMissionProxy().notifyMissionUpdate();
                 break;
         }
     }

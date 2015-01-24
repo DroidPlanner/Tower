@@ -57,6 +57,7 @@ public class MissionRegionOfInterestFragment extends MissionDetailFragment imple
                 for (MissionItem missionItem : getMissionItems()) {
                     ((RegionOfInterest) missionItem).getCoordinate().setAltitude(baseValue);
                 }
+                getMissionProxy().notifyMissionUpdate();
                 break;
         }
     }
