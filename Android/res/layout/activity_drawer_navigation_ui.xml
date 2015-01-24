@@ -13,10 +13,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
+        android:layout_width="wrap_content"
+        android:minWidth="120dp"
+        android:layout_height="match_parent"
+        android:id="@+id/action_drawer_container"
+        android:layout_gravity="end"
+        android:fitsSystemWindows="true" />
+
     <FrameLayout
         android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:id="@+id/nav_drawer_container"
+        android:id="@+id/navigation_drawer_container"
         android:layout_gravity="start"
         tools:layout_gravity=""
         android:fitsSystemWindows="true">
