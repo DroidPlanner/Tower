@@ -6,7 +6,7 @@
     >
 
     <ScrollView
-        android:layout_margin="2dp"
+        android:layout_margin="1dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -44,11 +44,6 @@
                 android:id="@+id/editor_tools_selector"
                 style="@style/editorButton"
                 android:button="@drawable/ic_tab_unselected_white_24dp"/>
-
-            <org.droidplanner.android.widgets.button.RadioButtonCenter
-                android:id="@+id/editor_tools_info"
-                style="@style/editorButton"
-                android:button="@drawable/ic_info_outline_white_24dp"/>
 
             <org.droidplanner.android.widgets.button.RadioButtonCenter
                 android:id="@+id/editor_tools_trash"

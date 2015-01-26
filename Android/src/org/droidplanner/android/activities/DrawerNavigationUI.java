@@ -3,8 +3,6 @@ package org.droidplanner.android.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
@@ -21,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.droidplanner.android.R;
@@ -37,8 +33,6 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
 
     private static final String TAG = DrawerNavigationUI.class.getSimpleName();
 
-    private static final String EXTRA_IS_ACTION_DRAWER_OPENED = "extra_is_action_drawer_opened";
-
     /**
      * Activates the navigation drawer when the home button is clicked.
      */
@@ -50,8 +44,6 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
     private DrawerLayout mDrawerLayout;
 
     private SlidingDrawer actionDrawer;
-
-    private ImageButton actionDrawerToggle;
 
     /**
      * Container for the activity content.
@@ -94,18 +86,10 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
         actionDrawer = (SlidingDrawer) mDrawerLayout.findViewById(R.id.action_drawer_container);
         actionDrawer.setOnDrawerCloseListener(this);
         actionDrawer.setOnDrawerOpenListener(this);
-
-        boolean isActionDrawerOpened = isActionDrawerOpenedByDefault();
-        if(savedInstanceState != null){
-            isActionDrawerOpened = savedInstanceState.getBoolean(EXTRA_IS_ACTION_DRAWER_OPENED, isActionDrawerOpened);
-        }
-
-        if(isActionDrawerOpened)
-            openActionDrawer();
     }
 
-    protected boolean isActionDrawerOpenedByDefault(){
-        return false;
+    protected View getActionDrawer() {
+        return actionDrawer;
     }
 
     /**
@@ -123,23 +107,6 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
 
         initToolbar();
         initNavigationDrawer();
-        initActionDrawerToggle();
-    }
-
-    private void initActionDrawerToggle(){
-        actionDrawerToggle = (ImageButton) findViewById(R.id.toggle_action_drawer);
-
-        if(actionDrawerToggle != null) {
-            actionDrawerToggle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isActionDrawerOpened())
-                        closeActionDrawer();
-                    else
-                        openActionDrawer();
-                }
-            });
-        }
     }
 
     private void initToolbar() {
@@ -148,9 +115,8 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
         toolbar.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                final float topMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8,
-                        getResources().getDisplayMetrics());
-                ((ViewGroup.MarginLayoutParams)actionDrawer.getLayoutParams()).topMargin = (int) (topMargin + (bottom - top));
+                final float topMargin = getActionDrawerTopMargin();
+                ((ViewGroup.MarginLayoutParams) actionDrawer.getLayoutParams()).topMargin = (int) (topMargin + (bottom - top));
                 actionDrawer.requestLayout();
             }
         });
@@ -170,6 +136,10 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
             actionBarTelem = new ActionBarTelemFragment();
             fm.beginTransaction().add(toolbarId, actionBarTelem).commit();
         }
+    }
+
+    protected float getActionDrawerTopMargin() {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
     }
 
     @Override
@@ -255,13 +225,6 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
 
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState){
-        super.onSaveInstanceState(outState);
-
-        outState.putBoolean(EXTRA_IS_ACTION_DRAWER_OPENED, isActionDrawerOpened());
-    }
-
     private void setupNavigationEntry(int currentEntryId, TextView navView, final Intent clickIntent) {
         if (navView == null) {
             return;
@@ -292,11 +255,11 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
 
     protected abstract int getToolbarId();
 
-    protected boolean isActionDrawerOpened(){
+    protected boolean isActionDrawerOpened() {
         return actionDrawer.isOpened();
     }
 
-    protected int getActionDrawerId(){
+    protected int getActionDrawerId() {
         return R.id.action_drawer_content;
     }
 
@@ -305,9 +268,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
      * Should be override by children as needed.
      */
     @Override
-    public void onDrawerOpened(){
-        if(actionDrawerToggle != null)
-            actionDrawerToggle.setActivated(true);
+    public void onDrawerOpened() {
     }
 
     /**
@@ -315,17 +276,15 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
      * Should be override by children as needed.
      */
     @Override
-    public void onDrawerClosed(){
-        if(actionDrawerToggle != null)
-            actionDrawerToggle.setActivated(false);
+    public void onDrawerClosed() {
     }
 
-    protected void openActionDrawer(){
+    protected void openActionDrawer() {
         actionDrawer.animateOpen();
         actionDrawer.lock();
     }
 
-    protected void closeActionDrawer(){
+    protected void closeActionDrawer() {
         actionDrawer.animateClose();
         actionDrawer.lock();
     }

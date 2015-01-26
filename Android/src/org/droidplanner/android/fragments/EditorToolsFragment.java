@@ -38,7 +38,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
     private static final String STATE_SELECTED_TOOL = "selected_tool";
 
     public enum EditorTools {
-        MARKER, DRAW, POLY, TRASH, SELECTOR, DETAIL_WINDOW, NONE
+        MARKER, DRAW, POLY, TRASH, SELECTOR, NONE
     }
 
     public interface OnEditorToolSelected {
@@ -86,10 +86,8 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         final RadioButtonCenter buttonPoly = (RadioButtonCenter) view.findViewById(R.id.editor_tools_poly);
         final RadioButtonCenter buttonTrash = (RadioButtonCenter) view.findViewById(R.id.editor_tools_trash);
         final RadioButtonCenter buttonSelector = (RadioButtonCenter) view.findViewById(R.id.editor_tools_selector);
-        final RadioButtonCenter buttonInfoWindow = (RadioButtonCenter) view.findViewById(R.id.editor_tools_info);
 
-        for (View vv : new View[]{buttonDraw, buttonMarker, buttonPoly, buttonTrash, buttonSelector,
-                buttonInfoWindow}) {
+        for (View vv : new View[]{buttonDraw, buttonMarker, buttonPoly, buttonTrash, buttonSelector}) {
             vv.setOnClickListener(this);
         }
 
@@ -183,7 +181,6 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
     private void setTool(EditorTools tool, boolean notifyListeners) {
         if (mMissionProxy != null && mMissionProxy.getItems().size() > 0
                 && tool != EditorTools.TRASH
-                && tool != EditorTools.DETAIL_WINDOW
                 && tool != EditorTools.SELECTOR
                 && tool != EditorTools.NONE) {
 
@@ -245,9 +242,6 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
             case R.id.editor_tools_selector:
                 return EditorTools.SELECTOR;
 
-            case R.id.editor_tools_info:
-                return EditorTools.DETAIL_WINDOW;
-
             default:
                 return EditorTools.NONE;
         }
@@ -275,9 +269,6 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
             case SELECTOR:
                 return R.id.editor_tools_selector;
-
-            case DETAIL_WINDOW:
-                return R.id.editor_tools_info;
 
             case NONE:
             default:

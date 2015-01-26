@@ -21,12 +21,13 @@
         <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:fitsSystemWindows="true">
 
             <org.droidplanner.android.widgets.SlidingDrawer
                 android:id="@+id/action_drawer_container"
                 android:minWidth="170dp"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/action_drawer_width"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 app:content="@+id/action_drawer_content"

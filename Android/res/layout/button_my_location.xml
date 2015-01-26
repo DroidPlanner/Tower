@@ -31,6 +31,8 @@
 
     <ImageButton
         android:id="@+id/toggle_action_drawer"
+        android:visibility="gone"
+        tools:visibility="visible"
         style="@style/mapButton"
         android:src="@drawable/ic_flip"
         />
