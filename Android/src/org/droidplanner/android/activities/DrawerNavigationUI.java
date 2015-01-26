@@ -3,6 +3,8 @@ package org.droidplanner.android.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,22 +13,31 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.fragments.actionbar.ActionBarTelemFragment;
+import org.droidplanner.android.widgets.SlidingDrawer;
 
 /**
  * This abstract activity provides its children access to a navigation drawer
  * interface.
  */
-public abstract class DrawerNavigationUI extends SuperUI {
+public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawer.OnDrawerOpenListener, SlidingDrawer.OnDrawerCloseListener {
+
+    private static final String TAG = DrawerNavigationUI.class.getSimpleName();
+
+    private static final String EXTRA_IS_ACTION_DRAWER_OPENED = "extra_is_action_drawer_opened";
 
     /**
      * Activates the navigation drawer when the home button is clicked.
@@ -37,6 +48,10 @@ public abstract class DrawerNavigationUI extends SuperUI {
      * Navigation drawer used to access the different sections of the app.
      */
     private DrawerLayout mDrawerLayout;
+
+    private SlidingDrawer actionDrawer;
+
+    private ImageButton actionDrawerToggle;
 
     /**
      * Container for the activity content.
@@ -70,33 +85,27 @@ public abstract class DrawerNavigationUI extends SuperUI {
                             mNavigationIntent = null;
                         }
                         break;
-
-                    case R.id.action_drawer_container:
-                        onActionDrawerClosed();
-                        break;
-                }
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView){
-                switch(drawerView.getId()){
-                    case R.id.action_drawer_container:
-                        onActionDrawerOpened();
-                        break;
-                }
-            }
-
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset){
-                switch(drawerView.getId()){
-                    case R.id.action_drawer_container:
-                        onActionDrawerSlide(slideOffset);
-                        break;
                 }
             }
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        actionDrawer = (SlidingDrawer) mDrawerLayout.findViewById(R.id.action_drawer_container);
+        actionDrawer.setOnDrawerCloseListener(this);
+        actionDrawer.setOnDrawerOpenListener(this);
+
+        boolean isActionDrawerOpened = isActionDrawerOpenedByDefault();
+        if(savedInstanceState != null){
+            isActionDrawerOpened = savedInstanceState.getBoolean(EXTRA_IS_ACTION_DRAWER_OPENED, isActionDrawerOpened);
+        }
+
+        if(isActionDrawerOpened)
+            openActionDrawer();
+    }
+
+    protected boolean isActionDrawerOpenedByDefault(){
+        return false;
     }
 
     /**
@@ -114,11 +123,38 @@ public abstract class DrawerNavigationUI extends SuperUI {
 
         initToolbar();
         initNavigationDrawer();
+        initActionDrawerToggle();
+    }
+
+    private void initActionDrawerToggle(){
+        actionDrawerToggle = (ImageButton) findViewById(R.id.toggle_action_drawer);
+
+        if(actionDrawerToggle != null) {
+            actionDrawerToggle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isActionDrawerOpened())
+                        closeActionDrawer();
+                    else
+                        openActionDrawer();
+                }
+            });
+        }
     }
 
     private void initToolbar() {
         final int toolbarId = getToolbarId();
         final Toolbar toolbar = (Toolbar) findViewById(toolbarId);
+        toolbar.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                final float topMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8,
+                        getResources().getDisplayMetrics());
+                ((ViewGroup.MarginLayoutParams)actionDrawer.getLayoutParams()).topMargin = (int) (topMargin + (bottom - top));
+                actionDrawer.requestLayout();
+            }
+        });
+
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -219,6 +255,13 @@ public abstract class DrawerNavigationUI extends SuperUI {
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(EXTRA_IS_ACTION_DRAWER_OPENED, isActionDrawerOpened());
+    }
+
     private void setupNavigationEntry(int currentEntryId, TextView navView, final Intent clickIntent) {
         if (navView == null) {
             return;
@@ -250,37 +293,41 @@ public abstract class DrawerNavigationUI extends SuperUI {
     protected abstract int getToolbarId();
 
     protected boolean isActionDrawerOpened(){
-        return mDrawerLayout.isDrawerOpen(Gravity.END);
+        return actionDrawer.isOpened();
     }
 
     protected int getActionDrawerId(){
-        return R.id.action_drawer_container;
+        return R.id.action_drawer_content;
     }
 
     /**
      * Called when the action drawer is opened.
      * Should be override by children as needed.
      */
-    protected void onActionDrawerOpened(){}
+    @Override
+    public void onDrawerOpened(){
+        if(actionDrawerToggle != null)
+            actionDrawerToggle.setActivated(true);
+    }
 
     /**
      * Called when the action drawer is closed.
      * Should be override by children as needed.
      */
-    protected void onActionDrawerClosed(){}
-
-    /**
-     * Called when the action drawer position changes.
-     * Should be override by children as needed.
-     */
-    protected void onActionDrawerSlide(float slideOffset){}
+    @Override
+    public void onDrawerClosed(){
+        if(actionDrawerToggle != null)
+            actionDrawerToggle.setActivated(false);
+    }
 
     protected void openActionDrawer(){
-        mDrawerLayout.openDrawer(Gravity.END);
+        actionDrawer.animateOpen();
+        actionDrawer.lock();
     }
 
     protected void closeActionDrawer(){
-        mDrawerLayout.closeDrawer(Gravity.END);
+        actionDrawer.animateClose();
+        actionDrawer.lock();
     }
 
     protected abstract int getNavigationDrawerEntryId();

@@ -85,16 +85,6 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
         distanceView = (TextView) findViewById(R.id.distanceView);
         azimuthView = (TextView) findViewById(R.id.azimuthView);
 
-        final ImageButton resetMapBearing = (ImageButton) findViewById(R.id.map_orientation_button);
-        resetMapBearing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (locatorMapFragment != null) {
-                    locatorMapFragment.updateMapBearing(0);
-                }
-            }
-        });
-
         final ImageButton zoomToFit = (ImageButton) findViewById(R.id.zoom_to_fit_button);
         zoomToFit.setVisibility(View.VISIBLE);
         zoomToFit.setOnClickListener(new View.OnClickListener() {
@@ -149,7 +139,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
         final int lastSelectedPosition = lastPositions.indexOf(selectedMsg);

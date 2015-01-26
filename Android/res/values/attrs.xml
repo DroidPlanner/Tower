@@ -37,4 +37,14 @@
         <attr name="android:orientation" />
     </declare-styleable>
 
+    <declare-styleable name="SlidingDrawer">
+        <attr name="android:orientation" />
+        <attr name="handle" format="integer" />
+        <attr name="content" format="integer" />
+        <attr name="topOffset" format="dimension" />
+        <attr name="bottomOffset" format="dimension" />
+        <attr name="allowSingleTap" format="boolean" />
+        <attr name="animateOnClick" format="boolean" />
+    </declare-styleable>
+
 </resources>

@@ -153,7 +153,11 @@ public class FlightActivity extends DrawerNavigationUI {
     private ImageButton mGoToDroneLocation;
 
     @Override
-    protected void onActionDrawerClosed(){
+    public void onDrawerClosed(){
+        super.onDrawerClosed();
+
+        if(telemetryFragment == null)
+            return;
         final View telemetryView = telemetryFragment.getView();
         if(telemetryView != null) {
             final int slidingDrawerWidth = telemetryView.getWidth();
@@ -163,7 +167,12 @@ public class FlightActivity extends DrawerNavigationUI {
     }
 
     @Override
-    protected void onActionDrawerOpened(){
+    public void onDrawerOpened(){
+        super.onDrawerOpened();
+
+        if(telemetryFragment == null)
+            return;
+
         final View telemetryView = telemetryFragment.getView();
         if(telemetryView != null) {
             final int slidingDrawerWidth = telemetryView.getWidth();
@@ -187,14 +196,6 @@ public class FlightActivity extends DrawerNavigationUI {
         mLocationButtonsContainer = findViewById(R.id.location_button_container);
         mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
         mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
-
-        final ImageButton resetMapBearing = (ImageButton) findViewById(R.id.map_orientation_button);
-        resetMapBearing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateMapBearing(0);
-            }
-        });
 
         mGoToMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -275,6 +276,11 @@ public class FlightActivity extends DrawerNavigationUI {
                     .add(R.id.sliding_drawer_content, flightModePanel)
                     .commit();
         }
+    }
+
+    @Override
+    protected boolean isActionDrawerOpenedByDefault(){
+        return true;
     }
 
     @Override
@@ -385,6 +391,12 @@ public class FlightActivity extends DrawerNavigationUI {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         updateMapLocationButtons(mAppPrefs.getAutoPanMode());
+
+        final View telemetryView = telemetryFragment.getView();
+        if(telemetryView != null) {
+            final int slidingDrawerWidth = telemetryView.getWidth();
+            updateLocationButtonsMargin(isActionDrawerOpened(), slidingDrawerWidth);
+        }
     }
 
     /**

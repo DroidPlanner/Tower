@@ -22,16 +22,16 @@
         />
 
     <ImageButton
-        android:id="@+id/map_orientation_button"
-        style="@style/mapButton"
-        android:src="@drawable/ic_compass"
-        />
-
-    <ImageButton
         android:id="@+id/zoom_to_fit_button"
         style="@style/mapButton"
         android:src="@drawable/ic_expand"
         android:visibility="gone"
         tools:visibility="visible"
         android:contentDescription="@string/zoom_fit"/>
+
+    <ImageButton
+        android:id="@+id/toggle_action_drawer"
+        style="@style/mapButton"
+        android:src="@drawable/ic_flip"
+        />
 </LinearLayout>

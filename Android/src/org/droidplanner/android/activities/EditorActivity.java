@@ -117,17 +117,18 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
         infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
-        final ImageButton resetMapBearing = (ImageButton) findViewById(R.id.map_orientation_button);
-        resetMapBearing.setOnClickListener(this);
         final ImageButton zoomToFit = (ImageButton) findViewById(R.id.zoom_to_fit_button);
         zoomToFit.setVisibility(View.VISIBLE);
         zoomToFit.setOnClickListener(this);
+
         final ImageButton mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
         mGoToMyLocation.setOnClickListener(this);
         mGoToMyLocation.setOnLongClickListener(this);
+
         final ImageButton mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
         mGoToDroneLocation.setOnClickListener(this);
         mGoToDroneLocation.setOnLongClickListener(this);
+
         normalToggle = (RadioButton) findViewById(R.id.normalWpToggle);
         normalToggle.setOnClickListener(this);
         splineToggle = (RadioButton) findViewById(R.id.splineWpToggle);
@@ -178,11 +179,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
 
         switch (v.getId()) {
-            case R.id.map_orientation_button:
-                if (planningMapFragment != null) {
-                    planningMapFragment.updateMapBearing(0);
-                }
-                break;
             case R.id.zoom_to_fit_button:
                 if (planningMapFragment != null) {
                     planningMapFragment.zoomToFit();
