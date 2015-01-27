@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -123,14 +124,15 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
                 toolImpl.onRestoreInstanceState(savedInstanceState);
         }
 
-        popupLeftMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
+        final Resources res = getResources();
+        popupLeftMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, res.getDisplayMetrics());
 
         final Context context = getContext();
         final LayoutInflater inflater = getActivity().getLayoutInflater();
 
         final int popupWidth = ViewGroup.LayoutParams.WRAP_CONTENT;
         final int popupHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
-        final Drawable popupBg = getResources().getDrawable(android.R.color.transparent);
+        final Drawable popupBg = res.getDrawable(android.R.color.transparent);
 
         mEditorRadioGroup = (RadioGroup) view.findViewById(R.id.editor_tools_layout);
 

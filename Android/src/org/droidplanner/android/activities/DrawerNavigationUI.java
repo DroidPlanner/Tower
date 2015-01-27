@@ -116,8 +116,13 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 final float topMargin = getActionDrawerTopMargin();
-                ((ViewGroup.MarginLayoutParams) actionDrawer.getLayoutParams()).topMargin = (int) (topMargin + (bottom - top));
-                actionDrawer.requestLayout();
+                final int fullTopMargin = (int) (topMargin + (bottom - top));
+
+                ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) actionDrawer.getLayoutParams();
+                if(lp.topMargin != fullTopMargin) {
+                    lp.topMargin = fullTopMargin;
+                    actionDrawer.requestLayout();
+                }
             }
         });
 

@@ -456,8 +456,8 @@
     <string name="pref_permanent_notification_summary">Enable to make status bar notification permanent when connected.</string>
 
     <string name="zoom_fit">Zoom to Fit</string>
-    <string name="open_mission_file">Open Mission File</string>
-    <string name="save_mission_file">Save Mission File</string>
+    <string name="open_mission_file">Import Mission File</string>
+    <string name="save_mission_file">Export Mission File</string>
 
     <string name="pref_ui_gps_hdop_summary">Display HDOP instead of FIX in satellite info bar item</string>
     <string name="pref_ui_gps_hdop_title">Display Satellite HDOP</string>
