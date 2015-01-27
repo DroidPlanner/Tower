@@ -11,13 +11,13 @@ dependencies {
     compile 'com.android.support:cardview-v7:21.0.2'
     compile 'com.android.support:recyclerview-v7:21.0.2'
 
-    compile 'com.o3dr:3dr-services-lib:2.1.54'
+    compile 'com.o3dr:3dr-services-lib:2.1.55'
 
     compile files('libs/droneapi-java-0.3-SNAPSHOT.jar')
     compile files('libs/j2xx.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
     compile files('libs/jeromq-0.3.4.jar')
-    compile files('libs/sius-0.3.1-SNAPSHOT.jar')
+    compile files('libs/sius-0.3.2-SNAPSHOT.jar')
 }
 
 android {

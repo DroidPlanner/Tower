@@ -500,13 +500,18 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         toolImpl.onListItemClick(item);
 
         if (zoomToFit) {
-            final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
-            List<MissionItemProxy> selected = missionProxy.selection.getSelected();
-            if (selected.isEmpty()) {
-                planningMapFragment.zoomToFit();
-            } else {
-                planningMapFragment.zoomToFit(MissionProxy.getVisibleCoords(selected));
-            }
+            zoomToFitSelected();
+        }
+    }
+
+    @Override
+    public void zoomToFitSelected(){
+        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
+        List<MissionItemProxy> selected = missionProxy.selection.getSelected();
+        if (selected.isEmpty()) {
+            planningMapFragment.zoomToFit();
+        } else {
+            planningMapFragment.zoomToFit(MissionProxy.getVisibleCoords(selected));
         }
     }
 

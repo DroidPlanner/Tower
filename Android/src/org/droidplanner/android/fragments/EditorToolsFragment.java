@@ -58,6 +58,8 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         public void enableGestureDetection(boolean enable);
 
         public void skipMarkerClickEvents(boolean skip);
+
+        public void zoomToFitSelected();
     }
 
     private static final IntentFilter eventFilter = new IntentFilter();
@@ -704,6 +706,8 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
                         @Override
                         public void onNo() {
+                            if(missionProxy != null)
+                                missionProxy.selection.clearSelection();
                         }
                     });
 
@@ -736,6 +740,9 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
         private void selectAll() {
             missionProxy.selection.setSelectionTo(missionProxy.getItems());
+            EditorToolListener listener = editorToolsFragment.listener;
+            if (listener != null)
+                listener.zoomToFitSelected();
         }
 
         @Override
