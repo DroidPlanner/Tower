@@ -78,8 +78,7 @@
             android:id="@+id/flight_time_layout"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="36dp"
+            android:layout_height="48dp"
             android:layout_below="@+id/rollValueText"
             android:background="@drawable/round_rect_bg"
             android:layout_marginBottom="2dp"
@@ -94,15 +93,16 @@
                 android:id="@+id/reset_flight_timer_button"
                 android:src="@drawable/ic_restore_white_24dp"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_width="36dp"
-                android:layout_height="wrap_content"/>
+                android:layout_width="48dp"
+                android:layout_height="48dp"/>
 
             <TextView
                 android:id="@+id/flight_timer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
                 style="@style/largeTelemetryText"
-                android:gravity="center"
+                android:gravity="start|center_vertical"
                 android:text="00:00"
                 tools:text="99:99"/>
 

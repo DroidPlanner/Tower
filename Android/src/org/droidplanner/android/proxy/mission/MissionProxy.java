@@ -87,7 +87,7 @@ public class MissionProxy implements DPMap.PathSource {
     private final List<MissionItemProxy> missionItemProxies = new ArrayList<MissionItemProxy>();
 
     private final LocalBroadcastManager lbm;
-    private final Drone drone;
+    private Drone drone;
 
     private final CircularQueue<Mission> undoBuffer = new CircularQueue<>(UNDO_BUFFER_SIZE);
 
@@ -99,6 +99,10 @@ public class MissionProxy implements DPMap.PathSource {
         this.currentMission = generateMission(true);
         lbm = LocalBroadcastManager.getInstance(context);
         lbm.registerReceiver(eventReceiver, eventFilter);
+    }
+
+    public void setDrone(Drone drone){
+        this.drone = drone;
     }
 
     public void notifyMissionUpdate() {

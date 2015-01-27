@@ -9,6 +9,7 @@ import com.o3dr.android.client.Drone;
 
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.unit.UnitManager;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
 import org.droidplanner.android.utils.unit.providers.speed.SpeedUnitProvider;
@@ -26,6 +27,11 @@ public abstract class ApiListenerFragment extends Fragment implements DroidPlann
     private SpeedUnitProvider speedUnitProvider;
 
     protected MissionProxy getMissionProxy() { return dpApp.getMissionProxy(); }
+
+    protected DroidPlannerPrefs getAppPrefs(){
+        return dpApp.getAppPreferences();
+    }
+
 	protected Drone getDrone() {
 		return dpApp.getDrone();
 	}

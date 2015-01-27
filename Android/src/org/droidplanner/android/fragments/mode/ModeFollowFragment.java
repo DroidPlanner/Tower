@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.gcs.follow.FollowState;
@@ -68,7 +69,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 		mRadiusWheel.addScrollListener(this);
 
 		spinner = (Spinner) parentView.findViewById(R.id.follow_type_spinner);
-		adapter = new FollowTypesAdapter(context);
+		adapter = new FollowTypesAdapter(context, getAppPrefs().isAdvancedMenuEnabled());
 		spinner.setAdapter(adapter);
 		spinner.setOnItemSelectedListener(this);
 	}
@@ -120,23 +121,45 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        final FollowType type = adapter.getItem(position);
+
 		final Drone drone = getDrone();
 		if (drone.isConnected()) {
-			drone.enableFollowMe(adapter.getItem(position));
-			updateCurrentRadius();
+			drone.enableFollowMe(type);
 		}
+
+        if(type.hasRadius()) {
+            showRadiusPicker();
+            updateCurrentRadius();
+        }
+        else{
+            hideRadiusPicker();
+        }
 	}
 
-	@Override
+    private void hideRadiusPicker() {
+        mRadiusWheel.setVisibility(View.GONE);
+    }
+
+    private void showRadiusPicker() {
+        mRadiusWheel.setVisibility(View.VISIBLE);
+    }
+
+    @Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
+
+    @Override
+    public void onGuidedClick(LatLong coord){
+        super.onGuidedClick(coord);
+    }
 
     private static class FollowTypesAdapter extends ArrayAdapter<FollowType> {
 
         private final LayoutInflater inflater;
 
-        public FollowTypesAdapter(Context context) {
-            super(context, 0, FollowType.values());
+        public FollowTypesAdapter(Context context, boolean isAdvancedMenuEnabled) {
+            super(context, 0, FollowType.getFollowTypes(isAdvancedMenuEnabled));
             inflater = LayoutInflater.from(context);
         }
 

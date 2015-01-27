@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -408,6 +409,10 @@ public class FlightActivity extends DrawerNavigationUI {
                 fragmentManager.beginTransaction().add(R.id.flight_map_fragment, mapFragment).commit();
             }
         }
+    }
+
+    public void setGuidedClickListener(FlightMapFragment.OnGuidedClickListener listener){
+        mapFragment.setGuidedClickListener(listener);
     }
 
     @Override

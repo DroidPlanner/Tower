@@ -12,10 +12,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.o3dr.android.client.ControlTower;
 import com.o3dr.android.client.Drone;
-import com.o3dr.android.client.ServiceManager;
 import com.o3dr.android.client.interfaces.DroneListener;
-import com.o3dr.android.client.interfaces.ServiceListener;
+import com.o3dr.android.client.interfaces.TowerListener;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.connection.ConnectionParameter;
 import com.o3dr.services.android.lib.drone.connection.ConnectionResult;
@@ -33,7 +33,7 @@ import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DroidPlannerApp extends Application implements DroneListener, ServiceListener {
+public class DroidPlannerApp extends Application implements DroneListener, TowerListener {
 
     private static final long DELAY_TO_DISCONNECTION = 30000l; // ms
 
@@ -73,22 +73,25 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
     };
 
     @Override
-    public void onServiceConnected() {
+    public void onTowerConnected() {
         if (notificationHandler == null) {
             notificationHandler = new NotificationHandler(getApplicationContext(), drone);
         }
 
-        if (!drone.isStarted()) {
-            this.drone.start();
-            this.drone.registerDroneListener(this);
-        }
+        drone.unregisterDroneListener(this);
+        controlTower.registerDrone(drone, handler);
+        drone.registerDroneListener(this);
 
         notifyApiConnected();
     }
 
     @Override
-    public void onServiceInterrupted() {
+    public void onTowerDisconnected() {
         notifyApiDisconnected();
+    }
+
+    public DroidPlannerPrefs getAppPreferences() {
+        return dpPrefs;
     }
 
     public interface ApiListener {
@@ -100,8 +103,8 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
     private final Runnable disconnectionTask = new Runnable() {
         @Override
         public void run() {
-            drone.destroy();
-            serviceMgr.disconnect();
+            controlTower.unregisterDrone(drone);
+            controlTower.disconnect();
 
             if (notificationHandler != null) {
                 notificationHandler.terminate();
@@ -125,7 +128,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
 
     private Thread.UncaughtExceptionHandler exceptionHandler;
 
-    private ServiceManager serviceMgr;
+    private ControlTower controlTower;
     private Drone drone;
 
     private MissionProxy missionProxy;
@@ -141,8 +144,8 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
         dpPrefs = new DroidPlannerPrefs(context);
         lbm = LocalBroadcastManager.getInstance(context);
 
-        serviceMgr = new ServiceManager(context);
-        drone = new Drone(serviceMgr, handler);
+        controlTower = new ControlTower(context);
+        drone = new Drone();
         missionProxy = new MissionProxy(context, this.drone);
 
         exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
@@ -162,13 +165,13 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
             return;
 
         handler.removeCallbacks(disconnectionTask);
-        boolean isServiceConnected = serviceMgr.isServiceConnected();
-        if (isServiceConnected)
+        boolean isTowerConnected = controlTower.isTowerConnected();
+        if (isTowerConnected)
             listener.onApiConnected();
 
-        if (!isServiceConnected) {
+        if (!isTowerConnected) {
             try {
-                serviceMgr.connect(this);
+                controlTower.connect(this);
             } catch (IllegalStateException e) {
                 //Ignore
             }
@@ -330,7 +333,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Servi
 
     @Override
     public void onDroneServiceInterrupted(String errorMsg) {
-        drone.destroy();
+        controlTower.unregisterDrone(drone);
         if (notificationHandler != null) {
             notificationHandler.terminate();
             notificationHandler = null;

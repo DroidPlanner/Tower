@@ -1,27 +1,47 @@
 package org.droidplanner.android.fragments.mode;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.GuidedState;
 
 import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
+import org.droidplanner.android.activities.FlightActivity;
+import org.droidplanner.android.fragments.FlightMapFragment;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
 import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
 
 public class ModeGuidedFragment extends ApiListenerFragment implements
-        CardWheelHorizontalView.OnCardWheelScrollListener<LengthUnit> {
+        CardWheelHorizontalView.OnCardWheelScrollListener<LengthUnit>,FlightMapFragment.OnGuidedClickListener {
 
     private static final float DEFAULT_ALTITUDE = 2f;
 
     private CardWheelHorizontalView<LengthUnit> mAltitudeWheel;
+    protected FlightActivity parentActivity;
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        if(!(activity instanceof FlightActivity))
+            throw new IllegalStateException("Parent activity must be an instance of " + FlightActivity.class.getName());
+
+        parentActivity = (FlightActivity) activity;
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        parentActivity = null;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,9 +100,19 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
                             DEFAULT_ALTITUDE));
             mAltitudeWheel.setCurrentValue(initialValue);
         }
+
+        parentActivity.setGuidedClickListener(this);
     }
 
     @Override
     public void onApiDisconnected() {
+        parentActivity.setGuidedClickListener(null);
+    }
+
+    @Override
+    public void onGuidedClick(LatLong coord) {
+        final Drone drone = getDrone();
+        if(drone != null)
+            drone.sendGuidedPoint(coord, false);
     }
 }

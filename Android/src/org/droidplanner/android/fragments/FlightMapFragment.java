@@ -1,13 +1,5 @@
 package org.droidplanner.android.fragments;
 
-import org.droidplanner.android.R;
-import org.droidplanner.android.dialogs.GuidedDialog;
-import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
-import org.droidplanner.android.maps.DPMap;
-import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.android.utils.DroneHelper;
-import org.droidplanner.android.utils.prefs.AutoPanMode;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,16 +20,28 @@ import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.GuidedState;
 import com.o3dr.services.android.lib.drone.property.State;
 
+import org.droidplanner.android.R;
+import org.droidplanner.android.dialogs.GuidedDialog;
+import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
+import org.droidplanner.android.maps.DPMap;
+import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.utils.DroneHelper;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+
 public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
-		DPMap.OnMarkerClickListener, DPMap.OnMarkerDragListener, GuidedDialogListener {
+        DPMap.OnMarkerClickListener, DPMap.OnMarkerDragListener, GuidedDialogListener {
 
-	private static final int MAX_TOASTS_FOR_LOCATION_PRESS = 3;
+    public interface OnGuidedClickListener {
+        void onGuidedClick(LatLong coord);
+    }
 
-	private static final String PREF_USER_LOCATION_FIRST_PRESS = "pref_user_location_first_press";
-	private static final int DEFAULT_USER_LOCATION_FIRST_PRESS = 0;
+    private static final int MAX_TOASTS_FOR_LOCATION_PRESS = 3;
 
-	private static final String PREF_DRONE_LOCATION_FIRST_PRESS = "pref_drone_location_first_press";
-	private static final int DEFAULT_DRONE_LOCATION_FIRST_PRESS = 0;
+    private static final String PREF_USER_LOCATION_FIRST_PRESS = "pref_user_location_first_press";
+    private static final int DEFAULT_USER_LOCATION_FIRST_PRESS = 0;
+
+    private static final String PREF_DRONE_LOCATION_FIRST_PRESS = "pref_drone_location_first_press";
+    private static final int DEFAULT_DRONE_LOCATION_FIRST_PRESS = 0;
 
     /**
      * The map should zoom on the user location the first time it's acquired. This flag helps
@@ -52,7 +56,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if(AttributeEvent.STATE_ARMING.equals(action)){
+            if (AttributeEvent.STATE_ARMING.equals(action)) {
                 final State droneState = drone.getAttribute(AttributeType.STATE);
                 if (droneState.isArmed()) {
                     mMapFragment.clearFlightPath();
@@ -61,137 +65,139 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
         }
     };
 
-	private boolean guidedModeOnLongPress;
+    private OnGuidedClickListener guidedClickListener;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
-		View view = super.onCreateView(inflater, viewGroup, bundle);
+    public void setGuidedClickListener(OnGuidedClickListener guidedClickListener) {
+        this.guidedClickListener = guidedClickListener;
+    }
 
-		mMapFragment.setOnMapLongClickListener(this);
-		mMapFragment.setOnMarkerDragListener(this);
-		mMapFragment.setOnMarkerClickListener(this);
-		return view;
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
+        View view = super.onCreateView(inflater, viewGroup, bundle);
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		mMapFragment.selectAutoPanMode(mAppPrefs.getAutoPanMode());
-		guidedModeOnLongPress = mAppPrefs.isGuidedModeOnLongPressEnabled();
+        mMapFragment.setOnMapLongClickListener(this);
+        mMapFragment.setOnMarkerDragListener(this);
+        mMapFragment.setOnMarkerClickListener(this);
+        return view;
+    }
 
-        if(!didZoomOnUserLocation){
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapFragment.selectAutoPanMode(mAppPrefs.getAutoPanMode());
+
+        if (!didZoomOnUserLocation) {
             super.goToMyLocation();
             didZoomOnUserLocation = true;
         }
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		mMapFragment.selectAutoPanMode(AutoPanMode.DISABLED);
-	}
-
-	@Override
-	protected int getMaxFlightPathSize() {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		return Integer.valueOf(prefs.getString("pref_max_flight_path_size", "0"));
-	}
-
-	@Override
-	public boolean setAutoPanMode(AutoPanMode target) {
-		// Update the map panning preferences.
-		mAppPrefs.setAutoPanMode(target);
-		mMapFragment.selectAutoPanMode(target);
-		return true;
-	}
+    }
 
     @Override
-    public void onApiConnected(){
+    public void onPause() {
+        super.onPause();
+        mMapFragment.selectAutoPanMode(AutoPanMode.DISABLED);
+    }
+
+    @Override
+    protected int getMaxFlightPathSize() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return Integer.valueOf(prefs.getString("pref_max_flight_path_size", "0"));
+    }
+
+    @Override
+    public boolean setAutoPanMode(AutoPanMode target) {
+        // Update the map panning preferences.
+        mAppPrefs.setAutoPanMode(target);
+        mMapFragment.selectAutoPanMode(target);
+        return true;
+    }
+
+    @Override
+    public void onApiConnected() {
         super.onApiConnected();
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
 
     @Override
-    public void onApiDisconnected(){
+    public void onApiDisconnected() {
         super.onApiDisconnected();
         getBroadcastManager().unregisterReceiver(eventReceiver);
     }
 
-	@Override
-	public void onMapLongClick(LatLong coord) {
-		if (drone != null && drone.isConnected()) {
+    @Override
+    public void onMapLongClick(LatLong coord) {
+        if (drone != null && drone.isConnected()) {
             final GuidedState guidedState = drone.getAttribute(AttributeType.GUIDED_STATE);
-			if (guidedState.isInitialized()) {
-				drone.sendGuidedPoint(coord, false);
-			} else {
-				if (guidedModeOnLongPress) {
-					GuidedDialog dialog = new GuidedDialog();
-					dialog.setCoord(DroneHelper.CoordToLatLang(coord));
-					dialog.setListener(this);
-					dialog.show(getChildFragmentManager(), "GUIDED dialog");
-				}
-			}
-		}
-	}
+            if (guidedState.isInitialized()) {
+                if(guidedClickListener != null)
+                    guidedClickListener.onGuidedClick(coord);
+            } else {
+                GuidedDialog dialog = new GuidedDialog();
+                dialog.setCoord(DroneHelper.CoordToLatLang(coord));
+                dialog.setListener(this);
+                dialog.show(getChildFragmentManager(), "GUIDED dialog");
+            }
+        }
+    }
 
-	@Override
-	public void onForcedGuidedPoint(LatLng coord) {
-		try {
-			drone.sendGuidedPoint(DroneHelper.LatLngToCoord(coord), true);
-		} catch (Exception e) {
-			Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-		}
-	}
+    @Override
+    public void onForcedGuidedPoint(LatLng coord) {
+        try {
+            drone.sendGuidedPoint(DroneHelper.LatLngToCoord(coord), true);
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
 
-	@Override
-	public void onMarkerDragStart(MarkerInfo markerInfo) {
-	}
+    @Override
+    public void onMarkerDragStart(MarkerInfo markerInfo) {
+    }
 
-	@Override
-	public void onMarkerDrag(MarkerInfo markerInfo) {
-	}
+    @Override
+    public void onMarkerDrag(MarkerInfo markerInfo) {
+    }
 
-	@Override
-	public void onMarkerDragEnd(MarkerInfo markerInfo) {
-		drone.sendGuidedPoint(markerInfo.getPosition(), false);
-	}
+    @Override
+    public void onMarkerDragEnd(MarkerInfo markerInfo) {
+        drone.sendGuidedPoint(markerInfo.getPosition(), false);
+    }
 
-	@Override
-	public boolean onMarkerClick(MarkerInfo markerInfo) {
-		drone.sendGuidedPoint(markerInfo.getPosition(), false);
-		return true;
-	}
+    @Override
+    public boolean onMarkerClick(MarkerInfo markerInfo) {
+        drone.sendGuidedPoint(markerInfo.getPosition(), false);
+        return true;
+    }
 
-	@Override
-	protected boolean isMissionDraggable() {
-		return false;
-	}
+    @Override
+    protected boolean isMissionDraggable() {
+        return false;
+    }
 
-	@Override
-	public void goToMyLocation() {
-		super.goToMyLocation();
-		int pressCount = mAppPrefs.prefs.getInt(PREF_USER_LOCATION_FIRST_PRESS,
-				DEFAULT_USER_LOCATION_FIRST_PRESS);
-		if (pressCount < MAX_TOASTS_FOR_LOCATION_PRESS) {
-			Toast.makeText(context, R.string.user_autopan_long_press, Toast.LENGTH_LONG).show();
-			mAppPrefs.prefs.edit().putInt(PREF_USER_LOCATION_FIRST_PRESS, pressCount + 1).apply();
-		}
-	}
+    @Override
+    public void goToMyLocation() {
+        super.goToMyLocation();
+        int pressCount = mAppPrefs.prefs.getInt(PREF_USER_LOCATION_FIRST_PRESS,
+                DEFAULT_USER_LOCATION_FIRST_PRESS);
+        if (pressCount < MAX_TOASTS_FOR_LOCATION_PRESS) {
+            Toast.makeText(context, R.string.user_autopan_long_press, Toast.LENGTH_LONG).show();
+            mAppPrefs.prefs.edit().putInt(PREF_USER_LOCATION_FIRST_PRESS, pressCount + 1).apply();
+        }
+    }
 
-	@Override
-	public void goToDroneLocation() {
-		super.goToDroneLocation();
+    @Override
+    public void goToDroneLocation() {
+        super.goToDroneLocation();
 
         final Gps droneGps = this.drone.getAttribute(AttributeType.GPS);
-		if (droneGps == null || !droneGps.isValid())
-			return;
+        if (droneGps == null || !droneGps.isValid())
+            return;
 
-		final int pressCount = mAppPrefs.prefs.getInt(PREF_DRONE_LOCATION_FIRST_PRESS,
-				DEFAULT_DRONE_LOCATION_FIRST_PRESS);
-		if (pressCount < MAX_TOASTS_FOR_LOCATION_PRESS) {
-			Toast.makeText(context, R.string.drone_autopan_long_press, Toast.LENGTH_LONG).show();
-			mAppPrefs.prefs.edit().putInt(PREF_DRONE_LOCATION_FIRST_PRESS, pressCount + 1).apply();
-		}
-	}
+        final int pressCount = mAppPrefs.prefs.getInt(PREF_DRONE_LOCATION_FIRST_PRESS,
+                DEFAULT_DRONE_LOCATION_FIRST_PRESS);
+        if (pressCount < MAX_TOASTS_FOR_LOCATION_PRESS) {
+            Toast.makeText(context, R.string.drone_autopan_long_press, Toast.LENGTH_LONG).show();
+            mAppPrefs.prefs.edit().putInt(PREF_DRONE_LOCATION_FIRST_PRESS, pressCount + 1).apply();
+        }
+    }
 
 }

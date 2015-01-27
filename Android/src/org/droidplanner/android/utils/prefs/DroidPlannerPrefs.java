@@ -270,11 +270,6 @@ public class DroidPlannerPrefs {
 		prefs.edit().putString(AutoPanMode.PREF_KEY, target.name()).apply();
 	}
 
-	public boolean isGuidedModeOnLongPressEnabled() {
-		return prefs
-				.getBoolean("pref_guided_mode_on_long_press", DEFAULT_GUIDED_MODE_ON_LONG_PRESS);
-	}
-
 	/**
 	 * Use HDOP instead of satellite count on infobar
 	 */

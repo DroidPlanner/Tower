@@ -167,7 +167,7 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
         final MenuItem toggleConnectionItem = menu.findItem(R.id.menu_connect);
 
         Drone dpApi = dpApp.getDrone();
-        if (dpApi.isConnected()) {
+        if (dpApi != null && dpApi.isConnected()) {
             menu.setGroupEnabled(R.id.menu_group_connected, true);
             menu.setGroupVisible(R.id.menu_group_connected, true);
 
@@ -262,7 +262,7 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
 
     public void toggleDroneConnection() {
         final Drone drone = dpApp.getDrone();
-        if (drone.isConnected())
+        if (drone != null && drone.isConnected())
             dpApp.disconnectFromDrone();
         else
             dpApp.connectToDrone();
