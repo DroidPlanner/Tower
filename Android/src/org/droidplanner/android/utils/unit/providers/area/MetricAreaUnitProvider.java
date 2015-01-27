@@ -13,9 +13,11 @@ public class MetricAreaUnitProvider extends AreaUnitProvider {
     @Override
     public AreaUnit fromBaseToTarget(SquareMeter base) {
         double absBase = Math.abs(base.getValue());
-        if(absBase >= Constants.SQM_PER_SQKM)
+        if (absBase >= Constants.SQM_PER_SQKM)
             return Operation.convert(base, UnitIdentifier.SQUARE_KILOMETER);
-
-        return base;
+        else if (absBase >= 0.1)
+            return base;
+        else
+            return Operation.convert(base, UnitIdentifier.SQUARE_MILLIMETER);
     }
 }

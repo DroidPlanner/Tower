@@ -2,13 +2,13 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="305dp"
+    android:layout_height="wrap_content"
     >
 
     <ScrollView
-        android:layout_margin="2dp"
+        android:layout_margin="1dp"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <RadioGroup
             android:id="@+id/editor_tools_layout"
@@ -20,19 +20,13 @@
             <org.droidplanner.android.widgets.button.RadioButtonCenter
                 android:id="@+id/editor_tools_marker"
                 style="@style/editorButton"
-                android:button="@drawable/ic_editor_wp"
+                android:button="@drawable/ic_pin_drop_white_24dp"
                 />
 
             <org.droidplanner.android.widgets.button.RadioButtonCenter
                 android:id="@+id/editor_tools_draw"
                 style="@style/editorButton"
-                android:button="@drawable/ic_editor_draw"
-                />
-
-            <org.droidplanner.android.widgets.button.RadioButtonCenter
-                android:id="@+id/editor_tools_poly"
-                style="@style/editorButton"
-                android:button="@drawable/ic_editor_poly"
+                android:button="@drawable/ic_gesture_white_24dp"
                 />
 
             <View
@@ -46,15 +40,20 @@
                 android:button="@drawable/ic_tab_unselected_white_24dp"/>
 
             <org.droidplanner.android.widgets.button.RadioButtonCenter
-                android:id="@+id/editor_tools_info"
-                style="@style/editorButton"
-                android:button="@drawable/ic_info_outline_white_24dp"/>
-
-            <org.droidplanner.android.widgets.button.RadioButtonCenter
                 android:id="@+id/editor_tools_trash"
                 style="@style/editorButton.Trash"
                 android:button="@drawable/ic_delete_white_24dp"
                 />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/white"/>
+
+            <ImageButton
+                android:id="@+id/editor_tools_undo"
+                style="@style/editorButton"
+                android:src="@drawable/ic_undo_white_24dp"/>
 
         </RadioGroup>
     </ScrollView>

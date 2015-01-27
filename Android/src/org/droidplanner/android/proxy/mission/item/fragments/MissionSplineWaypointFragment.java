@@ -72,6 +72,7 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment impleme
                 for (MissionItem item : getMissionItems()) {
                     ((SplineWaypoint) item).getCoordinate().setAltitude(baseValue);
                 }
+                getMissionProxy().notifyMissionUpdate();
                 break;
 
             case R.id.waypointDelayPicker:
@@ -79,6 +80,7 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment impleme
                 for (MissionItem item : getMissionItems()) {
                     ((SplineWaypoint) item).setDelay(delay);
                 }
+                getMissionProxy().notifyMissionUpdate();
                 break;
         }
     }

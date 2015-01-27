@@ -523,5 +523,8 @@
     <string name="label_sign_up">Sign Up</string>
     <string name="label_login">Login</string>
     <string name="label_logout">Logout</string>
+    <string name="delete_selected_waypoints_confirm">Clear selected waypoints from the map?</string>
+    <string name="delete_selected_waypoints_title">Clear selected waypoints</string>
+    <string name="label_select_all">select all</string>
 
 </resources>

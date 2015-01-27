@@ -68,6 +68,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
                 for (MissionItem item : getMissionItems()) {
                     ((Waypoint) item).getCoordinate().setAltitude(altitude);
                 }
+                getMissionProxy().notifyMissionUpdate();
                 break;
 
             case R.id.waypointDelayPicker:
@@ -75,6 +76,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
                 for (MissionItem item : getMissionItems()) {
                     ((Waypoint) item).setDelay(delay);
                 }
+                getMissionProxy().notifyMissionUpdate();
                 break;
         }
 

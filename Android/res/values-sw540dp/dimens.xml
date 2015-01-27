@@ -14,7 +14,6 @@
     <!-- Dimension for the editor buttons -->
     <dimen name="editor_button_width">56dp</dimen>
     <dimen name="editor_button_height">56dp</dimen>
-    <dimen name="editor_button_margin">2dp</dimen>
 
     <!-- Dimension for the editor list items -->
     <dimen name="editor_list_item_text_size">24sp</dimen>
@@ -45,5 +44,6 @@
     <dimen name="tuning_edit_number_text_size">11sp</dimen>
     <dimen name="tuning_mission_header_title_height">64dp</dimen>
     <dimen name="info_bar_text_size">15sp</dimen>
+    <dimen name="action_drawer_width">300dp</dimen>
 
 </resources>

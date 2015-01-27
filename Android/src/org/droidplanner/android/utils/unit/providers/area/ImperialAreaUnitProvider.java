@@ -13,9 +13,11 @@ public class ImperialAreaUnitProvider extends AreaUnitProvider {
     @Override
     public AreaUnit fromBaseToTarget(SquareMeter base) {
         double absBase = Math.abs(base.getValue());
-        if(absBase >= Constants.SQM_PER_SQMILE)
+        if (absBase >= Constants.SQM_PER_SQMILE)
             return Operation.convert(base, UnitIdentifier.SQUARE_MILE);
-
-        return Operation.convert(base, UnitIdentifier.SQUARE_FOOT);
+        else if (absBase >= 0.1)
+            return Operation.convert(base, UnitIdentifier.SQUARE_FOOT);
+        else
+            return Operation.convert(base, UnitIdentifier.SQUARE_INCH);
     }
 }

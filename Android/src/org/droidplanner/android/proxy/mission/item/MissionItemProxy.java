@@ -26,6 +26,7 @@ public class MissionItemProxy {
     private final Drone.OnMissionItemsBuiltCallback missionItemBuiltListener = new Drone.OnMissionItemsBuiltCallback() {
         @Override
         public void onMissionItemsBuilt(MissionItem.ComplexItem[] complexItems) {
+            mMission.notifyMissionUpdate();
         }
     };
 

@@ -201,7 +201,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
     }
 
     private void updateViews() {
-        if (isDetached())
+        if (getActivity() == null)
             return;
 
         updateTextViews();

@@ -83,6 +83,7 @@ public class MissionCircleFragment extends MissionDetailFragment implements
                 for (Circle item : getMissionItems()) {
                     item.getCoordinate().setAltitude(baseValue);
                 }
+                getMissionProxy().notifyMissionUpdate();
                 break;
             }
 
@@ -103,6 +104,7 @@ public class MissionCircleFragment extends MissionDetailFragment implements
                 for (Circle item : getMissionItems()) {
                     item.setTurns(turns);
                 }
+                getMissionProxy().notifyMissionUpdate();
                 break;
         }
     }
