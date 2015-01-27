@@ -21,6 +21,7 @@ import com.o3dr.services.android.lib.drone.mission.item.command.ReturnToLaunch;
 import com.o3dr.services.android.lib.drone.mission.item.command.Takeoff;
 import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
+import com.o3dr.services.android.lib.drone.mission.item.spatial.BaseSpatialItem;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.RegionOfInterest;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
@@ -57,6 +58,8 @@ public class MissionProxy implements DPMap.PathSource {
         eventFilter.addAction(AttributeEvent.MISSION_UPDATED);
         eventFilter.addAction(AttributeEvent.MISSION_RECEIVED);
     }
+
+    private static final String TAG = MissionProxy.class.getSimpleName();
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
@@ -102,12 +105,12 @@ public class MissionProxy implements DPMap.PathSource {
         notifyMissionUpdate(true);
     }
 
-    public boolean canUndoMission(){
+    public boolean canUndoMission() {
         return !undoBuffer.isEmpty();
     }
 
-    public void undoMission(){
-        if(!canUndoMission())
+    public void undoMission() {
+        if (!canUndoMission())
             throw new IllegalStateException("Invalid state for mission undoing.");
 
         Mission previousMission = undoBuffer.poll();
@@ -274,6 +277,12 @@ public class MissionProxy implements DPMap.PathSource {
         notifyMissionUpdate();
     }
 
+    public void addSpatialWaypoint(BaseSpatialItem spatialItem, LatLong point) {
+        final double alt = getLastAltitude();
+        spatialItem.setCoordinate(new LatLongAlt(point.getLatitude(), point.getLongitude(), alt));
+        addMissionItem(spatialItem);
+    }
+
     /**
      * Add a waypoint generated around the passed 2D point.
      *
@@ -282,8 +291,7 @@ public class MissionProxy implements DPMap.PathSource {
     public void addWaypoint(LatLong point) {
         final double alt = getLastAltitude();
         final Waypoint waypoint = new Waypoint();
-        waypoint.setCoordinate(new LatLongAlt(point.getLatitude(), point.getLongitude(),
-                (float) alt));
+        waypoint.setCoordinate(new LatLongAlt(point.getLatitude(), point.getLongitude(), alt));
         addMissionItem(waypoint);
     }
 
@@ -295,8 +303,7 @@ public class MissionProxy implements DPMap.PathSource {
     public void addSplineWaypoint(LatLong point) {
         final double alt = getLastAltitude();
         final SplineWaypoint splineWaypoint = new SplineWaypoint();
-        splineWaypoint.setCoordinate(new LatLongAlt(point.getLatitude(), point.getLongitude(),
-                (float) alt));
+        splineWaypoint.setCoordinate(new LatLongAlt(point.getLatitude(), point.getLongitude(), alt));
         addMissionItem(splineWaypoint);
     }
 

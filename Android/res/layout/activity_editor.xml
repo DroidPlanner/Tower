@@ -47,16 +47,6 @@
             />
 
         <include
-            android:id="@+id/editorSplineToggleContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            layout="@layout/editor_spline_toggle"
-            android:layout_below="@+id/editorInfoWindow"
-            android:layout_alignWithParentIfMissing="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"/>
-
-        <include
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             layout="@layout/button_my_location"
@@ -71,7 +61,7 @@
             android:orientation="vertical"
             android:layout_centerVertical="true"
             android:layout_above="@+id/mission_list_fragment"
-            android:layout_below="@+id/editorInfoWindow"
+            android:layout_below="@+id/actionbar_container"
             android:gravity="center">
 
             <fragment

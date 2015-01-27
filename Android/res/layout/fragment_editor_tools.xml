@@ -29,12 +29,6 @@
                 android:button="@drawable/ic_gesture_white_24dp"
                 />
 
-            <org.droidplanner.android.widgets.button.RadioButtonCenter
-                android:id="@+id/editor_tools_poly"
-                style="@style/editorButton"
-                android:button="@drawable/ic_editor_poly"
-                />
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
