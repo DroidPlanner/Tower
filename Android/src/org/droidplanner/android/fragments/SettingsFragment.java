@@ -19,6 +19,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ import com.o3dr.services.android.lib.drone.property.Type;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
+import org.droidplanner.android.dialogs.ClearBTDialogPreference;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
@@ -229,6 +231,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setupConnectionPreferences();
         setupAdvancedMenuToggle();
         setupUnitSystemPreferences();
+        setupBluetoothDevicePreferences();
     }
 
     private void setupAdvancedMenuToggle(){
@@ -298,6 +301,41 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         }
     }
 
+    private void setupBluetoothDevicePreferences(){
+        final ClearBTDialogPreference preference = (ClearBTDialogPreference) findPreference(getString(R.string
+                .pref_bluetooth_device_address_key));
+        if(preference != null){
+            updateBluetoothDevicePreference(preference, dpPrefs.getBluetoothDeviceAddress());
+            preference.setOnResultListener(new ClearBTDialogPreference.OnResultListener() {
+                @Override
+                public void onResult(boolean result) {
+                    if(result){
+                        updateBluetoothDevicePreference(preference, dpPrefs.getBluetoothDeviceAddress());
+                    }
+                }
+            });
+        }
+    }
+
+    private void updateBluetoothDevicePreference(Preference preference, String deviceAddress){
+        if(TextUtils.isEmpty(deviceAddress)) {
+            preference.setEnabled(false);
+            preference.setTitle(R.string.pref_no_saved_bluetooth_device_title);
+            preference.setSummary("");
+        }
+        else{
+            preference.setEnabled(true);
+            preference.setSummary(deviceAddress);
+
+            final String deviceName = dpPrefs.getBluetoothDeviceName();
+            if(deviceName != null){
+                preference.setTitle(getString(R.string.pref_forget_bluetooth_device_title, deviceName));
+            }
+            else
+                preference.setTitle(getString(R.string.pref_forget_bluetooth_device_address));
+        }
+    }
+
     private void updateConnectionPreferenceSummary(Preference preference, int connectionType) {
         String connectionName;
         switch (connectionType) {
@@ -333,7 +371,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         mDefaultSummaryPrefs.add(getString(R.string.pref_server_port_key));
         mDefaultSummaryPrefs.add(getString(R.string.pref_server_ip_key));
         mDefaultSummaryPrefs.add(getString(R.string.pref_udp_server_port_key));
-        mDefaultSummaryPrefs.add(getString(R.string.pref_bluetooth_device_address_key));
         mDefaultSummaryPrefs.add(getString(R.string.pref_rc_quickmode_left_key));
         mDefaultSummaryPrefs.add(getString(R.string.pref_rc_quickmode_right_key));
     }

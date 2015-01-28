@@ -422,6 +422,7 @@
     <!-- BLuetooth -->
     <string name="pref_bluetooth">BLUETOOTH CONNECTION</string>
     <string name="pref_bluetooth_device_address">Bluetooth device</string>
+    <string name="pref_forget_bluetooth_device_title">Forget %s device</string>
     <string name="pref_forget_bluetooth_device_address">Forget default device</string>
     <string name="pref_forget_bluetooth_device_address_confirm">Are you sure?</string>
     <string name="pref_bluetooth_forget">Forget</string>
@@ -529,5 +530,6 @@
     <string name="label_select_all">select all</string>
     <string name="guided_scan_roi_set_message">Targeting selected location.</string>
     <string name="mode_follow_guided_scan">Vehicle follows the user while remaining locked on a point of interest. Long click on the map to select the point of interest.</string>
+    <string name="pref_no_saved_bluetooth_device_title">No saved bluetooth device.</string>
 
 </resources>

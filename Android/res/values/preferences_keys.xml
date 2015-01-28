@@ -19,6 +19,7 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_server_ip_key" translatable="false">pref_server_ip</string>
     <string name="pref_server_port_key" translatable="false">pref_server_port</string>
     <string name="pref_udp_server_port_key" translatable="false">pref_udp_server_port</string>
+    <string name="pref_bluetooth_device_name_key" translatable="false">pref_bluetooth_device_name</string>
     <string name="pref_bluetooth_device_address_key" translatable="false">pref_bluetooth_device_address</string>
     <string name="pref_vehicle_type_key" translatable="false">pref_vehicle_type</string>
     <string name="pref_rc_quickmode_right_key" translatable="false">pref_rc_quickmode_right</string>
