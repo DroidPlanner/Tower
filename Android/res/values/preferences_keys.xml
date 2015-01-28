@@ -23,9 +23,7 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_vehicle_type_key" translatable="false">pref_vehicle_type</string>
     <string name="pref_rc_quickmode_right_key" translatable="false">pref_rc_quickmode_right</string>
     <string name="pref_rc_quickmode_left_key" translatable="false">pref_rc_quickmode_left</string>
-    <string name="pref_max_flight_path_size_key" translatable="false">pref_max_flight_path_size</string>
     <string name="pref_storage_key" translatable="false">pref_storage</string>
-    <string name="pref_rc_mode_key" translatable="false">pref_rc_mode</string>
     <string name="pref_mavlink_version_key" translatable="false">pref_mavlink_version</string>
     <string name="pref_firmware_version_key" translatable="false">pref_firmware_version</string>
     <string name="pref_usage_statistics_key" translatable="false">pref_usage_statistics</string>
@@ -38,7 +36,6 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_ui_realtime_footprints_key" translatable="false">pref_ui_realtime_footprints_key</string>
     <string name="pref_dshare_username_key" translatable="false">dshare_username</string>
     <string name="pref_dshare_password_key" translatable="false">dshare_password</string>
-    <string name="pref_dshare_enabled_key" translatable="false">dshare_enabled</string>
     <string name="pref_live_upload_enabled_key" translatable="false">pref_live_upload_enabled</string>
 
     <string name="pref_dialogs_key" translatable="false">pref_dialogs</string>
@@ -60,5 +57,7 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_tts_warning_low_signal_key" translatable="false">tts_low_signal</string>
     <string name="pref_tts_warning_lost_signal_key" translatable="false">tts_lost_signal</string>
     <string name="pref_tts_warning_autopilot_warnings_key" translatable="false">tts_autopilot_warning</string>
+
+    <string name="pref_unit_system_key" translatable="false">pref_unit_system</string>
 
 </resources>

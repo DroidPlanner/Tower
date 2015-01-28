@@ -22,62 +22,45 @@
         <FrameLayout
             android:id="@+id/flight_map_fragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <SlidingDrawer
-            android:id="@+id/slidingDrawerRight"
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:content="@+id/telemetryFragment"
-            android:handle="@+id/slideButtonLeft"
-            android:orientation="horizontal"
-            android:visibility="visible"
-            >
-
-            <ImageView
-                android:id="@+id/slideButtonLeft"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:scaleType="fitEnd"
-                android:paddingTop="@dimen/slide_button_padding_top"
-                android:src="@drawable/drawer_tab"
-                tools:ignore="ContentDescription"/>
-
-            <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
-                android:id="@+id/telemetryFragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fitsSystemWindows="true"
-                tools:layout="@layout/fragment_telemetry"/>
-
-        </SlidingDrawer>
+            android:layout_height="match_parent"/>
 
         <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:fitsSystemWindows="true"
-            >
+            android:id="@+id/actionbar_container"
+            android:fitsSystemWindows="true">
 
-            <TextView
-                android:id="@+id/failsafeTextView"
-                style="@style/editorMissionOverviewText"
-                android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:background="#D8ee2d3e"
-                android:gravity="start|center_vertical"
-                android:visibility="gone"/>
-
-            <include
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                layout="@layout/button_my_location"
-                android:layout_margin="8dp"
-                android:layout_gravity="center_vertical|end"/>
+            <include layout="@layout/actionbar_toolbar"/>
         </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
+
+        <TextView
+            android:id="@+id/failsafeTextView"
+            style="@style/editorMissionOverviewText"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:background="#D8ee2d3e"
+            android:gravity="start|center_vertical"
+            android:visibility="gone"
+            android:layout_below="@+id/actionbar_container"
+            android:layout_alignLeft="@+id/actionbar_container"
+            android:layout_alignStart="@+id/actionbar_container"
+            android:layout_alignRight="@+id/actionbar_container"
+            android:layout_alignEnd="@+id/actionbar_container"
+            />
+
+        <include
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/button_my_location"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_below="@+id/actionbar_container"
+            android:layout_alignRight="@+id/actionbar_container"
+            android:layout_alignEnd="@+id/actionbar_container"
+            />
 
     </RelativeLayout>
     <!-- Sliding layout -->

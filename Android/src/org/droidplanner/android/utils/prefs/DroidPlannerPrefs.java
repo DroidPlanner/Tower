@@ -3,14 +3,15 @@ package org.droidplanner.android.utils.prefs;
 import java.util.UUID;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.SparseBooleanArray;
 
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
-import com.o3dr.services.android.lib.drone.connection.StreamRates;
 
 /**
  * Provides structured access to Droidplanner preferences
@@ -47,6 +48,7 @@ public class DroidPlannerPrefs {
     private static final String DEFAULT_TCP_SERVER_IP = "192.168.40.100";
     private static final String DEFAULT_TCP_SERVER_PORT = "5763";
     private static final String DEFAULT_UDP_SERVER_PORT = "14550";
+    private static final int DEFAULT_UNIT_SYSTEM = UnitSystem.AUTO;
 
     // Public for legacy usage
 	public SharedPreferences prefs;
@@ -57,7 +59,7 @@ public class DroidPlannerPrefs {
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
-	public boolean getLiveUploadEnabled() {
+	public boolean isLiveUploadEnabled() {
 		// FIXME: Disabling live upload as it often causes the app to freeze on
 		// disconnect.
 		// return
@@ -71,8 +73,7 @@ public class DroidPlannerPrefs {
 	}
 
 	public void setDroneshareLogin(String b) {
-		prefs.edit().putString(context.getString(R.string.pref_dshare_username_key), b.trim())
-				.apply();
+		prefs.edit().putString(context.getString(R.string.pref_dshare_username_key), b.trim()).apply();
 	}
 
 	public String getDroneshareEmail() {
@@ -88,17 +89,16 @@ public class DroidPlannerPrefs {
 	}
 
 	public void setDronesharePassword(String b) {
-		prefs.edit().putString(context.getString(R.string.pref_dshare_password_key), b.trim())
-				.apply();
+		prefs.edit().putString(context.getString(R.string.pref_dshare_password_key), b.trim()).apply();
 	}
 
-	public boolean getDroneshareEnabled() {
-		return prefs.getBoolean(context.getString(R.string.pref_dshare_enabled_key), true);
+	public boolean isDroneshareEnabled() {
+        return !TextUtils.isEmpty(getDroneshareLogin()) && !TextUtils.isEmpty(getDronesharePassword());
 	}
 
-	public void setDroneshareEnabled(boolean b) {
-		prefs.edit().putBoolean(context.getString(R.string.pref_dshare_enabled_key), b).apply();
-	}
+    public String getDroneshareApiKey(){
+        return "2d38fb2e.72afe7b3761d5ee6346c178fdd6b680f";
+    }
 
 	/**
 	 * How many times has this application been started? (will increment for
@@ -147,6 +147,14 @@ public class DroidPlannerPrefs {
     public int getConnectionParameterType(){
         return Integer.parseInt(prefs.getString(context.getString(R.string
                 .pref_connection_type_key), DEFAULT_CONNECTION_TYPE));
+    }
+
+    public int getUnitSystemType() {
+        String unitSystem = prefs.getString(context.getString(R.string.pref_unit_system_key), null);
+        if(unitSystem == null)
+            return DEFAULT_UNIT_SYSTEM;
+
+        return Integer.parseInt(unitSystem);
     }
 
     public void setUsbBaudRate(int baudRate){
@@ -262,11 +270,6 @@ public class DroidPlannerPrefs {
 		prefs.edit().putString(AutoPanMode.PREF_KEY, target.name()).apply();
 	}
 
-	public boolean isGuidedModeOnLongPressEnabled() {
-		return prefs
-				.getBoolean("pref_guided_mode_on_long_press", DEFAULT_GUIDED_MODE_ON_LONG_PRESS);
-	}
-
 	/**
 	 * Use HDOP instead of satellite count on infobar
 	 */
@@ -327,25 +330,6 @@ public class DroidPlannerPrefs {
 				context.getString(R.string.pref_tts_warning_autopilot_warnings_key),
 				DEFAULT_TTS_WARNING_AUTOPILOT_WARNING);
 	}
-
-    public StreamRates getStreamRates() {
-        StreamRates rates = new StreamRates();
-
-        rates.setExtendedStatus(Integer.parseInt(prefs.getString(
-                "pref_mavlink_stream_rate_ext_stat", "2")));
-        rates.setExtra1(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra1", "2")));
-        rates.setExtra2(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra2", "2")));
-        rates.setExtra3(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra3", "2")));
-        rates.setPosition(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_position",
-                "2")));
-        rates.setRcChannels(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_rc_channels",
-                "2")));
-        rates.setRawSensors(Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_raw_sensors",
-                "2")));
-        rates.setRawController(Integer.parseInt(prefs.getString(
-                "pref_mavlink_stream_rate_raw_controller", "2")));
-        return rates;
-    }
 
     public boolean isAdvancedMenuEnabled(){
         return prefs.getBoolean(context.getString(R.string.pref_advanced_menu_toggle_key), false);

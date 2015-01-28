@@ -279,71 +279,83 @@ public class TTSNotificationProvider implements OnInitListener,
 			final String action = intent.getAction();
             State droneState = drone.getAttribute(AttributeType.STATE);
 
-			if (AttributeEvent.STATE_ARMING.equals(action)) {
-                if(droneState != null)
-				    speakArmedState(droneState.isArmed());
-			} else if (AttributeEvent.BATTERY_UPDATED.equals(action)) {
-                Battery droneBattery = drone.getAttribute(AttributeType.BATTERY);
-                if(droneBattery != null)
-				    batteryDischargeNotification(droneBattery.getBatteryRemain());
-			} else if (AttributeEvent.STATE_VEHICLE_MODE.equals(action)) {
-                if(droneState != null)
-				    speakMode(droneState.getVehicleMode());
-			} else if (AttributeEvent.MISSION_SENT.equals(action)) {
-				Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT).show();
-				speak("Waypoints saved to Drone");
-			} else if (AttributeEvent.GPS_FIX.equals(action)) {
-                Gps droneGps = drone.getAttribute(AttributeType.GPS);
-                if(droneGps != null)
-				    speakGpsMode(droneGps.getFixType());
-			} else if (AttributeEvent.MISSION_RECEIVED.equals(action)) {
-				Toast.makeText(context, "Waypoints received from Drone", Toast.LENGTH_SHORT).show();
-				speak("Waypoints received");
-			} else if (AttributeEvent.HEARTBEAT_FIRST.equals(action)) {
-				watchdogCallback.setDrone(drone);
-				scheduleWatchdog();
-				speak("Connected");
-			} else if (AttributeEvent.HEARTBEAT_TIMEOUT.equals(action)) {
-				if (mAppPrefs.getWarningOnLostOrRestoredSignal()) {
-					speak("Data link lost, check connection.");
-					handler.removeCallbacks(watchdogCallback);
-				}
-			}
-            else if(AttributeEvent.HEARTBEAT_RESTORED.equals(action)){
-                watchdogCallback.setDrone(drone);
-                scheduleWatchdog();
-                if (mAppPrefs.getWarningOnLostOrRestoredSignal()) {
-                    speak("Data link restored");
-                }
-            }
-            else if(AttributeEvent.STATE_DISCONNECTED.equals(action)){
-                handler.removeCallbacks(watchdogCallback);
-            }
-            else if(AttributeEvent.MISSION_ITEM_UPDATED.equals(action)){
-                int currentWaypoint = intent.getIntExtra(AttributeEventExtra.EXTRA_MISSION_CURRENT_WAYPOINT, 0);
-                speak("Going for waypoint " + currentWaypoint);
-            }
-            else if(AttributeEvent.FOLLOW_START.equals(action)){
-                speak("Following");
-            }
-            else if(AttributeEvent.ALTITUDE_400FT_EXCEEDED.equals(action)){
-                if (mAppPrefs.getWarningOn400ftExceeded()) {
-                    speak("warning, 400 feet exceeded");
-                }
-            }
-            else if(AttributeEvent.AUTOPILOT_FAILSAFE.equals(action)){
-                String warning = intent.getStringExtra(AttributeEventExtra.EXTRA_AUTOPILOT_FAILSAFE_MESSAGE);
-                if (!TextUtils.isEmpty(warning) && mAppPrefs.getWarningOnAutopilotWarning()) {
-                    speak(warning);
-                }
-            }
-            else if(AttributeEvent.SIGNAL_WEAK.equals(action)){
-                if (mAppPrefs.getWarningOnLowSignalStrength()) {
-                    speak("Warning, weak signal");
-                }
-            }
-            else if(AttributeEvent.WARNING_NO_GPS.equals(action)){
-                speak("Error, no gps lock yet");
+            switch (action) {
+                case AttributeEvent.STATE_ARMING:
+                    if (droneState != null)
+                        speakArmedState(droneState.isArmed());
+                    break;
+                case AttributeEvent.BATTERY_UPDATED:
+                    Battery droneBattery = drone.getAttribute(AttributeType.BATTERY);
+                    if (droneBattery != null)
+                        batteryDischargeNotification(droneBattery.getBatteryRemain());
+                    break;
+                case AttributeEvent.STATE_VEHICLE_MODE:
+                    if (droneState != null)
+                        speakMode(droneState.getVehicleMode());
+                    break;
+                case AttributeEvent.MISSION_SENT:
+                    Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT).show();
+                    speak("Waypoints saved to Drone");
+                    break;
+                case AttributeEvent.GPS_FIX:
+                    Gps droneGps = drone.getAttribute(AttributeType.GPS);
+                    if (droneGps != null)
+                        speakGpsMode(droneGps.getFixType());
+                    break;
+                case AttributeEvent.MISSION_RECEIVED:
+                    Toast.makeText(context, "Waypoints received from Drone", Toast.LENGTH_SHORT).show();
+                    speak("Waypoints received");
+                    break;
+                case AttributeEvent.HEARTBEAT_FIRST:
+                    watchdogCallback.setDrone(drone);
+                    scheduleWatchdog();
+                    speak("Connected");
+                    break;
+                case AttributeEvent.HEARTBEAT_TIMEOUT:
+                    if (mAppPrefs.getWarningOnLostOrRestoredSignal()) {
+                        speak("Data link lost, check connection.");
+                        handler.removeCallbacks(watchdogCallback);
+                    }
+                    break;
+                case AttributeEvent.HEARTBEAT_RESTORED:
+                    watchdogCallback.setDrone(drone);
+                    scheduleWatchdog();
+                    if (mAppPrefs.getWarningOnLostOrRestoredSignal()) {
+                        speak("Data link restored");
+                    }
+                    break;
+                case AttributeEvent.STATE_DISCONNECTED:
+                    handler.removeCallbacks(watchdogCallback);
+                    break;
+                case AttributeEvent.MISSION_ITEM_UPDATED:
+                    int currentWaypoint = intent.getIntExtra(AttributeEventExtra.EXTRA_MISSION_CURRENT_WAYPOINT, 0);
+                    speak("Going for waypoint " + currentWaypoint);
+                    break;
+                case AttributeEvent.FOLLOW_START:
+                    speak("Following");
+                    break;
+                case AttributeEvent.ALTITUDE_400FT_EXCEEDED:
+                    if (mAppPrefs.getWarningOn400ftExceeded()) {
+                        speak("warning, 400 feet exceeded");
+                    }
+                    break;
+                case AttributeEvent.AUTOPILOT_FAILSAFE:
+                    String warning = intent.getStringExtra(AttributeEventExtra.EXTRA_AUTOPILOT_FAILSAFE_MESSAGE);
+                    final int logLevel = intent.getIntExtra(AttributeEventExtra
+                            .EXTRA_AUTOPILOT_FAILSAFE_MESSAGE_LEVEL, Log.VERBOSE);
+                    if (!TextUtils.isEmpty(warning) && mAppPrefs.getWarningOnAutopilotWarning() &&
+                            (logLevel == Log.ERROR || logLevel == Log.WARN || logLevel == Log.INFO)) {
+                        speak(warning);
+                    }
+                    break;
+                case AttributeEvent.SIGNAL_WEAK:
+                    if (mAppPrefs.getWarningOnLowSignalStrength()) {
+                        speak("Warning, weak signal");
+                    }
+                    break;
+                case AttributeEvent.WARNING_NO_GPS:
+                    speak("Error, no gps lock yet");
+                    break;
             }
 		}
 	};

@@ -3,29 +3,17 @@ package org.droidplanner.android.proxy.mission.item;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.android.R;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
-import org.droidplanner.android.utils.unit.UnitManager;
-
-import android.content.Context;
-import android.graphics.Color;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
-import com.o3dr.services.android.lib.drone.mission.Mission;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
-import com.o3dr.services.android.lib.drone.mission.item.command.Takeoff;
 import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.Circle;
-import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
 import com.o3dr.services.android.lib.util.MathUtils;
 
 /**
@@ -38,6 +26,7 @@ public class MissionItemProxy {
     private final Drone.OnMissionItemsBuiltCallback missionItemBuiltListener = new Drone.OnMissionItemsBuiltCallback() {
         @Override
         public void onMissionItemsBuilt(MissionItem.ComplexItem[] complexItems) {
+            mMission.notifyMissionUpdate();
         }
     };
 
@@ -57,7 +46,14 @@ public class MissionItemProxy {
 	 */
 	private final List<MarkerInfo> mMarkerInfos;
 
+    /**
+     * Used by the mission item list adapter to provide drag and drop support.
+     */
+    private final long stableId;
+
 	public MissionItemProxy(MissionProxy mission, MissionItem missionItem) {
+        this.stableId = System.nanoTime();
+
 		mMission = mission;
 		mMissionItem = missionItem;
 		mMarkerInfos = MissionItemMarkerInfo.newInstance(this);
@@ -144,4 +140,11 @@ public class MissionItemProxy {
 
 		return pathPoints;
 	}
+
+    /**
+     * @return stable id used by the recycler view adapter to provide drag and drop support.
+     */
+    public long getStableId(){
+        return stableId;
+    }
 }

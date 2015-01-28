@@ -1,35 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RadioGroup
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/editor_tools_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/flight_action_buttons_container_bg"
-    android:gravity="center">
+    >
 
-    <org.droidplanner.android.widgets.button.RadioButtonCenter
-        android:id="@+id/editor_tools_marker"
-        style="@style/editorButton"
-        android:button="@drawable/ic_editor_wp"
-        />
+    <ScrollView
+        android:layout_margin="1dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <org.droidplanner.android.widgets.button.RadioButtonCenter
-        android:id="@+id/editor_tools_draw"
-        style="@style/editorButton"
-        android:button="@drawable/ic_editor_draw"
-        />
+        <RadioGroup
+            android:id="@+id/editor_tools_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/flight_action_buttons_container_bg"
+            android:gravity="center">
 
-    <org.droidplanner.android.widgets.button.RadioButtonCenter
-        android:id="@+id/editor_tools_poly"
-        style="@style/editorButton"
-        android:button="@drawable/ic_editor_poly"
-        />
+            <org.droidplanner.android.widgets.button.RadioButtonCenter
+                android:id="@+id/editor_tools_marker"
+                style="@style/editorButton"
+                android:button="@drawable/ic_pin_drop_white_24dp"
+                />
 
-    <org.droidplanner.android.widgets.button.RadioButtonCenter
-        android:id="@+id/editor_tools_trash"
-        style="@style/editorButton.Trash"
-        android:button="@drawable/ic_editor_trash"
-        />
+            <org.droidplanner.android.widgets.button.RadioButtonCenter
+                android:id="@+id/editor_tools_draw"
+                style="@style/editorButton"
+                android:button="@drawable/ic_gesture_white_24dp"
+                />
 
-</RadioGroup>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/white"/>
 
+            <org.droidplanner.android.widgets.button.RadioButtonCenter
+                android:id="@+id/editor_tools_selector"
+                style="@style/editorButton"
+                android:button="@drawable/ic_tab_unselected_white_24dp"/>
+
+            <org.droidplanner.android.widgets.button.RadioButtonCenter
+                android:id="@+id/editor_tools_trash"
+                style="@style/editorButton.Trash"
+                android:button="@drawable/ic_delete_white_24dp"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/white"/>
+
+            <ImageButton
+                android:id="@+id/editor_tools_undo"
+                style="@style/editorButton"
+                android:src="@drawable/ic_undo_white_24dp"/>
+
+        </RadioGroup>
+    </ScrollView>
+</android.support.v7.widget.CardView>

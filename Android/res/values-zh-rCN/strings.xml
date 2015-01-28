@@ -25,17 +25,6 @@
     <string name="pref_maps_providers_summary">使用那一家的地图供应商</string>
     <string name="pref_maps_providers_title">地图提供商</string>
     <string name="pref_mavlink">MAVLink</string>
-    <string name="pref_mavlink_rates">流速</string>
-    <string name="pref_mavlink_rates_summary">接收无人机飞行数据的速率（以Hz为单位）</string>
-    <string name="pref_mavlink_stream_rate_ext_stat">航点、GPS原始数据、围栏数据、当前航点等</string>
-    <string name="pref_mavlink_stream_rate_extra1">姿态</string>
-    <string name="pref_mavlink_stream_rate_extra2">VFR_Hud数据</string>
-    <string name="pref_mavlink_stream_rate_extra3">航姿系统（AHRS），硬件状态，风速</string>
-    <string name="pref_mavlink_stream_rate_position">位置数据</string>
-    <string name="pref_mavlink_stream_rate_RC_override">遥控通道覆盖</string>
-    <string name="pref_mavlink_stream_rate_rc_channels">遥控通道数据</string>
-    <string name="pref_mavlink_stream_rate_raw_sensors">传感器原始数据</string>
-    <string name="pref_mavlink_stream_rate_raw_controller">控制器原始数据</string>
     <string name="pref_ui">用户界面</string>
     <string name="pref_ui_language_english">将英语作为界面语言</string>
     <string name="pref_ui_language_english_summary">使用英文为主要语言（代替系统语言）需要重新启动应用程序。</string>
@@ -47,8 +36,6 @@
     <string name="pref_lock_screen_orientation">锁定屏幕方向</string>
     <string name="pref_lock_screen_orientation_summary">连接无人机时，屏幕将会定在当前的旋转方向</string>
     <string name="pref_flight_data">飞行数据</string>
-    <string name="pref_max_flight_path_size">飞行路径尺寸</string>
-    <string name="pref_max_flight_path_size_summary">飞行路径的尺寸，若要关闭请设为0。</string>
     <string name="pref_guided_mode_on_long_press">长按地图启动Guided引导模式</string>
     <string name="pref_guided_mode_on_long_press_summary">长按在地图上以进入引导模式。</string>
     <string name="pref_follow_me_mode_enabled">启用Flooow Me跟随模式</string>
@@ -255,7 +242,6 @@
     <string name="metadata_units">单位：</string>
     <string name="metadata_range">范围：</string>
     <string name="lst_note_hint">添加更多行，只需点击回车</string>
-    <string name="set_to_zero_to_disable">（设为0以禁用）。</string>
 
     <!-- Calibration data progress -->
     <string name="progress_title_uploading">上传校准数据</string>
@@ -414,25 +400,10 @@
     <string name="pref_tts_off">关闭</string>
 
     <!-- Droneshare -->
-    <string name="dsheader">你有兴趣使用免费的无人机社群服务www.Droneshare.com嘛？</string>
     <string name="dsinfo">Droneshare是一个免费的平台，你可以在平台上分析或者分享飞行数据。</string>
-    <string name="create_a_new_account">创建一个账号</string>
-    <string name="login_to_an_existing_account">登陆账号</string>
     <string name="username">使用者名称</string>
     <string name="password">密码</string>
-    <string name="do_not_use_droneshare">不适用 Droneshare</string>
     <string name="email_address">电子邮件地址</string>
-    <string name="droneshare_password">Droneshare 密码</string>
-    <string name="enter_or_pick_a_password">输入密码</string>
-    <string name="if_that_user_does_not_exist_it_will_be_created">当账号不存在时，则会产生新的账号。</string>
-    <string name="droneshare_username">Droneshare 使用者名称</string>
-    <string name="droneshare_enabled">启用 Droneshare</string>
-    <string name="do_you_want_to_use_droneshare_">你想要使用Droneshare吗？</string>
-    <string name="pref_dshare_username_title">使用者名称</string>
-    <string name="pref_dshare_password_title">密码</string>
-    <string name="uploader_success_message">上传成功！选择要查看的...</string>
-    <string name="uploader_fail_retry_message">稍后再试</string>
-    <string name="uploader_notification_title">上传至Droneshare</string>
 
     <!-- BLuetooth -->
     <string name="pref_bluetooth">蓝牙连接</string>
@@ -456,8 +427,6 @@
     <string name="dialog_box_title_altitude">高度</string>
     <string name="mode_switch">将遥控通道5分配在你的遥控器上的开关用来控制飞行模式。移动开关到每个位置并在下方选择期望的飞行模式。</string>
     <string name="msg_connect_first">请首先连接</string>
-    <string name="mode1_throttle_on_right_stick">日本手：油门在右边的摇杆</string>
-    <string name="mode2_throttle_on_left_stick">美国手：油门在左边的摇杆</string>
     <string name="pref_title_language">语言</string>
     <string name="pref_title_screen">界面</string>
     <string name="pref_title_notifications">通知</string>

@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.State;
 
@@ -38,11 +40,18 @@ public class NotificationHandler {
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
 			if (AttributeEvent.AUTOPILOT_FAILSAFE.equals(action)) {
-                State droneState = drone.getAttribute(AttributeType.STATE);
-				final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-						.setCategory(GAUtils.Category.FAILSAFE).setAction("Autopilot warning")
-						.setLabel(droneState.getFailsafeWarning());
-				GAUtils.sendEvent(eventBuilder);
+                final String failsafeMsg = intent.getStringExtra(AttributeEventExtra.EXTRA_AUTOPILOT_FAILSAFE_MESSAGE);
+                if(failsafeMsg != null) {
+                    final int logLevel = intent.getIntExtra(AttributeEventExtra
+                            .EXTRA_AUTOPILOT_FAILSAFE_MESSAGE_LEVEL, Log.VERBOSE);
+                    if(logLevel == Log.ERROR || logLevel == Log.WARN) {
+                        final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                                .setCategory(GAUtils.Category.FAILSAFE)
+                                .setAction("Autopilot warning")
+                                .setLabel(failsafeMsg);
+                        GAUtils.sendEvent(eventBuilder);
+                    }
+                }
 			}
 		}
 	};

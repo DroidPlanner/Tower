@@ -25,17 +25,6 @@
     <string name="pref_maps_providers_summary">使用哪一家的地圖供應商</string>
     <string name="pref_maps_providers_title">地圖供應商</string>
     <string name="pref_mavlink">MAVLink</string>
-    <string name="pref_mavlink_rates">資料流速率</string>
-    <string name="pref_mavlink_rates_summary">接收無人機飛行數據的速率(以每 Hz 為單位)</string>
-    <string name="pref_mavlink_stream_rate_ext_stat">航點, GPS 原始資料, fence 資料, 目前航點等</string>
-    <string name="pref_mavlink_stream_rate_extra1">姿態</string>
-    <string name="pref_mavlink_stream_rate_extra2">VFR_Hud 資料</string>
-    <string name="pref_mavlink_stream_rate_extra3">航姿系統(AHRS), 硬體狀況, 風</string>
-    <string name="pref_mavlink_stream_rate_position">位置資料</string>
-    <string name="pref_mavlink_stream_rate_RC_override">遙控頻道覆蓋</string>
-    <string name="pref_mavlink_stream_rate_rc_channels">遙控頻道資料</string>
-    <string name="pref_mavlink_stream_rate_raw_sensors">感測器原始資料</string>
-    <string name="pref_mavlink_stream_rate_raw_controller">伺服原始資料</string>
     <string name="pref_ui">使用者界面</string>
     <string name="pref_ui_language_english">以英文作為界面語言</string>
     <string name="pref_ui_language_english_summary">使用英文為主要語言(代替系統語言)。此動作需要重新啟動app</string>
@@ -46,8 +35,6 @@
     <string name="pref_lock_screen_orientation">鎖定螢幕旋轉</string>
     <string name="pref_lock_screen_orientation_summary">連結無人機時，螢幕會將會鎖定在目前的旋轉方向</string>
     <string name="pref_flight_data">飛行數據</string>
-    <string name="pref_max_flight_path_size">飛行路徑尺寸</string>
-    <string name="pref_max_flight_path_size_summary">飛行路徑的尺寸, 若要關閉請設為0</string>
     <string name="pref_guided_mode_on_long_press">啟用 Guided 導引模式-長按地圖</string>
     <string name="pref_guided_mode_on_long_press_summary">長按在地圖上以進入導引模式</string>
     <string name="pref_follow_me_mode_enabled">啟用 FollowMe 跟隨模式</string>
@@ -243,7 +230,6 @@
     <string name="metadata_units">單位:</string>
     <string name="metadata_range">範圍:</string>
     <string name="lst_note_hint">按 Enter 鍵增加更多行</string>
-    <string name="set_to_zero_to_disable">(若要關閉請設為 0 )。</string>
 
     <!-- Calibration data progress -->
     <string name="progress_title_uploading">上傳校正數據</string>
@@ -393,25 +379,10 @@
     <string name="pref_tts_off">關閉</string>
     
     <!-- Droneshare -->
-    <string name="dsheader">你有興趣使用免費的無人機社群服務 www.Droneshare.com 嗎？</string>
     <string name="dsinfo">Droneshare 是一個免費的平台，你可以在平台上分析或者是分享飛行數據。</string>
-    <string name="create_a_new_account">創建一個帳號</string>
-    <string name="login_to_an_existing_account">登入帳號</string>
     <string name="username">使用者名稱</string>
     <string name="password">密碼</string>
-    <string name="do_not_use_droneshare">不使用 Droneshare</string>
     <string name="email_address">電子郵件</string>
-    <string name="droneshare_password">Droneshare 密碼</string>
-    <string name="enter_or_pick_a_password">輸入密碼</string>
-    <string name="if_that_user_does_not_exist_it_will_be_created">當帳號不存在時，則會產生新的帳號。</string>
-    <string name="droneshare_username">Droneshare 使用者名稱</string>
-    <string name="droneshare_enabled">啟用 Droneshare</string>
-    <string name="do_you_want_to_use_droneshare_">你想要使用 Droneshare 嗎？</string>
-    <string name="pref_dshare_username_title">使用者名稱</string>
-    <string name="pref_dshare_password_title">密碼</string>
-    <string name="uploader_success_message">上傳成功！若要檢視，請點選...</string>
-    <string name="uploader_fail_retry_message">待會再試試</string>
-    <string name="uploader_notification_title">上傳至 Droneshare</string>
 
     <!-- BLuetooth -->
     <string name="pref_bluetooth">藍芽連線</string>
@@ -433,8 +404,6 @@
     <string name="dialog_box_title_altitude">高度</string>
     <string name="mode_switch">指定遙控器的第 5 頻道切換飛行模式。切換開關到每一個位置以指定下列的飛行模式。</string>g
     <string name="msg_connect_first">請先連線</string>
-    <string name="mode1_throttle_on_right_stick">模式 1(日本手):油門在右邊的遙桿</string>
-    <string name="mode2_throttle_on_left_stick">模式 2(美國手):油門在左邊的遙桿</string>
     <string name="pref_title_language">語言</string>
     <string name="pref_title_screen">畫面</string>
     <string name="pref_title_notifications">通知</string>

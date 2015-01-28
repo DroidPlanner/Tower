@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Do not translate the following strings -->
-    <string name="app_title" translatable="false">DroidPlanner 3</string>
+    <string name="app_title" translatable="false">Tower</string>
 
     <!-- Generic strings -->
     <string name="settings">Settings</string>
@@ -28,17 +28,6 @@
     <string name="pref_maps_providers_summary">Which map provider to use.</string>
     <string name="pref_maps_providers_title">Maps Providers</string>
     <string name="pref_mavlink">MAVLink</string>
-    <string name="pref_mavlink_rates">Stream Rates</string>
-    <string name="pref_mavlink_rates_summary">Rate at which flight data should be received from the drone (in Hz)</string>
-    <string name="pref_mavlink_stream_rate_ext_stat">Waypoints, GPS raw, fence data, current waypoint, etc</string>
-    <string name="pref_mavlink_stream_rate_extra1">Attitude</string>
-    <string name="pref_mavlink_stream_rate_extra2">VFR_Hud data</string>
-    <string name="pref_mavlink_stream_rate_extra3">AHRS, Hardware Status, Wind</string>
-    <string name="pref_mavlink_stream_rate_position">Position data</string>
-    <string name="pref_mavlink_stream_rate_RC_override">RC Override</string>
-    <string name="pref_mavlink_stream_rate_rc_channels">RC Channel Data</string>
-    <string name="pref_mavlink_stream_rate_raw_sensors">Raw Sensors</string>
-    <string name="pref_mavlink_stream_rate_raw_controller">Raw Controller</string>
     <string name="pref_ui">User Interface</string>
     <string name="pref_ui_language_english">English as UI Language</string>
     <string name="pref_ui_language_english_summary">Use English language (instead of system language). Requires app restart.</string>
@@ -50,8 +39,6 @@
     <string name="pref_lock_screen_orientation">Lock Screen Orientation</string>
     <string name="pref_lock_screen_orientation_summary">Locks screen to the orientation which is present when connecting</string>
     <string name="pref_flight_data">Flight Data</string>
-    <string name="pref_max_flight_path_size">Flight path size</string>
-    <string name="pref_max_flight_path_size_summary">Size of the flight path, set to zero to disable.</string>
     <string name="pref_guided_mode_on_long_press">Guided Mode on long press</string>
     <string name="pref_guided_mode_on_long_press_summary">Enable entering the Guided Mode by long pressing the map.</string>
     <string name="pref_follow_me_mode_enabled">Enable FollowMe Mode</string>
@@ -212,7 +199,7 @@
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">One cannot add new waypoints after LAND or RTL</string>
     <string name="editor_info_window">Distance: 0m, Flight time: 0:00</string>
-    <string name="editor_info_window_distance">Distance: %02.2fm</string>
+    <string name="editor_info_window_distance">Distance: %s</string>
     <string name="editor_info_window_flight_time">Flight Time: %1$02d:%2$02d</string>
     <string name="editor_info_window_heading">Heading: %.0f°</string>
     <string name="distance_to_home">Distance to home</string>
@@ -261,14 +248,13 @@
     <string name="params_click_to_refresh">Click to refresh parameters from drone</string>
     <string name="refreshing_parameters">Refreshing Parameters…</string>
     <string name="parameters_saved">Parameters saved</string>
-    <string name="msg_parameters_written_to_drone">parameters written to drone</string>
+    <string name="msg_parameters_written_to_drone">parameters uploaded to drone</string>
     <string name="metadata_value">Value:</string>
     <string name="metadata_custom_value">** Custom value **</string>
     <string name="metadata_values">Values:</string>
     <string name="metadata_units">Units:</string>
     <string name="metadata_range">Range:</string>
     <string name="lst_note_hint">To add more rows, just press Enter</string>
-    <string name="set_to_zero_to_disable">(set to zero to disable).</string>
 
     <!-- Calibration data progress -->
     <string name="progress_title_uploading">Uploading calibration data</string>
@@ -427,25 +413,10 @@
     <string name="pref_tts_off">off</string>
 
     <!-- Droneshare -->
-    <string name="dsheader">Would you be interested in using the free www.Droneshare.com service?</string>
-    <string name="dsinfo">Droneshare is a free web service which allows you to analyze and optionally share flights.</string>
-    <string name="create_a_new_account">Create a new account</string>
-    <string name="login_to_an_existing_account">Login to an existing account</string>
+    <string name="dsinfo">Droneshare is a free web service which allows you to review, analyze and share flights.</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
-    <string name="do_not_use_droneshare">Do not use Droneshare</string>
     <string name="email_address">Email address</string>
-    <string name="droneshare_password">Droneshare password</string>
-    <string name="enter_or_pick_a_password">Enter or pick a password</string>
-    <string name="if_that_user_does_not_exist_it_will_be_created">If that user does not exist, it will be created</string>
-    <string name="droneshare_username">Droneshare username</string>
-    <string name="droneshare_enabled">Droneshare enabled</string>
-    <string name="do_you_want_to_use_droneshare_">Do you want to use Droneshare?</string>
-    <string name="pref_dshare_username_title">Username</string>
-    <string name="pref_dshare_password_title">Password</string>
-    <string name="uploader_success_message">Upload successful! Select to view…</string>
-    <string name="uploader_fail_retry_message">Will try again later</string>
-    <string name="uploader_notification_title">Droneshare upload</string>
 
     <!-- BLuetooth -->
     <string name="pref_bluetooth">BLUETOOTH CONNECTION</string>
@@ -469,8 +440,6 @@
     <string name="dialog_box_title_altitude">Altitude</string>
     <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
     <string name="msg_connect_first">Please connect first</string>
-    <string name="mode1_throttle_on_right_stick">Mode 1: Throttle on RIGHT stick</string>
-    <string name="mode2_throttle_on_left_stick">Mode 2: Throttle on LEFT stick</string>
     <string name="pref_title_language">Language</string>
     <string name="pref_title_screen">Screen</string>
     <string name="pref_title_notifications">Notifications</string>
@@ -487,8 +456,8 @@
     <string name="pref_permanent_notification_summary">Enable to make status bar notification permanent when connected.</string>
 
     <string name="zoom_fit">Zoom to Fit</string>
-    <string name="open_mission_file">Open Mission File</string>
-    <string name="save_mission_file">Save Mission File</string>
+    <string name="open_mission_file">Import Mission File</string>
+    <string name="save_mission_file">Export Mission File</string>
 
     <string name="pref_ui_gps_hdop_summary">Display HDOP instead of FIX in satellite info bar item</string>
     <string name="pref_ui_gps_hdop_title">Display Satellite HDOP</string>
@@ -532,13 +501,30 @@
     <string name="dialog_confirm_take_off_in_auto_title">Take off in Auto?</string>
     <string name="dialog_confirm_take_off_in_auto_msg">Warning! The drone will now take off and start the mission.</string>
     <string name="pref_dronie_creation_title">Create dronie?</string>
-    <string name="pref_dronie_creation_message">Please stand back 8m before starting the
-        dronie.</string>
+    <string name="pref_dronie_creation_message">Please stand back 8m before starting the dronie.</string>
     <string name="editor_multi_edit_no_waypoint_error">No waypoint(s) selected.</string>
     <string name="failed_start_calibration_message">Unable to start calibration!</string>
     <string name="pref_advanced_menu_title">Advanced Menu</string>
     <string name="pref_advanced_menu_summary">Enable advanced menu options.</string>
     <string name="pref_licenses">Licenses</string>
-    <string name="pref_licenses_summary">Libraries (and it\'s licenses) used in this project</string>
+    <string name="pref_licenses_summary">Libraries (and their licenses) used in this project</string>
+    <string name="upload">Upload</string>
+    <string name="download">Download</string>
+    <string name="import_from_device">Import from device</string>
+    <string name="export_to_device">Export to device</string>
+    <string name="pref_title_local">Localization</string>
+
+    <string name="unit_system_entry_auto">Auto</string>
+    <string name="unit_system_entry_metric">Metric System</string>
+    <string name="unit_system_entry_imperial">Imperial System</string>
+    <string name="pref_unit_system_title">Unit System</string>
+    <string name="pref_unit_system_summary">Select the unit system to use throughout the app.</string>
+    <string name="account_label">Account</string>
+    <string name="label_sign_up">Sign Up</string>
+    <string name="label_login">Login</string>
+    <string name="label_logout">Logout</string>
+    <string name="delete_selected_waypoints_confirm">Clear selected waypoints from the map?</string>
+    <string name="delete_selected_waypoints_title">Clear selected waypoints</string>
+    <string name="label_select_all">select all</string>
 
 </resources>

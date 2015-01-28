@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_load_parameters"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_reload"
-        android:title="@string/refresh" />
+        android:id="@+id/menu_download_parameters"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_refresh_black_48dp"
+        android:title="@string/download" />
     <item
         android:id="@+id/menu_write_parameters"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:icon="@drawable/ic_action_upload"
-        android:title="@string/write"/>
+        android:title="@string/upload"/>
     <item
         android:id="@+id/menu_filter_params"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:icon="@android:drawable/ic_menu_search"
         android:title="@string/menu_search_toggle"
         />
@@ -22,10 +22,10 @@
         android:id="@+id/menu_open_parameters"
         app:showAsAction="never"
         android:icon="@drawable/ic_action_folder_open"
-        android:title="@string/open"/>
+        android:title="@string/import_from_device"/>
     <item
         android:id="@+id/menu_save_parameters"
         app:showAsAction="never"
         android:icon="@drawable/ic_action_save"
-        android:title="@string/save"/>
+        android:title="@string/export_to_device"/>
 </menu>

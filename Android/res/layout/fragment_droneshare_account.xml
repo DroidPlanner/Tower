@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/account_image"
+        android:layout_margin="10dp"
+        android:layout_height="100dp"
+        android:layout_width="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="invisible"
+        android:src="@drawable/ic_account_circle_grey600_48dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/account_image"
+        android:layout_toEndOf="@+id/account_image"
+        android:layout_alignTop="@+id/account_image"
+        android:layout_alignBottom="@+id/account_image"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:gravity="center_vertical"
+        android:textSize="30sp"
+        android:id="@+id/dshare_username"
+        tools:text="ne0fhyk"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/account_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/user_vehicles_list"
+        android:fadeScrollbars="true"/>
+
+</RelativeLayout>

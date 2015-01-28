@@ -51,87 +51,91 @@ public class FragmentSetupMAG extends ApiListenerFragment {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
-			if (AttributeEvent.STATE_CONNECTED.equals(action)) {
-				buttonStep.setEnabled(true);
-			}
-            else if (AttributeEvent.STATE_DISCONNECTED.equals(action)) {
-				cancelCalibration();
-				buttonStep.setEnabled(false);
-			}
-            else if(AttributeEvent.CALIBRATION_MAG_STARTED.equals(action)){
-                double[] pointsX = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_X);
-                double[] pointsY = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_Y);
-                double[] pointsZ = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_Z);
+            switch (action) {
+                case AttributeEvent.STATE_CONNECTED:
+                    buttonStep.setEnabled(true);
+                    break;
+                case AttributeEvent.STATE_DISCONNECTED:
+                    cancelCalibration();
+                    buttonStep.setEnabled(false);
+                    break;
+                case AttributeEvent.CALIBRATION_MAG_STARTED: {
+                    double[] pointsX = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_X);
+                    double[] pointsY = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_Y);
+                    double[] pointsZ = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_Z);
 
-                inProgressPoints = Point3D.fromDoubleArrays(pointsX, pointsY, pointsZ);
+                    inProgressPoints = Point3D.fromDoubleArrays(pointsX, pointsY, pointsZ);
 
-                setCalibrationStatus(CALIBRATION_IN_PROGRESS);
-            }
-            else if(AttributeEvent.CALIBRATION_MAG_ESTIMATION.equals(action)){
-                double[] pointsX = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_X);
-                double[] pointsY = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_Y);
-                double[] pointsZ = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_Z);
-
-                inProgressPoints = Point3D.fromDoubleArrays(pointsX, pointsY, pointsZ);
-
-                final int pointsCount = inProgressPoints == null ? 0 : inProgressPoints.length;
-                if (pointsCount == 0) {
-                    return;
+                    setCalibrationStatus(CALIBRATION_IN_PROGRESS);
+                    break;
                 }
+                case AttributeEvent.CALIBRATION_MAG_ESTIMATION: {
+                    double[] pointsX = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_X);
+                    double[] pointsY = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_Y);
+                    double[] pointsZ = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_POINTS_Z);
 
-                final double fitness = intent.getDoubleExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_FITNESS,
-                        0);
-                final double[] fitCenter = intent.getDoubleArrayExtra(AttributeEventExtra
-                        .EXTRA_CALIBRATION_MAG_FIT_CENTER);
-                final double[] fitRadii = intent.getDoubleArrayExtra(AttributeEventExtra
-                        .EXTRA_CALIBRATION_MAG_FIT_RADII);
+                    inProgressPoints = Point3D.fromDoubleArrays(pointsX, pointsY, pointsZ);
 
-                if (pointsCount < MIN_POINTS_COUNT) {
-                    calibrationFitness.setIndeterminate(true);
-                    calibrationProgress.setText("0 / 100");
-                } else {
-                    final int progress = (int) (fitness * 100);
-                    calibrationFitness.setIndeterminate(false);
-                    calibrationFitness.setMax(100);
-                    calibrationFitness.setProgress(progress);
+                    final int pointsCount = inProgressPoints == null ? 0 : inProgressPoints.length;
+                    if (pointsCount == 0) {
+                        return;
+                    }
 
-                    calibrationProgress.setText(progress + " / 100");
+                    final double fitness = intent.getDoubleExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_FITNESS,
+                            0);
+                    final double[] fitCenter = intent.getDoubleArrayExtra(AttributeEventExtra
+                            .EXTRA_CALIBRATION_MAG_FIT_CENTER);
+                    final double[] fitRadii = intent.getDoubleArrayExtra(AttributeEventExtra
+                            .EXTRA_CALIBRATION_MAG_FIT_RADII);
+
+                    if (pointsCount < MIN_POINTS_COUNT) {
+                        calibrationFitness.setIndeterminate(true);
+                        calibrationProgress.setText("0 / 100");
+                    } else {
+                        final int progress = (int) (fitness * 100);
+                        calibrationFitness.setIndeterminate(false);
+                        calibrationFitness.setMax(100);
+                        calibrationFitness.setProgress(progress);
+
+                        calibrationProgress.setText(progress + " / 100");
+                    }
+
+                    // Grab the last point
+                    final Point3D point = inProgressPoints[pointsCount - 1];
+
+                    plot1.addData((float) point.x);
+                    plot1.addData((float) point.z);
+                    if (fitCenter == null || fitRadii == null) {
+                        plot1.updateSphere(null);
+                    } else {
+                        plot1.updateSphere(new int[]{(int) fitCenter[0], (int) fitCenter[2],
+                                (int) fitRadii[0], (int) fitRadii[2]});
+                    }
+                    plot1.invalidate();
+
+                    plot2.addData((float) point.y);
+                    plot2.addData((float) point.z);
+                    if (fitCenter == null || fitRadii == null) {
+                        plot2.updateSphere(null);
+                    } else {
+                        plot2.updateSphere(new int[]{(int) fitCenter[1], (int) fitCenter[2],
+                                (int) fitRadii[1], (int) fitRadii[2]});
+                    }
+                    plot2.invalidate();
+
+                    break;
                 }
+                case AttributeEvent.CALIBRATION_MAG_COMPLETED:
+                    double[] offsets = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_OFFSETS);
+                    if (offsets != null) {
+                        String offsetsSummary = Arrays.toString(offsets);
+                        Log.d("MAG", "Calibration Finished: " + offsetsSummary);
+                        Toast.makeText(getActivity(), "Calibration Finished: " + offsetsSummary,
+                                Toast.LENGTH_LONG).show();
+                    }
 
-                // Grab the last point
-                final Point3D point = inProgressPoints[pointsCount - 1];
-
-                plot1.addData((float) point.x);
-                plot1.addData((float) point.z);
-                if (fitCenter == null || fitRadii == null) {
-                    plot1.updateSphere(null);
-                } else {
-                    plot1.updateSphere(new int[] { (int) fitCenter[0],  (int) fitCenter[2],
-                            (int) fitRadii[0],  (int) fitRadii[2] });
-                }
-                plot1.invalidate();
-
-                plot2.addData((float) point.y);
-                plot2.addData((float) point.z);
-                if (fitCenter == null || fitRadii == null) {
-                    plot2.updateSphere(null);
-                } else {
-                    plot2.updateSphere(new int[] { (int) fitCenter[1],  (int) fitCenter[2],
-                            (int) fitRadii[1],  (int) fitRadii[2]  });
-                }
-                plot2.invalidate();
-
-            }
-            else if(AttributeEvent.CALIBRATION_MAG_COMPLETED.equals(action)){
-                double[] offsets = intent.getDoubleArrayExtra(AttributeEventExtra.EXTRA_CALIBRATION_MAG_OFFSETS);
-                if(offsets != null) {
-                    String offsetsSummary = Arrays.toString(offsets);
-                    Log.d("MAG", "Calibration Finished: " + offsetsSummary);
-                    Toast.makeText(getActivity(), "Calibration Finished: " + offsetsSummary,
-                            Toast.LENGTH_LONG).show();
-                }
-
-                setCalibrationStatus(CALIBRATION_COMPLETED);
+                    setCalibrationStatus(CALIBRATION_COMPLETED);
+                    break;
             }
 		}
 	};

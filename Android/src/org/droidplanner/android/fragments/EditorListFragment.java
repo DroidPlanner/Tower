@@ -18,6 +18,7 @@ import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
+import org.droidplanner.android.utils.ReorderRecyclerView;
 import org.droidplanner.android.widgets.adapterViews.MissionItemListAdapter;
 
 import java.util.List;
@@ -37,8 +38,8 @@ public class EditorListFragment extends ApiListenerFragment implements MissionSe
     private MissionProxy missionProxy;
     private OnEditorInteraction editorListener;
 
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter recyclerAdapter;
+    private ReorderRecyclerView recyclerView;
+    private ReorderRecyclerView.Adapter recyclerAdapter;
 
     @Override
     public void onAttach(Activity activity) {
@@ -60,7 +61,7 @@ public class EditorListFragment extends ApiListenerFragment implements MissionSe
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.mission_item_recycler_view);
+        recyclerView = (ReorderRecyclerView) view.findViewById(R.id.mission_item_recycler_view);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -70,6 +71,7 @@ public class EditorListFragment extends ApiListenerFragment implements MissionSe
         final RecyclerView.LayoutManager recyclerLayoutMgr = new LinearLayoutManager(getActivity()
                 .getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(recyclerLayoutMgr);
+
     }
 
     @Override
@@ -82,7 +84,7 @@ public class EditorListFragment extends ApiListenerFragment implements MissionSe
     public void onApiConnected() {
         missionProxy = getMissionProxy();
 
-        recyclerAdapter = new MissionItemListAdapter(missionProxy, editorListener);
+        recyclerAdapter = new MissionItemListAdapter(getContext(), missionProxy, editorListener);
         recyclerView.setAdapter(recyclerAdapter);
 
         missionProxy.selection.addSelectionUpdateListener(this);

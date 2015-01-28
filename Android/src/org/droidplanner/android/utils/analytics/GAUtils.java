@@ -113,7 +113,7 @@ public class GAUtils {
 
 		final String login = prefs.getDroneshareLogin();
 		final String password = prefs.getDronesharePassword();
-		final boolean isDroneShareUser = prefs.getLiveUploadEnabled() && !login.isEmpty()
+		final boolean isDroneShareUser = prefs.isLiveUploadEnabled() && !login.isEmpty()
 				&& !password.isEmpty();
 
 		sendHit(new HitBuilders.AppViewBuilder()

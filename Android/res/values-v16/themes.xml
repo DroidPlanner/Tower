@@ -7,8 +7,5 @@
     <style name="CustomActionBarTheme.Transparent">
         <item name="android:windowActionBarOverlay">true</item>
         <item name="windowActionBarOverlay">true</item>
-
-        <item name="android:actionBarStyle">@style/CustomActionBarTheme.ActionBar.Transparent</item>
-        <item name="actionBarStyle">@style/CustomActionBarTheme.ActionBar.Transparent</item>
     </style>
 </resources>

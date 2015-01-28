@@ -15,12 +15,21 @@
         <PreferenceScreen
             android:key="pref_ui"
             android:title="@string/pref_ui" >
-            <PreferenceCategory android:title="@string/pref_title_language" >
+            <PreferenceCategory android:title="@string/pref_title_local" >
                 <CheckBoxPreference
                     android:defaultValue="false"
                     android:key="@string/pref_ui_language_english_key"
                     android:summary="@string/pref_ui_language_english_summary"
                     android:title="@string/pref_ui_language_english" />
+
+                <ListPreference
+                    android:key="@string/pref_unit_system_key"
+                    android:entries="@array/unit_systems"
+                    android:entryValues="@array/unit_system_values"
+                    android:defaultValue="0"
+                    android:title="@string/pref_unit_system_title"
+                    android:summary="@string/pref_unit_system_summary"
+                    />
             </PreferenceCategory>
             <PreferenceCategory
                 android:key="pref_connection_actions"
@@ -186,42 +195,6 @@
             </PreferenceCategory>
         </PreferenceScreen>
 
-        <!-- Droneshare preferences section -->
-        <PreferenceScreen
-            android:key="pref_mavlink_droneshare"
-            android:title="Droneshare" >
-            <EditTextPreference
-                android:defaultValue=""
-                android:dialogTitle="@string/droneshare_username"
-                android:inputType="textEmailAddress"
-                android:key="@string/pref_dshare_username_key"
-                android:summary="@string/if_that_user_does_not_exist_it_will_be_created"
-                android:title="@string/pref_dshare_username_title" />
-            <EditTextPreference
-                android:defaultValue=""
-                android:dialogTitle="@string/droneshare_password"
-                android:inputType="textPassword"
-                android:key="@string/pref_dshare_password_key"
-                android:summary="@string/enter_or_pick_a_password"
-                android:title="@string/pref_dshare_password_title" />
-
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="@string/pref_dshare_enabled_key"
-                android:summary="@string/do_you_want_to_use_droneshare_"
-                android:title="@string/droneshare_enabled" />
-
-            <!-- FIXME: Live upload is disabled because it often causes the app to crash on disconnect -->
-            <!--
-                <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="@string/pref_live_upload_enabled_key"
-                android:summary="@string/pref_live_upload_summary"
-                android:title="@string/pref_live_upload" />
-            -->
-
-        </PreferenceScreen>
-
         <!-- Advanced preferences section. -->
         <PreferenceScreen
             android:key="pref_advanced"
@@ -277,76 +250,10 @@
                         android:title="@string/pref_forget_bluetooth_device_address" />
                 </PreferenceCategory>
             </PreferenceScreen>
-            <PreferenceScreen
-                android:key="pref_mavlink_rates"
-                android:summary="@string/pref_mavlink_rates_summary"
-                android:title="@string/pref_mavlink_rates" >
-                <EditTextPreference
-                    android:defaultValue="2"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_ext_stat"
-                    android:title="@string/pref_mavlink_stream_rate_ext_stat" />
-                <EditTextPreference
-                    android:defaultValue="10"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_extra1"
-                    android:title="@string/pref_mavlink_stream_rate_extra1" />
-                <EditTextPreference
-                    android:defaultValue="2"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_extra2"
-                    android:title="@string/pref_mavlink_stream_rate_extra2" />
-                <EditTextPreference
-                    android:defaultValue="2"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_extra3"
-                    android:title="@string/pref_mavlink_stream_rate_extra3" />
-                <EditTextPreference
-                    android:defaultValue="3"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_position"
-                    android:title="@string/pref_mavlink_stream_rate_position" />
-                <EditTextPreference
-                    android:defaultValue="50"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_RC_override"
-                    android:title="@string/pref_mavlink_stream_rate_RC_override" />
-                <EditTextPreference
-                    android:defaultValue="5"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_rc_channels"
-                    android:title="@string/pref_mavlink_stream_rate_rc_channels" />
-                <EditTextPreference
-                    android:defaultValue="2"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_raw_sensors"
-                    android:title="@string/pref_mavlink_stream_rate_raw_sensors" />
-                <EditTextPreference
-                    android:defaultValue="3"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="pref_mavlink_stream_rate_raw_controller"
-                    android:title="@string/pref_mavlink_stream_rate_raw_controller" />
-            </PreferenceScreen>
 
             <PreferenceCategory
                 android:key="pref_flight_data"
                 android:title="@string/pref_flight_data" >
-                <EditTextPreference
-                    android:defaultValue="500"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:key="@string/pref_max_flight_path_size_key"
-                    android:summary="@string/pref_max_flight_path_size_summary"
-                    android:title="@string/pref_max_flight_path_size" />
 
                 <CheckBoxPreference
                     android:defaultValue="false"

@@ -192,23 +192,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             }
         }
 
-        final String maxFlightPathSizeKey = getString(R.string.pref_max_flight_path_size_key);
-        final Preference maxFlightPathSizePref = findPreference(maxFlightPathSizeKey);
-        if (maxFlightPathSizePref != null) {
-            maxFlightPathSizePref.setSummary(sharedPref.getString(maxFlightPathSizeKey, "") + " "
-                    + getString(R.string.set_to_zero_to_disable));
-        }
-
-        final String rcModeKey = getString(R.string.pref_rc_mode_key);
-        final Preference rcModePref = findPreference(rcModeKey);
-        if (rcModePref != null) {
-            if (sharedPref.getString(rcModeKey, "MODE2").equalsIgnoreCase("MODE1")) {
-                rcModePref.setSummary(getString(R.string.mode1_throttle_on_right_stick));
-            } else {
-                rcModePref.setSummary(getString(R.string.mode2_throttle_on_left_stick));
-            }
-        }
-
         // Set the usage statistics preference
         final String usageStatKey = getString(R.string.pref_usage_statistics_key);
         final CheckBoxPreference usageStatPref = (CheckBoxPreference) findPreference(usageStatKey);
@@ -245,6 +228,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         updateMavlinkVersionPreference(null);
         setupConnectionPreferences();
         setupAdvancedMenuToggle();
+        setupUnitSystemPreferences();
     }
 
     private void setupAdvancedMenuToggle(){
@@ -259,6 +243,42 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                 }
             });
         }
+    }
+
+    private void setupUnitSystemPreferences(){
+        ListPreference unitSystemPref = (ListPreference) findPreference(getString(R.string.pref_unit_system_key));
+        if(unitSystemPref != null){
+            int defaultUnitSystem = dpPrefs.getUnitSystemType();
+            updateUnitSystemSummary(unitSystemPref, defaultUnitSystem);
+            unitSystemPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int unitSystem = Integer.parseInt((String) newValue);
+                    updateUnitSystemSummary(preference, unitSystem);
+                    return true;
+                }
+            });
+        }
+    }
+
+    private void updateUnitSystemSummary(Preference preference, int unitSystemType){
+        final int summaryResId;
+        switch(unitSystemType){
+            case 0:
+            default:
+                summaryResId = R.string.unit_system_entry_auto;
+                break;
+
+            case 1:
+                summaryResId = R.string.unit_system_entry_metric;
+                break;
+
+            case 2:
+                summaryResId = R.string.unit_system_entry_imperial;
+                break;
+        }
+
+        preference.setSummary(summaryResId);
     }
 
     private void setupConnectionPreferences() {
@@ -389,19 +409,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
         if (mDefaultSummaryPrefs.contains(key)) {
             preference.setSummary(sharedPreferences.getString(key, ""));
-        }
-
-        if (key.equals(getString(R.string.pref_max_flight_path_size_key))) {
-            preference.setSummary(sharedPreferences.getString(key, "") + " "
-                    + getString(R.string.set_to_zero_to_disable));
-        }
-
-        if (key.equals(getString(R.string.pref_rc_mode_key))) {
-            if (sharedPreferences.getString(key, "MODE2").equalsIgnoreCase("MODE1")) {
-                preference.setSummary(R.string.mode1_throttle_on_right_stick);
-            } else {
-                preference.setSummary(R.string.mode2_throttle_on_left_stick);
-            }
         }
     }
 

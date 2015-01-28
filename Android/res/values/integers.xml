@@ -2,4 +2,5 @@
 <resources>
     <integer name="airSpeedRadioBtn">0</integer>
     <integer name="groundSpeedRadioBtn">1</integer>
+    <integer name="vehiclesColCount">1</integer>
 </resources>

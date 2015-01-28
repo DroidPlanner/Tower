@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +23,8 @@ import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
+import org.droidplanner.android.utils.unit.UnitManager;
+import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 /**
  * Parent class for the app activity classes.
@@ -61,14 +60,13 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
     };
 
     private ScreenOrientation screenOrientation = new ScreenOrientation(this);
-    private InfoBarActionProvider infoBar;
     private LocalBroadcastManager lbm;
 
     /**
      * Handle to the app preferences.
      */
     protected DroidPlannerPrefs mAppPrefs;
-
+    protected UnitSystem unitSystem;
     protected DroidPlannerApp dpApp;
 
     @Override
@@ -76,16 +74,12 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
         super.onCreate(savedInstanceState);
 
         final Context context = getApplicationContext();
+
         dpApp = (DroidPlannerApp) getApplication();
         lbm = LocalBroadcastManager.getInstance(context);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
-        }
-
         mAppPrefs = new DroidPlannerPrefs(context);
+        unitSystem = UnitManager.getUnitSystem(context);
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -130,12 +124,6 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
     @Override
     public void onApiDisconnected() {
         getBroadcastManager().unregisterReceiver(superReceiver);
-
-        if (infoBar != null) {
-            infoBar.setDrone(null);
-            infoBar = null;
-        }
-
         onDroneDisconnected();
     }
 
@@ -152,6 +140,8 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
     @Override
     protected void onStart() {
         super.onStart();
+
+        unitSystem = UnitManager.getUnitSystem(getApplicationContext());
         dpApp.addApiListener(this);
         maxVolumeIfEnabled();
     }
@@ -172,22 +162,12 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Reset the previous info bar
-        if (infoBar != null) {
-            infoBar.setDrone(null);
-            infoBar = null;
-        }
-
         getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
 
         final MenuItem toggleConnectionItem = menu.findItem(R.id.menu_connect);
-        final MenuItem infoBarItem = menu.findItem(R.id.menu_info_bar);
-        if (infoBarItem != null)
-            infoBar = (InfoBarActionProvider) MenuItemCompat.getActionProvider(infoBarItem);
 
-        // Configure the info bar action provider if we're connected
         Drone dpApi = dpApp.getDrone();
-        if (dpApi.isConnected()) {
+        if (dpApi != null && dpApi.isConnected()) {
             menu.setGroupEnabled(R.id.menu_group_connected, true);
             menu.setGroupVisible(R.id.menu_group_connected, true);
 
@@ -207,19 +187,11 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
             loadMission.setVisible(areMissionMenusEnabled);
 
             toggleConnectionItem.setTitle(R.string.menu_disconnect);
-
-            if (infoBar != null) {
-                infoBar.setDrone(dpApi);
-            }
         } else {
             menu.setGroupEnabled(R.id.menu_group_connected, false);
             menu.setGroupVisible(R.id.menu_group_connected, false);
 
             toggleConnectionItem.setTitle(R.string.menu_connect);
-
-            if (infoBar != null) {
-                infoBar.setDrone(null);
-            }
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -290,7 +262,7 @@ public abstract class SuperUI extends ActionBarActivity implements DroidPlannerA
 
     public void toggleDroneConnection() {
         final Drone drone = dpApp.getDrone();
-        if (drone.isConnected())
+        if (drone != null && drone.isConnected())
             dpApp.disconnectFromDrone();
         else
             dpApp.connectToDrone();

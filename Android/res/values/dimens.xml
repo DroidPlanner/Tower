@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Dimension for the telemetry ui elements -->
-    <dimen name="largeTelemetryTextSize">18sp</dimen>
+    <dimen name="largeTelemetryTextSize">17sp</dimen>
 
     <!-- Dimension for the flight control buttons -->
     <dimen name="flightControlMargin">10dp</dimen>
@@ -15,7 +15,7 @@
     <!-- Dimension for the editor buttons -->
     <dimen name="editor_button_width">48dp</dimen>
     <dimen name="editor_button_height">48dp</dimen>
-    <dimen name="editor_button_margin">1dp</dimen>
+    <dimen name="editor_button_margin">0dp</dimen>
 
     <!-- Dimension for the editor list items -->
     <dimen name="editor_list_item_text_size">20sp</dimen>
@@ -49,16 +49,20 @@
     <!-- Dimension for the info bar -->
     <dimen name="info_bar_text_size">12sp</dimen>
     <dimen name="info_bar_drawable_padding">0dp</dimen>
-    <dimen name="info_bar_flight_mode_width">90dp</dimen>
+    <dimen name="info_bar_flight_mode_width">100dp</dimen>
 
     <!-- Dimensions for the number picker dialog -->
     <dimen name="width_number_picker_dialog">192dp</dimen>
     <dimen name="height_number_picker_dialog">96dp</dimen>
     <dimen name="margin_left_right_card_wheel_horizontal_view">8dp</dimen>
     <dimen name="margin_top_bottom_card_wheel_horizontal_view">4dp</dimen>
-    <dimen name="telem_widget_bg_corner_radius">4dp</dimen>
+    <dimen name="telem_widget_bg_corner_radius">2dp</dimen>
     <dimen name="slide_button_padding_top">0dp</dimen>
     <dimen name="flight_actions_container_width">360dp</dimen>
     <dimen name="flight_actions_container_height">320dp</dimen>
+
+    <dimen name="toolbar_min_height">56dp</dimen>
+    <dimen name="action_bar_telem_height">112dp</dimen>
+    <dimen name="action_drawer_width">260dp</dimen>
 
 </resources>

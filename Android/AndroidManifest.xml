@@ -60,6 +60,11 @@
             android:value="@integer/google_play_services_version"/>
 
         <activity
+            android:name=".activities.AccountActivity"
+            android:launchMode="singleTop"
+            android:label="@string/account_label"/>
+
+        <activity
             android:name=".activities.FlightActivity"
             android:launchMode="singleTask"
             android:theme="@style/CustomActionBarTheme.Transparent">
@@ -90,7 +95,6 @@
             android:name=".activities.ConfigurationActivity"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.PageIndicatorDefaults"
             android:label="@string/menu_drone_setup"/>
 
         <activity
@@ -120,7 +124,7 @@
             android:noHistory="true"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
-            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar"/>
+            android:theme="@style/CustomDialogTheme"/>
 
     </application>
 

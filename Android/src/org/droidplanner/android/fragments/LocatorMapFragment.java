@@ -24,8 +24,7 @@ public class LocatorMapFragment extends DroneMap {
         if(target == AutoPanMode.DISABLED)
             return true;
 
-        Toast.makeText(getActivity(), "Auto pan is not supported on this map.",
-                Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Auto pan is not supported on this map.", Toast.LENGTH_LONG).show();
         return false;
     }
 
