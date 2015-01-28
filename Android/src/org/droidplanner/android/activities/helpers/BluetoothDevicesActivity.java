@@ -135,8 +135,8 @@ public class BluetoothDevicesActivity extends ActionBarActivity {
 			// so the bluetooth client can retrieve it on connection.
             final Context context = getApplicationContext();
 			DroidPlannerPrefs mAppPrefs = new DroidPlannerPrefs(context);
-			mAppPrefs.setBluetoothDeviceAddress(device.getAddress() + ";" + device.getName());
-
+            mAppPrefs.setBluetoothDeviceName(device.getName());
+            mAppPrefs.setBluetoothDeviceAddress(device.getAddress());
 
 			// Toggle the drone connection
             DroidPlannerApp.connectToDrone(context);

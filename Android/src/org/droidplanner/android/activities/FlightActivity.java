@@ -27,6 +27,7 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.DroneMap;
 import org.droidplanner.android.fragments.FlightActionsFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
 import org.droidplanner.android.fragments.TelemetryFragment;
@@ -413,6 +414,14 @@ public class FlightActivity extends DrawerNavigationUI {
 
     public void setGuidedClickListener(FlightMapFragment.OnGuidedClickListener listener){
         mapFragment.setGuidedClickListener(listener);
+    }
+
+    public void addMapMarkerProvider(DroneMap.MapMarkerProvider provider){
+        mapFragment.addMapMarkerProvider(provider);
+    }
+
+    public void removeMapMarkerProvider(DroneMap.MapMarkerProvider provider){
+        mapFragment.removeMapMarkerProvider(provider);
     }
 
     @Override

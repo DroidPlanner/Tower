@@ -8,7 +8,13 @@ import android.util.AttributeSet;
 
 public class ClearBTDialogPreference extends DialogPreference {
 
+    public interface OnResultListener {
+        void onResult(boolean result);
+    }
+
 	private DroidPlannerPrefs mAppPrefs;
+
+    private OnResultListener listener;
 
 	public ClearBTDialogPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -21,6 +27,13 @@ public class ClearBTDialogPreference extends DialogPreference {
 		if (positiveResult) {
 			mAppPrefs.setBluetoothDeviceAddress("");
 		}
+
+        if(listener != null)
+            listener.onResult(positiveResult);
 	}
+
+    public void setOnResultListener(OnResultListener listener){
+        this.listener = listener;
+    }
 
 }

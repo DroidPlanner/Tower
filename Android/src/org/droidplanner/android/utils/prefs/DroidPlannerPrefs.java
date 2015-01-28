@@ -196,6 +196,14 @@ public class DroidPlannerPrefs {
                         .pref_udp_server_port_key), DEFAULT_UDP_SERVER_PORT));
     }
 
+    public String getBluetoothDeviceName(){
+        return prefs.getString(context.getString(R.string.pref_bluetooth_device_name_key), null);
+    }
+
+    public void setBluetoothDeviceName(String deviceName){
+        prefs.edit().putString(context.getString(R.string.pref_bluetooth_device_name_key), deviceName).apply();
+    }
+
     public String getBluetoothDeviceAddress() {
         return prefs.getString(context.getString(R.string.pref_bluetooth_device_address_key), null);
     }
