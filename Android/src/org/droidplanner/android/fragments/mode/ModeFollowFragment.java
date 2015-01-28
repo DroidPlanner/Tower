@@ -114,6 +114,8 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
     }
 
     private void onFollowTypeUpdate(FollowType followType, Bundle params){
+        updateModeDescription(followType);
+
         if (followType.hasParam(FollowType.EXTRA_FOLLOW_RADIUS)) {
             showRadiusPicker();
             updateCurrentRadius();
