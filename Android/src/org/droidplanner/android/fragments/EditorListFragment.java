@@ -74,6 +74,13 @@ public class EditorListFragment extends ApiListenerFragment implements MissionSe
 
     }
 
+    public void enableDeleteMode(boolean isEnabled){
+        if(isEnabled)
+            recyclerView.setBackgroundResource(android.R.color.holo_red_light);
+        else
+            recyclerView.setBackgroundResource(R.color.editor_bar);
+    }
+
     @Override
     public void onStart() {
         super.onStart();

@@ -14,8 +14,6 @@ import java.util.Locale;
  */
 public class UnitManager {
 
-    private static final UnitSystem unitSystem = new MetricUnitSystem();
-
     private static DroidPlannerPrefs dpPrefs;
     private static MetricUnitSystem metricUnitSystem;
     private static ImperialUnitSystem imperialUnitSystem;
