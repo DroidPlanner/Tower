@@ -33,12 +33,17 @@ import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public abstract class DroneMap extends ApiListenerFragment {
 
 	private final static String TAG = DroneMap.class.getSimpleName();
+
+    public static final String ACTION_UPDATE_MAP = Utils.PACKAGE_NAME + ".action.UPDATE_MAP";
 
 	private static final IntentFilter eventFilter = new IntentFilter();
 	static {
@@ -51,9 +56,12 @@ public abstract class DroneMap extends ApiListenerFragment {
 		eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
 		eventFilter.addAction(AttributeEvent.CAMERA_FOOTPRINTS_UPDATED);
 		eventFilter.addAction(AttributeEvent.ATTITUDE_UPDATED);
+        eventFilter.addAction(ACTION_UPDATE_MAP);
 	}
 
-	private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+    private static final List<MarkerInfo> NO_EXTERNAL_MARKERS = Collections.emptyList();
+
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (!isResumed())
@@ -61,9 +69,11 @@ public abstract class DroneMap extends ApiListenerFragment {
 
 			final String action = intent.getAction();
             switch (action) {
+                case ACTION_UPDATE_MAP:
                 case MissionProxy.ACTION_MISSION_PROXY_UPDATE:
                     postUpdate();
                     break;
+
                 case AttributeEvent.GPS_POSITION: {
                     mMapFragment.updateMarker(graphicDrone);
                     mMapFragment.updateDroneLeashPath(guided);
@@ -124,8 +134,10 @@ public abstract class DroneMap extends ApiListenerFragment {
 				return;
 
 			final List<MarkerInfo> missionMarkerInfos = missionProxy.getMarkersInfos();
+            final List<MarkerInfo> externalMarkers = collectMarkersFromProviders();
 
 			final boolean isThereMissionMarkers = !missionMarkerInfos.isEmpty();
+            final boolean isThereExternalMarkers = !externalMarkers.isEmpty();
 			final boolean isHomeValid = home.isValid();
 			final boolean isGuidedVisible = guided.isVisible();
 
@@ -145,6 +157,9 @@ public abstract class DroneMap extends ApiListenerFragment {
 					markersOnTheMap.removeAll(missionMarkerInfos);
 				}
 
+                if(isThereExternalMarkers)
+                    markersOnTheMap.removeAll(externalMarkers);
+
 				mMapFragment.removeMarkers(markersOnTheMap);
 			}
 
@@ -160,6 +175,9 @@ public abstract class DroneMap extends ApiListenerFragment {
 				mMapFragment.updateMarkers(missionMarkerInfos, isMissionDraggable());
 			}
 
+            if(isThereExternalMarkers)
+                mMapFragment.updateMarkers(externalMarkers, false);
+
 			mMapFragment.updateMissionPath(missionProxy);
 
 			mMapFragment.updatePolygonsPaths(missionProxy.getPolygonsPath());
@@ -167,6 +185,8 @@ public abstract class DroneMap extends ApiListenerFragment {
 			mHandler.removeCallbacks(this);
 		}
 	};
+
+    private final ConcurrentLinkedQueue<MapMarkerProvider> markerProviders = new ConcurrentLinkedQueue<>();
 
 	protected DPMap mMapFragment;
 
@@ -342,4 +362,38 @@ public abstract class DroneMap extends ApiListenerFragment {
 	public void skipMarkerClickEvents(boolean skip) {
 		mMapFragment.skipMarkerClickEvents(skip);
 	}
+
+    public void addMapMarkerProvider(MapMarkerProvider provider){
+        if(provider != null) {
+            markerProviders.add(provider);
+            postUpdate();
+        }
+    }
+
+    public void removeMapMarkerProvider(MapMarkerProvider provider){
+        if(provider != null) {
+            markerProviders.remove(provider);
+            postUpdate();
+        }
+    }
+
+    public interface MapMarkerProvider {
+        MarkerInfo[] getMapMarkers();
+    }
+
+    private List<MarkerInfo> collectMarkersFromProviders(){
+        if(markerProviders.isEmpty())
+            return NO_EXTERNAL_MARKERS;
+
+        List<MarkerInfo> markers = new ArrayList<>();
+        for(MapMarkerProvider provider : markerProviders){
+            MarkerInfo[] externalMarkers = provider.getMapMarkers();
+            Collections.addAll(markers, externalMarkers);
+        }
+
+        if(markers.isEmpty())
+            return NO_EXTERNAL_MARKERS;
+
+        return markers;
+    }
 }

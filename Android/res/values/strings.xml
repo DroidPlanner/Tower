@@ -155,6 +155,7 @@
     <string name="mode_sport">Sport allows a pilot to control rate of rotation directly with the addition of self-leveling.</string>
     <string name="mode_stabilize">Stabilize levels the vehicle in flight.</string>
     <string name="mode_poshold">PosHold allows position hold (GPS) with direct response to pilot input.</string>
+    <string name="mode_follow">The vehicle follows the user based on the device GPS location.</string>
 
     <!-- Waypoint types -->
     <string name="waypointType_Waypoint">Waypoint</string>
@@ -526,5 +527,7 @@
     <string name="delete_selected_waypoints_confirm">Clear selected waypoints from the map?</string>
     <string name="delete_selected_waypoints_title">Clear selected waypoints</string>
     <string name="label_select_all">select all</string>
+    <string name="guided_scan_roi_set_message">Targeting selected location.</string>
+    <string name="mode_follow_guided_scan">Vehicle follows the user while remaining locked on a point of interest. Long click on the map to select the point of interest.</string>
 
 </resources>

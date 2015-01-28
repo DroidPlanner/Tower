@@ -61,7 +61,6 @@ public class FlightModePanel extends ApiListenerFragment{
 
 	private void onModeUpdate(Drone drone) {
 		// Update the info panel fragment
-		drone = getDrone();
         final State droneState = drone.getAttribute(AttributeType.STATE);
 		Fragment infoPanel;
 		if (droneState == null || !droneState.isConnected()) {
