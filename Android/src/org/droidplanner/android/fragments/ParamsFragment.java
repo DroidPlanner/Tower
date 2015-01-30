@@ -79,8 +79,9 @@ public class ParamsFragment extends ApiListenerListFragment {
                     stopProgress();
                     /*** FALL - THROUGH ***/
                 case AttributeEvent.TYPE_UPDATED:
-                    if (getDrone().isConnected()) {
-                        final Parameters droneParams = getDrone().getAttribute(AttributeType.PARAMETERS);
+                    final Drone drone = getDrone();
+                    if (drone != null && drone.isConnected()) {
+                        final Parameters droneParams = drone.getAttribute(AttributeType.PARAMETERS);
                         loadAdapter(droneParams.getParameters(), false);
                     }
                     break;
