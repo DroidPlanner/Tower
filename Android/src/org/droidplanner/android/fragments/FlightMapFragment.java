@@ -188,6 +188,9 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
     public void goToDroneLocation() {
         super.goToDroneLocation();
 
+        if(this.drone == null)
+            return;
+
         final Gps droneGps = this.drone.getAttribute(AttributeType.GPS);
         if (droneGps == null || !droneGps.isValid())
             return;

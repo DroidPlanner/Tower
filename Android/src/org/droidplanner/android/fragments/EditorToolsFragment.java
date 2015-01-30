@@ -238,7 +238,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         // Store the currently selected tool
         savedInstanceState.putString(STATE_SELECTED_TOOL, tool.name());
 
-        for(EditorToolsImpl toolImpl : editorToolsImpls){
+        for (EditorToolsImpl toolImpl : editorToolsImpls) {
             toolImpl.onSaveInstanceState(savedInstanceState);
         }
     }
@@ -399,9 +399,11 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
             this.missionProxy = missionProxy;
         }
 
-        void onSaveInstanceState(Bundle outState){}
+        void onSaveInstanceState(Bundle outState) {
+        }
 
-        void onRestoreInstanceState(Bundle savedState){}
+        void onRestoreInstanceState(Bundle savedState) {
+        }
 
         public void onMapClick(LatLong point) {
             if (missionProxy == null) return;
@@ -451,13 +453,13 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
             super(fragment);
         }
 
-        void onSaveInstanceState(Bundle outState){
+        void onSaveInstanceState(Bundle outState) {
             super.onSaveInstanceState(outState);
-            if(selectedType != null)
+            if (selectedType != null)
                 outState.putString(EXTRA_SELECTED_MARKER_MISSION_ITEM_TYPE, selectedType.name());
         }
 
-        void onRestoreInstanceState(Bundle savedState){
+        void onRestoreInstanceState(Bundle savedState) {
             super.onRestoreInstanceState(savedState);
             final String selectedTypeName = savedState.getString(EXTRA_SELECTED_MARKER_MISSION_ITEM_TYPE,
                     MARKER_ITEMS_TYPE[0].name());
@@ -495,7 +497,8 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
                 listener.skipMarkerClickEvents(true);
             }
 
-            missionProxy.selection.clearSelection();
+            if (missionProxy != null)
+                missionProxy.selection.clearSelection();
         }
 
         @Override
@@ -530,13 +533,13 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
             super(fragment);
         }
 
-        void onSaveInstanceState(Bundle outState){
+        void onSaveInstanceState(Bundle outState) {
             super.onSaveInstanceState(outState);
-            if(selectedType != null)
+            if (selectedType != null)
                 outState.putString(EXTRA_SELECTED_DRAW_MISSION_ITEM_TYPE, selectedType.name());
         }
 
-        void onRestoreInstanceState(Bundle savedState){
+        void onRestoreInstanceState(Bundle savedState) {
             super.onRestoreInstanceState(savedState);
             final String selectedTypeName = savedState.getString(EXTRA_SELECTED_DRAW_MISSION_ITEM_TYPE,
                     DRAW_ITEMS_TYPE[0].name());
@@ -556,7 +559,8 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
                 listener.skipMarkerClickEvents(false);
             }
 
-            missionProxy.selection.clearSelection();
+            if (missionProxy != null)
+                missionProxy.selection.clearSelection();
 
             if (selectedType == MissionItemType.SURVEY) {
                 Toast.makeText(editorToolsFragment.getContext(), R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
@@ -641,6 +645,9 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
         @Override
         public void onListItemClick(MissionItemProxy item) {
+            if (missionProxy == null)
+                return;
+
             missionProxy.removeItem(item);
             missionProxy.selection.clearSelection();
 
@@ -708,7 +715,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
                         @Override
                         public void onNo() {
-                            if(missionProxy != null)
+                            if (missionProxy != null)
                                 missionProxy.selection.clearSelection();
                         }
                     });
@@ -733,6 +740,9 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
         @Override
         public void onListItemClick(MissionItemProxy item) {
+            if (missionProxy == null)
+                return;
+
             if (missionProxy.selection.selectionContains(item)) {
                 missionProxy.selection.removeItemFromSelection(item);
             } else {
@@ -741,6 +751,9 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         }
 
         private void selectAll() {
+            if (missionProxy == null)
+                return;
+
             missionProxy.selection.setSelectionTo(missionProxy.getItems());
             EditorToolListener listener = editorToolsFragment.listener;
             if (listener != null)
@@ -762,7 +775,9 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
             Toast.makeText(editorToolsFragment.getContext(), "Click on mission items to select them.",
                     Toast.LENGTH_SHORT).show();
-            missionProxy.selection.clearSelection();
+
+            if (missionProxy != null)
+                missionProxy.selection.clearSelection();
         }
 
         @Override
