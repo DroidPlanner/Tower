@@ -37,7 +37,6 @@ public class DroidPlannerPrefs {
 	private static final boolean DEFAULT_OFFLINE_MAP_ENABLED = false;
 	private static final String DEFAULT_MAP_TYPE = "";
 	private static final AutoPanMode DEFAULT_AUTO_PAN_MODE = AutoPanMode.DISABLED;
-	private static final boolean DEFAULT_GUIDED_MODE_ON_LONG_PRESS = true;
 	public static final boolean DEFAULT_PREF_UI_LANGUAGE = false;
 	public static final String DEFAULT_SPEECH_PERIOD = "0";
 	public static final boolean DEFAULT_TTS_CEILING_EXCEEDED = true;

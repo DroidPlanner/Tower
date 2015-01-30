@@ -5,8 +5,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.mode.ModeFollowFragment;
 import org.droidplanner.android.maps.MarkerInfo;
 
 /**
@@ -14,15 +16,25 @@ import org.droidplanner.android.maps.MarkerInfo;
  */
 public class GuidedScanROIMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
 
-    private LatLong roiCoord;
+    public static final double DEFAULT_FOLLOW_ROI_ALTITUDE = 10; //meters
+    private LatLongAlt roiCoord;
 
     @Override
     public void setPosition(LatLong coord){
-        this.roiCoord = coord;
+        if(coord == null || coord instanceof LatLongAlt){
+            roiCoord = (LatLongAlt) coord;
+        }
+        else {
+            double defaultHeight = DEFAULT_FOLLOW_ROI_ALTITUDE;
+            if(roiCoord != null)
+                defaultHeight = roiCoord.getAltitude();
+
+            this.roiCoord = new LatLongAlt(coord.getLatitude(), coord.getLongitude(), defaultHeight);
+        }
     }
 
     @Override
-    public LatLong getPosition(){
+    public LatLongAlt getPosition(){
         return roiCoord;
     }
 
