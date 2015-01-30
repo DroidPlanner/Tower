@@ -35,4 +35,13 @@
         style="@style/missionItemDetailCard"
         android:text="@string/radius_label"/>
 
+    <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+        android:id="@+id/roi_height_spinner"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        style="@style/missionItemDetailCard"
+        android:text="@string/roi_height_label"/>
+
 </LinearLayout>

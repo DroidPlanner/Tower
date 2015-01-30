@@ -337,6 +337,7 @@
     <string name="telemetry_default_value">0.0</string>
     <string name="climb_rate_label">Climb Rate</string>
     <string name="altitude_label">Altitude</string>
+    <string name="roi_height_label">ROI Height</string>
     <string name="meter_unit">m</string>
     <string name="speed_unit">m/s</string>
     <string name="speed_label">Speed</string>

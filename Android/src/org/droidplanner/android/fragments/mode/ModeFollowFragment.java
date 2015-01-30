@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.o3dr.android.client.Drone;
 import com.o3dr.android.client.apis.gcs.FollowApi;
 import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.gcs.follow.FollowState;
@@ -33,6 +34,8 @@ import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
 
 public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSelectedListener, DroneMap.MapMarkerProvider {
+
+    private static final double DEFAULT_MIN_RADIUS = 2; //meters
 
     private static final int ROI_TARGET_MARKER_INDEX = 0;
 
@@ -51,10 +54,13 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
         }
     };
 
+    private final GuidedScanROIMarkerInfo roiMarkerInfo = new GuidedScanROIMarkerInfo();
+
+    private final MarkerInfo[] emptyMarkers = {};
     private final MarkerInfo[] markers = new MarkerInfo[1];
 
     {
-        markers[ROI_TARGET_MARKER_INDEX] = new GuidedScanROIMarkerInfo();
+        markers[ROI_TARGET_MARKER_INDEX] = roiMarkerInfo;
     }
 
     private TextView modeDescription;
@@ -62,6 +68,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
     private ArrayAdapter<FollowType> adapter;
 
     private CardWheelHorizontalView<LengthUnit> mRadiusWheel;
+    private CardWheelHorizontalView<LengthUnit> roiHeightWheel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,16 +79,24 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
     public void onViewCreated(View parentView, Bundle savedInstanceState) {
         super.onViewCreated(parentView, savedInstanceState);
 
+        modeDescription = (TextView) parentView.findViewById(R.id.ModeDetail);
+
         final Context context = getContext();
         final LengthUnitProvider lengthUP = getLengthUnitProvider();
+
         final LengthWheelAdapter radiusAdapter = new LengthWheelAdapter(context, R.layout.wheel_text_centered,
                 lengthUP.boxBaseValueToTarget(2), lengthUP.boxBaseValueToTarget(200));
-
-        modeDescription = (TextView) parentView.findViewById(R.id.ModeDetail);
 
         mRadiusWheel = (CardWheelHorizontalView<LengthUnit>) parentView.findViewById(R.id.radius_spinner);
         mRadiusWheel.setViewAdapter(radiusAdapter);
         mRadiusWheel.addScrollListener(this);
+
+        final LengthWheelAdapter roiHeightAdapter = new LengthWheelAdapter(context, R.layout.wheel_text_centered,
+                lengthUP.boxBaseValueToTarget(0), lengthUP.boxBaseValueToTarget(200));
+
+        roiHeightWheel = (CardWheelHorizontalView<LengthUnit>) parentView.findViewById(R.id.roi_height_spinner);
+        roiHeightWheel.setViewAdapter(roiHeightAdapter);
+        roiHeightWheel.addScrollListener(this);
 
         spinner = (Spinner) parentView.findViewById(R.id.follow_type_spinner);
         adapter = new FollowTypesAdapter(context, getAppPrefs().isAdvancedMenuEnabled());
@@ -103,7 +118,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
         super.onApiConnected();
 
         final FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
-        if(followState != null){
+        if (followState != null) {
             final FollowType followType = followState.getMode();
             spinner.setSelection(adapter.getPosition(followType));
             onFollowTypeUpdate(followType, followState.getParams());
@@ -113,29 +128,41 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
 
-    private void onFollowTypeUpdate(FollowType followType, Bundle params){
+    private void onFollowTypeUpdate(FollowType followType, Bundle params) {
         updateModeDescription(followType);
 
         if (followType.hasParam(FollowType.EXTRA_FOLLOW_RADIUS)) {
-            showRadiusPicker();
-            updateCurrentRadius();
+            double radius = DEFAULT_MIN_RADIUS;
+            if (params != null) {
+                radius = params.getDouble(FollowType.EXTRA_FOLLOW_RADIUS, DEFAULT_MIN_RADIUS);
+            }
+
+            mRadiusWheel.setVisibility(View.VISIBLE);
+            mRadiusWheel.setCurrentValue((getLengthUnitProvider().boxBaseValueToTarget(radius)));
         } else {
-            hideRadiusPicker();
+            mRadiusWheel.setVisibility(View.GONE);
         }
 
-        if(!followType.hasParam(FollowType.EXTRA_FOLLOW_ROI_TARGET))
-            markers[ROI_TARGET_MARKER_INDEX].setPosition(null);
-        else if(params != null){
-            params.setClassLoader(LatLong.class.getClassLoader());
-            LatLong roiTarget = params.getParcelable(FollowType.EXTRA_FOLLOW_ROI_TARGET);
-            if(roiTarget != null){
-                updateROITargetMarker(roiTarget);
+        double roiHeight = GuidedScanROIMarkerInfo.DEFAULT_FOLLOW_ROI_ALTITUDE;
+        LatLong roiTarget = null;
+        if (followType.hasParam(FollowType.EXTRA_FOLLOW_ROI_TARGET)) {
+            roiTarget = roiMarkerInfo.getPosition();
+
+            if (params != null) {
+                params.setClassLoader(LatLong.class.getClassLoader());
+                roiTarget = params.getParcelable(FollowType.EXTRA_FOLLOW_ROI_TARGET);
             }
+
+            if (roiTarget instanceof LatLongAlt)
+                roiHeight = ((LatLongAlt) roiTarget).getAltitude();
         }
+
+        roiHeightWheel.setCurrentValue(getLengthUnitProvider().boxBaseValueToTarget(roiHeight));
+        updateROITargetMarker(roiTarget);
     }
 
-    private void updateModeDescription(FollowType followType){
-        switch(followType){
+    private void updateModeDescription(FollowType followType) {
+        switch (followType) {
             case GUIDED_SCAN:
                 modeDescription.setText(R.string.mode_follow_guided_scan);
                 break;
@@ -155,9 +182,9 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 
     @Override
     public void onScrollingEnded(CardWheelHorizontalView cardWheel, LengthUnit oldValue, LengthUnit newValue) {
+        final Drone drone = getDrone();
         switch (cardWheel.getId()) {
             case R.id.radius_spinner:
-                final Drone drone = getDrone();
                 if (drone.isConnected()) {
                     Bundle params = new Bundle();
                     params.putDouble(FollowType.EXTRA_FOLLOW_RADIUS, newValue.toBase().getValue());
@@ -165,19 +192,19 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
                 }
                 break;
 
+            case R.id.roi_height_spinner:
+                if (drone.isConnected()) {
+                    final LatLongAlt roiCoord = roiMarkerInfo.getPosition();
+                    if (roiCoord != null) {
+                        roiCoord.setAltitude(newValue.toBase().getValue());
+                        pushROITargetToVehicle(drone, roiCoord);
+                    }
+                }
+                break;
+
             default:
                 super.onScrollingEnded(cardWheel, oldValue, newValue);
                 break;
-        }
-    }
-
-    private void updateCurrentRadius() {
-        final Drone drone = getDrone();
-        if (mRadiusWheel != null && drone.isConnected()) {
-            final FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
-            Bundle params = followState.getParams();
-            double radius = params.getDouble(FollowType.EXTRA_FOLLOW_RADIUS, 2);
-            mRadiusWheel.setCurrentValue((getLengthUnitProvider().boxBaseValueToTarget(radius)));
         }
     }
 
@@ -193,14 +220,6 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
         onFollowTypeUpdate(type, null);
     }
 
-    private void hideRadiusPicker() {
-        mRadiusWheel.setVisibility(View.GONE);
-    }
-
-    private void showRadiusPicker() {
-        mRadiusWheel.setVisibility(View.VISIBLE);
-    }
-
     @Override
     public void onNothingSelected(AdapterView<?> arg0) {
     }
@@ -212,23 +231,42 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
         if (followState != null && followState.isEnabled() && followState.getMode().hasParam(FollowType.EXTRA_FOLLOW_ROI_TARGET)) {
             Toast.makeText(getContext(), R.string.guided_scan_roi_set_message, Toast.LENGTH_LONG).show();
 
-            Bundle params = new Bundle();
-            params.putParcelable(FollowType.EXTRA_FOLLOW_ROI_TARGET, coord);
-            FollowApi.updateFollowParams(drone, params);
+            final double roiHeight = roiHeightWheel.getCurrentValue().toBase().getValue();
+            final LatLongAlt roiCoord = new LatLongAlt(coord.getLatitude(), coord.getLongitude(), roiHeight);
+
+            pushROITargetToVehicle(drone, roiCoord);
             updateROITargetMarker(coord);
         } else {
             super.onGuidedClick(coord);
         }
     }
 
-    private void updateROITargetMarker(LatLong target){
-        markers[ROI_TARGET_MARKER_INDEX].setPosition(target);
+    private void pushROITargetToVehicle(Drone drone, LatLongAlt roiCoord) {
+        if (roiCoord == null)
+            return;
+
+        Bundle params = new Bundle();
+        params.putParcelable(FollowType.EXTRA_FOLLOW_ROI_TARGET, roiCoord);
+        FollowApi.updateFollowParams(drone, params);
+    }
+
+    private void updateROITargetMarker(LatLong target) {
+        roiMarkerInfo.setPosition(target);
         getBroadcastManager().sendBroadcast(new Intent(DroneMap.ACTION_UPDATE_MAP));
+
+        if (target == null) {
+            roiHeightWheel.setVisibility(View.GONE);
+        } else {
+            roiHeightWheel.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public MarkerInfo[] getMapMarkers() {
-        return markers;
+        if (roiMarkerInfo.isVisible())
+            return markers;
+        else
+            return emptyMarkers;
     }
 
     private static class FollowTypesAdapter extends ArrayAdapter<FollowType> {

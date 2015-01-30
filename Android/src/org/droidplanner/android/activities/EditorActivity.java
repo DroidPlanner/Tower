@@ -30,6 +30,7 @@ import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenMissionDialog;
+import org.droidplanner.android.fragments.EditorListFragment;
 import org.droidplanner.android.fragments.EditorMapFragment;
 import org.droidplanner.android.fragments.EditorToolsFragment;
 import org.droidplanner.android.fragments.EditorToolsFragment.EditorTools;
@@ -111,6 +112,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
     private View mLocationButtonsContainer;
     private ImageButton itemDetailToggle;
+    private EditorListFragment editorListFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -121,6 +123,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
         gestureMapFragment = ((GestureMapFragment) fragmentManager.findFragmentById(R.id.gestureMapFragment));
         editorToolsFragment = (EditorToolsFragment) fragmentManager.findFragmentById(R.id.editor_tools_fragment);
+        editorListFragment = (EditorListFragment) fragmentManager.findFragmentById(R.id.mission_list_fragment);
 
         infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
@@ -410,7 +413,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     }
 
     private void setupTool() {
-        getToolImpl().setup();
+        final EditorToolsFragment.EditorToolsImpl toolImpl = getToolImpl();
+        toolImpl.setup();
+        editorListFragment.enableDeleteMode(toolImpl.getEditorTools() == EditorTools.TRASH);
     }
 
     @Override
@@ -505,7 +510,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     }
 
     @Override
-    public void zoomToFitSelected(){
+    public void zoomToFitSelected() {
         final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
         List<MissionItemProxy> selected = missionProxy.selection.getSelected();
         if (selected.isEmpty()) {
