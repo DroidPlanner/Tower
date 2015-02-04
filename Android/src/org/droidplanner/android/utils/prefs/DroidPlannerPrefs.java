@@ -15,14 +15,14 @@ import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 
 /**
  * Provides structured access to Droidplanner preferences
- * 
+ *
  * Over time it might be good to move the various places that are doing
  * prefs.getFoo(blah, default) here - to collect prefs in one place and avoid
  * duplicating string constants (which tend to become stale as code evolves).
  * This is called the DRY (don't repeat yourself) principle of software
  * development.
- * 
- * 
+ *
+ *
  */
 public class DroidPlannerPrefs {
 
@@ -270,7 +270,7 @@ public class DroidPlannerPrefs {
 
 	/**
 	 * Updates the map auto panning target.
-	 * 
+	 *
 	 * @param target
 	 */
 	public void setAutoPanMode(AutoPanMode target) {

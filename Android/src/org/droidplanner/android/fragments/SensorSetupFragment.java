@@ -21,13 +21,12 @@ import org.droidplanner.android.widgets.viewPager.TabPageIndicator;
 public class SensorSetupFragment extends Fragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_sensor_setup, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState){
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         final SensorPagerAdapter pagerAdapter = new SensorPagerAdapter(getActivity()
@@ -36,8 +35,7 @@ public class SensorSetupFragment extends Fragment {
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.configuration_pager);
         viewPager.setAdapter(pagerAdapter);
 
-        final TabPageIndicator tabIndicator = (TabPageIndicator) view.findViewById(R.id
-                .configuration_tab_strip);
+        final TabPageIndicator tabIndicator = (TabPageIndicator) view.findViewById(R.id.configuration_tab_strip);
         tabIndicator.setViewPager(viewPager);
     }
 
@@ -52,28 +50,30 @@ public class SensorSetupFragment extends Fragment {
 
         @Override
         public Fragment getItem(int i) {
-            switch(i){
+            switch (i) {
                 case 0:
                 default:
-                	return new FragmentSetupMAG();
+                    return new FragmentSetupIMU();
                 case 1:
-                	return new FragmentSetupIMU();
+                    return new FragmentSetupMAG();
             }
         }
 
         @Override
         public int getCount() {
-            return 2;
+            //Enable mag calibration when it's fully working.
+//            return 2;
+            return 1;
         }
 
         @Override
-        public CharSequence getPageTitle(int position){
-            switch(position){
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
                 case 0:
                 default:
-                	return FragmentSetupMAG.getTitle(context);
+                    return FragmentSetupIMU.getTitle(context);
                 case 1:
-                	return FragmentSetupIMU.getTitle(context);
+                    return FragmentSetupMAG.getTitle(context);
             }
         }
     }
