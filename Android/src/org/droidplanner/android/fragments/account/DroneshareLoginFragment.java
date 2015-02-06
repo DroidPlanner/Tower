@@ -200,9 +200,11 @@ public class DroneshareLoginFragment extends Fragment {
                     if (loginResult) {
                         prefs.setDroneshareLogin(username);
                         prefs.setDronesharePassword(password);
+                        return Pair.create(true, "Login successful!");
                     }
-
-                    return Pair.create(loginResult, "Login successful!");
+                    else{
+                        return Pair.create(false, "Login failed!");
+                    }
                 }
             } catch (IOException e) {
                 return Pair.create(false, e.getMessage());
