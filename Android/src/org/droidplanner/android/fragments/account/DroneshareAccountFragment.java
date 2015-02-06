@@ -163,7 +163,7 @@ public class DroneshareAccountFragment extends Fragment {
 
         @Override
         protected void onCancelled() {
-            if (progressDialog != null)
+            if (progressDialog != null && progressDialog.isShowing())
                 progressDialog.dismiss();
         }
 
@@ -183,8 +183,11 @@ public class DroneshareAccountFragment extends Fragment {
 
         @Override
         protected void onPostExecute(JSONObject result) {
-            if (progressDialog != null)
+            if (progressDialog != null && progressDialog.isShowing())
                 progressDialog.dismiss();
+
+            if(loginListener == null)
+                return;
 
             if (result == null) {
                 if (forceUpdate)

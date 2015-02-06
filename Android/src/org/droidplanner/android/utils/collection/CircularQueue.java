@@ -1,7 +1,5 @@
 package org.droidplanner.android.utils.collection;
 
-import java.util.Arrays;
-
 /**
  * Created by Fredia Huya-Kouadio on 1/23/15.
  */
@@ -17,35 +15,35 @@ public class CircularQueue<T> {
         bufferIndex = 0;
     }
 
-    private int getAndIncrementIndex(){
+    private int getAndIncrementIndex() {
         int index = bufferIndex;
         bufferIndex = (bufferIndex + 1) % buffer.length;
         return index;
     }
 
-    private int decrementAndGetIndex(){
-        bufferIndex = (bufferIndex - 1) % buffer.length;
+    private int decrementAndGetIndex() {
+        bufferIndex = (buffer.length + bufferIndex - 1) % buffer.length;
         return bufferIndex;
     }
 
-    public int capacity(){
+    public int capacity() {
         return buffer.length;
     }
 
-    public void clear(){
+    public void clear() {
         bufferSize = 0;
         bufferIndex = 0;
 
-        for(int i = 0; i < buffer.length; i++){
+        for (int i = 0; i < buffer.length; i++) {
             buffer[i] = null;
         }
     }
 
-    public int size(){
+    public int size() {
         return bufferSize;
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return bufferSize == 0;
     }
 
@@ -55,7 +53,7 @@ public class CircularQueue<T> {
     }
 
     public T poll() {
-        if(isEmpty())
+        if (isEmpty())
             return null;
 
         int index = decrementAndGetIndex();

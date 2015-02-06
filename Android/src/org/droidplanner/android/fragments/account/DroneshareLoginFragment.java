@@ -31,9 +31,9 @@ public class DroneshareLoginFragment extends Fragment {
     private AccountLoginListener loginListener;
 
     @Override
-    public void onAttach(Activity activity){
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if(!(activity instanceof AccountLoginListener)){
+        if (!(activity instanceof AccountLoginListener)) {
             throw new IllegalStateException("Parent must implement " + AccountLoginListener.class.getName());
         }
 
@@ -41,7 +41,7 @@ public class DroneshareLoginFragment extends Fragment {
     }
 
     @Override
-    public void onDetach(){
+    public void onDetach() {
         super.onDetach();
         loginListener = null;
     }
@@ -216,17 +216,22 @@ public class DroneshareLoginFragment extends Fragment {
 
         @Override
         protected void onCancelled() {
-            progressDialog.dismiss();
+            if (progressDialog.isShowing())
+                progressDialog.dismiss();
         }
 
         @Override
         protected void onPostExecute(Pair<Boolean, String> result) {
-            progressDialog.dismiss();
-            Toast.makeText(getActivity(), result.second, Toast.LENGTH_LONG).show();
-            if(result.first)
-                loginListener.onLogin();
-            else
-                loginListener.onFailedLogin();
+            if (progressDialog.isShowing())
+                progressDialog.dismiss();
+
+            if (loginListener != null) {
+                Toast.makeText(getActivity(), result.second, Toast.LENGTH_LONG).show();
+                if (result.first)
+                    loginListener.onLogin();
+                else
+                    loginListener.onFailedLogin();
+            }
         }
     }
 }
