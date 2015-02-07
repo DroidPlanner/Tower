@@ -22,7 +22,7 @@
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
         android:background="@drawable/wp_title_rectangle"
-        android:text="Select Waypoint Type"
+        android:text="@string/label_mission_item_type_selection"
         android:textAllCaps="true"/>
 
     <ImageView
@@ -37,11 +37,12 @@
         />
 
     <TextView
+        android:id="@+id/mission_item_type_selection_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/WaypointType"
         style="@style/ModeDetailText"
         android:background="@drawable/mode_desc_rectangle"
-        android:text="Click on the spinner to select a type for the selected waypoints."/>
+        android:text="@string/description_mission_item_type_selection"/>
 
 </RelativeLayout>

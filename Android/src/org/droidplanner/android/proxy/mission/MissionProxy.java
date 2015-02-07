@@ -77,7 +77,7 @@ public class MissionProxy implements DPMap.PathSource {
     private final Drone.OnMissionItemsBuiltCallback missionItemsBuiltListener = new Drone.OnMissionItemsBuiltCallback() {
         @Override
         public void onMissionItemsBuilt(MissionItem.ComplexItem[] complexItems) {
-            notifyMissionUpdate();
+            notifyMissionUpdate(false);
         }
     };
 
@@ -121,7 +121,7 @@ public class MissionProxy implements DPMap.PathSource {
         load(previousMission, false);
     }
 
-    private void notifyMissionUpdate(boolean saveMission) {
+    public void notifyMissionUpdate(boolean saveMission) {
         if (saveMission && currentMission != null) {
             //Store the current state of the mission.
             undoBuffer.add(currentMission);
@@ -243,7 +243,7 @@ public class MissionProxy implements DPMap.PathSource {
         addMissionItems(missionItemsToAdd);
     }
 
-    private double getLastAltitude() {
+    public double getLastAltitude() {
         if (!missionItemProxies.isEmpty()) {
             MissionItem lastItem = missionItemProxies.get(missionItemProxies.size() - 1).getMissionItem();
             if (lastItem instanceof MissionItem.SpatialItem
@@ -402,7 +402,7 @@ public class MissionProxy implements DPMap.PathSource {
         notifyMissionUpdate();
     }
 
-    public void replaceAll(List<Pair<MissionItemProxy, MissionItemProxy>> oldNewList) {
+    public void replaceAll(List<Pair<MissionItemProxy, List<MissionItemProxy>>> oldNewList) {
         if (oldNewList == null) {
             return;
         }
@@ -422,13 +422,14 @@ public class MissionProxy implements DPMap.PathSource {
                 continue;
             }
 
-            final MissionItemProxy newItem = oldNewList.get(i).second;
             missionItemProxies.remove(index);
-            missionItemProxies.add(index, newItem);
+
+            final List<MissionItemProxy> newItems = oldNewList.get(i).second;
+            missionItemProxies.addAll(index, newItems);
 
             if (selection.selectionContains(oldItem)) {
                 selectionsToRemove.add(oldItem);
-                itemsToSelect.add(newItem);
+                itemsToSelect.addAll(newItems);
             }
         }
 
@@ -632,6 +633,7 @@ public class MissionProxy implements DPMap.PathSource {
     public void movePolygonPoint(Survey survey, int index, LatLong position) {
         survey.getPolygonPoints().get(index).set(position);
         this.drone.buildMissionItemsAsync(missionItemsBuiltListener, survey);
+        notifyMissionUpdate();
     }
 
     public static List<LatLong> getVisibleCoords(List<MissionItemProxy> mipList) {

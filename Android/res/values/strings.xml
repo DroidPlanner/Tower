@@ -532,5 +532,9 @@
     <string name="guided_scan_roi_set_message">Targeting selected location.</string>
     <string name="mode_follow_guided_scan">Vehicle follows the user while remaining locked on a point of interest. Long click on the map to select the point of interest.</string>
     <string name="pref_no_saved_bluetooth_device_title">No saved bluetooth device.</string>
+    <string name="label_mission_item_type_selection">Select Waypoint Type</string>
+    <string name="label_mission_item_type_no_selection">No available option</string>
+    <string name="description_mission_item_type_selection">Click on the spinner to select a type for the selected waypoints.</string>
+    <string name="description_mission_item_type_no_selection">No type option is available for the selected items.</string>
 
 </resources>

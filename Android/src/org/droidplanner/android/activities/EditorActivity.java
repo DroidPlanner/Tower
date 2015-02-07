@@ -474,7 +474,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
     @Override
     public void onWaypointTypeChanged(MissionItemType newType, List<Pair<MissionItemProxy,
-            MissionItemProxy>> oldNewItemsList) {
+            List<MissionItemProxy>>> oldNewItemsList) {
         missionProxy.replaceAll(oldNewItemsList);
     }
 
