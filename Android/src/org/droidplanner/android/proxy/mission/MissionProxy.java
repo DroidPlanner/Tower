@@ -77,7 +77,7 @@ public class MissionProxy implements DPMap.PathSource {
     private final Drone.OnMissionItemsBuiltCallback missionItemsBuiltListener = new Drone.OnMissionItemsBuiltCallback() {
         @Override
         public void onMissionItemsBuilt(MissionItem.ComplexItem[] complexItems) {
-            notifyMissionUpdate();
+            notifyMissionUpdate(false);
         }
     };
 
@@ -121,7 +121,7 @@ public class MissionProxy implements DPMap.PathSource {
         load(previousMission, false);
     }
 
-    private void notifyMissionUpdate(boolean saveMission) {
+    public void notifyMissionUpdate(boolean saveMission) {
         if (saveMission && currentMission != null) {
             //Store the current state of the mission.
             undoBuffer.add(currentMission);
@@ -633,6 +633,7 @@ public class MissionProxy implements DPMap.PathSource {
     public void movePolygonPoint(Survey survey, int index, LatLong position) {
         survey.getPolygonPoints().get(index).set(position);
         this.drone.buildMissionItemsAsync(missionItemsBuiltListener, survey);
+        notifyMissionUpdate();
     }
 
     public static List<LatLong> getVisibleCoords(List<MissionItemProxy> mipList) {
