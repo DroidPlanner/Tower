@@ -11,15 +11,23 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
-    <TextView
-        android:id="@+id/vehicle_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="15dp"
-        tools:text="quadcopter"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:minHeight="64dp"/>
+
+        <TextView
+            android:id="@+id/vehicle_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/borderlessButtonStyle"
+            android:padding="15dp"
+            tools:text="quadcopter"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textAllCaps="false"
+            android:textColor="@color/dark_grey"
+            android:drawableEnd="@drawable/ic_open_in_new_grey600_18dp"
+            android:drawableRight="@drawable/ic_open_in_new_grey600_18dp"
+            android:drawablePadding="10dp"
+            android:minHeight="64dp"/>
 
         <View
             android:layout_width="match_parent"

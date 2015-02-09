@@ -536,5 +536,6 @@
     <string name="label_mission_item_type_no_selection">No available option</string>
     <string name="description_mission_item_type_selection">Click on the spinner to select a type for the selected waypoints.</string>
     <string name="description_mission_item_type_no_selection">No type option is available for the selected items.</string>
+    <string name="label_vehicle_details">Vehicle details</string>
 
 </resources>

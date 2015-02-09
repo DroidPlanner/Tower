@@ -1,5 +1,8 @@
 package org.droidplanner.android.widgets.adapterViews;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.account.DroneshareAccountFragment;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -34,9 +38,11 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.ViewHo
         }
     }
 
+    private final Context context;
     private JSONArray userVehicleData;
 
-    public UserDataAdapter() {
+    public UserDataAdapter(Context context) {
+        this.context = context;
         userVehicleData = new JSONArray();
     }
 
@@ -75,6 +81,20 @@ public class UserDataAdapter extends RecyclerView.Adapter<UserDataAdapter.ViewHo
         if(vehicleName.isEmpty())
             vehicleName = vehicleType;
         holder.vehicleName.setText(vehicleName);
+
+        final String vehicleId = vehicleData.optString("id", null);
+        if(vehicleId != null) {
+            holder.vehicleName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final String vehicleInfoUrl = DroneshareAccountFragment.DRONESHARE_URL + "vehicle/" + vehicleId;
+                    context.startActivity(new Intent(Intent.ACTION_VIEW)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .setData(Uri.parse(vehicleInfoUrl)));
+                }
+            });
+        }
+
         holder.autopilot.setText("Autopilot: " + vehicleData.optString("autopilotType", ""));
 
         JSONArray missions = vehicleData.optJSONArray("missions");
