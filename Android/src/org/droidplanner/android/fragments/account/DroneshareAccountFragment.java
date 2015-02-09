@@ -3,6 +3,8 @@ package org.droidplanner.android.fragments.account;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +24,7 @@ import com.geeksville.apiproxy.rest.RESTClient;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.AccountLoginListener;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.android.widgets.NiceProgressView;
 import org.droidplanner.android.widgets.adapterViews.UserDataAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +39,8 @@ public class DroneshareAccountFragment extends Fragment {
     private static final String TAG = DroneshareAccountFragment.class.getSimpleName();
 
     private final static String EXTRA_USER_DATA = "extra_user_data";
+
+    public final static String DRONESHARE_URL = "http://www.droneshare.com/";
 
     private DroidPlannerPrefs dpPrefs;
 
@@ -79,6 +84,20 @@ public class DroneshareAccountFragment extends Fragment {
         final TextView usernameView = (TextView) view.findViewById(R.id.dshare_username);
         usernameView.setText(username);
 
+        final String userProfileUrl = DRONESHARE_URL + "user/" + username;
+        final TextView userUrlView = (TextView) view.findViewById(R.id.dshare_user_url);
+        userUrlView.setText(userProfileUrl);
+
+        final View userInfoBox = view.findViewById(R.id.user_info_container);
+        userInfoBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Open the user profile on droneshare.
+                startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(userProfileUrl)));
+            }
+        });
+
+        final NiceProgressView progressView = (NiceProgressView) view.findViewById(R.id.vehicle_loading_progress);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.user_vehicles_list);
 
         //Use this setting to improve performance if you know that changes in content do not change the layout side
@@ -90,7 +109,7 @@ public class DroneshareAccountFragment extends Fragment {
         final RecyclerView.LayoutManager gridLayoutMgr = new GridLayoutManager(context, colCount);
         recyclerView.setLayoutManager(gridLayoutMgr);
 
-        userDataAdapter = new UserDataAdapter();
+        userDataAdapter = new UserDataAdapter(context);
 
         if (savedInstanceState != null) {
             String userDataString = savedInstanceState.getString(EXTRA_USER_DATA);
@@ -106,7 +125,7 @@ public class DroneshareAccountFragment extends Fragment {
 
         recyclerView.setAdapter(userDataAdapter);
 
-        new LoadUserData(userData == null).execute(username, password);
+        new LoadUserData(progressView, userData == null).execute(username, password);
     }
 
     @Override
@@ -140,31 +159,24 @@ public class DroneshareAccountFragment extends Fragment {
 
     private class LoadUserData extends AsyncTask<String, Void, JSONObject> {
 
-        private final ProgressDialog progressDialog;
         private final boolean forceUpdate;
+        private final NiceProgressView progressView;
 
-        LoadUserData(boolean forceUpdate) {
+        LoadUserData(NiceProgressView progressView, boolean forceUpdate) {
+            this.progressView = progressView;
             this.forceUpdate = forceUpdate;
-            if (forceUpdate) {
-                progressDialog = new ProgressDialog(getActivity());
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                progressDialog.setIndeterminate(true);
-                progressDialog.setTitle("Loading user data...");
-            } else {
-                progressDialog = null;
-            }
         }
 
         @Override
         protected void onPreExecute() {
-            if (progressDialog != null)
-                progressDialog.show();
+            if(progressView != null && forceUpdate)
+                progressView.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onCancelled() {
-            if (progressDialog != null && progressDialog.isShowing())
-                progressDialog.dismiss();
+            if(progressView != null && forceUpdate)
+                progressView.setVisibility(View.GONE);
         }
 
         @Override
@@ -183,8 +195,8 @@ public class DroneshareAccountFragment extends Fragment {
 
         @Override
         protected void onPostExecute(JSONObject result) {
-            if (progressDialog != null && progressDialog.isShowing())
-                progressDialog.dismiss();
+            if(progressView != null && forceUpdate)
+                progressView.setVisibility(View.GONE);
 
             if(loginListener == null)
                 return;

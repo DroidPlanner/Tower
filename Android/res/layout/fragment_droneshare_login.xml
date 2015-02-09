@@ -76,6 +76,7 @@
                 android:minWidth="250dp"
                 android:minHeight="56dp"
                 android:background="@drawable/signup_button_bg"
+                android:textColor="@android:color/white"
                 android:layout_marginTop="20dp"
                 android:text="@string/label_sign_up"
                 android:textAllCaps="true"/>
@@ -110,6 +111,7 @@
                 android:background="@drawable/login_button_bg"
                 android:layout_marginTop="20dp"
                 android:text="@string/label_login"
+                android:textColor="@android:color/white"
                 android:textAllCaps="true"/>
 
             <TextView
