@@ -253,21 +253,23 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
             mMissionProxy.selection.notifySelectionUpdate();
         }
 
-        final TextView spinnerTitle = (TextView) view.findViewById(R.id.WaypointType);
-        final TextView spinnerDescription = (TextView) view.findViewById(R.id.mission_item_type_selection_description);
+        if(getResource() == R.layout.fragment_editor_detail_generic) {
+            final TextView spinnerTitle = (TextView) view.findViewById(R.id.WaypointType);
+            final TextView spinnerDescription = (TextView) view.findViewById(R.id.mission_item_type_selection_description);
 
-        if (list.isEmpty()) {
-            if (spinnerTitle != null)
-                spinnerTitle.setText(R.string.label_mission_item_type_no_selection);
+            if (list.isEmpty()) {
+                if (spinnerTitle != null)
+                    spinnerTitle.setText(R.string.label_mission_item_type_no_selection);
 
-            if (spinnerDescription != null)
-                spinnerDescription.setText(R.string.description_mission_item_type_no_selection);
-        } else {
-            if (spinnerTitle != null)
-                spinnerTitle.setText(R.string.label_mission_item_type_selection);
+                if (spinnerDescription != null)
+                    spinnerDescription.setText(R.string.description_mission_item_type_no_selection);
+            } else {
+                if (spinnerTitle != null)
+                    spinnerTitle.setText(R.string.label_mission_item_type_selection);
 
-            if (spinnerDescription != null)
-                spinnerDescription.setText(R.string.description_mission_item_type_selection);
+                if (spinnerDescription != null)
+                    spinnerDescription.setText(R.string.description_mission_item_type_selection);
+            }
         }
 
         commandAdapter = new AdapterMissionItems(getActivity(),

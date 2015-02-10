@@ -487,8 +487,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             final MissionItemType proxyType = proxy.getMissionItem().getType();
             if (referenceType == null) {
                 referenceType = proxyType;
-            } else if (referenceType != proxyType || MissionDetailFragment
-                    .typeWithNoMultiEditSupport.contains(referenceType)) {
+            } else if (referenceType != proxyType
+                    || MissionDetailFragment.typeWithNoMultiEditSupport.contains(referenceType)) {
                 //Return a generic mission detail.
                 return new MissionDetailFragment();
             }
