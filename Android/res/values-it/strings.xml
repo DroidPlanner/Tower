@@ -290,13 +290,10 @@
     <string name="pref_title_notifications">Notifiche</string>
     <string name="about"></string>
     <string name="channel_label"></string>
-    <string name="create_a_new_account">Crea un nuovo account</string>
     <string name="dialog_confirm_arming_msg">Attenzione! Le eliche ruoteranno e il drone potrebbe volare.</string>
     <string name="dialog_confirm_arming_title">Armare le eliche?</string>
     <string name="dialog_confirm_take_off_in_auto_msg">Attenzione! Il drone decollerà e inizierò la missione</string>
     <string name="dialog_confirm_take_off_in_auto_title">Decollare in Auto?</string>
-    <string name="do_not_use_droneshare">Non usare Droneshare</string>
-    <string name="do_you_want_to_use_droneshare_">Vuoi usare Droneshare?</string>
     <string name="drone_autopan_long_press">Fai una pressione prolungata per attivare l\'auto panning</string>
     <string name="drone_no_location">Posizione del drone non disponibile</string>
     <string name="dsinfo">Dronehare è un servizio web gratuito che ti permette di analizzare e condividere i voli.</string>
@@ -376,9 +373,7 @@
     <string name="pref_tts_seconds">secondi</string>
     <string name="pref_tts_warning_400ft_ceiling_exceeded">400ft. Superati</string>
     <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">In molte situazioni è illegale volare oltre 400ft</string>
-    <string name="login_to_an_existing_account">Login con un account esistente</string>
     <string name="setup_mag_start">Premi Calibra per iniziare la calibrazione del magnetometro. Effettua la calibrazione all\'apero e lontano da oggetti metallici</string>
-    <string name="uploader_fail_retry_message">Riproveremo dopo</string>
     <string name="usage_statistics">Statistiche utilizzo</string>
     <string name="waypointInfo_CameraTrigger">Attiva la fotocamera ad intervalli per distanze regolari </string>
     <string name="waypointInfo_EpmGrabber">Rilascia il carico dell\'EPM</string>
@@ -394,8 +389,6 @@
     <string name="structure_scan_description">Mappa un edificio</string>
     <string name="structure_scan_start_alt">Altezza di inizio</string>
     <string name="structure_scan_step_height">Step altezza</string>
-    <string name="uploader_notification_title">Caricamento su Droneshare</string>
-    <string name="uploader_success_message">Caricamento avvenuto! Seleziona per vedere…</string>
     <string name="waypointInfo_CondDistance">Non continua la missione finchè il Drone non è entro il raggio desiderato dal punto NAV.</string>
     <string name="waypointInfo_CondAlt">Sale / scende alla velocità specificata. Non coninua la missione finché non raggiunge l\'altezza voluta.</string>
     <string name="waypointInfo_CondYaw">Condizione che verifica se il drone ha raggiunto un certo angolo.</string>
