@@ -62,7 +62,7 @@
     <dimen name="flight_actions_container_height">320dp</dimen>
 
     <dimen name="toolbar_min_height">56dp</dimen>
-    <dimen name="action_bar_telem_height">112dp</dimen>
+    <dimen name="action_bar_telem_height">96dp</dimen>
     <dimen name="action_drawer_width">260dp</dimen>
 
 </resources>

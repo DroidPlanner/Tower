@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.GuidedState;
 
@@ -94,9 +95,12 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
     public void onApiConnected() {
         if (mAltitudeWheel != null) {
             GuidedState guidedState = getDrone().getAttribute(AttributeType.GUIDED_STATE);
+            LatLongAlt coordinate = guidedState == null ? null : guidedState.getCoordinate();
 
             final LengthUnit initialValue = getLengthUnitProvider().boxBaseValueToTarget(
-                    Math.max(guidedState == null ? DEFAULT_ALTITUDE : guidedState.getCoordinate().getAltitude(),
+                    Math.max(guidedState == null
+                                    ? DEFAULT_ALTITUDE
+                                    : coordinate == null ? DEFAULT_ALTITUDE : coordinate.getAltitude(),
                             DEFAULT_ALTITUDE));
             mAltitudeWheel.setCurrentValue(initialValue);
         }
