@@ -111,6 +111,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
 
     private TextView homeTelem;
     private TextView gpsTelem;
+    private PopupWindow gpsPopup;
 
     private TextView batteryTelem;
     private PopupWindow batteryPopup;
@@ -140,6 +141,15 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
 
         homeTelem = (TextView) view.findViewById(R.id.bar_home);
         gpsTelem = (TextView) view.findViewById(R.id.bar_gps);
+        final View gpsPopupView = inflater.inflate(R.layout.popup_info_gps, null);
+        gpsPopup = new PopupWindow(gpsPopupView,popupWidth, popupHeight, true);
+        gpsPopup.setBackgroundDrawable(popupBg);
+        gpsTelem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gpsPopup.showAsDropDown(gpsTelem);
+            }
+        });
 
         batteryTelem = (TextView) view.findViewById(R.id.bar_battery);
         final View batteryPopupView = inflater.inflate(R.layout.popup_info_power, null);
@@ -311,11 +321,17 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
     private void updateGpsTelem() {
         final Drone drone = getDrone();
 
+        final View popupView = gpsPopup.getContentView();
+        TextView satNoView = (TextView) popupView.findViewById(R.id.bar_gps_satno);
+        TextView hdopView = (TextView) popupView.findViewById(R.id.bar_gps_hdop);
+
         final String update;
         final int gpsIcon;
         if (!drone.isConnected()) {
             update = getString(R.string.empty_content);
             gpsIcon = R.drawable.ic_gps_off_black_24dp;
+            satNoView.setText(update);
+            hdopView.setText(update);
         } else {
             Gps droneGps = drone.getAttribute(AttributeType.GPS);
             final String fixStatus = droneGps.getFixStatus();
@@ -337,10 +353,14 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                     gpsIcon = R.drawable.ic_gps_not_fixed_black_24dp;
                     break;
             }
+
+            satNoView.setText(String.format("Satellites %d", droneGps.getSatellitesCount()));
+            hdopView.setText(String.format("HDOP %.1f", droneGps.getGpsEph()));
         }
 
         gpsTelem.setText(update);
         gpsTelem.setCompoundDrawablesWithIntrinsicBounds(gpsIcon, 0, 0, 0);
+        gpsPopup.update();
     }
 
     private void updateHomeTelem() {
