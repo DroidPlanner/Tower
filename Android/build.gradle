@@ -11,7 +11,7 @@ dependencies {
     compile 'com.android.support:cardview-v7:21.0.2'
     compile 'com.android.support:recyclerview-v7:21.0.2'
 
-    compile 'com.o3dr:3dr-services-lib:2.2.15'
+    compile 'com.o3dr:3dr-services-lib:2.2.16'
 
     compile files('libs/droneapi-java-0.3-SNAPSHOT.jar')
     compile files('libs/j2xx.jar')

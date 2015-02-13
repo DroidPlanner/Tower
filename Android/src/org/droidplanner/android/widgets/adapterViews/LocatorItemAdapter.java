@@ -10,8 +10,13 @@ import com.MAVLink.common.msg_global_position_int;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.LocatorListFragment;
+import org.droidplanner.android.utils.file.IO.TLogReader;
+import org.droidplanner.android.utils.file.IO.TLogReader.Event;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * MissionItem Adapter for the MissionItem horizontal list view. This adapter
@@ -33,11 +38,13 @@ public class LocatorItemAdapter extends RecyclerView.Adapter<LocatorItemAdapter.
         }
     }
 
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.US);
+
     private int selectedPosition = -1;
-    private final List<msg_global_position_int> msgList;
+    private final List<Event> msgList;
     private final LocatorListFragment.OnLocatorListListener listener;
 
-    public LocatorItemAdapter(List<msg_global_position_int> list, LocatorListFragment.OnLocatorListListener listener) {
+    public LocatorItemAdapter(List<TLogReader.Event> list, LocatorListFragment.OnLocatorListListener listener) {
         this.msgList = list;
         this.listener = listener;
     }
@@ -53,7 +60,7 @@ public class LocatorItemAdapter extends RecyclerView.Adapter<LocatorItemAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        final msg_global_position_int msg = msgList.get(position);
+        final Event msgEvent = msgList.get(position);
 
         final View container = holder.viewContainer;
         container.setActivated(isSelected(position));
@@ -63,7 +70,7 @@ public class LocatorItemAdapter extends RecyclerView.Adapter<LocatorItemAdapter.
                 setSelection(position);
                 if (listener != null) {
                     if (isSelected(position)) {
-                        listener.onItemClick(msg);
+                        listener.onItemClick((msg_global_position_int) msgEvent.getMavLinkMessage());
                     } else {
                         listener.onItemClick(null);
                     }
@@ -71,10 +78,8 @@ public class LocatorItemAdapter extends RecyclerView.Adapter<LocatorItemAdapter.
             }
         });
 
-        final int hour = msg.time_boot_ms / 3600000;
-        final int min = (msg.time_boot_ms % 3600000) / 60000;
-        final int sec = (msg.time_boot_ms % 60000) / 1000;
-        holder.timeView.setText(String.format("%02d:%02d:%02d", hour, min, sec));
+        Date eventDate = new Date(msgEvent.getTimestamp());
+        holder.timeView.setText(sdf.format(eventDate));
     }
 
     @Override

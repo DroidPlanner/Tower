@@ -37,7 +37,7 @@ public class LocatorMapFragment extends DroneMap {
         // add lastPosition
         final LatLong lastPosition = graphicLocator.getPosition();
         if(lastPosition != null && lastPosition.getLongitude() != 0 && lastPosition.getLatitude() != 0) {
-            mMapFragment.zoomToFitMyLocation(Collections.singletonList(lastPosition));
+            mMapFragment.zoomToFit(Collections.singletonList(lastPosition));
         }
         else{
             mMapFragment.goToMyLocation();

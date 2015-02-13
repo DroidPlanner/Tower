@@ -63,6 +63,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/editorMissionOverviewText"/>
+
+            <TextView
+                android:id="@+id/altitudeView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/editorMissionOverviewText"/>
         </LinearLayout>
 
         <include

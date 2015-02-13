@@ -83,7 +83,7 @@ public class TLogReader implements OpenFileDialog.FileReader {
                 while((packet = parser.mavlink_parse_char(in.readUnsignedByte())) == null);
 
                 if(msgFilter == MSGFILTER_NONE || packet.msgid == msgFilter) {
-                    if((timestamp - prevTimestamp) > 30000) {
+                    if((timestamp - prevTimestamp) > 5000) {
                         logEvents.add(new Event(timestamp, packet.unpack()));
                         prevTimestamp = timestamp;
                     }
@@ -112,7 +112,7 @@ public class TLogReader implements OpenFileDialog.FileReader {
         return true;
     }
 
-    private boolean openTLog(String file) {
+    public boolean openTLog(String file) {
         if (!FileManager.isExternalStorageAvailable()) {
             return false;
         }
@@ -135,7 +135,7 @@ public class TLogReader implements OpenFileDialog.FileReader {
                 while((packet = parser.mavlink_parse_char(in.readUnsignedByte())) == null);
 
                 if(msgFilter == MSGFILTER_NONE || packet.msgid == msgFilter) {
-                    if((timestamp - prevTimestamp) > 60000) {
+                    if((timestamp - prevTimestamp) > 5000) {
                         logEvents.add(new Event(timestamp, packet.unpack()));
                         prevTimestamp = timestamp;
             }
