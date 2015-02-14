@@ -1,6 +1,7 @@
 package org.droidplanner.android.widgets.spinnerWheel.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import org.beyene.sius.operation.Operation;
 import org.beyene.sius.unit.length.LengthUnit;
@@ -60,6 +61,10 @@ public class LengthWheelAdapter extends AbstractWheelTextAdapter<LengthUnit> {
 
     @Override
     public LengthUnit parseItemText(CharSequence itemText) {
-        return (LengthUnit) unitsList.get(0).valueOf(Double.parseDouble(itemText.toString()));
+        String text = itemText.toString();
+        if(TextUtils.isEmpty(text))
+            return (LengthUnit) unitsList.get(0).valueOf(0);
+
+        return (LengthUnit) unitsList.get(0).valueOf(Double.parseDouble(text));
     }
 }

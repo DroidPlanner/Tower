@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item
+        android:id="@+id/menu_connect"
+        app:showAsAction="never"
+        android:title="@string/menu_disconnect"/>
+
     <group
         android:id="@+id/menu_group_connected"
         android:enabled="false"
@@ -39,10 +44,5 @@
         </item>
 
     </group>
-
-    <item
-        android:id="@+id/menu_connect"
-        app:showAsAction="never"
-        android:title="@string/menu_disconnect"/>
 
 </menu>

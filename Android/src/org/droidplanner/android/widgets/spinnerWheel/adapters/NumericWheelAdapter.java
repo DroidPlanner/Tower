@@ -25,6 +25,7 @@
 package org.droidplanner.android.widgets.spinnerWheel.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 /**
  * Numeric Wheel adapter.
@@ -130,7 +131,10 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter<Integer> {
 
     @Override
     public Integer parseItemText(CharSequence itemText) {
-        return Integer.parseInt(itemText.toString());
+        String text = itemText.toString();
+        if(TextUtils.isEmpty(text))
+            return 0;
+        return Integer.parseInt(text);
     }
 
     @Override

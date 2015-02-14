@@ -1,6 +1,7 @@
 package org.droidplanner.android.widgets.spinnerWheel.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import org.beyene.sius.operation.Operation;
 import org.beyene.sius.unit.composition.speed.SpeedUnit;
@@ -61,6 +62,10 @@ public class SpeedWheelAdapter extends AbstractWheelTextAdapter<SpeedUnit>{
 
     @Override
     public SpeedUnit parseItemText(CharSequence itemText) {
-        return (SpeedUnit) unitsList.get(0).valueOf(Double.parseDouble(itemText.toString()));
+        String text = itemText.toString();
+        if(TextUtils.isEmpty(text))
+            return (SpeedUnit) unitsList.get(0).valueOf(0);
+
+        return (SpeedUnit) unitsList.get(0).valueOf(Double.parseDouble(text));
     }
 }

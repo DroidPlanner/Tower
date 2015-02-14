@@ -54,6 +54,8 @@ import java.util.List;
 public class EditorActivity extends DrawerNavigationUI implements OnPathFinishedListener,
         EditorToolsFragment.EditorToolListener, MissionDetailFragment.OnMissionDetailListener, OnEditorInteraction, MissionSelection.OnSelectionUpdateListener, OnClickListener, OnLongClickListener {
 
+    private static final double DEFAULT_SPEED = 5; //meters per second.
+
     /**
      * Used to retrieve the item detail window when the activity is destroyed,
      * and recreated.
@@ -67,6 +69,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     static {
         eventFilter.addAction(MissionProxy.ACTION_MISSION_PROXY_UPDATE);
         eventFilter.addAction(AttributeEvent.MISSION_RECEIVED);
+        eventFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_ENDED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -74,6 +77,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             switch (action) {
+                case AttributeEvent.PARAMETERS_REFRESH_ENDED:
                 case MissionProxy.ACTION_MISSION_PROXY_UPDATE:
                     updateMissionLength();
                     break;
@@ -357,12 +361,15 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
             double missionLength = missionProxy.getMissionLength();
             LengthUnit convertedMissionLength = unitSystem.getLengthUnitProvider().boxBaseValueToTarget(missionLength);
-            double speedParameter = dpApp.getDrone().getSpeedParameter();
-            String infoString = getString(R.string.editor_info_window_distance, convertedMissionLength.toString());
-            if (speedParameter > 0) {
-                int time = (int) (missionLength / speedParameter);
-                infoString += ", " + getString(R.string.editor_info_window_flight_time, time / 60, time % 60);
-            }
+            double speedParameter = dpApp.getDrone().getSpeedParameter() / 100; //cm/s to m/s conversion.
+            if(speedParameter == 0)
+                speedParameter = DEFAULT_SPEED;
+
+            int time = (int) (missionLength / speedParameter);
+
+            String infoString = getString(R.string.editor_info_window_distance, convertedMissionLength.toString())
+                    + ", " + getString(R.string.editor_info_window_flight_time, time / 60, time % 60);
+
             infoView.setText(infoString);
 
             // Remove detail window if item is removed
@@ -487,8 +494,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             final MissionItemType proxyType = proxy.getMissionItem().getType();
             if (referenceType == null) {
                 referenceType = proxyType;
-            } else if (referenceType != proxyType || MissionDetailFragment
-                    .typeWithNoMultiEditSupport.contains(referenceType)) {
+            } else if (referenceType != proxyType
+                    || MissionDetailFragment.typeWithNoMultiEditSupport.contains(referenceType)) {
                 //Return a generic mission detail.
                 return new MissionDetailFragment();
             }
