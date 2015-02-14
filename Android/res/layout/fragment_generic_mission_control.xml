@@ -15,5 +15,11 @@
         style="@style/flightControlButton.Row"
         android:drawableTop="@drawable/ic_connect"
         android:text="@string/menu_connect"/>
+		
+		<Button
+            android:id="@+id/mc_joystickBtn"
+            style="@style/flightControlButton.Row"
+            android:drawableTop="@drawable/ic_control"
+            android:text="@string/mission_control_control"/>
 
 </LinearLayout>

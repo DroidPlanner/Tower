@@ -1,6 +1,7 @@
 package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
+import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.core.model.Drone;
 
@@ -31,6 +32,7 @@ public class GenericActionsFragment extends Fragment implements View.OnClickList
 
         connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
         connectBtn.setOnClickListener(this);
+		view.findViewById(R.id.mc_joystickBtn).setOnClickListener(this);
     }
 
     @Override
@@ -38,6 +40,9 @@ public class GenericActionsFragment extends Fragment implements View.OnClickList
         switch(v.getId()){
             case R.id.mc_connectBtn:
                 ((SuperUI) getActivity()).toggleDroneConnection();
+                break;
+				case R.id.mc_joystickBtn:
+                ((FlightActivity) getActivity()).toggleRcControls();
                 break;
         }
     }

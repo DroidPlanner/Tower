@@ -1,90 +1,58 @@
 package org.droidplanner.android.utils.rc.input.GameController;
 
 import android.content.Context;
-import android.os.Handler;
+import android.provider.SyncStateContract.Constants;
+import android.util.SparseArray;
+import android.view.InputDevice;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+import org.droidplanner.android.utils.rc.RCConstants;
 import org.droidplanner.android.utils.rc.input.GenericInputDevice;
-import org.droidplanner.android.utils.rc.input.GameController.GameControllerMappingParser.Controller;
-import org.droidplanner.android.utils.rc.input.GameController.GameControllerMappingParser.DoubleAxisRemap;
-import org.droidplanner.android.utils.rc.input.GameController.GameControllerMappingParser.SingleAxisRemap;
-
-import java.util.List;
+import org.droidplanner.android.utils.rc.input.GameController.Controller.BaseCommand;
+import org.droidplanner.android.utils.rc.input.GameController.Controller.DoubleAxisRemap;
+import org.droidplanner.android.utils.rc.input.GameController.Controller.SingleAxisRemap;
 
 public class GameControllerDevice extends GenericInputDevice {
 
     private Controller controller;
-    private Handler mHandler;
-    private boolean stopped;
-    private MotionEvent lastMotionEvent;
-    private List<SingleAxisRemap> remap;
-    private List<DoubleAxisRemap> doubleRemap;
 
     public GameControllerDevice(Context context) {
         super(context);
         controller = GameControllerConfig.getInstance(context).getController();
-        remap = controller.getAxisRemap();
-        doubleRemap = controller.getDoubleAxisRemap();
-
-        mHandler = new Handler();
-        stopped = true;
-        start();
     }
 
     @Override
-    public void start() {
-        if (stopped) {
-            stopped = false;
-            mHandler.post(secondInputMethod);
+    public void onGenericMotionEvent(MotionEvent lastMotionEvent) {
+        super.onGenericMotionEvent(lastMotionEvent);
+
+        for (int channel : RCConstants.rchannels) {
+            BaseCommand channelCommand = controller.joystickRemap.get(channel);
+
+            if (channelCommand == null || !channelCommand.isValid()) {
+                break;
+            }
+            else if (channelCommand instanceof SingleAxisRemap) {
+                SingleAxisRemap c = (SingleAxisRemap) channelCommand;
+
+                if (c.isValid())
+                    setChannelValue(channel, lastMotionEvent.getAxisValue(c.Trigger)
+                            * (c.isReversed ? -1 : 1));
+            }
+            else if(channelCommand instanceof DoubleAxisRemap)// DoubleAxisRemap
+            {
+                DoubleAxisRemap c = (DoubleAxisRemap) channelCommand;
+                float incrementAxisValue = lastMotionEvent.getAxisValue(c.TriggerIncrement);
+                float decrementAxisValue = lastMotionEvent.getAxisValue(c.TriggerDecrement);
+                float newValue = incrementAxisValue - decrementAxisValue;
+                setChannelValue(channel, newValue);
+            }
         }
+        
+        notifyChannelsChanged();
     }
 
-    @Override
-    public void stop() {
-        stopped = true;
-        mHandler.removeCallbacks(secondInputMethod);
+    public void onKeyUp(int keycode, KeyEvent event) {
+
     }
-
-    @Override
-    public void onGenericMotionEvent(MotionEvent e) {
-        super.onGenericMotionEvent(e);
-        lastMotionEvent = e;
-
-        for (int x = 0; x < remap.size(); x++) {
-            SingleAxisRemap c = remap.get(x);
-            setChannelValue(c.mDestination, lastMotionEvent.getAxisValue(c.mSourceAxis) * c.mMultiplierReversed);
-        }
-
-        if (isListenerBound()) {
-            listener.onChannelsChanged(rc_channels);
-        }
-    }
-
-    private void updateChannelsMode2() {
-        if(lastMotionEvent == null)
-            return;
-
-        for (int x = 0; x < doubleRemap.size(); x++) {
-            DoubleAxisRemap c = doubleRemap.get(x);
-            if (c.mIncrementAxis != -1)
-                setChannelValue(c.mDestination, rc_channels[c.mDestination] + lastMotionEvent.getAxisValue(c.mIncrementAxis) * 0.03f);
-            if (c.mDecrementAxis != -1)
-                setChannelValue(c.mDestination, rc_channels[c.mDestination] - lastMotionEvent.getAxisValue(c.mDecrementAxis) * 0.03f);
-        }
-
-        if (isListenerBound()) {
-            listener.onChannelsChanged(rc_channels);
-        }
-    }
-
-    Runnable secondInputMethod = new Runnable() {
-        @Override
-        public void run() {
-            updateChannelsMode2();
-            if (!stopped)
-                mHandler.postDelayed(this, 50);
-        }
-
-    };
-
 }

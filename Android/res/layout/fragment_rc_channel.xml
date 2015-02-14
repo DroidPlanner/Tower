@@ -17,7 +17,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:paddingTop="5dp"
-            android:text="Throttle"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -29,7 +28,6 @@
             android:layout_alignRight="@+id/lblTitle"
             android:layout_below="@id/lblTitle"
             android:gravity="center_horizontal"
-            android:text="0"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#F00" />
     </RelativeLayout>
@@ -56,7 +54,7 @@
             android:text="Reverse"
             android:textColor="#FFF" />
     </LinearLayout>
-
+    
     <LinearLayout
         android:id="@+id/viewMode2"
         android:layout_width="wrap_content"
@@ -85,20 +83,6 @@
             android:background="?android:attr/selectableItemBackground"
             android:text="Decrement JoyStick"
             android:textColor="#FFF" />
-
-        <!--
-            <EditText
-            android:id="@+id/txtSize"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/btnSecondKey"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/btnSecondKey"
-            android:ems="10"
-            android:hint="Inc"
-            android:inputType="number"
-            android:textColor="#FFF" />
-        -->
     </LinearLayout>
 
 </LinearLayout>

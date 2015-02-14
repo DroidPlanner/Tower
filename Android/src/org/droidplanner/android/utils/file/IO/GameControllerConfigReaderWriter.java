@@ -1,77 +1,49 @@
 package org.droidplanner.android.utils.file.IO;
 
 import android.content.Context;
-import android.content.res.AssetManager;
-
 import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.android.utils.file.FileManager;
-import org.droidplanner.android.utils.rc.input.GameController.GameControllerMappingParser;
+import org.droidplanner.android.utils.file.FileStream;
+import org.droidplanner.android.utils.rc.input.GameController.Controller;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class GameControllerConfigReaderWriter {
-    private final String GCCONFIGFILENAME = "controllerconfig.json";
+    private final static String GCCONFIGFILENAME = "controller.conf";
 
-    public GameControllerMappingParser load(Context context) {
+    public Controller load(Context context) {
         try {
-            return internalLoad(context);
+            ObjectInputStream inReader = new ObjectInputStream(
+                    FileStream.getControllerConfigStream(context, GCCONFIGFILENAME));
+            return (Controller) inReader.readObject();
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
-        }
-    }
-
-    private GameControllerMappingParser internalLoad(Context context) throws IOException {
-        File dir = new File(DirectoryPath.getParametersPath());
-        if (!dir.exists())
-            dir.mkdirs();
-
-        File jsonFile = new File(DirectoryPath.getParametersPath() + GCCONFIGFILENAME);
-        InputStream in;
-        if (!jsonFile.exists() || !FileManager.isExternalStorageAvailable()) {
-            AssetManager assetManager = context.getAssets();
-            in = assetManager.open(GCCONFIGFILENAME);
-            OutputStream out = new FileOutputStream(jsonFile);
-            FileManager.copyFile(in, out);
-            in = assetManager.open(GCCONFIGFILENAME);
-            out.close();
-        }
-        else
-        {
-            in = new FileInputStream(jsonFile);
-        }
-        byte[] configurationBytes = new byte[in.available()];
-        in.read(configurationBytes);
-        in.close();
-        String json = new String(configurationBytes);
-
-        GameControllerMappingParser mapping = new GameControllerMappingParser();
-        mapping.parse(json);
-
-        return mapping;
-    }
-
-    public void save(String json) {
-        File jsonFile = new File(DirectoryPath.getParametersPath() + GCCONFIGFILENAME);
-        if(!FileManager.isExternalStorageAvailable())
-            return;
-
-        PrintWriter out = null;
-        try {
-            out = new PrintWriter(jsonFile);
-            out.write(json);
-        } catch (FileNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        } finally {
+        }
+        return null;
+    }
+
+    public boolean save(Controller controller) {
+        File jsonFile = new File(DirectoryPath.getParametersPath() + GCCONFIGFILENAME);
+        if (!FileManager.isExternalStorageAvailable())
+            return false;
+
+        try {
+            ObjectOutputStream out = null;
+            out = new ObjectOutputStream(new FileOutputStream(jsonFile));
+            out.writeObject(controller);
             if (out != null)
                 out.close();
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 }

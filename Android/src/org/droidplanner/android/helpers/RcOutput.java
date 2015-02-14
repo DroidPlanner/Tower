@@ -14,22 +14,10 @@ import java.util.concurrent.TimeUnit;
 
 public class RcOutput {
 	private static final int DISABLE_OVERRIDE = 0;
-	private static final int RC_TRIM = 1500;
-	private static final int RC_RANGE = 550;
 	private Context parrentContext;
 	private ScheduledExecutorService scheduleTaskExecutor;
 	private Drone drone;
 	public int[] rcOutputs = new int[8];
-
-	public static final int AILERON = 0;
-	public static final int ELEVATOR = 1;
-	public static final int TROTTLE = 2;
-	public static final int RUDDER = 3;
-
-	public static final int RC5 = 4;
-	public static final int RC6 = 5;
-	public static final int RC7 = 6;
-	public static final int RC8 = 7;
 
 	public RcOutput(Drone drone, Context context) {
 		this.drone = drone;

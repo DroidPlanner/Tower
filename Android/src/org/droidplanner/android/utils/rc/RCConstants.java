@@ -1,6 +1,5 @@
 package org.droidplanner.android.utils.rc;
 
-import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -15,28 +14,23 @@ public class RCConstants {
     public static final int RC7 = 6;
     public static final int RC8 = 7;
 
+    
     public static final int[] rchannels = {
-            AILERON, ELEVATOR, THROTTLE, RUDDER
-            // TODO Add the rest after testing
+            AILERON, ELEVATOR, THROTTLE, RUDDER, RC5, RC6, RC7, RC8
     };
-    public static final String[] STRINGRCCHANNELS = {
-            "AILERON", "ELEVATOR", "THROTTLE", "RUDDER"
-            // TODO Add the rest after testing
+    public static final String[] RChannelsTitle = {
+        "Aileron", "Elevator", "Throttle", "Rudder", "RC5", "RC6", "RC7", "RC8"
     };
-
+    
     public final static int MODE_SINGLEKEY = 0;
     public final static int MODE_INCREMENTKEY = 1;
     public final static int MODE_DECREMENTKEY = 2;
+    
     public static boolean isPhysicalDeviceEvent(MotionEvent event) {
-        int sources = event.getSource();
-        boolean isJoystick = (((sources & InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD)
-                || ((sources & InputDevice.SOURCE_JOYSTICK)
-                == InputDevice.SOURCE_JOYSTICK));
-        boolean isTrigger = event.getAxisValue(11) < 0.5f || event.getAxisValue(14) < 0.5f; // Ouya left and right triggers
-        return isJoystick || isTrigger;
+        return event.getDeviceId() > 0;
 
     }
-    public static boolean isPhysicalDeviceEvent(KeyEvent event) {
-        return event.getKeyCode() == 110; // For now, find better way, probably using device id
+    public static boolean isPhysicalDeviceKeyCode(KeyEvent event) {
+        return event.getDeviceId() > 0;
     }
 }

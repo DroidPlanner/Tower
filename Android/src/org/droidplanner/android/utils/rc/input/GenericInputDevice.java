@@ -59,8 +59,9 @@ public abstract class GenericInputDevice {
     protected boolean isListenerBound() {
         return listener != null;
     }
-
-    public abstract void start();
-
-    public abstract void stop();
+    protected void notifyChannelsChanged() {
+        if (isListenerBound()) {
+            listener.onChannelsChanged(rc_channels);
+        }
+    }
 }

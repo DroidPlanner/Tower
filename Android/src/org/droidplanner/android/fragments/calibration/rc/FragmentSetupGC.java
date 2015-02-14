@@ -1,75 +1,65 @@
 package org.droidplanner.android.fragments.calibration.rc;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
 
 import org.droidplanner.R;
-import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.activities.helpers.ControllerEventCaptureView;
 import org.droidplanner.android.activities.interfaces.PhysicalDeviceEvents;
-import org.droidplanner.android.dialogs.UninterruptingDialog;
 import org.droidplanner.android.utils.rc.RCConstants;
 import org.droidplanner.android.utils.rc.RCControlManager;
-import org.droidplanner.android.utils.rc.input.AxisFinder;
 import org.droidplanner.android.utils.rc.input.GenericInputDevice.IRCEvents;
+import org.droidplanner.android.utils.rc.input.GameController.Controller.DoubleAxisRemap;
+import org.droidplanner.android.utils.rc.input.GameController.Controller.SingleAxisRemap;
 import org.droidplanner.android.utils.rc.input.GameController.GameControllerConfig;
 import org.droidplanner.android.widgets.rcchannel.GameControllerChannel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentSetupGC extends Fragment implements
         GameControllerChannel.GameControllerChannelEvents, PhysicalDeviceEvents, IRCEvents {
 
     private GameControllerConfig gcConfig;
-    private GameControllerChannel[] channels;
+    private List<GameControllerChannel> channels = new ArrayList<GameControllerChannel>();
 
     private RCControlManager rcOutput;
-    private UninterruptingDialog dialog;
-    private int nextChannelToAssignMode;
-    private int nextChannelToAssign = -1;
+    
+    private ControllerEventCaptureView eventsView;
+    private WindowManager wm;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_setup_gc_main, container, false);
+        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.fragment_setup_gc_main, container, false);
 
         gcConfig = GameControllerConfig.getInstance(getActivity());
-
-        String packageName = this.getActivity().getPackageName();
-        channels = new GameControllerChannel[RCConstants.rchannels.length];
-        for(int x = 0; x < RCConstants.rchannels.length; x++) {
-            int id = getResources().getIdentifier("gc" + RCConstants.STRINGRCCHANNELS[x], "id", packageName);
-            GameControllerChannel current = (GameControllerChannel) view.findViewById(id);
-            current.IDENTIFIYING_CHANNEL_KEY = RCConstants.rchannels[x];
-            current.setCheckedWithoutEvent(gcConfig.isReversed(RCConstants.rchannels[x]));
-            current.setFirstMode(!gcConfig.isAssigned(current.IDENTIFIYING_CHANNEL_KEY, RCConstants.MODE_INCREMENTKEY));
-            channels[x] = current;
+        
+        for(int channelId : RCConstants.rchannels) { //For each channel
+            GameControllerChannel current = new GameControllerChannel(this.getActivity());
+            current.setTag(channelId);
+            current.setTitle(RCConstants.RChannelsTitle[channelId]);
+            current.setFirstMode(gcConfig.isSingleAxis(channelId));
+            current.setCheckedWithoutEvent(gcConfig.isReversed(channelId));
+            
+            view.addView(current);
+            channels.add(current);
         }
-
-        ((SuperUI) getActivity()).registerPhysicalDeviceEventListener(this);
+        
         rcOutput = new RCControlManager(this.getActivity());
         rcOutput.registerListener(this);
-
-        dialog = new UninterruptingDialog(this.getActivity());
-        dialog.setTitle("Waiting for input...");
-        dialog.setIndeterminate(true);
-        dialog.setMessage("Move Joystick to autodetect");
-        dialog.setCancelable(true);
-        dialog.setButton(ProgressDialog.BUTTON_NEUTRAL, "Cancel",
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        cancelJoystickAssign();
-                        dialog.dismiss();
-                    }
-
-                });
-        dialog.registerPhysicalDeviceEventsListener(this);
-
         return view;
     }
 
@@ -77,75 +67,121 @@ public class FragmentSetupGC extends Fragment implements
     public void onPause() {
         super.onPause();
 
-        for (int x = 0; x < channels.length; x++) {
-            if (channels[RCConstants.rchannels[x]].isFirstMode())
-                gcConfig.remove(RCConstants.rchannels[x], RCConstants.MODE_INCREMENTKEY);
-            else
-                gcConfig.remove(RCConstants.rchannels[x], RCConstants.MODE_SINGLEKEY);
-            channels[x].setListener(null);
-        }
+        for (GameControllerChannel current : channels)
+            current.setListener(null);
+        
         gcConfig.save();
+        removeControllerListener();
+    }
+    @Override
+    public void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        float[] channelsValues = new float[channels.size()];
+        for(int x = 0; x < channels.size(); x++) {
+            channelsValues[x] = channels.get(x).getValue();
+        }
+        outState.putFloatArray("channelsValues", channelsValues);
+    }
+    
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        
+        if(savedInstanceState != null) {
+            float[] channelsValues = savedInstanceState.getFloatArray("channelsValues");
+            for(int x = 0; x < channels.size(); x++) {
+                channels.get(x).setValue(channelsValues[x]);
+            }
+        }
+        
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        for(int x = 0; x < channels.length; x++) {
-            channels[x].setListener(this);
-            channels[x].setCheckedWithoutEvent(gcConfig.isReversed(RCConstants.rchannels[x]));
+        
+        for (GameControllerChannel current : channels) {
+            current.setCheckedWithoutEvent(gcConfig.isReversed((int) current.getTag()));
+            current.setListener(this);
         }
+        createControllerEventListener();
     }
 
     @Override
     public void onChannelsChanged(float[] channelsValue) {
-        for (int x = 0; x < channels.length; x++)
-            channels[x].setValue((int) channelsValue[RCConstants.rchannels[x]]);
+        for (GameControllerChannel current : channels) {
+            current.setValue(channelsValue[(int) current.getTag()]);
+        }
     }
 
     @Override
     public void physicalJoyMoved(MotionEvent event) {
         rcOutput.onGenericMotionEvent(event);
-        if (nextChannelToAssign != -1 && AxisFinder.figureOutAxis(event)) {
-            gcConfig.assign(nextChannelToAssign, AxisFinder.getFiguredOutAxis(), nextChannelToAssignMode);
-            cancelJoystickAssign();
-            dialog.dismiss();
+    }
+    
+    @Override
+    public void OnCheckedReverseChanged(GameControllerChannel v, boolean reversed) {
+        gcConfig.getSingleRemap((int) v.getTag()).isReversed = reversed;
+    }
+    
+    public static String getTitle(Context c) {
+        return "Controller Setup";
+    }
+
+    @Override
+    public void OnAssignPressed(GameControllerChannel gameControllerChannel, int mode, int trigger) {
+        int channelId = (int) gameControllerChannel.getTag();
+        switch(mode) {
+            case RCConstants.MODE_SINGLEKEY:
+                SingleAxisRemap remap = gcConfig.getSingleRemap(channelId);
+                remap.Trigger = trigger;
+                break;
+            case RCConstants.MODE_INCREMENTKEY:
+                DoubleAxisRemap remap1 = gcConfig.getDoubleRemap(channelId);
+                remap1.TriggerIncrement = trigger;
+                break;
+            case RCConstants.MODE_DECREMENTKEY:
+                DoubleAxisRemap remap2 = gcConfig.getDoubleRemap(channelId);
+                remap2.TriggerDecrement = trigger;
+                break;
         }
     }
 
-    public static String getTitle(Context c) {
-        return "Game Controller Setup";
+    @Override
+    public void physicalKeyUp(int keyCode, KeyEvent event) {
+        // TODO Auto-generated method stub
+        
     }
 
     @Override
-    public void OnSingleKeyPressed(GameControllerChannel gameControllerChannel) {
-        nextChannelToAssignMode = RCConstants.MODE_SINGLEKEY;
-        keyPressed(gameControllerChannel);
+    public void onSearchJoystickAxisStart() {
+        removeControllerListener(); //Remove overlay so dialog is visible
     }
 
     @Override
-    public void OnIncrementPressed(GameControllerChannel gameControllerChannel) {
-        nextChannelToAssignMode = RCConstants.MODE_INCREMENTKEY;
-        keyPressed(gameControllerChannel);
+    public void onSearchJoystickAxisFinished() {
+        createControllerEventListener();
     }
-
-    @Override
-    public void OnDecrementPressed(GameControllerChannel gameControllerChannel) {
-        nextChannelToAssignMode = RCConstants.MODE_DECREMENTKEY;
-        keyPressed(gameControllerChannel);
+    
+    private void removeControllerListener() {
+      if(eventsView != null && wm != null && eventsView.isShown());
+          wm.removeView(eventsView);
     }
-
-    private void keyPressed(GameControllerChannel gameControllerChannel) {
-        nextChannelToAssign = gameControllerChannel.IDENTIFIYING_CHANNEL_KEY;
-        dialog.show();
-    }
-
-    @Override
-    public void OnCheckedReverseChanged(GameControllerChannel v, boolean reversed) {
-        gcConfig.setReversed(v.IDENTIFIYING_CHANNEL_KEY, reversed);
-    }
-
-    protected void cancelJoystickAssign() {
-        nextChannelToAssign = -1;
+    
+    private void createControllerEventListener() {
+        if(eventsView == null)
+            eventsView = new ControllerEventCaptureView(this.getActivity());
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                5,
+                5,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                PixelFormat.TRANSPARENT);
+        eventsView.blockInput(false);
+        eventsView.registerPhysicalDeviceEventListener(this);
+        
+        wm = (WindowManager) this.getActivity().getSystemService(Activity.WINDOW_SERVICE);
+        wm.addView(eventsView, params);
     }
 
 }

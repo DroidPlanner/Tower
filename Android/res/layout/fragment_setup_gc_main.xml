@@ -7,41 +7,6 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="20dp" >
-
-	<org.droidplanner.android.widgets.rcchannel.GameControllerChannel
-        android:id="@+id/gcTHROTTLE"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        custom:title="Throttle"
-        custom:value="0" >
-    </org.droidplanner.android.widgets.rcchannel.GameControllerChannel>
-
-    <org.droidplanner.android.widgets.rcchannel.GameControllerChannel
-        android:id="@+id/gcRUDDER"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        custom:title="Rudder"
-        custom:value="0" >
-    </org.droidplanner.android.widgets.rcchannel.GameControllerChannel>
-
-    <org.droidplanner.android.widgets.rcchannel.GameControllerChannel
-        android:id="@+id/gcELEVATOR"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        custom:title="Elevator"
-        custom:value="0" >
-    </org.droidplanner.android.widgets.rcchannel.GameControllerChannel>
-
-    <org.droidplanner.android.widgets.rcchannel.GameControllerChannel
-        android:id="@+id/gcAILERON"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        custom:title="Aileron"
-        custom:value="0" >
-    </org.droidplanner.android.widgets.rcchannel.GameControllerChannel>
-
+    
+    
 </LinearLayout>

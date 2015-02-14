@@ -15,6 +15,12 @@
         android:layout_gravity="center_horizontal"
         >
 
+                <Button
+            android:id="@+id/mc_joystickBtn"
+            style="@style/flightControlButton.Row"
+            android:drawableTop="@drawable/ic_control"
+            android:text="@string/mission_control_control"/>
+                
         <Button
             android:id="@+id/mc_connectBtn"
             style="@style/flightControlButton.Row"
@@ -38,11 +44,13 @@
             android:drawableTop="@drawable/ic_arm"
             android:text="@string/mission_control_arm"/>
         
+        <!-- 
         <Button
             android:id="@+id/mc_joystickBtn"
             style="@style/flightControlButton.Row"
             android:drawableTop="@drawable/ic_control"
             android:text="@string/mission_control_control"/>
+            -->
         
         <Button
             android:id="@+id/mc_dronieBtn"
