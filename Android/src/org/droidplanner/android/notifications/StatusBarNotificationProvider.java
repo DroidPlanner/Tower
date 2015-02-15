@@ -129,7 +129,8 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
                             .setContentIntent(mNotificationIntent)
                             .setContentText(summaryText)
                             .setOngoing(mAppPrefs.isNotificationPermanent())
-                            .setSmallIcon(R.drawable.ic_launcher);
+                            .setSmallIcon(R.drawable.ic_stat_notify)
+                            .setColor(context.getResources().getColor(R.color.stat_notify_connected));
 
                     updateFlightMode(drone);
                     updateDroneState(drone);
@@ -172,7 +173,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
                                 .setContentIntent(mNotificationIntent)
                                 .setContentTitle(mContext.getString(R.string.disconnected))
                                 .setOngoing(false).setContentText("")
-                                .setSmallIcon(R.drawable.ic_launcher);
+                                .setSmallIcon(R.drawable.ic_stat_notify);
                     }
                     break;
 
