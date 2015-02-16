@@ -17,17 +17,17 @@
         android:layout_height="wrap_content"
         android:gravity="left|center_vertical"
         android:textColor="@android:color/black"
-        android:text="Satellites 3"
+        android:text="@string/empty_content"
         android:textSize="@dimen/info_bar_text_size"/>
 
     <TextView
-        android:id="@+id/bar_gps_hdop"
+        android:id="@+id/bar_gps_hdop_status"
         style="?android:attr/buttonBarButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left|center_vertical"
         android:textColor="@android:color/black"
-        android:text="HDOP 9.0"
+        android:text="@string/empty_content"
         android:textSize="@dimen/info_bar_text_size"/>
 
 </LinearLayout>
