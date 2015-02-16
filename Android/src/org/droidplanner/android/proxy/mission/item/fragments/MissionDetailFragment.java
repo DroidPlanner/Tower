@@ -49,6 +49,22 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
         typeWithNoMultiEditSupport.add(MissionItemType.SURVEY);
     }
 
+    private static final MissionItemType[] SUPPORTED_MISSION_ITEM_TYPES = {
+            MissionItemType.WAYPOINT,
+            MissionItemType.SPLINE_WAYPOINT,
+            MissionItemType.CIRCLE,
+            MissionItemType.REGION_OF_INTEREST,
+            MissionItemType.CHANGE_SPEED,
+            MissionItemType.TAKEOFF,
+            MissionItemType.LAND,
+            MissionItemType.RETURN_TO_LAUNCH,
+            MissionItemType.STRUCTURE_SCANNER,
+            MissionItemType.CAMERA_TRIGGER,
+            MissionItemType.EPM_GRIPPER,
+            MissionItemType.YAW_CONDITION,
+            MissionItemType.SET_SERVO
+    };
+
     public interface OnMissionDetailListener {
         /**
          * Only fired when the mission detail is shown as a dialog. Notifies the
@@ -154,7 +170,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
         final View view = getView();
         if (view == null) return;
 
-        List<MissionItemType> list = new LinkedList<MissionItemType>(Arrays.asList(MissionItemType.values()));
+        List<MissionItemType> list = new LinkedList<>(Arrays.asList(SUPPORTED_MISSION_ITEM_TYPES));
 
         if (mSelectedProxies.size() == 1) {
             final MissionItemProxy itemProxy = mSelectedProxies.get(0);
@@ -237,21 +253,23 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
             mMissionProxy.selection.notifySelectionUpdate();
         }
 
-        final TextView spinnerTitle = (TextView) view.findViewById(R.id.WaypointType);
-        final TextView spinnerDescription = (TextView) view.findViewById(R.id.mission_item_type_selection_description);
+        if(getResource() == R.layout.fragment_editor_detail_generic) {
+            final TextView spinnerTitle = (TextView) view.findViewById(R.id.WaypointType);
+            final TextView spinnerDescription = (TextView) view.findViewById(R.id.mission_item_type_selection_description);
 
-        if (list.isEmpty()) {
-            if (spinnerTitle != null)
-                spinnerTitle.setText(R.string.label_mission_item_type_no_selection);
+            if (list.isEmpty()) {
+                if (spinnerTitle != null)
+                    spinnerTitle.setText(R.string.label_mission_item_type_no_selection);
 
-            if (spinnerDescription != null)
-                spinnerDescription.setText(R.string.description_mission_item_type_no_selection);
-        } else {
-            if (spinnerTitle != null)
-                spinnerTitle.setText(R.string.label_mission_item_type_selection);
+                if (spinnerDescription != null)
+                    spinnerDescription.setText(R.string.description_mission_item_type_no_selection);
+            } else {
+                if (spinnerTitle != null)
+                    spinnerTitle.setText(R.string.label_mission_item_type_selection);
 
-            if (spinnerDescription != null)
-                spinnerDescription.setText(R.string.description_mission_item_type_selection);
+                if (spinnerDescription != null)
+                    spinnerDescription.setText(R.string.description_mission_item_type_selection);
+            }
         }
 
         commandAdapter = new AdapterMissionItems(getActivity(),

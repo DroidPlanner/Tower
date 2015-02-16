@@ -11,8 +11,8 @@
     <string name="app_settings">App Settings</string>
     <string name="flight_data">Flight Data</string>
     <string name="editor">Editor</string>
-    <string name="upload_mission">Upload Mission</string>
-    <string name="download_mission">Download Mission</string>
+    <string name="upload_mission">Upload mission</string>
+    <string name="download_mission">Download mission</string>
 
     <!-- Drone Setup tabs -->
     <string name="screen_tuning">Tuning</string>
@@ -459,8 +459,8 @@
     <string name="pref_permanent_notification_summary">Enable to make status bar notification permanent when connected.</string>
 
     <string name="zoom_fit">Zoom to Fit</string>
-    <string name="open_mission_file">Import Mission File</string>
-    <string name="save_mission_file">Export Mission File</string>
+    <string name="open_mission_file">Import from file</string>
+    <string name="save_mission_file">Export to file</string>
 
     <string name="pref_ui_gps_hdop_summary">Display HDOP instead of FIX in satellite info bar item</string>
     <string name="pref_ui_gps_hdop_title">Display Satellite HDOP</string>
@@ -488,7 +488,7 @@
 
     <!-- Drone locator strings -->
     <string name="locator">Flight History</string>
-    <string name="open_tlog_file">Open Log File</string>
+    <string name="open_tlog_file">Open log file</string>
     <string name="status_waiting_for_gps">Waiting for GPS…</string>
 
     <!-- Preference dialogs -->
@@ -511,10 +511,10 @@
     <string name="pref_advanced_menu_summary">Enable advanced menu options.</string>
     <string name="pref_licenses">Licenses</string>
     <string name="pref_licenses_summary">Libraries (and their licenses) used in this project</string>
-    <string name="upload">Upload</string>
-    <string name="download">Download</string>
-    <string name="import_from_device">Import from device</string>
-    <string name="export_to_device">Export to device</string>
+    <string name="upload_params">Upload parameters</string>
+    <string name="download_params">Download parameters</string>
+    <string name="import_from_device">Import from file</string>
+    <string name="export_to_device">Export to file</string>
     <string name="pref_title_local">Localization</string>
 
     <string name="unit_system_entry_auto">Auto</string>
