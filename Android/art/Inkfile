@@ -1,0 +1,9 @@
+#
+out: ../res
+
+drawable-mdpi/ic_launcher.png                      48x48
+drawable-hdpi/ic_launcher.png                      72x72
+drawable-xhdpi/ic_launcher.png                     96x96
+drawable-xxhdpi/ic_launcher.png                   144x144
+drawable-xxxhdpi/ic_launcher.png                  192x192
+../art/play_store_icon.png        ic_launcher.svg 512x512
