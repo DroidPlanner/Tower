@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.droidplanner.R;
-import org.droidplanner.android.fragments.calibration.imu.FragmentSetupIMU;
-import org.droidplanner.android.fragments.calibration.mag.FragmentSetupMAG;
 import org.droidplanner.android.fragments.calibration.rc.FragmentSetupGC;
 import org.droidplanner.android.fragments.calibration.rc.FragmentSetupRC;
 import org.droidplanner.android.widgets.viewPager.TabPageIndicator;

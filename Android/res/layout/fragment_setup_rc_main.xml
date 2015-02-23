@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Limit Throttle"
+        android:text="@string/fragment_setup_rc_limit_throttle"
         android:textAppearance="?android:attr/textAppearanceMedium"
         style="@style/configLayoutComplementaryColor"
         android:paddingTop="10dp"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         style="@style/configLayoutComplementaryColor"
-        android:text="100"
+        android:text="@string/stub"
         android:layout_marginLeft="15dp" />
 
     <Space
@@ -36,7 +36,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Limit max rudder/aileron/elevator"
+        android:text="@string/fragment_setup_rc_limit_other_channels"
         android:textAppearance="?android:attr/textAppearanceMedium"
         style="@style/configLayoutComplementaryColor"
         android:paddingTop="10dp"
@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         style="@style/configLayoutComplementaryColor"
-        android:text="100"
+        android:text="@string/stub"
         android:layout_marginLeft="15dp" />
 
 </LinearLayout>

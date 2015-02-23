@@ -1,6 +1,5 @@
 package org.droidplanner.android.widgets.rcchannel;
 
-import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
@@ -218,7 +217,7 @@ public class GameControllerChannel extends RelativeLayout implements
 
     @Override
     public boolean onLongClick(View v) {
-        Toast.makeText(this.getContext(), "Cleared", Toast.LENGTH_SHORT).show(); //TODO
+        Toast.makeText(this.getContext(), "Cleared", Toast.LENGTH_SHORT).show();
         Vibrator vibrator = (Vibrator) this.getContext().getSystemService(Context.VIBRATOR_SERVICE);
         vibrator.vibrate(250);
         if(listener != null)

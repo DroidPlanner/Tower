@@ -16,7 +16,7 @@
             android:id="@+id/btnArmAssign"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Arm Button" />
+            android:text="@string/fragment_setup_gc_armbuttonassign" />
     </LinearLayout>
 
 </ScrollView>

@@ -6,14 +6,11 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.widget.Toast;
 
 import org.droidplanner.android.fragments.calibration.rc.FragmentSetupRC;
 import org.droidplanner.android.utils.rc.input.GenericInput;
 import org.droidplanner.android.utils.rc.input.GenericInputDevice;
 import org.droidplanner.android.utils.rc.input.GenericInputDevice.IRCEvents;
-
-import java.util.Vector;
 
 public class RCControlManager implements IRCEvents {
     GenericInput input = GenericInput.CONTROLLER;

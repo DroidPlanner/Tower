@@ -10,8 +10,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
@@ -22,7 +20,6 @@ import org.droidplanner.android.helpers.RcOutput;
 import org.droidplanner.android.utils.rc.RCConstants;
 import org.droidplanner.android.utils.rc.RCControlManager;
 import org.droidplanner.android.utils.rc.input.GenericInputDevice.IRCEvents;
-import org.droidplanner.core.MAVLink.MavLinkArm;
 import org.droidplanner.core.model.Drone;
 
 public class RcFragment extends Fragment implements IRCEvents, PhysicalDeviceEvents {

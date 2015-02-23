@@ -1,12 +1,8 @@
 package org.droidplanner.android.utils.rc.input.GameController;
 
 import android.content.Context;
-import android.provider.SyncStateContract.Constants;
-import android.util.SparseArray;
-import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.widget.Toast;
 
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.utils.rc.RCConstants;

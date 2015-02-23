@@ -1,13 +1,10 @@
 package org.droidplanner.android.fragments.calibration.rc;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -26,7 +23,6 @@ import org.droidplanner.android.activities.interfaces.PhysicalDeviceEvents;
 import org.droidplanner.android.utils.rc.RCConstants;
 import org.droidplanner.android.utils.rc.RCControlManager;
 import org.droidplanner.android.utils.rc.input.GenericInputDevice.IRCEvents;
-import org.droidplanner.android.utils.rc.input.GameController.Controller.BaseCommand;
 import org.droidplanner.android.utils.rc.input.GameController.Controller.ButtonRemap;
 import org.droidplanner.android.utils.rc.input.GameController.Controller.DoubleAxisRemap;
 import org.droidplanner.android.utils.rc.input.GameController.Controller.SingleAxisRemap;
@@ -170,7 +166,7 @@ public class FragmentSetupGC extends Fragment implements OnClickListener, GameCo
             ButtonRemap remap = gcConfig.getButtonRemap(keyCode);
             remap.Action = ButtonRemap.ARM_DISARM;
             assignArmButton = false;
-            Toast.makeText(this.getActivity(), "Assigned Arm Button " + keyCode, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.getActivity(), "Assigned " + event.getDisplayLabel() + " To Arm/Disarm", Toast.LENGTH_SHORT).show();
             Vibrator vibrator = (Vibrator) this.getActivity().getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(250);
         }

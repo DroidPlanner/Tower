@@ -9,7 +9,6 @@ import org.droidplanner.android.utils.rc.input.GameController.Controller.DoubleA
 import org.droidplanner.android.utils.rc.input.GameController.Controller.SingleAxisRemap;
 
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 
 public class GameControllerConfig {
