@@ -11,7 +11,7 @@ import org.droidplanner.android.utils.rc.RCConstants;
 public class ControllerEventCaptureView extends View
 {
     private PhysicalDeviceEvents gcListener;
-    private boolean blockInput = false;
+    private boolean blockInput = true;
     
     public ControllerEventCaptureView(Context context) {
         super(context);

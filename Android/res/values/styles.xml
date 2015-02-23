@@ -128,7 +128,11 @@
     <style name="configLayout">
         <item name="android:background">#151515</item>
     </style>
-
+    
+    <style name="configLayoutComplementaryColor">
+        <item name="android:textColor">#FFF</item>
+    </style>
+    
     <style name="settingsLayout">
         <item name="android:background">#ededed</item>
     </style>
@@ -251,12 +255,6 @@
 	</style>
 
 	 <!-- RC setup screen -->
-
-	<style name="rc_textTitle" >
-        <item name="android:textColor">#fff</item>
-		<item name="android:textSize">@dimen/setup_rc_text_title_size</item>
-	    <item name="android:textStyle">bold</item>
-	</style>
 	<style name="rc_textPWM" >
         <item name="android:textColor">#fff</item>
 		<item name="android:textSize">16sp</item>
@@ -457,6 +455,13 @@
         <item name="android:layout_height">40dp</item>
         <item name="android:background">@drawable/btn_explore</item>
         <item name="android:layout_marginBottom">4dp</item>
+    </style>
+    
+    <style name="rcTextView">
+        <item name="android:padding">30dp</item>
+        <item name="android:text">@string/channel_label</item> <!-- Stub Text to see layout -->
+        <item name="android:textColor">@color/Droidblue</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
     </style>
 	
 </resources>

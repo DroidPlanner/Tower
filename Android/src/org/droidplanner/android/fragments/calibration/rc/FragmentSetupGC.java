@@ -6,15 +6,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.Toast;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.helpers.ControllerEventCaptureView;
@@ -22,6 +26,8 @@ import org.droidplanner.android.activities.interfaces.PhysicalDeviceEvents;
 import org.droidplanner.android.utils.rc.RCConstants;
 import org.droidplanner.android.utils.rc.RCControlManager;
 import org.droidplanner.android.utils.rc.input.GenericInputDevice.IRCEvents;
+import org.droidplanner.android.utils.rc.input.GameController.Controller.BaseCommand;
+import org.droidplanner.android.utils.rc.input.GameController.Controller.ButtonRemap;
 import org.droidplanner.android.utils.rc.input.GameController.Controller.DoubleAxisRemap;
 import org.droidplanner.android.utils.rc.input.GameController.Controller.SingleAxisRemap;
 import org.droidplanner.android.utils.rc.input.GameController.GameControllerConfig;
@@ -30,8 +36,7 @@ import org.droidplanner.android.widgets.rcchannel.GameControllerChannel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentSetupGC extends Fragment implements
-        GameControllerChannel.GameControllerChannelEvents, PhysicalDeviceEvents, IRCEvents {
+public class FragmentSetupGC extends Fragment implements OnClickListener, GameControllerChannel.GameControllerChannelEvents, PhysicalDeviceEvents, IRCEvents {
 
     private GameControllerConfig gcConfig;
     private List<GameControllerChannel> channels = new ArrayList<GameControllerChannel>();
@@ -40,11 +45,13 @@ public class FragmentSetupGC extends Fragment implements
     
     private ControllerEventCaptureView eventsView;
     private WindowManager wm;
+    private boolean assignArmButton = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.fragment_setup_gc_main, container, false);
-
+        ScrollView rootView = (ScrollView) inflater.inflate(R.layout.fragment_setup_gc_main, container, false);
+        LinearLayout view = (LinearLayout) rootView.findViewById(R.id.setup_gc_container);
+        
         gcConfig = GameControllerConfig.getInstance(getActivity());
         
         for(int channelId : RCConstants.rchannels) { //For each channel
@@ -52,6 +59,7 @@ public class FragmentSetupGC extends Fragment implements
             current.setTag(channelId);
             current.setTitle(RCConstants.RChannelsTitle[channelId]);
             current.setFirstMode(gcConfig.isSingleAxis(channelId));
+            //Change to setView(getView(BaseCommand))
             current.setCheckedWithoutEvent(gcConfig.isReversed(channelId));
             
             view.addView(current);
@@ -60,7 +68,9 @@ public class FragmentSetupGC extends Fragment implements
         
         rcOutput = new RCControlManager(this.getActivity());
         rcOutput.registerListener(this);
-        return view;
+        
+        view.findViewById(R.id.btnArmAssign).setOnClickListener(this);
+        return rootView;
     }
 
     @Override
@@ -121,7 +131,9 @@ public class FragmentSetupGC extends Fragment implements
     
     @Override
     public void OnCheckedReverseChanged(GameControllerChannel v, boolean reversed) {
-        gcConfig.getSingleRemap((int) v.getTag()).isReversed = reversed;
+        int channelId = (int) v.getTag();
+        if(!gcConfig.isSingleAxisButton(channelId))
+            gcConfig.getSingleRemap(channelId).isReversed = reversed;
     }
     
     public static String getTitle(Context c) {
@@ -144,13 +156,25 @@ public class FragmentSetupGC extends Fragment implements
                 DoubleAxisRemap remap2 = gcConfig.getDoubleRemap(channelId);
                 remap2.TriggerDecrement = trigger;
                 break;
+            case RCConstants.MODE_JOYSTICK_BUTTON:
+                ButtonRemap remap3 = gcConfig.getJoystickButtonRemap(channelId);
+                remap3.Trigger = trigger;
+                break;
         }
     }
 
     @Override
     public void physicalKeyUp(int keyCode, KeyEvent event) {
-        // TODO Auto-generated method stub
-        
+        if(assignArmButton) {
+            gcConfig.removeButtonRemapAction(1);
+            ButtonRemap remap = gcConfig.getButtonRemap(keyCode);
+            remap.Action = ButtonRemap.ARM_DISARM;
+            assignArmButton = false;
+            Toast.makeText(this.getActivity(), "Assigned Arm Button " + keyCode, Toast.LENGTH_SHORT).show();
+            Vibrator vibrator = (Vibrator) this.getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(250);
+        }
+        rcOutput.onKeyUp(keyCode, event);
     }
 
     @Override
@@ -177,11 +201,39 @@ public class FragmentSetupGC extends Fragment implements
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSPARENT);
-        eventsView.blockInput(false);
         eventsView.registerPhysicalDeviceEventListener(this);
         
         wm = (WindowManager) this.getActivity().getSystemService(Activity.WINDOW_SERVICE);
         wm.addView(eventsView, params);
     }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.btnArmAssign:
+                assignArmButton = true;
+                break;
+        }
+    }
+
+    @Override
+    public void clear(GameControllerChannel channel) {
+        gcConfig.getController().joystickRemap.remove(channel.getTag());
+    }
+    
+    /*public void onJoystickViewChanged(View gamecontrollerChannel, BaseCommand command) {
+        gcConfig.getController().joystickRemap.put(gameControllerChannel.getTag(), command);
+    }
+    public View getChannelView(BaseCommand command) {
+        if(command == null)
+            return null;
+        else if(command instanceof SingleAxisRemap)
+            return null;
+        else if(command instanceof ButtonRemap)
+            return null;
+        else if(command instanceof DoubleAxisRemap)
+            return null;
+        return null;
+    }*/
 
 }

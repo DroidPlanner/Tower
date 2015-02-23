@@ -1,16 +1,20 @@
 package org.droidplanner.android.widgets.rcchannel;
 
+import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.res.TypedArray;
+import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,9 +24,10 @@ import org.droidplanner.R;
 import org.droidplanner.android.dialogs.ControllerAxisKeyPressDialog;
 import org.droidplanner.android.dialogs.ControllerAxisKeyPressDialog.ControllerPressListener;
 import org.droidplanner.android.utils.rc.RCConstants;
+import org.droidplanner.android.utils.rc.input.AxisFinder;
 
 public class GameControllerChannel extends RelativeLayout implements
-        OnClickListener, OnCheckedChangeListener, ControllerPressListener {
+        OnClickListener, OnLongClickListener, OnCheckedChangeListener, ControllerPressListener {
     private TextView lblTitle;
     private TextView lblValue;
     private boolean firstMode;
@@ -45,6 +50,8 @@ public class GameControllerChannel extends RelativeLayout implements
         void onSearchJoystickAxisStart();
         
         void onSearchJoystickAxisFinished();
+        
+        void clear(GameControllerChannel channel);
     };
 
     public GameControllerChannel(Context context) {
@@ -85,13 +92,16 @@ public class GameControllerChannel extends RelativeLayout implements
 
         btnAssignKey = (Button) findViewById(R.id.btnAssignKey);
         btnAssignKey.setOnClickListener(this);
+        btnAssignKey.setOnLongClickListener(this);
 
         btnIncrementKey = (Button) findViewById(R.id.btnIncrementKey);
         btnIncrementKey.setOnClickListener(this);
+        btnIncrementKey.setOnLongClickListener(this);
 
         btnDecrementKey = (Button) findViewById(R.id.btnDecrementKey);
         btnDecrementKey.setOnClickListener(this);
-
+        btnDecrementKey.setOnLongClickListener(this);
+        
         chkReversed = (CheckBox) findViewById(R.id.chkReversed);
         chkReversed.setOnCheckedChangeListener(this);
 
@@ -169,13 +179,14 @@ public class GameControllerChannel extends RelativeLayout implements
 
             @Override
             public void onDismiss(DialogInterface dialog) {
+                AxisFinder.cancel(); //TODO move to appropriate place
                 if(listener != null)
                     listener.onSearchJoystickAxisFinished();
             }
             
         });
         dialog.registerListener(this);
-        dialog.setId(id);
+        dialog.ID = id;
         dialog.show();
     }
 
@@ -192,10 +203,27 @@ public class GameControllerChannel extends RelativeLayout implements
     }
 
     @Override
-    public void onControllerPress(int id, int key) {
+    public void onControllerPress(ControllerAxisKeyPressDialog dialog, int key, boolean fromJoystick) {
         if(listener != null) {
-            listener.OnAssignPressed(this, id, key);
+            if(fromJoystick) {
+                listener.OnAssignPressed(this, dialog.ID, key);
+                dialog.dismiss();
+            }
+            else if (dialog.ID == RCConstants.MODE_SINGLEKEY) {
+                listener.OnAssignPressed(this, RCConstants.MODE_JOYSTICK_BUTTON, key);
+                dialog.dismiss();
+            }
         }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        Toast.makeText(this.getContext(), "Cleared", Toast.LENGTH_SHORT).show(); //TODO
+        Vibrator vibrator = (Vibrator) this.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(250);
+        if(listener != null)
+            listener.clear(this);
+            return false;
     }
 
 }

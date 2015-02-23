@@ -77,6 +77,7 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
 	private ImageButton mGoToDroneLocation;
 
 	private RcFragment rcFragment;
+	public TelemetryFragment telemetryFragment;
 
     @Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -187,14 +188,14 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
         });
 
         // Add the telemetry fragment
-        Fragment telemetryFragment = fragmentManager.findFragmentById(R.id.telemetryFragment);
+        telemetryFragment = (TelemetryFragment) fragmentManager.findFragmentById(R.id.telemetryFragment);
         if (telemetryFragment == null) {
             telemetryFragment = new TelemetryFragment();
             fragmentManager.beginTransaction()
                     .add(R.id.telemetryFragment, telemetryFragment)
                     .commit();
         }
-
+        
         // Add the mode info panel fragment
         Fragment flightModePanel = fragmentManager.findFragmentById(R.id.sliding_drawer_content);
         if (flightModePanel == null) {
@@ -380,9 +381,13 @@ public class FlightActivity extends DrawerNavigationUI implements OnDroneListene
         if (rcFragment == null) {
             rcFragment = new RcFragment();
             fragmentManager.beginTransaction().add(R.id.containerRc, rcFragment).commit();
+            if(telemetryFragment != null)
+                telemetryFragment.setControllerStatusVisible(true);
         } else {
             fragmentManager.beginTransaction().remove(rcFragment).commit();
             rcFragment = null;
+            if(telemetryFragment != null)
+                telemetryFragment.setControllerStatusVisible(false);
         }
     }
 

@@ -11,8 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.helpers.ControllerEventCaptureView;
 import org.droidplanner.android.activities.interfaces.PhysicalDeviceEvents;
 import org.droidplanner.android.helpers.RcOutput;
@@ -24,7 +27,7 @@ import org.droidplanner.core.model.Drone;
 
 public class RcFragment extends Fragment implements IRCEvents, PhysicalDeviceEvents {
 
-    private TextView textViewThrottle, textViewRudder, textViewAileron, textViewElevator;
+    //private TextView textViewThrottle, textViewRudder, textViewAileron, textViewElevator;
 
     private RCControlManager rcManager;
     private RcOutput rcOutput;
@@ -32,12 +35,21 @@ public class RcFragment extends Fragment implements IRCEvents, PhysicalDeviceEve
     
     private ControllerEventCaptureView eventsView;
     private WindowManager wm;
+    private TelemetryFragment telemetryFragment;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        eventsView = new ControllerEventCaptureView(this.getActivity());
+    }
+    
+    private void createControllerEventListener() {
+        if(eventsView == null)
+            eventsView = new ControllerEventCaptureView(this.getActivity());
+        
+        if(eventsView.isShown())
+            return;
+        
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 5,
                 5,
@@ -54,7 +66,7 @@ public class RcFragment extends Fragment implements IRCEvents, PhysicalDeviceEve
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rc, container, false);
 
-        textViewThrottle = (TextView) view.findViewById(R.id.textViewRCThrottle);
+        /*textViewThrottle = (TextView) view.findViewById(R.id.textViewRCThrottle);
         textViewThrottle.setText("Move");
 
         textViewRudder = (TextView) view.findViewById(R.id.textViewRCRudder);
@@ -64,13 +76,15 @@ public class RcFragment extends Fragment implements IRCEvents, PhysicalDeviceEve
         textViewElevator.setText("To");
 
         textViewAileron = (TextView) view.findViewById(R.id.textViewRCAileron);
-        textViewAileron.setText("Initialize");
+        textViewAileron.setText("Initialize");*/
 
         drone = ((DroidPlannerApp) this.getActivity().getApplication()).getDrone();
         rcOutput = new RcOutput(drone, this.getActivity());
         rcManager = new RCControlManager(this.getActivity());
         rcManager.registerListener(this);
         rcOutput.enableRcOverride();
+        
+        telemetryFragment = ((FlightActivity) this.getActivity()).telemetryFragment; //TODO make listener in telemetry fragment instead of updating it like this
         return view;
     }
     
@@ -84,31 +98,46 @@ public class RcFragment extends Fragment implements IRCEvents, PhysicalDeviceEve
         super.onDestroy();
         rcManager.registerListener(null);
         rcOutput.disableRcOverride();
-        wm.removeView(eventsView);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        removeControllerEventListener();
+    }
+
+    private void removeControllerEventListener() {
+        if(wm != null)
+            wm.removeView(eventsView);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        createControllerEventListener();
     }
 
     @Override
     public void onChannelsChanged(float[] channels) {
-        textViewThrottle.setText("Thrt: " + Math.round(channels[RCConstants.THROTTLE]) + "");
-        textViewRudder.setText("Rudd: " + Math.round(channels[RCConstants.RUDDER]) + "");
-        textViewElevator.setText("Elev: " + Math.round(channels[RCConstants.ELEVATOR]) + "");
-        textViewAileron.setText("Ail: " + Math.round(channels[RCConstants.AILERON]) + "");
-
+        telemetryFragment.updateControllerStatus(channels);
+        /*
+        textViewThrottle.setText("Thrt: \n" + Math.round(channels[RCConstants.THROTTLE]) + "");
+        textViewRudder.setText("Rudd: \n" + Math.round(channels[RCConstants.RUDDER]) + "");
+        textViewElevator.setText("Elev: \n" + Math.round(channels[RCConstants.ELEVATOR]) + "");
+        textViewAileron.setText("Ail: \n" + Math.round(channels[RCConstants.AILERON]) + "");
+         */
         for(int x = 0; x < RCConstants.rchannels.length; x++) {
             rcOutput.setRcChannel(RCConstants.rchannels[x], channels[RCConstants.rchannels[x]]);
         }
     }
 
     @Override
-    public void physicalJoyMoved(MotionEvent event) { // Will be changed to send InputDevice to RcControlManager
+    public void physicalJoyMoved(MotionEvent event) {
         rcManager.onGenericMotionEvent(event);
     }
 
     @Override
     public void physicalKeyUp(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BUTTON_START) {
-            if (drone.isConnectionAlive())
-                MavLinkArm.sendArmMessage(drone, !drone.getState().isArmed());
-        }
+        rcManager.onKeyUp(keyCode, event);
     }
 }

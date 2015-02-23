@@ -66,6 +66,8 @@ public class Controller implements Serializable {
          * 
          */
         private static final long serialVersionUID = 2834977351964447707L;
+        public static final int ARM_DISARM = 1;
+        
         public int Trigger = -1;
         public double ActionValue = -1;
 

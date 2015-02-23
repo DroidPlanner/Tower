@@ -8,28 +8,26 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 public class ControllerAxisKeyPressDialog extends ProgressDialog {
 
     public interface ControllerPressListener
     {
-        void onControllerPress(int id, int key);
+        void onControllerPress(ControllerAxisKeyPressDialog mode, int key, boolean fromJoystick);
     }
 
     private ControllerPressListener listener;
-    private int id = 0;
+    public int ID;
     
     public ControllerAxisKeyPressDialog(Context context) {
         super(context);
         Initialize();
     }
-    public void setId(int id) {
-        this.id = id;
-    }
     private void Initialize() {
         setTitle("Waiting for input...");
         setIndeterminate(true);
-        setMessage("Move Joystick to autodetect");
+        setMessage("Move Joystick or press button to detect");
         setCancelable(true);
         setButton(ProgressDialog.BUTTON_NEUTRAL, "Cancel",
                 new DialogInterface.OnClickListener() {
@@ -41,29 +39,20 @@ public class ControllerAxisKeyPressDialog extends ProgressDialog {
 
                 });
     }
-
-    public void setJoystickMode() {
-        setMessage("Move Joystick to autodetect");
-    }
-    public void setButtonMode() {
-        setMessage("Press button to autodetect");
-    }
     
     @Override
     public boolean onGenericMotionEvent(MotionEvent event) {
         if (RCConstants.isPhysicalDeviceEvent(event) && AxisFinder.figureOutAxis(event)) {
-            listener.onControllerPress(id, AxisFinder.getFiguredOutAxis());
-            dismiss();
+            listener.onControllerPress(this, AxisFinder.getFiguredOutAxis(), true);
             return true;
         }
         return super.onGenericMotionEvent(event);
     }
-
+    
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (RCConstants.isPhysicalDeviceKeyCode(event)) {
-            listener.onControllerPress(id, event.getKeyCode());
-            dismiss();
+            listener.onControllerPress(this, keyCode, false);
             return true;
         }
         return super.onKeyUp(keyCode, event);

@@ -1,64 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/configLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
-    android:padding="15dp" >
+    android:padding="15dp"
+    style="@style/configLayout" >
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:text="Limit Throttle"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        style="@style/configLayoutComplementaryColor"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:text="Throttle Limit"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#FFF" />
+    <SeekBar
+        android:id="@+id/seekThrottle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <SeekBar
-            android:id="@+id/seekThrottle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+    <TextView
+        android:id="@+id/lblSeekThrottle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        style="@style/configLayoutComplementaryColor"
+        android:text="100"
+        android:layout_marginLeft="15dp" />
 
-        <TextView
-            android:id="@+id/lblSeekThrottle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFF" />
-    </LinearLayout>
+    <Space
+        android:layout_width="1dp"
+        android:layout_height="30dp" />
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:text="Limit max rudder/aileron/elevator"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        style="@style/configLayoutComplementaryColor"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" />
 
-        <TextView
-            android:layout_width="132dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:text="Limit range of rudder, elevator and aileron"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#FFF" />
+    <SeekBar
+        android:id="@+id/seekRange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <SeekBar
-            android:id="@+id/seekRange"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/lblSeekRange"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFF" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/lblSeekRange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        style="@style/configLayoutComplementaryColor"
+        android:text="100"
+        android:layout_marginLeft="15dp" />
 
 </LinearLayout>

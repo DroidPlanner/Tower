@@ -10,6 +10,7 @@ import static org.droidplanner.android.utils.rc.RCConstants.RUDDER;
 import static org.droidplanner.android.utils.rc.RCConstants.THROTTLE;
 
 import android.content.Context;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 public abstract class GenericInputDevice {
@@ -43,6 +44,10 @@ public abstract class GenericInputDevice {
             value = -1.0f;
         rc_channels[channel] = value;
     }
+    
+    protected float getChannelValue(int channel) {
+        return rc_channels[channel];
+    }
 
     public void registerListener(IRCEvents listener) {
         this.listener = listener;
@@ -63,5 +68,9 @@ public abstract class GenericInputDevice {
         if (isListenerBound()) {
             listener.onChannelsChanged(rc_channels);
         }
+    }
+
+    public void onKeyUp(int keyCode, KeyEvent event) {
+      // Do nothing, let subclass implement if necessary
     }
 }

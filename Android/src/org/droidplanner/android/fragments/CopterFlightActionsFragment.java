@@ -227,7 +227,7 @@ public class CopterFlightActionsFragment extends Fragment implements View.OnClic
                 getDronieConfirmation();
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Dronie uploaded");
                 break;
-            
+                
             case R.id.mc_joystickBtn:
                 ((FlightActivity) getActivity()).toggleRcControls();
                 break;

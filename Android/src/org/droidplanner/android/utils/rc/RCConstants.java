@@ -21,10 +21,14 @@ public class RCConstants {
     public static final String[] RChannelsTitle = {
         "Aileron", "Elevator", "Throttle", "Rudder", "RC5", "RC6", "RC7", "RC8"
     };
+    public static final String[] ShortRChannelsTitle = {
+        "Ail", "Elev", "Thr", "Rudd", "RC5", "RC6", "RC7", "RC8"
+    };
     
     public final static int MODE_SINGLEKEY = 0;
     public final static int MODE_INCREMENTKEY = 1;
     public final static int MODE_DECREMENTKEY = 2;
+    public static final int MODE_JOYSTICK_BUTTON = 3;
     
     public static boolean isPhysicalDeviceEvent(MotionEvent event) {
         return event.getDeviceId() > 0;

@@ -2,6 +2,7 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.utils.rc.RCConstants;
 import org.droidplanner.android.widgets.AttitudeIndicator;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
@@ -11,9 +12,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class TelemetryFragment extends Fragment implements OnDroneListener {
@@ -29,6 +34,9 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	private TextView altitude;
 	private TextView targetAltitude;
 	private boolean headingModeFPV;
+    private TextView lblController;
+    private RelativeLayout rcLayout;
+    private TextView lblControllerRight;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,6 +52,10 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 		climbRate = (TextView) view.findViewById(R.id.climbRateValue);
 		altitude = (TextView) view.findViewById(R.id.altitudeValue);
 		targetAltitude = (TextView) view.findViewById(R.id.targetAltitudeValue);
+		
+		rcLayout = (RelativeLayout) view.findViewById(R.id.rc_layout);
+		lblController = (TextView) view.findViewById(R.id.lblRCValue);
+		lblControllerRight = (TextView) view.findViewById(R.id.lblRCValueRight);
 
 		drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 		return view;
@@ -110,7 +122,51 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 		double targetAlt = drone.getAltitude().getTargetAltitude();
 		altitude.setText(String.format("%3.1f", alt));
 		targetAltitude.setText(String.format("%3.1f", targetAlt));
-
+		
 	}
-
+	
+    public void setControllerStatusVisible(boolean visible) {
+        if(rcLayout == null)
+            return;
+        
+        if (visible) {
+            if(lblController.getText().length() < 5) //Set default text
+            {
+                float[] channels = new float[8];
+                channels[RCConstants.THROTTLE] = 0;
+                channels[RCConstants.AILERON] = 0;
+                channels[RCConstants.ELEVATOR] = 0;
+                channels[RCConstants.RUDDER] = 0;
+                channels[RCConstants.RC5] = 0;
+                channels[RCConstants.RC6] = 0;
+                channels[RCConstants.RC7] = 0;
+                channels[RCConstants.RC8] = 0;
+                updateControllerStatus(channels);
+            }
+            rcLayout.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            rcLayout.setVisibility(View.GONE);
+        }
+    }
+	
+	public void updateControllerStatus(float[] channels) {
+	    
+	    String leftText = "";
+	    for(int x = 0; x < RCConstants.rchannels.length; x += 2) {
+	        leftText += RCConstants.ShortRChannelsTitle[x] + "\n";
+	        leftText += Math.round(channels[x]) + "\n";
+	    }
+	    leftText += "";
+	    
+	       String rightText = "";
+        for(int x = 1; x < RCConstants.rchannels.length; x += 2) {
+            rightText += RCConstants.ShortRChannelsTitle[x] + "\n";
+            rightText += Math.round(channels[x]) + "\n";
+        }
+        
+        lblController.setText(leftText);
+	    lblControllerRight.setText(rightText);
+	}
 }
