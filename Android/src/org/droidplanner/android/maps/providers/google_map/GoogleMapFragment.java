@@ -857,7 +857,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
                     .draggable(false)
                     .flat(true)
                     .visible(true)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location_history_white_36dp));
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.blue));
 
             getMapAsync(new OnMapReadyCallback() {
                 @Override
