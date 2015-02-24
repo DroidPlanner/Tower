@@ -89,7 +89,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     // TODO: update the interval based on the user's current activity.
     private static final long USER_LOCATION_UPDATE_INTERVAL = 30000; // ms
     private static final long USER_LOCATION_UPDATE_FASTEST_INTERVAL = 1000; // ms
-    private static final float USER_LOCATION_UPDATE_MIN_DISPLACEMENT = 1; // m
+    private static final float USER_LOCATION_UPDATE_MIN_DISPLACEMENT = 0; // m
 
     private static final float GO_TO_MY_LOCATION_ZOOM = 19f;
 
