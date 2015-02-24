@@ -6,11 +6,9 @@ import com.o3dr.services.android.lib.drone.mission.Mission;
 import com.o3dr.services.android.lib.util.ParcelableUtils;
 
 import org.droidplanner.android.utils.file.FileList;
-import org.droidplanner.android.utils.file.FileManager;
 import org.droidplanner.android.utils.file.FileStream;
 
 import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 
 /**
  * Write a mission to file.
@@ -24,7 +22,7 @@ public class MissionWriter {
 
 	public static boolean write(Mission mission, String filename) {
 		try {
-			if (!FileManager.isExternalStorageAvailable())
+			if (!FileStream.isExternalStorageAvailable())
 				return false;
 
 			if (!filename.endsWith(FileList.WAYPOINT_FILENAME_EXT)) {

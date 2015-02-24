@@ -1,5 +1,7 @@
 package org.droidplanner.android.utils.file.IO;
 
+import android.content.Context;
+
 import java.io.PrintStream;
 
 import org.droidplanner.android.utils.file.FileStream;
@@ -11,9 +13,9 @@ public class ExceptionWriter {
 		this.exception = ex;
 	}
 
-	public void saveStackTraceToSD() {
+	public void saveStackTraceToSD(Context context) {
 		try {
-			PrintStream out = new PrintStream(FileStream.getExceptionFileStream());
+			PrintStream out = new PrintStream(FileStream.getExceptionFileStream(context));
 			exception.printStackTrace(out);
 			out.close();
 		} catch (Exception excep) {

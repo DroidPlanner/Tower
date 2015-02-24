@@ -9,10 +9,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
-import org.droidplanner.android.utils.file.DirectoryPath;
-import org.droidplanner.android.utils.file.FileList;
-import org.droidplanner.android.utils.file.FileManager;
+import org.droidplanner.android.utils.file.FileStream;
 
 import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Parser;
@@ -26,7 +23,7 @@ import com.MAVLink.Messages.MAVLinkMessage;
  * See http://qgroundcontrol.org/mavlink for details
  *
  */
-public class TLogReader implements OpenFileDialog.FileReader {
+public class TLogReader {
 
     private static final String TAG = TLogReader.class.getSimpleName();
     public static final int MSGFILTER_NONE = -1;
@@ -113,7 +110,7 @@ public class TLogReader implements OpenFileDialog.FileReader {
     }
 
     public boolean openTLog(String file) {
-        if (!FileManager.isExternalStorageAvailable()) {
+        if (!FileStream.isExternalStorageAvailable()) {
             return false;
         }
 
@@ -162,20 +159,5 @@ public class TLogReader implements OpenFileDialog.FileReader {
         }
 
         return true;
-    }
-
-    @Override
-    public String getPath() {
-        return DirectoryPath.getTLogPath().getPath() + "/";
-    }
-
-    @Override
-    public String[] getFileList() {
-        return FileList.getTLogFileList();
-    }
-
-    @Override
-    public boolean openFile(String file) {
-        return openTLog(file);
     }
 }

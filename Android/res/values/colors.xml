@@ -47,4 +47,7 @@
     <color name="bottom_top_bar">#66848484</color>
     <color name="editor_bar">#66848484</color>
 
+    <!-- colors for status bar notifications -->
+    <color name="stat_notify_connected">#57eccd</color>
+
 </resources>

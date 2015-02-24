@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Locale;
 
 import org.droidplanner.android.utils.file.FileList;
-import org.droidplanner.android.utils.file.FileManager;
 import org.droidplanner.android.utils.file.FileStream;
 
 public class ParameterWriter {
@@ -20,7 +19,7 @@ public class ParameterWriter {
 
 	public boolean saveParametersToFile(String filename) {
 		try {
-			if (!FileManager.isExternalStorageAvailable()) {
+			if (!FileStream.isExternalStorageAvailable()) {
 				return false;
 			}
 
@@ -43,7 +42,7 @@ public class ParameterWriter {
 	}
 
 	private void writeFirstLine(FileOutputStream out) throws IOException {
-		out.write((("#NOTE: " + FileManager.getTimeStamp() + "\n").getBytes()));
+		out.write((("#NOTE: " + FileStream.getTimeStamp() + "\n").getBytes()));
 	}
 
 	private void writeWaypointsLines(FileOutputStream out) throws IOException {

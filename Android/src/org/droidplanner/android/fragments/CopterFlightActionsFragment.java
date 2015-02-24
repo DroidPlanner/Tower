@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +43,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     private static final double TAKEOFF_ALTITUDE = 10.0;
 
     private static final IntentFilter eventFilter = new IntentFilter();
+
     static {
         eventFilter.addAction(AttributeEvent.STATE_ARMING);
         eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
@@ -74,53 +74,52 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
                 case AttributeEvent.FOLLOW_START:
                 case AttributeEvent.FOLLOW_STOP:
+                    final FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
+                    if (followState != null) {
+                        String eventLabel = null;
+                        switch (followState.getState()) {
+                            case FollowState.STATE_START:
+                                eventLabel = "FollowMe enabled";
+                                break;
+
+                            case FollowState.STATE_RUNNING:
+                                eventLabel = "FollowMe running";
+                                break;
+
+                            case FollowState.STATE_END:
+                                eventLabel = "FollowMe disabled";
+                                break;
+
+                            case FollowState.STATE_INVALID:
+                                eventLabel = "FollowMe error: invalid state";
+                                break;
+
+                            case FollowState.STATE_DRONE_DISCONNECTED:
+                                eventLabel = "FollowMe error: drone not connected";
+                                break;
+
+                            case FollowState.STATE_DRONE_NOT_ARMED:
+                                eventLabel = "FollowMe error: drone not armed";
+                                break;
+                        }
+
+                        if (eventLabel != null) {
+                            HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                                    .setCategory(GAUtils.Category.FLIGHT)
+                                    .setAction(ACTION_FLIGHT_ACTION_BUTTON)
+                                    .setLabel(eventLabel);
+                            GAUtils.sendEvent(eventBuilder);
+
+                            Toast.makeText(getActivity(), eventLabel, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    /* FALL - THROUGH */
                 case AttributeEvent.FOLLOW_UPDATE:
                     updateFlightModeButtons();
                     updateFollowButton();
-
-                    if ((AttributeEvent.FOLLOW_START.equals(action)
-                            || AttributeEvent.FOLLOW_STOP.equals(action))) {
-                        final FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
-                        if (followState != null) {
-                            String eventLabel = null;
-                            switch (followState.getState()) {
-                                case FollowState.STATE_START:
-                                    eventLabel = "FollowMe enabled";
-                                    break;
-
-                                case FollowState.STATE_RUNNING:
-                                    eventLabel = "FollowMe running";
-                                    break;
-
-                                case FollowState.STATE_END:
-                                    eventLabel = "FollowMe disabled";
-                                    break;
-
-                                case FollowState.STATE_INVALID:
-                                    eventLabel = "FollowMe error: invalid state";
-                                    break;
-
-                                case FollowState.STATE_DRONE_DISCONNECTED:
-                                    eventLabel = "FollowMe error: drone not connected";
-                                    break;
-
-                                case FollowState.STATE_DRONE_NOT_ARMED:
-                                    eventLabel = "FollowMe error: drone not armed";
-                                    break;
-                            }
-
-                            if (eventLabel != null) {
-                                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                                        .setCategory(GAUtils.Category.FLIGHT)
-                                        .setAction(ACTION_FLIGHT_ACTION_BUTTON)
-                                        .setLabel(eventLabel);
-                                GAUtils.sendEvent(eventBuilder);
-
-                                Toast.makeText(getActivity(), eventLabel, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
                     break;
+
                 case AttributeEvent.MISSION_DRONIE_CREATED:
                     //Get the bearing of the dronie mission.
                     float bearing = intent.getFloatExtra(AttributeEventExtra.EXTRA_MISSION_DRONIE_BEARING, -1);
@@ -252,7 +251,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
             case R.id.mc_pause: {
                 final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
-                if (followState.isEnabled()){
+                if (followState.isEnabled()) {
                     drone.disableFollowMe();
                 }
 
@@ -275,7 +274,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
             case R.id.mc_follow:
                 FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
-                if(followState != null) {
+                if (followState != null) {
                     if (followState.isEnabled())
                         drone.disableFollowMe();
                     else
@@ -301,19 +300,19 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
     private void getDronieConfirmation() {
         YesNoWithPrefsDialog ynd = YesNoWithPrefsDialog.newInstance(getActivity()
-                .getApplicationContext(), getString(R.string.pref_dronie_creation_title),
+                        .getApplicationContext(), getString(R.string.pref_dronie_creation_title),
                 getString(R.string.pref_dronie_creation_message), new YesNoDialog.Listener() {
-            @Override
-            public void onYes() {
-                missionProxy.makeAndUploadDronie(getDrone());
-            }
+                    @Override
+                    public void onYes() {
+                        missionProxy.makeAndUploadDronie(getDrone());
+                    }
 
-            @Override
-            public void onNo() {
-            }
-        }, getString(R.string.pref_warn_on_dronie_creation_key));
+                    @Override
+                    public void onNo() {
+                    }
+                }, getString(R.string.pref_warn_on_dronie_creation_key));
 
-        if(ynd != null){
+        if (ynd != null) {
             ynd.show(getChildFragmentManager(), "Confirm dronie creation");
         }
     }
@@ -334,7 +333,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                     }
                 }, getString(R.string.pref_warn_on_takeoff_in_auto_key));
 
-        if(ynd != null){
+        if (ynd != null) {
             ynd.show(getChildFragmentManager(), "Confirm take off in auto");
         }
     }
@@ -349,25 +348,25 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                     }
 
                     @Override
-                    public void onNo() {}
+                    public void onNo() {
+                    }
                 }, getString(R.string.pref_warn_on_arm_key));
 
-        if(ynd != null) {
+        if (ynd != null) {
             ynd.show(getChildFragmentManager(), "Confirm arming");
         }
     }
-
 
 
     private void updateFlightModeButtons() {
         resetFlightModeButtons();
 
         State droneState = getDrone().getAttribute(AttributeType.STATE);
-        if(droneState == null)
+        if (droneState == null)
             return;
 
         final VehicleMode flightMode = droneState.getVehicleMode();
-        if(flightMode == null)
+        if (flightMode == null)
             return;
 
         switch (flightMode) {
@@ -405,7 +404,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
     private void updateFollowButton() {
         FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
-        if(followState == null)
+        if (followState == null)
             return;
 
         switch (followState.getState()) {
@@ -471,7 +470,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
     @Override
     public boolean isSlidingUpPanelEnabled(Drone drone) {
-        if(!drone.isConnected())
+        if (!drone.isConnected())
             return false;
 
         final State droneState = drone.getAttribute(AttributeType.STATE);

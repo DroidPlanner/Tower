@@ -53,6 +53,8 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.FootPrint;
 import com.o3dr.services.android.lib.drone.property.Gps;
+import com.o3dr.services.android.lib.util.googleApi.GoogleApiClientManager;
+import com.o3dr.services.android.lib.util.googleApi.GoogleApiClientManager.GoogleApiClientTask;
 
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
@@ -61,9 +63,6 @@ import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.DroneHelper;
-
-import com.o3dr.services.android.lib.util.googleApi.GoogleApiClientManager;
-import com.o3dr.services.android.lib.util.googleApi.GoogleApiClientManager.GoogleApiClientTask;
 import org.droidplanner.android.utils.collection.HashBiMap;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -89,16 +88,15 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
     // TODO: update the interval based on the user's current activity.
     private static final long USER_LOCATION_UPDATE_INTERVAL = 30000; // ms
-    private static final long USER_LOCATION_UPDATE_FASTEST_INTERVAL = 10000; // ms
-    private static final float USER_LOCATION_UPDATE_MIN_DISPLACEMENT = 15; // m
+    private static final long USER_LOCATION_UPDATE_FASTEST_INTERVAL = 1000; // ms
+    private static final float USER_LOCATION_UPDATE_MIN_DISPLACEMENT = 0; // m
 
     private static final float GO_TO_MY_LOCATION_ZOOM = 19f;
 
     private static final IntentFilter eventFilter = new IntentFilter();
+
     static {
         eventFilter.addAction(AttributeEvent.GPS_POSITION);
-        eventFilter.addAction(AttributeEvent.FOLLOW_START);
-        eventFilter.addAction(AttributeEvent.FOLLOW_STOP);
     }
 
     private final static Api<? extends Api.ApiOptions.NotRequiredOptions>[] apisList = new Api[]{LocationServices.API};
@@ -107,28 +105,19 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            switch(action){
+            switch (action) {
                 case AttributeEvent.GPS_POSITION:
-                    final Drone drone = getDroneApi();
-                    if (!drone.isConnected())
-                        return;
+                    if (mPanMode.get() == AutoPanMode.DRONE) {
+                        final Drone drone = getDroneApi();
+                        if (!drone.isConnected())
+                            return;
 
-                    final Gps droneGps = drone.getAttribute(AttributeType.GPS);
-                    if (droneGps == null)
-                        return;
-
-                    if (mPanMode.get() == AutoPanMode.DRONE && droneGps.isValid()) {
-                        final LatLong droneLocation = droneGps.getPosition();
-                        updateCamera(droneLocation);
+                        final Gps droneGps = drone.getAttribute(AttributeType.GPS);
+                        if (droneGps != null && droneGps.isValid()) {
+                            final LatLong droneLocation = droneGps.getPosition();
+                            updateCamera(droneLocation);
+                        }
                     }
-                    break;
-
-                case AttributeEvent.FOLLOW_START:
-                    mGApiClientMgr.addTask(mRequestFastLocationUpdateTask);
-                    break;
-
-                case AttributeEvent.FOLLOW_STOP:
-                    mGApiClientMgr.addTask(mRequestLocationUpdateTask);
                     break;
             }
         }
@@ -148,7 +137,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
             if (myLocation != null) {
                 updateCamera(DroneHelper.LocationToCoord(myLocation), GO_TO_MY_LOCATION_ZOOM);
 
-                if(mLocationListener != null)
+                if (mLocationListener != null)
                     mLocationListener.onLocationChanged(myLocation);
             }
         }
@@ -175,20 +164,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         }
     };
 
-    private final GoogleApiClientTask mRequestFastLocationUpdateTask = new GoogleApiClientTask() {
-        @Override
-        public void doRun() {
-            final LocationRequest locationReq = LocationRequest.create()
-                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                    .setFastestInterval(0)
-                    .setInterval(0)
-                    .setSmallestDisplacement(0);
-            LocationServices.FusedLocationApi.requestLocationUpdates(
-                    getGoogleApiClient(), locationReq, GoogleMapFragment.this);
-
-        }
-    };
-
     private final GoogleApiClientTask requestLastLocationTask = new GoogleApiClientTask() {
         @Override
         protected void doRun() {
@@ -200,6 +175,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     };
 
     private GoogleApiClientManager mGApiClientMgr;
+
+    private Marker userMarker;
 
     private Polyline flightPath;
     private Polyline missionPath;
@@ -253,10 +230,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         super.onStart();
         mGApiClientMgr.start();
 
-        if (mPanMode.get() == AutoPanMode.DRONE) {
-            LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
-                    .registerReceiver(eventReceiver, eventFilter);
-        }
+        mGApiClientMgr.addTask(mRequestLocationUpdateTask);
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
+                .registerReceiver(eventReceiver, eventFilter);
 
         setupMap();
     }
@@ -264,6 +240,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     @Override
     public void onStop() {
         super.onStop();
+
+        mGApiClientMgr.addTask(mRemoveLocationUpdateTask);
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
                 .unregisterReceiver(eventReceiver);
 
@@ -320,12 +298,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
                             .unregisterReceiver(eventReceiver);
                     break;
 
-                case USER:
-                    if (!mGApiClientMgr.addTask(mRemoveLocationUpdateTask)) {
-                        Log.e(TAG, "Unable to add google api client task.");
-                    }
-                    break;
-
                 case DISABLED:
                 default:
                     break;
@@ -335,12 +307,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
                 case DRONE:
                     LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver
                             (eventReceiver, eventFilter);
-                    break;
-
-                case USER:
-                    if (!mGApiClientMgr.addTask(mRequestLocationUpdateTask)) {
-                        Log.e(TAG, "Unable to add google api client task.");
-                    }
                     break;
 
                 case DISABLED:
@@ -529,15 +495,11 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         //Update the listener with the last received location
         if (mLocationListener != null) {
             mGApiClientMgr.addTask(requestLastLocationTask);
-            mGApiClientMgr.addTask(mRequestLocationUpdateTask);
-        }
-        else if(mPanMode.get() != AutoPanMode.USER) {
-            mGApiClientMgr.addTask(mRemoveLocationUpdateTask);
         }
     }
 
-    private void updateCamera(final LatLong coord){
-        if(coord != null){
+    private void updateCamera(final LatLong coord) {
+        if (coord != null) {
             getMapAsync(new OnMapReadyCallback() {
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
@@ -800,8 +762,11 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
                     onMapClickListener.onMapClick(marker.getPosition());
                     return true;
                 }
+
                 if (mMarkerClickListener != null) {
-                    return mMarkerClickListener.onMarkerClick(mBiMarkersMap.getKey(marker));
+                    final MarkerInfo markerInfo = mBiMarkersMap.getKey(marker);
+                    if(markerInfo != null)
+                        return mMarkerClickListener.onMarkerClick(markerInfo);
                 }
                 return false;
             }
@@ -809,7 +774,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     }
 
     private void setupMapUI(GoogleMap map) {
-        map.setMyLocationEnabled(true);
+        map.setMyLocationEnabled(false);
         UiSettings mUiSettings = map.getUiSettings();
         mUiSettings.setMyLocationButtonEnabled(false);
         mUiSettings.setCompassEnabled(false);
@@ -885,8 +850,27 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d(TAG, "User location changed.");
+        //Update the user location icon.
+        if (userMarker == null) {
+            final MarkerOptions options = new MarkerOptions()
+                    .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                    .draggable(false)
+                    .flat(true)
+                    .visible(true)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.blue));
+
+            getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    userMarker = googleMap.addMarker(options);
+                }
+            });
+        } else {
+            userMarker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
+        }
+
         if (mPanMode.get() == AutoPanMode.USER) {
+            Log.d(TAG, "User location changed.");
             updateCamera(DroneHelper.LocationToCoord(location), (int) getMap().getCameraPosition().zoom);
         }
 
@@ -906,13 +890,12 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
                 ? Collections.<LatLong>emptyList()
                 : footprint.getVertexInGlobalFrame();
 
-        if(pathPoints.isEmpty()){
-            if(footprintPoly != null) {
+        if (pathPoints.isEmpty()) {
+            if (footprintPoly != null) {
                 footprintPoly.remove();
                 footprintPoly = null;
             }
-        }
-        else {
+        } else {
             if (footprintPoly == null) {
                 PolygonOptions pathOptions = new PolygonOptions()
                         .strokeColor(FOOTPRINT_DEFAULT_COLOR)
@@ -937,19 +920,18 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     @Override
     public void onGoogleApiConnectionError(ConnectionResult connectionResult) {
         final Activity activity = getActivity();
-        if(activity == null)
+        if (activity == null)
             return;
 
-        if(connectionResult.hasResolution()){
+        if (connectionResult.hasResolution()) {
             try {
                 connectionResult.startResolutionForResult(activity, 0);
             } catch (IntentSender.SendIntentException e) {
                 //There was an error with the resolution intent. Try again.
-                if(mGApiClientMgr != null)
+                if (mGApiClientMgr != null)
                     mGApiClientMgr.start();
             }
-        }
-        else{
+        } else {
             onUnavailableGooglePlayServices(connectionResult.getErrorCode());
         }
     }
@@ -957,7 +939,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     @Override
     public void onUnavailableGooglePlayServices(int i) {
         final Activity activity = getActivity();
-        if(activity != null) {
+        if (activity != null) {
             GooglePlayServicesUtil.showErrorDialogFragment(i, getActivity(), 0, new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {

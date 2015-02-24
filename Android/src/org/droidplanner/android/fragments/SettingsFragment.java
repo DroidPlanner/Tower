@@ -1,7 +1,6 @@
 package org.droidplanner.android.fragments;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,19 +8,16 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -43,11 +39,6 @@ import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Locale;
 
@@ -213,7 +204,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
         final Preference storagePref = findPreference(getString(R.string.pref_storage_key));
         if (storagePref != null) {
-            storagePref.setSummary(DirectoryPath.getDroidPlannerPath());
+            storagePref.setSummary(DirectoryPath.getPublicDataPath());
         }
 
         try {
@@ -232,6 +223,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setupAdvancedMenuToggle();
         setupUnitSystemPreferences();
         setupBluetoothDevicePreferences();
+        setupImminentGroundCollisionWarningPreference();
     }
 
     private void setupAdvancedMenuToggle(){
@@ -258,6 +250,24 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     int unitSystem = Integer.parseInt((String) newValue);
                     updateUnitSystemSummary(preference, unitSystem);
+                    return true;
+                }
+            });
+        }
+    }
+
+    private void setupImminentGroundCollisionWarningPreference(){
+        final CheckBoxPreference collisionWarn = (CheckBoxPreference) findPreference(getString(R.string
+                .pref_ground_collision_warning_key));
+        if(collisionWarn != null){
+            collisionWarn.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    final boolean isEnabled = (Boolean) newValue;
+                    if(!isEnabled){
+                        lbm.sendBroadcast(new Intent(Drone.ACTION_GROUND_COLLISION_IMMINENT)
+                                .putExtra(Drone.EXTRA_IS_GROUND_COLLISION_IMMINENT, false));
+                    }
                     return true;
                 }
             });

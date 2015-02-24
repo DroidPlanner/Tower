@@ -48,6 +48,7 @@ public class DroidPlannerPrefs {
     private static final String DEFAULT_TCP_SERVER_PORT = "5763";
     private static final String DEFAULT_UDP_SERVER_PORT = "14550";
     private static final int DEFAULT_UNIT_SYSTEM = UnitSystem.AUTO;
+    private static final boolean DEFAULT_WARNING_GROUND_COLLISION = false;
 
     // Public for legacy usage
 	public SharedPreferences prefs;
@@ -337,6 +338,11 @@ public class DroidPlannerPrefs {
 				context.getString(R.string.pref_tts_warning_autopilot_warnings_key),
 				DEFAULT_TTS_WARNING_AUTOPILOT_WARNING);
 	}
+
+    public boolean getImminentGroundCollisionWarning(){
+        return prefs.getBoolean(context.getString(R.string.pref_ground_collision_warning_key),
+                DEFAULT_WARNING_GROUND_COLLISION);
+    }
 
     public boolean isAdvancedMenuEnabled(){
         return prefs.getBoolean(context.getString(R.string.pref_advanced_menu_toggle_key), false);
