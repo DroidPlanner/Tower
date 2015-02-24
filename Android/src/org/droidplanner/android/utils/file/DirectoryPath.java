@@ -49,13 +49,6 @@ public class DirectoryPath {
 	}
 
 	/**
-	 * Storage folder for user camera description files
-	 */
-	public static String getCameraInfoPath() {
-		return getPublicDataPath() + "/CameraInfo/";
-	}
-
-	/**
 	 * Storage folder for stacktraces
 	 */
 	public static String getLogCatPath(Context context) {
