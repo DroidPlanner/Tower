@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.android.utils.file.FileList;
-import org.droidplanner.android.utils.file.FileManager;
+import org.droidplanner.android.utils.file.FileStream;
 
 public class ParameterReader implements
 		org.droidplanner.android.dialogs.openfile.OpenFileDialog.FileReader {
@@ -23,7 +23,7 @@ public class ParameterReader implements
 
 	@Override
 	public boolean openFile(String itemList) {
-		if (!FileManager.isExternalStorageAvailable()) {
+		if (!FileStream.isExternalStorageAvailable()) {
 			return false;
 		}
 		try {

@@ -1,79 +1,64 @@
 package org.droidplanner.android.utils.file;
 
-import java.io.File;
-
+import android.content.Context;
 import android.os.Environment;
+
+import java.io.File;
 
 public class DirectoryPath {
 
+    /**
+     * Main path used to store private data files related to the program
+     * @param context application context
+     * @return Path to Tower private data directory.
+     */
+    public static String getPrivateDataPath(Context context){
+        File dataDir = context.getExternalFilesDir(null);
+        return dataDir.getAbsolutePath();
+    }
+
 	/**
-	 * Main path used to store files related to the program
+	 * Main path used to store public data files related to the program
 	 * 
-	 * @return Path to DroidPlanner/ folder in external storage
+	 * @return Path to Tower data directory in external storage
 	 */
-	static public String getDroidPlannerPath() {
+	static public String getPublicDataPath() {
 		String root = Environment.getExternalStorageDirectory().getPath();
-		return (root + "/DroidPlanner/");
+		return (root + "/Tower/");
 	}
 
 	/**
 	 * Storage folder for Parameters
 	 */
 	static public String getParametersPath() {
-		return getDroidPlannerPath() + "/Parameters/";
+		return getPublicDataPath() + "/Parameters/";
 	}
 
 	/**
 	 * Storage folder for mission files
 	 */
 	static public String getWaypointsPath() {
-		return getDroidPlannerPath() + "/Waypoints/";
-	}
-
-	/**
-	 * Folder where telemetry log files are stored
-	 */
-	static public File getTLogPath() {
-		File f = new File(getDroidPlannerPath() + "/Logs/");
-		f.mkdirs();
-		return f;
-	}
-
-	/**
-	 * After tlogs are uploaded they get moved to this directory
-	 */
-	static public File getSentPath() {
-		File f = new File(getTLogPath() + "/Sent/");
-		f.mkdirs();
-		return f;
+		return getPublicDataPath() + "/Waypoints/";
 	}
 
 	/**
 	 * Storage folder for user map tiles
 	 */
 	static public String getMapsPath() {
-		return getDroidPlannerPath() + "/Maps/";
+		return getPublicDataPath() + "/Maps/";
 	}
 
 	/**
 	 * Storage folder for user camera description files
 	 */
 	public static String getCameraInfoPath() {
-		return getDroidPlannerPath() + "/CameraInfo/";
+		return getPublicDataPath() + "/CameraInfo/";
 	}
 
 	/**
 	 * Storage folder for stacktraces
 	 */
-	public static String getLogCatPath() {
-		return getDroidPlannerPath() + "/LogCat/";
+	public static String getLogCatPath(Context context) {
+		return getPrivateDataPath(context) + "/LogCat/";
 	}
-
-	/**
-	 * Storage folder for SRTM data
-	 */
-	static public String getSrtmPath() {
-		return getDroidPlannerPath() + "/Srtm/";
-	}
-
 }

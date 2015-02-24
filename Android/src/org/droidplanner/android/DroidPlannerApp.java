@@ -118,14 +118,6 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
     private final Handler handler = new Handler();
     private final List<ApiListener> apiListeners = new ArrayList<ApiListener>();
 
-    private final Thread.UncaughtExceptionHandler dpExceptionHandler = new Thread.UncaughtExceptionHandler() {
-        @Override
-        public void uncaughtException(Thread thread, Throwable ex) {
-            new ExceptionWriter(ex).saveStackTraceToSD();
-            exceptionHandler.uncaughtException(thread, ex);
-        }
-    };
-
     private Thread.UncaughtExceptionHandler exceptionHandler;
 
     private ControlTower controlTower;
@@ -147,6 +139,14 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
         controlTower = new ControlTower(context);
         drone = new Drone();
         missionProxy = new MissionProxy(context, this.drone);
+
+        final Thread.UncaughtExceptionHandler dpExceptionHandler = new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, Throwable ex) {
+                new ExceptionWriter(ex).saveStackTraceToSD(context);
+                exceptionHandler.uncaughtException(thread, ex);
+            }
+        };
 
         exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(dpExceptionHandler);
