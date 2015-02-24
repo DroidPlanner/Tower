@@ -223,6 +223,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setupAdvancedMenuToggle();
         setupUnitSystemPreferences();
         setupBluetoothDevicePreferences();
+        setupImminentGroundCollisionWarningPreference();
     }
 
     private void setupAdvancedMenuToggle(){
@@ -249,6 +250,24 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     int unitSystem = Integer.parseInt((String) newValue);
                     updateUnitSystemSummary(preference, unitSystem);
+                    return true;
+                }
+            });
+        }
+    }
+
+    private void setupImminentGroundCollisionWarningPreference(){
+        final CheckBoxPreference collisionWarn = (CheckBoxPreference) findPreference(getString(R.string
+                .pref_ground_collision_warning_key));
+        if(collisionWarn != null){
+            collisionWarn.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    final boolean isEnabled = (Boolean) newValue;
+                    if(!isEnabled){
+                        lbm.sendBroadcast(new Intent(Drone.ACTION_GROUND_COLLISION_IMMINENT)
+                                .putExtra(Drone.EXTRA_IS_GROUND_COLLISION_IMMINENT, false));
+                    }
                     return true;
                 }
             });
