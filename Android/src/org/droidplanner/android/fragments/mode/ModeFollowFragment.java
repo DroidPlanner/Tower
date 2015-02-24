@@ -162,6 +162,9 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
     }
 
     private void updateModeDescription(FollowType followType) {
+        if(followType == null)
+            return;
+
         switch (followType) {
             case GUIDED_SCAN:
                 modeDescription.setText(R.string.mode_follow_guided_scan);

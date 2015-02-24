@@ -762,8 +762,11 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
                     onMapClickListener.onMapClick(marker.getPosition());
                     return true;
                 }
+
                 if (mMarkerClickListener != null) {
-                    return mMarkerClickListener.onMarkerClick(mBiMarkersMap.getKey(marker));
+                    final MarkerInfo markerInfo = mBiMarkersMap.getKey(marker);
+                    if(markerInfo != null)
+                        return mMarkerClickListener.onMarkerClick(markerInfo);
                 }
                 return false;
             }
