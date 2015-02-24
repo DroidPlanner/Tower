@@ -48,7 +48,9 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
             if (AttributeEvent.FOLLOW_UPDATE.equals(action)) {
                 final FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
                 if (followState != null) {
-                    spinner.setSelection(adapter.getPosition(followState.getMode()));
+                    final FollowType followType = followState.getMode();
+                    spinner.setSelection(adapter.getPosition(followType));
+                    onFollowTypeUpdate(followType, followState.getParams());
                 }
             }
         }
@@ -219,8 +221,6 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
         if (drone.isConnected()) {
             drone.enableFollowMe(type);
         }
-
-        onFollowTypeUpdate(type, null);
     }
 
     @Override
