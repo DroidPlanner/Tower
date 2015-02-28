@@ -194,6 +194,9 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
         final Button dronieBtn = (Button) view.findViewById(R.id.mc_dronieBtn);
         dronieBtn.setOnClickListener(this);
+        
+        final Button joystickBtn = (Button) view.findViewById(R.id.mc_joystickBtn);
+        joystickBtn.setOnClickListener(this);
     }
 
     @Override
@@ -287,7 +290,11 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                 getDronieConfirmation();
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Dronie uploaded");
                 break;
-
+                
+            case R.id.mc_joystickBtn:
+                ((FlightActivity) getActivity()).toggleRcControls();
+                break;
+                
             default:
                 eventBuilder = null;
                 break;

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    style="@style/configLayout" >
+
+    <RelativeLayout
+        android:id="@+id/textholder"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginRight="20dp" >
+
+        <TextView
+            android:id="@+id/lblTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            style="@style/configLayoutComplementaryColor"
+            android:text="@string/stub" />
+
+        <TextView
+            android:id="@+id/lblValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lblTitle"
+            android:layout_alignLeft="@+id/lblTitle"
+            android:layout_alignRight="@+id/lblTitle"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#F00"
+            android:text="@string/stub"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/viewMode1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical" >
+
+        <Button
+            android:id="@+id/btnAssignKey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rc_channel_singleaxis_lbl"
+            android:background="?android:attr/selectableItemBackground"
+            style="@style/configLayoutComplementaryColor"  />
+
+        <CheckBox
+            android:id="@+id/chkReversed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rc_channel_singleaxis_reverse" 
+            style="@style/configLayoutComplementaryColor"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/viewMode2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:visibility="gone" >
+
+        <Button
+            android:id="@+id/btnDecrementKey"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="@string/fragment_rc_doubleaxis_decrement"
+            android:textColor="#FFF" />
+        <Space 
+            android:layout_width="15dp"
+            android:layout_height="10dp"/>
+        <Button
+            android:id="@+id/btnIncrementKey"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="@string/fragment_rc_doubleaxis_increment"
+            android:textColor="#FFF" />
+    </LinearLayout>
+
+</LinearLayout>

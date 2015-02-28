@@ -223,7 +223,11 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
         setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mChecklist, new Intent(context,
                 ConfigurationActivity.class).putExtra(ConfigurationActivity
                 .EXTRA_CONFIG_SCREEN_ID, R.id.navigation_checklist));
-
+        
+        setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mRCSetup, new Intent(context,
+                ConfigurationActivity.class).putExtra(ConfigurationActivity
+                .EXTRA_CONFIG_SCREEN_ID, R.id.navigation_rc));
+        
         setupNavigationEntry(navDrawerEntryId, mNavViewsHolder.mParams, new Intent(context,
                 ConfigurationActivity.class).putExtra(ConfigurationActivity
                 .EXTRA_CONFIG_SCREEN_ID, R.id.navigation_params));
@@ -311,6 +315,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
 
         final TextView mParams;
         final TextView mChecklist;
+        final TextView mRCSetup;
         final TextView mCalibration;
 
         private NavDrawerViewHolder(View containerView) {
@@ -321,6 +326,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
             mSettings = (TextView) containerView.findViewById(R.id.navigation_settings);
             mParams = (TextView) containerView.findViewById(R.id.navigation_params);
             mChecklist = (TextView) containerView.findViewById(R.id.navigation_checklist);
+            mRCSetup = (TextView) containerView.findViewById(R.id.navigation_rc);
             mCalibration = (TextView) containerView.findViewById(R.id.navigation_calibration);
         }
     }

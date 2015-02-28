@@ -30,6 +30,7 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.DroneMap;
 import org.droidplanner.android.fragments.FlightActionsFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
+import org.droidplanner.android.fragments.RcFragment;
 import org.droidplanner.android.fragments.TelemetryFragment;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
@@ -74,9 +75,11 @@ public class FlightActivity extends DrawerNavigationUI {
                     onWarningChanged(warning, logLevel);
                     break;
 
+                case AttributeEvent.STATE_DISCONNECTED:
+                    if(rcFragment != null)
+                        toggleRcControls();
                 case AttributeEvent.STATE_ARMING:
                 case AttributeEvent.STATE_CONNECTED:
-                case AttributeEvent.STATE_DISCONNECTED:
                 case AttributeEvent.STATE_UPDATED:
                     enableSlidingUpPanel(dpApp.getDrone());
                     break;
@@ -147,7 +150,8 @@ public class FlightActivity extends DrawerNavigationUI {
 
     private FlightMapFragment mapFragment;
     private FlightActionsFragment flightActions;
-    private TelemetryFragment telemetryFragment;
+    private RcFragment rcFragment;
+    public TelemetryFragment telemetryFragment;
 
     private SlidingUpPanelLayout mSlidingPanel;
     private View mFlightActionsView;
@@ -491,6 +495,20 @@ public class FlightActivity extends DrawerNavigationUI {
                 warningView.setVisibility(View.VISIBLE);
                 handler.postDelayed(hideWarningView, WARNING_VIEW_DISPLAY_TIMEOUT);
             }
+        }
+    }
+
+    public void toggleRcControls() {
+        if (rcFragment == null) {
+            rcFragment = new RcFragment();
+            fragmentManager.beginTransaction().add(R.id.containerRc, rcFragment).commit();
+            if(telemetryFragment != null)
+                telemetryFragment.setControllerStatusVisible(true);
+        } else {
+            fragmentManager.beginTransaction().remove(rcFragment).commit();
+            rcFragment = null;
+            if(telemetryFragment != null)
+                telemetryFragment.setControllerStatusVisible(false);
         }
     }
 }

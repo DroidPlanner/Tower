@@ -227,6 +227,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="1dp"
+            android:layout_marginBottom="2dp"
             android:layout_alignLeft="@+id/rollValueText"
             android:layout_alignRight="@+id/aiView"
             android:baselineAligned="true">
@@ -251,5 +252,57 @@
                 />
         </RelativeLayout>
 
+                <!-- ************** RC ********************* -->
+
+        <RelativeLayout
+            android:id="@+id/rc_layout"
+            android:layout_below="@+id/alt_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/climb_rate_bg"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="1dp"
+            android:layout_alignLeft="@+id/rollValueText"
+            android:layout_alignRight="@+id/aiView"
+            android:baselineAligned="true"
+            android:visibility="gone" >
+
+            <LinearLayout 
+                android:id="@+id/lblRCValueContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal"
+                >
+            <TextView
+                android:id="@+id/lblRCValue"
+                style="@style/largeTelemetryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/telemetry_default_value"/>
+
+            <TextView
+                android:id="@+id/lblRCValueRight"
+                style="@style/largeTelemetryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/telemetry_default_value"/>
+            </LinearLayout>
+            
+            <TextView
+                android:id="@+id/RCLabel"
+                style="@style/textLabels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/lblRCValueContainer"
+                android:text="@string/screen_rc"
+                android:textColor="@color/altitude_label"
+                />
+        </RelativeLayout>
+        
     </RelativeLayout>
 </ScrollView>

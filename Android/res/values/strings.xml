@@ -18,7 +18,7 @@
     <string name="screen_tuning">Tuning</string>
     <string name="screen_cal">Calibration</string>
     <string name="screen_checklist">Checklist</string>
-    <string name="screen_rc">Radio</string>
+    <string name="screen_rc">Controller</string>
     <string name="screen_parameters">Parameters</string>
     
     <!-- App Settings/Preferences -->
@@ -515,6 +515,14 @@
     <string name="download_params">Download parameters</string>
     <string name="import_from_device">Import from file</string>
     <string name="export_to_device">Export to file</string>
+    <string name="rc_channel_singleaxis_reverse">Reverse</string>
+    <string name="rc_channel_singleaxis_lbl">Assign</string>
+    <string name="fragment_rc_doubleaxis_decrement">Decrement\nJoyStick</string>
+    <string name="fragment_rc_doubleaxis_increment">Increment\nJoyStick</string>
+    <string name="stub">Test</string>
+    <string name="fragment_setup_gc_armbuttonassign">Assign Arm Button</string>
+    <string name="fragment_setup_rc_limit_throttle">Limit Throttle</string>
+    <string name="fragment_setup_rc_limit_other_channels">Limit max rudder/aileron/elevator</string>
     <string name="pref_title_local">Localization</string>
 
     <string name="unit_system_entry_auto">Auto</string>

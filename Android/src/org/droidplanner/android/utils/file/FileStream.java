@@ -1,10 +1,16 @@
 package org.droidplanner.android.utils.file;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class FileStream {
 	public static FileOutputStream getParameterFileStream(String filename) throws
@@ -32,6 +38,29 @@ public class FileStream {
 		return out;
 	}
 
+	public static InputStream getControllerConfigStream(Context context, String fileName) throws IOException {
+	    
+	    File dir = new File(DirectoryPath.getParametersPath());
+        if (!dir.exists())
+            dir.mkdirs();
+
+        File jsonFile = new File(DirectoryPath.getParametersPath() + fileName);
+        InputStream in;
+        if (!jsonFile.exists() || !FileManager.isExternalStorageAvailable()) {
+            AssetManager assetManager = context.getAssets();
+            in = assetManager.open(fileName);
+            OutputStream out = new FileOutputStream(jsonFile);
+            FileManager.copyFile(in, out);
+            in = assetManager.open(fileName);
+            out.close();
+        }
+        else
+        {
+            in = new FileInputStream(jsonFile);
+        }
+        return in;
+	}
+	
 	static public FileOutputStream getWaypointFileStream(String filename) throws
             FileNotFoundException {
 		File myDir = new File(DirectoryPath.getWaypointsPath());

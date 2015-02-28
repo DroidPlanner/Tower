@@ -2,6 +2,7 @@ package org.droidplanner.android.fragments;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import org.droidplanner.android.utils.rc.RCConstants;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -10,10 +11,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -113,6 +114,9 @@ public class TelemetryFragment extends ApiListenerFragment {
     private TextView altitude;
     private TextView flightTimer;
     private boolean headingModeFPV;
+    private TextView lblController;
+    private RelativeLayout rcLayout;
+    private TextView lblControllerRight;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -127,6 +131,10 @@ public class TelemetryFragment extends ApiListenerFragment {
         airSpeed = (TextView) view.findViewById(R.id.airSpeedValue);
         climbRate = (TextView) view.findViewById(R.id.climbRateValue);
         altitude = (TextView) view.findViewById(R.id.altitudeValue);
+		
+		rcLayout = (RelativeLayout) view.findViewById(R.id.rc_layout);
+		lblController = (TextView) view.findViewById(R.id.lblRCValue);
+		lblControllerRight = (TextView) view.findViewById(R.id.lblRCValueRight);
 
         flightTimer = (TextView) view.findViewById(R.id.flight_timer);
 
@@ -215,13 +223,13 @@ public class TelemetryFragment extends ApiListenerFragment {
     private void onSpeedUpdate(Speed speed) {
         if (speed != null) {
             final SpeedUnitProvider speedUnitProvider = getSpeedUnitProvider();
-
+		
             airSpeed.setText(speedUnitProvider.boxBaseValueToTarget(speed.getAirSpeed()).toString());
             groundSpeed.setText(speedUnitProvider.boxBaseValueToTarget(speed.getGroundSpeed()).toString());
             climbRate.setText(speedUnitProvider.boxBaseValueToTarget(speed.getVerticalSpeed()).toString());
         }
     }
-
+	
     private void onAltitudeUpdate(Altitude altitude) {
         if (altitude != null) {
             double alt = altitude.getAltitude();
@@ -230,4 +238,48 @@ public class TelemetryFragment extends ApiListenerFragment {
             this.altitude.setText(altUnit.toString());
         }
     }
+    public void setControllerStatusVisible(boolean visible) {
+        if(rcLayout == null)
+            return;
+        
+        if (visible) {
+            if(lblController.getText().length() < 5) //Set default text
+            {
+                float[] channels = new float[8];
+                channels[RCConstants.THROTTLE] = 0;
+                channels[RCConstants.AILERON] = 0;
+                channels[RCConstants.ELEVATOR] = 0;
+                channels[RCConstants.RUDDER] = 0;
+                channels[RCConstants.RC5] = 0;
+                channels[RCConstants.RC6] = 0;
+                channels[RCConstants.RC7] = 0;
+                channels[RCConstants.RC8] = 0;
+                updateControllerStatus(channels);
+            }
+            rcLayout.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            rcLayout.setVisibility(View.GONE);
+        }
+    }
+	
+	public void updateControllerStatus(float[] channels) {
+	    
+	    String leftText = "";
+	    for(int x = 0; x < RCConstants.rchannels.length; x += 2) {
+	        leftText += RCConstants.ShortRChannelsTitle[x] + "\n";
+	        leftText += Math.round(channels[x]) + "\n";
+	    }
+	    leftText += "";
+	    
+	       String rightText = "";
+        for(int x = 1; x < RCConstants.rchannels.length; x += 2) {
+            rightText += RCConstants.ShortRChannelsTitle[x] + "\n";
+            rightText += Math.round(channels[x]) + "\n";
+        }
+        
+        lblController.setText(leftText);
+	    lblControllerRight.setText(rightText);
+	}
 }
