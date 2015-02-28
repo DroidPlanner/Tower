@@ -1,2 +1,0 @@
-droidplanner-pebble
-===================

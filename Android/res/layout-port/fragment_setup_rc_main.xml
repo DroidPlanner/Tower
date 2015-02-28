@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp"
+    style="@style/configLayout" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/fragment_setup_rc_limit_throttle"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        style="@style/configLayoutComplementaryColor"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" />
+
+    <SeekBar
+        android:id="@+id/seekThrottle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/lblSeekThrottle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        style="@style/configLayoutComplementaryColor"
+        android:text="@string/stub"
+        android:layout_marginLeft="15dp" />
+
+    <Space
+        android:layout_width="1dp"
+        android:layout_height="30dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/fragment_setup_rc_limit_other_channels"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        style="@style/configLayoutComplementaryColor"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" />
+
+    <SeekBar
+        android:id="@+id/seekRange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/lblSeekRange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        style="@style/configLayoutComplementaryColor"
+        android:text="@string/stub"
+        android:layout_marginLeft="15dp" />
+
+</LinearLayout>
