@@ -1,0 +1,96 @@
+# Batch SVG export with Inkmake (https://github.com/wader/inkmake)
+out: ../res
+
+# Launcher icons and Play Store icon
+drawable-mdpi/ic_launcher.png                     48x48
+drawable-hdpi/ic_launcher.png                     72x72
+drawable-xhdpi/ic_launcher.png                    96x96
+drawable-xxhdpi/ic_launcher.png                   144x144
+drawable-xxxhdpi/ic_launcher.png                  192x192
+../art/play_store_icon.png        ic_launcher.svg 512x512
+
+# Waypoint icons
+drawable-xxxhdpi/ic_mission_wp.png                     wp_icons.svg  64x64 @wp
+drawable-xxxhdpi/ic_mission_circle_wp.png              wp_icons.svg  64x64 @circle
+drawable-xxxhdpi/ic_mission_takeoff_wp.png             wp_icons.svg  64x64 @takeoff
+drawable-xxxhdpi/ic_mission_land_wp.png                wp_icons.svg  64x64 @land
+drawable-xxxhdpi/ic_mission_rtl_wp.png                 wp_icons.svg  64x64 @rtl
+drawable-xxxhdpi/ic_mission_roi_wp.png                 wp_icons.svg  64x64 @roi
+drawable-xxxhdpi/ic_mission_structure_scanner_wp.png   wp_icons.svg  64x64 @structure_scanner
+drawable-xxxhdpi/ic_mission_survey_wp.png              wp_icons.svg  64x64 @survey
+drawable-xxxhdpi/ic_mission_command_wp.png             wp_icons.svg  64x64 @command
+drawable-xxxhdpi/ic_mission_change_speed_wp.png        wp_icons.svg  64x64 @change_speed
+drawable-xxxhdpi/ic_mission_epm_gripper_wp.png         wp_icons.svg  64x64 @epm_gripper
+drawable-xxxhdpi/ic_mission_yaw_cond_wp.png            wp_icons.svg  64x64 @yaw_cond
+drawable-xxxhdpi/ic_mission_camera_trigger_wp.png      wp_icons.svg  64x64 @camera_trigger
+drawable-xxxhdpi/ic_mission_camera_details_wp.png      wp_icons.svg  64x64 @camera_details
+drawable-xxxhdpi/ic_mission_set_servo_wp.png           wp_icons.svg  64x64 @set_servo
+drawable-xxxhdpi/ic_mission_spline_wp.png              wp_icons.svg  64x64 @spline
+
+drawable-xxhdpi/ic_mission_wp.png                     wp_icons.svg  48x48 @wp
+drawable-xxhdpi/ic_mission_circle_wp.png              wp_icons.svg  48x48 @circle
+drawable-xxhdpi/ic_mission_takeoff_wp.png             wp_icons.svg  48x48 @takeoff
+drawable-xxhdpi/ic_mission_land_wp.png                wp_icons.svg  48x48 @land
+drawable-xxhdpi/ic_mission_rtl_wp.png                 wp_icons.svg  48x48 @rtl
+drawable-xxhdpi/ic_mission_roi_wp.png                 wp_icons.svg  48x48 @roi
+drawable-xxhdpi/ic_mission_structure_scanner_wp.png   wp_icons.svg  48x48 @structure_scanner
+drawable-xxhdpi/ic_mission_survey_wp.png              wp_icons.svg  48x48 @survey
+drawable-xxhdpi/ic_mission_command_wp.png             wp_icons.svg  48x48 @command
+drawable-xxhdpi/ic_mission_change_speed_wp.png        wp_icons.svg  48x48 @change_speed
+drawable-xxhdpi/ic_mission_epm_gripper_wp.png         wp_icons.svg  48x48 @epm_gripper
+drawable-xxhdpi/ic_mission_yaw_cond_wp.png            wp_icons.svg  48x48 @yaw_cond
+drawable-xxhdpi/ic_mission_camera_trigger_wp.png      wp_icons.svg  48x48 @camera_trigger
+drawable-xxhdpi/ic_mission_camera_details_wp.png      wp_icons.svg  48x48 @camera_details
+drawable-xxhdpi/ic_mission_set_servo_wp.png           wp_icons.svg  48x48 @set_servo
+drawable-xxhdpi/ic_mission_spline_wp.png              wp_icons.svg  48x48 @spline
+
+drawable-xhdpi/ic_mission_wp.png                     wp_icons.svg  32x32 @wp
+drawable-xhdpi/ic_mission_circle_wp.png              wp_icons.svg  32x32 @circle
+drawable-xhdpi/ic_mission_takeoff_wp.png             wp_icons.svg  32x32 @takeoff
+drawable-xhdpi/ic_mission_land_wp.png                wp_icons.svg  32x32 @land
+drawable-xhdpi/ic_mission_rtl_wp.png                 wp_icons.svg  32x32 @rtl
+drawable-xhdpi/ic_mission_roi_wp.png                 wp_icons.svg  32x32 @roi
+drawable-xhdpi/ic_mission_structure_scanner_wp.png   wp_icons.svg  32x32 @structure_scanner
+drawable-xhdpi/ic_mission_survey_wp.png              wp_icons.svg  32x32 @survey
+drawable-xhdpi/ic_mission_command_wp.png             wp_icons.svg  32x32 @command
+drawable-xhdpi/ic_mission_change_speed_wp.png        wp_icons.svg  32x32 @change_speed
+drawable-xhdpi/ic_mission_epm_gripper_wp.png         wp_icons.svg  32x32 @epm_gripper
+drawable-xhdpi/ic_mission_yaw_cond_wp.png            wp_icons.svg  32x32 @yaw_cond
+drawable-xhdpi/ic_mission_camera_trigger_wp.png      wp_icons.svg  32x32 @camera_trigger
+drawable-xhdpi/ic_mission_camera_details_wp.png      wp_icons.svg  32x32 @camera_details
+drawable-xhdpi/ic_mission_set_servo_wp.png           wp_icons.svg  32x32 @set_servo
+drawable-xhdpi/ic_mission_spline_wp.png              wp_icons.svg  32x32 @spline
+
+drawable-hdpi/ic_mission_wp.png                     wp_icons.svg  24x24 @wp
+drawable-hdpi/ic_mission_circle_wp.png              wp_icons.svg  24x24 @circle
+drawable-hdpi/ic_mission_takeoff_wp.png             wp_icons.svg  24x24 @takeoff
+drawable-hdpi/ic_mission_land_wp.png                wp_icons.svg  24x24 @land
+drawable-hdpi/ic_mission_rtl_wp.png                 wp_icons.svg  24x24 @rtl
+drawable-hdpi/ic_mission_roi_wp.png                 wp_icons.svg  24x24 @roi
+drawable-hdpi/ic_mission_structure_scanner_wp.png   wp_icons.svg  24x24 @structure_scanner
+drawable-hdpi/ic_mission_survey_wp.png              wp_icons.svg  24x24 @survey
+drawable-hdpi/ic_mission_command_wp.png             wp_icons.svg  24x24 @command
+drawable-hdpi/ic_mission_change_speed_wp.png        wp_icons.svg  24x24 @change_speed
+drawable-hdpi/ic_mission_epm_gripper_wp.png         wp_icons.svg  24x24 @epm_gripper
+drawable-hdpi/ic_mission_yaw_cond_wp.png            wp_icons.svg  24x24 @yaw_cond
+drawable-hdpi/ic_mission_camera_trigger_wp.png      wp_icons.svg  24x24 @camera_trigger
+drawable-hdpi/ic_mission_camera_details_wp.png      wp_icons.svg  24x24 @camera_details
+drawable-hdpi/ic_mission_set_servo_wp.png           wp_icons.svg  24x24 @set_servo
+drawable-hdpi/ic_mission_spline_wp.png              wp_icons.svg  24x24 @spline
+
+drawable-mdpi/ic_mission_wp.png                     wp_icons.svg  16x16 @wp
+drawable-mdpi/ic_mission_circle_wp.png              wp_icons.svg  16x16 @circle
+drawable-mdpi/ic_mission_takeoff_wp.png             wp_icons.svg  16x16 @takeoff
+drawable-mdpi/ic_mission_land_wp.png                wp_icons.svg  16x16 @land
+drawable-mdpi/ic_mission_rtl_wp.png                 wp_icons.svg  16x16 @rtl
+drawable-mdpi/ic_mission_roi_wp.png                 wp_icons.svg  16x16 @roi
+drawable-mdpi/ic_mission_structure_scanner_wp.png   wp_icons.svg  16x16 @structure_scanner
+drawable-mdpi/ic_mission_survey_wp.png              wp_icons.svg  16x16 @survey
+drawable-mdpi/ic_mission_command_wp.png             wp_icons.svg  16x16 @command
+drawable-mdpi/ic_mission_change_speed_wp.png        wp_icons.svg  16x16 @change_speed
+drawable-mdpi/ic_mission_epm_gripper_wp.png         wp_icons.svg  16x16 @epm_gripper
+drawable-mdpi/ic_mission_yaw_cond_wp.png            wp_icons.svg  16x16 @yaw_cond
+drawable-mdpi/ic_mission_camera_trigger_wp.png      wp_icons.svg  16x16 @camera_trigger
+drawable-mdpi/ic_mission_camera_details_wp.png      wp_icons.svg  16x16 @camera_details
+drawable-mdpi/ic_mission_set_servo_wp.png           wp_icons.svg  16x16 @set_servo
+drawable-mdpi/ic_mission_spline_wp.png              wp_icons.svg  16x16 @spline
