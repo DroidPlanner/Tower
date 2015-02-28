@@ -299,7 +299,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/lblRCValueContainer"
-                android:text="@string/rc_label"
+                android:text="@string/screen_rc"
                 android:textColor="@color/altitude_label"
                 />
         </RelativeLayout>

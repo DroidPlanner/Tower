@@ -3,16 +3,16 @@ package org.droidplanner.android.utils.rc.input;
 import android.view.MotionEvent;
 
 public class AxisFinder {
-    private static int mFoundAxis;
-    private static final int[] axis_id = {
+    private int mFoundAxis;
+    private final int[] axis_id = {
             MotionEvent.AXIS_X, MotionEvent.AXIS_Y, // Left Stick
             MotionEvent.AXIS_RX, MotionEvent.AXIS_RY, // Right Stick
             MotionEvent.AXIS_Z, MotionEvent.AXIS_RZ, // Ouya Right Stick
             MotionEvent.AXIS_LTRIGGER, MotionEvent.AXIS_RTRIGGER
     };
-    private static float[] initialValues = null;
-    public static boolean figureOutAxis(MotionEvent event) {
-        if(initialValues == null) { //Set initial Values
+    private float[] initialValues = null;
+    public boolean figureOutAxis(MotionEvent event) {
+        if(initialValues == null) {
             initialValues = new float[axis_id.length];
             
             for (int x = 0; x < axis_id.length; x++) {
@@ -30,12 +30,12 @@ public class AxisFinder {
         return false;
     }
 
-    public static int getFiguredOutAxis() {
+    public int getFiguredOutAxis() {
         cancel();
         return mFoundAxis;
     }
     
-    public static void cancel() {
+    public void cancel() {
         initialValues = null;
     }
 }

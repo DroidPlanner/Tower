@@ -55,9 +55,9 @@ public class RcControlSetupFragment extends Fragment {
             switch(i){
                 case 0:
                 default:
-                	return new FragmentSetupRC();
+                    return new FragmentSetupGC();
                 case 1:
-                	return new FragmentSetupGC();
+                    return new FragmentSetupRC();
             }
         }
 
@@ -71,9 +71,9 @@ public class RcControlSetupFragment extends Fragment {
             switch(position){
                 case 0:
                 default:
-                	return FragmentSetupRC.getTitle(context);
-                case 1:
                 	return FragmentSetupGC.getTitle(context);
+                case 1:
+                	return FragmentSetupRC.getTitle(context);
             }
         }
     }

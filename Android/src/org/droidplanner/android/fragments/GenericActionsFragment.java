@@ -1,6 +1,5 @@
 package org.droidplanner.android.fragments;
 
-import org.droidplanner.android.activities.FlightActivity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;

@@ -23,7 +23,6 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.ControllerAxisKeyPressDialog;
 import org.droidplanner.android.dialogs.ControllerAxisKeyPressDialog.ControllerPressListener;
 import org.droidplanner.android.utils.rc.RCConstants;
-import org.droidplanner.android.utils.rc.input.AxisFinder;
 
 public class GameControllerChannel extends RelativeLayout implements
         OnClickListener, OnLongClickListener, OnCheckedChangeListener, ControllerPressListener {
@@ -172,7 +171,6 @@ public class GameControllerChannel extends RelativeLayout implements
 
             @Override
             public void onDismiss(DialogInterface dialog) {
-                AxisFinder.cancel(); //TODO move to appropriate place
                 if(listener != null)
                     listener.onSearchJoystickAxisFinished();
             }

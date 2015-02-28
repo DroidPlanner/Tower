@@ -11,6 +11,8 @@ import android.view.MotionEvent;
 
 public class ControllerAxisKeyPressDialog extends ProgressDialog {
 
+    private AxisFinder axisFinder;
+
     public interface ControllerPressListener
     {
         void onControllerPress(ControllerAxisKeyPressDialog mode, int key, boolean fromJoystick);
@@ -37,12 +39,13 @@ public class ControllerAxisKeyPressDialog extends ProgressDialog {
                     }
 
                 });
+        axisFinder = new AxisFinder();
     }
     
     @Override
     public boolean onGenericMotionEvent(MotionEvent event) {
-        if (RCConstants.isPhysicalDeviceEvent(event) && AxisFinder.figureOutAxis(event)) {
-            listener.onControllerPress(this, AxisFinder.getFiguredOutAxis(), true);
+        if (RCConstants.isPhysicalDeviceEvent(event) && axisFinder.figureOutAxis(event)) {
+            listener.onControllerPress(this, axisFinder.getFiguredOutAxis(), true);
             return true;
         }
         return super.onGenericMotionEvent(event);
