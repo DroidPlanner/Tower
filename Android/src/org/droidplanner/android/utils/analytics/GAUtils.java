@@ -2,8 +2,8 @@ package org.droidplanner.android.utils.analytics;
 
 import java.util.Map;
 
-import org.droidplanner.BuildConfig;
-import org.droidplanner.R;
+import org.droidplanner.android.BuildConfig;
+import org.droidplanner.android.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
@@ -93,8 +93,7 @@ public class GAUtils {
 
 			final GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
 
-			// Call is needed for now to allow dispatching of auto activity
-			// reports
+			// Call is needed for now to allow dispatching of auto activity reports
 			// (http://stackoverflow.com/a/23256722/1088814)
 			analytics.enableAutoActivityReports(app);
 
@@ -111,16 +110,14 @@ public class GAUtils {
 
 	public static void startNewSession(Context context) {
 		final DroidPlannerPrefs prefs = new DroidPlannerPrefs(context);
-		final String connectionType = prefs.getMavLinkConnectionType();
 
 		final String login = prefs.getDroneshareLogin();
 		final String password = prefs.getDronesharePassword();
-		final boolean isDroneShareUser = prefs.getLiveUploadEnabled() && !login.isEmpty()
+		final boolean isDroneShareUser = prefs.isLiveUploadEnabled() && !login.isEmpty()
 				&& !password.isEmpty();
 
 		sendHit(new HitBuilders.AppViewBuilder()
 				.setNewSession()
-				.setCustomDimension(CustomDimension.MAVLINK_CONNECTION_TYPE, connectionType)
 				.setCustomDimension(CustomDimension.DRONESHARE_ACTIVE,
 						String.valueOf(isDroneShareUser)).build());
 	}

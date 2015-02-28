@@ -1,6 +1,6 @@
 package org.droidplanner.android.maps.providers.google_map;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.maps.providers.MapProviderPreferences;
 
@@ -19,7 +19,7 @@ public class GoogleMapProviderPreferences extends MapProviderPreferences {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.preferences_google_map);
+		addPreferencesFromResource(R.xml.preferences_google_maps);
 		setupPreferences();
 	}
 

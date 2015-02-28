@@ -18,7 +18,7 @@
     <!-- Attributes for the spinner wheel widgets -->
     <declare-styleable name="AbstractWheelView">
         <attr name="visibleItems" format="integer"/>
-        <attr name="isAllVisible" format="boolean"/>
+        <attr name="isAllVisible" format="boolean"/>˛
         <attr name="itemOffsetPercent" format="integer"/>
         <attr name="itemsPadding" format="dimension"/>
         <attr name="selectionDividerDimmedAlpha" format="integer"/>
@@ -36,10 +36,15 @@
         <attr name="android:text" />
         <attr name="android:orientation" />
     </declare-styleable>
-    
-    <declare-styleable name="GameControllerChannel">
-        <attr name="title" format="string"/>
-        <attr name="value" format="integer"/>
+
+    <declare-styleable name="SlidingDrawer">
+        <attr name="android:orientation" />
+        <attr name="handle" format="integer" />
+        <attr name="content" format="integer" />
+        <attr name="topOffset" format="dimension" />
+        <attr name="bottomOffset" format="dimension" />
+        <attr name="allowSingleTap" format="boolean" />
+        <attr name="animateOnClick" format="boolean" />
     </declare-styleable>
     
 </resources>

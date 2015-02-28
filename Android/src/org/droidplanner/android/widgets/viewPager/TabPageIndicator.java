@@ -18,7 +18,7 @@ package org.droidplanner.android.widgets.viewPager;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;

@@ -27,7 +27,7 @@ package org.droidplanner.android.widgets.spinnerWheel;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.WheelViewAdapter;
 
 import android.content.Context;
@@ -557,7 +557,10 @@ public abstract class AbstractWheel extends View {
 		if (this.mViewAdapter != null) {
 			this.mViewAdapter.unregisterDataSetObserver(mDataObserver);
 		}
+
 		this.mViewAdapter = viewAdapter;
+        mCurrentItemIdx = 0;
+
 		if (this.mViewAdapter != null) {
 			this.mViewAdapter.registerDataSetObserver(mDataObserver);
 		}

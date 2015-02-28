@@ -1,36 +1,39 @@
 package org.droidplanner.android.fragments;
 
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.android.utils.analytics.GAUtils;
-import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.drone.variables.State;
-import org.droidplanner.core.gcs.follow.Follow;
-import org.droidplanner.core.model.Drone;
-
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.MAVLink.Messages.ApmModes;
 import com.google.android.gms.analytics.HitBuilders;
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.GuidedState;
+import com.o3dr.services.android.lib.drone.property.State;
+import com.o3dr.services.android.lib.drone.property.VehicleMode;
+import com.o3dr.services.android.lib.gcs.follow.FollowState;
+import com.o3dr.services.android.lib.gcs.follow.FollowType;
+
+import org.droidplanner.android.R;
+import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
+import org.droidplanner.android.utils.analytics.GAUtils;
 
 /**
  * Provides functionality for flight action buttons specific to planes.
  */
-public class PlaneFlightActionsFragment extends Fragment implements View.OnClickListener,
-		DroneInterfaces.OnDroneListener, FlightActionsFragment.SlidingUpHeader {
+public class PlaneFlightActionsFragment extends ApiListenerFragment implements
+		View.OnClickListener, FlightActionsFragment.SlidingUpHeader {
 
 	private static final String ACTION_FLIGHT_ACTION_BUTTON = "Copter flight action button";
-
-	private Drone drone;
-	private Follow followMe;
 
 	private View mDisconnectedButtons;
 	private View mConnectedButtons;
@@ -40,13 +43,83 @@ public class PlaneFlightActionsFragment extends Fragment implements View.OnClick
 	private Button pauseBtn;
 	private Button autoBtn;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
-		drone = droidPlannerApp.getDrone();
-		followMe = droidPlannerApp.getFollowMe();
-	}
+    private static final IntentFilter eventFilter = new IntentFilter();
+    static {
+        eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
+        eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+        eventFilter.addAction(AttributeEvent.STATE_UPDATED);
+        eventFilter.addAction(AttributeEvent.STATE_VEHICLE_MODE);
+        eventFilter.addAction(AttributeEvent.FOLLOW_START);
+        eventFilter.addAction(AttributeEvent.FOLLOW_STOP);
+        eventFilter.addAction(AttributeEvent.FOLLOW_UPDATE);
+    }
+
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            switch (action) {
+                case AttributeEvent.STATE_CONNECTED:
+                case AttributeEvent.STATE_DISCONNECTED:
+                case AttributeEvent.STATE_UPDATED:
+                    setupButtonsByFlightState();
+                    break;
+
+                case AttributeEvent.STATE_VEHICLE_MODE:
+                    updateFlightModeButtons();
+                    break;
+
+                case AttributeEvent.FOLLOW_START:
+                case AttributeEvent.FOLLOW_STOP:
+                case AttributeEvent.FOLLOW_UPDATE:
+                    updateFlightModeButtons();
+                    updateFollowButton();
+
+                    if ((AttributeEvent.FOLLOW_START.equals(action) || AttributeEvent.FOLLOW_STOP.equals(action))) {
+                        final FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
+                        if (followState != null) {
+                            String eventLabel = null;
+                            switch (followState.getState()) {
+                                case FollowState.STATE_START:
+                                    eventLabel = "FollowMe enabled";
+                                    break;
+
+                                case FollowState.STATE_RUNNING:
+                                    eventLabel = "FollowMe running";
+                                    break;
+
+                                case FollowState.STATE_END:
+                                    eventLabel = "FollowMe disabled";
+                                    break;
+
+                                case FollowState.STATE_INVALID:
+                                    eventLabel = "FollowMe error: invalid state";
+                                    break;
+
+                                case FollowState.STATE_DRONE_DISCONNECTED:
+                                    eventLabel = "FollowMe error: drone not connected";
+                                    break;
+
+                                case FollowState.STATE_DRONE_NOT_ARMED:
+                                    eventLabel = "FollowMe error: drone not armed";
+                                    break;
+                            }
+
+                            if (eventLabel != null) {
+                                HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                                        .setCategory(GAUtils.Category.FLIGHT)
+                                        .setAction(ACTION_FLIGHT_ACTION_BUTTON)
+                                        .setLabel(eventLabel);
+                                GAUtils.sendEvent(eventBuilder);
+
+                                Toast.makeText(getActivity(), eventLabel, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+    };
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,21 +149,13 @@ public class PlaneFlightActionsFragment extends Fragment implements View.OnClick
 		followBtn.setOnClickListener(this);
 	}
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		setupButtonsByFlightState();
-		updateFlightModeButtons();
-		updateFollowButton();
-		drone.addDroneListener(this);
-	}
-
 	private void updateFollowButton() {
-		switch (followMe.getState()) {
-		case FOLLOW_START:
+        final FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
+		switch (followState.getState()) {
+		case FollowState.STATE_START:
 			followBtn.setBackgroundColor(Color.RED);
 			break;
-		case FOLLOW_RUNNING:
+		case FollowState.STATE_RUNNING:
 			followBtn.setActivated(true);
 			followBtn.setBackgroundResource(R.drawable.flight_action_row_bg_selector);
 			break;
@@ -104,22 +169,28 @@ public class PlaneFlightActionsFragment extends Fragment implements View.OnClick
 	private void updateFlightModeButtons() {
 		resetFlightModeButtons();
 
-		final ApmModes flightMode = drone.getState().getMode();
-		switch (flightMode) {
-		case FIXED_WING_AUTO:
-			autoBtn.setActivated(true);
-			break;
+		final Drone drone = getDrone();
+        final State droneState = drone.getAttribute(AttributeType.STATE);
+		final VehicleMode flightMode = droneState.getVehicleMode();
+        if(flightMode != null) {
+            switch (flightMode) {
+                case PLANE_AUTO:
+                    autoBtn.setActivated(true);
+                    break;
 
-		case FIXED_WING_GUIDED:
-			if (drone.getGuidedPoint().isIdle() && !followMe.isEnabled()) {
-				pauseBtn.setActivated(true);
-			}
-			break;
+                case PLANE_GUIDED:
+                    final GuidedState guidedState = drone.getAttribute(AttributeType.GUIDED_STATE);
+                    final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
+                    if (guidedState.isInitialized() && !followState.isEnabled()) {
+                        pauseBtn.setActivated(true);
+                    }
+                    break;
 
-		case FIXED_WING_RTL:
-			homeBtn.setActivated(true);
-			break;
-		}
+                case PLANE_RTL:
+                    homeBtn.setActivated(true);
+                    break;
+            }
+        }
 	}
 
 	private void resetFlightModeButtons() {
@@ -129,7 +200,7 @@ public class PlaneFlightActionsFragment extends Fragment implements View.OnClick
 	}
 
 	private void setupButtonsByFlightState() {
-		if (drone.getMavClient().isConnected()) {
+		if (getDrone().isConnected()) {
 			mDisconnectedButtons.setVisibility(View.GONE);
 			mConnectedButtons.setVisibility(View.VISIBLE);
 		} else {
@@ -139,111 +210,74 @@ public class PlaneFlightActionsFragment extends Fragment implements View.OnClick
 	}
 
 	@Override
-	public void onStop() {
-		super.onStop();
-		drone.removeDroneListener(this);
+	public void onApiConnected() {
+		setupButtonsByFlightState();
+		updateFlightModeButtons();
+		updateFollowButton();
+		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
+	}
+
+	@Override
+	public void onApiDisconnected() {
+		getBroadcastManager().unregisterReceiver(eventReceiver);
 	}
 
 	@Override
 	public void onClick(View v) {
-        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                .setCategory(GAUtils.Category.FLIGHT);
+        final Drone drone = getDrone();
+		HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+				.setCategory(GAUtils.Category.FLIGHT);
 
-        switch(v.getId()){
-            case R.id.mc_connectBtn:
-                ((SuperUI) getActivity()).toggleDroneConnection();
-                break;
+		switch (v.getId()) {
+		case R.id.mc_connectBtn:
+			((SuperUI) getActivity()).toggleDroneConnection();
+			break;
 
-            case R.id.mc_homeBtn:
-                drone.getState().changeFlightMode(ApmModes.FIXED_WING_RTL);
-                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.FIXED_WING_RTL.getName());
-                break;
+		case R.id.mc_homeBtn:
+			drone.changeVehicleMode(VehicleMode.PLANE_RTL);
+			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON)
+                    .setLabel(VehicleMode.PLANE_RTL.getLabel());
+			break;
 
-            case R.id.mc_pause:
-                if (followMe.isEnabled()) {
-                    followMe.toggleFollowMeState();
-                }
+		case R.id.mc_pause: {
+            final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
+            if (followState.isEnabled()){
+                drone.disableFollowMe();
+            }
 
-                drone.getGuidedPoint().pauseAtCurrentLocation();
-                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Pause");
-                break;
-
-            case R.id.mc_autoBtn:
-                drone.getState().changeFlightMode(ApmModes.FIXED_WING_AUTO);
-                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(ApmModes.FIXED_WING_AUTO.getName());
-                break;
-
-            case R.id.mc_follow:
-                followMe.toggleFollowMeState();
-                String eventLabel = null;
-
-                switch (followMe.getState()) {
-                    case FOLLOW_START:
-                        eventLabel = "FollowMe enabled";
-                        break;
-
-                    case FOLLOW_RUNNING:
-                        eventLabel = "FollowMe running";
-                        break;
-
-                    case FOLLOW_END:
-                        eventLabel = "FollowMe disabled";
-                        break;
-
-                    case FOLLOW_INVALID_STATE:
-                        eventLabel = "FollowMe error: invalid state";
-                        break;
-
-                    case FOLLOW_DRONE_DISCONNECTED:
-                        eventLabel = "FollowMe error: drone not connected";
-                        break;
-
-                    case FOLLOW_DRONE_NOT_ARMED:
-                        eventLabel = "FollowMe error: drone not armed";
-                        break;
-                }
-
-                if (eventLabel != null) {
-                    eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(eventLabel);
-                    Toast.makeText(getActivity(), eventLabel, Toast.LENGTH_SHORT).show();
-                }
-                break;
-
-            default:
-                eventBuilder = null;
-                break;
+            drone.pauseAtCurrentLocation();
+            eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Pause");
+            break;
         }
 
-        if (eventBuilder != null) {
-            GAUtils.sendEvent(eventBuilder);
+		case R.id.mc_autoBtn:
+			drone.changeVehicleMode(VehicleMode.PLANE_AUTO);
+			eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON)
+                    .setLabel(VehicleMode.PLANE_AUTO.getLabel());
+			break;
+
+		case R.id.mc_follow: {
+            final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
+            if (followState.isEnabled()) {
+                drone.disableFollowMe();
+            } else
+                drone.enableFollowMe(FollowType.LEASH);
+            break;
         }
-	}
 
-	@Override
-	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
-		switch (event) {
-		case CONNECTED:
-		case DISCONNECTED:
-		case STATE:
-			setupButtonsByFlightState();
+		default:
+			eventBuilder = null;
 			break;
+		}
 
-		case MODE:
-			updateFlightModeButtons();
-			break;
-
-		case FOLLOW_START:
-		case FOLLOW_STOP:
-		case FOLLOW_UPDATE:
-			updateFlightModeButtons();
-			updateFollowButton();
-			break;
+		if (eventBuilder != null) {
+			GAUtils.sendEvent(eventBuilder);
 		}
 	}
 
-    @Override
-    public boolean isSlidingUpPanelEnabled(Drone drone) {
-        final State droneState = drone.getState();
-        return drone.getMavClient().isConnected() && droneState.isArmed();
-    }
+	@Override
+	public boolean isSlidingUpPanelEnabled(Drone drone) {
+        final State droneState = drone.getAttribute(AttributeType.STATE);
+		return droneState.isConnected() && droneState.isArmed();
+	}
 }

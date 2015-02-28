@@ -1,89 +1,116 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
-import java.util.List;
-
-import org.droidplanner.R;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-import org.droidplanner.core.helpers.units.Altitude;
-import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.waypoints.Circle;
-
 import android.content.Context;
-import android.os.Bundle;
 import android.view.View;
 
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.spatial.Circle;
+
+import org.beyene.sius.unit.length.LengthUnit;
+import org.droidplanner.android.R;
+import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
+import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
+
+import java.util.List;
+
 public class MissionCircleFragment extends MissionDetailFragment implements
-		CardWheelHorizontalView.OnCardWheelChangedListener{
+        CardWheelHorizontalView.OnCardWheelScrollListener {
 
-	private List<Circle> mItemsList;
+    @Override
+    protected int getResource() {
+        return R.layout.fragment_editor_detail_circle;
+    }
 
-	@Override
-	protected int getResource() {
-		return R.layout.fragment_editor_detail_circle;
-	}
+    @Override
+    public void onApiConnected() {
+        super.onApiConnected();
 
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		final Context context = getActivity().getApplicationContext();
+        final View view = getView();
+        final Context context = getActivity().getApplicationContext();
 
-		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CIRCLE));
+        typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CIRCLE));
 
-		mItemsList = (List<Circle>) getMissionItems();
+        final LengthUnitProvider lengthUP = getLengthUnitProvider();
 
-        //Use the first one as reference.
-        final Circle firstItem = mItemsList.get(0);
+        final LengthWheelAdapter altitudeAdapter = new LengthWheelAdapter(context, R.layout.wheel_text_centered,
+                lengthUP.boxBaseValueToTarget(MIN_ALTITUDE), lengthUP.boxBaseValueToTarget(MAX_ALTITUDE));
 
-		final NumericWheelAdapter altitudeAdapter = new NumericWheelAdapter(context, MIN_ALTITUDE,
-				MAX_ALTITUDE, "%d m");
-		altitudeAdapter.setItemResource(R.layout.wheel_text_centered);
-		final CardWheelHorizontalView altitudePicker = (CardWheelHorizontalView) view
-				.findViewById(R.id.altitudePicker);
-		altitudePicker.setViewAdapter(altitudeAdapter);
-        altitudePicker.addChangingListener(this);
-		altitudePicker.setCurrentValue((int) firstItem.getCoordinate().getAltitude().valueInMeters
-                ());
+        CardWheelHorizontalView<LengthUnit> altitudePicker = (CardWheelHorizontalView<LengthUnit>) view
+                .findViewById(R.id.altitudePicker);
+        altitudePicker.setViewAdapter(altitudeAdapter);
+        altitudePicker.addScrollListener(this);
 
-		final NumericWheelAdapter loiterTurnAdapter = new NumericWheelAdapter(context,
-				R.layout.wheel_text_centered, 0, 10, "%d");
-		final CardWheelHorizontalView loiterTurnPicker = (CardWheelHorizontalView) view
-				.findViewById(R.id.loiterTurnPicker);
-		loiterTurnPicker.setViewAdapter(loiterTurnAdapter);
-        loiterTurnPicker.addChangingListener(this);
-		loiterTurnPicker.setCurrentValue(firstItem.getNumberOfTurns());
+        final NumericWheelAdapter loiterTurnAdapter = new NumericWheelAdapter(context,
+                R.layout.wheel_text_centered, 0, 10, "%d");
 
-		final NumericWheelAdapter loiterRadiusAdapter = new NumericWheelAdapter(context, 0, 50,
-				"%d m");
-		loiterRadiusAdapter.setItemResource(R.layout.wheel_text_centered);
-		final CardWheelHorizontalView loiterRadiusPicker = (CardWheelHorizontalView) view
-				.findViewById(R.id.loiterRadiusPicker);
-		loiterRadiusPicker.setViewAdapter(loiterRadiusAdapter);
-        loiterRadiusPicker.addChangingListener(this);
-		loiterRadiusPicker.setCurrentValue((int) firstItem.getRadius());
-	}
+        CardWheelHorizontalView<Integer> loiterTurnPicker = (CardWheelHorizontalView<Integer>) view
+                .findViewById(R.id.loiterTurnPicker);
+        loiterTurnPicker.setViewAdapter(loiterTurnAdapter);
+        loiterTurnPicker.addScrollListener(this);
 
-	@Override
-	public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue) {
-		switch (cardWheel.getId()) {
-		case R.id.altitudePicker:
-            for(Circle item: mItemsList) {
-                item.setAltitude(new Altitude(newValue));
+        final LengthWheelAdapter loiterRadiusAdapter = new LengthWheelAdapter(context, R.layout.wheel_text_centered,
+                lengthUP.boxBaseValueToTarget(0), lengthUP.boxBaseValueToTarget(50));
+        CardWheelHorizontalView<LengthUnit> loiterRadiusPicker = (CardWheelHorizontalView<LengthUnit>) view
+                .findViewById(R.id.loiterRadiusPicker);
+        loiterRadiusPicker.setViewAdapter(loiterRadiusAdapter);
+        loiterRadiusPicker.addScrollListener(this);
+
+        // Use the first one as reference.
+        final Circle firstItem = getMissionItems().get(0);
+        altitudePicker.setCurrentValue(lengthUP.boxBaseValueToTarget(firstItem.getCoordinate().getAltitude()));
+        loiterTurnPicker.setCurrentValue(firstItem.getTurns());
+        loiterRadiusPicker.setCurrentValue(lengthUP.boxBaseValueToTarget(firstItem.getRadius()));
+    }
+
+    @Override
+    public void onScrollingStarted(CardWheelHorizontalView cardWheel, Object startValue) {
+
+    }
+
+    @Override
+    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, Object oldValue, Object newValue) {
+
+    }
+
+    @Override
+    public void onScrollingEnded(CardWheelHorizontalView cardWheel, Object startValue, Object endValue) {
+        switch (cardWheel.getId()) {
+            case R.id.altitudePicker: {
+                final double baseValue = ((LengthUnit) endValue).toBase().getValue();
+                for (Circle item : getMissionItems()) {
+                    item.getCoordinate().setAltitude(baseValue);
+                }
+                getMissionProxy().notifyMissionUpdate();
+                break;
             }
-			break;
 
-		case R.id.loiterRadiusPicker:
-            for(Circle item: mItemsList) {
-                item.setRadius(newValue);
-            }
-            getMissionProxy().getMission().notifyMissionUpdate();
-			break;
+            case R.id.loiterRadiusPicker: {
+                final double baseValue =  ((LengthUnit) endValue).toBase().getValue();
+                for (Circle item : getMissionItems()) {
+                    item.setRadius(baseValue);
+                }
 
-		case R.id.loiterTurnPicker:
-            for(Circle item: mItemsList) {
-                item.setTurns(newValue);
+                MissionProxy missionProxy = getMissionProxy();
+                if (missionProxy != null)
+                    missionProxy.notifyMissionUpdate();
+                break;
             }
-			break;
-		}
-	}
+
+            case R.id.loiterTurnPicker:
+                int turns = (Integer) endValue;
+                for (Circle item : getMissionItems()) {
+                    item.setTurns(turns);
+                }
+                getMissionProxy().notifyMissionUpdate();
+                break;
+        }
+    }
+
+    @Override
+    public List<Circle> getMissionItems() {
+        return (List<Circle>) super.getMissionItems();
+    }
 }

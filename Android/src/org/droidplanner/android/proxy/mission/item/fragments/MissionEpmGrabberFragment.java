@@ -1,10 +1,11 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
-import org.droidplanner.R;
-import org.droidplanner.core.mission.MissionItemType;
+import org.droidplanner.android.R;
 
 import android.os.Bundle;
 import android.view.View;
+
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 
 public class MissionEpmGrabberFragment extends MissionDetailFragment {
 
@@ -14,8 +15,8 @@ public class MissionEpmGrabberFragment extends MissionDetailFragment {
 	}
 
 	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
+	public void onApiConnected() {
+        super.onApiConnected();
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.EPM_GRIPPER));
 	}
 }

@@ -1,5 +1,6 @@
 package org.droidplanner.android.activities.helpers;
 
+import android.content.BroadcastReceiver;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
@@ -10,272 +11,262 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import org.droidplanner.R;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBarActivity;
+
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
-import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
-import org.droidplanner.core.MAVLink.MavLinkROI;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.gcs.GCSHeartbeat;
-import org.droidplanner.core.model.Drone;
+import org.droidplanner.android.utils.unit.UnitManager;
+import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 /**
  * Parent class for the app activity classes.
  */
-public abstract class SuperUI extends FragmentActivity implements OnDroneListener {
+public abstract class SuperUI extends ActionBarActivity implements DroidPlannerApp.ApiListener {
 
-	public final static String ACTION_TOGGLE_DRONE_CONNECTION = SuperUI.class.getName()
-			+ ".ACTION_TOGGLE_DRONE_CONNECTION";
+    private static final IntentFilter superIntentFilter = new IntentFilter();
+
+    static {
+        superIntentFilter.addAction(AttributeEvent.STATE_CONNECTED);
+        superIntentFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+        superIntentFilter.addAction(Utils.ACTION_UPDATE_OPTIONS_MENU);
+    }
+
+    private final BroadcastReceiver superReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            switch (action) {
+                case AttributeEvent.STATE_CONNECTED:
+                    onDroneConnected();
+                    break;
+
+                case AttributeEvent.STATE_DISCONNECTED:
+                    onDroneDisconnected();
+                    break;
+
+                case Utils.ACTION_UPDATE_OPTIONS_MENU:
+                    invalidateOptionsMenu();
+                    break;
+            }
+        }
+    };
 
     private ScreenOrientation screenOrientation = new ScreenOrientation(this);
-	private InfoBarActionProvider infoBar;
-	private GCSHeartbeat gcsHeartbeat;
-	public DroidPlannerApp app;
-	public Drone drone;
+    private LocalBroadcastManager lbm;
 
-	/**
-	 * Handle to the app preferences.
-	 */
-	protected DroidPlannerPrefs mAppPrefs;
+    /**
+     * Handle to the app preferences.
+     */
+    protected DroidPlannerPrefs mAppPrefs;
+    protected UnitSystem unitSystem;
+    protected DroidPlannerApp dpApp;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		ActionBar actionBar = getActionBar();
-		if (actionBar != null) {
-			actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
-		}
+        final Context context = getApplicationContext();
 
-		app = (DroidPlannerApp) getApplication();
-		this.drone = app.getDrone();
-		gcsHeartbeat = new GCSHeartbeat(drone, 1);
-		mAppPrefs = new DroidPlannerPrefs(getApplicationContext());
+        dpApp = (DroidPlannerApp) getApplication();
+        lbm = LocalBroadcastManager.getInstance(context);
 
-		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        mAppPrefs = new DroidPlannerPrefs(context);
+        unitSystem = UnitManager.getUnitSystem(context);
+
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		/*
-		 * Used to supplant wake lock acquisition (previously in
+         * Used to supplant wake lock acquisition (previously in
 		 * org.droidplanner.android.service .MAVLinkService) as suggested by the
 		 * android android.os.PowerManager#newWakeLock documentation.
 		 */
-		if (mAppPrefs.keepScreenOn()) {
-			getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		}
+        if (mAppPrefs.keepScreenOn()) {
+            getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
 
-		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-		screenOrientation.unlock();
-		Utils.updateUILanguage(getApplicationContext());
+        screenOrientation.unlock();
+        Utils.updateUILanguage(context);
+    }
 
-		handleIntent(getIntent());
-	}
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        lbm = null;
+    }
 
-	@Override
-	public void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		handleIntent(intent);
-	}
+    protected LocalBroadcastManager getBroadcastManager() {
+        return lbm;
+    }
 
-	private void handleIntent(Intent intent) {
-		if (intent == null)
-			return;
+    @Override
+    public void onApiConnected() {
+        invalidateOptionsMenu();
 
-		final String action = intent.getAction();
-		if (ACTION_TOGGLE_DRONE_CONNECTION.equals(action)) {
-			toggleDroneConnection();
-		}
-	}
+        getBroadcastManager().registerReceiver(superReceiver, superIntentFilter);
+        if (dpApp.getDrone().isConnected())
+            onDroneConnected();
+        else
+            onDroneDisconnected();
 
-	@Override
-	protected void onStart() {
-		super.onStart();
-		maxVolumeIfEnabled();
-		drone.addDroneListener(this);
-		drone.getMavClient().queryConnectionState();
-		drone.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
-	}
+        lbm.sendBroadcast(new Intent(MissionProxy.ACTION_MISSION_PROXY_UPDATE));
+    }
 
-	private void maxVolumeIfEnabled() {
-		if (mAppPrefs.maxVolumeOnStart()) {
-			AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-			audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
-					audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
-		}
-	}
+    @Override
+    public void onApiDisconnected() {
+        getBroadcastManager().unregisterReceiver(superReceiver);
+        onDroneDisconnected();
+    }
 
-	@Override
-	protected void onStop() {
-		super.onStop();
-		drone.removeDroneListener(this);
+    private void onDroneConnected() {
+        invalidateOptionsMenu();
+        screenOrientation.requestLock();
+    }
 
-		if (infoBar != null) {
-			infoBar.setDrone(null);
-			infoBar = null;
-		}
-	}
+    private void onDroneDisconnected() {
+        invalidateOptionsMenu();
+        screenOrientation.unlock();
+    }
 
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		if (infoBar != null) {
-			infoBar.onDroneEvent(event, drone);
-		}
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-		switch (event) {
-		case CONNECTED:
-			gcsHeartbeat.setActive(true);
-			invalidateOptionsMenu();
-			screenOrientation.requestLock();
-			break;
-		case DISCONNECTED:
-			gcsHeartbeat.setActive(false);
-			invalidateOptionsMenu();
-			screenOrientation.unlock();
-			break;
-		default:
-			break;
-		}
-	}
+        unitSystem = UnitManager.getUnitSystem(getApplicationContext());
+        dpApp.addApiListener(this);
+        maxVolumeIfEnabled();
+    }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Reset the previous info bar
-		if (infoBar != null) {
-			infoBar.setDrone(null);
-			infoBar = null;
-		}
+    @Override
+    public void onStop() {
+        super.onStop();
+        dpApp.removeApiListener(this);
+    }
 
-		getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
+    private void maxVolumeIfEnabled() {
+        if (mAppPrefs.maxVolumeOnStart()) {
+            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                    audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+        }
+    }
 
-		final MenuItem toggleConnectionItem = menu.findItem(R.id.menu_connect);
-		final MenuItem infoBarItem = menu.findItem(R.id.menu_info_bar);
-		if (infoBarItem != null)
-			infoBar = (InfoBarActionProvider) infoBarItem.getActionProvider();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
 
-		// Configure the info bar action provider if we're connected
-		if (drone.getMavClient().isConnected()) {
-			menu.setGroupEnabled(R.id.menu_group_connected, true);
-			menu.setGroupVisible(R.id.menu_group_connected, true);
+        final MenuItem toggleConnectionItem = menu.findItem(R.id.menu_connect);
+
+        Drone dpApi = dpApp.getDrone();
+        if (dpApi != null && dpApi.isConnected()) {
+            menu.setGroupEnabled(R.id.menu_group_connected, true);
+            menu.setGroupVisible(R.id.menu_group_connected, true);
+
+            final boolean isAdvancedEnabled = mAppPrefs.isAdvancedMenuEnabled();
+            final MenuItem advancedSubMenu = menu.findItem(R.id.menu_advanced);
+            advancedSubMenu.setEnabled(isAdvancedEnabled);
+            advancedSubMenu.setVisible(isAdvancedEnabled);
 
             final boolean areMissionMenusEnabled = enableMissionMenus();
 
-            final MenuItem sendMission = menu.findItem(R.id.menu_send_mission);
+            final MenuItem sendMission = menu.findItem(R.id.menu_upload_mission);
             sendMission.setEnabled(areMissionMenusEnabled);
             sendMission.setVisible(areMissionMenusEnabled);
 
-            final MenuItem loadMission = menu.findItem(R.id.menu_load_mission);
+            final MenuItem loadMission = menu.findItem(R.id.menu_download_mission);
             loadMission.setEnabled(areMissionMenusEnabled);
             loadMission.setVisible(areMissionMenusEnabled);
 
-			toggleConnectionItem.setTitle(R.string.menu_disconnect);
-			toggleConnectionItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            toggleConnectionItem.setTitle(R.string.menu_disconnect);
+        } else {
+            menu.setGroupEnabled(R.id.menu_group_connected, false);
+            menu.setGroupVisible(R.id.menu_group_connected, false);
 
-			if (infoBar != null) {
-				infoBar.setDrone(drone);
-			}
-		} else {
-			menu.setGroupEnabled(R.id.menu_group_connected, false);
-			menu.setGroupVisible(R.id.menu_group_connected, false);
+            toggleConnectionItem.setTitle(R.string.menu_connect);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
 
-			toggleConnectionItem.setTitle(R.string.menu_connect);
-			toggleConnectionItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-
-			if (infoBar != null) {
-				infoBar.setDrone(null);
-			}
-		}
-		return super.onCreateOptionsMenu(menu);
-	}
-
-    protected boolean enableMissionMenus(){
+    protected boolean enableMissionMenus() {
         return false;
     }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_send_mission:
-            final MissionProxy missionProxy = app.getMissionProxy();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        final Drone dpApi = dpApp.getDrone();
 
-			if (missionProxy.getItems().isEmpty() || drone.getMission().hasTakeoffAndLandOrRTL()) {
-                missionProxy.sendMissionToAPM();
-			} else {
-                YesNoWithPrefsDialog dialog = YesNoWithPrefsDialog.newInstance(getApplicationContext(),
-                        "Mission Upload", "Do you want to append a Takeoff and RTL to your " +
-                                "mission?", "Ok", "Skip", new YesNoDialog.Listener() {
+        switch (item.getItemId()) {
+            case R.id.menu_connect:
+                toggleDroneConnection();
+                return true;
 
-                            @Override
-                            public void onYes() {
-                                missionProxy.addTakeOffAndRTL();
-                                missionProxy.sendMissionToAPM();
-                            }
+            case R.id.menu_upload_mission: {
+                final MissionProxy missionProxy = dpApp.getMissionProxy();
+                if (missionProxy.getItems().isEmpty() || missionProxy.hasTakeoffAndLandOrRTL()) {
+                    missionProxy.sendMissionToAPM(dpApi);
+                } else {
+                    YesNoWithPrefsDialog dialog = YesNoWithPrefsDialog.newInstance(
+                            getApplicationContext(), "Mission Upload",
+                            "Do you want to append a Takeoff and RTL to your " + "mission?", "Ok",
+                            "Skip", new YesNoDialog.Listener() {
 
-                            @Override
-                            public void onNo() {
-                                missionProxy.sendMissionToAPM();
-                            }
-                        },
-                        getString(R.string.pref_auto_insert_mission_takeoff_rtl_land_key));
+                                @Override
+                                public void onYes() {
+                                    missionProxy.addTakeOffAndRTL();
+                                    missionProxy.sendMissionToAPM(dpApi);
+                                }
 
-                if(dialog != null) {
-                    dialog.show(getSupportFragmentManager(), "Mission Upload check.");
+                                @Override
+                                public void onNo() {
+                                    missionProxy.sendMissionToAPM(dpApi);
+                                }
+                            }, getString(R.string.pref_auto_insert_mission_takeoff_rtl_land_key));
+
+                    if (dialog != null) {
+                        dialog.show(getSupportFragmentManager(), "Mission Upload check.");
+                    }
                 }
-			}
-			return true;
+                return true;
+            }
 
-		case R.id.menu_load_mission:
-			drone.getWaypointManager().getWaypoints();
-			return true;
-		case R.id.menu_triggerCamera:
-			MavLinkROI.triggerCamera(drone);
-			return true;
-		case R.id.menu_epm_grab:
-			MavLinkROI.empCommand(drone, false);
-			return true;
-		case R.id.menu_epm_release:
-			MavLinkROI.empCommand(drone, true);
-			return true;
-		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
+            case R.id.menu_download_mission:
+                dpApi.loadWaypoints();
+                return true;
+            case R.id.menu_triggerCamera:
+                dpApi.triggerCamera();
+                return true;
+            case R.id.menu_epm_grab:
+                dpApi.epmCommand(false);
+                return true;
+            case R.id.menu_epm_release:
+                dpApi.epmCommand(true);
+                return true;
 
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_connect:
-			toggleDroneConnection();
-			return true;
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
 
-		default:
-			return super.onMenuItemSelected(featureId, item);
-		}
-	}
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
-	public void toggleDroneConnection() {
-		if (!drone.getMavClient().isConnected()) {
-			final String connectionType = mAppPrefs.getMavLinkConnectionType();
-
-			if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
-				// Launch a bluetooth device selection screen for the user
-				final String address = mAppPrefs.getBluetoothDeviceAddress();
-				if (address == null || address.isEmpty()) {
-					new BTDeviceListFragment().show(getSupportFragmentManager(),
-							"Device selection dialog");
-					return;
-				}
-			}
-		}
-		drone.getMavClient().toggleConnectionState();
-	}
+    public void toggleDroneConnection() {
+        final Drone drone = dpApp.getDrone();
+        if (drone != null && drone.isConnected())
+            dpApp.disconnectFromDrone();
+        else
+            dpApp.connectToDrone();
+    }
 }

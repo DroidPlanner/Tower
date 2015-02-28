@@ -4,6 +4,10 @@ import android.content.Context;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.State;
+
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.utils.rc.RCConstants;
 import org.droidplanner.android.utils.rc.input.GenericInputDevice;
@@ -11,8 +15,6 @@ import org.droidplanner.android.utils.rc.input.GameController.Controller.BaseCom
 import org.droidplanner.android.utils.rc.input.GameController.Controller.ButtonRemap;
 import org.droidplanner.android.utils.rc.input.GameController.Controller.DoubleAxisRemap;
 import org.droidplanner.android.utils.rc.input.GameController.Controller.SingleAxisRemap;
-import org.droidplanner.core.MAVLink.MavLinkArm;
-import org.droidplanner.core.model.Drone;
 
 public class GameControllerDevice extends GenericInputDevice {
 
@@ -83,8 +85,9 @@ public class GameControllerDevice extends GenericInputDevice {
                     DroidPlannerApp app =
                             (DroidPlannerApp) this.context.getApplicationContext();
                     Drone drone = app.getDrone();
-                    boolean armed = drone.getState().isArmed();
-                    MavLinkArm.sendArmMessage(drone, !armed);
+                    State vehicleState = drone.getAttribute(AttributeType.STATE);
+                    boolean armed = vehicleState.isArmed();
+                    drone.arm(!armed);
                     break;
             }
         }

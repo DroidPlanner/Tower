@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_title_local">Localisation</string>
+
+    <string name="unit_system_entry_auto">Automatique</string>
+    <string name="unit_system_entry_metric">System Metrique</string>
+    <string name="unit_system_entry_imperial">System Imperial</string>
+    <string name="pref_unit_system_title">Système d\' unité</string>
+    <string name="pref_unit_system_summary">Choisi le Système d\' unité a utiliser.</string>
+</resources>

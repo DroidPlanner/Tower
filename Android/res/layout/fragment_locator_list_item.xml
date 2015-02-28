@@ -3,46 +3,25 @@
 <!--
 Used to Style the horizontal list of mission items.
 -->
-
-<RelativeLayout
+<TextView
+    android:id="@+id/timeView"
+    android:background="@drawable/ic_locator_button"
+    android:padding="10dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/dragHandler"
     android:layout_width="wrap_content"
-    android:minWidth="70dp"
-    android:minHeight="60dp"
     android:layout_height="wrap_content"
-    android:background="@drawable/ic_locator_button"
-    android:padding="5dp"
-    >
-
-    <TextView
-        android:id="@+id/titleView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp"
-        tools:text="44"
-        android:textColor="#FFFFFF"
-        android:textSize="@dimen/editor_list_item_text_size"
-        android:textStyle="bold"
-
-        />
-
-    <TextView
-        android:id="@+id/timeView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/titleView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="10m59.1s"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:drawableStart="@drawable/ic_locator_time"
-        android:drawableLeft="@drawable/ic_locator_time"
-        android:drawablePadding="5dp"
-        />
-
-</RelativeLayout>
+    android:gravity="center"
+    android:layout_marginTop="1dp"
+    android:layout_marginBottom="1dp"
+    android:layout_marginLeft="2dp"
+    android:layout_marginStart="2dp"
+    android:layout_marginRight="2dp"
+    android:layout_marginEnd="2dp"
+    tools:text="00:10:59"
+    android:textColor="#FFFFFF"
+    android:textStyle="bold"
+    android:drawableStart="@drawable/ic_locator_time"
+    android:drawableLeft="@drawable/ic_locator_time"
+    android:drawablePadding="5dp"
+    />

@@ -1,32 +1,11 @@
 package org.droidplanner.android.fragments;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.dialogs.EditInputDialog;
-import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
-import org.droidplanner.android.dialogs.openfile.OpenParameterDialog;
-import org.droidplanner.android.dialogs.parameters.DialogParameterInfo;
-import org.droidplanner.android.utils.file.FileStream;
-import org.droidplanner.android.utils.file.IO.ParameterWriter;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.widgets.adapterViews.ParamsAdapter;
-import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
-import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.model.Drone;
-import org.droidplanner.core.parameters.Parameter;
-import org.droidplanner.core.parameters.ParameterMetadata;
-
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -46,70 +25,137 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ParamsFragment extends ListFragment implements
-		DroneInterfaces.OnParameterManagerListener, OnDroneListener {
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.Parameter;
+import com.o3dr.services.android.lib.drone.property.Parameters;
 
-	static final String TAG = ParamsFragment.class.getSimpleName();
+import org.droidplanner.android.R;
+import org.droidplanner.android.dialogs.EditInputDialog;
+import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
+import org.droidplanner.android.dialogs.openfile.OpenParameterDialog;
+import org.droidplanner.android.dialogs.parameters.DialogParameterInfo;
+import org.droidplanner.android.fragments.helpers.ApiListenerListFragment;
+import org.droidplanner.android.utils.file.FileStream;
+import org.droidplanner.android.utils.file.IO.ParameterWriter;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.android.widgets.adapterViews.ParamsAdapter;
+import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
 
-	public static final String ADAPTER_ITEMS = ParamsFragment.class.getName() + ".adapter.items";
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
+
+public class ParamsFragment extends ApiListenerListFragment {
+
+    static final String TAG = ParamsFragment.class.getSimpleName();
+
+    public static final String ADAPTER_ITEMS = ParamsFragment.class.getName() + ".adapter.items";
     private static final String PREF_PARAMS_FILTER_ON = "pref_params_filter_on";
     private static final boolean DEFAULT_PARAMS_FILTER_ON = true;
+
+    private static final String EXTRA_OPENED_PARAMS_FILENAME = "extra_opened_params_filename";
+
+    private final static IntentFilter intentFilter = new IntentFilter();
+
+    static {
+        intentFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_STARTED);
+        intentFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_ENDED);
+        intentFilter.addAction(AttributeEvent.PARAMETERS_RECEIVED);
+    }
+
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            switch (action) {
+                case AttributeEvent.PARAMETERS_REFRESH_STARTED:
+                    startProgress();
+                    break;
+
+                case AttributeEvent.PARAMETERS_REFRESH_ENDED:
+                    stopProgress();
+                    /*** FALL - THROUGH ***/
+                case AttributeEvent.TYPE_UPDATED:
+                    final Drone drone = getDrone();
+                    if (drone != null && drone.isConnected()) {
+                        final Parameters droneParams = drone.getAttribute(AttributeType.PARAMETERS);
+                        loadAdapter(droneParams.getParameters(), false);
+                    }
+                    break;
+
+                case AttributeEvent.PARAMETERS_RECEIVED:
+                    final int defaultValue = -1;
+                    int index = intent.getIntExtra(AttributeEventExtra.EXTRA_PARAMETER_INDEX, defaultValue);
+                    int count = intent.getIntExtra(AttributeEventExtra.EXTRA_PARAMETERS_COUNT, defaultValue);
+
+                    if (index != defaultValue && count != defaultValue)
+                        updateProgress(index, count);
+                    break;
+
+                case AttributeEvent.STATE_DISCONNECTED:
+                    stopProgress();
+                    break;
+            }
+        }
+    };
 
     private ProgressDialog progressDialog;
 
     private ProgressBar mLoadingProgress;
     private EditText mParamsFilter;
 
-	private Drone drone;
     private DroidPlannerPrefs mPrefs;
-	private ParamsAdapter adapter;
+    private ParamsAdapter adapter;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    /**
+     * If the parameters were loaded from a file, the filename is stored here.
+     */
+    private String openedParamsFilename;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
 
-        final DroidPlannerApp dpApp = (DroidPlannerApp) getActivity().getApplication();
-        drone = dpApp.getDrone();
-        mPrefs = dpApp.getPreferences();
+        mPrefs = new DroidPlannerPrefs(getActivity().getApplicationContext());
 
-		// create adapter
-		if (savedInstanceState != null) {
-			// load adapter items
-			@SuppressWarnings("unchecked")
-			final ArrayList<ParamsAdapterItem> pwms = (ArrayList<ParamsAdapterItem>) savedInstanceState
-					.getSerializable(ADAPTER_ITEMS);
-			adapter = new ParamsAdapter(getActivity(), R.layout.row_params, pwms);
+        // create adapter
+        if (savedInstanceState != null) {
+            this.openedParamsFilename = savedInstanceState.getString(EXTRA_OPENED_PARAMS_FILENAME);
 
-		} else {
-			// empty adapter
-			adapter = new ParamsAdapter(getActivity(), R.layout.row_params);
+            // load adapter items
+            @SuppressWarnings("unchecked")
+            final ArrayList<ParamsAdapterItem> pwms = savedInstanceState.getParcelableArrayList
+                    (ADAPTER_ITEMS);
+            adapter = new ParamsAdapter(getActivity(), R.layout.row_params, pwms);
 
-            final List<Parameter> parametersList = drone.getParameters().getParametersList();
-            if(!parametersList.isEmpty()) {
-                loadAdapter(parametersList);
+        } else {
+            // empty adapter
+            adapter = new ParamsAdapter(getActivity(), R.layout.row_params);
+        }
+        setListAdapter(adapter);
+
+        // help handler
+        adapter.setOnInfoListener(new ParamsAdapter.OnInfoListener() {
+            @Override
+            public void onHelp(int position, EditText valueView) {
+                showInfo(position, valueView);
             }
-		}
-		setListAdapter(adapter);
-
-		// help handler
-		adapter.setOnInfoListener(new ParamsAdapter.OnInfoListener() {
-			@Override
-			public void onHelp(int position, EditText valueView) {
-				showInfo(position, valueView);
-			}
-		});
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		// bind & initialize UI
-		return inflater.inflate(R.layout.fragment_params, container, false);
-	}
+        });
+    }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // bind & initialize UI
+        return inflater.inflate(R.layout.fragment_params, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         mLoadingProgress = (ProgressBar) view.findViewById(R.id.reload_progress);
@@ -127,7 +173,7 @@ public class ParamsFragment extends ListFragment implements
         mParamsFilter.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                switch(event.getAction()){
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_UP:
                         enableParameterFilter();
                         break;
@@ -137,10 +183,12 @@ public class ParamsFragment extends ListFragment implements
         });
         mParamsFilter.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -152,7 +200,7 @@ public class ParamsFragment extends ListFragment implements
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 filterInput(v.getText());
 
-                if(actionId == EditorInfo.IME_NULL || actionId == EditorInfo.IME_ACTION_SEARCH){
+                if (actionId == EditorInfo.IME_NULL || actionId == EditorInfo.IME_ACTION_SEARCH) {
                     mParamsFilter.clearFocus();
                 }
                 return true;
@@ -188,111 +236,102 @@ public class ParamsFragment extends ListFragment implements
         final Context context = getActivity();
         final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context
                 .INPUT_METHOD_SERVICE);
-        if(imm != null) {
+        if (imm != null) {
             imm.hideSoftInputFromWindow(mParamsFilter.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
         }
     }
 
-    private void filterInput(CharSequence input){
-        if(TextUtils.isEmpty(input)){
+    private void filterInput(CharSequence input) {
+        if (TextUtils.isEmpty(input)) {
             adapter.getFilter().filter("");
-        }
-        else{
+        } else {
             adapter.getFilter().filter(input);
         }
     }
 
     @Override
-	public void onStart() {
-		super.onStart();
-		drone.addDroneListener(this);
-		drone.getParameters().setParameterListener(this);
-        toggleParameterFilter(isParameterFilterVisible(), false);
-	}
+    public void onApiConnected() {
+        final Parameters droneParams = getDrone().getAttribute(AttributeType.PARAMETERS);
 
-	@Override
-	public void onStop() {
-		super.onStop();
-		drone.removeDroneListener(this);
-		drone.getParameters().setParameterListener(null);
-	}
-
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-        switch(event){
-            case TYPE:
-                adapter.loadMetadata(drone);
-                break;
-
-            case DISCONNECTED:
-                stopProgress();
-                break;
+        if (adapter.isEmpty() && droneParams != null) {
+            List<Parameter> parametersList = droneParams.getParameters();
+            if (!parametersList.isEmpty())
+                loadAdapter(parametersList, false);
         }
-	}
 
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
+        toggleParameterFilter(isParameterFilterVisible(), false);
 
-		// save adapter items
-		final ArrayList<ParamsAdapterItem> pwms = new ArrayList<ParamsAdapterItem>(adapter
+        getBroadcastManager().registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void onApiDisconnected() {
+        getBroadcastManager().unregisterReceiver(broadcastReceiver);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // save adapter items
+        final ArrayList<ParamsAdapterItem> pwms = new ArrayList<ParamsAdapterItem>(adapter
                 .getOriginalValues());
-		outState.putSerializable(ADAPTER_ITEMS, pwms);
-	}
+        outState.putParcelableArrayList(ADAPTER_ITEMS, pwms);
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
+        outState.putString(EXTRA_OPENED_PARAMS_FILENAME, this.openedParamsFilename);
+    }
 
-		inflater.inflate(R.menu.menu_parameters, menu);
-	}
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		adapter.clearFocus();
+        inflater.inflate(R.menu.menu_parameters, menu);
+    }
 
-		switch (item.getItemId()) {
-		case R.id.menu_load_parameters:
-			refreshParameters();
-			break;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        adapter.clearFocus();
 
-		case R.id.menu_write_parameters:
-			writeModifiedParametersToDrone();
-			break;
+        switch (item.getItemId()) {
+            case R.id.menu_download_parameters:
+                refreshParameters();
+                break;
 
-		case R.id.menu_open_parameters:
-			openParametersFromFile();
-			break;
+            case R.id.menu_write_parameters:
+                writeModifiedParametersToDrone();
+                break;
 
-		case R.id.menu_save_parameters:
-			saveParametersToFile();
-			break;
+            case R.id.menu_open_parameters:
+                openParametersFromFile();
+                break;
 
-        case R.id.menu_filter_params:
-            final boolean isEnabled = !isParameterFilterVisible();
-            toggleParameterFilter(isEnabled, isEnabled);
-            break;
+            case R.id.menu_save_parameters:
+                saveParametersToFile();
+                break;
 
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-		return true;
-	}
+            case R.id.menu_filter_params:
+                final boolean isEnabled = !isParameterFilterVisible();
+                toggleParameterFilter(isEnabled, isEnabled);
+                break;
 
-    private void toggleParameterFilter(boolean isVisible, boolean enableInput){
-        if(isVisible){
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    private void toggleParameterFilter(boolean isVisible, boolean enableInput) {
+        if (isVisible) {
             //Show the parameter filter
             mParamsFilter.setVisibility(View.VISIBLE);
             filterInput(mParamsFilter.getText());
 
-            if(enableInput) {
+            if (enableInput) {
                 enableParameterFilter();
-            }
-            else{
+            } else {
                 disableParameterFilter();
             }
-        }
-        else{
+        } else {
             //Hide the parameter filter
             disableParameterFilter();
             mParamsFilter.setVisibility(View.GONE);
@@ -302,61 +341,71 @@ public class ParamsFragment extends ListFragment implements
         mPrefs.prefs.edit().putBoolean(PREF_PARAMS_FILTER_ON, isVisible).apply();
     }
 
-    private boolean isParameterFilterVisible(){
-        return mPrefs.prefs.getBoolean(PREF_PARAMS_FILTER_ON,
-                DEFAULT_PARAMS_FILTER_ON);
+    private boolean isParameterFilterVisible() {
+        return mPrefs.prefs.getBoolean(PREF_PARAMS_FILTER_ON, DEFAULT_PARAMS_FILTER_ON);
     }
 
-	private void showInfo(int position, EditText valueView) {
-		final ParamsAdapterItem item = adapter.getItem(position);
-		final ParameterMetadata metadata = item.getMetadata();
-		if (metadata == null || !metadata.hasInfo())
-			return;
+    private void showInfo(int position, EditText valueView) {
+        final ParamsAdapterItem item = adapter.getItem(position);
+        if (!item.getParameter().hasInfo())
+            return;
 
-		DialogParameterInfo.build(item, valueView, getActivity()).show();
-	}
+        DialogParameterInfo.build(item, valueView, getActivity()).show();
+    }
 
-	private void refreshParameters() {
-		if (drone.getMavClient().isConnected()) {
-			drone.getParameters().refreshParameters();
-		} else {
-			Toast.makeText(getActivity(), R.string.msg_connect_first, Toast.LENGTH_SHORT).show();
-		}
-	}
+    private void refreshParameters() {
+        if (getDrone().isConnected()) {
+            getDrone().refreshParameters();
+        } else {
+            Toast.makeText(getActivity(), R.string.msg_connect_first, Toast.LENGTH_SHORT).show();
+        }
+    }
 
-	private void writeModifiedParametersToDrone() {
-		int written = 0;
-		for (int i = 0; i < adapter.getCount(); i++) {
-			final ParamsAdapterItem item = adapter.getItem(i);
-			if (!item.isDirty())
-				continue;
+    private void writeModifiedParametersToDrone() {
+        final Drone drone = getDrone();
+        if (!drone.isConnected())
+            return;
 
-			drone.getParameters().sendParameter(item.getParameter());
-			item.commit();
+        final int adapterCount = adapter.getCount();
+        List<Parameter> parametersList = new ArrayList<Parameter>(adapterCount);
+        for (int i = 0; i < adapterCount; i++) {
+            final ParamsAdapterItem item = adapter.getItem(i);
+            if (!item.isDirty())
+                continue;
 
-			written++;
-		}
-		if (written > 0)
-			adapter.notifyDataSetChanged();
-		Toast.makeText(getActivity(),
-				written + " " + getString(R.string.msg_parameters_written_to_drone),
-				Toast.LENGTH_SHORT).show();
-	}
+            parametersList.add(item.getParameter());
+            item.commit();
+        }
 
-	private void openParametersFromFile() {
-		OpenFileDialog dialog = new OpenParameterDialog() {
-			@Override
-			public void parameterFileLoaded(List<Parameter> parameters) {
-				loadAdapter(parameters);
-			}
-		};
-		dialog.openDialog(getActivity());
-	}
+        final int parametersCount = parametersList.size();
+        if (parametersCount > 0) {
+            drone.writeParameters(new Parameters(parametersList));
+            adapter.notifyDataSetChanged();
+            Toast.makeText(getActivity(),
+                    parametersCount + " " + getString(R.string.msg_parameters_written_to_drone),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
 
-	private void saveParametersToFile() {
+    private void openParametersFromFile() {
+        OpenFileDialog dialog = new OpenParameterDialog() {
+            @Override
+            public void parameterFileLoaded(List<Parameter> parameters) {
+                openedParamsFilename = getSelectedFilename();
+                loadAdapter(parameters, true);
+            }
+        };
+        dialog.openDialog(getActivity());
+    }
+
+    private void saveParametersToFile() {
         final Context context = getActivity().getApplicationContext();
+        final String defaultFilename = TextUtils.isEmpty(openedParamsFilename)
+                ? FileStream.getParameterFilename("Parameters-")
+                : openedParamsFilename;
+
         final EditInputDialog dialog = EditInputDialog.newInstance(context,
-                getString(R.string.label_enter_filename), FileStream.getParameterFilename("Parameters-"),
+                getString(R.string.label_enter_filename), defaultFilename,
                 new EditInputDialog.Listener() {
                     @Override
                     public void onOk(CharSequence input) {
@@ -374,45 +423,37 @@ public class ParamsFragment extends ListFragment implements
                     }
 
                     @Override
-                    public void onCancel() {}
+                    public void onCancel() {
+                    }
                 });
 
         dialog.show(getChildFragmentManager(), "Parameters filename");
-	}
+    }
 
-	@Override
-	public void onBeginReceivingParameters() {
-		startProgress();
-	}
-
-	@Override
-	public void onParameterReceived(Parameter parameter, int index, int count) {
-        updateProgress(index, count);
-	}
-
-	@Override
-	public void onEndReceivingParameters(List<Parameter> parameters) {
-        loadAdapter(parameters);
-		stopProgress();
-	}
-
-    private void loadAdapter(List<Parameter> parameters){
-        if(parameters == null || parameters.isEmpty()){
+    private void loadAdapter(List<Parameter> parameters, boolean isUpdate) {
+        if (parameters == null || parameters.isEmpty()) {
             return;
         }
 
-        Set<Parameter> prunedParameters = new TreeSet<Parameter>(parameters);
-        adapter.loadParameters(drone, prunedParameters);
-
-        if(mParamsFilter != null && mParamsFilter.getVisibility() == View.VISIBLE){
-            mParamsFilter.setText("");
+        TreeMap<String, Parameter> prunedParameters = new TreeMap<String, Parameter>();
+        for (Parameter parameter : parameters) {
+            prunedParameters.put(parameter.getName(), parameter);
         }
-        else{
+
+        if (isUpdate) {
+            adapter.updateParameters(prunedParameters);
+        } else {
+            adapter.loadParameters(prunedParameters);
+        }
+
+        if (mParamsFilter != null && mParamsFilter.getVisibility() == View.VISIBLE) {
+            mParamsFilter.setText("");
+        } else {
             filterInput(null);
         }
     }
 
-    private void startProgress(){
+    private void startProgress() {
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle(R.string.refreshing_parameters);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);

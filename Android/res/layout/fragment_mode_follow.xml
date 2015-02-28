@@ -4,9 +4,7 @@
     style="@style/flyoutPanelLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingLeft="3dp"
-    android:paddingRight="3dp">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/ModeDetail"
@@ -14,7 +12,7 @@
         style="@style/ModeDetailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/mode_guided"/>
+        android:text="@string/mode_follow"/>
 
     <Spinner
         android:id="@+id/follow_type_spinner"
@@ -36,5 +34,14 @@
         android:layout_height="wrap_content"
         style="@style/missionItemDetailCard"
         android:text="@string/radius_label"/>
+
+    <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+        android:id="@+id/roi_height_spinner"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        style="@style/missionItemDetailCard"
+        android:text="@string/roi_height_label"/>
 
 </LinearLayout>

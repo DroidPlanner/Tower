@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_open_mission"
         android:icon="@drawable/ic_action_folder_open"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/open_mission_file"/>
     <item
         android:id="@+id/menu_save_mission"
         android:icon="@drawable/ic_action_save"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/save_mission_file"/>
 </menu>

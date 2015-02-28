@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.ControllerAxisKeyPressDialog;
 import org.droidplanner.android.dialogs.ControllerAxisKeyPressDialog.ControllerPressListener;
 import org.droidplanner.android.utils.rc.RCConstants;
@@ -73,12 +73,6 @@ public class GameControllerChannel extends RelativeLayout implements
 
         if (!isInEditMode()) {
             loadViews();
-
-            TypedArray a = context.obtainStyledAttributes(attrs,
-                    R.styleable.GameControllerChannel);
-            setTitle(a.getString(R.styleable.GameControllerChannel_title));
-            setValue(a.getInt(R.styleable.GameControllerChannel_value, -1));
-            a.recycle();
         }
     }
 

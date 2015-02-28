@@ -1,5 +1,7 @@
 package org.droidplanner.android.utils.file.IO;
 
+import com.o3dr.services.android.lib.drone.property.Parameter;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,7 +12,6 @@ import java.util.List;
 import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.android.utils.file.FileList;
 import org.droidplanner.android.utils.file.FileManager;
-import org.droidplanner.core.parameters.Parameter;
 
 public class ParameterReader implements
 		org.droidplanner.android.dialogs.openfile.OpenFileDialog.FileReader {
@@ -65,7 +66,7 @@ public class ParameterReader implements
 
 		Parameter.checkParameterName(name);
 
-		parameters.add(new Parameter(name, value));
+		parameters.add(new Parameter(name, value, 0));
 	}
 
 	private String[] splitLine(String line) throws Exception {

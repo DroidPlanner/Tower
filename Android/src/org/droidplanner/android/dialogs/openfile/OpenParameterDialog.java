@@ -1,9 +1,10 @@
 package org.droidplanner.android.dialogs.openfile;
 
+import com.o3dr.services.android.lib.drone.property.Parameter;
+
 import java.util.List;
 
 import org.droidplanner.android.utils.file.IO.ParameterReader;
-import org.droidplanner.core.parameters.Parameter;
 
 public abstract class OpenParameterDialog extends OpenFileDialog {
 	public abstract void parameterFileLoaded(List<Parameter> parameters);

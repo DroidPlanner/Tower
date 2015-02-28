@@ -1,13 +1,17 @@
 package org.droidplanner.android.graphic.map;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.model.Drone;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.Attitude;
+import com.o3dr.services.android.lib.drone.property.Gps;
 
 public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
@@ -28,13 +32,14 @@ public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 	}
 
 	@Override
-	public Coord2D getPosition() {
-		return drone.getGps().getPosition();
+	public LatLong getPosition() {
+        Gps droneGps = drone.getAttribute(AttributeType.GPS);
+        return isValid() ? droneGps.getPosition() :  null;
 	}
 
 	@Override
 	public Bitmap getIcon(Resources res) {
-		if (drone.isConnectionAlive()) {
+		if (drone.isConnected()) {
 			return BitmapFactory.decodeResource(res, R.drawable.quad);
 		}
 		return BitmapFactory.decodeResource(res, R.drawable.quad_disconnect);
@@ -53,10 +58,12 @@ public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
 	@Override
 	public float getRotation() {
-		return (float) drone.getOrientation().getYaw();
+        Attitude attitude = drone.getAttribute(AttributeType.ATTITUDE);
+		return attitude == null ? 0 : (float) attitude.getYaw();
 	}
 
 	public boolean isValid() {
-		return drone.getGps().isPositionValid();
+        Gps droneGps = drone.getAttribute(AttributeType.GPS);
+		return droneGps != null && droneGps.isValid();
 	}
 }

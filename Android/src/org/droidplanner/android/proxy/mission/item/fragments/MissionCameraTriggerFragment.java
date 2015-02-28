@@ -1,50 +1,65 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
-import org.droidplanner.R;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-import org.droidplanner.core.helpers.units.Length;
-import org.droidplanner.core.mission.MissionItem;
-import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.commands.CameraTrigger;
-
-import android.os.Bundle;
 import android.view.View;
 
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.mission.item.command.CameraTrigger;
+
+import org.beyene.sius.unit.length.LengthUnit;
+import org.droidplanner.android.R;
+import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
+import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
+
 public class MissionCameraTriggerFragment extends MissionDetailFragment implements
-		CardWheelHorizontalView.OnCardWheelChangedListener {
+        CardWheelHorizontalView.OnCardWheelScrollListener<LengthUnit> {
 
-	@Override
-	protected int getResource() {
-		return R.layout.fragment_editor_detail_camera_trigger;
-	}
+    @Override
+    protected int getResource() {
+        return R.layout.fragment_editor_detail_camera_trigger;
+    }
 
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CAMERA_TRIGGER));
+    @Override
+    public void onApiConnected() {
+        super.onApiConnected();
 
-		CameraTrigger item = (CameraTrigger) getMissionItems().get(0);
-		
-		final NumericWheelAdapter adapter = new NumericWheelAdapter(getActivity()
-				.getApplicationContext(), R.layout.wheel_text_centered, 0,
-                100, "%d m");
-		final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view
-				.findViewById(R.id.picker1);
-		cardAltitudePicker.setViewAdapter(adapter);
-        cardAltitudePicker.addChangingListener(this);
-		cardAltitudePicker.setCurrentValue((int) item.getTriggerDistance().valueInMeters());
-	}
+        final View view = getView();
+        typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CAMERA_TRIGGER));
 
-	@Override
-	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
-		switch (wheel.getId()) {
-		case R.id.picker1:
-            for(MissionItem missionItem : getMissionItems()) {
-            	CameraTrigger item = (CameraTrigger) missionItem;
-                item.setTriggerDistance(new Length(newValue));
-            }
-			break;
-		}
-	}
+        CameraTrigger item = (CameraTrigger) getMissionItems().get(0);
+
+        final LengthUnitProvider lengthUnitProvider = getLengthUnitProvider();
+        final LengthWheelAdapter adapter = new LengthWheelAdapter(getContext(), R.layout.wheel_text_centered,
+                lengthUnitProvider.boxBaseValueToTarget(0), lengthUnitProvider.boxBaseValueToTarget(100));
+        final CardWheelHorizontalView<LengthUnit> cardAltitudePicker = (CardWheelHorizontalView<LengthUnit>) view
+                .findViewById(R.id.picker1);
+        cardAltitudePicker.setViewAdapter(adapter);
+        cardAltitudePicker.addScrollListener(this);
+        cardAltitudePicker.setCurrentValue(lengthUnitProvider.boxBaseValueToTarget(item.getTriggerDistance()));
+    }
+
+    @Override
+    public void onScrollingStarted(CardWheelHorizontalView cardWheel, LengthUnit startValue) {
+
+    }
+
+    @Override
+    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, LengthUnit oldValue, LengthUnit newValue) {
+
+    }
+
+    @Override
+    public void onScrollingEnded(CardWheelHorizontalView wheel, LengthUnit startValue, LengthUnit endValue) {
+        switch (wheel.getId()) {
+            case R.id.picker1:
+                double baseValue = endValue.toBase().getValue();
+                for (MissionItem missionItem : getMissionItems()) {
+                    CameraTrigger item = (CameraTrigger) missionItem;
+                    item.setTriggerDistance(baseValue);
+                }
+                getMissionProxy().notifyMissionUpdate();
+                break;
+        }
+    }
 }

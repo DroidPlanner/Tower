@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-import org.droidplanner.R;
+import com.o3dr.android.client.Drone;
+
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.R;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.helpers.ControllerEventCaptureView;
 import org.droidplanner.android.activities.interfaces.PhysicalDeviceEvents;
@@ -20,7 +22,6 @@ import org.droidplanner.android.helpers.RcOutput;
 import org.droidplanner.android.utils.rc.RCConstants;
 import org.droidplanner.android.utils.rc.RCControlManager;
 import org.droidplanner.android.utils.rc.input.GenericInputDevice.IRCEvents;
-import org.droidplanner.core.model.Drone;
 
 public class RcFragment extends Fragment implements IRCEvents, PhysicalDeviceEvents {
 

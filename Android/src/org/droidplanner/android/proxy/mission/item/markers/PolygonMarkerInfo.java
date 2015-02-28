@@ -1,18 +1,19 @@
 package org.droidplanner.android.proxy.mission.item.markers;
 
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
+
 import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.mission.survey.Survey;
 
 /**
  */
 public class PolygonMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
 
-	private Coord2D mPoint;
-	private Survey survey;
-	private int polygonIndex;
+	private LatLong mPoint;
+    private final Survey survey;
+    private final int polygonIndex;
 
-	public PolygonMarkerInfo(Coord2D point, Survey mSurvey, int index) {
+	public PolygonMarkerInfo(LatLong point, Survey mSurvey, int index) {
 		mPoint = point;
 		survey = mSurvey;
 		polygonIndex = index;
@@ -38,12 +39,12 @@ public class PolygonMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
 	}
 
 	@Override
-	public Coord2D getPosition() {
+	public com.o3dr.services.android.lib.coordinate.LatLong getPosition() {
 		return mPoint;
 	}
 
 	@Override
-	public void setPosition(Coord2D coord) {
+	public void setPosition(LatLong coord) {
 		mPoint = coord;
 	}
 	

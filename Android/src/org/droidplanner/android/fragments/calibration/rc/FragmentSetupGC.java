@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.ControllerEventCaptureView;
 import org.droidplanner.android.activities.interfaces.PhysicalDeviceEvents;
 import org.droidplanner.android.utils.rc.RCConstants;

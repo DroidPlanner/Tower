@@ -34,15 +34,7 @@
             mandatory="yes"
             system_tag="SYS_CONNECTION_STATE"
             title="連結數傳" />
-        <value_item
-            description="顯示預設高度"
-            editable="yes"
-            mandatory="yes"
-            minimum_val="10"
-            nominal_val="20"
-            system_tag="SYS_DEF_ALT"
-            title="預設高度"
-            unit="%0.2fm" />
+
         <level_item
             description="顯示 GPS 衛星數量"
             editable="no"

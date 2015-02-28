@@ -8,57 +8,57 @@ This file is used to store the preferences keys so that it's accessible and modi
  NOTE: NE TRANSLATER PAS LE CONTENU DANS CETTE FICHE!! (la seule translation permit est cette notification)
  -->
 <resources>
-    <string name="pref_maps_category_key">pref_maps_category</string>
-    <string name="pref_maps_providers_key">pref_maps_providers_key</string>
-    <string name="pref_map_provider_settings_key">pref_map_provider_settings</string>
-    <string name="pref_connection_type_key">pref_connection_type</string>
-    <string name="pref_map_type_key">pref_map_type</string>
-    <string name="pref_advanced_use_offline_maps_key">pref_advanced_use_offline_maps</string>
-    <string name="pref_baud_type_key">pref_baud_type</string>
-    <string name="pref_server_ip_key">pref_server_ip</string>
-    <string name="pref_server_port_key">pref_server_port</string>
-    <string name="pref_udp_server_port_key">pref_udp_server_port</string>
-    <string name="pref_bluetooth_device_address_key">pref_bluetooth_device_address</string>
-    <string name="pref_vehicle_type_key">pref_vehicle_type</string>
-    <string name="pref_rc_quickmode_right_key">pref_rc_quickmode_right</string>
-    <string name="pref_rc_quickmode_left_key">pref_rc_quickmode_left</string>
-    <string name="pref_max_flight_path_size_key">pref_max_flight_path_size</string>
-    <string name="pref_storage_key">pref_storage</string>
-    <string name="pref_rc_mode_key">pref_rc_mode</string>
-    <string name="pref_mavlink_version_key">pref_mavlink_version</string>
-    <string name="pref_firmware_version_key">pref_firmware_version</string>    
-    <string name="pref_usage_statistics_key">pref_usage_statistics</string>
-    <string name="pref_version_key">pref_version</string>
-    <string name="pref_request_max_volume_key">pref_request_max_volume</string>
-    <string name="pref_pebble_install_key">pref_pebble_install_key</string>
-    <string name="pref_keep_screen_bright_key">pref_keep_screen_bright</string>
-    <string name="pref_permanent_notification_key">pref_permanent_notification</string>
-    <string name="pref_ui_gps_hdop_key">pref_ui_gps_hdop</string>
-    <string name="pref_ui_language_english_key">pref_ui_language_english</string>
-    <string name="pref_ui_realtime_footprints_key">pref_ui_realtime_footprints_key</string>
-    <string name="pref_dshare_username_key">dshare_username</string>
-    <string name="pref_dshare_password_key">dshare_password</string>
-    <string name="pref_dshare_enabled_key">dshare_enabled</string>
-    <string name="pref_live_upload_enabled_key">pref_live_upload_enabled</string>
+    <string name="pref_maps_category_key" translatable="false">pref_maps_category</string>
+    <string name="pref_maps_providers_key" translatable="false">pref_maps_providers_key</string>
+    <string name="pref_map_provider_settings_key" translatable="false">pref_map_provider_settings</string>
+    <string name="pref_connection_type_key" translatable="false">pref_connection_param_type</string>
+    <string name="pref_map_type_key" translatable="false">pref_map_type</string>
+    <string name="pref_advanced_use_offline_maps_key" translatable="false">pref_advanced_use_offline_maps</string>
+    <string name="pref_advanced_menu_toggle_key" translatable="false">pref_advanced_menu_toggle</string>
+    <string name="pref_baud_type_key" translatable="false">pref_baud_type</string>
+    <string name="pref_server_ip_key" translatable="false">pref_server_ip</string>
+    <string name="pref_server_port_key" translatable="false">pref_server_port</string>
+    <string name="pref_udp_server_port_key" translatable="false">pref_udp_server_port</string>
+    <string name="pref_bluetooth_device_name_key" translatable="false">pref_bluetooth_device_name</string>
+    <string name="pref_bluetooth_device_address_key" translatable="false">pref_bluetooth_device_address</string>
+    <string name="pref_vehicle_type_key" translatable="false">pref_vehicle_type</string>
+    <string name="pref_rc_quickmode_right_key" translatable="false">pref_rc_quickmode_right</string>
+    <string name="pref_rc_quickmode_left_key" translatable="false">pref_rc_quickmode_left</string>
+    <string name="pref_storage_key" translatable="false">pref_storage</string>
+    <string name="pref_mavlink_version_key" translatable="false">pref_mavlink_version</string>
+    <string name="pref_firmware_version_key" translatable="false">pref_firmware_version</string>
+    <string name="pref_usage_statistics_key" translatable="false">pref_usage_statistics</string>
+    <string name="pref_version_key" translatable="false">pref_version</string>
+    <string name="pref_request_max_volume_key" translatable="false">pref_request_max_volume</string>
+    <string name="pref_keep_screen_bright_key" translatable="false">pref_keep_screen_bright</string>
+    <string name="pref_permanent_notification_key" translatable="false">pref_permanent_notification</string>
+    <string name="pref_ui_gps_hdop_key" translatable="false">pref_ui_gps_hdop</string>
+    <string name="pref_ui_language_english_key" translatable="false">pref_ui_language_english</string>
+    <string name="pref_ui_realtime_footprints_key" translatable="false">pref_ui_realtime_footprints_key</string>
+    <string name="pref_dshare_username_key" translatable="false">dshare_username</string>
+    <string name="pref_dshare_password_key" translatable="false">dshare_password</string>
+    <string name="pref_live_upload_enabled_key" translatable="false">pref_live_upload_enabled</string>
 
-    <string name="pref_dialogs_key">pref_dialogs</string>
-    <string name="pref_warn_on_arm_key">pref_warn_on_arm</string>
-    <string name="pref_auto_insert_mission_takeoff_rtl_land_key">pref_auto_insert_mission_takeoff_rtl_land</string>
-    <string name="pref_warn_on_takeoff_in_auto_key">pref_warn_on_takeoff_in_auto</string>
-    <string name="pref_warn_on_dronie_creation_key">pref_warn_on_dronie_creation</string>
+    <string name="pref_dialogs_key" translatable="false">pref_dialogs</string>
+    <string name="pref_warn_on_arm_key" translatable="false">pref_warn_on_arm</string>
+    <string name="pref_auto_insert_mission_takeoff_rtl_land_key" translatable="false">pref_auto_insert_mission_takeoff_rtl_land</string>
+    <string name="pref_warn_on_takeoff_in_auto_key" translatable="false">pref_warn_on_takeoff_in_auto</string>
+    <string name="pref_warn_on_dronie_creation_key" translatable="false">pref_warn_on_dronie_creation</string>
 
-    <string name="pref_enable_tts_key">pref_enable_tts</string>
-    <string name="pref_tts_periodic_key">tts_periodic</string>
-    <string name="pref_tts_periodic_period_key">tts_periodic_status_period</string>
-    <string name="pref_tts_periodic_bat_volt_key">tts_periodic_bat_volt</string>
-    <string name="pref_tts_periodic_alt_key">tts_periodic_alt</string>
-    <string name="pref_tts_periodic_rssi_key">tts_periodic_rssi</string>
-    <string name="pref_tts_periodic_airspeed_key">tts_periodic_airspeed</string>
-    <string name="pref_tts_warning_solar_activity_key">tts_solar_activity</string>
-    <string name="pref_tts_warning_wind_speed_key">tts_wind_speed</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded_key">tts_ceiling_exceeded</string>
-    <string name="pref_tts_warning_low_signal_key">tts_low_signal</string>
-    <string name="pref_tts_warning_lost_signal_key">tts_lost_signal</string>
-    <string name="pref_tts_warning_autopilot_warnings_key">tts_autopilot_warning</string>
+    <string name="pref_enable_tts_key" translatable="false">pref_enable_tts</string>
+    <string name="pref_tts_periodic_key" translatable="false">tts_periodic</string>
+    <string name="pref_tts_periodic_period_key" translatable="false">tts_periodic_status_period</string>
+    <string name="pref_tts_periodic_bat_volt_key" translatable="false">tts_periodic_bat_volt</string>
+    <string name="pref_tts_periodic_alt_key" translatable="false">tts_periodic_alt</string>
+    <string name="pref_tts_periodic_rssi_key" translatable="false">tts_periodic_rssi</string>
+    <string name="pref_tts_periodic_airspeed_key" translatable="false">tts_periodic_airspeed</string>
+    <string name="pref_tts_warning_solar_activity_key" translatable="false">tts_solar_activity</string>
+    <string name="pref_tts_warning_wind_speed_key" translatable="false">tts_wind_speed</string>
+    <string name="pref_tts_warning_400ft_ceiling_exceeded_key" translatable="false">tts_ceiling_exceeded</string>
+    <string name="pref_tts_warning_low_signal_key" translatable="false">tts_low_signal</string>
+    <string name="pref_tts_warning_lost_signal_key" translatable="false">tts_lost_signal</string>
+    <string name="pref_tts_warning_autopilot_warnings_key" translatable="false">tts_autopilot_warning</string>
+
+    <string name="pref_unit_system_key" translatable="false">pref_unit_system</string>
 
 </resources>

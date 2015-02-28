@@ -6,17 +6,17 @@ import java.util.Set;
 
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.survey.Footprint;
 
 import android.graphics.Color;
 import android.location.LocationListener;
 
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.property.FootPrint;
+
 /**
  * Defines the functionality expected from the map providers.
  */
-public interface DPMap extends DroneInterfaces.OnDroneListener {
+public interface DPMap {
 
 	public static final String PACKAGE_NAME = DPMap.class.getPackage().getName();
 
@@ -55,7 +55,7 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	public static final int DEFAULT_ZOOM_LEVEL = 17;
 
 	interface PathSource {
-		public List<Coord2D> getPathPoints();
+		public List<LatLong> getPathPoints();
 	}
 
 	/**
@@ -68,7 +68,7 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 		 * @param coord
 		 *            location where the map was clicked.
 		 */
-		void onMapClick(Coord2D coord);
+		void onMapClick(LatLong coord);
 	}
 
 	/**
@@ -81,7 +81,7 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 		 * @param coord
 		 *            location where the map was long clicked.
 		 */
-		void onMapLongClick(Coord2D coord);
+		void onMapLongClick(LatLong coord);
 	}
 
 	/**
@@ -139,13 +139,13 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 * @param coord
 	 *            drone's coordinate
 	 */
-	public void addFlightPathPoint(Coord2D coord);
+	public void addFlightPathPoint(LatLong coord);
 
 	/**
 	 * Draw the footprint of the camera in the ground
 	 * @param footprintToBeDraw
 	 */
-	public void addCameraFootprint(Footprint footprintToBeDraw);
+	public void addCameraFootprint(FootPrint footprintToBeDraw);
 
 	/**
 	 * Remove all markers from the map.
@@ -160,7 +160,7 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	/**
 	 * @return the map center coordinates.
 	 */
-	public Coord2D getMapCenter();
+	public LatLong getMapCenter();
 
 	/**
 	 * @return the map current zoom level.
@@ -202,7 +202,7 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 */
 	public void loadCameraPosition();
 
-	public List<Coord2D> projectPathIntoMap(List<Coord2D> pathPoints);
+	public List<LatLong> projectPathIntoMap(List<LatLong> pathPoints);
 
 	/**
 	 * Remove the markers whose info is in the list from the map.
@@ -293,7 +293,7 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 * @param zoomLevel
 	 *            zoom level for the map
 	 */
-	public void updateCamera(Coord2D coord, float zoomLevel);
+	public void updateCamera(LatLong coord, float zoomLevel);
 
     /**
      * Updates the map's bearing.
@@ -361,7 +361,7 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 * Updates the polygons on the map.
 	 * 
 	 */
-    public void updatePolygonsPaths(List<List<Coord2D>> paths);
+    public void updatePolygonsPaths(List<List<LatLong>> paths);
 
 	/**
 	 * Zoom to fit coordinates on map
@@ -369,13 +369,13 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 * @param coords
 	 *            to be displayed
 	 */
-	public void zoomToFit(List<Coord2D> coords);
+	public void zoomToFit(List<LatLong> coords);
 
     /**
      * Zoom to fit my location and the given coordinates on map
      * @param coords
      */
-    public void zoomToFitMyLocation(List<Coord2D> coords);
+    public void zoomToFitMyLocation(List<LatLong> coords);
     
     /**
      * Ignore marker clicks on the map and instead report the event as a mapClick
@@ -383,6 +383,6 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
      */
     public void skipMarkerClickEvents(boolean skip);
 
-	public void updateRealTimeFootprint(Footprint footprint);
+	public void updateRealTimeFootprint(FootPrint footprint);
     
 }

@@ -12,7 +12,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 
 public class FragmentSetupRC extends Fragment {
 

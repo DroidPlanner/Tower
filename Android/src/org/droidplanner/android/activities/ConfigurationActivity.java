@@ -1,6 +1,6 @@
 package org.droidplanner.android.activities;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.ChecklistFragment;
 import org.droidplanner.android.fragments.ParamsFragment;
 import org.droidplanner.android.fragments.RcControlSetupFragment;
@@ -37,6 +37,11 @@ public class ConfigurationActivity extends DrawerNavigationUI {
 
 		handleIntent(getIntent());
 	}
+
+    @Override
+    protected int getToolbarId() {
+        return R.id.actionbar_toolbar;
+    }
 
     @Override
     protected int getNavigationDrawerEntryId() {
@@ -108,5 +113,10 @@ public class ConfigurationActivity extends DrawerNavigationUI {
         else {
             return R.id.navigation_params;
         }
+    }
+
+    @Override
+    public void onApiConnected() {
+        super.onApiConnected();
     }
 }

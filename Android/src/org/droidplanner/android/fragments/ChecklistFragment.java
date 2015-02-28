@@ -4,32 +4,44 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.droidplanner.R;
-import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.R;
+import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.widgets.checklist.CheckListAdapter;
 import org.droidplanner.android.widgets.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
 import org.droidplanner.android.widgets.checklist.CheckListItem;
 import org.droidplanner.android.widgets.checklist.CheckListSysLink;
 import org.droidplanner.android.widgets.checklist.CheckListXmlParser;
 import org.droidplanner.android.widgets.checklist.xml.ListXmlParser.OnXmlParserError;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.model.Drone;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
-public class ChecklistFragment extends Fragment implements OnXmlParserError,
-		OnCheckListItemUpdateListener, OnDroneListener {
+public class ChecklistFragment extends ApiListenerFragment implements OnXmlParserError,
+		OnCheckListItemUpdateListener {
+
+    private final static IntentFilter intentFilter = new IntentFilter(DroidPlannerApp
+            .ACTION_DRONE_EVENT);
+
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(DroidPlannerApp.ACTION_DRONE_EVENT.equals(action)){
+                onInfoUpdate();
+            }
+        }
+    };
 
 	private Context context;
-	private Drone drone;
 	private ExpandableListView expListView;
 	private List<String> listDataHeader;
 	private List<CheckListItem> checklistItems;
@@ -43,7 +55,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 		View view = inflater.inflate(R.layout.fragment_checklist, container, false);
 		expListView = (ExpandableListView) view.findViewById(R.id.expListView);
 
-		createListAdapter();
+		createListAdapter(inflater);
 		expListView.setAdapter(listAdapter);
 
 		listViewAutoExpand(true, true);
@@ -69,31 +81,25 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 		super.onDetach();
 	}
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		drone = ((SuperUI) this.context).drone;
-		sysLink = new CheckListSysLink(this.drone);
-		drone.addDroneListener(this);
-	}
+    @Override
+    public void onApiConnected(){
+        sysLink = new CheckListSysLink(getActivity().getApplicationContext(), getDrone());
+        getBroadcastManager().registerReceiver(broadcastReceiver, intentFilter);
+    }
 
-	@Override
-	public void onStop() {
-		super.onStop();
-		drone.removeDroneListener(this);
-	}
-
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		onInfoUpdate();
-	}
+    @Override
+    public void onApiDisconnected(){
+        getBroadcastManager().unregisterReceiver(broadcastReceiver);
+    }
 
 	public void onInfoUpdate() {
-		for (CheckListItem item : checklistItems) {
-			if (item.getSys_tag() != null) {
-				sysLink.getSystemData(item, item.getSys_tag());
-			}
-		}
+        if(checklistItems != null && !checklistItems.isEmpty()) {
+            for (CheckListItem item : checklistItems) {
+                if (item.getSys_tag() != null) {
+                    sysLink.getSystemData(item, item.getSys_tag());
+                }
+            }
+        }
 		if (listAdapter != null)
 			listAdapter.notifyDataSetChanged();
 	}
@@ -124,10 +130,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	}
 
 	// create listAdapter
-	private void createListAdapter() {
-		final LayoutInflater layoutInflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+	private void createListAdapter(LayoutInflater layoutInflater) {
 		listAdapter = new CheckListAdapter(layoutInflater, listDataHeader, listDataChild);
 
 		listAdapter.setHeaderLayout(R.layout.list_group_header);
@@ -148,19 +151,22 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	@Override
 	public void onError() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onRowItemChanged(CheckListItem checkListItem) {
-		sysLink.setSystemData(checkListItem);
-		listAdapter.notifyDataSetChanged();
-		listViewAutoExpand(false, true);
+        if(sysLink != null) {
+            sysLink.setSystemData(checkListItem);
+            listAdapter.notifyDataSetChanged();
+            listViewAutoExpand(false, true);
+        }
 	}
 
 	@Override
 	public void onRowItemGetData(CheckListItem checkListItem, String mSysTag) {
-		sysLink.getSystemData(checkListItem, mSysTag);
+        if(sysLink != null) {
+            sysLink.getSystemData(checkListItem, mSysTag);
+        }
 	}
 
 }

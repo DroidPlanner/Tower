@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <fragment
-        android:id="@id/mapFragment"
+        android:id="@+id/editor_map_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="false"

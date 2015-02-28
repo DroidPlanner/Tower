@@ -2,50 +2,54 @@ package org.droidplanner.android.utils.prefs;
 
 import java.util.UUID;
 
-import org.droidplanner.R;
-import org.droidplanner.android.utils.Utils;
-import org.droidplanner.android.utils.file.IO.VehicleProfileReader;
-import org.droidplanner.core.drone.profiles.VehicleProfile;
-import org.droidplanner.core.firmware.FirmwareType;
+import org.droidplanner.android.R;
+import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.SparseBooleanArray;
+
+import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 
 /**
  * Provides structured access to Droidplanner preferences
- * 
+ *
  * Over time it might be good to move the various places that are doing
  * prefs.getFoo(blah, default) here - to collect prefs in one place and avoid
  * duplicating string constants (which tend to become stale as code evolves).
  * This is called the DRY (don't repeat yourself) principle of software
  * development.
- * 
- * 
+ *
+ *
  */
-public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preferences {
+public class DroidPlannerPrefs {
 
 	/*
 	 * Default preference value
 	 */
 	public static final boolean DEFAULT_USAGE_STATISTICS = true;
-	public static final String DEFAULT_CONNECTION_TYPE = Utils.ConnectionType.USB.name();
+	public static final String DEFAULT_CONNECTION_TYPE = String.valueOf(ConnectionType.TYPE_USB);
 	private static final boolean DEFAULT_KEEP_SCREEN_ON = false;
 	private static final boolean DEFAULT_MAX_VOLUME_ON_START = false;
 	private static final boolean DEFAULT_PERMANENT_NOTIFICATION = true;
 	private static final boolean DEFAULT_OFFLINE_MAP_ENABLED = false;
 	private static final String DEFAULT_MAP_TYPE = "";
 	private static final AutoPanMode DEFAULT_AUTO_PAN_MODE = AutoPanMode.DISABLED;
-	private static final boolean DEFAULT_GUIDED_MODE_ON_LONG_PRESS = true;
 	public static final boolean DEFAULT_PREF_UI_LANGUAGE = false;
 	public static final String DEFAULT_SPEECH_PERIOD = "0";
 	public static final boolean DEFAULT_TTS_CEILING_EXCEEDED = true;
 	public static final boolean DEFAULT_TTS_WARNING_LOST_SIGNAL = true;
 	public static final boolean DEFAULT_TTS_WARNING_LOW_SIGNAL = false;
 	public static final boolean DEFAULT_TTS_WARNING_AUTOPILOT_WARNING = true;
+    private static final String DEFAULT_USB_BAUD_RATE = "57600";
+    private static final String DEFAULT_TCP_SERVER_IP = "192.168.40.100";
+    private static final String DEFAULT_TCP_SERVER_PORT = "5763";
+    private static final String DEFAULT_UDP_SERVER_PORT = "14550";
+    private static final int DEFAULT_UNIT_SYSTEM = UnitSystem.AUTO;
 
-	// Public for legacy usage
+    // Public for legacy usage
 	public SharedPreferences prefs;
 	private Context context;
 
@@ -54,7 +58,7 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
-	public boolean getLiveUploadEnabled() {
+	public boolean isLiveUploadEnabled() {
 		// FIXME: Disabling live upload as it often causes the app to freeze on
 		// disconnect.
 		// return
@@ -68,8 +72,7 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	}
 
 	public void setDroneshareLogin(String b) {
-		prefs.edit().putString(context.getString(R.string.pref_dshare_username_key), b.trim())
-				.apply();
+		prefs.edit().putString(context.getString(R.string.pref_dshare_username_key), b.trim()).apply();
 	}
 
 	public String getDroneshareEmail() {
@@ -85,17 +88,16 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	}
 
 	public void setDronesharePassword(String b) {
-		prefs.edit().putString(context.getString(R.string.pref_dshare_password_key), b.trim())
-				.apply();
+		prefs.edit().putString(context.getString(R.string.pref_dshare_password_key), b.trim()).apply();
 	}
 
-	public boolean getDroneshareEnabled() {
-		return prefs.getBoolean(context.getString(R.string.pref_dshare_enabled_key), true);
+	public boolean isDroneshareEnabled() {
+        return !TextUtils.isEmpty(getDroneshareLogin()) && !TextUtils.isEmpty(getDronesharePassword());
 	}
 
-	public void setDroneshareEnabled(boolean b) {
-		prefs.edit().putBoolean(context.getString(R.string.pref_dshare_enabled_key), b).apply();
-	}
+    public String getDroneshareApiKey(){
+        return "2d38fb2e.72afe7b3761d5ee6346c178fdd6b680f";
+    }
 
 	/**
 	 * How many times has this application been started? (will increment for
@@ -125,37 +127,6 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 		return r;
 	}
 
-	@Override
-	public FirmwareType getVehicleType() {
-		String str = prefs.getString("pref_vehicle_type", FirmwareType.ARDU_COPTER.toString());
-		return FirmwareType.firmwareFromString(str);
-	}
-
-	@Override
-	public VehicleProfile loadVehicleProfile(FirmwareType firmwareType) {
-		return VehicleProfileReader.load(context, firmwareType);
-	}
-
-	@Override
-	public Rates getRates() {
-		Rates rates = new Rates();
-
-		rates.extendedStatus = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_ext_stat", "0"));
-		rates.extra1 = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra1", "0"));
-		rates.extra2 = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra2", "0"));
-		rates.extra3 = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra3", "0"));
-		rates.position = Integer
-				.parseInt(prefs.getString("pref_mavlink_stream_rate_position", "0"));
-		rates.rcChannels = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_rc_channels",
-				"0"));
-		rates.rawSensors = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_raw_sensors",
-				"0"));
-		rates.rawController = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_raw_controller", "0"));
-		return rates;
-	}
-
 	/**
 	 * @return true if google analytics reporting is enabled.
 	 */
@@ -164,13 +135,83 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 				DEFAULT_USAGE_STATISTICS);
 	}
 
-	/**
-	 * @return the selected mavlink connection type.
-	 */
-	public String getMavLinkConnectionType() {
-		return prefs.getString(context.getString(R.string.pref_connection_type_key),
-				DEFAULT_CONNECTION_TYPE);
-	}
+    public void setConnectionParameterType(int connectionType){
+        prefs.edit().putString(context.getString(R.string.pref_connection_type_key),
+                String.valueOf(connectionType)).apply();
+    }
+
+    /**
+     * @return the selected mavlink connection type.
+     */
+    public int getConnectionParameterType(){
+        return Integer.parseInt(prefs.getString(context.getString(R.string
+                .pref_connection_type_key), DEFAULT_CONNECTION_TYPE));
+    }
+
+    public int getUnitSystemType() {
+        String unitSystem = prefs.getString(context.getString(R.string.pref_unit_system_key), null);
+        if(unitSystem == null)
+            return DEFAULT_UNIT_SYSTEM;
+
+        return Integer.parseInt(unitSystem);
+    }
+
+    public void setUsbBaudRate(int baudRate){
+        prefs.edit().putString(context.getString(R.string.pref_baud_type_key),
+                String.valueOf(baudRate)).apply();
+    }
+
+    public int getUsbBaudRate(){
+        return Integer.parseInt(prefs.getString(context.getString(R.string.pref_baud_type_key),
+                DEFAULT_USB_BAUD_RATE));
+    }
+
+    public void setTcpServerIp(String serverIp){
+        prefs.edit().putString(context.getString(R.string.pref_server_ip_key), serverIp).apply();
+    }
+
+    public String getTcpServerIp(){
+        return prefs.getString(context.getString(R.string.pref_server_ip_key),
+                DEFAULT_TCP_SERVER_IP);
+    }
+
+    public void setTcpServerPort(int serverPort){
+        prefs.edit().putString(context.getString(R.string.pref_server_port_key),
+                String.valueOf(serverPort)).apply();
+    }
+
+    public int getTcpServerPort(){
+        return Integer.parseInt(prefs.getString(context.getString(R.string.pref_server_port_key),
+                DEFAULT_TCP_SERVER_PORT));
+    }
+
+    public void setUdpServerPort(int serverPort){
+        prefs.edit().putString(context.getString(R.string.pref_udp_server_port_key),
+                String.valueOf(serverPort)).apply();
+    }
+
+    public int getUdpServerPort(){
+        return Integer.parseInt(prefs.getString(context.getString(R.string
+                        .pref_udp_server_port_key), DEFAULT_UDP_SERVER_PORT));
+    }
+
+    public String getBluetoothDeviceName(){
+        return prefs.getString(context.getString(R.string.pref_bluetooth_device_name_key), null);
+    }
+
+    public void setBluetoothDeviceName(String deviceName){
+        prefs.edit().putString(context.getString(R.string.pref_bluetooth_device_name_key), deviceName).apply();
+    }
+
+    public String getBluetoothDeviceAddress() {
+        return prefs.getString(context.getString(R.string.pref_bluetooth_device_address_key), null);
+    }
+
+    public void setBluetoothDeviceAddress(String newAddress) {
+        final SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(context.getString(R.string.pref_bluetooth_device_address_key), newAddress)
+                .apply();
+    }
 
 	/**
 	 * @return true if the device screen should stay on.
@@ -229,26 +270,11 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 
 	/**
 	 * Updates the map auto panning target.
-	 * 
+	 *
 	 * @param target
 	 */
 	public void setAutoPanMode(AutoPanMode target) {
 		prefs.edit().putString(AutoPanMode.PREF_KEY, target.name()).apply();
-	}
-
-	public boolean isGuidedModeOnLongPressEnabled() {
-		return prefs
-				.getBoolean("pref_guided_mode_on_long_press", DEFAULT_GUIDED_MODE_ON_LONG_PRESS);
-	}
-
-	public String getBluetoothDeviceAddress() {
-		return prefs.getString(context.getString(R.string.pref_bluetooth_device_address_key), null);
-	}
-
-	public void setBluetoothDeviceAddress(String newAddress) {
-		final SharedPreferences.Editor editor = prefs.edit();
-		editor.putString(context.getString(R.string.pref_bluetooth_device_address_key), newAddress)
-				.apply();
 	}
 
 	/**
@@ -311,4 +337,8 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 				context.getString(R.string.pref_tts_warning_autopilot_warnings_key),
 				DEFAULT_TTS_WARNING_AUTOPILOT_WARNING);
 	}
+
+    public boolean isAdvancedMenuEnabled(){
+        return prefs.getBoolean(context.getString(R.string.pref_advanced_menu_toggle_key), false);
+    }
 }

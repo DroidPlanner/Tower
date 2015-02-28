@@ -1,56 +1,105 @@
 package org.droidplanner.android.widgets.adapterViews;
 
-import java.util.List;
-
-import org.droidplanner.R;
-
-import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.MAVLink.common.msg_global_position_int;
+
+import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.LocatorListFragment;
+import org.droidplanner.android.utils.file.IO.TLogReader;
+import org.droidplanner.android.utils.file.IO.TLogReader.Event;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * MissionItem Adapter for the MissionItem horizontal list view. This adapter
  * updates the content of the list view item's view based on the mission item
  * type.
  */
-public class LocatorItemAdapter extends ArrayAdapter<msg_global_position_int> {
+public class LocatorItemAdapter extends RecyclerView.Adapter<LocatorItemAdapter.ViewHolder> {
 
-	private final LayoutInflater inflater;
+    // Provide a reference to the views for each data item
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-	public LocatorItemAdapter(Context context, List<msg_global_position_int> list) {
-		super(context, 0, list);
-		inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	}
+        final View viewContainer;
+        final TextView timeView;
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		final msg_global_position_int item = getItem(position);
+        public ViewHolder(View container, TextView timeView) {
+            super(container);
+            this.viewContainer = container;
+            this.timeView = timeView;
+        }
+    }
 
-		final View view;
-		if (convertView != null) {
-			// recycle view
-			view = convertView;
-		} else {
-			// create new view
-			view = inflater.inflate(R.layout.fragment_locator_list_item, parent, false);
-		}
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.US);
 
-		final TextView titleView = (TextView) view.findViewById(R.id.titleView);
-		final TextView timeView = (TextView) view.findViewById(R.id.timeView);
+    private int selectedPosition = -1;
+    private final List<Event> msgList;
+    private final LocatorListFragment.OnLocatorListListener listener;
 
-		titleView.setText(String.valueOf(position + 1));
+    public LocatorItemAdapter(List<TLogReader.Event> list, LocatorListFragment.OnLocatorListListener listener) {
+        this.msgList = list;
+        this.listener = listener;
+    }
 
-		final int min = item.time_boot_ms / 60000;
-		final int sec = (item.time_boot_ms % 60000) / 1000;
-		final int fsec = (item.time_boot_ms % 1000) / 100;
-		timeView.setText(String.format("%dm%02d.%01ds", min, sec, fsec));
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_locator_list_item, parent, false);
 
-		return view;
-	}
+        final TextView timeView = (TextView) view.findViewById(R.id.timeView);
 
+        return new ViewHolder(view, timeView);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        final Event msgEvent = msgList.get(position);
+
+        final View container = holder.viewContainer;
+        container.setActivated(isSelected(position));
+        container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSelection(position);
+                if (listener != null) {
+                    if (isSelected(position)) {
+                        listener.onItemClick((msg_global_position_int) msgEvent.getMavLinkMessage());
+                    } else {
+                        listener.onItemClick(null);
+                    }
+                }
+            }
+        });
+
+        Date eventDate = new Date(msgEvent.getTimestamp());
+        holder.timeView.setText(sdf.format(eventDate));
+    }
+
+    @Override
+    public int getItemCount() {
+        return msgList.size();
+    }
+
+    private void setSelection(int selection) {
+        if (selection == selectedPosition)
+            clearSelection();
+        else
+            selectedPosition = selection;
+        notifyDataSetChanged();
+    }
+
+    private boolean isSelected(int position) {
+        return selectedPosition == position;
+    }
+
+    public void clearSelection() {
+        selectedPosition = -1;
+    }
 }

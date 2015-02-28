@@ -1,16 +1,9 @@
 package org.droidplanner.android.fragments.mode;
 
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.gcs.follow.Follow;
-import org.droidplanner.core.gcs.follow.FollowAlgorithm.FollowModes;
-import org.droidplanner.core.model.Drone;
-
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,96 +12,289 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class ModeFollowFragment extends ModeGuidedFragment implements
-		OnItemSelectedListener, OnDroneListener {
+import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.gcs.FollowApi;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLongAlt;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.gcs.follow.FollowState;
+import com.o3dr.services.android.lib.gcs.follow.FollowType;
 
-	private Follow followMe;
-	private Spinner spinner;
-	private ArrayAdapter<FollowModes> adapter;
+import org.beyene.sius.unit.length.LengthUnit;
+import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.DroneMap;
+import org.droidplanner.android.graphic.map.GuidedScanROIMarkerInfo;
+import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
+import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
 
-    private CardWheelHorizontalView mRadiusWheel;
+public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSelectedListener, DroneMap.MapMarkerProvider {
+
+    private static final double DEFAULT_MIN_RADIUS = 2; //meters
+
+    private static final int ROI_TARGET_MARKER_INDEX = 0;
+
+    private static final IntentFilter eventFilter = new IntentFilter(AttributeEvent.FOLLOW_UPDATE);
+
+    private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (AttributeEvent.FOLLOW_UPDATE.equals(action)) {
+                final FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
+                if (followState != null) {
+                    spinner.setSelection(adapter.getPosition(followState.getMode()));
+                }
+            }
+        }
+    };
+
+    private final GuidedScanROIMarkerInfo roiMarkerInfo = new GuidedScanROIMarkerInfo();
+
+    private final MarkerInfo[] emptyMarkers = {};
+    private final MarkerInfo[] markers = new MarkerInfo[1];
+
+    {
+        markers[ROI_TARGET_MARKER_INDEX] = roiMarkerInfo;
+    }
+
+    private TextView modeDescription;
+    private Spinner spinner;
+    private ArrayAdapter<FollowType> adapter;
+
+    private CardWheelHorizontalView<LengthUnit> mRadiusWheel;
+    private CardWheelHorizontalView<LengthUnit> roiHeightWheel;
 
     @Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		DroidPlannerApp app = (DroidPlannerApp) getActivity().getApplication();
-		followMe = app.getFollowMe();
-		drone = app.getDrone();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_mode_follow, container, false);
+    }
 
-		return inflater.inflate(R.layout.fragment_mode_follow, container, false);
-	}
-
-	@Override
-	public void onViewCreated(View parentView, Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View parentView, Bundle savedInstanceState) {
         super.onViewCreated(parentView, savedInstanceState);
 
-        final Context context = getActivity().getApplicationContext();
+        modeDescription = (TextView) parentView.findViewById(R.id.ModeDetail);
 
-		final NumericWheelAdapter radiusAdapter = new NumericWheelAdapter(context,
-                R.layout.wheel_text_centered, 0, 200, "%d m");
+        final Context context = getContext();
+        final LengthUnitProvider lengthUP = getLengthUnitProvider();
 
-        mRadiusWheel = (CardWheelHorizontalView) parentView.findViewById(R.id.radius_spinner);
+        final LengthWheelAdapter radiusAdapter = new LengthWheelAdapter(context, R.layout.wheel_text_centered,
+                lengthUP.boxBaseValueToTarget(2), lengthUP.boxBaseValueToTarget(200));
+
+        mRadiusWheel = (CardWheelHorizontalView<LengthUnit>) parentView.findViewById(R.id.radius_spinner);
         mRadiusWheel.setViewAdapter(radiusAdapter);
-        updateCurrentRadius();
-        mRadiusWheel.addChangingListener(this);
+        mRadiusWheel.addScrollListener(this);
 
-		spinner = (Spinner) parentView.findViewById(R.id.follow_type_spinner);
-		adapter = new ArrayAdapter<FollowModes>(getActivity(),
-				android.R.layout.simple_spinner_item, FollowModes.values());
-		spinner.setAdapter(adapter);
+        final LengthWheelAdapter roiHeightAdapter = new LengthWheelAdapter(context, R.layout.wheel_text_centered,
+                lengthUP.boxBaseValueToTarget(0), lengthUP.boxBaseValueToTarget(200));
+
+        roiHeightWheel = (CardWheelHorizontalView<LengthUnit>) parentView.findViewById(R.id.roi_height_spinner);
+        roiHeightWheel.setViewAdapter(roiHeightAdapter);
+        roiHeightWheel.addScrollListener(this);
+
+        spinner = (Spinner) parentView.findViewById(R.id.follow_type_spinner);
+        adapter = new FollowTypesAdapter(context, getAppPrefs().isAdvancedMenuEnabled());
+        spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-
-        drone.addDroneListener(this);
-	}
+    }
 
     @Override
-    public void onDestroyView(){
+    public void onDestroyView() {
         super.onDestroyView();
 
-        if(mRadiusWheel != null){
+        if (mRadiusWheel != null) {
             mRadiusWheel.removeChangingListener(this);
         }
     }
 
     @Override
-    public void onChanged(CardWheelHorizontalView cardWheel, int oldValue, int newValue){
-        switch(cardWheel.getId()){
-            case R.id.radius_spinner:
-                followMe.changeRadius(newValue);
+    public void onApiConnected() {
+        super.onApiConnected();
+
+        final FollowState followState = getDrone().getAttribute(AttributeType.FOLLOW_STATE);
+        if (followState != null) {
+            final FollowType followType = followState.getMode();
+            spinner.setSelection(adapter.getPosition(followType));
+            onFollowTypeUpdate(followType, followState.getParams());
+        }
+
+        parentActivity.addMapMarkerProvider(this);
+        getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
+    }
+
+    private void onFollowTypeUpdate(FollowType followType, Bundle params) {
+        updateModeDescription(followType);
+
+        if (followType.hasParam(FollowType.EXTRA_FOLLOW_RADIUS)) {
+            double radius = DEFAULT_MIN_RADIUS;
+            if (params != null) {
+                radius = params.getDouble(FollowType.EXTRA_FOLLOW_RADIUS, DEFAULT_MIN_RADIUS);
+            }
+
+            mRadiusWheel.setVisibility(View.VISIBLE);
+            mRadiusWheel.setCurrentValue((getLengthUnitProvider().boxBaseValueToTarget(radius)));
+        } else {
+            mRadiusWheel.setVisibility(View.GONE);
+        }
+
+        double roiHeight = GuidedScanROIMarkerInfo.DEFAULT_FOLLOW_ROI_ALTITUDE;
+        LatLong roiTarget = null;
+        if (followType.hasParam(FollowType.EXTRA_FOLLOW_ROI_TARGET)) {
+            roiTarget = roiMarkerInfo.getPosition();
+
+            if (params != null) {
+                params.setClassLoader(LatLong.class.getClassLoader());
+                roiTarget = params.getParcelable(FollowType.EXTRA_FOLLOW_ROI_TARGET);
+            }
+
+            if (roiTarget instanceof LatLongAlt)
+                roiHeight = ((LatLongAlt) roiTarget).getAltitude();
+        }
+
+        roiHeightWheel.setCurrentValue(getLengthUnitProvider().boxBaseValueToTarget(roiHeight));
+        updateROITargetMarker(roiTarget);
+    }
+
+    private void updateModeDescription(FollowType followType) {
+        switch (followType) {
+            case GUIDED_SCAN:
+                modeDescription.setText(R.string.mode_follow_guided_scan);
                 break;
 
             default:
-                super.onChanged(cardWheel, oldValue, newValue);
+                modeDescription.setText(R.string.mode_follow);
                 break;
         }
     }
 
-    private void updateCurrentRadius(){
-        if(mRadiusWheel != null){
-            mRadiusWheel.setCurrentValue((int) followMe.getRadius().valueInMeters());
+    @Override
+    public void onApiDisconnected() {
+        super.onApiDisconnected();
+        parentActivity.removeMapMarkerProvider(this);
+        getBroadcastManager().unregisterReceiver(eventReceiver);
+    }
+
+    @Override
+    public void onScrollingEnded(CardWheelHorizontalView cardWheel, LengthUnit oldValue, LengthUnit newValue) {
+        final Drone drone = getDrone();
+        switch (cardWheel.getId()) {
+            case R.id.radius_spinner:
+                if (drone.isConnected()) {
+                    Bundle params = new Bundle();
+                    params.putDouble(FollowType.EXTRA_FOLLOW_RADIUS, newValue.toBase().getValue());
+                    FollowApi.updateFollowParams(drone, params);
+                }
+                break;
+
+            case R.id.roi_height_spinner:
+                if (drone.isConnected()) {
+                    final LatLongAlt roiCoord = roiMarkerInfo.getPosition();
+                    if (roiCoord != null) {
+                        roiCoord.setAltitude(newValue.toBase().getValue());
+                        pushROITargetToVehicle(drone, roiCoord);
+                    }
+                }
+                break;
+
+            default:
+                super.onScrollingEnded(cardWheel, oldValue, newValue);
+                break;
         }
     }
 
-	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		followMe.setType(adapter.getItem(position));
-		updateCurrentRadius();
-	}
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        final FollowType type = adapter.getItem(position);
 
-	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {
-	}
+        final Drone drone = getDrone();
+        if (drone.isConnected()) {
+            drone.enableFollowMe(type);
+        }
 
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		switch (event) {
-		case FOLLOW_CHANGE_TYPE:
-			spinner.setSelection(adapter.getPosition(followMe.getType()));
-			break;
-		default:
-			break;
-		}
+        onFollowTypeUpdate(type, null);
+    }
 
-	}
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+    }
 
+    @Override
+    public void onGuidedClick(LatLong coord) {
+        final Drone drone = getDrone();
+        final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
+        if (followState != null && followState.isEnabled() && followState.getMode().hasParam(FollowType.EXTRA_FOLLOW_ROI_TARGET)) {
+            Toast.makeText(getContext(), R.string.guided_scan_roi_set_message, Toast.LENGTH_LONG).show();
+
+            final double roiHeight = roiHeightWheel.getCurrentValue().toBase().getValue();
+            final LatLongAlt roiCoord = new LatLongAlt(coord.getLatitude(), coord.getLongitude(), roiHeight);
+
+            pushROITargetToVehicle(drone, roiCoord);
+            updateROITargetMarker(coord);
+        } else {
+            super.onGuidedClick(coord);
+        }
+    }
+
+    private void pushROITargetToVehicle(Drone drone, LatLongAlt roiCoord) {
+        if (roiCoord == null)
+            return;
+
+        Bundle params = new Bundle();
+        params.putParcelable(FollowType.EXTRA_FOLLOW_ROI_TARGET, roiCoord);
+        FollowApi.updateFollowParams(drone, params);
+    }
+
+    private void updateROITargetMarker(LatLong target) {
+        roiMarkerInfo.setPosition(target);
+        getBroadcastManager().sendBroadcast(new Intent(DroneMap.ACTION_UPDATE_MAP));
+
+        if (target == null) {
+            roiHeightWheel.setVisibility(View.GONE);
+        } else {
+            roiHeightWheel.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public MarkerInfo[] getMapMarkers() {
+        if (roiMarkerInfo.isVisible())
+            return markers;
+        else
+            return emptyMarkers;
+    }
+
+    private static class FollowTypesAdapter extends ArrayAdapter<FollowType> {
+
+        private final LayoutInflater inflater;
+
+        public FollowTypesAdapter(Context context, boolean isAdvancedMenuEnabled) {
+            super(context, 0, FollowType.getFollowTypes(isAdvancedMenuEnabled));
+            inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            TextView view;
+            if (convertView == null) {
+                view = (TextView) inflater.inflate(R.layout.list_item_follow_types, parent, false);
+            } else {
+                view = (TextView) convertView;
+            }
+
+            final FollowType followType = getItem(position);
+            view.setText(followType.getTypeLabel());
+            return view;
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return getView(position, convertView, parent);
+        }
+    }
 }

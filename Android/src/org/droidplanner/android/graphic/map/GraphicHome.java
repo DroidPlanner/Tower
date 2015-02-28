@@ -1,21 +1,23 @@
 package org.droidplanner.android.graphic.map;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.core.drone.variables.Home;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.model.Drone;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.Home;
+
 public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 
-	private Home home;
+	private Drone drone;
 
 	public GraphicHome(Drone drone) {
-		home = drone.getHome();
+		this.drone = drone;
 	}
 
 	@Override
@@ -24,7 +26,8 @@ public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 	}
 
 	public boolean isValid() {
-		return home.isValid();
+        Home droneHome = drone.getAttribute(AttributeType.HOME);
+		return droneHome != null && droneHome.isValid();
 	}
 
 	@Override
@@ -38,13 +41,17 @@ public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 	}
 
 	@Override
-	public Coord2D getPosition() {
-		return home.getCoord();
+	public LatLong getPosition() {
+        Home droneHome = drone.getAttribute(AttributeType.HOME);
+        if(droneHome == null) return null;
+
+		return droneHome.getCoordinate();
 	}
 
 	@Override
 	public String getSnippet() {
-		return "Home " + home.getAltitude();
+        Home droneHome = drone.getAttribute(AttributeType.HOME);
+		return "Home " + (droneHome == null ? "N/A" : droneHome.getCoordinate().getAltitude());
 	}
 
 	@Override
@@ -54,6 +61,6 @@ public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 
 	@Override
 	public boolean isVisible() {
-		return home.isValid();
+		return isValid();
 	}
 }

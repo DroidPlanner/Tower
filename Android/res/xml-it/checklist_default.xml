@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preflightcheck
+    title="Pre-Flight Checklist"
+    type="APM"
+    version="1" >
+
+    <category label="Checklist Utente" >
+        <check_item
+            description="Assicurati che la camera sia connessa e accesa Ensure Camera is connected and switch on"
+            editable="yes"
+            mandatory="yes"
+            title="Camera connessa e accesa" />
+    </category>
+    <category label="Controllo direzione servi" >
+        <check_item
+            description="Assicurati che il movimento sia nella direzione giusta"
+            editable="yes"
+            mandatory="yes"
+            title="Alettoni" />
+        <check_item
+            description="Ensure surface control is in the right direction"
+            editable="yes"
+            mandatory="yes"
+            title="Elevatore" />
+        <check_item
+            description="Ensure surface control is in the right direction"
+            editable="yes"
+            mandatory="yes"
+            title="Timone" />
+    </category>
+    <category label="Checklist sistema" >
+        <switch_item
+            description="Stato connessione telemetria"
+            editable="yes"
+            mandatory="yes"
+            system_tag="SYS_CONNECTION_STATE"
+            title="Telemetry connection" />
+
+        <level_item
+            description="Satelliti gps"
+            editable="no"
+            mandatory="yes"
+            maximum_val="8"
+            minimum_val="5"
+            nominal_val="6"
+            system_tag="SYS_GPS3D_LVL"
+            title="GPS(3D) Sats"
+            unit="%.0f Sats." />
+        <level_item
+            description="Batteria rimanente"
+            editable="no"
+            mandatory="yes"
+            maximum_val="100"
+            minimum_val="75"
+            nominal_val="80"
+            system_tag="SYS_BATTREM_LVL"
+            title="Battery level"
+            unit="%.1f%%" />
+        <level_item
+            description="Voltaggio batteria"
+            editable="no"
+            mandatory="yes"
+            maximum_val="13"
+            minimum_val="10.5"
+            nominal_val="11.1"
+            system_tag="SYS_BATTVOL_LVL"
+            title="Battery voltage"
+            unit="%.1fV" />
+        <level_item
+            description="Corrente batteria"
+            editable="no"
+            mandatory="yes"
+            maximum_val="20"
+            minimum_val="5"
+            nominal_val="10"
+            system_tag="SYS_BATTCUR_LVL"
+            title="Battery current"
+            unit="%.1fA" />
+    </category>
+
+</preflightcheck>

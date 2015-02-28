@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.droidplanner.R;
+import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.calibration.rc.FragmentSetupGC;
 import org.droidplanner.android.fragments.calibration.rc.FragmentSetupRC;
 import org.droidplanner.android.widgets.viewPager.TabPageIndicator;

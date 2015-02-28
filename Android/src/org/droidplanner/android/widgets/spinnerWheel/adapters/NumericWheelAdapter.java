@@ -25,11 +25,12 @@
 package org.droidplanner.android.widgets.spinnerWheel.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 /**
  * Numeric Wheel adapter.
  */
-public class NumericWheelAdapter extends AbstractWheelTextAdapter {
+public class NumericWheelAdapter extends AbstractWheelTextAdapter<Integer> {
 
 	/** The default min value */
 	public static final int DEFAULT_MAX_VALUE = 9;
@@ -111,14 +112,16 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
 		return null;
 	}
 
-	public int getItem(int index) {
+    @Override
+	public Integer getItem(int index) {
 		if (index >= 0 && index < getItemsCount()) {
 			return minValue + index;
 		}
 		throw new IllegalArgumentException("Index is out of range.");
 	}
 
-	public int getItemIndex(int value) {
+    @Override
+	public int getItemIndex(Integer value) {
 		if (value < this.minValue || value > this.maxValue) {
 			return -1;
 		}
@@ -126,7 +129,15 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
 		return value - this.minValue;
 	}
 
-	@Override
+    @Override
+    public Integer parseItemText(CharSequence itemText) {
+        String text = itemText.toString();
+        if(TextUtils.isEmpty(text))
+            return 0;
+        return Integer.parseInt(text);
+    }
+
+    @Override
 	public int getItemsCount() {
 		return maxValue - minValue + 1;
 	}

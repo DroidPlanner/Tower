@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/user_info_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp">
+
+        <RelativeLayout
+            android:id="@+id/user_info_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="@drawable/clickable_bg"
+            >
+
+            <ImageView
+                android:id="@+id/account_image"
+                android:layout_margin="10dp"
+                android:layout_height="70dp"
+                android:layout_width="70dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:visibility="visible"
+                android:src="@drawable/ic_account_circle_grey600_48dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/account_image"
+                android:layout_toEndOf="@+id/account_image"
+                android:layout_marginTop="15dp"
+                android:gravity="center_vertical"
+                android:textSize="30sp"
+                android:id="@+id/dshare_username"
+                tools:text="ne0fhyk"/>
+
+            <TextView
+                android:id="@+id/dshare_user_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dshare_username"
+                android:layout_alignStart="@+id/dshare_username"
+                android:layout_alignLeft="@+id/dshare_username"
+                tools:text="http://www.droneshare.com/user/test"/>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_below="@+id/user_info_card"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                style="?android:attr/textAppearanceLarge"
+                android:text="@string/label_vehicle_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark_grey"
+                android:padding="15dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/light_grey"
+                android:layout_marginBottom="10dp"
+                />
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/user_vehicles_list"
+                android:scrollbars="vertical"
+                android:scrollbarStyle="insideInset"
+                />
+        </LinearLayout>
+
+        <org.droidplanner.android.widgets.NiceProgressView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/vehicle_loading_progress"
+            android:visibility="gone"
+            style="?android:progressBarStyleLarge"/>
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

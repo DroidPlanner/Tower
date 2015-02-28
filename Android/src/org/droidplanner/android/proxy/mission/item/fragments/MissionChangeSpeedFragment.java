@@ -1,50 +1,65 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
-import org.droidplanner.R;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-import org.droidplanner.core.helpers.units.Speed;
-import org.droidplanner.core.mission.MissionItem;
-import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.core.mission.commands.ChangeSpeed;
-
-import android.os.Bundle;
 import android.view.View;
 
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.mission.item.command.ChangeSpeed;
+
+import org.beyene.sius.unit.composition.speed.SpeedUnit;
+import org.droidplanner.android.R;
+import org.droidplanner.android.utils.unit.providers.speed.SpeedUnitProvider;
+import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.SpeedWheelAdapter;
+
 public class MissionChangeSpeedFragment extends MissionDetailFragment implements
-		CardWheelHorizontalView.OnCardWheelChangedListener {
+        CardWheelHorizontalView.OnCardWheelScrollListener<SpeedUnit> {
 
-	@Override
-	protected int getResource() {
-		return R.layout.fragment_editor_detail_change_speed;
-	}
+    @Override
+    protected int getResource() {
+        return R.layout.fragment_editor_detail_change_speed;
+    }
 
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CHANGE_SPEED));
+    @Override
+    public void onApiConnected() {
+        super.onApiConnected();
 
-		ChangeSpeed item = (ChangeSpeed) getMissionItems().get(0);
-		
-		final NumericWheelAdapter adapter = new NumericWheelAdapter(getActivity()
-				.getApplicationContext(), R.layout.wheel_text_centered, 1,
-                20, "%d m/s");
-		final CardWheelHorizontalView cardAltitudePicker = (CardWheelHorizontalView) view
-				.findViewById(R.id.picker1);
-		cardAltitudePicker.setViewAdapter(adapter);
-        cardAltitudePicker.addChangingListener(this);
-		cardAltitudePicker.setCurrentValue((int) item.getSpeed().valueInMetersPerSecond());
-	}
+        final View view = getView();
+        typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CHANGE_SPEED));
 
-	@Override
-	public void onChanged(CardWheelHorizontalView wheel, int oldValue, int newValue) {
-		switch (wheel.getId()) {
-		case R.id.picker1:
-            for(MissionItem missionItem : getMissionItems()) {
-            	ChangeSpeed item = (ChangeSpeed) missionItem;
-                item.setSpeed(new Speed(newValue));
-            }
-			break;
-		}
-	}
+        final SpeedUnitProvider speedUnitProvider = getSpeedUnitProvider();
+        final SpeedWheelAdapter adapter = new SpeedWheelAdapter(getContext(), R.layout.wheel_text_centered,
+                speedUnitProvider.boxBaseValueToTarget(1), speedUnitProvider.boxBaseValueToTarget(20));
+        CardWheelHorizontalView<SpeedUnit> cardAltitudePicker = (CardWheelHorizontalView<SpeedUnit>) view.findViewById
+                (R.id.picker1);
+        cardAltitudePicker.setViewAdapter(adapter);
+        cardAltitudePicker.addScrollListener(this);
+
+        ChangeSpeed item = (ChangeSpeed) getMissionItems().get(0);
+        cardAltitudePicker.setCurrentValue(speedUnitProvider.boxBaseValueToTarget(item.getSpeed()));
+    }
+
+    @Override
+    public void onScrollingStarted(CardWheelHorizontalView cardWheel, SpeedUnit startValue) {
+
+    }
+
+    @Override
+    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, SpeedUnit oldValue, SpeedUnit newValue) {
+
+    }
+
+    @Override
+    public void onScrollingEnded(CardWheelHorizontalView wheel, SpeedUnit startValue, SpeedUnit endValue) {
+        switch (wheel.getId()) {
+            case R.id.picker1:
+                double baseValue = endValue.toBase().getValue();
+                for (MissionItem missionItem : getMissionItems()) {
+                    ChangeSpeed item = (ChangeSpeed) missionItem;
+                    item.setSpeed(baseValue);
+                }
+                getMissionProxy().notifyMissionUpdate();
+                break;
+        }
+    }
 }

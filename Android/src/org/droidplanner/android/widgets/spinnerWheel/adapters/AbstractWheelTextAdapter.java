@@ -35,7 +35,7 @@ import android.widget.TextView;
 /**
  * Abstract spinnerwheel adapter provides common functionality for adapters.
  */
-public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
+public abstract class AbstractWheelTextAdapter<T> extends AbstractWheelAdapter {
 
 	/** Text view resource. Used as a default view for adapter. */
 	public static final int TEXT_VIEW_ITEM_RESOURCE = -1;
@@ -226,6 +226,12 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
 	 * @return the text of specified items
 	 */
 	protected abstract CharSequence getItemText(int index);
+
+    public abstract T getItem(int index);
+
+    public abstract int getItemIndex(T item);
+
+    public abstract T parseItemText(CharSequence itemText);
 
 	@Override
 	public View getItem(int index, View convertView, ViewGroup parent) {

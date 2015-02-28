@@ -3,9 +3,8 @@ package org.droidplanner.android.fragments.helpers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.R;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.helpers.geoTools.Simplify;
+import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.EditorMapFragment;
 
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGestureListener;
@@ -16,6 +15,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.util.MathUtils;
+
 public class GestureMapFragment extends Fragment implements OnGestureListener {
 	private static final int TOLERANCE = 15;
 	private static final int STROKE_WIDTH = 3;
@@ -24,11 +26,12 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 
 	public interface OnPathFinishedListener {
 
-		void onPathFinished(List<Coord2D> path);
+		void onPathFinished(List<LatLong> path);
 	}
 
 	private GestureOverlayView overlay;
 	private OnPathFinishedListener listener;
+    private EditorMapFragment mapFragment;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,10 +45,21 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 		return view;
 	}
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
+        mapFragment = ((EditorMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.editor_map_fragment));
+    }
+
 	private int scaleDpToPixels(double value) {
 		final float scale = getResources().getDisplayMetrics().density;
 		return (int) Math.round(value * scale);
 	}
+
+    public EditorMapFragment getMapFragment(){
+        return mapFragment;
+    }
 
 	public void enableGestureDetection() {
 		overlay.setEnabled(true);
@@ -62,23 +76,23 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 	@Override
 	public void onGestureEnded(GestureOverlayView arg0, MotionEvent arg1) {
 		overlay.setEnabled(false);
-		List<Coord2D> path = decodeGesture();
+		List<LatLong> path = decodeGesture();
 		if (path.size() > 1) {
-			path = Simplify.simplify(path, toleranceInPixels);
+			path = MathUtils.simplify(path, toleranceInPixels);
 		}
 		listener.onPathFinished(path);
 	}
 
-	private List<Coord2D> decodeGesture() {
-		List<Coord2D> path = new ArrayList<Coord2D>();
+	private List<LatLong> decodeGesture() {
+		List<LatLong> path = new ArrayList<LatLong>();
 		extractPathFromGesture(path);
 		return path;
 	}
 
-	private void extractPathFromGesture(List<Coord2D> path) {
+	private void extractPathFromGesture(List<LatLong> path) {
 		float[] points = overlay.getGesture().getStrokes().get(0).points;
 		for (int i = 0; i < points.length; i += 2) {
-			path.add(new Coord2D((int) points[i], (int) points[i + 1]));
+			path.add(new LatLong((int) points[i], (int) points[i + 1]));
 		}
 	}
 
