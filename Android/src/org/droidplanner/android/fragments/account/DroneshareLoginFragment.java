@@ -2,6 +2,7 @@ package org.droidplanner.android.fragments.account;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -77,6 +79,8 @@ public class DroneshareLoginFragment extends Fragment {
             public void onClick(View v) {
                 final String usernameText = username.getText().toString();
                 final String passwordText = password.getText().toString();
+                // Hide the soft keyboard, otherwise can remain after logging in.
+                hideSoftInput();
                 new AsyncConnect(false).execute(usernameText, passwordText);
             }
         });
@@ -99,6 +103,10 @@ public class DroneshareLoginFragment extends Fragment {
                 final String usernameText = username.getText().toString();
                 final String passwordText = password.getText().toString();
                 final String emailText = email.getText().toString();
+
+                // Hide the soft keyboard, otherwise can remain after logging in.
+                hideSoftInput();
+
                 new AsyncConnect(true).execute(usernameText, passwordText, emailText);
             }
         });
@@ -158,6 +166,17 @@ public class DroneshareLoginFragment extends Fragment {
 //
 //        GAUtils.sendEvent(eventBuilder);
 //    }
+
+    private void hideSoftInput() {
+        // Get currently focused view and hide soft input.
+        final Activity activity = getActivity();
+        View view = activity.getCurrentFocus();
+        if (view != null) {
+            final InputMethodManager inputManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (inputManager != null)
+                inputManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 
     private class AsyncConnect extends AsyncTask<String, Void, Pair<Boolean, String>> {
 
