@@ -148,6 +148,12 @@
                             android:key="@string/pref_tts_warning_autopilot_warnings_key"
                             android:summary="@string/pref_tts_warning_autopilot_warnings_summary"
                             android:title="@string/pref_tts_warning_autopilot_warnings" />
+
+                        <CheckBoxPreference
+                            android:defaultValue="false"
+                            android:key="@string/pref_ground_collision_warning_key"
+                            android:summary="@string/pref_ground_collision_warning_summary"
+                            android:title="@string/pref_ground_collision_warning_title"/>
                     </PreferenceCategory>
                 </PreferenceScreen>
 

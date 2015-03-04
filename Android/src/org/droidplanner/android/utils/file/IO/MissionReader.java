@@ -1,26 +1,16 @@
 package org.droidplanner.android.utils.file.IO;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
-import android.util.SparseArray;
 
-import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.android.utils.file.FileList;
-import org.droidplanner.android.utils.file.FileManager;
+import org.droidplanner.android.utils.file.FileStream;
 
 import com.o3dr.services.android.lib.drone.mission.Mission;
 import com.o3dr.services.android.lib.util.ParcelableUtils;
@@ -35,7 +25,7 @@ public class MissionReader implements OpenFileDialog.FileReader {
 	private Mission mission = new Mission();
 
 	public boolean openMission(String file) {
-		if (!FileManager.isExternalStorageAvailable()) {
+		if (!FileStream.isExternalStorageAvailable()) {
 			return false;
 		}
 		try {

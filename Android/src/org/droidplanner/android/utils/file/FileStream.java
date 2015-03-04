@@ -1,10 +1,15 @@
 package org.droidplanner.android.utils.file;
 
-import java.io.BufferedOutputStream;
+import android.content.Context;
+import android.os.Environment;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class FileStream {
 	public static FileOutputStream getParameterFileStream(String filename) throws
@@ -19,13 +24,13 @@ public class FileStream {
 	}
 
     public static String getParameterFilename(String prefix){
-        return prefix + "-" + FileManager.getTimeStamp() + FileList.PARAM_FILENAME_EXT;
+        return prefix + "-" + getTimeStamp() + FileList.PARAM_FILENAME_EXT;
     }
 
-	public static FileOutputStream getExceptionFileStream() throws FileNotFoundException {
-		File myDir = new File(DirectoryPath.getLogCatPath());
+	public static FileOutputStream getExceptionFileStream(Context context) throws FileNotFoundException {
+		File myDir = new File(DirectoryPath.getLogCatPath(context));
 		myDir.mkdirs();
-		File file = new File(myDir, FileManager.getTimeStamp() + ".txt");
+		File file = new File(myDir, getTimeStamp() + ".txt");
 		if (file.exists())
 			file.delete();
 		FileOutputStream out = new FileOutputStream(file);
@@ -44,42 +49,8 @@ public class FileStream {
 	}
 
     public static String getWaypointFilename(String prefix){
-        return prefix + "-" + FileManager.getTimeStamp() + FileList.WAYPOINT_FILENAME_EXT;
+        return prefix + "-" + getTimeStamp() + FileList.WAYPOINT_FILENAME_EXT;
     }
-
-	/**
-	 * Return a filename that is suitable for a tlog
-	 * 
-	 * @return
-	 * @throws FileNotFoundException
-	 */
-	static public File getTLogFile() {
-		File myDir = DirectoryPath.getTLogPath();
-
-		// We add a suffix .tmp to note incomplete tlogs
-		return new File(myDir, FileManager.getTimeStamp() + ".tlog.tmp");
-	}
-
-	/**
-	 * Get a buffered outputstream for a file
-	 * 
-	 * @return output file stream for the log file
-	 */
-	static public BufferedOutputStream openOutputStream(File filename) throws FileNotFoundException {
-		BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(filename));
-		return out;
-	}
-
-	/**
-	 * If the specified file ends with .tmp, remove that suffix.
-	 */
-	public static void commitFile(File f) {
-		String fullname = f.getAbsolutePath();
-		if (f.exists() && fullname.endsWith(".tmp")) {
-			String newname = fullname.substring(0, fullname.length() - 4);
-			f.renameTo(new File(newname));
-		}
-	}
 
 	/**
 	 * Creates a new .nomedia file on the maps folder
@@ -95,4 +66,17 @@ public class FileStream {
 		new File(myDir, ".nomedia").createNewFile();
 	}
 
+    /**
+     * Timestamp for logs in the Mission Planner Format
+     */
+    static public String getTimeStamp() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss", Locale.US);
+        String timeStamp = sdf.format(new Date());
+        return timeStamp;
+    }
+
+    public static boolean isExternalStorageAvailable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
+    }
 }

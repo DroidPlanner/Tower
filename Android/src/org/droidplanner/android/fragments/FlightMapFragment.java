@@ -164,6 +164,9 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 
     @Override
     public boolean onMarkerClick(MarkerInfo markerInfo) {
+        if(markerInfo == null)
+            return false;
+
         drone.sendGuidedPoint(markerInfo.getPosition(), false);
         return true;
     }
