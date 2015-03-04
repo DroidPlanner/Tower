@@ -28,7 +28,7 @@ import java.io.IOException;
 public class DroneshareLoginFragment extends Fragment {
 
     private static final String DRONESHARE_PROMPT_ACTION = "droneshare_prompt";
-
+    private static final short DRONESHARE_MIN_PASSWORD = 7;
     private final DroneshareClient dshareClient = new DroneshareClient();
     private DroidPlannerPrefs prefs;
 
@@ -138,21 +138,34 @@ public class DroneshareLoginFragment extends Fragment {
         username.addTextChangedListener(new TextValidator(username) {
             @Override public void validate(TextView textView, String text) {
                 // TODO: validate on acceptable characters, etc
-                if(text.length() == 0) textView.setError("Please enter a username");
+                if(text.length() == 0)
+                    textView.setError("Please enter a username");
+                else
+                    textView.setError(null);
             }
         });
 
         password.addTextChangedListener(new TextValidator(password) {
             @Override public void validate(TextView textView, String text) {
-                // TODO: check for valid length, characters
-                if(text.length() == 0) textView.setError("Please enter a password");
+                if(loginSection.getVisibility() == View.VISIBLE && (
+                    text.length() < 1))
+                    // Since some accounts have been created with < 7 and no digits, allow login
+                    textView.setError("Please enter a password");
+               else if(loginSection.getVisibility() == View.GONE && (
+                        text.length() < DRONESHARE_MIN_PASSWORD || !text.matches(".*\\d+.*")))
+                    // New accounts require at least 7 characters and digit
+                    textView.setError("Use at least 7 characters and one digit");
+                else
+                    textView.setError(null);
             }
         });
 
         email.addTextChangedListener(new TextValidator(email) {
             @Override public void validate(TextView textView, String text) {
-                // TODO: validate on acceptable characters, etc
-                if(text.length() == 0) textView.setError("Please enter an email");
+                if(text.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches())
+                    textView.setError("Please enter a valid email");
+                else
+                    textView.setError(null);
             }
         });
 
