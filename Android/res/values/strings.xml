@@ -475,8 +475,9 @@
     <string name="label_steps_count">Number of Steps</string>
     <string name="label_altitude_step">Altitude Step</string>
     <string name="menu_search_toggle">Toggle Search</string>
-    <string name="dialog_confirm_arming_title">Arm propellers?</string>
+    <string name="dialog_confirm_arming_title">Arm vehicle?</string>
     <string name="dialog_confirm_arming_msg">Warning! Propellers will spin and drone may begin to fly.</string>
+    <string name="dialog_confirm_rover_arming_msg">Arm rover?</string>
     <string name="radius_label">Radius</string>
     <string name="menu_action_delete">Delete</string>
     <string name="menu_action_reverse">Reverse</string>
