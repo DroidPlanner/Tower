@@ -233,7 +233,7 @@ public class DroneshareLoginFragment extends Fragment {
         }
     }
 
-    public abstract class TextValidator implements TextWatcher {
+    private static abstract class TextValidator implements TextWatcher {
         // Wrapper for TextWatcher, providing a shorthand method of field specific validations
         private final TextView textView;
 
