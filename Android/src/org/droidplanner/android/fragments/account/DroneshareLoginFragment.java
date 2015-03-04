@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,11 +79,15 @@ public class DroneshareLoginFragment extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String usernameText = username.getText().toString();
-                final String passwordText = password.getText().toString();
-                // Hide the soft keyboard, otherwise can remain after logging in.
-                hideSoftInput();
-                new AsyncConnect(false).execute(usernameText, passwordText);
+                // Validate required fields
+                if (validateField(username) && validateField(password)) {
+                    final String usernameText = username.getText().toString();
+                    final String passwordText = password.getText().toString();
+
+                    // Hide the soft keyboard, otherwise can remain after logging in.
+                    hideSoftInput();
+                    new AsyncConnect(false).execute(usernameText, passwordText);
+                }
             }
         });
 
@@ -100,14 +106,17 @@ public class DroneshareLoginFragment extends Fragment {
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String usernameText = username.getText().toString();
-                final String passwordText = password.getText().toString();
-                final String emailText = email.getText().toString();
+                // If we have all required fields...
+                if (validateField(username) && validateField(password) && validateField(email)) {
+                    final String usernameText = username.getText().toString();
+                    final String passwordText = password.getText().toString();
+                    final String emailText = email.getText().toString();
 
-                // Hide the soft keyboard, otherwise can remain after logging in.
-                hideSoftInput();
+                    // Hide the soft keyboard, otherwise can remain after logging in.
+                    hideSoftInput();
 
-                new AsyncConnect(true).execute(usernameText, passwordText, emailText);
+                    new AsyncConnect(true).execute(usernameText, passwordText, emailText);
+                }
             }
         });
 
@@ -123,6 +132,29 @@ public class DroneshareLoginFragment extends Fragment {
         username.setText(prefs.getDroneshareLogin());
         password.setText(prefs.getDronesharePassword());
         email.setText(prefs.getDroneshareEmail());
+
+        // Field validation - we need to add these after the fields have been set
+        // otherwise validation will fail on empty fields (ugly).
+        username.addTextChangedListener(new TextValidator(username) {
+            @Override public void validate(TextView textView, String text) {
+                // TODO: validate on acceptable characters, etc
+                if(text.length() == 0) textView.setError("Please enter a username");
+            }
+        });
+
+        password.addTextChangedListener(new TextValidator(password) {
+            @Override public void validate(TextView textView, String text) {
+                // TODO: check for valid length, characters
+                if(text.length() == 0) textView.setError("Please enter a password");
+            }
+        });
+
+        email.addTextChangedListener(new TextValidator(email) {
+            @Override public void validate(TextView textView, String text) {
+                // TODO: validate on acceptable characters, etc
+                if(text.length() == 0) textView.setError("Please enter an email");
+            }
+        });
 
         // Save to prefs on save
 //        builder.setView(root)
@@ -168,7 +200,7 @@ public class DroneshareLoginFragment extends Fragment {
 //    }
 
     private void hideSoftInput() {
-        // Get currently focused view and hide soft input.
+        // Hide the soft keyboard and unfocus any active inputs.
         final Activity activity = getActivity();
         View view = activity.getCurrentFocus();
         if (view != null) {
@@ -176,6 +208,39 @@ public class DroneshareLoginFragment extends Fragment {
             if (inputManager != null)
                 inputManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    private Boolean validateField(EditText field) {
+        // Trigger text changed to see if we have any errors:
+        field.setText(field.getText());
+        if (field.getError() != null) {
+            return false; // Invalid, the text field will display an error
+        } else {
+            return true; // Valid
+        }
+    }
+
+    public abstract class TextValidator implements TextWatcher {
+        // Wrapper for TextWatcher, providing a shorthand method of field specific validations
+        private final TextView textView;
+
+        public TextValidator(TextView textView) {
+            this.textView = textView;
+        }
+
+        public abstract void validate(TextView textView, String text);
+
+        @Override
+        final public void afterTextChanged(Editable s) {
+            String text = textView.getText().toString();
+            validate(textView, text);
+        }
+
+        @Override
+        final public void beforeTextChanged(CharSequence s, int start, int count, int after) { /* Don't care */ }
+
+        @Override
+        final public void onTextChanged(CharSequence s, int start, int before, int count) { /* Don't care */ }
     }
 
     private class AsyncConnect extends AsyncTask<String, Void, Pair<Boolean, String>> {
