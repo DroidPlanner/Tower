@@ -38,6 +38,9 @@ public class FlightModePanel extends ApiListenerFragment{
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if(getActivity() == null)
+                return;
+
             onModeUpdate(getDrone());
         }
     };
@@ -142,7 +145,6 @@ public class FlightModePanel extends ApiListenerFragment{
             }
 		}
 
-		getChildFragmentManager().beginTransaction().replace(R.id.modeInfoPanel, infoPanel)
-				.commit();
+		getChildFragmentManager().beginTransaction().replace(R.id.modeInfoPanel, infoPanel).commit();
 	}
 }
