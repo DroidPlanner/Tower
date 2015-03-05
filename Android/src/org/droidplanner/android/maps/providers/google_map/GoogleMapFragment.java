@@ -72,6 +72,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -658,8 +659,21 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
             getMapAsync(new OnMapReadyCallback() {
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
-                    CameraUpdate animation = CameraUpdateFactory.newLatLngBounds(bounds, 100);
-                    googleMap.animateCamera(animation);
+                    final Activity activity = getActivity();
+                    if(activity == null)
+                        return;
+
+                    final View rootView = ((ViewGroup)activity.findViewById(android.R.id.content)).getChildAt(0);
+                    if(rootView == null)
+                        return;
+
+                    final int height = rootView.getHeight();
+                    final int width = rootView.getWidth();
+                    Log.d(TAG, String.format(Locale.US, "Screen W %d, H %d", width, height));
+                    if(height > 0 && width > 0) {
+                        CameraUpdate animation = CameraUpdateFactory.newLatLngBounds(bounds, width, height, 100);
+                        googleMap.animateCamera(animation);
+                    }
                 }
             });
         }
