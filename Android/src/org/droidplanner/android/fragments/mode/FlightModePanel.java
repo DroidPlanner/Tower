@@ -38,6 +38,9 @@ public class FlightModePanel extends ApiListenerFragment{
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if(getActivity() == null)
+                return;
+
             onModeUpdate(getDrone());
         }
     };
@@ -114,6 +117,7 @@ public class FlightModePanel extends ApiListenerFragment{
                     case COPTER_GUIDED:
                     case PLANE_GUIDED:
                     case ROVER_GUIDED:
+                    case ROVER_HOLD:
                         final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
                         if (followState.isEnabled()) {
                             infoPanel = new ModeFollowFragment();
@@ -141,7 +145,6 @@ public class FlightModePanel extends ApiListenerFragment{
             }
 		}
 
-		getChildFragmentManager().beginTransaction().replace(R.id.modeInfoPanel, infoPanel)
-				.commit();
+		getChildFragmentManager().beginTransaction().replace(R.id.modeInfoPanel, infoPanel).commit();
 	}
 }

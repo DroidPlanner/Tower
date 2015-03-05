@@ -79,6 +79,9 @@ public class FlightActionsFragment extends ApiListenerFragment {
 			break;
 
 		case Type.TYPE_ROVER:
+            actionsBarFragment = new RoverFlightActionsFragment();
+            break;
+
 		default:
 			actionsBarFragment = new GenericActionsFragment();
 			break;
