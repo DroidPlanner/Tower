@@ -2,6 +2,7 @@ package org.droidplanner.android.fragments.calibration.rc;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -20,13 +21,14 @@ import android.widget.Toast;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.ControllerEventCaptureView;
 import org.droidplanner.android.activities.interfaces.PhysicalDeviceEvents;
+import org.droidplanner.android.fragments.GlobalMotionEventListener;
 import org.droidplanner.android.utils.rc.RCConstants;
 import org.droidplanner.android.utils.rc.RCControlManager;
-import org.droidplanner.android.utils.rc.input.GenericInputDevice.IRCEvents;
 import org.droidplanner.android.utils.rc.input.GameController.Controller.ButtonRemap;
 import org.droidplanner.android.utils.rc.input.GameController.Controller.DoubleAxisRemap;
 import org.droidplanner.android.utils.rc.input.GameController.Controller.SingleAxisRemap;
 import org.droidplanner.android.utils.rc.input.GameController.GameControllerConfig;
+import org.droidplanner.android.utils.rc.input.GenericInputDevice.IRCEvents;
 import org.droidplanner.android.widgets.rcchannel.GameControllerChannel;
 
 import java.util.ArrayList;
@@ -38,16 +40,17 @@ public class FragmentSetupGC extends Fragment implements OnClickListener, GameCo
     private List<GameControllerChannel> channels = new ArrayList<GameControllerChannel>();
 
     private RCControlManager rcOutput;
-    
-    private ControllerEventCaptureView eventsView;
+
     private WindowManager wm;
     private boolean assignArmButton = false;
+    private ControllerEventCaptureView eventsView;
+    private boolean isCaptureVisible = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ScrollView rootView = (ScrollView) inflater.inflate(R.layout.fragment_setup_gc_main, container, false);
         LinearLayout view = (LinearLayout) rootView.findViewById(R.id.setup_gc_container);
-        
+
         gcConfig = GameControllerConfig.getInstance(getActivity());
         
         for(int channelId : RCConstants.rchannels) { //For each channel
@@ -69,16 +72,6 @@ public class FragmentSetupGC extends Fragment implements OnClickListener, GameCo
         return rootView;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        for (GameControllerChannel current : channels)
-            current.setListener(null);
-        
-        gcConfig.save();
-        removeControllerListener();
-    }
     @Override
     public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -103,6 +96,18 @@ public class FragmentSetupGC extends Fragment implements OnClickListener, GameCo
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+
+        for (GameControllerChannel current : channels)
+            current.setListener(null);
+
+        gcConfig.save();
+
+        removeControllerListener();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         
@@ -110,6 +115,7 @@ public class FragmentSetupGC extends Fragment implements OnClickListener, GameCo
             current.setCheckedWithoutEvent(gcConfig.isReversed((int) current.getTag()));
             current.setListener(this);
         }
+
         createControllerEventListener();
     }
 
@@ -161,12 +167,12 @@ public class FragmentSetupGC extends Fragment implements OnClickListener, GameCo
 
     @Override
     public void physicalKeyUp(int keyCode, KeyEvent event) {
-        if(assignArmButton) {
+        if (assignArmButton) {
             gcConfig.removeButtonRemapAction(1);
             ButtonRemap remap = gcConfig.getButtonRemap(keyCode);
             remap.Action = ButtonRemap.ARM_DISARM;
             assignArmButton = false;
-            Toast.makeText(this.getActivity(), "Assigned " + event.getDisplayLabel() + " To Arm/Disarm", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.getActivity(), "Assigned " + event.getDisplayLabel(), Toast.LENGTH_SHORT).show();
             Vibrator vibrator = (Vibrator) this.getActivity().getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(250);
         }
@@ -182,12 +188,22 @@ public class FragmentSetupGC extends Fragment implements OnClickListener, GameCo
     public void onSearchJoystickAxisFinished() {
         createControllerEventListener();
     }
-    
-    private void removeControllerListener() {
-      if(eventsView != null && wm != null && eventsView.isShown());
-          wm.removeView(eventsView);
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.btnArmAssign:
+                assignArmButton = true;
+                Toast.makeText(this.getActivity(), "Press Button To Assign", Toast.LENGTH_SHORT).show();//Later show dialog like with the joystick
+                break;
+        }
     }
-    
+
+    @Override
+    public void clear(GameControllerChannel channel) {
+        gcConfig.getController().joystickRemap.remove(channel.getTag());
+    }
+
     private void createControllerEventListener() {
         if(eventsView == null)
             eventsView = new ControllerEventCaptureView(this.getActivity());
@@ -198,25 +214,19 @@ public class FragmentSetupGC extends Fragment implements OnClickListener, GameCo
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSPARENT);
         eventsView.registerPhysicalDeviceEventListener(this);
-        
+
         wm = (WindowManager) this.getActivity().getSystemService(Activity.WINDOW_SERVICE);
         wm.addView(eventsView, params);
+        isCaptureVisible = true;
     }
 
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()) {
-            case R.id.btnArmAssign:
-                assignArmButton = true;
-                break;
+    private void removeControllerListener() {
+        if(eventsView != null && wm != null && eventsView.isShown() && isCaptureVisible) {
+            wm.removeView(eventsView);
+            isCaptureVisible = false;
         }
     }
 
-    @Override
-    public void clear(GameControllerChannel channel) {
-        gcConfig.getController().joystickRemap.remove(channel.getTag());
-    }
-    
     /*public void onJoystickViewChanged(View gamecontrollerChannel, BaseCommand command) {
         gcConfig.getController().joystickRemap.put(gameControllerChannel.getTag(), command);
     }

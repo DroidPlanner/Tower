@@ -3,7 +3,6 @@ package org.droidplanner.android.widgets.rcchannel;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
-import android.content.res.TypedArray;
 import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -13,11 +12,11 @@ import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.ControllerAxisKeyPressDialog;
@@ -30,7 +29,7 @@ public class GameControllerChannel extends RelativeLayout implements
     private TextView lblValue;
     private boolean firstMode;
     private float value = 0;
-    
+
     private GameControllerChannelEvents listener = null;
     private CheckBox chkReversed;
     private LinearLayout viewMode1;
@@ -42,22 +41,24 @@ public class GameControllerChannel extends RelativeLayout implements
     public interface GameControllerChannelEvents {
 
         void OnAssignPressed(GameControllerChannel gameControllerChannel, int id, int key);
-        
+
         void OnCheckedReverseChanged(GameControllerChannel v, boolean reversed);
-        
+
         void onSearchJoystickAxisStart();
-        
+
         void onSearchJoystickAxisFinished();
-        
+
         void clear(GameControllerChannel channel);
-    };
+    }
+
+    ;
 
     public GameControllerChannel(Context context) {
         super(context);
 
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.fragment_rc_channel, this);
-        
+
         if (!isInEditMode()) {
             loadViews();
             setValue(value);
@@ -77,10 +78,8 @@ public class GameControllerChannel extends RelativeLayout implements
 
     private void loadViews() {
         lblTitle = (TextView) findViewById(R.id.lblTitle);
-        lblTitle.setOnClickListener(this);
 
         lblValue = (TextView) findViewById(R.id.lblValue);
-        lblValue.setOnClickListener(this);
 
         btnAssignKey = (Button) findViewById(R.id.btnAssignKey);
         btnAssignKey.setOnClickListener(this);
@@ -93,12 +92,14 @@ public class GameControllerChannel extends RelativeLayout implements
         btnDecrementKey = (Button) findViewById(R.id.btnDecrementKey);
         btnDecrementKey.setOnClickListener(this);
         btnDecrementKey.setOnLongClickListener(this);
-        
+
         chkReversed = (CheckBox) findViewById(R.id.chkReversed);
         chkReversed.setOnCheckedChangeListener(this);
 
         viewMode1 = (LinearLayout) findViewById(R.id.viewMode1);
         viewMode2 = (LinearLayout) findViewById(R.id.viewMode2);
+
+        findViewById(R.id.textholder).setOnClickListener(this);
 
         setFirstMode(firstMode = true);
     }
@@ -115,6 +116,7 @@ public class GameControllerChannel extends RelativeLayout implements
         this.value = value;
         lblValue.setText(Math.round(value) + "");
     }
+
     public float getValue() {
         return value;
     }
@@ -141,13 +143,9 @@ public class GameControllerChannel extends RelativeLayout implements
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.lblTitle:
-            case R.id.lblValue:
-                setFirstMode(!firstMode);
-                if(firstMode)
-                    setCheckedWithoutEvent(false);
+            case R.id.textholder:
+                changeMode();
                 break;
-
             case R.id.btnAssignKey:
                 showDialog(RCConstants.MODE_SINGLEKEY);
                 break;
@@ -161,9 +159,15 @@ public class GameControllerChannel extends RelativeLayout implements
                 break;
         }
     }
-    
+
+    private void changeMode() {
+        setFirstMode(!firstMode);
+        if (firstMode)
+            setCheckedWithoutEvent(false);
+    }
+
     private void showDialog(int id) {
-        if(listener != null)
+        if (listener != null)
             listener.onSearchJoystickAxisStart();
 
         ControllerAxisKeyPressDialog dialog = new ControllerAxisKeyPressDialog(this.getContext());
@@ -171,10 +175,10 @@ public class GameControllerChannel extends RelativeLayout implements
 
             @Override
             public void onDismiss(DialogInterface dialog) {
-                if(listener != null)
+                if (listener != null)
                     listener.onSearchJoystickAxisFinished();
             }
-            
+
         });
         dialog.registerListener(this);
         dialog.ID = id;
@@ -195,12 +199,11 @@ public class GameControllerChannel extends RelativeLayout implements
 
     @Override
     public void onControllerPress(ControllerAxisKeyPressDialog dialog, int key, boolean fromJoystick) {
-        if(listener != null) {
-            if(fromJoystick) {
+        if (listener != null) {
+            if (fromJoystick) {
                 listener.OnAssignPressed(this, dialog.ID, key);
                 dialog.dismiss();
-            }
-            else if (dialog.ID == RCConstants.MODE_SINGLEKEY) {
+            } else if (dialog.ID == RCConstants.MODE_SINGLEKEY) {
                 listener.OnAssignPressed(this, RCConstants.MODE_JOYSTICK_BUTTON, key);
                 dialog.dismiss();
             }
@@ -212,9 +215,9 @@ public class GameControllerChannel extends RelativeLayout implements
         Toast.makeText(this.getContext(), "Cleared", Toast.LENGTH_SHORT).show();
         Vibrator vibrator = (Vibrator) this.getContext().getSystemService(Context.VIBRATOR_SERVICE);
         vibrator.vibrate(250);
-        if(listener != null)
+        if (listener != null)
             listener.clear(this);
-            return false;
+        return false;
     }
 
 }

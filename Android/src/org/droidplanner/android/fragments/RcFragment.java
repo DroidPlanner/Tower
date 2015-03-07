@@ -1,8 +1,14 @@
 package org.droidplanner.android.fragments;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -30,51 +36,19 @@ public class RcFragment extends Fragment implements IRCEvents, PhysicalDeviceEve
     private RCControlManager rcManager;
     private RcOutput rcOutput;
     private Drone drone;
-    
-    private ControllerEventCaptureView eventsView;
-    private WindowManager wm;
+
     private TelemetryFragment telemetryFragment;
-    
+    public static final String SAVED_RC_VALUES = "saved_rc_values";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-    }
-    
-    private void createControllerEventListener() {
-        if(eventsView == null)
-            eventsView = new ControllerEventCaptureView(this.getActivity());
-        
-        if(eventsView.isShown())
-            return;
-        
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                5,
-                5,
-                WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-                PixelFormat.TRANSPARENT);
-        eventsView.registerPhysicalDeviceEventListener(this);
-        
-        wm = (WindowManager) this.getActivity().getSystemService(Activity.WINDOW_SERVICE);
-        wm.addView(eventsView, params);
+        setRetainInstance(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rc, container, false);
-
-        /*textViewThrottle = (TextView) view.findViewById(R.id.textViewRCThrottle);
-        textViewThrottle.setText("Move");
-
-        textViewRudder = (TextView) view.findViewById(R.id.textViewRCRudder);
-        textViewRudder.setText("Controller");
-
-        textViewElevator = (TextView) view.findViewById(R.id.textViewRCElevator);
-        textViewElevator.setText("To");
-
-        textViewAileron = (TextView) view.findViewById(R.id.textViewRCAileron);
-        textViewAileron.setText("Initialize");*/
 
         drone = ((DroidPlannerApp) this.getActivity().getApplication()).getDrone();
         rcOutput = new RcOutput(drone, this.getActivity());
@@ -83,9 +57,48 @@ public class RcFragment extends Fragment implements IRCEvents, PhysicalDeviceEve
         rcOutput.enableRcOverride();
         
         telemetryFragment = ((FlightActivity) this.getActivity()).telemetryFragment; //TODO make listener in telemetry fragment instead of updating it like this
+
+        Intent intent = new Intent(this.getActivity(), GlobalMotionEventListener.class);
+        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+
         return view;
     }
-    
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if(savedInstanceState != null) {
+            rcManager.mDevice.setRCChannels(savedInstanceState.getFloatArray(SAVED_RC_VALUES));
+            rcManager.mDevice.notifyChannelsChanged();
+        }
+    }
+
+    private GlobalMotionEventListener mService;
+    public boolean mBound = false;
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            GlobalMotionEventListener.LocalBinder binder = (GlobalMotionEventListener.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+            registerListener();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
+
+    public void registerListener() {
+        mService.getMotionView().registerPhysicalDeviceEventListener(this);
+    }
+
     @Override
     public void onStop() {
         super.onDestroyView();
@@ -96,37 +109,27 @@ public class RcFragment extends Fragment implements IRCEvents, PhysicalDeviceEve
         super.onDestroy();
         rcManager.registerListener(null);
         rcOutput.disableRcOverride();
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        removeControllerEventListener();
-    }
-
-    private void removeControllerEventListener() {
-        if(wm != null)
-            wm.removeView(eventsView);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        createControllerEventListener();
+        if (mBound) {
+            mService.stopSelf();
+            getActivity().unbindService(mConnection);
+            mBound = false;
+        }
     }
 
     @Override
     public void onChannelsChanged(float[] channels) {
         telemetryFragment.updateControllerStatus(channels);
-        /*
-        textViewThrottle.setText("Thrt: \n" + Math.round(channels[RCConstants.THROTTLE]) + "");
-        textViewRudder.setText("Rudd: \n" + Math.round(channels[RCConstants.RUDDER]) + "");
-        textViewElevator.setText("Elev: \n" + Math.round(channels[RCConstants.ELEVATOR]) + "");
-        textViewAileron.setText("Ail: \n" + Math.round(channels[RCConstants.AILERON]) + "");
-         */
+
         for(int x = 0; x < RCConstants.rchannels.length; x++) {
             rcOutput.setRcChannel(RCConstants.rchannels[x], channels[RCConstants.rchannels[x]]);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putFloatArray(SAVED_RC_VALUES, rcManager.mDevice.getRCChannels());
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,6 +118,7 @@ public class TelemetryFragment extends ApiListenerFragment {
     private TextView lblController;
     private RelativeLayout rcLayout;
     private TextView lblControllerRight;
+    private boolean setControllerVisibleOnViewCreated = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -131,10 +133,6 @@ public class TelemetryFragment extends ApiListenerFragment {
         airSpeed = (TextView) view.findViewById(R.id.airSpeedValue);
         climbRate = (TextView) view.findViewById(R.id.climbRateValue);
         altitude = (TextView) view.findViewById(R.id.altitudeValue);
-		
-		rcLayout = (RelativeLayout) view.findViewById(R.id.rc_layout);
-		lblController = (TextView) view.findViewById(R.id.lblRCValue);
-		lblControllerRight = (TextView) view.findViewById(R.id.lblRCValueRight);
 
         flightTimer = (TextView) view.findViewById(R.id.flight_timer);
 
@@ -169,6 +167,20 @@ public class TelemetryFragment extends ApiListenerFragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        rcLayout = (RelativeLayout) view.findViewById(R.id.rc_layout);
+        lblController = (TextView) view.findViewById(R.id.lblRCValue);
+        lblControllerRight = (TextView) view.findViewById(R.id.lblRCValueRight);
+
+        if(setControllerVisibleOnViewCreated) {
+            setControllerStatusVisible(true);
+            setControllerVisibleOnViewCreated = false;
+        }
     }
 
     @Override
@@ -239,21 +251,24 @@ public class TelemetryFragment extends ApiListenerFragment {
         }
     }
     public void setControllerStatusVisible(boolean visible) {
-        if(rcLayout == null)
+        if(rcLayout == null) {
+            setControllerVisibleOnViewCreated = true;
             return;
+        }
         
         if (visible) {
             if(lblController.getText().length() < 5) //Set default text
             {
                 float[] channels = new float[8];
-                channels[RCConstants.THROTTLE] = 0;
-                channels[RCConstants.AILERON] = 0;
-                channels[RCConstants.ELEVATOR] = 0;
-                channels[RCConstants.RUDDER] = 0;
-                channels[RCConstants.RC5] = 0;
-                channels[RCConstants.RC6] = 0;
-                channels[RCConstants.RC7] = 0;
-                channels[RCConstants.RC8] = 0;
+                channels[RCConstants.AILERON] = 1500;
+                channels[RCConstants.ELEVATOR] = 1500;
+                channels[RCConstants.THROTTLE] = 1500;
+                channels[RCConstants.RUDDER] = 1500;
+
+                channels[RCConstants.RC5] = 1000;
+                channels[RCConstants.RC6] = 1000;
+                channels[RCConstants.RC7] = 1000;
+                channels[RCConstants.RC8] = 1000;
                 updateControllerStatus(channels);
             }
             rcLayout.setVisibility(View.VISIBLE);

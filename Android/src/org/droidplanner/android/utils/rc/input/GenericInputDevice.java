@@ -28,7 +28,7 @@ public abstract class GenericInputDevice {
 
         rc_channels[AILERON] = 0.0f;
         rc_channels[ELEVATOR] = 0.0f;
-        rc_channels[THROTTLE] = -1.0f;
+        rc_channels[THROTTLE] = 0.0f;
         rc_channels[RUDDER] = 0.0f;
 
         rc_channels[RC5] = -1.0f;
@@ -64,7 +64,7 @@ public abstract class GenericInputDevice {
     protected boolean isListenerBound() {
         return listener != null;
     }
-    protected void notifyChannelsChanged() {
+    public void notifyChannelsChanged() {
         if (isListenerBound()) {
             listener.onChannelsChanged(rc_channels);
         }
@@ -72,5 +72,13 @@ public abstract class GenericInputDevice {
 
     public void onKeyUp(int keyCode, KeyEvent event) {
       // Do nothing, let subclass implement if necessary
+    }
+
+    public float[] getRCChannels() {
+        return rc_channels;
+    }
+
+    public void setRCChannels(float[] rc_channels) {
+        this.rc_channels = rc_channels;
     }
 }

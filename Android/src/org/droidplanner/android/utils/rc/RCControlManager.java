@@ -14,13 +14,13 @@ import org.droidplanner.android.utils.rc.input.GenericInputDevice.IRCEvents;
 
 public class RCControlManager implements IRCEvents {
     GenericInput input = GenericInput.CONTROLLER;
-    GenericInputDevice mDevice;
-    Context context;
+    public GenericInputDevice mDevice;
+    private Context context;
     private IRCEvents listener;
 
-    private int rc_med = 1500;
-    private int rc_range = 300;
-    private int rc_max_throttle = 1800;
+    private final int rc_med = 1500;
+    private int rc_range = 500;
+    private int rc_max_throttle = 2000;
     private final SharedPreferences prefs;
     OnSharedPreferenceChangeListener prefChangeListener;
 

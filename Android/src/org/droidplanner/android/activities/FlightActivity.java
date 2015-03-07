@@ -11,6 +11,8 @@ import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -34,6 +36,7 @@ import org.droidplanner.android.fragments.RcFragment;
 import org.droidplanner.android.fragments.TelemetryFragment;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.android.utils.rc.RCConstants;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -43,6 +46,7 @@ public class FlightActivity extends DrawerNavigationUI {
     private static final int GOOGLE_PLAY_SERVICES_REQUEST_CODE = 101;
 
     private static final String EXTRA_IS_ACTION_DRAWER_OPENED = "extra_is_action_drawer_opened";
+    private static final String EXTRA_IS_CONTROLLER_ACTIVATED = "extra_is_controller_activated";
     private static final boolean DEFAULT_IS_ACTION_DRAWER_OPENED = true;
 
     /**
@@ -304,18 +308,25 @@ public class FlightActivity extends DrawerNavigationUI {
         }
 
         boolean isActionDrawerOpened = DEFAULT_IS_ACTION_DRAWER_OPENED;
+        boolean isControllerActivated = false;
         if (savedInstanceState != null) {
             isActionDrawerOpened = savedInstanceState.getBoolean(EXTRA_IS_ACTION_DRAWER_OPENED, isActionDrawerOpened);
+            isControllerActivated = savedInstanceState.getBoolean(EXTRA_IS_CONTROLLER_ACTIVATED, isControllerActivated);
         }
 
         if (isActionDrawerOpened)
             openActionDrawer();
+
+        if(isControllerActivated)
+            toggleRcControls();
+
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(EXTRA_IS_ACTION_DRAWER_OPENED, isActionDrawerOpened());
+        outState.putBoolean(EXTRA_IS_CONTROLLER_ACTIVATED, rcFragment != null);
     }
 
     @Override
@@ -500,10 +511,12 @@ public class FlightActivity extends DrawerNavigationUI {
 
     public void toggleRcControls() {
         if (rcFragment == null) {
-            rcFragment = new RcFragment();
-            fragmentManager.beginTransaction().add(R.id.containerRc, rcFragment).commit();
-            if(telemetryFragment != null)
-                telemetryFragment.setControllerStatusVisible(true);
+            rcFragment = (RcFragment) fragmentManager.findFragmentById(R.id.containerRc); //Get Fragment if screen rotated
+            if(rcFragment == null) {
+                rcFragment = new RcFragment();
+                fragmentManager.beginTransaction().add(R.id.containerRc, rcFragment).commit();
+            }
+            telemetryFragment.setControllerStatusVisible(true);
         } else {
             fragmentManager.beginTransaction().remove(rcFragment).commit();
             rcFragment = null;

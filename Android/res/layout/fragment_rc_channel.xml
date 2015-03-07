@@ -3,21 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:baselineAligned="false"
-    style="@style/configLayout" >
+    android:orientation="horizontal"
+    android:padding="5dp"
+    style="@style/configLayout">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/textholder"
-        android:layout_width="80dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:layout_marginRight="20dp" >
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/lblTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceMedium"
             style="@style/configLayoutComplementaryColor"
             android:text="@string/stub" />
@@ -26,72 +28,83 @@
             android:id="@+id/lblValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/lblTitle"
-            android:layout_alignLeft="@+id/lblTitle"
-            android:layout_alignRight="@+id/lblTitle"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:paddingTop="2dp"
+            android:layout_marginLeft="8dp"
             android:textColor="#F00"
-            android:text="@string/stub"/>
+            android:text="@string/stub" />
+
+    </LinearLayout>
+    <View
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:background="@color/ground_speed_label"
+        />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3">
+
+        <LinearLayout
+            android:id="@+id/viewMode1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnAssignKey"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:text="@string/rc_channel_singleaxis_lbl"
+                android:background="?android:attr/selectableItemBackground"
+                style="@style/configLayoutComplementaryColor" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <CheckBox
+                    android:id="@+id/chkReversed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/rc_channel_singleaxis_reverse"
+                    android:button="@drawable/btn_check_holo_dark"
+                    android:textColor="#FFF"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/viewMode2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/btnDecrementKey"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?android:attr/selectableItemBackground"
+                android:text="@string/fragment_rc_doubleaxis_decrement"
+                style="@style/configLayoutComplementaryColor" />
+
+            <Button
+                android:id="@+id/btnIncrementKey"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?android:attr/selectableItemBackground"
+                android:text="@string/fragment_rc_doubleaxis_increment"
+                style="@style/configLayoutComplementaryColor" />
+        </LinearLayout>
+
+
     </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/viewMode1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical" >
-
-        <Button
-            android:id="@+id/btnAssignKey"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/rc_channel_singleaxis_lbl"
-            android:background="?android:attr/selectableItemBackground"
-            style="@style/configLayoutComplementaryColor"  />
-
-        <CheckBox
-            android:id="@+id/chkReversed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/rc_channel_singleaxis_reverse" 
-            style="@style/configLayoutComplementaryColor"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/viewMode2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:visibility="gone" >
-
-        <Button
-            android:id="@+id/btnDecrementKey"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="@string/fragment_rc_doubleaxis_decrement"
-            android:textColor="#FFF" />
-        <Space 
-            android:layout_width="15dp"
-            android:layout_height="10dp"/>
-        <Button
-            android:id="@+id/btnIncrementKey"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="@string/fragment_rc_doubleaxis_increment"
-            android:textColor="#FFF" />
-    </LinearLayout>
 
 </LinearLayout>

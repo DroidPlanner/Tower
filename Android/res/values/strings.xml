@@ -517,8 +517,8 @@
     <string name="export_to_device">Export to file</string>
     <string name="rc_channel_singleaxis_reverse">Reverse</string>
     <string name="rc_channel_singleaxis_lbl">Assign</string>
-    <string name="fragment_rc_doubleaxis_decrement">Decrement\nJoyStick</string>
-    <string name="fragment_rc_doubleaxis_increment">Increment\nJoyStick</string>
+    <string name="fragment_rc_doubleaxis_decrement">Decrement\nAxis</string>
+    <string name="fragment_rc_doubleaxis_increment">Increment\nAxis</string>
     <string name="stub">Test</string>
     <string name="fragment_setup_gc_armbuttonassign">Assign Arm Button</string>
     <string name="fragment_setup_rc_limit_throttle">Limit Throttle</string>
@@ -545,5 +545,8 @@
     <string name="description_mission_item_type_selection">Click on the spinner to select a type for the selected waypoints.</string>
     <string name="description_mission_item_type_no_selection">No type option is available for the selected items.</string>
     <string name="label_vehicle_details">Vehicle details</string>
+    <string name="setup_gc_title">Configure controller</string>
+    <string name="setup_rc_title">Limit the min/max of each channel</string>
+    <string name="setup_gc_title_channels">Channels</string>
 
 </resources>
