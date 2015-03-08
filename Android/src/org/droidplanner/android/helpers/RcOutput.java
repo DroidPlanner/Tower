@@ -25,7 +25,7 @@ public class RcOutput {
 
 	public RcOutput(Drone drone, Context context) {
 		this.drone = drone;
-		parrentContext = context;
+		parrentContext = context.getApplicationContext();
 	}
 
 	public void disableRcOverride() {

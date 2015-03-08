@@ -44,21 +44,21 @@ public class RcFragment extends Fragment implements IRCEvents, PhysicalDeviceEve
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
+        drone = ((DroidPlannerApp) this.getActivity().getApplicationContext()).getDrone();
+        rcOutput = new RcOutput(drone, this.getActivity());
+        rcOutput.enableRcOverride();
+        rcManager = new RCControlManager(this.getActivity());
+        rcManager.registerListener(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rc, container, false);
 
-        drone = ((DroidPlannerApp) this.getActivity().getApplication()).getDrone();
-        rcOutput = new RcOutput(drone, this.getActivity());
-        rcManager = new RCControlManager(this.getActivity());
-        rcManager.registerListener(this);
-        rcOutput.enableRcOverride();
-        
         telemetryFragment = ((FlightActivity) this.getActivity()).telemetryFragment; //TODO make listener in telemetry fragment instead of updating it like this
 
-        Intent intent = new Intent(this.getActivity(), GlobalMotionEventListener.class);
+        Intent intent = new Intent(this.getActivity().getApplicationContext(), GlobalMotionEventListener.class);
         getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 
         return view;
@@ -97,11 +97,6 @@ public class RcFragment extends Fragment implements IRCEvents, PhysicalDeviceEve
 
     public void registerListener() {
         mService.getMotionView().registerPhysicalDeviceEventListener(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onDestroyView();
     }
 
     @Override

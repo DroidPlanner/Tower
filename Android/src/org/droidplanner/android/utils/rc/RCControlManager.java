@@ -25,11 +25,11 @@ public class RCControlManager implements IRCEvents {
     OnSharedPreferenceChangeListener prefChangeListener;
 
     public RCControlManager(Context context) {
-        this.context = context;
-        mDevice = input.getInstance(context);
+        this.context = context.getApplicationContext();
+        mDevice = input.getInstance(this.context);
         mDevice.registerListener(this);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this.context);
         prefChangeListener = new OnSharedPreferenceChangeListener() {
 
             @Override
