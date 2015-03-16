@@ -622,16 +622,21 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
     @Override
     public void loadCameraPosition() {
-        final SharedPreferences settings = mAppPrefs.prefs;
+        getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                final SharedPreferences settings = mAppPrefs.prefs;
 
-        CameraPosition.Builder camera = new CameraPosition.Builder();
-        camera.bearing(settings.getFloat(PREF_BEA, DEFAULT_BEARING));
-        camera.tilt(settings.getFloat(PREF_TILT, DEFAULT_TILT));
-        camera.zoom(settings.getFloat(PREF_ZOOM, DEFAULT_ZOOM_LEVEL));
-        camera.target(new LatLng(settings.getFloat(PREF_LAT, DEFAULT_LATITUDE),
-                settings.getFloat(PREF_LNG, DEFAULT_LONGITUDE)));
+                final CameraPosition.Builder camera = new CameraPosition.Builder();
+                camera.bearing(settings.getFloat(PREF_BEA, DEFAULT_BEARING));
+                camera.tilt(settings.getFloat(PREF_TILT, DEFAULT_TILT));
+                camera.zoom(settings.getFloat(PREF_ZOOM, DEFAULT_ZOOM_LEVEL));
+                camera.target(new LatLng(settings.getFloat(PREF_LAT, DEFAULT_LATITUDE),
+                        settings.getFloat(PREF_LNG, DEFAULT_LONGITUDE)));
 
-        getMap().moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));
+                googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));
+            }
+        });
     }
 
     private void setupMap() {
