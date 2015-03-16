@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.util.CircularArray;
 import android.util.Pair;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -89,7 +90,7 @@ public class MissionProxy implements DPMap.PathSource {
     private final LocalBroadcastManager lbm;
     private Drone drone;
 
-    private final CircularQueue<Mission> undoBuffer = new CircularQueue<>(UNDO_BUFFER_SIZE);
+    private final CircularArray<Mission> undoBuffer = new CircularArray<>(UNDO_BUFFER_SIZE);
 
     private Mission currentMission;
     public MissionSelection selection = new MissionSelection();
@@ -117,14 +118,14 @@ public class MissionProxy implements DPMap.PathSource {
         if (!canUndoMission())
             throw new IllegalStateException("Invalid state for mission undoing.");
 
-        Mission previousMission = undoBuffer.poll();
+        Mission previousMission = undoBuffer.popLast();
         load(previousMission, false);
     }
 
     public void notifyMissionUpdate(boolean saveMission) {
         if (saveMission && currentMission != null) {
             //Store the current state of the mission.
-            undoBuffer.add(currentMission);
+            undoBuffer.addLast(currentMission);
         }
 
         currentMission = generateMission(true);
@@ -176,7 +177,7 @@ public class MissionProxy implements DPMap.PathSource {
 
         if (isNew) {
             currentMission = null;
-            undoBuffer.clear();
+            clearUndoBuffer();
         }
 
         selection.mSelectedItems.clear();
@@ -189,6 +190,11 @@ public class MissionProxy implements DPMap.PathSource {
         selection.notifySelectionUpdate();
 
         notifyMissionUpdate(isNew);
+    }
+
+    private void clearUndoBuffer(){
+        while(!undoBuffer.isEmpty())
+            undoBuffer.popLast();
     }
 
     /**

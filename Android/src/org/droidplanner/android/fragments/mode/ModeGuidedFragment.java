@@ -11,6 +11,8 @@ import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.GuidedState;
+import com.o3dr.services.android.lib.drone.property.State;
+import com.o3dr.services.android.lib.drone.property.Type;
 
 import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
@@ -93,8 +95,10 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
 
     @Override
     public void onApiConnected() {
+        final Drone drone = getDrone();
+
         if (mAltitudeWheel != null) {
-            GuidedState guidedState = getDrone().getAttribute(AttributeType.GUIDED_STATE);
+            GuidedState guidedState = drone.getAttribute(AttributeType.GUIDED_STATE);
             LatLongAlt coordinate = guidedState == null ? null : guidedState.getCoordinate();
 
             final LengthUnit initialValue = getLengthUnitProvider().boxBaseValueToTarget(
@@ -106,6 +110,13 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
         }
 
         parentActivity.setGuidedClickListener(this);
+        Type droneType = drone.getAttribute(AttributeType.TYPE);
+        if(droneType.getDroneType() == Type.TYPE_ROVER){
+            mAltitudeWheel.setVisibility(View.GONE);
+        }
+        else{
+            mAltitudeWheel.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
