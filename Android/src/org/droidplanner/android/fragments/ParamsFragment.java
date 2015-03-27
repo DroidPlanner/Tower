@@ -64,6 +64,8 @@ public class ParamsFragment extends ApiListenerListFragment {
         intentFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_STARTED);
         intentFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_ENDED);
         intentFilter.addAction(AttributeEvent.PARAMETERS_RECEIVED);
+        intentFilter.addAction(AttributeEvent.STATE_CONNECTED);
+        intentFilter.addAction(AttributeEvent.TYPE_UPDATED);
     }
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -78,6 +80,7 @@ public class ParamsFragment extends ApiListenerListFragment {
                 case AttributeEvent.PARAMETERS_REFRESH_ENDED:
                     stopProgress();
                     /*** FALL - THROUGH ***/
+                case AttributeEvent.STATE_CONNECTED:
                 case AttributeEvent.TYPE_UPDATED:
                     final Drone drone = getDrone();
                     if (drone != null && drone.isConnected()) {
