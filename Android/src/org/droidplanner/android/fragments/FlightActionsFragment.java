@@ -25,16 +25,23 @@ public class FlightActionsFragment extends ApiListenerFragment {
 		boolean isSlidingUpPanelEnabled(Drone drone);
 	}
 
-	private static final IntentFilter eventFilter = new IntentFilter(AttributeEvent.TYPE_UPDATED);
+	private static final IntentFilter eventFilter = new IntentFilter();
+    static {
+        eventFilter.addAction(AttributeEvent.TYPE_UPDATED);
+        eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
+    }
 
 	private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
-			if (AttributeEvent.TYPE_UPDATED.equals(action)) {
-                Type type = getDrone().getAttribute(AttributeType.TYPE);
-				selectActionsBar(type == null ? -1 : type.getDroneType());
-			}
+            switch (action) {
+                case AttributeEvent.STATE_CONNECTED:
+                case AttributeEvent.TYPE_UPDATED:
+                    Type type = getDrone().getAttribute(AttributeType.TYPE);
+                    selectActionsBar(type == null ? -1 : type.getDroneType());
+                    break;
+            }
 		}
 	};
 

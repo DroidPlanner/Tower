@@ -70,6 +70,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
     static {
         intentFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+        intentFilter.addAction(AttributeEvent.STATE_CONNECTED);
         intentFilter.addAction(AttributeEvent.STATE_UPDATED);
         intentFilter.addAction(AttributeEvent.HEARTBEAT_FIRST);
         intentFilter.addAction(AttributeEvent.HEARTBEAT_RESTORED);
@@ -99,6 +100,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                         updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
                     break;
 
+                case AttributeEvent.STATE_CONNECTED:
                 case AttributeEvent.TYPE_UPDATED:
                     Drone drone = dpApp.getDrone();
                     if (drone.isConnected()) {
