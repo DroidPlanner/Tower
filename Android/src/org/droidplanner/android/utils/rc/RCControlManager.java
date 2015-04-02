@@ -72,9 +72,8 @@ public class RCControlManager implements IRCEvents {
     }
 
     private float smooth(float f) {
-        double newValue = Math.pow(f, 2);
-        if (f < 0)
-            newValue = -newValue;
+        float factor = 0.40f;
+        double newValue = (1 - factor) * Math.pow(f, 3) + factor * f;
         return (float) newValue;
     }
 
