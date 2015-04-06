@@ -3,17 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    android:padding="10dp">
 
     <org.droidplanner.android.widgets.SlideButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="48dp"
         android:clickable="false"
         android:max="100"
         android:progressDrawable="@android:color/transparent"
-        android:thumb="@drawable/slider_icon"
+        android:thumb="@drawable/ic_panorama_fisheye_white_48dp"
         android:id="@+id/unlock_slider"
-        android:background="@android:color/holo_green_light"
+        android:background="@color/transparent_dark"
         />
 
     <com.facebook.shimmer.ShimmerFrameLayout
@@ -28,8 +30,15 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Slide to unlock"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:textSize="22sp"/>
     </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <ImageView
+        android:layout_gravity="end|center_vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_lock_open_white_36dp"
+        android:scaleType="center"/>
 
 </FrameLayout>
