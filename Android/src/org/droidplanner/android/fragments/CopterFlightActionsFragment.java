@@ -26,16 +26,19 @@ import com.o3dr.services.android.lib.gcs.follow.FollowType;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.dialogs.SlideToUnlockDialog;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.analytics.GAUtils;
+import org.droidplanner.android.widgets.SlideButtonListener;
 
 /**
  * Provide functionality for flight action button specific to copters.
  */
-public class CopterFlightActionsFragment extends ApiListenerFragment implements View.OnClickListener, FlightActionsFragment.SlidingUpHeader {
+public class CopterFlightActionsFragment extends ApiListenerFragment implements View.OnClickListener,
+        FlightActionsFragment.SlidingUpHeader, SlideButtonListener {
 
     private static final String TAG = CopterFlightActionsFragment.class.getSimpleName();
 
@@ -339,22 +342,25 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     }
 
     private void getArmingConfirmation() {
-        YesNoWithPrefsDialog ynd = YesNoWithPrefsDialog.newInstance(getActivity().getApplicationContext(),
-                getString(R.string.dialog_confirm_arming_title),
-                getString(R.string.dialog_confirm_arming_msg), new YesNoDialog.Listener() {
-                    @Override
-                    public void onYes() {
-                        getDrone().arm(true);
-                    }
+//        YesNoWithPrefsDialog ynd = YesNoWithPrefsDialog.newInstance(getActivity().getApplicationContext(),
+//                getString(R.string.dialog_confirm_arming_title),
+//                getString(R.string.dialog_confirm_arming_msg), new YesNoDialog.Listener() {
+//                    @Override
+//                    public void onYes() {
+//                        getDrone().arm(true);
+//                    }
+//
+//                    @Override
+//                    public void onNo() {
+//                    }
+//                }, getString(R.string.pref_warn_on_arm_key));
+//
+//        if (ynd != null) {
+//            ynd.show(getChildFragmentManager(), "Confirm arming");
+//        }
 
-                    @Override
-                    public void onNo() {
-                    }
-                }, getString(R.string.pref_warn_on_arm_key));
-
-        if (ynd != null) {
-            ynd.show(getChildFragmentManager(), "Confirm arming");
-        }
+        SlideToUnlockDialog unlockDialog = new SlideToUnlockDialog();
+        unlockDialog.show(getChildFragmentManager(), "Slide To Unlock");
     }
 
 
@@ -475,5 +481,10 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
         final State droneState = drone.getAttribute(AttributeType.STATE);
         return droneState.isArmed() && droneState.isFlying();
+    }
+
+    @Override
+    public void handleSlide() {
+
     }
 }

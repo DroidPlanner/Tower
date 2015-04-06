@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+    <org.droidplanner.android.widgets.SlideButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:max="100"
+        android:progressDrawable="@android:color/transparent"
+        android:thumb="@drawable/slider_icon"
+        android:id="@+id/unlock_slider"
+        android:background="@android:color/holo_green_light"
+        />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/shimmer_view_container"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/slider_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Slide to unlock"
+            android:textColor="@android:color/black"
+            android:textSize="22sp"/>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+</FrameLayout>
