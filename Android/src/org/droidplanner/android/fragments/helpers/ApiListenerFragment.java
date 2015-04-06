@@ -23,9 +23,6 @@ public abstract class ApiListenerFragment extends Fragment implements DroidPlann
 	private DroidPlannerApp dpApp;
 	private LocalBroadcastManager broadcastManager;
 
-    private LengthUnitProvider lengthUnitProvider;
-    private SpeedUnitProvider speedUnitProvider;
-
     protected MissionProxy getMissionProxy() { return dpApp.getMissionProxy(); }
 
     protected DroidPlannerPrefs getAppPrefs(){
@@ -41,11 +38,21 @@ public abstract class ApiListenerFragment extends Fragment implements DroidPlann
 	}
 
     protected LengthUnitProvider getLengthUnitProvider(){
-        return lengthUnitProvider;
+        final Context context = getContext();
+        if(context == null)
+            return null;
+
+        final UnitSystem unitSystem = UnitManager.getUnitSystem(context);
+        return unitSystem.getLengthUnitProvider();
     }
 
-    protected SpeedUnitProvider getSpeedUnitProvider(){
-        return speedUnitProvider;
+    protected SpeedUnitProvider getSpeedUnitProvider() {
+        final Context context = getContext();
+        if(context == null)
+            return null;
+
+        final UnitSystem unitSystem = UnitManager.getUnitSystem(context);
+        return unitSystem.getSpeedUnitProvider();
     }
 
     protected Context getContext(){
@@ -59,19 +66,11 @@ public abstract class ApiListenerFragment extends Fragment implements DroidPlann
 
         final Context context = activity.getApplicationContext();
 		broadcastManager = LocalBroadcastManager.getInstance(context);
-        final UnitSystem unitSystem = UnitManager.getUnitSystem(context);
-        lengthUnitProvider = unitSystem.getLengthUnitProvider();
-        speedUnitProvider = unitSystem.getSpeedUnitProvider();
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
-
-        final UnitSystem unitSystem = UnitManager.getUnitSystem(getContext());
-        lengthUnitProvider = unitSystem.getLengthUnitProvider();
-        speedUnitProvider = unitSystem.getSpeedUnitProvider();
-
 		dpApp.addApiListener(this);
 	}
 
