@@ -24,6 +24,7 @@ public class SlideToUnlockDialog extends DialogFragment implements SeekBar.OnSee
 
     private SlideButtonListener slideListener;
 
+    private TextView sliderText;
     private ShimmerFrameLayout shimmerContainer;
     private SlideButton slideButton;
 
@@ -64,6 +65,8 @@ public class SlideToUnlockDialog extends DialogFragment implements SeekBar.OnSee
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
+        sliderText = (TextView) view.findViewById(R.id.slider_text);
+
         slideButton = (SlideButton) view.findViewById(R.id.unlock_slider);
         slideButton.setSlideButtonListener(slideListener);
         slideButton.setOnSeekBarChangeListener(this);
@@ -80,15 +83,14 @@ public class SlideToUnlockDialog extends DialogFragment implements SeekBar.OnSee
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
         shimmerContainer.stopShimmerAnimation();
-        shimmerContainer.setVisibility(View.INVISIBLE);
+        sliderText.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         if (seekBar.getProgress() < 70) {
             seekBar.setProgress(0);
-
-            shimmerContainer.setVisibility(View.VISIBLE);
+            sliderText.setVisibility(View.VISIBLE);
             shimmerContainer.startShimmerAnimation();
         } else {
             seekBar.setProgress(100);

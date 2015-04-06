@@ -1,44 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:padding="10dp">
-
-    <org.droidplanner.android.widgets.SlideButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:clickable="false"
-        android:max="100"
-        android:progressDrawable="@android:color/transparent"
-        android:thumb="@drawable/ic_panorama_fisheye_white_48dp"
-        android:id="@+id/unlock_slider"
-        android:background="@color/transparent_dark"
-        />
+    >
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/shimmer_view_container"
-        android:layout_gravity="center">
+        android:minHeight="56dp"
+        android:layout_gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:id="@+id/shimmer_view_container">
+
+        <ImageView
+            android:layout_gravity="end|center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src="@drawable/ic_lock_open_black_24dp"
+            android:layout_marginRight="10dp"
+            android:scaleType="center"/>
+
+        <org.droidplanner.android.widgets.SlideButton
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:clickable="false"
+            android:max="100"
+            android:progressDrawable="@android:color/transparent"
+            android:thumb="@drawable/ic_unlock_slider"
+            android:id="@+id/unlock_slider"
+            android:layout_gravity="center"
+            android:thumbOffset="-1dp"
+            />
 
         <TextView
             android:id="@+id/slider_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_gravity="center"
             android:text="Slide to unlock"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:textSize="22sp"/>
+
     </com.facebook.shimmer.ShimmerFrameLayout>
-
-    <ImageView
-        android:layout_gravity="end|center_vertical"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:src="@drawable/ic_lock_open_white_36dp"
-        android:scaleType="center"/>
-
-</FrameLayout>
+</android.support.v7.widget.CardView>
