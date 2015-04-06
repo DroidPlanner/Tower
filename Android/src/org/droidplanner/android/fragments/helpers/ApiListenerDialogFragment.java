@@ -1,13 +1,17 @@
 package org.droidplanner.android.fragments.helpers;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.o3dr.android.client.Drone;
 
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.unit.UnitManager;
 import org.droidplanner.android.utils.unit.providers.area.AreaUnitProvider;
@@ -20,6 +24,22 @@ import org.droidplanner.android.utils.unit.systems.UnitSystem;
  */
 public abstract class ApiListenerDialogFragment extends DialogFragment implements
         DroidPlannerApp.ApiListener {
+
+    private static final IntentFilter filter = new IntentFilter();
+    static {
+        filter.addAction(SettingsFragment.ACTION_PREF_UNIT_SYSTEM_UPDATE);
+    }
+
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch(intent.getAction()){
+                case SettingsFragment.ACTION_PREF_UNIT_SYSTEM_UPDATE:
+                    setupUnitProviders(context);
+                    break;
+            }
+        }
+    };
 
     private DroidPlannerApp dpApp;
     private LocalBroadcastManager broadcastManager;
@@ -50,7 +70,7 @@ public abstract class ApiListenerDialogFragment extends DialogFragment implement
     }
 
     protected Context getContext(){
-        return getActivity().getApplicationContext();
+        return dpApp.getApplicationContext();
     }
 
     @Override
@@ -59,29 +79,36 @@ public abstract class ApiListenerDialogFragment extends DialogFragment implement
         dpApp = (DroidPlannerApp) activity.getApplication();
 
         final Context context = activity.getApplicationContext();
-        broadcastManager = LocalBroadcastManager.getInstance(activity.getApplicationContext());
+        broadcastManager = LocalBroadcastManager.getInstance(context);
 
-        final UnitSystem unitSystem = UnitManager.getUnitSystem(context);
-        lengthUnitProvider = unitSystem.getLengthUnitProvider();
-        areaUnitProvider = unitSystem.getAreaUnitProvider();
-        speedUnitProvider = unitSystem.getSpeedUnitProvider();
+        setupUnitProviders(context);
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
 
-        final UnitSystem unitSystem = UnitManager.getUnitSystem(getContext());
-        lengthUnitProvider = unitSystem.getLengthUnitProvider();
-        areaUnitProvider = unitSystem.getAreaUnitProvider();
-        speedUnitProvider = unitSystem.getSpeedUnitProvider();
+        setupUnitProviders(getContext());
+        broadcastManager.registerReceiver(receiver, filter);
 
         dpApp.addApiListener(this);
     }
 
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
         dpApp.removeApiListener(this);
+
+        broadcastManager.unregisterReceiver(receiver);
+    }
+
+    private void setupUnitProviders(Context context){
+        if(context == null)
+            return;
+
+        final UnitSystem unitSystem = UnitManager.getUnitSystem(context);
+        lengthUnitProvider = unitSystem.getLengthUnitProvider();
+        areaUnitProvider = unitSystem.getAreaUnitProvider();
+        speedUnitProvider = unitSystem.getSpeedUnitProvider();
     }
 }
