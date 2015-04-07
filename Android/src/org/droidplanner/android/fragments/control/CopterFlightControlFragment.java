@@ -36,10 +36,10 @@ import org.droidplanner.android.utils.analytics.GAUtils;
 /**
  * Provide functionality for flight action button specific to copters.
  */
-public class CopterFlightActionsFragment extends ApiListenerFragment implements View.OnClickListener,
+public class CopterFlightControlFragment extends ApiListenerFragment implements View.OnClickListener,
         FlightControlManagerFragment.SlidingUpHeader {
 
-    private static final String TAG = CopterFlightActionsFragment.class.getSimpleName();
+    private static final String TAG = CopterFlightControlFragment.class.getSimpleName();
 
     private static final String ACTION_FLIGHT_ACTION_BUTTON = "Copter flight action button";
     private static final double TAKEOFF_ALTITUDE = 10.0;
@@ -149,6 +149,8 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     private Button pauseBtn;
     private Button autoBtn;
 
+    private int orangeColor;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_copter_mission_control, container, false);
@@ -157,6 +159,8 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        orangeColor = getResources().getColor(R.color.orange);
 
         mDisconnectedButtons = view.findViewById(R.id.mc_disconnected_buttons);
         mDisarmedButtons = view.findViewById(R.id.mc_disarmed_buttons);
@@ -400,7 +404,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
         switch (followState.getState()) {
             case FollowState.STATE_START:
-                followBtn.setBackgroundColor(Color.RED);
+                followBtn.setBackgroundColor(orangeColor);
                 break;
 
             case FollowState.STATE_RUNNING:

@@ -12,6 +12,7 @@
     <color name="light_grey">#EFEFEF</color>
     <color name="white_grey">#f7f6f6</color>
     <color name="navigation_entry_color">#212121</color>
+    <color name="orange">#FAAF4C</color>
 
     <color name="ground_speed_units">#57eccd</color>
     <color name="ground_speed_label">#0a5242</color>

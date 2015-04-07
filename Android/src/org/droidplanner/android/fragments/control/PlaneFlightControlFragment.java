@@ -33,7 +33,7 @@ import org.droidplanner.android.utils.analytics.GAUtils;
 /**
  * Provides functionality for flight action buttons specific to planes.
  */
-public class PlaneFlightActionsFragment extends ApiListenerFragment implements
+public class PlaneFlightControlFragment extends ApiListenerFragment implements
         View.OnClickListener, FlightControlManagerFragment.SlidingUpHeader {
 
     private static final String ACTION_FLIGHT_ACTION_BUTTON = "Copter flight action button";
@@ -128,6 +128,8 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
     private Button pauseBtn;
     private Button autoBtn;
 
+    private int orangeColor;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_plane_mission_control, container, false);
@@ -136,6 +138,8 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        orangeColor = getResources().getColor(R.color.orange);
 
         mDisconnectedButtons = view.findViewById(R.id.mc_disconnected_buttons);
         disarmedButtons = view.findViewById(R.id.mc_disarmed_buttons);
@@ -174,7 +178,7 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
 
         switch (followState.getState()) {
             case FollowState.STATE_START:
-                followBtn.setBackgroundColor(Color.RED);
+                followBtn.setBackgroundColor(orangeColor);
                 break;
             case FollowState.STATE_RUNNING:
                 followBtn.setActivated(true);
