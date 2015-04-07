@@ -134,7 +134,7 @@
     </style>
 
     <style name="flyoutPanelLayout">
-        <item name="android:background">#ffededed</item>
+        <item name="android:background">@color/transparent_light_grey</item>
     </style>
 
 	<!-- style the list navigation -->
