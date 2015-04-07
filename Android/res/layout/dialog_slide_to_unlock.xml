@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     >
@@ -8,7 +9,7 @@
     <com.facebook.shimmer.ShimmerFrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minHeight="56dp"
+        android:minHeight="64dp"
         android:layout_gravity="center"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
@@ -18,8 +19,9 @@
             android:layout_gravity="end|center_vertical"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:src="@drawable/ic_lock_open_black_24dp"
+            android:src="@drawable/ic_lock_open_green_600_36dp"
             android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:scaleType="center"/>
 
         <org.droidplanner.android.widgets.SlideButton
@@ -41,7 +43,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_gravity="center"
-            android:text="Slide to unlock"
+            tools:text="Slide to unlock"
             android:textColor="@android:color/black"
             android:textSize="22sp"/>
 

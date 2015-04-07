@@ -1,4 +1,4 @@
-package org.droidplanner.android.fragments;
+package org.droidplanner.android.fragments.control;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,6 +17,7 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Type;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.GenericActionsFragment;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 
 public class FlightActionsFragment extends ApiListenerFragment {

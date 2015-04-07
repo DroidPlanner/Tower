@@ -1,4 +1,4 @@
-package org.droidplanner.android.fragments;
+package org.droidplanner.android.fragments.control;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package org.droidplanner.android.fragments;
+package org.droidplanner.android.fragments.control;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -32,13 +32,12 @@ import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.analytics.GAUtils;
-import org.droidplanner.android.widgets.SlideButtonListener;
 
 /**
  * Provide functionality for flight action button specific to copters.
  */
 public class CopterFlightActionsFragment extends ApiListenerFragment implements View.OnClickListener,
-        FlightActionsFragment.SlidingUpHeader, SlideButtonListener {
+        FlightActionsFragment.SlidingUpHeader {
 
     private static final String TAG = CopterFlightActionsFragment.class.getSimpleName();
 
@@ -342,27 +341,18 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     }
 
     private void getArmingConfirmation() {
-//        YesNoWithPrefsDialog ynd = YesNoWithPrefsDialog.newInstance(getActivity().getApplicationContext(),
-//                getString(R.string.dialog_confirm_arming_title),
-//                getString(R.string.dialog_confirm_arming_msg), new YesNoDialog.Listener() {
-//                    @Override
-//                    public void onYes() {
-//                        getDrone().arm(true);
-//                    }
-//
-//                    @Override
-//                    public void onNo() {
-//                    }
-//                }, getString(R.string.pref_warn_on_arm_key));
-//
-//        if (ynd != null) {
-//            ynd.show(getChildFragmentManager(), "Confirm arming");
-//        }
+        SlideToUnlockDialog unlockDialog = new SlideToUnlockDialog() {
+            @Override
+            public void onSliderUnlocked() {
+                getDrone().arm(true);
+            }
+        };
 
-        SlideToUnlockDialog unlockDialog = new SlideToUnlockDialog();
-        unlockDialog.show(getChildFragmentManager(), "Slide To Unlock");
+        Bundle args = new Bundle();
+        args.putString(SlideToUnlockDialog.EXTRA_UNLOCK_ACTION, "arm");
+        unlockDialog.setArguments(args);
+        unlockDialog.show(getChildFragmentManager(), "Slide To Arm");
     }
-
 
     private void updateFlightModeButtons() {
         resetFlightModeButtons();
@@ -481,10 +471,5 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
         final State droneState = drone.getAttribute(AttributeType.STATE);
         return droneState.isArmed() && droneState.isFlying();
-    }
-
-    @Override
-    public void handleSlide() {
-
     }
 }

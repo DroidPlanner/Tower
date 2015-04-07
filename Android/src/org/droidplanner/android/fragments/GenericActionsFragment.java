@@ -11,6 +11,7 @@ import com.o3dr.android.client.Drone;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.fragments.control.FlightActionsFragment;
 
 /**
  * Provides action buttons functionality for generic drone type.

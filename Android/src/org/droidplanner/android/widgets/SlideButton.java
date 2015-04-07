@@ -11,7 +11,6 @@ import android.widget.SeekBar;
  */
 public class SlideButton extends SeekBar {
     private Drawable thumb;
-    private SlideButtonListener listener;
 
     public SlideButton(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -26,27 +25,13 @@ public class SlideButton extends SeekBar {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (thumb.getBounds().contains((int) event.getX(), (int) event.getY())) {
-                super.onTouchEvent(event);
-            } else
+            if (!thumb.getBounds().contains((int) event.getX(), (int) event.getY())) {
                 return false;
-        } else if (event.getAction() == MotionEvent.ACTION_UP) {
-            if (getProgress() > 70)
-                handleSlide();
+            }
+        }
 
-            setProgress(0);
-        } else
-            super.onTouchEvent(event);
-
-        return true;
+        return super.onTouchEvent(event);
     }
 
-    private void handleSlide() {
-        listener.handleSlide();
-    }
-
-    public void setSlideButtonListener(SlideButtonListener listener) {
-        this.listener = listener;
-    }
 }
 

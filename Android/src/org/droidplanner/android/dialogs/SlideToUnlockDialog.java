@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,34 +21,14 @@ import org.droidplanner.android.widgets.SlideButtonListener;
 /**
  * Created by Fredia Huya-Kouadio on 4/6/15.
  */
-public class SlideToUnlockDialog extends DialogFragment implements SeekBar.OnSeekBarChangeListener{
+public abstract class SlideToUnlockDialog extends DialogFragment implements SeekBar.OnSeekBarChangeListener{
 
-    private SlideButtonListener slideListener;
+    private static final String TAG = SlideToUnlockDialog.class.getSimpleName();
+
+    public static final String EXTRA_UNLOCK_ACTION = "extra_unlock_action";
 
     private TextView sliderText;
     private ShimmerFrameLayout shimmerContainer;
-    private SlideButton slideButton;
-
-    @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-
-        Fragment parentFragment = getParentFragment();
-        if(parentFragment != null){
-            if(!(parentFragment instanceof SlideButtonListener)){
-                throw new IllegalStateException("Parent must implement " + SlideButtonListener.class.getSimpleName());
-            }
-
-            slideListener = (SlideButtonListener) parentFragment;
-        }
-        else {
-            if (!(activity instanceof SlideButtonListener)) {
-                throw new IllegalStateException("Parent must implement " + SlideButtonListener.class.getSimpleName());
-            }
-
-            slideListener = (SlideButtonListener) activity;
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -62,13 +43,25 @@ public class SlideToUnlockDialog extends DialogFragment implements SeekBar.OnSee
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        getDialog().setCanceledOnTouchOutside(true);
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        sliderText = (TextView) view.findViewById(R.id.slider_text);
+        final Bundle args = getArguments();
+        String unlockAction = "unlock";
+        if(args != null){
+            unlockAction = args.getString(EXTRA_UNLOCK_ACTION, unlockAction);
+        }
 
-        slideButton = (SlideButton) view.findViewById(R.id.unlock_slider);
-        slideButton.setSlideButtonListener(slideListener);
+        sliderText = (TextView) view.findViewById(R.id.slider_text);
+        sliderText.setText(getString(R.string.unlock_slider_description, unlockAction));
+
+        final SlideButton slideButton = (SlideButton) view.findViewById(R.id.unlock_slider);
         slideButton.setOnSeekBarChangeListener(this);
 
         shimmerContainer = (ShimmerFrameLayout) view.findViewById(R.id.shimmer_view_container);
@@ -84,16 +77,26 @@ public class SlideToUnlockDialog extends DialogFragment implements SeekBar.OnSee
     public void onStartTrackingTouch(SeekBar seekBar) {
         shimmerContainer.stopShimmerAnimation();
         sliderText.setVisibility(View.INVISIBLE);
+        Log.d(TAG, "Received start tracking touch event.");
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        if (seekBar.getProgress() < 70) {
+        Log.d(TAG, "Received start tracking touch event.");
+        if (seekBar.getProgress() < 80) {
             seekBar.setProgress(0);
             sliderText.setVisibility(View.VISIBLE);
             shimmerContainer.startShimmerAnimation();
         } else {
             seekBar.setProgress(100);
+            handleSlide();
         }
     }
+
+    private void handleSlide() {
+        onSliderUnlocked();
+        dismiss();
+    }
+
+    public abstract void onSliderUnlocked();
 }
