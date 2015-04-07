@@ -1,4 +1,4 @@
-package org.droidplanner.android.fragments;
+package org.droidplanner.android.fragments.control;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,9 +19,9 @@ import com.o3dr.services.android.lib.drone.property.Type;
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 
-public class FlightActionsFragment extends ApiListenerFragment {
+public class FlightControlManagerFragment extends ApiListenerFragment {
 
-	interface SlidingUpHeader {
+	public interface SlidingUpHeader {
 		boolean isSlidingUpPanelEnabled(Drone drone);
 	}
 
@@ -78,15 +78,15 @@ public class FlightActionsFragment extends ApiListenerFragment {
 		Fragment actionsBarFragment;
 		switch (droneType) {
 		case Type.TYPE_COPTER:
-			actionsBarFragment = new CopterFlightActionsFragment();
+			actionsBarFragment = new CopterFlightControlFragment();
 			break;
 
 		case Type.TYPE_PLANE:
-			actionsBarFragment = new PlaneFlightActionsFragment();
+			actionsBarFragment = new PlaneFlightControlFragment();
 			break;
 
 		case Type.TYPE_ROVER:
-            actionsBarFragment = new RoverFlightActionsFragment();
+            actionsBarFragment = new RoverFlightControlFragment();
             break;
 
 		default:

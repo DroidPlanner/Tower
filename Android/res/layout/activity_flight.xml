@@ -80,19 +80,24 @@
             tools:layout="@layout/fragment_flight_actions_bar"
             android:fitsSystemWindows="true"/>
 
-        <ScrollView
+        <android.support.v7.widget.CardView
             android:layout_width="@dimen/flight_actions_container_width"
             android:layout_height="wrap_content"
-            android:minHeight="@dimen/flight_actions_container_height"
-            android:background="@drawable/flight_mode_panel_container_bg"
-            android:padding="3dp"
             android:clickable="true">
 
-            <FrameLayout
-                android:id="@+id/sliding_drawer_content"
-                android:layout_width="match_parent"
+            <ScrollView
+                android:layout_width="@dimen/flight_actions_container_width"
                 android:layout_height="wrap_content"
-                tools:layout="@layout/fragment_flight_mode_panel"/>
-        </ScrollView>
+                android:minHeight="@dimen/flight_actions_container_height"
+                android:background="@color/transparent_light_grey"
+                >
+
+                <FrameLayout
+                    android:id="@+id/sliding_drawer_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:layout="@layout/fragment_flight_mode_panel"/>
+            </ScrollView>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

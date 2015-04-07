@@ -169,22 +169,8 @@
                     android:key="@string/pref_dialogs_key">
 
                     <ListPreference
-                        android:key="@string/pref_warn_on_arm_key"
-                        android:title="@string/pref_warn_on_arm_title"
-                        android:entries="@array/preference_dialog_entry"
-                        android:entryValues="@array/preference_dialog_entry"
-                        android:defaultValue="@string/pref_dialog_entry_ask"/>
-
-                    <ListPreference
                         android:key="@string/pref_auto_insert_mission_takeoff_rtl_land_key"
                         android:title="@string/pref_auto_insert_mission_takeoff_rtl_land_title"
-                        android:entries="@array/preference_dialog_entry"
-                        android:defaultValue="@string/pref_dialog_entry_ask"
-                        android:entryValues="@array/preference_dialog_entry"/>
-
-                    <ListPreference
-                        android:key="@string/pref_warn_on_takeoff_in_auto_key"
-                        android:title="@string/dialog_confirm_take_off_in_auto_title"
                         android:entries="@array/preference_dialog_entry"
                         android:defaultValue="@string/pref_dialog_entry_ask"
                         android:entryValues="@array/preference_dialog_entry"/>

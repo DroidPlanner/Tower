@@ -53,13 +53,23 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
      */
     private final static String TAG = SettingsFragment.class.getSimpleName();
 
-    private static final String PACKAGE_NAME = SettingsFragment.class.getPackage().getName();
+    private static final String PACKAGE_NAME = Utils.PACKAGE_NAME;
 
     /**
      * Action used to broadcast updates to the period for the spoken status
      * summary.
      */
     public static final String ACTION_UPDATED_STATUS_PERIOD = PACKAGE_NAME + ".ACTION_UPDATED_STATUS_PERIOD";
+
+    /**
+     * Action used to broadcast updates to the gps hdop display preference.
+     */
+    public static final String ACTION_PREF_HDOP_UPDATE = PACKAGE_NAME + ".ACTION_PREF_HDOP_UPDATE";
+
+    /**
+     * Action used to broadcast updates to the unit system.
+     */
+    public static final String ACTION_PREF_UNIT_SYSTEM_UPDATE = PACKAGE_NAME + ".ACTION_PREF_UNIT_SYSTEM_UPDATE";
 
     /**
      * Used to retrieve the new period for the spoken status summary.
@@ -222,13 +232,13 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
         updateMavlinkVersionPreference(null);
         setupConnectionPreferences();
-        setupAdvancedMenuToggle();
+        setupAdvancedMenu();
         setupUnitSystemPreferences();
         setupBluetoothDevicePreferences();
         setupImminentGroundCollisionWarningPreference();
     }
 
-    private void setupAdvancedMenuToggle(){
+    private void setupAdvancedMenu(){
         CheckBoxPreference togglePref = (CheckBoxPreference) findPreference(getString(R.string
                 .pref_advanced_menu_toggle_key));
         if(togglePref != null){
@@ -240,6 +250,16 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                 }
             });
         }
+
+        final CheckBoxPreference hdopToggle = (CheckBoxPreference) findPreference(getString(R.string
+                .pref_ui_gps_hdop_key));
+        hdopToggle.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                lbm.sendBroadcast(new Intent(ACTION_PREF_HDOP_UPDATE));
+                return true;
+            }
+        });
     }
 
     private void setupUnitSystemPreferences(){
@@ -252,6 +272,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     int unitSystem = Integer.parseInt((String) newValue);
                     updateUnitSystemSummary(preference, unitSystem);
+                    lbm.sendBroadcast(new Intent(ACTION_PREF_UNIT_SYSTEM_UPDATE));
                     return true;
                 }
             });

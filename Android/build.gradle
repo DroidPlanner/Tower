@@ -13,6 +13,9 @@ dependencies {
 
     compile 'com.o3dr:3dr-services-lib:2.2.17'
 
+    compile 'me.grantland:autofittextview:0.2.1'
+    compile(name:'shimmer-android-release', ext:'aar')
+
     compile files('libs/droneapi-java-0.3-SNAPSHOT.jar')
     compile files('libs/j2xx.jar')
     compile files('libs/protobuf-java-2.5.0.jar')

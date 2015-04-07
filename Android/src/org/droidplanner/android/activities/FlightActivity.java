@@ -21,14 +21,13 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.DroneMap;
-import org.droidplanner.android.fragments.FlightActionsFragment;
+import org.droidplanner.android.fragments.control.FlightControlManagerFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
 import org.droidplanner.android.fragments.TelemetryFragment;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
@@ -146,7 +145,7 @@ public class FlightActivity extends DrawerNavigationUI {
     private TextView warningView;
 
     private FlightMapFragment mapFragment;
-    private FlightActionsFragment flightActions;
+    private FlightControlManagerFragment flightActions;
     private TelemetryFragment telemetryFragment;
 
     private SlidingUpPanelLayout mSlidingPanel;
@@ -262,9 +261,9 @@ public class FlightActivity extends DrawerNavigationUI {
             }
         });
 
-        flightActions = (FlightActionsFragment) fragmentManager.findFragmentById(R.id.flightActionsFragment);
+        flightActions = (FlightControlManagerFragment) fragmentManager.findFragmentById(R.id.flightActionsFragment);
         if (flightActions == null) {
-            flightActions = new FlightActionsFragment();
+            flightActions = new FlightControlManagerFragment();
             fragmentManager.beginTransaction().add(R.id.flightActionsFragment, flightActions).commit();
         }
 
