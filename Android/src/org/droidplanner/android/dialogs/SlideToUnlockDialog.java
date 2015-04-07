@@ -1,11 +1,7 @@
 package org.droidplanner.android.dialogs;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +12,6 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.widgets.SlideButton;
-import org.droidplanner.android.widgets.SlideButtonListener;
 
 /**
  * Created by Fredia Huya-Kouadio on 4/6/15.

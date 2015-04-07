@@ -241,7 +241,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                 break;
 
             case R.id.mc_takeoff:
-                getDrone().doGuidedTakeoff(TAKEOFF_ALTITUDE);
+                getTakeOffConfirmation();
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Takeoff");
                 break;
 
@@ -264,14 +264,12 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
             case R.id.mc_autoBtn:
                 getDrone().changeVehicleMode(VehicleMode.COPTER_AUTO);
-                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode
-                        .COPTER_AUTO.getLabel());
+                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode.COPTER_AUTO.getLabel());
                 break;
 
             case R.id.mc_TakeoffInAutoBtn:
                 getTakeOffInAutoConfirmation();
-                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode.COPTER_AUTO
-                        .getLabel());
+                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode.COPTER_AUTO.getLabel());
                 break;
 
             case R.id.mc_follow:
@@ -317,6 +315,16 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
         if (ynd != null) {
             ynd.show(getChildFragmentManager(), "Confirm dronie creation");
         }
+    }
+
+    private void getTakeOffConfirmation(){
+        final SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("take off", new Runnable() {
+            @Override
+            public void run() {
+                getDrone().doGuidedTakeoff(TAKEOFF_ALTITUDE);
+            }
+        });
+        unlockDialog.show(getChildFragmentManager(), "Slide to take off");
     }
 
     private void getTakeOffInAutoConfirmation() {
