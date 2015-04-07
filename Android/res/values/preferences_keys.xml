@@ -40,9 +40,7 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_live_upload_enabled_key" translatable="false">pref_live_upload_enabled</string>
 
     <string name="pref_dialogs_key" translatable="false">pref_dialogs</string>
-    <string name="pref_warn_on_arm_key" translatable="false">pref_warn_on_arm</string>
     <string name="pref_auto_insert_mission_takeoff_rtl_land_key" translatable="false">pref_auto_insert_mission_takeoff_rtl_land</string>
-    <string name="pref_warn_on_takeoff_in_auto_key" translatable="false">pref_warn_on_takeoff_in_auto</string>
     <string name="pref_warn_on_dronie_creation_key" translatable="false">pref_warn_on_dronie_creation</string>
 
     <string name="pref_enable_tts_key" translatable="false">pref_enable_tts</string>
