@@ -13,6 +13,7 @@ dependencies {
 
     compile 'com.o3dr:3dr-services-lib:2.2.17'
 
+    compile 'com.getbase:floatingactionbutton:1.9.0'
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')
 
