@@ -25,7 +25,7 @@ import org.droidplanner.android.utils.analytics.GAUtils;
 /**
  * Created by Fredia Huya-Kouadio on 3/4/15.
  */
-public class RoverFlightActionsFragment extends ApiListenerFragment implements FlightActionsFragment.SlidingUpHeader, View.OnClickListener {
+public class RoverFlightActionsFragment extends ApiListenerFragment implements FlightControlManagerFragment.SlidingUpHeader, View.OnClickListener {
 
     private static final String ACTION_FLIGHT_ACTION_BUTTON = "Rover flight action button";
 

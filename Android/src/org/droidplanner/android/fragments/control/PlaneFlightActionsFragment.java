@@ -24,6 +24,7 @@ import com.o3dr.services.android.lib.gcs.follow.FollowType;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.dialogs.SlideToUnlockDialog;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
@@ -33,7 +34,7 @@ import org.droidplanner.android.utils.analytics.GAUtils;
  * Provides functionality for flight action buttons specific to planes.
  */
 public class PlaneFlightActionsFragment extends ApiListenerFragment implements
-        View.OnClickListener, FlightActionsFragment.SlidingUpHeader {
+        View.OnClickListener, FlightControlManagerFragment.SlidingUpHeader {
 
     private static final String ACTION_FLIGHT_ACTION_BUTTON = "Copter flight action button";
 
@@ -277,22 +278,17 @@ public class PlaneFlightActionsFragment extends ApiListenerFragment implements
     }
 
     private void getArmingConfirmation() {
-        YesNoWithPrefsDialog ynd = YesNoWithPrefsDialog.newInstance(getActivity().getApplicationContext(),
-                getString(R.string.dialog_confirm_arming_title),
-                getString(R.string.dialog_confirm_arming_msg), new YesNoDialog.Listener() {
-                    @Override
-                    public void onYes() {
-                        getDrone().arm(true);
-                    }
+        SlideToUnlockDialog unlockDialog = new SlideToUnlockDialog() {
+            @Override
+            public void onSliderUnlocked() {
+                getDrone().arm(true);
+            }
+        };
 
-                    @Override
-                    public void onNo() {
-                    }
-                }, getString(R.string.pref_warn_on_arm_key));
-
-        if (ynd != null) {
-            ynd.show(getChildFragmentManager(), "Confirm arming");
-        }
+        Bundle args = new Bundle();
+        args.putString(SlideToUnlockDialog.EXTRA_UNLOCK_ACTION, "arm");
+        unlockDialog.setArguments(args);
+        unlockDialog.show(getChildFragmentManager(), "Slide To Arm");
     }
 
     @Override

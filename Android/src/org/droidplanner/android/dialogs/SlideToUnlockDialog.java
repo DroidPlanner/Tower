@@ -27,6 +27,21 @@ public abstract class SlideToUnlockDialog extends DialogFragment implements Seek
 
     public static final String EXTRA_UNLOCK_ACTION = "extra_unlock_action";
 
+    public static SlideToUnlockDialog newInstance(String unlockDescription, final Runnable unlockAction){
+        final SlideToUnlockDialog unlockDialog = new SlideToUnlockDialog() {
+            @Override
+            public void onSliderUnlocked() {
+                if(unlockAction != null)
+                    unlockAction.run();
+            }
+        };
+
+        Bundle args = new Bundle();
+        args.putString(SlideToUnlockDialog.EXTRA_UNLOCK_ACTION, unlockDescription);
+        unlockDialog.setArguments(args);
+        return unlockDialog;
+    }
+
     private TextView sliderText;
     private ShimmerFrameLayout shimmerContainer;
 
@@ -77,12 +92,10 @@ public abstract class SlideToUnlockDialog extends DialogFragment implements Seek
     public void onStartTrackingTouch(SeekBar seekBar) {
         shimmerContainer.stopShimmerAnimation();
         sliderText.setVisibility(View.INVISIBLE);
-        Log.d(TAG, "Received start tracking touch event.");
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        Log.d(TAG, "Received start tracking touch event.");
         if (seekBar.getProgress() < 80) {
             seekBar.setProgress(0);
             sliderText.setVisibility(View.VISIBLE);

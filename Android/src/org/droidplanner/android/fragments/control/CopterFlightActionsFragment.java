@@ -37,7 +37,7 @@ import org.droidplanner.android.utils.analytics.GAUtils;
  * Provide functionality for flight action button specific to copters.
  */
 public class CopterFlightActionsFragment extends ApiListenerFragment implements View.OnClickListener,
-        FlightActionsFragment.SlidingUpHeader {
+        FlightControlManagerFragment.SlidingUpHeader {
 
     private static final String TAG = CopterFlightActionsFragment.class.getSimpleName();
 
@@ -320,37 +320,24 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     }
 
     private void getTakeOffInAutoConfirmation() {
-        YesNoWithPrefsDialog ynd = YesNoWithPrefsDialog.newInstance(getActivity()
-                        .getApplicationContext(), getString(R.string.dialog_confirm_take_off_in_auto_title),
-                getString(R.string.dialog_confirm_take_off_in_auto_msg), new YesNoDialog.Listener() {
-                    @Override
-                    public void onYes() {
-                        Drone drone = getDrone();
-                        drone.doGuidedTakeoff(TAKEOFF_ALTITUDE);
-                        drone.changeVehicleMode(VehicleMode.COPTER_AUTO);
-                    }
-
-                    @Override
-                    public void onNo() {
-                    }
-                }, getString(R.string.pref_warn_on_takeoff_in_auto_key));
-
-        if (ynd != null) {
-            ynd.show(getChildFragmentManager(), "Confirm take off in auto");
-        }
+        final SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("take off in auto", new Runnable() {
+            @Override
+            public void run() {
+                Drone drone = getDrone();
+                drone.doGuidedTakeoff(TAKEOFF_ALTITUDE);
+                drone.changeVehicleMode(VehicleMode.COPTER_AUTO);
+            }
+        });
+        unlockDialog.show(getChildFragmentManager(), "Slide to take off in auto");
     }
 
     private void getArmingConfirmation() {
-        SlideToUnlockDialog unlockDialog = new SlideToUnlockDialog() {
+        SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("arm", new Runnable() {
             @Override
-            public void onSliderUnlocked() {
+            public void run() {
                 getDrone().arm(true);
             }
-        };
-
-        Bundle args = new Bundle();
-        args.putString(SlideToUnlockDialog.EXTRA_UNLOCK_ACTION, "arm");
-        unlockDialog.setArguments(args);
+        }) ;
         unlockDialog.show(getChildFragmentManager(), "Slide To Arm");
     }
 

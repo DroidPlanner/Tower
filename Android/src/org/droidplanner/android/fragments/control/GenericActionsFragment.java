@@ -1,4 +1,4 @@
-package org.droidplanner.android.fragments;
+package org.droidplanner.android.fragments.control;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,13 +11,13 @@ import com.o3dr.android.client.Drone;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.android.fragments.control.FlightActionsFragment;
+import org.droidplanner.android.fragments.control.FlightControlManagerFragment;
 
 /**
  * Provides action buttons functionality for generic drone type.
  */
 public class GenericActionsFragment extends Fragment implements View.OnClickListener,
-        FlightActionsFragment.SlidingUpHeader {
+        FlightControlManagerFragment.SlidingUpHeader {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

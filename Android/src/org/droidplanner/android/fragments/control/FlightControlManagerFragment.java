@@ -17,12 +17,12 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Type;
 
 import org.droidplanner.android.R;
-import org.droidplanner.android.fragments.GenericActionsFragment;
+import org.droidplanner.android.fragments.control.GenericActionsFragment;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 
-public class FlightActionsFragment extends ApiListenerFragment {
+public class FlightControlManagerFragment extends ApiListenerFragment {
 
-	interface SlidingUpHeader {
+	public interface SlidingUpHeader {
 		boolean isSlidingUpPanelEnabled(Drone drone);
 	}
 
