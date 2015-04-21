@@ -156,7 +156,6 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 
     private void addParameter(String name, Parameter parameter, boolean isDirty){
         try {
-            Parameter.checkParameterName(name);
             ParamsAdapterItem item = new ParamsAdapterItem(parameter);
             item.setDirtyValue(parameter.getDisplayValue(), isDirty);
             add(item);
