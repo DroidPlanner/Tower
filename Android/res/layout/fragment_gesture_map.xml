@@ -3,12 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <fragment
-        android:id="@+id/editor_map_fragment"
+    <FrameLayout
+        android:id="@+id/gesture_map_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="false"
-        class="org.droidplanner.android.fragments.EditorMapFragment" />
+        android:layout_height="match_parent"/>
 
     <android.gesture.GestureOverlayView
         android:id="@+id/overlay1"

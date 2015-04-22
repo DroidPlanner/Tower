@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
 
 dependencies {
-    compile 'com.google.android.gms:play-services-maps:6.5.87'
-    compile 'com.google.android.gms:play-services-location:6.5.87'
+    compile 'com.google.android.gms:play-services-maps:7.0.0'
+    compile 'com.google.android.gms:play-services-location:7.0.0'
+    compile 'com.google.android.gms:play-services-analytics:7.0.0'
 
     compile 'com.sothree.slidinguppanel:library:2.0.2'
 
-    compile 'com.android.support:support-v4:21.0.3'
-    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:support-v4:22.1.0'
+    compile 'com.android.support:appcompat-v7:22.1.0'
     compile 'com.android.support:cardview-v7:21.0.2'
     compile 'com.android.support:recyclerview-v7:21.0.2'
 
@@ -25,13 +26,13 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
 
     defaultConfig {
         applicationId 'org.droidplanner.android'
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 22
         versionCode 30105
         versionName getGitVersion()
     }

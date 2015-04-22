@@ -153,7 +153,7 @@ public class TTSNotificationProvider implements OnInitListener,
                 case AttributeEvent.AUTOPILOT_ERROR:
                     String errorId = intent.getStringExtra(AttributeEventExtra.EXTRA_AUTOPILOT_ERROR_ID);
                     final ErrorType errorType = ErrorType.getErrorById(errorId);
-                    if(errorType != null){
+                    if(errorType != null && errorType != ErrorType.NO_ERROR){
                         speak(errorType.getLabel(context).toString());
                     }
                     break;

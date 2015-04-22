@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -29,7 +30,7 @@ import org.droidplanner.android.utils.unit.systems.UnitSystem;
 /**
  * Parent class for the app activity classes.
  */
-public abstract class SuperUI extends ActionBarActivity implements DroidPlannerApp.ApiListener {
+public abstract class SuperUI extends AppCompatActivity implements DroidPlannerApp.ApiListener {
 
     private static final IntentFilter superIntentFilter = new IntentFilter();
 

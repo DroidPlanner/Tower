@@ -7,13 +7,11 @@
     android:gravity="center"
     >
 
-    <fragment
-        android:id="@+id/gestureMapFragment"
-        android:name="org.droidplanner.android.fragments.helpers.GestureMapFragment"
+    <FrameLayout
+        android:id="@+id/editor_map_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_gesture_map"
-        />
+        tools:layout="@layout/fragment_gesture_map"/>
 
     <org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout
         android:layout_width="match_parent"
