@@ -807,6 +807,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         map.setMyLocationEnabled(false);
         UiSettings mUiSettings = map.getUiSettings();
         mUiSettings.setMyLocationButtonEnabled(false);
+        mUiSettings.setMapToolbarEnabled(false);
         mUiSettings.setCompassEnabled(false);
         mUiSettings.setTiltGesturesEnabled(false);
         mUiSettings.setZoomControlsEnabled(false);
