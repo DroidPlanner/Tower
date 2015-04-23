@@ -76,6 +76,9 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
      */
     public static final String EXTRA_UPDATED_STATUS_PERIOD = "extra_updated_status_period";
 
+    public static final String ACTION_LOCATION_SETTINGS_UPDATED = PACKAGE_NAME + ".action.LOCATION_SETTINGS_UPDATED";
+    public static final String EXTRA_RESULT_CODE = "extra_result_code";
+
     /**
      * Used to notify of an update to the map rotation preference.
      */

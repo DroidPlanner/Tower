@@ -364,16 +364,9 @@ public class MissionProxy implements DPMap.PathSource {
                 MissionItem firstItem = missionItemProxies.get(0).getMissionItem();
                 if (firstItem instanceof MissionItem.SpatialItem)
                     defaultAlt = ((MissionItem.SpatialItem) firstItem).getCoordinate().getAltitude();
-                else {
-                    SurveyDetail surveyDetail = null;
-                    if (firstItem instanceof Survey) {
-                        surveyDetail = ((Survey) firstItem).getSurveyDetail();
-                    }
-                    else if(firstItem instanceof StructureScanner){
-                        surveyDetail = ((StructureScanner)firstItem).getSurveyDetail();
-                    }
-
-                    if(surveyDetail != null)
+                else if (firstItem instanceof Survey) {
+                    final SurveyDetail surveyDetail = ((Survey) firstItem).getSurveyDetail();
+                    if (surveyDetail != null)
                         defaultAlt = surveyDetail.getAltitude();
                 }
             }
