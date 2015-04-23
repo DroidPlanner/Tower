@@ -14,7 +14,6 @@ dependencies {
 
     compile 'com.o3dr:dronekit-android:2.3.09'
 
-    compile 'com.getbase:floatingactionbutton:1.9.0'
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')
 

@@ -37,7 +37,6 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
     static {
         superIntentFilter.addAction(AttributeEvent.STATE_CONNECTED);
         superIntentFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
-        superIntentFilter.addAction(Utils.ACTION_UPDATE_OPTIONS_MENU);
     }
 
     private final BroadcastReceiver superReceiver = new BroadcastReceiver() {
@@ -51,10 +50,6 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
 
                 case AttributeEvent.STATE_DISCONNECTED:
                     onDroneDisconnected();
-                    break;
-
-                case Utils.ACTION_UPDATE_OPTIONS_MENU:
-                    invalidateOptionsMenu();
                     break;
             }
         }
@@ -172,11 +167,6 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
             menu.setGroupEnabled(R.id.menu_group_connected, true);
             menu.setGroupVisible(R.id.menu_group_connected, true);
 
-            final boolean isAdvancedEnabled = mAppPrefs.isAdvancedMenuEnabled();
-            final MenuItem advancedSubMenu = menu.findItem(R.id.menu_advanced);
-            advancedSubMenu.setEnabled(isAdvancedEnabled);
-            advancedSubMenu.setVisible(isAdvancedEnabled);
-
             final boolean areMissionMenusEnabled = enableMissionMenus();
 
             final MenuItem sendMission = menu.findItem(R.id.menu_upload_mission);
@@ -241,15 +231,6 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
 
             case R.id.menu_download_mission:
                 dpApi.loadWaypoints();
-                return true;
-            case R.id.menu_triggerCamera:
-                dpApi.triggerCamera();
-                return true;
-            case R.id.menu_epm_grab:
-                dpApi.epmCommand(false);
-                return true;
-            case R.id.menu_epm_release:
-                dpApi.epmCommand(true);
                 return true;
 
             case android.R.id.home:

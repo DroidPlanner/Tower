@@ -151,10 +151,12 @@ public class TTSNotificationProvider implements OnInitListener,
                     }
                     break;
                 case AttributeEvent.AUTOPILOT_ERROR:
-                    String errorId = intent.getStringExtra(AttributeEventExtra.EXTRA_AUTOPILOT_ERROR_ID);
-                    final ErrorType errorType = ErrorType.getErrorById(errorId);
-                    if(errorType != null && errorType != ErrorType.NO_ERROR){
-                        speak(errorType.getLabel(context).toString());
+                    if(mAppPrefs.getWarningOnAutopilotWarning()) {
+                        String errorId = intent.getStringExtra(AttributeEventExtra.EXTRA_AUTOPILOT_ERROR_ID);
+                        final ErrorType errorType = ErrorType.getErrorById(errorId);
+                        if (errorType != null && errorType != ErrorType.NO_ERROR) {
+                            speak(errorType.getLabel(context).toString());
+                        }
                     }
                     break;
                 case AttributeEvent.SIGNAL_WEAK:

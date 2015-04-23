@@ -58,6 +58,7 @@ import com.o3dr.services.android.lib.util.googleApi.GoogleApiClientManager.Googl
 
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.helpers.LocalMapTileProvider;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
@@ -98,6 +99,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
     static {
         eventFilter.addAction(AttributeEvent.GPS_POSITION);
+        eventFilter.addAction(SettingsFragment.ACTION_MAP_ROTATION_PREFERENCE_UPDATED);
     }
 
     private final static Api<? extends Api.ApiOptions.NotRequiredOptions>[] apisList = new Api[]{LocationServices.API};
@@ -119,6 +121,15 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
                             updateCamera(droneLocation);
                         }
                     }
+                    break;
+
+                case SettingsFragment.ACTION_MAP_ROTATION_PREFERENCE_UPDATED:
+                    getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap googleMap) {
+                            setupMapUI(googleMap);
+                        }
+                    });
                     break;
             }
         }
@@ -799,6 +810,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         mUiSettings.setCompassEnabled(false);
         mUiSettings.setTiltGesturesEnabled(false);
         mUiSettings.setZoomControlsEnabled(false);
+        mUiSettings.setRotateGesturesEnabled(mAppPrefs.isMapRotationEnabled());
     }
 
     private void setupMapOverlay(GoogleMap map) {

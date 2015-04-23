@@ -76,6 +76,12 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
      */
     public static final String EXTRA_UPDATED_STATUS_PERIOD = "extra_updated_status_period";
 
+    /**
+     * Used to notify of an update to the map rotation preference.
+     */
+    public static final String ACTION_MAP_ROTATION_PREFERENCE_UPDATED = PACKAGE_NAME +
+            ".ACTION_MAP_ROTATION_PREFERENCE_UPDATED";
+
     private static final IntentFilter intentFilter = new IntentFilter();
 
     static {
@@ -239,18 +245,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     }
 
     private void setupAdvancedMenu(){
-        CheckBoxPreference togglePref = (CheckBoxPreference) findPreference(getString(R.string
-                .pref_advanced_menu_toggle_key));
-        if(togglePref != null){
-            togglePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    lbm.sendBroadcast(new Intent(Utils.ACTION_UPDATE_OPTIONS_MENU));
-                    return true;
-                }
-            });
-        }
-
         final CheckBoxPreference hdopToggle = (CheckBoxPreference) findPreference(getString(R.string
                 .pref_ui_gps_hdop_key));
         hdopToggle.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -277,6 +271,18 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                 }
             });
         }
+    }
+
+    private void setupMapPreferences(){
+        final CheckBoxPreference mapRotation = (CheckBoxPreference) findPreference(getString(R.string
+                .pref_map_enable_rotation_key));
+        mapRotation.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                lbm.sendBroadcast(new Intent(ACTION_MAP_ROTATION_PREFERENCE_UPDATED));
+                return true;
+            }
+        });
     }
 
     private void setupImminentGroundCollisionWarningPreference(){
