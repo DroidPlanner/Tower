@@ -8,9 +8,9 @@ import java.util.Map;
 import org.droidplanner.android.R;
 import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,6 +32,7 @@ public class DialogParameterInfo {
 		final View view = buildView(item, context);
 
 		final AlertDialog dialog = new AlertDialog.Builder(context).setView(view).create();
+        dialog.setCanceledOnTouchOutside(true);
 
 		// spinner's onItemSelcted impl needs ref to Dialog interface
 		buildValueSpinner(dialog, view, item.getParameter(), valueView, context);

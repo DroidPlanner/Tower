@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey">
 
     <ProgressBar
         android:id="@+id/reload_progress"
@@ -13,33 +13,33 @@
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:visibility="gone"
+        android:layout_alignParentTop="true"
         style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"/>
 
-    <EditText
-        android:id="@+id/parameter_filter"
+    <android.support.v7.widget.SearchView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
+        android:layout_height="56dp"
+        android:padding="5dp"
         android:imeOptions="actionSearch"
-        android:background="@drawable/bg_cell_white"
-        android:drawableLeft="@android:drawable/ic_menu_search"
-        android:drawableStart="@android:drawable/ic_menu_search"
-        android:textIsSelectable="true"
+        android:id="@+id/params_filter"
+        android:inputType="text"
+        android:layout_below="@+id/reload_progress"
         />
 
     <ListView
         android:id="@android:id/list"
-        android:descendantFocusability="beforeDescendants"
-        android:dividerHeight="0dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/params_filter"
+        />
 
     <TextView
         android:id="@android:id/empty"
-        android:textAppearance="@style/paramsClickToRefresh"
+        style="@style/paramsClickToRefresh"
         android:text="@string/params_click_to_refresh"
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_below="@android:id/list"/>
 
-</LinearLayout>
+</RelativeLayout>

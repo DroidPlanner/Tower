@@ -5,7 +5,7 @@
     <color name="transparent_light">#d0ffffff</color>
     <color name="opaque_black">#000</color>
     <color name="opaque_white">#fff</color>
-    <color name="greyText">#4d4d4d</color>
+    <color name="greyText">#5d5d5d</color>
     <color name="dark_grey">#9E9E9E</color>
     <color name="transparent_dark_grey">#d09E9E9E</color>
     <color name="transparent_light_grey">#d0EFEFEF</color>
@@ -54,5 +54,9 @@
 
     <!-- colors for status bar notifications -->
     <color name="stat_notify_connected">#57eccd</color>
+
+    <color name="green">#ff06aa09</color>
+    <color name="medium_green">#50CB12</color>
+    <color name="light_green">#5574D800</color>
 
 </resources>

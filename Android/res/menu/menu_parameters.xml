@@ -24,10 +24,4 @@
         android:icon="@drawable/ic_action_save"
         android:title="@string/export_to_device"/>
 
-    <item
-        android:id="@+id/menu_filter_params"
-        app:showAsAction="never"
-        android:icon="@android:drawable/ic_menu_search"
-        android:title="@string/menu_search_toggle"
-        />
 </menu>

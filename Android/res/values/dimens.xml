@@ -64,5 +64,6 @@
     <dimen name="toolbar_min_height">56dp</dimen>
     <dimen name="action_bar_telem_height">96dp</dimen>
     <dimen name="action_drawer_width">260dp</dimen>
+    <dimen name="fab_edge_distance">16dp</dimen>
 
 </resources>

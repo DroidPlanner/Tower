@@ -246,7 +246,7 @@
     <string name="menu_map_type_terrain">Terrain</string>
 
     <!-- Parameters screen -->
-    <string name="params_click_to_refresh">Click to refresh parameters from drone</string>
+    <string name="params_click_to_refresh">No Parameters</string>
     <string name="refreshing_parameters">Refreshing Parameters…</string>
     <string name="parameters_saved">Parameters saved</string>
     <string name="msg_parameters_written_to_drone">parameters uploaded to drone</string>
