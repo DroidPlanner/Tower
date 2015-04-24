@@ -10,6 +10,7 @@ import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGestureListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,21 +36,25 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_gesture_map, container, false);
-		overlay = (GestureOverlayView) view.findViewById(R.id.overlay1);
-		overlay.addOnGestureListener(this);
-		overlay.setEnabled(false);
-
-		overlay.setGestureStrokeWidth(scaleDpToPixels(STROKE_WIDTH));
-		toleranceInPixels = scaleDpToPixels(TOLERANCE);
-		return view;
+		return inflater.inflate(R.layout.fragment_gesture_map, container, false);
 	}
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
-        mapFragment = ((EditorMapFragment) getChildFragmentManager()
-                .findFragmentById(R.id.editor_map_fragment));
+        final FragmentManager fm = getChildFragmentManager();
+        mapFragment = ((EditorMapFragment) fm.findFragmentById(R.id.gesture_map_fragment));
+        if(mapFragment == null){
+            mapFragment = new EditorMapFragment();
+            fm.beginTransaction().add(R.id.gesture_map_fragment, mapFragment).commit();
+        }
+
+        overlay = (GestureOverlayView) view.findViewById(R.id.overlay1);
+        overlay.addOnGestureListener(this);
+        overlay.setEnabled(false);
+
+        overlay.setGestureStrokeWidth(scaleDpToPixels(STROKE_WIDTH));
+        toleranceInPixels = scaleDpToPixels(TOLERANCE);
     }
 
 	private int scaleDpToPixels(double value) {

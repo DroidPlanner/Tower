@@ -49,6 +49,7 @@ public class DroidPlannerPrefs {
     private static final String DEFAULT_UDP_SERVER_PORT = "14550";
     private static final int DEFAULT_UNIT_SYSTEM = UnitSystem.AUTO;
     private static final boolean DEFAULT_WARNING_GROUND_COLLISION = false;
+    private static final boolean DEFAULT_ENABLE_MAP_ROTATION = true;
 
     // Public for legacy usage
 	public SharedPreferences prefs;
@@ -344,7 +345,7 @@ public class DroidPlannerPrefs {
                 DEFAULT_WARNING_GROUND_COLLISION);
     }
 
-    public boolean isAdvancedMenuEnabled(){
-        return prefs.getBoolean(context.getString(R.string.pref_advanced_menu_toggle_key), false);
+    public boolean isMapRotationEnabled(){
+        return prefs.getBoolean(context.getString(R.string.pref_map_enable_rotation_key), DEFAULT_ENABLE_MAP_ROTATION);
     }
 }

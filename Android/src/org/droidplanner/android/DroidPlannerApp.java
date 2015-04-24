@@ -35,7 +35,7 @@ import java.util.List;
 
 public class DroidPlannerApp extends Application implements DroneListener, TowerListener {
 
-    private static final long DELAY_TO_DISCONNECTION = 5000l; // ms
+    private static final long DELAY_TO_DISCONNECTION = 1000l; // ms
 
     private static final String TAG = DroidPlannerApp.class.getSimpleName();
 

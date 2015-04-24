@@ -8,7 +8,7 @@
     >
 
     <TextView
-        style="?android:attr/buttonBarButtonStyle"
+        style="?android:attr/spinnerDropDownItemStyle"
         android:id="@+id/clear_mission_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,6 +16,7 @@
         android:padding="10dp"
         android:gravity="start|center_vertical"
         android:textColor="@android:color/black"
+        android:textStyle="normal"
         android:text="@string/dlg_clear_mission_title"/>
 
 </android.support.v7.widget.CardView>

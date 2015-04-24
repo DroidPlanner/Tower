@@ -250,7 +250,6 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
     @Override
     public void onClick(View v) {
         EditorTools newTool = getToolForView(v.getId());
-        if (newTool == this.tool) {
             final int xOff = (int) (v.getWidth() + popupLeftMargin);
             final int yOff = -v.getHeight();
             switch (newTool) {
@@ -270,7 +269,6 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
                     markerPopup.showAsDropDown(v, xOff, yOff);
                     break;
             }
-        } else
             setTool(newTool);
     }
 

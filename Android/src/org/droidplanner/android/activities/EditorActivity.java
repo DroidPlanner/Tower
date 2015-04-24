@@ -125,7 +125,12 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
         fragmentManager = getSupportFragmentManager();
 
-        gestureMapFragment = ((GestureMapFragment) fragmentManager.findFragmentById(R.id.gestureMapFragment));
+        gestureMapFragment = ((GestureMapFragment) fragmentManager.findFragmentById(R.id.editor_map_fragment));
+        if(gestureMapFragment == null){
+            gestureMapFragment = new GestureMapFragment();
+            fragmentManager.beginTransaction().add(R.id.editor_map_fragment, gestureMapFragment).commit();
+        }
+
         editorToolsFragment = (EditorToolsFragment) fragmentManager.findFragmentById(R.id.editor_tools_fragment);
         editorListFragment = (EditorListFragment) fragmentManager.findFragmentById(R.id.mission_list_fragment);
 

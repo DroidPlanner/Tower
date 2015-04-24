@@ -1,36 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="48dp"
+    android:background="@drawable/params_row_bg"
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/params_row_name"
-        android:textAppearance="@style/paramRowLabelText"
-        android:gravity="center_vertical"
-        android:paddingLeft="6dp"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"/>
+        style="@style/paramRowLabel.Title"
+        android:gravity="center_vertical|start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/params_row_value"
+        android:layout_toStartOf="@+id/params_row_value"
+        android:clickable="false"
+        tools:text="PARAMETER NAME"/>
 
     <TextView
         android:id="@+id/params_row_desc"
-        android:textAppearance="@style/paramRowLabelText"
-        android:gravity="center_vertical"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:layout_width="0dp"
+        style="@style/paramRowLabel.Text"
+        android:gravity="center_vertical|start"
+        android:layout_alignLeft="@+id/params_row_name"
+        android:layout_alignStart="@+id/params_row_name"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        tools:text="Parameter Description"
+        android:layout_below="@+id/params_row_name"
+        android:layout_toLeftOf="@+id/params_row_value"
+        android:layout_toStartOf="@+id/params_row_value"
+        android:clickable="false"
         android:layout_height="wrap_content"/>
 
     <EditText
         android:id="@+id/params_row_value"
         android:inputType="number|text"
         android:digits="0123456789.,-"
-        android:gravity="right|center_vertical"
-        android:layout_width="120dp"
+        android:gravity="end|center_vertical"
+        android:layout_width="100dp"
         android:selectAllOnFocus="true"
-        android:layout_height="wrap_content"/>
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        tools:text="param "
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_alignParentBottom="true"/>
 
-</LinearLayout>
+</RelativeLayout>

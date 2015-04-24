@@ -145,6 +145,6 @@ public class FlightModePanel extends ApiListenerFragment{
             }
 		}
 
-		getChildFragmentManager().beginTransaction().replace(R.id.modeInfoPanel, infoPanel).commit();
+		getChildFragmentManager().beginTransaction().replace(R.id.modeInfoPanel, infoPanel).commitAllowingStateLoss();
 	}
 }

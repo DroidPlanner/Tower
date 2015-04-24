@@ -73,7 +73,12 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        locatorMapFragment = ((LocatorMapFragment) fragmentManager.findFragmentById(R.id.mapFragment));
+        locatorMapFragment = ((LocatorMapFragment) fragmentManager.findFragmentById(R.id.locator_map_fragment));
+        if(locatorMapFragment == null){
+            locatorMapFragment = new LocatorMapFragment();
+            fragmentManager.beginTransaction().add(R.id.locator_map_fragment, locatorMapFragment).commit();
+        }
+
         locatorListFragment = (LocatorListFragment) fragmentManager.findFragmentById(R.id.locatorListFragment);
 
         statusView = (LinearLayout) findViewById(R.id.statusView);

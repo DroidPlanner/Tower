@@ -22,6 +22,7 @@ import com.o3dr.services.android.lib.drone.mission.item.command.ReturnToLaunch;
 import com.o3dr.services.android.lib.drone.mission.item.command.Takeoff;
 import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
+import com.o3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.BaseSpatialItem;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.RegionOfInterest;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
@@ -363,6 +364,11 @@ public class MissionProxy implements DPMap.PathSource {
                 MissionItem firstItem = missionItemProxies.get(0).getMissionItem();
                 if (firstItem instanceof MissionItem.SpatialItem)
                     defaultAlt = ((MissionItem.SpatialItem) firstItem).getCoordinate().getAltitude();
+                else if (firstItem instanceof Survey) {
+                    final SurveyDetail surveyDetail = ((Survey) firstItem).getSurveyDetail();
+                    if (surveyDetail != null)
+                        defaultAlt = surveyDetail.getAltitude();
+                }
             }
 
             final Takeoff takeOff = new Takeoff();
