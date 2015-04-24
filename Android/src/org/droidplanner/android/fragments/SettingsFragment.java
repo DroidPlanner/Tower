@@ -253,23 +253,27 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     private void setupAdvancedMenu(){
         final CheckBoxPreference hdopToggle = (CheckBoxPreference) findPreference(getString(R.string
                 .pref_ui_gps_hdop_key));
-        hdopToggle.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                lbm.sendBroadcast(new Intent(ACTION_PREF_HDOP_UPDATE));
-                return true;
-            }
-        });
+        if(hdopToggle !=  null) {
+            hdopToggle.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    lbm.sendBroadcast(new Intent(ACTION_PREF_HDOP_UPDATE));
+                    return true;
+                }
+            });
+        }
 
         final CheckBoxPreference killSwitch = (CheckBoxPreference) findPreference(getString(R.string
                 .pref_enable_kill_switch_key));
-        killSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                lbm.sendBroadcast(new Intent(ACTION_ADVANCED_MENU_UPDATED));
-                return true;
-            }
-        });
+        if(killSwitch != null) {
+            killSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    lbm.sendBroadcast(new Intent(ACTION_ADVANCED_MENU_UPDATED));
+                    return true;
+                }
+            });
+        }
     }
 
     private void setupUnitSystemPreferences(){
