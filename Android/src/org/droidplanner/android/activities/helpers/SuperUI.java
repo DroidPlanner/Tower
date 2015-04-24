@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -257,7 +256,7 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
                     public void run() {
                         dpApp.getDrone().arm(false);
                     }
-                }) ;
+                });
                 unlockDialog.show(getSupportFragmentManager(), "Slide to use the Kill Switch");
                 return true;
 
