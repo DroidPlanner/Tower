@@ -21,6 +21,22 @@
             app:showAsAction="never"
             android:title="@string/download_mission"/>
 
+        <item
+            android:id="@+id/menu_advanced"
+            android:enabled="false"
+            android:visible="false"
+            android:title="@string/pref_advanced"
+            app:showAsAction="never">
+            <menu>
+                <item
+                    android:id="@+id/menu_kill_switch"
+                    app:showAsAction="never"
+                    android:enabled="false"
+                    android:visible="false"
+                    android:title="KILL SWITCH"/>
+            </menu>
+        </item>
+
     </group>
 
 </menu>

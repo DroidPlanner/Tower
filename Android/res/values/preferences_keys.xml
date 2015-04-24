@@ -59,5 +59,6 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_ground_collision_warning_key" translatable="false">pref_ground_collision_warning</string>
 
     <string name="pref_unit_system_key" translatable="false">pref_unit_system</string>
+    <string name="pref_enable_kill_switch_key" translatable="false">pref_enable_kill_switch</string>
 
 </resources>
