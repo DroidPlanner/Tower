@@ -163,8 +163,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         lbm = LocalBroadcastManager.getInstance(context);
         final SharedPreferences sharedPref = dpPrefs.prefs;
 
-        setupPeriodicControls();
-
         // Populate the map preference category
         final String mapsProvidersPrefKey = getString(R.string.pref_maps_providers_key);
         final ListPreference mapsProvidersPref = (ListPreference) findPreference(mapsProvidersPrefKey);
@@ -242,33 +240,40 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         }
 
         updateMavlinkVersionPreference(null);
+
+        setupPeriodicControls();
         setupConnectionPreferences();
         setupAdvancedMenu();
         setupUnitSystemPreferences();
         setupBluetoothDevicePreferences();
         setupImminentGroundCollisionWarningPreference();
+        setupMapPreferences();
     }
 
     private void setupAdvancedMenu(){
         final CheckBoxPreference hdopToggle = (CheckBoxPreference) findPreference(getString(R.string
                 .pref_ui_gps_hdop_key));
-        hdopToggle.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                lbm.sendBroadcast(new Intent(ACTION_PREF_HDOP_UPDATE));
-                return true;
-            }
-        });
+        if(hdopToggle !=  null) {
+            hdopToggle.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    lbm.sendBroadcast(new Intent(ACTION_PREF_HDOP_UPDATE));
+                    return true;
+                }
+            });
+        }
 
         final CheckBoxPreference killSwitch = (CheckBoxPreference) findPreference(getString(R.string
                 .pref_enable_kill_switch_key));
-        killSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                lbm.sendBroadcast(new Intent(ACTION_ADVANCED_MENU_UPDATED));
-                return true;
-            }
-        });
+        if(killSwitch != null) {
+            killSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    lbm.sendBroadcast(new Intent(ACTION_ADVANCED_MENU_UPDATED));
+                    return true;
+                }
+            });
+        }
     }
 
     private void setupUnitSystemPreferences(){
@@ -427,6 +432,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         mDefaultSummaryPrefs.add(getString(R.string.pref_udp_server_port_key));
         mDefaultSummaryPrefs.add(getString(R.string.pref_rc_quickmode_left_key));
         mDefaultSummaryPrefs.add(getString(R.string.pref_rc_quickmode_right_key));
+        mDefaultSummaryPrefs.add(getString(R.string.pref_udp_ping_receiver_ip_key));
+        mDefaultSummaryPrefs.add(getString(R.string.pref_udp_ping_receiver_port_key));
     }
 
     /**

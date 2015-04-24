@@ -60,5 +60,8 @@ This file is used to store the preferences keys so that it's accessible and modi
 
     <string name="pref_unit_system_key" translatable="false">pref_unit_system</string>
     <string name="pref_enable_kill_switch_key" translatable="false">pref_enable_kill_switch</string>
+    <string name="pref_enable_udp_server_ping_key" translatable="false">pref_enable_udp_server_ping</string>
+    <string name="pref_udp_ping_receiver_ip_key" translatable="false">pref_udp_ping_receiver_ip</string>
+    <string name="pref_udp_ping_receiver_port_key" translatable="false">pref_udp_ping_receiver_port</string>
 
 </resources>

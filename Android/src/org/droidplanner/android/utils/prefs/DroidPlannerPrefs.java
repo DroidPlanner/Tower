@@ -51,6 +51,7 @@ public class DroidPlannerPrefs {
     private static final boolean DEFAULT_WARNING_GROUND_COLLISION = false;
     private static final boolean DEFAULT_ENABLE_MAP_ROTATION = true;
     private static final boolean DEFAULT_ENABLE_KILL_SWITCH = false;
+    private static final boolean DEFAULT_ENABLE_UDP_PING = false;
 
     // Public for legacy usage
 	public SharedPreferences prefs;
@@ -196,6 +197,19 @@ public class DroidPlannerPrefs {
     public int getUdpServerPort(){
         return Integer.parseInt(prefs.getString(context.getString(R.string
                         .pref_udp_server_port_key), DEFAULT_UDP_SERVER_PORT));
+    }
+
+    public boolean isUdpPingEnabled(){
+        return prefs.getBoolean(context.getString(R.string.pref_enable_udp_server_ping_key), DEFAULT_ENABLE_UDP_PING);
+    }
+
+    public String getUdpPingReceiverIp(){
+        return prefs.getString(context.getString(R.string.pref_udp_ping_receiver_ip_key), null);
+    }
+
+    public int getUdpPingReceiverPort(){
+        return Integer.parseInt(prefs.getString(context.getString(R.string.pref_udp_ping_receiver_port_key),
+                DEFAULT_UDP_SERVER_PORT));
     }
 
     public String getBluetoothDeviceName(){
