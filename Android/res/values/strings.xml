@@ -545,5 +545,9 @@
     <string name="pref_advance_menu_title">Advanced Menu Options</string>
     <string name="pref_enable_kill_switch_summary">If enabled, a Kill Switch option will appear under the Advanced section in the menu, allowing to disarm the vehicle immediately.</string>
     <string name="pref_enable_kill_switch_title">Enable Kill Switch</string>
+    <string name="pref_enable_udp_server_title">Enable UDP server ping</string>
+    <string name="pref_udp_server_ping_summary">Enable to allow the app to periodically ping the udp server.</string>
+    <string name="pref_udp_ping_receiver_ip_title">UDP ping receiver ip</string>
+    <string name="pref_udp_ping_receiver_port_title">UDP ping receiver port</string>
 
 </resources>

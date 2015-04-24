@@ -266,6 +266,11 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
 
             case ConnectionType.TYPE_UDP:
                 extraParams.putInt(ConnectionType.EXTRA_UDP_SERVER_PORT, dpPrefs.getUdpServerPort());
+                if(dpPrefs.isUdpPingEnabled()){
+                    extraParams.putString(ConnectionType.EXTRA_UDP_PING_RECEIVER_IP, dpPrefs.getUdpPingReceiverIp());
+                    extraParams.putInt(ConnectionType.EXTRA_UDP_PING_RECEIVER_PORT, dpPrefs.getUdpPingReceiverPort());
+                    extraParams.putByteArray(ConnectionType.EXTRA_UDP_PING_PAYLOAD, "Hello".getBytes());
+                }
                 connParams = new ConnectionParameter(connectionType, extraParams, droneSharePrefs);
                 break;
 

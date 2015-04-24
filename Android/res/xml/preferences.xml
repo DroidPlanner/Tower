@@ -235,6 +235,27 @@
                         android:inputType="number"
                         android:key="@string/pref_udp_server_port_key"
                         android:title="@string/pref_udp_server_port" />
+
+                    <CheckBoxPreference
+                        android:defaultValue="false"
+                        android:key="@string/pref_enable_udp_server_ping_key"
+                        android:title="@string/pref_enable_udp_server_title"
+                        android:summary="@string/pref_udp_server_ping_summary"/>
+
+                    <EditTextPreference
+                        android:gravity="center"
+                        android:dependency="@string/pref_enable_udp_server_ping_key"
+                        android:key="@string/pref_udp_ping_receiver_ip_key"
+                        android:title="@string/pref_udp_ping_receiver_ip_title"/>
+
+                    <EditTextPreference
+                        android:gravity="center"
+                        android:dependency="@string/pref_enable_udp_server_ping_key"
+                        android:key="@string/pref_udp_ping_receiver_port_key"
+                        android:title="@string/pref_udp_ping_receiver_port_title"/>
+
+                    <EditTextPreference
+                        />
                 </PreferenceCategory>
                 <PreferenceCategory
                     android:key="pref_bluetooth"

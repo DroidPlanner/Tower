@@ -163,8 +163,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         lbm = LocalBroadcastManager.getInstance(context);
         final SharedPreferences sharedPref = dpPrefs.prefs;
 
-        setupPeriodicControls();
-
         // Populate the map preference category
         final String mapsProvidersPrefKey = getString(R.string.pref_maps_providers_key);
         final ListPreference mapsProvidersPref = (ListPreference) findPreference(mapsProvidersPrefKey);
@@ -242,11 +240,14 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         }
 
         updateMavlinkVersionPreference(null);
+
+        setupPeriodicControls();
         setupConnectionPreferences();
         setupAdvancedMenu();
         setupUnitSystemPreferences();
         setupBluetoothDevicePreferences();
         setupImminentGroundCollisionWarningPreference();
+        setupMapPreferences();
     }
 
     private void setupAdvancedMenu(){
@@ -427,6 +428,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         mDefaultSummaryPrefs.add(getString(R.string.pref_udp_server_port_key));
         mDefaultSummaryPrefs.add(getString(R.string.pref_rc_quickmode_left_key));
         mDefaultSummaryPrefs.add(getString(R.string.pref_rc_quickmode_right_key));
+        mDefaultSummaryPrefs.add(getString(R.string.pref_udp_ping_receiver_ip_key));
+        mDefaultSummaryPrefs.add(getString(R.string.pref_udp_ping_receiver_port_key));
     }
 
     /**
