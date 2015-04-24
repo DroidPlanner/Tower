@@ -208,7 +208,8 @@ public class DroidPlannerPrefs {
     }
 
     public int getUdpPingReceiverPort(){
-        return prefs.getInt(context.getString(R.string.pref_udp_ping_receiver_port_key), 0);
+        return Integer.parseInt(prefs.getString(context.getString(R.string.pref_udp_ping_receiver_port_key),
+                DEFAULT_UDP_SERVER_PORT));
     }
 
     public String getBluetoothDeviceName(){
