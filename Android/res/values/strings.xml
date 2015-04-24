@@ -542,5 +542,8 @@
     <string name="pref_ground_collision_warning_summary">Warns about imminent ground collision.</string>
     <string name="pref_map_rotation_title">Enable map rotation</string>
     <string name="pref_map_rotation_summary">Check to enable the ability to rotate the map.</string>
+    <string name="pref_advance_menu_title">Advanced Menu Options</string>
+    <string name="pref_enable_kill_switch_summary">If enabled, a Kill Switch option will appear under the Advanced section in the menu, allowing to disarm the vehicle immediately.</string>
+    <string name="pref_enable_kill_switch_title">Enable Kill Switch</string>
 
 </resources>

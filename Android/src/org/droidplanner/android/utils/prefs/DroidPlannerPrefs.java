@@ -50,6 +50,7 @@ public class DroidPlannerPrefs {
     private static final int DEFAULT_UNIT_SYSTEM = UnitSystem.AUTO;
     private static final boolean DEFAULT_WARNING_GROUND_COLLISION = false;
     private static final boolean DEFAULT_ENABLE_MAP_ROTATION = true;
+    private static final boolean DEFAULT_ENABLE_KILL_SWITCH = false;
 
     // Public for legacy usage
 	public SharedPreferences prefs;
@@ -347,5 +348,13 @@ public class DroidPlannerPrefs {
 
     public boolean isMapRotationEnabled(){
         return prefs.getBoolean(context.getString(R.string.pref_map_enable_rotation_key), DEFAULT_ENABLE_MAP_ROTATION);
+    }
+
+    public boolean isAdvancedMenuEnabled(){
+        return isKillSwitchEnabled();
+    }
+
+    public boolean isKillSwitchEnabled(){
+        return prefs.getBoolean(context.getString(R.string.pref_enable_kill_switch_key), DEFAULT_ENABLE_KILL_SWITCH);
     }
 }

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,8 +18,10 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
+import org.droidplanner.android.dialogs.SlideToUnlockDialog;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
+import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -37,6 +38,7 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
     static {
         superIntentFilter.addAction(AttributeEvent.STATE_CONNECTED);
         superIntentFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+        superIntentFilter.addAction(SettingsFragment.ACTION_ADVANCED_MENU_UPDATED);
     }
 
     private final BroadcastReceiver superReceiver = new BroadcastReceiver() {
@@ -50,6 +52,10 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
 
                 case AttributeEvent.STATE_DISCONNECTED:
                     onDroneDisconnected();
+                    break;
+
+                case SettingsFragment.ACTION_ADVANCED_MENU_UPDATED:
+                    supportInvalidateOptionsMenu();
                     break;
             }
         }
@@ -167,6 +173,17 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
             menu.setGroupEnabled(R.id.menu_group_connected, true);
             menu.setGroupVisible(R.id.menu_group_connected, true);
 
+            final boolean isAdvancedEnabled = mAppPrefs.isAdvancedMenuEnabled();
+            final MenuItem advancedSubMenu = menu.findItem(R.id.menu_advanced);
+            advancedSubMenu.setEnabled(isAdvancedEnabled);
+            advancedSubMenu.setVisible(isAdvancedEnabled);
+
+            //Enable specific sub items within the advanced menu section.
+            final MenuItem killSwitchItem = menu.findItem(R.id.menu_kill_switch);
+            final boolean isKillEnabled = mAppPrefs.isKillSwitchEnabled();
+            killSwitchItem.setEnabled(isKillEnabled);
+            killSwitchItem.setVisible(isKillEnabled);
+
             final boolean areMissionMenusEnabled = enableMissionMenus();
 
             final MenuItem sendMission = menu.findItem(R.id.menu_upload_mission);
@@ -231,6 +248,16 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
 
             case R.id.menu_download_mission:
                 dpApi.loadWaypoints();
+                return true;
+
+            case R.id.menu_kill_switch:
+                SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("disable vehicle", new Runnable() {
+                    @Override
+                    public void run() {
+                        dpApp.getDrone().arm(false);
+                    }
+                });
+                unlockDialog.show(getSupportFragmentManager(), "Slide to use the Kill Switch");
                 return true;
 
             case android.R.id.home:
