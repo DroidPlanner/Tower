@@ -1,4 +1,4 @@
-package org.droidplanner.android.fragments;
+package org.droidplanner.android.fragments.control;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,6 +26,7 @@ import com.o3dr.services.android.lib.gcs.follow.FollowType;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.dialogs.SlideToUnlockDialog;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
@@ -35,9 +36,10 @@ import org.droidplanner.android.utils.analytics.GAUtils;
 /**
  * Provide functionality for flight action button specific to copters.
  */
-public class CopterFlightActionsFragment extends ApiListenerFragment implements View.OnClickListener, FlightActionsFragment.SlidingUpHeader {
+public class CopterFlightControlFragment extends ApiListenerFragment implements View.OnClickListener,
+        FlightControlManagerFragment.SlidingUpHeader {
 
-    private static final String TAG = CopterFlightActionsFragment.class.getSimpleName();
+    private static final String TAG = CopterFlightControlFragment.class.getSimpleName();
 
     private static final String ACTION_FLIGHT_ACTION_BUTTON = "Copter flight action button";
     private static final double TAKEOFF_ALTITUDE = 10.0;
@@ -147,6 +149,8 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     private Button pauseBtn;
     private Button autoBtn;
 
+    private int orangeColor;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_copter_mission_control, container, false);
@@ -155,6 +159,8 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        orangeColor = getResources().getColor(R.color.orange);
 
         mDisconnectedButtons = view.findViewById(R.id.mc_disconnected_buttons);
         mDisarmedButtons = view.findViewById(R.id.mc_disarmed_buttons);
@@ -239,7 +245,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
                 break;
 
             case R.id.mc_takeoff:
-                getDrone().doGuidedTakeoff(TAKEOFF_ALTITUDE);
+                getTakeOffConfirmation();
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Takeoff");
                 break;
 
@@ -262,14 +268,12 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
             case R.id.mc_autoBtn:
                 getDrone().changeVehicleMode(VehicleMode.COPTER_AUTO);
-                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode
-                        .COPTER_AUTO.getLabel());
+                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode.COPTER_AUTO.getLabel());
                 break;
 
             case R.id.mc_TakeoffInAutoBtn:
                 getTakeOffInAutoConfirmation();
-                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode.COPTER_AUTO
-                        .getLabel());
+                eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode.COPTER_AUTO.getLabel());
                 break;
 
             case R.id.mc_follow:
@@ -317,46 +321,37 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
         }
     }
 
+    private void getTakeOffConfirmation(){
+        final SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("take off", new Runnable() {
+            @Override
+            public void run() {
+                getDrone().doGuidedTakeoff(TAKEOFF_ALTITUDE);
+            }
+        });
+        unlockDialog.show(getChildFragmentManager(), "Slide to take off");
+    }
+
     private void getTakeOffInAutoConfirmation() {
-        YesNoWithPrefsDialog ynd = YesNoWithPrefsDialog.newInstance(getActivity()
-                        .getApplicationContext(), getString(R.string.dialog_confirm_take_off_in_auto_title),
-                getString(R.string.dialog_confirm_take_off_in_auto_msg), new YesNoDialog.Listener() {
-                    @Override
-                    public void onYes() {
-                        Drone drone = getDrone();
-                        drone.doGuidedTakeoff(TAKEOFF_ALTITUDE);
-                        drone.changeVehicleMode(VehicleMode.COPTER_AUTO);
-                    }
-
-                    @Override
-                    public void onNo() {
-                    }
-                }, getString(R.string.pref_warn_on_takeoff_in_auto_key));
-
-        if (ynd != null) {
-            ynd.show(getChildFragmentManager(), "Confirm take off in auto");
-        }
+        final SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("take off in auto", new Runnable() {
+            @Override
+            public void run() {
+                Drone drone = getDrone();
+                drone.doGuidedTakeoff(TAKEOFF_ALTITUDE);
+                drone.changeVehicleMode(VehicleMode.COPTER_AUTO);
+            }
+        });
+        unlockDialog.show(getChildFragmentManager(), "Slide to take off in auto");
     }
 
     private void getArmingConfirmation() {
-        YesNoWithPrefsDialog ynd = YesNoWithPrefsDialog.newInstance(getActivity().getApplicationContext(),
-                getString(R.string.dialog_confirm_arming_title),
-                getString(R.string.dialog_confirm_arming_msg), new YesNoDialog.Listener() {
-                    @Override
-                    public void onYes() {
-                        getDrone().arm(true);
-                    }
-
-                    @Override
-                    public void onNo() {
-                    }
-                }, getString(R.string.pref_warn_on_arm_key));
-
-        if (ynd != null) {
-            ynd.show(getChildFragmentManager(), "Confirm arming");
-        }
+        SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("arm", new Runnable() {
+            @Override
+            public void run() {
+                getDrone().arm(true);
+            }
+        }) ;
+        unlockDialog.show(getChildFragmentManager(), "Slide To Arm");
     }
-
 
     private void updateFlightModeButtons() {
         resetFlightModeButtons();
@@ -409,7 +404,7 @@ public class CopterFlightActionsFragment extends ApiListenerFragment implements 
 
         switch (followState.getState()) {
             case FollowState.STATE_START:
-                followBtn.setBackgroundColor(Color.RED);
+                followBtn.setBackgroundColor(orangeColor);
                 break;
 
             case FollowState.STATE_RUNNING:

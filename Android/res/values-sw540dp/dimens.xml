@@ -45,5 +45,6 @@
     <dimen name="tuning_mission_header_title_height">64dp</dimen>
     <dimen name="info_bar_text_size">15sp</dimen>
     <dimen name="action_drawer_width">300dp</dimen>
+    <dimen name="fab_edge_distance">24dp</dimen>
 
 </resources>

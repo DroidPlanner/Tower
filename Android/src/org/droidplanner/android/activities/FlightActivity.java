@@ -21,14 +21,14 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
+import com.o3dr.services.android.lib.drone.attribute.error.ErrorType;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.DroneMap;
-import org.droidplanner.android.fragments.FlightActionsFragment;
+import org.droidplanner.android.fragments.control.FlightControlManagerFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
 import org.droidplanner.android.fragments.TelemetryFragment;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
@@ -52,7 +52,7 @@ public class FlightActivity extends DrawerNavigationUI {
     private static final IntentFilter eventFilter = new IntentFilter();
 
     static {
-        eventFilter.addAction(AttributeEvent.AUTOPILOT_FAILSAFE);
+        eventFilter.addAction(AttributeEvent.AUTOPILOT_ERROR);
         eventFilter.addAction(AttributeEvent.STATE_ARMING);
         eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
         eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
@@ -66,12 +66,10 @@ public class FlightActivity extends DrawerNavigationUI {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             switch (action) {
-                case AttributeEvent.AUTOPILOT_FAILSAFE:
-                    String warning = intent.getStringExtra(AttributeEventExtra
-                            .EXTRA_AUTOPILOT_FAILSAFE_MESSAGE);
-                    final int logLevel = intent.getIntExtra(AttributeEventExtra
-                            .EXTRA_AUTOPILOT_FAILSAFE_MESSAGE_LEVEL, Log.VERBOSE);
-                    onWarningChanged(warning, logLevel);
+                case AttributeEvent.AUTOPILOT_ERROR:
+                    String errorName = intent.getStringExtra(AttributeEventExtra.EXTRA_AUTOPILOT_ERROR_ID);
+                    final ErrorType errorType = ErrorType.getErrorById(errorName);
+                    onAutopilotError(errorType);
                     break;
 
                 case AttributeEvent.STATE_ARMING:
@@ -146,7 +144,7 @@ public class FlightActivity extends DrawerNavigationUI {
     private TextView warningView;
 
     private FlightMapFragment mapFragment;
-    private FlightActionsFragment flightActions;
+    private FlightControlManagerFragment flightActions;
     private TelemetryFragment telemetryFragment;
 
     private SlidingUpPanelLayout mSlidingPanel;
@@ -262,9 +260,9 @@ public class FlightActivity extends DrawerNavigationUI {
             }
         });
 
-        flightActions = (FlightActionsFragment) fragmentManager.findFragmentById(R.id.flightActionsFragment);
+        flightActions = (FlightControlManagerFragment) fragmentManager.findFragmentById(R.id.flightActionsFragment);
         if (flightActions == null) {
-            flightActions = new FlightActionsFragment();
+            flightActions = new FlightControlManagerFragment();
             fragmentManager.beginTransaction().add(R.id.flightActionsFragment, flightActions).commit();
         }
 
@@ -480,17 +478,27 @@ public class FlightActivity extends DrawerNavigationUI {
         }
     }
 
-    public void onWarningChanged(String warning, int logLevel) {
-        if (!TextUtils.isEmpty(warning)) {
-            if (logLevel == Log.INFO) {
-                Toast.makeText(getApplicationContext(), warning, Toast.LENGTH_SHORT).show();
-            } else if (logLevel == Log.WARN || logLevel == Log.ERROR) {
-                handler.removeCallbacks(hideWarningView);
+    private void onAutopilotError(ErrorType errorType) {
+        if(errorType == null)
+            return;
 
-                warningView.setText(warning);
-                warningView.setVisibility(View.VISIBLE);
-                handler.postDelayed(hideWarningView, WARNING_VIEW_DISPLAY_TIMEOUT);
-            }
+        final CharSequence errorLabel;
+        switch(errorType){
+            case NO_ERROR:
+                errorLabel = null;
+                break;
+
+            default:
+                errorLabel = errorType.getLabel(getApplicationContext());
+                break;
+        }
+
+        if(!TextUtils.isEmpty(errorLabel)) {
+            handler.removeCallbacks(hideWarningView);
+
+            warningView.setText(errorLabel);
+            warningView.setVisibility(View.VISIBLE);
+            handler.postDelayed(hideWarningView, WARNING_VIEW_DISPLAY_TIMEOUT);
         }
     }
 }

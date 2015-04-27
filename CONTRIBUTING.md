@@ -20,3 +20,6 @@ Now you just need to get some reply from us. We like to review PRs, and make com
 
 For further commits you might want to consider using a branching model as described in: https://guides.github.com/introduction/flow/
 
+## Branching model
+
+Our branching model follows the one described here: http://nvie.com/posts/a-successful-git-branching-model/

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="64dp"
+        android:layout_gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:id="@+id/shimmer_view_container"
+        app:base_alpha="0.25"
+        app:intensity="0.25"
+        >
+
+        <ImageView
+            android:layout_gravity="end|center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src="@drawable/ic_lock_open_green_600_36dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:scaleType="center"/>
+
+        <org.droidplanner.android.widgets.SlideButton
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:clickable="false"
+            android:max="100"
+            android:progressDrawable="@android:color/transparent"
+            android:thumb="@drawable/ic_unlock_slider"
+            android:id="@+id/unlock_slider"
+            android:layout_gravity="center"
+            android:thumbOffset="-1dp"
+            />
+
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/slider_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            tools:text="Slide to unlock"
+            android:textColor="@android:color/black"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+</android.support.v7.widget.CardView>

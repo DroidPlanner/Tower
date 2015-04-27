@@ -30,10 +30,6 @@ public class ParameterReader implements
 			FileInputStream in = new FileInputStream(itemList);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-			if (!isParameterFile(reader)) {
-				in.close();
-				return false;
-			}
 			parseWaypointLines(reader);
 
 			in.close();
@@ -64,8 +60,6 @@ public class ParameterReader implements
 		String name = RowData[0];
 		Double value = Double.valueOf(RowData[1]);
 
-		Parameter.checkParameterName(name);
-
 		parameters.add(new Parameter(name, value, 0));
 	}
 
@@ -76,10 +70,6 @@ public class ParameterReader implements
 		}
 		RowData[0] = RowData[0].trim();
 		return RowData;
-	}
-
-	private static boolean isParameterFile(BufferedReader reader) throws IOException {
-		return reader.readLine().contains("#NOTE");
 	}
 
 	public List<Parameter> getParameters() {

@@ -134,7 +134,7 @@
     </style>
 
     <style name="flyoutPanelLayout">
-        <item name="android:background">#ffededed</item>
+        <item name="android:background">@color/transparent_light_grey</item>
     </style>
 
 	<!-- style the list navigation -->
@@ -277,8 +277,16 @@
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
 
-    <style name="paramRowLabelText" >
-        <item name="android:textSize">15sp</item>
+    <style name="paramRowLabel" />
+
+    <style name="paramRowLabel.Title">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="paramRowLabel.Text" >
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/greyText</item>
     </style>
 
     <style name="paramValueUnchanged" >
@@ -294,7 +302,7 @@
     </style>
 
     <style name="paramValueValid" parent="paramValueChanged">
-        <item name="android:textColor">#ff06aa09</item>
+        <item name="android:textColor">@color/green</item>
     </style>
 
     <style name="paramValueInvalid" parent="paramValueChanged">

@@ -11,6 +11,7 @@ import org.droidplanner.android.R;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -77,6 +78,7 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 			view = mInflater.inflate(resource, parent, false);
 
 			paramTag = new ParamTag();
+            paramTag.setContainerView(view);
 			paramTag.setNameView((TextView) view.findViewById(R.id.params_row_name));
 			paramTag.setDescView((TextView) view.findViewById(R.id.params_row_desc));
 			paramTag.setValueView((EditText) view.findViewById(R.id.params_row_value));
@@ -110,13 +112,9 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 		valueView.setText(param.getDisplayValue());
 
 		// attach listeners
-		paramTag.getNameView().setOnClickListener(paramTag);
-		paramTag.getDescView().setOnClickListener(paramTag);
+        view.setOnClickListener(paramTag);
 		valueView.addTextChangedListener(paramTag);
 		valueView.setOnFocusChangeListener(paramTag);
-
-		// alternate background color for clarity
-		view.setBackgroundColor((position % 2 == 1) ? colorAltRow : Color.TRANSPARENT);
 
 		return view;
 	}
@@ -156,7 +154,6 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 
     private void addParameter(String name, Parameter parameter, boolean isDirty){
         try {
-            Parameter.checkParameterName(name);
             ParamsAdapterItem item = new ParamsAdapterItem(parameter);
             item.setDirtyValue(parameter.getDisplayValue(), isDirty);
             add(item);
@@ -192,8 +189,9 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 		private TextView nameView;
 		private TextView descView;
 		private EditText valueView;
+        private View containerView;
 
-		public void setPosition(int position) {
+        public void setPosition(int position) {
 			this.position = position;
 		}
 
@@ -246,7 +244,9 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 					break;
 				}
 
+                containerView.setBackgroundResource(R.drawable.dirty_params_row_bg);
 			} else {
+                containerView.setBackgroundResource(R.drawable.params_row_bg);
 				resid = R.style.paramValueUnchanged;
 			}
 			valueView.setTextAppearance(getContext(), resid);
@@ -272,6 +272,7 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 			final ParamsAdapterItem item = getItem(position);
 			item.setDirtyValue(editable.toString());
 
+
 			setAppearance(item);
 		}
 
@@ -293,5 +294,9 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 			if (onInfoListener != null)
 				onInfoListener.onHelp(position, valueView);
 		}
-	}
+
+        public void setContainerView(View view) {
+            containerView = view;
+        }
+    }
 }

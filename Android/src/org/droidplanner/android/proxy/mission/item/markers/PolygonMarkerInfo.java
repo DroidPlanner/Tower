@@ -18,7 +18,7 @@ public class PolygonMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
 		survey = mSurvey;
 		polygonIndex = index;
 	}
-	
+
 	public Survey getSurvey(){
 		return survey;
 	}

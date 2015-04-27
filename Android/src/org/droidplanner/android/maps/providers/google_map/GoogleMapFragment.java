@@ -24,9 +24,17 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -58,6 +66,7 @@ import com.o3dr.services.android.lib.util.googleApi.GoogleApiClientManager.Googl
 
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.helpers.LocalMapTileProvider;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
@@ -92,12 +101,16 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     private static final long USER_LOCATION_UPDATE_FASTEST_INTERVAL = 1000; // ms
     private static final float USER_LOCATION_UPDATE_MIN_DISPLACEMENT = 0; // m
 
+    public static final int REQUEST_CHECK_SETTINGS = 147;
+
     private static final float GO_TO_MY_LOCATION_ZOOM = 19f;
 
     private static final IntentFilter eventFilter = new IntentFilter();
 
     static {
         eventFilter.addAction(AttributeEvent.GPS_POSITION);
+        eventFilter.addAction(SettingsFragment.ACTION_MAP_ROTATION_PREFERENCE_UPDATED);
+        eventFilter.addAction(SettingsFragment.ACTION_LOCATION_SETTINGS_UPDATED);
     }
 
     private final static Api<? extends Api.ApiOptions.NotRequiredOptions>[] apisList = new Api[]{LocationServices.API};
@@ -118,6 +131,32 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
                             final LatLong droneLocation = droneGps.getPosition();
                             updateCamera(droneLocation);
                         }
+                    }
+                    break;
+
+                case SettingsFragment.ACTION_MAP_ROTATION_PREFERENCE_UPDATED:
+                    getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap googleMap) {
+                            setupMapUI(googleMap);
+                        }
+                    });
+                    break;
+
+                case SettingsFragment.ACTION_LOCATION_SETTINGS_UPDATED:
+                    final int resultCode = intent.getIntExtra(SettingsFragment.EXTRA_RESULT_CODE, Activity.RESULT_OK);
+                    switch (resultCode) {
+                        case Activity.RESULT_OK:
+                            // All required changes were successfully made. Try to acquire user location again
+                            mGApiClientMgr.addTask(mRequestLocationUpdateTask);
+                            break;
+
+                        case Activity.RESULT_CANCELED:
+                            // The user was asked to change settings, but chose not to
+                            Toast.makeText(getActivity(), "Please update your location settings!", Toast.LENGTH_LONG).show();
+                            break;
+                        default:
+                            break;
                     }
                     break;
             }
@@ -159,9 +198,51 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
                     .setFastestInterval(USER_LOCATION_UPDATE_FASTEST_INTERVAL)
                     .setInterval(USER_LOCATION_UPDATE_INTERVAL)
                     .setSmallestDisplacement(USER_LOCATION_UPDATE_MIN_DISPLACEMENT);
-            LocationServices.FusedLocationApi.requestLocationUpdates(getGoogleApiClient(), locationReq,
-                    GoogleMapFragment.this);
 
+            final GoogleApiClient googleApiClient = getGoogleApiClient();
+
+            LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                    .addLocationRequest(locationReq);
+
+            PendingResult<LocationSettingsResult> result =
+                    LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
+
+            result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+                @Override
+                public void onResult(LocationSettingsResult callback) {
+                    final Status status = callback.getStatus();
+
+                    switch (status.getStatusCode()) {
+                        case LocationSettingsStatusCodes.SUCCESS:
+                            // All location settings are satisfied. The client can initialize location
+                            // requests here.
+                            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationReq,
+                                    GoogleMapFragment.this);
+                            break;
+
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            // Location settings are not satisfied. But could be fixed by showing the user
+                            // a dialog.
+                            try {
+                                // Show the dialog by calling startResolutionForResult(),
+                                // and check the result in onActivityResult().
+                                status.startResolutionForResult(getActivity(), REQUEST_CHECK_SETTINGS);
+                            } catch (IntentSender.SendIntentException e) {
+                                // Ignore the error.
+                                Log.e(TAG, e.getMessage(), e);
+                            }
+                            break;
+
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            // Location settings are not satisfied. However, we have no way to fix the
+                            // settings so we won't show the dialog.
+                            Log.w(TAG, "Unable to get accurate user location.");
+                            Toast.makeText(getActivity(), "Unable to get accurate location. Please update your " +
+                                    "location settings!", Toast.LENGTH_LONG).show();
+                            break;
+                    }
+                }
+            });
         }
     };
 
@@ -622,16 +703,21 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
     @Override
     public void loadCameraPosition() {
-        final SharedPreferences settings = mAppPrefs.prefs;
+        getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                final SharedPreferences settings = mAppPrefs.prefs;
 
-        CameraPosition.Builder camera = new CameraPosition.Builder();
-        camera.bearing(settings.getFloat(PREF_BEA, DEFAULT_BEARING));
-        camera.tilt(settings.getFloat(PREF_TILT, DEFAULT_TILT));
-        camera.zoom(settings.getFloat(PREF_ZOOM, DEFAULT_ZOOM_LEVEL));
-        camera.target(new LatLng(settings.getFloat(PREF_LAT, DEFAULT_LATITUDE),
-                settings.getFloat(PREF_LNG, DEFAULT_LONGITUDE)));
+                final CameraPosition.Builder camera = new CameraPosition.Builder();
+                camera.bearing(settings.getFloat(PREF_BEA, DEFAULT_BEARING));
+                camera.tilt(settings.getFloat(PREF_TILT, DEFAULT_TILT));
+                camera.zoom(settings.getFloat(PREF_ZOOM, DEFAULT_ZOOM_LEVEL));
+                camera.target(new LatLng(settings.getFloat(PREF_LAT, DEFAULT_LATITUDE),
+                        settings.getFloat(PREF_LNG, DEFAULT_LONGITUDE)));
 
-        getMap().moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));
+                googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));
+            }
+        });
     }
 
     private void setupMap() {
@@ -791,9 +877,11 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         map.setMyLocationEnabled(false);
         UiSettings mUiSettings = map.getUiSettings();
         mUiSettings.setMyLocationButtonEnabled(false);
+        mUiSettings.setMapToolbarEnabled(false);
         mUiSettings.setCompassEnabled(false);
         mUiSettings.setTiltGesturesEnabled(false);
         mUiSettings.setZoomControlsEnabled(false);
+        mUiSettings.setRotateGesturesEnabled(mAppPrefs.isMapRotationEnabled());
     }
 
     private void setupMapOverlay(GoogleMap map) {

@@ -53,7 +53,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
      */
     private final static String TAG = SettingsFragment.class.getSimpleName();
 
-    private static final String PACKAGE_NAME = SettingsFragment.class.getPackage().getName();
+    private static final String PACKAGE_NAME = Utils.PACKAGE_NAME;
 
     /**
      * Action used to broadcast updates to the period for the spoken status
@@ -62,14 +62,36 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     public static final String ACTION_UPDATED_STATUS_PERIOD = PACKAGE_NAME + ".ACTION_UPDATED_STATUS_PERIOD";
 
     /**
+     * Action used to broadcast updates to the gps hdop display preference.
+     */
+    public static final String ACTION_PREF_HDOP_UPDATE = PACKAGE_NAME + ".ACTION_PREF_HDOP_UPDATE";
+
+    /**
+     * Action used to broadcast updates to the unit system.
+     */
+    public static final String ACTION_PREF_UNIT_SYSTEM_UPDATE = PACKAGE_NAME + ".ACTION_PREF_UNIT_SYSTEM_UPDATE";
+
+    /**
      * Used to retrieve the new period for the spoken status summary.
      */
     public static final String EXTRA_UPDATED_STATUS_PERIOD = "extra_updated_status_period";
+
+    public static final String ACTION_LOCATION_SETTINGS_UPDATED = PACKAGE_NAME + ".action.LOCATION_SETTINGS_UPDATED";
+    public static final String EXTRA_RESULT_CODE = "extra_result_code";
+
+    public static final String ACTION_ADVANCED_MENU_UPDATED = PACKAGE_NAME + ".action.ADVANCED_MENU_UPDATED";
+
+    /**
+     * Used to notify of an update to the map rotation preference.
+     */
+    public static final String ACTION_MAP_ROTATION_PREFERENCE_UPDATED = PACKAGE_NAME +
+            ".ACTION_MAP_ROTATION_PREFERENCE_UPDATED";
 
     private static final IntentFilter intentFilter = new IntentFilter();
 
     static {
         intentFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+        intentFilter.addAction(AttributeEvent.STATE_CONNECTED);
         intentFilter.addAction(AttributeEvent.STATE_UPDATED);
         intentFilter.addAction(AttributeEvent.HEARTBEAT_FIRST);
         intentFilter.addAction(AttributeEvent.HEARTBEAT_RESTORED);
@@ -99,6 +121,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                         updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
                     break;
 
+                case AttributeEvent.STATE_CONNECTED:
                 case AttributeEvent.TYPE_UPDATED:
                     Drone drone = dpApp.getDrone();
                     if (drone.isConnected()) {
@@ -139,8 +162,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         dpPrefs = new DroidPlannerPrefs(context);
         lbm = LocalBroadcastManager.getInstance(context);
         final SharedPreferences sharedPref = dpPrefs.prefs;
-
-        setupPeriodicControls();
 
         // Populate the map preference category
         final String mapsProvidersPrefKey = getString(R.string.pref_maps_providers_key);
@@ -219,21 +240,36 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         }
 
         updateMavlinkVersionPreference(null);
+
+        setupPeriodicControls();
         setupConnectionPreferences();
-        setupAdvancedMenuToggle();
+        setupAdvancedMenu();
         setupUnitSystemPreferences();
         setupBluetoothDevicePreferences();
         setupImminentGroundCollisionWarningPreference();
+        setupMapPreferences();
     }
 
-    private void setupAdvancedMenuToggle(){
-        CheckBoxPreference togglePref = (CheckBoxPreference) findPreference(getString(R.string
-                .pref_advanced_menu_toggle_key));
-        if(togglePref != null){
-            togglePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+    private void setupAdvancedMenu(){
+        final CheckBoxPreference hdopToggle = (CheckBoxPreference) findPreference(getString(R.string
+                .pref_ui_gps_hdop_key));
+        if(hdopToggle !=  null) {
+            hdopToggle.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    lbm.sendBroadcast(new Intent(Utils.ACTION_UPDATE_OPTIONS_MENU));
+                    lbm.sendBroadcast(new Intent(ACTION_PREF_HDOP_UPDATE));
+                    return true;
+                }
+            });
+        }
+
+        final CheckBoxPreference killSwitch = (CheckBoxPreference) findPreference(getString(R.string
+                .pref_enable_kill_switch_key));
+        if(killSwitch != null) {
+            killSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    lbm.sendBroadcast(new Intent(ACTION_ADVANCED_MENU_UPDATED));
                     return true;
                 }
             });
@@ -250,10 +286,23 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     int unitSystem = Integer.parseInt((String) newValue);
                     updateUnitSystemSummary(preference, unitSystem);
+                    lbm.sendBroadcast(new Intent(ACTION_PREF_UNIT_SYSTEM_UPDATE));
                     return true;
                 }
             });
         }
+    }
+
+    private void setupMapPreferences(){
+        final CheckBoxPreference mapRotation = (CheckBoxPreference) findPreference(getString(R.string
+                .pref_map_enable_rotation_key));
+        mapRotation.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                lbm.sendBroadcast(new Intent(ACTION_MAP_ROTATION_PREFERENCE_UPDATED));
+                return true;
+            }
+        });
     }
 
     private void setupImminentGroundCollisionWarningPreference(){
@@ -383,6 +432,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         mDefaultSummaryPrefs.add(getString(R.string.pref_udp_server_port_key));
         mDefaultSummaryPrefs.add(getString(R.string.pref_rc_quickmode_left_key));
         mDefaultSummaryPrefs.add(getString(R.string.pref_rc_quickmode_right_key));
+        mDefaultSummaryPrefs.add(getString(R.string.pref_udp_ping_receiver_ip_key));
+        mDefaultSummaryPrefs.add(getString(R.string.pref_udp_ping_receiver_port_key));
     }
 
     /**

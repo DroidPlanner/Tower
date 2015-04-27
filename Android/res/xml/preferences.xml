@@ -57,7 +57,13 @@
                     android:key="@string/pref_map_provider_settings_key"
                     android:summary="@string/pref_map_provider_settings_summary"
                     android:title="@string/pref_map_provider_settings_title" />
-                
+
+                <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:key="@string/pref_map_enable_rotation_key"
+                    android:title="@string/pref_map_rotation_title"
+                    android:summary="@string/pref_map_rotation_summary"/>
+
                 <CheckBoxPreference
                     android:defaultValue="false"
                     android:key="@string/pref_ui_realtime_footprints_key"
@@ -169,22 +175,8 @@
                     android:key="@string/pref_dialogs_key">
 
                     <ListPreference
-                        android:key="@string/pref_warn_on_arm_key"
-                        android:title="@string/pref_warn_on_arm_title"
-                        android:entries="@array/preference_dialog_entry"
-                        android:entryValues="@array/preference_dialog_entry"
-                        android:defaultValue="@string/pref_dialog_entry_ask"/>
-
-                    <ListPreference
                         android:key="@string/pref_auto_insert_mission_takeoff_rtl_land_key"
                         android:title="@string/pref_auto_insert_mission_takeoff_rtl_land_title"
-                        android:entries="@array/preference_dialog_entry"
-                        android:defaultValue="@string/pref_dialog_entry_ask"
-                        android:entryValues="@array/preference_dialog_entry"/>
-
-                    <ListPreference
-                        android:key="@string/pref_warn_on_takeoff_in_auto_key"
-                        android:title="@string/dialog_confirm_take_off_in_auto_title"
                         android:entries="@array/preference_dialog_entry"
                         android:defaultValue="@string/pref_dialog_entry_ask"
                         android:entryValues="@array/preference_dialog_entry"/>
@@ -243,6 +235,28 @@
                         android:inputType="number"
                         android:key="@string/pref_udp_server_port_key"
                         android:title="@string/pref_udp_server_port" />
+
+                    <CheckBoxPreference
+                        android:defaultValue="false"
+                        android:key="@string/pref_enable_udp_server_ping_key"
+                        android:title="@string/pref_enable_udp_server_title"
+                        android:summary="@string/pref_udp_server_ping_summary"/>
+
+                    <EditTextPreference
+                        android:gravity="center"
+                        android:dependency="@string/pref_enable_udp_server_ping_key"
+                        android:key="@string/pref_udp_ping_receiver_ip_key"
+                        android:title="@string/pref_udp_ping_receiver_ip_title"/>
+
+                    <EditTextPreference
+                        android:gravity="center"
+                        android:dependency="@string/pref_enable_udp_server_ping_key"
+                        android:key="@string/pref_udp_ping_receiver_port_key"
+                        android:inputType="number"
+                        android:title="@string/pref_udp_ping_receiver_port_title"/>
+
+                    <EditTextPreference
+                        />
                 </PreferenceCategory>
                 <PreferenceCategory
                     android:key="pref_bluetooth"
@@ -267,13 +281,18 @@
                     android:summary="@string/pref_ui_gps_hdop_summary"
                     android:title="@string/pref_ui_gps_hdop_title" />
             </PreferenceCategory>
-            <PreferenceCategory android:title="@string/pref_misc_title">
+
+            <!-- Disabling kill switch until arducopter v3.3 is out.
+            <PreferenceCategory
+                android:title="@string/pref_advance_menu_title">
+
                 <CheckBoxPreference
                     android:defaultValue="false"
-                    android:key="@string/pref_advanced_menu_toggle_key"
-                    android:title="@string/pref_advanced_menu_title"
-                    android:summary="@string/pref_advanced_menu_summary"/>
-            </PreferenceCategory>
+                    android:key="@string/pref_enable_kill_switch_key"
+                    android:summary="@string/pref_enable_kill_switch_summary"
+                    android:title="@string/pref_enable_kill_switch_title"/>
+
+            </PreferenceCategory>-->
         </PreferenceScreen>
     </PreferenceCategory>
 

@@ -7,12 +7,10 @@
     android:gravity="center"
     >
 
-    <fragment
-        android:id="@id/mapFragment"
+    <FrameLayout
+        android:id="@+id/locator_map_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="false"
-        class="org.droidplanner.android.fragments.LocatorMapFragment"/>
+        android:layout_height="match_parent"/>
 
     <org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout
         android:layout_width="match_parent"

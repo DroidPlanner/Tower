@@ -235,7 +235,7 @@
     <string name="structure_scan_step_height">Step height</string>
     <string name="stucture_scanner_cross_hatch">Cross Hatch</string>
 
-    <string name="dlg_clear_mission_title">Clear Mission</string>
+    <string name="dlg_clear_mission_title">Clear mission</string>
     <string name="dlg_clear_mission_confirm">Clear all waypoints from the map?</string>
 
     <!-- Selection of map style -->
@@ -246,7 +246,7 @@
     <string name="menu_map_type_terrain">Terrain</string>
 
     <!-- Parameters screen -->
-    <string name="params_click_to_refresh">Click to refresh parameters from drone</string>
+    <string name="params_click_to_refresh">No Parameters</string>
     <string name="refreshing_parameters">Refreshing Parameters…</string>
     <string name="parameters_saved">Parameters saved</string>
     <string name="msg_parameters_written_to_drone">parameters uploaded to drone</string>
@@ -492,6 +492,7 @@
     <string name="status_waiting_for_gps">Waiting for GPS…</string>
 
     <!-- Preference dialogs -->
+    <string name="unlock_slider_description">Slide to %s</string>
     <string name="pref_misc_title">Miscellaneous</string>
     <string name="pref_dialogs_title">Preference Dialogs</string>
     <string name="pref_warn_on_arm_title">Arming button warning</string>
@@ -528,7 +529,7 @@
     <string name="label_logout">Logout</string>
     <string name="delete_selected_waypoints_confirm">Clear selected waypoints from the map?</string>
     <string name="delete_selected_waypoints_title">Clear selected waypoints</string>
-    <string name="label_select_all">select all</string>
+    <string name="label_select_all">Select all</string>
     <string name="guided_scan_roi_set_message">Targeting selected location.</string>
     <string name="mode_follow_guided_scan">Vehicle follows the user while remaining locked on a point of interest. Long click on the map to select the point of interest.</string>
     <string name="pref_no_saved_bluetooth_device_title">No saved bluetooth device.</string>
@@ -539,5 +540,14 @@
     <string name="label_vehicle_details">Vehicle details</string>
     <string name="pref_ground_collision_warning_title">Ground Collision</string>
     <string name="pref_ground_collision_warning_summary">Warns about imminent ground collision.</string>
+    <string name="pref_map_rotation_title">Enable map rotation</string>
+    <string name="pref_map_rotation_summary">Check to enable the ability to rotate the map.</string>
+    <string name="pref_advance_menu_title">Advanced Menu Options</string>
+    <string name="pref_enable_kill_switch_summary">If enabled, a Kill Switch option will appear under the Advanced section in the menu, allowing to disarm the vehicle immediately.</string>
+    <string name="pref_enable_kill_switch_title">Enable Kill Switch</string>
+    <string name="pref_enable_udp_server_title">Enable UDP server ping</string>
+    <string name="pref_udp_server_ping_summary">Enable to allow the app to periodically ping the udp server.</string>
+    <string name="pref_udp_ping_receiver_ip_title">UDP ping receiver ip</string>
+    <string name="pref_udp_ping_receiver_port_title">UDP ping receiver port</string>
 
 </resources>

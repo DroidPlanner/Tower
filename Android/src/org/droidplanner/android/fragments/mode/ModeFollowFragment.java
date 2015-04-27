@@ -101,7 +101,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
         roiHeightWheel.addScrollListener(this);
 
         spinner = (Spinner) parentView.findViewById(R.id.follow_type_spinner);
-        adapter = new FollowTypesAdapter(context, getAppPrefs().isAdvancedMenuEnabled());
+        adapter = new FollowTypesAdapter(context, false);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
     }
@@ -131,6 +131,9 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
     }
 
     private void onFollowTypeUpdate(FollowType followType, Bundle params) {
+        if(followType == null)
+            return;
+
         updateModeDescription(followType);
 
         if (followType.hasParam(FollowType.EXTRA_FOLLOW_RADIUS)) {

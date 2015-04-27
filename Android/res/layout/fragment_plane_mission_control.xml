@@ -2,6 +2,7 @@
 
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -68,6 +69,7 @@
         android:layout_width="@dimen/flight_actions_container_width"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        tools:visibility="visible"
         android:id="@+id/mc_connected_buttons"
         android:layout_gravity="center_horizontal">
 
@@ -114,6 +116,15 @@
                 android:text="@string/mission_control_follow"
                 android:layout_weight="1"
                 />
+
+            <ImageView
+                android:id="@+id/reveal_toggler"
+                android:layout_width="36dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/flight_action_row_bg_selector"
+                android:src="@drawable/ic_more_vert_black_24dp"
+                android:scaleType="center"/>
 
         </LinearLayout>
     </android.support.v7.widget.CardView>

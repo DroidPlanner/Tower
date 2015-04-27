@@ -25,21 +25,15 @@
             android:id="@+id/menu_advanced"
             android:enabled="false"
             android:visible="false"
-            android:title="Advanced"
+            android:title="@string/pref_advanced"
             app:showAsAction="never">
             <menu>
                 <item
-                    android:id="@+id/menu_triggerCamera"
+                    android:id="@+id/menu_kill_switch"
                     app:showAsAction="never"
-                    android:title="Picture"/>
-                <item
-                    android:id="@+id/menu_epm_release"
-                    app:showAsAction="never"
-                    android:title="Release"/>
-                <item
-                    android:id="@+id/menu_epm_grab"
-                    app:showAsAction="never"
-                    android:title="Grab"/>
+                    android:enabled="false"
+                    android:visible="false"
+                    android:title="KILL SWITCH"/>
             </menu>
         </item>
 

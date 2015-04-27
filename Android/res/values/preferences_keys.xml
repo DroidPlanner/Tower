@@ -13,8 +13,8 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_map_provider_settings_key" translatable="false">pref_map_provider_settings</string>
     <string name="pref_connection_type_key" translatable="false">pref_connection_param_type</string>
     <string name="pref_map_type_key" translatable="false">pref_map_type</string>
+    <string name="pref_map_enable_rotation_key" translatable="false">pref_map_enable_rotation</string>
     <string name="pref_advanced_use_offline_maps_key" translatable="false">pref_advanced_use_offline_maps</string>
-    <string name="pref_advanced_menu_toggle_key" translatable="false">pref_advanced_menu_toggle</string>
     <string name="pref_baud_type_key" translatable="false">pref_baud_type</string>
     <string name="pref_server_ip_key" translatable="false">pref_server_ip</string>
     <string name="pref_server_port_key" translatable="false">pref_server_port</string>
@@ -40,9 +40,7 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_live_upload_enabled_key" translatable="false">pref_live_upload_enabled</string>
 
     <string name="pref_dialogs_key" translatable="false">pref_dialogs</string>
-    <string name="pref_warn_on_arm_key" translatable="false">pref_warn_on_arm</string>
     <string name="pref_auto_insert_mission_takeoff_rtl_land_key" translatable="false">pref_auto_insert_mission_takeoff_rtl_land</string>
-    <string name="pref_warn_on_takeoff_in_auto_key" translatable="false">pref_warn_on_takeoff_in_auto</string>
     <string name="pref_warn_on_dronie_creation_key" translatable="false">pref_warn_on_dronie_creation</string>
 
     <string name="pref_enable_tts_key" translatable="false">pref_enable_tts</string>
@@ -61,5 +59,9 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_ground_collision_warning_key" translatable="false">pref_ground_collision_warning</string>
 
     <string name="pref_unit_system_key" translatable="false">pref_unit_system</string>
+    <string name="pref_enable_kill_switch_key" translatable="false">pref_enable_kill_switch</string>
+    <string name="pref_enable_udp_server_ping_key" translatable="false">pref_enable_udp_server_ping</string>
+    <string name="pref_udp_ping_receiver_ip_key" translatable="false">pref_udp_ping_receiver_ip</string>
+    <string name="pref_udp_ping_receiver_port_key" translatable="false">pref_udp_ping_receiver_port</string>
 
 </resources>
