@@ -94,7 +94,7 @@ public class FlightControlManagerFragment extends ApiListenerFragment {
 			break;
 		}
 
-		fm.beginTransaction().replace(R.id.flight_actions_bar, actionsBarFragment).commit();
+		fm.beginTransaction().replace(R.id.flight_actions_bar, actionsBarFragment).commitAllowingStateLoss();
 		header = (SlidingUpHeader) actionsBarFragment;
 	}
 
