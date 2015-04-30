@@ -166,7 +166,7 @@
     <string name="pref_advanced_menu_title">Menu avanzado</string>
     <string name="pref_advanced_use_offline_maps">Usar mapas "Sin conexión"</string>
     <string name="pref_advanced_use_offline_maps_summary">Usar los mapas almacenados en el almacenamiento local , para la vista de mapas en modo desconectado</string>
-    <string name="pref_auto_insert_mission_takeoff_rtl_land_title">auto insertar \'Despegue\' y         \'RTL\'/\'Land\' a la misión</string>
+    <string name="pref_auto_insert_mission_takeoff_rtl_land_title">Auto insertar \'Despegue\' y         \'RTL\'/\'Land\' a la misión</string>
     <string name="pref_baud_type">Velocidad del enlace de telemetria</string>
     <string name="pref_baud_type_summary">Baud Rate del enlace USB Telemetria</string>
     <string name="pref_bluetooth">CONEXION BLUETOOH</string>
@@ -320,7 +320,7 @@
     <string name="setup_ch_CH7_options">Canal 7 Opciones:</string>
     <string name="setup_ch_CH8_options">Canal 8 Tuning:</string>
     <string name="setup_ch_options_title">Opciones de canal - CH7 &amp; CH8</string>
-    <string name="setup_ch_side_desc">Pulse \ 'Enviar \' para actualizar la nueva función del servo al vehículo.</string>
+    <string name="setup_ch_side_desc">Pulse \'Enviar\' para actualizar la nueva funcion del servo al vehiculo.</string>
     <string name="setup_ch_side_title">Actualizar las opciones del canal</string>
     <string name="setup_ch_title">Opciones de conficuracion del canal</string>
     <string name="setup_ch_tune_high">Tune Value - High:</string>
@@ -334,7 +334,7 @@
     <string name="setup_fm_mode4">4.</string>
     <string name="setup_fm_mode5">5.</string>
     <string name="setup_fm_mode6">6.</string>
-    <string name="setup_fm_side_desc"> Pulse \ 'Enviar \' para actualizar los nuevos modos de vuelo a vehículo.</string>
+    <string name="setup_fm_side_desc">Pulse \'Enviar\' para actualizar los nuevos modos de vuelo a vehículo.</string>
     <string name="setup_fm_side_title"> Actualización Modo de vuelo</string>
     <string name="setup_fm_simple">Modo Simple</string>
     <string name="setup_fm_super">Modo Super Simple</string>
@@ -352,9 +352,9 @@
     <string name="setup_imu_title">Calibrar Acelerometro</string>
     <string name="setup_mag_start">Presione Calibrar para iniciar la calibración magnetómetro. Realice la calibración aire libre lejos de objetos metálicos.</string>
     <string name="setup_mag_title">Calibracion de la brujula</string>
-    <string name="setup_radio_cal_desc"> Presione Calibrar para iniciar la calibración de radio. Asegúrese de que el transmisor de radio está encendido \ 'ON \' y transmite.</string>
+    <string name="setup_radio_cal_desc">Presione Calibrar para iniciar la calibración de radio. Asegúrese de que el transmisor de radio está encendido \'ON\' y transmite.</string>
     <string name="setup_radio_cal_title">Iniciar calibración</string>
-    <string name="setup_radio_desc_complete"> Completó la calibración RC. Pulse \ 'Guardar \' para cargar los datos al vehículo.</string>
+    <string name="setup_radio_desc_complete">Completó la calibración RC. Pulse \'Guardar\' para cargar los datos al vehículo.</string>
     <string name="setup_radio_desc_middle">Ponga stick del acelerador a la posición más baja y los otros joysticks , interruptores, palancas y pomos a su posición central.</string>
     <string name="setup_radio_desc_minmax">Mueva los joysticks todo el recorrido varias veces y mueva los interruptores, palancas y mandos para todas las posiciones posibles.</string>
     <string name="setup_radio_title">Calibracion del canal de radio</string>
@@ -370,7 +370,7 @@
     <string name="setup_sf_servo8">Servo 8:</string>
     <string name="setup_sf_servo9">Servo 9:</string>
     <string name="setup_sf_servo_title">Configuracion Funciones Servo</string>
-    <string name="setup_sf_side_desc"> Pulse \ 'Enviar \' para actualizar la nuevas funciones del servo al vehículo.</string>
+    <string name="setup_sf_side_desc">Pulse \'Enviar\' para actualizar la nuevas funciones del servo al vehículo.</string>
     <string name="setup_sf_side_title">Actualizar Funciones Servo</string>
     <string name="setup_sf_title">Configuracion Funciones Servo</string>
     <string name="speed_label">Velocidad</string>
