@@ -137,7 +137,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
         lbm = LocalBroadcastManager.getInstance(context);
 
         controlTower = new ControlTower(context);
-        drone = new Drone();
+        drone = new Drone(context);
         missionProxy = new MissionProxy(context, this.drone);
 
         final Thread.UncaughtExceptionHandler dpExceptionHandler = new Thread.UncaughtExceptionHandler() {

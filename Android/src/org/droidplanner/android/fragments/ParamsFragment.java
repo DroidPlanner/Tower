@@ -63,8 +63,8 @@ public class ParamsFragment extends ApiListenerListFragment {
 
     static {
         intentFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_STARTED);
-        intentFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_ENDED);
-        intentFilter.addAction(AttributeEvent.PARAMETERS_RECEIVED);
+        intentFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_COMPLETED);
+        intentFilter.addAction(AttributeEvent.PARAMETER_RECEIVED);
         intentFilter.addAction(AttributeEvent.STATE_CONNECTED);
         intentFilter.addAction(AttributeEvent.TYPE_UPDATED);
     }
@@ -78,7 +78,7 @@ public class ParamsFragment extends ApiListenerListFragment {
                     startProgress();
                     break;
 
-                case AttributeEvent.PARAMETERS_REFRESH_ENDED:
+                case AttributeEvent.PARAMETERS_REFRESH_COMPLETED:
                     stopProgress();
                     /*** FALL - THROUGH ***/
                 case AttributeEvent.STATE_CONNECTED:
@@ -90,7 +90,7 @@ public class ParamsFragment extends ApiListenerListFragment {
                     }
                     break;
 
-                case AttributeEvent.PARAMETERS_RECEIVED:
+                case AttributeEvent.PARAMETER_RECEIVED:
                     final int defaultValue = -1;
                     int index = intent.getIntExtra(AttributeEventExtra.EXTRA_PARAMETER_INDEX, defaultValue);
                     int count = intent.getIntExtra(AttributeEventExtra.EXTRA_PARAMETERS_COUNT, defaultValue);
