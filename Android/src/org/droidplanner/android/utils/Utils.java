@@ -3,10 +3,13 @@ package org.droidplanner.android.utils;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Looper;
 
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.util.Locale;
 
 /**
@@ -47,4 +50,20 @@ public class Utils {
 			res.updateConfiguration(config, res.getDisplayMetrics());
 		}
 	}
+
+	public static boolean runningOnMainThread() {
+		return  Looper.myLooper() == Looper.getMainLooper();
+	}
+
+	public static String readAll(Reader rd) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		int cp;
+		while ((cp = rd.read()) != -1) {
+			sb.append((char) cp);
+		}
+		return sb.toString();
+	}
+
+	//Private constructor to prevent instantiation.
+	private Utils(){}
 }

@@ -23,6 +23,7 @@ import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 import com.o3dr.services.android.lib.drone.connection.DroneSharePrefs;
 
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
+import org.droidplanner.android.maps.providers.mapbox.offline.MapDownloader;
 import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
@@ -127,6 +128,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
     private DroidPlannerPrefs dpPrefs;
     private LocalBroadcastManager lbm;
     private NotificationHandler notificationHandler;
+    private MapDownloader mapDownloader;
 
     @Override
     public void onCreate() {
@@ -135,6 +137,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
 
         dpPrefs = new DroidPlannerPrefs(context);
         lbm = LocalBroadcastManager.getInstance(context);
+        mapDownloader = new MapDownloader(context);
 
         controlTower = new ControlTower(context);
         drone = new Drone(context);
@@ -158,6 +161,10 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
         intentFilter.addAction(ACTION_TOGGLE_DRONE_CONNECTION);
 
         registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    public MapDownloader getMapDownloader() {
+        return mapDownloader;
     }
 
     public void addApiListener(ApiListener listener) {
