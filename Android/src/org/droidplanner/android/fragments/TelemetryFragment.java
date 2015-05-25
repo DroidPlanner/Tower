@@ -38,6 +38,7 @@ public class TelemetryFragment extends ApiListenerFragment {
     static {
         eventFilter.addAction(AttributeEvent.ATTITUDE_UPDATED);
         eventFilter.addAction(AttributeEvent.SPEED_UPDATED);
+        eventFilter.addAction(AttributeEvent.ALTITUDE_UPDATED);
         eventFilter.addAction(AttributeEvent.STATE_UPDATED);
     }
 
@@ -62,7 +63,9 @@ public class TelemetryFragment extends ApiListenerFragment {
                 case AttributeEvent.SPEED_UPDATED:
                     final Speed droneSpeed = drone.getAttribute(AttributeType.SPEED);
                     onSpeedUpdate(droneSpeed);
+                    break;
 
+                case AttributeEvent.ALTITUDE_UPDATED:
                     final Altitude droneAltitude = drone.getAttribute(AttributeType.ALTITUDE);
                     onAltitudeUpdate(droneAltitude);
                     break;
