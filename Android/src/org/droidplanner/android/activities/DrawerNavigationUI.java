@@ -21,13 +21,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.GoogleMap;
-
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.actionbar.ActionBarTelemFragment;
-import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
+import org.droidplanner.android.fragments.control.BaseFlightControlFragment;
 import org.droidplanner.android.widgets.SlidingDrawer;
 
 /**
@@ -100,7 +98,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         switch(requestCode) {
-            case GoogleMapFragment.REQUEST_CHECK_SETTINGS:
+            case BaseFlightControlFragment.FOLLOW_SETTINGS_UPDATE:
                 LocalBroadcastManager.getInstance(getApplicationContext())
                         .sendBroadcast(new Intent(SettingsFragment.ACTION_LOCATION_SETTINGS_UPDATED)
                                 .putExtra(SettingsFragment.EXTRA_RESULT_CODE, resultCode));

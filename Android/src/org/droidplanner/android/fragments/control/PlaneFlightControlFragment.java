@@ -33,8 +33,7 @@ import org.droidplanner.android.utils.analytics.GAUtils;
 /**
  * Provides functionality for flight action buttons specific to planes.
  */
-public class PlaneFlightControlFragment extends ApiListenerFragment implements
-        View.OnClickListener, FlightControlManagerFragment.SlidingUpHeader {
+public class PlaneFlightControlFragment extends BaseFlightControlFragment {
 
     private static final String ACTION_FLIGHT_ACTION_BUTTON = "Copter flight action button";
 
@@ -270,6 +269,8 @@ public class PlaneFlightControlFragment extends ApiListenerFragment implements
 
     @Override
     public void onApiConnected() {
+        super.onApiConnected();
+
         setupButtonsByFlightState();
         updateFlightModeButtons();
         updateFollowButton();
@@ -278,6 +279,7 @@ public class PlaneFlightControlFragment extends ApiListenerFragment implements
 
     @Override
     public void onApiDisconnected() {
+        super.onApiDisconnected();
         getBroadcastManager().unregisterReceiver(eventReceiver);
     }
 
@@ -340,11 +342,7 @@ public class PlaneFlightControlFragment extends ApiListenerFragment implements
                 break;
 
             case R.id.mc_follow: {
-                final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
-                if (followState.isEnabled()) {
-                    drone.disableFollowMe();
-                } else
-                    drone.enableFollowMe(FollowType.LEASH);
+                toggleFollowMe();
                 break;
             }
 
