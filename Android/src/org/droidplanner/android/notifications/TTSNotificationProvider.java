@@ -303,10 +303,7 @@ public class TTSNotificationProvider implements OnInitListener,
 			// TODO: check if the language is available
 			Locale ttsLanguage;
 			final int sdkVersion = Build.VERSION.SDK_INT;
-			if(sdkVersion >= Build.VERSION_CODES.LOLLIPOP){
-				ttsLanguage = tts.getDefaultVoice().getLocale();
-			}
-			else if (sdkVersion >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			if (sdkVersion >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
 				ttsLanguage = tts.getDefaultLanguage();
 			} else {
 				ttsLanguage = tts.getLanguage();

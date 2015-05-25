@@ -281,6 +281,12 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     protected DroidPlannerApp dpApp;
     private Polygon footprintPoly;
 
+    /*
+    Tile overlay
+     */
+    private TileOverlay onlineTileProvider;
+    private TileOverlay offlineTileProvider;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
