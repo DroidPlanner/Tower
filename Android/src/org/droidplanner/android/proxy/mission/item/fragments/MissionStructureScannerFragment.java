@@ -74,7 +74,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
         CardWheelHorizontalView<LengthUnit> endAltitudeStepPicker = (CardWheelHorizontalView) view
                 .findViewById(R.id.heightStepPicker);
         endAltitudeStepPicker.setViewAdapter(new LengthWheelAdapter(context, R.layout.wheel_text_centered,
-                lengthUP.boxBaseValueToTarget(1), lengthUP.boxBaseValueToTarget(MAX_ALTITUDE)));
+                lengthUP.boxBaseValueToTarget(MIN_ALTITUDE), lengthUP.boxBaseValueToTarget(MAX_ALTITUDE)));
         endAltitudeStepPicker.addScrollListener(this);
 
         CardWheelHorizontalView<Integer> numberStepsPicker = (CardWheelHorizontalView<Integer>) view

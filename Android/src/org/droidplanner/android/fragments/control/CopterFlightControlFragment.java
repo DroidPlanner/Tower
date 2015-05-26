@@ -41,7 +41,6 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment {
     private static final String TAG = CopterFlightControlFragment.class.getSimpleName();
 
     private static final String ACTION_FLIGHT_ACTION_BUTTON = "Copter flight action button";
-    private static final double TAKEOFF_ALTITUDE = 10.0;
 
     private static final IntentFilter eventFilter = new IntentFilter();
 
@@ -320,7 +319,8 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment {
         final SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("take off", new Runnable() {
             @Override
             public void run() {
-                getDrone().doGuidedTakeoff(TAKEOFF_ALTITUDE);
+                final int takeOffAltitude = getAppPrefs().getDefaultAltitude();
+                getDrone().doGuidedTakeoff(takeOffAltitude);
             }
         });
         unlockDialog.show(getChildFragmentManager(), "Slide to take off");
@@ -330,8 +330,11 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment {
         final SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("take off in auto", new Runnable() {
             @Override
             public void run() {
+
+                final int takeOffAltitude = getAppPrefs().getDefaultAltitude();
+
                 Drone drone = getDrone();
-                drone.doGuidedTakeoff(TAKEOFF_ALTITUDE);
+                drone.doGuidedTakeoff(takeOffAltitude);
                 drone.changeVehicleMode(VehicleMode.COPTER_AUTO);
             }
         });

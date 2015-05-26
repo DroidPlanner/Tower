@@ -24,6 +24,7 @@ import org.droidplanner.android.fragments.helpers.ApiListenerDialogFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 
 import java.util.ArrayList;
@@ -36,8 +37,8 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
 
     private static final String TAG = MissionDetailFragment.class.getSimpleName();
 
-    protected static final int MIN_ALTITUDE = -200; // meter
-    protected static final int MAX_ALTITUDE = +200; // meters
+    protected int MIN_ALTITUDE; // meter
+    protected int MAX_ALTITUDE; // meters
 
     public static final List<MissionItemType> typeWithNoMultiEditSupport = new
             ArrayList<MissionItemType>();
@@ -153,6 +154,10 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+
+        final DroidPlannerPrefs dpPrefs = getAppPrefs();
+        MIN_ALTITUDE = dpPrefs.getMinAltitude();
+        MAX_ALTITUDE = dpPrefs.getMaxAltitude();
     }
 
     @Override

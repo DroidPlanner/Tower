@@ -26,7 +26,7 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
 
         final LengthUnitProvider lengthUP = getLengthUnitProvider();
         final LengthWheelAdapter altitudeAdapter = new LengthWheelAdapter(getContext(), R.layout.wheel_text_centered,
-                lengthUP.boxBaseValueToTarget(0), lengthUP.boxBaseValueToTarget(MAX_ALTITUDE));
+                lengthUP.boxBaseValueToTarget(MIN_ALTITUDE), lengthUP.boxBaseValueToTarget(MAX_ALTITUDE));
         CardWheelHorizontalView<LengthUnit> cardAltitudePicker = (CardWheelHorizontalView) getView()
                 .findViewById(R.id.altitudePicker);
         cardAltitudePicker.setViewAdapter(altitudeAdapter);
