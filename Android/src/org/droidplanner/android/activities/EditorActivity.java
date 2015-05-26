@@ -69,7 +69,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     static {
         eventFilter.addAction(MissionProxy.ACTION_MISSION_PROXY_UPDATE);
         eventFilter.addAction(AttributeEvent.MISSION_RECEIVED);
-        eventFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_ENDED);
+        eventFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_COMPLETED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -77,7 +77,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             switch (action) {
-                case AttributeEvent.PARAMETERS_REFRESH_ENDED:
+                case AttributeEvent.PARAMETERS_REFRESH_COMPLETED:
                 case MissionProxy.ACTION_MISSION_PROXY_UPDATE:
                     updateMissionLength();
                     break;

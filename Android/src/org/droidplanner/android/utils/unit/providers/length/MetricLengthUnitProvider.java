@@ -2,6 +2,7 @@ package org.droidplanner.android.utils.unit.providers.length;
 
 import org.beyene.sius.operation.Operation;
 import org.beyene.sius.unit.UnitIdentifier;
+import org.beyene.sius.unit.impl.FactoryLength;
 import org.beyene.sius.unit.length.Constants;
 import org.beyene.sius.unit.length.LengthUnit;
 import org.beyene.sius.unit.length.Meter;
@@ -18,5 +19,10 @@ public class MetricLengthUnitProvider extends LengthUnitProvider {
             return Operation.convert(base, UnitIdentifier.KILOMETER);
         else
             return base;
+    }
+
+    @Override
+    public LengthUnit boxTargetValue(double valueInTargetUnits) {
+        return FactoryLength.meter(valueInTargetUnits);
     }
 }

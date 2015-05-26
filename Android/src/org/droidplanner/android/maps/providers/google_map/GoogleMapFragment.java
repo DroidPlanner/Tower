@@ -24,17 +24,11 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -85,7 +79,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class GoogleMapFragment extends SupportMapFragment implements DPMap, LocationListener, GoogleApiClientManager.ManagerListener {
+public class GoogleMapFragment extends SupportMapFragment implements DPMap, GoogleApiClientManager.ManagerListener {
 
     private static final String TAG = GoogleMapFragment.class.getSimpleName();
 
@@ -96,12 +90,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     public static final String MAP_TYPE_NORMAL = "Normal";
     public static final String MAP_TYPE_TERRAIN = "Terrain";
 
-    // TODO: update the interval based on the user's current activity.
     private static final long USER_LOCATION_UPDATE_INTERVAL = 30000; // ms
-    private static final long USER_LOCATION_UPDATE_FASTEST_INTERVAL = 1000; // ms
+    private static final long USER_LOCATION_UPDATE_FASTEST_INTERVAL = 5000; // ms
     private static final float USER_LOCATION_UPDATE_MIN_DISPLACEMENT = 0; // m
-
-    public static final int REQUEST_CHECK_SETTINGS = 147;
 
     private static final float GO_TO_MY_LOCATION_ZOOM = 19f;
 
@@ -110,7 +101,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     static {
         eventFilter.addAction(AttributeEvent.GPS_POSITION);
         eventFilter.addAction(SettingsFragment.ACTION_MAP_ROTATION_PREFERENCE_UPDATED);
-        eventFilter.addAction(SettingsFragment.ACTION_LOCATION_SETTINGS_UPDATED);
     }
 
     private final static Api<? extends Api.ApiOptions.NotRequiredOptions>[] apisList = new Api[]{LocationServices.API};
@@ -142,23 +132,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
                         }
                     });
                     break;
-
-                case SettingsFragment.ACTION_LOCATION_SETTINGS_UPDATED:
-                    final int resultCode = intent.getIntExtra(SettingsFragment.EXTRA_RESULT_CODE, Activity.RESULT_OK);
-                    switch (resultCode) {
-                        case Activity.RESULT_OK:
-                            // All required changes were successfully made. Try to acquire user location again
-                            mGApiClientMgr.addTask(mRequestLocationUpdateTask);
-                            break;
-
-                        case Activity.RESULT_CANCELED:
-                            // The user was asked to change settings, but chose not to
-                            Toast.makeText(getActivity(), "Please update your location settings!", Toast.LENGTH_LONG).show();
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
             }
         }
     };
@@ -169,6 +142,52 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
     private final AtomicReference<AutoPanMode> mPanMode = new AtomicReference<AutoPanMode>(
             AutoPanMode.DISABLED);
+
+    private final Handler handler = new Handler();
+
+    private final LocationCallback locationCb = new LocationCallback() {
+        @Override
+        public void onLocationAvailability(LocationAvailability locationAvailability) {
+            super.onLocationAvailability(locationAvailability);
+        }
+
+        @Override
+        public void onLocationResult(LocationResult result) {
+            super.onLocationResult(result);
+
+            final Location location = result.getLastLocation();
+            if (location == null)
+                return;
+
+            //Update the user location icon.
+            if (userMarker == null) {
+                final MarkerOptions options = new MarkerOptions()
+                        .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                        .draggable(false)
+                        .flat(true)
+                        .visible(true)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.blue));
+
+                getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(GoogleMap googleMap) {
+                        userMarker = googleMap.addMarker(options);
+                    }
+                });
+            } else {
+                userMarker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
+            }
+
+            if (mPanMode.get() == AutoPanMode.USER) {
+                Log.d(TAG, "User location changed.");
+                updateCamera(DroneHelper.LocationToCoord(location), (int) getMap().getCameraPosition().zoom);
+            }
+
+            if (mLocationListener != null) {
+                mLocationListener.onLocationChanged(location);
+            }
+        }
+    };
 
     private final GoogleApiClientTask mGoToMyLocationTask = new GoogleApiClientTask() {
         @Override
@@ -186,7 +205,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
     private final GoogleApiClientTask mRemoveLocationUpdateTask = new GoogleApiClientTask() {
         @Override
         public void doRun() {
-            LocationServices.FusedLocationApi.removeLocationUpdates(getGoogleApiClient(), GoogleMapFragment.this);
+            LocationServices.FusedLocationApi.removeLocationUpdates(getGoogleApiClient(), locationCb);
         }
     };
 
@@ -194,55 +213,13 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
         @Override
         public void doRun() {
             final LocationRequest locationReq = LocationRequest.create()
-                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                    .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
                     .setFastestInterval(USER_LOCATION_UPDATE_FASTEST_INTERVAL)
                     .setInterval(USER_LOCATION_UPDATE_INTERVAL)
                     .setSmallestDisplacement(USER_LOCATION_UPDATE_MIN_DISPLACEMENT);
 
-            final GoogleApiClient googleApiClient = getGoogleApiClient();
-
-            LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                    .addLocationRequest(locationReq);
-
-            PendingResult<LocationSettingsResult> result =
-                    LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
-
-            result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-                @Override
-                public void onResult(LocationSettingsResult callback) {
-                    final Status status = callback.getStatus();
-
-                    switch (status.getStatusCode()) {
-                        case LocationSettingsStatusCodes.SUCCESS:
-                            // All location settings are satisfied. The client can initialize location
-                            // requests here.
-                            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationReq,
-                                    GoogleMapFragment.this);
-                            break;
-
-                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                            // Location settings are not satisfied. But could be fixed by showing the user
-                            // a dialog.
-                            try {
-                                // Show the dialog by calling startResolutionForResult(),
-                                // and check the result in onActivityResult().
-                                status.startResolutionForResult(getActivity(), REQUEST_CHECK_SETTINGS);
-                            } catch (IntentSender.SendIntentException e) {
-                                // Ignore the error.
-                                Log.e(TAG, e.getMessage(), e);
-                            }
-                            break;
-
-                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                            // Location settings are not satisfied. However, we have no way to fix the
-                            // settings so we won't show the dialog.
-                            Log.w(TAG, "Unable to get accurate user location.");
-                            Toast.makeText(getActivity(), "Unable to get accurate location. Please update your " +
-                                    "location settings!", Toast.LENGTH_LONG).show();
-                            break;
-                    }
-                }
-            });
+            LocationServices.FusedLocationApi.requestLocationUpdates(getGoogleApiClient(), locationReq,
+                    locationCb, handler.getLooper());
         }
     };
 
@@ -280,6 +257,12 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
     protected DroidPlannerApp dpApp;
     private Polygon footprintPoly;
+
+    /*
+    Tile overlay
+     */
+    private TileOverlay onlineTileProvider;
+    private TileOverlay offlineTileProvider;
 
     @Override
     public void onAttach(Activity activity) {
@@ -746,17 +729,17 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
                     final Activity activity = getActivity();
-                    if(activity == null)
+                    if (activity == null)
                         return;
 
-                    final View rootView = ((ViewGroup)activity.findViewById(android.R.id.content)).getChildAt(0);
-                    if(rootView == null)
+                    final View rootView = ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
+                    if (rootView == null)
                         return;
 
                     final int height = rootView.getHeight();
                     final int width = rootView.getWidth();
                     Log.d(TAG, String.format(Locale.US, "Screen W %d, H %d", width, height));
-                    if(height > 0 && width > 0) {
+                    if (height > 0 && width > 0) {
                         CameraUpdate animation = CameraUpdateFactory.newLatLngBounds(bounds, width, height, 100);
                         googleMap.animateCamera(animation);
                     }
@@ -865,7 +848,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
                 if (mMarkerClickListener != null) {
                     final MarkerInfo markerInfo = mBiMarkersMap.getKey(marker);
-                    if(markerInfo != null)
+                    if (markerInfo != null)
                         return mMarkerClickListener.onMarkerClick(markerInfo);
                 }
                 return false;
@@ -947,37 +930,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
             return map.getCameraPosition().bearing;
         } else {
             return 0;
-        }
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        //Update the user location icon.
-        if (userMarker == null) {
-            final MarkerOptions options = new MarkerOptions()
-                    .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                    .draggable(false)
-                    .flat(true)
-                    .visible(true)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.blue));
-
-            getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap googleMap) {
-                    userMarker = googleMap.addMarker(options);
-                }
-            });
-        } else {
-            userMarker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
-        }
-
-        if (mPanMode.get() == AutoPanMode.USER) {
-            Log.d(TAG, "User location changed.");
-            updateCamera(DroneHelper.LocationToCoord(location), (int) getMap().getCameraPosition().zoom);
-        }
-
-        if (mLocationListener != null) {
-            mLocationListener.onLocationChanged(location);
         }
     }
 

@@ -11,10 +11,12 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.support.annotation.StringRes;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,6 +31,7 @@ import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.Type;
 
+import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
@@ -38,6 +41,9 @@ import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.android.utils.unit.UnitManager;
+import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
+import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -96,6 +102,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         intentFilter.addAction(AttributeEvent.HEARTBEAT_FIRST);
         intentFilter.addAction(AttributeEvent.HEARTBEAT_RESTORED);
         intentFilter.addAction(AttributeEvent.TYPE_UPDATED);
+        intentFilter.addAction(ACTION_PREF_UNIT_SYSTEM_UPDATE);
     }
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -129,6 +136,10 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                         updateFirmwareVersionPreference(droneType.getFirmwareVersion());
                     } else
                         updateFirmwareVersionPreference(null);
+                    break;
+
+                case ACTION_PREF_UNIT_SYSTEM_UPDATE:
+                    setupAltitudePreferences();
                     break;
             }
         }
@@ -248,6 +259,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setupBluetoothDevicePreferences();
         setupImminentGroundCollisionWarningPreference();
         setupMapPreferences();
+        setupAltitudePreferences();
     }
 
     private void setupAdvancedMenu(){
@@ -368,12 +380,55 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             preference.setOnResultListener(new ClearBTDialogPreference.OnResultListener() {
                 @Override
                 public void onResult(boolean result) {
-                    if(result){
+                    if (result) {
                         updateBluetoothDevicePreference(preference, dpPrefs.getBluetoothDeviceAddress());
                     }
                 }
             });
         }
+    }
+
+    private void setupAltitudePreferences(){
+        setupAltitudePreferenceHelper(R.string.pref_alt_max_value_key, dpPrefs.getMaxAltitude());
+        setupAltitudePreferenceHelper(R.string.pref_alt_min_value_key, dpPrefs.getMinAltitude());
+        setupAltitudePreferenceHelper(R.string.pref_alt_default_value_key, dpPrefs.getDefaultAltitude());
+    }
+
+    private void setupAltitudePreferenceHelper(final @StringRes int prefKeyRes, int defaultAlt){
+        final LengthUnitProvider lup = getLengthUnitProvider();
+
+        final EditTextPreference altPref = (EditTextPreference) findPreference(getString(prefKeyRes));
+        if(altPref != null){
+            final LengthUnit altValue = lup.boxBaseValueToTarget(defaultAlt);
+
+            altPref.setText(String.valueOf((int) altValue.getValue()));
+            altPref.setSummary(altValue.toString());
+
+            altPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    try {
+                        final int altValue = Integer.parseInt(newValue.toString());
+
+                        final LengthUnitProvider lup = getLengthUnitProvider();
+                        final LengthUnit newAltValue = lup.boxTargetValue(altValue);
+
+                        altPref.setText(String.valueOf((int) newAltValue.getValue()));
+                        altPref.setSummary(newAltValue.toString());
+
+                        dpPrefs.setAltitudePreference(prefKeyRes, (int) lup.fromTargetToBase(newAltValue).getValue());
+                    } catch (NumberFormatException e) {
+
+                    }
+                    return false;
+                }
+            });
+        }
+    }
+
+    private LengthUnitProvider getLengthUnitProvider(){
+        final UnitSystem unitSystem = UnitManager.getUnitSystem(getActivity().getApplicationContext());
+        return unitSystem.getLengthUnitProvider();
     }
 
     private void updateBluetoothDevicePreference(Preference preference, String deviceAddress){

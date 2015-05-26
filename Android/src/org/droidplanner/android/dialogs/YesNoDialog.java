@@ -1,11 +1,11 @@
 package org.droidplanner.android.dialogs;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.TextView;
 
@@ -69,8 +69,7 @@ public class YesNoDialog extends DialogFragment {
     }
 
     protected View generateContentView(Bundle savedInstanceState){
-        final View contentView = getActivity().getLayoutInflater().inflate(R.layout
-                .dialog_yes_no_content, null);
+        final View contentView = getActivity().getLayoutInflater().inflate(R.layout.dialog_yes_no_content, null);
 
         if(contentView == null){
             return contentView;

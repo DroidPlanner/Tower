@@ -56,6 +56,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 		eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
 		eventFilter.addAction(AttributeEvent.CAMERA_FOOTPRINTS_UPDATED);
 		eventFilter.addAction(AttributeEvent.ATTITUDE_UPDATED);
+		eventFilter.addAction(AttributeEvent.HOME_UPDATED);
         eventFilter.addAction(ACTION_UPDATE_MAP);
 	}
 
@@ -70,6 +71,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 			final String action = intent.getAction();
             switch (action) {
                 case ACTION_UPDATE_MAP:
+				case AttributeEvent.HOME_UPDATED:
                 case MissionProxy.ACTION_MISSION_PROXY_UPDATE:
                     postUpdate();
                     break;

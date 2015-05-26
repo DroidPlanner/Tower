@@ -37,6 +37,7 @@ import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.collection.CircularQueue;
 import org.droidplanner.android.utils.file.IO.MissionReader;
 import org.droidplanner.android.utils.file.IO.MissionWriter;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,7 +51,6 @@ public class MissionProxy implements DPMap.PathSource {
 
     public static final String ACTION_MISSION_PROXY_UPDATE = Utils.PACKAGE_NAME + ".ACTION_MISSION_PROXY_UPDATE";
 
-    private static final double DEFAULT_ALTITUDE = 20; //meters
     private static final int UNDO_BUFFER_SIZE = 30;
 
     private static final IntentFilter eventFilter = new IntentFilter();
@@ -89,6 +89,7 @@ public class MissionProxy implements DPMap.PathSource {
     private final List<MissionItemProxy> missionItemProxies = new ArrayList<MissionItemProxy>();
 
     private final LocalBroadcastManager lbm;
+    private final DroidPlannerPrefs dpPrefs;
     private Drone drone;
 
     private final CircularArray<Mission> undoBuffer = new CircularArray<>(UNDO_BUFFER_SIZE);
@@ -101,6 +102,8 @@ public class MissionProxy implements DPMap.PathSource {
         this.currentMission = generateMission(true);
         lbm = LocalBroadcastManager.getInstance(context);
         lbm.registerReceiver(eventReceiver, eventFilter);
+
+        dpPrefs = new DroidPlannerPrefs(context);
     }
 
     public void setDrone(Drone drone){
@@ -259,7 +262,7 @@ public class MissionProxy implements DPMap.PathSource {
             }
         }
 
-        return DEFAULT_ALTITUDE;
+        return dpPrefs.getDefaultAltitude();
     }
 
     /**
@@ -330,7 +333,7 @@ public class MissionProxy implements DPMap.PathSource {
 
     public void addTakeoff() {
         Takeoff takeoff = new Takeoff();
-        takeoff.setTakeoffAltitude(10);
+        takeoff.setTakeoffAltitude(dpPrefs.getDefaultAltitude());
         addMissionItem(takeoff);
     }
 

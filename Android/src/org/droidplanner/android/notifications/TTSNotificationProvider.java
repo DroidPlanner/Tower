@@ -1,5 +1,6 @@
 package org.droidplanner.android.notifications;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -31,8 +32,11 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -138,7 +142,10 @@ public class TTSNotificationProvider implements OnInitListener,
                     break;
                 case AttributeEvent.MISSION_ITEM_UPDATED:
                     int currentWaypoint = intent.getIntExtra(AttributeEventExtra.EXTRA_MISSION_CURRENT_WAYPOINT, 0);
-                    speak("Going for waypoint " + currentWaypoint);
+					if(currentWaypoint != 0) {
+						//Zeroth waypoint is the home location.
+						speak("Going for waypoint " + currentWaypoint);
+					}
                     break;
                 case AttributeEvent.FOLLOW_START:
                     speak("Following");
@@ -292,19 +299,34 @@ public class TTSNotificationProvider implements OnInitListener,
 		}
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	public void onInit(int status) {
 		if (status == TextToSpeech.SUCCESS) {
 			// TODO: check if the language is available
 			Locale ttsLanguage;
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			final int sdkVersion = Build.VERSION.SDK_INT;
+			if (sdkVersion >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
 				ttsLanguage = tts.getDefaultLanguage();
 			} else {
 				ttsLanguage = tts.getLanguage();
 			}
 
-			if (ttsLanguage == null) {
-				ttsLanguage = Locale.US;
+			if (ttsLanguage == null || tts.isLanguageAvailable(ttsLanguage) == TextToSpeech.LANG_NOT_SUPPORTED) {
+				final List<Locale> availableLanguages = new ArrayList<>(tts.getAvailableLanguages());
+
+				if(!availableLanguages.isEmpty()) {
+					//Pick the first available language.
+					ttsLanguage = availableLanguages.get(0);
+				}
+				else {
+					ttsLanguage = Locale.US;
+				}
+			}
+
+			if(tts.isLanguageAvailable(ttsLanguage) == TextToSpeech.LANG_MISSING_DATA){
+				context.startActivity(new Intent(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA)
+						.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 			}
 
 			int supportStatus = tts.setLanguage(ttsLanguage);

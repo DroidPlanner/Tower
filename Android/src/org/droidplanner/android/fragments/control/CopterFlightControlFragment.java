@@ -36,13 +36,11 @@ import org.droidplanner.android.utils.analytics.GAUtils;
 /**
  * Provide functionality for flight action button specific to copters.
  */
-public class CopterFlightControlFragment extends ApiListenerFragment implements View.OnClickListener,
-        FlightControlManagerFragment.SlidingUpHeader {
+public class CopterFlightControlFragment extends BaseFlightControlFragment {
 
     private static final String TAG = CopterFlightControlFragment.class.getSimpleName();
 
     private static final String ACTION_FLIGHT_ACTION_BUTTON = "Copter flight action button";
-    private static final double TAKEOFF_ALTITUDE = 10.0;
 
     private static final IntentFilter eventFilter = new IntentFilter();
 
@@ -203,6 +201,7 @@ public class CopterFlightControlFragment extends ApiListenerFragment implements 
 
     @Override
     public void onApiConnected() {
+        super.onApiConnected();
         missionProxy = getMissionProxy();
 
         setupButtonsByFlightState();
@@ -214,6 +213,7 @@ public class CopterFlightControlFragment extends ApiListenerFragment implements 
 
     @Override
     public void onApiDisconnected() {
+        super.onApiDisconnected();
         getBroadcastManager().unregisterReceiver(eventReceiver);
     }
 
@@ -277,13 +277,7 @@ public class CopterFlightControlFragment extends ApiListenerFragment implements 
                 break;
 
             case R.id.mc_follow:
-                FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
-                if (followState != null) {
-                    if (followState.isEnabled())
-                        drone.disableFollowMe();
-                    else
-                        drone.enableFollowMe(FollowType.LEASH);
-                }
+                toggleFollowMe();
                 break;
 
             case R.id.mc_dronieBtn:
@@ -325,7 +319,8 @@ public class CopterFlightControlFragment extends ApiListenerFragment implements 
         final SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("take off", new Runnable() {
             @Override
             public void run() {
-                getDrone().doGuidedTakeoff(TAKEOFF_ALTITUDE);
+                final int takeOffAltitude = getAppPrefs().getDefaultAltitude();
+                getDrone().doGuidedTakeoff(takeOffAltitude);
             }
         });
         unlockDialog.show(getChildFragmentManager(), "Slide to take off");
@@ -335,8 +330,11 @@ public class CopterFlightControlFragment extends ApiListenerFragment implements 
         final SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("take off in auto", new Runnable() {
             @Override
             public void run() {
+
+                final int takeOffAltitude = getAppPrefs().getDefaultAltitude();
+
                 Drone drone = getDrone();
-                drone.doGuidedTakeoff(TAKEOFF_ALTITUDE);
+                drone.doGuidedTakeoff(takeOffAltitude);
                 drone.changeVehicleMode(VehicleMode.COPTER_AUTO);
             }
         });

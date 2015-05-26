@@ -3,11 +3,15 @@ package org.droidplanner.android.utils.prefs;
 import java.util.UUID;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.utils.unit.UnitManager;
+import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
 import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.IdRes;
+import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.util.SparseBooleanArray;
 
@@ -52,8 +56,11 @@ public class DroidPlannerPrefs {
     private static final boolean DEFAULT_ENABLE_MAP_ROTATION = true;
     private static final boolean DEFAULT_ENABLE_KILL_SWITCH = false;
     private static final boolean DEFAULT_ENABLE_UDP_PING = false;
+	private static final int DEFAULT_MAX_ALT = 200; //meters
+	private static final int DEFAULT_MIN_ALT = 0; // meter
+	private static final int DEFAULT_ALT = 20; // meters
 
-    // Public for legacy usage
+	// Public for legacy usage
 	public SharedPreferences prefs;
 	private Context context;
 
@@ -196,7 +203,7 @@ public class DroidPlannerPrefs {
 
     public int getUdpServerPort(){
         return Integer.parseInt(prefs.getString(context.getString(R.string
-                        .pref_udp_server_port_key), DEFAULT_UDP_SERVER_PORT));
+				.pref_udp_server_port_key), DEFAULT_UDP_SERVER_PORT));
     }
 
     public boolean isUdpPingEnabled(){
@@ -209,7 +216,7 @@ public class DroidPlannerPrefs {
 
     public int getUdpPingReceiverPort(){
         return Integer.parseInt(prefs.getString(context.getString(R.string.pref_udp_ping_receiver_port_key),
-                DEFAULT_UDP_SERVER_PORT));
+				DEFAULT_UDP_SERVER_PORT));
     }
 
     public String getBluetoothDeviceName(){
@@ -371,4 +378,42 @@ public class DroidPlannerPrefs {
     public boolean isKillSwitchEnabled(){
         return prefs.getBoolean(context.getString(R.string.pref_enable_kill_switch_key), DEFAULT_ENABLE_KILL_SWITCH);
     }
+
+	/**
+	 * @return the max altitude in meters
+	 */
+	public int getMaxAltitude(){
+		return getAltitudePreference(R.string.pref_alt_max_value_key, DEFAULT_MAX_ALT);
+	}
+
+	/**
+	 * @return the min altitude in meters
+	 */
+	public int getMinAltitude(){
+		return getAltitudePreference(R.string.pref_alt_min_value_key, DEFAULT_MIN_ALT);
+	}
+
+	/**
+	 * @return the default starting altitude in meters
+	 */
+	public int getDefaultAltitude(){
+		return getAltitudePreference(R.string.pref_alt_default_value_key, DEFAULT_ALT);
+	}
+
+	public void setAltitudePreference(@StringRes int prefKeyRes, int altitude){
+		prefs.edit().putString(context.getString(prefKeyRes), String.valueOf(altitude)).apply();
+	}
+
+	private int getAltitudePreference(@StringRes int prefKeyRes, int defaultValue){
+		final String maxAltValue = prefs.getString(context.getString(prefKeyRes), null);
+		if(TextUtils.isEmpty(maxAltValue))
+			return defaultValue;
+
+		try {
+			final int maxAlt = Integer.parseInt(maxAltValue);
+			return maxAlt;
+		}catch(Exception e){
+			return defaultValue;
+		}
+	}
 }
