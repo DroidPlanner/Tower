@@ -551,4 +551,10 @@
     <string name="pref_udp_ping_receiver_port_title">UDP ping receiver port</string>
     <string name="invalid_location_settings_warning">Unable to get accurate location. Please update your location settings!</string>
 
+    <!-- Altitude preferences -->
+    <string name="pref_alt_title">Altitude Preferences</string>
+    <string name="pref_max_alt_title">Max altitude value</string>
+    <string name="pref_min_alt_title">Min altitude value</string>
+    <string name="pref_default_alt_title">Default altitude value</string>
+
 </resources>

@@ -64,4 +64,8 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_udp_ping_receiver_ip_key" translatable="false">pref_udp_ping_receiver_ip</string>
     <string name="pref_udp_ping_receiver_port_key" translatable="false">pref_udp_ping_receiver_port</string>
 
+    <string name="pref_alt_max_value_key" translatable="false">pref_alt_max_value</string>
+    <string name="pref_alt_min_value_key" translatable="false">pref_alt_min_value</string>
+    <string name="pref_alt_default_value_key" translatable="false">pref_alt_default_value</string>
+
 </resources>

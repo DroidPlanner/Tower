@@ -28,4 +28,10 @@ public abstract class LengthUnitProvider {
 
         return Operation.convert(target, UnitIdentifier.METER);
     }
+
+    public Meter fromTargetToBase(double valueInTargetUnits){
+        return fromTargetToBase(boxTargetValue(valueInTargetUnits));
+    }
+
+    public abstract LengthUnit boxTargetValue(double valueInTargetUnits);
 }

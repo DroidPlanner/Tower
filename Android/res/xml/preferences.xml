@@ -282,6 +282,33 @@
                     android:title="@string/pref_ui_gps_hdop_title" />
             </PreferenceCategory>
 
+            <PreferenceCategory
+                android:title="@string/pref_alt_title">
+
+                <EditTextPreference
+                    android:gravity="center"
+                    android:inputType="numberSigned"
+                    android:key="@string/pref_alt_max_value_key"
+                    android:title="@string/pref_max_alt_title"
+                    android:persistent="false"
+                    />
+
+                <EditTextPreference
+                    android:gravity="center"
+                    android:inputType="numberSigned"
+                    android:key="@string/pref_alt_min_value_key"
+                    android:title="@string/pref_min_alt_title"
+                    android:persistent="false"/>
+
+                <EditTextPreference
+                    android:gravity="center"
+                    android:inputType="numberSigned"
+                    android:key="@string/pref_alt_default_value_key"
+                    android:title="@string/pref_default_alt_title"
+                    android:persistent="false"/>
+
+            </PreferenceCategory>
+
             <!-- Disabling kill switch until arducopter v3.3 is out.
             <PreferenceCategory
                 android:title="@string/pref_advance_menu_title">
