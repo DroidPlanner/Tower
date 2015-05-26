@@ -142,7 +142,10 @@ public class TTSNotificationProvider implements OnInitListener,
                     break;
                 case AttributeEvent.MISSION_ITEM_UPDATED:
                     int currentWaypoint = intent.getIntExtra(AttributeEventExtra.EXTRA_MISSION_CURRENT_WAYPOINT, 0);
-                    speak("Going for waypoint " + currentWaypoint);
+					if(currentWaypoint != 0) {
+						//Zeroth waypoint is the home location.
+						speak("Going for waypoint " + currentWaypoint);
+					}
                     break;
                 case AttributeEvent.FOLLOW_START:
                     speak("Following");
