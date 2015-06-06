@@ -313,14 +313,14 @@ public class TTSNotificationProvider implements OnInitListener,
 			}
 
 			if (ttsLanguage == null || tts.isLanguageAvailable(ttsLanguage) == TextToSpeech.LANG_NOT_SUPPORTED) {
-				final List<Locale> availableLanguages = new ArrayList<>(tts.getAvailableLanguages());
+				ttsLanguage = Locale.US;
+				if(sdkVersion >= Build.VERSION_CODES.LOLLIPOP) {
+					final List<Locale> availableLanguages = new ArrayList<>(tts.getAvailableLanguages());
 
-				if(!availableLanguages.isEmpty()) {
-					//Pick the first available language.
-					ttsLanguage = availableLanguages.get(0);
-				}
-				else {
-					ttsLanguage = Locale.US;
+					if (!availableLanguages.isEmpty()) {
+						//Pick the first available language.
+						ttsLanguage = availableLanguages.get(0);
+					}
 				}
 			}
 
