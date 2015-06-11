@@ -34,6 +34,8 @@ import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 public class DroidPlannerApp extends Application implements DroneListener, TowerListener {
 
     private static final long DELAY_TO_DISCONNECTION = 1000l; // ms
@@ -156,6 +158,10 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
 
         GAUtils.initGATracker(this);
         GAUtils.startNewSession(context);
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
 
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_TOGGLE_DRONE_CONNECTION);
