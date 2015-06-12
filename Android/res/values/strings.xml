@@ -49,8 +49,13 @@
     <string name="pref_advanced_use_offline_maps">Use offline maps</string>
     <string name="pref_advanced_use_offline_maps_summary">Use map tiles on the local storage, for offline map view</string>
     <string name="pref_map_type">Map Type</string>
-    <string name="pref_map_type_default">Satellite</string>
+    <string name="pref_map_type_default">@string/menu_map_type_satellite</string>
     <string name="pref_map_type_summary">Which type of map to use</string>
+    <string name="pref_tile_provider_title">Map Tile Provider</string>
+    <string name="pref_tile_provider_default">@string/pref_tile_provider_google</string>
+    <string name="pref_tile_provider_google">Google</string>
+    <string name="pref_tile_provider_mapbox">Mapbox</string>
+    <string name="pref_tile_provider_summary">Which map tile provider to use</string>
     <string name="pref_enable_tts">Enable Speech output</string>
     <string name="pref_enable_tts_summary">Audible messages for important events</string>
     <string name="pref_request_max_volume">Set Volume To Max On Start</string>
@@ -432,8 +437,8 @@
     <string name="pref_map_provider_settings_summary">Configure the selected map provider</string>
     <string name="pref_map_provider_settings_title">Map Provider Preferences</string>
     <string name="pref_title_google_maps">Google Maps Preferences</string>
-    <string name="pref_title_osm">Open Street Map Preferences</string>
-    <string name="pref_title_mapbox">MapBox Preferences</string>
+    <string name="pref_title_google_tile_provider">Google Tile Provider</string>
+    <string name="pref_title_mapbox_tile_provider">Mapbox Tile Provider</string>
     <string name="activity_title_map_provider_preferences">Map Provider Preferences</string>
     <string name="pref_ui_realtime_footprints_title">Realtime camera footprint</string>
     <string name="pref_ui_realtime_footprints_summary">Display the camera projection on the ground in realtime</string>

@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +47,6 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
-import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
@@ -61,10 +59,10 @@ import com.o3dr.services.android.lib.util.googleApi.GoogleApiClientManager.Googl
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.SettingsFragment;
-import org.droidplanner.android.helpers.LocalMapTileProvider;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.maps.providers.MapProviderPreferences;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.utils.collection.HashBiMap;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
@@ -75,20 +73,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
+import timber.log.Timber;
+
 public class GoogleMapFragment extends SupportMapFragment implements DPMap, GoogleApiClientManager.ManagerListener {
-
-    private static final String TAG = GoogleMapFragment.class.getSimpleName();
-
-    public static final String PREF_MAP_TYPE = "pref_map_type";
-
-    public static final String MAP_TYPE_SATELLITE = "Satellite";
-    public static final String MAP_TYPE_HYBRID = "Hybrid";
-    public static final String MAP_TYPE_NORMAL = "Normal";
-    public static final String MAP_TYPE_TERRAIN = "Terrain";
 
     private static final long USER_LOCATION_UPDATE_INTERVAL = 30000; // ms
     private static final long USER_LOCATION_UPDATE_FASTEST_INTERVAL = 5000; // ms
@@ -179,7 +169,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
             }
 
             if (mPanMode.get() == AutoPanMode.USER) {
-                Log.d(TAG, "User location changed.");
+                Timber.d("User location changed.");
                 updateCamera(DroneHelper.LocationToCoord(location), (int) getMap().getCameraPosition().zoom);
             }
 
@@ -738,7 +728,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
 
                     final int height = rootView.getHeight();
                     final int width = rootView.getWidth();
-                    Log.d(TAG, String.format(Locale.US, "Screen W %d, H %d", width, height));
+                    Timber.d("Screen W %d, H %d", width, height);
                     if (height > 0 && width > 0) {
                         CameraUpdate animation = CameraUpdateFactory.newLatLngBounds(bounds, width, height, 100);
                         googleMap.animateCamera(animation);
@@ -768,7 +758,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     @Override
     public void goToMyLocation() {
         if (!mGApiClientMgr.addTask(mGoToMyLocationTask)) {
-            Log.e(TAG, "Unable to add google api client task.");
+            Timber.e("Unable to add google api client task.");
         }
     }
 
@@ -868,42 +858,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     }
 
     private void setupMapOverlay(GoogleMap map) {
-        if (mAppPrefs.isOfflineMapEnabled()) {
-            setupOfflineMapOverlay(map);
-        } else {
-            setupOnlineMapOverlay(map);
-        }
-    }
-
-    private void setupOnlineMapOverlay(GoogleMap map) {
-        map.setMapType(getMapType());
-    }
-
-    private int getMapType() {
-        String mapType = mAppPrefs.getMapType();
-
-        if (mapType.equalsIgnoreCase(MAP_TYPE_SATELLITE)) {
-            return GoogleMap.MAP_TYPE_SATELLITE;
-        }
-        if (mapType.equalsIgnoreCase(MAP_TYPE_HYBRID)) {
-            return GoogleMap.MAP_TYPE_HYBRID;
-        }
-        if (mapType.equalsIgnoreCase(MAP_TYPE_NORMAL)) {
-            return GoogleMap.MAP_TYPE_NORMAL;
-        }
-        if (mapType.equalsIgnoreCase(MAP_TYPE_TERRAIN)) {
-            return GoogleMap.MAP_TYPE_TERRAIN;
-        } else {
-            return GoogleMap.MAP_TYPE_SATELLITE;
-        }
-    }
-
-    private void setupOfflineMapOverlay(GoogleMap map) {
-        map.setMapType(GoogleMap.MAP_TYPE_NONE);
-        TileOverlay tileOverlay = map.addTileOverlay(new TileOverlayOptions()
-                .tileProvider(new LocalMapTileProvider()));
-        tileOverlay.setZIndex(-1);
-        tileOverlay.clearTileCache();
+        map.setMapType(GoogleMapProviderPreferences.getMapType(getActivity()));
     }
 
     protected void clearMap() {

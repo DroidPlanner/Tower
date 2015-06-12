@@ -7,7 +7,8 @@ import android.text.TextUtils;
 
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 
-import org.droidplanner.android.R;
+import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.maps.providers.MapProviderPreferences;
 import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 import java.util.HashMap;
@@ -44,14 +45,11 @@ public class DroidPlannerPrefs {
 	private static final String PREF_PERMANENT_NOTIFICATION = "pref_permanent_notification";
 	private static final boolean DEFAULT_PERMANENT_NOTIFICATION = true;
 
-	public static final String PREF_OFFLINE_MAP_ENABLED = "pref_advanced_use_offline_maps";
-	private static final boolean DEFAULT_OFFLINE_MAP_ENABLED = false;
-
 	public static final String PREF_MAPS_PROVIDERS = "pref_maps_providers_key";
+	private static final String DEFAULT_MAPS_PROVIDER = DPMapProvider.DEFAULT_MAP_PROVIDER.name();
+
 	public static final String PREF_MAPS_PROVIDER_SETTINGS = "pref_map_provider_settings";
 
-	public static final String PREF_MAP_TYPE = "pref_map_type";
-	private static final String DEFAULT_MAP_TYPE = "";
 	private static final AutoPanMode DEFAULT_AUTO_PAN_MODE = AutoPanMode.DISABLED;
 
 	private static final String PREF_UI_LANGUAGE = "pref_ui_language_english";
@@ -157,10 +155,8 @@ public class DroidPlannerPrefs {
 
 	// Public for legacy usage
 	public SharedPreferences prefs;
-	private Context context;
 
 	public DroidPlannerPrefs(Context context) {
-		this.context = context;
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
@@ -327,21 +323,6 @@ public class DroidPlannerPrefs {
 	}
 
 	/**
-	 * @return true if offline map is enabled (if supported by the map
-	 *         provider).
-	 */
-	public boolean isOfflineMapEnabled() {
-		return prefs.getBoolean(PREF_OFFLINE_MAP_ENABLED, DEFAULT_OFFLINE_MAP_ENABLED);
-	}
-
-	/**
-	 * @return the selected map type (if supported by the map provider).
-	 */
-	public String getMapType() {
-		return prefs.getString(PREF_MAP_TYPE, DEFAULT_MAP_TYPE);
-	}
-
-	/**
 	 * @return the target for the map auto panning.
 	 */
 	public AutoPanMode getAutoPanMode() {
@@ -380,7 +361,19 @@ public class DroidPlannerPrefs {
 	}
 
 	public String getMapProviderName() {
-		return prefs.getString(PREF_MAPS_PROVIDERS, null);
+		return prefs.getString(PREF_MAPS_PROVIDERS, DEFAULT_MAPS_PROVIDER);
+	}
+
+	/**
+	 * Returns the map provider selected by the user.
+	 *
+	 * @return selected map provider
+	 */
+	public DPMapProvider getMapProvider() {
+		final String mapProviderName = getMapProviderName();
+
+		return mapProviderName == null ? DPMapProvider.DEFAULT_MAP_PROVIDER : DPMapProvider.getMapProvider
+				(mapProviderName);
 	}
 
 	public Map<String, Boolean> getPeriodicSpeechPrefs() {

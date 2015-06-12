@@ -2,20 +2,31 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/pref_title_google_maps" />
+    <PreferenceCategory android:title="@string/pref_title_google_maps">
 
-    <ListPreference
-        android:defaultValue="@string/pref_map_type_default"
-        android:entries="@array/MapTypes"
-        android:entryValues="@array/MapTypes"
-        android:key="pref_map_type"
-        android:summary="@string/pref_map_type_summary"
-        android:title="@string/pref_map_type"/>
+        <ListPreference
+            android:defaultValue="@string/pref_tile_provider_default"
+            android:key="pref_google_map_tile_provider"
+            android:summary="@string/pref_tile_provider_summary"
+            android:title="@string/pref_tile_provider_title"
+            android:entries="@array/TileProviders"
+            android:entryValues="@array/TileProviders"/>
 
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="pref_advanced_use_offline_maps"
-        android:summary="@string/pref_advanced_use_offline_maps_summary"
-        android:title="@string/pref_advanced_use_offline_maps"/>
+        <PreferenceCategory android:title="@string/pref_title_google_tile_provider"
+            android:key="pref_google_tile_provider_settings">
+            <ListPreference
+                android:defaultValue="@string/pref_map_type_default"
+                android:entries="@array/MapTypes"
+                android:entryValues="@array/MapTypes"
+                android:key="pref_map_type"
+                android:summary="@string/pref_map_type_summary"
+                android:title="@string/pref_map_type"/>
+        </PreferenceCategory>
 
+        <PreferenceCategory android:title="@string/pref_title_mapbox_tile_provider"
+            android:key="pref_mapbox_tile_provider_settings">
+
+        </PreferenceCategory>
+
+    </PreferenceCategory>
 </PreferenceScreen>

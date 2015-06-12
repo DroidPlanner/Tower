@@ -38,6 +38,10 @@
     </string-array>
 
 
+    <string-array name="TileProviders">
+        <item>@string/pref_tile_provider_google</item>
+        <item>@string/pref_tile_provider_mapbox</item>
+    </string-array>
     <string-array name="MapTypes">
         <item>@string/menu_map_type_satellite</item>
         <item>@string/menu_map_type_hybrid</item>

@@ -23,7 +23,7 @@ import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 import com.o3dr.services.android.lib.drone.connection.DroneSharePrefs;
 
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
-import org.droidplanner.android.maps.providers.mapbox.offline.MapDownloader;
+import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader;
 import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;

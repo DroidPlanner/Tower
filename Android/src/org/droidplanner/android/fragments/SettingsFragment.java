@@ -16,7 +16,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
-import android.support.annotation.StringRes;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -174,41 +173,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         lbm = LocalBroadcastManager.getInstance(context);
         final SharedPreferences sharedPref = dpPrefs.prefs;
 
-        // Populate the map preference category
-        final String mapsProvidersPrefKey = DroidPlannerPrefs.PREF_MAPS_PROVIDERS;
-        final ListPreference mapsProvidersPref = (ListPreference) findPreference(mapsProvidersPrefKey);
-        if (mapsProvidersPref != null) {
-            final DPMapProvider[] providers = DPMapProvider.values();
-            final int providersCount = providers.length;
-
-            final CharSequence[] providersNames = new CharSequence[providersCount];
-            final CharSequence[] providersNamesValues = new CharSequence[providersCount];
-            for (int i = 0; i < providersCount; i++) {
-                final String providerName = providers[i].name();
-                providersNamesValues[i] = providerName;
-                providersNames[i] = providerName.toLowerCase(Locale.ENGLISH).replace('_', ' ');
-            }
-
-            final String defaultProviderName = sharedPref.getString(mapsProvidersPrefKey,
-                    DPMapProvider.DEFAULT_MAP_PROVIDER.name());
-
-            mapsProvidersPref.setEntries(providersNames);
-            mapsProvidersPref.setEntryValues(providersNamesValues);
-            mapsProvidersPref.setValue(defaultProviderName);
-            mapsProvidersPref
-                    .setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                        @Override
-                        public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            // Update the map provider settings preference.
-                            final String mapProviderName = newValue.toString();
-                            return updateMapSettingsPreference(mapProviderName);
-                        }
-                    });
-
-            updateMapSettingsPreference(defaultProviderName);
-        }
-
         // update the summary for the preferences in the mDefaultSummaryPrefs hash table.
         for (String prefKey : mDefaultSummaryPrefs) {
             final Preference pref = findPreference(prefKey);
@@ -252,6 +216,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
         updateMavlinkVersionPreference(null);
 
+        setupMapProviders();
         setupPeriodicControls();
         setupConnectionPreferences();
         setupAdvancedMenu();
@@ -260,6 +225,42 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setupImminentGroundCollisionWarningPreference();
         setupMapPreferences();
         setupAltitudePreferences();
+    }
+
+    private void setupMapProviders(){
+        // Populate the map preference category
+        final String mapsProvidersPrefKey = DroidPlannerPrefs.PREF_MAPS_PROVIDERS;
+
+        final ListPreference mapsProvidersPref = (ListPreference) findPreference(mapsProvidersPrefKey);
+        if (mapsProvidersPref != null) {
+            final DPMapProvider[] providers = DPMapProvider.values();
+            final int providersCount = providers.length;
+
+            final CharSequence[] providersNames = new CharSequence[providersCount];
+            final CharSequence[] providersNamesValues = new CharSequence[providersCount];
+            for (int i = 0; i < providersCount; i++) {
+                final String providerName = providers[i].name();
+                providersNamesValues[i] = providerName;
+                providersNames[i] = providerName.toLowerCase(Locale.ENGLISH).replace('_', ' ');
+            }
+
+            final String defaultProviderName = dpPrefs.getMapProviderName();
+
+            mapsProvidersPref.setEntries(providersNames);
+            mapsProvidersPref.setEntryValues(providersNamesValues);
+            mapsProvidersPref.setValue(defaultProviderName);
+            mapsProvidersPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    // Update the map provider settings preference.
+                    final String mapProviderName = newValue.toString();
+                    return updateMapSettingsPreference(mapProviderName);
+                }
+            });
+
+            updateMapSettingsPreference(defaultProviderName);
+        }
     }
 
     private void setupAdvancedMenu(){
@@ -531,6 +532,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         final DPMapProvider mapProvider = DPMapProvider.getMapProvider(mapProviderName);
         if (mapProvider == null)
             return false;
+
+
 
         final Preference providerPrefs = findPreference(DroidPlannerPrefs.PREF_MAPS_PROVIDER_SETTINGS);
         if (providerPrefs != null) {
