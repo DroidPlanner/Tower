@@ -237,7 +237,7 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
                                 public void onNo() {
                                     missionProxy.sendMissionToAPM(dpApi);
                                 }
-                            }, getString(R.string.pref_auto_insert_mission_takeoff_rtl_land_key));
+                            }, DroidPlannerPrefs.PREF_AUTO_INSERT_MISSION_TAKEOFF_RTL_LAND);
 
                     if (dialog != null) {
                         dialog.show(getSupportFragmentManager(), "Mission Upload check.");

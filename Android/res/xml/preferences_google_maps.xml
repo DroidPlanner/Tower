@@ -8,13 +8,13 @@
         android:defaultValue="@string/pref_map_type_default"
         android:entries="@array/MapTypes"
         android:entryValues="@array/MapTypes"
-        android:key="@string/pref_map_type_key"
+        android:key="pref_map_type"
         android:summary="@string/pref_map_type_summary"
         android:title="@string/pref_map_type"/>
 
     <CheckBoxPreference
         android:defaultValue="false"
-        android:key="@string/pref_advanced_use_offline_maps_key"
+        android:key="pref_advanced_use_offline_maps"
         android:summary="@string/pref_advanced_use_offline_maps_summary"
         android:title="@string/pref_advanced_use_offline_maps"/>
 

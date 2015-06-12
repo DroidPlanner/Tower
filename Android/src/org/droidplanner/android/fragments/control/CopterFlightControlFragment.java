@@ -32,6 +32,7 @@ import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.analytics.GAUtils;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 /**
  * Provide functionality for flight action button specific to copters.
@@ -308,7 +309,7 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment {
                     @Override
                     public void onNo() {
                     }
-                }, getString(R.string.pref_warn_on_dronie_creation_key));
+                }, DroidPlannerPrefs.PREF_WARN_ON_DRONIE_CREATION);
 
         if (ynd != null) {
             ynd.show(getChildFragmentManager(), "Confirm dronie creation");
