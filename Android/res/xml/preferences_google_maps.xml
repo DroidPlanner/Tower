@@ -6,18 +6,18 @@
 
         <ListPreference
             android:defaultValue="@string/pref_tile_provider_default"
-            android:key="pref_google_map_tile_provider"
+            android:key="pref_google_map_tile_providers"
             android:summary="@string/pref_tile_provider_summary"
             android:title="@string/pref_tile_provider_title"
             android:entries="@array/TileProviders"
-            android:entryValues="@array/TileProviders"/>
+            android:entryValues="@array/TileProviderValues"/>
 
         <PreferenceCategory android:title="@string/pref_title_google_tile_provider"
             android:key="pref_google_tile_provider_settings">
             <ListPreference
                 android:defaultValue="@string/pref_map_type_default"
                 android:entries="@array/MapTypes"
-                android:entryValues="@array/MapTypes"
+                android:entryValues="@array/MapTypeValues"
                 android:key="pref_map_type"
                 android:summary="@string/pref_map_type_summary"
                 android:title="@string/pref_map_type"/>
@@ -25,6 +25,36 @@
 
         <PreferenceCategory android:title="@string/pref_title_mapbox_tile_provider"
             android:key="pref_mapbox_tile_provider_settings">
+
+            <ListPreference
+                android:title="@string/pref_title_mapbox_tile_source"
+                android:summary="@string/pref_summary_mapbox_tile_source"
+                android:key="pref_mapbox_tile_source"
+                android:defaultValue="@string/mapbox_tile_source_online"
+                android:entries="@array/MapboxTileSources"
+                android:entryValues="@array/MapboxTileSourceValues"/>
+
+            <Preference
+                android:key="pref_mapbox_map_download"
+                android:title="@string/pref_title_mapbox_map_download"
+                android:summary="@string/pref_summary_mapbox_map_download"/>
+
+            <CheckBoxPreference
+                android:title="@string/pref_title_download_menu_option"
+                android:defaultValue="false"
+                android:key="pref_download_menu_option"/>
+
+            <EditTextPreference
+                android:key="pref_mapbox_id"
+                android:title="@string/pref_title_mapbox_id"
+                android:hint="@string/pref_hint_mapbox_id"
+                android:summary="@string/pref_summary_mapbox_id"/>
+
+            <EditTextPreference
+                android:key="pref_mapbox_access_token"
+                android:title="@string/pref_title_mapbox_access_token"
+                android:hint="@string/pref_hint_mapbox_access_token"
+                android:summary="@string/pref_summary_mapbox_access_token"/>
 
         </PreferenceCategory>
 

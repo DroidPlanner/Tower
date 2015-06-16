@@ -62,7 +62,6 @@ import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
-import org.droidplanner.android.maps.providers.MapProviderPreferences;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.utils.collection.HashBiMap;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
@@ -858,7 +857,37 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     }
 
     private void setupMapOverlay(GoogleMap map) {
-        map.setMapType(GoogleMapProviderPreferences.getMapType(getActivity()));
+        final Context context = getContext();
+        if(context == null)
+            return;
+
+        final @GoogleMapPrefConstants.TileProvider String tileProvider = GoogleMapPrefFragment.PrefManager.getMapTileProvider(context);
+        switch(tileProvider){
+            case GoogleMapPrefConstants.GOOGLE_TILE_PROVIDER:
+                setupGoogleTileProvider(context, map);
+                break;
+
+            case GoogleMapPrefConstants.MAPBOX_TILE_PROVIDER:
+                setupMapboxTileProvider(context, map);
+                break;
+        }
+    }
+
+    private void setupGoogleTileProvider(Context context, GoogleMap map){
+        map.setMapType(GoogleMapPrefFragment.PrefManager.getMapType(context));
+    }
+
+    private void setupMapboxTileProvider(Context context, GoogleMap map){
+        //Remove the default google map layer.
+        map.setMapType(GoogleMap.MAP_TYPE_NONE);
+    }
+
+    protected Context getContext(){
+        final Activity activity = getActivity();
+        if(activity == null)
+            return null;
+
+        return activity.getApplicationContext();
     }
 
     protected void clearMap() {
