@@ -16,6 +16,9 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -47,6 +50,9 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.maps.model.TileProvider;
+import com.google.android.gms.maps.model.VisibleRegion;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
@@ -62,6 +68,8 @@ import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.MapboxTileProvider;
+import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.OfflineTileProvider;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.utils.collection.HashBiMap;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
@@ -84,6 +92,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     private static final float USER_LOCATION_UPDATE_MIN_DISPLACEMENT = 0; // m
 
     private static final float GO_TO_MY_LOCATION_ZOOM = 19f;
+
+    private static final int ONLINE_TILE_PROVIDER_Z_INDEX = -1;
+    private static final int OFFLINE_TILE_PROVIDER_Z_INDEX = -2;
 
     private static final IntentFilter eventFilter = new IntentFilter();
 
@@ -261,6 +272,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
+        setHasOptionsMenu(true);
+
         final FragmentActivity activity = getActivity();
         final Context context = activity.getApplicationContext();
 
@@ -300,6 +313,45 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
                 .unregisterReceiver(eventReceiver);
 
         mGApiClientMgr.stopSafely();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.menu_google_map, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.menu_download_mapbox_map:
+                startActivity(new Intent(getContext(), DownloadMapboxMapActivity.class));
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu){
+        final MenuItem item = menu.findItem(R.id.menu_download_mapbox_map);
+        if(item != null) {
+            final boolean isEnabled = shouldShowDownloadMapMenuOption();
+            item.setEnabled(isEnabled);
+            item.setVisible(isEnabled);
+        }
+
+    }
+
+    private boolean shouldShowDownloadMapMenuOption(){
+        final Context context = getContext();
+        final @GoogleMapPrefConstants.TileProvider String tileProvider = GoogleMapPrefFragment.PrefManager
+                .getMapTileProvider(context);
+
+        return GoogleMapPrefConstants.MAPBOX_TILE_PROVIDER.equals(tileProvider)
+                && GoogleMapPrefFragment.PrefManager.addDownloadMenuOption(context);
     }
 
     @Override
@@ -874,12 +926,58 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     }
 
     private void setupGoogleTileProvider(Context context, GoogleMap map){
+        //Remove the mapbox tile providers
+        if(offlineTileProvider != null){
+            offlineTileProvider.remove();
+            offlineTileProvider = null;
+        }
+
+        if(onlineTileProvider != null){
+            onlineTileProvider.remove();
+            onlineTileProvider = null;
+        }
+
         map.setMapType(GoogleMapPrefFragment.PrefManager.getMapType(context));
     }
 
     private void setupMapboxTileProvider(Context context, GoogleMap map){
+        Timber.d("Enabling mapbox tile provider.");
+
         //Remove the default google map layer.
-        map.setMapType(GoogleMap.MAP_TYPE_NONE);
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        final GoogleMapPrefFragment.PrefManager prefManager = GoogleMapPrefFragment.PrefManager;
+        final String mapboxId = prefManager.getMapboxId(context);
+        final String mapboxAccessToken = prefManager.getMapboxAccessToken(context);
+        final int maxZoomLevel = (int) map.getMaxZoomLevel();
+
+        if(onlineTileProvider == null){
+            final TileProvider tileProvider = new MapboxTileProvider(mapboxId, mapboxAccessToken, maxZoomLevel);
+            final TileOverlayOptions options = new TileOverlayOptions()
+                    .tileProvider(tileProvider)
+                    .zIndex(ONLINE_TILE_PROVIDER_Z_INDEX);
+
+            onlineTileProvider = map.addTileOverlay(options);
+        }
+
+        //Check if the offline provider is enabled as well.
+        if (prefManager.isOfflineMapLayerEnabled(context)) {
+            if(offlineTileProvider == null){
+                final TileProvider tileProvider = new OfflineTileProvider(context, mapboxId, mapboxAccessToken,
+                        maxZoomLevel);
+                final TileOverlayOptions options = new TileOverlayOptions()
+                        .tileProvider(tileProvider)
+                        .zIndex(OFFLINE_TILE_PROVIDER_Z_INDEX);
+
+                offlineTileProvider = map.addTileOverlay(options);
+            }
+        }
+        else{
+            if(offlineTileProvider != null){
+                offlineTileProvider.remove();
+                offlineTileProvider = null;
+            }
+        }
     }
 
     protected Context getContext(){
@@ -915,6 +1013,18 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
         } else {
             return 0;
         }
+    }
+
+    public VisibleMapArea getVisibleMapArea(){
+        final GoogleMap map = getMap();
+        if(map == null)
+            return null;
+
+        final VisibleRegion mapRegion = map.getProjection().getVisibleRegion();
+        return new VisibleMapArea(DroneHelper.LatLngToCoord(mapRegion.farLeft),
+                DroneHelper.LatLngToCoord(mapRegion.nearLeft),
+                DroneHelper.LatLngToCoord(mapRegion.nearRight),
+                DroneHelper.LatLngToCoord(mapRegion.farRight));
     }
 
     @Override

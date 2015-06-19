@@ -126,6 +126,13 @@
             android:launchMode="singleTask"
             android:theme="@style/CustomDialogTheme"/>
 
+        <activity
+            android:name=".maps.providers.google_map.DownloadMapboxMapActivity"
+            android:noHistory="true"
+            android:excludeFromRecents="true"
+            android:theme="@style/CustomActionBarTheme.Transparent"
+            android:launchMode="singleTask"/>
+
     </application>
 
 </manifest>

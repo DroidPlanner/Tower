@@ -10,6 +10,7 @@ import android.util.Log;
 import com.google.android.gms.maps.model.VisibleRegion;
 
 import org.droidplanner.android.data.DatabaseState;
+import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.MapboxUtils;
 import org.droidplanner.android.utils.NetworkUtils;
 import org.droidplanner.android.utils.Utils;
@@ -35,9 +36,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MapDownloader {
+import timber.log.Timber;
 
-    private static final String TAG = MapDownloader.class.getSimpleName();
+public class MapDownloader {
 
     /**
      * The possible states of the offline map downloader.
@@ -77,7 +78,11 @@ public class MapDownloader {
     }
 
     public boolean addMapDownloaderListener(MapDownloaderListener listener) {
-        return listeners.add(listener);
+        if(listener != null) {
+            listener.stateChanged(this.state);
+            return listeners.add(listener);
+        }
+        return false;
     }
 
     public boolean removeMapDownloaderListener(MapDownloaderListener listener) {
@@ -104,7 +109,7 @@ public class MapDownloader {
         }
 
         final int processorsCount = (int) (Runtime.getRuntime().availableProcessors() * 1.5f);
-        Log.v(TAG, "Using " + processorsCount + " processors.");
+        Timber.v("Using " + processorsCount + " processors.");
         downloadsScheduler = Executors.newFixedThreadPool(processorsCount);
     }
 
@@ -144,8 +149,7 @@ public class MapDownloader {
 
     public void notifyDelegateOfHTTPStatusError(int status, String url) {
         for (MapDownloaderListener listener : listeners) {
-            listener.httpStatusError(new Exception(String.format(Locale.US, "HTTP Status Error %d, for url = %s", status,
-                    url)));
+            listener.httpStatusError(status, url);
         }
     }
 
@@ -164,14 +168,14 @@ public class MapDownloader {
 
         notifyDelegateOfInitialCount(totalFilesExpectedToWrite.get());
 
-        Log.d(TAG, String.format(Locale.US, "number of urls to download = %d", urls.size()));
+        Timber.d(String.format(Locale.US, "number of urls to download = %d", urls.size()));
         if (this.totalFilesExpectedToWrite.get() == 0) {
             finishUpDownloadProcess();
             return;
         }
 
         if (!NetworkUtils.isNetworkAvailable(context)) {
-            Log.e(TAG, "Network is not available.");
+            Timber.e("Network is not available.");
             notifyDelegateOfNetworkConnectivityError(new IllegalStateException("Network is not available"));
             return;
         }
@@ -184,13 +188,13 @@ public class MapDownloader {
                     HttpURLConnection conn = null;
                     try {
                         conn = NetworkUtils.getHttpURLConnection(new URL(url));
-                        Log.d(TAG, "URL to download = " + conn.getURL().toString());
+                        Timber.d("URL to download = " + conn.getURL().toString());
                         conn.setConnectTimeout(60000);
                         conn.connect();
                         int rc = conn.getResponseCode();
                         if (rc != HttpURLConnection.HTTP_OK) {
                             String msg = String.format(Locale.US, "HTTP Error connection.  Response Code = %d for url = %s", rc, conn.getURL().toString());
-                            Log.w(TAG, msg);
+                            Timber.w(msg);
                             notifyDelegateOfHTTPStatusError(rc, url);
                             throw new IOException(msg);
                         }
@@ -207,8 +211,8 @@ public class MapDownloader {
                                 bais.write(byteChunk, 0, n);
                             }
                         } catch (IOException e) {
-                            Log.e(TAG, String.format(Locale.US, "Failed while reading bytes from %s: %s", conn.getURL().toString(), e.getMessage()));
-                            e.printStackTrace();
+                            Timber.e(e, String.format(Locale.US, "Failed while reading bytes from %s: %s", conn
+                                    .getURL().toString(), e.getMessage()));
                         } finally {
                             if (is != null) {
                                 is.close();
@@ -217,7 +221,7 @@ public class MapDownloader {
                         }
                         sqliteSaveDownloadedData(mapId, bais.toByteArray(), url);
                     } catch (IOException e) {
-                        Log.e(TAG, "Error occurred while retrieving map data.", e);
+                        Timber.e(e, "Error occurred while retrieving map data.");
                     } finally {
                         downloadsTracker.countDown();
 
@@ -236,7 +240,7 @@ public class MapDownloader {
                 try {
                     downloadsTracker.await();
                 } catch (InterruptedException e) {
-                    Log.e(TAG, "Error while waiting for downloads to complete.", e);
+                    Timber.e(e, "Error while waiting for downloads to complete.");
                 } finally {
                     finishUpDownloadProcess();
                 }
@@ -250,21 +254,20 @@ public class MapDownloader {
 
     public void sqliteSaveDownloadedData(String mapId, byte[] data, String url) {
         if (Utils.runningOnMainThread()) {
-            Log.w(TAG, "trying to run sqliteSaveDownloadedData() on main thread. Return.");
+            Timber.w("trying to run sqliteSaveDownloadedData() on main thread. Return.");
             return;
         }
 
         // Bail out if the state has changed to canceling, suspended, or available
         if (this.state != MBXOfflineMapDownloaderState.MBXOfflineMapDownloaderStateRunning) {
-            Log.w(TAG, "sqliteSaveDownloadedData() is not in a Running state so bailing.  State = " + this.state);
+            Timber.w("sqliteSaveDownloadedData() is not in a Running state so bailing.  State = " + this.state);
             return;
         }
 
         // Open the database read-write and multi-threaded. The slightly obscure c-style variable names here and below are
         // used to stay consistent with the sqlite documentaion.
         // Continue by inserting an image blob into the data table
-        SQLiteDatabase db = DatabaseState.getOfflineDatabaseHandlerForMapId(context, mapId)
-                .getWritableDatabase();
+        SQLiteDatabase db = DatabaseState.getOfflineDatabaseHandlerForMapId(context, mapId).getWritableDatabase();
         try {
             db.beginTransaction();
 
@@ -277,18 +280,18 @@ public class MapDownloader {
             db.endTransaction();
 //        db.close();
         }catch(IllegalStateException e){
-            Log.e(TAG, "Error while saving downloader data to the database.", e);
+            Timber.e(e,"Error while saving downloader data to the database.");
         }
 
         // Update the progress
         notifyDelegateOfProgress(this.totalFilesWritten.incrementAndGet(), this.totalFilesExpectedToWrite.get());
-        Log.d(TAG, "totalFilesWritten = " + this.totalFilesWritten + "; totalFilesExpectedToWrite = " + this
+        Timber.d("totalFilesWritten = " + this.totalFilesWritten + "; totalFilesExpectedToWrite = " + this
                 .totalFilesExpectedToWrite.get());
     }
 
     private void finishUpDownloadProcess() {
         if (this.state == MBXOfflineMapDownloaderState.MBXOfflineMapDownloaderStateRunning) {
-            Log.i(TAG, "Just finished downloading all materials.  Persist the OfflineMapDatabase, change the state, and call it a day.");
+            Timber.i("Just finished downloading all materials.  Persist the OfflineMapDatabase, change the state, and call it a day.");
             // This is what to do when we've downloaded all the files
             notifyDelegateOfCompletionWithOfflineMapDatabase();
             this.state = MBXOfflineMapDownloaderState.MBXOfflineMapDownloaderStateAvailable;
@@ -299,7 +302,7 @@ public class MapDownloader {
     public ArrayList<String> sqliteReadArrayOfOfflineMapURLsToBeDownloadLimit(String mapId, int limit) {
         ArrayList<String> results = new ArrayList<String>();
         if (Utils.runningOnMainThread()) {
-            Log.w(TAG, "Attempting to run sqliteReadArrayOfOfflineMapURLsToBeDownloadLimit() on main thread.  Returning.");
+            Timber.w("Attempting to run sqliteReadArrayOfOfflineMapURLsToBeDownloadLimit() on main thread.  Returning.");
             return results;
         }
 
@@ -311,8 +314,7 @@ public class MapDownloader {
         query = query + ";";
 
         // Open the database
-        SQLiteDatabase db = DatabaseState.getOfflineDatabaseHandlerForMapId(context, mapId)
-                .getReadableDatabase();
+        SQLiteDatabase db = DatabaseState.getOfflineDatabaseHandlerForMapId(context, mapId).getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         if (cursor != null) {
             if (cursor.moveToFirst()) {
@@ -330,13 +332,12 @@ public class MapDownloader {
 
     public boolean sqliteCreateDatabaseUsingMetadata(String mapId, List<String> urlStrings) {
         if (Utils.runningOnMainThread()) {
-            Log.w(TAG, "sqliteCreateDatabaseUsingMetadata() running on main thread.  Returning.");
+            Timber.w("sqliteCreateDatabaseUsingMetadata() running on main thread.  Returning.");
             return false;
         }
 
         // Build a query to populate the database (map metadata and list of map resource urls)
-        SQLiteDatabase db = DatabaseState.getOfflineDatabaseHandlerForMapId(context, mapId)
-                .getWritableDatabase();
+        SQLiteDatabase db = DatabaseState.getOfflineDatabaseHandlerForMapId(context, mapId).getWritableDatabase();
         db.beginTransaction();
 
         for (String url : urlStrings) {
@@ -352,24 +353,42 @@ public class MapDownloader {
         return true;
     }
 
+    private boolean deleteIncompleteDownloads(String mapId){
+        if(TextUtils.isEmpty(mapId))
+            return false;
+
+        if(Utils.runningOnMainThread()){
+            Timber.w("This call should not be made on the main thread.");
+            return false;
+        }
+
+        final SQLiteDatabase db = DatabaseState.getOfflineDatabaseHandlerForMapId(context, mapId).getWritableDatabase();
+        final int deletedCount = db.delete(OfflineDatabaseHandler.TABLE_RESOURCES, "status IS NULL OR TRIM(status) = " +
+                "''", null);
+        Timber.d("Deleted %d rows", deletedCount);
+        return true;
+    }
+
 /*
     API: Begin an offline map download
 */
 
-    public void beginDownloadingMapID(final String mapId, final String accessToken, VisibleRegion mapRegion, int
+    public void beginDownloadingMapID(final String mapId, final String accessToken, DPMap.VisibleMapArea mapRegion, int
             minimumZ, int maximumZ) {
         beginDownloadingMapID(mapId, accessToken, mapRegion, minimumZ, maximumZ, true, true);
     }
 
-    public void beginDownloadingMapID(final String mapId, final String accessToken, VisibleRegion mapRegion, int minimumZ, int maximumZ, boolean includeMetadata,
+    public void beginDownloadingMapID(final String mapId, final String accessToken, DPMap.VisibleMapArea mapRegion, int
+            minimumZ, int maximumZ, boolean includeMetadata,
                                       boolean includeMarkers) {
         if (state != MBXOfflineMapDownloaderState.MBXOfflineMapDownloaderStateAvailable) {
-            Log.w(TAG, "state doesn't equal MBXOfflineMapDownloaderStateAvailable so return.  state = " + state);
+            Timber.w("state doesn't equal MBXOfflineMapDownloaderStateAvailable so return.  state = " + state);
             return;
         }
 
         // Start a download job to retrieve all the resources needed for using the specified map offline
         this.state = MBXOfflineMapDownloaderState.MBXOfflineMapDownloaderStateRunning;
+        notifyDelegateOfStateChange();
 
         final ArrayList<String> urls = new ArrayList<String>();
         String dataName = "features.json";    // Only using API V4 for now
@@ -387,18 +406,18 @@ public class MapDownloader {
         // Loop through the zoom levels and lat/lon bounds to generate a list of urls which should be included in the offline map
         //
         double minLat = Math.min(
-                Math.min(mapRegion.farLeft.latitude, mapRegion.nearLeft.latitude),
-                Math.min(mapRegion.farRight.latitude, mapRegion.nearRight.latitude));
+                Math.min(mapRegion.farLeft.getLatitude(), mapRegion.nearLeft.getLatitude()),
+                Math.min(mapRegion.farRight.getLatitude(), mapRegion.nearRight.getLatitude()));
         double maxLat = Math.max(
-                Math.max(mapRegion.farLeft.latitude, mapRegion.nearLeft.latitude),
-                Math.max(mapRegion.farRight.latitude, mapRegion.nearRight.latitude));
+                Math.max(mapRegion.farLeft.getLatitude(), mapRegion.nearLeft.getLatitude()),
+                Math.max(mapRegion.farRight.getLatitude(), mapRegion.nearRight.getLatitude()));
 
         double minLon = Math.min(
-                Math.min(mapRegion.farLeft.longitude, mapRegion.nearLeft.longitude),
-                Math.min(mapRegion.farRight.longitude, mapRegion.nearRight.longitude));
+                Math.min(mapRegion.farLeft.getLongitude(), mapRegion.nearLeft.getLongitude()),
+                Math.min(mapRegion.farRight.getLongitude(), mapRegion.nearRight.getLongitude()));
         double maxLon = Math.max(
-                Math.max(mapRegion.farLeft.longitude, mapRegion.nearLeft.longitude),
-                Math.max(mapRegion.farRight.longitude, mapRegion.nearRight.longitude));
+                Math.max(mapRegion.farLeft.getLongitude(), mapRegion.nearLeft.getLongitude()),
+                Math.max(mapRegion.farRight.getLongitude(), mapRegion.nearRight.getLongitude()));
 
         int minX;
         int maxX;
@@ -406,7 +425,7 @@ public class MapDownloader {
         int maxY;
         int tilesPerSide;
 
-        Log.d(TAG, "Generating urls for tiles from zoom " + minimumZ + " to zoom " + maximumZ);
+        Timber.d("Generating urls for tiles from zoom " + minimumZ + " to zoom " + maximumZ);
 
         for (int zoom = minimumZ; zoom <= maximumZ; zoom++) {
             tilesPerSide = Double.valueOf(Math.pow(2.0, zoom)).intValue();
@@ -421,7 +440,7 @@ public class MapDownloader {
             }
         }
 
-        Log.d(TAG, urls.size() + " urls generated.");
+        Timber.d(urls.size() + " urls generated.");
 
         // Determine if we need to add marker icon urls (i.e. parse markers.geojson/features.json), and if so, add them
         if (includeMarkers) {
@@ -435,7 +454,7 @@ public class MapDownloader {
                 // added to the list of urls to download, the lack of network connectivity is a non-recoverable error
                 // here.
                 notifyDelegateOfNetworkConnectivityError(new IllegalStateException("Network is unavailable"));
-                Log.e(TAG, "Network is unavailable.");
+                Timber.e("Network is unavailable.");
                 return;
             }
 
@@ -459,7 +478,7 @@ public class MapDownloader {
                         //
                         Set<String> markerIconURLStrings = new HashSet<String>();
                         markerIconURLStrings.addAll(parseMarkerIconURLStringsFromGeojsonData(accessToken, jsonText));
-                        Log.i(TAG, "Number of markerIconURLs = " + markerIconURLStrings.size());
+                        Timber.i("Number of markerIconURLs = " + markerIconURLStrings.size());
                         if (markerIconURLStrings.size() > 0) {
                             urls.addAll(markerIconURLStrings);
                         }
@@ -479,10 +498,11 @@ public class MapDownloader {
                 }
             });
         } else {
-            Log.i(TAG, "No marker icons to worry about, so just start downloading.");
+            Timber.i("No marker icons to worry about, so just start downloading.");
             // There aren't any marker icons to worry about, so just create database and start downloading
             startDownloadProcess(mapId, urls);
         }
+
     }
 
     /**
@@ -494,9 +514,11 @@ public class MapDownloader {
         downloadsScheduler.execute(new Runnable() {
             @Override
             public void run() {
+                deleteIncompleteDownloads(mapId);
+
                 // Do database creation / io on background thread
                 if (!sqliteCreateDatabaseUsingMetadata(mapId, urls)) {
-                    Log.e(TAG, "Map Database wasn't created");
+                    Timber.e("Map Database wasn't created");
                     return;
                 }
 
@@ -514,7 +536,7 @@ public class MapDownloader {
             simplestyleJSONDictionary = new JSONObject(data);
 
             // Find point features in the markers dictionary (if there are any) and add them to the map.
-            JSONArray markers = simplestyleJSONDictionary.getJSONArray("features");
+            JSONArray markers = simplestyleJSONDictionary.optJSONArray("features");
 
             if (markers != null && markers.length() > 0) {
                 for (int lc = 0; lc < markers.length(); lc++) {
@@ -538,7 +560,7 @@ public class MapDownloader {
                 }
             }
         } catch (JSONException e) {
-            Log.e(TAG, e.getMessage(), e);
+            Timber.e(e, e.getMessage());
         }
 
         // Return only the unique icon urls

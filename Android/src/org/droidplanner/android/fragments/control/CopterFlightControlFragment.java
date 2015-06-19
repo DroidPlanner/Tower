@@ -27,6 +27,8 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.dialogs.SlideToUnlockDialog;
+import org.droidplanner.android.dialogs.SupportYesNoDialog;
+import org.droidplanner.android.dialogs.SupportYesNoWithPrefsDialog;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
@@ -298,9 +300,9 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment {
     }
 
     private void getDronieConfirmation() {
-        YesNoWithPrefsDialog ynd = YesNoWithPrefsDialog.newInstance(getActivity()
+        SupportYesNoWithPrefsDialog ynd = SupportYesNoWithPrefsDialog.newInstance(getActivity()
                         .getApplicationContext(), getString(R.string.pref_dronie_creation_title),
-                getString(R.string.pref_dronie_creation_message), new YesNoDialog.Listener() {
+                getString(R.string.pref_dronie_creation_message), new SupportYesNoDialog.Listener() {
                     @Override
                     public void onYes() {
                         missionProxy.makeAndUploadDronie(getDrone());

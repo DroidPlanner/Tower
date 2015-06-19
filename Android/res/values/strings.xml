@@ -563,11 +563,6 @@
 
     <!-- Mapbox preferences -->
     <string name="pref_title_mapbox_tile_provider">Mapbox Tile Provider</string>
-    <string name="pref_title_mapbox_tile_source">Mapbox Tile Source</string>
-    <string name="mapbox_tile_source_auto">Auto</string>
-    <string name="mapbox_tile_source_online">Online</string>
-    <string name="mapbox_tile_source_offline">Offline</string>
-    <string name="pref_summary_mapbox_tile_source">Where to fetch the mapbox tiles from</string>
     <string name="pref_title_mapbox_map_download">Download Offline Map</string>
     <string name="pref_summary_mapbox_map_download">Click to cache map for use while offline</string>
     <string name="pref_title_mapbox_id">Mapbox Id</string>
@@ -577,5 +572,10 @@
     <string name="pref_hint_mapbox_access_token">Mapbox access token</string>
     <string name="pref_summary_mapbox_access_token">Enter your mapbox access token</string>
     <string name="pref_title_download_menu_option">Add \'Download Map\' to menu</string>
+    <string name="pref_title_enable_offline_map_layer">Enable offline map layer</string>
+    <string name="label_download_map">Download Map</string>
+    <string name="instructions_map_download_selection">Pan and zoom to adjust the map area to save</string>
+    <string name="instructions_tap_to_save_map">Tap to save the map</string>
+    <string name="label_map_saved">Map area saved!</string>
 
 </resources>

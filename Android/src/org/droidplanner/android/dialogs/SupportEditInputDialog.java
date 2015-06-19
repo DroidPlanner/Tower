@@ -1,6 +1,5 @@
 package org.droidplanner.android.dialogs;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -11,9 +10,9 @@ import android.widget.EditText;
 import org.droidplanner.android.R;
 
 /**
- * Created by fhuya on 10/14/14.
+ * Created by Fredia Huya-Kouadio on 6/17/15.
  */
-public class EditInputDialog extends YesNoDialog {
+public class SupportEditInputDialog extends SupportYesNoDialog {
 
     protected static final String EXTRA_HINT = "hint";
 
@@ -23,8 +22,8 @@ public class EditInputDialog extends YesNoDialog {
         void onCancel();
     }
 
-    public static EditInputDialog newInstance(String title, String hint, boolean hintIsValidEntry, Listener listener){
-        EditInputDialog dialog = new EditInputDialog();
+    public static SupportEditInputDialog newInstance(String title, String hint, Listener listener){
+        SupportEditInputDialog dialog = new SupportEditInputDialog();
 
         Bundle bundle = new Bundle();
         bundle.putString(EXTRA_TITLE, title);
@@ -36,13 +35,11 @@ public class EditInputDialog extends YesNoDialog {
 
         dialog.setArguments(bundle);
         dialog.mListener = listener;
-        dialog.hintIsValidEntry = hintIsValidEntry;
 
         return dialog;
     }
 
     protected Listener mListener;
-    protected boolean hintIsValidEntry;
     private EditText mEditText;
 
     @Override
@@ -56,9 +53,7 @@ public class EditInputDialog extends YesNoDialog {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         CharSequence input = mEditText.getText();
-                        if (TextUtils.isEmpty(input) && hintIsValidEntry) {
-                            input = mEditText.getHint();
-                        }
+                        if(TextUtils.isEmpty(input)) input = mEditText.getHint();
 
                         mListener.onOk(input);
                     }

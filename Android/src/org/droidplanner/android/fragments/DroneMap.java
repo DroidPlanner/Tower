@@ -41,8 +41,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public abstract class DroneMap extends ApiListenerFragment {
 
-	private final static String TAG = DroneMap.class.getSimpleName();
-
     public static final String ACTION_UPDATE_MAP = Utils.PACKAGE_NAME + ".action.UPDATE_MAP";
 
 	private static final IntentFilter eventFilter = new IntentFilter();
@@ -398,4 +396,8 @@ public abstract class DroneMap extends ApiListenerFragment {
 
         return markers;
     }
+
+	public DPMap.VisibleMapArea getVisibleMapArea(){
+		return mMapFragment == null ? null : mMapFragment.getVisibleMapArea();
+	}
 }

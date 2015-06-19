@@ -47,17 +47,6 @@
         <item>mapbox</item>
     </string-array>
 
-    <string-array name="MapboxTileSources">
-        <item>@string/mapbox_tile_source_auto</item>
-        <item>@string/mapbox_tile_source_online</item>
-        <item>@string/mapbox_tile_source_offline</item>
-    </string-array>
-    <string-array name="MapboxTileSourceValues">
-        <item>auto</item>
-        <item>online</item>
-        <item>offline</item>
-    </string-array>
-
     <string-array name="MapTypes">
         <item>@string/menu_map_type_satellite</item>
         <item>@string/menu_map_type_hybrid</item>

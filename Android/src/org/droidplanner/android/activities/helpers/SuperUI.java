@@ -19,6 +19,8 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.SlideToUnlockDialog;
+import org.droidplanner.android.dialogs.SupportYesNoDialog;
+import org.droidplanner.android.dialogs.SupportYesNoWithPrefsDialog;
 import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
 import org.droidplanner.android.fragments.SettingsFragment;
@@ -222,10 +224,10 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
                 if (missionProxy.getItems().isEmpty() || missionProxy.hasTakeoffAndLandOrRTL()) {
                     missionProxy.sendMissionToAPM(dpApi);
                 } else {
-                    YesNoWithPrefsDialog dialog = YesNoWithPrefsDialog.newInstance(
+                    SupportYesNoWithPrefsDialog dialog = SupportYesNoWithPrefsDialog.newInstance(
                             getApplicationContext(), "Mission Upload",
                             "Do you want to append a Takeoff and RTL to your " + "mission?", "Ok",
-                            "Skip", new YesNoDialog.Listener() {
+                            "Skip", new SupportYesNoDialog.Listener() {
 
                                 @Override
                                 public void onYes() {
