@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
+import android.os.AsyncTask
 import android.os.Bundle
 import android.preference.ListPreference
 import android.preference.PreferenceCategory
@@ -16,6 +17,8 @@ import org.droidplanner.android.dialogs.EditInputDialog
 import org.droidplanner.android.maps.providers.DPMapProvider
 import org.droidplanner.android.maps.providers.MapProviderPreferences
 import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefConstants.*
+import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.MapboxUtils
+import java.net.HttpURLConnection
 
 /**
  * This is the google map provider preferences. It stores and handles all preferences related to google map.
@@ -170,8 +173,8 @@ public class GoogleMapPrefFragment : MapProviderPreferences() {
                                         object : EditInputDialog.Listener {
                                             override fun onOk(input: CharSequence?) {
                                                 if(TextUtils.isEmpty(input)){
-                                                    Toast.makeText(context, "Invalid mapbox access token", Toast
-                                                            .LENGTH_LONG).show()
+                                                    Toast.makeText(context, R.string.label_invalid_mapbox_access_token,
+                                                            Toast.LENGTH_LONG).show()
                                                 }
                                                 else{
                                                     //Save the mapbox access token to preferences
@@ -200,7 +203,7 @@ public class GoogleMapPrefFragment : MapProviderPreferences() {
 
                                             override fun onOk(input: CharSequence?) {
                                                 if(TextUtils.isEmpty(input)) {
-                                                    Toast.makeText(context, "Invalid mapbox id", Toast.LENGTH_LONG)
+                                                    Toast.makeText(context, R.string.label_invalid_mapbox_id, Toast.LENGTH_LONG)
                                                             .show()
                                                 }
                                                 else{

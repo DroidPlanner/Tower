@@ -577,5 +577,7 @@
     <string name="instructions_map_download_selection">Pan and zoom to adjust the map area to save</string>
     <string name="instructions_tap_to_save_map">Tap to save the map</string>
     <string name="label_map_saved">Map area saved!</string>
+    <string name="label_invalid_mapbox_id">Invalid mapbox id</string>
+    <string name="label_invalid_mapbox_access_token">Invalid mapbox access token</string>
 
 </resources>

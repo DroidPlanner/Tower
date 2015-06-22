@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -69,12 +70,14 @@ import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.MapboxTileProvider;
+import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.MapboxUtils;
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.OfflineTileProvider;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.utils.collection.HashBiMap;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -263,6 +266,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
      */
     private TileOverlay onlineTileProvider;
     private TileOverlay offlineTileProvider;
+
+    private String mapboxId;
+    private String mapboxAccessToken;
 
     @Override
     public void onAttach(Activity activity) {
@@ -926,6 +932,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     }
 
     private void setupGoogleTileProvider(Context context, GoogleMap map){
+        //Reset the mapbox id and access token
+        mapboxId = null;
+        mapboxAccessToken = null;
+
         //Remove the mapbox tile providers
         if(offlineTileProvider != null){
             offlineTileProvider.remove();
@@ -951,7 +961,13 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
         final String mapboxAccessToken = prefManager.getMapboxAccessToken(context);
         final int maxZoomLevel = (int) map.getMaxZoomLevel();
 
-        if(onlineTileProvider == null){
+        boolean wereCredentialsUpdated = !mapboxId.equals(this.mapboxId)
+                || !mapboxAccessToken.equals(this.mapboxAccessToken);
+
+        if(wereCredentialsUpdated || onlineTileProvider == null){
+            if(onlineTileProvider != null)
+                onlineTileProvider.remove();
+
             final TileProvider tileProvider = new MapboxTileProvider(mapboxId, mapboxAccessToken, maxZoomLevel);
             final TileOverlayOptions options = new TileOverlayOptions()
                     .tileProvider(tileProvider)
@@ -962,7 +978,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
 
         //Check if the offline provider is enabled as well.
         if (prefManager.isOfflineMapLayerEnabled(context)) {
-            if(offlineTileProvider == null){
+            if(wereCredentialsUpdated || offlineTileProvider == null){
+                if(offlineTileProvider != null)
+                    offlineTileProvider.remove();
+
                 final TileProvider tileProvider = new OfflineTileProvider(context, mapboxId, mapboxAccessToken,
                         maxZoomLevel);
                 final TileOverlayOptions options = new TileOverlayOptions()
@@ -978,6 +997,28 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
                 offlineTileProvider = null;
             }
         }
+
+        this.mapboxId = mapboxId;
+        this.mapboxAccessToken = mapboxAccessToken;
+
+        //Check if the mapbox credentials are valid.
+        new AsyncTask<Void, Void, Integer>(){
+
+            @Override
+            protected Integer doInBackground(Void... params) {
+                final Context context = getContext();
+                return MapboxUtils.fetchReferenceTileUrl(context, mapboxId, mapboxAccessToken);
+            }
+
+            @Override
+            protected void onPostExecute(Integer result){
+                if(result != null && result == HttpURLConnection.HTTP_UNAUTHORIZED){
+                    //Invalid mapbox credentials
+                    Toast.makeText(getContext(), "Invalid mapbox credentials! Please update!", Toast.LENGTH_LONG)
+                            .show();
+                }
+            }
+        }.execute();
     }
 
     protected Context getContext(){
