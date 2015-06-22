@@ -579,5 +579,6 @@
     <string name="label_map_saved">Map area saved!</string>
     <string name="label_invalid_mapbox_id">Invalid mapbox id</string>
     <string name="label_invalid_mapbox_access_token">Invalid mapbox access token</string>
+    <string name="alert_invalid_mapbox_credentials">Invalid mapbox credentials! Please update your mapbox settings.</string>
 
 </resources>

@@ -1012,10 +1012,14 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
 
             @Override
             protected void onPostExecute(Integer result){
-                if(result != null && result == HttpURLConnection.HTTP_UNAUTHORIZED){
-                    //Invalid mapbox credentials
-                    Toast.makeText(getContext(), "Invalid mapbox credentials! Please update!", Toast.LENGTH_LONG)
-                            .show();
+                if(result != null){
+                    switch(result){
+                        case HttpURLConnection.HTTP_UNAUTHORIZED:
+                        case HttpURLConnection.HTTP_NOT_FOUND:
+                            //Invalid mapbox credentials
+                            Toast.makeText(getContext(), R.string.alert_invalid_mapbox_credentials, Toast.LENGTH_LONG).show();
+                            break;
+                    }
                 }
             }
         }.execute();

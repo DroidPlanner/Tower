@@ -55,7 +55,11 @@ public class SupportEditInputDialog extends SupportYesNoDialog {
                         CharSequence input = mEditText.getText();
                         if(TextUtils.isEmpty(input)) input = mEditText.getHint();
 
-                        mListener.onOk(input);
+                        String value = null;
+                        if(input != null)
+                            value = input.toString().trim();
+
+                        mListener.onOk(value);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
