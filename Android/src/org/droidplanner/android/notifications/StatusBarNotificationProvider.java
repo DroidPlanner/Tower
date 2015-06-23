@@ -230,7 +230,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
             final Home droneHome = this.drone.getAttribute(AttributeType.HOME);
             if(droneGps != null && droneGps.isValid() && droneHome != null && droneHome.isValid()) {
                 LengthUnit distanceToHome = UnitManager.getUnitSystem(mContext).getLengthUnitProvider()
-                        .boxBaseValueToTarget(MathUtils.getDistance(droneHome.getCoordinate(), droneGps.getPosition()));
+                        .boxBaseValueToTarget(MathUtils.getDistance2D(droneHome.getCoordinate(), droneGps.getPosition()));
                 update = String.format("Home\n%s", distanceToHome);
             }
 		mInboxBuilder.setLine(0, SpannableUtils.normal("Home:   ", update));

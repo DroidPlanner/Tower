@@ -59,10 +59,10 @@ public class MissionItemProxy {
 		mMarkerInfos = MissionItemMarkerInfo.newInstance(this);
 
         if(mMissionItem instanceof Survey){
-            mMission.getDrone().buildMissionItemsAsync(missionItemBuiltListener, (Survey) mMissionItem);
+            mMission.getDrone().buildMissionItemsAsync(new Survey[]{(Survey) mMissionItem}, missionItemBuiltListener);
         }
         else if(mMissionItem instanceof StructureScanner){
-            mMission.getDrone().buildMissionItemsAsync(missionItemBuiltListener, (StructureScanner) mMissionItem);
+            mMission.getDrone().buildMissionItemsAsync(new StructureScanner[]{(StructureScanner) mMissionItem}, missionItemBuiltListener);
         }
 	}
 

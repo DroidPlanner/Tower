@@ -278,7 +278,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
                 distanceView.setText(R.string.status_waiting_for_gps, TextView.BufferType.NORMAL);
                 azimuthView.setText("");
             } else {
-                final double distance = MathUtils.getDistance(lastGCSPosition, msgCoord);
+                final double distance = MathUtils.getDistance2D(lastGCSPosition, msgCoord);
                 final LengthUnit convertedDistance = lengthUnitProvider.boxBaseValueToTarget(distance);
                 String distanceText = getString(R.string.editor_info_window_distance, convertedDistance.toString());
                 if (lastGCSBearingTo != Float.MAX_VALUE) {

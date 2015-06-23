@@ -181,7 +181,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
                         final MissionItem.ComplexItem<Survey>[] surveys = surveyList
                                 .toArray(new MissionItem.ComplexItem[surveyList.size()]);
 
-                        drone.buildMissionItemsAsync(this, surveys);
+                        drone.buildMissionItemsAsync(surveys, this);
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Error while building the survey.", e);
