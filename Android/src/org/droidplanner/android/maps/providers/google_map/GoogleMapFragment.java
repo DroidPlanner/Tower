@@ -11,12 +11,15 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -49,6 +52,8 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.maps.model.TileProvider;
+import com.google.android.gms.maps.model.VisibleRegion;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
@@ -61,40 +66,38 @@ import com.o3dr.services.android.lib.util.googleApi.GoogleApiClientManager.Googl
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.SettingsFragment;
-import org.droidplanner.android.helpers.LocalMapTileProvider;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.MapboxTileProvider;
+import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.MapboxUtils;
+import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.OfflineTileProvider;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.utils.collection.HashBiMap;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
+import timber.log.Timber;
+
 public class GoogleMapFragment extends SupportMapFragment implements DPMap, GoogleApiClientManager.ManagerListener {
-
-    private static final String TAG = GoogleMapFragment.class.getSimpleName();
-
-    public static final String PREF_MAP_TYPE = "pref_map_type";
-
-    public static final String MAP_TYPE_SATELLITE = "Satellite";
-    public static final String MAP_TYPE_HYBRID = "Hybrid";
-    public static final String MAP_TYPE_NORMAL = "Normal";
-    public static final String MAP_TYPE_TERRAIN = "Terrain";
 
     private static final long USER_LOCATION_UPDATE_INTERVAL = 30000; // ms
     private static final long USER_LOCATION_UPDATE_FASTEST_INTERVAL = 5000; // ms
     private static final float USER_LOCATION_UPDATE_MIN_DISPLACEMENT = 0; // m
 
     private static final float GO_TO_MY_LOCATION_ZOOM = 19f;
+
+    private static final int ONLINE_TILE_PROVIDER_Z_INDEX = -1;
+    private static final int OFFLINE_TILE_PROVIDER_Z_INDEX = -2;
 
     private static final IntentFilter eventFilter = new IntentFilter();
 
@@ -179,7 +182,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
             }
 
             if (mPanMode.get() == AutoPanMode.USER) {
-                Log.d(TAG, "User location changed.");
+                Timber.d("User location changed.");
                 updateCamera(DroneHelper.LocationToCoord(location), (int) getMap().getCameraPosition().zoom);
             }
 
@@ -264,6 +267,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     private TileOverlay onlineTileProvider;
     private TileOverlay offlineTileProvider;
 
+    private String mapboxId;
+    private String mapboxAccessToken;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -272,6 +278,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
+        setHasOptionsMenu(true);
+
         final FragmentActivity activity = getActivity();
         final Context context = activity.getApplicationContext();
 
@@ -311,6 +319,45 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
                 .unregisterReceiver(eventReceiver);
 
         mGApiClientMgr.stopSafely();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.menu_google_map, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.menu_download_mapbox_map:
+                startActivity(new Intent(getContext(), DownloadMapboxMapActivity.class));
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu){
+        final MenuItem item = menu.findItem(R.id.menu_download_mapbox_map);
+        if(item != null) {
+            final boolean isEnabled = shouldShowDownloadMapMenuOption();
+            item.setEnabled(isEnabled);
+            item.setVisible(isEnabled);
+        }
+
+    }
+
+    private boolean shouldShowDownloadMapMenuOption(){
+        final Context context = getContext();
+        final @GoogleMapPrefConstants.TileProvider String tileProvider = GoogleMapPrefFragment.PrefManager
+                .getMapTileProvider(context);
+
+        return GoogleMapPrefConstants.MAPBOX_TILE_PROVIDER.equals(tileProvider)
+                && GoogleMapPrefFragment.PrefManager.addDownloadMenuOption(context);
     }
 
     @Override
@@ -738,7 +785,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
 
                     final int height = rootView.getHeight();
                     final int width = rootView.getWidth();
-                    Log.d(TAG, String.format(Locale.US, "Screen W %d, H %d", width, height));
+                    Timber.d("Screen W %d, H %d", width, height);
                     if (height > 0 && width > 0) {
                         CameraUpdate animation = CameraUpdateFactory.newLatLngBounds(bounds, width, height, 100);
                         googleMap.animateCamera(animation);
@@ -768,7 +815,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     @Override
     public void goToMyLocation() {
         if (!mGApiClientMgr.addTask(mGoToMyLocationTask)) {
-            Log.e(TAG, "Unable to add google api client task.");
+            Timber.e("Unable to add google api client task.");
         }
     }
 
@@ -868,42 +915,122 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     }
 
     private void setupMapOverlay(GoogleMap map) {
-        if (mAppPrefs.isOfflineMapEnabled()) {
-            setupOfflineMapOverlay(map);
-        } else {
-            setupOnlineMapOverlay(map);
+        final Context context = getContext();
+        if(context == null)
+            return;
+
+        final @GoogleMapPrefConstants.TileProvider String tileProvider = GoogleMapPrefFragment.PrefManager.getMapTileProvider(context);
+        switch(tileProvider){
+            case GoogleMapPrefConstants.GOOGLE_TILE_PROVIDER:
+                setupGoogleTileProvider(context, map);
+                break;
+
+            case GoogleMapPrefConstants.MAPBOX_TILE_PROVIDER:
+                setupMapboxTileProvider(context, map);
+                break;
         }
     }
 
-    private void setupOnlineMapOverlay(GoogleMap map) {
-        map.setMapType(getMapType());
+    private void setupGoogleTileProvider(Context context, GoogleMap map){
+        //Reset the mapbox id and access token
+        mapboxId = null;
+        mapboxAccessToken = null;
+
+        //Remove the mapbox tile providers
+        if(offlineTileProvider != null){
+            offlineTileProvider.remove();
+            offlineTileProvider = null;
+        }
+
+        if(onlineTileProvider != null){
+            onlineTileProvider.remove();
+            onlineTileProvider = null;
+        }
+
+        map.setMapType(GoogleMapPrefFragment.PrefManager.getMapType(context));
     }
 
-    private int getMapType() {
-        String mapType = mAppPrefs.getMapType();
+    private void setupMapboxTileProvider(Context context, GoogleMap map){
+        Timber.d("Enabling mapbox tile provider.");
 
-        if (mapType.equalsIgnoreCase(MAP_TYPE_SATELLITE)) {
-            return GoogleMap.MAP_TYPE_SATELLITE;
+        //Remove the default google map layer.
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        final GoogleMapPrefFragment.PrefManager prefManager = GoogleMapPrefFragment.PrefManager;
+        final String mapboxId = prefManager.getMapboxId(context);
+        final String mapboxAccessToken = prefManager.getMapboxAccessToken(context);
+        final int maxZoomLevel = (int) map.getMaxZoomLevel();
+
+        boolean wereCredentialsUpdated = !mapboxId.equals(this.mapboxId)
+                || !mapboxAccessToken.equals(this.mapboxAccessToken);
+
+        if(wereCredentialsUpdated || onlineTileProvider == null){
+            if(onlineTileProvider != null)
+                onlineTileProvider.remove();
+
+            final TileProvider tileProvider = new MapboxTileProvider(mapboxId, mapboxAccessToken, maxZoomLevel);
+            final TileOverlayOptions options = new TileOverlayOptions()
+                    .tileProvider(tileProvider)
+                    .zIndex(ONLINE_TILE_PROVIDER_Z_INDEX);
+
+            onlineTileProvider = map.addTileOverlay(options);
         }
-        if (mapType.equalsIgnoreCase(MAP_TYPE_HYBRID)) {
-            return GoogleMap.MAP_TYPE_HYBRID;
+
+        //Check if the offline provider is enabled as well.
+        if (prefManager.isOfflineMapLayerEnabled(context)) {
+            if(wereCredentialsUpdated || offlineTileProvider == null){
+                if(offlineTileProvider != null)
+                    offlineTileProvider.remove();
+
+                final TileProvider tileProvider = new OfflineTileProvider(context, mapboxId, mapboxAccessToken,
+                        maxZoomLevel);
+                final TileOverlayOptions options = new TileOverlayOptions()
+                        .tileProvider(tileProvider)
+                        .zIndex(OFFLINE_TILE_PROVIDER_Z_INDEX);
+
+                offlineTileProvider = map.addTileOverlay(options);
+            }
         }
-        if (mapType.equalsIgnoreCase(MAP_TYPE_NORMAL)) {
-            return GoogleMap.MAP_TYPE_NORMAL;
+        else{
+            if(offlineTileProvider != null){
+                offlineTileProvider.remove();
+                offlineTileProvider = null;
+            }
         }
-        if (mapType.equalsIgnoreCase(MAP_TYPE_TERRAIN)) {
-            return GoogleMap.MAP_TYPE_TERRAIN;
-        } else {
-            return GoogleMap.MAP_TYPE_SATELLITE;
-        }
+
+        this.mapboxId = mapboxId;
+        this.mapboxAccessToken = mapboxAccessToken;
+
+        //Check if the mapbox credentials are valid.
+        new AsyncTask<Void, Void, Integer>(){
+
+            @Override
+            protected Integer doInBackground(Void... params) {
+                final Context context = getContext();
+                return MapboxUtils.fetchReferenceTileUrl(context, mapboxId, mapboxAccessToken);
+            }
+
+            @Override
+            protected void onPostExecute(Integer result){
+                if(result != null){
+                    switch(result){
+                        case HttpURLConnection.HTTP_UNAUTHORIZED:
+                        case HttpURLConnection.HTTP_NOT_FOUND:
+                            //Invalid mapbox credentials
+                            Toast.makeText(getContext(), R.string.alert_invalid_mapbox_credentials, Toast.LENGTH_LONG).show();
+                            break;
+                    }
+                }
+            }
+        }.execute();
     }
 
-    private void setupOfflineMapOverlay(GoogleMap map) {
-        map.setMapType(GoogleMap.MAP_TYPE_NONE);
-        TileOverlay tileOverlay = map.addTileOverlay(new TileOverlayOptions()
-                .tileProvider(new LocalMapTileProvider()));
-        tileOverlay.setZIndex(-1);
-        tileOverlay.clearTileCache();
+    protected Context getContext(){
+        final Activity activity = getActivity();
+        if(activity == null)
+            return null;
+
+        return activity.getApplicationContext();
     }
 
     protected void clearMap() {
@@ -931,6 +1058,18 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
         } else {
             return 0;
         }
+    }
+
+    public VisibleMapArea getVisibleMapArea(){
+        final GoogleMap map = getMap();
+        if(map == null)
+            return null;
+
+        final VisibleRegion mapRegion = map.getProjection().getVisibleRegion();
+        return new VisibleMapArea(DroneHelper.LatLngToCoord(mapRegion.farLeft),
+                DroneHelper.LatLngToCoord(mapRegion.nearLeft),
+                DroneHelper.LatLngToCoord(mapRegion.nearRight),
+                DroneHelper.LatLngToCoord(mapRegion.farRight));
     }
 
     @Override

@@ -1,4 +1,4 @@
-package org.droidplanner.android.maps.providers.mapbox;
+package org.droidplanner.android.maps.providers.google_map.tiles.mapbox;
 
 import android.content.Context;
 

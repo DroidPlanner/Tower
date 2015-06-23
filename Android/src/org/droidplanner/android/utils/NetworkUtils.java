@@ -10,7 +10,7 @@ import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.OkUrlFactory;
 
-import org.droidplanner.android.maps.providers.mapbox.MapboxUtils;
+import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.MapboxUtils;
 
 import java.net.HttpURLConnection;
 import java.net.URL;

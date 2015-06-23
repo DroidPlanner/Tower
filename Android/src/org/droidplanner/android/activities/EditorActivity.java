@@ -28,6 +28,7 @@ import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.dialogs.EditInputDialog;
+import org.droidplanner.android.dialogs.SupportEditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenMissionDialog;
 import org.droidplanner.android.fragments.EditorListFragment;
@@ -326,8 +327,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 ? FileStream.getWaypointFilename("waypoints")
                 : openedMissionFilename;
 
-        final EditInputDialog dialog = EditInputDialog.newInstance(context, getString(R.string.label_enter_filename),
-                defaultFilename, new EditInputDialog.Listener() {
+        final SupportEditInputDialog dialog = SupportEditInputDialog.newInstance(getString(R.string
+                        .label_enter_filename),
+                defaultFilename, new SupportEditInputDialog.Listener() {
                     @Override
                     public void onOk(CharSequence input) {
                         if (missionProxy.writeMissionToFile(input.toString())) {

@@ -1,49 +1,52 @@
 package org.droidplanner.android.dialogs;
 
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.TextView;
 
 import org.droidplanner.android.R;
 
-public class YesNoDialog extends DialogFragment {
+/**
+ * Created by Fredia Huya-Kouadio on 6/17/15.
+ */
+public class SupportYesNoDialog extends DialogFragment {
 
     protected final static String EXTRA_TITLE = "title";
     protected final static String EXTRA_MESSAGE = "message";
     protected final static String EXTRA_POSITIVE_LABEL = "positive_label";
     protected final static String EXTRA_NEGATIVE_LABEL = "negative_label";
 
-	public interface Listener {
-		void onYes();
+    public interface Listener {
+        void onYes();
 
-		void onNo();
-	}
+        void onNo();
+    }
 
-	public static YesNoDialog newInstance(Context context, String title, String msg,
+    public static SupportYesNoDialog newInstance(Context context, String title, String msg,
                                           Listener listener) {
-		YesNoDialog f = new YesNoDialog();
-		Bundle b = new Bundle();
-		b.putString(EXTRA_TITLE, title);
-		b.putString(EXTRA_MESSAGE, msg);
+        SupportYesNoDialog f = new SupportYesNoDialog();
+        Bundle b = new Bundle();
+        b.putString(EXTRA_TITLE, title);
+        b.putString(EXTRA_MESSAGE, msg);
         b.putString(EXTRA_POSITIVE_LABEL, context.getString(android.R.string.yes));
         b.putString(EXTRA_NEGATIVE_LABEL, context.getString(android.R.string.no));
 
-		f.setArguments(b);
-		f.mListener = listener;
-		return f;
-	}
+        f.setArguments(b);
+        f.mListener = listener;
+        return f;
+    }
 
-	protected Listener mListener;
+    protected Listener mListener;
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         return buildDialog(savedInstanceState).create();
-	}
+    }
 
     protected AlertDialog.Builder buildDialog(Bundle savedInstanceState){
         final Bundle arguments = getArguments();

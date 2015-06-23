@@ -10,17 +10,14 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
+import timber.log.Timber;
+
 /**
  * This activity is used to display the preferences for the currently selected
  * map provider. It does so by retrieving the PreferenceFragment instance from
  * the currently selected map provider, and displaying it.
  */
 public class MapPreferencesActivity extends FragmentActivity {
-
-	/**
-	 * Used as tag for logging.
-	 */
-	private final static String TAG = MapPreferencesActivity.class.getSimpleName();
 
 	/**
 	 * Bundle key used to pass, and retrieve the current map provider name.
@@ -50,7 +47,7 @@ public class MapPreferencesActivity extends FragmentActivity {
 	 */
 	private void handleIntent(Intent intent) {
 		if (intent == null) {
-			Log.w(TAG, "No intent was used when starting this class.");
+			Timber.w("No intent was used when starting this class.");
 			finish();
 			return;
 		}
@@ -59,7 +56,7 @@ public class MapPreferencesActivity extends FragmentActivity {
 		final String mapProviderName = intent.getStringExtra(EXTRA_MAP_PROVIDER_NAME);
 		final DPMapProvider mapProvider = DPMapProvider.getMapProvider(mapProviderName);
 		if (mapProvider == null) {
-			Log.w(TAG, "Invalid map provider name: " + mapProviderName);
+			Timber.w("Invalid map provider name: " + mapProviderName);
 			finish();
 			return;
 		}
@@ -71,11 +68,10 @@ public class MapPreferencesActivity extends FragmentActivity {
 		if (currentPrefs == null || currentPrefs.getMapProvider() != mapProvider) {
 			currentPrefs = mapProvider.getMapProviderPreferences();
 			if (currentPrefs == null) {
-				Log.w(TAG, "Undefined map provider preferences for provider " + mapProviderName);
+				Timber.w("Undefined map provider preferences for provider " + mapProviderName);
 				finish();
 			} else {
-				fm.beginTransaction().replace(R.id.map_preferences_container, currentPrefs)
-						.commit();
+				fm.beginTransaction().replace(R.id.map_preferences_container, currentPrefs).commit();
 			}
 		}
 	}

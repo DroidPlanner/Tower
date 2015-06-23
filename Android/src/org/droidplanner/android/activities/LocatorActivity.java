@@ -40,8 +40,6 @@ import java.util.List;
 public class LocatorActivity extends DrawerNavigationUI implements LocatorListFragment.OnLocatorListListener,
         LocationListener {
 
-    private static final String TAG = LocatorActivity.class.getSimpleName();
-
     private static final String STATE_LAST_SELECTED_POSITION = "STATE_LAST_SELECTED_POSITION";
     private static final int TLOG_PICKER_REQUEST_CODE = 101;
 

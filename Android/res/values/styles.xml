@@ -469,5 +469,19 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
+    <style name="AlertMessage" />
+
+    <style name="AlertMessage.Title">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@android:color/primary_text_light</item>
+    </style>
+
+    <style name="AlertMessage.Subtitle">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@android:color/secondary_text_light</item>
+    </style>
+
 </resources>
 
