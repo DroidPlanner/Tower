@@ -374,7 +374,6 @@
     <string name="label_yes_no_dialog_dont_show">Nicht mehr anzeigen.</string>
     <string name="length_label">Länge</string>
     <string name="locator">Flugverlauf</string>
-    <string name="mavlink_version">MAVLink-Version</string>
     <string name="menu_action_delete">Löschen</string>
     <string name="menu_action_reverse">Umkehren</string>
     <string name="menu_search_toggle">Suche ein-/ausschalten</string>

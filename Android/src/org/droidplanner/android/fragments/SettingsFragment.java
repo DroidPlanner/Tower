@@ -24,7 +24,6 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
-import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 import com.o3dr.services.android.lib.drone.property.State;
@@ -114,17 +113,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             final String action = intent.getAction();
             switch (action) {
                 case AttributeEvent.STATE_DISCONNECTED:
-                    updateMavlinkVersionPreference(null);
                     updateFirmwareVersionPreference(null);
-                    break;
-
-                case AttributeEvent.HEARTBEAT_FIRST:
-                case AttributeEvent.HEARTBEAT_RESTORED:
-                    int mavlinkVersion = intent.getIntExtra(AttributeEventExtra.EXTRA_MAVLINK_VERSION, -1);
-                    if (mavlinkVersion == -1)
-                        updateMavlinkVersionPreference(null);
-                    else
-                        updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
                     break;
 
                 case AttributeEvent.STATE_CONNECTED:
@@ -132,7 +121,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                     Drone drone = dpApp.getDrone();
                     if (drone.isConnected()) {
                         Type droneType = drone.getAttribute(AttributeType.TYPE);
-                        updateFirmwareVersionPreference(droneType.getFirmwareVersion());
+                        updateFirmwareVersionPreference(droneType);
                     } else
                         updateFirmwareVersionPreference(null);
                     break;
@@ -213,8 +202,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         } catch (NameNotFoundException e) {
             Log.e(TAG, "Unable to retrieve version name.", e);
         }
-
-        updateMavlinkVersionPreference(null);
 
         setupMapProviders();
         setupPeriodicControls();
@@ -485,38 +472,46 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         mDefaultSummaryPrefs.add(DroidPlannerPrefs.PREF_UDP_PING_RECEIVER_PORT);
     }
 
-    /**
-     * This is used to update the mavlink version preference.
-     *
-     * @param version mavlink version
-     */
-    private void updateMavlinkVersionPreference(String version) {
-        final Preference mavlinkVersionPref = findPreference(DroidPlannerPrefs.PREF_MAVLINK_VERSION);
-        if (mavlinkVersionPref != null) {
-            final HitBuilders.EventBuilder mavlinkEvent = new HitBuilders.EventBuilder()
-                    .setCategory(GAUtils.Category.MAVLINK_CONNECTION);
+    private void updateFirmwareVersionPreference(Type droneType) {
+        String firmwareVersion = droneType == null ? null : droneType.getFirmwareVersion();
 
-            if (version == null) {
-                mavlinkVersionPref.setSummary(getString(R.string.empty_content));
-                mavlinkEvent.setAction("Mavlink version unset");
-            } else {
-                mavlinkVersionPref.setSummary('v' + version);
-                mavlinkEvent.setAction("Mavlink version set").setLabel(version);
+        final Preference vehicleTypePref = findPreference(DroidPlannerPrefs.PREF_VEHICLE_TYPE);
+        if(vehicleTypePref != null){
+            if(droneType == null){
+                vehicleTypePref.setSummary(R.string.empty_content);
             }
+            else{
+                final int typeLabelResId;
+                switch(droneType.getDroneType()){
+                    case Type.TYPE_COPTER:
+                        typeLabelResId = R.string.label_type_copter;
+                        break;
 
-            // Record the mavlink version
-            GAUtils.sendEvent(mavlinkEvent);
+                    case Type.TYPE_PLANE:
+                        typeLabelResId = R.string.label_type_plane;
+                        break;
+
+                    case Type.TYPE_ROVER:
+                        typeLabelResId = R.string.label_type_rover;
+                        break;
+
+                    case Type.TYPE_UNKNOWN:
+                    default:
+                        typeLabelResId = R.string.label_type_unknown;
+                        break;
+                }
+
+                vehicleTypePref.setSummary(typeLabelResId);
+            }
         }
-    }
 
-    private void updateFirmwareVersionPreference(String firmwareVersion) {
         final Preference firmwareVersionPref = findPreference(DroidPlannerPrefs.PREF_FIRMWARE_VERSION);
         if (firmwareVersionPref != null) {
             final HitBuilders.EventBuilder firmwareEvent = new HitBuilders.EventBuilder()
                     .setCategory(GAUtils.Category.MAVLINK_CONNECTION);
 
             if (firmwareVersion == null) {
-                firmwareVersionPref.setSummary(getString(R.string.empty_content));
+                firmwareVersionPref.setSummary(R.string.empty_content);
                 firmwareEvent.setAction("Firmware version unset");
             } else {
                 firmwareVersionPref.setSummary(firmwareVersion);
@@ -628,18 +623,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         Drone drone = dpApp.getDrone();
         State droneState = drone.getAttribute(AttributeType.STATE);
         Type droneType = drone.getAttribute(AttributeType.TYPE);
-        final int mavlinkVersion = droneState == null
-                ? State.INVALID_MAVLINK_VERSION
-                : droneState.getMavlinkVersion();
 
-        if (mavlinkVersion != State.INVALID_MAVLINK_VERSION) {
-            updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
-        } else {
-            updateMavlinkVersionPreference(null);
-        }
-
-        String firmwareVersion = droneType == null ? null : droneType.getFirmwareVersion();
-        updateFirmwareVersionPreference(firmwareVersion);
+        updateFirmwareVersionPreference(droneType);
 
         lbm.registerReceiver(broadcastReceiver, intentFilter);
     }
