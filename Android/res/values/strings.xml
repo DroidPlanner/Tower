@@ -452,8 +452,7 @@
     <string name="pref_title_notifications">Notifications</string>
     <string name="normal_waypoint_toggle">Normal</string>
     <string name="spline_waypoint_toggle">Spline</string>
-    <string name="mavlink_version">MAVLink Version</string>
-    <string name="firmware_version">Firmware Version</string>    
+    <string name="firmware_version">Firmware Version</string>
     <string name="empty_content" translatable="false">--</string>
     <string name="usage_statistics">Usage Statistics</string>
     <string name="pref_usage_statistics_title">Send usage statistics</string>
@@ -580,5 +579,10 @@
     <string name="label_invalid_mapbox_id">Invalid mapbox id</string>
     <string name="label_invalid_mapbox_access_token">Invalid mapbox access token</string>
     <string name="alert_invalid_mapbox_credentials">Invalid mapbox credentials! Please update your mapbox settings.</string>
+    <string name="vehicle_type">Vehicle Type</string>
+    <string name="label_type_copter">Copter</string>
+    <string name="label_type_plane">Plane</string>
+    <string name="label_type_rover">Rover</string>
+    <string name="label_type_unknown">Unknown</string>
 
 </resources>

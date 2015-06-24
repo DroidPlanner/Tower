@@ -339,11 +339,11 @@
             android:title="@string/firmware_version" />
         <Preference
             android:enabled="false"
-            android:key="pref_mavlink_version"
-            android:persistent="false"
+            android:key="pref_vehicle_type"
             android:selectable="false"
+            android:persistent="false"
             android:shouldDisableView="false"
-            android:title="@string/mavlink_version" />
+            android:title="@string/vehicle_type"/>
         <Preference
             android:enabled="false"
             android:key="pref_storage"

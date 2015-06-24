@@ -513,7 +513,7 @@ public class MissionProxy implements DPMap.PathSource {
 
         MissionItem previous = missionItemProxies.get(index - 1).getMissionItem();
         if (previous instanceof MissionItem.SpatialItem) {
-            return MathUtils.getDistance(((MissionItem.SpatialItem) waypoint).getCoordinate(),
+            return MathUtils.getDistance3D(((MissionItem.SpatialItem) waypoint).getCoordinate(),
                     ((MissionItem.SpatialItem) previous).getCoordinate());
         }
 
@@ -634,7 +634,8 @@ public class MissionProxy implements DPMap.PathSource {
                     position.getLongitude(), spatialItem.getCoordinate().getAltitude()));
 
             if (spatialItem instanceof StructureScanner) {
-                this.drone.buildMissionItemsAsync(missionItemsBuiltListener, (StructureScanner) spatialItem);
+                this.drone.buildMissionItemsAsync(new StructureScanner[]{(StructureScanner) spatialItem},
+                        missionItemsBuiltListener);
             }
 
             notifyMissionUpdate();
@@ -647,7 +648,7 @@ public class MissionProxy implements DPMap.PathSource {
 
     public void movePolygonPoint(Survey survey, int index, LatLong position) {
         survey.getPolygonPoints().get(index).set(position);
-        this.drone.buildMissionItemsAsync(missionItemsBuiltListener, survey);
+        this.drone.buildMissionItemsAsync(new Survey[]{survey}, missionItemsBuiltListener);
         notifyMissionUpdate();
     }
 
@@ -731,7 +732,7 @@ public class MissionProxy implements DPMap.PathSource {
         double length = 0;
         if (points.size() > 1) {
             for (int i = 1; i < points.size(); i++) {
-                length += MathUtils.getDistance(points.get(i - 1), points.get(i));
+                length += MathUtils.getDistance2D(points.get(i - 1), points.get(i));
             }
         }
 

@@ -305,7 +305,6 @@
     <string name="editor_multi_edit_no_waypoint_error">Nessun waypoint selezionato.</string>
     <string name="email_address">Indirizzo Email</string>
     <string name="locator">Cronologia Voli</string>
-    <string name="mavlink_version">Versione MAVLink</string>
     <string name="menu_action_delete">Cancella</string>
     <string name="menu_action_multi_edit"></string>
     <string name="menu_action_reverse">Inverti</string>
