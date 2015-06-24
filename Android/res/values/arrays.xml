@@ -38,12 +38,28 @@
     </string-array>
 
 
+    <string-array name="TileProviders">
+        <item>@string/pref_tile_provider_google</item>
+        <item>@string/pref_tile_provider_mapbox</item>
+    </string-array>
+    <string-array name="TileProviderValues">
+        <item>google</item>
+        <item>mapbox</item>
+    </string-array>
+
     <string-array name="MapTypes">
         <item>@string/menu_map_type_satellite</item>
         <item>@string/menu_map_type_hybrid</item>
         <item>@string/menu_map_type_normal</item>
         <item>@string/menu_map_type_terrain</item>
     </string-array>
+    <string-array name="MapTypeValues">
+        <item>satellite</item>
+        <item>hybrid</item>
+        <item>normal</item>
+        <item>terrain</item>
+    </string-array>
+
     <string-array name="TelemetryBaudTypes">
         <item name="38400">38400</item>
         <item name="57600">57600</item>

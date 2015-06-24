@@ -9,6 +9,8 @@ import org.droidplanner.android.utils.prefs.AutoPanMode;
 
 import android.graphics.Color;
 import android.location.LocationListener;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.property.FootPrint;
@@ -133,6 +135,50 @@ public interface DPMap {
 
 	}
 
+	class VisibleMapArea implements Parcelable {
+		public final LatLong nearLeft;
+		public final LatLong nearRight;
+		public final LatLong farLeft;
+		public final LatLong farRight;
+
+		public VisibleMapArea(LatLong farLeft, LatLong nearLeft, LatLong nearRight, LatLong farRight) {
+			this.farLeft = farLeft;
+			this.nearLeft = nearLeft;
+			this.nearRight = nearRight;
+			this.farRight = farRight;
+		}
+
+		@Override
+		public int describeContents() {
+			return 0;
+		}
+
+		@Override
+		public void writeToParcel(Parcel dest, int flags) {
+			dest.writeParcelable(this.nearLeft, 0);
+			dest.writeParcelable(this.nearRight, 0);
+			dest.writeParcelable(this.farLeft, 0);
+			dest.writeParcelable(this.farRight, 0);
+		}
+
+		protected VisibleMapArea(Parcel in) {
+			this.nearLeft = in.readParcelable(LatLong.class.getClassLoader());
+			this.nearRight = in.readParcelable(LatLong.class.getClassLoader());
+			this.farLeft = in.readParcelable(LatLong.class.getClassLoader());
+			this.farRight = in.readParcelable(LatLong.class.getClassLoader());
+		}
+
+		public static final Parcelable.Creator<VisibleMapArea> CREATOR = new Parcelable.Creator<VisibleMapArea>() {
+			public VisibleMapArea createFromParcel(Parcel source) {
+				return new VisibleMapArea(source);
+			}
+
+			public VisibleMapArea[] newArray(int size) {
+				return new VisibleMapArea[size];
+			}
+		};
+	}
+
 	/**
 	 * Adds a coordinate to the drone's flight path.
 	 * 
@@ -186,6 +232,11 @@ public interface DPMap {
 	 * @return this map's provider.
 	 */
 	public DPMapProvider getProvider();
+
+	/**
+	 * @return the bounds of the map area visible on screen.
+	 */
+	VisibleMapArea getVisibleMapArea();
 
 	/**
 	 * Move the map to the drone location.

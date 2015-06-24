@@ -3,7 +3,7 @@ package org.droidplanner.android.data;
 import android.content.Context;
 import android.text.TextUtils;
 
-import org.droidplanner.android.maps.providers.mapbox.offline.OfflineDatabaseHandler;
+import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.OfflineDatabaseHandler;
 
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;

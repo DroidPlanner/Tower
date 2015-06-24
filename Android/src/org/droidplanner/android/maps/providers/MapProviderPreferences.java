@@ -11,4 +11,5 @@ public abstract class MapProviderPreferences extends PreferenceFragment {
 	 * @return the map provider this fragment contains preferences for.
 	 */
 	public abstract DPMapProvider getMapProvider();
+
 }

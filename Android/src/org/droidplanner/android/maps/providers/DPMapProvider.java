@@ -2,7 +2,7 @@ package org.droidplanner.android.maps.providers;
 
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
-import org.droidplanner.android.maps.providers.google_map.GoogleMapProviderPreferences;
+import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefFragment;
 
 /**
  * Contains a listing of the various map providers supported, and implemented in
@@ -20,7 +20,7 @@ public enum DPMapProvider {
 
 		@Override
 		public MapProviderPreferences getMapProviderPreferences() {
-			return new GoogleMapProviderPreferences();
+			return new GoogleMapPrefFragment();
 		}
 	};
 

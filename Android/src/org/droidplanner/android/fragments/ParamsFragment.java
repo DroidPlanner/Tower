@@ -35,6 +35,7 @@ import com.o3dr.services.android.lib.drone.property.Parameters;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.EditInputDialog;
+import org.droidplanner.android.dialogs.SupportEditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenParameterDialog;
 import org.droidplanner.android.dialogs.parameters.DialogParameterInfo;
@@ -330,9 +331,10 @@ public class ParamsFragment extends ApiListenerListFragment {
                 ? FileStream.getParameterFilename("Parameters-")
                 : openedParamsFilename;
 
-        final EditInputDialog dialog = EditInputDialog.newInstance(context,
-                getString(R.string.label_enter_filename), defaultFilename,
-                new EditInputDialog.Listener() {
+        final SupportEditInputDialog dialog = SupportEditInputDialog.newInstance(getString(R.string
+                        .label_enter_filename),
+                defaultFilename,
+                new SupportEditInputDialog.Listener() {
                     @Override
                     public void onOk(CharSequence input) {
                         final List<Parameter> parameters = new ArrayList<Parameter>();

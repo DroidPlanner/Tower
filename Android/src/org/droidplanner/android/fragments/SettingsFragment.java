@@ -16,7 +16,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
-import android.support.annotation.StringRes;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -174,41 +173,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         lbm = LocalBroadcastManager.getInstance(context);
         final SharedPreferences sharedPref = dpPrefs.prefs;
 
-        // Populate the map preference category
-        final String mapsProvidersPrefKey = getString(R.string.pref_maps_providers_key);
-        final ListPreference mapsProvidersPref = (ListPreference) findPreference(mapsProvidersPrefKey);
-        if (mapsProvidersPref != null) {
-            final DPMapProvider[] providers = DPMapProvider.values();
-            final int providersCount = providers.length;
-
-            final CharSequence[] providersNames = new CharSequence[providersCount];
-            final CharSequence[] providersNamesValues = new CharSequence[providersCount];
-            for (int i = 0; i < providersCount; i++) {
-                final String providerName = providers[i].name();
-                providersNamesValues[i] = providerName;
-                providersNames[i] = providerName.toLowerCase(Locale.ENGLISH).replace('_', ' ');
-            }
-
-            final String defaultProviderName = sharedPref.getString(mapsProvidersPrefKey,
-                    DPMapProvider.DEFAULT_MAP_PROVIDER.name());
-
-            mapsProvidersPref.setEntries(providersNames);
-            mapsProvidersPref.setEntryValues(providersNamesValues);
-            mapsProvidersPref.setValue(defaultProviderName);
-            mapsProvidersPref
-                    .setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                        @Override
-                        public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            // Update the map provider settings preference.
-                            final String mapProviderName = newValue.toString();
-                            return updateMapSettingsPreference(mapProviderName);
-                        }
-                    });
-
-            updateMapSettingsPreference(defaultProviderName);
-        }
-
         // update the summary for the preferences in the mDefaultSummaryPrefs hash table.
         for (String prefKey : mDefaultSummaryPrefs) {
             final Preference pref = findPreference(prefKey);
@@ -218,7 +182,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         }
 
         // Set the usage statistics preference
-        final String usageStatKey = getString(R.string.pref_usage_statistics_key);
+        final String usageStatKey = DroidPlannerPrefs.PREF_USAGE_STATISTICS;
         final CheckBoxPreference usageStatPref = (CheckBoxPreference) findPreference(usageStatKey);
         if (usageStatPref != null) {
             usageStatPref
@@ -234,13 +198,13 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                     });
         }
 
-        final Preference storagePref = findPreference(getString(R.string.pref_storage_key));
+        final Preference storagePref = findPreference(DroidPlannerPrefs.PREF_STORAGE);
         if (storagePref != null) {
             storagePref.setSummary(DirectoryPath.getPublicDataPath());
         }
 
         try {
-            Preference versionPref = findPreference("pref_version");
+            Preference versionPref = findPreference(DroidPlannerPrefs.PREF_APP_VERSION);
             if (versionPref != null) {
                 String version = context.getPackageManager().getPackageInfo(
                         context.getPackageName(), 0).versionName;
@@ -252,6 +216,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
         updateMavlinkVersionPreference(null);
 
+        setupMapProviders();
         setupPeriodicControls();
         setupConnectionPreferences();
         setupAdvancedMenu();
@@ -262,9 +227,44 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setupAltitudePreferences();
     }
 
+    private void setupMapProviders(){
+        // Populate the map preference category
+        final String mapsProvidersPrefKey = DroidPlannerPrefs.PREF_MAPS_PROVIDERS;
+
+        final ListPreference mapsProvidersPref = (ListPreference) findPreference(mapsProvidersPrefKey);
+        if (mapsProvidersPref != null) {
+            final DPMapProvider[] providers = DPMapProvider.values();
+            final int providersCount = providers.length;
+
+            final CharSequence[] providersNames = new CharSequence[providersCount];
+            final CharSequence[] providersNamesValues = new CharSequence[providersCount];
+            for (int i = 0; i < providersCount; i++) {
+                final String providerName = providers[i].name();
+                providersNamesValues[i] = providerName;
+                providersNames[i] = providerName.toLowerCase(Locale.ENGLISH).replace('_', ' ');
+            }
+
+            final String defaultProviderName = dpPrefs.getMapProviderName();
+
+            mapsProvidersPref.setEntries(providersNames);
+            mapsProvidersPref.setEntryValues(providersNamesValues);
+            mapsProvidersPref.setValue(defaultProviderName);
+            mapsProvidersPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    // Update the map provider settings preference.
+                    final String mapProviderName = newValue.toString();
+                    return updateMapSettingsPreference(mapProviderName);
+                }
+            });
+
+            updateMapSettingsPreference(defaultProviderName);
+        }
+    }
+
     private void setupAdvancedMenu(){
-        final CheckBoxPreference hdopToggle = (CheckBoxPreference) findPreference(getString(R.string
-                .pref_ui_gps_hdop_key));
+        final CheckBoxPreference hdopToggle = (CheckBoxPreference) findPreference(DroidPlannerPrefs.PREF_SHOW_GPS_HDOP);
         if(hdopToggle !=  null) {
             hdopToggle.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -275,8 +275,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             });
         }
 
-        final CheckBoxPreference killSwitch = (CheckBoxPreference) findPreference(getString(R.string
-                .pref_enable_kill_switch_key));
+        final CheckBoxPreference killSwitch = (CheckBoxPreference) findPreference(DroidPlannerPrefs.PREF_ENABLE_KILL_SWITCH);
         if(killSwitch != null) {
             killSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -289,7 +288,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     }
 
     private void setupUnitSystemPreferences(){
-        ListPreference unitSystemPref = (ListPreference) findPreference(getString(R.string.pref_unit_system_key));
+        ListPreference unitSystemPref = (ListPreference) findPreference(DroidPlannerPrefs.PREF_UNIT_SYSTEM);
         if(unitSystemPref != null){
             int defaultUnitSystem = dpPrefs.getUnitSystemType();
             updateUnitSystemSummary(unitSystemPref, defaultUnitSystem);
@@ -306,8 +305,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     }
 
     private void setupMapPreferences(){
-        final CheckBoxPreference mapRotation = (CheckBoxPreference) findPreference(getString(R.string
-                .pref_map_enable_rotation_key));
+        final CheckBoxPreference mapRotation = (CheckBoxPreference) findPreference(DroidPlannerPrefs.PREF_ENABLE_MAP_ROTATION);
         mapRotation.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -318,8 +316,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     }
 
     private void setupImminentGroundCollisionWarningPreference(){
-        final CheckBoxPreference collisionWarn = (CheckBoxPreference) findPreference(getString(R.string
-                .pref_ground_collision_warning_key));
+        final CheckBoxPreference collisionWarn = (CheckBoxPreference) findPreference(DroidPlannerPrefs.PREF_WARNING_GROUND_COLLISION);
         if(collisionWarn != null){
             collisionWarn.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -356,7 +353,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     }
 
     private void setupConnectionPreferences() {
-        ListPreference connectionTypePref = (ListPreference) findPreference(getString(R.string.pref_connection_type_key));
+        ListPreference connectionTypePref = (ListPreference) findPreference(DroidPlannerPrefs.PREF_CONNECTION_TYPE);
         if (connectionTypePref != null) {
             int defaultConnectionType = dpPrefs.getConnectionParameterType();
             updateConnectionPreferenceSummary(connectionTypePref, defaultConnectionType);
@@ -373,8 +370,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     }
 
     private void setupBluetoothDevicePreferences(){
-        final ClearBTDialogPreference preference = (ClearBTDialogPreference) findPreference(getString(R.string
-                .pref_bluetooth_device_address_key));
+        final ClearBTDialogPreference preference = (ClearBTDialogPreference) findPreference(DroidPlannerPrefs.PREF_BT_DEVICE_ADDRESS);
         if(preference != null){
             updateBluetoothDevicePreference(preference, dpPrefs.getBluetoothDeviceAddress());
             preference.setOnResultListener(new ClearBTDialogPreference.OnResultListener() {
@@ -389,15 +385,15 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     }
 
     private void setupAltitudePreferences(){
-        setupAltitudePreferenceHelper(R.string.pref_alt_max_value_key, dpPrefs.getMaxAltitude());
-        setupAltitudePreferenceHelper(R.string.pref_alt_min_value_key, dpPrefs.getMinAltitude());
-        setupAltitudePreferenceHelper(R.string.pref_alt_default_value_key, dpPrefs.getDefaultAltitude());
+        setupAltitudePreferenceHelper(DroidPlannerPrefs.PREF_ALT_MAX_VALUE, dpPrefs.getMaxAltitude());
+        setupAltitudePreferenceHelper(DroidPlannerPrefs.PREF_ALT_MIN_VALUE, dpPrefs.getMinAltitude());
+        setupAltitudePreferenceHelper(DroidPlannerPrefs.PREF_ALT_DEFAULT_VALUE, dpPrefs.getDefaultAltitude());
     }
 
-    private void setupAltitudePreferenceHelper(final @StringRes int prefKeyRes, int defaultAlt){
+    private void setupAltitudePreferenceHelper(final String prefKey, int defaultAlt){
         final LengthUnitProvider lup = getLengthUnitProvider();
 
-        final EditTextPreference altPref = (EditTextPreference) findPreference(getString(prefKeyRes));
+        final EditTextPreference altPref = (EditTextPreference) findPreference(prefKey);
         if(altPref != null){
             final LengthUnit altValue = lup.boxBaseValueToTarget(defaultAlt);
 
@@ -416,7 +412,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                         altPref.setText(String.valueOf((int) newAltValue.getValue()));
                         altPref.setSummary(newAltValue.toString());
 
-                        dpPrefs.setAltitudePreference(prefKeyRes, (int) lup.fromTargetToBase(newAltValue).getValue());
+                        dpPrefs.setAltitudePreference(prefKey, (int) lup.fromTargetToBase(newAltValue).getValue());
                     } catch (NumberFormatException e) {
 
                     }
@@ -481,14 +477,12 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     private void initSummaryPerPrefs() {
         mDefaultSummaryPrefs.clear();
 
-        mDefaultSummaryPrefs.add(getString(R.string.pref_baud_type_key));
-        mDefaultSummaryPrefs.add(getString(R.string.pref_server_port_key));
-        mDefaultSummaryPrefs.add(getString(R.string.pref_server_ip_key));
-        mDefaultSummaryPrefs.add(getString(R.string.pref_udp_server_port_key));
-        mDefaultSummaryPrefs.add(getString(R.string.pref_rc_quickmode_left_key));
-        mDefaultSummaryPrefs.add(getString(R.string.pref_rc_quickmode_right_key));
-        mDefaultSummaryPrefs.add(getString(R.string.pref_udp_ping_receiver_ip_key));
-        mDefaultSummaryPrefs.add(getString(R.string.pref_udp_ping_receiver_port_key));
+        mDefaultSummaryPrefs.add(DroidPlannerPrefs.PREF_USB_BAUD_RATE);
+        mDefaultSummaryPrefs.add(DroidPlannerPrefs.PREF_TCP_SERVER_PORT);
+        mDefaultSummaryPrefs.add(DroidPlannerPrefs.PREF_TCP_SERVER_IP);
+        mDefaultSummaryPrefs.add(DroidPlannerPrefs.PREF_UDP_SERVER_PORT);
+        mDefaultSummaryPrefs.add(DroidPlannerPrefs.PREF_UDP_PING_RECEIVER_IP);
+        mDefaultSummaryPrefs.add(DroidPlannerPrefs.PREF_UDP_PING_RECEIVER_PORT);
     }
 
     /**
@@ -497,7 +491,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
      * @param version mavlink version
      */
     private void updateMavlinkVersionPreference(String version) {
-        final Preference mavlinkVersionPref = findPreference(getString(R.string.pref_mavlink_version_key));
+        final Preference mavlinkVersionPref = findPreference(DroidPlannerPrefs.PREF_MAVLINK_VERSION);
         if (mavlinkVersionPref != null) {
             final HitBuilders.EventBuilder mavlinkEvent = new HitBuilders.EventBuilder()
                     .setCategory(GAUtils.Category.MAVLINK_CONNECTION);
@@ -516,7 +510,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     }
 
     private void updateFirmwareVersionPreference(String firmwareVersion) {
-        final Preference firmwareVersionPref = findPreference(getString(R.string.pref_firmware_version_key));
+        final Preference firmwareVersionPref = findPreference(DroidPlannerPrefs.PREF_FIRMWARE_VERSION);
         if (firmwareVersionPref != null) {
             final HitBuilders.EventBuilder firmwareEvent = new HitBuilders.EventBuilder()
                     .setCategory(GAUtils.Category.MAVLINK_CONNECTION);
@@ -539,7 +533,9 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         if (mapProvider == null)
             return false;
 
-        final Preference providerPrefs = findPreference(getText(R.string.pref_map_provider_settings_key));
+
+
+        final Preference providerPrefs = findPreference(DroidPlannerPrefs.PREF_MAPS_PROVIDER_SETTINGS);
         if (providerPrefs != null) {
             providerPrefs.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -566,7 +562,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     }
 
     private void setupPeriodicControls() {
-        final PreferenceCategory periodicSpeechPrefs = (PreferenceCategory) findPreference(getString(R.string.pref_tts_periodic_key));
+        final PreferenceCategory periodicSpeechPrefs = (PreferenceCategory) findPreference(DroidPlannerPrefs.PREF_TTS_PERIODIC);
         ListPreference periodic = ((ListPreference) periodicSpeechPrefs.getPreference(0));
         periodic.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override

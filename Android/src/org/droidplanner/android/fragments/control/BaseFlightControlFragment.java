@@ -27,8 +27,6 @@ public abstract class BaseFlightControlFragment extends ApiListenerFragment impl
 
     public static final int FOLLOW_SETTINGS_UPDATE = 147;
 
-    private static final String TAG = BaseFlightControlFragment.class.getSimpleName();
-
     private static final int FOLLOW_LOCATION_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
     private static final long FOLLOW_LOCATION_UPDATE_INTERVAL = 30000; // ms
     private static final long FOLLOW_LOCATION_UPDATE_FASTEST_INTERVAL = 5000; // ms

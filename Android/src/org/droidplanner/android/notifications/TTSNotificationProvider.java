@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -245,26 +246,26 @@ public class TTSNotificationProvider implements OnInitListener,
 		private void speakPeriodic(Drone drone) {
 			// Drop the message if the previous one is not done yet.
 			if (mIsPeriodicStatusStarted.compareAndSet(false, true)) {
-				final SparseBooleanArray speechPrefs = mAppPrefs.getPeriodicSpeechPrefs();
+				final Map<String, Boolean> speechPrefs = mAppPrefs.getPeriodicSpeechPrefs();
 
 				mMessageBuilder.setLength(0);
-				if (speechPrefs.get(R.string.pref_tts_periodic_bat_volt_key)) {
+				if (speechPrefs.get(DroidPlannerPrefs.PREF_TTS_PERIODIC_BAT_VOLT)) {
                     final Battery droneBattery = drone.getAttribute(AttributeType.BATTERY);
 					mMessageBuilder.append(String.format("battery %2.1f volts. ", droneBattery.getBatteryVoltage()));
 				}
 
-				if (speechPrefs.get(R.string.pref_tts_periodic_alt_key)) {
+				if (speechPrefs.get(DroidPlannerPrefs.PREF_TTS_PERIODIC_ALT)) {
                     final Altitude altitude = drone.getAttribute(AttributeType.ALTITUDE);
 					mMessageBuilder.append("altitude, ").append((int) (altitude.getAltitude())).append(" meters. ");
 				}
 
-				if (speechPrefs.get(R.string.pref_tts_periodic_airspeed_key)) {
+				if (speechPrefs.get(DroidPlannerPrefs.PREF_TTS_PERIODIC_AIRSPEED)) {
                     final Speed droneSpeed = drone.getAttribute(AttributeType.SPEED);
 					mMessageBuilder.append("airspeed, ").append((int) (droneSpeed.getAirSpeed()))
                             .append(" meters per second. ");
 				}
 
-				if (speechPrefs.get(R.string.pref_tts_periodic_rssi_key)) {
+				if (speechPrefs.get(DroidPlannerPrefs.PREF_TTS_PERIODIC_RSSI)) {
                     final Signal signal = drone.getAttribute(AttributeType.SIGNAL);
 					mMessageBuilder.append("r s s i, ").append((int) signal.getRssi()).append(" decibels");
 				}
@@ -313,14 +314,14 @@ public class TTSNotificationProvider implements OnInitListener,
 			}
 
 			if (ttsLanguage == null || tts.isLanguageAvailable(ttsLanguage) == TextToSpeech.LANG_NOT_SUPPORTED) {
-				final List<Locale> availableLanguages = new ArrayList<>(tts.getAvailableLanguages());
+				ttsLanguage = Locale.US;
+				if(sdkVersion >= Build.VERSION_CODES.LOLLIPOP) {
+					final List<Locale> availableLanguages = new ArrayList<>(tts.getAvailableLanguages());
 
-				if(!availableLanguages.isEmpty()) {
-					//Pick the first available language.
-					ttsLanguage = availableLanguages.get(0);
-				}
-				else {
-					ttsLanguage = Locale.US;
+					if (!availableLanguages.isEmpty()) {
+						//Pick the first available language.
+						ttsLanguage = availableLanguages.get(0);
+					}
 				}
 			}
 
@@ -383,7 +384,7 @@ public class TTSNotificationProvider implements OnInitListener,
 	}
 
 	private boolean shouldEnableTTS() {
-		return mAppPrefs.prefs.getBoolean("pref_enable_tts", false);
+		return mAppPrefs.isTtsEnabled();
 	}
 
 	private void speakArmedState(boolean armed) {
