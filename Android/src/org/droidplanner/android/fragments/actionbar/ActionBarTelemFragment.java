@@ -385,7 +385,6 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
     }
 
     private void updateHomeTelem() {
-        final Context context = getActivity().getApplicationContext();
         final Drone drone = getDrone();
 
         String update = getString(R.string.empty_content);
