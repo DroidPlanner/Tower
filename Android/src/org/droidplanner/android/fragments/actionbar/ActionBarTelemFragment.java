@@ -393,7 +393,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             final Home droneHome = drone.getAttribute(AttributeType.HOME);
             if (droneGps.isValid() && droneHome.isValid()) {
                 LengthUnit distanceToHome = getLengthUnitProvider().boxBaseValueToTarget
-                        (MathUtils.getDistance(droneHome.getCoordinate(), droneGps.getPosition()));
+                        (MathUtils.getDistance2D(droneHome.getCoordinate(), droneGps.getPosition()));
                 update = String.format("%s", distanceToHome);
             }
         }

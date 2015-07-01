@@ -432,7 +432,6 @@
     <string name="pref_title_notifications">通知</string>
     <string name="normal_waypoint_toggle">常规</string>
     <string name="spline_waypoint_toggle">曲线</string>
-    <string name="mavlink_version">MAVLink 版本</string>
     <string name="firmware_version">固件版本</string>
     <string name="usage_statistics">使用统计</string>
     <string name="pref_usage_statistics_title">发送使用统计</string>

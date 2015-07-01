@@ -118,8 +118,8 @@ public class DroidPlannerPrefs {
 	public static final String PREF_BT_DEVICE_ADDRESS = "pref_bluetooth_device_address";
 
 	public static final String PREF_STORAGE = "pref_storage";
-	public static final String PREF_MAVLINK_VERSION = "pref_mavlink_version";
 	public static final String PREF_FIRMWARE_VERSION = "pref_firmware_version";
+	public static final String PREF_VEHICLE_TYPE = "pref_vehicle_type";
 
 	public static final String PREF_SHOW_GPS_HDOP = "pref_ui_gps_hdop";
 	public static final boolean DEFAULT_SHOW_GPS_HDOP = false;

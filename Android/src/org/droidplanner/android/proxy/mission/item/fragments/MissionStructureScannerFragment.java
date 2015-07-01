@@ -102,7 +102,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
         final List<StructureScanner> scannerList = getMissionItems();
         if (scannerList.isEmpty()) return;
 
-        getDrone().buildMissionItemsAsync(this, scannerList.toArray(new MissionItem.ComplexItem[scannerList.size()]));
+        getDrone().buildMissionItemsAsync(scannerList.toArray(new MissionItem.ComplexItem[scannerList.size()]), this);
     }
 
     @Override
