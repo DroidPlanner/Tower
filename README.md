@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/DroidPlanner/Tower.svg?branch=master)](https://travis-ci.org/DroidPlanner/Tower)
+[![Build Status](https://travis-ci.org/DroidPlanner/Tower.svg?branch=develop)](https://travis-ci.org/DroidPlanner/Tower)
 [![Issue Stats](http://issuestats.com/github/DroidPlanner/droidplanner/badge/pr)](http://issuestats.com/github/DroidPlanner/droidplanner)
 [![Issue Stats](http://issuestats.com/github/DroidPlanner/droidplanner/badge/issue)](http://issuestats.com/github/DroidPlanner/droidplanner)
 
