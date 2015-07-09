@@ -44,6 +44,7 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
     static {
         superIntentFilter.addAction(AttributeEvent.STATE_CONNECTED);
         superIntentFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+        superIntentFilter.addAction(SettingsFragment.ACTION_ADVANCED_MENU_UPDATED);
     }
 
     private final BroadcastReceiver superReceiver = new BroadcastReceiver() {
@@ -57,6 +58,10 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
 
                 case AttributeEvent.STATE_DISCONNECTED:
                     onDroneDisconnected();
+                    break;
+
+                case SettingsFragment.ACTION_ADVANCED_MENU_UPDATED:
+                    supportInvalidateOptionsMenu();
                     break;
             }
         }
@@ -249,20 +254,7 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
                 SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("disable vehicle", new Runnable() {
                     @Override
                     public void run() {
-                        /* If the vehicle is a Copter running a firmware older than 3.3,
-                           set the vehicle to stabilize.  Otherwise, leave the mode alone.
-                           Then send the emergency disarm command.
-                         */
-                        Drone drone = dpApp.getDrone();
-                        Type droneType = drone.getAttribute(AttributeType.TYPE);
-                        if(droneType !=null){
-                            if(droneType.getDroneType() == (Type.TYPE_COPTER) &&
-                                    !droneType.getFirmwareVersion().startsWith("APM:Copter V3.3") &&
-                                    !droneType.getFirmwareVersion().startsWith("APM:Copter V3.4")){
-                                DroneStateApi.setVehicleMode(drone, VehicleMode.COPTER_STABILIZE);
-                            }
-                        }
-                        DroneStateApi.arm(drone, false, true);
+                        DroneStateApi.arm(dpApp.getDrone(), false, true);
                     }
                 });
                 unlockDialog.show(getSupportFragmentManager(), "Slide to use the Kill Switch");
