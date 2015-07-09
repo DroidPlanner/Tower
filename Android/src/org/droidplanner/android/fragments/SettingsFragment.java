@@ -83,8 +83,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     public static final String ACTION_LOCATION_SETTINGS_UPDATED = PACKAGE_NAME + ".action.LOCATION_SETTINGS_UPDATED";
     public static final String EXTRA_RESULT_CODE = "extra_result_code";
 
-    public static final String ACTION_ADVANCED_MENU_UPDATED = PACKAGE_NAME + ".action.ADVANCED_MENU_UPDATED";
-
     /**
      * Used to notify of an update to the map rotation preference.
      */
@@ -257,17 +255,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     lbm.sendBroadcast(new Intent(ACTION_PREF_HDOP_UPDATE));
-                    return true;
-                }
-            });
-        }
-
-        final CheckBoxPreference killSwitch = (CheckBoxPreference) findPreference(DroidPlannerPrefs.PREF_ENABLE_KILL_SWITCH);
-        if(killSwitch != null) {
-            killSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    lbm.sendBroadcast(new Intent(ACTION_ADVANCED_MENU_UPDATED));
                     return true;
                 }
             });

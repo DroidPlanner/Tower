@@ -429,7 +429,7 @@
     
     <!-- Help -->
     <string name="help_item_description">如何設定和實際操作任務，請點我看影片</string>
-    <string name="label_advaned">進階設定</string>
+    <string name="label_advanced">進階設定</string>
     <string name="label_steps_count">階層數</string>
     <string name="label_altitude_step">階層高度</string>
     <string name="menu_search_toggle">切換搜尋</string>

@@ -418,10 +418,6 @@ public class DroidPlannerPrefs {
         return prefs.getBoolean(PREF_ENABLE_MAP_ROTATION, DEFAULT_ENABLE_MAP_ROTATION);
     }
 
-    public boolean isAdvancedMenuEnabled(){
-        return isKillSwitchEnabled();
-    }
-
     public boolean isKillSwitchEnabled(){
 		return prefs.getBoolean(PREF_ENABLE_KILL_SWITCH, DEFAULT_ENABLE_KILL_SWITCH);
 	}
@@ -432,6 +428,7 @@ public class DroidPlannerPrefs {
 	public int getMaxAltitude(){
 		return getAltitudePreference(PREF_ALT_MAX_VALUE, DEFAULT_MAX_ALT);
 	}
+
 
 	/**
 	 * @return the min altitude in meters

@@ -297,7 +297,6 @@
 
             </PreferenceCategory>
 
-            <!-- Disabling kill switch until arducopter v3.3 is out.
             <PreferenceCategory
                 android:title="@string/pref_advance_menu_title">
 
@@ -307,7 +306,7 @@
                     android:summary="@string/pref_enable_kill_switch_summary"
                     android:title="@string/pref_enable_kill_switch_title"/>
 
-            </PreferenceCategory>-->
+            </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>
 

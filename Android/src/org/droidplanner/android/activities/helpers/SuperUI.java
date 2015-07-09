@@ -41,7 +41,6 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
     static {
         superIntentFilter.addAction(AttributeEvent.STATE_CONNECTED);
         superIntentFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
-        superIntentFilter.addAction(SettingsFragment.ACTION_ADVANCED_MENU_UPDATED);
     }
 
     private final BroadcastReceiver superReceiver = new BroadcastReceiver() {
@@ -55,10 +54,6 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
 
                 case AttributeEvent.STATE_DISCONNECTED:
                     onDroneDisconnected();
-                    break;
-
-                case SettingsFragment.ACTION_ADVANCED_MENU_UPDATED:
-                    supportInvalidateOptionsMenu();
                     break;
             }
         }
@@ -176,12 +171,6 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
             menu.setGroupEnabled(R.id.menu_group_connected, true);
             menu.setGroupVisible(R.id.menu_group_connected, true);
 
-            final boolean isAdvancedEnabled = mAppPrefs.isAdvancedMenuEnabled();
-            final MenuItem advancedSubMenu = menu.findItem(R.id.menu_advanced);
-            advancedSubMenu.setEnabled(isAdvancedEnabled);
-            advancedSubMenu.setVisible(isAdvancedEnabled);
-
-            //Enable specific sub items within the advanced menu section.
             final MenuItem killSwitchItem = menu.findItem(R.id.menu_kill_switch);
             final boolean isKillEnabled = mAppPrefs.isKillSwitchEnabled();
             killSwitchItem.setEnabled(isKillEnabled);

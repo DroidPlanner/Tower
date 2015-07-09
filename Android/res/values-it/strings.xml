@@ -363,7 +363,7 @@
     <string name="file_saved_success">File salvato</string>
     <string name="firmware_version">Versione Firmware</string>
     <string name="help_item_description">Come pianificare e avviare una missione</string>
-    <string name="label_advaned">Avanzate</string>
+    <string name="label_advanced">Avanzate</string>
     <string name="pref_title_mapbox">Preferenze MapBox</string>
     <string name="pref_tts_periodic_alt">Altezza</string>
     <string name="pref_tts_periodic_bat_volt">Voltaggio batteria</string>
