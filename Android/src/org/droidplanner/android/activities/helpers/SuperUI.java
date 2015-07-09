@@ -16,6 +16,9 @@ import android.view.MenuItem;
 import com.o3dr.android.client.Drone;
 import com.o3dr.android.client.apis.drone.DroneStateApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.Type;
+import com.o3dr.services.android.lib.drone.property.VehicleMode;
 
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
@@ -246,7 +249,18 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
                 SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("disable vehicle", new Runnable() {
                     @Override
                     public void run() {
-                        DroneStateApi.arm(dpApp.getDrone(), false, true);
+                        /* If the vehicle is a Copter running a firmware older than 3.3,
+                           set the vehicle to stabilize.  Otherwise, leave the mode alone.
+                           Then send the emergency disarm command.
+                         */
+                        Drone drone = dpApp.getDrone();
+                        Type droneType = drone.getAttribute(AttributeType.TYPE);
+                        if(droneType.getDroneType() == (Type.TYPE_COPTER) &&
+                           !(droneType.getFirmwareVersion().startsWith("APM:Copter v3.3") ||
+                             droneType.getFirmwareVersion().startsWith("APM:Copter v3.4"))){
+                            DroneStateApi.setVehicleMode(drone, VehicleMode.COPTER_STABILIZE);
+                        }
+                        DroneStateApi.arm(drone, false, true);
                     }
                 });
                 unlockDialog.show(getSupportFragmentManager(), "Slide to use the Kill Switch");
