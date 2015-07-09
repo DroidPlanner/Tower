@@ -453,7 +453,7 @@
     <!-- Help -->
     <string name="help_item_description">如何规划和执行飞行任务</string>
     
-    <string name="label_advaned">高级设定</string>
+    <string name="label_advanced">高级设定</string>
     <string name="label_steps_count">步数</string>
     <string name="label_altitude_step">高度级别</string>
     <string name="menu_search_toggle">切换搜索</string>

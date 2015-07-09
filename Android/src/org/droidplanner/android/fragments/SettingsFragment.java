@@ -261,7 +261,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                 }
             });
         }
-
         final CheckBoxPreference killSwitch = (CheckBoxPreference) findPreference(DroidPlannerPrefs.PREF_ENABLE_KILL_SWITCH);
         if(killSwitch != null) {
             killSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

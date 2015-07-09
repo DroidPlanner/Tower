@@ -14,7 +14,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.drone.DroneStateApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.Type;
+import com.o3dr.services.android.lib.drone.property.VehicleMode;
 
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
@@ -175,12 +179,6 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
             menu.setGroupEnabled(R.id.menu_group_connected, true);
             menu.setGroupVisible(R.id.menu_group_connected, true);
 
-            final boolean isAdvancedEnabled = mAppPrefs.isAdvancedMenuEnabled();
-            final MenuItem advancedSubMenu = menu.findItem(R.id.menu_advanced);
-            advancedSubMenu.setEnabled(isAdvancedEnabled);
-            advancedSubMenu.setVisible(isAdvancedEnabled);
-
-            //Enable specific sub items within the advanced menu section.
             final MenuItem killSwitchItem = menu.findItem(R.id.menu_kill_switch);
             final boolean isKillEnabled = mAppPrefs.isKillSwitchEnabled();
             killSwitchItem.setEnabled(isKillEnabled);
@@ -256,7 +254,7 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
                 SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("disable vehicle", new Runnable() {
                     @Override
                     public void run() {
-                        dpApp.getDrone().arm(false);
+                        DroneStateApi.arm(dpApp.getDrone(), false, true);
                     }
                 });
                 unlockDialog.show(getSupportFragmentManager(), "Slide to use the Kill Switch");

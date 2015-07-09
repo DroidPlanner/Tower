@@ -13,7 +13,7 @@ dependencies {
     compile 'com.android.support:cardview-v7:22.1.0'
     compile 'com.android.support:recyclerview-v7:22.1.0'
 
-    compile 'com.o3dr.android:dronekit-android:2.3.32'
+    compile 'com.o3dr.android:dronekit-android:2.3.34'
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')

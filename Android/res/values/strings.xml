@@ -474,7 +474,7 @@
     <!-- Help -->
     <string name="help_item_description">How to plan and fly a mission</string>
     
-    <string name="label_advaned">Advanced</string>
+    <string name="label_advanced">Advanced</string>
     <string name="label_steps_count">Number of Steps</string>
     <string name="label_altitude_step">Altitude Step</string>
     <string name="menu_search_toggle">Toggle Search</string>
@@ -546,7 +546,7 @@
     <string name="pref_map_rotation_title">Enable map rotation</string>
     <string name="pref_map_rotation_summary">Check to enable the ability to rotate the map.</string>
     <string name="pref_advance_menu_title">Advanced Menu Options</string>
-    <string name="pref_enable_kill_switch_summary">If enabled, a Kill Switch option will appear under the Advanced section in the menu, allowing to disarm the vehicle immediately.</string>
+    <string name="pref_enable_kill_switch_summary">If enabled, a Kill Switch option will appear in the menu, allowing immediate vehicle disarming.</string>
     <string name="pref_enable_kill_switch_title">Enable Kill Switch</string>
     <string name="pref_enable_udp_server_title">Enable UDP server ping</string>
     <string name="pref_udp_server_ping_summary">Enable to allow the app to periodically ping the udp server.</string>
