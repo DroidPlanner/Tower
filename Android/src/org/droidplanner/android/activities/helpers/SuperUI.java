@@ -255,10 +255,12 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
                          */
                         Drone drone = dpApp.getDrone();
                         Type droneType = drone.getAttribute(AttributeType.TYPE);
-                        if(droneType.getDroneType() == (Type.TYPE_COPTER) &&
-                           !(droneType.getFirmwareVersion().startsWith("APM:Copter v3.3") ||
-                             droneType.getFirmwareVersion().startsWith("APM:Copter v3.4"))){
-                            DroneStateApi.setVehicleMode(drone, VehicleMode.COPTER_STABILIZE);
+                        if(droneType !=null){
+                            if(droneType.getDroneType() == (Type.TYPE_COPTER) &&
+                                    !droneType.getFirmwareVersion().startsWith("APM:Copter V3.3") &&
+                                    !droneType.getFirmwareVersion().startsWith("APM:Copter V3.4")){
+                                DroneStateApi.setVehicleMode(drone, VehicleMode.COPTER_STABILIZE);
+                            }
                         }
                         DroneStateApi.arm(drone, false, true);
                     }
