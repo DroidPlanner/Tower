@@ -35,7 +35,6 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
     private static final IntentFilter intentFilter = new IntentFilter();
     static {
         intentFilter.addAction(AttributeEvent.CALIBRATION_IMU);
-        intentFilter.addAction(AttributeEvent.CALIBRATION_IMU_ERROR);
         intentFilter.addAction(AttributeEvent.CALIBRATION_IMU_TIMEOUT);
         intentFilter.addAction(AttributeEvent.STATE_CONNECTED);
         intentFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
@@ -71,13 +70,6 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
                             relayInstructions(message);
                     }
                     break;
-                case AttributeEvent.CALIBRATION_IMU_ERROR: {
-                    String message = intent.getStringExtra(AttributeEventExtra.EXTRA_CALIBRATION_IMU_MESSAGE);
-                    if (message != null) {
-                        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-                    }
-                    break;
-                }
             }
         }
     };
