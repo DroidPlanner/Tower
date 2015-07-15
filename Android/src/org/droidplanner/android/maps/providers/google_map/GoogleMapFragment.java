@@ -169,7 +169,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
                         .draggable(false)
                         .flat(true)
                         .visible(true)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.blue));
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.user_location));
 
                 getMapAsync(new OnMapReadyCallback() {
                     @Override

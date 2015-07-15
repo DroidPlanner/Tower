@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Do not translate the following strings -->
-    <string name="app_title" translatable="false">Tower</string>
-
     <!-- Generic strings -->
     <string name="settings">Settings</string>
     <string name="help">Help</string>
