@@ -14,11 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.o3dr.android.client.Drone;
-import com.o3dr.android.client.apis.drone.DroneStateApi;
+import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Type;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
+import com.o3dr.services.android.lib.model.SimpleCommandListener;
 
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
@@ -254,7 +255,17 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
                 SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("disable vehicle", new Runnable() {
                     @Override
                     public void run() {
-                        DroneStateApi.arm(dpApp.getDrone(), false, true);
+                        VehicleApi.getApi(dpApp.getDrone()).arm(false, true, new SimpleCommandListener(){
+                            @Override
+                            public void onError(int error){
+                                //TODO: complete
+                            }
+
+                            @Override
+                            public void onTimeout(){
+                                //TODO: complete
+                            }
+                        });
                     }
                 });
                 unlockDialog.show(getSupportFragmentManager(), "Slide to use the Kill Switch");

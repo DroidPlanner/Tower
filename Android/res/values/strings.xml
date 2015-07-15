@@ -584,5 +584,6 @@
     <string name="label_type_plane">Plane</string>
     <string name="label_type_rover">Rover</string>
     <string name="label_type_unknown">Unknown</string>
+    <string name="imu_calibration_start_error">Unable to start imu calibration</string>
 
 </resources>
