@@ -34,7 +34,7 @@ import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import java.util.Collections;
 import java.util.List;
 
-public class MissionSurveyFragment extends MissionDetailFragment implements
+public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragment implements
         CardWheelHorizontalView.OnCardWheelScrollListener, SpinnerSelfSelect.OnSpinnerItemSelectedListener,
         Drone.OnMissionItemsBuiltCallback {
 
@@ -74,8 +74,8 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
     }
 
     @Override
-    protected List<Survey> getMissionItems() {
-        return (List<Survey>) super.getMissionItems();
+    protected List<T> getMissionItems() {
+        return (List<T>) super.getMissionItems();
     }
 
     @Override
@@ -141,7 +141,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
     public void onSpinnerItemSelected(Spinner spinner, int position) {
         if (spinner.getId() == id.cameraFileSpinner) {
             CameraDetail cameraInfo = cameraAdapter.getItem(position);
-            for (Survey survey : getMissionItems()) {
+            for (T survey : getMissionItems()) {
                 survey.getSurveyDetail().setCameraDetail(cameraInfo);
             }
 
@@ -168,9 +168,9 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
             case R.id.sidelapPicker:
                 final Drone drone = getDrone();
                 try {
-                    final List<Survey> surveyList = getMissionItems();
+                    final List<T> surveyList = getMissionItems();
                     if (!surveyList.isEmpty()) {
-                        for (final Survey survey : surveyList) {
+                        for (final T survey : surveyList) {
                             SurveyDetail surveyDetail = survey.getSurveyDetail();
                             surveyDetail.setAltitude(mAltitudePicker.getCurrentValue().toBase().getValue());
                             surveyDetail.setAngle(mAnglePicker.getCurrentValue());
@@ -178,7 +178,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
                             surveyDetail.setSidelap(mSidelapPicker.getCurrentValue());
                         }
 
-                        final MissionItem.ComplexItem<Survey>[] surveys = surveyList
+                        final MissionItem.ComplexItem<T>[] surveys = surveyList
                                 .toArray(new MissionItem.ComplexItem[surveyList.size()]);
 
                         drone.buildMissionItemsAsync(surveys, this);
@@ -190,7 +190,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
         }
     }
 
-    private void checkIfValid(Survey survey) {
+    private void checkIfValid(T survey) {
         if (mAltitudePicker == null)
             return;
 
@@ -209,18 +209,18 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
     }
 
     private void updateCamera() {
-        List<Survey> surveyList = getMissionItems();
+        List<T> surveyList = getMissionItems();
         if (!surveyList.isEmpty()) {
-            Survey survey = surveyList.get(0);
+            T survey = surveyList.get(0);
             final int cameraSelection = cameraAdapter.getPosition(survey.getSurveyDetail().getCameraDetail());
             cameraSpinner.setSelection(Math.max(cameraSelection, 0));
         }
     }
 
     private void updateSeekBars() {
-        List<Survey> surveyList = getMissionItems();
+        List<T> surveyList = getMissionItems();
         if (!surveyList.isEmpty()) {
-            Survey survey = surveyList.get(0);
+            T survey = surveyList.get(0);
             SurveyDetail surveyDetail = survey.getSurveyDetail();
             if (surveyDetail != null) {
                 mAnglePicker.setCurrentValue((int) surveyDetail.getAngle());
@@ -235,9 +235,9 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 
     private void updateTextViews() {
         boolean setDefault = true;
-        List<Survey> surveyList = getMissionItems();
+        List<T> surveyList = getMissionItems();
         if (!surveyList.isEmpty()) {
-            Survey survey = surveyList.get(0);
+            T survey = surveyList.get(0);
             SurveyDetail surveyDetail = survey.getSurveyDetail();
             try {
                 final LengthUnitProvider lengthUnitProvider = getLengthUnitProvider();
@@ -293,8 +293,8 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 
     @Override
     public void onMissionItemsBuilt(MissionItem.ComplexItem[] complexItems) {
-        for (MissionItem.ComplexItem<Survey> item : complexItems) {
-            checkIfValid((Survey) item);
+        for (MissionItem.ComplexItem<T> item : complexItems) {
+            checkIfValid((T) item);
         }
 
         getMissionProxy().notifyMissionUpdate();
