@@ -63,7 +63,8 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
             MissionItemType.CAMERA_TRIGGER,
             MissionItemType.EPM_GRIPPER,
             MissionItemType.YAW_CONDITION,
-            MissionItemType.SET_SERVO
+            MissionItemType.SET_SERVO,
+            MissionItemType.SPLINE_SURVEY
     };
 
     public interface OnMissionDetailListener {
