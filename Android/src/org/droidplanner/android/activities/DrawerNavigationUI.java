@@ -1,7 +1,9 @@
 package org.droidplanner.android.activities;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -21,6 +23,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.fragments.SettingsFragment;
@@ -34,7 +39,23 @@ import org.droidplanner.android.widgets.SlidingDrawer;
  */
 public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawer.OnDrawerOpenListener, SlidingDrawer.OnDrawerCloseListener {
 
-    private static final String TAG = DrawerNavigationUI.class.getSimpleName();
+    private static final IntentFilter filter = new IntentFilter();
+    static {
+        filter.addAction(AttributeEvent.STATE_CONNECTED);
+        filter.addAction(AttributeEvent.STATE_DISCONNECTED);
+    }
+
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch(intent.getAction()){
+                case AttributeEvent.STATE_CONNECTED:
+                case AttributeEvent.STATE_DISCONNECTED:
+                    updateActionBarLogo();
+                    break;
+            }
+        }
+    };
 
     /**
      * Activates the navigation drawer when the home button is clicked.
@@ -91,6 +112,18 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
         actionDrawer.setOnDrawerOpenListener(this);
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        getBroadcastManager().registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        getBroadcastManager().unregisterReceiver(receiver);
+    }
+
     protected View getActionDrawer() {
         return actionDrawer;
     }
@@ -137,7 +170,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
                 final int fullTopMargin = (int) (topMargin + (bottom - top));
 
                 ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) actionDrawer.getLayoutParams();
-                if(lp.topMargin != fullTopMargin) {
+                if (lp.topMargin != fullTopMargin) {
                     lp.topMargin = fullTopMargin;
                     actionDrawer.requestLayout();
                 }
@@ -151,7 +184,30 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
+
+            updateActionBarLogo();
         }
+    }
+
+    private void updateActionBarLogo(){
+        if(!shouldDisplayLogo())
+            return;
+
+        final ActionBar actionBar = getSupportActionBar();
+        if(actionBar == null)
+            return;
+
+        final Drone drone = dpApp.getDrone();
+        if(drone == null || !drone.isConnected()){
+            actionBar.setLogo(R.drawable.ic_navigation_grey_700_18dp);
+        }
+        else{
+            actionBar.setLogo(R.drawable.ic_navigation_green_600_18dp);
+        }
+    }
+
+    protected boolean shouldDisplayLogo(){
+        return true;
     }
 
     protected float getActionDrawerTopMargin() {

@@ -4,5 +4,6 @@
     <item
         android:id="@+id/menu_dshare_logout"
         android:title="@string/label_logout"
+        android:icon="@drawable/ic_exit_to_app_grey_700_24dp"
         app:showAsAction="never"/>
 </menu>

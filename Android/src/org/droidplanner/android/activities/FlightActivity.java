@@ -40,7 +40,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FlightActivity extends DrawerNavigationUI {
 
-    private static final String TAG = FlightActivity.class.getSimpleName();
     private static final int GOOGLE_PLAY_SERVICES_REQUEST_CODE = 101;
 
     private static final String EXTRA_IS_ACTION_DRAWER_OPENED = "extra_is_action_drawer_opened";
@@ -306,6 +305,11 @@ public class FlightActivity extends DrawerNavigationUI {
 
         if (isActionDrawerOpened)
             openActionDrawer();
+    }
+
+    @Override
+    protected boolean shouldDisplayLogo(){
+        return false;
     }
 
     @Override
