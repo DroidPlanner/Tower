@@ -17,6 +17,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.Altitude;
 import com.o3dr.services.android.lib.drone.property.Battery;
 import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.Home;
@@ -27,13 +28,11 @@ import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.util.MathUtils;
 
 import org.beyene.sius.unit.length.LengthUnit;
-import org.beyene.sius.unit.length.Meter;
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
 import org.droidplanner.android.widgets.spinners.ModeAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 
@@ -58,6 +57,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         eventFilter.addAction(AttributeEvent.SIGNAL_UPDATED);
         eventFilter.addAction(AttributeEvent.STATE_VEHICLE_MODE);
         eventFilter.addAction(AttributeEvent.TYPE_UPDATED);
+        eventFilter.addAction(AttributeEvent.ALTITUDE_UPDATED);
 
         eventFilter.addAction(SettingsFragment.ACTION_PREF_HDOP_UPDATE);
         eventFilter.addAction(SettingsFragment.ACTION_PREF_UNIT_SYSTEM_UPDATE);
@@ -111,6 +111,10 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                     updateHomeTelem();
                     break;
 
+                case AttributeEvent.ALTITUDE_UPDATED:
+                    updateAltitudeTelem();
+                    break;
+
                 default:
                     break;
             }
@@ -122,6 +126,8 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
     private DroidPlannerPrefs appPrefs;
 
     private TextView homeTelem;
+    private TextView altitudeTelem;
+
     private TextView gpsTelem;
     private PopupWindow gpsPopup;
 
@@ -156,6 +162,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final Drawable popupBg = getResources().getDrawable(android.R.color.transparent);
 
         homeTelem = (TextView) view.findViewById(R.id.bar_home);
+        altitudeTelem = (TextView) view.findViewById(R.id.bar_altitude);
 
         gpsTelem = (TextView) view.findViewById(R.id.bar_gps);
         final View gpsPopupView = inflater.inflate(R.layout.popup_info_gps, (ViewGroup) view, false);
@@ -209,6 +216,12 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
     }
 
     @Override
+    public void onStart(){
+        hideTelemBar();
+        super.onStart();
+    }
+
+    @Override
     public void onApiConnected() {
         final Drone drone = getDrone();
         if(drone.isConnected())
@@ -250,6 +263,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         updateGpsTelem();
         updateHomeTelem();
         updateBatteryTelem();
+        updateAltitudeTelem();
     }
 
     private void updateFlightModeTelem() {
@@ -385,7 +399,6 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
     }
 
     private void updateHomeTelem() {
-        final Context context = getActivity().getApplicationContext();
         final Drone drone = getDrone();
 
         String update = getString(R.string.empty_content);
@@ -448,6 +461,17 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         }
         else{
             return String.format(Locale.ENGLISH, "%2.0f mAh", chargeInmAh);
+        }
+    }
+
+    private void updateAltitudeTelem() {
+        final Drone drone = getDrone();
+        final Altitude altitude = drone.getAttribute(AttributeType.ALTITUDE);
+        if (altitude != null) {
+            double alt = altitude.getAltitude();
+            LengthUnit altUnit = getLengthUnitProvider().boxBaseValueToTarget(alt);
+
+            this.altitudeTelem.setText(altUnit.toString());
         }
     }
 }

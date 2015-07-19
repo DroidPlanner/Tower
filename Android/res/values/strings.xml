@@ -585,5 +585,9 @@
     <string name="label_type_rover">Rover</string>
     <string name="label_type_unknown">Unknown</string>
     <string name="imu_calibration_start_error">Unable to start imu calibration</string>
+    <string name="horizontal_speed_empty">hs: —</string>
+    <string name="horizontal_speed_telem">hs: %s</string>
+    <string name="vertical_speed_empty">vs: —</string>
+    <string name="vertical_speed_telem">vs: %s</string>
 
 </resources>

@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/transparentLayout"
-    android:layout_width="wrap_content"
+    android:layout_width="145dp"
+    android:paddingEnd="10dp"
+    android:paddingRight="10dp"
     android:layout_height="wrap_content"
     android:layout_gravity="end">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:paddingBottom="1dp"
-        android:paddingLeft="1dp"
-        android:paddingRight="1dp"
-        android:paddingTop="1dp">
+        android:layout_gravity="center_horizontal">
 
         <android.support.v7.widget.CardView
             android:id="@+id/attitude_widget"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            >
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal">
+                android:layout_gravity="center_horizontal"
+                android:padding="3dp"
+                >
 
                 <TextView
                     android:id="@+id/yawValueText"
@@ -83,179 +84,79 @@
 
             </RelativeLayout>
         </android.support.v7.widget.CardView>
-        <!-- FLIGHT TIME -->
 
-        <LinearLayout
-            android:id="@+id/flight_time_layout"
+        <android.support.v7.widget.CardView
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/attitude_widget"
+            android:layout_alignStart="@+id/attitude_widget"
             android:layout_alignRight="@+id/attitude_widget"
+            android:layout_alignEnd="@+id/attitude_widget"
             android:layout_below="@+id/attitude_widget"
-            android:layout_marginBottom="2dp"
-            android:background="@drawable/round_rect_bg"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingBottom="1dp"
-            android:paddingRight="10dp">
+            android:id="@+id/speed_telem_widget"
+            android:layout_marginBottom="5dp">
 
-            <ImageButton
-                android:id="@+id/reset_flight_timer_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_restore_white_24dp" />
-
-            <TextView
-                android:id="@+id/flight_timer"
-                style="@style/largeTelemetryText"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start|center_vertical"
-                android:paddingLeft="5dp"
-                android:text="00:00"
-                tools:text="99:99" />
+                android:padding="5dp"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/horizontal_speed_telem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/largeTelemetryText"
+                    android:drawableLeft="@drawable/debug_step_over"
+                    android:drawableStart="@drawable/debug_step_over"
+                    android:drawablePadding="10dp"
+                    android:padding="5dp"
+                    android:text="@string/horizontal_speed_empty"
+                    tools:text="hs: 1000 m/s"/>
 
-        <!-- ************** GROUND SPEED ********************* -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_grey"
+                    android:layout_margin="5dp"/>
 
-        <RelativeLayout
-            android:id="@+id/ground_speed_layout"
+                <TextView
+                    android:id="@+id/vertical_speed_telem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    style="@style/largeTelemetryText"
+                    tools:text="vs: 1000 m/s"
+                    android:drawablePadding="10dp"
+                    android:text="@string/vertical_speed_empty"
+                    android:drawableStart="@drawable/debug_step_out"
+                    android:drawableLeft="@drawable/debug_step_out"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/attitude_widget"
-            android:layout_alignRight="@+id/attitude_widget"
-            android:layout_below="@+id/flight_time_layout"
-            android:layout_marginBottom="2dp"
-            android:background="@drawable/ground_speed_bg"
-            android:baselineAligned="true"
-            android:paddingBottom="1dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:layout_alignLeft="@+id/speed_telem_widget"
+            android:layout_alignStart="@+id/speed_telem_widget"
+            android:layout_alignRight="@+id/speed_telem_widget"
+            android:layout_alignEnd="@+id/speed_telem_widget"
+            android:layout_below="@+id/speed_telem_widget"
+            >
 
-            <TextView
-                android:id="@+id/groundSpeedValue"
-                style="@style/largeTelemetryText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="@string/telemetry_default_value" />
+            <TextureView
+                android:layout_width="140dp"
+                android:layout_height="78dp"
+                android:layout_gravity="center"
+                android:id="@+id/minimized_video"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
 
-            <TextView
-                android:id="@+id/groundSpeedLabel"
-                style="@style/textLabels"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/groundSpeedValue"
-                android:text="@string/ground_speed_label"
-                android:textColor="@color/ground_speed_label" />
-        </RelativeLayout>
-
-        <!-- ************** Air SPEED ********************* -->
-
-        <RelativeLayout
-            android:id="@+id/air_speed_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/attitude_widget"
-            android:layout_alignRight="@+id/attitude_widget"
-            android:layout_below="@+id/ground_speed_layout"
-            android:layout_marginBottom="2dp"
-            android:background="@drawable/air_speed_bg"
-            android:baselineAligned="true"
-            android:paddingBottom="1dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-            <TextView
-                android:id="@+id/airSpeedValue"
-                style="@style/largeTelemetryText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="@string/telemetry_default_value" />
-
-            <TextView
-                android:id="@+id/airSpeedLabel"
-                style="@style/textLabels"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/airSpeedValue"
-                android:text="@string/air_speed_label"
-                android:textColor="@color/air_speed_label" />
-        </RelativeLayout>
-
-        <!-- ************** Climb Rate ********************* -->
-
-        <RelativeLayout
-            android:id="@+id/climb_rate_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/attitude_widget"
-            android:layout_alignRight="@+id/attitude_widget"
-            android:layout_below="@+id/air_speed_layout"
-            android:layout_marginBottom="2dp"
-            android:background="@drawable/climb_rate_bg"
-            android:baselineAligned="true"
-            android:paddingBottom="1dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-            <TextView
-                android:id="@+id/climbRateValue"
-                style="@style/largeTelemetryText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="@string/telemetry_default_value" />
-
-            <TextView
-                android:id="@+id/climbRateLabel"
-                style="@style/textLabels"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/climbRateValue"
-                android:text="@string/climb_rate_label"
-                android:textColor="@color/climb_rate_label" />
-        </RelativeLayout>
-
-        <!-- ************** Altitude ********************* -->
-
-        <RelativeLayout
-            android:id="@+id/alt_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/attitude_widget"
-            android:layout_alignRight="@+id/attitude_widget"
-            android:layout_below="@+id/climb_rate_layout"
-            android:background="@drawable/alt_change_bg"
-            android:baselineAligned="true"
-            android:paddingBottom="1dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-            <TextView
-                android:id="@+id/altitudeValue"
-                style="@style/largeTelemetryText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="@string/telemetry_default_value" />
-
-            <TextView
-                android:id="@+id/AltitudeLabel"
-                style="@style/textLabels"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/altitudeValue"
-                android:text="@string/altitude_label"
-                android:textColor="@color/altitude_label" />
-        </RelativeLayout>
+        </android.support.v7.widget.CardView>
 
     </RelativeLayout>
 </ScrollView>

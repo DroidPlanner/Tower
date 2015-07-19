@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Dimension for the telemetry ui elements -->
-    <dimen name="largeTelemetryTextSize">17sp</dimen>
+    <dimen name="largeTelemetryTextSize">14sp</dimen>
 
     <!-- Dimension for the flight control buttons -->
     <dimen name="flightControlMargin">10dp</dimen>
@@ -48,7 +48,7 @@
 
     <!-- Dimension for the info bar -->
     <dimen name="info_bar_text_size">12sp</dimen>
-    <dimen name="info_bar_drawable_padding">0dp</dimen>
+    <dimen name="info_bar_drawable_padding">5dp</dimen>
     <dimen name="info_bar_flight_mode_width">100dp</dimen>
 
     <!-- Dimensions for the number picker dialog -->
