@@ -127,7 +127,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
         initNavigationDrawer();
     }
 
-    private void initToolbar() {
+    protected void initToolbar() {
         final int toolbarId = getToolbarId();
         final Toolbar toolbar = (Toolbar) findViewById(toolbarId);
         toolbar.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
@@ -151,13 +151,6 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
-        }
-
-        final FragmentManager fm = getSupportFragmentManager();
-        Fragment actionBarTelem = fm.findFragmentById(toolbarId);
-        if (actionBarTelem == null) {
-            actionBarTelem = new ActionBarTelemFragment();
-            fm.beginTransaction().add(toolbarId, actionBarTelem).commit();
         }
     }
 

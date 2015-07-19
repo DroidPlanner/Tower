@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,6 +29,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.DroneMap;
+import org.droidplanner.android.fragments.actionbar.ActionBarTelemFragment;
 import org.droidplanner.android.fragments.control.FlightControlManagerFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
 import org.droidplanner.android.fragments.TelemetryFragment;
@@ -304,6 +306,19 @@ public class FlightActivity extends DrawerNavigationUI {
 
         if (isActionDrawerOpened)
             openActionDrawer();
+    }
+
+    @Override
+    protected void initToolbar(){
+        super.initToolbar();
+
+        final int toolbarId = getToolbarId();
+        final FragmentManager fm = getSupportFragmentManager();
+        Fragment actionBarTelem = fm.findFragmentById(toolbarId);
+        if (actionBarTelem == null) {
+            actionBarTelem = new ActionBarTelemFragment();
+            fm.beginTransaction().add(toolbarId, actionBarTelem).commit();
+        }
     }
 
     @Override
