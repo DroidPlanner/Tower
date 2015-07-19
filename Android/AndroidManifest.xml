@@ -120,6 +120,11 @@
             android:theme="@style/CustomActionBarTheme.Transparent"/>
 
         <activity
+            android:name=".activities.WidgetActivity"
+            android:launchMode="singleTop"
+            />
+
+        <activity
             android:name=".activities.helpers.BluetoothDevicesActivity"
             android:noHistory="true"
             android:excludeFromRecents="true"

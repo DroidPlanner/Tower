@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -38,24 +39,6 @@ import org.droidplanner.android.widgets.SlidingDrawer;
  * interface.
  */
 public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawer.OnDrawerOpenListener, SlidingDrawer.OnDrawerCloseListener {
-
-    private static final IntentFilter filter = new IntentFilter();
-    static {
-        filter.addAction(AttributeEvent.STATE_CONNECTED);
-        filter.addAction(AttributeEvent.STATE_DISCONNECTED);
-    }
-
-    private final BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch(intent.getAction()){
-                case AttributeEvent.STATE_CONNECTED:
-                case AttributeEvent.STATE_DISCONNECTED:
-                    updateActionBarLogo();
-                    break;
-            }
-        }
-    };
 
     /**
      * Activates the navigation drawer when the home button is clicked.
@@ -112,18 +95,6 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
         actionDrawer.setOnDrawerOpenListener(this);
     }
 
-    @Override
-    public void onStart(){
-        super.onStart();
-        getBroadcastManager().registerReceiver(receiver, filter);
-    }
-
-    @Override
-    public void onStop(){
-        super.onStop();
-        getBroadcastManager().unregisterReceiver(receiver);
-    }
-
     protected View getActionDrawer() {
         return actionDrawer;
     }
@@ -156,7 +127,6 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
         contentLayout.addView(contentView);
         setContentView(mDrawerLayout);
 
-        initToolbar();
         initNavigationDrawer();
     }
 
@@ -179,35 +149,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
 
         setSupportActionBar(toolbar);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
-
-            updateActionBarLogo();
-        }
-    }
-
-    private void updateActionBarLogo(){
-        if(!shouldDisplayLogo())
-            return;
-
-        final ActionBar actionBar = getSupportActionBar();
-        if(actionBar == null)
-            return;
-
-        final Drone drone = dpApp.getDrone();
-        if(drone == null || !drone.isConnected()){
-            actionBar.setLogo(R.drawable.ic_navigation_grey_700_18dp);
-        }
-        else{
-            actionBar.setLogo(R.drawable.ic_navigation_green_600_18dp);
-        }
-    }
-
-    protected boolean shouldDisplayLogo(){
-        return true;
+        super.initToolbar();
     }
 
     protected float getActionDrawerTopMargin() {
@@ -308,7 +250,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
             navView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mDrawerLayout.closeDrawer(Gravity.START);
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
                 }
             });
         } else {
@@ -319,7 +261,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
                     if (clickIntent != null) {
                         mNavigationIntent = clickIntent;
                     }
-                    mDrawerLayout.closeDrawer(Gravity.START);
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
                 }
             });
         }

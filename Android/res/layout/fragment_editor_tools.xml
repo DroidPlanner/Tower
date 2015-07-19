@@ -1,17 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    android:orientation="vertical">
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp">
+
+    <ImageView
+        android:id="@+id/drone_connected_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_navigation_grey_700_18dp" />
+
+    <View
+        android:id="@+id/drone_connected_icon_separator"
+        android:layout_width="1dp"
+        android:layout_height="30dp"
+        android:layout_margin="10dp"
+        android:layout_toEndOf="@+id/drone_connected_icon"
+        android:layout_toRightOf="@+id/drone_connected_icon"
+        android:background="@color/light_grey" />
 
     <RadioGroup
         android:id="@+id/editor_tools_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
+        android:layout_toEndOf="@+id/drone_connected_icon_separator"
+        android:layout_toRightOf="@+id/drone_connected_icon_separator"
         android:gravity="center"
-        android:layout_weight="1"
         android:orientation="horizontal">
 
         <org.droidplanner.android.widgets.button.RadioButtonCenter
@@ -41,74 +61,83 @@
 
     </RadioGroup>
 
-    <View
-        android:layout_height="1dp"
+    <LinearLayout
+        android:id="@+id/editor_sub_tools"
         android:layout_width="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@color/light_grey" />
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/editor_tools_layout"
+        android:layout_alignLeft="@+id/editor_tools_layout"
+        android:layout_alignRight="@+id/editor_tools_layout"
+        android:layout_alignStart="@+id/editor_tools_layout"
+        android:layout_below="@+id/editor_tools_layout"
+        android:orientation="vertical">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        style="?android:attr/buttonBarStyle"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
-        android:layout_weight="1">
-
-        <Spinner
-            style="?android:attr/buttonBarButtonStyle"
-            android:id="@+id/draw_items_spinner"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:spinnerMode="dropdown"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:layout_height="1dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginStart="15dp"
+            android:background="@color/light_grey" />
 
-        <Spinner
-            style="?android:attr/buttonBarButtonStyle"
-            android:id="@+id/marker_items_spinner"
+        <FrameLayout
+            style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:spinnerMode="dropdown"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:layout_height="40dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp">
 
-        <TextView
-            style="?android:attr/buttonBarButtonStyle"
-            android:id="@+id/clear_mission_button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:minHeight="36dp"
-            android:padding="10dp"
-            android:gravity="center"
-            android:textColor="@android:color/black"
-            android:textStyle="normal"
-            android:layout_gravity="center"
-            android:textAllCaps="true"
-            android:text="@string/dlg_clear_mission_title"
-            android:visibility="gone"/>
+            <Spinner
+                android:id="@+id/draw_items_spinner"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:spinnerMode="dropdown"
+                android:visibility="gone" />
 
-        <TextView
-            style="?android:attr/buttonBarButtonStyle"
-            android:id="@+id/select_all_button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:minHeight="36dp"
-            android:padding="10dp"
-            android:gravity="center"
-            android:textColor="@android:color/black"
-            android:textStyle="normal"
-            android:layout_gravity="center"
-            android:textAllCaps="true"
-            android:text="@string/label_select_all"
-            android:visibility="visible"/>
+            <Spinner
+                android:id="@+id/marker_items_spinner"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:spinnerMode="dropdown"
+                android:visibility="gone" />
 
-    </FrameLayout>
-</LinearLayout>
+            <TextView
+                android:id="@+id/clear_mission_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:minHeight="36dp"
+                android:padding="10dp"
+                android:text="@string/dlg_clear_mission_title"
+                android:textAllCaps="true"
+                android:textColor="@android:color/black"
+                android:textStyle="normal"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/select_all_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:minHeight="36dp"
+                android:padding="10dp"
+                android:text="@string/label_select_all"
+                android:textAllCaps="true"
+                android:textColor="@android:color/black"
+                android:textStyle="normal"
+                android:visibility="visible" />
+
+        </FrameLayout>
+    </LinearLayout>
+</RelativeLayout>

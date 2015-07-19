@@ -12,11 +12,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
@@ -63,14 +65,23 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
     static {
         eventFilter.addAction(AttributeEvent.MISSION_RECEIVED);
+        eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
+        eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if (AttributeEvent.MISSION_RECEIVED.equals(action)) {
-                setTool(tool, false);
+            switch (action) {
+                case AttributeEvent.MISSION_RECEIVED:
+                    setTool(tool, false);
+                    break;
+
+                case AttributeEvent.STATE_CONNECTED:
+                case AttributeEvent.STATE_DISCONNECTED:
+                    updateDroneConnectedLogo();
+                    break;
             }
         }
     };
@@ -90,12 +101,15 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         editorToolsImpls[EditorTools.NONE.ordinal()] = new NoneToolsImpl(this);
     }
 
+    private ImageView droneConnectedLogo;
+
     private EditorToolListener listener;
     private RadioGroup mEditorRadioGroup;
     private EditorTools tool = DEFAULT_TOOL;
     private MissionProxy mMissionProxy;
 
     //Sub action views
+    private View editorSubTools;
     private Spinner drawItemsSpinner;
     private Spinner markerItemsSpinner;
     private TextView clearMission;
@@ -121,7 +135,10 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
         final Context context = getContext();
 
+        droneConnectedLogo = (ImageView) view.findViewById(R.id.drone_connected_icon);
+
         mEditorRadioGroup = (RadioGroup) view.findViewById(R.id.editor_tools_layout);
+        editorSubTools = view.findViewById(R.id.editor_sub_tools);
 
         final DrawToolsImpl drawToolImpl = (DrawToolsImpl) editorToolsImpls[EditorTools.DRAW.ordinal()];
         final RadioButtonCenter buttonDraw = (RadioButtonCenter) view.findViewById(R.id.editor_tools_draw);
@@ -156,6 +173,19 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         }
     }
 
+    private void updateDroneConnectedLogo() {
+        if(droneConnectedLogo == null)
+            return;
+
+        final Drone drone = getDrone();
+        if(drone == null || !drone.isConnected()){
+            droneConnectedLogo.setImageResource(R.drawable.ic_navigation_grey_700_18dp);
+        }
+        else{
+            droneConnectedLogo.setImageResource(R.drawable.ic_navigation_green_600_18dp);
+        }
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -175,6 +205,8 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
     @Override
     public void onApiConnected() {
+        updateDroneConnectedLogo();
+
         mMissionProxy = getMissionProxy();
         setToolAndUpdateView(tool);
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
@@ -201,6 +233,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
     @Override
     public void onApiDisconnected() {
+        updateDroneConnectedLogo();
         getBroadcastManager().unregisterReceiver(eventReceiver);
         mMissionProxy = null;
 
@@ -234,6 +267,9 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
     }
 
     private void hideSubTools() {
+        if(editorSubTools != null)
+            editorSubTools.setVisibility(View.GONE);
+
         if (selectAll != null)
             selectAll.setVisibility(View.GONE);
 
@@ -303,19 +339,27 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         hideSubTools();
         switch (tool) {
             case SELECTOR:
+                editorSubTools.setVisibility(View.VISIBLE);
                 selectAll.setVisibility(View.VISIBLE);
                 break;
 
             case TRASH:
+                editorSubTools.setVisibility(View.VISIBLE);
                 clearMission.setVisibility(View.VISIBLE);
                 break;
 
             case DRAW:
+                editorSubTools.setVisibility(View.VISIBLE);
                 drawItemsSpinner.setVisibility(View.VISIBLE);
                 break;
 
             case MARKER:
+                editorSubTools.setVisibility(View.VISIBLE);
                 markerItemsSpinner.setVisibility(View.VISIBLE);
+                break;
+
+            default:
+                hideSubTools();
                 break;
         }
     }

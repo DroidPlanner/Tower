@@ -27,7 +27,6 @@ import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
-import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.SupportEditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenMissionDialog;
@@ -127,7 +126,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         setContentView(R.layout.activity_editor);
 
         gestureMapFragment = ((GestureMapFragment) fragmentManager.findFragmentById(R.id.editor_map_fragment));
-        if(gestureMapFragment == null){
+        if (gestureMapFragment == null) {
             gestureMapFragment = new GestureMapFragment();
             fragmentManager.beginTransaction().add(R.id.editor_map_fragment, gestureMapFragment).commit();
         }
@@ -161,6 +160,11 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
         gestureMapFragment.setOnPathFinishedListener(this);
         openActionDrawer();
+    }
+
+    @Override
+    protected boolean shouldDisplayLogo(){
+        return false;
     }
 
     @Override
@@ -368,7 +372,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             double missionLength = missionProxy.getMissionLength();
             LengthUnit convertedMissionLength = unitSystem.getLengthUnitProvider().boxBaseValueToTarget(missionLength);
             double speedParameter = dpApp.getDrone().getSpeedParameter() / 100; //cm/s to m/s conversion.
-            if(speedParameter == 0)
+            if (speedParameter == 0)
                 speedParameter = DEFAULT_SPEED;
 
             int time = (int) (missionLength / speedParameter);
@@ -438,12 +442,12 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     }
 
     @Override
-    protected void initToolbar(){
+    protected void initToolbar() {
         super.initToolbar();
 
         final int toolbarId = getToolbarId();
         editorToolsFragment = (EditorToolsFragment) fragmentManager.findFragmentById(toolbarId);
-        if(editorToolsFragment == null){
+        if (editorToolsFragment == null) {
             editorToolsFragment = new EditorToolsFragment();
             fragmentManager.beginTransaction().add(toolbarId, editorToolsFragment).commit();
         }

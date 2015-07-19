@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
@@ -282,7 +283,7 @@ public class ParamsFragment extends ApiListenerListFragment {
 
     private void refreshParameters() {
         if (getDrone().isConnected()) {
-            getDrone().refreshParameters();
+            VehicleApi.getApi(getDrone()).refreshParameters();
         } else {
             Toast.makeText(getActivity(), R.string.msg_connect_first, Toast.LENGTH_SHORT).show();
         }

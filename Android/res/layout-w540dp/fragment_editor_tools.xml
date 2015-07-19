@@ -3,14 +3,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:orientation="horizontal"
-    >
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/drone_connected_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_navigation_grey_700_18dp" />
 
     <View
-        android:layout_height="match_parent"
         android:layout_width="1dp"
-        android:background="@color/light_grey"
-        android:layout_margin="10dp"/>
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:background="@color/light_grey" />
 
     <RadioGroup
         android:id="@+id/editor_tools_layout"
@@ -48,75 +55,81 @@
     </RadioGroup>
 
     <View
-        android:layout_height="match_parent"
         android:layout_width="1dp"
-        android:background="@color/light_grey"
-        android:layout_margin="10dp"/>
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:background="@color/light_grey" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="?android:attr/buttonBarStyle"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
         android:layout_weight="1">
 
-        <Spinner
-            style="?android:attr/buttonBarButtonStyle"
-            android:id="@+id/draw_items_spinner"
+        <FrameLayout
+            android:id="@+id/editor_sub_tools"
+            style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:spinnerMode="dropdown"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp">
 
-        <Spinner
-            style="?android:attr/buttonBarButtonStyle"
-            android:id="@+id/marker_items_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:spinnerMode="dropdown"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
+            <Spinner
+                android:id="@+id/draw_items_spinner"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:spinnerMode="dropdown"
+                android:visibility="gone" />
 
-        <TextView
-            style="?android:attr/buttonBarButtonStyle"
-            android:id="@+id/clear_mission_button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:minHeight="36dp"
-            android:padding="10dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:textColor="@android:color/black"
-            android:textStyle="normal"
-            android:textAllCaps="true"
-            android:text="@string/dlg_clear_mission_title"
-            android:visibility="gone"/>
+            <Spinner
+                android:id="@+id/marker_items_spinner"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:spinnerMode="dropdown"
+                android:visibility="gone" />
 
-        <TextView
-            style="?android:attr/buttonBarButtonStyle"
-            android:id="@+id/select_all_button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:minHeight="36dp"
-            android:padding="10dp"
-            android:gravity="center"
-            android:textColor="@android:color/black"
-            android:textStyle="normal"
-            android:textAllCaps="true"
-            android:layout_gravity="center"
-            android:text="@string/label_select_all"
-            android:visibility="visible"/>
+            <TextView
+                android:id="@+id/clear_mission_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:minHeight="36dp"
+                android:padding="10dp"
+                android:text="@string/dlg_clear_mission_title"
+                android:textAllCaps="true"
+                android:textColor="@android:color/black"
+                android:textStyle="normal"
+                android:visibility="gone" />
 
+            <TextView
+                android:id="@+id/select_all_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:minHeight="36dp"
+                android:padding="10dp"
+                android:text="@string/label_select_all"
+                android:textAllCaps="true"
+                android:textColor="@android:color/black"
+                android:textStyle="normal"
+                android:visibility="visible" />
+
+        </FrameLayout>
     </FrameLayout>
 
     <View
-        android:layout_height="match_parent"
         android:layout_width="1dp"
-        android:background="@color/light_grey"
-        android:layout_margin="10dp"/>
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:background="@color/light_grey" />
 
 </LinearLayout>
