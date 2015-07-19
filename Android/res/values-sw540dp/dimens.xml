@@ -11,10 +11,6 @@
     <dimen name="fragment_mission_control_padding_left">50dp</dimen>
     <dimen name="fragment_mission_control_padding_right">50dp</dimen>
 
-    <!-- Dimension for the editor buttons -->
-    <dimen name="editor_button_width">56dp</dimen>
-    <dimen name="editor_button_height">56dp</dimen>
-
     <!-- Dimension for the editor list items -->
     <dimen name="editor_list_item_text_size">24sp</dimen>
 

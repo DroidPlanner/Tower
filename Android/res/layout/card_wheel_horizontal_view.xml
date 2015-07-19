@@ -18,7 +18,7 @@
         app:isAllVisible="false"
         app:isCyclic="false"
         app:itemsDimmedAlpha="150"
-        app:selectionDivider="@android:color/holo_blue_dark"
+        app:selectionDivider="@android:color/holo_blue_light"
         app:selectionDividerWidth="2dp"
         app:selectionDividerActiveAlpha="100"
         app:selectionDividerDimmedAlpha="255"

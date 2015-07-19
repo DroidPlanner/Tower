@@ -53,24 +53,6 @@
             android:layout_below="@+id/editorInfoWindow"
             android:layout_alignWithParentIfMissing="true"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_centerVertical="true"
-            android:layout_above="@+id/mission_list_fragment"
-            android:layout_below="@+id/actionbar_container"
-            android:gravity="center">
-
-            <fragment
-                android:id="@+id/editor_tools_fragment"
-                android:name="org.droidplanner.android.fragments.EditorToolsFragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:layout="@layout/fragment_editor_tools"
-                />
-        </LinearLayout>
-
         <fragment
             android:id="@+id/mission_list_fragment"
             android:name="org.droidplanner.android.fragments.EditorListFragment"

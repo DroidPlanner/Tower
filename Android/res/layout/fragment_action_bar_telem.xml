@@ -24,9 +24,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:drawableLeft="@drawable/ic_home_grey_700_24dp"
+                android:drawableLeft="@drawable/ic_home_grey_700_18dp"
                 android:drawablePadding="@dimen/info_bar_drawable_padding"
-                android:drawableStart="@drawable/ic_home_grey_700_24dp"
+                android:drawableStart="@drawable/ic_home_grey_700_18dp"
                 android:text="@string/empty_content"
                 android:textSize="@dimen/info_bar_text_size"
                 tools:text="1000 m" />
@@ -45,9 +45,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:drawableLeft="@drawable/ic_file_upload_grey_700_24dp"
+                android:drawableLeft="@drawable/ic_file_upload_grey_700_18dp"
                 android:drawablePadding="@dimen/info_bar_drawable_padding"
-                android:drawableStart="@drawable/ic_file_upload_grey_700_24dp"
+                android:drawableStart="@drawable/ic_file_upload_grey_700_18dp"
                 android:text="@string/empty_content"
                 android:textSize="@dimen/info_bar_text_size"
                 tools:text="1000 m" />
@@ -66,9 +66,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:drawableLeft="@drawable/ic_gps_off_grey_700_24dp"
+                android:drawableLeft="@drawable/ic_gps_off_grey_700_18dp"
                 android:drawablePadding="@dimen/info_bar_drawable_padding"
-                android:drawableStart="@drawable/ic_gps_off_grey_700_24dp"
+                android:drawableStart="@drawable/ic_gps_off_grey_700_18dp"
                 android:minHeight="40dp"
                 android:minWidth="90dp"
                 android:text="@string/empty_content"
@@ -92,9 +92,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:drawableLeft="@drawable/ic_signal_wifi_off_grey_700_24dp"
+                android:drawableLeft="@drawable/ic_signal_wifi_off_grey_700_18dp"
                 android:drawablePadding="@dimen/info_bar_drawable_padding"
-                android:drawableStart="@drawable/ic_signal_wifi_off_grey_700_24dp"
+                android:drawableStart="@drawable/ic_signal_wifi_off_grey_700_18dp"
                 android:text="@string/empty_content"
                 android:textSize="@dimen/info_bar_text_size"
                 tools:text="100 %" />
@@ -114,7 +114,7 @@
                 android:id="@+id/bar_flight_mode_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_navigation_grey_700_24dp"
+                android:src="@drawable/ic_navigation_grey_700_18dp"
                 android:scaleType="fitCenter"/>
 
             <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
@@ -140,9 +140,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:drawableLeft="@drawable/ic_battery_unknown_grey_700_24dp"
+                android:drawableLeft="@drawable/ic_battery_unknown_grey_700_18dp"
                 android:drawablePadding="@dimen/info_bar_drawable_padding"
-                android:drawableStart="@drawable/ic_battery_unknown_grey_700_24dp"
+                android:drawableStart="@drawable/ic_battery_unknown_grey_700_18dp"
                 android:text="@string/empty_content"
                 android:textSize="@dimen/info_bar_text_size"
                 tools:text="99.9V" />

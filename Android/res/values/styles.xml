@@ -113,6 +113,7 @@
         <item name="android:layout_width">@dimen/editor_button_width</item>
         <item name="android:layout_height">@dimen/editor_button_height</item>
         <item name="android:background">@drawable/editor_button_bg</item>
+        <item name="android:layout_weight">1</item>
     </style>
 
     <style name="editorButton.Trash">

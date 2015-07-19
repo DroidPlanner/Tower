@@ -121,10 +121,10 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        fragmentManager = getSupportFragmentManager();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
-
-        fragmentManager = getSupportFragmentManager();
 
         gestureMapFragment = ((GestureMapFragment) fragmentManager.findFragmentById(R.id.editor_map_fragment));
         if(gestureMapFragment == null){
@@ -132,7 +132,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             fragmentManager.beginTransaction().add(R.id.editor_map_fragment, gestureMapFragment).commit();
         }
 
-        editorToolsFragment = (EditorToolsFragment) fragmentManager.findFragmentById(R.id.editor_tools_fragment);
         editorListFragment = (EditorListFragment) fragmentManager.findFragmentById(R.id.mission_list_fragment);
 
         infoView = (TextView) findViewById(R.id.editorInfoWindow);
@@ -436,6 +435,18 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         updateLocationButtonsMargin(itemDetailFragment != null);
+    }
+
+    @Override
+    protected void initToolbar(){
+        super.initToolbar();
+
+        final int toolbarId = getToolbarId();
+        editorToolsFragment = (EditorToolsFragment) fragmentManager.findFragmentById(toolbarId);
+        if(editorToolsFragment == null){
+            editorToolsFragment = new EditorToolsFragment();
+            fragmentManager.beginTransaction().add(toolbarId, editorToolsFragment).commit();
+        }
     }
 
     private void showItemDetail(MissionDetailFragment itemDetail) {

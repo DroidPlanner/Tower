@@ -2,16 +2,22 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    android:orientation="vertical">
+    android:layout_height="50dp"
+    android:orientation="horizontal"
+    >
+
+    <View
+        android:layout_height="match_parent"
+        android:layout_width="1dp"
+        android:background="@color/light_grey"
+        android:layout_margin="10dp"/>
 
     <RadioGroup
         android:id="@+id/editor_tools_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_weight="1"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <org.droidplanner.android.widgets.button.RadioButtonCenter
@@ -42,19 +48,14 @@
     </RadioGroup>
 
     <View
-        android:layout_height="1dp"
-        android:layout_width="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@color/light_grey" />
+        android:layout_height="match_parent"
+        android:layout_width="1dp"
+        android:background="@color/light_grey"
+        android:layout_margin="10dp"/>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="match_parent"
         style="?android:attr/buttonBarStyle"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
@@ -88,9 +89,9 @@
             android:minHeight="36dp"
             android:padding="10dp"
             android:gravity="center"
+            android:layout_gravity="center"
             android:textColor="@android:color/black"
             android:textStyle="normal"
-            android:layout_gravity="center"
             android:textAllCaps="true"
             android:text="@string/dlg_clear_mission_title"
             android:visibility="gone"/>
@@ -105,10 +106,17 @@
             android:gravity="center"
             android:textColor="@android:color/black"
             android:textStyle="normal"
-            android:layout_gravity="center"
             android:textAllCaps="true"
+            android:layout_gravity="center"
             android:text="@string/label_select_all"
             android:visibility="visible"/>
 
     </FrameLayout>
+
+    <View
+        android:layout_height="match_parent"
+        android:layout_width="1dp"
+        android:background="@color/light_grey"
+        android:layout_margin="10dp"/>
+
 </LinearLayout>
