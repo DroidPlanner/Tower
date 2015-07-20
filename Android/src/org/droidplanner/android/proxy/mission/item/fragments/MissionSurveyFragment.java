@@ -15,6 +15,7 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
+import com.o3dr.services.android.lib.drone.mission.item.complex.SplineSurvey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
 import com.o3dr.services.android.lib.drone.property.CameraProxy;
@@ -30,6 +31,7 @@ import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
+import org.w3c.dom.Text;
 
 import java.util.Collections;
 import java.util.List;
@@ -57,6 +59,7 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
     private CardWheelHorizontalView<LengthUnit> mAltitudePicker;
     private CardWheelHorizontalView<Integer> mSidelapPicker;
 
+    public TextView waypointType;
     public TextView distanceBetweenLinesTextView;
     public TextView areaTextView;
     public TextView distanceTextView;
@@ -84,6 +87,8 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
 
         final View view = getView();
         final Context context = getContext();
+
+        waypointType = (TextView) view.findViewById(id.WaypointType);
 
         CameraProxy camera = getDrone().getAttribute(AttributeType.CAMERA);
         List<CameraDetail> cameraDetails = camera == null
@@ -182,6 +187,7 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
                                 .toArray(new MissionItem.ComplexItem[surveyList.size()]);
 
                         drone.buildMissionItemsAsync(surveys, this);
+                        System.out.println("nothing");
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Error while building the survey.", e);
@@ -239,6 +245,10 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
         if (!surveyList.isEmpty()) {
             T survey = surveyList.get(0);
             SurveyDetail surveyDetail = survey.getSurveyDetail();
+            if(survey instanceof SplineSurvey){
+                waypointType.setText(getResources().getText(R.string.waypointType_Spline_Survey));
+            }
+
             try {
                 final LengthUnitProvider lengthUnitProvider = getLengthUnitProvider();
                 final AreaUnitProvider areaUnitProvider = getAreaUnitProvider();
@@ -262,6 +272,7 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
 
                 areaTextView.setText(String.format("%s: %s", getString(R.string.area),
                         areaUnitProvider.boxBaseValueToTarget(survey.getPolygonArea())));
+
 
                 lengthView.setText(String.format("%s: %s", getString(R.string.mission_length),
                         lengthUnitProvider.boxBaseValueToTarget(survey.getGridLength())));

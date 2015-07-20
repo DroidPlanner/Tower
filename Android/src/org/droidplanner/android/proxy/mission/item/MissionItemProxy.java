@@ -11,6 +11,7 @@ import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.mission.item.complex.SplineSurvey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.Circle;
@@ -58,7 +59,9 @@ public class MissionItemProxy {
 		mMissionItem = missionItem;
 		mMarkerInfos = MissionItemMarkerInfo.newInstance(this);
 
-        if(mMissionItem instanceof Survey){
+		if(mMissionItem instanceof SplineSurvey){
+			mMission.getDrone().buildMissionItemsAsync(new SplineSurvey[]{(SplineSurvey) mMissionItem}, missionItemBuiltListener);
+		}else if(mMissionItem instanceof Survey){
             mMission.getDrone().buildMissionItemsAsync(new Survey[]{(Survey) mMissionItem}, missionItemBuiltListener);
         }
         else if(mMissionItem instanceof StructureScanner){
@@ -122,6 +125,7 @@ public class MissionItemProxy {
 			}
 			break;
 
+		case SPLINE_SURVEY:
 		case SURVEY:
             List<LatLong> gridPoints = ((Survey)mMissionItem).getGridPoints();
 			if (gridPoints != null && !gridPoints.isEmpty()) {
