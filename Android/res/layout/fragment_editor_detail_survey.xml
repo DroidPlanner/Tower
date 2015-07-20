@@ -54,24 +54,6 @@
                 android:text="@string/waypointType_Survey"
                 android:textAllCaps="true" />
 
-            <TextView
-                android:id="@+id/DistanceLabel"
-                style="@style/missionHeaderlabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/WaypointType"
-                android:layout_below="@id/WaypointType"
-                android:text="@string/area" />
-
-            <TextView
-                android:id="@+id/DistanceValue"
-                style="@style/missionHeaderValue"
-                android:layout_marginLeft="12dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/DistanceLabel"
-                android:layout_toRightOf="@id/DistanceLabel"
-                tools:text="2154 m2" />
         </RelativeLayout>
     </RelativeLayout>
 
