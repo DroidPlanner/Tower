@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.SurfaceTexture;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -23,10 +22,12 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Attitude;
 import com.o3dr.services.android.lib.drone.property.Speed;
-import com.o3dr.services.android.lib.model.AbstractCommandListener;
 import com.o3dr.services.android.lib.model.SimpleCommandListener;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.activities.WidgetActivity;
+import org.droidplanner.android.activities.WidgetActivityConstants;
+import org.droidplanner.android.activities.WidgetActivityConstants.WidgetIds;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.unit.providers.speed.SpeedUnitProvider;
 import org.droidplanner.android.widgets.AttitudeIndicator;
@@ -88,6 +89,13 @@ public class TelemetryFragment extends ApiListenerFragment {
 
         videoView = (TextureView) view.findViewById(R.id.minimized_video);
         videoView.setVisibility(View.GONE);
+        videoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), WidgetActivity.class)
+                        .putExtra(WidgetActivityConstants.EXTRA_WIDGET_ID, WidgetIds.SOLOLINK_VIDEO));
+            }
+        });
 
         return view;
     }
@@ -112,25 +120,25 @@ public class TelemetryFragment extends ApiListenerFragment {
         getBroadcastManager().unregisterReceiver(eventReceiver);
     }
 
-    private void updateAllTelem(){
+    private void updateAllTelem() {
         onOrientationUpdate();
         onSpeedUpdate();
         tryStreamingVideo();
     }
 
-    private void tryStoppingVideoStream(){
+    private void tryStoppingVideoStream() {
         final Drone drone = getDrone();
         SoloLinkApi.getApi(drone).stopVideoStream(null);
     }
 
-    private void tryStreamingVideo(){
+    private void tryStreamingVideo() {
         final Drone drone = getDrone();
         CapabilityApi.getApi(drone).checkFeatureSupport(CapabilityApi.FeatureIds.SOLOLINK_VIDEO_STREAMING, new CapabilityApi.FeatureSupportListener() {
             @Override
             public void onFeatureSupportResult(String featureId, int result, Bundle bundle) {
-                switch(result){
+                switch (result) {
                     case CapabilityApi.FEATURE_SUPPORTED:
-                        if(videoView != null){
+                        if (videoView != null) {
                             videoView.setVisibility(View.VISIBLE);
                             videoView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
                                 @Override
@@ -168,7 +176,7 @@ public class TelemetryFragment extends ApiListenerFragment {
                         break;
 
                     default:
-                        if(videoView != null){
+                        if (videoView != null) {
                             videoView.setVisibility(View.GONE);
                         }
                 }
@@ -206,10 +214,10 @@ public class TelemetryFragment extends ApiListenerFragment {
         final double groundSpeedValue = speed != null ? speed.getGroundSpeed() : 0;
         final double verticalSpeedValue = speed != null ? speed.getVerticalSpeed() : 0;
 
-            final SpeedUnitProvider speedUnitProvider = getSpeedUnitProvider();
+        final SpeedUnitProvider speedUnitProvider = getSpeedUnitProvider();
 
-            horizontalSpeed.setText(getString(R.string.horizontal_speed_telem, speedUnitProvider.boxBaseValueToTarget(groundSpeedValue).toString()));
-            verticalSpeed.setText(getString(R.string.vertical_speed_telem, speedUnitProvider.boxBaseValueToTarget(verticalSpeedValue).toString()));
+        horizontalSpeed.setText(getString(R.string.horizontal_speed_telem, speedUnitProvider.boxBaseValueToTarget(groundSpeedValue).toString()));
+        verticalSpeed.setText(getString(R.string.vertical_speed_telem, speedUnitProvider.boxBaseValueToTarget(verticalSpeedValue).toString()));
     }
 
 }

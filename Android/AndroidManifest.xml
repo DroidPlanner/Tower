@@ -122,7 +122,13 @@
         <activity
             android:name=".activities.WidgetActivity"
             android:launchMode="singleTop"
-            />
+            android:parentActivityName=".activities.FlightActivity"
+            >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.FlightActivity"/>
+        </activity>
 
         <activity
             android:name=".activities.helpers.BluetoothDevicesActivity"

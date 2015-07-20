@@ -76,9 +76,14 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
     protected DroidPlannerApp dpApp;
 
     @Override
+    public void setContentView(int resId){
+        super.setContentView(resId);
+        initToolbar();
+    }
+
+    @Override
     public void setContentView(View view){
         super.setContentView(view);
-
         initToolbar();
     }
 
