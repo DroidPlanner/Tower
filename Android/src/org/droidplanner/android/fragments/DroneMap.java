@@ -102,9 +102,11 @@ public abstract class DroneMap extends ApiListenerFragment {
                     break;
 
                 case AttributeEvent.CAMERA_FOOTPRINTS_UPDATED: {
-                    CameraProxy camera = drone.getAttribute(AttributeType.CAMERA);
-                    if (camera != null && camera.getLastFootPrint() != null)
-                        mMapFragment.addCameraFootprint(camera.getLastFootPrint());
+					if(mAppPrefs.isRealtimeFootprintsEnabled()) {
+						CameraProxy camera = drone.getAttribute(AttributeType.CAMERA);
+						if (camera != null && camera.getLastFootPrint() != null)
+							mMapFragment.addCameraFootprint(camera.getLastFootPrint());
+					}
                     break;
                 }
 
