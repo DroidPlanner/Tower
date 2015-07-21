@@ -187,7 +187,6 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
                                 .toArray(new MissionItem.ComplexItem[surveyList.size()]);
 
                         drone.buildMissionItemsAsync(surveys, this);
-                        System.out.println("nothing");
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Error while building the survey.", e);
