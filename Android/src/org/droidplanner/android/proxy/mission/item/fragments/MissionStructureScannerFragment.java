@@ -32,6 +32,22 @@ import java.util.List;
 public class MissionStructureScannerFragment extends MissionDetailFragment implements
         CardWheelHorizontalView.OnCardWheelScrollListener, CompoundButton.OnCheckedChangeListener, Drone.OnMissionItemsBuiltCallback {
 
+    private final SpinnerSelfSelect.OnSpinnerItemSelectedListener cameraSpinnerListener = new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {
+        @Override
+        public void onSpinnerItemSelected(Spinner spinner, int position) {
+            if (spinner.getId() == id.cameraFileSpinner) {
+
+                CameraDetail cameraInfo = cameraAdapter.getItem(position);
+                for (StructureScanner scan : getMissionItems()) {
+                    SurveyDetail surveyDetail = scan.getSurveyDetail();
+                    surveyDetail.setCameraDetail(cameraInfo);
+                }
+
+                submitForBuilding();
+            }
+        }
+    };
+
     private CamerasAdapter cameraAdapter;
 
     @Override
@@ -55,7 +71,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
         cameraAdapter = new CamerasAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, cameraDetails);
         SpinnerSelfSelect cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
         cameraSpinner.setAdapter(cameraAdapter);
-        cameraSpinner.setOnSpinnerItemSelectedListener(this);
+        cameraSpinner.setOnSpinnerItemSelectedListener(cameraSpinnerListener);
 
         final LengthUnitProvider lengthUP = getLengthUnitProvider();
 
@@ -158,20 +174,6 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
         }
 
         submitForBuilding();
-    }
-
-    @Override
-    public void onSpinnerItemSelected(Spinner spinner, int position) {
-        if (spinner.getId() == id.cameraFileSpinner) {
-
-            CameraDetail cameraInfo = cameraAdapter.getItem(position);
-            for (StructureScanner scan : getMissionItems()) {
-                SurveyDetail surveyDetail = scan.getSurveyDetail();
-                surveyDetail.setCameraDetail(cameraInfo);
-            }
-
-            submitForBuilding();
-        }
     }
 
     @Override

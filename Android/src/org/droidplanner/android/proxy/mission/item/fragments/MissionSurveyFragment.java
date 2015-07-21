@@ -31,14 +31,12 @@ import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
 import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
-import org.w3c.dom.Text;
 
 import java.util.Collections;
 import java.util.List;
 
 public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragment implements
-        CardWheelHorizontalView.OnCardWheelScrollListener, SpinnerSelfSelect.OnSpinnerItemSelectedListener,
-        Drone.OnMissionItemsBuiltCallback {
+        CardWheelHorizontalView.OnCardWheelScrollListener, Drone.OnMissionItemsBuiltCallback {
 
     private static final String TAG = MissionSurveyFragment.class.getSimpleName();
 
@@ -50,6 +48,20 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
             final String action = intent.getAction();
             if (MissionProxy.ACTION_MISSION_PROXY_UPDATE.equals(action)) {
                 updateViews();
+            }
+        }
+    };
+
+    private final SpinnerSelfSelect.OnSpinnerItemSelectedListener cameraSpinnerListener = new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {
+        @Override
+        public void onSpinnerItemSelected(Spinner spinner, int position) {
+            if (spinner.getId() == id.cameraFileSpinner) {
+                CameraDetail cameraInfo = cameraAdapter.getItem(position);
+                for (T survey : getMissionItems()) {
+                    survey.getSurveyDetail().setCameraDetail(cameraInfo);
+                }
+
+                onScrollingEnded(mAnglePicker, 0, 0);
             }
         }
     };
@@ -98,7 +110,7 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
 
         cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
         cameraSpinner.setAdapter(cameraAdapter);
-        cameraSpinner.setOnSpinnerItemSelectedListener(this);
+        cameraSpinner.setOnSpinnerItemSelectedListener(cameraSpinnerListener);
 
         mAnglePicker = (CardWheelHorizontalView) view.findViewById(id.anglePicker);
         mAnglePicker.setViewAdapter(new NumericWheelAdapter(context, R.layout.wheel_text_centered, 0, 180, "%dº"));
@@ -131,7 +143,11 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
         mSidelapPicker.addScrollListener(this);
         mAltitudePicker.addScrollListener(this);
 
-        typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
+        final T referenceItem = getMissionItems().get(0);
+        if (referenceItem instanceof SplineSurvey)
+            typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SPLINE_SURVEY));
+        else
+            typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
 
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
@@ -140,18 +156,6 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
     public void onApiDisconnected() {
         super.onApiDisconnected();
         getBroadcastManager().unregisterReceiver(eventReceiver);
-    }
-
-    @Override
-    public void onSpinnerItemSelected(Spinner spinner, int position) {
-        if (spinner.getId() == id.cameraFileSpinner) {
-            CameraDetail cameraInfo = cameraAdapter.getItem(position);
-            for (T survey : getMissionItems()) {
-                survey.getSurveyDetail().setCameraDetail(cameraInfo);
-            }
-
-            onScrollingEnded(mAnglePicker, 0, 0);
-        }
     }
 
     @Override

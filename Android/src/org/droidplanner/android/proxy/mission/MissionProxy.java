@@ -433,8 +433,8 @@ public class MissionProxy implements DPMap.PathSource {
             return;
         }
 
-        final List<MissionItemProxy> selectionsToRemove = new ArrayList<MissionItemProxy>(pairSize);
-        final List<MissionItemProxy> itemsToSelect = new ArrayList<MissionItemProxy>(pairSize);
+        final List<MissionItemProxy> selectionsToRemove = new ArrayList<>(pairSize);
+        final List<MissionItemProxy> itemsToSelect = new ArrayList<>(pairSize);
 
         for (int i = 0; i < pairSize; i++) {
             final MissionItemProxy oldItem = oldNewList.get(i).first;
@@ -533,10 +533,10 @@ public class MissionProxy implements DPMap.PathSource {
         }
 
         // Partition the mission items into spline/non-spline buckets.
-        final List<Pair<Boolean, List<MissionItemProxy>>> bucketsList = new ArrayList<Pair<Boolean, List<MissionItemProxy>>>();
+        final List<Pair<Boolean, List<MissionItemProxy>>> bucketsList = new ArrayList<>();
 
         boolean isSpline = false;
-        List<MissionItemProxy> currentBucket = new ArrayList<MissionItemProxy>();
+        List<MissionItemProxy> currentBucket = new ArrayList<>();
         for (MissionItemProxy missionItemProxy : missionItemProxies) {
 
             MissionItem missionItem = missionItemProxy.getMissionItem();
@@ -545,22 +545,18 @@ public class MissionProxy implements DPMap.PathSource {
                 continue;
             }
 
-            if (missionItem instanceof SplineWaypoint) {
+            if (missionItem instanceof SplineWaypoint || missionItem instanceof SplineSurvey) {
                 if (!isSpline) {
                     if (!currentBucket.isEmpty()) {
-                        // Get the last item from the current bucket. It will
-                        // become the first
+                        // Get the last item from the current bucket. It will become the first
                         // anchor point for the spline path.
-                        final MissionItemProxy lastItem = currentBucket
-                                .get(currentBucket.size() - 1);
+                        final MissionItemProxy lastItem = currentBucket.get(currentBucket.size() - 1);
 
                         // Store the previous item bucket.
-                        bucketsList.add(new Pair<Boolean, List<MissionItemProxy>>(Boolean.FALSE,
-                                currentBucket));
+                        bucketsList.add(new Pair<>(Boolean.FALSE, currentBucket));
 
-                        // Create a new bucket for this category and update
-                        // 'isSpline'
-                        currentBucket = new ArrayList<MissionItemProxy>();
+                        // Create a new bucket for this category and update 'isSpline'
+                        currentBucket = new ArrayList<>();
                         currentBucket.add(lastItem);
                     }
 
@@ -572,17 +568,15 @@ public class MissionProxy implements DPMap.PathSource {
             } else {
                 if (isSpline) {
 
-                    // Add the current item to the spline bucket. It will act as
-                    // the end anchor
+                    // Add the current item to the spline bucket. It will act as the end anchor
                     // point for the spline path.
                     if (!currentBucket.isEmpty()) {
                         currentBucket.add(missionItemProxy);
 
                         // Store the previous item bucket.
-                        bucketsList.add(new Pair<Boolean, List<MissionItemProxy>>(Boolean.TRUE,
-                                currentBucket));
+                        bucketsList.add(new Pair<>(Boolean.TRUE, currentBucket));
 
-                        currentBucket = new ArrayList<MissionItemProxy>();
+                        currentBucket = new ArrayList<>();
                     }
 
                     isSpline = false;
@@ -593,16 +587,16 @@ public class MissionProxy implements DPMap.PathSource {
             }
         }
 
-        bucketsList.add(new Pair<Boolean, List<MissionItemProxy>>(isSpline, currentBucket));
+        bucketsList.add(new Pair<>(isSpline, currentBucket));
 
-        final List<LatLong> pathPoints = new ArrayList<LatLong>();
+        final List<LatLong> pathPoints = new ArrayList<>();
         LatLong lastPoint = null;
 
         for (Pair<Boolean, List<MissionItemProxy>> bucketEntry : bucketsList) {
 
             final List<MissionItemProxy> bucket = bucketEntry.second;
             if (bucketEntry.first) {
-                final List<LatLong> splinePoints = new ArrayList<LatLong>();
+                final List<LatLong> splinePoints = new ArrayList<>();
                 for (MissionItemProxy missionItemProxy : bucket) {
                     splinePoints.addAll(missionItemProxy.getPath(lastPoint));
 
@@ -612,7 +606,8 @@ public class MissionProxy implements DPMap.PathSource {
                 }
 
                 pathPoints.addAll(MathUtils.SplinePath.process(splinePoints));
-            } else {
+            }
+            else {
                 for (MissionItemProxy missionItemProxy : bucket) {
                     pathPoints.addAll(missionItemProxy.getPath(lastPoint));
 
@@ -755,8 +750,6 @@ public class MissionProxy implements DPMap.PathSource {
             MissionItem item = itemProxy.getMissionItem();
             if (item instanceof Survey) {
                 polygonPaths.add(((Survey) item).getPolygonPoints());
-            } else if (item instanceof SplineSurvey){
-                polygonPaths.add(((SplineSurvey) item).getPolygonPoints());
             }
         }
         return polygonPaths;
