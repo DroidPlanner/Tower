@@ -3,7 +3,7 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_open_tlog_file"
-        app:showAsAction="never"
-        android:icon="@drawable/ic_action_folder_open"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_folder_open_grey_700_24dp"
         android:title="@string/open_tlog_file"/>
 </menu>

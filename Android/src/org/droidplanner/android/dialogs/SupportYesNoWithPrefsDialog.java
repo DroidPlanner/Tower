@@ -96,13 +96,15 @@ public class SupportYesNoWithPrefsDialog extends SupportYesNoDialog {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 savePreferences(prefKey, true);
-                mListener.onYes();
+                if(mListener != null)
+                    mListener.onYes();
             }
         }).setNegativeButton(arguments.getString(EXTRA_NEGATIVE_LABEL), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 savePreferences(prefKey, false);
-                mListener.onNo();
+                if(mListener != null)
+                    mListener.onNo();
             }
         });
 

@@ -75,6 +75,7 @@ public class TTSNotificationProvider implements OnInitListener,
         eventFilter.addAction(AttributeEvent.HEARTBEAT_FIRST);
         eventFilter.addAction(AttributeEvent.HEARTBEAT_TIMEOUT);
         eventFilter.addAction(AttributeEvent.HEARTBEAT_RESTORED);
+		eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
         eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
         eventFilter.addAction(AttributeEvent.MISSION_ITEM_UPDATED);
         eventFilter.addAction(AttributeEvent.FOLLOW_START);
@@ -120,7 +121,9 @@ public class TTSNotificationProvider implements OnInitListener,
                     Toast.makeText(context, "Waypoints received from Drone", Toast.LENGTH_SHORT).show();
                     speak("Waypoints received");
                     break;
+
                 case AttributeEvent.HEARTBEAT_FIRST:
+				case AttributeEvent.STATE_CONNECTED:
                     watchdogCallback.setDrone(drone);
                     scheduleWatchdog();
                     speak("Connected");

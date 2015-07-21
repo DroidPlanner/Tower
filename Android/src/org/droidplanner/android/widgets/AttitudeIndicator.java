@@ -58,7 +58,7 @@ public class AttitudeIndicator extends View {
 		fillPaint.setStyle(Style.FILL);
 
 		yawPaint = new Paint(fillPaint);
-		yawPaint.setColor(Color.WHITE);
+		yawPaint.setColor(Color.GRAY);
 
 		skyPaint = new Paint(fillPaint);
 
