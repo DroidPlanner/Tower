@@ -22,17 +22,20 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Attitude;
 import com.o3dr.services.android.lib.drone.property.Speed;
+import com.o3dr.services.android.lib.model.AbstractCommandListener;
 import com.o3dr.services.android.lib.model.SimpleCommandListener;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.WidgetActivity;
-import org.droidplanner.android.activities.WidgetActivityConstants;
-import org.droidplanner.android.activities.WidgetActivityConstants.WidgetIds;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.unit.providers.speed.SpeedUnitProvider;
 import org.droidplanner.android.widgets.AttitudeIndicator;
 
+import timber.log.Timber;
+
 public class TelemetryFragment extends ApiListenerFragment {
+
+    private static final String TAG = TelemetryFragment.class.getSimpleName();
 
     private final static IntentFilter eventFilter = new IntentFilter();
 
@@ -93,7 +96,7 @@ public class TelemetryFragment extends ApiListenerFragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), WidgetActivity.class)
-                        .putExtra(WidgetActivityConstants.EXTRA_WIDGET_ID, WidgetIds.SOLOLINK_VIDEO));
+                        .putExtra(WidgetActivity.EXTRA_WIDGET_ID, WidgetActivity.WIDGET_SOLOLINK_VIDEO));
             }
         });
 
@@ -115,6 +118,18 @@ public class TelemetryFragment extends ApiListenerFragment {
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+        tryStreamingVideo();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        tryStoppingVideoStream();
+    }
+
+    @Override
     public void onApiDisconnected() {
         tryStoppingVideoStream();
         getBroadcastManager().unregisterReceiver(eventReceiver);
@@ -128,7 +143,23 @@ public class TelemetryFragment extends ApiListenerFragment {
 
     private void tryStoppingVideoStream() {
         final Drone drone = getDrone();
-        SoloLinkApi.getApi(drone).stopVideoStream(null);
+        Timber.d("Stopping video stream with tag %s.", TAG);
+        SoloLinkApi.getApi(drone).stopVideoStream(TAG, new AbstractCommandListener() {
+            @Override
+            public void onSuccess() {
+                Timber.d("Video streaming stopped successfully.");
+            }
+
+            @Override
+            public void onError(int i) {
+                Timber.d("Unable to stop video streaming: %d", i);
+            }
+
+            @Override
+            public void onTimeout() {
+                Timber.d("Timed out while trying to stop video streaming.");
+            }
+        });
     }
 
     private void tryStreamingVideo() {
@@ -143,16 +174,22 @@ public class TelemetryFragment extends ApiListenerFragment {
                             videoView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
                                 @Override
                                 public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-                                    SoloLinkApi.getApi(drone).startVideoStream(new Surface(surface), new SimpleCommandListener() {
+                                    Timber.d("Starting video with tag %s", TAG);
+                                    SoloLinkApi.getApi(drone).startVideoStream(new Surface(surface), TAG, new SimpleCommandListener() {
+
+                                        @Override
+                                        public void onSuccess() {
+                                            Timber.d("Video started successfully.");
+                                        }
 
                                         @Override
                                         public void onError(int i) {
-
+                                            Timber.d("Starting video error: %d", i);
                                         }
 
                                         @Override
                                         public void onTimeout() {
-
+                                            Timber.d("Starting video timeout.");
                                         }
                                     });
                                 }
@@ -164,7 +201,8 @@ public class TelemetryFragment extends ApiListenerFragment {
 
                                 @Override
                                 public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-                                    return false;
+                                    tryStoppingVideoStream();
+                                    return true;
                                 }
 
                                 @Override

@@ -92,10 +92,14 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayShowTitleEnabled(isDisplayTitleEnabled());
 
             updateActionBarLogo();
         }
+    }
+
+    protected boolean isDisplayTitleEnabled(){
+        return false;
     }
 
     private void updateActionBarLogo(){

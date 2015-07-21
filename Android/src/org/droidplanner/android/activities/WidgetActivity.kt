@@ -6,13 +6,16 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
+import com.o3dr.android.client.apis.CapabilityApi
+import com.o3dr.android.client.apis.SoloLinkApi
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
 import org.droidplanner.android.R
 import org.droidplanner.android.activities.helpers.SuperUI
 import org.droidplanner.android.fragments.FlightMapFragment
 import org.droidplanner.android.utils.prefs.AutoPanMode
-import org.droidplanner.android.activities.WidgetActivityConstants.WidgetIds
 import org.droidplanner.android.fragments.widget.telem.WidgetSoloLinkVideo
 import kotlin.properties.Delegates
 
@@ -21,12 +24,45 @@ import kotlin.properties.Delegates
  */
 public class WidgetActivity : SuperUI() {
 
+    companion object {
+        private val filter = initFilter()
+
+        val EXTRA_WIDGET_ID = "extra_widget_id"
+
+        val WIDGET_SOLOLINK_VIDEO = "widget_sololink_video";
+
+        private fun initFilter(): IntentFilter {
+            val temp = IntentFilter()
+            temp.addAction(AttributeEvent.STATE_CONNECTED)
+            temp.addAction(AttributeEvent.STATE_DISCONNECTED)
+            return temp
+        }
+    }
+
+    private val receiver = object : BroadcastReceiver(){
+        override fun onReceive(context: Context, intent: Intent) {
+            when(intent.getAction()){
+                AttributeEvent.STATE_CONNECTED -> checkSoloLinkVideoSupport()
+                AttributeEvent.STATE_DISCONNECTED -> finish()
+            }
+        }
+
+    }
+
     private val goToMyLocation by Delegates.lazy {
         findViewById(R.id.my_location_button) as ImageButton?
     }
 
     private val goToDroneLocation by Delegates.lazy {
         findViewById(R.id.drone_location_button) as ImageButton?
+    }
+
+    private val takePhotoButton by Delegates.lazy {
+        findViewById(R.id.sololink_take_picture_button) as Button?
+    }
+
+    private val recordVideo by Delegates.lazy {
+        findViewById(R.id.sololink_record_video_button) as Button?
     }
 
     private var mapFragment: FlightMapFragment? = null
@@ -62,6 +98,22 @@ public class WidgetActivity : SuperUI() {
             true
         }
 
+        takePhotoButton?.setOnClickListener {
+            val drone = dpApp.getDrone()
+            if(drone != null) {
+                //TODO: fix when camera control support is stable on sololink
+                SoloLinkApi.getApi(drone).takePhoto(null)
+            }
+        }
+
+        recordVideo?.setOnClickListener {
+            val drone = dpApp.getDrone()
+            if(drone != null){
+                //TODO: fix when camera control support is stable on sololink
+                SoloLinkApi.getApi(drone).toggleVideoRecording(null)
+            }
+        }
+
         handleIntent(getIntent())
     }
 
@@ -72,11 +124,11 @@ public class WidgetActivity : SuperUI() {
     }
 
     private fun handleIntent(intent: Intent){
-        val widgetId = intent.getStringExtra(WidgetActivityConstants.EXTRA_WIDGET_ID)
+        val widgetId = intent.getStringExtra(EXTRA_WIDGET_ID)
         val fm = getSupportFragmentManager()
 
         when(widgetId){
-            WidgetIds.SOLOLINK_VIDEO -> {
+            WIDGET_SOLOLINK_VIDEO -> {
                 var widgetFragment = fm.findFragmentById(R.id.widget_view)
                 if(!(widgetFragment is WidgetSoloLinkVideo)){
                     widgetFragment = WidgetSoloLinkVideo()
@@ -103,5 +155,36 @@ public class WidgetActivity : SuperUI() {
         setSupportActionBar(toolbar)
 
         super.initToolbar()
+
+        getSupportActionBar()?.setTitle("SoloLink Video")
     }
+
+    private fun checkSoloLinkVideoSupport(){
+        val drone = dpApp.getDrone()
+        if(drone == null || !drone.isConnected())
+            finish()
+        else{
+            CapabilityApi.getApi(drone).checkFeatureSupport(CapabilityApi.FeatureIds.SOLOLINK_VIDEO_STREAMING, { featureId, result, bundle ->
+                when (result) {
+                    CapabilityApi.FEATURE_SUPPORTED -> {}
+                    else -> finish()
+                }
+            })
+        }
+    }
+
+    override fun onApiConnected(){
+        super.onApiConnected()
+        checkSoloLinkVideoSupport()
+        getBroadcastManager().registerReceiver(receiver, filter)
+    }
+
+    override fun onApiDisconnected(){
+        super.onApiDisconnected()
+        if(!isFinishing())
+            checkSoloLinkVideoSupport()
+        getBroadcastManager().unregisterReceiver(receiver)
+    }
+
+    override fun isDisplayTitleEnabled() = true
 }
