@@ -74,6 +74,7 @@ public class TelemetryFragment extends ApiListenerFragment {
     private TextView horizontalSpeed;
     private TextView verticalSpeed;
 
+    private View videoContainer;
     private TextureView videoView;
 
     private boolean headingModeFPV;
@@ -90,15 +91,17 @@ public class TelemetryFragment extends ApiListenerFragment {
         horizontalSpeed = (TextView) view.findViewById(R.id.horizontal_speed_telem);
         verticalSpeed = (TextView) view.findViewById(R.id.vertical_speed_telem);
 
-        videoView = (TextureView) view.findViewById(R.id.minimized_video);
-        videoView.setVisibility(View.GONE);
-        videoView.setOnClickListener(new View.OnClickListener() {
+        videoContainer = view.findViewById(R.id.minimized_video_container);
+        videoContainer.setVisibility(View.GONE);
+        videoContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), WidgetActivity.class)
                         .putExtra(WidgetActivity.EXTRA_WIDGET_ID, WidgetActivity.WIDGET_SOLOLINK_VIDEO));
             }
         });
+
+        videoView = (TextureView) view.findViewById(R.id.minimized_video);
 
         return view;
     }
@@ -169,8 +172,8 @@ public class TelemetryFragment extends ApiListenerFragment {
             public void onFeatureSupportResult(String featureId, int result, Bundle bundle) {
                 switch (result) {
                     case CapabilityApi.FEATURE_SUPPORTED:
-                        if (videoView != null) {
-                            videoView.setVisibility(View.VISIBLE);
+                        if (videoContainer != null) {
+                            videoContainer.setVisibility(View.VISIBLE);
                             videoView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
                                 @Override
                                 public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -214,8 +217,8 @@ public class TelemetryFragment extends ApiListenerFragment {
                         break;
 
                     default:
-                        if (videoView != null) {
-                            videoView.setVisibility(View.GONE);
+                        if (videoContainer != null) {
+                            videoContainer.setVisibility(View.GONE);
                         }
                 }
             }
