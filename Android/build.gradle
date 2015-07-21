@@ -2,18 +2,19 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 dependencies {
-    compile 'com.google.android.gms:play-services-maps:7.3.0'
-    compile 'com.google.android.gms:play-services-location:7.3.0'
-    compile 'com.google.android.gms:play-services-analytics:7.3.0'
+    compile 'com.google.android.gms:play-services-maps:7.5.0'
+    compile 'com.google.android.gms:play-services-location:7.5.0'
+    compile 'com.google.android.gms:play-services-analytics:7.5.0'
 
     compile 'com.sothree.slidinguppanel:library:2.0.2'
 
-    compile 'com.android.support:support-v4:22.1.1'
-    compile 'com.android.support:appcompat-v7:22.1.1'
+    compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:cardview-v7:22.1.0'
     compile 'com.android.support:recyclerview-v7:22.1.0'
 
-    compile 'com.o3dr.android:dronekit-android:2.3.34'
+    //DroneKit-Android client library.
+    compile 'com.o3dr.android:dronekit-android:2.5.3'
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')
@@ -59,11 +60,6 @@ android {
             assets.srcDirs = ['assets']
         }
 
-        // Move the tests to tests/java, tests/res, etc...
-        androidTest {
-            java.srcDirs = ['test']
-        }
-
         // Move the build types to build-types/<type>
         // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
         // This moves them out of them default location under src/<type>/... which would
@@ -103,10 +99,12 @@ android {
         debug {
             applicationIdSuffix ".debug"
             versionNameSuffix ".debug"
+            resValue "string", "app_title", "Tower Dev"
         }
 
         release {
             signingConfig signingConfigs.release
+            resValue "string", "app_title", "Tower"
         }
     }
 }

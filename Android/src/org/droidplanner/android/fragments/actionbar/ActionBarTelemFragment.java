@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.Altitude;
 import com.o3dr.services.android.lib.drone.property.Battery;
 import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.Home;
@@ -27,13 +29,11 @@ import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.util.MathUtils;
 
 import org.beyene.sius.unit.length.LengthUnit;
-import org.beyene.sius.unit.length.Meter;
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
 import org.droidplanner.android.widgets.spinners.ModeAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 
@@ -58,6 +58,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         eventFilter.addAction(AttributeEvent.SIGNAL_UPDATED);
         eventFilter.addAction(AttributeEvent.STATE_VEHICLE_MODE);
         eventFilter.addAction(AttributeEvent.TYPE_UPDATED);
+        eventFilter.addAction(AttributeEvent.ALTITUDE_UPDATED);
 
         eventFilter.addAction(SettingsFragment.ACTION_PREF_HDOP_UPDATE);
         eventFilter.addAction(SettingsFragment.ACTION_PREF_UNIT_SYSTEM_UPDATE);
@@ -111,6 +112,10 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                     updateHomeTelem();
                     break;
 
+                case AttributeEvent.ALTITUDE_UPDATED:
+                    updateAltitudeTelem();
+                    break;
+
                 default:
                     break;
             }
@@ -122,6 +127,8 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
     private DroidPlannerPrefs appPrefs;
 
     private TextView homeTelem;
+    private TextView altitudeTelem;
+
     private TextView gpsTelem;
     private PopupWindow gpsPopup;
 
@@ -131,6 +138,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
     private TextView signalTelem;
     private PopupWindow signalPopup;
 
+    private ImageView flightModeIcon;
     private SpinnerSelfSelect flightModeTelem;
     private int lastDroneType = -1;
     private ModeAdapter modeAdapter;
@@ -156,6 +164,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final Drawable popupBg = getResources().getDrawable(android.R.color.transparent);
 
         homeTelem = (TextView) view.findViewById(R.id.bar_home);
+        altitudeTelem = (TextView) view.findViewById(R.id.bar_altitude);
 
         gpsTelem = (TextView) view.findViewById(R.id.bar_gps);
         final View gpsPopupView = inflater.inflate(R.layout.popup_info_gps, (ViewGroup) view, false);
@@ -190,6 +199,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             }
         });
 
+        flightModeIcon = (ImageView) view.findViewById(R.id.bar_flight_mode_icon);
         flightModeTelem = (SpinnerSelfSelect) view.findViewById(R.id.bar_flight_mode);
         modeAdapter = new ModeAdapter(context, R.layout.spinner_drop_down_flight_mode);
 
@@ -206,6 +216,12 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final View view = getView();
         if(view != null)
             view.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onStart(){
+        hideTelemBar();
+        super.onStart();
     }
 
     @Override
@@ -250,6 +266,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         updateGpsTelem();
         updateHomeTelem();
         updateBatteryTelem();
+        updateAltitudeTelem();
     }
 
     private void updateFlightModeTelem() {
@@ -258,9 +275,11 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final boolean isDroneConnected = drone.isConnected();
         final int droneType;
         if (isDroneConnected) {
+            flightModeIcon.setImageResource(R.drawable.ic_navigation_green_600_18dp);
             Type type = drone.getAttribute(AttributeType.TYPE);
             droneType = type.getDroneType();
         } else {
+            flightModeIcon.setImageResource(R.drawable.ic_navigation_grey_700_18dp);
             droneType = -1;
         }
 
@@ -294,7 +313,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final Signal droneSignal = drone.getAttribute(AttributeType.SIGNAL);
         if(!drone.isConnected() || !droneSignal.isValid()){
             signalTelem.setText(emptyString);
-            signalTelem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_signal_wifi_statusbar_null_black_24dp,
+            signalTelem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_signal_wifi_off_grey_700_18dp,
                     0, 0, 0);
 
             rssiView.setText("RSSI: " + emptyString);
@@ -309,15 +328,15 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                     droneSignal.getRemFadeMargin());
             final int signalIcon;
             if (signalStrength >= 100)
-                signalIcon = R.drawable.ic_signal_wifi_4_bar_black_24dp;
+                signalIcon = R.drawable.ic_signal_wifi_4_bar_grey_700_18dp;
             else if (signalStrength >= 75)
-                signalIcon = R.drawable.ic_signal_wifi_3_bar_black_24dp;
+                signalIcon = R.drawable.ic_signal_wifi_3_bar_grey_700_18dp;
             else if (signalStrength >= 50)
-                signalIcon = R.drawable.ic_signal_wifi_2_bar_black_24dp;
+                signalIcon = R.drawable.ic_signal_wifi_2_bar_grey_700_18dp;
             else if (signalStrength >= 25)
-                signalIcon = R.drawable.ic_signal_wifi_1_bar_black_24dp;
+                signalIcon = R.drawable.ic_signal_wifi_1_bar_grey_700_18dp;
             else
-                signalIcon = R.drawable.ic_signal_wifi_0_bar_black_24dp;
+                signalIcon = R.drawable.ic_signal_wifi_0_bar_grey_700_18dp;
 
             signalTelem.setText(String.format(Locale.ENGLISH, "%d%%", signalStrength));
             signalTelem.setCompoundDrawablesWithIntrinsicBounds(signalIcon, 0, 0, 0);
@@ -346,7 +365,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final int gpsIcon;
         if (!drone.isConnected()) {
             update = (displayHdop ? "HDOP: " : "") + emptyString;
-            gpsIcon = R.drawable.ic_gps_off_black_24dp;
+            gpsIcon = R.drawable.ic_gps_off_grey_700_18dp;
             satNoView.setText("S: " + emptyString);
             hdopStatusView.setText("HDOP: " + emptyString);
         } else {
@@ -361,13 +380,13 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
 
             switch(fixStatus){
                 case Gps.LOCK_3D:
-                    gpsIcon = R.drawable.ic_gps_fixed_black_24dp;
+                    gpsIcon = R.drawable.ic_gps_fixed_grey_700_18dp;
                     break;
 
                 case Gps.LOCK_2D:
                 case Gps.NO_FIX:
                 default:
-                    gpsIcon = R.drawable.ic_gps_not_fixed_black_24dp;
+                    gpsIcon = R.drawable.ic_gps_not_fixed_grey_700_18dp;
                     break;
             }
 
@@ -385,7 +404,6 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
     }
 
     private void updateHomeTelem() {
-        final Context context = getActivity().getApplicationContext();
         final Drone drone = getDrone();
 
         String update = getString(R.string.empty_content);
@@ -418,7 +436,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             dischargeView.setText("D: " + emptyString);
             currentView.setText("C: " + emptyString);
             mAhView.setText("R: " + emptyString);
-            batteryIcon = R.drawable.ic_battery_unknown_black_24dp;
+            batteryIcon = R.drawable.ic_battery_unknown_grey_700_18dp;
         } else {
             Double discharge = droneBattery.getBatteryDischarge();
             String dischargeText;
@@ -433,7 +451,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             currentView.setText(String.format("C: %2.1f A", droneBattery.getBatteryCurrent()));
 
             update = String.format(Locale.ENGLISH, "%2.1f V", droneBattery.getBatteryVoltage());
-            batteryIcon = R.drawable.ic_battery_std_black_24dp;
+            batteryIcon = R.drawable.ic_battery_std_grey_700_18dp;
         }
 
         batteryPopup.update();
@@ -448,6 +466,17 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         }
         else{
             return String.format(Locale.ENGLISH, "%2.0f mAh", chargeInmAh);
+        }
+    }
+
+    private void updateAltitudeTelem() {
+        final Drone drone = getDrone();
+        final Altitude altitude = drone.getAttribute(AttributeType.ALTITUDE);
+        if (altitude != null) {
+            double alt = altitude.getAltitude();
+            LengthUnit altUnit = getLengthUnitProvider().boxBaseValueToTarget(alt);
+
+            this.altitudeTelem.setText(altUnit.toString());
         }
     }
 }

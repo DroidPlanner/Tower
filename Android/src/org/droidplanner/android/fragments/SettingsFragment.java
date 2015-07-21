@@ -97,7 +97,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         intentFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
         intentFilter.addAction(AttributeEvent.STATE_CONNECTED);
         intentFilter.addAction(AttributeEvent.STATE_UPDATED);
-        intentFilter.addAction(AttributeEvent.HEARTBEAT_FIRST);
         intentFilter.addAction(AttributeEvent.HEARTBEAT_RESTORED);
         intentFilter.addAction(AttributeEvent.TYPE_UPDATED);
         intentFilter.addAction(ACTION_PREF_UNIT_SYSTEM_UPDATE);

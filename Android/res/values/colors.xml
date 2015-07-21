@@ -59,4 +59,9 @@
     <color name="medium_green">#50CB12</color>
     <color name="light_green">#5574D800</color>
 
+    <color name="charcoal">#161616</color>
+    <color name="very_dark_grey">#1C1C1C</color>
+    <color name="medium_grey">#3C3C3C</color>
+    <color name="grey700">#616161</color>
+
 </resources>
