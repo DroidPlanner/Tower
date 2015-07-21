@@ -15,6 +15,7 @@ import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.mission.item.complex.SplineSurvey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
@@ -63,7 +64,8 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
             MissionItemType.CAMERA_TRIGGER,
             MissionItemType.EPM_GRIPPER,
             MissionItemType.YAW_CONDITION,
-            MissionItemType.SET_SERVO
+            MissionItemType.SET_SERVO,
+            MissionItemType.SPLINE_SURVEY
     };
 
     public interface OnMissionDetailListener {
@@ -116,8 +118,11 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
             case RETURN_TO_LAUNCH:
                 fragment = new MissionRTLFragment();
                 break;
+            case SPLINE_SURVEY:
+                fragment = new MissionSurveyFragment<SplineSurvey>();
+                break;
             case SURVEY:
-                fragment = new MissionSurveyFragment();
+                fragment = new MissionSurveyFragment<>();
                 break;
             case TAKEOFF:
                 fragment = new MissionTakeoffFragment();

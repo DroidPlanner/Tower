@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.o3dr.android.client.Drone;
-import com.o3dr.android.client.apis.gcs.FollowApi;
+import com.o3dr.android.client.apis.FollowApi;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
@@ -196,7 +196,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
                 if (drone.isConnected()) {
                     Bundle params = new Bundle();
                     params.putDouble(FollowType.EXTRA_FOLLOW_RADIUS, newValue.toBase().getValue());
-                    FollowApi.updateFollowParams(drone, params);
+                    FollowApi.getApi(drone).updateFollowParams(params);
                 }
                 break;
 
@@ -253,7 +253,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 
         Bundle params = new Bundle();
         params.putParcelable(FollowType.EXTRA_FOLLOW_ROI_TARGET, roiCoord);
-        FollowApi.updateFollowParams(drone, params);
+        FollowApi.getApi(drone).updateFollowParams(params);
     }
 
     private void updateROITargetMarker(LatLong target) {
