@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item type="id" name="mapFragment"/>
-    
+    <item name="save_param_dialog_title" type="id">Unsaved Parameters</item>
+    <item name="save_param_dialog_message" type="id">Your changes have not been uploaded, would you
+        like to upload them?
+    </item>
+
 </resources>
