@@ -597,8 +597,27 @@ public class MissionProxy implements DPMap.PathSource {
             final List<MissionItemProxy> bucket = bucketEntry.second;
             if (bucketEntry.first) {
                 final List<LatLong> splinePoints = new ArrayList<>();
-                for (MissionItemProxy missionItemProxy : bucket) {
-                    splinePoints.addAll(missionItemProxy.getPath(lastPoint));
+                final int bucketSize = bucket.size();
+                for(int i = 0; i < bucketSize; i++){
+                    final MissionItemProxy missionItemProxy = bucket.get(i);
+                    final MissionItemType missionItemType = missionItemProxy.getMissionItem().getType();
+                    final List<LatLong> missionItemPath = missionItemProxy.getPath(lastPoint);
+
+                    switch(missionItemType){
+                        case SURVEY:
+                            if(!missionItemPath.isEmpty()) {
+                                if (i == 0)
+                                    splinePoints.add(missionItemPath.get(0));
+                                else {
+                                    splinePoints.add(missionItemPath.get(missionItemPath.size() - 1));
+                                }
+                            }
+                            break;
+
+                        default:
+                            splinePoints.addAll(missionItemPath);
+                            break;
+                    }
 
                     if (!splinePoints.isEmpty()) {
                         lastPoint = splinePoints.get(splinePoints.size() - 1);

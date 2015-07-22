@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
@@ -22,6 +23,7 @@ import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.gcs.follow.FollowState;
 import com.o3dr.services.android.lib.gcs.follow.FollowType;
+import com.o3dr.services.android.lib.model.SimpleCommandListener;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.FlightActivity;
@@ -336,9 +338,13 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment {
 
                 final int takeOffAltitude = getAppPrefs().getDefaultAltitude();
 
-                Drone drone = getDrone();
-                drone.doGuidedTakeoff(takeOffAltitude);
-                drone.changeVehicleMode(VehicleMode.COPTER_AUTO);
+                final Drone drone = getDrone();
+                VehicleApi.getApi(drone).takeoff(takeOffAltitude, new SimpleCommandListener(){
+                    @Override
+                    public void onSuccess(){
+                        VehicleApi.getApi(drone).setVehicleMode(VehicleMode.COPTER_AUTO);
+                    }
+                });
             }
         });
         unlockDialog.show(getChildFragmentManager(), "Slide to take off in auto");
