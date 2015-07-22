@@ -584,5 +584,10 @@
     <string name="label_type_plane">Plane</string>
     <string name="label_type_rover">Rover</string>
     <string name="label_type_unknown">Unknown</string>
+    <string name="mode_auto_current_command">Current command:</string>
+    <string name="mode_auto_estimated_finish">Estimated to finish:</string>
+    <string name="mission_control_label">Mission control:</string>
+    <string name="wp_speed">WP Speed:</string>
+    <string name="mission_progress">Mission progress:</string>
 
 </resources>
