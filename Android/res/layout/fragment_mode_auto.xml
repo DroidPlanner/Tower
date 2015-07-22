@@ -27,62 +27,50 @@
         android:animationResolution="@android:integer/config_shortAnimTime"
         android:progressBackgroundTint="@android:color/holo_blue_dark" />
 
-    <GridLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:rowCount="2"
-        android:columnCount="2"
-        android:useDefaultMargins="true"
-        android:paddingLeft="-5dp">
+        android:orientation="horizontal"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:background="@drawable/button_blue">
 
-        <ImageButton
+        <ImageView
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_blue"
-            android:src="@drawable/ic_pause_white_24dp"
-            android:id="@+id/mc_pause"
-            android:layout_row="0"
-            android:layout_column="0"
-            android:scaleType="fitCenter"
-            android:padding="5dp"
-            android:clickable="true" />
-
-        <ImageButton
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_blue"
-            android:src="@drawable/ic_replay_white_24dp"
-            android:id="@+id/mc_restart"
-            android:layout_row="0"
-            android:layout_column="1"
-            android:scaleType="fitCenter"
-            android:padding="5dp"
-            android:clickable="true" />
-
-        <ImageButton
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_blue"
             android:src="@drawable/ic_skip_previous_white_24dp"
             android:id="@+id/mc_prev"
-            android:layout_row="1"
-            android:layout_column="0"
             android:padding="5dp"
             android:clickable="true"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"/>
 
-        <ImageButton
+        <ImageView
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_blue"
+            android:src="@drawable/ic_pause_white_24dp"
+            android:id="@+id/mc_pause"
+            android:scaleType="fitCenter"
+            android:padding="5dp"
+            android:clickable="true" />
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_replay_white_24dp"
+            android:id="@+id/mc_restart"
+            android:scaleType="fitCenter"
+            android:padding="5dp"
+            android:clickable="true" />
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
             android:src="@drawable/ic_skip_next_white_24dp"
             android:id="@+id/mc_next"
-            android:layout_row="1"
-            android:layout_column="1"
             android:padding="5dp"
             android:clickable="true"
             android:scaleType="fitCenter" />
-    </GridLayout>
+    </LinearLayout>
 
 </LinearLayout>
 
