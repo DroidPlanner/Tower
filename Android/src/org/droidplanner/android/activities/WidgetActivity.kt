@@ -11,6 +11,8 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import com.o3dr.android.client.apis.CapabilityApi
 import com.o3dr.android.client.apis.SoloLinkApi
+import com.o3dr.android.client.apis.VehicleApi
+import com.o3dr.services.android.lib.coordinate.LatLong
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
 import org.droidplanner.android.R
 import org.droidplanner.android.activities.helpers.SuperUI
@@ -23,6 +25,15 @@ import kotlin.properties.Delegates
  * Created by Fredia Huya-Kouadio on 7/19/15.
  */
 public class WidgetActivity : SuperUI() {
+
+    private val guidedClickListener = object : FlightMapFragment.OnGuidedClickListener{
+
+        override fun onGuidedClick(coord: LatLong?) {
+            val drone = dpApp.getDrone()
+            if(drone != null)
+                VehicleApi.getApi(drone).sendGuidedPoint(coord, false)
+        }
+    }
 
     companion object {
         private val filter = initFilter()
@@ -176,6 +187,7 @@ public class WidgetActivity : SuperUI() {
     override fun onApiConnected(){
         super.onApiConnected()
         checkSoloLinkVideoSupport()
+        mapFragment?.setGuidedClickListener(guidedClickListener)
         getBroadcastManager().registerReceiver(receiver, filter)
     }
 
@@ -183,6 +195,8 @@ public class WidgetActivity : SuperUI() {
         super.onApiDisconnected()
         if(!isFinishing())
             checkSoloLinkVideoSupport()
+
+        mapFragment?.setGuidedClickListener(null)
         getBroadcastManager().unregisterReceiver(receiver)
     }
 

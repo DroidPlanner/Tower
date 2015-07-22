@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Matrix
 import android.graphics.SurfaceTexture
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -78,6 +79,7 @@ public class WidgetSoloLinkVideo : ApiListenerFragment() {
 
         textureView?.setSurfaceTextureListener(object : TextureView.SurfaceTextureListener{
             override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, width: Int, height: Int) {
+                adjustAspectRatio(textureView as TextureView);
                 Timber.d("Starting video stream with tag %s", TAG)
                 SoloLinkApi.getApi(drone).startVideoStream(Surface(surface), TAG, object : AbstractCommandListener(){
                     override fun onError(error: Int) {
@@ -128,5 +130,34 @@ public class WidgetSoloLinkVideo : ApiListenerFragment() {
             }
 
         })
+    }
+
+    private fun adjustAspectRatio(textureView: TextureView){
+        val viewWidth = textureView.getWidth()
+        val viewHeight = textureView.getHeight()
+        val aspectRatio: Float = 9f/16f
+
+        val newWidth: Int
+        val newHeight: Int
+        if(viewHeight > (viewWidth * aspectRatio)){
+            //limited by narrow width; restrict height
+            newWidth = viewWidth
+            newHeight = (viewWidth * aspectRatio).toInt()
+        }
+        else{
+            //limited by short height; restrict width
+            newWidth = (viewHeight / aspectRatio).toInt();
+            newHeight = viewHeight
+        }
+
+        val xoff = (viewWidth - newWidth) / 2f
+        val yoff = (viewHeight - newHeight) / 2f
+
+        val txform = Matrix();
+        textureView.getTransform(txform);
+        txform.setScale((newWidth.toFloat() / viewWidth), newHeight.toFloat() / viewHeight);
+
+        txform.postTranslate(xoff, yoff);
+        textureView.setTransform(txform);
     }
 }

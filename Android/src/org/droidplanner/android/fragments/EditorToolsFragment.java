@@ -850,8 +850,11 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
             Toast.makeText(editorToolsFragment.getContext(), "Click on mission items to select them.",
                     Toast.LENGTH_SHORT).show();
 
-            if (missionProxy != null)
+            if (missionProxy != null) {
                 missionProxy.selection.clearSelection();
+                final List<MissionItemProxy> missionItems = missionProxy.getItems();
+                editorToolsFragment.selectAll.setEnabled(!missionItems.isEmpty());
+            }
         }
 
         @Override
