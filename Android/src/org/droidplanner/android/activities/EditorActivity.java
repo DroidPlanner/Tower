@@ -560,6 +560,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
     @Override
     public void onSelectionUpdate(List<MissionItemProxy> selected) {
+        EditorToolsFragment.EditorToolsImpl toolImpl = getToolImpl();
+        toolImpl.onSelectionUpdate(selected);
+
         final boolean isEmpty = selected.isEmpty();
 
         if (isEmpty) {

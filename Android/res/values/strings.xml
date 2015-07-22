@@ -588,5 +588,6 @@
     <string name="vertical_speed_empty">vs: —</string>
     <string name="vertical_speed_telem">vs: %s</string>
     <string name="menu_kill_switch">Kill Switch</string>
+    <string name="label_clear_selected">Clear selected</string>
 
 </resources>

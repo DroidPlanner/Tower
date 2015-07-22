@@ -28,6 +28,7 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.SupportYesNoDialog;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
 import org.droidplanner.android.widgets.button.RadioButtonCenter;
@@ -112,7 +113,11 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
     private View editorSubTools;
     private Spinner drawItemsSpinner;
     private Spinner markerItemsSpinner;
+
+    private View clearSubOptions;
     private TextView clearMission;
+    private TextView clearSelected;
+
     private TextView selectAll;
 
     @Override
@@ -160,8 +165,14 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
         final RadioButtonCenter buttonTrash = (RadioButtonCenter) view.findViewById(R.id.editor_tools_trash);
         final TrashToolsImpl trashToolImpl = (TrashToolsImpl) editorToolsImpls[EditorTools.TRASH.ordinal()];
+
+        clearSubOptions = view.findViewById(R.id.clear_sub_options);
+
         clearMission = (TextView) view.findViewById(R.id.clear_mission_button);
         clearMission.setOnClickListener(trashToolImpl);
+
+        clearSelected = (TextView) view.findViewById(R.id.clear_selected_button);
+        clearSelected.setOnClickListener(trashToolImpl);
 
         final RadioButtonCenter buttonSelector = (RadioButtonCenter) view.findViewById(R.id.editor_tools_selector);
         final SelectorToolsImpl selectorToolImpl = (SelectorToolsImpl) editorToolsImpls[EditorTools.SELECTOR.ordinal()];
@@ -273,8 +284,8 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         if (selectAll != null)
             selectAll.setVisibility(View.GONE);
 
-        if (clearMission != null)
-            clearMission.setVisibility(View.GONE);
+        if (clearSubOptions != null)
+            clearSubOptions.setVisibility(View.GONE);
 
         if (markerItemsSpinner != null)
             markerItemsSpinner.setVisibility(View.GONE);
@@ -345,7 +356,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
             case TRASH:
                 editorSubTools.setVisibility(View.VISIBLE);
-                clearMission.setVisibility(View.VISIBLE);
+                clearSubOptions.setVisibility(View.VISIBLE);
                 break;
 
             case DRAW:
@@ -426,7 +437,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         }
     }
 
-    public static abstract class EditorToolsImpl {
+    public static abstract class EditorToolsImpl implements MissionSelection.OnSelectionUpdateListener {
 
         protected MissionProxy missionProxy;
         protected final EditorToolsFragment editorToolsFragment;
@@ -467,6 +478,11 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         public void onPathFinished(List<LatLong> path) {
         }
 
+        @Override
+        public void onSelectionUpdate(List<MissionItemProxy> selected){
+
+        }
+
         public abstract EditorTools getEditorTools();
 
         public abstract void setup();
@@ -486,7 +502,6 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
         private final static String EXTRA_SELECTED_MARKER_MISSION_ITEM_TYPE = "extra_selected_marker_mission_item_type";
 
-        private boolean wasSelected = false;
         private MissionItemType selectedType = MARKER_ITEMS_TYPE[0];
 
         MarkerToolsImpl(EditorToolsFragment fragment) {
@@ -544,7 +559,6 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             selectedType = (MissionItemType) parent.getItemAtPosition(position);
-            wasSelected = true;
         }
 
         @Override
@@ -699,6 +713,12 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         }
 
         @Override
+        public void onSelectionUpdate(List<MissionItemProxy> selected){
+            super.onSelectionUpdate(selected);
+            editorToolsFragment.clearSelected.setEnabled(!selected.isEmpty());
+        }
+
+        @Override
         public EditorTools getEditorTools() {
             return EditorTools.TRASH;
         }
@@ -713,9 +733,10 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
             if (missionProxy != null) {
                 List<MissionItemProxy> selected = missionProxy.selection.getSelected();
-                if (!selected.isEmpty()) {
-                    deleteSelectedItems();
-                }
+                editorToolsFragment.clearSelected.setEnabled(!selected.isEmpty());
+
+                final List<MissionItemProxy> missionItems = missionProxy.getItems();
+                editorToolsFragment.clearMission.setEnabled(!missionItems.isEmpty());
             }
         }
 
@@ -773,7 +794,15 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
         @Override
         public void onClick(View v) {
-            doClearMissionConfirmation();
+            switch(v.getId()){
+                case R.id.clear_mission_button:
+                    doClearMissionConfirmation();
+                    break;
+
+                case R.id.clear_selected_button:
+                    deleteSelectedItems();
+                    break;
+            }
         }
     }
 
