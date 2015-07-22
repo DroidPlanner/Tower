@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.fragments.ParamsFragment;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.actionbar.ActionBarTelemFragment;
 import org.droidplanner.android.fragments.control.BaseFlightControlFragment;
@@ -72,14 +73,31 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
 
             @Override
-            public void onDrawerClosed(View drawerView) {
-                switch (drawerView.getId()) {
-                    case R.id.navigation_drawer_container:
-                        if (mNavigationIntent != null) {
-                            startActivity(mNavigationIntent);
-                            mNavigationIntent = null;
+            public void onDrawerClosed(final View drawerView) {
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.configuration_screen);
+                if (fragment != null && fragment instanceof ParamsFragment) {
+                    ((ParamsFragment) fragment).finish(new Runnable() {
+                        @Override
+                        public void run() {
+                            switch (drawerView.getId()) {
+                                case R.id.navigation_drawer_container:
+                                    if (mNavigationIntent != null) {
+                                        startActivity(mNavigationIntent);
+                                        mNavigationIntent = null;
+                                    }
+                                    break;
+                            }
                         }
-                        break;
+                    });
+                } else {
+                    switch (drawerView.getId()) {
+                        case R.id.navigation_drawer_container:
+                            if (mNavigationIntent != null) {
+                                startActivity(mNavigationIntent);
+                                mNavigationIntent = null;
+                            }
+                            break;
+                    }
                 }
             }
         };

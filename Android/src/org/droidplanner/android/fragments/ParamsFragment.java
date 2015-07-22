@@ -1,5 +1,6 @@
 package org.droidplanner.android.fragments;
 
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -36,6 +37,7 @@ import com.o3dr.services.android.lib.drone.property.Parameters;
 import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.SupportEditInputDialog;
+import org.droidplanner.android.dialogs.SupportYesNoDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenParameterDialog;
 import org.droidplanner.android.dialogs.parameters.DialogParameterInfo;
@@ -416,5 +418,28 @@ public class ParamsFragment extends ApiListenerListFragment {
         }
 
         mLoadingProgress.setVisibility(View.GONE);
+    }
+
+    public void finish(final Runnable onFinish) {
+        final int adapterCount = adapter.getCount();
+        for (int i = 0; i < adapterCount; i++) {
+            final ParamsAdapterItem item = adapter.getItem(i);
+            if (item.isDirty()){
+                SupportYesNoDialog saveParamsDialog = SupportYesNoDialog.newInstance(getActivity().getApplicationContext(), getString(R.id.save_param_dialog_title), getString(R.id.save_param_dialog_message), new SupportYesNoDialog.Listener() {
+                    @Override
+                    public void onYes() {
+                        writeModifiedParametersToDrone();
+                        onFinish.run();
+                    }
+
+                    @Override
+                    public void onNo() {
+                        onFinish.run();
+                    }
+                });
+                saveParamsDialog.show(getFragmentManager(), getString(R.id.save_param_dialog_title));
+                break;
+            }
+        }
     }
 }
