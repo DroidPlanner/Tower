@@ -175,6 +175,12 @@ public class ParamsFragment extends ApiListenerListFragment {
                 return true;
             }
         });
+        searchParams.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchParams.findViewById(android.support.v7.appcompat.R.id.search_button).callOnClick();
+            }
+        });
 
         mLoadingProgress = (ProgressBar) view.findViewById(R.id.reload_progress);
         mLoadingProgress.setVisibility(View.GONE);
