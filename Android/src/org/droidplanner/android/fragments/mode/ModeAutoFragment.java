@@ -94,7 +94,6 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
     };
     private Mission mission;
 
-    private TextView waypointSpeed;
     private ProgressBar missionProgress;
 
 
@@ -110,9 +109,6 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
         view.findViewById(R.id.mc_restart).setOnClickListener(this);
         view.findViewById(R.id.mc_next).setOnClickListener(this);
         view.findViewById(R.id.mc_prev).setOnClickListener(this);
-        view.findViewById(R.id.wp_speed_plus).setOnClickListener(this);
-        view.findViewById(R.id.wp_speed_minus).setOnClickListener(this);
-        waypointSpeed = (TextView) view.findViewById(R.id.wp_speed);
         missionProgress = (ProgressBar) view.findViewById(R.id.mission_progress);
     }
 
@@ -149,12 +145,6 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
                 ExperimentalApi.sendMavlinkMessage(drone, new MavlinkMessageWrapper(msg));
                 break;
             }
-			case R.id.wp_speed_plus:
-                changeWaypointSpeedBy(100.0);
-				break;
-			case R.id.wp_speed_minus:
-                changeWaypointSpeedBy(-100.0);
-				break;
 		}
 	}
 
@@ -211,7 +201,6 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
 
     private void updateWaypointSpeed(double speed) {
         Timber.i("speed set to: %f ", speed);
-        waypointSpeed.setText("(" + speed/100 + "m/s)");
     }
 
     private void changeWaypointSpeedBy(final double delta){
