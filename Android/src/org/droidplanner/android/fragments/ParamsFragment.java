@@ -118,6 +118,7 @@ public class ParamsFragment extends ApiListenerListFragment {
      * If the parameters were loaded from a file, the filename is stored here.
      */
     private String openedParamsFilename;
+    private View searchButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -175,10 +176,11 @@ public class ParamsFragment extends ApiListenerListFragment {
                 return true;
             }
         });
+        searchButton = searchParams.findViewById(android.support.v7.appcompat.R.id.search_button);
         searchParams.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchParams.findViewById(android.support.v7.appcompat.R.id.search_button).callOnClick();
+                searchButton.callOnClick();
             }
         });
 
