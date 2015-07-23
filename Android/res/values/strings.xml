@@ -514,6 +514,7 @@
     <string name="pref_licenses">Licenses</string>
     <string name="pref_licenses_summary">Libraries (and their licenses) used in this project</string>
     <string name="upload_params">Upload parameters</string>
+    <string name="upload">Upload</string>
     <string name="download_params">Download parameters</string>
     <string name="import_from_device">Import from file</string>
     <string name="export_to_device">Export to file</string>
@@ -589,5 +590,6 @@
     <string name="vertical_speed_telem">vs: %s</string>
     <string name="menu_kill_switch">Kill Switch</string>
     <string name="label_clear_selected">Clear selected</string>
+    <string name="unsaved_param_warning">You have unsaved changes</string>
 
 </resources>
