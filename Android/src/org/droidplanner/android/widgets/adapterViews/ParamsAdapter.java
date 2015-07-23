@@ -30,7 +30,7 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 	}
 
 	public interface OnParametersChangeListener {
-		void onParameterChange(int dirtyCount);
+		void onParametersChange(int dirtyCount);
 	}
 
     private final static DecimalFormat formatter = (DecimalFormat) DecimalFormat.getInstance();
@@ -46,7 +46,7 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 
 	private View focusView;
 	private OnInfoListener onInfoListener;
-	private OnParametersChangeListener onParameterChangeListener;
+	private OnParametersChangeListener onParametersChangeListener;
 
 	public ParamsAdapter(Context context, int resource) {
 		this(context, resource, new ArrayList<ParamsAdapterItem>());
@@ -71,8 +71,8 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 		this.onInfoListener = onInfoListener;
 	}
 
-	public void setOnParameterChangeListener(OnParametersChangeListener onParameterChangeListener){
-		this.onParameterChangeListener = onParameterChangeListener;
+	public void setOnParametersChangeListener(OnParametersChangeListener onParametersChangeListener){
+		this.onParametersChangeListener = onParametersChangeListener;
 	}
 
 	@Override
@@ -294,8 +294,8 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
             }else if(!dirtyValue && item.isDirty()){
                 dirtyCount++;
             }
-			if(onParameterChangeListener != null) {
-				onParameterChangeListener.onParameterChange(dirtyCount);
+			if(onParametersChangeListener != null) {
+				onParametersChangeListener.onParametersChange(dirtyCount);
             }
 
 			setAppearance(item);

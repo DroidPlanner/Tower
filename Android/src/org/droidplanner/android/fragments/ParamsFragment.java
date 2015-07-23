@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.Space;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -17,9 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -31,7 +28,6 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Parameter;
 import com.o3dr.services.android.lib.drone.property.Parameters;
 
-import org.beyene.sius.dimension.Dimension;
 import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.SupportEditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
@@ -150,12 +146,12 @@ public class ParamsFragment extends ApiListenerListFragment {
                 showInfo(position, valueView);
             }
         });
-        adapter.setOnParameterChangeListener(new ParamsAdapter.OnParametersChangeListener() {
+        adapter.setOnParametersChangeListener(new ParamsAdapter.OnParametersChangeListener() {
             @Override
-            public void onParameterChange(int dirtyCount) {
-                if(dirtyCount > 0){
+            public void onParametersChange(int dirtyCount) {
+                if (dirtyCount > 0) {
                     View view = getView();
-                    if(view != null && snackbar == null) {
+                    if (view != null && snackbar == null) {
                         snackbar = Snackbar.make(view, R.string.unsaved_param_warning, Snackbar.LENGTH_INDEFINITE)
                                 .setAction(getString(R.string.upload), new View.OnClickListener() {
                                     @Override
@@ -166,7 +162,7 @@ public class ParamsFragment extends ApiListenerListFragment {
                         snackbar.show();
                     }
 
-                }else{
+                } else {
                     snackbar.dismiss();
                     snackbar = null;
                 }
