@@ -24,7 +24,7 @@ dependencies {
     compile files('libs/j2xx.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
     compile files('libs/jeromq-0.3.4.jar')
-    compile files('libs/sius-0.3.2-SNAPSHOT.jar')
+    compile files('libs/sius-0.3.0-SNAPSHOT.jar')
 
     compile 'com.squareup.okhttp:okhttp:2.3.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.3.0'
