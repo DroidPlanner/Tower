@@ -8,10 +8,12 @@ import android.graphics.Matrix
 import android.graphics.SurfaceTexture
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.GestureDetectorCompat
 import android.view.*
 import android.widget.TextView
 import com.o3dr.android.client.apis.CapabilityApi
 import com.o3dr.android.client.apis.CapabilityApi.FeatureIds
+import com.o3dr.android.client.apis.GimbalApi
 import com.o3dr.android.client.apis.SoloLinkApi
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
 import com.o3dr.services.android.lib.model.AbstractCommandListener
@@ -47,6 +49,14 @@ public class WidgetSoloLinkVideo : ApiListenerFragment() {
 
     private val videoStatus by Delegates.lazy {
         getView()?.findViewById(R.id.sololink_video_status) as TextView?
+    }
+
+    private val gestureDetector by Delegates.lazy {
+        GestureDetectorCompat(getActivity().getApplicationContext(), object : GestureDetector.SimpleOnGestureListener(){
+            override fun onFling(e1 : MotionEvent, e2 : MotionEvent, vX : Float, vY : Float) : Boolean{
+                return true
+            }
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
