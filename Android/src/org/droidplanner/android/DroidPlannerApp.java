@@ -196,7 +196,8 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
     public void removeApiListener(ApiListener listener) {
         if (listener != null) {
             apiListeners.remove(listener);
-            listener.onApiDisconnected();
+            if(controlTower.isTowerConnected())
+                listener.onApiDisconnected();
         }
 
         shouldWeTerminate();

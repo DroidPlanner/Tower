@@ -16,6 +16,7 @@ import com.o3dr.services.android.lib.drone.mission.item.command.ReturnToLaunch;
 import com.o3dr.services.android.lib.drone.mission.item.command.SetServo;
 import com.o3dr.services.android.lib.drone.mission.item.command.Takeoff;
 import com.o3dr.services.android.lib.drone.mission.item.command.YawCondition;
+import com.o3dr.services.android.lib.drone.mission.item.complex.SplineSurvey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.Circle;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.Land;
@@ -148,7 +149,9 @@ public class MissionItemListAdapter extends ReorderRecyclerView.ReorderAdapter<M
         // Complex item's icons
         // TODO CameraDetail (inconvertible type) and StructureScanner (condition always false) WPs
         } else if (missionItem instanceof MissionItem.ComplexItem) {
-            if (missionItem instanceof Survey) {
+            if (missionItem instanceof SplineSurvey) {
+                leftDrawable = R.drawable.ic_mission_spline_survey_wp;
+            } else if (missionItem instanceof Survey) {
                 leftDrawable = R.drawable.ic_mission_survey_wp;
             } else {
                 leftDrawable = R.drawable.ic_mission_command_wp;

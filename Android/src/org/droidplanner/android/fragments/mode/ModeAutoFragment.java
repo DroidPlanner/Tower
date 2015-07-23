@@ -1,12 +1,8 @@
 package org.droidplanner.android.fragments.mode;
 
-import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
-import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.proxy.mission.MissionProxy;
-import org.droidplanner.android.utils.unit.UnitManager;
-import org.w3c.dom.Text;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -21,22 +17,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.MAVLink.common.msg_command_int;
-import com.MAVLink.common.msg_command_long;
-import com.MAVLink.common.msg_mission_set_current;
-import com.MAVLink.common.msg_set_mode;
-import com.MAVLink.enums.MAV_CMD;
-import com.MAVLink.enums.MAV_FRAME;
-import com.MAVLink.enums.MAV_GOTO;
-import com.MAVLink.enums.MAV_MODE;
-import com.google.android.gms.maps.model.LatLng;
 import com.o3dr.android.client.Drone;
-import com.o3dr.android.client.apis.drone.DroneStateApi;
-import com.o3dr.android.client.apis.drone.ExperimentalApi;
-import com.o3dr.android.client.apis.drone.ParameterApi;
+import com.o3dr.android.client.apis.MissionApi;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
@@ -45,9 +28,6 @@ import com.o3dr.services.android.lib.drone.mission.Mission;
 import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.Parameter;
 import com.o3dr.services.android.lib.drone.property.Parameters;
-import com.o3dr.services.android.lib.drone.property.VehicleMode;
-import com.o3dr.services.android.lib.mavlink.MavlinkMessageWrapper;
-import com.o3dr.services.android.lib.model.action.Action;
 import com.o3dr.services.android.lib.util.MathUtils;
 
 import java.util.List;
@@ -64,6 +44,7 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
         eventFilter.addAction(AttributeEvent.PARAMETER_RECEIVED);
         eventFilter.addAction(AttributeEvent.GPS_POSITION);
         eventFilter.addAction(AttributeEvent.AUTOPILOT_MESSAGE);
+        eventFilter.addAction(AttributeEvent.MISSION_ITEM_REACHED);
     }
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
@@ -71,12 +52,16 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
             final String action = intent.getAction();
             switch (action){
                 case AttributeEvent.MISSION_ITEM_UPDATED:
-                    mission = drone.getAttribute(AttributeType.MISSION);
-                    int currentWaypoint = intent.getIntExtra(AttributeEventExtra.EXTRA_MISSION_CURRENT_WAYPOINT, 0);
-                    mission.setCurrentMissionItem(currentWaypoint);
+                    nextWaypoint = intent.getIntExtra(AttributeEventExtra.EXTRA_MISSION_CURRENT_WAYPOINT, 0);
                 case AttributeEvent.GPS_POSITION:
                     updateMission();
                     break;
+
+                case AttributeEvent.MISSION_ITEM_REACHED:
+                    mission = drone.getAttribute(AttributeType.MISSION);
+                    int currentMissionItem = intent.getIntExtra(AttributeEventExtra.EXTRA_MISSION_CURRENT_MISSION_ITEM, 0);
+                    mission.setCurrentMissionItem(currentMissionItem);
+                    updateMission();
 
                 case AttributeEvent.PARAMETER_RECEIVED:
                     String paramName = intent.getStringExtra(AttributeEventExtra.EXTRA_PARAMETER_NAME);
@@ -93,7 +78,7 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
         }
     };
     private Mission mission;
-
+    private int nextWaypoint;
     private ProgressBar missionProgress;
 
 
@@ -125,24 +110,15 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
                 break;
             }
 			case R.id.mc_restart: {
-                if(mission.getCurrentMissionItem() == mission.getMissionItems().size()){
-                    resetAutoMode();
-                }
-                msg_mission_set_current msg = new msg_mission_set_current();
-                msg.seq = 0;
-                ExperimentalApi.sendMavlinkMessage(drone, new MavlinkMessageWrapper(msg));
+                MissionApi.getApi(drone).gotoMissionItem(0, 1, null);
                 break;
             }
 			case R.id.mc_next: {
-                msg_mission_set_current msg = new msg_mission_set_current();
-                msg.seq = mission.getCurrentMissionItem() + 1;
-                ExperimentalApi.sendMavlinkMessage(drone, new MavlinkMessageWrapper(msg));
+                MissionApi.getApi(drone).gotoMissionItem(mission.getCurrentMissionItem() + 1, 1, null);
                 break;
             }
 			case R.id.mc_prev: {
-                msg_mission_set_current msg = new msg_mission_set_current();
-                msg.seq = mission.getCurrentMissionItem() - 1;
-                ExperimentalApi.sendMavlinkMessage(drone, new MavlinkMessageWrapper(msg));
+                MissionApi.getApi(drone).gotoMissionItem(mission.getCurrentMissionItem() - 1, 1, null);
                 break;
             }
 		}
@@ -160,20 +136,6 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(eventReceiver);
     }
 
-    public void resetAutoMode(){
-        new Thread(){
-            public void run(){
-                DroneStateApi.setVehicleMode(drone, VehicleMode.COPTER_BRAKE);
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                DroneStateApi.setVehicleMode(drone, VehicleMode.COPTER_AUTO);
-            }
-        }.start();
-    }
-
 
 
     private void updateMission(){
@@ -184,10 +146,9 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
             return;
         MissionProxy proxy= ((DroidPlannerApp)getActivity().getApplication()).getMissionProxy();
         int missionSize = proxy.getPathPoints().size();
-        int currentItem = mission.getCurrentMissionItem();
         LatLong dronePos = gps.getPosition();
         int offset = mission.getMissionItems().size() - missionSize + 1;
-        List<LatLong> remainingMission = proxy.getPathPoints().subList(Math.max(currentItem -offset,0), missionSize);
+        List<LatLong> remainingMission = proxy.getPathPoints().subList(Math.max(nextWaypoint -offset,0), missionSize);
         double remainingLength = MathUtils.getDistance2D(dronePos, remainingMission.get(0));
         for (int i = 1; i < remainingMission.size(); i ++){
             remainingLength += MathUtils.getDistance2D(remainingMission.get(i-1), remainingMission.get(i));
@@ -202,47 +163,6 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
     private void updateWaypointSpeed(double speed) {
         Timber.i("speed set to: %f ", speed);
     }
-
-    private void changeWaypointSpeedBy(final double delta){
-        drone.getAttributeAsync(AttributeType.PARAMETERS, new Drone.OnAttributeRetrievedCallback<Parcelable>() {
-            @Override
-            public void onRetrievalSucceed(Parcelable parcelable) {
-                Parameters params = (Parameters) parcelable;
-                Parameter speed = params.getParameter(WPNAV_SPEED);
-                speed.setValue(speed.getValue() + delta);
-                List<Parameter> parameters = params.getParameters();
-                parameters.set(parameters.indexOf(speed), speed);
-                params.setParametersList(parameters);
-                ParameterApi.writeParameters(drone, params);
-            }
-
-            @Override
-            public void onRetrievalFailed() {
-
-            }
-        });
-    }
-
-    private void setWaypointSpeed(final double value){
-        drone.getAttributeAsync(AttributeType.PARAMETERS, new Drone.OnAttributeRetrievedCallback<Parcelable>() {
-            @Override
-            public void onRetrievalSucceed(Parcelable parcelable) {
-                Parameters params = (Parameters) parcelable;
-                Parameter speed = params.getParameter(WPNAV_SPEED);
-                speed.setValue(value);
-                List<Parameter> parameters = params.getParameters();
-                parameters.set(parameters.indexOf(speed), speed);
-                params.setParametersList(parameters);
-                ParameterApi.writeParameters(drone, params);
-            }
-
-            @Override
-            public void onRetrievalFailed() {
-
-            }
-        });
-    }
-
 
     @Override
 	public void onAttach(Activity activity) {
