@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="145dp"
+    android:layout_width="150dp"
     android:layout_height="wrap_content"
     android:layout_gravity="end"
     android:paddingEnd="10dp"
@@ -34,8 +34,9 @@
                     android:layout_marginBottom="2dp"
                     android:background="@drawable/round_rect_bg"
                     android:drawableLeft="@drawable/yaw_icon"
+                    android:drawableStart="@drawable/yaw_icon"
                     android:focusable="true"
-                    android:gravity="left|center_vertical"
+                    android:gravity="start|center_vertical"
                     android:text="@string/default_angle_value"
                     android:textSize="16sp" />
 
@@ -50,8 +51,9 @@
                     android:layout_marginBottom="2dp"
                     android:background="@drawable/round_rect_bg"
                     android:drawableLeft="@drawable/pitch_icon"
+                    android:drawableStart="@drawable/pitch_icon"
                     android:drawablePadding="2dp"
-                    android:gravity="left|center_vertical"
+                    android:gravity="start|center_vertical"
                     android:text="@string/default_angle_value"
                     android:textSize="16sp" />
 
@@ -66,8 +68,9 @@
                     android:layout_marginBottom="2dp"
                     android:background="@drawable/round_rect_bg"
                     android:drawableLeft="@drawable/roll_icon"
+                    android:drawableStart="@drawable/roll_icon"
                     android:drawablePadding="2dp"
-                    android:gravity="left|center_vertical"
+                    android:gravity="start|center_vertical"
                     android:text="@string/default_angle_value"
                     android:textSize="16sp" />
 
@@ -78,6 +81,7 @@
                     android:layout_alignBottom="@+id/rollValueText"
                     android:layout_alignTop="@+id/yawValueText"
                     android:layout_toRightOf="@+id/yawValueText"
+                    android:layout_toEndOf="@+id/yawValueText"
                     tools:ignore="ContentDescription" />
 
             </RelativeLayout>
@@ -99,9 +103,10 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
-                android:padding="5dp">
+                android:padding="8dp">
 
-                <TextView
+                <me.grantland.widget.AutofitTextView
+                    android:singleLine="true"
                     android:id="@+id/horizontal_speed_telem"
                     style="@style/largeTelemetryText"
                     android:layout_width="wrap_content"
@@ -109,9 +114,8 @@
                     android:drawableLeft="@drawable/debug_step_over"
                     android:drawablePadding="10dp"
                     android:drawableStart="@drawable/debug_step_over"
-                    android:padding="5dp"
                     android:text="@string/horizontal_speed_empty"
-                    tools:text="hs: 1000 m/s" />
+                    tools:text="hs: 1000 mph" />
 
                 <View
                     android:layout_width="match_parent"
@@ -119,17 +123,17 @@
                     android:layout_margin="5dp"
                     android:background="@color/light_grey" />
 
-                <TextView
+                <me.grantland.widget.AutofitTextView
                     android:id="@+id/vertical_speed_telem"
                     style="@style/largeTelemetryText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/debug_step_out"
                     android:drawablePadding="10dp"
+                    android:singleLine="true"
                     android:drawableStart="@drawable/debug_step_out"
-                    android:padding="5dp"
                     android:text="@string/vertical_speed_empty"
-                    tools:text="vs: 1000 m/s" />
+                    tools:text="vs: 1000 mph" />
 
             </LinearLayout>
 
@@ -149,7 +153,7 @@
 
             <TextureView
                 android:id="@+id/minimized_video"
-                android:layout_width="140dp"
+                android:layout_width="145dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center"
                  />
