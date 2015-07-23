@@ -11,6 +11,6 @@ import org.beyene.sius.unit.composition.speed.SpeedUnit;
 public class ImperialSpeedUnitProvider extends SpeedUnitProvider {
     @Override
     public SpeedUnit fromBaseToTarget(MeterPerSecond base) {
-        return Operation.convert(base, UnitIdentifier.FOOT_PER_SECOND);
+        return Operation.convert(base, UnitIdentifier.MILES_PER_HOUR);
     }
 }
