@@ -313,7 +313,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final Signal droneSignal = drone.getAttribute(AttributeType.SIGNAL);
         if(!drone.isConnected() || !droneSignal.isValid()){
             signalTelem.setText(emptyString);
-            signalTelem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_signal_wifi_off_grey_700_18dp,
+            signalTelem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_signal_0_bar_24dp,
                     0, 0, 0);
 
             rssiView.setText("RSSI: " + emptyString);
@@ -328,15 +328,17 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                     droneSignal.getRemFadeMargin());
             final int signalIcon;
             if (signalStrength >= 100)
-                signalIcon = R.drawable.ic_signal_wifi_4_bar_grey_700_18dp;
-            else if (signalStrength >= 75)
-                signalIcon = R.drawable.ic_signal_wifi_3_bar_grey_700_18dp;
-            else if (signalStrength >= 50)
-                signalIcon = R.drawable.ic_signal_wifi_2_bar_grey_700_18dp;
-            else if (signalStrength >= 25)
-                signalIcon = R.drawable.ic_signal_wifi_1_bar_grey_700_18dp;
+                signalIcon = R.drawable.ic_signal_5_bar_24dp;
+            else if (signalStrength >= 80)
+                signalIcon = R.drawable.ic_signal_4_bar_24dp;
+            else if (signalStrength >= 60)
+                signalIcon = R.drawable.ic_signal_3_bar_24dp;
+            else if (signalStrength >= 40)
+                signalIcon = R.drawable.ic_signal_2_bar_24dp;
+            else if(signalStrength >= 20)
+                signalIcon = R.drawable.ic_signal_1_bar_24dp;
             else
-                signalIcon = R.drawable.ic_signal_wifi_0_bar_grey_700_18dp;
+                signalIcon = R.drawable.ic_signal_0_bar_24dp;
 
             signalTelem.setText(String.format(Locale.ENGLISH, "%d%%", signalStrength));
             signalTelem.setCompoundDrawablesWithIntrinsicBounds(signalIcon, 0, 0, 0);
