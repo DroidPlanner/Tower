@@ -15,6 +15,7 @@ import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.mission.item.complex.SplineSurvey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
@@ -32,22 +33,18 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MissionDetailFragment extends ApiListenerDialogFragment implements SpinnerSelfSelect
-        .OnSpinnerItemSelectedListener {
-
-    private static final String TAG = MissionDetailFragment.class.getSimpleName();
+public class MissionDetailFragment extends ApiListenerDialogFragment {
 
     protected int MIN_ALTITUDE; // meter
     protected int MAX_ALTITUDE; // meters
 
-    public static final List<MissionItemType> typeWithNoMultiEditSupport = new
-            ArrayList<MissionItemType>();
-
+    public static final List<MissionItemType> typeWithNoMultiEditSupport = new  ArrayList<>();
     static {
         typeWithNoMultiEditSupport.add(MissionItemType.LAND);
         typeWithNoMultiEditSupport.add(MissionItemType.TAKEOFF);
         typeWithNoMultiEditSupport.add(MissionItemType.RETURN_TO_LAUNCH);
         typeWithNoMultiEditSupport.add(MissionItemType.SURVEY);
+        typeWithNoMultiEditSupport.add(MissionItemType.SPLINE_SURVEY);
     }
 
     private static final MissionItemType[] SUPPORTED_MISSION_ITEM_TYPES = {
@@ -63,7 +60,8 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
             MissionItemType.CAMERA_TRIGGER,
             MissionItemType.EPM_GRIPPER,
             MissionItemType.YAW_CONDITION,
-            MissionItemType.SET_SERVO
+            MissionItemType.SET_SERVO,
+            MissionItemType.SPLINE_SURVEY
     };
 
     public interface OnMissionDetailListener {
@@ -85,6 +83,86 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
         public void onWaypointTypeChanged(MissionItemType newType, List<Pair<MissionItemProxy,
                 List<MissionItemProxy>>> oldNewItemsList);
     }
+
+    private final SpinnerSelfSelect.OnSpinnerItemSelectedListener missionItemSpinnerListener = new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {
+        @Override
+        public void onSpinnerItemSelected(Spinner spinner, int position) {
+            final MissionItemType selectedType = commandAdapter.getItem(position);
+
+            try {
+                if (mSelectedProxies.isEmpty())
+                    return;
+
+                final List<Pair<MissionItemProxy, List<MissionItemProxy>>> updatesList = new ArrayList<>(
+                        mSelectedProxies.size());
+
+                for (MissionItemProxy missionItemProxy : mSelectedProxies) {
+                    final MissionItem oldItem = missionItemProxy.getMissionItem();
+                    final MissionItemType previousType = oldItem.getType();
+
+                    if (previousType != selectedType) {
+                        final List<MissionItemProxy> newItems = new ArrayList<>();
+
+                        if (previousType == MissionItemType.SURVEY || previousType == MissionItemType.SPLINE_SURVEY) {
+                            switch(selectedType){
+                                case SURVEY: {
+                                    final Survey newItem = new Survey((Survey)oldItem);
+                                    newItems.add(new MissionItemProxy(mMissionProxy, newItem));
+                                    break;
+                                }
+
+                                case SPLINE_SURVEY: {
+                                    final SplineSurvey newItem = new SplineSurvey((Survey) oldItem);
+                                    newItems.add(new MissionItemProxy(mMissionProxy, newItem));
+                                    break;
+                                }
+
+                                default: {
+                                    final Survey previousSurvey = (Survey) oldItem;
+                                    final SurveyDetail surveyDetail = previousSurvey.getSurveyDetail();
+                                    final double altitude = surveyDetail == null
+                                            ? mMissionProxy.getLastAltitude()
+                                            : surveyDetail.getAltitude();
+
+                                    final List<LatLong> polygonPoints = previousSurvey.getPolygonPoints();
+                                    for (LatLong coordinate : polygonPoints) {
+                                        final MissionItem newItem = selectedType.getNewItem();
+                                        if (newItem instanceof MissionItem.SpatialItem) {
+                                            ((MissionItem.SpatialItem) newItem).setCoordinate(new LatLongAlt(coordinate
+                                                    .getLatitude(), coordinate.getLongitude(), altitude));
+                                        }
+
+                                        newItems.add(new MissionItemProxy(mMissionProxy, newItem));
+                                    }
+                                    break;
+                                }
+                            }
+
+                        } else {
+                            final MissionItem newItem = selectedType.getNewItem();
+
+                            if (oldItem instanceof MissionItem.SpatialItem && newItem instanceof
+                                    MissionItem.SpatialItem) {
+                                ((MissionItem.SpatialItem) newItem).setCoordinate(((MissionItem
+                                        .SpatialItem) oldItem).getCoordinate());
+                            }
+
+                            newItems.add(new MissionItemProxy(mMissionProxy, newItem));
+                        }
+
+                        updatesList.add(Pair.create(missionItemProxy, newItems));
+                    }
+                }
+
+                if (!updatesList.isEmpty()) {
+                    mListener.onWaypointTypeChanged(selectedType, updatesList);
+                    dismiss();
+                }
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     protected int getResource() {
         return R.layout.fragment_editor_detail_generic;
@@ -116,8 +194,11 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
             case RETURN_TO_LAUNCH:
                 fragment = new MissionRTLFragment();
                 break;
+            case SPLINE_SURVEY:
+                fragment = new MissionSurveyFragment<SplineSurvey>();
+                break;
             case SURVEY:
-                fragment = new MissionSurveyFragment();
+                fragment = new MissionSurveyFragment<>();
                 break;
             case TAKEOFF:
                 fragment = new MissionTakeoffFragment();
@@ -184,8 +265,10 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
             if (currentItem instanceof Survey) {
                 list.clear();
                 list.add(MissionItemType.SURVEY);
+                list.add(MissionItemType.SPLINE_SURVEY);
             } else {
                 list.remove(MissionItemType.SURVEY);
+                list.remove(MissionItemType.SPLINE_SURVEY);
             }
 
             if ((currentItem instanceof StructureScanner)) {
@@ -240,6 +323,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
                 list.remove(MissionItemType.WAYPOINT);
                 list.remove(MissionItemType.STRUCTURE_SCANNER);
                 list.remove(MissionItemType.SURVEY);
+                list.remove(MissionItemType.SPLINE_SURVEY);
             }
 
             if (hasSpatialOrComplexItems(mSelectedProxies)) {
@@ -282,7 +366,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
 
         typeSpinner = (SpinnerSelfSelect) view.findViewById(R.id.spinnerWaypointType);
         typeSpinner.setAdapter(commandAdapter);
-        typeSpinner.setOnSpinnerItemSelectedListener(this);
+        typeSpinner.setOnSpinnerItemSelectedListener(missionItemSpinnerListener);
     }
 
     private boolean hasCommandItems(List<MissionItemProxy> items) {
@@ -339,66 +423,6 @@ public class MissionDetailFragment extends ApiListenerDialogFragment implements 
         super.onDismiss(dialog);
         if (mListener != null) {
             mListener.onDetailDialogDismissed(mSelectedProxies);
-        }
-    }
-
-    @Override
-    public void onSpinnerItemSelected(Spinner spinner, int position) {
-        final MissionItemType selectedType = commandAdapter.getItem(position);
-
-        try {
-            if (mSelectedProxies.isEmpty())
-                return;
-
-            final List<Pair<MissionItemProxy, List<MissionItemProxy>>> updatesList = new ArrayList<>(
-                    mSelectedProxies.size());
-
-            for (MissionItemProxy missionItemProxy : mSelectedProxies) {
-                final MissionItem oldItem = missionItemProxy.getMissionItem();
-                final MissionItemType previousType = oldItem.getType();
-
-                if (previousType != selectedType) {
-                    final List<MissionItemProxy> newItems = new ArrayList<>();
-
-                    if (previousType == MissionItemType.SURVEY) {
-                        final Survey previousSurvey = (Survey) oldItem;
-                        final SurveyDetail surveyDetail = previousSurvey.getSurveyDetail();
-                        final double altitude = surveyDetail == null
-                                ? mMissionProxy.getLastAltitude()
-                                : surveyDetail.getAltitude();
-
-                        final List<LatLong> polygonPoints = previousSurvey.getPolygonPoints();
-                        for (LatLong coordinate : polygonPoints) {
-                            final MissionItem newItem = selectedType.getNewItem();
-                            if (newItem instanceof MissionItem.SpatialItem) {
-                                ((MissionItem.SpatialItem) newItem).setCoordinate(new LatLongAlt(coordinate
-                                        .getLatitude(), coordinate.getLongitude(), altitude));
-                            }
-
-                            newItems.add(new MissionItemProxy(mMissionProxy, newItem));
-                        }
-                    } else {
-                        final MissionItem newItem = selectedType.getNewItem();
-
-                        if (oldItem instanceof MissionItem.SpatialItem && newItem instanceof
-                                MissionItem.SpatialItem) {
-                            ((MissionItem.SpatialItem) newItem).setCoordinate(((MissionItem
-                                    .SpatialItem) oldItem).getCoordinate());
-                        }
-
-                        newItems.add(new MissionItemProxy(mMissionProxy, newItem));
-                    }
-
-                    updatesList.add(Pair.create(missionItemProxy, newItems));
-                }
-            }
-
-            if (!updatesList.isEmpty()) {
-                mListener.onWaypointTypeChanged(selectedType, updatesList);
-                dismiss();
-            }
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
         }
     }
 }

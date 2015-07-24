@@ -27,6 +27,35 @@ public class GoogleMapPrefFragment : MapProviderPreferences() {
 
     companion object PrefManager {
 
+        val DEFAULT_TILE_PROVIDER = GOOGLE_TILE_PROVIDER
+
+        val MAP_TYPE_SATELLITE = "satellite"
+        val MAP_TYPE_HYBRID = "hybrid"
+        val MAP_TYPE_NORMAL = "normal"
+        val MAP_TYPE_TERRAIN = "terrain"
+
+        val PREF_TILE_PROVIDERS = "pref_google_map_tile_providers"
+
+        val PREF_GOOGLE_TILE_PROVIDER_SETTINGS = "pref_google_tile_provider_settings"
+
+        val PREF_MAP_TYPE = "pref_map_type"
+        val DEFAULT_MAP_TYPE = MAP_TYPE_SATELLITE
+
+        val PREF_MAPBOX_TILE_PROVIDER_SETTINGS = "pref_mapbox_tile_provider_settings"
+
+        val PREF_MAPBOX_MAP_DOWNLOAD = "pref_mapbox_map_download"
+
+        val PREF_DOWNLOAD_MENU_OPTION = "pref_download_menu_option"
+        val DEFAULT_DOWNLOAD_MENU_OPTION = false
+
+        val PREF_MAPBOX_ID = "pref_mapbox_id"
+        val PREF_MAPBOX_ACCESS_TOKEN = "pref_mapbox_access_token"
+
+        val PREF_MAPBOX_LEARN_MORE = "pref_mapbox_learn_more"
+
+        val PREF_ENABLE_OFFLINE_LAYER = "pref_enable_offline_map_layer"
+        val DEFAULT_OFFLINE_LAYER_ENABLED = false
+
         fun getMapType(context: Context?): Int {
             var mapType = GoogleMap.MAP_TYPE_SATELLITE
             context?.let {

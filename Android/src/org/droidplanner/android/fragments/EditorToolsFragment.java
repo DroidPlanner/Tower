@@ -5,22 +5,20 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.PopupWindow;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
@@ -28,9 +26,9 @@ import com.o3dr.services.android.lib.drone.mission.item.spatial.BaseSpatialItem;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.SupportYesNoDialog;
-import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
 import org.droidplanner.android.widgets.button.RadioButtonCenter;
@@ -68,14 +66,23 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
     static {
         eventFilter.addAction(AttributeEvent.MISSION_RECEIVED);
+        eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
+        eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if (AttributeEvent.MISSION_RECEIVED.equals(action)) {
-                setTool(tool, false);
+            switch (action) {
+                case AttributeEvent.MISSION_RECEIVED:
+                    setTool(tool, false);
+                    break;
+
+                case AttributeEvent.STATE_CONNECTED:
+                case AttributeEvent.STATE_DISCONNECTED:
+                    updateDroneConnectedLogo();
+                    break;
             }
         }
     };
@@ -95,17 +102,23 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         editorToolsImpls[EditorTools.NONE.ordinal()] = new NoneToolsImpl(this);
     }
 
+    private ImageView droneConnectedLogo;
+
     private EditorToolListener listener;
     private RadioGroup mEditorRadioGroup;
     private EditorTools tool = DEFAULT_TOOL;
     private MissionProxy mMissionProxy;
 
-    private PopupWindow trashPopup;
-    private PopupWindow selectorPopup;
-    private PopupWindow drawPopup;
-    private PopupWindow markerPopup;
+    //Sub action views
+    private View editorSubTools;
+    private Spinner drawItemsSpinner;
+    private Spinner markerItemsSpinner;
 
-    private float popupLeftMargin;
+    private View clearSubOptions;
+    private TextView clearMission;
+    private TextView clearSelected;
+
+    private TextView selectAll;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -125,60 +138,62 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
                 toolImpl.onRestoreInstanceState(savedInstanceState);
         }
 
-        final Resources res = getResources();
-        popupLeftMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, res.getDisplayMetrics());
-
         final Context context = getContext();
-        final LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        final int popupWidth = ViewGroup.LayoutParams.WRAP_CONTENT;
-        final int popupHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
-        final Drawable popupBg = res.getDrawable(android.R.color.transparent);
+        droneConnectedLogo = (ImageView) view.findViewById(R.id.drone_connected_icon);
 
         mEditorRadioGroup = (RadioGroup) view.findViewById(R.id.editor_tools_layout);
+        editorSubTools = view.findViewById(R.id.editor_sub_tools);
 
         final DrawToolsImpl drawToolImpl = (DrawToolsImpl) editorToolsImpls[EditorTools.DRAW.ordinal()];
         final RadioButtonCenter buttonDraw = (RadioButtonCenter) view.findViewById(R.id.editor_tools_draw);
-        final View drawPopupView = inflater.inflate(R.layout.popup_editor_tool_draw, (ViewGroup) view, false);
         final AdapterMissionItems drawItemsAdapter = new AdapterMissionItems(context,
-                R.layout.spinner_drop_down_flight_mode, DrawToolsImpl.DRAW_ITEMS_TYPE);
-        final Spinner drawItemsSpinner = (Spinner) drawPopupView.findViewById(R.id.draw_items_spinner);
+                R.layout.spinner_drop_down_mission_item, DrawToolsImpl.DRAW_ITEMS_TYPE);
+        drawItemsSpinner = (Spinner) view.findViewById(R.id.draw_items_spinner);
         drawItemsSpinner.setAdapter(drawItemsAdapter);
         drawItemsSpinner.setSelection(drawItemsAdapter.getPosition(drawToolImpl.getSelected()));
         drawItemsSpinner.setOnItemSelectedListener(drawToolImpl);
-        drawPopup = new PopupWindow(drawPopupView, popupWidth, popupHeight, true);
-        drawPopup.setBackgroundDrawable(popupBg);
 
         final MarkerToolsImpl markerToolImpl = (MarkerToolsImpl) editorToolsImpls[EditorTools.MARKER.ordinal()];
         final RadioButtonCenter buttonMarker = (RadioButtonCenter) view.findViewById(R.id.editor_tools_marker);
-        final View markerPopupView = inflater.inflate(R.layout.popup_editor_tool_marker, (ViewGroup) view, false);
         final AdapterMissionItems markerItemsAdapter = new AdapterMissionItems(context,
-                R.layout.spinner_drop_down_flight_mode, MarkerToolsImpl.MARKER_ITEMS_TYPE);
-        final Spinner markerItemsSpinner = (Spinner) markerPopupView.findViewById(R.id.marker_items_spinner);
+                R.layout.spinner_drop_down_mission_item, MarkerToolsImpl.MARKER_ITEMS_TYPE);
+        markerItemsSpinner = (Spinner) view.findViewById(R.id.marker_items_spinner);
         markerItemsSpinner.setAdapter(markerItemsAdapter);
         markerItemsSpinner.setSelection(markerItemsAdapter.getPosition(markerToolImpl.getSelected()));
         markerItemsSpinner.setOnItemSelectedListener(markerToolImpl);
-        markerPopup = new PopupWindow(markerPopupView, popupWidth, popupHeight, true);
-        markerPopup.setBackgroundDrawable(popupBg);
 
         final RadioButtonCenter buttonTrash = (RadioButtonCenter) view.findViewById(R.id.editor_tools_trash);
-        final View trashPopupView = inflater.inflate(R.layout.popup_editor_tool_trash, (ViewGroup) view, false);
         final TrashToolsImpl trashToolImpl = (TrashToolsImpl) editorToolsImpls[EditorTools.TRASH.ordinal()];
-        final TextView clearMission = (TextView) trashPopupView.findViewById(R.id.clear_mission_button);
+
+        clearSubOptions = view.findViewById(R.id.clear_sub_options);
+
+        clearMission = (TextView) view.findViewById(R.id.clear_mission_button);
         clearMission.setOnClickListener(trashToolImpl);
-        trashPopup = new PopupWindow(trashPopupView, popupWidth, popupHeight, true);
-        trashPopup.setBackgroundDrawable(popupBg);
+
+        clearSelected = (TextView) view.findViewById(R.id.clear_selected_button);
+        clearSelected.setOnClickListener(trashToolImpl);
 
         final RadioButtonCenter buttonSelector = (RadioButtonCenter) view.findViewById(R.id.editor_tools_selector);
-        final View selectorPopupView = inflater.inflate(R.layout.popup_editor_tool_selector, (ViewGroup) view, false);
         final SelectorToolsImpl selectorToolImpl = (SelectorToolsImpl) editorToolsImpls[EditorTools.SELECTOR.ordinal()];
-        final TextView selectAll = (TextView) selectorPopupView.findViewById(R.id.select_all_button);
+        selectAll = (TextView) view.findViewById(R.id.select_all_button);
         selectAll.setOnClickListener(selectorToolImpl);
-        selectorPopup = new PopupWindow(selectorPopupView, popupWidth, popupHeight, true);
-        selectorPopup.setBackgroundDrawable(popupBg);
 
         for (View vv : new View[]{buttonDraw, buttonMarker, buttonTrash, buttonSelector}) {
             vv.setOnClickListener(this);
+        }
+    }
+
+    private void updateDroneConnectedLogo() {
+        if(droneConnectedLogo == null)
+            return;
+
+        final Drone drone = getDrone();
+        if(drone == null || !drone.isConnected()){
+            droneConnectedLogo.setImageResource(R.drawable.ic_navigation_grey_700_18dp);
+        }
+        else{
+            droneConnectedLogo.setImageResource(R.drawable.ic_navigation_green_600_18dp);
         }
     }
 
@@ -201,6 +216,8 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
     @Override
     public void onApiConnected() {
+        updateDroneConnectedLogo();
+
         mMissionProxy = getMissionProxy();
         setToolAndUpdateView(tool);
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
@@ -209,6 +226,8 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         buttonUndo.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                setTool(EditorTools.NONE);
+
                 if (mMissionProxy.canUndoMission())
                     mMissionProxy.undoMission();
                 else {
@@ -225,6 +244,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
     @Override
     public void onApiDisconnected() {
+        updateDroneConnectedLogo();
         getBroadcastManager().unregisterReceiver(eventReceiver);
         mMissionProxy = null;
 
@@ -251,26 +271,27 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
     @Override
     public void onClick(View v) {
         EditorTools newTool = getToolForView(v.getId());
-            final int xOff = (int) (v.getWidth() + popupLeftMargin);
-            final int yOff = -v.getHeight();
-            switch (newTool) {
-                case SELECTOR:
-                    selectorPopup.showAsDropDown(v, xOff, yOff);
-                    break;
+        if(this.tool == newTool)
+            newTool = EditorTools.NONE;
 
-                case TRASH:
-                    trashPopup.showAsDropDown(v, xOff, yOff);
-                    break;
+        setTool(newTool);
+    }
 
-                case DRAW:
-                    drawPopup.showAsDropDown(v, xOff, yOff);
-                    break;
+    private void hideSubTools() {
+        if(editorSubTools != null)
+            editorSubTools.setVisibility(View.GONE);
 
-                case MARKER:
-                    markerPopup.showAsDropDown(v, xOff, yOff);
-                    break;
-            }
-            setTool(newTool);
+        if (selectAll != null)
+            selectAll.setVisibility(View.GONE);
+
+        if (clearSubOptions != null)
+            clearSubOptions.setVisibility(View.GONE);
+
+        if (markerItemsSpinner != null)
+            markerItemsSpinner.setVisibility(View.GONE);
+
+        if (drawItemsSpinner != null)
+            drawItemsSpinner.setVisibility(View.GONE);
     }
 
     public EditorTools getTool() {
@@ -318,8 +339,39 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
             mEditorRadioGroup.clearCheck();
         }
 
+        updateSubToolsVisibility();
+
         if (listener != null && notifyListeners) {
             listener.editorToolChanged(this.tool);
+        }
+    }
+
+    private void updateSubToolsVisibility(){
+        hideSubTools();
+        switch (tool) {
+            case SELECTOR:
+                editorSubTools.setVisibility(View.VISIBLE);
+                selectAll.setVisibility(View.VISIBLE);
+                break;
+
+            case TRASH:
+                editorSubTools.setVisibility(View.VISIBLE);
+                clearSubOptions.setVisibility(View.VISIBLE);
+                break;
+
+            case DRAW:
+                editorSubTools.setVisibility(View.VISIBLE);
+                drawItemsSpinner.setVisibility(View.VISIBLE);
+                break;
+
+            case MARKER:
+                editorSubTools.setVisibility(View.VISIBLE);
+                markerItemsSpinner.setVisibility(View.VISIBLE);
+                break;
+
+            default:
+                hideSubTools();
+                break;
         }
     }
 
@@ -385,7 +437,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         }
     }
 
-    public static abstract class EditorToolsImpl {
+    public static abstract class EditorToolsImpl implements MissionSelection.OnSelectionUpdateListener {
 
         protected MissionProxy missionProxy;
         protected final EditorToolsFragment editorToolsFragment;
@@ -426,6 +478,11 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         public void onPathFinished(List<LatLong> path) {
         }
 
+        @Override
+        public void onSelectionUpdate(List<MissionItemProxy> selected){
+
+        }
+
         public abstract EditorTools getEditorTools();
 
         public abstract void setup();
@@ -445,7 +502,6 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
         private final static String EXTRA_SELECTED_MARKER_MISSION_ITEM_TYPE = "extra_selected_marker_mission_item_type";
 
-        private boolean wasSelected = false;
         private MissionItemType selectedType = MARKER_ITEMS_TYPE[0];
 
         MarkerToolsImpl(EditorToolsFragment fragment) {
@@ -502,11 +558,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            if (wasSelected)
-                editorToolsFragment.markerPopup.dismiss();
-
             selectedType = (MissionItemType) parent.getItemAtPosition(position);
-            wasSelected = true;
         }
 
         @Override
@@ -520,12 +572,12 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         private static final MissionItemType[] DRAW_ITEMS_TYPE = {
                 MissionItemType.WAYPOINT,
                 MissionItemType.SPLINE_WAYPOINT,
-                MissionItemType.SURVEY
+                MissionItemType.SURVEY,
+                MissionItemType.SPLINE_SURVEY
         };
 
         private final static String EXTRA_SELECTED_DRAW_MISSION_ITEM_TYPE = "extra_selected_draww_mission_item_type";
 
-        private boolean wasSelected = false;
         private MissionItemType selectedType = DRAW_ITEMS_TYPE[0];
 
         DrawToolsImpl(EditorToolsFragment fragment) {
@@ -581,7 +633,16 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
                     case SURVEY:
                         if (points.size() > 2) {
-                            missionProxy.addSurveyPolygon(points);
+                            missionProxy.addSurveyPolygon(points, false);
+                        } else {
+                            editorToolsFragment.setTool(EditorTools.DRAW);
+                            return;
+                        }
+                        break;
+
+                    case SPLINE_SURVEY:
+                        if (points.size() > 2) {
+                            missionProxy.addSurveyPolygon(points, true);
                         } else {
                             editorToolsFragment.setTool(EditorTools.DRAW);
                             return;
@@ -594,15 +655,11 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            if (wasSelected)
-                editorToolsFragment.drawPopup.dismiss();
 
             selectedType = (MissionItemType) parent.getItemAtPosition(position);
-            if (selectedType == MissionItemType.SURVEY) {
+            if (selectedType == MissionItemType.SURVEY || selectedType == MissionItemType.SPLINE_SURVEY) {
                 Toast.makeText(editorToolsFragment.getContext(), R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
             }
-
-            wasSelected = true;
         }
 
         @Override
@@ -656,6 +713,12 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         }
 
         @Override
+        public void onSelectionUpdate(List<MissionItemProxy> selected){
+            super.onSelectionUpdate(selected);
+            editorToolsFragment.clearSelected.setEnabled(!selected.isEmpty());
+        }
+
+        @Override
         public EditorTools getEditorTools() {
             return EditorTools.TRASH;
         }
@@ -670,13 +733,17 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
             if (missionProxy != null) {
                 List<MissionItemProxy> selected = missionProxy.selection.getSelected();
-                if (!selected.isEmpty()) {
-                    deleteSelectedItems();
-                }
+                editorToolsFragment.clearSelected.setEnabled(!selected.isEmpty());
+
+                final List<MissionItemProxy> missionItems = missionProxy.getItems();
+                editorToolsFragment.clearMission.setEnabled(!missionItems.isEmpty());
             }
         }
 
         private void doClearMissionConfirmation() {
+            if(missionProxy == null || missionProxy.getItems().isEmpty())
+                return;
+
             final Context context = editorToolsFragment.getContext();
             SupportYesNoDialog ynd = SupportYesNoDialog.newInstance(context, context.getString(R.string
                             .dlg_clear_mission_title),
@@ -727,8 +794,15 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
         @Override
         public void onClick(View v) {
-            doClearMissionConfirmation();
-            editorToolsFragment.trashPopup.dismiss();
+            switch(v.getId()){
+                case R.id.clear_mission_button:
+                    doClearMissionConfirmation();
+                    break;
+
+                case R.id.clear_selected_button:
+                    deleteSelectedItems();
+                    break;
+            }
         }
     }
 
@@ -776,14 +850,16 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
             Toast.makeText(editorToolsFragment.getContext(), "Click on mission items to select them.",
                     Toast.LENGTH_SHORT).show();
 
-            if (missionProxy != null)
+            if (missionProxy != null) {
                 missionProxy.selection.clearSelection();
+                final List<MissionItemProxy> missionItems = missionProxy.getItems();
+                editorToolsFragment.selectAll.setEnabled(!missionItems.isEmpty());
+            }
         }
 
         @Override
         public void onClick(View v) {
             selectAll();
-            editorToolsFragment.selectorPopup.dismiss();
         }
     }
 }

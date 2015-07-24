@@ -46,7 +46,8 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo 
 		case STRUCTURE_SCANNER:
 			markerInfos.add(new StructureScannerMarkerInfoProvider(origin));
 			break;
-			
+
+		case SPLINE_SURVEY:
 		case SURVEY:
 			markerInfos.addAll(new SurveyMarkerInfoProvider(origin).getMarkersInfos());
 			break;
