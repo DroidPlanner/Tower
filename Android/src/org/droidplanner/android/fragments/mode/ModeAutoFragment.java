@@ -1,16 +1,11 @@
 package org.droidplanner.android.fragments.mode;
 
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.R;
-import org.droidplanner.android.proxy.mission.MissionProxy;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
@@ -20,19 +15,17 @@ import android.widget.ProgressBar;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.android.client.apis.MissionApi;
-import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.mission.Mission;
-import com.o3dr.services.android.lib.drone.property.Gps;
-import com.o3dr.services.android.lib.drone.property.Parameter;
-import com.o3dr.services.android.lib.drone.property.Parameters;
-import com.o3dr.services.android.lib.util.MathUtils;
+import com.o3dr.services.android.lib.drone.property.VehicleMode;
+import com.o3dr.services.android.lib.model.AbstractCommandListener;
 
-import java.util.List;
-
-import timber.log.Timber;
+import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.R;
+import org.droidplanner.android.proxy.mission.MissionProxy;
 
 public class ModeAutoFragment extends Fragment implements View.OnClickListener{
     public static final String WPNAV_SPEED = "WPNAV_SPEED";
@@ -43,8 +36,6 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
         eventFilter.addAction(AttributeEvent.MISSION_ITEM_UPDATED);
         eventFilter.addAction(AttributeEvent.PARAMETER_RECEIVED);
         eventFilter.addAction(AttributeEvent.GPS_POSITION);
-        eventFilter.addAction(AttributeEvent.AUTOPILOT_MESSAGE);
-        eventFilter.addAction(AttributeEvent.MISSION_ITEM_REACHED);
     }
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
@@ -52,34 +43,23 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
             final String action = intent.getAction();
             switch (action){
                 case AttributeEvent.MISSION_ITEM_UPDATED:
-                    nextWaypoint = intent.getIntExtra(AttributeEventExtra.EXTRA_MISSION_CURRENT_WAYPOINT, 0);
-                case AttributeEvent.GPS_POSITION:
-                    updateMission();
-                    break;
-
-                case AttributeEvent.MISSION_ITEM_REACHED:
                     mission = drone.getAttribute(AttributeType.MISSION);
                     int currentMissionItem = intent.getIntExtra(AttributeEventExtra.EXTRA_MISSION_CURRENT_MISSION_ITEM, 0);
+                    nextWaypoint = intent.getIntExtra(AttributeEventExtra.EXTRA_MISSION_CURRENT_WAYPOINT, 0);
                     mission.setCurrentMissionItem(currentMissionItem);
-                    updateMission();
-
-                case AttributeEvent.PARAMETER_RECEIVED:
-                    String paramName = intent.getStringExtra(AttributeEventExtra.EXTRA_PARAMETER_NAME);
-                    if(paramName.equals(WPNAV_SPEED)) {
-                        double value = intent.getDoubleExtra(AttributeEventExtra.EXTRA_PARAMETER_VALUE, 2000.0);
-                        updateWaypointSpeed(value);
-                    }
                     break;
-
-                case AttributeEvent.AUTOPILOT_MESSAGE:
-                    String message = intent.getStringExtra(AttributeEventExtra.EXTRA_AUTOPILOT_MESSAGE);
-                    Timber.i(message);
+                case AttributeEvent.GPS_POSITION:
+                    remainingMissionLength = intent.getDoubleExtra(AttributeEventExtra.EXTRA_MISSION_REMAINING_DISTANCE, 0);
+                    updateMission();
+                    break;
             }
         }
     };
     private Mission mission;
     private int nextWaypoint;
     private ProgressBar missionProgress;
+    private double remainingMissionLength;
+    private boolean missionFinished;
 
 
 	@Override
@@ -99,8 +79,6 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
 
     @Override
 	public void onClick(View v) {
-		Parameters params = drone.getAttribute(AttributeType.PARAMETERS);
-        Parameter speed = params.getParameter(WPNAV_SPEED);
         if(mission == null){
             mission = drone.getAttribute(AttributeType.MISSION);
         }
@@ -110,15 +88,15 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
                 break;
             }
 			case R.id.mc_restart: {
-                MissionApi.getApi(drone).gotoMissionItem(0, 1, null);
+                gotoMissionItem(0);
                 break;
             }
 			case R.id.mc_next: {
-                MissionApi.getApi(drone).gotoMissionItem(mission.getCurrentMissionItem() + 1, 1, null);
+                gotoMissionItem(mission.getCurrentMissionItem() + 1);
                 break;
             }
 			case R.id.mc_prev: {
-                MissionApi.getApi(drone).gotoMissionItem(mission.getCurrentMissionItem() - 1, 1, null);
+                gotoMissionItem(mission.getCurrentMissionItem() - 1);
                 break;
             }
 		}
@@ -136,52 +114,56 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(eventReceiver);
     }
 
+    private void gotoMissionItem(final int waypoint){
+        if(missionFinished || waypoint == 0){
+            VehicleApi.getApi(drone).setVehicleMode(VehicleMode.COPTER_BRAKE, new AbstractCommandListener() {
+                @Override
+                public void onSuccess() {
+                    MissionApi.getApi(drone).startMission(true, true, new AbstractCommandListener() {
+                        @Override
+                        public void onSuccess() {
+                            MissionApi.getApi(drone).gotoMissionItem(waypoint,null);
+                        }
+
+                        @Override
+                        public void onError(int i) {
+
+                        }
+
+                        @Override
+                        public void onTimeout() {
+
+                        }
+                    });
+                    missionFinished = false;
+                }
+
+                @Override
+                public void onError(int i) {}
+
+                @Override
+                public void onTimeout() {}
+            });
+        }else{
+            MissionApi.getApi(drone).gotoMissionItem(waypoint,null);
+        }
+    }
+
 
 
     private void updateMission(){
         if(mission == null)
             return;
-        Gps gps = drone.getAttribute(AttributeType.GPS);
-        if(!gps.isValid())
-            return;
         MissionProxy proxy= ((DroidPlannerApp)getActivity().getApplication()).getMissionProxy();
-        int missionSize = proxy.getPathPoints().size();
-        LatLong dronePos = gps.getPosition();
-        int offset = mission.getMissionItems().size() - missionSize + 1;
-        List<LatLong> remainingMission = proxy.getPathPoints().subList(Math.max(nextWaypoint -offset,0), missionSize);
-        double remainingLength = MathUtils.getDistance2D(dronePos, remainingMission.get(0));
-        for (int i = 1; i < remainingMission.size(); i ++){
-            remainingLength += MathUtils.getDistance2D(remainingMission.get(i-1), remainingMission.get(i));
-        }
         double totalLength = proxy.getMissionLength();
-        if(remainingLength > totalLength){
-            remainingLength = totalLength;
-        }
-        missionProgress.setProgress((int)(((totalLength - remainingLength)/totalLength)*100));
-    }
-
-    private void updateWaypointSpeed(double speed) {
-        Timber.i("speed set to: %f ", speed);
+        missionProgress.setMax((int) totalLength);
+        missionProgress.setProgress((int) ((totalLength - remainingMissionLength)));
+        missionFinished = remainingMissionLength < 5;
     }
 
     @Override
 	public void onAttach(Activity activity) {
 		drone = ((DroidPlannerApp)activity.getApplication()).getDrone();
 		super.onAttach(activity);
-        drone.getAttributeAsync(AttributeType.PARAMETERS, new Drone.OnAttributeRetrievedCallback<Parcelable>() {
-            @Override
-            public void onRetrievalSucceed(Parcelable parcelable) {
-                Parameter speed = ((Parameters) parcelable).getParameter(WPNAV_SPEED);
-                if (speed != null) {
-                    updateWaypointSpeed(speed.getValue());
-                }
-            }
-
-            @Override
-            public void onRetrievalFailed() {
-
-            }
-        });
-
 	}
 }
