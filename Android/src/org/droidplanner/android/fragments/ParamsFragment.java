@@ -342,6 +342,7 @@ public class ParamsFragment extends ApiListenerListFragment {
                     parametersCount + " " + getString(R.string.msg_parameters_written_to_drone),
                     Toast.LENGTH_SHORT).show();
         }
+        snackbar = null;
     }
 
     private void openParametersFromFile() {
