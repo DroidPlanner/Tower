@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/ic_battery_circle_0_48dp" android:maxLevel="0" />
+    <item android:drawable="@drawable/ic_battery_circle_1_48dp" android:maxLevel="1" />
+    <item android:drawable="@drawable/ic_battery_circle_2_48dp" android:maxLevel="2" />
+    <item android:drawable="@drawable/ic_battery_circle_3_48dp" android:maxLevel="3" />
+    <item android:drawable="@drawable/ic_battery_circle_4_48dp" android:maxLevel="4" />
+    <item android:drawable="@drawable/ic_battery_circle_5_48dp" android:maxLevel="5" />
+    <item android:drawable="@drawable/ic_battery_circle_6_48dp" android:maxLevel="6" />
+    <item android:drawable="@drawable/ic_battery_circle_7_48dp" android:maxLevel="7" />
+    <item android:drawable="@drawable/ic_battery_circle_8_48dp" android:maxLevel="8" />
+</level-list>

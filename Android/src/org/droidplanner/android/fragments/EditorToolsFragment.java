@@ -12,13 +12,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
@@ -66,8 +64,6 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
     static {
         eventFilter.addAction(AttributeEvent.MISSION_RECEIVED);
-        eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
-        eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -76,12 +72,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
             final String action = intent.getAction();
             switch (action) {
                 case AttributeEvent.MISSION_RECEIVED:
-                    setTool(tool, false);
-                    break;
-
-                case AttributeEvent.STATE_CONNECTED:
-                case AttributeEvent.STATE_DISCONNECTED:
-                    updateDroneConnectedLogo();
+                    setTool(EditorTools.NONE);
                     break;
             }
         }
@@ -101,8 +92,6 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         editorToolsImpls[EditorTools.SELECTOR.ordinal()] = new SelectorToolsImpl(this);
         editorToolsImpls[EditorTools.NONE.ordinal()] = new NoneToolsImpl(this);
     }
-
-    private ImageView droneConnectedLogo;
 
     private EditorToolListener listener;
     private RadioGroup mEditorRadioGroup;
@@ -139,8 +128,6 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         }
 
         final Context context = getContext();
-
-        droneConnectedLogo = (ImageView) view.findViewById(R.id.drone_connected_icon);
 
         mEditorRadioGroup = (RadioGroup) view.findViewById(R.id.editor_tools_layout);
         editorSubTools = view.findViewById(R.id.editor_sub_tools);
@@ -184,19 +171,6 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         }
     }
 
-    private void updateDroneConnectedLogo() {
-        if(droneConnectedLogo == null)
-            return;
-
-        final Drone drone = getDrone();
-        if(drone == null || !drone.isConnected()){
-            droneConnectedLogo.setImageResource(R.drawable.ic_navigation_grey_700_18dp);
-        }
-        else{
-            droneConnectedLogo.setImageResource(R.drawable.ic_navigation_green_600_18dp);
-        }
-    }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -216,8 +190,6 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
     @Override
     public void onApiConnected() {
-        updateDroneConnectedLogo();
-
         mMissionProxy = getMissionProxy();
         setToolAndUpdateView(tool);
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
@@ -244,7 +216,6 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
     @Override
     public void onApiDisconnected() {
-        updateDroneConnectedLogo();
         getBroadcastManager().unregisterReceiver(eventReceiver);
         mMissionProxy = null;
 
@@ -271,14 +242,14 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
     @Override
     public void onClick(View v) {
         EditorTools newTool = getToolForView(v.getId());
-        if(this.tool == newTool)
+        if (this.tool == newTool)
             newTool = EditorTools.NONE;
 
         setTool(newTool);
     }
 
     private void hideSubTools() {
-        if(editorSubTools != null)
+        if (editorSubTools != null)
             editorSubTools.setVisibility(View.GONE);
 
         if (selectAll != null)
@@ -346,7 +317,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         }
     }
 
-    private void updateSubToolsVisibility(){
+    private void updateSubToolsVisibility() {
         hideSubTools();
         switch (tool) {
             case SELECTOR:
@@ -479,7 +450,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         }
 
         @Override
-        public void onSelectionUpdate(List<MissionItemProxy> selected){
+        public void onSelectionUpdate(List<MissionItemProxy> selected) {
 
         }
 
@@ -713,7 +684,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         }
 
         @Override
-        public void onSelectionUpdate(List<MissionItemProxy> selected){
+        public void onSelectionUpdate(List<MissionItemProxy> selected) {
             super.onSelectionUpdate(selected);
             editorToolsFragment.clearSelected.setEnabled(!selected.isEmpty());
         }
@@ -741,7 +712,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         }
 
         private void doClearMissionConfirmation() {
-            if(missionProxy == null || missionProxy.getItems().isEmpty())
+            if (missionProxy == null || missionProxy.getItems().isEmpty())
                 return;
 
             final Context context = editorToolsFragment.getContext();
@@ -752,7 +723,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
                         public void onYes() {
                             if (missionProxy != null) {
                                 missionProxy.clear();
-                                missionProxy.addTakeoff();
+                                editorToolsFragment.setTool(EditorTools.NONE);
                             }
                         }
 
@@ -794,7 +765,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()){
+            switch (v.getId()) {
                 case R.id.clear_mission_button:
                     doClearMissionConfirmation();
                     break;

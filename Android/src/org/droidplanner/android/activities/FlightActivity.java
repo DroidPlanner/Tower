@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -308,14 +309,7 @@ public class FlightActivity extends DrawerNavigationUI {
     }
 
     @Override
-    protected boolean shouldDisplayLogo(){
-        return false;
-    }
-
-    @Override
-    protected void initToolbar(){
-        super.initToolbar();
-
+    protected void addToolbarFragment(){
         final int toolbarId = getToolbarId();
         final FragmentManager fm = getSupportFragmentManager();
         Fragment actionBarTelem = fm.findFragmentById(toolbarId);
