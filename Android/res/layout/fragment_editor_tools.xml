@@ -7,23 +7,23 @@
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp">
 
-    <ImageView
-        android:id="@+id/drone_connected_icon"
+    <fragment
+        android:id="@+id/vehicle_status_fragment"
+        android:name="org.droidplanner.android.fragments.actionbar.VehicleStatusFragment"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_navigation_grey_700_18dp" />
+        />
 
     <View
         android:id="@+id/drone_connected_icon_separator"
         android:layout_width="1dp"
         android:layout_height="30dp"
-        android:layout_margin="10dp"
-        android:layout_toEndOf="@+id/drone_connected_icon"
-        android:layout_toRightOf="@+id/drone_connected_icon"
+        android:layout_margin="5dp"
+        android:layout_toEndOf="@+id/vehicle_status_fragment"
+        android:layout_toRightOf="@+id/vehicle_status_fragment"
         android:background="@color/light_grey" />
 
     <RadioGroup
@@ -122,7 +122,7 @@
                 <me.grantland.widget.AutofitTextView
                     android:id="@+id/clear_selected_button"
                     style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="1"
@@ -144,7 +144,7 @@
                 <me.grantland.widget.AutofitTextView
                     android:id="@+id/clear_mission_button"
                     style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:singleLine="true"

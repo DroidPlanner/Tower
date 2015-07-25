@@ -78,7 +78,7 @@ public class RoverFlightControlFragment extends BaseFlightControlFragment {
         mDisconnectedButtons = view.findViewById(R.id.mc_disconnected_buttons);
         mActiveButtons = view.findViewById(R.id.mc_connected_buttons);
 
-        final Button connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
+        final View connectBtn = view.findViewById(R.id.mc_connectBtn);
         connectBtn.setOnClickListener(this);
 
         homeBtn = (Button) view.findViewById(R.id.mc_homeBtn);

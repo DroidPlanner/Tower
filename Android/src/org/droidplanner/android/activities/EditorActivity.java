@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.util.TypedValue;
@@ -160,11 +161,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
         gestureMapFragment.setOnPathFinishedListener(this);
         openActionDrawer();
-    }
-
-    @Override
-    protected boolean shouldDisplayLogo(){
-        return false;
     }
 
     @Override
@@ -442,9 +438,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     }
 
     @Override
-    protected void initToolbar() {
-        super.initToolbar();
-
+    protected void addToolbarFragment(){
         final int toolbarId = getToolbarId();
         editorToolsFragment = (EditorToolsFragment) fragmentManager.findFragmentById(toolbarId);
         if (editorToolsFragment == null) {
