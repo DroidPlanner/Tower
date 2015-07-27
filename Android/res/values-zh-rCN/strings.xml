@@ -427,7 +427,7 @@
     <string name="pref_bluetooth_device_address">蓝牙装置</string>
     <string name="pref_forget_bluetooth_device_title">移除 %s 装置</string>
     <string name="pref_forget_bluetooth_device_address">移除预设的装置</string>
-    <string name="pref_forget_bluetooth_device_address_confirm"您确定吗？</string>
+    <string name="pref_forget_bluetooth_device_address_confirm">您确定吗？</string>
     <string name="pref_bluetooth_forget">移除</string>
 
     <!-- Map providers -->
