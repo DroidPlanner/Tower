@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Do not translate the following strings -->
-    <string name="app_title" translatable="false">Tower</string>
-
     <!-- Generic strings -->
     <string name="settings">Settings</string>
     <string name="help">Help</string>
@@ -34,8 +31,7 @@
     <string name="pref_connection_actions">While Connected to Drone</string>
     <string name="pref_connection_actions_summary">Actions to perform on or while connected to the Drone\nTo apply disconnect and reconnect</string>
     <string name="pref_keep_screen_bright">Keep Screen On</string>
-    <string name="pref_keep_screen_bright_summary">Check to keep the screen on and bright (affect
-        battery life)</string>
+    <string name="pref_keep_screen_bright_summary">Check to keep the screen on and bright (affect battery life)</string>
     <string name="pref_lock_screen_orientation">Lock Screen Orientation</string>
     <string name="pref_lock_screen_orientation_summary">Locks screen to the orientation which is present when connecting</string>
     <string name="pref_flight_data">Flight Data</string>
@@ -176,7 +172,8 @@
     <string name="waypointType_Circle">Circle</string>
     <string name="waypointType_Loiter">Loiter</string>
     <string name="waypointType_ROI">Region of Interest</string>
-    <string name="waypointType_Survey">Survey Polygon</string>
+    <string name="waypointType_Survey">Survey</string>
+    <string name="waypointType_Spline_Survey">Spline Survey</string>
     <string name="waypointType_BuildingMapper">Structure Scan</string>
 
     <!-- Waypoint info -->
@@ -239,7 +236,6 @@
     <string name="structure_scan_start_alt">Start altitude</string>
     <string name="structure_scan_step_height">Step height</string>
     <string name="stucture_scanner_cross_hatch">Cross Hatch</string>
-
     <string name="dlg_clear_mission_title">Clear mission</string>
     <string name="dlg_clear_mission_confirm">Clear all waypoints from the map?</string>
 
@@ -457,23 +453,18 @@
     <string name="usage_statistics">Usage Statistics</string>
     <string name="pref_usage_statistics_title">Send usage statistics</string>
     <string name="pref_usage_statistics_summary">Help improve DroidPlanner by sending usage statistics.</string>
-
     <string name="pref_permanent_notification_title">Enable permanent notification</string>
     <string name="pref_permanent_notification_summary">Enable to make status bar notification permanent when connected.</string>
-
     <string name="zoom_fit">Zoom to Fit</string>
     <string name="open_mission_file">Import from file</string>
     <string name="save_mission_file">Export to file</string>
-
     <string name="pref_ui_gps_hdop_summary">Display HDOP instead of FIX in satellite info bar item</string>
     <string name="pref_ui_gps_hdop_title">Display Satellite HDOP</string>
-
     <string name="status_disconnecting">Disconnecting…</string>
     <string name="status_connecting">Connecting…</string>
 
     <!-- Help -->
     <string name="help_item_description">How to plan and fly a mission</string>
-    
     <string name="label_advanced">Advanced</string>
     <string name="label_steps_count">Number of Steps</string>
     <string name="label_altitude_step">Altitude Step</string>
@@ -499,8 +490,7 @@
     <string name="pref_misc_title">Miscellaneous</string>
     <string name="pref_dialogs_title">Preference Dialogs</string>
     <string name="pref_warn_on_arm_title">Arming button warning</string>
-    <string name="pref_auto_insert_mission_takeoff_rtl_land_title">Auto insert \'TakeOff\' and
-        \'RTL\'/\'Land\' to mission</string>
+    <string name="pref_auto_insert_mission_takeoff_rtl_land_title">Auto insert \'TakeOff\' and \'RTL\'/\'Land\' to mission</string>
     <string name="pref_dialog_entry_always">Always</string>
     <string name="pref_dialog_entry_never">Never</string>
     <string name="pref_dialog_entry_ask">Ask</string>
@@ -516,11 +506,11 @@
     <string name="pref_licenses">Licenses</string>
     <string name="pref_licenses_summary">Libraries (and their licenses) used in this project</string>
     <string name="upload_params">Upload parameters</string>
+    <string name="upload">Upload</string>
     <string name="download_params">Download parameters</string>
     <string name="import_from_device">Import from file</string>
     <string name="export_to_device">Export to file</string>
     <string name="pref_title_local">Localization</string>
-
     <string name="unit_system_entry_auto">Auto</string>
     <string name="unit_system_entry_metric">Metric System</string>
     <string name="unit_system_entry_imperial">Imperial System</string>
@@ -584,5 +574,13 @@
     <string name="label_type_plane">Plane</string>
     <string name="label_type_rover">Rover</string>
     <string name="label_type_unknown">Unknown</string>
+    <string name="imu_calibration_start_error">Unable to start imu calibration</string>
+    <string name="horizontal_speed_empty">hs: —</string>
+    <string name="horizontal_speed_telem">hs: %s</string>
+    <string name="vertical_speed_empty">vs: —</string>
+    <string name="vertical_speed_telem">vs: %s</string>
+    <string name="menu_kill_switch">Kill Switch</string>
+    <string name="label_clear_selected">Clear selected</string>
+    <string name="unsaved_param_warning">You have unsaved changes</string>
 
 </resources>
