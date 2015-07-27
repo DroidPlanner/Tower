@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- Do not translate the following strings -->
@@ -6,6 +6,7 @@
 
     <!-- Generic strings -->
     <string name="settings">Settings</string>
+    <string name="help">Help</string>
     <string name="menu_drone_setup">Drone Setup</string>
     <string name="app_settings">App Settings</string>
     <string name="flight_data">Flight Data</string>
@@ -14,35 +15,69 @@
     <string name="download_mission">Download mission</string>
 
     <!-- Drone Setup tabs -->
+    <string name="screen_tuning">Tuning</string>
     <string name="screen_cal">Calibration</string>
     <string name="screen_checklist">Checklist</string>
+    <string name="screen_rc">Radio</string>
     <string name="screen_parameters">Parameters</string>
-    
+
     <!-- App Settings/Preferences -->
     <string name="pref_connection_type">Telemetry Connection Type</string>
     <string name="pref_connection_type_summary">Which link to use to connect to the drone</string>
     <string name="pref_maps_title">Maps</string>
     <string name="pref_maps_providers_summary">Which map provider to use.</string>
     <string name="pref_maps_providers_title">Maps Providers</string>
+    <string name="pref_mavlink">MAVLink</string>
     <string name="pref_ui">User Interface</string>
     <string name="pref_ui_language_english">English as UI Language</string>
     <string name="pref_ui_language_english_summary">Use English language (instead of system language). Requires app restart.</string>
+    <string name="pref_connection_actions">While Connected to Drone</string>
+    <string name="pref_connection_actions_summary">Actions to perform on or while connected to the Drone\nTo apply disconnect and reconnect</string>
     <string name="pref_keep_screen_bright">Keep Screen On</string>
     <string name="pref_keep_screen_bright_summary">Check to keep the screen on and bright (affect
         battery life)</string>
     <string name="pref_lock_screen_orientation">Lock Screen Orientation</string>
     <string name="pref_lock_screen_orientation_summary">Locks screen to the orientation which is present when connecting</string>
     <string name="pref_flight_data">Flight Data</string>
+    <string name="pref_guided_mode_on_long_press">Guided Mode on long press</string>
+    <string name="pref_guided_mode_on_long_press_summary">Enable entering the Guided Mode by long pressing the map.</string>
+    <string name="pref_follow_me_mode_enabled">Enable FollowMe Mode</string>
+    <string name="pref_follow_me_mode_enabled_summary">In development</string>
+    <string name="pref_heading_mode">Enable FPV heading mode</string>
+    <string name="pref_heading_mode_summary">Change heading mode to FPV (-180° to 180°)</string>
     <string name="pref_advanced">Advanced</string>
+    <string name="pref_advanced_use_offline_maps">Use offline maps</string>
+    <string name="pref_advanced_use_offline_maps_summary">Use map tiles on the local storage, for offline map view</string>
     <string name="pref_map_type">Map Type</string>
+    <string name="pref_map_type_default">@string/menu_map_type_satellite</string>
     <string name="pref_map_type_summary">Which type of map to use</string>
     <string name="pref_tile_provider_title">Map Tile Provider</string>
+    <string name="pref_tile_provider_default">@string/pref_tile_provider_google</string>
     <string name="pref_tile_provider_google">Google</string>
     <string name="pref_tile_provider_mapbox">Mapbox</string>
     <string name="pref_tile_provider_summary">Which map tile provider to use</string>
     <string name="pref_enable_tts">Enable Speech output</string>
     <string name="pref_enable_tts_summary">Audible messages for important events</string>
     <string name="pref_request_max_volume">Set Volume To Max On Start</string>
+    <string name="pref_vehicle_type">Default Vehicle Type</string>
+    <string name="pref_vehicle_type_summary">Default vehicle type when disconnected</string>
+    <string name="pref_rc">RC Screen</string>
+    <string name="pref_rc_general">General</string>
+    <string name="pref_rc_mode">RC Mode</string>
+    <string name="pref_rc_mode_summary">Throttle on left or right stick</string>
+    <string name="pref_rc_quickmode_left">QuickMode Left</string>
+    <string name="pref_rc_quickmode_right">QuickMode Right</string>
+    <string name="pref_rc_reverse">Reverse</string>
+    <string name="pref_rc_throttle">Throttle</string>
+    <string name="pref_rc_throttle_reverse_summary">Reverses Throttle direction</string>
+    <string name="pref_rc_throttle_returntocenter">Return to Center</string>
+    <string name="pref_rc_throttle_returntocenter_summary">On touch release Throttle returns to center</string>
+    <string name="pref_rc_rudder">Rudder</string>
+    <string name="pref_rc_rudder_reverse_summary">Reverses Rudder/Yaw direction</string>
+    <string name="pref_rc_aileron">Aileron</string>
+    <string name="pref_rc_aileron_reverse_summary">Reverses Aileron/Roll direction</string>
+    <string name="pref_rc_elevator">Elevator</string>
+    <string name="pref_rc_elevator_reverse_summary">Reverses Elevator/Pitch direction</string>
     <string name="pref_connection">Connection Preferences</string>
     <string name="pref_usb">USB Connection</string>
     <string name="pref_baud_type">Telemetry link speed</string>
@@ -55,6 +90,9 @@
     <string name="about">About</string>
     <string name="version">Version</string>
     <string name="storage_folder">Storage Folder</string>
+    <string name="pref_live_upload">Enable live upload (ALPHA TEST)</string>
+    <string name="pref_live_upload_summary">Live vehicle monitoring on Droneshare</string>
+
     <!-- Toast Message -->
     <string name="user_autopan_long_press">Long press to activate user auto panning.</string>
     <string name="drone_autopan_long_press">Long press to activate drone auto panning.</string>
@@ -71,12 +109,21 @@
     <string name="button_setup_cancel">Cancel</string>
     <string name="button_setup_send">Send</string>
     <string name="button_setup_next">Next</string>
+    <string name="button_setup_reset">Reset</string>
     <string name="button_setup_done">Done</string>
+    <string name="Pause">Pause</string>
+    <string name="dialog_box_btn_txt_ok">OK</string>
+
     <!-- File operations -->
     <string name="select_file_to_open">Select file to open:</string>
     <string name="no_files">No files</string>
     <string name="error_when_opening_file">Error when opening file</string>
     <string name="status_file_opened">File opened</string>
+    <string name="save">Save</string>
+    <string name="open">Open</string>
+    <string name="write">Write</string>
+    <string name="refresh">Refresh</string>
+
     <!-- Survey/Mapping related strings -->
     <string name="distance_between_lines">Lateral</string>
     <string name="footprint">Footprint</string>
@@ -84,6 +131,7 @@
     <string name="distance_between_pictures">Longitudinal</string>
     <string name="area">Area</string>
     <string name="camera_">Camera:</string>
+    <string name="inner_wps">Inner WPs</string>
     <string name="hatch_angle">Hatch angle:</string>
     <string name="flight_altitude">Flight Altitude:</string>
     <string name="overlap">Overlap:</string>
@@ -91,7 +139,12 @@
     <string name="mission_length">Grid Length</string>
     <string name="pictures">Pictures</string>
     <string name="number_of_strips">Number of Strips</string>
+    <string name="exception_draw_polygon">Draw a polygon/WPTs</string>
+    <string name="exception_draw_2_more_polygon_points">Draw at least 2 more polygon points</string>
+    <string name="exception_draw_1_more_polygon_points">Draw at least 1 more polygon point</string>
     <string name="draw_the_survey_region">Draw the survey region</string>
+    <string name="mission_is_too_lengthy">Mission is too lengthy</string>
+
     <!-- Flight Mode information -->
     <string name="mode_acro">Acro allows a pilot to control rate of rotation directly.</string>
     <string name="mode_althold">Alt Hold automatically controls throttle and maintains altitude. Does not require GPS.</string>
@@ -101,6 +154,8 @@
     <string name="mode_guided">Guided enables position control from a ground station. Requires GPS lock.</string>
     <string name="mode_land">Land at the current location. Requires GPS lock.</string>
     <string name="mode_loiter">Loiter allows the pilot to fly completely through GPS.</string>
+    <string name="mode_ofloiter">Optical Flow enabled Loiter holds position and altitude assisted by the required optical flow sensors.</string>
+    <string name="mode_position">Position allows the pilot to fly completely through GPS, but with manual throttle control.</string>
     <string name="mode_rtl">RTL rises to the minimum altitude, returns to the home location and lands. Requires GPS lock.</string>
     <string name="mode_sport">Sport allows a pilot to control rate of rotation directly with the addition of self-leveling.</string>
     <string name="mode_stabilize">Stabilize levels the vehicle in flight.</string>
@@ -126,17 +181,24 @@
 
     <!-- Waypoint info -->
     <string name="waypointInfo_Land">Land vehicle at the current location. You must manually exit Auto mode to disarm motors.</string>
+    <string name="waypointInfo_Generic">Generic Waypoint</string>
+    <string name="waypointInfo_Loiter">not used.</string>
     <string name="waypointInfo_LoiterN">Orbit the current location for the desired number of turns.</string>
     <string name="waypointInfo_LoiterT">Hold the current location for the desired number of seconds or indefinitely to end the mission.</string>
     <string name="waypointInfo_RTL">Send the vehicle to the home location set when armed. An altitude of 0 will return to home at the RTL altitude parameter.</string>
     <string name="waypointInfo_TakeOff">Lift off from the ground to the specified altitude before proceeding to the next waypoint.</string>
     <string name="waypointInfo_Waypoint">Travel to a position in 3D space. Optional delay (in seconds) to hold position.</string>
+    <string name="waypointInfo_CondAlt">Climb/descend at specified rate. Delay mission state machine until desired altitude reached.</string>
     <string name="waypointInfo_CondYaw">Set condition to reach a certain target angle.</string>
+    <string name="waypointInfo_CondDistance">Delay mission state machine until within desired distance of next NAV point</string>
+    <string name="waypointInfo_SetHome">Changes the home location either to the current location or a specified location.</string>
     <string name="waypointInfo_SetSpeed">Change vehicle speed until the end of this mission.</string>
     <string name="waypointInfo_CameraTrigger">Trigger the camera shutter at regular distance intervals.</string>
     <string name="waypointInfo_SetServo">Move a servo to a particular PWM value.</string>
     <string name="waypointInfo_EpmGrabber">Release the payload of the EPM grabber</string>
     <string name="waypointInfo_ROI">Sets a location and altitude to point copter towards and to aim an optional camera.</string>
+    <string name="waypointInfo_SetJump">Repeat waypoint</string>
+
     <!-- Custom waypoint info -->
     <string name="pwm">PWM</string>
 
@@ -149,9 +211,29 @@
     <string name="distance_to_home">Distance to home</string>
     <string name="loiter_time">Loiter Time</string>
     <string name="waypoint_delay">Delay before next waypoint</string>
+    <string name="loiter_radius">Loiter Radius</string>
+    <string name="loiter_ccw">CCW</string>
     <string name="circle_radius">Circle Radius</string>
+    <string name="waypoint_altitude">Altitude</string>
+    <string name="waypoint_angle">Yaw Angle</string>
+    <string name="waypoint_finalaltitude">Target Altitude</string>
+    <string name="waypoint_altrate">Climb/descend Rate</string>
+    <string name="waypoint_yawrate">Yaw Rate</string>
+    <string name="waypoint_yawdir">Set yaw direction to CCW</string>
+    <string name="waypoint_yawoffset">Use relative offset</string>
+    <string name="waypoint_distance">Distance</string>
+    <string name="waypoint_homecurrent">Set Home using current position</string>
     <string name="waypoint_longitude">Longitude: %f°</string>
     <string name="waypoint_latitude">Latitude: %f°</string>
+    <string name="waypoint_speed">Target Speed</string>
+    <string name="waypoint_throttle">Throttle</string>
+    <string name="waypoint_speedtype">Speed Type</string>
+    <string name="waypoint_airspeed">Air Speed</string>
+    <string name="waypoint_groundspeed">Ground Speed</string>
+    <string name="selectCoodSource">Select location source</string>
+    <string name="waypoint_coordsrc">Source data:</string>
+    <string name="waypoint_jumpto">Jump to waypoint:</string>
+    <string name="waypoint_repeat">Repeat waypoint</string>
     <string name="circle_turns">Number of turns</string>
     <string name="structure_scan_description">Map a building</string>
     <string name="structure_scan_start_alt">Start altitude</string>
@@ -162,6 +244,7 @@
     <string name="dlg_clear_mission_confirm">Clear all waypoints from the map?</string>
 
     <!-- Selection of map style -->
+    <string name="menu_map_type">Map Type</string>
     <string name="menu_map_type_satellite">Satellite</string>
     <string name="menu_map_type_hybrid">Hybrid</string>
     <string name="menu_map_type_normal">Normal</string>
@@ -180,6 +263,8 @@
     <string name="lst_note_hint">To add more rows, just press Enter</string>
 
     <!-- Calibration data progress -->
+    <string name="progress_title_uploading">Uploading calibration data</string>
+    <string name="progress_desc_uploading">DroidPlanner is uploading calibration data to vehicle</string>
     <string name="progress_title_downloading">Downloading calibration data</string>
     <string name="progress_desc_downloading">DroidPlanner is downloading calibration data from vehicle. If system is not connected, press Cancel.</string>
 
@@ -188,8 +273,10 @@
     <string name="setup_radio_cal_title">Start Calibration</string>
     <string name="setup_radio_cal_desc">Press Calibrate to start the radio calibration. Ensure the radio transmitter is switched \'ON\' and transmitting.</string>
     <string name="setup_radio_title_minmax">Set Min &amp; Max values</string>
+    <string name="setup_radio_title_middle">Set Center values</string>
     <string name="setup_radio_title_complete">Calibration complete</string>
     <string name="setup_radio_desc_minmax">Move the joysticks all the way out several times and toggle the switches, levers and knobs to all possible positions.</string>
+    <string name="setup_radio_desc_middle">Set throttle stick to the lowest position and other joysticks, switches, levers and knobs to their center position.</string>
     <string name="setup_radio_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle.</string>
 
     <!-- Compass Setup Resource Strings -->
@@ -209,11 +296,13 @@
     <string name="setup_imu_step">To start calibration, press Calibrate.</string>
     <string name="setup_imu_timeleft">Time left before next orientation:</string>
 
-    
+
     <!-- Flight Setup Resource Strings -->
     <string name="setup_fm_title">Flight Mode Configuration</string>
     <string name="setup_fm_side_title">Update Flight Mode</string>
     <string name="setup_fm_side_desc">Press \'Send\' to update the new flight modes to vehicle.</string>
+    <string name="setup_fm_desc_uploading">Uploading Flight Mode configuration data</string>
+    <string name="setup_fm_desc_downloading">Downloading Flight Mode configuration data</string>
     <string name="setup_fm_mode1">1.</string>
     <string name="setup_fm_mode2">2.</string>
     <string name="setup_fm_mode3">3.</string>
@@ -225,6 +314,8 @@
 
     <!-- Channel Options Setup Resource Strings -->
     <string name="setup_ch_title">Channel Options Configuration</string>
+    <string name="setup_ch_side_title">Update Channel Options</string>
+    <string name="setup_ch_side_desc">Press \'Send\' to update the new servo function to vehicle.</string>
     <string name="setup_ch_tune_title">Channel 6 - Tuning Function</string>
     <string name="setup_ch_options_title">Channel Options - CH7 &amp; CH8</string>
     <string name="setup_ch_CH7_options">Channel 7 Options:</string>
@@ -235,6 +326,10 @@
 
     <!-- Servo functions Setup Resource Strings -->
     <string name="setup_sf_title">Servo Function Configuration</string>
+    <string name="setup_sf_side_title">Update Servo Function</string>
+    <string name="setup_sf_side_desc">Press \'Send\' to update the new servo function to vehicle.</string>
+    <string name="setup_sf_desc_uploading">Uploading Servo configuration data</string>
+    <string name="setup_sf_desc_downloading">Downloading Servo configuration data</string>
     <string name="setup_sf_servo_title">Servo Functions Configuration</string>
     <string name="setup_sf_servo5">Servo 5:</string>
     <string name="setup_sf_servo6">Servo 6:</string>
@@ -248,12 +343,16 @@
     <string name="climb_rate_label">Climb Rate</string>
     <string name="altitude_label">Altitude</string>
     <string name="roi_height_label">ROI Height</string>
+    <string name="meter_unit">m</string>
+    <string name="speed_unit">m/s</string>
     <string name="speed_label">Speed</string>
     <string name="length_label">Length</string>
     <string name="channel_label">Channel</string>
     <string name="ground_speed_label">Ground Speed</string>
     <string name="air_speed_label">Air Speed</string>
     <string name="default_angle_value">--°</string>
+    <string name="mission_control_control">Control</string>
+    <string name="mission_control_edit">Edit</string>
     <string name="mission_control_home">Home</string>
     <string name="mission_control_arm">Arm</string>
     <string name="mission_control_disarm">Disarm</string>
@@ -261,10 +360,14 @@
     <string name="mission_control_takeoff">Takeoff</string>
     <string name="mission_control_pause">Pause</string>
     <string name="mission_control_auto">Auto</string>
-    <string name="mission_control_follow">Follow</string>    
+    <string name="mission_control_follow">Follow</string>
     <string name="mission_control_dronie">Dronie</string>
+    <string name="mission_control_change_speed">Change Speed</string>
     <string name="mission_control_condition_yaw_angle">Target angle</string>
     <string name="mission_control_condition_yaw_relative">Relative Angle</string>
+    <string name="telemetry_label">Telemetry</string>
+    <string name="flight_modes_label">Flight modes</string>
+    <string name="menu_info_bar">Info Bar</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="guided_mode_warning">"Press OK to enter Guided mode. \nTo change locations, press and hold the map.</string>
@@ -275,13 +378,17 @@
     <string name="none_found">No devices found</string>
     <string name="title_paired_devices">Paired Devices</string>
     <string name="title_other_devices">Other Available Devices</string>
+    <string name="button_scan">Scan for devices</string>
     <string name="scanning">Scanning for devices</string>
 
     <!-- Content description -->
+    <string name="expandable_listview_icon_desc">Expandable ListView icon</string>
+
     <!-- Google Analytics -->
 
     <!-- Text To Speech -->
     <string name="pref_title_tts">Speech Output</string>
+    <string name="pref_title_tts_periodic">Periodic</string>
     <string name="pref_title_tts_periodic_status">Periodic Status</string>
     <string name="pref_tts_periodic_summary">What is included in the periodic status.</string>
     <string name="pref_tts_periodic_period">Period</string>
@@ -295,6 +402,10 @@
     <string name="pref_tts_periodic_airspeed">Airspeed</string>
     <string name="pref_tts_periodic_airspeed_summary">Read airspeed.</string>
     <string name="pref_title_tts_warnings">Warnings</string>
+    <string name="pref_tts_warning_solar_activity">Solar Activity</string>
+    <string name="pref_tts_warning_solar_activity_summary">Warns about high solar activity which can decrease gps accuracy.</string>
+    <string name="pref_tts_warning_wind_speed">Wind Speed</string>
+    <string name="pref_tts_warning_wind_speed_summary">Warns about high wind speeds which may make flight difficult.</string>
     <string name="pref_tts_warning_400ft_ceiling_exceeded">400ft. Exceeded</string>
     <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">In many situations it is illegal to fly above 400ft.</string>
     <string name="pref_tts_warning_low_signal_strength">Low Signal Strength</string>
@@ -316,6 +427,7 @@
 
     <!-- BLuetooth -->
     <string name="pref_bluetooth">BLUETOOTH CONNECTION</string>
+    <string name="pref_bluetooth_device_address">Bluetooth device</string>
     <string name="pref_forget_bluetooth_device_title">Forget %s device</string>
     <string name="pref_forget_bluetooth_device_address">Forget default device</string>
     <string name="pref_forget_bluetooth_device_address_confirm">Are you sure?</string>
@@ -331,10 +443,15 @@
     <string name="pref_ui_realtime_footprints_summary">Display the camera projection on the ground in realtime</string>
 
     <!-- Others (when possible move to a grouping above) -->
+    <string name="tune_roll">Manual adjustment of roll and pitch tuning. Rate_P is the primary value to adjust.</string>
+    <string name="dialog_box_title_altitude">Altitude</string>
     <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
     <string name="msg_connect_first">Please connect first</string>
+    <string name="pref_title_language">Language</string>
     <string name="pref_title_screen">Screen</string>
     <string name="pref_title_notifications">Notifications</string>
+    <string name="normal_waypoint_toggle">Normal</string>
+    <string name="spline_waypoint_toggle">Spline</string>
     <string name="firmware_version">Firmware Version</string>
     <string name="empty_content" translatable="false">--</string>
     <string name="usage_statistics">Usage Statistics</string>
@@ -351,9 +468,22 @@
     <string name="pref_ui_gps_hdop_summary">Display HDOP instead of FIX in satellite info bar item</string>
     <string name="pref_ui_gps_hdop_title">Display Satellite HDOP</string>
 
+    <string name="status_disconnecting">Disconnecting…</string>
+    <string name="status_connecting">Connecting…</string>
+
     <!-- Help -->
+    <string name="help_item_description">How to plan and fly a mission</string>
+
+    <string name="label_advanced">Advanced</string>
     <string name="label_steps_count">Number of Steps</string>
+    <string name="label_altitude_step">Altitude Step</string>
+    <string name="menu_search_toggle">Toggle Search</string>
+    <string name="dialog_confirm_arming_title">Arm vehicle?</string>
+    <string name="dialog_confirm_arming_msg">Warning! Propellers will spin and drone may begin to fly.</string>
     <string name="radius_label">Radius</string>
+    <string name="menu_action_delete">Delete</string>
+    <string name="menu_action_reverse">Reverse</string>
+    <string name="menu_action_multi_edit">Multi-Edit</string>
     <string name="label_yes_no_dialog_dont_show">Don\'t show again.</string>
     <string name="file_saved_success">File saved</string>
     <string name="file_saved_error">Error saving file</string>
@@ -368,14 +498,21 @@
     <string name="unlock_slider_description">Slide to %s</string>
     <string name="pref_misc_title">Miscellaneous</string>
     <string name="pref_dialogs_title">Preference Dialogs</string>
+    <string name="pref_warn_on_arm_title">Arming button warning</string>
     <string name="pref_auto_insert_mission_takeoff_rtl_land_title">Auto insert \'TakeOff\' and
         \'RTL\'/\'Land\' to mission</string>
     <string name="pref_dialog_entry_always">Always</string>
     <string name="pref_dialog_entry_never">Never</string>
     <string name="pref_dialog_entry_ask">Ask</string>
     <string name="pref_dialog_selection_reset_desc"><![CDATA[Reset selection through: Settings -> User Interface -> Preference Dialogs]]></string>
+    <string name="dialog_confirm_take_off_in_auto_title">Take off in Auto?</string>
+    <string name="dialog_confirm_take_off_in_auto_msg">Warning! The drone will now take off and start the mission.</string>
     <string name="pref_dronie_creation_title">Create dronie?</string>
     <string name="pref_dronie_creation_message">Please stand back 8m before starting the dronie.</string>
+    <string name="editor_multi_edit_no_waypoint_error">No waypoint(s) selected.</string>
+    <string name="failed_start_calibration_message">Unable to start calibration!</string>
+    <string name="pref_advanced_menu_title">Advanced Menu</string>
+    <string name="pref_advanced_menu_summary">Enable advanced menu options.</string>
     <string name="pref_licenses">Licenses</string>
     <string name="pref_licenses_summary">Libraries (and their licenses) used in this project</string>
     <string name="upload_params">Upload parameters</string>
@@ -438,6 +575,9 @@
     <string name="label_download_map">Download Map</string>
     <string name="instructions_map_download_selection">Pan and zoom to adjust the map area to save</string>
     <string name="instructions_tap_to_save_map">Tap to save the map</string>
+    <string name="label_map_saved">Map area saved!</string>
+    <string name="label_invalid_mapbox_id">Invalid mapbox id</string>
+    <string name="label_invalid_mapbox_access_token">Invalid mapbox access token</string>
     <string name="alert_invalid_mapbox_credentials">Invalid mapbox credentials! Please update your mapbox settings.</string>
     <string name="vehicle_type">Vehicle Type</string>
     <string name="label_type_copter">Copter</string>
