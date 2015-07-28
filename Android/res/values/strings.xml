@@ -346,6 +346,7 @@
     <string name="speed_label">Speed</string>
     <string name="length_label">Length</string>
     <string name="channel_label">Channel</string>
+    <string name="waypoint_label">Waypoint</string>
     <string name="ground_speed_label">Ground Speed</string>
     <string name="air_speed_label">Air Speed</string>
     <string name="default_angle_value">--°</string>

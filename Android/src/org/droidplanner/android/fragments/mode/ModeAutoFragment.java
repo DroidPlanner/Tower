@@ -16,19 +16,31 @@ import android.widget.ProgressBar;
 import com.o3dr.android.client.Drone;
 import com.o3dr.android.client.apis.MissionApi;
 import com.o3dr.android.client.apis.VehicleApi;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.mission.Mission;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.model.AbstractCommandListener;
+import com.o3dr.services.android.lib.util.MathUtils;
 
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
 import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
+import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
 
-public class ModeAutoFragment extends Fragment implements View.OnClickListener{
-    public static final String WPNAV_SPEED = "WPNAV_SPEED";
+import java.util.ArrayList;
+import java.util.List;
+
+import timber.log.Timber;
+
+public class ModeAutoFragment extends Fragment implements View.OnClickListener, CardWheelHorizontalView.OnCardWheelScrollListener<Integer> {
     private Drone drone;
 
     private static final IntentFilter eventFilter = new IntentFilter();
@@ -36,20 +48,27 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
         eventFilter.addAction(AttributeEvent.MISSION_ITEM_UPDATED);
         eventFilter.addAction(AttributeEvent.PARAMETER_RECEIVED);
         eventFilter.addAction(AttributeEvent.GPS_POSITION);
+        eventFilter.addAction(AttributeEvent.MISSION_UPDATED);
+        eventFilter.addAction(AttributeEvent.MISSION_RECEIVED);
     }
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             switch (action){
+                case AttributeEvent.MISSION_RECEIVED:
+                case AttributeEvent.MISSION_UPDATED:
+                    mission = drone.getAttribute(AttributeType.MISSION);
+                    waypointSelectorAdapter = new NumericWheelAdapter(getActivity().getApplicationContext(),  R.layout.wheel_text_centered, getFirst(), getLast(), "%3d");
+                    waypointSelector.setViewAdapter(waypointSelectorAdapter);
+                    break;
+
                 case AttributeEvent.MISSION_ITEM_UPDATED:
                     mission = drone.getAttribute(AttributeType.MISSION);
-                    int currentMissionItem = intent.getIntExtra(AttributeEventExtra.EXTRA_MISSION_CURRENT_MISSION_ITEM, 0);
                     nextWaypoint = intent.getIntExtra(AttributeEventExtra.EXTRA_MISSION_CURRENT_WAYPOINT, 0);
-                    mission.setCurrentMissionItem(currentMissionItem);
+                    waypointSelector.setCurrentValue(nextWaypoint);
                     break;
                 case AttributeEvent.GPS_POSITION:
-                    remainingMissionLength = intent.getDoubleExtra(AttributeEventExtra.EXTRA_MISSION_REMAINING_DISTANCE, 0);
                     updateMission();
                     break;
             }
@@ -60,9 +79,11 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
     private ProgressBar missionProgress;
     private double remainingMissionLength;
     private boolean missionFinished;
+    private CardWheelHorizontalView<Integer> waypointSelector;
+    private NumericWheelAdapter waypointSelectorAdapter;
 
 
-	@Override
+    @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.fragment_mode_auto, container, false);
 	}
@@ -72,9 +93,12 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
         super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.mc_pause).setOnClickListener(this);
         view.findViewById(R.id.mc_restart).setOnClickListener(this);
-        view.findViewById(R.id.mc_next).setOnClickListener(this);
-        view.findViewById(R.id.mc_prev).setOnClickListener(this);
         missionProgress = (ProgressBar) view.findViewById(R.id.mission_progress);
+        waypointSelector = (CardWheelHorizontalView<Integer>) view.findViewById(R.id.waypoint_selector);
+        waypointSelector.addScrollListener(this);
+        mission = drone.getAttribute(AttributeType.MISSION);
+        waypointSelectorAdapter = new NumericWheelAdapter(getActivity().getApplicationContext(),  R.layout.wheel_text_centered, getFirst(), getLast(), "%3d");
+        waypointSelector.setViewAdapter(waypointSelectorAdapter);
     }
 
     @Override
@@ -89,14 +113,6 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
             }
 			case R.id.mc_restart: {
                 gotoMissionItem(0);
-                break;
-            }
-			case R.id.mc_next: {
-                gotoMissionItem(mission.getCurrentMissionItem() + 1);
-                break;
-            }
-			case R.id.mc_prev: {
-                gotoMissionItem(mission.getCurrentMissionItem() - 1);
                 break;
             }
 		}
@@ -116,7 +132,7 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
 
     private void gotoMissionItem(final int waypoint){
         if(missionFinished || waypoint == 0){
-            VehicleApi.getApi(drone).setVehicleMode(VehicleMode.COPTER_BRAKE, new AbstractCommandListener() {
+            VehicleApi.getApi(drone).setVehicleMode(VehicleMode.COPTER_GUIDED, new AbstractCommandListener() {
                 @Override
                 public void onSuccess() {
                     MissionApi.getApi(drone).startMission(true, true, new AbstractCommandListener() {
@@ -149,16 +165,69 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+        private double getRemainingMissionLength(){
+        Gps gps = drone.getAttribute(AttributeType.GPS);
+        if(mission == null || mission.getMissionItems().size() == 0 || gps == null || !gps.isValid())
+            return -1;
+        LatLong dronePos = gps.getPosition();
+        List<MissionItem> missionItems = mission.getMissionItems();
+        List<LatLong> path = new ArrayList<LatLong>();
+        path.add(dronePos);
+        for(int i = Math.max(nextWaypoint - 1, 0); i < missionItems.size(); i++){
+            MissionItem item = missionItems.get(i);
+            if(item instanceof MissionItem.SpatialItem){
+                MissionItem.SpatialItem spatialItem = (MissionItem.SpatialItem)item;
+                LatLongAlt coordinate = spatialItem.getCoordinate();
+                path.add(new LatLong(coordinate.getLatitude(), coordinate.getLongitude()));
+            }
+
+        }
+        return MathUtils.getPolylineLength(path);
+    }
+
+    private double getTotalMissionLength(){
+        List<MissionItem> missionItems = mission.getMissionItems();
+        List<LatLong> path = new ArrayList<LatLong>();
+        for(int i = 0; i < missionItems.size(); i++){
+            MissionItem item = missionItems.get(i);
+            if(item instanceof MissionItem.SpatialItem){
+                MissionItem.SpatialItem spatialItem = (MissionItem.SpatialItem)item;
+                LatLongAlt coordinate = spatialItem.getCoordinate();
+                path.add(new LatLong(coordinate.getLatitude(), coordinate.getLongitude()));
+            }
+
+        }
+        return MathUtils.getPolylineLength(path);
+    }
+
 
 
     private void updateMission(){
         if(mission == null)
             return;
-        MissionProxy proxy= ((DroidPlannerApp)getActivity().getApplication()).getMissionProxy();
-        double totalLength = proxy.getMissionLength();
+        double totalLength = getTotalMissionLength();
         missionProgress.setMax((int) totalLength);
+        remainingMissionLength = getRemainingMissionLength();
         missionProgress.setProgress((int) ((totalLength - remainingMissionLength)));
         missionFinished = remainingMissionLength < 5;
+    }
+
+    private int getFirst(){
+        MissionProxy proxy = ((DroidPlannerApp) getActivity().getApplication()).getMissionProxy();
+        if(proxy.getMarkersInfos().size() > 0) {
+            MissionItemMarkerInfo info = (MissionItemMarkerInfo) proxy.getMarkersInfos().get(0);
+            return proxy.getOrder(info.getMarkerOrigin());
+        }
+        return 0;
+    }
+
+    private int getLast(){
+        MissionProxy proxy = ((DroidPlannerApp) getActivity().getApplication()).getMissionProxy();
+        if(proxy.getMarkersInfos().size() > 0) {
+            MissionItemMarkerInfo info = (MissionItemMarkerInfo) proxy.getMarkersInfos().get(proxy.getMarkersInfos().size()-1);
+            return proxy.getOrder(info.getMarkerOrigin());
+        }
+        return 0;
     }
 
     @Override
@@ -166,4 +235,21 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener{
 		drone = ((DroidPlannerApp)activity.getApplication()).getDrone();
 		super.onAttach(activity);
 	}
+
+    @Override
+    public void onScrollingStarted(CardWheelHorizontalView cardWheel, Integer startValue) {
+
+    }
+
+    @Override
+    public void onScrollingUpdate(CardWheelHorizontalView cardWheel, Integer oldValue, Integer newValue) {
+
+    }
+
+    @Override
+    public void onScrollingEnded(CardWheelHorizontalView cardWheel, Integer startValue, Integer endValue) {
+        if(cardWheel.getId() == R.id.waypoint_selector) {
+            gotoMissionItem(endValue);
+        }
+    }
 }
