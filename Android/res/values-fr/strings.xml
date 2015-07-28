@@ -487,6 +487,8 @@
     <string name="pref_title_mapbox_tile_provider">Fournisseur de Tuiles Mapbox</string>
     <string name="pref_title_mapbox_map_download">Télécharger la carte Hors-ligne</string>
     <string name="pref_summary_mapbox_map_download">Cliquer pour mettre la carte en cache pour un usage Hors-ligne</string>
+    <string name="label_map_saved">Zone de la carte sauvegardée!</string>
+    <string name="label_invalid_mapbox_id">ID Mapbox incorrect</string>
     <string name="pref_title_mapbox_id">ID Mapbox</string>
     <string name="pref_hint_mapbox_id">Map ID Mapbox</string>
     <string name="pref_summary_mapbox_id">Entrez votre Map ID Mapbox</string>
