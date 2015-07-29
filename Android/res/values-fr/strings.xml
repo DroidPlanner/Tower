@@ -473,6 +473,9 @@
     <string name="label_download_map">Télécharger la carte</string>
     <string name="instructions_map_download_selection">Orienter, zoomer pour ajuster la zone de la carte à sauvegarder</string>
     <string name="instructions_tap_to_save_map">Appuyer pour sauvegarder la carte</string>
+    <string name="label_map_saved">Zone de la carte sauvegardée!</string>
+    <string name="label_invalid_mapbox_id">ID Mapbox incorrect</string>
+    <string name="label_invalid_mapbox_access_token">Token d\'accès Mapbox non valide</string>
     <string name="alert_invalid_mapbox_credentials">Certificats MapBox non valides! Merci de mettre à jour vos paramètres Mapbox.</string>
     <string name="vehicle_type">Type de drone</string>
     <string name="label_type_copter">Copter</string>
