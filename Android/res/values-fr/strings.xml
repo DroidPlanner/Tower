@@ -3,8 +3,8 @@
 
     <!-- Generic strings -->  <!-- 100% -->
     <string name="settings">Réglages</string>
-    <!-- not found -->
-    <string name="menu_drone_setup">Configuration Drone</string><!-- not found -->
+
+    <string name="menu_drone_setup">Configuration Drone</string>
     <string name="app_settings">Paramètres App</string>
     <string name="flight_data">Données de Vol</string>
     <string name="editor">Editeur</string>
@@ -12,37 +12,33 @@
     <string name="download_mission">Télécharger la mission</string>
 
     <!-- Drone Setup tabs --> <!-- 100% -->
-    <!-- not found -->
+
     <string name="screen_cal">Calibration</string>
     <string name="screen_checklist">Checklist</string>
-    <!-- not found -->
+
     <string name="screen_parameters">Paramètres</string>
 
     <!-- App Settings/Preferences --> <!-- 100% -->
     <string name="pref_connection_type">Type de connexion</string>
-    <string name="pref_connection_type_summary">Quel lien utiliser pour connecter le drone</string> <!-- not found -->
+    <string name="pref_connection_type_summary">Quel lien utiliser pour connecter le drone</string>
     <string name="pref_maps_title">Cartes</string>
     <string name="pref_maps_providers_summary">Choisir un fournisseur de cartes</string>
     <string name="pref_maps_providers_title">Fournisseurs de cartes</string>
-    <!-- not found -->
+
     <string name="pref_ui">Paramètres Interface Utilisateur</string>
     <string name="pref_ui_language_english">English as UI Language</string>
     <string name="pref_ui_language_english_summary">Use English language (instead of system language). Requires app restart.</string>
-    <!-- not found -->
-    <!-- not found -->
+
+
     <string name="pref_keep_screen_bright">Garder l\'écran allumé</string>
     <string name="pref_keep_screen_bright_summary">Cocher pour garder l\'écran allumé et lumineux (affecte la durée de vie batterie)</string>
     <string name="pref_lock_screen_orientation">Verrouiller l\'orientation d\'écran</string>
     <string name="pref_lock_screen_orientation_summary">Cocher pour verrouiller l\'actuel orientation d\'écran lorsque connecté</string>
     <string name="pref_flight_data">Données de Vol</string>
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
+
+
     <string name="pref_advanced">Paramètres Avancés</string>
-    <!-- not found -->
+
     <string name="pref_map_type">Type de carte</string>
     <string name="pref_map_type_summary">Quel type de carte utiliser</string>
     <string name="pref_tile_provider_title">Fournisseur de tuiles (cartes)</string>
@@ -52,25 +48,12 @@
     <string name="pref_enable_tts">Activer la sortie vocale</string>
     <string name="pref_enable_tts_summary">Cocher pour disposer de messages vocaux lors d\'événements importants</string>
     <string name="pref_request_max_volume">Mettre le son au maximum au démarrage de Tower</string>
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
+
+
     <!-- MODE -->
     <!-- MODE -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
+
+
     <string name="pref_connection">Préférences de Connexion</string>
     <string name="pref_usb">Connexion USB</string>
     <string name="pref_baud_type">Vitesse du lien de Télémétrie</string>
@@ -83,19 +66,18 @@
     <string name="about">A propos</string>
     <string name="version">Version</string>
     <string name="storage_folder">Dossier de stockage</string>
-    <!-- not found -->
-    <!-- not found -->
+
 
     <!-- Toast Message --> <!-- 100% -->
     <string name="user_autopan_long_press">Appui long pour activer un panoramique automatique.</string>
-    <string name="drone_autopan_long_press">Appui long pour activer un panoramique automatique.</string><!-- not found -->
-    <string name="drone_no_location">Aucune localisation du drone n\'est disponible</string><!-- not found -->
+    <string name="drone_autopan_long_press">Appui long pour activer un panoramique automatique.</string>
+    <string name="drone_no_location">Aucune localisation du drone n\'est disponible</string>
 
     <!-- Connection State --> <!-- 100% -->
     <string name="menu_connect">Connect</string>
     <string name="menu_disconnect">Se déconnecter</string>
-    <string name="connected">Connecté</string><!-- not found -->
-    <string name="disconnected">Déconnecté</string><!-- not found -->
+    <string name="connected">Connecté</string>
+    <string name="disconnected">Déconnecté</string>
 
     <!-- Common Setup Buttons Resource Strings --> <!-- 100% -->
     <string name="button_setup_calibrate">Calibrer</string>
@@ -115,7 +97,7 @@
     <string name="distance_between_pictures">Longitudinal</string>
     <string name="area">Zone:</string>
     <string name="camera_">Caméra:</string>
-    <!-- not found -->
+
     <string name="hatch_angle">Orientation:</string>
     <string name="flight_altitude">Altitude de vol:</string>
     <string name="overlap">Overlap:</string>
@@ -123,11 +105,10 @@
     <string name="mission_length">Longueur parcours</string>
     <string name="pictures">Photos</string>
     <string name="number_of_strips">Nombre de bandes</string>
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
+
+
     <string name="draw_the_survey_region">Dessiner la zone de surveillance</string>
-    <!-- not found -->
+
 
     <!-- Flight Mode information --> <!-- 100%, not verified -->
     <string name="mode_acro">Le Mode Acro permets un contrôle entièrement manuel du drone (angles, rotations). Attention expérience nécessaire.</string>
@@ -156,29 +137,29 @@
     <string name="waypointType_Set_Servo">SET SERVO</string>
     <string name="waypointType_EPM">EPM GRIPPER</string>
     <string name="waypointType_Circle">Circle</string>
-    <string name="waypointType_Loiter">Loiter</string><!-- not found -->
+    <string name="waypointType_Loiter">Loiter</string>
     <string name="waypointType_ROI">Region of Interest</string>
-    <string name="waypointType_Survey">Survey</string><!-- not found -->
+    <string name="waypointType_Survey">Survey</string>
     <string name="waypointType_BuildingMapper">Structure Scan</string>
 
     <!-- Waypoint info -->  <!-- 100% -->
     <string name="waypointInfo_Land">Le drone atterri à sa position définie. Vous devez manuellement sortir du Mode Auto pour désarmer les moteurs.</string>
-    <!-- not found -->
-    <!-- not found -->
+
+
     <string name="waypointInfo_LoiterN">Le drone orbite autour de la position définie pendant le nombre de tours désirés.</string>
     <string name="waypointInfo_LoiterT">Le drone tiens la position actuelle pendant le nombre désiré de secondes ou indéfiniment (à la fin de la mission).</string>
     <string name="waypointInfo_RTL">Le drone est envoyé sur sa position d\'armement(HOME).</string>
     <string name="waypointInfo_TakeOff">Le drone décolle vers l\'altitude spécifiée avant de poursuivre sa mission.</string>
     <string name="waypointInfo_Waypoint">Le drone se déplace jusqu\'à son point spécifié (3D). Un délai est possible une fois la position atteinte.</string>
-    <!-- not found -->
+
     <string name="waypointInfo_CondYaw">Le drone pointe le cap désiré.</string>
-    <!-- not found -->
+
     <string name="waypointInfo_SetSpeed">Le drone modifie sa vitesse d\'évolution jusqu\'à la fin de la mission ou jusqu\'à la prochaine commande du même type.</string>
     <string name="waypointInfo_CameraTrigger">Le drone déclenche la caméra à distances régulières spécifiées.</string>
     <string name="waypointInfo_SetServo">Le drone commande le servo à la valeur PWM spécifiée.</string>
     <string name="waypointInfo_EpmGrabber">Le drone asservit la charge utile EPM.</string>
     <string name="waypointInfo_ROI">Le drone pointe une location (3D).</string>
-    <!-- not found -->
+
 
     <!-- Custom waypoint info --> <!-- 100% -->
     <string name="pwm">PWM</string>
@@ -188,24 +169,19 @@
     <string name="editor_info_window">Distance: 0m, Temps de Vol estimé: 0:00</string>
     <string name="editor_info_window_distance">Distance: %s</string>
     <string name="editor_info_window_flight_time">Temps de Vol estimé: %1$02d:%2$02d</string>
-    <string name="editor_info_window_heading">Cap: %.0f°</string><!-- not found -->
+    <string name="editor_info_window_heading">Cap: %.0f°</string>
     <string name="distance_to_home">Distance Point Home:</string>
-    <string name="loiter_time">Temps d\'Attente</string><!-- not found -->
+    <string name="loiter_time">Temps d\'Attente</string>
     <string name="waypoint_delay">Délai avant le prochain Waypoint</string>
-    <!-- not found -->
-    <!-- not found -->
+
+
     <string name="circle_radius">Rayon du cercle</string>
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
+
+
     <string name="waypoint_longitude">Longitude: %f°</string>
     <string name="waypoint_latitude">Latitude: %f°</string>
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
+
+
     <string name="circle_turns">Nombre de tours</string>
     <string name="structure_scan_description">Le drone se déplace autour de la structure à différentes hauteurs dans le cas où plusieurs passages seraient définis.</string>
     <string name="structure_scan_start_alt">Altitude de départ</string>
@@ -225,12 +201,12 @@
     <string name="refreshing_parameters">Rafraichissement des Paramètres</string>
     <string name="parameters_saved">Paramètres sauvegardés</string>
     <string name="msg_parameters_written_to_drone">Paramètres transférés au drone</string>
-    <string name="metadata_value">Valeur:</string><!-- not found -->
-    <string name="metadata_custom_value">** Valeur personnalisée **</string><!-- not found -->
+    <string name="metadata_value">Valeur:</string>
+    <string name="metadata_custom_value">** Valeur personnalisée **</string>
     <string name="metadata_values">Valeurs:</string>
     <string name="metadata_units">Unités:</string>
-    <string name="metadata_range">Distance:</string><!-- not found -->
-    <string name="lst_note_hint">Pour ajoute plus de lignes, appuyer sur Enter</string><!-- not found -->
+    <string name="metadata_range">Distance:</string>
+    <string name="lst_note_hint">Pour ajoute plus de lignes, appuyer sur Enter</string>
 
     <!-- Calibration data progress --> <!-- 100%, not verified -->
     <string name="progress_title_downloading">Téléchargement des données de calibration</string>
@@ -298,9 +274,9 @@
 
     <!-- Main Screen and Telemetry -->  <!-- not 100% verified -->
     <string name="telemetry_default_value">0.0</string>
-    <string name="climb_rate_label">Taux de montée</string><!-- not found -->
+    <string name="climb_rate_label">Taux de montée</string>
     <string name="altitude_label">Altitude</string>
-    <string name="roi_height_label">Hauteur ROI</string><!-- not found -->
+    <string name="roi_height_label">Hauteur ROI</string>
     <string name="speed_label">Vitesse</string>
     <string name="length_label">Distance</string>
     <string name="channel_label">Voie</string>
@@ -318,9 +294,9 @@
     <string name="mission_control_dronie">Dronie</string>
     <string name="mission_control_condition_yaw_angle">Cap ciblé</string>
     <string name="mission_control_condition_yaw_relative">Cap relatif ciblé</string>
-    <!-- not found -->
-    <string name="drawer_open">Ouvrir le dessinateur de parcours</string><!-- not found -->
-    <string name="drawer_close">Fermer le dessinateur de parcours</string><!-- not found -->
+
+    <string name="drawer_open">Ouvrir le dessinateur de parcours</string>
+    <string name="drawer_close">Fermer le dessinateur de parcours</string>
     <string name="guided_mode_warning">Appuyer sur OK pour entrer en Mode Guided. \nPour changer de position, Maintenir Appuyé sur la carte.</string>
 
     <!-- Bluetooth device selection strings --> <!-- 100% -->
@@ -336,11 +312,11 @@
 
     <!-- Text To Speech --> <!-- 100% -->
     <string name="pref_title_tts">Sortie Vocale</string>
-    <!-- not found -->
-    <string name="pref_title_tts_periodic_status">Notifications périodiques</string><!-- not found -->
-    <string name="pref_tts_periodic_summary">Ce qui est inclus dans les notifications périodiques.</string><!-- not found -->
+
+    <string name="pref_title_tts_periodic_status">Notifications périodiques</string>
+    <string name="pref_tts_periodic_summary">Ce qui est inclus dans les notifications périodiques.</string>
     <string name="pref_tts_periodic_period">Intervalle</string>
-    <string name="pref_tts_periodic_period_summary">Combien de fois les notifications périodiques sont lues.</string><!-- not found -->
+    <string name="pref_tts_periodic_period_summary">Combien de fois les notifications périodiques sont lues.</string>
     <string name="pref_tts_periodic_bat_volt">Tension Batterie</string>
     <string name="pref_tts_periodic_bat_volt_summary">Cocher pour lire la Tension Batterie.</string>
     <string name="pref_tts_periodic_alt">Altitude</string>
@@ -350,16 +326,14 @@
     <string name="pref_tts_periodic_airspeed">Vitesse Air</string>
     <string name="pref_tts_periodic_airspeed_summary">Cocher pour lire la Vitesse Air.</string>
     <string name="pref_title_tts_warnings">Alertes</string>
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
+
+
     <string name="pref_tts_warning_400ft_ceiling_exceeded">400ft (122m) dépassés</string>
     <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">Cocher pour être averti du dépassement des 400ft.</string>
     <string name="pref_tts_warning_low_signal_strength">Force de signal faible</string>
     <string name="pref_tts_warning_low_signal_strength_summary">Cocher pour être averti d\'une mauvaise connexion avec le drone.</string>
-    <string name="pref_tts_warning_lost_signal">Etat de Connexion</string><!-- not found -->
-    <string name="pref_tts_warning_lost_signal_summary">Cocher pour être averti d\'une connexion rompue ou restaurée avec le drone.</string><!-- not found -->
+    <string name="pref_tts_warning_lost_signal">Etat de Connexion</string>
+    <string name="pref_tts_warning_lost_signal_summary">Cocher pour être averti d\'une connexion rompue ou restaurée avec le drone.</string>
     <string name="pref_tts_warning_autopilot_warnings">Alertes issues de l\'autopilot</string>
     <string name="pref_tts_warning_autopilot_warnings_summary">Cocher pour être averti sur les échecs d\'armement, batterie faible, etc.</string>
     <string name="pref_tts_periodic_status_disabled">Notifications périodique désactivé</string>
@@ -390,10 +364,10 @@
     <string name="pref_ui_realtime_footprints_summary">Cocher pour activer la projection de la caméra au sol (Temps réel)</string>
 
     <!-- Others (when possible move to a grouping above) --> <!-- 100% -->
-    <!-- not found -->
-    <string name="mode_switch">Assigne la Voie 5 à un interrupteur de votre Radiocommande pour contrôler les Modes de Vol. Déplacer l\'interrupteur à chaque position et sélectionner le mode de vol ci-dessous.</string><!-- not found -->
-    <string name="msg_connect_first">Merci d\'abord de se connecter</string><!-- not found -->
-    <!-- not found -->
+
+    <string name="mode_switch">Assigne la Voie 5 à un interrupteur de votre Radiocommande pour contrôler les Modes de Vol. Déplacer l\'interrupteur à chaque position et sélectionner le mode de vol ci-dessous.</string>
+    <string name="msg_connect_first">Merci d\'abord de se connecter</string>
+
     <string name="pref_title_screen">Ecran</string>
     <string name="pref_title_notifications">Notifications</string>
     <string name="firmware_version">Version Firmware</string>
@@ -409,8 +383,8 @@
     <string name="pref_ui_gps_hdop_title">Affiche le HDOP Satellite</string>
     <!-- Help --> <!-- 100% -->
     <string name="label_steps_count">Nombre de passages</string>
-    <!-- not found -->
-    <!-- not found -->
+
+
     <string name="radius_label">Rayon</string>
     <string name="label_yes_no_dialog_dont_show">Ne plus afficher</string>
     <string name="file_saved_success">Fichier sauvegardé</string>
@@ -423,7 +397,8 @@
     <string name="status_waiting_for_gps">En attente de GPS…</string>
 
     <!-- Preference dialogs --> <!-- 100% -->
-    <string name="unlock_slider_description">Glisser</string><!-- a confirmer car termes anglais s'ajoutent "Glisser vers %s" arm disarm -->
+    <string name="unlock_slider_description">Glisser</string>
+    <!-- a confirmer car termes anglais s'ajoutent "Glisser vers %s" arm disarm -->
     <string name="pref_misc_title">Divers</string>
     <string name="pref_dialogs_title">Dialogues de préférences</string>
     <string name="pref_auto_insert_mission_takeoff_rtl_land_title">Ajout automatique des Waypoints décollage, RTL, et Atterrissage à la mission</string>
@@ -431,12 +406,12 @@
     <string name="pref_dialog_entry_never">Jamais</string>
     <string name="pref_dialog_entry_ask">Demander</string>
     <string name="pref_dialog_selection_reset_desc"><![CDATA[Reset selection through: Settings -> User Interface -> Preference Dialogs]]></string>
-    <!-- not found -->
-    <!-- not found -->
-    <string name="pref_dronie_creation_title">Réaliser un dronie?</string> <!-- not found -->
-    <string name="pref_dronie_creation_message">Merci de se positionner à 8 mètres avant de commencer le dronie.</string> <!-- not found -->
-    <!-- not found -->
-    <!-- not found -->
+
+
+    <string name="pref_dronie_creation_title">Réaliser un dronie?</string>
+    <string name="pref_dronie_creation_message">Merci de se positionner à 8 mètres avant de commencer le dronie.</string>
+
+
     <string name="pref_licenses">Licences</string>
     <string name="pref_licenses_summary">Librairies (et leurs licences) utilisées dans ce projet</string>
     <string name="upload_params">Transférer les paramètres</string>
@@ -457,13 +432,13 @@
     <string name="delete_selected_waypoints_title">Suppression des Waypoints sélectionnés</string>
     <string name="label_select_all">Tout sélectionner</string>
     <string name="guided_scan_roi_set_message">Cibler la location sélectionnée.</string>
-    <string name="mode_follow_guided_scan">Le drone suis l\'utilisateur en même temps que resté verrouillé sur un point d\'intérêt. Appui long sur la carte pour sélectionner le point d\'intérêt.</string><!-- not found -->
+    <string name="mode_follow_guided_scan">Le drone suis l\'utilisateur en même temps que resté verrouillé sur un point d\'intérêt. Appui long sur la carte pour sélectionner le point d\'intérêt.</string>
     <string name="pref_no_saved_bluetooth_device_title">Pas de module Bluetooth sauvegardé.</string>
     <string name="label_mission_item_type_selection">sélectionner le type de Waypoint</string>
-    <string name="label_mission_item_type_no_selection">Pas d\'option disponible</string><!-- not found -->
+    <string name="label_mission_item_type_no_selection">Pas d\'option disponible</string>
     <string name="description_mission_item_type_selection">Cliquer pour sélectionner le type du Waypoint.</string>
     <string name="description_mission_item_type_no_selection">Aucune option de type n\'est disponible pour l\'objet sélectionné.</string>
-    <string name="label_vehicle_details">Détails du drone</string><!-- not found -->
+    <string name="label_vehicle_details">Détails du drone</string>
     <string name="pref_ground_collision_warning_title">Impact au sol</string>
     <string name="pref_ground_collision_warning_summary">Cocher pour être averti lors d\'un impact imminent au sol.</string>
     <string name="pref_map_rotation_title">Active la rotation de la carte</string>
