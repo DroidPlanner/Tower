@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!-- Dimension for the telemetry ui elements -->
     <dimen name="largeTelemetryTextSize">16sp</dimen>
@@ -10,6 +10,10 @@
     <dimen name="flight_action_height">80dp</dimen>
     <dimen name="fragment_mission_control_padding_left">50dp</dimen>
     <dimen name="fragment_mission_control_padding_right">50dp</dimen>
+
+    <!-- Dimension for the editor buttons -->
+    <dimen name="editor_button_width">56dp</dimen>
+    <dimen name="editor_button_height">56dp</dimen>
 
     <!-- Dimension for the editor list items -->
     <dimen name="editor_list_item_text_size">24sp</dimen>
@@ -33,14 +37,6 @@
     <dimen name="setup_action_button_width">120dp</dimen>
 
     <!-- Dimensions for the setup tuning screen -->
-    <integer name="tuning_graph_weight">7</integer>
-    <integer name="tuning_params_weight">3</integer>
-    <dimen name="tuning_edit_number_button_width">60dp</dimen>
-    <dimen name="tuning_edit_number_button_height">60dp</dimen>
-    <dimen name="tuning_edit_number_text_size">11sp</dimen>
-    <dimen name="tuning_mission_header_title_height">64dp</dimen>
     <dimen name="info_bar_text_size">15sp</dimen>
     <dimen name="action_drawer_width">300dp</dimen>
-    <dimen name="fab_edge_distance">24dp</dimen>
-
-</resources>
+    </resources>
