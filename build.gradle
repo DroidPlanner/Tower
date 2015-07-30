@@ -6,9 +6,11 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
+        maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.0'
+        classpath 'com.android.tools.build:gradle:1.2.3'
+        classpath 'io.fabric.tools:gradle:1.19.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -37,6 +39,8 @@ allprojects {
                 password getMavenApiKey()
             }
         }
+
+        maven { url 'https://maven.fabric.io/public' }
 
         flatDir {
             dirs 'libs'

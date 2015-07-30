@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.o3dr.android.client.ControlTower;
 import com.o3dr.android.client.Drone;
 import com.o3dr.android.client.interfaces.DroneListener;
@@ -22,6 +23,7 @@ import com.o3dr.services.android.lib.drone.connection.ConnectionResult;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 import com.o3dr.services.android.lib.drone.connection.DroneSharePrefs;
 
+import io.fabric.sdk.android.Fabric;
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader;
 import org.droidplanner.android.notifications.NotificationHandler;
@@ -139,6 +141,11 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if(!BuildConfig.DEBUG) {
+            Fabric.with(this, new Crashlytics());
+        }
+
         final Context context = getApplicationContext();
 
         dpPrefs = new DroidPlannerPrefs(context);
