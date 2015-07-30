@@ -163,8 +163,10 @@ public class ParamsFragment extends ApiListenerListFragment {
                     }
 
                 } else {
-                    snackbar.dismiss();
-                    snackbar = null;
+                    if(snackbar != null) {
+                        snackbar.dismiss();
+                        snackbar = null;
+                    }
                 }
             }
         });
@@ -342,6 +344,7 @@ public class ParamsFragment extends ApiListenerListFragment {
                     parametersCount + " " + getString(R.string.msg_parameters_written_to_drone),
                     Toast.LENGTH_SHORT).show();
         }
+        snackbar = null;
     }
 
     private void openParametersFromFile() {

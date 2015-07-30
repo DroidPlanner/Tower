@@ -170,7 +170,7 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment {
         mArmedButtons = view.findViewById(R.id.mc_armed_buttons);
         mInFlightButtons = view.findViewById(R.id.mc_in_flight_buttons);
 
-        final Button connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
+        final View connectBtn = view.findViewById(R.id.mc_connectBtn);
         connectBtn.setOnClickListener(this);
 
         homeBtn = (Button) view.findViewById(R.id.mc_homeBtn);

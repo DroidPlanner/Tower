@@ -7,10 +7,12 @@ import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +28,7 @@ import org.droidplanner.android.dialogs.SlideToUnlockDialog;
 import org.droidplanner.android.dialogs.SupportYesNoDialog;
 import org.droidplanner.android.dialogs.SupportYesNoWithPrefsDialog;
 import org.droidplanner.android.fragments.SettingsFragment;
+import org.droidplanner.android.fragments.actionbar.VehicleStatusFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -78,23 +81,44 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
     @Override
     public void setContentView(int resId){
         super.setContentView(resId);
-        initToolbar();
+
+        final int toolbarId = getToolbarId();
+        final Toolbar toolbar = (Toolbar) findViewById(toolbarId);
+        initToolbar(toolbar);
     }
 
     @Override
     public void setContentView(View view){
         super.setContentView(view);
-        initToolbar();
+
+        final int toolbarId = getToolbarId();
+        final Toolbar toolbar = (Toolbar) findViewById(toolbarId);
+        initToolbar(toolbar);
     }
 
-    protected void initToolbar(){
+    protected void initToolbar(Toolbar toolbar){
+        if(toolbar == null)
+            return;
+
+        setSupportActionBar(toolbar);
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayShowTitleEnabled(isDisplayTitleEnabled());
+        }
 
-            updateActionBarLogo();
+        addToolbarFragment();
+    }
+
+    protected void addToolbarFragment(){
+        final int toolbarId = getToolbarId();
+        final FragmentManager fm = getSupportFragmentManager();
+        VehicleStatusFragment status = (VehicleStatusFragment) fm.findFragmentById(toolbarId);
+        if(status == null){
+            status = new VehicleStatusFragment();
+            fm.beginTransaction().add(toolbarId, status).commit();
         }
     }
 
@@ -102,26 +126,7 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
         return false;
     }
 
-    private void updateActionBarLogo(){
-        if(!shouldDisplayLogo())
-            return;
-
-        final ActionBar actionBar = getSupportActionBar();
-        if(actionBar == null)
-            return;
-
-        final Drone drone = dpApp.getDrone();
-        if(drone == null || !drone.isConnected()){
-            actionBar.setLogo(R.drawable.ic_navigation_grey_700_18dp);
-        }
-        else{
-            actionBar.setLogo(R.drawable.ic_navigation_green_600_18dp);
-        }
-    }
-
-    protected boolean shouldDisplayLogo(){
-        return true;
-    }
+    protected abstract int getToolbarId();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -184,13 +189,11 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
     private void onDroneConnected() {
         invalidateOptionsMenu();
         screenOrientation.requestLock();
-        updateActionBarLogo();
     }
 
     private void onDroneDisconnected() {
         invalidateOptionsMenu();
         screenOrientation.unlock();
-        updateActionBarLogo();
     }
 
     @Override

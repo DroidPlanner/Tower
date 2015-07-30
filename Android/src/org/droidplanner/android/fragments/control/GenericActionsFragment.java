@@ -28,7 +28,7 @@ public class GenericActionsFragment extends BaseFlightControlFragment {
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        Button connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
+        View connectBtn = view.findViewById(R.id.mc_connectBtn);
         connectBtn.setOnClickListener(this);
     }
 

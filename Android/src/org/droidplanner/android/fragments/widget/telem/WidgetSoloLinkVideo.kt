@@ -19,6 +19,7 @@ import com.o3dr.services.android.lib.model.SimpleCommandListener
 import org.droidplanner.android.R
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment
 import timber.log.Timber
+import kotlin.platform.platformStatic
 import kotlin.properties.Delegates
 
 /**
