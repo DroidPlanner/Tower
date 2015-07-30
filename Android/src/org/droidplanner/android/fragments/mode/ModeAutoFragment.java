@@ -38,8 +38,6 @@ import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapte
 import java.util.ArrayList;
 import java.util.List;
 
-import timber.log.Timber;
-
 public class ModeAutoFragment extends Fragment implements View.OnClickListener, CardWheelHorizontalView.OnCardWheelScrollListener<Integer> {
     private Drone drone;
 
@@ -59,7 +57,7 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener, 
                 case AttributeEvent.MISSION_RECEIVED:
                 case AttributeEvent.MISSION_UPDATED:
                     mission = drone.getAttribute(AttributeType.MISSION);
-                    waypointSelectorAdapter = new NumericWheelAdapter(getActivity().getApplicationContext(),  R.layout.wheel_text_centered, getFirst(), getLast(), "%3d");
+                    waypointSelectorAdapter = new NumericWheelAdapter(getActivity().getApplicationContext(),  R.layout.wheel_text_centered, getFirstWaypoint(), getLastWaypoint(), "%3d");
                     waypointSelector.setViewAdapter(waypointSelectorAdapter);
                     break;
 
@@ -97,7 +95,7 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener, 
         waypointSelector = (CardWheelHorizontalView<Integer>) view.findViewById(R.id.waypoint_selector);
         waypointSelector.addScrollListener(this);
         mission = drone.getAttribute(AttributeType.MISSION);
-        waypointSelectorAdapter = new NumericWheelAdapter(getActivity().getApplicationContext(),  R.layout.wheel_text_centered, getFirst(), getLast(), "%3d");
+        waypointSelectorAdapter = new NumericWheelAdapter(getActivity().getApplicationContext(),  R.layout.wheel_text_centered, getFirstWaypoint(), getLastWaypoint(), "%3d");
         waypointSelector.setViewAdapter(waypointSelectorAdapter);
     }
 
@@ -138,7 +136,7 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener, 
                     MissionApi.getApi(drone).startMission(true, true, new AbstractCommandListener() {
                         @Override
                         public void onSuccess() {
-                            MissionApi.getApi(drone).gotoMissionItem(waypoint,null);
+                            MissionApi.getApi(drone).gotoWaypoint(waypoint, null);
                         }
 
                         @Override
@@ -161,7 +159,7 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener, 
                 public void onTimeout() {}
             });
         }else{
-            MissionApi.getApi(drone).gotoMissionItem(waypoint,null);
+            MissionApi.getApi(drone).gotoWaypoint(waypoint, null);
         }
     }
 
@@ -212,7 +210,7 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener, 
         missionFinished = remainingMissionLength < 5;
     }
 
-    private int getFirst(){
+    private int getFirstWaypoint(){
         MissionProxy proxy = ((DroidPlannerApp) getActivity().getApplication()).getMissionProxy();
         if(proxy.getMarkersInfos().size() > 0) {
             MissionItemMarkerInfo info = (MissionItemMarkerInfo) proxy.getMarkersInfos().get(0);
@@ -221,7 +219,7 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener, 
         return 0;
     }
 
-    private int getLast(){
+    private int getLastWaypoint(){
         MissionProxy proxy = ((DroidPlannerApp) getActivity().getApplication()).getMissionProxy();
         if(proxy.getMarkersInfos().size() > 0) {
             MissionItemMarkerInfo info = (MissionItemMarkerInfo) proxy.getMarkersInfos().get(proxy.getMarkersInfos().size()-1);

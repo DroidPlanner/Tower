@@ -172,12 +172,6 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
     public boolean onMarkerClick(MarkerInfo markerInfo) {
         if(markerInfo == null)
             return false;
-
-        if(markerInfo instanceof MissionItemMarkerInfo){
-            MissionItemMarkerInfo missionMarkerInfo = (MissionItemMarkerInfo) markerInfo;
-            int waypoint = missionProxy.getOrder(missionMarkerInfo.getMarkerOrigin());
-            MissionApi.getApi(drone).gotoMissionItem(waypoint, null);
-        }
         drone.sendGuidedPoint(markerInfo.getPosition(), false);
         return true;
     }
