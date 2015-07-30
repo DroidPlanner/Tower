@@ -161,14 +161,12 @@ public class WidgetActivity : SuperUI() {
         }
     }
 
-    protected override fun initToolbar(){
-        val toolbar = findViewById(R.id.actionbar_container) as Toolbar?
-        setSupportActionBar(toolbar)
-
-        super.initToolbar()
-
+    protected override fun initToolbar(toolbar: Toolbar?){
+        super.initToolbar(toolbar)
         getSupportActionBar()?.setTitle("SoloLink Video")
     }
+
+    override fun getToolbarId() = R.id.actionbar_container
 
     private fun checkSoloLinkVideoSupport(){
         val drone = dpApp.getDrone()

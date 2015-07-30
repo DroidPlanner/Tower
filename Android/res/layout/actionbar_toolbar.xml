@@ -6,6 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="@dimen/toolbar_min_height"
-    android:gravity="center"
+    android:gravity="center_vertical|start"
     android:background="@drawable/telem_bar_bg"
     app:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>

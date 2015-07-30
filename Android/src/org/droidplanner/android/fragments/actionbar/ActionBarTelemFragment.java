@@ -313,7 +313,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final Signal droneSignal = drone.getAttribute(AttributeType.SIGNAL);
         if(!drone.isConnected() || !droneSignal.isValid()){
             signalTelem.setText(emptyString);
-            signalTelem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_signal_wifi_off_grey_700_18dp,
+            signalTelem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_signal_0_bar_24dp,
                     0, 0, 0);
 
             rssiView.setText("RSSI: " + emptyString);
@@ -328,15 +328,17 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                     droneSignal.getRemFadeMargin());
             final int signalIcon;
             if (signalStrength >= 100)
-                signalIcon = R.drawable.ic_signal_wifi_4_bar_grey_700_18dp;
-            else if (signalStrength >= 75)
-                signalIcon = R.drawable.ic_signal_wifi_3_bar_grey_700_18dp;
-            else if (signalStrength >= 50)
-                signalIcon = R.drawable.ic_signal_wifi_2_bar_grey_700_18dp;
-            else if (signalStrength >= 25)
-                signalIcon = R.drawable.ic_signal_wifi_1_bar_grey_700_18dp;
+                signalIcon = R.drawable.ic_signal_5_bar_24dp;
+            else if (signalStrength >= 80)
+                signalIcon = R.drawable.ic_signal_4_bar_24dp;
+            else if (signalStrength >= 60)
+                signalIcon = R.drawable.ic_signal_3_bar_24dp;
+            else if (signalStrength >= 40)
+                signalIcon = R.drawable.ic_signal_2_bar_24dp;
+            else if(signalStrength >= 20)
+                signalIcon = R.drawable.ic_signal_1_bar_24dp;
             else
-                signalIcon = R.drawable.ic_signal_wifi_0_bar_grey_700_18dp;
+                signalIcon = R.drawable.ic_signal_0_bar_24dp;
 
             signalTelem.setText(String.format(Locale.ENGLISH, "%d%%", signalStrength));
             signalTelem.setCompoundDrawablesWithIntrinsicBounds(signalIcon, 0, 0, 0);
@@ -426,7 +428,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final View batteryPopupView = batteryPopup.getContentView();
         final TextView dischargeView = (TextView) batteryPopupView.findViewById(R.id.bar_power_discharge);
         final TextView currentView = (TextView) batteryPopupView.findViewById(R.id.bar_power_current);
-        final TextView mAhView = (TextView) batteryPopupView.findViewById(R.id.bar_power_mAh);
+        final TextView voltageView = (TextView) batteryPopupView.findViewById(R.id.bar_power_voltage);
 
         String update;
         Battery droneBattery;
@@ -435,8 +437,8 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             update = emptyString;
             dischargeView.setText("D: " + emptyString);
             currentView.setText("C: " + emptyString);
-            mAhView.setText("R: " + emptyString);
-            batteryIcon = R.drawable.ic_battery_unknown_grey_700_18dp;
+            voltageView.setText("V: " + emptyString);
+            batteryIcon = R.drawable.ic_battery_circle_0_36dp;
         } else {
             Double discharge = droneBattery.getBatteryDischarge();
             String dischargeText;
@@ -447,11 +449,39 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             }
 
             dischargeView.setText(dischargeText);
-            mAhView.setText(String.format(Locale.ENGLISH, "R: %2.0f %%", droneBattery.getBatteryRemain()));
+            voltageView.setText(String.format(Locale.ENGLISH, "V: %2.1f V", droneBattery.getBatteryVoltage()));
             currentView.setText(String.format("C: %2.1f A", droneBattery.getBatteryCurrent()));
 
-            update = String.format(Locale.ENGLISH, "%2.1f V", droneBattery.getBatteryVoltage());
-            batteryIcon = R.drawable.ic_battery_std_grey_700_18dp;
+            final double battRemain = droneBattery.getBatteryRemain();
+            update = String.format(Locale.ENGLISH, "%2.0f%%", battRemain);
+
+            if(battRemain >= 100){
+                batteryIcon = R.drawable.ic_battery_circle_8_36dp;
+            }
+            else if(battRemain >= 87.5){
+                batteryIcon = R.drawable.ic_battery_circle_7_36dp;
+            }
+            else if(battRemain >= 75){
+                batteryIcon = R.drawable.ic_battery_circle_6_36dp;
+            }
+            else if(battRemain >= 62.5){
+                batteryIcon = R.drawable.ic_battery_circle_5_36dp;
+            }
+            else if(battRemain >= 50){
+                batteryIcon = R.drawable.ic_battery_circle_4_36dp;
+            }
+            else if(battRemain >= 37.5){
+                batteryIcon = R.drawable.ic_battery_circle_3_36dp;
+            }
+            else if(battRemain >= 25){
+                batteryIcon = R.drawable.ic_battery_circle_2_36dp;
+            }
+            else if(battRemain >= 12.5){
+                batteryIcon = R.drawable.ic_battery_circle_1_36dp;
+            }
+            else{
+                batteryIcon = R.drawable.ic_battery_circle_0_36dp;
+            }
         }
 
         batteryPopup.update();

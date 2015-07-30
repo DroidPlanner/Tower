@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="48dp">
+
+    <ImageView
+        android:id="@+id/status_vehicle_battery"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_battery_circle_levels_48dp"
+        android:paddingLeft="-15.5dp"
+        android:paddingStart="-15.5dp"
+        android:layout_centerVertical="true"/>
+
+    <ImageView
+        android:id="@+id/status_vehicle_connection"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:src="@drawable/ic_navigation_levels_18dp"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/status_vehicle_battery"
+        android:layout_alignStart="@+id/status_vehicle_battery"
+        android:layout_alignRight="@+id/status_vehicle_battery"
+        android:layout_alignEnd="@+id/status_vehicle_battery"
+        android:paddingLeft="-15dp"
+        android:paddingStart="-15dp"
+        android:paddingBottom="2dp"/>
+
+    <ImageView
+        android:id="@+id/status_vehicle_signal"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_signal_bar_levels_24dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/status_vehicle_battery"
+        android:layout_toEndOf="@+id/status_vehicle_battery"
+        android:layout_marginLeft="-18.5dp"
+        android:layout_marginStart="-18.5dp"
+        />
+
+</RelativeLayout>

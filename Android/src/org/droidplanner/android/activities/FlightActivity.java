@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -54,6 +55,7 @@ public class FlightActivity extends DrawerNavigationUI {
 
     static {
         eventFilter.addAction(AttributeEvent.AUTOPILOT_ERROR);
+        eventFilter.addAction(AttributeEvent.AUTOPILOT_MESSAGE);
         eventFilter.addAction(AttributeEvent.STATE_ARMING);
         eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
         eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
@@ -71,6 +73,12 @@ public class FlightActivity extends DrawerNavigationUI {
                     String errorName = intent.getStringExtra(AttributeEventExtra.EXTRA_AUTOPILOT_ERROR_ID);
                     final ErrorType errorType = ErrorType.getErrorById(errorName);
                     onAutopilotError(errorType);
+                    break;
+
+                case AttributeEvent.AUTOPILOT_MESSAGE:
+                    final int logLevel = intent.getIntExtra(AttributeEventExtra.EXTRA_AUTOPILOT_MESSAGE_LEVEL, Log.VERBOSE);
+                    final String message = intent.getStringExtra(AttributeEventExtra.EXTRA_AUTOPILOT_MESSAGE);
+                    onAutopilotError(logLevel, message);
                     break;
 
                 case AttributeEvent.STATE_ARMING:
@@ -308,14 +316,7 @@ public class FlightActivity extends DrawerNavigationUI {
     }
 
     @Override
-    protected boolean shouldDisplayLogo(){
-        return false;
-    }
-
-    @Override
-    protected void initToolbar(){
-        super.initToolbar();
-
+    protected void addToolbarFragment(){
         final int toolbarId = getToolbarId();
         final FragmentManager fm = getSupportFragmentManager();
         Fragment actionBarTelem = fm.findFragmentById(toolbarId);
@@ -512,12 +513,22 @@ public class FlightActivity extends DrawerNavigationUI {
                 break;
         }
 
-        if(!TextUtils.isEmpty(errorLabel)) {
-            handler.removeCallbacks(hideWarningView);
+        onAutopilotError(Log.ERROR, errorLabel);
+    }
 
-            warningView.setText(errorLabel);
-            warningView.setVisibility(View.VISIBLE);
-            handler.postDelayed(hideWarningView, WARNING_VIEW_DISPLAY_TIMEOUT);
+    private void onAutopilotError(int logLevel, CharSequence errorMsg){
+        if(TextUtils.isEmpty(errorMsg))
+            return;
+
+        switch(logLevel){
+            case Log.ERROR:
+            case Log.WARN:
+                handler.removeCallbacks(hideWarningView);
+
+                warningView.setText(errorMsg);
+                warningView.setVisibility(View.VISIBLE);
+                handler.postDelayed(hideWarningView, WARNING_VIEW_DISPLAY_TIMEOUT);
+                break;
         }
     }
 }
