@@ -7,6 +7,7 @@
     <color name="dark_grey">#9E9E9E</color>
     <color name="transparent_light_grey">#d0EFEFEF</color>
     <color name="light_grey">#EFEFEF</color>
+    <color name="white">#fafafa</color>
     <color name="white_grey">#f7f6f6</color>
     <color name="navigation_entry_color">#212121</color>
 

@@ -77,11 +77,13 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
 
     @Override
     public void onTowerConnected() {
+        Timber.d("Connecting to the control tower.");
         if (notificationHandler == null) {
             notificationHandler = new NotificationHandler(getApplicationContext(), drone);
         }
 
         drone.unregisterDroneListener(this);
+
         controlTower.registerDrone(drone, handler);
         drone.registerDroneListener(this);
 
@@ -90,6 +92,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
 
     @Override
     public void onTowerDisconnected() {
+        Timber.d("Disconnection from the control tower.");
         notifyApiDisconnected();
     }
 
@@ -106,6 +109,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
     private final Runnable disconnectionTask = new Runnable() {
         @Override
         public void run() {
+            Timber.d("Starting control tower disconnect process...");
             controlTower.unregisterDrone(drone);
             controlTower.disconnect();
 
@@ -233,12 +237,15 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
 
         boolean isDroneConnected = drone.isConnected();
         if (!connParams.equals(drone.getConnectionParameter()) && isDroneConnected) {
+            Timber.d("Drone disconnection before reconnect attempt with different parameters.");
             drone.disconnect();
             isDroneConnected = false;
         }
 
-        if (!isDroneConnected)
+        if (!isDroneConnected) {
+            Timber.d("Connecting to drone using parameter %s", connParams);
             drone.connect(connParams);
+        }
     }
 
     public static void connectToDrone(Context context) {
@@ -252,8 +259,10 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
     }
 
     public void disconnectFromDrone() {
-        if (drone.isConnected())
+        if (drone.isConnected()) {
+            Timber.d("Disconnecting from drone.");
             drone.disconnect();
+        }
     }
 
     public Drone getDrone() {
@@ -352,6 +361,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
 
     @Override
     public void onDroneServiceInterrupted(String errorMsg) {
+        Timber.d("Drone service interrupted: %s", errorMsg);
         controlTower.unregisterDrone(drone);
         if (notificationHandler != null) {
             notificationHandler.terminate();

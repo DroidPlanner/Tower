@@ -163,8 +163,10 @@ public class ParamsFragment extends ApiListenerListFragment {
                     }
 
                 } else {
-                    snackbar.dismiss();
-                    snackbar = null;
+                    if(snackbar != null) {
+                        snackbar.dismiss();
+                        snackbar = null;
+                    }
                 }
             }
         });
