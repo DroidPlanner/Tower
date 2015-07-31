@@ -8,10 +8,12 @@ import android.graphics.Matrix
 import android.graphics.SurfaceTexture
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.GestureDetectorCompat
 import android.view.*
 import android.widget.TextView
 import com.o3dr.android.client.apis.CapabilityApi
 import com.o3dr.android.client.apis.CapabilityApi.FeatureIds
+import com.o3dr.android.client.apis.GimbalApi
 import com.o3dr.android.client.apis.SoloLinkApi
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
 import com.o3dr.services.android.lib.model.AbstractCommandListener
@@ -48,6 +50,16 @@ public class WidgetSoloLinkVideo : ApiListenerFragment() {
 
     private val videoStatus by Delegates.lazy {
         getView()?.findViewById(R.id.sololink_video_status) as TextView?
+    }
+
+    private val orientationListener = object : GimbalApi.GimbalOrientationListener{
+        override fun onGimbalOrientationUpdate(orientation: com.o3dr.android.client.apis.GimbalApi.GimbalOrientation){
+           Timber.d("orientation: %f, %f, %f", orientation.getPitch(), orientation.getYaw(), orientation.getRoll())
+        }
+
+        override fun onGimbalOrientationCommandError(code: Int){
+            Timber.e("command failed with error code: %d", code)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -111,6 +123,43 @@ public class WidgetSoloLinkVideo : ApiListenerFragment() {
 
             }
 
+        })
+
+        textureView?.setOnTouchListener(object : View.OnTouchListener{
+            var startX : Float = 0f
+            var startY : Float = 0f
+            val gimbalApi = GimbalApi.getApi(drone)
+            val orientation = gimbalApi.getGimbalOrientation()
+            var pitch = orientation.getPitch()
+            var yaw = orientation.getYaw()
+            override fun onTouch(view : View, event : MotionEvent) : Boolean{
+                val conversionX = view.getWidth()/90
+                val conversionY = view.getHeight()/90
+                when (event.getAction()) {
+                    MotionEvent.ACTION_DOWN -> {
+                        startX = event.getX()
+                        startY = event.getY()
+                        gimbalApi.startGimbalControl(orientationListener)
+                        return true
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        val vX = event.getX() - startX
+                        val vY = event.getY() - startY
+                        pitch += vY/conversionX
+                        yaw   += vX/conversionY
+                        Timber.d("drag %f, %f", yaw, pitch)
+                        gimbalApi.updateGimbalOrientation(pitch, yaw, orientation.getRoll(), orientationListener)
+                        startX = event.getX()
+                        startY = event.getY()
+                        pitch = Math.min(pitch, 0f)
+                        pitch = Math.max(pitch, -90f)
+                        return true
+                    }
+                    MotionEvent.ACTION_UP -> gimbalApi.stopGimbalControl(orientationListener)
+
+                }
+                return false
+            }
         })
     }
 
