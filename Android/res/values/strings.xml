@@ -249,6 +249,7 @@
     <string name="speed_label">Speed</string>
     <string name="length_label">Length</string>
     <string name="channel_label">Channel</string>
+    <string name="waypoint_label">Waypoint</string>
     <string name="ground_speed_label">Ground Speed</string>
     <string name="air_speed_label">Air Speed</string>
     <string name="default_angle_value">--°</string>
@@ -446,6 +447,11 @@
     <string name="label_type_plane">Plane</string>
     <string name="label_type_rover">Rover</string>
     <string name="label_type_unknown">Unknown</string>
+    <string name="mode_auto_current_command">Current command:</string>
+    <string name="mode_auto_estimated_finish">Estimated to finish:</string>
+    <string name="mission_control_label">Mission control:</string>
+    <string name="wp_speed">WP Speed:</string>
+    <string name="mission_progress">Mission progress:</string>
     <string name="imu_calibration_start_error">Unable to start imu calibration</string>
     <string name="horizontal_speed_empty">hs: —</string>
     <string name="horizontal_speed_telem">hs: %s</string>
