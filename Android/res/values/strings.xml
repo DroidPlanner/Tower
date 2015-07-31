@@ -135,8 +135,11 @@
     <string name="waypointInfo_SetServo">Move a servo to a particular PWM value.</string>
     <string name="waypointInfo_EpmGrabber">Release the payload of the EPM grabber</string>
     <string name="waypointInfo_ROI">Sets a location and altitude to point copter towards and to aim an optional camera.</string>
+    <string name="waypointType_Do_Jump">Do Jump</string>
+    <string name="waypointInfo_DoJump">Jump to a specific waypoint.</string>
     <!-- Custom waypoint info -->
     <string name="pwm">PWM</string>
+    <string name="repeat_count">Repeat Count</string>
 
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">One cannot add new waypoints after LAND or RTL</string>
