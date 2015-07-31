@@ -6,19 +6,22 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.ImageView
+import com.o3dr.android.client.Drone
 import com.o3dr.android.client.apis.CapabilityApi
 import com.o3dr.android.client.apis.SoloLinkApi
 import com.o3dr.android.client.apis.VehicleApi
 import com.o3dr.services.android.lib.coordinate.LatLong
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
+import com.o3dr.services.android.lib.drone.attribute.AttributeType
+import com.o3dr.services.android.lib.drone.companion.solo.tlv.SoloGoproState
 import org.droidplanner.android.R
 import org.droidplanner.android.activities.helpers.SuperUI
 import org.droidplanner.android.fragments.FlightMapFragment
-import org.droidplanner.android.utils.prefs.AutoPanMode
 import org.droidplanner.android.fragments.widget.telem.WidgetSoloLinkVideo
+import org.droidplanner.android.utils.prefs.AutoPanMode
 import kotlin.properties.Delegates
 
 /**
@@ -46,6 +49,7 @@ public class WidgetActivity : SuperUI() {
             val temp = IntentFilter()
             temp.addAction(AttributeEvent.STATE_CONNECTED)
             temp.addAction(AttributeEvent.STATE_DISCONNECTED)
+            temp.addAction(AttributeEvent.SOLOLINK_GOPRO_STATE_UPDATED)
             return temp
         }
     }
@@ -55,9 +59,16 @@ public class WidgetActivity : SuperUI() {
             when(intent.getAction()){
                 AttributeEvent.STATE_CONNECTED -> checkSoloLinkVideoSupport()
                 AttributeEvent.STATE_DISCONNECTED -> finish()
+                AttributeEvent.SOLOLINK_GOPRO_STATE_UPDATED -> {
+                    //checkGoproControlSupport(dpApp.getDrone())
+                }
             }
         }
 
+    }
+
+    private val widgetButtonBar by Delegates.lazy {
+        findViewById(R.id.widget_button_bar) as View?
     }
 
     private val goToMyLocation by Delegates.lazy {
@@ -175,7 +186,10 @@ public class WidgetActivity : SuperUI() {
         else{
             CapabilityApi.getApi(drone).checkFeatureSupport(CapabilityApi.FeatureIds.SOLOLINK_VIDEO_STREAMING, { featureId, result, bundle ->
                 when (result) {
-                    CapabilityApi.FEATURE_SUPPORTED -> {}
+                    CapabilityApi.FEATURE_SUPPORTED -> {
+                        //checkGoproControlSupport(drone)
+                    }
+
                     else -> finish()
                 }
             })
@@ -199,4 +213,14 @@ public class WidgetActivity : SuperUI() {
     }
 
     override fun isDisplayTitleEnabled() = true
+
+    private fun checkGoproControlSupport(drone: Drone){
+        val goproState: SoloGoproState? = drone.getAttribute(AttributeType.SOLOLINK_GOPRO_STATE)
+        widgetButtonBar?.setVisibility(
+                if (goproState == null)
+                    View.GONE
+                else
+                    View.VISIBLE
+        )
+    }
 }

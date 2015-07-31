@@ -54,7 +54,7 @@ public class WidgetSoloLinkVideo : ApiListenerFragment() {
 
     private val orientationListener = object : GimbalApi.GimbalOrientationListener{
         override fun onGimbalOrientationUpdate(orientation: com.o3dr.android.client.apis.GimbalApi.GimbalOrientation){
-           Timber.d("orientation: %f, %f, %f", orientation.getPitch(), orientation.getYaw(), orientation.getRoll())
+//           Timber.d("orientation: %f, %f, %f", orientation.getPitch(), orientation.getYaw(), orientation.getRoll())
         }
 
         override fun onGimbalOrientationCommandError(code: Int){
@@ -147,7 +147,7 @@ public class WidgetSoloLinkVideo : ApiListenerFragment() {
                         val vY = event.getY() - startY
                         pitch += vY/conversionX
                         yaw   += vX/conversionY
-                        Timber.d("drag %f, %f", yaw, pitch)
+//                        Timber.d("drag %f, %f", yaw, pitch)
                         gimbalApi.updateGimbalOrientation(pitch, yaw, orientation.getRoll(), orientationListener)
                         startX = event.getX()
                         startY = event.getY()
