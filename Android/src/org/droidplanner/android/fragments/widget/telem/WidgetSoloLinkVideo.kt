@@ -14,7 +14,7 @@ import android.widget.TextView
 import com.o3dr.android.client.apis.CapabilityApi
 import com.o3dr.android.client.apis.CapabilityApi.FeatureIds
 import com.o3dr.android.client.apis.GimbalApi
-import com.o3dr.android.client.apis.SoloLinkApi
+import com.o3dr.android.client.apis.solo.SoloCameraApi
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
 import com.o3dr.services.android.lib.model.AbstractCommandListener
 import com.o3dr.services.android.lib.model.SimpleCommandListener
@@ -94,7 +94,7 @@ public class WidgetSoloLinkVideo : ApiListenerFragment() {
             override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, width: Int, height: Int) {
                 adjustAspectRatio(textureView as TextureView);
                 Timber.d("Starting video stream with tag %s", TAG)
-                SoloLinkApi.getApi(drone).startVideoStream(Surface(surface), TAG, object : AbstractCommandListener(){
+                SoloCameraApi.getApi(drone).startVideoStream(Surface(surface), TAG, object : AbstractCommandListener(){
                     override fun onError(error: Int) {
                         Timber.d("Unable to start video stream: %d", error)
                     }
@@ -166,7 +166,7 @@ public class WidgetSoloLinkVideo : ApiListenerFragment() {
     private fun tryStoppingVideoStream(){
         val drone = getDrone()
         Timber.d("Stopping video stream with tag %s", TAG)
-        SoloLinkApi.getApi(drone).stopVideoStream(TAG, object : AbstractCommandListener(){
+        SoloCameraApi.getApi(drone).stopVideoStream(TAG, object : AbstractCommandListener(){
             override fun onError(error: Int) {
                 Timber.d("Unable to stop video stream: %d", error)
             }

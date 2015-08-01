@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.android.client.apis.CapabilityApi;
-import com.o3dr.android.client.apis.SoloLinkApi;
+import com.o3dr.android.client.apis.solo.SoloCameraApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Attitude;
@@ -147,7 +147,7 @@ public class TelemetryFragment extends ApiListenerFragment {
     private void tryStoppingVideoStream() {
         final Drone drone = getDrone();
         Timber.d("Stopping video stream with tag %s.", TAG);
-        SoloLinkApi.getApi(drone).stopVideoStream(TAG, new AbstractCommandListener() {
+        SoloCameraApi.getApi(drone).stopVideoStream(TAG, new AbstractCommandListener() {
             @Override
             public void onSuccess() {
                 Timber.d("Video streaming stopped successfully.");
@@ -167,7 +167,7 @@ public class TelemetryFragment extends ApiListenerFragment {
 
     private void tryStreamingVideo() {
         final Drone drone = getDrone();
-        CapabilityApi.getApi(drone).checkFeatureSupport(CapabilityApi.FeatureIds.SOLOLINK_VIDEO_STREAMING, new CapabilityApi.FeatureSupportListener() {
+        CapabilityApi.getApi(drone).checkFeatureSupport(CapabilityApi.FeatureIds.SOLO_VIDEO_STREAMING, new CapabilityApi.FeatureSupportListener() {
             @Override
             public void onFeatureSupportResult(String featureId, int result, Bundle bundle) {
                 switch (result) {
@@ -178,7 +178,7 @@ public class TelemetryFragment extends ApiListenerFragment {
                                 @Override
                                 public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
                                     Timber.d("Starting video with tag %s", TAG);
-                                    SoloLinkApi.getApi(drone).startVideoStream(new Surface(surface), TAG, new SimpleCommandListener() {
+                                    SoloCameraApi.getApi(drone).startVideoStream(new Surface(surface), TAG, new SimpleCommandListener() {
 
                                         @Override
                                         public void onSuccess() {

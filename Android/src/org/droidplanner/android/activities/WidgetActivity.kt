@@ -11,11 +11,13 @@ import android.widget.Button
 import android.widget.ImageButton
 import com.o3dr.android.client.Drone
 import com.o3dr.android.client.apis.CapabilityApi
-import com.o3dr.android.client.apis.SoloLinkApi
 import com.o3dr.android.client.apis.VehicleApi
+import com.o3dr.android.client.apis.solo.SoloCameraApi
 import com.o3dr.services.android.lib.coordinate.LatLong
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
 import com.o3dr.services.android.lib.drone.attribute.AttributeType
+import com.o3dr.services.android.lib.drone.companion.solo.SoloAttributes
+import com.o3dr.services.android.lib.drone.companion.solo.SoloEvents
 import com.o3dr.services.android.lib.drone.companion.solo.tlv.SoloGoproState
 import org.droidplanner.android.R
 import org.droidplanner.android.activities.helpers.SuperUI
@@ -49,7 +51,7 @@ public class WidgetActivity : SuperUI() {
             val temp = IntentFilter()
             temp.addAction(AttributeEvent.STATE_CONNECTED)
             temp.addAction(AttributeEvent.STATE_DISCONNECTED)
-            temp.addAction(AttributeEvent.SOLOLINK_GOPRO_STATE_UPDATED)
+            temp.addAction(SoloEvents.SOLO_GOPRO_STATE_UPDATED)
             return temp
         }
     }
@@ -59,7 +61,7 @@ public class WidgetActivity : SuperUI() {
             when(intent.getAction()){
                 AttributeEvent.STATE_CONNECTED -> checkSoloLinkVideoSupport()
                 AttributeEvent.STATE_DISCONNECTED -> finish()
-                AttributeEvent.SOLOLINK_GOPRO_STATE_UPDATED -> {
+                SoloEvents.SOLO_GOPRO_STATE_UPDATED -> {
                     //checkGoproControlSupport(dpApp.getDrone())
                 }
             }
@@ -124,7 +126,7 @@ public class WidgetActivity : SuperUI() {
             val drone = dpApp.getDrone()
             if(drone != null) {
                 //TODO: fix when camera control support is stable on sololink
-                SoloLinkApi.getApi(drone).takePhoto(null)
+                SoloCameraApi.getApi(drone).takePhoto(null)
             }
         }
 
@@ -132,7 +134,7 @@ public class WidgetActivity : SuperUI() {
             val drone = dpApp.getDrone()
             if(drone != null){
                 //TODO: fix when camera control support is stable on sololink
-                SoloLinkApi.getApi(drone).toggleVideoRecording(null)
+                SoloCameraApi.getApi(drone).toggleVideoRecording(null)
             }
         }
 
@@ -184,7 +186,7 @@ public class WidgetActivity : SuperUI() {
         if(drone == null || !drone.isConnected())
             finish()
         else{
-            CapabilityApi.getApi(drone).checkFeatureSupport(CapabilityApi.FeatureIds.SOLOLINK_VIDEO_STREAMING, { featureId, result, bundle ->
+            CapabilityApi.getApi(drone).checkFeatureSupport(CapabilityApi.FeatureIds.SOLO_VIDEO_STREAMING, { featureId, result, bundle ->
                 when (result) {
                     CapabilityApi.FEATURE_SUPPORTED -> {
                         //checkGoproControlSupport(drone)
@@ -215,7 +217,7 @@ public class WidgetActivity : SuperUI() {
     override fun isDisplayTitleEnabled() = true
 
     private fun checkGoproControlSupport(drone: Drone){
-        val goproState: SoloGoproState? = drone.getAttribute(AttributeType.SOLOLINK_GOPRO_STATE)
+        val goproState: SoloGoproState? = drone.getAttribute(SoloAttributes.SOLO_GOPRO_STATE)
         widgetButtonBar?.setVisibility(
                 if (goproState == null)
                     View.GONE
