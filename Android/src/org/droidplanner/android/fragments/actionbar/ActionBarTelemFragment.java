@@ -361,7 +361,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
 
             switch(fixStatus){
                 case Gps.LOCK_3D:
-                case Gps.Lock_3D_DGPS:
+                case Gps.LOCK_3D_DGPS:
                 case Gps.LOCK_3D_RTK:
                     gpsIcon = R.drawable.ic_gps_fixed_black_24dp;
                     break;
