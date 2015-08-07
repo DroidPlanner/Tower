@@ -1,0 +1,148 @@
+package org.droidplanner.android.activities;
+
+import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+
+import com.MAVLink.common.msg_attitude;
+import com.MAVLink.common.msg_command_long;
+import com.MAVLink.common.msg_set_position_target_global_int;
+import com.MAVLink.common.msg_set_position_target_local_ned;
+import com.MAVLink.enums.MAV_CMD;
+import com.o3dr.android.client.MavlinkObserver;
+import com.o3dr.android.client.apis.drone.ExperimentalApi;
+import com.o3dr.services.android.lib.mavlink.MavlinkMessageWrapper;
+
+import org.droidplanner.android.R;
+import org.droidplanner.android.widgets.JoystickView;
+
+import timber.log.Timber;
+
+/**
+ * Created by Toby on 8/5/2015.
+ */
+public class ControlActivity extends DrawerNavigationUI {
+    private JoystickView leftJoystick, rightJoystick;
+    private static final int ignoreVel = ((1<<3) | (1<<4) | (1 << 5));
+    private static final int ignoreAcc = ((1<<6) | (1<<7) | (1 << 8));
+    private static final int ignorePos = ((1<<0) | (1<<1) | (1<<2));
+    private long lastRecieved;
+    private float lastYaw, lastYawSpeed;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_control);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE);
+        leftJoystick = (JoystickView)findViewById(R.id.left_joystick);
+        rightJoystick = (JoystickView)findViewById(R.id.right_joystick);
+        Bitmap reticle = BitmapFactory.decodeResource(getResources(), R.drawable.ic_control_grey_600_24dp);
+        leftJoystick.setReticle(reticle);
+        rightJoystick.setReticle(reticle);
+        leftJoystick.setSpring(JoystickView.Axis.X, true);
+        leftJoystick.setSpring(JoystickView.Axis.Y, true);
+        rightJoystick.setSpring(JoystickView.Axis.Y, true);
+        rightJoystick.setSpring(JoystickView.Axis.X, true);
+        leftJoystick.setJoystickListener(new JoystickView.JoystickListener() {
+            @Override
+            public void joystickMoved(float x, float y) {
+                float heading = lastYaw + lastYawSpeed * ((System.currentTimeMillis() - lastRecieved)/1000f);
+                sendMove(heading);
+                sendYaw(heading);
+            }
+        });
+        rightJoystick.setJoystickListener(new JoystickView.JoystickListener() {
+            @Override
+            public void joystickMoved(float x, float y) {
+                float heading = lastYaw + lastYawSpeed * ((System.currentTimeMillis() - lastRecieved)/1000f);
+                sendMove(heading);
+            }
+        });
+        new Thread(){
+            @Override
+            public void run() {
+                while(true) {
+                    float heading = lastYaw + lastYawSpeed * ((System.currentTimeMillis() - lastRecieved)/1000f);
+                    sendYaw(heading);
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
+
+    }
+
+    private void sendYaw(float heading) {
+        float yaw = leftJoystick.getAxis(JoystickView.Axis.X);
+        heading/= Math.PI;
+        heading *= 180f;
+        if(Math.abs(yaw) > 0.05) {
+            msg_command_long msgYaw = new msg_command_long();
+            msgYaw.command = MAV_CMD.MAV_CMD_CONDITION_YAW;
+            msgYaw.param1 = (360 + (heading + yaw*30f)) % 360;
+            Timber.d("yaw: %f", msgYaw.param1);
+            msgYaw.param2 = Math.abs(yaw) * 30f;
+            msgYaw.param3 = Math.signum(yaw);
+            msgYaw.param4 = 0;
+            ExperimentalApi.sendMavlinkMessage(dpApp.getDrone(), new MavlinkMessageWrapper(msgYaw));
+        }
+    }
+
+    private void sendMove(float heading){
+        float throttle = leftJoystick.getAxis(JoystickView.Axis.Y);
+        float x = rightJoystick.getAxis(JoystickView.Axis.X);
+        float y = rightJoystick.getAxis(JoystickView.Axis.Y);
+        if(x != 0 && y != 0) {
+            double theta = Math.atan(y / x);
+            if (theta < 0) {
+                theta += Math.PI;
+            }
+            if (y < 0) {
+                theta += Math.PI;
+            }
+            theta += Math.PI/2;
+            double magnitude = Math.sqrt(x * x + y * y);
+            x = (float) (Math.cos(heading + theta) * magnitude);
+            y = (float) (Math.sin(heading + theta) * magnitude);
+
+        }
+        msg_set_position_target_local_ned msg = new msg_set_position_target_local_ned();
+        msg.vz = throttle * 5f;
+        msg.vy = y * 5f;
+        msg.vx = x * 5f;
+        Timber.d("x: %f, y: %f", msg.vx, msg.vy);
+        msg.type_mask = ignoreAcc | ignorePos;
+        ExperimentalApi.sendMavlinkMessage(dpApp.getDrone(), new MavlinkMessageWrapper(msg));
+    }
+
+    @Override
+    protected int getToolbarId() {
+        return R.id.actionbar_toolbar;
+    }
+
+    @Override
+    protected int getNavigationDrawerEntryId() {
+        return R.id.navigation_control;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        dpApp.getDrone().addMavlinkObserver(new MavlinkObserver() {
+            @Override
+            public void onMavlinkMessageReceived(MavlinkMessageWrapper mavlinkMessageWrapper) {
+                if(mavlinkMessageWrapper.getMavLinkMessage().msgid == msg_attitude.MAVLINK_MSG_ID_ATTITUDE){
+                    msg_attitude msg = (msg_attitude)mavlinkMessageWrapper.getMavLinkMessage();
+                    lastYaw = msg.yaw;
+//                    Timber.d("yaw: %f",lastYaw);
+                    lastYawSpeed = msg.yawspeed;
+                    lastRecieved = System.currentTimeMillis();
+                }
+            }
+        });
+    }
+}

@@ -447,5 +447,6 @@
     <string name="label_type_plane">Plane</string>
     <string name="label_type_rover">Rover</string>
     <string name="label_type_unknown">Unknown</string>
+    <string name="control">Control</string>
 
 </resources>

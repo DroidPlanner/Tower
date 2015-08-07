@@ -114,6 +114,15 @@
                     android:drawableLeft="@drawable/ic_history_grey600_24dp"
                     android:drawableStart="@drawable/ic_history_grey600_24dp"
                     android:text="@string/locator"/>
+                <TextView
+                    android:id="@+id/navigation_control"
+                    style="@style/navigationDrawerEntry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_control_grey_600_24dp"
+                    android:drawableStart="@drawable/ic_control_grey_600_24dp"
+                    android:text="@string/control"
+                    />
 
                 <View
                     android:layout_width="match_parent"
