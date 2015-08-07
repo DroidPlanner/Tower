@@ -4,6 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/widget_view"></FrameLayout>
+
     <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
         android:layout_alignParentTop="true"
         android:layout_marginLeft="10dp"

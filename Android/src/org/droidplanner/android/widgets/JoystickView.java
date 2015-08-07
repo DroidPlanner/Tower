@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Vibrator;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -21,18 +22,27 @@ import timber.log.Timber;
 public class JoystickView extends View {
     private float x = 0f,y = 0f;
     private boolean springX, springY;
+    private boolean lockedX, lockedY;
     private Bitmap reticle;
     private JoystickListener listener;
     private boolean engaged;
     private ValueAnimator animator;
     private float major, minor;
-    private static final float MAX_SIZE = 300;
+    private static float MAX_SIZE = 300;
+    private static float MIN_SIZE = 50;
     private static final int THRESHOLD = 200;
+    private static final float DEADZONE = 0.05f;
+    private static final float SPEED_THRESHOLD = 0.0005f;
+    private long lastEvent;
     private Vibrator vibrator;
 
     public JoystickView(Context context, AttributeSet attrs) {
         super(context, attrs);
         vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        MAX_SIZE = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
+        MIN_SIZE = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+        major = MIN_SIZE;
+        minor = MIN_SIZE;
     }
 
     public enum Axis {
@@ -71,21 +81,52 @@ public class JoystickView extends View {
                         vibrator.vibrate(50);
                     }
                 }
+                lastEvent = System.currentTimeMillis();
 
                 return true;
             case MotionEvent.ACTION_MOVE:
                 if(engaged) {
+                    float delta = (System.currentTimeMillis() - lastEvent)/1000f;
+                    lastEvent = System.currentTimeMillis();
+                    float lastY = y;
+                    float lastX = x;
                     y = (((event.getY() * 2f) / getHeight()) - 1f);
                     x = ((event.getX() * 2f) / getWidth()) - 1f;
                     y = Math.min(1, y);
                     y = Math.max(-1, y);
                     x = Math.min(1, x);
                     x = Math.max(-1, x);
-                    invalidate();
                     dispatchMove();
+                    float velocity = (float)Math.sqrt(Math.pow(Math.abs(lastY - y)*delta, 2) + Math.pow(Math.abs(lastX - x)*delta, 2));
+                    if(((((Math.abs(lastY) < DEADZONE && Math.abs(y) < DEADZONE)) && velocity< SPEED_THRESHOLD)
+                            || (((Math.abs(lastX) < DEADZONE && Math.abs(x) < DEADZONE)) && velocity < SPEED_THRESHOLD)) && !(lockedX || lockedY)){
+                        Timber.d("speed velocity: %f", velocity);
+                        vibrator.vibrate(50);
+                        if(Math.abs(x) < DEADZONE){
+                            x = 0f;
+                            lockedX = true;
+                        }
+                        if(Math.abs(y) < DEADZONE){
+                            y = 0f;
+                            lockedY = true;
+                        }
+                    }
+                    if(Math.abs(x) < DEADZONE && lockedX){
+                        x = 0f;
+                    }else{
+                        lockedX = false;
+                    }
+                    if(Math.abs(y) < DEADZONE && lockedY){
+                        y = 0f;
+                    }else{
+                        lockedY = false;
+                    }
+                    invalidate();
                 }
                 major = Math.min(event.getTouchMajor(), MAX_SIZE);
+                major = Math.max(major, MIN_SIZE);
                 minor = Math.min(event.getTouchMinor(), MAX_SIZE);
+                minor = Math.max(minor, MIN_SIZE);
                 return true;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_OUTSIDE:
@@ -105,8 +146,9 @@ public class JoystickView extends View {
                             if (springY) {
                                 y = (yStart * (1f - animation.getAnimatedFraction()));
                             }
-                            major = majorStart * (1f - animation.getAnimatedFraction());
-                            minor = minorStart * (1f - animation.getAnimatedFraction());
+                            major = (majorStart - MIN_SIZE) * (1f - animation.getAnimatedFraction()) + MIN_SIZE;
+                            minor = (minorStart - MIN_SIZE) * (1f - animation.getAnimatedFraction()) + MIN_SIZE;
+                            dispatchMove();
                             invalidate();
                         }
                     });

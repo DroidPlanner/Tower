@@ -70,7 +70,7 @@ public class WidgetActivity : SuperUI() {
     }
 
     private val widgetButtonBar by Delegates.lazy {
-        findViewById(R.id.widget_button_bar) as View?
+        findViewById(R.id.widget_button_bar)
     }
 
     private val goToMyLocation by Delegates.lazy {

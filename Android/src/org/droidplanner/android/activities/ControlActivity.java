@@ -4,17 +4,21 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.view.View;
 
 import com.MAVLink.common.msg_attitude;
 import com.MAVLink.common.msg_command_long;
-import com.MAVLink.common.msg_set_position_target_global_int;
 import com.MAVLink.common.msg_set_position_target_local_ned;
 import com.MAVLink.enums.MAV_CMD;
 import com.o3dr.android.client.MavlinkObserver;
-import com.o3dr.android.client.apis.drone.ExperimentalApi;
+import com.o3dr.android.client.apis.ExperimentalApi;
 import com.o3dr.services.android.lib.mavlink.MavlinkMessageWrapper;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.actionbar.ActionBarTelemFragment;
+import org.droidplanner.android.fragments.widget.telem.WidgetSoloLinkVideo;
 import org.droidplanner.android.widgets.JoystickView;
 
 import timber.log.Timber;
@@ -29,6 +33,7 @@ public class ControlActivity extends DrawerNavigationUI {
     private static final int ignorePos = ((1<<0) | (1<<1) | (1<<2));
     private long lastRecieved;
     private float lastYaw, lastYawSpeed;
+    private static final float MAX_VEL = 10f, MAX_VEL_Z = 5f;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,7 +52,7 @@ public class ControlActivity extends DrawerNavigationUI {
         leftJoystick.setJoystickListener(new JoystickView.JoystickListener() {
             @Override
             public void joystickMoved(float x, float y) {
-                float heading = lastYaw + lastYawSpeed * ((System.currentTimeMillis() - lastRecieved)/1000f);
+                float heading = lastYaw + lastYawSpeed * ((System.currentTimeMillis() - lastRecieved) / 1000f);
                 sendMove(heading);
                 sendYaw(heading);
             }
@@ -55,7 +60,7 @@ public class ControlActivity extends DrawerNavigationUI {
         rightJoystick.setJoystickListener(new JoystickView.JoystickListener() {
             @Override
             public void joystickMoved(float x, float y) {
-                float heading = lastYaw + lastYawSpeed * ((System.currentTimeMillis() - lastRecieved)/1000f);
+                float heading = lastYaw + lastYawSpeed * ((System.currentTimeMillis() - lastRecieved) / 1000f);
                 sendMove(heading);
             }
         });
@@ -66,13 +71,20 @@ public class ControlActivity extends DrawerNavigationUI {
                     float heading = lastYaw + lastYawSpeed * ((System.currentTimeMillis() - lastRecieved)/1000f);
                     sendYaw(heading);
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }.start();
+
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment widgetFragment = fm.findFragmentById(R.id.widget_view);
+        if(!(widgetFragment instanceof WidgetSoloLinkVideo)){
+            widgetFragment = new WidgetSoloLinkVideo();
+            fm.beginTransaction().replace(R.id.widget_view, widgetFragment).commit();
+        }
 
     }
 
@@ -83,12 +95,12 @@ public class ControlActivity extends DrawerNavigationUI {
         if(Math.abs(yaw) > 0.05) {
             msg_command_long msgYaw = new msg_command_long();
             msgYaw.command = MAV_CMD.MAV_CMD_CONDITION_YAW;
-            msgYaw.param1 = (360 + (heading + yaw*30f)) % 360;
-            Timber.d("yaw: %f", msgYaw.param1);
+            msgYaw.param1 = (360 + (heading + yaw*60f)) % 360;
+//            Timber.d("yaw: %f", msgYaw.param1);
             msgYaw.param2 = Math.abs(yaw) * 30f;
             msgYaw.param3 = Math.signum(yaw);
             msgYaw.param4 = 0;
-            ExperimentalApi.sendMavlinkMessage(dpApp.getDrone(), new MavlinkMessageWrapper(msgYaw));
+            ExperimentalApi.getApi(dpApp.getDrone()).sendMavlinkMessage(new MavlinkMessageWrapper(msgYaw));
         }
     }
 
@@ -111,12 +123,23 @@ public class ControlActivity extends DrawerNavigationUI {
 
         }
         msg_set_position_target_local_ned msg = new msg_set_position_target_local_ned();
-        msg.vz = throttle * 5f;
-        msg.vy = y * 5f;
-        msg.vx = x * 5f;
-        Timber.d("x: %f, y: %f", msg.vx, msg.vy);
+        msg.vz = throttle * MAX_VEL_Z;
+        msg.vy = y *  MAX_VEL;
+        msg.vx = x * MAX_VEL;
+//        Timber.d("x: %f, y: %f", msg.vx, msg.vy);
         msg.type_mask = ignoreAcc | ignorePos;
-        ExperimentalApi.sendMavlinkMessage(dpApp.getDrone(), new MavlinkMessageWrapper(msg));
+        ExperimentalApi.getApi(dpApp.getDrone()).sendMavlinkMessage(new MavlinkMessageWrapper(msg));
+    }
+
+    @Override
+    protected void addToolbarFragment(){
+        final int toolbarId = getToolbarId();
+        final FragmentManager fm = getSupportFragmentManager();
+        Fragment actionBarTelem = fm.findFragmentById(toolbarId);
+        if (actionBarTelem == null) {
+            actionBarTelem = new ActionBarTelemFragment();
+            fm.beginTransaction().add(toolbarId, actionBarTelem).commit();
+        }
     }
 
     @Override
