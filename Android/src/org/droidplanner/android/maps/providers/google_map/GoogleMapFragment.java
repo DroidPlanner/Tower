@@ -94,7 +94,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     private static final long USER_LOCATION_UPDATE_FASTEST_INTERVAL = 5000; // ms
     private static final float USER_LOCATION_UPDATE_MIN_DISPLACEMENT = 0; // m
 
-    private static final float GO_TO_MY_LOCATION_ZOOM = 19f;
+    private static final float GO_TO_MY_LOCATION_ZOOM = 17f;
 
     private static final int ONLINE_TILE_PROVIDER_Z_INDEX = -1;
     private static final int OFFLINE_TILE_PROVIDER_Z_INDEX = -2;
@@ -169,7 +169,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
                         .draggable(false)
                         .flat(true)
                         .visible(true)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.blue));
+                        .anchor(0.5f, 0.5f)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.user_location));
 
                 getMapAsync(new OnMapReadyCallback() {
                     @Override

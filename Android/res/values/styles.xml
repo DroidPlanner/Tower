@@ -38,13 +38,9 @@
 	</style>
 
     <style name="largeTelemetryText">
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">@color/very_dark_grey</item>
         <item name="android:textSize">@dimen/largeTelemetryTextSize</item>
-	    <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">sans-serif-condensed</item>
-        <item name="android:layout_marginRight">4dp</item>
-        <item name="android:layout_marginTop">0dp</item>
-        <item name="android:gravity">right</item>
+        <item name="android:gravity">start</item>
         </style>
 
     <style name="largeMissionDetailText">
@@ -115,6 +111,7 @@
         <item name="android:layout_width">@dimen/editor_button_width</item>
         <item name="android:layout_height">@dimen/editor_button_height</item>
         <item name="android:background">@drawable/editor_button_bg</item>
+        <item name="android:layout_weight">1</item>
     </style>
 
     <style name="editorButton.Trash">

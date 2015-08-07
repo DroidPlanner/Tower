@@ -58,13 +58,15 @@ public class SupportYesNoDialog extends DialogFragment {
                 .setPositiveButton(arguments.getString(EXTRA_POSITIVE_LABEL), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mListener.onYes();
+                        if (mListener != null)
+                            mListener.onYes();
                     }
                 })
                 .setNegativeButton(arguments.getString(EXTRA_NEGATIVE_LABEL), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mListener.onNo();
+                        if (mListener != null)
+                            mListener.onNo();
                     }
                 });
 

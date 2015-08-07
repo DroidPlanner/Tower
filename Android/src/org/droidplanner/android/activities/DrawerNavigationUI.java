@@ -1,13 +1,16 @@
 package org.droidplanner.android.activities;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,6 +24,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.fragments.SettingsFragment;
@@ -33,8 +39,6 @@ import org.droidplanner.android.widgets.SlidingDrawer;
  * interface.
  */
 public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawer.OnDrawerOpenListener, SlidingDrawer.OnDrawerCloseListener {
-
-    private static final String TAG = DrawerNavigationUI.class.getSimpleName();
 
     /**
      * Activates the navigation drawer when the home button is clicked.
@@ -123,13 +127,13 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
         contentLayout.addView(contentView);
         setContentView(mDrawerLayout);
 
-        initToolbar();
         initNavigationDrawer();
     }
 
-    private void initToolbar() {
-        final int toolbarId = getToolbarId();
-        final Toolbar toolbar = (Toolbar) findViewById(toolbarId);
+    @Override
+    protected void initToolbar(Toolbar toolbar) {
+        super.initToolbar(toolbar);
+
         toolbar.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
@@ -137,28 +141,12 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
                 final int fullTopMargin = (int) (topMargin + (bottom - top));
 
                 ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) actionDrawer.getLayoutParams();
-                if(lp.topMargin != fullTopMargin) {
+                if (lp.topMargin != fullTopMargin) {
                     lp.topMargin = fullTopMargin;
                     actionDrawer.requestLayout();
                 }
             }
         });
-
-        setSupportActionBar(toolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
-        }
-
-        final FragmentManager fm = getSupportFragmentManager();
-        Fragment actionBarTelem = fm.findFragmentById(toolbarId);
-        if (actionBarTelem == null) {
-            actionBarTelem = new ActionBarTelemFragment();
-            fm.beginTransaction().add(toolbarId, actionBarTelem).commit();
-        }
     }
 
     protected float getActionDrawerTopMargin() {
@@ -261,7 +249,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
             navView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mDrawerLayout.closeDrawer(Gravity.START);
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
                 }
             });
         } else {
@@ -272,13 +260,11 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
                     if (clickIntent != null) {
                         mNavigationIntent = clickIntent;
                     }
-                    mDrawerLayout.closeDrawer(Gravity.START);
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
                 }
             });
         }
     }
-
-    protected abstract int getToolbarId();
 
     protected boolean isActionDrawerOpened() {
         return actionDrawer.isOpened();

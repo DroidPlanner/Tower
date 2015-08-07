@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.util.TypedValue;
@@ -27,7 +28,6 @@ import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
-import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.SupportEditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenMissionDialog;
@@ -121,18 +121,17 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        fragmentManager = getSupportFragmentManager();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
-        fragmentManager = getSupportFragmentManager();
-
         gestureMapFragment = ((GestureMapFragment) fragmentManager.findFragmentById(R.id.editor_map_fragment));
-        if(gestureMapFragment == null){
+        if (gestureMapFragment == null) {
             gestureMapFragment = new GestureMapFragment();
             fragmentManager.beginTransaction().add(R.id.editor_map_fragment, gestureMapFragment).commit();
         }
 
-        editorToolsFragment = (EditorToolsFragment) fragmentManager.findFragmentById(R.id.editor_tools_fragment);
         editorListFragment = (EditorListFragment) fragmentManager.findFragmentById(R.id.mission_list_fragment);
 
         infoView = (TextView) findViewById(R.id.editorInfoWindow);
@@ -369,7 +368,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             double missionLength = missionProxy.getMissionLength();
             LengthUnit convertedMissionLength = unitSystem.getLengthUnitProvider().boxBaseValueToTarget(missionLength);
             double speedParameter = dpApp.getDrone().getSpeedParameter() / 100; //cm/s to m/s conversion.
-            if(speedParameter == 0)
+            if (speedParameter == 0)
                 speedParameter = DEFAULT_SPEED;
 
             int time = (int) (missionLength / speedParameter);
@@ -436,6 +435,16 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         updateLocationButtonsMargin(itemDetailFragment != null);
+    }
+
+    @Override
+    protected void addToolbarFragment(){
+        final int toolbarId = getToolbarId();
+        editorToolsFragment = (EditorToolsFragment) fragmentManager.findFragmentById(toolbarId);
+        if (editorToolsFragment == null) {
+            editorToolsFragment = new EditorToolsFragment();
+            fragmentManager.beginTransaction().add(toolbarId, editorToolsFragment).commit();
+        }
     }
 
     private void showItemDetail(MissionDetailFragment itemDetail) {
@@ -545,6 +554,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
     @Override
     public void onSelectionUpdate(List<MissionItemProxy> selected) {
+        EditorToolsFragment.EditorToolsImpl toolImpl = getToolImpl();
+        toolImpl.onSelectionUpdate(selected);
+
         final boolean isEmpty = selected.isEmpty();
 
         if (isEmpty) {

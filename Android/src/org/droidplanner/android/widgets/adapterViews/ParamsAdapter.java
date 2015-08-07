@@ -5,13 +5,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.droidplanner.android.R;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -32,11 +29,16 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 		void onHelp(int position, EditText valueView);
 	}
 
+	public interface OnParametersChangeListener {
+		void onParametersChange(int dirtyCount);
+	}
+
     private final static DecimalFormat formatter = (DecimalFormat) DecimalFormat.getInstance();
     static {
         formatter.applyPattern("0.###");
     }
 
+    private int dirtyCount = 0;
 	private final int resource;
 	private final int colorAltRow;
 
@@ -44,6 +46,7 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 
 	private View focusView;
 	private OnInfoListener onInfoListener;
+	private OnParametersChangeListener onParametersChangeListener;
 
 	public ParamsAdapter(Context context, int resource) {
 		this(context, resource, new ArrayList<ParamsAdapterItem>());
@@ -66,6 +69,10 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 
 	public void setOnInfoListener(OnInfoListener onInfoListener) {
 		this.onInfoListener = onInfoListener;
+	}
+
+	public void setOnParametersChangeListener(OnParametersChangeListener onParametersChangeListener){
+		this.onParametersChangeListener = onParametersChangeListener;
 	}
 
 	@Override
@@ -128,7 +135,13 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
             ParamsAdapterItem item = getItem(i);
             Parameter update = parameters.remove(item.getParameter().getName());
             if(update != null){
+                boolean dirtyValue = item.isDirty();
                 item.setDirtyValue(update.getDisplayValue());
+                if(dirtyValue && !item.isDirty()){
+                    dirtyCount--;
+                }else if(!dirtyValue && item.isDirty()){
+                    dirtyCount++;
+                }
             }
         }
 
@@ -146,6 +159,7 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 		for (Map.Entry<String, Parameter> entry : parameters.entrySet()) {
             addParameter(entry.getKey(), entry.getValue());
         }
+        dirtyCount = 0;
 	}
 
     private void addParameter(String name, Parameter parameter) {
@@ -154,6 +168,9 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 
     private void addParameter(String name, Parameter parameter, boolean isDirty){
         try {
+            if(isDirty){
+                dirtyCount++;
+            }
             ParamsAdapterItem item = new ParamsAdapterItem(parameter);
             item.setDirtyValue(parameter.getDisplayValue(), isDirty);
             add(item);
@@ -270,8 +287,16 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
 				return;
 
 			final ParamsAdapterItem item = getItem(position);
+            boolean dirtyValue = item.isDirty();
 			item.setDirtyValue(editable.toString());
-
+            if(dirtyValue && !item.isDirty()){
+                dirtyCount--;
+            }else if(!dirtyValue && item.isDirty()){
+                dirtyCount++;
+            }
+			if(onParametersChangeListener != null) {
+				onParametersChangeListener.onParametersChange(dirtyCount);
+            }
 
 			setAppearance(item);
 		}

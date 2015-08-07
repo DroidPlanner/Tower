@@ -6,27 +6,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.SearchView;
-import android.text.Editable;
-import android.text.InputType;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
@@ -34,7 +29,6 @@ import com.o3dr.services.android.lib.drone.property.Parameter;
 import com.o3dr.services.android.lib.drone.property.Parameters;
 
 import org.droidplanner.android.R;
-import org.droidplanner.android.dialogs.EditInputDialog;
 import org.droidplanner.android.dialogs.SupportEditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenParameterDialog;
@@ -61,6 +55,7 @@ public class ParamsFragment extends ApiListenerListFragment {
     private static final String EXTRA_OPENED_PARAMS_FILENAME = "extra_opened_params_filename";
 
     private final static IntentFilter intentFilter = new IntentFilter();
+    public static final int SNACKBAR_HEIGHT = 48;
 
     static {
         intentFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_STARTED);
@@ -119,6 +114,7 @@ public class ParamsFragment extends ApiListenerListFragment {
      */
     private String openedParamsFilename;
     private View searchButton;
+    private Snackbar snackbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -148,6 +144,30 @@ public class ParamsFragment extends ApiListenerListFragment {
             @Override
             public void onHelp(int position, EditText valueView) {
                 showInfo(position, valueView);
+            }
+        });
+        adapter.setOnParametersChangeListener(new ParamsAdapter.OnParametersChangeListener() {
+            @Override
+            public void onParametersChange(int dirtyCount) {
+                if (dirtyCount > 0) {
+                    View view = getView();
+                    if (view != null && snackbar == null) {
+                        snackbar = Snackbar.make(view, R.string.unsaved_param_warning, Snackbar.LENGTH_INDEFINITE)
+                                .setAction(getString(R.string.upload), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        writeModifiedParametersToDrone();
+                                    }
+                                });
+                        snackbar.show();
+                    }
+
+                } else {
+                    if(snackbar != null) {
+                        snackbar.dismiss();
+                        snackbar = null;
+                    }
+                }
             }
         });
     }
@@ -186,6 +206,10 @@ public class ParamsFragment extends ApiListenerListFragment {
 
         mLoadingProgress = (ProgressBar) view.findViewById(R.id.reload_progress);
         mLoadingProgress.setVisibility(View.GONE);
+
+        View space = new View(getActivity().getApplicationContext());
+        space.setLayoutParams(new ViewGroup.LayoutParams(0, (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, SNACKBAR_HEIGHT, getResources().getDisplayMetrics())));
+        getListView().addFooterView(space);
     }
 
     private void filterInput(CharSequence input) {
@@ -290,7 +314,7 @@ public class ParamsFragment extends ApiListenerListFragment {
 
     private void refreshParameters() {
         if (getDrone().isConnected()) {
-            getDrone().refreshParameters();
+            VehicleApi.getApi(getDrone()).refreshParameters();
         } else {
             Toast.makeText(getActivity(), R.string.msg_connect_first, Toast.LENGTH_SHORT).show();
         }
@@ -320,6 +344,7 @@ public class ParamsFragment extends ApiListenerListFragment {
                     parametersCount + " " + getString(R.string.msg_parameters_written_to_drone),
                     Toast.LENGTH_SHORT).show();
         }
+        snackbar = null;
     }
 
     private void openParametersFromFile() {

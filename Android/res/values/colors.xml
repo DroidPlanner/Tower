@@ -7,6 +7,7 @@
     <color name="dark_grey">#9E9E9E</color>
     <color name="transparent_light_grey">#d0EFEFEF</color>
     <color name="light_grey">#EFEFEF</color>
+    <color name="white">#fafafa</color>
     <color name="white_grey">#f7f6f6</color>
     <color name="navigation_entry_color">#212121</color>
 
@@ -39,5 +40,10 @@
     <color name="green">#ff06aa09</color>
     <color name="medium_green">#50CB12</color>
     <color name="light_green">#5574D800</color>
+
+    <color name="charcoal">#161616</color>
+    <color name="very_dark_grey">#1C1C1C</color>
+    <color name="medium_grey">#3C3C3C</color>
+    <color name="grey700">#616161</color>
 
 </resources>
