@@ -17,7 +17,7 @@ dependencies {
     compile 'com.android.support:design:22.2.1'
 
     //DroneKit-Android client library.
-    compile 'com.o3dr.android:dronekit-android:2.5.19'
+    compile 'com.o3dr.android:dronekit-android:2.5.21'
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')
@@ -38,6 +38,12 @@ dependencies {
     }
 }
 
+//Decomposed version name and code (https://plus.google.com/+JakeWharton/posts/6f5TcVPRZij)
+def versionMajor = 3
+def versionMinor = 2
+def versionPatch = 0
+def versionBuild = 0 //bump for dogfood builds, public betas, etc.
+
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
@@ -46,8 +52,8 @@ android {
         applicationId 'org.droidplanner.android'
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 30107
-        versionName getGitVersion()
+        versionCode versionMajor * 100000 + versionMinor * 1000 + versionPatch * 10 + versionBuild
+        versionName "Tower-v${versionMajor}.${versionMinor}.${versionPatch}"
     }
 
     compileOptions {
@@ -104,14 +110,14 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
-            versionNameSuffix ".debug"
+            versionNameSuffix ".debug.${versionBuild}"
             resValue "string", "app_title", "Tower Dev"
         }
 
         beta {
             signingConfig signingConfigs.release
             applicationIdSuffix ".beta"
-            versionNameSuffix ".beta"
+            versionNameSuffix ".beta.${versionBuild}"
             resValue "string", "app_title", "Tower Beta"
         }
 
