@@ -62,7 +62,7 @@ public class WidgetActivity : SuperUI() {
                 AttributeEvent.STATE_CONNECTED -> checkSoloLinkVideoSupport()
                 AttributeEvent.STATE_DISCONNECTED -> finish()
                 SoloEvents.SOLO_GOPRO_STATE_UPDATED -> {
-                    //checkGoproControlSupport(dpApp.getDrone())
+                    checkGoproControlSupport(dpApp.getDrone())
                 }
             }
         }
@@ -189,7 +189,7 @@ public class WidgetActivity : SuperUI() {
             CapabilityApi.getApi(drone).checkFeatureSupport(CapabilityApi.FeatureIds.SOLO_VIDEO_STREAMING, { featureId, result, bundle ->
                 when (result) {
                     CapabilityApi.FEATURE_SUPPORTED -> {
-                        //checkGoproControlSupport(drone)
+                        checkGoproControlSupport(drone)
                     }
 
                     else -> finish()
