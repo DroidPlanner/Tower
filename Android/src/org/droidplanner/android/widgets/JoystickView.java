@@ -21,6 +21,7 @@ import timber.log.Timber;
  */
 public class JoystickView extends View {
     private float x = 0f,y = 0f;
+    private float uiX, uiY;
     private boolean springX, springY;
     private boolean lockedX, lockedY;
     private Bitmap reticle;
@@ -35,6 +36,7 @@ public class JoystickView extends View {
     private static final float SPEED_THRESHOLD = 0.0005f;
     private long lastEvent;
     private Vibrator vibrator;
+    private boolean hapticX, hapticY;
 
     public JoystickView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -97,30 +99,35 @@ public class JoystickView extends View {
                     x = Math.min(1, x);
                     x = Math.max(-1, x);
                     dispatchMove();
-                    float velocity = (float)Math.sqrt(Math.pow(Math.abs(lastY - y)*delta, 2) + Math.pow(Math.abs(lastX - x)*delta, 2));
-                    if(((((Math.abs(lastY) < DEADZONE && Math.abs(y) < DEADZONE)) && velocity< SPEED_THRESHOLD)
-                            || (((Math.abs(lastX) < DEADZONE && Math.abs(x) < DEADZONE)) && velocity < SPEED_THRESHOLD)) && !(lockedX || lockedY)){
-                        Timber.d("speed velocity: %f", velocity);
-                        vibrator.vibrate(50);
-                        if(Math.abs(x) < DEADZONE){
-                            x = 0f;
-                            lockedX = true;
-                        }
-                        if(Math.abs(y) < DEADZONE){
-                            y = 0f;
-                            lockedY = true;
-                        }
-                    }
-                    if(Math.abs(x) < DEADZONE && lockedX){
-                        x = 0f;
-                    }else{
-                        lockedX = false;
-                    }
-                    if(Math.abs(y) < DEADZONE && lockedY){
-                        y = 0f;
-                    }else{
-                        lockedY = false;
-                    }
+//                    float velocity = (float)Math.sqrt(Math.pow(Math.abs(lastY - y)*delta, 2) + Math.pow(Math.abs(lastX - x)*delta, 2));
+//                    if(((((Math.abs(lastY) < DEADZONE && Math.abs(y) < DEADZONE)) && velocity< SPEED_THRESHOLD)
+//                            || (((Math.abs(lastX) < DEADZONE && Math.abs(x) < DEADZONE)) && velocity < SPEED_THRESHOLD)) && !(lockedX || lockedY)){
+//                        Timber.d("speed velocity: %f", velocity);
+//                        if(Math.abs(x) < DEADZONE){
+//                            x = 0f;
+//                            lockedX = true;
+//                            if(hapticX) {
+//                                vibrator.vibrate(50);
+//                            }
+//                        }
+//                        if(Math.abs(y) < DEADZONE){
+//                            y = 0f;
+//                            lockedY = true;
+//                            if(hapticY) {
+//                                vibrator.vibrate(50);
+//                            }
+//                        }
+//                    }
+//                    if(Math.abs(x) < DEADZONE && lockedX){
+//                        x = 0f;
+//                    }else{
+//                        lockedX = false;
+//                    }
+//                    if(Math.abs(y) < DEADZONE && lockedY){
+//                        y = 0f;
+//                    }else{
+//                        lockedY = false;
+//                    }
                     invalidate();
                 }
                 major = Math.min(event.getTouchMajor(), MAX_SIZE);
@@ -136,7 +143,7 @@ public class JoystickView extends View {
                 if(springX  || springY) {
                     animator = ValueAnimator.ofFloat(0f, 1f);
                     animator.setInterpolator(new AccelerateInterpolator());
-                    animator.setDuration(100);
+                    animator.setDuration(500);
                     animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         @Override
                         public void onAnimationUpdate(ValueAnimator animation) {
@@ -238,6 +245,17 @@ public class JoystickView extends View {
         if(listener != null){
             listener.joystickMoved(x, -y);
 
+        }
+    }
+
+    public void setHaptic(Axis axis, boolean haptic){
+        switch(axis){
+            case X:
+                hapticX = haptic;
+                break;
+            case Y:
+                hapticY = haptic;
+                break;
         }
     }
 
