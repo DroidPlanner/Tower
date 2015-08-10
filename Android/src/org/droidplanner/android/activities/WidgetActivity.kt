@@ -147,6 +147,11 @@ public class WidgetActivity : SuperUI() {
             handleIntent(intent)
     }
 
+    override fun onStart(){
+        super.onStart()
+        setToolbarTitle("SoloLink Video")
+    }
+
     private fun handleIntent(intent: Intent){
         val widgetId = intent.getStringExtra(EXTRA_WIDGET_ID)
         val fm = getSupportFragmentManager()
@@ -172,11 +177,6 @@ public class WidgetActivity : SuperUI() {
             AutoPanMode.DRONE -> goToDroneLocation?.setActivated(true)
             AutoPanMode.USER -> goToMyLocation?.setActivated(true)
         }
-    }
-
-    protected override fun initToolbar(toolbar: Toolbar?){
-        super.initToolbar(toolbar)
-        getSupportActionBar()?.setTitle("SoloLink Video")
     }
 
     override fun getToolbarId() = R.id.actionbar_container
@@ -213,8 +213,6 @@ public class WidgetActivity : SuperUI() {
         mapFragment?.setGuidedClickListener(null)
         getBroadcastManager().unregisterReceiver(receiver)
     }
-
-    override fun isDisplayTitleEnabled() = true
 
     private fun checkGoproControlSupport(drone: Drone){
         val goproState: SoloGoproState? = drone.getAttribute(SoloAttributes.SOLO_GOPRO_STATE)

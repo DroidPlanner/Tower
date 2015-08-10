@@ -9,14 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
 import com.o3dr.services.android.lib.drone.attribute.AttributeType
 import com.o3dr.services.android.lib.drone.property.Battery
-import com.o3dr.services.android.lib.drone.property.Signal
-import com.o3dr.services.android.lib.util.MathUtils
+import com.o3dr.services.android.lib.drone.property.State
 import org.droidplanner.android.R
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment
-import kotlin.platform.platformStatic
 import kotlin.properties.Delegates
 
 /**
@@ -32,8 +31,9 @@ public class VehicleStatusFragment : ApiListenerFragment() {
 
             filter.addAction(AttributeEvent.STATE_CONNECTED)
             filter.addAction(AttributeEvent.STATE_DISCONNECTED)
+            filter.addAction(AttributeEvent.HEARTBEAT_TIMEOUT)
+            filter.addAction(AttributeEvent.HEARTBEAT_RESTORED)
             filter.addAction(AttributeEvent.BATTERY_UPDATED)
-            filter.addAction(AttributeEvent.SIGNAL_UPDATED)
 
             return filter
         }
@@ -46,7 +46,9 @@ public class VehicleStatusFragment : ApiListenerFragment() {
 
                 AttributeEvent.STATE_DISCONNECTED -> updateAllStatus()
 
-                AttributeEvent.SIGNAL_UPDATED -> updateSignalStatus()
+                AttributeEvent.HEARTBEAT_RESTORED -> updateConnectionStatus()
+
+                AttributeEvent.HEARTBEAT_TIMEOUT -> updateConnectionStatus()
 
                 AttributeEvent.BATTERY_UPDATED -> updateBatteryStatus()
             }
@@ -61,8 +63,8 @@ public class VehicleStatusFragment : ApiListenerFragment() {
         getView()?.findViewById(R.id.status_vehicle_battery) as ImageView?
     }
 
-    private val signalIcon by Delegates.lazy {
-        getView()?.findViewById(R.id.status_vehicle_signal) as ImageView?
+    private val titleView by Delegates.lazy {
+        getView()?.findViewById(R.id.status_actionbar_title) as TextView?
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?{
@@ -80,7 +82,6 @@ public class VehicleStatusFragment : ApiListenerFragment() {
     }
 
     private fun updateAllStatus(){
-        updateSignalStatus()
         updateBatteryStatus()
         updateConnectionStatus()
     }
@@ -90,9 +91,22 @@ public class VehicleStatusFragment : ApiListenerFragment() {
         connectedIcon?.setImageLevel(
                 if(drone == null || !drone.isConnected())
                     0
-                else
-                    1
+                else {
+                    val state: State = drone.getAttribute(AttributeType.STATE)
+                    if (state.isTelemetryLive())
+                        2
+                    else
+                        1
+                }
         )
+    }
+
+    fun setTitle(titleResId: Int){
+        titleView?.setText(titleResId)
+    }
+
+    fun setTitle(title: CharSequence){
+        titleView?.setText(title)
     }
 
     private fun updateBatteryStatus() {
@@ -124,31 +138,6 @@ public class VehicleStatusFragment : ApiListenerFragment() {
                     } else {
                         0
                     }
-                }
-        )
-    }
-
-    private fun updateSignalStatus(){
-        val drone = getDrone()
-        signalIcon?.setImageLevel(
-                if(drone == null || !drone.isConnected()){
-                    0
-                }
-                else{
-                    val signal: Signal = drone.getAttribute(AttributeType.SIGNAL)
-                    val signalStrength = MathUtils.getSignalStrength(signal.getFadeMargin(), signal.getRemFadeMargin())
-                    if (signalStrength >= 100)
-                        5
-                    else if (signalStrength >= 80)
-                        4
-                    else if (signalStrength >= 60)
-                        3
-                    else if (signalStrength >= 40)
-                        2
-                    else if (signalStrength >= 20)
-                        1
-                    else
-                        0
                 }
         )
     }

@@ -78,6 +78,8 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
     protected UnitSystem unitSystem;
     protected DroidPlannerApp dpApp;
 
+    private VehicleStatusFragment statusFragment;
+
     @Override
     public void setContentView(int resId){
         super.setContentView(resId);
@@ -106,24 +108,34 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(isDisplayTitleEnabled());
+            actionBar.setDisplayShowTitleEnabled(false);
         }
 
         addToolbarFragment();
     }
 
+    protected void setToolbarTitle(CharSequence title){
+        if(statusFragment == null)
+            return;
+
+        statusFragment.setTitle(title);
+    }
+
+    protected void setToolbarTitle(int titleResId){
+        if(statusFragment == null)
+            return;
+
+        statusFragment.setTitle(titleResId);
+    }
+
     protected void addToolbarFragment(){
         final int toolbarId = getToolbarId();
         final FragmentManager fm = getSupportFragmentManager();
-        VehicleStatusFragment status = (VehicleStatusFragment) fm.findFragmentById(toolbarId);
-        if(status == null){
-            status = new VehicleStatusFragment();
-            fm.beginTransaction().add(toolbarId, status).commit();
+        statusFragment = (VehicleStatusFragment) fm.findFragmentById(toolbarId);
+        if(statusFragment == null){
+            statusFragment = new VehicleStatusFragment();
+            fm.beginTransaction().add(toolbarId, statusFragment).commit();
         }
-    }
-
-    protected boolean isDisplayTitleEnabled(){
-        return false;
     }
 
     protected abstract int getToolbarId();
