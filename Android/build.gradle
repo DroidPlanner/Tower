@@ -124,6 +124,7 @@ android {
         beta {
             signingConfig signingConfigs.release
             versionNameSuffix ".beta.${versionBuild}"
+            resValue "string", "app_title", "Tower"
         }
 
         release {
