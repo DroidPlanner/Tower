@@ -1,7 +1,11 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Pair;
@@ -11,14 +15,19 @@ import android.view.ViewGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SplineSurvey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
+import com.o3dr.services.android.lib.drone.property.Home;
+import com.o3dr.services.android.lib.util.MathUtils;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.helpers.ApiListenerDialogFragment;
@@ -35,7 +44,7 @@ import java.util.List;
 
 public class MissionDetailFragment extends ApiListenerDialogFragment {
 
-    protected int MIN_ALTITUDE; // meter
+    protected int MIN_ALTITUDE; // meters
     protected int MAX_ALTITUDE; // meters
 
     public static final List<MissionItemType> typeWithNoMultiEditSupport = new  ArrayList<>();
@@ -83,6 +92,28 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
         public void onWaypointTypeChanged(MissionItemType newType, List<Pair<MissionItemProxy,
                 List<MissionItemProxy>>> oldNewItemsList);
     }
+
+    private static final IntentFilter filter = new IntentFilter();
+    static {
+        filter.addAction(AttributeEvent.HOME_UPDATED);
+        filter.addAction(AttributeEvent.STATE_CONNECTED);
+        filter.addAction(AttributeEvent.STATE_DISCONNECTED);
+        filter.addAction(AttributeEvent.HEARTBEAT_RESTORED);
+    }
+
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch(intent.getAction()){
+                case AttributeEvent.HEARTBEAT_RESTORED:
+                case AttributeEvent.STATE_DISCONNECTED:
+                case AttributeEvent.STATE_CONNECTED:
+                case AttributeEvent.HOME_UPDATED:
+                    updateHomeDistance();
+                    break;
+            }
+        }
+    };
 
     private final SpinnerSelfSelect.OnSpinnerItemSelectedListener missionItemSpinnerListener = new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {
         @Override
@@ -172,6 +203,9 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
     protected AdapterMissionItems commandAdapter;
     private OnMissionDetailListener mListener;
 
+    private TextView distanceView;
+    private TextView distanceLabelView;
+
     private MissionProxy mMissionProxy;
     private final List<MissionItem> mSelectedItems = new ArrayList<MissionItem>();
     private final List<MissionItemProxy> mSelectedProxies = new ArrayList<MissionItemProxy>();
@@ -256,6 +290,14 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
         final View view = getView();
         if (view == null) return;
 
+        distanceView = (TextView) view.findViewById(R.id.DistanceValue);
+        if(distanceView != null)
+            distanceView.setVisibility(View.GONE);
+
+        distanceLabelView = (TextView) view.findViewById(R.id.DistanceLabel);
+        if(distanceLabelView != null)
+            distanceLabelView.setVisibility(View.GONE);
+
         List<MissionItemType> list = new LinkedList<>(Arrays.asList(SUPPORTED_MISSION_ITEM_TYPES));
 
         if (mSelectedProxies.size() == 1) {
@@ -300,16 +342,6 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
                 waypointIndex.setText(String.valueOf(itemOrder));
             }
 
-            final TextView distanceView = (TextView) view.findViewById(R.id.DistanceValue);
-            if (distanceView != null) {
-                distanceView.setText(getLengthUnitProvider().boxBaseValueToTarget(mMissionProxy
-                        .getDistanceFromLastWaypoint(itemProxy)).toString());
-            }
-
-            final TextView distanceLabelView = (TextView) view.findViewById(R.id.DistanceLabel);
-            if (distanceLabelView != null) {
-                distanceLabelView.setVisibility(View.VISIBLE);
-            }
         } else if (mSelectedProxies.size() > 1) {
             //Remove the mission item types that don't apply to multiple items.
             list.removeAll(typeWithNoMultiEditSupport);
@@ -367,6 +399,58 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
         typeSpinner = (SpinnerSelfSelect) view.findViewById(R.id.spinnerWaypointType);
         typeSpinner.setAdapter(commandAdapter);
         typeSpinner.setOnSpinnerItemSelectedListener(missionItemSpinnerListener);
+    }
+
+    public void onResume(){
+        super.onResume();
+        updateHomeDistance();
+        getBroadcastManager().registerReceiver(receiver, filter);
+    }
+
+    public void onPause(){
+        super.onPause();
+        getBroadcastManager().unregisterReceiver(receiver);
+    }
+
+    private void updateHomeDistance(){
+        if(distanceView == null && distanceLabelView == null)
+            return;
+
+        boolean hideDistanceInfo = true;
+
+        final Drone drone = getDrone();
+        final Home home = drone == null ? null : drone.<Home>getAttribute(AttributeType.HOME);
+
+        if(home != null && home.isValid() && mSelectedProxies.size() == 1) {
+            final MissionItemProxy itemProxy = mSelectedProxies.get(0);
+            final MissionItem item = itemProxy.getMissionItem();
+            if(item instanceof MissionItem.SpatialItem) {
+                final LatLongAlt itemCoordinate = ((MissionItem.SpatialItem)item).getCoordinate();
+                final LatLongAlt homeCoordinate = home.getCoordinate();
+                final double homeDistance = MathUtils.getDistance3D(homeCoordinate, itemCoordinate);
+                if(homeDistance > 0) {
+                    hideDistanceInfo = false;
+
+                    if (distanceView != null) {
+                        distanceView.setText(getLengthUnitProvider().boxBaseValueToTarget(homeDistance).toString());
+                        distanceView.setVisibility(View.VISIBLE);
+
+                        if (distanceLabelView != null) {
+                            distanceLabelView.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            }
+        }
+
+        if(hideDistanceInfo){
+            if(distanceView != null)
+                distanceView.setVisibility(View.GONE);
+
+            if(distanceLabelView != null){
+                distanceLabelView.setVisibility(View.GONE);
+            }
+        }
     }
 
     private boolean hasCommandItems(List<MissionItemProxy> items) {

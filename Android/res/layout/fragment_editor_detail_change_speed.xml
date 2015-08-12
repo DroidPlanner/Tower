@@ -50,14 +50,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:text="@string/waypointType_Change_Speed" />
-
-            <TextView
-                android:id="@+id/DistanceLabel"
-                style="@style/missionHeaderlabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/WaypointType"
-                android:layout_below="@id/WaypointType" />
         </RelativeLayout>
     </RelativeLayout>
 
