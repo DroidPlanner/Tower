@@ -44,8 +44,8 @@ import java.util.List;
 
 public class MissionDetailFragment extends ApiListenerDialogFragment {
 
-    protected int MIN_ALTITUDE; // meters
-    protected int MAX_ALTITUDE; // meters
+    protected double MIN_ALTITUDE; // meters
+    protected double MAX_ALTITUDE; // meters
 
     public static final List<MissionItemType> typeWithNoMultiEditSupport = new  ArrayList<>();
     static {

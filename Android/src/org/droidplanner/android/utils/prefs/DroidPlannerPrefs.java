@@ -101,13 +101,13 @@ public class DroidPlannerPrefs {
 	private static final boolean DEFAULT_ENABLE_UDP_PING = false;
 
 	public static final String PREF_ALT_MAX_VALUE = "pref_alt_max_value";
-	private static final int DEFAULT_MAX_ALT = 200; //meters
+	private static final double DEFAULT_MAX_ALT = 200; //meters
 
 	public static final String PREF_ALT_MIN_VALUE = "pref_alt_min_value";
-	private static final int DEFAULT_MIN_ALT = 0; // meter
+	private static final double DEFAULT_MIN_ALT = 0; // meter
 
 	public static final String PREF_ALT_DEFAULT_VALUE = "pref_alt_default_value";
-	private static final int DEFAULT_ALT = 20; // meters
+	private static final double DEFAULT_ALT = 20; // meters
 
 	public static final String PREF_APP_VERSION = "pref_version";
 
@@ -425,7 +425,7 @@ public class DroidPlannerPrefs {
 	/**
 	 * @return the max altitude in meters
 	 */
-	public int getMaxAltitude(){
+	public double getMaxAltitude(){
 		return getAltitudePreference(PREF_ALT_MAX_VALUE, DEFAULT_MAX_ALT);
 	}
 
@@ -433,28 +433,28 @@ public class DroidPlannerPrefs {
 	/**
 	 * @return the min altitude in meters
 	 */
-	public int getMinAltitude(){
+	public double getMinAltitude(){
 		return getAltitudePreference(PREF_ALT_MIN_VALUE, DEFAULT_MIN_ALT);
 	}
 
 	/**
 	 * @return the default starting altitude in meters
 	 */
-	public int getDefaultAltitude(){
+	public double getDefaultAltitude(){
 		return getAltitudePreference(PREF_ALT_DEFAULT_VALUE, DEFAULT_ALT);
 	}
 
-	public void setAltitudePreference(String prefKey, int altitude) {
+	public void setAltitudePreference(String prefKey, double altitude) {
 		prefs.edit().putString(prefKey, String.valueOf(altitude)).apply();
 	}
 
-	private int getAltitudePreference(String prefKey, int defaultValue) {
+	private double getAltitudePreference(String prefKey, double defaultValue) {
 		final String maxAltValue = prefs.getString(prefKey, null);
 		if(TextUtils.isEmpty(maxAltValue))
 			return defaultValue;
 
 		try {
-			final int maxAlt = Integer.parseInt(maxAltValue);
+			final double maxAlt = Double.parseDouble(maxAltValue);
 			return maxAlt;
 		}catch(Exception e){
 			return defaultValue;

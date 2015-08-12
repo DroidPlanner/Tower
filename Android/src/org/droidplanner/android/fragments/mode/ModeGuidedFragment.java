@@ -99,7 +99,7 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
         final Drone drone = getDrone();
 
         if (mAltitudeWheel != null) {
-            final int defaultAlt = getAppPrefs().getDefaultAltitude();
+            final double defaultAlt = getAppPrefs().getDefaultAltitude();
 
             GuidedState guidedState = drone.getAttribute(AttributeType.GUIDED_STATE);
             LatLongAlt coordinate = guidedState == null ? null : guidedState.getCoordinate();
