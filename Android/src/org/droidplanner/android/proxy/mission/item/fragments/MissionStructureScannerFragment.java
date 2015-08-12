@@ -37,6 +37,9 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
         public void onSpinnerItemSelected(Spinner spinner, int position) {
             if (spinner.getId() == id.cameraFileSpinner) {
 
+                if(cameraAdapter.isEmpty())
+                    return;
+
                 CameraDetail cameraInfo = cameraAdapter.getItem(position);
                 for (StructureScanner scan : getMissionItems()) {
                     SurveyDetail surveyDetail = scan.getSurveyDetail();
