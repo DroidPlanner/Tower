@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:minHeight="40dp"
-            android:minWidth="75dp">
+            android:minWidth="90dp">
 
             <TextView
                 android:id="@+id/bar_battery"
@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:gravity="center"
+                android:gravity="start"
                 app:isSelectable="false" />
         </LinearLayout>
 

@@ -366,16 +366,16 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final String update;
         final int gpsIcon;
         if (!drone.isConnected()) {
-            update = (displayHdop ? "HDOP: " : "") + emptyString;
+            update = (displayHdop ? "hdop: " : "") + emptyString;
             gpsIcon = R.drawable.ic_gps_off_grey_700_18dp;
             satNoView.setText("S: " + emptyString);
-            hdopStatusView.setText("HDOP: " + emptyString);
+            hdopStatusView.setText("hdop: " + emptyString);
         } else {
             Gps droneGps = drone.getAttribute(AttributeType.GPS);
             final String fixStatus = droneGps.getFixStatus();
 
             if (displayHdop) {
-                update = String.format(Locale.ENGLISH, "HDOP: %.1f", droneGps.getGpsEph());
+                update = String.format(Locale.ENGLISH, "hdop: %.1f", droneGps.getGpsEph());
             } else {
                 update = String.format(Locale.ENGLISH, "%s", fixStatus);
             }
@@ -396,7 +396,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             if (appPrefs.shouldGpsHdopBeDisplayed()) {
                 hdopStatusView.setText(String.format(Locale.ENGLISH, "%s", fixStatus));
             } else {
-                hdopStatusView.setText(String.format(Locale.ENGLISH, "HDOP: %.1f", droneGps.getGpsEph()));
+                hdopStatusView.setText(String.format(Locale.ENGLISH, "hdop: %.1f", droneGps.getGpsEph()));
             }
         }
 
