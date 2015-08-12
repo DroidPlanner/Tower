@@ -18,8 +18,6 @@ import org.droidplanner.android.widgets.SlideButton;
  */
 public abstract class SlideToUnlockDialog extends DialogFragment implements SeekBar.OnSeekBarChangeListener{
 
-    private static final String TAG = SlideToUnlockDialog.class.getSimpleName();
-
     public static final String EXTRA_UNLOCK_ACTION = "extra_unlock_action";
 
     public static SlideToUnlockDialog newInstance(String unlockDescription, final Runnable unlockAction){
@@ -56,6 +54,12 @@ public abstract class SlideToUnlockDialog extends DialogFragment implements Seek
     public void onStart(){
         super.onStart();
         getDialog().setCanceledOnTouchOutside(true);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        dismiss();
     }
 
     @Override

@@ -275,7 +275,8 @@
 
                 <EditTextPreference
                     android:gravity="center"
-                    android:inputType="numberSigned"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:selectAllOnFocus="true"
                     android:key="pref_alt_max_value"
                     android:title="@string/pref_max_alt_title"
                     android:persistent="false"
@@ -283,14 +284,16 @@
 
                 <EditTextPreference
                     android:gravity="center"
-                    android:inputType="numberSigned"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:selectAllOnFocus="true"
                     android:key="pref_alt_min_value"
                     android:title="@string/pref_min_alt_title"
                     android:persistent="false"/>
 
                 <EditTextPreference
                     android:gravity="center"
-                    android:inputType="numberSigned"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:selectAllOnFocus="true"
                     android:key="pref_alt_default_value"
                     android:title="@string/pref_default_alt_title"
                     android:persistent="false"/>

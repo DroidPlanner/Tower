@@ -675,8 +675,9 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
             if (missionProxy == null)
                 return;
 
-            missionProxy.removeItem(item);
+
             missionProxy.selection.clearSelection();
+            missionProxy.removeItem(item);
 
             if (missionProxy.getItems().size() <= 0) {
                 editorToolsFragment.setTool(EditorTools.NONE);

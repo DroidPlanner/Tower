@@ -324,7 +324,7 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment {
         final SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("take off", new Runnable() {
             @Override
             public void run() {
-                final int takeOffAltitude = getAppPrefs().getDefaultAltitude();
+                final double takeOffAltitude = getAppPrefs().getDefaultAltitude();
                 getDrone().doGuidedTakeoff(takeOffAltitude);
             }
         });
@@ -336,7 +336,7 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment {
             @Override
             public void run() {
 
-                final int takeOffAltitude = getAppPrefs().getDefaultAltitude();
+                final double takeOffAltitude = getAppPrefs().getDefaultAltitude();
 
                 final Drone drone = getDrone();
                 VehicleApi.getApi(drone).takeoff(takeOffAltitude, new SimpleCommandListener(){

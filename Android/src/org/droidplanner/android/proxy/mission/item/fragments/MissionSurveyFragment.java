@@ -56,6 +56,9 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
         @Override
         public void onSpinnerItemSelected(Spinner spinner, int position) {
             if (spinner.getId() == id.cameraFileSpinner) {
+                if(cameraAdapter.isEmpty())
+                    return;
+
                 CameraDetail cameraInfo = cameraAdapter.getItem(position);
                 for (T survey : getMissionItems()) {
                     survey.getSurveyDetail().setCameraDetail(cameraInfo);

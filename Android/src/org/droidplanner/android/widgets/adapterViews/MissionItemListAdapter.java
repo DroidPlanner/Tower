@@ -175,16 +175,6 @@ public class MissionItemListAdapter extends ReorderRecyclerView.ReorderAdapter<M
             else
                 altitudeView.setTextColor(Color.WHITE);
 
-            try {
-                double diff = missionProxy.getAltitudeDiffFromPreviousItem(proxy);
-                if (diff > 0) {
-                    altitudeView.setTextColor(Color.RED);
-                } else if (diff < 0) {
-                    altitudeView.setTextColor(Color.BLUE);
-                }
-            } catch (Exception e) {
-                // Do nothing when last item doesn't have an altitude
-            }
         } else if (missionItem instanceof Survey) {
             double altitude = ((Survey) missionItem).getSurveyDetail().getAltitude();
             LengthUnit convertedAltitude = lengthUnitProvider.boxBaseValueToTarget(altitude);
