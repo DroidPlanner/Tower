@@ -114,11 +114,16 @@ android {
             resValue "string", "app_title", "Tower Dev"
         }
 
-        beta {
+        betaInternal {
             signingConfig signingConfigs.release
             applicationIdSuffix ".beta"
             versionNameSuffix ".beta.${versionBuild}"
             resValue "string", "app_title", "Tower Beta"
+        }
+
+        beta {
+            signingConfig signingConfigs.release
+            versionNameSuffix ".beta.${versionBuild}"
         }
 
         release {
