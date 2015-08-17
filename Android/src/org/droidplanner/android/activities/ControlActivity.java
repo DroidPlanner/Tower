@@ -25,6 +25,7 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Attitude;
 import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.Home;
+import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.mavlink.MavlinkMessageWrapper;
 import com.o3dr.services.android.lib.util.MathUtils;
@@ -52,7 +53,7 @@ public class ControlActivity extends DrawerNavigationUI {
     private static final int ignorePos = ((1<<0) | (1<<1) | (1<<2));
     private long lastRecieved;
     private float lastYaw, lastYawSpeed;
-    private static final float MAX_VEL = 5f, MAX_VEL_Z = 5f;
+    private static final float MAX_VEL = 5f, MAX_VEL_Z = 5f, MAX_YAW_RATE = 5f;
     private final static IntentFilter eventFilter = new IntentFilter();
     private VehicleMode mode;
     static{
@@ -67,7 +68,8 @@ public class ControlActivity extends DrawerNavigationUI {
                     attitudeUpdated();
                     break;
                 case AttributeEvent.STATE_VEHICLE_MODE:
-                    mode = dpApp.getDrone().getAttribute(AttributeType.STATE);
+                    State state = dpApp.getDrone().getAttribute(AttributeType.STATE);
+                    mode = state.getVehicleMode();
                     break;
             }
         }
@@ -142,6 +144,8 @@ public class ControlActivity extends DrawerNavigationUI {
     }
 
     private void sendYaw(float heading) {
+        if(mode == null || !mode.equals(VehicleMode.COPTER_GUIDED))
+            return;
         float yaw = leftJoystick.getAxis(JoystickView.Axis.X);
         heading/= Math.PI;
         heading *= 180f;
@@ -161,7 +165,8 @@ public class ControlActivity extends DrawerNavigationUI {
         float throttle = leftJoystick.getAxis(JoystickView.Axis.Y);
         float x = rightJoystick.getAxis(JoystickView.Axis.X);
         float y = rightJoystick.getAxis(JoystickView.Axis.Y);
-        if(mode.equals(VehicleMode.COPTER_GUIDED)) {
+        float yaw = leftJoystick.getAxis(JoystickView.Axis.X);
+        if(mode != null && mode.equals(VehicleMode.COPTER_GUIDED)) {
             if (x != 0 && y != 0) {
                 double theta = Math.atan(y / x);
                 if (theta < 0) {
@@ -176,12 +181,16 @@ public class ControlActivity extends DrawerNavigationUI {
                 y = (float) (Math.sin(heading + theta) * magnitude);
 
             }
+        }else{
+            y = -y;
+            throttle = -throttle;
         }
+        Timber.d("x: %f, y: %f, z: %f, yaw: %f", x, y, throttle, yaw);
         msg_set_position_target_local_ned msg = new msg_set_position_target_local_ned();
         msg.vz = throttle * MAX_VEL_Z;
         msg.vy = y *  MAX_VEL;
         msg.vx = x * MAX_VEL;
-//        Timber.d("x: %f, y: %f, z: %f", msg.vx, msg.vy, msg.vz);
+        msg.yaw_rate = yaw * MAX_YAW_RATE;
         msg.type_mask = ignoreAcc | ignorePos;
         ExperimentalApi.getApi(dpApp.getDrone()).sendMavlinkMessage(new MavlinkMessageWrapper(msg));
     }
