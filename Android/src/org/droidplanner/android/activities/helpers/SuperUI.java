@@ -16,10 +16,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.CapabilityApi;
+import com.o3dr.android.client.apis.MissionApi;
 import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.error.CommandExecutionError;
 import com.o3dr.services.android.lib.model.SimpleCommandListener;
 
 import org.droidplanner.android.DroidPlannerApp;
@@ -237,15 +241,32 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
 
         final MenuItem toggleConnectionItem = menu.findItem(R.id.menu_connect);
 
-        Drone dpApi = dpApp.getDrone();
-        if (dpApi != null && dpApi.isConnected()) {
+        Drone drone = dpApp.getDrone();
+        if (drone != null && drone.isConnected()) {
             menu.setGroupEnabled(R.id.menu_group_connected, true);
             menu.setGroupVisible(R.id.menu_group_connected, true);
 
             final MenuItem killSwitchItem = menu.findItem(R.id.menu_kill_switch);
             final boolean isKillEnabled = mAppPrefs.isKillSwitchEnabled();
-            killSwitchItem.setEnabled(isKillEnabled);
-            killSwitchItem.setVisible(isKillEnabled);
+            if(killSwitchItem != null && isKillEnabled) {
+                CapabilityApi.getApi(drone).checkFeatureSupport(CapabilityApi.FeatureIds.KILL_SWITCH, new CapabilityApi.FeatureSupportListener() {
+                    @Override
+                    public void onFeatureSupportResult(String s, int i, Bundle bundle) {
+                        switch (i) {
+                            case CapabilityApi.FEATURE_SUPPORTED:
+                                killSwitchItem.setEnabled(true);
+                                killSwitchItem.setVisible(true);
+                                break;
+
+                            default:
+                                killSwitchItem.setEnabled(false);
+                                killSwitchItem.setVisible(false);
+                                break;
+                        }
+                    }
+                });
+
+            }
 
             final boolean areMissionMenusEnabled = enableMissionMenus();
 
@@ -310,22 +331,33 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
             }
 
             case R.id.menu_download_mission:
-                dpApi.loadWaypoints();
+                MissionApi.getApi(dpApi).loadWaypoints();
                 return true;
 
             case R.id.menu_kill_switch:
                 SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("disable vehicle", new Runnable() {
                     @Override
                     public void run() {
-                        VehicleApi.getApi(dpApp.getDrone()).arm(false, true, new SimpleCommandListener() {
+                        VehicleApi.getApi(dpApi).arm(false, true, new SimpleCommandListener() {
                             @Override
                             public void onError(int error) {
-                                //TODO: complete
+                                final int errorMsgId;
+                                switch(error){
+                                    case CommandExecutionError.COMMAND_UNSUPPORTED:
+                                        errorMsgId = R.string.error_kill_switch_unsupported;
+                                        break;
+
+                                    default:
+                                        errorMsgId = R.string.error_kill_switch_failed;
+                                        break;
+                                }
+
+                                Toast.makeText(getApplicationContext(), errorMsgId, Toast.LENGTH_LONG).show();
                             }
 
                             @Override
                             public void onTimeout() {
-                                //TODO: complete
+                                Toast.makeText(getApplicationContext(), R.string.error_kill_switch_failed, Toast.LENGTH_LONG).show();
                             }
                         });
                     }

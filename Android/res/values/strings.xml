@@ -29,7 +29,6 @@
         battery life)</string>
     <string name="pref_lock_screen_orientation">Lock Screen Orientation</string>
     <string name="pref_lock_screen_orientation_summary">Locks screen to the orientation which is present when connecting</string>
-    <string name="pref_flight_data">Flight Data</string>
     <string name="pref_advanced">Advanced</string>
     <string name="pref_map_type">Map Type</string>
     <string name="pref_map_type_summary">Which type of map to use</string>
@@ -409,7 +408,7 @@
     <string name="pref_map_rotation_title">Enable map rotation</string>
     <string name="pref_map_rotation_summary">Check to enable the ability to rotate the map.</string>
     <string name="pref_advance_menu_title">Advanced Menu Options</string>
-    <string name="pref_enable_kill_switch_summary">If enabled, a Kill Switch option will appear in the menu, allowing immediate vehicle disarming.</string>
+    <string name="pref_enable_kill_switch_summary">If enabled, a Kill Switch option will appear in the menu, allowing immediate vehicle disarming. Only supported on multi-rotor vehicles</string>
     <string name="pref_enable_kill_switch_title">Enable Kill Switch</string>
     <string name="pref_enable_udp_server_title">Enable UDP server ping</string>
     <string name="pref_udp_server_ping_summary">Enable to allow the app to periodically ping the udp server.</string>
@@ -460,5 +459,7 @@
     <string name="menu_kill_switch">Kill Switch</string>
     <string name="label_clear_selected">Clear selected</string>
     <string name="unsaved_param_warning">You have unsaved changes</string>
+    <string name="error_kill_switch_unsupported">KILL SWITCH command is not supported!</string>
+    <string name="error_kill_switch_failed">KILL SWITCH command failed!</string>
 
 </resources>
