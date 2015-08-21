@@ -51,8 +51,6 @@ public class TTSNotificationProvider implements OnInitListener,
 
 	private static final double BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT = 10;
 
-    private static final double MAX_ALTITUDE = 121.92; //meters
-
 	/**
 	 * Utterance id for the periodic status speech.
 	 */
@@ -155,10 +153,9 @@ public class TTSNotificationProvider implements OnInitListener,
                     speak("Following");
                     break;
                 case AttributeEvent.ALTITUDE_UPDATED:
-                    if (mAppPrefs.getWarningOn400ftExceeded()) {
-                        final Altitude altitude = drone.getAttribute(AttributeType.ALTITUDE);
-                        if (altitude.getAltitude() > MAX_ALTITUDE)
-                            speak("warning, 400 feet exceeded");
+					final Altitude altitude = drone.getAttribute(AttributeType.ALTITUDE);
+                    if (mAppPrefs.hasExceededMaxAltitude(altitude.getAltitude())) {
+                            speak("Warning, max altitude exceeded!");
                     }
                     break;
                 case AttributeEvent.AUTOPILOT_ERROR:

@@ -254,8 +254,6 @@
     <string name="pref_tts_periodic_period">Intervallo</string>
     <string name="pref_tts_periodic_rssi">Potenza segnale (RSSI)</string>
     <string name="pref_tts_seconds">secondi</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded">400ft. Superati</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">In molte situazioni è illegale volare oltre 400ft</string>
     <string name="setup_mag_start">Premi Calibra per iniziare la calibrazione del magnetometro. Effettua la calibrazione all\'apero e lontano da oggetti metallici</string>
     <string name="usage_statistics">Statistiche utilizzo</string>
     <string name="waypointInfo_CameraTrigger">Attiva la fotocamera ad intervalli per distanze regolari </string>
