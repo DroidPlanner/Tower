@@ -17,7 +17,6 @@
     <string name="pref_keep_screen_bright_summary">Wenn nicht aktiviert, wird der Bildschirm nach einer gewissen Zeit abgedunkelt (spart Batterie)</string>
     <string name="pref_lock_screen_orientation">Bildschirmorientierung sperren</string>
     <string name="pref_lock_screen_orientation_summary">Sperrt die aktuelle Bildschirmorientierung beim Verbinden</string>
-    <string name="pref_flight_data">Flugdaten</string>
     <string name="pref_advanced">Erweitert</string>
     <string name="pref_map_type">Kartentyp</string>
     <string name="pref_map_type_summary">Kartentyp wählen</string>

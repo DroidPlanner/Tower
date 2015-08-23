@@ -29,7 +29,6 @@
 	    使用时间）</string>
     <string name="pref_lock_screen_orientation">锁定屏幕方向</string>
     <string name="pref_lock_screen_orientation_summary">连接无人机时，屏幕将会定在当前的旋转方向</string>
-    <string name="pref_flight_data">飞行数据</string>
     <string name="pref_advanced">高级设定</string>
     <string name="pref_map_type">地图样式</string>
     <string name="pref_map_type_summary">使用哪种类型的地图</string>

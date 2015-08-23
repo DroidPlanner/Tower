@@ -34,8 +34,6 @@
     <string name="pref_keep_screen_bright_summary">Cocher pour garder l\'écran allumé et lumineux (affecte la durée de vie batterie)</string>
     <string name="pref_lock_screen_orientation">Verrouiller l\'orientation d\'écran</string>
     <string name="pref_lock_screen_orientation_summary">Cocher pour verrouiller l\'actuel orientation d\'écran lorsque connecté</string>
-    <string name="pref_flight_data">Données de Vol</string>
-
 
     <string name="pref_advanced">Paramètres Avancés</string>
 

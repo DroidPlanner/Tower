@@ -28,7 +28,6 @@
     <string name="pref_keep_screen_bright_summary">Mantiene lo schermo acceso e luminoso (incide sulla durata della batteria)</string>
     <string name="pref_lock_screen_orientation">Blocca orientamento schermo</string>
     <string name="pref_lock_screen_orientation_summary">Bloccare l\'orientamento dello schermo in base a quello di inizio connessione</string>
-    <string name="pref_flight_data">Dati volo</string>
     <string name="pref_advanced">Avanzate</string>
     <string name="pref_map_type">Tipo mappa</string>
     <string name="pref_map_type_summary">Tipo mappa da usare</string>
