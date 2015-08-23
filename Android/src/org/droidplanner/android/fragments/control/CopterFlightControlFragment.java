@@ -43,8 +43,6 @@ import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
  */
 public class CopterFlightControlFragment extends BaseFlightControlFragment {
 
-    private static final String TAG = CopterFlightControlFragment.class.getSimpleName();
-
     private static final String ACTION_FLIGHT_ACTION_BUTTON = "Copter flight action button";
 
     private static final IntentFilter eventFilter = new IntentFilter();

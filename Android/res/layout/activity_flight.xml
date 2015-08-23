@@ -56,10 +56,10 @@
             android:layout_height="wrap_content"
             layout="@layout/button_my_location"
             android:layout_marginTop="8dp"
-            android:layout_gravity="center_vertical|end"
+            android:layout_gravity="center_vertical|start"
             android:layout_below="@+id/actionbar_container"
-            android:layout_alignRight="@+id/actionbar_container"
-            android:layout_alignEnd="@+id/actionbar_container"
+            android:layout_alignLeft="@+id/actionbar_container"
+            android:layout_alignStart="@+id/actionbar_container"
             />
 
     </RelativeLayout>

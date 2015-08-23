@@ -178,13 +178,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             return;
 
         itemDetailToggle.setActivated(isOpened);
-
-        // Update the right margin for the my location button
-        final ViewGroup.MarginLayoutParams marginLp = (ViewGroup.MarginLayoutParams) mLocationButtonsContainer
-                .getLayoutParams();
-        final int rightMargin = isOpened ? marginLp.leftMargin + actionDrawer.getWidth() : marginLp.leftMargin;
-        marginLp.setMargins(marginLp.leftMargin, marginLp.topMargin, rightMargin, marginLp.bottomMargin);
-        mLocationButtonsContainer.requestLayout();
     }
 
     @Override

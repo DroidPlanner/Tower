@@ -154,12 +154,10 @@ public class FlightActivity extends DrawerNavigationUI {
 
     private FlightMapFragment mapFragment;
     private FlightControlManagerFragment flightActions;
-    private TelemetryFragment telemetryFragment;
 
     private SlidingUpPanelLayout mSlidingPanel;
     private View mFlightActionsView;
 
-    private View mLocationButtonsContainer;
     private ImageButton mGoToMyLocation;
     private ImageButton mGoToDroneLocation;
     private ImageButton actionDrawerToggle;
@@ -170,15 +168,6 @@ public class FlightActivity extends DrawerNavigationUI {
 
         if(actionDrawerToggle != null)
             actionDrawerToggle.setActivated(false);
-
-        if (telemetryFragment == null)
-            return;
-        final View telemetryView = telemetryFragment.getView();
-        if (telemetryView != null) {
-            final int slidingDrawerWidth = telemetryView.getWidth();
-            final boolean isSlidingDrawerOpened = isActionDrawerOpened();
-            updateLocationButtonsMargin(isSlidingDrawerOpened, slidingDrawerWidth);
-        }
     }
 
     @Override
@@ -187,16 +176,6 @@ public class FlightActivity extends DrawerNavigationUI {
 
         if(actionDrawerToggle != null)
             actionDrawerToggle.setActivated(true);
-
-        if (telemetryFragment == null)
-            return;
-
-        final View telemetryView = telemetryFragment.getView();
-        if (telemetryView != null) {
-            final int slidingDrawerWidth = telemetryView.getWidth();
-            final boolean isSlidingDrawerOpened = isActionDrawerOpened();
-            updateLocationButtonsMargin(isSlidingDrawerOpened, slidingDrawerWidth);
-        }
     }
 
     @Override
@@ -211,7 +190,6 @@ public class FlightActivity extends DrawerNavigationUI {
 
         setupMapFragment();
 
-        mLocationButtonsContainer = findViewById(R.id.location_button_container);
         mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
         mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
         actionDrawerToggle = (ImageButton) findViewById(R.id.toggle_action_drawer);
@@ -288,7 +266,7 @@ public class FlightActivity extends DrawerNavigationUI {
 
         // Add the telemetry fragment
         final int actionDrawerId = getActionDrawerId();
-        telemetryFragment = (TelemetryFragment) fragmentManager.findFragmentById(actionDrawerId);
+        TelemetryFragment telemetryFragment = (TelemetryFragment) fragmentManager.findFragmentById(actionDrawerId);
         if (telemetryFragment == null) {
             telemetryFragment = new TelemetryFragment();
             fragmentManager.beginTransaction()
@@ -452,26 +430,6 @@ public class FlightActivity extends DrawerNavigationUI {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         updateMapLocationButtons(mAppPrefs.getAutoPanMode());
-
-        final View telemetryView = telemetryFragment.getView();
-        if (telemetryView != null) {
-            final int slidingDrawerWidth = telemetryView.getWidth();
-            updateLocationButtonsMargin(isActionDrawerOpened(), slidingDrawerWidth);
-        }
-    }
-
-    /**
-     * Account for the various ui elements and update the map padding so that it
-     * remains 'visible'.
-     */
-    private void updateLocationButtonsMargin(boolean isOpened, int drawerWidth) {
-
-        // Update the right margin for the my location button
-        final ViewGroup.MarginLayoutParams marginLp = (ViewGroup.MarginLayoutParams) mLocationButtonsContainer
-                .getLayoutParams();
-        final int rightMargin = isOpened ? marginLp.leftMargin + drawerWidth : marginLp.leftMargin;
-        marginLp.setMargins(marginLp.leftMargin, marginLp.topMargin, rightMargin, marginLp.bottomMargin);
-        mLocationButtonsContainer.requestLayout();
     }
 
     private void enableSlidingUpPanel(Drone api) {
