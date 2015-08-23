@@ -187,8 +187,6 @@
     <string name="pref_tts_periodic_airspeed">Fluggeschwindigkeit</string>
     <string name="pref_tts_periodic_airspeed_summary">Fluggeschwindigkeit lesen.</string>
     <string name="pref_title_tts_warnings">Warnungen</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded">400 fuss überschritten</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">In den Vereinigten Staaten ist es oft illegal höher als 400 fuss zu fliegen.</string>
     <string name="pref_tts_warning_low_signal_strength">Schwaches Signal</string>
     <string name="pref_tts_warning_low_signal_strength_summary">Warnt wenn die verbindung zur Drohne schlecht ist.</string>
     <string name="pref_tts_warning_lost_signal">Verbindungsstatus</string>

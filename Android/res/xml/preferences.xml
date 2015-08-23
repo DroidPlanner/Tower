@@ -123,11 +123,6 @@
                     <PreferenceCategory android:title="@string/pref_title_tts_warnings" >
 
                         <CheckBoxPreference
-                            android:defaultValue="true"
-                            android:key="tts_ceiling_exceeded"
-                            android:summary="@string/pref_tts_warning_400ft_ceiling_exceeded_summary"
-                            android:title="@string/pref_tts_warning_400ft_ceiling_exceeded" />
-                        <CheckBoxPreference
                             android:defaultValue="false"
                             android:key="tts_low_signal"
                             android:summary="@string/pref_tts_warning_low_signal_strength_summary"
@@ -261,6 +256,12 @@
 
             <PreferenceCategory
                 android:title="@string/pref_alt_title">
+
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="pref_max_alt_warning"
+                    android:summary="@string/pref_max_alt_warning_summary"
+                    android:title="@string/pref_max_alt_warning_title"/>
 
                 <EditTextPreference
                     android:gravity="center"

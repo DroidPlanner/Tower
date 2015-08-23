@@ -58,8 +58,8 @@ public class DroidPlannerPrefs {
 	private static final String PREF_SPEECH_PERIOD = "tts_periodic_status_period";
 	public static final String DEFAULT_SPEECH_PERIOD = "0";
 
-	public static final String PREF_TTS_CEILING_EXCEEDED = "tts_ceiling_exceeded";
-	public static final boolean DEFAULT_TTS_CEILING_EXCEEDED = true;
+	public static final String PREF_MAX_ALT_WARNING = "pref_max_alt_warning";
+	public static final boolean DEFAULT_MAX_ALT_WARNING = false;
 
 	public static final String PREF_TTS_LOST_SIGNAL = "tts_lost_signal";
 	public static final boolean DEFAULT_TTS_WARNING_LOST_SIGNAL = true;
@@ -394,8 +394,13 @@ public class DroidPlannerPrefs {
 		return Integer.parseInt(prefs.getString(PREF_SPEECH_PERIOD, DEFAULT_SPEECH_PERIOD));
 	}
 
-	public boolean getWarningOn400ftExceeded() {
-		return prefs.getBoolean(PREF_TTS_CEILING_EXCEEDED, DEFAULT_TTS_CEILING_EXCEEDED);
+	public boolean hasExceededMaxAltitude(double currentAltInMeters){
+		final boolean isWarningEnabled = prefs.getBoolean(PREF_MAX_ALT_WARNING, DEFAULT_MAX_ALT_WARNING);
+		if(!isWarningEnabled)
+			return false;
+
+		final double maxAltitude = getMaxAltitude();
+		return currentAltInMeters > maxAltitude;
 	}
 
 	public boolean getWarningOnLostOrRestoredSignal() {

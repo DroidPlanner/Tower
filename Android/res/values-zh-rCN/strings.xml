@@ -291,8 +291,6 @@
     <string name="pref_tts_periodic_airspeed">空速</string>
     <string name="pref_tts_periodic_airspeed_summary">广播空速数值</string>
     <string name="pref_title_tts_warnings">警告</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded">400英尺超过</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">在许多的情况下飞行高度超过400英尺是非法行为。</string>
     <string name="pref_tts_warning_low_signal_strength">低信号强度</string>
     <string name="pref_tts_warning_low_signal_strength_summary">当无人机连接困难时发出警告</string>
     <string name="pref_tts_warning_lost_signal">连接状态</string>

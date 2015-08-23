@@ -293,8 +293,6 @@
     <string name="pref_tts_periodic_airspeed">Airspeed</string>
     <string name="pref_tts_periodic_airspeed_summary">Read airspeed.</string>
     <string name="pref_title_tts_warnings">Warnings</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded">400ft. Exceeded</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">In many situations it is illegal to fly above 400ft.</string>
     <string name="pref_tts_warning_low_signal_strength">Low Signal Strength</string>
     <string name="pref_tts_warning_low_signal_strength_summary">Warns when connection to drone is bad.</string>
     <string name="pref_tts_warning_lost_signal">Connection Status</string>
@@ -461,5 +459,7 @@
     <string name="unsaved_param_warning">You have unsaved changes</string>
     <string name="error_kill_switch_unsupported">KILL SWITCH command is not supported!</string>
     <string name="error_kill_switch_failed">KILL SWITCH command failed!</string>
+    <string name="pref_max_alt_warning_title">Max altitude exceeded warning</string>
+    <string name="pref_max_alt_warning_summary">Enable for repeated warnings when flying above the set max altitude.</string>
 
 </resources>
