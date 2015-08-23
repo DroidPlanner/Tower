@@ -443,6 +443,12 @@ public class TTSNotificationProvider implements OnInitListener,
 		case 3:
 			speak("GPS 3D Lock");
 			break;
+		case 4:
+			speak("GPS 3D+DGPS Lock");
+			break;
+		case 5:
+			speak("GPS 3D+RTK Lock");
+			break;
 		default:
 			speak("Lost GPS Lock");
 			break;
