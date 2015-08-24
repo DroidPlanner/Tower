@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
@@ -158,9 +159,9 @@ public class FlightActivity extends DrawerNavigationUI {
     private SlidingUpPanelLayout mSlidingPanel;
     private View mFlightActionsView;
 
-    private ImageButton mGoToMyLocation;
-    private ImageButton mGoToDroneLocation;
-    private ImageButton actionDrawerToggle;
+    private FloatingActionButton mGoToMyLocation;
+    private FloatingActionButton mGoToDroneLocation;
+    private FloatingActionButton actionDrawerToggle;
 
     @Override
     public void onDrawerClosed() {
@@ -190,9 +191,9 @@ public class FlightActivity extends DrawerNavigationUI {
 
         setupMapFragment();
 
-        mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
-        mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
-        actionDrawerToggle = (ImageButton) findViewById(R.id.toggle_action_drawer);
+        mGoToMyLocation = (FloatingActionButton) findViewById(R.id.my_location_button);
+        mGoToDroneLocation = (FloatingActionButton) findViewById(R.id.drone_location_button);
+        actionDrawerToggle = (FloatingActionButton) findViewById(R.id.toggle_action_drawer);
         actionDrawerToggle.setVisibility(View.VISIBLE);
 
         actionDrawerToggle.setOnClickListener(new View.OnClickListener() {
