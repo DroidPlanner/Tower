@@ -44,6 +44,7 @@
             android:background="#D8ee2d3e"
             android:gravity="start|center_vertical"
             android:visibility="gone"
+            android:paddingLeft="55dp"
             android:layout_below="@+id/actionbar_container"
             android:layout_alignLeft="@+id/actionbar_container"
             android:layout_alignStart="@+id/actionbar_container"
