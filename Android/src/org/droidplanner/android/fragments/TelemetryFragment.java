@@ -166,6 +166,9 @@ public class TelemetryFragment extends ApiListenerFragment {
     }
 
     private void tryStreamingVideo() {
+        if(!isAttached())
+            return;
+
         final Drone drone = getDrone();
         CapabilityApi.getApi(drone).checkFeatureSupport(CapabilityApi.FeatureIds.SOLO_VIDEO_STREAMING, new CapabilityApi.FeatureSupportListener() {
             @Override
@@ -226,6 +229,9 @@ public class TelemetryFragment extends ApiListenerFragment {
     }
 
     private void onOrientationUpdate() {
+        if(!isAttached())
+            return;
+
         final Drone drone = getDrone();
 
         final Attitude attitude = drone.getAttribute(AttributeType.ATTITUDE);
@@ -249,6 +255,9 @@ public class TelemetryFragment extends ApiListenerFragment {
     }
 
     private void onSpeedUpdate() {
+        if(!isAttached())
+            return;
+
         final Drone drone = getDrone();
         final Speed speed = drone.getAttribute(AttributeType.SPEED);
 
