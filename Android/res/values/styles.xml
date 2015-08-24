@@ -453,6 +453,16 @@
         <item name="android:layout_marginBottom">4dp</item>
     </style>
 
+    <style name="mapFAB">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="backgroundTint">@android:color/white</item>
+        <item name="fabSize">mini</item>
+        <item name="elevation">6dp</item>
+        <item name="borderWidth">0dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+    </style>
+
     <style name="Telemetry" />
 
     <style name="Telemetry.Entry" >

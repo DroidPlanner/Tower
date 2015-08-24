@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.Button
@@ -74,11 +75,11 @@ public class WidgetActivity : SuperUI() {
     }
 
     private val goToMyLocation by Delegates.lazy {
-        findViewById(R.id.my_location_button) as ImageButton?
+        findViewById(R.id.my_location_button) as FloatingActionButton?
     }
 
     private val goToDroneLocation by Delegates.lazy {
-        findViewById(R.id.drone_location_button) as ImageButton?
+        findViewById(R.id.drone_location_button) as FloatingActionButton?
     }
 
     private val takePhotoButton by Delegates.lazy {

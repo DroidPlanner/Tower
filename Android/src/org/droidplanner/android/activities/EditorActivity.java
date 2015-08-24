@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -115,8 +116,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
      */
     private String openedMissionFilename;
 
-    private View mLocationButtonsContainer;
-    private ImageButton itemDetailToggle;
+    private FloatingActionButton itemDetailToggle;
     private EditorListFragment editorListFragment;
 
     @Override
@@ -136,20 +136,19 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
         infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
-        mLocationButtonsContainer = findViewById(R.id.location_button_container);
-        final ImageButton zoomToFit = (ImageButton) findViewById(R.id.zoom_to_fit_button);
+        final FloatingActionButton zoomToFit = (FloatingActionButton) findViewById(R.id.zoom_to_fit_button);
         zoomToFit.setVisibility(View.VISIBLE);
         zoomToFit.setOnClickListener(this);
 
-        final ImageButton mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
+        final FloatingActionButton mGoToMyLocation = (FloatingActionButton) findViewById(R.id.my_location_button);
         mGoToMyLocation.setOnClickListener(this);
         mGoToMyLocation.setOnLongClickListener(this);
 
-        final ImageButton mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
+        final FloatingActionButton mGoToDroneLocation = (FloatingActionButton) findViewById(R.id.drone_location_button);
         mGoToDroneLocation.setOnClickListener(this);
         mGoToDroneLocation.setOnLongClickListener(this);
 
-        itemDetailToggle = (ImageButton) findViewById(R.id.toggle_action_drawer);
+        itemDetailToggle = (FloatingActionButton) findViewById(R.id.toggle_action_drawer);
         itemDetailToggle.setOnClickListener(this);
 
         if (savedInstanceState != null) {
@@ -178,13 +177,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             return;
 
         itemDetailToggle.setActivated(isOpened);
-
-        // Update the right margin for the my location button
-        final ViewGroup.MarginLayoutParams marginLp = (ViewGroup.MarginLayoutParams) mLocationButtonsContainer
-                .getLayoutParams();
-        final int rightMargin = isOpened ? marginLp.leftMargin + actionDrawer.getWidth() : marginLp.leftMargin;
-        marginLp.setMargins(marginLp.leftMargin, marginLp.topMargin, rightMargin, marginLp.bottomMargin);
-        mLocationButtonsContainer.requestLayout();
     }
 
     @Override
