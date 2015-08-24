@@ -28,7 +28,6 @@
     <string name="pref_keep_screen_bright_summary">Mantiene lo schermo acceso e luminoso (incide sulla durata della batteria)</string>
     <string name="pref_lock_screen_orientation">Blocca orientamento schermo</string>
     <string name="pref_lock_screen_orientation_summary">Bloccare l\'orientamento dello schermo in base a quello di inizio connessione</string>
-    <string name="pref_flight_data">Dati volo</string>
     <string name="pref_advanced">Avanzate</string>
     <string name="pref_map_type">Tipo mappa</string>
     <string name="pref_map_type_summary">Tipo mappa da usare</string>
@@ -254,8 +253,6 @@
     <string name="pref_tts_periodic_period">Intervallo</string>
     <string name="pref_tts_periodic_rssi">Potenza segnale (RSSI)</string>
     <string name="pref_tts_seconds">secondi</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded">400ft. Superati</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">In molte situazioni è illegale volare oltre 400ft</string>
     <string name="setup_mag_start">Premi Calibra per iniziare la calibrazione del magnetometro. Effettua la calibrazione all\'apero e lontano da oggetti metallici</string>
     <string name="usage_statistics">Statistiche utilizzo</string>
     <string name="waypointInfo_CameraTrigger">Attiva la fotocamera ad intervalli per distanze regolari </string>

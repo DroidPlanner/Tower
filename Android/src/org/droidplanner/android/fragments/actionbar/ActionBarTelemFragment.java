@@ -313,7 +313,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final Signal droneSignal = drone.getAttribute(AttributeType.SIGNAL);
         if(!drone.isConnected() || !droneSignal.isValid()){
             signalTelem.setText(emptyString);
-            signalTelem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_signal_0_bar_24dp,
+            signalTelem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_signal_cellular_null_grey_700_18dp,
                     0, 0, 0);
 
             rssiView.setText("RSSI: " + emptyString);
@@ -328,17 +328,15 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                     droneSignal.getRemFadeMargin());
             final int signalIcon;
             if (signalStrength >= 100)
-                signalIcon = R.drawable.ic_signal_5_bar_24dp;
-            else if (signalStrength >= 80)
-                signalIcon = R.drawable.ic_signal_4_bar_24dp;
-            else if (signalStrength >= 60)
-                signalIcon = R.drawable.ic_signal_3_bar_24dp;
-            else if (signalStrength >= 40)
-                signalIcon = R.drawable.ic_signal_2_bar_24dp;
-            else if(signalStrength >= 20)
-                signalIcon = R.drawable.ic_signal_1_bar_24dp;
+                signalIcon = R.drawable.ic_signal_cellular_4_bar_grey_700_18dp;
+            else if (signalStrength >= 75)
+                signalIcon = R.drawable.ic_signal_cellular_3_bar_grey_700_18dp;
+            else if (signalStrength >= 50)
+                signalIcon = R.drawable.ic_signal_cellular_2_bar_grey_700_18dp;
+            else if (signalStrength >= 25)
+                signalIcon = R.drawable.ic_signal_cellular_1_bar_grey_700_18dp;
             else
-                signalIcon = R.drawable.ic_signal_0_bar_24dp;
+                signalIcon = R.drawable.ic_signal_cellular_0_bar_grey_700_18dp;
 
             signalTelem.setText(String.format(Locale.ENGLISH, "%d%%", signalStrength));
             signalTelem.setCompoundDrawablesWithIntrinsicBounds(signalIcon, 0, 0, 0);
@@ -382,7 +380,9 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
 
             switch(fixStatus){
                 case Gps.LOCK_3D:
-                    gpsIcon = R.drawable.ic_gps_fixed_grey_700_18dp;
+                case Gps.LOCK_3D_DGPS:
+                case Gps.LOCK_3D_RTK:
+                    gpsIcon = R.drawable.ic_gps_fixed_black_24dp;
                     break;
 
                 case Gps.LOCK_2D:

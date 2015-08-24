@@ -147,6 +147,11 @@ public class ReorderRecyclerView extends RecyclerView {
             public void onTouchEvent(RecyclerView rv, MotionEvent event) {
                 handleMotionEvent(event);
             }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean b) {
+
+            }
         };
         addOnItemTouchListener(itemTouchListener);
     }

@@ -29,7 +29,6 @@
 	    使用时间）</string>
     <string name="pref_lock_screen_orientation">锁定屏幕方向</string>
     <string name="pref_lock_screen_orientation_summary">连接无人机时，屏幕将会定在当前的旋转方向</string>
-    <string name="pref_flight_data">飞行数据</string>
     <string name="pref_advanced">高级设定</string>
     <string name="pref_map_type">地图样式</string>
     <string name="pref_map_type_summary">使用哪种类型的地图</string>
@@ -292,8 +291,6 @@
     <string name="pref_tts_periodic_airspeed">空速</string>
     <string name="pref_tts_periodic_airspeed_summary">广播空速数值</string>
     <string name="pref_title_tts_warnings">警告</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded">400英尺超过</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">在许多的情况下飞行高度超过400英尺是非法行为。</string>
     <string name="pref_tts_warning_low_signal_strength">低信号强度</string>
     <string name="pref_tts_warning_low_signal_strength_summary">当无人机连接困难时发出警告</string>
     <string name="pref_tts_warning_lost_signal">连接状态</string>
