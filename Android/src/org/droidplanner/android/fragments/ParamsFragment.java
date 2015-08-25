@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -211,7 +212,7 @@ public class ParamsFragment extends ApiListenerListFragment implements SupportEd
         mLoadingProgress.setVisibility(View.GONE);
 
         View space = new View(getActivity().getApplicationContext());
-        space.setLayoutParams(new ViewGroup.LayoutParams(0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, SNACKBAR_HEIGHT, getResources().getDisplayMetrics())));
+        space.setLayoutParams(new AbsListView.LayoutParams(0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, SNACKBAR_HEIGHT, getResources().getDisplayMetrics())));
         getListView().addFooterView(space);
     }
 
