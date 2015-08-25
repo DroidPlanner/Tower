@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
 import android.preference.ListPreference
 import android.preference.PreferenceCategory
@@ -16,9 +15,9 @@ import org.droidplanner.android.R
 import org.droidplanner.android.dialogs.EditInputDialog
 import org.droidplanner.android.maps.providers.DPMapProvider
 import org.droidplanner.android.maps.providers.MapProviderPreferences
-import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefConstants.*
-import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.MapboxUtils
-import java.net.HttpURLConnection
+import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefConstants.GOOGLE_TILE_PROVIDER
+import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefConstants.MAPBOX_TILE_PROVIDER
+import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefConstants.TileProvider
 
 /**
  * This is the google map provider preferences. It stores and handles all preferences related to google map.
@@ -184,7 +183,6 @@ public class GoogleMapPrefFragment : MapProviderPreferences() {
             val tileProvider = sharedPref.getString(tileProvidersKey, DEFAULT_TILE_PROVIDER)
             tileProvidersPref.setSummary(tileProvider)
             tileProvidersPref.setOnPreferenceChangeListener { preference, newValue ->
-                run {
                     val context = getContext()
 
                     val updatedTileProvider = newValue.toString()
@@ -247,7 +245,7 @@ public class GoogleMapPrefFragment : MapProviderPreferences() {
                                                     }
 
                                                     //Check if the mapbox access token is set
-                                                    accessTokenDialog?.show(getChildFragmentManager(),
+                                                    accessTokenDialog?.show(getFragmentManager(),
                                                             "Mapbox access token dialog")
 
                                                 }
@@ -259,7 +257,7 @@ public class GoogleMapPrefFragment : MapProviderPreferences() {
                                 accessTokenDialog
                             }
 
-                            inputDialog?.show(getChildFragmentManager(), "Mapbox map credentials dialog")
+                            inputDialog?.show(getFragmentManager(), "Mapbox map credentials dialog")
                         }
                     }
 
@@ -270,7 +268,6 @@ public class GoogleMapPrefFragment : MapProviderPreferences() {
                     else{
                         false
                     }
-                }
             }
 
             toggleTileProviderPrefs(tileProvider)
@@ -283,15 +280,15 @@ public class GoogleMapPrefFragment : MapProviderPreferences() {
         mapTypePref?.let {
             mapTypePref.setSummary(sharedPref.getString(mapTypeKey, DEFAULT_MAP_TYPE))
             mapTypePref.setOnPreferenceChangeListener { preference, newValue ->
-                run {
                     mapTypePref.setSummary(newValue.toString())
                     true
-                }
             }
         }
     }
 
     private fun setupMapboxTileProviderPreferences(sharedPref: SharedPreferences) {
+        val context = getContext()
+
         //Setup mapbox map download button
         val downloadMapPref = findPreference(PREF_MAPBOX_MAP_DOWNLOAD)
         downloadMapPref?.setOnPreferenceClickListener {
@@ -305,10 +302,14 @@ public class GoogleMapPrefFragment : MapProviderPreferences() {
             val mapboxId = sharedPref.getString(PREF_MAPBOX_ID, null)
             mapboxId?.let { mapboxIdPref.setSummary(mapboxId)}
             mapboxIdPref.setOnPreferenceChangeListener { preference, newValue ->
-                run {
-                    updateMapboxId(newValue.toString(), false)
-                    true
+                val mapboxId = newValue.toString()
+                if(TextUtils.isEmpty(mapboxId)){
+                    Toast.makeText(context, R.string.label_invalid_mapbox_id, Toast.LENGTH_LONG)
+                            .show()
                 }
+
+                updateMapboxId(mapboxId, false)
+                true
             }
         }
 
@@ -318,10 +319,14 @@ public class GoogleMapPrefFragment : MapProviderPreferences() {
             val mapboxToken = sharedPref.getString(PREF_MAPBOX_ACCESS_TOKEN, null)
             mapboxToken?.let { mapboxTokenPref.setSummary(mapboxToken)}
             mapboxTokenPref.setOnPreferenceChangeListener {preference, newValue ->
-                run {
-                    updateMapboxAccessToken(newValue.toString(), false)
-                    true
+                val mapboxAccessToken = newValue.toString()
+                if(TextUtils.isEmpty(mapboxAccessToken)){
+                    Toast.makeText(context, R.string.label_invalid_mapbox_access_token,
+                            Toast.LENGTH_LONG).show()
                 }
+
+                updateMapboxAccessToken(mapboxAccessToken, false)
+                true
             }
         }
 
