@@ -62,7 +62,7 @@ public abstract class ApiListenerFragment extends Fragment implements DroidPlann
 		return broadcastManager;
 	}
 
-    protected Context getContext(){
+    public Context getContext(){
         return getActivity().getApplicationContext();
     }
 

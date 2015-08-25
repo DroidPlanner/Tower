@@ -41,9 +41,11 @@ import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 /**
  * Provide functionality for flight action button specific to copters.
  */
-public class CopterFlightControlFragment extends BaseFlightControlFragment {
+public class CopterFlightControlFragment extends BaseFlightControlFragment implements SupportYesNoDialog.Listener {
 
     private static final String ACTION_FLIGHT_ACTION_BUTTON = "Copter flight action button";
+
+    private static final String DRONIE_CREATION_DIALOG_TAG = "Confirm dronie creation";
 
     private static final IntentFilter eventFilter = new IntentFilter();
 
@@ -301,20 +303,12 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment {
 
     private void getDronieConfirmation() {
         SupportYesNoWithPrefsDialog ynd = SupportYesNoWithPrefsDialog.newInstance(getActivity()
-                        .getApplicationContext(), getString(R.string.pref_dronie_creation_title),
-                getString(R.string.pref_dronie_creation_message), new SupportYesNoDialog.Listener() {
-                    @Override
-                    public void onYes() {
-                        missionProxy.makeAndUploadDronie(getDrone());
-                    }
-
-                    @Override
-                    public void onNo() {
-                    }
-                }, DroidPlannerPrefs.PREF_WARN_ON_DRONIE_CREATION);
+                        .getApplicationContext(), DRONIE_CREATION_DIALOG_TAG,
+                getString(R.string.pref_dronie_creation_title),
+                getString(R.string.pref_dronie_creation_message), DroidPlannerPrefs.PREF_WARN_ON_DRONIE_CREATION, this);
 
         if (ynd != null) {
-            ynd.show(getChildFragmentManager(), "Confirm dronie creation");
+            ynd.show(getChildFragmentManager(), DRONIE_CREATION_DIALOG_TAG);
         }
     }
 
@@ -475,5 +469,19 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment {
 
         final State droneState = drone.getAttribute(AttributeType.STATE);
         return droneState.isArmed() && droneState.isFlying();
+    }
+
+    @Override
+    public void onDialogYes(String dialogTag) {
+        switch(dialogTag){
+            case DRONIE_CREATION_DIALOG_TAG:
+                missionProxy.makeAndUploadDronie(getDrone());
+                break;
+        }
+    }
+
+    @Override
+    public void onDialogNo(String dialogTag) {
+
     }
 }
