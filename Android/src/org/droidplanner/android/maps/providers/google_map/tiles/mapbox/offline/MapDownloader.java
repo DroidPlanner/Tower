@@ -336,8 +336,12 @@ public class MapDownloader {
             return false;
         }
 
+        final OfflineDatabaseHandler dbHandler = DatabaseState.getOfflineDatabaseHandlerForMapId(context, mapId);
+        if(dbHandler == null)
+            return false;
+
         // Build a query to populate the database (map metadata and list of map resource urls)
-        SQLiteDatabase db = DatabaseState.getOfflineDatabaseHandlerForMapId(context, mapId).getWritableDatabase();
+        SQLiteDatabase db = dbHandler.getWritableDatabase();
         db.beginTransaction();
 
         for (String url : urlStrings) {
