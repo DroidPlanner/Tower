@@ -306,8 +306,11 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             @Override
             public void waypointFileLoaded(MissionReader reader) {
                 openedMissionFilename = getSelectedFilename();
-                missionProxy.readMissionFromFile(reader);
-                gestureMapFragment.getMapFragment().zoomToFit();
+
+                if(missionProxy != null) {
+                    missionProxy.readMissionFromFile(reader);
+                    gestureMapFragment.getMapFragment().zoomToFit();
+                }
             }
         };
         missionDialog.openDialog(this);

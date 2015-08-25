@@ -271,6 +271,44 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     private String mapboxId;
     private String mapboxAccessToken;
 
+    private final OnMapReadyCallback saveCameraPositionTask = new OnMapReadyCallback() {
+        @Override
+        public void onMapReady(GoogleMap googleMap) {
+            CameraPosition camera = googleMap.getCameraPosition();
+            mAppPrefs.prefs.edit()
+                    .putFloat(PREF_LAT, (float) camera.target.latitude)
+                    .putFloat(PREF_LNG, (float) camera.target.longitude)
+                    .putFloat(PREF_BEA, camera.bearing)
+                    .putFloat(PREF_TILT, camera.tilt)
+                    .putFloat(PREF_ZOOM, camera.zoom).apply();
+        }
+    };
+
+    private final OnMapReadyCallback loadCameraPositionTask = new OnMapReadyCallback() {
+        @Override
+        public void onMapReady(GoogleMap googleMap) {
+            final SharedPreferences settings = mAppPrefs.prefs;
+
+            final CameraPosition.Builder camera = new CameraPosition.Builder();
+            camera.bearing(settings.getFloat(PREF_BEA, DEFAULT_BEARING));
+            camera.tilt(settings.getFloat(PREF_TILT, DEFAULT_TILT));
+            camera.zoom(settings.getFloat(PREF_ZOOM, DEFAULT_ZOOM_LEVEL));
+            camera.target(new LatLng(settings.getFloat(PREF_LAT, DEFAULT_LATITUDE),
+                    settings.getFloat(PREF_LNG, DEFAULT_LONGITUDE)));
+
+            googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));
+        }
+    };
+
+    private final OnMapReadyCallback setupMapTask = new OnMapReadyCallback() {
+        @Override
+        public void onMapReady(GoogleMap googleMap) {
+            setupMapUI(googleMap);
+            setupMapOverlay(googleMap);
+            setupMapListeners(googleMap);
+        }
+    };
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -723,46 +761,19 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
      */
     @Override
     public void saveCameraPosition() {
-        CameraPosition camera = getMap().getCameraPosition();
-        mAppPrefs.prefs.edit()
-                .putFloat(PREF_LAT, (float) camera.target.latitude)
-                .putFloat(PREF_LNG, (float) camera.target.longitude)
-                .putFloat(PREF_BEA, camera.bearing)
-                .putFloat(PREF_TILT, camera.tilt)
-                .putFloat(PREF_ZOOM, camera.zoom).apply();
+        getMapAsync(saveCameraPositionTask);
     }
 
     @Override
     public void loadCameraPosition() {
-        getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                final SharedPreferences settings = mAppPrefs.prefs;
-
-                final CameraPosition.Builder camera = new CameraPosition.Builder();
-                camera.bearing(settings.getFloat(PREF_BEA, DEFAULT_BEARING));
-                camera.tilt(settings.getFloat(PREF_TILT, DEFAULT_TILT));
-                camera.zoom(settings.getFloat(PREF_ZOOM, DEFAULT_ZOOM_LEVEL));
-                camera.target(new LatLng(settings.getFloat(PREF_LAT, DEFAULT_LATITUDE),
-                        settings.getFloat(PREF_LNG, DEFAULT_LONGITUDE)));
-
-                googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));
-            }
-        });
+        getMapAsync(loadCameraPositionTask);
     }
 
     private void setupMap() {
         // Make sure the map is initialized
         MapsInitializer.initialize(getActivity().getApplicationContext());
 
-        getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                setupMapUI(googleMap);
-                setupMapOverlay(googleMap);
-                setupMapListeners(googleMap);
-            }
-        });
+        getMapAsync(setupMapTask);
     }
 
     @Override
