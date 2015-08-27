@@ -11,15 +11,11 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -34,7 +30,7 @@ import org.droidplanner.android.fragments.DroneMap;
 import org.droidplanner.android.fragments.actionbar.ActionBarTelemFragment;
 import org.droidplanner.android.fragments.control.FlightControlManagerFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
-import org.droidplanner.android.fragments.TelemetryFragment;
+import org.droidplanner.android.fragments.WidgetsListFragment;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 
@@ -267,11 +263,11 @@ public class FlightActivity extends DrawerNavigationUI {
 
         // Add the telemetry fragment
         final int actionDrawerId = getActionDrawerId();
-        TelemetryFragment telemetryFragment = (TelemetryFragment) fragmentManager.findFragmentById(actionDrawerId);
-        if (telemetryFragment == null) {
-            telemetryFragment = new TelemetryFragment();
+        WidgetsListFragment widgetsListFragment = (WidgetsListFragment) fragmentManager.findFragmentById(actionDrawerId);
+        if (widgetsListFragment == null) {
+            widgetsListFragment = new WidgetsListFragment();
             fragmentManager.beginTransaction()
-                    .add(actionDrawerId, telemetryFragment)
+                    .add(actionDrawerId, widgetsListFragment)
                     .commit();
         }
 

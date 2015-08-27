@@ -9,8 +9,8 @@ import com.o3dr.services.android.lib.drone.mission.item.command.ChangeSpeed;
 import org.beyene.sius.unit.composition.speed.SpeedUnit;
 import org.droidplanner.android.R;
 import org.droidplanner.android.utils.unit.providers.speed.SpeedUnitProvider;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.SpeedWheelAdapter;
+import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.view.spinnerWheel.adapters.SpeedWheelAdapter;
 
 public class MissionChangeSpeedFragment extends MissionDetailFragment implements
         CardWheelHorizontalView.OnCardWheelScrollListener<SpeedUnit> {

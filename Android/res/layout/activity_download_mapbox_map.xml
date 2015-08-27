@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:id="@+id/map_container"/>
 
-    <org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout
+    <org.droidplanner.android.view.FitsSystemWindowsRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
@@ -91,6 +91,6 @@
             </RelativeLayout>
 
         </android.support.v7.widget.CardView>
-    </org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout>
+    </org.droidplanner.android.view.FitsSystemWindowsRelativeLayout>
 
 </FrameLayout>

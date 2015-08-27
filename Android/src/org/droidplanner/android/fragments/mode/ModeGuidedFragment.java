@@ -20,8 +20,8 @@ import org.droidplanner.android.fragments.FlightMapFragment;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
+import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.view.spinnerWheel.adapters.LengthWheelAdapter;
 
 public class ModeGuidedFragment extends ApiListenerFragment implements
         CardWheelHorizontalView.OnCardWheelScrollListener<LengthUnit>, FlightMapFragment.OnGuidedClickListener {

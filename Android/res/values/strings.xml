@@ -464,7 +464,6 @@
 
     <!-- Telemetry widget labels -->
     <string name="label_widget_solo_video">Solo Video</string>
-    <string name="label_widget_vehicle_orientation">Vehicle Orientation</string>
-    <string name="label_widget_vehicle_speed">Vehicle Speed</string>
+    <string name="label_widget_telemetry_info">Telemetry Data</string>
 
 </resources>

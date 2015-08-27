@@ -23,7 +23,7 @@ import com.o3dr.services.android.lib.drone.companion.solo.tlv.SoloGoproState
 import org.droidplanner.android.R
 import org.droidplanner.android.activities.helpers.SuperUI
 import org.droidplanner.android.fragments.FlightMapFragment
-import org.droidplanner.android.fragments.widget.telem.WidgetSoloLinkVideo
+import org.droidplanner.android.fragments.widget.WidgetSoloLinkVideo
 import org.droidplanner.android.utils.prefs.AutoPanMode
 import kotlin.properties.Delegates
 
@@ -45,8 +45,6 @@ public class WidgetActivity : SuperUI() {
         private val filter = initFilter()
 
         val EXTRA_WIDGET_ID = "extra_widget_id"
-
-        val WIDGET_SOLOLINK_VIDEO = "widget_sololink_video";
 
         private fun initFilter(): IntentFilter {
             val temp = IntentFilter()
@@ -154,11 +152,11 @@ public class WidgetActivity : SuperUI() {
     }
 
     private fun handleIntent(intent: Intent){
-        val widgetId = intent.getStringExtra(EXTRA_WIDGET_ID)
+        val widgetId = intent.getIntExtra(EXTRA_WIDGET_ID, 0)
         val fm = getSupportFragmentManager()
 
         when(widgetId){
-            WIDGET_SOLOLINK_VIDEO -> {
+            R.id.tower_widget_solo_video -> {
                 var widgetFragment = fm.findFragmentById(R.id.widget_view)
                 if(!(widgetFragment is WidgetSoloLinkVideo)){
                     widgetFragment = WidgetSoloLinkVideo()

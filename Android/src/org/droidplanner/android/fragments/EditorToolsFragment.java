@@ -29,7 +29,7 @@ import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
-import org.droidplanner.android.widgets.button.RadioButtonCenter;
+import org.droidplanner.android.view.button.RadioButtonCenter;
 
 import java.util.List;
 

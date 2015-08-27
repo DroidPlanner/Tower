@@ -30,8 +30,8 @@ import org.droidplanner.android.fragments.DroneMap;
 import org.droidplanner.android.graphic.map.GuidedScanROIMarkerInfo;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
+import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.view.spinnerWheel.adapters.LengthWheelAdapter;
 
 public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSelectedListener, DroneMap.MapMarkerProvider {
 

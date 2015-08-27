@@ -32,8 +32,8 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
+import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.view.spinnerWheel.adapters.NumericWheelAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -35,7 +35,7 @@ import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
+import org.droidplanner.android.view.spinners.SpinnerSelfSelect;
 
 import java.util.ArrayList;
 import java.util.Arrays;

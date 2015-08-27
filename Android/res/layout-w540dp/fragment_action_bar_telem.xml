@@ -47,7 +47,7 @@
             android:src="@drawable/ic_navigation_grey_700_18dp"
             android:scaleType="fitCenter"/>
 
-        <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
+        <org.droidplanner.android.view.spinners.SpinnerSelfSelect
             android:id="@+id/bar_flight_mode"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"

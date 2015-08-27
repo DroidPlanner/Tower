@@ -37,8 +37,8 @@ import org.droidplanner.android.fragments.helpers.ApiListenerListFragment;
 import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.file.IO.ParameterWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.widgets.adapterViews.ParamsAdapter;
-import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
+import org.droidplanner.android.view.adapterViews.ParamsAdapter;
+import org.droidplanner.android.view.adapterViews.ParamsAdapterItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -163,7 +163,7 @@ public class ParamsFragment extends ApiListenerListFragment {
                     }
 
                 } else {
-                    if(snackbar != null) {
+                    if (snackbar != null) {
                         snackbar.dismiss();
                         snackbar = null;
                     }
@@ -208,7 +208,7 @@ public class ParamsFragment extends ApiListenerListFragment {
         mLoadingProgress.setVisibility(View.GONE);
 
         View space = new View(getActivity().getApplicationContext());
-        space.setLayoutParams(new ViewGroup.LayoutParams(0, (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, SNACKBAR_HEIGHT, getResources().getDisplayMetrics())));
+        space.setLayoutParams(new ViewGroup.LayoutParams(0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, SNACKBAR_HEIGHT, getResources().getDisplayMetrics())));
         getListView().addFooterView(space);
     }
 

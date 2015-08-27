@@ -10,8 +10,8 @@ import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.command.YawCondition;
 
 import org.droidplanner.android.R;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
+import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.view.spinnerWheel.adapters.NumericWheelAdapter;
 
 public class MissionConditionYawFragment extends MissionDetailFragment
         implements CardWheelHorizontalView.OnCardWheelScrollListener<Integer>,
