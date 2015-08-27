@@ -271,19 +271,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     private String mapboxId;
     private String mapboxAccessToken;
 
-    private final OnMapReadyCallback saveCameraPositionTask = new OnMapReadyCallback() {
-        @Override
-        public void onMapReady(GoogleMap googleMap) {
-            CameraPosition camera = googleMap.getCameraPosition();
-            mAppPrefs.prefs.edit()
-                    .putFloat(PREF_LAT, (float) camera.target.latitude)
-                    .putFloat(PREF_LNG, (float) camera.target.longitude)
-                    .putFloat(PREF_BEA, camera.bearing)
-                    .putFloat(PREF_TILT, camera.tilt)
-                    .putFloat(PREF_ZOOM, camera.zoom).apply();
-        }
-    };
-
     private final OnMapReadyCallback loadCameraPositionTask = new OnMapReadyCallback() {
         @Override
         public void onMapReady(GoogleMap googleMap) {
@@ -761,7 +748,17 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
      */
     @Override
     public void saveCameraPosition() {
-        getMapAsync(saveCameraPositionTask);
+        final GoogleMap googleMap = getMap();
+        if(googleMap == null)
+            return;
+
+        CameraPosition camera = googleMap.getCameraPosition();
+        mAppPrefs.prefs.edit()
+                .putFloat(PREF_LAT, (float) camera.target.latitude)
+                .putFloat(PREF_LNG, (float) camera.target.longitude)
+                .putFloat(PREF_BEA, camera.bearing)
+                .putFloat(PREF_TILT, camera.tilt)
+                .putFloat(PREF_ZOOM, camera.zoom).apply();
     }
 
     @Override
