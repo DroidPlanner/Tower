@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="80dp"
     android:background="@android:color/black">
 
     <TextureView
@@ -17,6 +17,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="no video available"
+        android:textColor="@android:color/white"
         android:textAllCaps="true"
         android:visibility="gone"
         tools:visibility="visible"/>

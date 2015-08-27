@@ -462,4 +462,9 @@
     <string name="pref_max_alt_warning_title">Max altitude exceeded warning</string>
     <string name="pref_max_alt_warning_summary">Enable for repeated warnings when flying above the set max altitude.</string>
 
+    <!-- Telemetry widget labels -->
+    <string name="label_widget_solo_video">Solo Video</string>
+    <string name="label_widget_vehicle_orientation">Vehicle Orientation</string>
+    <string name="label_widget_vehicle_speed">Vehicle Speed</string>
+
 </resources>

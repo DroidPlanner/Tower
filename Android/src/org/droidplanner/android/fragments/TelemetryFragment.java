@@ -8,6 +8,9 @@ import android.content.SharedPreferences;
 import android.graphics.SurfaceTexture;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.IdRes;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
@@ -28,6 +31,7 @@ import com.o3dr.services.android.lib.model.SimpleCommandListener;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.WidgetActivity;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
+import org.droidplanner.android.fragments.widget.telem.TelemetryWidget;
 import org.droidplanner.android.utils.unit.providers.speed.SpeedUnitProvider;
 import org.droidplanner.android.widgets.AttitudeIndicator;
 
@@ -42,7 +46,6 @@ public class TelemetryFragment extends ApiListenerFragment {
     static {
         eventFilter.addAction(AttributeEvent.ATTITUDE_UPDATED);
         eventFilter.addAction(AttributeEvent.SPEED_UPDATED);
-        eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -58,10 +61,6 @@ public class TelemetryFragment extends ApiListenerFragment {
                 case AttributeEvent.SPEED_UPDATED:
                     onSpeedUpdate();
                     break;
-
-                case AttributeEvent.STATE_CONNECTED:
-                    tryStreamingVideo();
-                    break;
             }
         }
     };
@@ -74,14 +73,14 @@ public class TelemetryFragment extends ApiListenerFragment {
     private TextView horizontalSpeed;
     private TextView verticalSpeed;
 
-    private View videoContainer;
-    private TextureView videoView;
-
     private boolean headingModeFPV;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_telemetry, container, false);
+
+        final ViewGroup widgetsContainer = (ViewGroup) view.findViewById(R.id.telem_widgets_container);
+
         attitudeIndicator = (AttitudeIndicator) view.findViewById(R.id.aiView);
 
         roll = (TextView) view.findViewById(R.id.rollValueText);
@@ -91,19 +90,44 @@ public class TelemetryFragment extends ApiListenerFragment {
         horizontalSpeed = (TextView) view.findViewById(R.id.horizontal_speed_telem);
         verticalSpeed = (TextView) view.findViewById(R.id.vertical_speed_telem);
 
-        videoContainer = view.findViewById(R.id.minimized_video_container);
-        videoContainer.setVisibility(View.GONE);
-        videoContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), WidgetActivity.class)
-                        .putExtra(WidgetActivity.EXTRA_WIDGET_ID, WidgetActivity.WIDGET_SOLOLINK_VIDEO));
-            }
-        });
-
-        videoView = (TextureView) view.findViewById(R.id.minimized_video);
+        generateTelemetryWidgets(inflater, widgetsContainer);
 
         return view;
+    }
+
+    private void generateTelemetryWidgets(LayoutInflater inflater, ViewGroup container){
+        final FragmentManager fm = getChildFragmentManager();
+        final TelemetryWidget[] telemWidgets = TelemetryWidget.values();
+
+        for(TelemetryWidget telemWidget: telemWidgets){
+            final @IdRes int holderId = telemWidget.getIdRes();
+
+            //Inflate the widget container
+            final View widgetView = inflater.inflate(R.layout.container_telemetry_widget, container, false);
+
+            final View contentHolder = widgetView.findViewById(R.id.widget_container);
+            contentHolder.setId(holderId);
+
+            //Add the widget holder to the container
+            container.addView(widgetView);
+
+            //Add the widget fragment to the widget holder
+            final Fragment widgetFragment = telemWidget.getMinimizedFragment();
+            fm.beginTransaction().add(holderId, widgetFragment).commit();
+
+            if(telemWidget.canMaximize()){
+                final View maximizeIcon = widgetView.findViewById(R.id.widget_maximize_button);
+                maximizeIcon.setVisibility(View.VISIBLE);
+
+                widgetView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(getContext(), WidgetActivity.class)
+                                .putExtra(WidgetActivity.EXTRA_WIDGET_ID, WidgetActivity.WIDGET_SOLOLINK_VIDEO));
+                    }
+                });
+            }
+        }
     }
 
     @Override
@@ -121,108 +145,13 @@ public class TelemetryFragment extends ApiListenerFragment {
     }
 
     @Override
-    public void onResume(){
-        super.onResume();
-        tryStreamingVideo();
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        tryStoppingVideoStream();
-    }
-
-    @Override
     public void onApiDisconnected() {
-        tryStoppingVideoStream();
         getBroadcastManager().unregisterReceiver(eventReceiver);
     }
 
     private void updateAllTelem() {
         onOrientationUpdate();
         onSpeedUpdate();
-        tryStreamingVideo();
-    }
-
-    private void tryStoppingVideoStream() {
-        final Drone drone = getDrone();
-        Timber.d("Stopping video stream with tag %s.", TAG);
-        SoloCameraApi.getApi(drone).stopVideoStream(TAG, new AbstractCommandListener() {
-            @Override
-            public void onSuccess() {
-                Timber.d("Video streaming stopped successfully.");
-            }
-
-            @Override
-            public void onError(int i) {
-                Timber.d("Unable to stop video streaming: %d", i);
-            }
-
-            @Override
-            public void onTimeout() {
-                Timber.d("Timed out while trying to stop video streaming.");
-            }
-        });
-    }
-
-    private void tryStreamingVideo() {
-        final Drone drone = getDrone();
-        CapabilityApi.getApi(drone).checkFeatureSupport(CapabilityApi.FeatureIds.SOLO_VIDEO_STREAMING, new CapabilityApi.FeatureSupportListener() {
-            @Override
-            public void onFeatureSupportResult(String featureId, int result, Bundle bundle) {
-                switch (result) {
-                    case CapabilityApi.FEATURE_SUPPORTED:
-                        if (videoContainer != null) {
-                            videoContainer.setVisibility(View.VISIBLE);
-                            videoView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
-                                @Override
-                                public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-                                    Timber.d("Starting video with tag %s", TAG);
-                                    SoloCameraApi.getApi(drone).startVideoStream(new Surface(surface), TAG, new SimpleCommandListener() {
-
-                                        @Override
-                                        public void onSuccess() {
-                                            Timber.d("Video started successfully.");
-                                        }
-
-                                        @Override
-                                        public void onError(int i) {
-                                            Timber.d("Starting video error: %d", i);
-                                        }
-
-                                        @Override
-                                        public void onTimeout() {
-                                            Timber.d("Starting video timeout.");
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-
-                                }
-
-                                @Override
-                                public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-                                    tryStoppingVideoStream();
-                                    return true;
-                                }
-
-                                @Override
-                                public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-
-                                }
-                            });
-                        }
-                        break;
-
-                    default:
-                        if (videoContainer != null) {
-                            videoContainer.setVisibility(View.GONE);
-                        }
-                }
-            }
-        });
     }
 
     private void onOrientationUpdate() {

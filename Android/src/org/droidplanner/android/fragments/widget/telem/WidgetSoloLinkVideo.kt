@@ -7,21 +7,15 @@ import android.content.IntentFilter
 import android.graphics.Matrix
 import android.graphics.SurfaceTexture
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.view.GestureDetectorCompat
 import android.view.*
 import android.widget.TextView
-import com.o3dr.android.client.apis.CapabilityApi
-import com.o3dr.android.client.apis.CapabilityApi.FeatureIds
 import com.o3dr.android.client.apis.GimbalApi
 import com.o3dr.android.client.apis.solo.SoloCameraApi
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
 import com.o3dr.services.android.lib.model.AbstractCommandListener
-import com.o3dr.services.android.lib.model.SimpleCommandListener
 import org.droidplanner.android.R
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment
 import timber.log.Timber
-import kotlin.platform.platformStatic
 import kotlin.properties.Delegates
 
 /**
@@ -44,6 +38,8 @@ public class WidgetSoloLinkVideo : ApiListenerFragment() {
 
     }
 
+    private var surfaceRef: Surface? = null
+
     private val textureView by Delegates.lazy {
         getView()?.findViewById(R.id.sololink_video_view) as TextureView?
     }
@@ -53,8 +49,7 @@ public class WidgetSoloLinkVideo : ApiListenerFragment() {
     }
 
     private val orientationListener = object : GimbalApi.GimbalOrientationListener{
-        override fun onGimbalOrientationUpdate(orientation: com.o3dr.android.client.apis.GimbalApi.GimbalOrientation){
-//           Timber.d("orientation: %f, %f, %f", orientation.getPitch(), orientation.getYaw(), orientation.getRoll())
+        override fun onGimbalOrientationUpdate(orientation: GimbalApi.GimbalOrientation){
         }
 
         override fun onGimbalOrientationCommandError(code: Int){
@@ -64,6 +59,32 @@ public class WidgetSoloLinkVideo : ApiListenerFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_widget_sololink_video, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
+        super.onViewCreated(view, savedInstanceState)
+
+        textureView?.setSurfaceTextureListener(object : TextureView.SurfaceTextureListener {
+            override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, width: Int, height: Int) {
+                adjustAspectRatio(textureView as TextureView);
+                surfaceRef = Surface(surface)
+                tryStreamingVideo()
+            }
+
+            override fun onSurfaceTextureDestroyed(surface: SurfaceTexture?): Boolean {
+                surfaceRef = null
+                tryStoppingVideoStream()
+                return true
+            }
+
+            override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture?, width: Int, height: Int) {
+            }
+
+            override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
+            }
+
+        }
+        )
     }
 
     override fun onApiConnected() {
@@ -86,85 +107,78 @@ public class WidgetSoloLinkVideo : ApiListenerFragment() {
         getBroadcastManager().unregisterReceiver(receiver)
     }
 
-    private fun tryStreamingVideo(){
+    private fun tryStreamingVideo() {
+        if(surfaceRef == null)
+            return
+
         val drone = getDrone()
         videoStatus?.setVisibility(View.GONE)
 
-        textureView?.setSurfaceTextureListener(object : TextureView.SurfaceTextureListener{
-            override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, width: Int, height: Int) {
-                adjustAspectRatio(textureView as TextureView);
-                Timber.d("Starting video stream with tag %s", TAG)
-                SoloCameraApi.getApi(drone).startVideoStream(Surface(surface), TAG, object : AbstractCommandListener(){
-                    override fun onError(error: Int) {
-                        Timber.d("Unable to start video stream: %d", error)
-                    }
-
-                    override fun onSuccess() {
-                        Timber.d("Video stream started successfully")
-                    }
-
-                    override fun onTimeout() {
-                        Timber.d("Timed out while trying to start the video stream")
-                    }
-
-                })
+        Timber.d("Starting video stream with tag %s", TAG)
+        SoloCameraApi.getApi(drone).startVideoStream(surfaceRef, TAG, object : AbstractCommandListener() {
+            override fun onError(error: Int) {
+                Timber.d("Unable to start video stream: %d", error)
+                textureView?.setOnTouchListener(null)
+                videoStatus?.setVisibility(View.VISIBLE)
             }
 
-            override fun onSurfaceTextureDestroyed(surface: SurfaceTexture?): Boolean {
-                tryStoppingVideoStream()
-                return true
-            }
+            override fun onSuccess() {
+                videoStatus?.setVisibility(View.GONE)
+                Timber.d("Video stream started successfully")
 
-            override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture?, width: Int, height: Int) {
+                val gimbalTracker = object : View.OnTouchListener {
+                    var startX: Float = 0f
+                    var startY: Float = 0f
+                    val gimbalApi = GimbalApi.getApi(drone)
+                    val orientation = gimbalApi.getGimbalOrientation()
+                    var pitch = orientation.getPitch()
+                    var yaw = orientation.getYaw()
 
-            }
+                    override fun onTouch(view: View, event: MotionEvent): Boolean {
+                        val conversionX = view.getWidth() / 90
+                        val conversionY = view.getHeight() / 90
+                        when (event.getAction()) {
+                            MotionEvent.ACTION_DOWN -> {
+                                startX = event.getX()
+                                startY = event.getY()
+                                gimbalApi.startGimbalControl(orientationListener)
+                                return true
+                            }
+                            MotionEvent.ACTION_MOVE -> {
+                                val vX = event.getX() - startX
+                                val vY = event.getY() - startY
+                                pitch += vY / conversionX
+                                yaw += vX / conversionY
+                                //                        Timber.d("drag %f, %f", yaw, pitch)
+                                gimbalApi.updateGimbalOrientation(pitch, yaw, orientation.getRoll(), orientationListener)
+                                startX = event.getX()
+                                startY = event.getY()
+                                pitch = Math.min(pitch, 0f)
+                                pitch = Math.max(pitch, -90f)
+                                return true
+                            }
+                            MotionEvent.ACTION_UP -> gimbalApi.stopGimbalControl(orientationListener)
 
-            override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
-
-            }
-
-        })
-
-        textureView?.setOnTouchListener(object : View.OnTouchListener{
-            var startX : Float = 0f
-            var startY : Float = 0f
-            val gimbalApi = GimbalApi.getApi(drone)
-            val orientation = gimbalApi.getGimbalOrientation()
-            var pitch = orientation.getPitch()
-            var yaw = orientation.getYaw()
-            override fun onTouch(view : View, event : MotionEvent) : Boolean{
-                val conversionX = view.getWidth()/90
-                val conversionY = view.getHeight()/90
-                when (event.getAction()) {
-                    MotionEvent.ACTION_DOWN -> {
-                        startX = event.getX()
-                        startY = event.getY()
-                        gimbalApi.startGimbalControl(orientationListener)
-                        return true
+                        }
+                        return false
                     }
-                    MotionEvent.ACTION_MOVE -> {
-                        val vX = event.getX() - startX
-                        val vY = event.getY() - startY
-                        pitch += vY/conversionX
-                        yaw   += vX/conversionY
-//                        Timber.d("drag %f, %f", yaw, pitch)
-                        gimbalApi.updateGimbalOrientation(pitch, yaw, orientation.getRoll(), orientationListener)
-                        startX = event.getX()
-                        startY = event.getY()
-                        pitch = Math.min(pitch, 0f)
-                        pitch = Math.max(pitch, -90f)
-                        return true
-                    }
-                    MotionEvent.ACTION_UP -> gimbalApi.stopGimbalControl(orientationListener)
-
                 }
-                return false
+
+                textureView?.setOnTouchListener(gimbalTracker)
             }
+
+            override fun onTimeout() {
+                Timber.d("Timed out while trying to start the video stream")
+                textureView?.setOnTouchListener(null)
+                videoStatus?.setVisibility(View.VISIBLE)
+            }
+
         })
     }
 
     private fun tryStoppingVideoStream(){
         val drone = getDrone()
+
         Timber.d("Stopping video stream with tag %s", TAG)
         SoloCameraApi.getApi(drone).stopVideoStream(TAG, object : AbstractCommandListener(){
             override fun onError(error: Int) {

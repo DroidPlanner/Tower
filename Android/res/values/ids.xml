@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item type="id" name="mapFragment"/>
-    
+    <item type="id" name="telem_widget_solo_video" />
 </resources>

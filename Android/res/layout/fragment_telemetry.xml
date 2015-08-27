@@ -7,19 +7,21 @@
     android:paddingEnd="10dp"
     android:paddingRight="10dp">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/telem_widgets_container"
+        android:orientation="vertical">
 
         <android.support.v7.widget.CardView
             android:id="@+id/attitude_widget"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp">
 
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:padding="3dp">
@@ -89,13 +91,8 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/speed_telem_widget"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/attitude_widget"
-            android:layout_alignLeft="@+id/attitude_widget"
-            android:layout_alignRight="@+id/attitude_widget"
-            android:layout_alignStart="@+id/attitude_widget"
-            android:layout_below="@+id/attitude_widget"
             android:layout_marginBottom="5dp">
 
             <LinearLayout
@@ -139,17 +136,13 @@
 
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <!--<android.support.v7.widget.CardView
             android:id="@+id/minimized_video_container"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/speed_telem_widget"
-            android:layout_alignLeft="@+id/speed_telem_widget"
-            android:layout_alignRight="@+id/speed_telem_widget"
-            android:layout_alignStart="@+id/speed_telem_widget"
-            android:layout_below="@+id/speed_telem_widget"
             android:visibility="gone"
-            tools:visibility="visible">
+            tools:visibility="visible"
+            android:layout_marginBottom="5dp">
 
             <TextureView
                 android:id="@+id/minimized_video"
@@ -164,7 +157,7 @@
                 android:layout_gravity="top|end"
                 android:background="@color/transparent_light"
                 android:src="@drawable/ic_launch_black_18dp" />
-        </android.support.v7.widget.CardView>
+        </android.support.v7.widget.CardView>-->
 
-    </RelativeLayout>
+    </LinearLayout>
 </ScrollView>
