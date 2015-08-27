@@ -461,5 +461,8 @@
     <string name="error_kill_switch_failed">KILL SWITCH command failed!</string>
     <string name="pref_max_alt_warning_title">Max altitude exceeded warning</string>
     <string name="pref_max_alt_warning_summary">Enable for repeated warnings when flying above the set max altitude.</string>
+    <string name="mission_upload_title">Mission Upload</string>
+    <string name="mission_upload_message">Do you want to append a Takeoff and RTL to your mission?</string>
+    <string name="label_skip">Skip</string>
 
 </resources>

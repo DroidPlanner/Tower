@@ -76,7 +76,13 @@ public class MissionItemListAdapter extends ReorderRecyclerView.ReorderAdapter<M
 
     @Override
     public void swapElements(int fromIndex, int toIndex) {
-        missionProxy.swap(fromIndex, toIndex);
+        if(isIndexValid(fromIndex) && isIndexValid(toIndex)) {
+            missionProxy.swap(fromIndex, toIndex);
+        }
+    }
+
+    private boolean isIndexValid(int index){
+        return index >= 0 && index < getItemCount();
     }
 
     @Override

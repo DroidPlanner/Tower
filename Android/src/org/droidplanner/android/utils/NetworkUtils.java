@@ -22,6 +22,9 @@ import javax.net.ssl.SSLSocketFactory;
  */
 public class NetworkUtils {
     public static boolean isNetworkAvailable(Context context) {
+        if(context == null)
+            return false;
+
         ConnectivityManager connectivityManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -29,6 +32,9 @@ public class NetworkUtils {
     }
 
     public static String getCurrentWifiLink(Context context) {
+        if(context == null)
+            return null;
+
         final WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
         final WifiInfo connectedWifi = wifiMgr.getConnectionInfo();
