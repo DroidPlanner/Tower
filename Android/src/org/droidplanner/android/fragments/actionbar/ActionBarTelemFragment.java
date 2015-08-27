@@ -275,7 +275,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final boolean isDroneConnected = drone.isConnected();
         final int droneType;
         if (isDroneConnected) {
-            flightModeIcon.setImageResource(R.drawable.ic_navigation_green_600_18dp);
+            flightModeIcon.setImageResource(R.drawable.ic_navigation_light_blue_a400_18dp);
             Type type = drone.getAttribute(AttributeType.TYPE);
             droneType = type.getDroneType();
         } else {

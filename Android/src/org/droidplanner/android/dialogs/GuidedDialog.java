@@ -43,4 +43,10 @@ public class GuidedDialog extends DialogFragment {
 
 		return builder.create();
 	}
+
+	@Override
+	public void onPause(){
+		super.onPause();
+		dismiss();
+	}
 }
