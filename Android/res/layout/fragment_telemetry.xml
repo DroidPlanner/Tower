@@ -136,28 +136,5 @@
 
         </android.support.v7.widget.CardView>
 
-        <!--<android.support.v7.widget.CardView
-            android:id="@+id/minimized_video_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            tools:visibility="visible"
-            android:layout_marginBottom="5dp">
-
-            <TextureView
-                android:id="@+id/minimized_video"
-                android:layout_width="145dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center"
-                 />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|end"
-                android:background="@color/transparent_light"
-                android:src="@drawable/ic_launch_black_18dp" />
-        </android.support.v7.widget.CardView>-->
-
     </LinearLayout>
 </ScrollView>

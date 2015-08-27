@@ -17,6 +17,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.android.client.apis.CapabilityApi;
@@ -116,10 +117,10 @@ public class TelemetryFragment extends ApiListenerFragment {
             fm.beginTransaction().add(holderId, widgetFragment).commit();
 
             if(telemWidget.canMaximize()){
-                final View maximizeIcon = widgetView.findViewById(R.id.widget_maximize_button);
-                maximizeIcon.setVisibility(View.VISIBLE);
+                final View maximizeView = widgetView.findViewById(R.id.widget_maximize_button);
+                maximizeView.setVisibility(View.VISIBLE);
 
-                widgetView.setOnClickListener(new View.OnClickListener() {
+                maximizeView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         startActivity(new Intent(getContext(), WidgetActivity.class)
