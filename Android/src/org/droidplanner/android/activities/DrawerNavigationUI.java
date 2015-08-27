@@ -135,8 +135,14 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
                     lp.topMargin = fullTopMargin;
                     actionDrawer.requestLayout();
                 }
+
+                onToolbarLayoutChange(left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom);
             }
         });
+    }
+
+    protected void onToolbarLayoutChange(int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom){
+
     }
 
     protected float getActionDrawerTopMargin() {
@@ -254,7 +260,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
         }
     }
 
-    protected boolean isActionDrawerOpened() {
+    public boolean isActionDrawerOpened() {
         return actionDrawer.isOpened();
     }
 
@@ -278,12 +284,12 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
     public void onDrawerClosed() {
     }
 
-    protected void openActionDrawer() {
+    public void openActionDrawer() {
         actionDrawer.animateOpen();
         actionDrawer.lock();
     }
 
-    protected void closeActionDrawer() {
+    public void closeActionDrawer() {
         actionDrawer.animateClose();
         actionDrawer.lock();
     }

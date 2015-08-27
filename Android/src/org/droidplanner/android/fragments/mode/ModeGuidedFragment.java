@@ -2,6 +2,7 @@ package org.droidplanner.android.fragments.mode;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ import com.o3dr.services.android.lib.drone.property.Type;
 
 import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
-import org.droidplanner.android.activities.FlightActivity;
+import org.droidplanner.android.fragments.FlightDataFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -27,21 +28,24 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
         CardWheelHorizontalView.OnCardWheelScrollListener<LengthUnit>, FlightMapFragment.OnGuidedClickListener {
 
     private CardWheelHorizontalView<LengthUnit> mAltitudeWheel;
-    protected FlightActivity parentActivity;
+    protected FlightDataFragment parent;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (!(activity instanceof FlightActivity))
-            throw new IllegalStateException("Parent activity must be an instance of " + FlightActivity.class.getName());
 
-        parentActivity = (FlightActivity) activity;
+        final Fragment parentFragment = getParentFragment().getParentFragment();
+        if (!(parentFragment instanceof FlightDataFragment)) {
+            throw new IllegalStateException("Parent fragment must be an instance of " + FlightDataFragment.class.getName());
+        }
+
+        parent = (FlightDataFragment) parentFragment;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        parentActivity = null;
+        parent = null;
     }
 
     @Override
@@ -112,7 +116,7 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
             mAltitudeWheel.setCurrentValue(initialValue);
         }
 
-        parentActivity.setGuidedClickListener(this);
+        parent.setGuidedClickListener(this);
         Type droneType = drone.getAttribute(AttributeType.TYPE);
         if (droneType.getDroneType() == Type.TYPE_ROVER) {
             mAltitudeWheel.setVisibility(View.GONE);
@@ -123,7 +127,7 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
 
     @Override
     public void onApiDisconnected() {
-        parentActivity.setGuidedClickListener(null);
+        parent.setGuidedClickListener(null);
     }
 
     @Override

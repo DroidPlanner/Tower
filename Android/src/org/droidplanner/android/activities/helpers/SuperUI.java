@@ -205,12 +205,12 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
         onDroneDisconnected();
     }
 
-    private void onDroneConnected() {
+    protected void onDroneConnected() {
         invalidateOptionsMenu();
         screenOrientation.requestLock();
     }
 
-    private void onDroneDisconnected() {
+    protected void onDroneDisconnected() {
         invalidateOptionsMenu();
         screenOrientation.unlock();
     }

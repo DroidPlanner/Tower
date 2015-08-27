@@ -126,7 +126,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
             onFollowTypeUpdate(followType, followState.getParams());
         }
 
-        parentActivity.addMapMarkerProvider(this);
+        parent.addMapMarkerProvider(this);
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
 
@@ -184,7 +184,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
     @Override
     public void onApiDisconnected() {
         super.onApiDisconnected();
-        parentActivity.removeMapMarkerProvider(this);
+        parent.removeMapMarkerProvider(this);
         getBroadcastManager().unregisterReceiver(eventReceiver);
     }
 

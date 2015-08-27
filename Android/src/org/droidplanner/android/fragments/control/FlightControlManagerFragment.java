@@ -1,5 +1,6 @@
 package org.droidplanner.android.fragments.control;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Type;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.FlightDataFragment;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 
 public class FlightControlManagerFragment extends ApiListenerFragment {
@@ -44,6 +46,17 @@ public class FlightControlManagerFragment extends ApiListenerFragment {
             }
 		}
 	};
+
+	@Override
+	public void onAttach(Activity activity){
+		super.onAttach(activity);
+
+		final Fragment parent = getParentFragment();
+		if(!(parent instanceof FlightDataFragment)){
+			throw new IllegalStateException("Parent must be an instance of " + FlightDataFragment.class
+					.getName());
+		}
+	}
 
 	private SlidingUpHeader header;
 
@@ -100,5 +113,12 @@ public class FlightControlManagerFragment extends ApiListenerFragment {
 
 	public boolean isSlidingUpPanelEnabled(Drone api) {
 		return header != null && header.isSlidingUpPanelEnabled(api);
+	}
+
+	public void updateMapBearing(float bearing) {
+		final FlightDataFragment parent = (FlightDataFragment) getParentFragment();
+		if (parent != null) {
+			parent.updateMapBearing(bearing);
+		}
 	}
 }

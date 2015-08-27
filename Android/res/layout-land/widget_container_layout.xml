@@ -7,14 +7,14 @@
     android:baselineAligned="false">
 
     <FrameLayout
-        android:id="@+id/widget_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="4" />
-
-    <FrameLayout
         android:id="@+id/map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="6" />
+
+    <FrameLayout
+        android:id="@+id/widget_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="4" />
 </LinearLayout>
