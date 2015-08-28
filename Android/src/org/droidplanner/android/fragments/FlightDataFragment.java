@@ -188,7 +188,9 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
         super.onViewCreated(view, savedInstanceState);
 
         final Bundle arguments = getArguments();
-        final boolean showActionDrawerToggle = arguments.getBoolean(EXTRA_SHOW_ACTION_DRAWER_TOGGLE, DEFAULT_SHOW_ACTION_DRAWER_TOGGLE);
+        final boolean showActionDrawerToggle = arguments == null
+                ? DEFAULT_SHOW_ACTION_DRAWER_TOGGLE
+                : arguments.getBoolean(EXTRA_SHOW_ACTION_DRAWER_TOGGLE, DEFAULT_SHOW_ACTION_DRAWER_TOGGLE);
 
         actionbarShadow = view.findViewById(R.id.actionbar_shadow);
 
@@ -308,18 +310,6 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
     public void onApiConnected() {
         enableSlidingUpPanel(getDrone());
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        enableSlidingUpPanel(getDrone());
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        enableSlidingUpPanel(getDrone());
     }
 
     @Override

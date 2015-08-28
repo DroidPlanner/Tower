@@ -23,6 +23,9 @@ import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 
 public class FlightControlManagerFragment extends ApiListenerFragment {
 
+	private static final String EXTRA_LAST_VEHICLE_TYPE = "extra_last_vehicle_type";
+	private static final int DEFAULT_LAST_VEHICLE_TYPE = Type.TYPE_UNKNOWN;
+
 	public interface SlidingUpHeader {
 		boolean isSlidingUpPanelEnabled(Drone drone);
 	}
@@ -47,6 +50,8 @@ public class FlightControlManagerFragment extends ApiListenerFragment {
 		}
 	};
 
+	private int droneType;
+
 	@Override
 	public void onAttach(Activity activity){
 		super.onAttach(activity);
@@ -66,6 +71,22 @@ public class FlightControlManagerFragment extends ApiListenerFragment {
 	}
 
 	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState){
+		super.onViewCreated(view, savedInstanceState);
+
+		this.droneType = savedInstanceState == null
+				? DEFAULT_LAST_VEHICLE_TYPE
+				: savedInstanceState.getInt(EXTRA_LAST_VEHICLE_TYPE, DEFAULT_LAST_VEHICLE_TYPE);
+		selectActionsBar(this.droneType);
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState){
+		super.onSaveInstanceState(outState);
+		outState.putInt(EXTRA_LAST_VEHICLE_TYPE, droneType);
+	}
+
+	@Override
 	public void onApiConnected() {
         Drone drone = getDrone();
         if(drone.isConnected()) {
@@ -73,7 +94,7 @@ public class FlightControlManagerFragment extends ApiListenerFragment {
             selectActionsBar(type.getDroneType());
         }
         else{
-            selectActionsBar(-1);
+            selectActionsBar(Type.TYPE_UNKNOWN);
         }
 		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 	}
@@ -82,29 +103,32 @@ public class FlightControlManagerFragment extends ApiListenerFragment {
 	public void onApiDisconnected() {
 		getBroadcastManager().unregisterReceiver(eventReceiver);
         if(isResumed())
-            selectActionsBar(-1);
+            selectActionsBar(Type.TYPE_UNKNOWN);
 	}
 
 	private void selectActionsBar(int droneType) {
+		this.droneType = droneType;
+
 		final FragmentManager fm = getChildFragmentManager();
 
 		Fragment actionsBarFragment;
 		switch (droneType) {
-		case Type.TYPE_COPTER:
-			actionsBarFragment = new CopterFlightControlFragment();
-			break;
+			case Type.TYPE_COPTER:
+				actionsBarFragment = new CopterFlightControlFragment();
+				break;
 
-		case Type.TYPE_PLANE:
-			actionsBarFragment = new PlaneFlightControlFragment();
-			break;
+			case Type.TYPE_PLANE:
+				actionsBarFragment = new PlaneFlightControlFragment();
+				break;
 
-		case Type.TYPE_ROVER:
-            actionsBarFragment = new RoverFlightControlFragment();
-            break;
+			case Type.TYPE_ROVER:
+				actionsBarFragment = new RoverFlightControlFragment();
+				break;
 
-		default:
-			actionsBarFragment = new GenericActionsFragment();
-			break;
+			case Type.TYPE_UNKNOWN:
+			default:
+				actionsBarFragment = new GenericActionsFragment();
+				break;
 		}
 
 		fm.beginTransaction().replace(R.id.flight_actions_bar, actionsBarFragment).commitAllowingStateLoss();
