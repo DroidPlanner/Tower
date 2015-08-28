@@ -61,6 +61,7 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
         eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
         eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
         eventFilter.addAction(AttributeEvent.STATE_UPDATED);
+        eventFilter.addAction(AttributeEvent.TYPE_UPDATED);
         eventFilter.addAction(AttributeEvent.FOLLOW_START);
         eventFilter.addAction(AttributeEvent.MISSION_DRONIE_CREATED);
     }
@@ -86,6 +87,7 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
                 case AttributeEvent.STATE_CONNECTED:
                 case AttributeEvent.STATE_DISCONNECTED:
                 case AttributeEvent.STATE_UPDATED:
+                case AttributeEvent.TYPE_UPDATED:
                     enableSlidingUpPanel(getDrone());
                     break;
 
@@ -103,6 +105,8 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
                     if (dronieBearing != -1)
                         updateMapBearing(dronieBearing);
                     break;
+
+
             }
         }
     };

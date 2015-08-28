@@ -44,7 +44,7 @@ public class FlightControlManagerFragment extends ApiListenerFragment {
                 case AttributeEvent.STATE_CONNECTED:
                 case AttributeEvent.TYPE_UPDATED:
                     Type type = getDrone().getAttribute(AttributeType.TYPE);
-                    selectActionsBar(type == null ? -1 : type.getDroneType());
+                    selectActionsBar(type.getDroneType());
                     break;
             }
 		}
@@ -77,7 +77,7 @@ public class FlightControlManagerFragment extends ApiListenerFragment {
 		this.droneType = savedInstanceState == null
 				? DEFAULT_LAST_VEHICLE_TYPE
 				: savedInstanceState.getInt(EXTRA_LAST_VEHICLE_TYPE, DEFAULT_LAST_VEHICLE_TYPE);
-		selectActionsBar(this.droneType);
+		selectActionsBar(this.droneType, true);
 	}
 
 	@Override
@@ -106,7 +106,14 @@ public class FlightControlManagerFragment extends ApiListenerFragment {
             selectActionsBar(Type.TYPE_UNKNOWN);
 	}
 
-	private void selectActionsBar(int droneType) {
+	private void selectActionsBar(int droneType){
+		selectActionsBar(droneType, false);
+	}
+
+	private void selectActionsBar(int droneType, boolean force) {
+		if(this.droneType == droneType && !force)
+			return;
+
 		this.droneType = droneType;
 
 		final FragmentManager fm = getChildFragmentManager();
@@ -136,6 +143,8 @@ public class FlightControlManagerFragment extends ApiListenerFragment {
 	}
 
 	public boolean isSlidingUpPanelEnabled(Drone api) {
+		Type type = api.getAttribute(AttributeType.TYPE);
+		selectActionsBar(type.getDroneType());
 		return header != null && header.isSlidingUpPanelEnabled(api);
 	}
 

@@ -116,8 +116,4 @@ public abstract class ApiListenerFragment extends Fragment implements DroidPlann
         areaUnitProvider = unitSystem.getAreaUnitProvider();
         speedUnitProvider = unitSystem.getSpeedUnitProvider();
     }
-
-    protected boolean isAttached(){
-        return getActivity() != null;
-    }
 }

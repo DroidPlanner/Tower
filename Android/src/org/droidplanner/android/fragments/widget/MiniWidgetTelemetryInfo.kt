@@ -96,6 +96,9 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
     }
 
     private fun onOrientationUpdate() {
+        if(isDetached())
+            return
+
         val drone = getDrone()
 
         val attitude = drone.getAttribute<Attitude>(AttributeType.ATTITUDE) ?: return
@@ -117,6 +120,9 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
     }
 
     private fun onSpeedUpdate() {
+        if(isDetached())
+            return
+
         val drone = getDrone()
         val speed = drone.getAttribute<Speed>(AttributeType.SPEED) ?: return
 
