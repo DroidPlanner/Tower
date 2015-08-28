@@ -22,7 +22,7 @@ import java.util.*
 /**
  * Created by Fredia Huya-Kouadio on 8/27/15.
  */
-public class MiniWidgetTelemetryInfo : ApiListenerFragment() {
+public class MiniWidgetTelemetryInfo : TowerWidget() {
 
     companion object {
         private val filter = initFilter()
@@ -78,6 +78,8 @@ public class MiniWidgetTelemetryInfo : ApiListenerFragment() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(getContext())
         headingModeFPV = prefs.getBoolean("pref_heading_mode", false)
     }
+
+    override fun getWidgetId() = R.id.tower_widget_telemetry_info
 
     override fun onApiConnected() {
         updateAllTelem()

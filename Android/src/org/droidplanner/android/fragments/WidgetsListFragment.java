@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.WidgetActivity;
+import org.droidplanner.android.fragments.widget.TowerWidget;
 import org.droidplanner.android.fragments.widget.TowerWidgets;
 
 public class WidgetsListFragment extends Fragment {
@@ -39,7 +40,7 @@ public class WidgetsListFragment extends Fragment {
             widgetsContainer.addView(widgetView);
 
             //Add the widget fragment to the widget holder
-            final Fragment widgetFragment = towerWidget.getMinimizedFragment();
+            final TowerWidget widgetFragment = towerWidget.getMinimizedFragment();
             fm.beginTransaction().add(widgetId, widgetFragment).commit();
 
             if (towerWidget.canMaximize()) {

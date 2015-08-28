@@ -8,10 +8,15 @@ import android.graphics.Matrix
 import android.graphics.SurfaceTexture
 import android.os.Bundle
 import android.view.*
+import android.widget.Button
 import android.widget.TextView
+import com.o3dr.android.client.Drone
 import com.o3dr.android.client.apis.GimbalApi
 import com.o3dr.android.client.apis.solo.SoloCameraApi
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
+import com.o3dr.services.android.lib.drone.companion.solo.SoloAttributes
+import com.o3dr.services.android.lib.drone.companion.solo.SoloEvents
+import com.o3dr.services.android.lib.drone.companion.solo.tlv.SoloGoproState
 import com.o3dr.services.android.lib.model.AbstractCommandListener
 import org.droidplanner.android.R
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment
@@ -21,18 +26,28 @@ import kotlin.properties.Delegates
 /**
  * Created by Fredia Huya-Kouadio on 7/19/15.
  */
-public class WidgetSoloLinkVideo : ApiListenerFragment() {
+public class WidgetSoloLinkVideo : TowerWidget() {
 
     companion object {
-        private val filter = IntentFilter(AttributeEvent.STATE_CONNECTED)
+        private val filter = initFilter()
 
         private val TAG = javaClass<WidgetSoloLinkVideo>().getSimpleName()
+
+        private fun initFilter(): IntentFilter {
+            val temp = IntentFilter()
+            temp.addAction(AttributeEvent.STATE_CONNECTED)
+            temp.addAction(SoloEvents.SOLO_GOPRO_STATE_UPDATED)
+            return temp
+        }
     }
 
     private val receiver = object : BroadcastReceiver(){
         override fun onReceive(context: Context, intent: Intent) {
             when(intent.getAction()){
                 AttributeEvent.STATE_CONNECTED -> tryStreamingVideo()
+                SoloEvents.SOLO_GOPRO_STATE_UPDATED -> {
+                    checkGoproControlSupport(getDrone())
+                }
             }
         }
 
@@ -46,6 +61,18 @@ public class WidgetSoloLinkVideo : ApiListenerFragment() {
 
     private val videoStatus by Delegates.lazy {
         getView()?.findViewById(R.id.sololink_video_status) as TextView?
+    }
+
+    private val widgetButtonBar by Delegates.lazy {
+        getView()?.findViewById(R.id.widget_button_bar)
+    }
+
+    private val takePhotoButton by Delegates.lazy {
+        getView()?.findViewById(R.id.sololink_take_picture_button) as Button?
+    }
+
+    private val recordVideo by Delegates.lazy {
+        getView()?.findViewById(R.id.sololink_record_video_button) as Button?
     }
 
     private val orientationListener = object : GimbalApi.GimbalOrientationListener {
@@ -85,10 +112,27 @@ public class WidgetSoloLinkVideo : ApiListenerFragment() {
 
         }
         )
+
+        takePhotoButton?.setOnClickListener {
+            val drone = getDrone()
+            if(drone != null) {
+                //TODO: fix when camera control support is stable on sololink
+                SoloCameraApi.getApi(drone).takePhoto(null)
+            }
+        }
+
+        recordVideo?.setOnClickListener {
+            val drone = getDrone()
+            if(drone != null){
+                //TODO: fix when camera control support is stable on sololink
+                SoloCameraApi.getApi(drone).toggleVideoRecording(null)
+            }
+        }
     }
 
     override fun onApiConnected() {
         tryStreamingVideo()
+        checkGoproControlSupport(getDrone())
         getBroadcastManager().registerReceiver(receiver, filter)
     }
 
@@ -104,8 +148,11 @@ public class WidgetSoloLinkVideo : ApiListenerFragment() {
 
     override fun onApiDisconnected() {
         tryStoppingVideoStream()
+        checkGoproControlSupport(getDrone())
         getBroadcastManager().unregisterReceiver(receiver)
     }
+
+    override fun getWidgetId() = R.id.tower_widget_solo_video
 
     private fun tryStreamingVideo() {
         if(surfaceRef == null)
@@ -194,6 +241,16 @@ public class WidgetSoloLinkVideo : ApiListenerFragment() {
             }
 
         })
+    }
+
+    private fun checkGoproControlSupport(drone: Drone){
+        val goproState: SoloGoproState? = drone.getAttribute(SoloAttributes.SOLO_GOPRO_STATE)
+        widgetButtonBar?.setVisibility(
+                if (goproState == null)
+                    View.GONE
+                else
+                    View.VISIBLE
+        )
     }
 
     private fun adjustAspectRatio(textureView: TextureView){

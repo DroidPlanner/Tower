@@ -5,23 +5,19 @@ import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import org.droidplanner.android.R
 import org.droidplanner.android.fragments.WidgetsListFragment
+import kotlin.platform.platformStatic
 
 /**
  * Created by Fredia Huya-Kouadio on 8/25/15.
  */
-public enum class TowerWidgets {
-    TELEMETRY_INFO {
-        override fun getLabelResId() = R.string.label_widget_telemetry_info
+public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId: Int) {
 
-        override fun getIdRes() = R.id.tower_widget_telemetry_info
+    TELEMETRY_INFO(R.id.tower_widget_telemetry_info, R.string.label_widget_telemetry_info) {
 
         override fun getMinimizedFragment() = MiniWidgetTelemetryInfo()
     },
 
-    SOLO_VIDEO {
-        override fun getLabelResId() = R.string.label_widget_solo_video
-
-        override fun getIdRes() = R.id.tower_widget_solo_video
+    SOLO_VIDEO(R.id.tower_widget_solo_video, R.string.label_widget_solo_video) {
 
         override fun canMaximize() = true
 
@@ -30,13 +26,19 @@ public enum class TowerWidgets {
         override fun getMaximizedFragment() = WidgetSoloLinkVideo()
     };
 
-    @StringRes abstract fun getLabelResId(): Int
-
-    @IdRes abstract fun getIdRes(): Int
-
-    abstract fun getMinimizedFragment(): Fragment
+    abstract fun getMinimizedFragment(): TowerWidget
 
     open fun canMaximize() = false
 
-    open fun getMaximizedFragment(): Fragment? = null
+    open fun getMaximizedFragment(): TowerWidget? = null
+
+    companion object {
+        @platformStatic fun getWidgetById(@IdRes id: Int): TowerWidgets? {
+            return when(id){
+                TELEMETRY_INFO.idRes -> TELEMETRY_INFO
+                SOLO_VIDEO.idRes -> SOLO_VIDEO
+                else -> null
+            }
+        }
+    }
 }

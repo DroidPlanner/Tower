@@ -1,24 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="match_parent"
+    android:minHeight="80dp"
     android:background="@android:color/black">
 
     <TextureView
         android:id="@+id/sololink_video_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:minHeight="80dp"/>
 
-    <TextView
-        android:id="@+id/sololink_video_status"
+    <android.support.v7.widget.CardView
+        android:id="@+id/widget_button_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_marginBottom="5dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/sololink_take_picture_button"
+                style="@style/flightControlButton.Row"
+                android:drawableTop="@drawable/ic_camera_alt_black_36dp"
+                android:text="Photo" />
+
+            <Button
+                android:id="@+id/sololink_record_video_button"
+                style="@style/flightControlButton.Row"
+                android:drawableTop="@drawable/ic_videocam_black_36dp"
+                android:text="Record" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/sololink_video_status"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
         android:gravity="center"
+        android:singleLine="true"
         android:text="no video available"
         android:textColor="@android:color/white"
+        android:background="@android:color/black"
         android:textAllCaps="true"
         android:visibility="gone"
         tools:visibility="visible"/>
-</FrameLayout>
+</RelativeLayout>

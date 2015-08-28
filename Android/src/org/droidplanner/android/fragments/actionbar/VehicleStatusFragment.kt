@@ -55,6 +55,8 @@ public class VehicleStatusFragment : ApiListenerFragment() {
         }
     }
 
+    private var title: CharSequence = ""
+
     private val connectedIcon by Delegates.lazy {
         getView()?.findViewById(R.id.status_vehicle_connection) as ImageView?
     }
@@ -63,12 +65,17 @@ public class VehicleStatusFragment : ApiListenerFragment() {
         getView()?.findViewById(R.id.status_vehicle_battery) as ImageView?
     }
 
-    private val titleView by Delegates.lazy {
-        getView()?.findViewById(R.id.status_actionbar_title) as TextView?
-    }
+    private var titleView: TextView? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         return inflater?.inflate(R.layout.fragment_vehicle_status, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
+        super.onViewCreated(view, savedInstanceState)
+
+        titleView = view.findViewById(R.id.status_actionbar_title) as TextView?
+        titleView?.setText(title)
     }
 
     override fun onApiConnected() {
@@ -101,11 +108,8 @@ public class VehicleStatusFragment : ApiListenerFragment() {
         )
     }
 
-    fun setTitle(titleResId: Int){
-        titleView?.setText(titleResId)
-    }
-
     fun setTitle(title: CharSequence){
+        this.title = title
         titleView?.setText(title)
     }
 
