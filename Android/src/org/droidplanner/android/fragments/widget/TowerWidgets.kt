@@ -10,14 +10,16 @@ import kotlin.platform.platformStatic
 /**
  * Created by Fredia Huya-Kouadio on 8/25/15.
  */
-public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId: Int) {
+public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId: Int, @StringRes val descriptionResId: Int, val prefKey: String) {
 
-    TELEMETRY_INFO(R.id.tower_widget_telemetry_info, R.string.label_widget_telemetry_info) {
+    TELEMETRY_INFO(R.id.tower_widget_telemetry_info, R.string.label_widget_telemetry_info, R.string.description_widget_telemetry_info, "pref_widget_telemetry_info") {
 
         override fun getMinimizedFragment() = MiniWidgetTelemetryInfo()
+
+        override fun isEnabledByDefault() = true
     },
 
-    SOLO_VIDEO(R.id.tower_widget_solo_video, R.string.label_widget_solo_video) {
+    SOLO_VIDEO(R.id.tower_widget_solo_video, R.string.label_widget_solo_video, R.string.description_widget_solo_video, "pref_widget_solo_video") {
 
         override fun canMaximize() = true
 
@@ -29,6 +31,8 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
     abstract fun getMinimizedFragment(): TowerWidget
 
     open fun canMaximize() = false
+
+    open fun isEnabledByDefault() = false
 
     open fun getMaximizedFragment(): TowerWidget? = null
 

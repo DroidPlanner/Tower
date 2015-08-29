@@ -296,6 +296,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
         }
     };
 
+    private LocalBroadcastManager lbm;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -308,6 +310,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
 
         final FragmentActivity activity = getActivity();
         final Context context = activity.getApplicationContext();
+
+        lbm = LocalBroadcastManager.getInstance(context);
 
         final View view = super.onCreateView(inflater, viewGroup, bundle);
 
@@ -330,9 +334,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
         mGApiClientMgr.start();
 
         mGApiClientMgr.addTask(mRequestLocationUpdateTask);
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
-                .registerReceiver(eventReceiver, eventFilter);
-
+        lbm.registerReceiver(eventReceiver, eventFilter);
         setupMap();
     }
 
@@ -341,8 +343,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
         super.onStop();
 
         mGApiClientMgr.addTask(mRemoveLocationUpdateTask);
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
-                .unregisterReceiver(eventReceiver);
+        lbm.unregisterReceiver(eventReceiver);
 
         mGApiClientMgr.stopSafely();
     }
@@ -429,29 +430,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     }
 
     private void setAutoPanMode(AutoPanMode current, AutoPanMode update) {
-        if (mPanMode.compareAndSet(current, update)) {
-            switch (current) {
-                case DRONE:
-                    LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
-                            .unregisterReceiver(eventReceiver);
-                    break;
-
-                case DISABLED:
-                default:
-                    break;
-            }
-
-            switch (update) {
-                case DRONE:
-                    LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver
-                            (eventReceiver, eventFilter);
-                    break;
-
-                case DISABLED:
-                default:
-                    break;
-            }
-        }
+        mPanMode.compareAndSet(current, update);
     }
 
     @Override

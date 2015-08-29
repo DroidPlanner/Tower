@@ -16,6 +16,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -35,6 +36,7 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
 import org.droidplanner.android.dialogs.ClearBTDialogPreference;
+import org.droidplanner.android.fragments.widget.TowerWidgets;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
@@ -91,6 +93,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
      */
     public static final String ACTION_MAP_ROTATION_PREFERENCE_UPDATED = PACKAGE_NAME +
             ".ACTION_MAP_ROTATION_PREFERENCE_UPDATED";
+
+    public static final String ACTION_WIDGETS_PREFERENCES_UPDATED = PACKAGE_NAME + ".ACTION_WIDGETS_PREFERENCES_UPDATED";
 
     private static final IntentFilter intentFilter = new IntentFilter();
 
@@ -203,6 +207,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             Log.e(TAG, "Unable to retrieve version name.", e);
         }
 
+        setupWidgetsPreferences();
         setupMapProviders();
         setupPeriodicControls();
         setupConnectionPreferences();
@@ -212,6 +217,32 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setupImminentGroundCollisionWarningPreference();
         setupMapPreferences();
         setupAltitudePreferences();
+    }
+
+    private void setupWidgetsPreferences(){
+        final PreferenceScreen widgetsPref = (PreferenceScreen) findPreference(DroidPlannerPrefs.PREF_TOWER_WIDGETS);
+        if(widgetsPref != null){
+            final Activity activity = getActivity();
+            final Preference.OnPreferenceChangeListener widgetPrefChangeListener = new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    lbm.sendBroadcast(new Intent(ACTION_WIDGETS_PREFERENCES_UPDATED));
+                    return true;
+                }
+            };
+
+            final TowerWidgets[] widgets = TowerWidgets.values();
+            for(TowerWidgets widget: widgets){
+                final CheckBoxPreference widgetPref = new CheckBoxPreference(activity);
+                widgetPref.setKey(widget.getPrefKey());
+                widgetPref.setTitle(widget.getLabelResId());
+                widgetPref.setSummary(widget.getDescriptionResId());
+                widgetPref.setChecked(dpPrefs.isWidgetEnabled(widget));
+                widgetPref.setOnPreferenceChangeListener(widgetPrefChangeListener);
+
+                widgetsPref.addPreference(widgetPref);
+            }
+        }
     }
 
     private void setupMapProviders(){

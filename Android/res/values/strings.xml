@@ -467,6 +467,11 @@
 
     <!-- Telemetry widget labels -->
     <string name="label_widget_solo_video">Solo Video</string>
+    <string name="description_widget_solo_video">Displays the video stream from a connected Solo vehicle</string>
     <string name="label_widget_telemetry_info">Telemetry Data</string>
+    <string name="description_widget_telemetry_info">Displays vehicle telemetry info</string>
+    <string name="pref_tower_widgets_title">Widgets Preferences</string>
+    <string name="pref_tower_widgets_category">Tower Widgets</string>
+    <string name="pref_widgets_list_category">Widgets list</string>
 
 </resources>
