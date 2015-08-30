@@ -55,7 +55,7 @@ public abstract class BaseWidgetEkfStatus : TowerWidget(){
     }
 
     private fun updateEkfStatus(){
-        if (isAdded())
+        if (!isAdded())
             return
 
         val state: State? = getDrone()?.getAttribute(AttributeType.STATE)
