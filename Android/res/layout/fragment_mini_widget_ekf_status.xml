@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="5dp">
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/ekf_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        tools:textColor="@android:color/holo_green_dark"
+        android:textColor="@color/greyText"
+        android:text="@string/label_ekf"
+        android:textStyle="bold"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/light_grey"
+        android:layout_margin="5dp"/>
+
+    <TextView
+        android:id="@+id/velocity_var_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/grey_circle_10dp"
+        android:gravity="center"
+        android:layout_margin="2dp"
+        android:text="@string/label_velocity_var_abbrev"/>
+
+    <TextView
+        android:id="@+id/horizontal_position_var_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/grey_circle_10dp"
+        android:gravity="center"
+        android:layout_margin="2dp"
+        android:text="@string/label_horizontal_position_var_abbrev"/>
+
+    <TextView
+        android:id="@+id/vertical_position_var_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/grey_circle_10dp"
+        android:gravity="center"
+        android:layout_margin="2dp"
+        android:text="@string/label_vertical_position_var_abbrev"/>
+
+    <TextView
+        android:id="@+id/mag_var_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/grey_circle_10dp"
+        android:gravity="center"
+        android:layout_margin="2dp"
+        android:text="@string/label_mag_var_abbrev"/>
+
+    <TextView
+        android:id="@+id/terrain_var_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_margin="2dp"
+        android:drawableTop="@drawable/grey_circle_10dp"
+        android:text="@string/label_terrain_var_abbrev"/>
+
+</LinearLayout>

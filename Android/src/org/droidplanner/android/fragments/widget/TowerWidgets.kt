@@ -26,6 +26,10 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
         override fun getMinimizedFragment() = WidgetSoloLinkVideo()
 
         override fun getMaximizedFragment() = WidgetSoloLinkVideo()
+    },
+
+    EKF_STATUS(R.id.tower_widget_ekf_status, R.string.label_widget_ekf_status, R.string.description_widget_ekf_status, "pref_widget_ekf_status"){
+        override fun getMinimizedFragment() = MiniWidgetEkfStatus()
     };
 
     abstract fun getMinimizedFragment(): TowerWidget
@@ -41,6 +45,7 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
             return when(id){
                 TELEMETRY_INFO.idRes -> TELEMETRY_INFO
                 SOLO_VIDEO.idRes -> SOLO_VIDEO
+                EKF_STATUS.idRes -> EKF_STATUS
                 else -> null
             }
         }

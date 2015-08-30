@@ -470,8 +470,16 @@
     <string name="description_widget_solo_video">Displays the video stream from a connected Solo vehicle</string>
     <string name="label_widget_telemetry_info">Telemetry Data</string>
     <string name="description_widget_telemetry_info">Displays vehicle telemetry info</string>
+    <string name="label_widget_ekf_status">EKF Status</string>
+    <string name="description_widget_ekf_status">Displays the vehicle EKF status</string>
     <string name="pref_tower_widgets_title">Widgets Preferences</string>
     <string name="pref_tower_widgets_category">Tower Widgets</string>
     <string name="pref_widgets_list_category">Widgets list</string>
+    <string name="label_ekf">ekf</string>
+    <string name="label_velocity_var_abbrev">v</string>
+    <string name="label_horizontal_position_var_abbrev">h.p</string>
+    <string name="label_vertical_position_var_abbrev">v.p</string>
+    <string name="label_mag_var_abbrev">mg</string>
+    <string name="label_terrain_var_abbrev">t</string>
 
 </resources>

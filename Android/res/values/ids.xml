@@ -3,4 +3,5 @@
     <item type="id" name="mapFragment"/>
     <item type="id" name="tower_widget_solo_video" />
     <item type="id" name="tower_widget_telemetry_info" />
+    <item type="id" name="tower_widget_ekf_status" />
 </resources>
