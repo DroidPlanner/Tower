@@ -53,7 +53,7 @@ public class WidgetsListFragment extends Fragment {
     }
 
     private void generateWidgetsList(){
-        if(isDetached())
+        if(!isAdded())
             return;
 
         widgetsContainer.removeAllViews();

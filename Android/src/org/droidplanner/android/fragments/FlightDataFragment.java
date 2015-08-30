@@ -451,7 +451,7 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
                     GOOGLE_PLAY_SERVICES_REQUEST_CODE, new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialog) {
-                            if (!isDetached()) {
+                            if (isAdded()) {
                                 getActivity().finish();
                             }
                         }

@@ -96,7 +96,7 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
     }
 
     private fun onOrientationUpdate() {
-        if(isDetached())
+        if(!isAdded())
             return
 
         val drone = getDrone()
@@ -120,7 +120,7 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
     }
 
     private fun onSpeedUpdate() {
-        if(isDetached())
+        if(!isAdded())
             return
 
         val drone = getDrone()
