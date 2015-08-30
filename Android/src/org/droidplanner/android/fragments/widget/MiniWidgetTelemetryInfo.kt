@@ -79,7 +79,7 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
         headingModeFPV = prefs.getBoolean("pref_heading_mode", false)
     }
 
-    override fun getWidgetId() = R.id.tower_widget_telemetry_info
+    override fun getWidgetType() = TowerWidgets.TELEMETRY_INFO
 
     override fun onApiConnected() {
         updateAllTelem()

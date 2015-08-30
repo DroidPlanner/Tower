@@ -68,9 +68,9 @@ public class WidgetActivity : SuperUI() {
             setToolbarTitle(widget.labelResId)
 
             val currentWidget = fm.findFragmentById(R.id.widget_view) as TowerWidget?
-            val currentWidgetId = if(currentWidget == null) 0 else currentWidget.getWidgetId()
+            val currentWidgetType = if(currentWidget == null) null else currentWidget.getWidgetType()
 
-            if(widgetId == currentWidgetId)
+            if(widget == currentWidgetType)
                 return
 
             val widgetFragment = widget.getMaximizedFragment()

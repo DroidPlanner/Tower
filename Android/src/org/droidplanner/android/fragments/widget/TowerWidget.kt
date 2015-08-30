@@ -8,5 +8,5 @@ import org.droidplanner.android.fragments.helpers.ApiListenerFragment
  */
 public abstract class TowerWidget : ApiListenerFragment() {
 
-    @IdRes abstract fun getWidgetId(): Int
+    abstract fun getWidgetType(): TowerWidgets
 }

@@ -1,63 +1,18 @@
 package org.droidplanner.android.fragments.widget
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
-import com.o3dr.services.android.lib.drone.attribute.AttributeType
-import com.o3dr.services.android.lib.drone.property.State
+import com.o3dr.services.android.lib.drone.property.EkfStatus
 import org.droidplanner.android.R
 
 /**
  * Created by Fredia Huya-Kouadio on 8/29/15.
  */
-public class MiniWidgetEkfStatus : TowerWidget() {
-
-    companion object {
-        private val filter = initFilter()
-
-        private fun initFilter(): IntentFilter {
-            val temp = IntentFilter()
-            temp.addAction(AttributeEvent.STATE_EKF_REPORT)
-            temp.addAction(AttributeEvent.STATE_CONNECTED)
-            temp.addAction(AttributeEvent.STATE_DISCONNECTED)
-            temp.addAction(AttributeEvent.HEARTBEAT_RESTORED)
-            temp.addAction(AttributeEvent.HEARTBEAT_TIMEOUT)
-            return temp
-        }
-
-        private val INVALID_HIGHEST_VARIANCE = -1f
-
-        /**
-         * Any variance value less than this threshold is considered good.
-         */
-        private val GOOD_VARIANCE_THRESHOLD = 0.5f
-
-        /**
-         * Variance values between the good threshold and the warning threshold are considered as warning.
-         * Variance values above the warning variance threshold are considered bad.
-         */
-        private val WARNING_VARIANCE_THRESHOLD = 0.8f
-    }
-
-    private val receiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            when (intent.getAction()) {
-                AttributeEvent.STATE_EKF_REPORT -> updateEkfStatus()
-                AttributeEvent.STATE_CONNECTED -> updateEkfStatus()
-                AttributeEvent.STATE_DISCONNECTED -> updateEkfStatus()
-                AttributeEvent.HEARTBEAT_RESTORED -> updateEkfStatus()
-                AttributeEvent.HEARTBEAT_TIMEOUT -> updateEkfStatus()
-            }
-        }
-    }
+public class MiniWidgetEkfStatus : BaseWidgetEkfStatus() {
 
     private var goodStatus: Drawable? = null
     private var warningStatus: Drawable? = null
@@ -65,7 +20,7 @@ public class MiniWidgetEkfStatus : TowerWidget() {
     private var disabledStatus: Drawable? = null
 
     private var ekfLabel: TextView? = null
-    private var ekfHighestVar: Float = INVALID_HIGHEST_VARIANCE
+    private var ekfHighestVar: Float = BaseWidgetEkfStatus.INVALID_HIGHEST_VARIANCE
 
     private var velocityVar: TextView? = null
     private var horizontalPosVar: TextView? = null
@@ -94,45 +49,29 @@ public class MiniWidgetEkfStatus : TowerWidget() {
         disabledStatus = res.getDrawable(R.drawable.grey_circle_10dp)
     }
 
-    override fun onApiConnected() {
-        updateEkfStatus()
-        getBroadcastManager().registerReceiver(receiver, filter)
-    }
-
-    override fun onApiDisconnected() {
-        getBroadcastManager().unregisterReceiver(receiver)
-        updateEkfStatus()
-    }
-
-    override fun getWidgetId() = R.id.tower_widget_ekf_status
-
-    fun updateEkfStatus() {
-        if (isDetached())
-            return
-
+    override fun updateEkfView(ekfStatus: EkfStatus) {
         val res = getResources()
-        val state: State? = getDrone()?.getAttribute(AttributeType.STATE)
-        val ekfStatus = state?.getEkfStatus()
-        if (state == null || !state.isTelemetryLive() || ekfStatus == null) {
-            ekfLabel?.setTextColor(res.getColor(R.color.greyText))
-            disableVarianceView(velocityVar)
-            disableVarianceView(horizontalPosVar)
-            disableVarianceView(verticalPosVar)
-            disableVarianceView(magVar)
-            disableVarianceView(terrainVar)
-        } else {
-            updateVarianceView(velocityVar, ekfStatus.getVelocityVariance())
-            updateVarianceView(horizontalPosVar, ekfStatus.getHorizontalPositionVariance())
-            updateVarianceView(verticalPosVar, ekfStatus.getVerticalPositionVariance())
-            updateVarianceView(magVar, ekfStatus.getCompassVariance())
-            updateVarianceView(terrainVar, ekfStatus.getTerrainAltitudeVariance())
+        updateVarianceView(velocityVar, ekfStatus.getVelocityVariance())
+        updateVarianceView(horizontalPosVar, ekfStatus.getHorizontalPositionVariance())
+        updateVarianceView(verticalPosVar, ekfStatus.getVerticalPositionVariance())
+        updateVarianceView(magVar, ekfStatus.getCompassVariance())
+        updateVarianceView(terrainVar, ekfStatus.getTerrainAltitudeVariance())
 
-            val textColor = if (ekfHighestVar < GOOD_VARIANCE_THRESHOLD) android.R.color.holo_green_dark
-            else if (ekfHighestVar < WARNING_VARIANCE_THRESHOLD) android.R.color.holo_orange_dark
-            else android.R.color.holo_red_dark
+        val textColor = if (ekfHighestVar < BaseWidgetEkfStatus.GOOD_VARIANCE_THRESHOLD) android.R.color.holo_green_dark
+        else if (ekfHighestVar < BaseWidgetEkfStatus.WARNING_VARIANCE_THRESHOLD) android.R.color.holo_orange_dark
+        else android.R.color.holo_red_dark
 
-            ekfLabel?.setTextColor(res.getColor(textColor))
-        }
+        ekfLabel?.setTextColor(res.getColor(textColor))
+    }
+
+    override fun disableEkfView() {
+        val res = getResources()
+        ekfLabel?.setTextColor(res.getColor(R.color.greyText))
+        disableVarianceView(velocityVar)
+        disableVarianceView(horizontalPosVar)
+        disableVarianceView(verticalPosVar)
+        disableVarianceView(magVar)
+        disableVarianceView(terrainVar)
     }
 
     protected fun disableVarianceView(varianceView: TextView?) {
@@ -142,8 +81,8 @@ public class MiniWidgetEkfStatus : TowerWidget() {
     protected fun updateVarianceView(varianceView: TextView?, variance: Float) {
         ekfHighestVar = Math.max(ekfHighestVar, variance)
 
-        val statusDrawable = if (variance < GOOD_VARIANCE_THRESHOLD) goodStatus
-        else if (variance < WARNING_VARIANCE_THRESHOLD) warningStatus
+        val statusDrawable = if (variance < BaseWidgetEkfStatus.GOOD_VARIANCE_THRESHOLD) goodStatus
+        else if (variance < BaseWidgetEkfStatus.WARNING_VARIANCE_THRESHOLD) warningStatus
         else dangerStatus
 
         varianceView?.setCompoundDrawablesWithIntrinsicBounds(null, statusDrawable, null, null)

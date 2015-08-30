@@ -18,11 +18,14 @@
         tools:visibility="visible">
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="13dp"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
             android:background="@color/transparent_light"
-            android:src="@drawable/ic_launch_black_18dp"
+            android:scaleType="centerCrop"
+            android:gravity="center"
+            android:layout_marginTop="2dp"
+            android:src="@drawable/ic_more_vert_black_18dp"
              />
     </FrameLayout>
 

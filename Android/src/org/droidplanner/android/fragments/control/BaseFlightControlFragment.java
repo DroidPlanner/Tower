@@ -93,7 +93,7 @@ public abstract class BaseFlightControlFragment extends ApiListenerFragment impl
                 .setInterval(FOLLOW_LOCATION_UPDATE_INTERVAL)
                 .setSmallestDisplacement(FOLLOW_LOCATION_UPDATE_MIN_DISPLACEMENT);
 
-        final CheckLocationSettings locationSettingsChecker = new CheckLocationSettings((DrawerNavigationUI) getActivity(), locationReq,
+        final CheckLocationSettings locationSettingsChecker = new CheckLocationSettings(getActivity(), locationReq,
                 new Runnable() {
                     @Override
                     public void run() {

@@ -121,14 +121,14 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
         addToolbarFragment();
     }
 
-    protected void setToolbarTitle(CharSequence title){
+    public void setToolbarTitle(CharSequence title){
         if(statusFragment == null)
             return;
 
         statusFragment.setTitle(title);
     }
 
-    protected void setToolbarTitle(int titleResId){
+    public void setToolbarTitle(int titleResId){
         if(statusFragment == null)
             return;
 

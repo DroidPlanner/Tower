@@ -152,7 +152,7 @@ public class WidgetSoloLinkVideo : TowerWidget() {
         getBroadcastManager().unregisterReceiver(receiver)
     }
 
-    override fun getWidgetId() = R.id.tower_widget_solo_video
+    override fun getWidgetType() = TowerWidgets.SOLO_VIDEO
 
     private fun tryStreamingVideo() {
         if(surfaceRef == null)

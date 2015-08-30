@@ -476,10 +476,23 @@
     <string name="pref_tower_widgets_category">Tower Widgets</string>
     <string name="pref_widgets_list_category">Widgets list</string>
     <string name="label_ekf">ekf</string>
-    <string name="label_velocity_var_abbrev">v</string>
-    <string name="label_horizontal_position_var_abbrev">h.p</string>
-    <string name="label_vertical_position_var_abbrev">v.p</string>
-    <string name="label_mag_var_abbrev">mg</string>
-    <string name="label_terrain_var_abbrev">t</string>
+    <string name="label_velocity_var_abbrev">vel</string>
+    <string name="label_horizontal_position_var_abbrev">h.pos</string>
+    <string name="label_vertical_position_var_abbrev">v.pos</string>
+    <string name="label_mag_var_abbrev">mag</string>
+    <string name="label_terrain_var_abbrev">ter</string>
+    <string name="label_attitude_estimate">Attitude estimate</string>
+    <string name="label_flags">Flags</string>
+    <string name="label_constant_position_mode">Constant position mode</string>
+    <string name="label_velocity">Velocity</string>
+    <string name="label_velocity_estimate">Vertical estimate</string>
+    <string name="label_horizontal_estimate">Horizontal estimate</string>
+    <string name="label_horizontal_position">Horizontal Position</string>
+    <string name="label_relative_estimate">Relative estimate</string>
+    <string name="label_absolute_estimate">Absolute estimate</string>
+    <string name="label_above_ground_estimate">Above ground estimate</string>
+    <string name="label_vertical_position">Vertical Position</string>
+    <string name="label_absolute_predicted_estimate">Absolute predicted estimate</string>
+    <string name="label_relative_predicted_estimate">Relative predicted estimate</string>
 
 </resources>

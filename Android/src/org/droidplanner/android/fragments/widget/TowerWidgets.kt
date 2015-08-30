@@ -30,6 +30,10 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
 
     EKF_STATUS(R.id.tower_widget_ekf_status, R.string.label_widget_ekf_status, R.string.description_widget_ekf_status, "pref_widget_ekf_status"){
         override fun getMinimizedFragment() = MiniWidgetEkfStatus()
+
+        override fun canMaximize() = true
+
+        override fun getMaximizedFragment() = FullWidgetEkfStatus()
     };
 
     abstract fun getMinimizedFragment(): TowerWidget
