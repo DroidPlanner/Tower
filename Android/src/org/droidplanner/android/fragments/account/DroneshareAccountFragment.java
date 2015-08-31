@@ -1,7 +1,6 @@
 package org.droidplanner.android.fragments.account;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -24,8 +23,8 @@ import com.geeksville.apiproxy.rest.RESTClient;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.AccountLoginListener;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.widgets.NiceProgressView;
-import org.droidplanner.android.widgets.adapterViews.UserDataAdapter;
+import org.droidplanner.android.view.NiceProgressView;
+import org.droidplanner.android.view.adapterViews.UserDataAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 

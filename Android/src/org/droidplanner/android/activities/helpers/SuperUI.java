@@ -121,18 +121,18 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
         addToolbarFragment();
     }
 
-    protected void setToolbarTitle(CharSequence title){
+    public void setToolbarTitle(CharSequence title){
         if(statusFragment == null)
             return;
 
         statusFragment.setTitle(title);
     }
 
-    protected void setToolbarTitle(int titleResId){
+    public void setToolbarTitle(int titleResId){
         if(statusFragment == null)
             return;
 
-        statusFragment.setTitle(titleResId);
+        statusFragment.setTitle(getString(titleResId));
     }
 
     protected void addToolbarFragment(){
@@ -205,12 +205,12 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
         onDroneDisconnected();
     }
 
-    private void onDroneConnected() {
+    protected void onDroneConnected() {
         invalidateOptionsMenu();
         screenOrientation.requestLock();
     }
 
-    private void onDroneDisconnected() {
+    protected void onDroneDisconnected() {
         invalidateOptionsMenu();
         screenOrientation.unlock();
     }

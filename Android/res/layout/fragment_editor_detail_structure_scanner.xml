@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/missionItemDetailLayout" >
 
-    <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
+    <org.droidplanner.android.view.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -100,28 +100,28 @@
                 android:background="@drawable/mode_desc_rectangle"
                 android:text="@string/structure_scan_description" />
 
-            <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+            <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
                 android:id="@+id/radiusPicker"
                 style="@style/missionItemDetailCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/circle_radius" />
 
-            <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+            <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
                 android:id="@+id/startAltitudePicker"
                 style="@style/missionItemDetailCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/structure_scan_start_alt" />
 
-            <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+            <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
                 android:id="@+id/heightStepPicker"
                 style="@style/missionItemDetailCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/structure_scan_step_height" />
 
-            <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+            <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
                 android:id="@+id/stepsPicker"
                 style="@style/missionItemDetailCard"
                 android:layout_width="match_parent"
@@ -151,7 +151,7 @@
                     android:text="@string/camera_"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
+                <org.droidplanner.android.view.spinners.SpinnerSelfSelect
                     android:id="@+id/cameraFileSpinner"
                     android:layout_width="196dp"
                     android:layout_height="wrap_content"

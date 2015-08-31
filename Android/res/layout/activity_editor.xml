@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_gesture_map"/>
 
-    <org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout
+    <org.droidplanner.android.view.FitsSystemWindowsRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
@@ -61,6 +61,6 @@
             tools:layout="@layout/fragment_editor_list"
             android:layout_alignParentBottom="true"
             />
-    </org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout>
+    </org.droidplanner.android.view.FitsSystemWindowsRelativeLayout>
 
 </RelativeLayout>

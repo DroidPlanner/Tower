@@ -9,8 +9,8 @@ import com.o3dr.services.android.lib.drone.mission.item.spatial.RegionOfInterest
 import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
+import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.view.spinnerWheel.adapters.LengthWheelAdapter;
 
 public class MissionRegionOfInterestFragment extends MissionDetailFragment implements
         CardWheelHorizontalView.OnCardWheelScrollListener<LengthUnit> {

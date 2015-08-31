@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import com.o3dr.services.android.lib.gcs.follow.FollowState;
 import com.o3dr.services.android.lib.gcs.follow.FollowType;
 
 import org.droidplanner.android.activities.DrawerNavigationUI;
+import org.droidplanner.android.fragments.FlightDataFragment;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.location.CheckLocationSettings;
@@ -59,15 +61,6 @@ public abstract class BaseFlightControlFragment extends ApiListenerFragment impl
     };
 
     @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-        if(!(activity instanceof DrawerNavigationUI)){
-            throw new IllegalStateException("Parent activity must be an instance of " + DrawerNavigationUI.class
-                    .getName());
-        }
-    }
-
-    @Override
     public void onApiConnected(){
         getBroadcastManager().registerReceiver(receiver, filter);
     }
@@ -100,7 +93,7 @@ public abstract class BaseFlightControlFragment extends ApiListenerFragment impl
                 .setInterval(FOLLOW_LOCATION_UPDATE_INTERVAL)
                 .setSmallestDisplacement(FOLLOW_LOCATION_UPDATE_MIN_DISPLACEMENT);
 
-        final CheckLocationSettings locationSettingsChecker = new CheckLocationSettings((DrawerNavigationUI) getActivity(), locationReq,
+        final CheckLocationSettings locationSettingsChecker = new CheckLocationSettings(getActivity(), locationReq,
                 new Runnable() {
                     @Override
                     public void run() {

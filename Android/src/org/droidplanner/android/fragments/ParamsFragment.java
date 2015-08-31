@@ -39,8 +39,8 @@ import org.droidplanner.android.fragments.helpers.ApiListenerListFragment;
 import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.file.IO.ParameterWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.widgets.adapterViews.ParamsAdapter;
-import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
+import org.droidplanner.android.view.adapterViews.ParamsAdapter;
+import org.droidplanner.android.view.adapterViews.ParamsAdapterItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,7 +164,7 @@ public class ParamsFragment extends ApiListenerListFragment implements SupportEd
                     }
 
                 } else {
-                    if(snackbar != null) {
+                    if (snackbar != null) {
                         snackbar.dismiss();
                         snackbar = null;
                     }

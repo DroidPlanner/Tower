@@ -54,7 +54,7 @@ public abstract class ApiListenerFragment extends Fragment implements DroidPlann
         return dpApp.getAppPreferences();
     }
 
-	protected Drone getDrone() {
+	public Drone getDrone() {
 		return dpApp.getDrone();
 	}
 
@@ -115,9 +115,5 @@ public abstract class ApiListenerFragment extends Fragment implements DroidPlann
         lengthUnitProvider = unitSystem.getLengthUnitProvider();
         areaUnitProvider = unitSystem.getAreaUnitProvider();
         speedUnitProvider = unitSystem.getSpeedUnitProvider();
-    }
-
-    protected boolean isAttached(){
-        return getActivity() != null;
     }
 }
