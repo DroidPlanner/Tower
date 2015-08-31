@@ -3,55 +3,63 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minHeight="80dp"
-    android:background="@android:color/black">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/black"
+    android:minHeight="85dp">
 
     <TextureView
         android:id="@+id/sololink_video_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:minHeight="80dp"/>
+        android:minHeight="85dp" />
 
-    <android.support.v7.widget.CardView
+    <LinearLayout
         android:id="@+id/widget_button_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal"
         android:visibility="gone"
-        tools:visibility="visible"
-        android:layout_marginBottom="5dp">
+        tools:visibility="visible">
 
-        <LinearLayout
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/sololink_take_picture_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            app:backgroundTint="@color/flight_action_row_bg_selector"
+            app:fabSize="normal"
+            app:elevation="6dp"
+            app:borderWidth="0dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_camera_alt_black_36dp"
+            android:text="Photo" />
 
-            <Button
-                android:id="@+id/sololink_take_picture_button"
-                style="@style/flightControlButton.Row"
-                android:drawableTop="@drawable/ic_camera_alt_black_36dp"
-                android:text="Photo" />
-
-            <Button
-                android:id="@+id/sololink_record_video_button"
-                style="@style/flightControlButton.Row"
-                android:drawableTop="@drawable/ic_videocam_black_36dp"
-                android:text="Record" />
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/sololink_record_video_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:backgroundTint="@color/flight_action_row_bg_selector"
+            app:fabSize="normal"
+            app:elevation="6dp"
+            app:borderWidth="0dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_videocam_black_36dp"
+            android:text="Record" />
+    </LinearLayout>
 
     <me.grantland.widget.AutofitTextView
         android:id="@+id/sololink_video_status"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
+        android:background="@android:color/black"
         android:gravity="center"
         android:singleLine="true"
-        android:text="no video available"
-        android:textColor="@android:color/white"
-        android:background="@android:color/black"
+        android:text="@string/error_no_video"
         android:textAllCaps="true"
+        android:textColor="@android:color/white"
         android:visibility="gone"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 </RelativeLayout>

@@ -494,5 +494,6 @@
     <string name="label_vertical_position">Vertical Position</string>
     <string name="label_absolute_predicted_estimate">Absolute predicted estimate</string>
     <string name="label_relative_predicted_estimate">Relative predicted estimate</string>
+    <string name="error_no_video">no video available</string>
 
 </resources>

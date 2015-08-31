@@ -26,7 +26,7 @@ import org.droidplanner.android.fragments.FlightDataFragment
 import org.droidplanner.android.fragments.FlightMapFragment
 import org.droidplanner.android.fragments.widget.TowerWidget
 import org.droidplanner.android.fragments.widget.TowerWidgets
-import org.droidplanner.android.fragments.widget.WidgetSoloLinkVideo
+import org.droidplanner.android.fragments.widget.FullWidgetSoloLinkVideo
 import org.droidplanner.android.utils.prefs.AutoPanMode
 import kotlin.properties.Delegates
 

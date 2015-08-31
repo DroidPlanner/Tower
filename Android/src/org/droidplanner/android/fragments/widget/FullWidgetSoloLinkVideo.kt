@@ -26,12 +26,12 @@ import kotlin.properties.Delegates
 /**
  * Created by Fredia Huya-Kouadio on 7/19/15.
  */
-public class WidgetSoloLinkVideo : TowerWidget() {
+public class FullWidgetSoloLinkVideo : TowerWidget() {
 
     companion object {
         private val filter = initFilter()
 
-        private val TAG = javaClass<WidgetSoloLinkVideo>().getSimpleName()
+        private val TAG = javaClass<FullWidgetSoloLinkVideo>().getSimpleName()
 
         private fun initFilter(): IntentFilter {
             val temp = IntentFilter()
@@ -44,9 +44,13 @@ public class WidgetSoloLinkVideo : TowerWidget() {
     private val receiver = object : BroadcastReceiver(){
         override fun onReceive(context: Context, intent: Intent) {
             when(intent.getAction()){
-                AttributeEvent.STATE_CONNECTED -> tryStreamingVideo()
+                AttributeEvent.STATE_CONNECTED -> {
+                    tryStreamingVideo()
+                    checkGoproControlSupport()
+                }
+
                 SoloEvents.SOLO_GOPRO_STATE_UPDATED -> {
-                    checkGoproControlSupport(getDrone())
+                    checkGoproControlSupport()
                 }
             }
         }
@@ -68,11 +72,11 @@ public class WidgetSoloLinkVideo : TowerWidget() {
     }
 
     private val takePhotoButton by Delegates.lazy {
-        getView()?.findViewById(R.id.sololink_take_picture_button) as Button?
+        getView()?.findViewById(R.id.sololink_take_picture_button)
     }
 
     private val recordVideo by Delegates.lazy {
-        getView()?.findViewById(R.id.sololink_record_video_button) as Button?
+        getView()?.findViewById(R.id.sololink_record_video_button)
     }
 
     private val orientationListener = object : GimbalApi.GimbalOrientationListener {
@@ -114,6 +118,7 @@ public class WidgetSoloLinkVideo : TowerWidget() {
         )
 
         takePhotoButton?.setOnClickListener {
+            Timber.d("Taking photo.. cheeze!")
             val drone = getDrone()
             if(drone != null) {
                 //TODO: fix when camera control support is stable on sololink
@@ -122,6 +127,7 @@ public class WidgetSoloLinkVideo : TowerWidget() {
         }
 
         recordVideo?.setOnClickListener {
+            Timber.d("Recording video!")
             val drone = getDrone()
             if(drone != null){
                 //TODO: fix when camera control support is stable on sololink
@@ -132,7 +138,7 @@ public class WidgetSoloLinkVideo : TowerWidget() {
 
     override fun onApiConnected() {
         tryStreamingVideo()
-        checkGoproControlSupport(getDrone())
+        checkGoproControlSupport()
         getBroadcastManager().registerReceiver(receiver, filter)
     }
 
@@ -148,7 +154,7 @@ public class WidgetSoloLinkVideo : TowerWidget() {
 
     override fun onApiDisconnected() {
         tryStoppingVideoStream()
-        checkGoproControlSupport(getDrone())
+        checkGoproControlSupport()
         getBroadcastManager().unregisterReceiver(receiver)
     }
 
@@ -243,8 +249,8 @@ public class WidgetSoloLinkVideo : TowerWidget() {
         })
     }
 
-    private fun checkGoproControlSupport(drone: Drone){
-        val goproState: SoloGoproState? = drone.getAttribute(SoloAttributes.SOLO_GOPRO_STATE)
+    private fun checkGoproControlSupport(){
+        val goproState: SoloGoproState? = getDrone()?.getAttribute(SoloAttributes.SOLO_GOPRO_STATE)
         widgetButtonBar?.setVisibility(
                 if (goproState == null)
                     View.GONE

@@ -94,7 +94,9 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     public static final String ACTION_MAP_ROTATION_PREFERENCE_UPDATED = PACKAGE_NAME +
             ".ACTION_MAP_ROTATION_PREFERENCE_UPDATED";
 
-    public static final String ACTION_WIDGETS_PREFERENCES_UPDATED = PACKAGE_NAME + ".ACTION_WIDGETS_PREFERENCES_UPDATED";
+    public static final String ACTION_WIDGET_PREFERENCE_UPDATED = PACKAGE_NAME + ".ACTION_WIDGET_PREFERENCE_UPDATED";
+    public static final String EXTRA_ADD_WIDGET = "extra_add_widget";
+    public static final String EXTRA_WIDGET_PREF_KEY = "extra_widget_pref_key";
 
     private static final IntentFilter intentFilter = new IntentFilter();
 
@@ -226,7 +228,10 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             final Preference.OnPreferenceChangeListener widgetPrefChangeListener = new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    lbm.sendBroadcast(new Intent(ACTION_WIDGETS_PREFERENCES_UPDATED));
+                    final boolean addWidget = (boolean) newValue;
+                    lbm.sendBroadcast(new Intent(ACTION_WIDGET_PREFERENCE_UPDATED)
+                            .putExtra(EXTRA_ADD_WIDGET, addWidget)
+                            .putExtra(EXTRA_WIDGET_PREF_KEY, preference.getKey()));
                     return true;
                 }
             };
