@@ -50,6 +50,8 @@ public class MiniWidgetEkfStatus : BaseWidgetEkfStatus() {
     }
 
     override fun updateEkfView(ekfStatus: EkfStatus) {
+        ekfHighestVar = BaseWidgetEkfStatus.INVALID_HIGHEST_VARIANCE
+
         val res = getResources()
         updateVarianceView(velocityVar, ekfStatus.getVelocityVariance())
         updateVarianceView(horizontalPosVar, ekfStatus.getHorizontalPositionVariance())
