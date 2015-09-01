@@ -17,7 +17,7 @@ dependencies {
     compile 'com.android.support:design:22.2.1'
 
     //DroneKit-Android client library.
-    compile 'com.o3dr.android:dronekit-android:2.5.23'
+    compile 'com.o3dr.android:dronekit-android:2.5.24'
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')
@@ -36,13 +36,16 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.5.0@aar') {
         transitive = true;
     }
+
+    //Charts and graph library
+    compile 'com.github.lecho:hellocharts-library:1.5.5@aar'
 }
 
 //Decomposed version name and code (https://plus.google.com/+JakeWharton/posts/6f5TcVPRZij)
 def versionMajor = 3
 def versionMinor = 2
 def versionPatch = 0
-def versionBuild = 2 //bump for dogfood builds, public betas, etc.
+def versionBuild = 3 //bump for dogfood builds, public betas, etc.
 
 android {
     compileSdkVersion 22
@@ -52,7 +55,7 @@ android {
         applicationId 'org.droidplanner.android'
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode versionMajor * 100000 + versionMinor * 1000 + versionPatch * 10 + versionBuild
+        versionCode versionMajor * 100000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "Tower-v${versionMajor}.${versionMinor}.${versionPatch}"
     }
 

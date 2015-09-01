@@ -18,13 +18,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-        <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
+        <org.droidplanner.android.view.FitsSystemWindowsFrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:fitsSystemWindows="true">
 
-            <org.droidplanner.android.widgets.SlidingDrawer
+            <org.droidplanner.android.view.SlidingDrawer
                 android:id="@+id/action_drawer_container"
                 android:minWidth="170dp"
                 android:layout_width="@dimen/action_drawer_width"
@@ -48,8 +48,8 @@
                     android:layout_height="wrap_content"
                     />
 
-            </org.droidplanner.android.widgets.SlidingDrawer>
-        </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
+            </org.droidplanner.android.view.SlidingDrawer>
+        </org.droidplanner.android.view.FitsSystemWindowsFrameLayout>
     </FrameLayout>
 
     <FrameLayout

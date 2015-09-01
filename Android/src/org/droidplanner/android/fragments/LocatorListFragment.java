@@ -13,7 +13,7 @@ import com.MAVLink.common.msg_global_position_int;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.LocatorActivity;
-import org.droidplanner.android.widgets.adapterViews.LocatorItemAdapter;
+import org.droidplanner.android.view.adapterViews.LocatorItemAdapter;
 
 public class LocatorListFragment extends Fragment {
 

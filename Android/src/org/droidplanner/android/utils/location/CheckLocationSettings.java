@@ -57,7 +57,7 @@ public class CheckLocationSettings implements GoogleApiClientManager.ManagerList
                 public void onResult(LocationSettingsResult locationSettingsResult) {
                     final Status status = locationSettingsResult.getStatus();
 
-                    final DrawerNavigationUI activity = activityRef.get();
+                    final Activity activity = activityRef.get();
                     switch (status.getStatusCode()) {
                         case LocationSettingsStatusCodes.SUCCESS:
                             if (onSuccess != null)
@@ -96,12 +96,12 @@ public class CheckLocationSettings implements GoogleApiClientManager.ManagerList
         }
     };
 
-    private final WeakReference<DrawerNavigationUI> activityRef;
+    private final WeakReference<Activity> activityRef;
     private final LocationRequest locationReq;
     private final Runnable onSuccess;
     private final GoogleApiClientManager gapiMgr;
 
-    public CheckLocationSettings(DrawerNavigationUI activity, LocationRequest locationReq, Runnable onSuccess) {
+    public CheckLocationSettings(Activity activity, LocationRequest locationReq, Runnable onSuccess) {
         activityRef = new WeakReference<>(activity);
         this.locationReq = locationReq;
         this.onSuccess = onSuccess;

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/yawValueText"
+            style="@style/RPYtextLabels"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/round_rect_bg"
+            android:drawableLeft="@drawable/yaw_icon"
+            android:drawableStart="@drawable/yaw_icon"
+            android:focusable="true"
+            android:gravity="start|center_vertical"
+            android:text="@string/default_angle_value"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/pitchValueText"
+            style="@style/RPYtextLabels"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/yawValueText"
+            android:layout_alignStart="@+id/yawValueText"
+            android:layout_below="@+id/yawValueText"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/round_rect_bg"
+            android:drawableLeft="@drawable/pitch_icon"
+            android:drawablePadding="2dp"
+            android:drawableStart="@drawable/pitch_icon"
+            android:gravity="start|center_vertical"
+            android:text="@string/default_angle_value"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/rollValueText"
+            style="@style/RPYtextLabels"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/pitchValueText"
+            android:layout_alignStart="@+id/pitchValueText"
+            android:layout_below="@+id/pitchValueText"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/round_rect_bg"
+            android:drawableLeft="@drawable/roll_icon"
+            android:drawablePadding="2dp"
+            android:drawableStart="@drawable/roll_icon"
+            android:gravity="start|center_vertical"
+            android:text="@string/default_angle_value"
+            android:textSize="16sp" />
+
+        <org.droidplanner.android.view.AttitudeIndicator
+            android:id="@+id/aiView"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignBottom="@+id/rollValueText"
+            android:layout_alignTop="@+id/yawValueText"
+            android:layout_toEndOf="@+id/yawValueText"
+            android:layout_toRightOf="@+id/yawValueText"
+            tools:ignore="ContentDescription" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"
+        android:background="@color/light_grey" />
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/horizontal_speed_telem"
+        style="@style/largeTelemetryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/debug_step_over"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/debug_step_over"
+        android:singleLine="true"
+        android:text="@string/horizontal_speed_empty"
+        tools:text="hs: 1000 mph" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"
+        android:background="@color/light_grey" />
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/vertical_speed_telem"
+        style="@style/largeTelemetryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/debug_step_out"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/debug_step_out"
+        android:singleLine="true"
+        android:text="@string/vertical_speed_empty"
+        tools:text="vs: 1000 mph" />
+
+</LinearLayout>

@@ -1,22 +1,16 @@
 package org.droidplanner.android.activities;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,15 +18,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.o3dr.android.client.Drone;
-import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
-
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.fragments.SettingsFragment;
-import org.droidplanner.android.fragments.actionbar.ActionBarTelemFragment;
 import org.droidplanner.android.fragments.control.BaseFlightControlFragment;
-import org.droidplanner.android.widgets.SlidingDrawer;
+import org.droidplanner.android.view.SlidingDrawer;
 
 /**
  * This abstract activity provides its children access to a navigation drawer
@@ -145,8 +135,14 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
                     lp.topMargin = fullTopMargin;
                     actionDrawer.requestLayout();
                 }
+
+                onToolbarLayoutChange(left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom);
             }
         });
+    }
+
+    protected void onToolbarLayoutChange(int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom){
+
     }
 
     protected float getActionDrawerTopMargin() {
@@ -264,7 +260,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
         }
     }
 
-    protected boolean isActionDrawerOpened() {
+    public boolean isActionDrawerOpened() {
         return actionDrawer.isOpened();
     }
 
@@ -288,12 +284,12 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
     public void onDrawerClosed() {
     }
 
-    protected void openActionDrawer() {
+    public void openActionDrawer() {
         actionDrawer.animateOpen();
         actionDrawer.lock();
     }
 
-    protected void closeActionDrawer() {
+    public void closeActionDrawer() {
         actionDrawer.animateClose();
         actionDrawer.lock();
     }

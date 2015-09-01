@@ -5,7 +5,7 @@
     style="@style/missionItemDetailLayout"
      >
 
-    <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
+    <org.droidplanner.android.view.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
                 android:text="@string/camera_"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
+            <org.droidplanner.android.view.spinners.SpinnerSelfSelect
                 android:id="@+id/cameraFileSpinner"
                 android:layout_width="196dp"
                 android:layout_height="wrap_content"
@@ -164,35 +164,35 @@
                     </GridLayout>
                 </HorizontalScrollView>
 
-                <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+                <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
                     android:id="@+id/anglePicker"
                     style="@style/missionItemDetailCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/hatch_angle" />
 
-                <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+                <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
                     android:id="@+id/altitudePicker"
                     style="@style/missionItemDetailCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/flight_altitude" />
 
-                <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+                <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
                     android:id="@+id/overlapPicker"
                     style="@style/missionItemDetailCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/overlap" >
-                </org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView>
+                </org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView>
 
-                <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+                <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
                     android:id="@+id/sidelapPicker"
                     style="@style/missionItemDetailCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/sidelap" >
-                </org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView>
+                </org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView>
 
             </LinearLayout>
 

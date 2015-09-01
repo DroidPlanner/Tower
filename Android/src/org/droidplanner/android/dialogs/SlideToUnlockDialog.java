@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.droidplanner.android.R;
-import org.droidplanner.android.widgets.SlideButton;
+import org.droidplanner.android.view.SlideButton;
 
 /**
  * Created by Fredia Huya-Kouadio on 4/6/15.

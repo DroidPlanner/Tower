@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <org.droidplanner.android.widgets.spinnerWheel.WheelHorizontalView
+    <org.droidplanner.android.view.spinnerWheel.WheelHorizontalView
         android:id="@+id/horizontalSpinnerWheel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

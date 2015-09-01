@@ -1,104 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.sothree.slidinguppanel.SlidingUpPanelLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:sothree="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/slidingPanelContainer"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="bottom"
-    sothree:shadowHeight="0dp"
-    sothree:paralaxOffset="0dp"
-    sothree:fadeColor="@android:color/transparent"
-    sothree:dragView="@+id/flightActionsFragment"
-    sothree:overlay="true">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        >
+        android:id="@+id/flight_data_container"/>
 
-        <FrameLayout
-            android:id="@+id/flight_map_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-        <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/actionbar_container"
-            android:fitsSystemWindows="true">
-
-            <include layout="@layout/actionbar_toolbar"/>
-        </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
-
-        <TextView
-            android:id="@+id/failsafeTextView"
-            style="@style/editorMissionOverviewText"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:background="#D8ee2d3e"
-            android:gravity="start|center_vertical"
-            android:visibility="gone"
-            android:paddingLeft="55dp"
-            android:layout_below="@+id/actionbar_container"
-            android:layout_alignLeft="@+id/actionbar_container"
-            android:layout_alignStart="@+id/actionbar_container"
-            android:layout_alignRight="@+id/actionbar_container"
-            android:layout_alignEnd="@+id/actionbar_container"
-            />
-
-        <include
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            layout="@layout/button_my_location"
-            android:layout_marginTop="8dp"
-            android:layout_gravity="center_vertical|start"
-            android:layout_below="@+id/actionbar_container"
-            android:layout_alignLeft="@+id/actionbar_container"
-            android:layout_alignStart="@+id/actionbar_container"
-            />
-
-    </RelativeLayout>
-    <!-- Sliding layout -->
-    <LinearLayout
+    <org.droidplanner.android.view.FitsSystemWindowsFrameLayout
+        android:layout_gravity="top"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:focusable="false"
-        android:clickable="false"
-        style="@style/slidingPanelGravity"
-        >
+        android:id="@+id/actionbar_container"
+        android:fitsSystemWindows="true">
 
-        <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
-            android:id="@+id/flightActionsFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:layout="@layout/fragment_flight_actions_bar"
-            android:fitsSystemWindows="true"/>
-
-        <android.support.v7.widget.CardView
-            android:layout_width="@dimen/flight_actions_container_width"
-            android:layout_height="wrap_content"
-            android:clickable="true">
-
-            <ScrollView
-                android:layout_width="@dimen/flight_actions_container_width"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/flight_actions_container_height"
-                android:background="@color/transparent_light_grey"
-                >
-
-                <FrameLayout
-                    android:id="@+id/sliding_drawer_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:layout="@layout/fragment_flight_mode_panel"/>
-            </ScrollView>
-        </android.support.v7.widget.CardView>
-    </LinearLayout>
-</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+        <include layout="@layout/actionbar_toolbar"/>
+    </org.droidplanner.android.view.FitsSystemWindowsFrameLayout>
+</FrameLayout>

@@ -34,8 +34,8 @@ import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.widgets.spinners.ModeAdapter;
-import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
+import org.droidplanner.android.view.spinners.ModeAdapter;
+import org.droidplanner.android.view.spinners.SpinnerSelfSelect;
 
 import java.util.List;
 import java.util.Locale;
@@ -275,7 +275,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final boolean isDroneConnected = drone.isConnected();
         final int droneType;
         if (isDroneConnected) {
-            flightModeIcon.setImageResource(R.drawable.ic_navigation_green_600_18dp);
+            flightModeIcon.setImageResource(R.drawable.ic_navigation_light_blue_a400_18dp);
             Type type = drone.getAttribute(AttributeType.TYPE);
             droneType = type.getDroneType();
         } else {

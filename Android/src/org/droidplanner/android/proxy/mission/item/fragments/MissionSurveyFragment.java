@@ -27,10 +27,10 @@ import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.CamerasAdapter;
 import org.droidplanner.android.utils.unit.providers.area.AreaUnitProvider;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
+import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.view.spinnerWheel.adapters.LengthWheelAdapter;
+import org.droidplanner.android.view.spinnerWheel.adapters.NumericWheelAdapter;
+import org.droidplanner.android.view.spinners.SpinnerSelfSelect;
 
 import java.util.Collections;
 import java.util.List;

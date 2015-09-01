@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 
+import org.droidplanner.android.fragments.widget.TowerWidgets;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.maps.providers.MapProviderPreferences;
 import org.droidplanner.android.utils.unit.systems.UnitSystem;
@@ -152,6 +153,8 @@ public class DroidPlannerPrefs {
 
 	public static final String PREF_TTS_PERIODIC_AIRSPEED = "tts_periodic_airspeed";
 	private static final boolean DEFAULT_TTS_PERIODIC_AIRSPEED = true;
+
+	public static final String PREF_TOWER_WIDGETS = "pref_tower_widgets";
 
 	// Public for legacy usage
 	public SharedPreferences prefs;
@@ -468,5 +471,9 @@ public class DroidPlannerPrefs {
 
 	public boolean isTtsEnabled() {
 		return prefs.getBoolean(PREF_IS_TTS_ENABLED, DEFAULT_TTS_ENABLED);
+	}
+
+	public boolean isWidgetEnabled(TowerWidgets widget){
+		return prefs.getBoolean(widget.getPrefKey(), widget.isEnabledByDefault());
 	}
 }

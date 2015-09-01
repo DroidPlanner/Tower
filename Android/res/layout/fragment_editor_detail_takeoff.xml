@@ -5,7 +5,7 @@
     style="@style/missionItemDetailLayout"
     >
 
-    <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
+    <org.droidplanner.android.view.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
             android:background="@drawable/mode_desc_rectangle"
             android:text="@string/waypointInfo_TakeOff"/>
 
-        <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
             android:id="@+id/altitudePicker"
             android:orientation="vertical"
             android:layout_width="match_parent"
