@@ -16,9 +16,11 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -34,6 +36,7 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
 import org.droidplanner.android.dialogs.ClearBTDialogPreference;
+import org.droidplanner.android.fragments.widget.TowerWidgets;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
@@ -90,6 +93,10 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
      */
     public static final String ACTION_MAP_ROTATION_PREFERENCE_UPDATED = PACKAGE_NAME +
             ".ACTION_MAP_ROTATION_PREFERENCE_UPDATED";
+
+    public static final String ACTION_WIDGET_PREFERENCE_UPDATED = PACKAGE_NAME + ".ACTION_WIDGET_PREFERENCE_UPDATED";
+    public static final String EXTRA_ADD_WIDGET = "extra_add_widget";
+    public static final String EXTRA_WIDGET_PREF_KEY = "extra_widget_pref_key";
 
     private static final IntentFilter intentFilter = new IntentFilter();
 
@@ -202,6 +209,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             Log.e(TAG, "Unable to retrieve version name.", e);
         }
 
+        setupWidgetsPreferences();
         setupMapProviders();
         setupPeriodicControls();
         setupConnectionPreferences();
@@ -211,6 +219,35 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setupImminentGroundCollisionWarningPreference();
         setupMapPreferences();
         setupAltitudePreferences();
+    }
+
+    private void setupWidgetsPreferences(){
+        final PreferenceScreen widgetsPref = (PreferenceScreen) findPreference(DroidPlannerPrefs.PREF_TOWER_WIDGETS);
+        if(widgetsPref != null){
+            final Activity activity = getActivity();
+            final Preference.OnPreferenceChangeListener widgetPrefChangeListener = new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    final boolean addWidget = (boolean) newValue;
+                    lbm.sendBroadcast(new Intent(ACTION_WIDGET_PREFERENCE_UPDATED)
+                            .putExtra(EXTRA_ADD_WIDGET, addWidget)
+                            .putExtra(EXTRA_WIDGET_PREF_KEY, preference.getKey()));
+                    return true;
+                }
+            };
+
+            final TowerWidgets[] widgets = TowerWidgets.values();
+            for(TowerWidgets widget: widgets){
+                final CheckBoxPreference widgetPref = new CheckBoxPreference(activity);
+                widgetPref.setKey(widget.getPrefKey());
+                widgetPref.setTitle(widget.getLabelResId());
+                widgetPref.setSummary(widget.getDescriptionResId());
+                widgetPref.setChecked(dpPrefs.isWidgetEnabled(widget));
+                widgetPref.setOnPreferenceChangeListener(widgetPrefChangeListener);
+
+                widgetsPref.addPreference(widgetPref);
+            }
+        }
     }
 
     private void setupMapProviders(){
@@ -375,31 +412,98 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setupAltitudePreferenceHelper(DroidPlannerPrefs.PREF_ALT_DEFAULT_VALUE, dpPrefs.getDefaultAltitude());
     }
 
-    private void setupAltitudePreferenceHelper(final String prefKey, int defaultAlt){
+    private Context getContext(){
+        final Activity activity = getActivity();
+        if(activity == null)
+            return null;
+
+        return activity.getApplicationContext();
+    }
+
+    private void setupAltitudePreferenceHelper(final String prefKey, double defaultAlt){
         final LengthUnitProvider lup = getLengthUnitProvider();
 
         final EditTextPreference altPref = (EditTextPreference) findPreference(prefKey);
         if(altPref != null){
-            final LengthUnit altValue = lup.boxBaseValueToTarget(defaultAlt);
+            final LengthUnit defaultAltValue = lup.boxBaseValueToTarget(defaultAlt);
 
-            altPref.setText(String.valueOf((int) altValue.getValue()));
-            altPref.setSummary(altValue.toString());
+            altPref.setText(String.format(Locale.US, "%2.1f", defaultAltValue.getValue()));
+            altPref.setSummary(defaultAltValue.toString());
 
             altPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    final Context context = getContext();
+
                     try {
-                        final int altValue = Integer.parseInt(newValue.toString());
+                        final double altValue = Double.parseDouble(newValue.toString());
 
                         final LengthUnitProvider lup = getLengthUnitProvider();
                         final LengthUnit newAltValue = lup.boxTargetValue(altValue);
 
-                        altPref.setText(String.valueOf((int) newAltValue.getValue()));
-                        altPref.setSummary(newAltValue.toString());
+                        final double altPrefValue = lup.fromTargetToBase(newAltValue).getValue();
 
-                        dpPrefs.setAltitudePreference(prefKey, (int) lup.fromTargetToBase(newAltValue).getValue());
+                        final double maxAltValue = dpPrefs.getMaxAltitude();
+                        final double minAltValue = dpPrefs.getMinAltitude();
+                        final double defaultAltValue = dpPrefs.getDefaultAltitude();
+
+                        final String key = preference.getKey();
+                        boolean isValueInvalid = false;
+                        String valueUpdateMsg = "";
+                        switch(key){
+                            case DroidPlannerPrefs.PREF_ALT_MIN_VALUE:
+                                //Compare the new altitude value with the max altitude value
+
+                                valueUpdateMsg = "Min altitude updated!";
+                                if(altPrefValue > defaultAltValue){
+                                    isValueInvalid = true;
+                                    valueUpdateMsg = "Min altitude cannot be greater than the default altitude";
+                                }
+                                else if(altPrefValue > maxAltValue){
+                                    isValueInvalid = true;
+                                    valueUpdateMsg = "Min altitude cannot be greater than the max altitude";
+                                }
+                                break;
+
+                            case DroidPlannerPrefs.PREF_ALT_MAX_VALUE:
+                                valueUpdateMsg = "Max altitude updated!";
+                                if(altPrefValue < defaultAltValue){
+                                    isValueInvalid = true;
+                                    valueUpdateMsg = "Max altitude cannot be less than the default altitude";
+                                }
+                                else if(altPrefValue < minAltValue){
+                                    isValueInvalid = true;
+                                    valueUpdateMsg = "Max altitude cannot be less than the min altitude";
+                                }
+                                break;
+
+                            case DroidPlannerPrefs.PREF_ALT_DEFAULT_VALUE:
+                                valueUpdateMsg = "Default altitude updated!";
+                                if(altPrefValue > maxAltValue){
+                                    isValueInvalid = true;
+                                    valueUpdateMsg = "Default altitude cannot be greater than the max altitude";
+                                }
+                                else if(altPrefValue < minAltValue){
+                                    isValueInvalid = true;
+                                    valueUpdateMsg = "Default altitude cannot be less than the min altitude";
+                                }
+                                break;
+                        }
+
+                        if(!isValueInvalid){
+                            altPref.setText(String.format(Locale.US, "%2.1f", newAltValue.getValue()));
+                            altPref.setSummary(newAltValue.toString());
+
+                            dpPrefs.setAltitudePreference(prefKey, altPrefValue);
+                        }
+
+                        if(context != null){
+                            Toast.makeText(context, valueUpdateMsg, Toast.LENGTH_LONG).show();
+                        }
                     } catch (NumberFormatException e) {
-
+                        if(context != null){
+                            Toast.makeText(context, "Invalid altitude value: " + newValue, Toast.LENGTH_LONG).show();
+                        }
                     }
                     return false;
                 }

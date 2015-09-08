@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.SearchView;
@@ -16,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -37,16 +39,14 @@ import org.droidplanner.android.fragments.helpers.ApiListenerListFragment;
 import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.file.IO.ParameterWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.widgets.adapterViews.ParamsAdapter;
-import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
+import org.droidplanner.android.view.adapterViews.ParamsAdapter;
+import org.droidplanner.android.view.adapterViews.ParamsAdapterItem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-public class ParamsFragment extends ApiListenerListFragment {
-
-    static final String TAG = ParamsFragment.class.getSimpleName();
+public class ParamsFragment extends ApiListenerListFragment implements SupportEditInputDialog.Listener {
 
     public static final String ADAPTER_ITEMS = ParamsFragment.class.getName() + ".adapter.items";
     private static final String PREF_PARAMS_FILTER_ON = "pref_params_filter_on";
@@ -56,6 +56,7 @@ public class ParamsFragment extends ApiListenerListFragment {
 
     private final static IntentFilter intentFilter = new IntentFilter();
     public static final int SNACKBAR_HEIGHT = 48;
+    private static final String PARAMETERS_FILENAME_DIALOG_TAG = "Parameters filename";
 
     static {
         intentFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_STARTED);
@@ -163,7 +164,7 @@ public class ParamsFragment extends ApiListenerListFragment {
                     }
 
                 } else {
-                    if(snackbar != null) {
+                    if (snackbar != null) {
                         snackbar.dismiss();
                         snackbar = null;
                     }
@@ -200,7 +201,10 @@ public class ParamsFragment extends ApiListenerListFragment {
         searchParams.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchButton.callOnClick();
+                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
+                    searchButton.performClick();
+                else
+                    searchButton.callOnClick();
             }
         });
 
@@ -208,7 +212,7 @@ public class ParamsFragment extends ApiListenerListFragment {
         mLoadingProgress.setVisibility(View.GONE);
 
         View space = new View(getActivity().getApplicationContext());
-        space.setLayoutParams(new ViewGroup.LayoutParams(0, (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, SNACKBAR_HEIGHT, getResources().getDisplayMetrics())));
+        space.setLayoutParams(new AbsListView.LayoutParams(0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, SNACKBAR_HEIGHT, getResources().getDisplayMetrics())));
         getListView().addFooterView(space);
     }
 
@@ -359,36 +363,37 @@ public class ParamsFragment extends ApiListenerListFragment {
     }
 
     private void saveParametersToFile() {
-        final Context context = getActivity().getApplicationContext();
         final String defaultFilename = TextUtils.isEmpty(openedParamsFilename)
                 ? FileStream.getParameterFilename("Parameters-")
                 : openedParamsFilename;
 
-        final SupportEditInputDialog dialog = SupportEditInputDialog.newInstance(getString(R.string
-                        .label_enter_filename),
-                defaultFilename,
-                new SupportEditInputDialog.Listener() {
-                    @Override
-                    public void onOk(CharSequence input) {
-                        final List<Parameter> parameters = new ArrayList<Parameter>();
-                        for (int i = 0; i < adapter.getCount(); i++) {
-                            parameters.add(adapter.getItem(i).getParameter());
-                        }
+        final SupportEditInputDialog dialog = SupportEditInputDialog.newInstance(PARAMETERS_FILENAME_DIALOG_TAG,
+                getString(R.string.label_enter_filename), defaultFilename, true);
 
-                        if (parameters.size() > 0) {
-                            ParameterWriter parameterWriter = new ParameterWriter(parameters);
-                            if (parameterWriter.saveParametersToFile(input.toString())) {
-                                Toast.makeText(getActivity(), R.string.parameters_saved, Toast.LENGTH_SHORT).show();
-                            }
-                        }
+        dialog.show(getChildFragmentManager(), PARAMETERS_FILENAME_DIALOG_TAG);
+    }
+
+    @Override
+    public void onOk(String dialogTag, CharSequence input) {
+        switch(dialogTag){
+            case PARAMETERS_FILENAME_DIALOG_TAG:
+                final List<Parameter> parameters = new ArrayList<Parameter>();
+                for (int i = 0; i < adapter.getCount(); i++) {
+                    parameters.add(adapter.getItem(i).getParameter());
+                }
+
+                if (parameters.size() > 0) {
+                    ParameterWriter parameterWriter = new ParameterWriter(parameters);
+                    if (parameterWriter.saveParametersToFile(input.toString())) {
+                        Toast.makeText(getActivity(), R.string.parameters_saved, Toast.LENGTH_SHORT).show();
                     }
+                }
+                break;
+        }
+    }
 
-                    @Override
-                    public void onCancel() {
-                    }
-                });
-
-        dialog.show(getChildFragmentManager(), "Parameters filename");
+    @Override
+    public void onCancel(String dialogTag) {
     }
 
     private void loadAdapter(List<Parameter> parameters, boolean isUpdate) {

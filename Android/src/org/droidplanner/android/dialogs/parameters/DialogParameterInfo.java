@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.droidplanner.android.R;
-import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
+import org.droidplanner.android.view.adapterViews.ParamsAdapterItem;
 
 import android.content.Context;
 import android.content.DialogInterface;

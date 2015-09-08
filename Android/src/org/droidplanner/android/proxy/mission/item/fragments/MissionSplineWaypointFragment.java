@@ -10,9 +10,9 @@ import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
 import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
+import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.view.spinnerWheel.adapters.LengthWheelAdapter;
+import org.droidplanner.android.view.spinnerWheel.adapters.NumericWheelAdapter;
 
 /**
  * This class renders the detail view for a spline waypoint mission item.

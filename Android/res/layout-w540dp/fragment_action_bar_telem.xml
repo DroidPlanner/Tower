@@ -47,7 +47,7 @@
             android:src="@drawable/ic_navigation_grey_700_18dp"
             android:scaleType="fitCenter"/>
 
-        <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
+        <org.droidplanner.android.view.spinners.SpinnerSelfSelect
             android:id="@+id/bar_flight_mode"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
@@ -68,9 +68,9 @@
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_signal_0_bar_24dp"
+            android:drawableLeft="@drawable/ic_signal_cellular_null_grey_700_18dp"
+            android:drawableStart="@drawable/ic_signal_cellular_null_grey_700_18dp"
             android:drawablePadding="@dimen/info_bar_drawable_padding"
-            android:drawableStart="@drawable/ic_signal_0_bar_24dp"
             android:text="@string/empty_content"
             android:layout_gravity="center"
             android:textSize="@dimen/info_bar_text_size"

@@ -35,22 +35,22 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <org.droidplanner.android.widgets.button.RadioButtonCenter
+        <org.droidplanner.android.view.button.RadioButtonCenter
             android:id="@+id/editor_tools_marker"
             style="@style/editorButton"
             android:button="@drawable/ic_pin_drop_grey_700_24dp" />
 
-        <org.droidplanner.android.widgets.button.RadioButtonCenter
+        <org.droidplanner.android.view.button.RadioButtonCenter
             android:id="@+id/editor_tools_draw"
             style="@style/editorButton"
             android:button="@drawable/ic_gesture_grey_700_24dp" />
 
-        <org.droidplanner.android.widgets.button.RadioButtonCenter
+        <org.droidplanner.android.view.button.RadioButtonCenter
             android:id="@+id/editor_tools_selector"
             style="@style/editorButton"
             android:button="@drawable/ic_tab_unselected_grey_700_24dp" />
 
-        <org.droidplanner.android.widgets.button.RadioButtonCenter
+        <org.droidplanner.android.view.button.RadioButtonCenter
             android:id="@+id/editor_tools_trash"
             style="@style/editorButton.Trash"
             android:button="@drawable/ic_delete_grey_700_24dp" />

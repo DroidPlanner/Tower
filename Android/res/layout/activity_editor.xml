@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_gesture_map"/>
 
-    <org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout
+    <org.droidplanner.android.view.FitsSystemWindowsRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
@@ -48,8 +48,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             layout="@layout/button_my_location"
-            android:layout_alignRight="@+id/actionbar_container"
-            android:layout_alignEnd="@+id/actionbar_container"
+            android:layout_alignLeft="@+id/actionbar_container"
+            android:layout_alignStart="@+id/actionbar_container"
             android:layout_below="@+id/editorInfoWindow"
             android:layout_alignWithParentIfMissing="true"/>
 
@@ -61,6 +61,6 @@
             tools:layout="@layout/fragment_editor_list"
             android:layout_alignParentBottom="true"
             />
-    </org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout>
+    </org.droidplanner.android.view.FitsSystemWindowsRelativeLayout>
 
 </RelativeLayout>

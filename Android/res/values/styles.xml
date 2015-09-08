@@ -453,6 +453,16 @@
         <item name="android:layout_marginBottom">4dp</item>
     </style>
 
+    <style name="mapFAB">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="backgroundTint">@android:color/white</item>
+        <item name="fabSize">mini</item>
+        <item name="elevation">6dp</item>
+        <item name="borderWidth">0dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+    </style>
+
     <style name="Telemetry" />
 
     <style name="Telemetry.Entry" >
@@ -478,6 +488,26 @@
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@android:color/secondary_text_light</item>
+    </style>
+
+    <style name="EkfStatus" />
+
+    <style name="EkfStatus.Flag" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">start|center_vertical</item>
+    </style>
+
+    <style name="EkfStatus.Flag.Title">
+        <item name="android:layout_marginTop">10dp</item>
+    </style>
+
+    <style name="EkfStatus.Flag.Entry">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:drawableEnd">@drawable/ic_help_orange_500_24dp</item>
+        <item name="android:drawableRight">@drawable/ic_help_orange_500_24dp</item>
     </style>
 
 </resources>

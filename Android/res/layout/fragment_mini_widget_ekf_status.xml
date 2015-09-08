@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="3dp">
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/ekf_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/label_ekf"
+        android:textColor="@color/greyText"
+        android:textStyle="bold"
+        tools:textColor="@android:color/holo_green_dark" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="1dp"
+        android:background="@color/light_grey" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*">
+
+        <TableRow
+            android:layout_marginTop="3dp">
+            <TextView
+                android:id="@+id/velocity_var_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/grey_circle_10dp"
+                android:gravity="center"
+                android:text="@string/label_velocity_var_abbrev" />
+
+
+            <TextView
+                android:id="@+id/mag_var_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/grey_circle_10dp"
+                android:gravity="center"
+                android:text="@string/label_mag_var_abbrev" />
+
+            <TextView
+                android:id="@+id/terrain_var_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/grey_circle_10dp"
+                android:gravity="center"
+                android:text="@string/label_terrain_var_abbrev" />
+
+        </TableRow>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_margin="1dp"
+            android:background="@color/light_grey" />
+
+        <TableRow
+            android:layout_marginTop="3dp">
+
+            <TextView
+                android:id="@+id/horizontal_position_var_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/grey_circle_10dp"
+                android:gravity="center"
+                android:text="@string/label_horizontal_position_var_abbrev" />
+
+            <TextView
+                android:id="@+id/vertical_position_var_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/grey_circle_10dp"
+                android:gravity="center"
+                android:text="@string/label_vertical_position_var_abbrev" />
+        </TableRow>
+    </TableLayout>
+
+
+</LinearLayout>

@@ -32,7 +32,6 @@
         battery life)</string>
     <string name="pref_lock_screen_orientation">Lock Screen Orientation</string>
     <string name="pref_lock_screen_orientation_summary">Locks screen to the orientation which is present when connecting</string>
-    <string name="pref_flight_data">Flight Data</string>
     <string name="pref_advanced">Advanced</string>
     <string name="pref_map_type">Map Type</string>
     <string name="pref_map_type_summary">Which type of map to use</string>
@@ -297,8 +296,6 @@
     <string name="pref_tts_periodic_airspeed">Airspeed</string>
     <string name="pref_tts_periodic_airspeed_summary">Read airspeed.</string>
     <string name="pref_title_tts_warnings">Warnings</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded">400ft. Exceeded</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">In many situations it is illegal to fly above 400ft.</string>
     <string name="pref_tts_warning_low_signal_strength">Low Signal Strength</string>
     <string name="pref_tts_warning_low_signal_strength_summary">Warns when connection to drone is bad.</string>
     <string name="pref_tts_warning_lost_signal">Connection Status</string>
@@ -412,7 +409,7 @@
     <string name="pref_map_rotation_title">Enable map rotation</string>
     <string name="pref_map_rotation_summary">Check to enable the ability to rotate the map.</string>
     <string name="pref_advance_menu_title">Advanced Menu Options</string>
-    <string name="pref_enable_kill_switch_summary">If enabled, a Kill Switch option will appear in the menu, allowing immediate vehicle disarming.</string>
+    <string name="pref_enable_kill_switch_summary">If enabled, a Kill Switch option will appear in the menu, allowing immediate vehicle disarming. Only supported on multi-rotor vehicles</string>
     <string name="pref_enable_kill_switch_title">Enable Kill Switch</string>
     <string name="pref_enable_udp_server_title">Enable UDP server ping</string>
     <string name="pref_udp_server_ping_summary">Enable to allow the app to periodically ping the udp server.</string>
@@ -464,5 +461,43 @@
     <string name="menu_kill_switch">Kill Switch</string>
     <string name="label_clear_selected">Clear selected</string>
     <string name="unsaved_param_warning">You have unsaved changes</string>
+    <string name="error_kill_switch_unsupported">KILL SWITCH command is not supported!</string>
+    <string name="error_kill_switch_failed">KILL SWITCH command failed!</string>
+    <string name="pref_max_alt_warning_title">Max altitude exceeded warning</string>
+    <string name="pref_max_alt_warning_summary">Enable for repeated warnings when flying above the set max altitude.</string>
+    <string name="mission_upload_title">Mission Upload</string>
+    <string name="mission_upload_message">Do you want to append a Takeoff and RTL to your mission?</string>
+    <string name="label_skip">Skip</string>
+
+    <!-- Telemetry widget labels -->
+    <string name="label_widget_solo_video">Solo Video</string>
+    <string name="description_widget_solo_video">Displays the video stream from a connected Solo vehicle</string>
+    <string name="label_widget_telemetry_info">Telemetry Data</string>
+    <string name="description_widget_telemetry_info">Displays vehicle telemetry info</string>
+    <string name="label_widget_ekf_status">EKF Status</string>
+    <string name="description_widget_ekf_status">Displays the vehicle EKF status</string>
+    <string name="pref_tower_widgets_title">Widgets Preferences</string>
+    <string name="pref_tower_widgets_category">Tower Widgets</string>
+    <string name="pref_widgets_list_category">Widgets list</string>
+    <string name="label_ekf">ekf</string>
+    <string name="label_velocity_var_abbrev">vel</string>
+    <string name="label_horizontal_position_var_abbrev">h.pos</string>
+    <string name="label_vertical_position_var_abbrev">v.pos</string>
+    <string name="label_mag_var_abbrev">mag</string>
+    <string name="label_terrain_var_abbrev">ter</string>
+    <string name="label_attitude_estimate">Attitude estimate</string>
+    <string name="label_flags">Flags</string>
+    <string name="label_constant_position_mode">Constant position mode</string>
+    <string name="label_velocity">Velocity</string>
+    <string name="label_velocity_estimate">Vertical estimate</string>
+    <string name="label_horizontal_estimate">Horizontal estimate</string>
+    <string name="label_horizontal_position">Horizontal Position</string>
+    <string name="label_relative_estimate">Relative estimate</string>
+    <string name="label_absolute_estimate">Absolute estimate</string>
+    <string name="label_above_ground_estimate">Above ground estimate</string>
+    <string name="label_vertical_position">Vertical Position</string>
+    <string name="label_absolute_predicted_estimate">Absolute predicted estimate</string>
+    <string name="label_relative_predicted_estimate">Relative predicted estimate</string>
+    <string name="error_no_video">no video available</string>
 
 </resources>

@@ -6,6 +6,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -86,7 +87,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
         azimuthView = (TextView) findViewById(R.id.azimuthView);
         altitudeView = (TextView) findViewById(R.id.altitudeView);
 
-        final ImageButton zoomToFit = (ImageButton) findViewById(R.id.zoom_to_fit_button);
+        final FloatingActionButton zoomToFit = (FloatingActionButton) findViewById(R.id.zoom_to_fit_button);
         zoomToFit.setVisibility(View.VISIBLE);
         zoomToFit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +98,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
             }
         });
 
-        ImageButton mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
+        FloatingActionButton mGoToMyLocation = (FloatingActionButton) findViewById(R.id.my_location_button);
         mGoToMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,7 +113,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
             }
         });
 
-        ImageButton mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
+        FloatingActionButton mGoToDroneLocation = (FloatingActionButton) findViewById(R.id.drone_location_button);
         mGoToDroneLocation.setVisibility(View.GONE);
 
         // clear prev state if this is a fresh start

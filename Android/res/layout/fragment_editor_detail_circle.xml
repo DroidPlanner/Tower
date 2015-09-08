@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/missionItemDetailLayout"
     >
-    <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
+    <org.droidplanner.android.view.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -104,21 +104,21 @@
 				android:background="@drawable/mode_desc_rectangle"
 				android:text="@string/waypointInfo_LoiterN" />
 
-            <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+            <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
                 android:id="@+id/altitudePicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/altitude_label"
                 style="@style/missionItemDetailCard"/>
 
-            <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+            <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
                 android:id="@+id/loiterRadiusPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/circle_radius"
                 style="@style/missionItemDetailCard"/>
 
-            <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+            <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
                 android:id="@+id/loiterTurnPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

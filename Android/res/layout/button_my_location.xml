@@ -1,39 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="wrap_content"
     android:layout_width="wrap_content"
     android:orientation="vertical"
-    android:id="@+id/location_button_container"
-    >
+    android:id="@+id/location_button_container">
 
-    <ImageButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/my_location_button"
-        style="@style/mapButton"
+        style="@style/mapFAB"
         android:src="@drawable/ic_location"
         />
 
-    <ImageButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/drone_location_button"
-        style="@style/mapButton"
+        style="@style/mapFAB"
         android:src="@drawable/ic_navigate"
         android:scaleType="centerInside"
         />
 
-    <ImageButton
+    <android.support.design.widget.FloatingActionButton
+        style="@style/mapFAB"
         android:id="@+id/zoom_to_fit_button"
-        style="@style/mapButton"
         android:src="@drawable/ic_expand"
         android:visibility="gone"
-        tools:visibility="visible"
-        android:contentDescription="@string/zoom_fit"/>
+        tools:visibility="visible"/>
 
-    <ImageButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/toggle_action_drawer"
         android:visibility="gone"
         tools:visibility="visible"
-        style="@style/mapButton"
+        style="@style/mapFAB"
         android:src="@drawable/ic_flip"
         />
 </LinearLayout>

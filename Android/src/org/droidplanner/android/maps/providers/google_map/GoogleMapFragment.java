@@ -271,6 +271,33 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     private String mapboxId;
     private String mapboxAccessToken;
 
+    private final OnMapReadyCallback loadCameraPositionTask = new OnMapReadyCallback() {
+        @Override
+        public void onMapReady(GoogleMap googleMap) {
+            final SharedPreferences settings = mAppPrefs.prefs;
+
+            final CameraPosition.Builder camera = new CameraPosition.Builder();
+            camera.bearing(settings.getFloat(PREF_BEA, DEFAULT_BEARING));
+            camera.tilt(settings.getFloat(PREF_TILT, DEFAULT_TILT));
+            camera.zoom(settings.getFloat(PREF_ZOOM, DEFAULT_ZOOM_LEVEL));
+            camera.target(new LatLng(settings.getFloat(PREF_LAT, DEFAULT_LATITUDE),
+                    settings.getFloat(PREF_LNG, DEFAULT_LONGITUDE)));
+
+            googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));
+        }
+    };
+
+    private final OnMapReadyCallback setupMapTask = new OnMapReadyCallback() {
+        @Override
+        public void onMapReady(GoogleMap googleMap) {
+            setupMapUI(googleMap);
+            setupMapOverlay(googleMap);
+            setupMapListeners(googleMap);
+        }
+    };
+
+    private LocalBroadcastManager lbm;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -283,6 +310,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
 
         final FragmentActivity activity = getActivity();
         final Context context = activity.getApplicationContext();
+
+        lbm = LocalBroadcastManager.getInstance(context);
 
         final View view = super.onCreateView(inflater, viewGroup, bundle);
 
@@ -305,9 +334,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
         mGApiClientMgr.start();
 
         mGApiClientMgr.addTask(mRequestLocationUpdateTask);
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
-                .registerReceiver(eventReceiver, eventFilter);
-
+        lbm.registerReceiver(eventReceiver, eventFilter);
         setupMap();
     }
 
@@ -316,8 +343,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
         super.onStop();
 
         mGApiClientMgr.addTask(mRemoveLocationUpdateTask);
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
-                .unregisterReceiver(eventReceiver);
+        lbm.unregisterReceiver(eventReceiver);
 
         mGApiClientMgr.stopSafely();
     }
@@ -404,29 +430,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     }
 
     private void setAutoPanMode(AutoPanMode current, AutoPanMode update) {
-        if (mPanMode.compareAndSet(current, update)) {
-            switch (current) {
-                case DRONE:
-                    LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
-                            .unregisterReceiver(eventReceiver);
-                    break;
-
-                case DISABLED:
-                default:
-                    break;
-            }
-
-            switch (update) {
-                case DRONE:
-                    LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver
-                            (eventReceiver, eventFilter);
-                    break;
-
-                case DISABLED:
-                default:
-                    break;
-            }
-        }
+        mPanMode.compareAndSet(current, update);
     }
 
     @Override
@@ -723,7 +727,11 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
      */
     @Override
     public void saveCameraPosition() {
-        CameraPosition camera = getMap().getCameraPosition();
+        final GoogleMap googleMap = getMap();
+        if(googleMap == null)
+            return;
+
+        CameraPosition camera = googleMap.getCameraPosition();
         mAppPrefs.prefs.edit()
                 .putFloat(PREF_LAT, (float) camera.target.latitude)
                 .putFloat(PREF_LNG, (float) camera.target.longitude)
@@ -734,35 +742,14 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
 
     @Override
     public void loadCameraPosition() {
-        getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                final SharedPreferences settings = mAppPrefs.prefs;
-
-                final CameraPosition.Builder camera = new CameraPosition.Builder();
-                camera.bearing(settings.getFloat(PREF_BEA, DEFAULT_BEARING));
-                camera.tilt(settings.getFloat(PREF_TILT, DEFAULT_TILT));
-                camera.zoom(settings.getFloat(PREF_ZOOM, DEFAULT_ZOOM_LEVEL));
-                camera.target(new LatLng(settings.getFloat(PREF_LAT, DEFAULT_LATITUDE),
-                        settings.getFloat(PREF_LNG, DEFAULT_LONGITUDE)));
-
-                googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));
-            }
-        });
+        getMapAsync(loadCameraPositionTask);
     }
 
     private void setupMap() {
         // Make sure the map is initialized
         MapsInitializer.initialize(getActivity().getApplicationContext());
 
-        getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                setupMapUI(googleMap);
-                setupMapOverlay(googleMap);
-                setupMapListeners(googleMap);
-            }
-        });
+        getMapAsync(setupMapTask);
     }
 
     @Override

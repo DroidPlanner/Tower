@@ -57,7 +57,7 @@ public class AccountActivity extends DrawerNavigationUI implements AccountLoginL
         if (!(currentFragment instanceof DroneshareLoginFragment)) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.droneshare_account, new DroneshareLoginFragment())
-                    .commit();
+                    .commitAllowingStateLoss();
         }
     }
 
