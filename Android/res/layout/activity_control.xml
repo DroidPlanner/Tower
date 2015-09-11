@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/widget_view"
-        android:layout_below="@+id/actionbar_container"></FrameLayout>
+        android:layout_below="@+id/actionbar_container"/>
 
     <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
         android:layout_alignParentTop="true"

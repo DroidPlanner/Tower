@@ -101,8 +101,9 @@
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop"
             android:label="@string/menu_drone_setup"/>
+
         <activity android:name=".activities.ControlActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="userLandscape"
             android:label="@string/control"/>
 
         <activity
