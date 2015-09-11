@@ -324,8 +324,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             remFadeView.setText("RemFade: " + emptyString);
         }
         else{
-            final int signalStrength = MathUtils.getSignalStrength(droneSignal.getFadeMargin(),
-                    droneSignal.getRemFadeMargin());
+            final int signalStrength = (int) droneSignal.getSignalStrength();
             final int signalIcon;
             if (signalStrength >= 100)
                 signalIcon = R.drawable.ic_signal_cellular_4_bar_grey_700_18dp;
