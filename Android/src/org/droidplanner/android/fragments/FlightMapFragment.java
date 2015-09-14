@@ -12,11 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.o3dr.android.client.apis.MissionApi;
-import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
@@ -29,8 +25,6 @@ import org.droidplanner.android.dialogs.GuidedDialog;
 import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
-import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 
@@ -113,8 +107,11 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
     @Override
     public boolean setAutoPanMode(AutoPanMode target) {
         // Update the map panning preferences.
-        mAppPrefs.setAutoPanMode(target);
-        mMapFragment.selectAutoPanMode(target);
+        if (mAppPrefs != null)
+            mAppPrefs.setAutoPanMode(target);
+
+        if (mMapFragment != null)
+            mMapFragment.selectAutoPanMode(target);
         return true;
     }
 

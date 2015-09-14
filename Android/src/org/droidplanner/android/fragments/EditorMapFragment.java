@@ -135,12 +135,14 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 		final List<LatLong> visibleCoords = missionProxy == null ? new ArrayList<LatLong>() : missionProxy.getVisibleCoords();
 
 		// add home coord if visible
-        Home home = drone.getAttribute(AttributeType.HOME);
-        if(home != null && home.isValid()) {
-            final LatLong homeCoord = home.getCoordinate();
-            if (homeCoord.getLongitude() != 0 && homeCoord.getLatitude() != 0)
-                visibleCoords.add(homeCoord);
-        }
+		if(drone != null) {
+			Home home = drone.getAttribute(AttributeType.HOME);
+			if (home != null && home.isValid()) {
+				final LatLong homeCoord = home.getCoordinate();
+				if (homeCoord.getLongitude() != 0 && homeCoord.getLatitude() != 0)
+					visibleCoords.add(homeCoord);
+			}
+		}
 
 		if (!visibleCoords.isEmpty())
 			zoomToFit(visibleCoords);
