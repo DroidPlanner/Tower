@@ -86,7 +86,7 @@
             android:padding="12dp"
             android:text="@string/waypointInfo_DoJump" />
 
-        <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
             android:id="@+id/waypoint_picker"
             style="@style/missionItemDetailCard"
             android:layout_width="match_parent"
@@ -94,13 +94,23 @@
             android:orientation="vertical"
             android:text="@string/waypoint_label" />
 
-        <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/missionItemDetailCard"
+            android:text="@string/label_repeat_indefinitely"
+            android:id="@+id/repeat_indefinitely_toggle"/>
+
+        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
             android:id="@+id/repeat_picker"
             style="@style/missionItemDetailCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:text="@string/repeat_count"/>
+            android:text="@string/repeat_count"
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
     </LinearLayout>
 

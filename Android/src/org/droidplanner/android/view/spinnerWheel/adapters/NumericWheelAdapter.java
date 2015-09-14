@@ -27,9 +27,6 @@ package org.droidplanner.android.view.spinnerWheel.adapters;
 import android.content.Context;
 import android.text.TextUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Numeric Wheel adapter.
  */
@@ -47,8 +44,6 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter<Integer> {
 
 	// format
 	private String format;
-
-	private Map<Integer, String> valueMap = new HashMap<Integer, String>();
 
 	/**
 	 * Constructor
@@ -112,11 +107,7 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter<Integer> {
 	public CharSequence getItemText(int index) {
 		if (index >= 0 && index < getItemsCount()) {
 			int value = minValue + index;
-			if(valueMap.containsKey(value)){
-				return valueMap.get(value);
-			}else {
-				return format != null ? String.format(format, value) : Integer.toString(value);
-			}
+			return format != null ? String.format(format, value) : Integer.toString(value);
 		}
 		return null;
 	}
@@ -151,7 +142,4 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter<Integer> {
 		return maxValue - minValue + 1;
 	}
 
-	public void addValueMap(int value, String text){
-		valueMap.put(value, text);
-	}
 }

@@ -2,6 +2,8 @@ package org.droidplanner.android.proxy.mission.item.fragments;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
@@ -35,19 +37,38 @@ public class MissionDoJumpFragment extends MissionDetailFragment implements Card
         final MissionProxy missionProxy = getMissionProxy();
         final NumericWheelAdapter adapter = new NumericWheelAdapter(context, R.layout.wheel_text_centered,
                 missionProxy.getFirstWaypoint(), missionProxy.getLastWaypoint(), "%d");
-        final CardWheelHorizontalView<Integer> waypointPicker = (CardWheelHorizontalView) view.findViewById(R.id
-                .waypoint_picker);
+        final CardWheelHorizontalView<Integer> waypointPicker = (CardWheelHorizontalView) view.findViewById(R.id.waypoint_picker);
         waypointPicker.setViewAdapter(adapter);
         waypointPicker.addScrollListener(this);
         waypointPicker.setCurrentValue(item.getWaypoint());
 
-        final NumericWheelAdapter repeatCountAdapter = new NumericWheelAdapter(context, R.layout.wheel_text_centered, -1,
-                2000, "%d");
-        repeatCountAdapter.addValueMap(-1, "inf");
+        final int repeatCount = item.getRepeatCount();
+        final boolean isIndefinite = repeatCount == -1;
+
+        final NumericWheelAdapter repeatCountAdapter = new NumericWheelAdapter(context, R.layout.wheel_text_centered, 0,
+                1337, "%d");
         final CardWheelHorizontalView<Integer> repeatCountPicker = (CardWheelHorizontalView) view.findViewById(R.id.repeat_picker);
         repeatCountPicker.setViewAdapter(repeatCountAdapter);
         repeatCountPicker.addScrollListener(this);
-        repeatCountPicker.setCurrentValue(item.getRepeatCount());
+        repeatCountPicker.setCurrentValue(isIndefinite ? 0 : repeatCount);
+        repeatCountPicker.setVisibility(isIndefinite ? View.GONE : View.VISIBLE);
+
+        final CheckBox indefiniteRepeatCheck = (CheckBox) view.findViewById(R.id.repeat_indefinitely_toggle);
+        indefiniteRepeatCheck.setChecked(isIndefinite);
+        indefiniteRepeatCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                final int newRepeatCount = isChecked ? -1 : repeatCountPicker.getCurrentValue();
+                repeatCountPicker.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+
+                for(MissionItem missionItem : getMissionItems()){
+                    final DoJump item = (DoJump) missionItem;
+                    item.setRepeatCount(newRepeatCount);
+                }
+
+                getMissionProxy().notifyMissionUpdate();
+            }
+        });
     }
 
     @Override
