@@ -127,7 +127,7 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
         final LengthUnitProvider lengthUP = getLengthUnitProvider();
         mAltitudePicker = (CardWheelHorizontalView) view.findViewById(R.id.altitudePicker);
         mAltitudePicker.setViewAdapter(new LengthWheelAdapter(context, R.layout.wheel_text_centered,
-                lengthUP.boxBaseValueToTarget(0), lengthUP.boxBaseValueToTarget(200)));
+                lengthUP.boxBaseValueToTarget(MIN_ALTITUDE), lengthUP.boxBaseValueToTarget(MAX_ALTITUDE)));
 
         areaTextView = (TextView) view.findViewById(id.areaTextView);
         distanceBetweenLinesTextView = (TextView) view.findViewById(id.distanceBetweenLinesTextView);
