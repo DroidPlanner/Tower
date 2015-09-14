@@ -247,6 +247,7 @@
     <string name="telemetry_default_value">0.0</string>
     <string name="climb_rate_label">Climb Rate</string>
     <string name="altitude_label">Altitude</string>
+    <string name="label_pitch">Pitch</string>
     <string name="roi_height_label">ROI Height</string>
     <string name="speed_label">Speed</string>
     <string name="length_label">Length</string>
