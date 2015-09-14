@@ -217,7 +217,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
         @Override
         public void doRun() {
             final LocationRequest locationReq = LocationRequest.create()
-                    .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                     .setFastestInterval(USER_LOCATION_UPDATE_FASTEST_INTERVAL)
                     .setInterval(USER_LOCATION_UPDATE_INTERVAL)
                     .setSmallestDisplacement(USER_LOCATION_UPDATE_MIN_DISPLACEMENT);
