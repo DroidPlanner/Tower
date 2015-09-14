@@ -10,7 +10,7 @@
         android:id="@+id/widget_view"
         android:layout_below="@+id/actionbar_container"/>
 
-    <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
+    <org.droidplanner.android.view.FitsSystemWindowsFrameLayout
         android:layout_alignParentTop="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -20,7 +20,7 @@
         android:fitsSystemWindows="true">
 
         <include layout="@layout/actionbar_toolbar"/>
-    </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
+    </org.droidplanner.android.view.FitsSystemWindowsFrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
