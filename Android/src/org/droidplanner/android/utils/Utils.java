@@ -18,6 +18,9 @@ public class Utils {
 
     public static final String PACKAGE_NAME = "org.droidplanner.android";
 
+	public static final int MIN_DISTANCE = 0; //meter
+	public static final int MAX_DISTANCE = 1000; // meters
+
 	/**
 	 * Used to update the user interface language.
 	 * 
