@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 
+import org.droidplanner.android.fragments.widget.TowerWidgets;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.maps.providers.MapProviderPreferences;
 import org.droidplanner.android.utils.unit.systems.UnitSystem;
@@ -58,8 +59,8 @@ public class DroidPlannerPrefs {
 	private static final String PREF_SPEECH_PERIOD = "tts_periodic_status_period";
 	public static final String DEFAULT_SPEECH_PERIOD = "0";
 
-	public static final String PREF_TTS_CEILING_EXCEEDED = "tts_ceiling_exceeded";
-	public static final boolean DEFAULT_TTS_CEILING_EXCEEDED = true;
+	public static final String PREF_MAX_ALT_WARNING = "pref_max_alt_warning";
+	public static final boolean DEFAULT_MAX_ALT_WARNING = false;
 
 	public static final String PREF_TTS_LOST_SIGNAL = "tts_lost_signal";
 	public static final boolean DEFAULT_TTS_WARNING_LOST_SIGNAL = true;
@@ -101,13 +102,13 @@ public class DroidPlannerPrefs {
 	private static final boolean DEFAULT_ENABLE_UDP_PING = false;
 
 	public static final String PREF_ALT_MAX_VALUE = "pref_alt_max_value";
-	private static final int DEFAULT_MAX_ALT = 200; //meters
+	private static final double DEFAULT_MAX_ALT = 200; //meters
 
 	public static final String PREF_ALT_MIN_VALUE = "pref_alt_min_value";
-	private static final int DEFAULT_MIN_ALT = 0; // meter
+	private static final double DEFAULT_MIN_ALT = 0; // meter
 
 	public static final String PREF_ALT_DEFAULT_VALUE = "pref_alt_default_value";
-	private static final int DEFAULT_ALT = 20; // meters
+	private static final double DEFAULT_ALT = 20; // meters
 
 	public static final String PREF_APP_VERSION = "pref_version";
 
@@ -152,6 +153,8 @@ public class DroidPlannerPrefs {
 
 	public static final String PREF_TTS_PERIODIC_AIRSPEED = "tts_periodic_airspeed";
 	private static final boolean DEFAULT_TTS_PERIODIC_AIRSPEED = true;
+
+	public static final String PREF_TOWER_WIDGETS = "pref_tower_widgets";
 
 	// Public for legacy usage
 	public SharedPreferences prefs;
@@ -394,8 +397,13 @@ public class DroidPlannerPrefs {
 		return Integer.parseInt(prefs.getString(PREF_SPEECH_PERIOD, DEFAULT_SPEECH_PERIOD));
 	}
 
-	public boolean getWarningOn400ftExceeded() {
-		return prefs.getBoolean(PREF_TTS_CEILING_EXCEEDED, DEFAULT_TTS_CEILING_EXCEEDED);
+	public boolean hasExceededMaxAltitude(double currentAltInMeters){
+		final boolean isWarningEnabled = prefs.getBoolean(PREF_MAX_ALT_WARNING, DEFAULT_MAX_ALT_WARNING);
+		if(!isWarningEnabled)
+			return false;
+
+		final double maxAltitude = getMaxAltitude();
+		return currentAltInMeters > maxAltitude;
 	}
 
 	public boolean getWarningOnLostOrRestoredSignal() {
@@ -425,7 +433,7 @@ public class DroidPlannerPrefs {
 	/**
 	 * @return the max altitude in meters
 	 */
-	public int getMaxAltitude(){
+	public double getMaxAltitude(){
 		return getAltitudePreference(PREF_ALT_MAX_VALUE, DEFAULT_MAX_ALT);
 	}
 
@@ -433,28 +441,28 @@ public class DroidPlannerPrefs {
 	/**
 	 * @return the min altitude in meters
 	 */
-	public int getMinAltitude(){
+	public double getMinAltitude(){
 		return getAltitudePreference(PREF_ALT_MIN_VALUE, DEFAULT_MIN_ALT);
 	}
 
 	/**
 	 * @return the default starting altitude in meters
 	 */
-	public int getDefaultAltitude(){
+	public double getDefaultAltitude(){
 		return getAltitudePreference(PREF_ALT_DEFAULT_VALUE, DEFAULT_ALT);
 	}
 
-	public void setAltitudePreference(String prefKey, int altitude) {
+	public void setAltitudePreference(String prefKey, double altitude) {
 		prefs.edit().putString(prefKey, String.valueOf(altitude)).apply();
 	}
 
-	private int getAltitudePreference(String prefKey, int defaultValue) {
+	private double getAltitudePreference(String prefKey, double defaultValue) {
 		final String maxAltValue = prefs.getString(prefKey, null);
 		if(TextUtils.isEmpty(maxAltValue))
 			return defaultValue;
 
 		try {
-			final int maxAlt = Integer.parseInt(maxAltValue);
+			final double maxAlt = Double.parseDouble(maxAltValue);
 			return maxAlt;
 		}catch(Exception e){
 			return defaultValue;
@@ -463,5 +471,9 @@ public class DroidPlannerPrefs {
 
 	public boolean isTtsEnabled() {
 		return prefs.getBoolean(PREF_IS_TTS_ENABLED, DEFAULT_TTS_ENABLED);
+	}
+
+	public boolean isWidgetEnabled(TowerWidgets widget){
+		return prefs.getBoolean(widget.getPrefKey(), widget.isEnabledByDefault());
 	}
 }

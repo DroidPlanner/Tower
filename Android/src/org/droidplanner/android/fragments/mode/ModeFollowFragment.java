@@ -30,8 +30,8 @@ import org.droidplanner.android.fragments.DroneMap;
 import org.droidplanner.android.graphic.map.GuidedScanROIMarkerInfo;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
+import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.view.spinnerWheel.adapters.LengthWheelAdapter;
 
 public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSelectedListener, DroneMap.MapMarkerProvider {
 
@@ -126,7 +126,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
             onFollowTypeUpdate(followType, followState.getParams());
         }
 
-        parentActivity.addMapMarkerProvider(this);
+        parent.addMapMarkerProvider(this);
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
 
@@ -184,7 +184,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
     @Override
     public void onApiDisconnected() {
         super.onApiDisconnected();
-        parentActivity.removeMapMarkerProvider(this);
+        parent.removeMapMarkerProvider(this);
         getBroadcastManager().unregisterReceiver(eventReceiver);
     }
 

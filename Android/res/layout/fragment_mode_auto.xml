@@ -66,7 +66,7 @@
 
     </LinearLayout>
 
-    <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+    <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
         android:id="@+id/waypoint_selector"
         android:orientation="horizontal"
         android:layout_width="match_parent"

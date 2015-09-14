@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <org.droidplanner.android.widgets.AttitudeIndicator
+    <org.droidplanner.android.view.AttitudeIndicator
         android:id="@+id/hudWidget"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />

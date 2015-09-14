@@ -28,7 +28,6 @@
     <string name="pref_keep_screen_bright_summary">勾選以防止螢幕進入休眠狀態(會影響電池使用時間)</string>
     <string name="pref_lock_screen_orientation">鎖定螢幕旋轉</string>
     <string name="pref_lock_screen_orientation_summary">連結無人機時，螢幕會將會鎖定在目前的旋轉方向</string>
-    <string name="pref_flight_data">飛行數據</string>
     <string name="pref_advanced">進階</string>
     <string name="pref_map_type">地圖樣式</string>
     <string name="pref_map_type_summary">使用哪種地圖樣式</string>
@@ -256,8 +255,6 @@
     <string name="pref_tts_periodic_airspeed">空速</string>
     <string name="pref_tts_periodic_airspeed_summary">廣播空速數值。</string>
     <string name="pref_title_tts_warnings">警訊廣播設定</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded">超過 400 英呎</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">在許多的情況下飛行高度超過 400 英呎是非法行為。</string>
     <string name="pref_tts_warning_low_signal_strength">訊號強度偏弱</string>
     <string name="pref_tts_warning_low_signal_strength_summary">當與無人機連線困難時會發出的警告。</string>
     <string name="pref_tts_warning_lost_signal">連線狀態</string>

@@ -19,7 +19,7 @@ import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.utils.ReorderRecyclerView;
-import org.droidplanner.android.widgets.adapterViews.MissionItemListAdapter;
+import org.droidplanner.android.view.adapterViews.MissionItemListAdapter;
 
 import java.util.List;
 

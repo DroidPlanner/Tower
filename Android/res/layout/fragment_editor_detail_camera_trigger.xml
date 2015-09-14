@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/missionItemDetailLayout" >
 
-    <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
+    <org.droidplanner.android.view.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
             android:padding="12dp"
             android:text="@string/waypointInfo_CameraTrigger" />
 
-        <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
             android:id="@+id/picker1"
             style="@style/missionItemDetailCard"
             android:layout_width="match_parent"

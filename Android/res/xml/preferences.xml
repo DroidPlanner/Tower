@@ -15,6 +15,15 @@
         <PreferenceScreen
             android:key="pref_ui"
             android:title="@string/pref_ui" >
+
+            <PreferenceCategory android:title="@string/pref_tower_widgets_category" >
+            <PreferenceScreen
+                android:key="pref_tower_widgets"
+                android:title="@string/pref_tower_widgets_title">
+                <PreferenceCategory android:title="@string/pref_widgets_list_category" />
+            </PreferenceScreen>
+            </PreferenceCategory>
+
             <PreferenceCategory android:title="@string/pref_title_local" >
                 <CheckBoxPreference
                     android:defaultValue="false"
@@ -122,11 +131,6 @@
                 <PreferenceScreen android:title="@string/pref_title_tts_warnings" >
                     <PreferenceCategory android:title="@string/pref_title_tts_warnings" >
 
-                        <CheckBoxPreference
-                            android:defaultValue="true"
-                            android:key="tts_ceiling_exceeded"
-                            android:summary="@string/pref_tts_warning_400ft_ceiling_exceeded_summary"
-                            android:title="@string/pref_tts_warning_400ft_ceiling_exceeded" />
                         <CheckBoxPreference
                             android:defaultValue="false"
                             android:key="tts_low_signal"
@@ -260,22 +264,18 @@
             </PreferenceScreen>
 
             <PreferenceCategory
-                android:key="pref_flight_data"
-                android:title="@string/pref_flight_data" >
+                android:title="@string/pref_alt_title">
 
                 <CheckBoxPreference
                     android:defaultValue="false"
-                    android:key="pref_ui_gps_hdop"
-                    android:summary="@string/pref_ui_gps_hdop_summary"
-                    android:title="@string/pref_ui_gps_hdop_title" />
-            </PreferenceCategory>
-
-            <PreferenceCategory
-                android:title="@string/pref_alt_title">
+                    android:key="pref_max_alt_warning"
+                    android:summary="@string/pref_max_alt_warning_summary"
+                    android:title="@string/pref_max_alt_warning_title"/>
 
                 <EditTextPreference
                     android:gravity="center"
-                    android:inputType="numberSigned"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:selectAllOnFocus="true"
                     android:key="pref_alt_max_value"
                     android:title="@string/pref_max_alt_title"
                     android:persistent="false"
@@ -283,14 +283,16 @@
 
                 <EditTextPreference
                     android:gravity="center"
-                    android:inputType="numberSigned"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:selectAllOnFocus="true"
                     android:key="pref_alt_min_value"
                     android:title="@string/pref_min_alt_title"
                     android:persistent="false"/>
 
                 <EditTextPreference
                     android:gravity="center"
-                    android:inputType="numberSigned"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:selectAllOnFocus="true"
                     android:key="pref_alt_default_value"
                     android:title="@string/pref_default_alt_title"
                     android:persistent="false"/>
@@ -298,7 +300,13 @@
             </PreferenceCategory>
 
             <PreferenceCategory
-                android:title="@string/pref_advance_menu_title">
+                android:title="@string/pref_misc_title">
+
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="pref_ui_gps_hdop"
+                    android:summary="@string/pref_ui_gps_hdop_summary"
+                    android:title="@string/pref_ui_gps_hdop_title" />
 
                 <CheckBoxPreference
                     android:defaultValue="false"

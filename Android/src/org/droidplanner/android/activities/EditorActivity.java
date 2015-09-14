@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.util.TypedValue;
@@ -15,8 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,8 +31,9 @@ import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenMissionDialog;
 import org.droidplanner.android.fragments.EditorListFragment;
 import org.droidplanner.android.fragments.EditorMapFragment;
-import org.droidplanner.android.fragments.EditorToolsFragment;
-import org.droidplanner.android.fragments.EditorToolsFragment.EditorTools;
+import org.droidplanner.android.fragments.account.editor.tool.EditorToolsFragment;
+import org.droidplanner.android.fragments.account.editor.tool.EditorToolsFragment.EditorTools;
+import org.droidplanner.android.fragments.account.editor.tool.EditorToolsImpl;
 import org.droidplanner.android.fragments.helpers.GestureMapFragment;
 import org.droidplanner.android.fragments.helpers.GestureMapFragment.OnPathFinishedListener;
 import org.droidplanner.android.proxy.mission.MissionProxy;
@@ -53,7 +52,9 @@ import java.util.List;
  * user to create and/or modify autonomous missions for the drone.
  */
 public class EditorActivity extends DrawerNavigationUI implements OnPathFinishedListener,
-        EditorToolsFragment.EditorToolListener, MissionDetailFragment.OnMissionDetailListener, OnEditorInteraction, MissionSelection.OnSelectionUpdateListener, OnClickListener, OnLongClickListener {
+        EditorToolsFragment.EditorToolListener, MissionDetailFragment.OnMissionDetailListener,
+        OnEditorInteraction, MissionSelection.OnSelectionUpdateListener, OnClickListener,
+        OnLongClickListener, SupportEditInputDialog.Listener {
 
     private static final double DEFAULT_SPEED = 5; //meters per second.
 
@@ -66,6 +67,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     private static final String EXTRA_OPENED_MISSION_FILENAME = "extra_opened_mission_filename";
 
     private static final IntentFilter eventFilter = new IntentFilter();
+    private static final String MISSION_FILENAME_DIALOG_TAG = "Mission filename";
 
     static {
         eventFilter.addAction(MissionProxy.ACTION_MISSION_PROXY_UPDATE);
@@ -115,8 +117,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
      */
     private String openedMissionFilename;
 
-    private View mLocationButtonsContainer;
-    private ImageButton itemDetailToggle;
+    private FloatingActionButton itemDetailToggle;
     private EditorListFragment editorListFragment;
 
     @Override
@@ -136,20 +137,19 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
         infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
-        mLocationButtonsContainer = findViewById(R.id.location_button_container);
-        final ImageButton zoomToFit = (ImageButton) findViewById(R.id.zoom_to_fit_button);
+        final FloatingActionButton zoomToFit = (FloatingActionButton) findViewById(R.id.zoom_to_fit_button);
         zoomToFit.setVisibility(View.VISIBLE);
         zoomToFit.setOnClickListener(this);
 
-        final ImageButton mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
+        final FloatingActionButton mGoToMyLocation = (FloatingActionButton) findViewById(R.id.my_location_button);
         mGoToMyLocation.setOnClickListener(this);
         mGoToMyLocation.setOnLongClickListener(this);
 
-        final ImageButton mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
+        final FloatingActionButton mGoToDroneLocation = (FloatingActionButton) findViewById(R.id.drone_location_button);
         mGoToDroneLocation.setOnClickListener(this);
         mGoToDroneLocation.setOnLongClickListener(this);
 
-        itemDetailToggle = (ImageButton) findViewById(R.id.toggle_action_drawer);
+        itemDetailToggle = (FloatingActionButton) findViewById(R.id.toggle_action_drawer);
         itemDetailToggle.setOnClickListener(this);
 
         if (savedInstanceState != null) {
@@ -178,13 +178,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             return;
 
         itemDetailToggle.setActivated(isOpened);
-
-        // Update the right margin for the my location button
-        final ViewGroup.MarginLayoutParams marginLp = (ViewGroup.MarginLayoutParams) mLocationButtonsContainer
-                .getLayoutParams();
-        final int rightMargin = isOpened ? marginLp.leftMargin + actionDrawer.getWidth() : marginLp.leftMargin;
-        marginLp.setMargins(marginLp.leftMargin, marginLp.topMargin, rightMargin, marginLp.bottomMargin);
-        mLocationButtonsContainer.requestLayout();
     }
 
     @Override
@@ -313,47 +306,53 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             @Override
             public void waypointFileLoaded(MissionReader reader) {
                 openedMissionFilename = getSelectedFilename();
-                missionProxy.readMissionFromFile(reader);
-                gestureMapFragment.getMapFragment().zoomToFit();
+
+                if(missionProxy != null) {
+                    missionProxy.readMissionFromFile(reader);
+                    gestureMapFragment.getMapFragment().zoomToFit();
+                }
             }
         };
         missionDialog.openDialog(this);
     }
 
-    private void saveMissionFile() {
+    @Override
+    public void onOk(String dialogTag, CharSequence input) {
         final Context context = getApplicationContext();
+
+        switch (dialogTag) {
+            case MISSION_FILENAME_DIALOG_TAG:
+                if (missionProxy.writeMissionToFile(input.toString())) {
+                    Toast.makeText(context, R.string.file_saved_success, Toast.LENGTH_SHORT)
+                            .show();
+
+                    final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                            .setCategory(GAUtils.Category.MISSION_PLANNING)
+                            .setAction("Mission saved to file")
+                            .setLabel("Mission items count");
+                    GAUtils.sendEvent(eventBuilder);
+
+                    break;
+                }
+
+                Toast.makeText(context, R.string.file_saved_error, Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    @Override
+    public void onCancel(String dialogTag) {
+    }
+
+    private void saveMissionFile() {
         final String defaultFilename = TextUtils.isEmpty(openedMissionFilename)
                 ? FileStream.getWaypointFilename("waypoints")
                 : openedMissionFilename;
 
-        final SupportEditInputDialog dialog = SupportEditInputDialog.newInstance(getString(R.string
-                        .label_enter_filename),
-                defaultFilename, new SupportEditInputDialog.Listener() {
-                    @Override
-                    public void onOk(CharSequence input) {
-                        if (missionProxy.writeMissionToFile(input.toString())) {
-                            Toast.makeText(context, R.string.file_saved_success, Toast.LENGTH_SHORT)
-                                    .show();
+        final SupportEditInputDialog dialog = SupportEditInputDialog.newInstance(MISSION_FILENAME_DIALOG_TAG,
+                getString(R.string.label_enter_filename), defaultFilename, true);
 
-                            final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                                    .setCategory(GAUtils.Category.MISSION_PLANNING)
-                                    .setAction("Mission saved to file")
-                                    .setLabel("Mission items count");
-                            GAUtils.sendEvent(eventBuilder);
-
-                            return;
-                        }
-
-                        Toast.makeText(context, R.string.file_saved_error, Toast.LENGTH_SHORT)
-                                .show();
-                    }
-
-                    @Override
-                    public void onCancel() {
-                    }
-                });
-
-        dialog.show(getSupportFragmentManager(), "Mission filename");
+        dialog.show(getSupportFragmentManager(), MISSION_FILENAME_DIALOG_TAG);
     }
 
     @Override
@@ -387,7 +386,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
     @Override
     public void onMapClick(LatLong point) {
-        EditorToolsFragment.EditorToolsImpl toolImpl = getToolImpl();
+        EditorToolsImpl toolImpl = getToolImpl();
         toolImpl.onMapClick(point);
     }
 
@@ -395,7 +394,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         return editorToolsFragment.getTool();
     }
 
-    public EditorToolsFragment.EditorToolsImpl getToolImpl() {
+    public EditorToolsImpl getToolImpl() {
         return editorToolsFragment.getToolImpl();
     }
 
@@ -426,7 +425,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     }
 
     private void setupTool() {
-        final EditorToolsFragment.EditorToolsImpl toolImpl = getToolImpl();
+        final EditorToolsImpl toolImpl = getToolImpl();
         toolImpl.setup();
         editorListFragment.enableDeleteMode(toolImpl.getEditorTools() == EditorTools.TRASH);
     }
@@ -486,7 +485,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     public void onPathFinished(List<LatLong> path) {
         final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
         List<LatLong> points = planningMapFragment.projectPathIntoMap(path);
-        EditorToolsFragment.EditorToolsImpl toolImpl = getToolImpl();
+        EditorToolsImpl toolImpl = getToolImpl();
         toolImpl.onPathFinished(points);
     }
 
@@ -524,7 +523,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     public void onItemClick(MissionItemProxy item, boolean zoomToFit) {
         if (missionProxy == null) return;
 
-        EditorToolsFragment.EditorToolsImpl toolImpl = getToolImpl();
+        EditorToolsImpl toolImpl = getToolImpl();
         toolImpl.onListItemClick(item);
 
         if (zoomToFit) {
@@ -554,7 +553,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
     @Override
     public void onSelectionUpdate(List<MissionItemProxy> selected) {
-        EditorToolsFragment.EditorToolsImpl toolImpl = getToolImpl();
+        EditorToolsImpl toolImpl = getToolImpl();
         toolImpl.onSelectionUpdate(selected);
 
         final boolean isEmpty = selected.isEmpty();

@@ -34,8 +34,8 @@ import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.widgets.spinners.ModeAdapter;
-import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
+import org.droidplanner.android.view.spinners.ModeAdapter;
+import org.droidplanner.android.view.spinners.SpinnerSelfSelect;
 
 import java.util.List;
 import java.util.Locale;
@@ -275,7 +275,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final boolean isDroneConnected = drone.isConnected();
         final int droneType;
         if (isDroneConnected) {
-            flightModeIcon.setImageResource(R.drawable.ic_navigation_green_600_18dp);
+            flightModeIcon.setImageResource(R.drawable.ic_navigation_light_blue_a400_18dp);
             Type type = drone.getAttribute(AttributeType.TYPE);
             droneType = type.getDroneType();
         } else {
@@ -313,7 +313,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final Signal droneSignal = drone.getAttribute(AttributeType.SIGNAL);
         if(!drone.isConnected() || !droneSignal.isValid()){
             signalTelem.setText(emptyString);
-            signalTelem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_signal_0_bar_24dp,
+            signalTelem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_signal_cellular_null_grey_700_18dp,
                     0, 0, 0);
 
             rssiView.setText("RSSI: " + emptyString);
@@ -324,21 +324,18 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             remFadeView.setText("RemFade: " + emptyString);
         }
         else{
-            final int signalStrength = MathUtils.getSignalStrength(droneSignal.getFadeMargin(),
-                    droneSignal.getRemFadeMargin());
+            final int signalStrength = (int) droneSignal.getSignalStrength();
             final int signalIcon;
             if (signalStrength >= 100)
-                signalIcon = R.drawable.ic_signal_5_bar_24dp;
-            else if (signalStrength >= 80)
-                signalIcon = R.drawable.ic_signal_4_bar_24dp;
-            else if (signalStrength >= 60)
-                signalIcon = R.drawable.ic_signal_3_bar_24dp;
-            else if (signalStrength >= 40)
-                signalIcon = R.drawable.ic_signal_2_bar_24dp;
-            else if(signalStrength >= 20)
-                signalIcon = R.drawable.ic_signal_1_bar_24dp;
+                signalIcon = R.drawable.ic_signal_cellular_4_bar_grey_700_18dp;
+            else if (signalStrength >= 75)
+                signalIcon = R.drawable.ic_signal_cellular_3_bar_grey_700_18dp;
+            else if (signalStrength >= 50)
+                signalIcon = R.drawable.ic_signal_cellular_2_bar_grey_700_18dp;
+            else if (signalStrength >= 25)
+                signalIcon = R.drawable.ic_signal_cellular_1_bar_grey_700_18dp;
             else
-                signalIcon = R.drawable.ic_signal_0_bar_24dp;
+                signalIcon = R.drawable.ic_signal_cellular_0_bar_grey_700_18dp;
 
             signalTelem.setText(String.format(Locale.ENGLISH, "%d%%", signalStrength));
             signalTelem.setCompoundDrawablesWithIntrinsicBounds(signalIcon, 0, 0, 0);
@@ -366,23 +363,25 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final String update;
         final int gpsIcon;
         if (!drone.isConnected()) {
-            update = (displayHdop ? "HDOP: " : "") + emptyString;
+            update = (displayHdop ? "hdop: " : "") + emptyString;
             gpsIcon = R.drawable.ic_gps_off_grey_700_18dp;
             satNoView.setText("S: " + emptyString);
-            hdopStatusView.setText("HDOP: " + emptyString);
+            hdopStatusView.setText("hdop: " + emptyString);
         } else {
             Gps droneGps = drone.getAttribute(AttributeType.GPS);
             final String fixStatus = droneGps.getFixStatus();
 
             if (displayHdop) {
-                update = String.format(Locale.ENGLISH, "HDOP: %.1f", droneGps.getGpsEph());
+                update = String.format(Locale.ENGLISH, "hdop: %.1f", droneGps.getGpsEph());
             } else {
                 update = String.format(Locale.ENGLISH, "%s", fixStatus);
             }
 
             switch(fixStatus){
                 case Gps.LOCK_3D:
-                    gpsIcon = R.drawable.ic_gps_fixed_grey_700_18dp;
+                case Gps.LOCK_3D_DGPS:
+                case Gps.LOCK_3D_RTK:
+                    gpsIcon = R.drawable.ic_gps_fixed_black_24dp;
                     break;
 
                 case Gps.LOCK_2D:
@@ -396,7 +395,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             if (appPrefs.shouldGpsHdopBeDisplayed()) {
                 hdopStatusView.setText(String.format(Locale.ENGLISH, "%s", fixStatus));
             } else {
-                hdopStatusView.setText(String.format(Locale.ENGLISH, "HDOP: %.1f", droneGps.getGpsEph()));
+                hdopStatusView.setText(String.format(Locale.ENGLISH, "hdop: %.1f", droneGps.getGpsEph()));
             }
         }
 
