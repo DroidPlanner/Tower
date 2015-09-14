@@ -30,9 +30,11 @@ import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
 import com.o3dr.services.android.lib.util.MathUtils;
 
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
+import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.collection.CircularQueue;
@@ -399,6 +401,31 @@ public class MissionProxy implements DPMap.PathSource {
      */
     public int getOrder(MissionItemProxy item) {
         return missionItemProxies.indexOf(item) + 1;
+    }
+
+    /**
+     * @return The order of the first waypoint.
+     */
+    public int getFirstWaypoint(){
+        final List<MarkerInfo> markerInfos = getMarkersInfos();
+        if(!markerInfos.isEmpty()) {
+            MissionItemMarkerInfo info = (MissionItemMarkerInfo) markerInfos.get(0);
+            return getOrder(info.getMarkerOrigin());
+        }
+
+        return 0;
+    }
+
+    /**
+     * @return The order for the last waypoint.
+     */
+    public int getLastWaypoint(){
+        final List<MarkerInfo> markerInfos = getMarkersInfos();
+        if(!markerInfos.isEmpty()) {
+            MissionItemMarkerInfo info = (MissionItemMarkerInfo) markerInfos.get(markerInfos.size() - 1);
+            return getOrder(info.getMarkerOrigin());
+        }
+        return 0;
     }
 
     /**

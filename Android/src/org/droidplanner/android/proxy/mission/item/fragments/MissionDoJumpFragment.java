@@ -7,12 +7,10 @@ import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.command.DoJump;
 
-import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
 import org.droidplanner.android.proxy.mission.MissionProxy;
-import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
+import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.view.spinnerWheel.adapters.NumericWheelAdapter;
 
 /**
  * Created by Toby on 7/31/2015.
@@ -34,7 +32,9 @@ public class MissionDoJumpFragment extends MissionDetailFragment implements Card
         final DoJump item = (DoJump) getMissionItems().get(0);
         final Context context = getContext();
 
-        final NumericWheelAdapter adapter = new NumericWheelAdapter(context, R.layout.wheel_text_centered, getFirstWaypoint(), getLastWaypoint(), "%d");
+        final MissionProxy missionProxy = getMissionProxy();
+        final NumericWheelAdapter adapter = new NumericWheelAdapter(context, R.layout.wheel_text_centered,
+                missionProxy.getFirstWaypoint(), missionProxy.getLastWaypoint(), "%d");
         final CardWheelHorizontalView<Integer> waypointPicker = (CardWheelHorizontalView) view.findViewById(R.id
                 .waypoint_picker);
         waypointPicker.setViewAdapter(adapter);
@@ -79,23 +79,5 @@ public class MissionDoJumpFragment extends MissionDetailFragment implements Card
                 getMissionProxy().notifyMissionUpdate();
                 break;
         }
-    }
-
-    private int getFirstWaypoint(){
-        MissionProxy proxy = ((DroidPlannerApp) getActivity().getApplication()).getMissionProxy();
-        if(proxy.getMarkersInfos().size() > 0) {
-            MissionItemMarkerInfo info = (MissionItemMarkerInfo) proxy.getMarkersInfos().get(0);
-            return proxy.getOrder(info.getMarkerOrigin());
-        }
-        return 0;
-    }
-
-    private int getLastWaypoint(){
-        MissionProxy proxy = ((DroidPlannerApp) getActivity().getApplication()).getMissionProxy();
-        if(proxy.getMarkersInfos().size() > 0) {
-            MissionItemMarkerInfo info = (MissionItemMarkerInfo) proxy.getMarkersInfos().get(proxy.getMarkersInfos().size()-1);
-            return proxy.getOrder(info.getMarkerOrigin());
-        }
-        return 0;
     }
 }
