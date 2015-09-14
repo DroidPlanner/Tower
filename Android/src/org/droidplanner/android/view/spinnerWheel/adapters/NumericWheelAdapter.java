@@ -141,5 +141,4 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter<Integer> {
 	public int getItemsCount() {
 		return maxValue - minValue + 1;
 	}
-
 }
