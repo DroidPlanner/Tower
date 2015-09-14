@@ -49,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
-                android:text="@string/waypointType_Condition_Yaw" />
+                android:text="@string/waypointType_Do_Jump" />
 
             <TextView
                 android:id="@+id/DistanceLabel"
@@ -57,7 +57,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/WaypointType"
-                android:layout_alignStart="@id/WaypointType"
                 android:layout_below="@id/WaypointType" />
         </RelativeLayout>
     </RelativeLayout>
@@ -68,7 +67,6 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/title_rect"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:layout_margin="10dp"
         android:src="@drawable/ic_menu_hint"
         tools:ignore="ContentDescription" />
@@ -86,24 +84,33 @@
             android:layout_height="wrap_content"
             android:background="@drawable/mode_desc_rectangle"
             android:padding="12dp"
-            android:text="@string/waypointInfo_CondYaw" />
+            android:text="@string/waypointInfo_DoJump" />
 
         <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
-            android:id="@+id/picker1"
+            android:id="@+id/waypoint_picker"
             style="@style/missionItemDetailCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:text="@string/mission_control_condition_yaw_angle" >
+            android:text="@string/waypoint_label" />
 
-        </org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView>
 
         <CheckBox
-            android:id="@+id/checkBox1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/missionItemDetailCard"
+            android:text="@string/label_repeat_indefinitely"
+            android:id="@+id/repeat_indefinitely_toggle"/>
+
+        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
+            android:id="@+id/repeat_picker"
             style="@style/missionItemDetailCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/mission_control_condition_yaw_relative" />
+            android:orientation="vertical"
+            android:text="@string/repeat_count"
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
     </LinearLayout>
 
