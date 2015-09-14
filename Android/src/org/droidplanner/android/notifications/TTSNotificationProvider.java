@@ -49,6 +49,8 @@ public class TTSNotificationProvider implements OnInitListener,
 	private static final String CLAZZ_NAME = TTSNotificationProvider.class.getName();
 	private static final String TAG = TTSNotificationProvider.class.getSimpleName();
 
+	private static final long WARNING_DELAY = 1500l; //ms
+
 	private static final double BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT = 10;
 
 	/**
@@ -154,9 +156,15 @@ public class TTSNotificationProvider implements OnInitListener,
                     break;
                 case AttributeEvent.ALTITUDE_UPDATED:
 					final Altitude altitude = drone.getAttribute(AttributeType.ALTITUDE);
-                    if (mAppPrefs.hasExceededMaxAltitude(altitude.getAltitude())) {
-                            speak("Warning, max altitude exceeded!");
-                    }
+					if(mAppPrefs.hasExceededMaxAltitude(altitude.getAltitude())) {
+						if (isMaxAltExceeded.compareAndSet(false, true)) {
+							handler.postDelayed(maxAltitudeExceededWarning, WARNING_DELAY);
+						}
+					}
+					else{
+						handler.removeCallbacks(maxAltitudeExceededWarning);
+						isMaxAltExceeded.set(false);
+					}
                     break;
                 case AttributeEvent.AUTOPILOT_ERROR:
                     if(mAppPrefs.getWarningOnAutopilotWarning()) {
@@ -208,6 +216,16 @@ public class TTSNotificationProvider implements OnInitListener,
 			if (PERIODIC_STATUS_UTTERANCE_ID.equals(utteranceId)) {
 				mIsPeriodicStatusStarted.set(false);
 			}
+		}
+	};
+
+	private final AtomicBoolean isMaxAltExceeded = new AtomicBoolean(false);
+
+	private final Runnable maxAltitudeExceededWarning = new Runnable() {
+		@Override
+		public void run() {
+			speak("Warning, max altitude exceeded!");
+			handler.removeCallbacks(maxAltitudeExceededWarning);
 		}
 	};
 
