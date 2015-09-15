@@ -40,6 +40,7 @@
     <string name="pref_enable_tts_summary">Audible messages for important events</string>
     <string name="pref_request_max_volume">Set Volume To Max On Start</string>
     <string name="pref_connection">Connection Preferences</string>
+    <string name="pref_connection_subtitle">USB, TCP and UDP settings</string>
     <string name="pref_usb">USB Connection</string>
     <string name="pref_baud_type">Telemetry link speed</string>
     <string name="pref_baud_type_summary">Baud Rate of the USB Telemetry Link</string>
