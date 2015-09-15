@@ -189,9 +189,10 @@
         <PreferenceScreen
             android:key="pref_advanced"
             android:title="@string/pref_advanced" >
+            <PreferenceCategory android:title="@string/pref_connection">
             <PreferenceScreen
                 android:key="pref_connection"
-                android:title="@string/pref_connection" >
+                android:title="@string/pref_connection_subtitle" >
                 <PreferenceCategory
                     android:key="pref_usb"
                     android:title="@string/pref_usb" >
@@ -262,6 +263,7 @@
                         android:title="@string/pref_forget_bluetooth_device_address" />
                 </PreferenceCategory>
             </PreferenceScreen>
+            </PreferenceCategory>
 
             <PreferenceCategory
                 android:title="@string/pref_alt_title">
