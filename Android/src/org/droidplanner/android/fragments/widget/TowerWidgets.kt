@@ -14,6 +14,14 @@ import kotlin.platform.platformStatic
  */
 public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId: Int, @StringRes val descriptionResId: Int, val prefKey: String) {
 
+    VEHICLE_DIAGNOSTICS(R.id.tower_widget_vehicle_diagnostics, R.string.label_widget_vehicle_diagnostics, R.string.description_widget_vehicle_diagnostics, "pref_widget_vehicle_diagnostics"){
+        override fun getMinimizedFragment() = MiniWidgetDiagnostics()
+
+        override fun canMaximize() = true
+
+        override fun getMaximizedFragment() = FullWidgetDiagnostics()
+    },
+
     TELEMETRY_INFO(R.id.tower_widget_telemetry_info, R.string.label_widget_telemetry_info, R.string.description_widget_telemetry_info, "pref_widget_telemetry_info") {
 
         override fun getMinimizedFragment() = MiniWidgetTelemetryInfo()
@@ -30,15 +38,8 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
         override fun getMinimizedFragment() = MiniWidgetSoloLinkVideo()
 
         override fun getMaximizedFragment() = FullWidgetSoloLinkVideo()
-    },
-
-    VEHICLE_DIAGNOSTICS(R.id.tower_widget_vehicle_diagnostics, R.string.label_widget_vehicle_diagnostics, R.string.description_widget_vehicle_diagnostics, "pref_widget_vehicle_diagnostics"){
-        override fun getMinimizedFragment() = MiniWidgetDiagnostics()
-
-        override fun canMaximize() = true
-
-        override fun getMaximizedFragment() = FullWidgetDiagnostics()
-    };
+    }
+    ;
 
     abstract fun getMinimizedFragment(): TowerWidget
 

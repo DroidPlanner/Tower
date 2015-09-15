@@ -7,86 +7,72 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.o3dr.services.android.lib.drone.property.EkfStatus
+import com.o3dr.services.android.lib.drone.property.Vibration
 import org.droidplanner.android.R
+import kotlin.properties.Delegates
 
 /**
  * Created by Fredia Huya-Kouadio on 8/29/15.
  */
 public class MiniWidgetDiagnostics : BaseWidgetDiagnostic() {
 
-    private var goodStatus: Drawable? = null
-    private var warningStatus: Drawable? = null
-    private var dangerStatus: Drawable? = null
-    private var disabledStatus: Drawable? = null
+    private val okFlagDrawable: Drawable? by Delegates.lazy {
+        getResources()?.getDrawable(R.drawable.ic_check_box_green_500_18dp)
+    }
 
-    private var ekfLabel: TextView? = null
-    private var ekfHighestVar: Float = BaseWidgetDiagnostic.INVALID_HIGHEST_VARIANCE
+    private val badFlagDrawable: Drawable? by Delegates.lazy {
+        getResources()?.getDrawable(R.drawable.ic_cancel_red_500_18dp)
+    }
 
-    private var velocityVar: TextView? = null
-    private var horizontalPosVar: TextView? = null
-    private var verticalPosVar: TextView? = null
-    private var magVar: TextView? = null
-    private var terrainVar: TextView? = null
+    private val warningFlagDrawable by Delegates.lazy {
+        getResources()?.getDrawable(R.drawable.ic_warning_orange_500_18dp)
+    }
+
+    private val unknownFlagDrawable: Drawable? by Delegates.lazy {
+        getResources()?.getDrawable(R.drawable.ic_help_grey_600_18dp)
+    }
+
+    private val ekfStatusView by Delegates.lazy {
+        getView()?.findViewById(R.id.ekf_status) as TextView?
+    }
+
+    private val vibrationStatus by Delegates.lazy {
+        getView()?.findViewById(R.id.vibration_status) as TextView?
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_mini_widget_ekf_status, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        ekfLabel = view.findViewById(R.id.ekf_label) as TextView?
-        velocityVar = view.findViewById(R.id.velocity_var_status) as TextView?
-        horizontalPosVar = view.findViewById(R.id.horizontal_position_var_status) as TextView?
-        verticalPosVar = view.findViewById(R.id.vertical_position_var_status) as TextView?
-        magVar = view.findViewById(R.id.mag_var_status) as TextView?
-        terrainVar = view.findViewById(R.id.terrain_var_status) as TextView?
-
-        val res = getResources()
-        goodStatus = res.getDrawable(R.drawable.green_circle_10dp)
-        warningStatus = res.getDrawable(R.drawable.orange_circle_10dp)
-        dangerStatus = res.getDrawable(R.drawable.red_circle_10dp)
-        disabledStatus = res.getDrawable(R.drawable.grey_circle_10dp)
-    }
-
     override fun updateEkfView(ekfStatus: EkfStatus) {
-        ekfHighestVar = BaseWidgetDiagnostic.INVALID_HIGHEST_VARIANCE
+        val ekfVar = Math.max(ekfStatus.getVelocityVariance(),
+                Math.max(ekfStatus.getHorizontalPositionVariance(),
+                        Math.max(ekfStatus.getVerticalPositionVariance(),
+                                Math.max(ekfStatus.getCompassVariance(), ekfStatus.getTerrainAltitudeVariance()))))
 
-        val res = getResources()
-        updateVarianceView(velocityVar, ekfStatus.getVelocityVariance())
-        updateVarianceView(horizontalPosVar, ekfStatus.getHorizontalPositionVariance())
-        updateVarianceView(verticalPosVar, ekfStatus.getVerticalPositionVariance())
-        updateVarianceView(magVar, ekfStatus.getCompassVariance())
-        updateVarianceView(terrainVar, ekfStatus.getTerrainAltitudeVariance())
+        val statusDrawable = if (ekfVar < BaseWidgetDiagnostic.GOOD_VARIANCE_THRESHOLD) okFlagDrawable
+        else if (ekfVar < BaseWidgetDiagnostic.WARNING_VARIANCE_THRESHOLD) warningFlagDrawable
+        else badFlagDrawable
 
-        val textColor = if (ekfHighestVar < BaseWidgetDiagnostic.GOOD_VARIANCE_THRESHOLD) android.R.color.holo_green_dark
-        else if (ekfHighestVar < BaseWidgetDiagnostic.WARNING_VARIANCE_THRESHOLD) android.R.color.holo_orange_dark
-        else android.R.color.holo_red_dark
-
-        ekfLabel?.setTextColor(res.getColor(textColor))
+        ekfStatusView?.setCompoundDrawablesWithIntrinsicBounds(null, statusDrawable, null, null)
     }
 
     override fun disableEkfView() {
-        val res = getResources()
-        ekfLabel?.setTextColor(res.getColor(R.color.greyText))
-        disableVarianceView(velocityVar)
-        disableVarianceView(horizontalPosVar)
-        disableVarianceView(verticalPosVar)
-        disableVarianceView(magVar)
-        disableVarianceView(terrainVar)
+        ekfStatusView?.setCompoundDrawablesWithIntrinsicBounds(null, unknownFlagDrawable, null, null)
     }
 
-    protected fun disableVarianceView(varianceView: TextView?) {
-        varianceView?.setCompoundDrawablesWithIntrinsicBounds(null, disabledStatus, null, null)
+    override fun updateVibrationView(vibration: Vibration){
+        val vibSummary = Math.max(vibration.getVibrationX(),
+                Math.max(vibration.getVibrationY(), vibration.getVibrationZ()))
+
+        val statusDrawable = if(vibSummary < BaseWidgetDiagnostic.GOOD_VIBRATION_THRESHOLD) okFlagDrawable
+        else if(vibSummary < BaseWidgetDiagnostic.WARNING_VIBRATION_THRESHOLD) warningFlagDrawable
+        else badFlagDrawable
+
+        vibrationStatus?.setCompoundDrawablesWithIntrinsicBounds(null, statusDrawable, null, null)
     }
 
-    protected fun updateVarianceView(varianceView: TextView?, variance: Float) {
-        ekfHighestVar = Math.max(ekfHighestVar, variance)
-
-        val statusDrawable = if (variance < BaseWidgetDiagnostic.GOOD_VARIANCE_THRESHOLD) goodStatus
-        else if (variance < BaseWidgetDiagnostic.WARNING_VARIANCE_THRESHOLD) warningStatus
-        else dangerStatus
-
-        varianceView?.setCompoundDrawablesWithIntrinsicBounds(null, statusDrawable, null, null)
+    override fun disableVibrationView(){
+        vibrationStatus?.setCompoundDrawablesWithIntrinsicBounds(null, unknownFlagDrawable, null, null)
     }
 }
