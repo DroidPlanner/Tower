@@ -7,9 +7,14 @@ buildscript {
         jcenter()
         mavenCentral()
         maven { url 'https://maven.fabric.io/public' }
+        maven {
+            url 'https://repos.zeroturnaround.com/nexus/content/repositories/zt-public-releases'
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.2.3'
+        // This does not break the build when Android Studio is missing the JRebel for Android plugin.
+        classpath 'com.zeroturnaround.jrebel.android:jr-android-gradle:0.9.+'
         classpath 'io.fabric.tools:gradle:1.19.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }

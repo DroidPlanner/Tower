@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import org.droidplanner.android.R
 import org.droidplanner.android.fragments.WidgetsListFragment
 import org.droidplanner.android.fragments.widget.MiniWidgetSoloLinkVideo
+import org.droidplanner.android.fragments.widget.diagnostics.FullWidgetDiagnostics
 import kotlin.platform.platformStatic
 
 /**
@@ -31,12 +32,12 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
         override fun getMaximizedFragment() = FullWidgetSoloLinkVideo()
     },
 
-    EKF_STATUS(R.id.tower_widget_ekf_status, R.string.label_widget_ekf_status, R.string.description_widget_ekf_status, "pref_widget_ekf_status"){
-        override fun getMinimizedFragment() = MiniWidgetEkfStatus()
+    VEHICLE_DIAGNOSTICS(R.id.tower_widget_vehicle_diagnostics, R.string.label_widget_vehicle_diagnostics, R.string.description_widget_vehicle_diagnostics, "pref_widget_vehicle_diagnostics"){
+        override fun getMinimizedFragment() = MiniWidgetDiagnostics()
 
         override fun canMaximize() = true
 
-        override fun getMaximizedFragment() = FullWidgetEkfStatus()
+        override fun getMaximizedFragment() = FullWidgetDiagnostics()
     };
 
     abstract fun getMinimizedFragment(): TowerWidget
@@ -52,7 +53,7 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
             return when(id){
                 TELEMETRY_INFO.idRes -> TELEMETRY_INFO
                 SOLO_VIDEO.idRes -> SOLO_VIDEO
-                EKF_STATUS.idRes -> EKF_STATUS
+                VEHICLE_DIAGNOSTICS.idRes -> VEHICLE_DIAGNOSTICS
                 else -> null
             }
         }
@@ -61,7 +62,7 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
             return when(prefKey){
                 TELEMETRY_INFO.prefKey -> TELEMETRY_INFO
                 SOLO_VIDEO.prefKey -> SOLO_VIDEO
-                EKF_STATUS.prefKey -> EKF_STATUS
+                VEHICLE_DIAGNOSTICS.prefKey -> VEHICLE_DIAGNOSTICS
                 else -> null
             }
         }

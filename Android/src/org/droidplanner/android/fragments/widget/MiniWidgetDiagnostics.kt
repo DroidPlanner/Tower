@@ -12,7 +12,7 @@ import org.droidplanner.android.R
 /**
  * Created by Fredia Huya-Kouadio on 8/29/15.
  */
-public class MiniWidgetEkfStatus : BaseWidgetEkfStatus() {
+public class MiniWidgetDiagnostics : BaseWidgetDiagnostic() {
 
     private var goodStatus: Drawable? = null
     private var warningStatus: Drawable? = null
@@ -20,7 +20,7 @@ public class MiniWidgetEkfStatus : BaseWidgetEkfStatus() {
     private var disabledStatus: Drawable? = null
 
     private var ekfLabel: TextView? = null
-    private var ekfHighestVar: Float = BaseWidgetEkfStatus.INVALID_HIGHEST_VARIANCE
+    private var ekfHighestVar: Float = BaseWidgetDiagnostic.INVALID_HIGHEST_VARIANCE
 
     private var velocityVar: TextView? = null
     private var horizontalPosVar: TextView? = null
@@ -50,7 +50,7 @@ public class MiniWidgetEkfStatus : BaseWidgetEkfStatus() {
     }
 
     override fun updateEkfView(ekfStatus: EkfStatus) {
-        ekfHighestVar = BaseWidgetEkfStatus.INVALID_HIGHEST_VARIANCE
+        ekfHighestVar = BaseWidgetDiagnostic.INVALID_HIGHEST_VARIANCE
 
         val res = getResources()
         updateVarianceView(velocityVar, ekfStatus.getVelocityVariance())
@@ -59,8 +59,8 @@ public class MiniWidgetEkfStatus : BaseWidgetEkfStatus() {
         updateVarianceView(magVar, ekfStatus.getCompassVariance())
         updateVarianceView(terrainVar, ekfStatus.getTerrainAltitudeVariance())
 
-        val textColor = if (ekfHighestVar < BaseWidgetEkfStatus.GOOD_VARIANCE_THRESHOLD) android.R.color.holo_green_dark
-        else if (ekfHighestVar < BaseWidgetEkfStatus.WARNING_VARIANCE_THRESHOLD) android.R.color.holo_orange_dark
+        val textColor = if (ekfHighestVar < BaseWidgetDiagnostic.GOOD_VARIANCE_THRESHOLD) android.R.color.holo_green_dark
+        else if (ekfHighestVar < BaseWidgetDiagnostic.WARNING_VARIANCE_THRESHOLD) android.R.color.holo_orange_dark
         else android.R.color.holo_red_dark
 
         ekfLabel?.setTextColor(res.getColor(textColor))
@@ -83,8 +83,8 @@ public class MiniWidgetEkfStatus : BaseWidgetEkfStatus() {
     protected fun updateVarianceView(varianceView: TextView?, variance: Float) {
         ekfHighestVar = Math.max(ekfHighestVar, variance)
 
-        val statusDrawable = if (variance < BaseWidgetEkfStatus.GOOD_VARIANCE_THRESHOLD) goodStatus
-        else if (variance < BaseWidgetEkfStatus.WARNING_VARIANCE_THRESHOLD) warningStatus
+        val statusDrawable = if (variance < BaseWidgetDiagnostic.GOOD_VARIANCE_THRESHOLD) goodStatus
+        else if (variance < BaseWidgetDiagnostic.WARNING_VARIANCE_THRESHOLD) warningStatus
         else dangerStatus
 
         varianceView?.setCompoundDrawablesWithIntrinsicBounds(null, statusDrawable, null, null)

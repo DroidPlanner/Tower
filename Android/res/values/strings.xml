@@ -475,8 +475,8 @@
     <string name="description_widget_solo_video">Displays the video stream from a connected Solo vehicle</string>
     <string name="label_widget_telemetry_info">Telemetry Data</string>
     <string name="description_widget_telemetry_info">Displays vehicle telemetry info</string>
-    <string name="label_widget_ekf_status">EKF Status</string>
-    <string name="description_widget_ekf_status">Displays the vehicle EKF status</string>
+    <string name="label_widget_vehicle_diagnostics">Diagnostics</string>
+    <string name="description_widget_vehicle_diagnostics">Displays the vehicle diagnostics stats</string>
     <string name="pref_tower_widgets_title">Widgets Preferences</string>
     <string name="pref_tower_widgets_category">Tower Widgets</string>
     <string name="pref_widgets_list_category">Widgets list</string>
@@ -501,5 +501,8 @@
     <string name="label_relative_predicted_estimate">Relative predicted estimate</string>
     <string name="error_no_video">no video available</string>
     <string name="label_repeat_indefinitely">Repeat indefinitely</string>
+    <string name="title_ekf_status_viewer">EKF</string>
+    <string name="title_vibration_viewer">Vibration</string>
+    <string name="title_ekf_flags_viewer">Flags</string>
 
 </resources>

@@ -21,6 +21,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import org.droidplanner.android.R;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -71,6 +72,7 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
 	private ViewPager mViewPager;
 	private OnPageChangeListener mListener;
 
+	private float mTextSize;
 	private int mMaxTabWidth;
 	private int mSelectedTabIndex;
 
@@ -82,6 +84,12 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
 
 	public TabPageIndicator(Context context, AttributeSet attrs) {
 		super(context, attrs);
+
+		final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TabPageIndicator);
+		mTextSize = a.getDimension(R.styleable.TabPageIndicator_android_textSize, 15f);
+
+		a.recycle();
+
 		setHorizontalScrollBarEnabled(false);
 
 		mTabLayout = new LinearLayout(getContext());
@@ -160,6 +168,7 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
 		tabView.setFocusable(true);
 		tabView.setOnClickListener(mTabClickListener);
 		tabView.setText(text);
+		tabView.setTextSize(mTextSize);
 
 		mTabLayout.addView(tabView, new LinearLayout.LayoutParams(0,
 				ViewGroup.LayoutParams.MATCH_PARENT, 1));
