@@ -31,29 +31,29 @@ public abstract class BaseWidgetDiagnostic : TowerWidget(){
             return temp
         }
 
-        public val INVALID_HIGHEST_VARIANCE: Float = -1f
+        val INVALID_HIGHEST_VARIANCE: Float = -1f
 
         /**
          * Any variance value less than this threshold is considered good.
          */
-        public val GOOD_VARIANCE_THRESHOLD: Float = 0.5f
+        val GOOD_VARIANCE_THRESHOLD: Float = 0.5f
 
         /**
          * Variance values between the good threshold and the warning threshold are considered as warning.
          * Variance values above the warning variance threshold are considered bad.
          */
-        public val WARNING_VARIANCE_THRESHOLD: Float = 0.8f
+        val WARNING_VARIANCE_THRESHOLD: Float = 0.8f
 
         /**
          * Vibration values less or equal to this value are considered good.
          */
-        public val GOOD_VIBRATION_THRESHOLD: Int = 30
+        val GOOD_VIBRATION_THRESHOLD: Int = 30
 
         /**
          * Vibration values between the good threshold and the warning threshold are in the warning zone.
          * Vibration values above the warning threshold are in the danger zone.
          */
-        public val WARNING_VIBRATION_THRESHOLD: Int = 60
+        val WARNING_VIBRATION_THRESHOLD: Int = 60
     }
 
     private val receiver = object : BroadcastReceiver() {

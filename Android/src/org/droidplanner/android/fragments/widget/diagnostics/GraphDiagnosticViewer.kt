@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import lecho.lib.hellocharts.formatter.SimpleAxisValueFormatter
 import lecho.lib.hellocharts.formatter.SimpleColumnChartValueFormatter
 import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.view.ColumnChartView
@@ -27,11 +26,11 @@ public abstract class GraphDiagnosticViewer : BaseWidgetDiagnostic() {
 
     protected val chartData: ColumnChartData = ColumnChartData()
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?{
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_graph_diagnostic_viewer, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupGraph(view)
     }
@@ -53,7 +52,7 @@ public abstract class GraphDiagnosticViewer : BaseWidgetDiagnostic() {
         return col
     }
 
-    private fun setupGraph(view: View){
+    private fun setupGraph(view: View) {
         graph = view.findViewById(R.id.column_chart) as ColumnChartView?
         graph?.isValueSelectionEnabled = true
         graph?.isZoomEnabled = false
@@ -74,7 +73,7 @@ public abstract class GraphDiagnosticViewer : BaseWidgetDiagnostic() {
         graph?.columnChartData = chartData
     }
 
-    protected open fun disableGraph(){
+    protected open fun disableGraph() {
         for (column in chartData.columns) {
             for (value in column.values) {
                 value.setTarget(0f)
@@ -85,11 +84,11 @@ public abstract class GraphDiagnosticViewer : BaseWidgetDiagnostic() {
         graph?.startDataAnimation()
     }
 
-    override fun disableEkfView(){
+    override fun disableEkfView() {
         disableGraph()
     }
 
-    override fun disableVibrationView(){
+    override fun disableVibrationView() {
         disableGraph()
     }
 }

@@ -504,5 +504,9 @@
     <string name="title_ekf_status_viewer">EKF</string>
     <string name="title_vibration_viewer">Vibration</string>
     <string name="title_ekf_flags_viewer">Flags</string>
+    <string name="label_tertiary">Tertiary</string>
+    <string name="label_secondary">Secondary</string>
+    <string name="label_primary">Primary</string>
+    <string name="label_clipping">Clipping</string>
 
 </resources>
