@@ -75,8 +75,6 @@ public class TTSNotificationProvider implements OnInitListener,
         eventFilter.addAction(AttributeEvent.HEARTBEAT_FIRST);
         eventFilter.addAction(AttributeEvent.HEARTBEAT_TIMEOUT);
         eventFilter.addAction(AttributeEvent.HEARTBEAT_RESTORED);
-		eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
-        eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
         eventFilter.addAction(AttributeEvent.MISSION_ITEM_UPDATED);
         eventFilter.addAction(AttributeEvent.FOLLOW_START);
         eventFilter.addAction(AttributeEvent.AUTOPILOT_ERROR);
@@ -123,17 +121,16 @@ public class TTSNotificationProvider implements OnInitListener,
                     break;
 
                 case AttributeEvent.HEARTBEAT_FIRST:
-				case AttributeEvent.STATE_CONNECTED:
-                    watchdogCallback.setDrone(drone);
-                    scheduleWatchdog();
                     speak("Connected");
                     break;
+
                 case AttributeEvent.HEARTBEAT_TIMEOUT:
                     if (mAppPrefs.getWarningOnLostOrRestoredSignal()) {
                         speak("Data link lost, check connection.");
                         handler.removeCallbacks(watchdogCallback);
                     }
                     break;
+
                 case AttributeEvent.HEARTBEAT_RESTORED:
                     watchdogCallback.setDrone(drone);
                     scheduleWatchdog();
@@ -141,9 +138,7 @@ public class TTSNotificationProvider implements OnInitListener,
                         speak("Data link restored");
                     }
                     break;
-                case AttributeEvent.STATE_DISCONNECTED:
-                    handler.removeCallbacks(watchdogCallback);
-                    break;
+
                 case AttributeEvent.MISSION_ITEM_UPDATED:
                     int currentWaypoint = intent.getIntExtra(AttributeEventExtra.EXTRA_MISSION_CURRENT_WAYPOINT, 0);
 					if(currentWaypoint != 0) {
@@ -304,10 +299,26 @@ public class TTSNotificationProvider implements OnInitListener,
 	TTSNotificationProvider(Context context, Drone drone) {
 		this.context = context;
 		this.drone = drone;
-		tts = new TextToSpeech(context, this);
 		mAppPrefs = new DroidPlannerPrefs(context);
+	}
 
-        LocalBroadcastManager.getInstance(context).registerReceiver(eventReceiver, eventFilter);
+	@Override
+	public void init(){
+		tts = new TextToSpeech(context, this);
+		LocalBroadcastManager.getInstance(context).registerReceiver(eventReceiver, eventFilter);
+	}
+
+	@Override
+	public void onTerminate() {
+		LocalBroadcastManager.getInstance(context).unregisterReceiver(eventReceiver);
+
+		handler.removeCallbacks(watchdogCallback);
+		speak("Disconnected");
+
+		if (tts != null) {
+			tts.shutdown();
+			tts = null;
+		}
 	}
 
 	private void scheduleWatchdog() {
@@ -371,6 +382,11 @@ public class TTSNotificationProvider implements OnInitListener,
 
 				LocalBroadcastManager.getInstance(context).registerReceiver(
 						mSpeechIntervalUpdateReceiver, intentFilter);
+
+				//Announce the connection event
+				watchdogCallback.setDrone(drone);
+				scheduleWatchdog();
+				speak("Connected");
 			}
 		} else {
 			// Notify the user that the tts engine is not available.
@@ -471,15 +487,5 @@ public class TTSNotificationProvider implements OnInitListener,
 			speak("Lost GPS Lock");
 			break;
 		}
-	}
-
-	@Override
-	public void onTerminate() {
-		if (tts != null) {
-			tts.shutdown();
-            tts = null;
-		}
-
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(eventReceiver);
 	}
 }

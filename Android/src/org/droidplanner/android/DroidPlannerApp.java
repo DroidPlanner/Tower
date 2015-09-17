@@ -18,6 +18,7 @@ import com.o3dr.android.client.Drone;
 import com.o3dr.android.client.interfaces.DroneListener;
 import com.o3dr.android.client.interfaces.TowerListener;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.o3dr.services.android.lib.drone.connection.ConnectionParameter;
 import com.o3dr.services.android.lib.drone.connection.ConnectionResult;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
@@ -80,9 +81,6 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
     @Override
     public void onTowerConnected() {
         Timber.d("Connecting to the control tower.");
-        if (notificationHandler == null) {
-            notificationHandler = new NotificationHandler(getApplicationContext(), drone);
-        }
 
         drone.unregisterDroneListener(this);
 
@@ -114,11 +112,6 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
             Timber.d("Starting control tower disconnect process...");
             controlTower.unregisterDrone(drone);
             controlTower.disconnect();
-
-            if (notificationHandler != null) {
-                notificationHandler.terminate();
-                notificationHandler = null;
-            }
 
             handler.removeCallbacks(this);
         }
@@ -155,6 +148,8 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
         controlTower = new ControlTower(context);
         drone = new Drone(context);
         missionProxy = new MissionProxy(context, this.drone);
+
+        notificationHandler = new NotificationHandler(context, drone);
 
         final Thread.UncaughtExceptionHandler dpExceptionHandler = new Thread.UncaughtExceptionHandler() {
             @Override
@@ -349,12 +344,18 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
         switch (event) {
             case AttributeEvent.STATE_CONNECTED:
                 handler.removeCallbacks(disconnectionTask);
-                if (notificationHandler == null) {
-                    notificationHandler = new NotificationHandler(getApplicationContext(), drone);
-                }
+                notificationHandler.init();
                 break;
+
             case AttributeEvent.STATE_DISCONNECTED:
+                notificationHandler.terminate();
                 shouldWeTerminate();
+                break;
+
+            case AttributeEvent.AUTOPILOT_ERROR:
+                final String errorName = extras.getString(AttributeEventExtra.EXTRA_AUTOPILOT_ERROR_ID);
+                if(notificationHandler != null)
+                    notificationHandler.onAutopilotError(errorName);
                 break;
         }
 
@@ -370,10 +371,6 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
     public void onDroneServiceInterrupted(String errorMsg) {
         Timber.d("Drone service interrupted: %s", errorMsg);
         controlTower.unregisterDrone(drone);
-        if (notificationHandler != null) {
-            notificationHandler.terminate();
-            notificationHandler = null;
-        }
 
         if (!TextUtils.isEmpty(errorMsg))
             Log.e(TAG, errorMsg);
