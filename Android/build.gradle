@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+// This does not break the build when Android Studio is missing the JRebel for Android plugin.
+apply plugin: 'com.zeroturnaround.jrebel.android'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 
@@ -17,7 +19,7 @@ dependencies {
     compile 'com.android.support:design:22.2.1'
 
     //DroneKit-Android client library.
-    compile 'com.o3dr.android:dronekit-android:2.6.1'
+    compile 'com.o3dr.android:dronekit-android:2.6.2'
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')

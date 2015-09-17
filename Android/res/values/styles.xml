@@ -369,8 +369,8 @@
         <item name="android:background">@drawable/vpi__tab_indicator</item>
         <item name="android:paddingRight">10dip</item>
         <item name="android:paddingLeft">10dip</item>
-        <item name="android:paddingTop">20dip</item>
-        <item name="android:paddingBottom">20dip</item>
+        <item name="android:paddingTop">10dip</item>
+        <item name="android:paddingBottom">10dip</item>
         <item name="android:ellipsize">end</item>
         <item name="android:textAppearance">@style/TextAppearance.TabPageIndicator</item>
         <item name="android:textSize">15sp</item>

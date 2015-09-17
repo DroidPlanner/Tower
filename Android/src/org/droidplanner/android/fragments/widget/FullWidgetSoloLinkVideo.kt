@@ -31,7 +31,7 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
     companion object {
         private val filter = initFilter()
 
-        private val TAG = javaClass<FullWidgetSoloLinkVideo>().getSimpleName()
+        private val TAG = FullWidgetSoloLinkVideo::class.java.simpleName
 
         private fun initFilter(): IntentFilter {
             val temp = IntentFilter()
@@ -43,7 +43,7 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
 
     private val receiver = object : BroadcastReceiver(){
         override fun onReceive(context: Context, intent: Intent) {
-            when(intent.getAction()){
+            when(intent.action){
                 AttributeEvent.STATE_CONNECTED -> {
                     tryStreamingVideo()
                     checkGoproControlSupport()
@@ -59,24 +59,24 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
 
     private var surfaceRef: Surface? = null
 
-    private val textureView by Delegates.lazy {
-        getView()?.findViewById(R.id.sololink_video_view) as TextureView?
+    private val textureView by lazy(LazyThreadSafetyMode.NONE) {
+        view?.findViewById(R.id.sololink_video_view) as TextureView?
     }
 
-    private val videoStatus by Delegates.lazy {
-        getView()?.findViewById(R.id.sololink_video_status) as TextView?
+    private val videoStatus by lazy(LazyThreadSafetyMode.NONE) {
+        view?.findViewById(R.id.sololink_video_status) as TextView?
     }
 
-    private val widgetButtonBar by Delegates.lazy {
-        getView()?.findViewById(R.id.widget_button_bar)
+    private val widgetButtonBar by lazy(LazyThreadSafetyMode.NONE) {
+        view?.findViewById(R.id.widget_button_bar)
     }
 
-    private val takePhotoButton by Delegates.lazy {
-        getView()?.findViewById(R.id.sololink_take_picture_button)
+    private val takePhotoButton by lazy(LazyThreadSafetyMode.NONE) {
+        view?.findViewById(R.id.sololink_take_picture_button)
     }
 
-    private val recordVideo by Delegates.lazy {
-        getView()?.findViewById(R.id.sololink_record_video_button)
+    private val recordVideo by lazy(LazyThreadSafetyMode.NONE) {
+        view?.findViewById(R.id.sololink_record_video_button)
     }
 
     private val orientationListener = object : GimbalApi.GimbalOrientationListener {
@@ -95,7 +95,7 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)
 
-        textureView?.setSurfaceTextureListener(object : TextureView.SurfaceTextureListener {
+        textureView?.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
             override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, width: Int, height: Int) {
                 adjustAspectRatio(textureView as TextureView);
                 surfaceRef = Surface(surface)
@@ -115,11 +115,10 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
             }
 
         }
-        )
 
         takePhotoButton?.setOnClickListener {
             Timber.d("Taking photo.. cheeze!")
-            val drone = getDrone()
+            val drone = drone
             if(drone != null) {
                 //TODO: fix when camera control support is stable on sololink
                 SoloCameraApi.getApi(drone).takePhoto(null)
@@ -128,7 +127,7 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
 
         recordVideo?.setOnClickListener {
             Timber.d("Recording video!")
-            val drone = getDrone()
+            val drone = drone
             if(drone != null){
                 //TODO: fix when camera control support is stable on sololink
                 SoloCameraApi.getApi(drone).toggleVideoRecording(null)
@@ -139,7 +138,7 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
     override fun onApiConnected() {
         tryStreamingVideo()
         checkGoproControlSupport()
-        getBroadcastManager().registerReceiver(receiver, filter)
+        broadcastManager.registerReceiver(receiver, filter)
     }
 
     override fun onResume(){
@@ -155,7 +154,7 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
     override fun onApiDisconnected() {
         tryStoppingVideoStream()
         checkGoproControlSupport()
-        getBroadcastManager().unregisterReceiver(receiver)
+        broadcastManager.unregisterReceiver(receiver)
     }
 
     override fun getWidgetType() = TowerWidgets.SOLO_VIDEO
@@ -164,48 +163,48 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
         if(surfaceRef == null)
             return
 
-        val drone = getDrone()
-        videoStatus?.setVisibility(View.GONE)
+        val drone = drone
+        videoStatus?.visibility = View.GONE
 
         Timber.d("Starting video stream with tag %s", TAG)
         SoloCameraApi.getApi(drone).startVideoStream(surfaceRef, TAG, object : AbstractCommandListener() {
             override fun onError(error: Int) {
                 Timber.d("Unable to start video stream: %d", error)
                 textureView?.setOnTouchListener(null)
-                videoStatus?.setVisibility(View.VISIBLE)
+                videoStatus?.visibility = View.VISIBLE
             }
 
             override fun onSuccess() {
-                videoStatus?.setVisibility(View.GONE)
+                videoStatus?.visibility = View.GONE
                 Timber.d("Video stream started successfully")
 
                 val gimbalTracker = object : View.OnTouchListener {
                     var startX: Float = 0f
                     var startY: Float = 0f
                     val gimbalApi = GimbalApi.getApi(drone)
-                    val orientation = gimbalApi.getGimbalOrientation()
-                    var pitch = orientation.getPitch()
-                    var yaw = orientation.getYaw()
+                    val orientation = gimbalApi.gimbalOrientation
+                    var pitch = orientation.pitch
+                    var yaw = orientation.yaw
 
                     override fun onTouch(view: View, event: MotionEvent): Boolean {
-                        val conversionX = view.getWidth() / 90
-                        val conversionY = view.getHeight() / 90
-                        when (event.getAction()) {
+                        val conversionX = view.width / 90
+                        val conversionY = view.height / 90
+                        when (event.action) {
                             MotionEvent.ACTION_DOWN -> {
-                                startX = event.getX()
-                                startY = event.getY()
+                                startX = event.x
+                                startY = event.y
                                 gimbalApi.startGimbalControl(orientationListener)
                                 return true
                             }
                             MotionEvent.ACTION_MOVE -> {
-                                val vX = event.getX() - startX
-                                val vY = event.getY() - startY
+                                val vX = event.x - startX
+                                val vY = event.y - startY
                                 pitch += vY / conversionX
                                 yaw += vX / conversionY
                                 //                        Timber.d("drag %f, %f", yaw, pitch)
-                                gimbalApi.updateGimbalOrientation(pitch, yaw, orientation.getRoll(), orientationListener)
-                                startX = event.getX()
-                                startY = event.getY()
+                                gimbalApi.updateGimbalOrientation(pitch, yaw, orientation.roll, orientationListener)
+                                startX = event.x
+                                startY = event.y
                                 pitch = Math.min(pitch, 0f)
                                 pitch = Math.max(pitch, -90f)
                                 return true
@@ -223,14 +222,14 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
             override fun onTimeout() {
                 Timber.d("Timed out while trying to start the video stream")
                 textureView?.setOnTouchListener(null)
-                videoStatus?.setVisibility(View.VISIBLE)
+                videoStatus?.visibility = View.VISIBLE
             }
 
         })
     }
 
     private fun tryStoppingVideoStream(){
-        val drone = getDrone()
+        val drone = drone
 
         Timber.d("Stopping video stream with tag %s", TAG)
         SoloCameraApi.getApi(drone).stopVideoStream(TAG, object : AbstractCommandListener(){
@@ -250,18 +249,16 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
     }
 
     private fun checkGoproControlSupport(){
-        val goproState: SoloGoproState? = getDrone()?.getAttribute(SoloAttributes.SOLO_GOPRO_STATE)
-        widgetButtonBar?.setVisibility(
-                if (goproState == null)
-                    View.GONE
-                else
-                    View.VISIBLE
-        )
+        val goproState: SoloGoproState? = drone?.getAttribute(SoloAttributes.SOLO_GOPRO_STATE)
+        widgetButtonBar?.visibility = if (goproState == null)
+            View.GONE
+        else
+            View.VISIBLE
     }
 
     private fun adjustAspectRatio(textureView: TextureView){
-        val viewWidth = textureView.getWidth()
-        val viewHeight = textureView.getHeight()
+        val viewWidth = textureView.width
+        val viewHeight = textureView.height
         val aspectRatio: Float = 9f/16f
 
         val newWidth: Int

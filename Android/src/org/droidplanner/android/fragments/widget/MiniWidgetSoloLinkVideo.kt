@@ -23,7 +23,6 @@ import org.droidplanner.android.fragments.helpers.ApiListenerFragment
 import org.droidplanner.android.fragments.widget.TowerWidget
 import org.droidplanner.android.fragments.widget.TowerWidgets
 import timber.log.Timber
-import kotlin.platform.platformStatic
 import kotlin.properties.Delegates
 
 /**
@@ -34,12 +33,12 @@ public class MiniWidgetSoloLinkVideo : TowerWidget() {
     companion object {
         private val filter = IntentFilter(AttributeEvent.STATE_CONNECTED)
 
-        private val TAG = javaClass<MiniWidgetSoloLinkVideo>().getSimpleName()
+        private val TAG = MiniWidgetSoloLinkVideo::class.java.simpleName
     }
 
     private val receiver = object : BroadcastReceiver(){
         override fun onReceive(context: Context, intent: Intent) {
-            when(intent.getAction()){
+            when(intent.action){
                 AttributeEvent.STATE_CONNECTED -> tryStreamingVideo()
             }
         }
@@ -48,12 +47,12 @@ public class MiniWidgetSoloLinkVideo : TowerWidget() {
 
     private var surfaceRef: Surface? = null
 
-    private val textureView by Delegates.lazy {
-        getView()?.findViewById(R.id.sololink_video_view) as TextureView?
+    private val textureView by lazy(LazyThreadSafetyMode.NONE) {
+        view?.findViewById(R.id.sololink_video_view) as TextureView?
     }
 
-    private val videoStatus by Delegates.lazy {
-        getView()?.findViewById(R.id.sololink_video_status) as TextView?
+    private val videoStatus by lazy(LazyThreadSafetyMode.NONE) {
+        view?.findViewById(R.id.sololink_video_status) as TextView?
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -63,7 +62,7 @@ public class MiniWidgetSoloLinkVideo : TowerWidget() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)
 
-        textureView?.setSurfaceTextureListener(object : TextureView.SurfaceTextureListener{
+        textureView?.surfaceTextureListener = object : TextureView.SurfaceTextureListener{
             override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, width: Int, height: Int) {
                 adjustAspectRatio(textureView as TextureView);
                 surfaceRef = Surface(surface)
@@ -84,12 +83,12 @@ public class MiniWidgetSoloLinkVideo : TowerWidget() {
 
             }
 
-        })
+        }
     }
 
     override fun onApiConnected() {
         tryStreamingVideo()
-        getBroadcastManager().registerReceiver(receiver, filter)
+        broadcastManager.registerReceiver(receiver, filter)
     }
 
     override fun onResume(){
@@ -104,7 +103,7 @@ public class MiniWidgetSoloLinkVideo : TowerWidget() {
 
     override fun onApiDisconnected() {
         tryStoppingVideoStream()
-        getBroadcastManager().unregisterReceiver(receiver)
+        broadcastManager.unregisterReceiver(receiver)
     }
 
     private fun tryStreamingVideo(){
@@ -112,31 +111,31 @@ public class MiniWidgetSoloLinkVideo : TowerWidget() {
             return
         }
 
-        val drone = getDrone()
-        videoStatus?.setVisibility(View.GONE)
+        val drone = drone
+        videoStatus?.visibility = View.GONE
 
         Timber.d("Starting video stream with tag %s", TAG)
         SoloCameraApi.getApi(drone).startVideoStream(surfaceRef, TAG, object : AbstractCommandListener(){
             override fun onError(error: Int) {
                 Timber.d("Unable to start video stream: %d", error)
-                videoStatus?.setVisibility(View.VISIBLE)
+                videoStatus?.visibility = View.VISIBLE
             }
 
             override fun onSuccess() {
                 Timber.d("Video stream started successfully")
-                videoStatus?.setVisibility(View.GONE)
+                videoStatus?.visibility = View.GONE
             }
 
             override fun onTimeout() {
                 Timber.d("Timed out while trying to start the video stream")
-                videoStatus?.setVisibility(View.VISIBLE)
+                videoStatus?.visibility = View.VISIBLE
             }
 
         })
     }
 
     private fun tryStoppingVideoStream(){
-        val drone = getDrone()
+        val drone = drone
         Timber.d("Stopping video stream with tag %s", TAG)
         SoloCameraApi.getApi(drone).stopVideoStream(TAG, object : AbstractCommandListener(){
             override fun onError(error: Int) {
@@ -157,8 +156,8 @@ public class MiniWidgetSoloLinkVideo : TowerWidget() {
     override fun getWidgetType() = TowerWidgets.SOLO_VIDEO
 
     private fun adjustAspectRatio(textureView: TextureView){
-        val viewWidth = textureView.getWidth()
-        val viewHeight = textureView.getHeight()
+        val viewWidth = textureView.width
+        val viewHeight = textureView.height
         val aspectRatio: Float = 9f/16f
 
         val newWidth: Int

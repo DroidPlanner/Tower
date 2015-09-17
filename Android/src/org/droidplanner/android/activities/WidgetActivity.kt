@@ -43,14 +43,14 @@ public class WidgetActivity : SuperUI() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_widget)
 
-        val fm = getSupportFragmentManager()
+        val fm = supportFragmentManager
         var flightDataFragment = fm.findFragmentById(R.id.map_view) as FlightDataFragment?
         if(flightDataFragment == null){
             flightDataFragment = FlightDataFragment()
             fm.beginTransaction().add(R.id.map_view, flightDataFragment).commit()
         }
 
-        handleIntent(getIntent())
+        handleIntent(intent)
     }
 
     override fun onNewIntent(intent: Intent?){
@@ -61,7 +61,7 @@ public class WidgetActivity : SuperUI() {
 
     private fun handleIntent(intent: Intent){
         val widgetId = intent.getIntExtra(EXTRA_WIDGET_ID, 0)
-        val fm = getSupportFragmentManager()
+        val fm = supportFragmentManager
 
         val widget = TowerWidgets.getWidgetById(widgetId)
         if(widget != null){

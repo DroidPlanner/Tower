@@ -81,7 +81,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
          *
          * @param itemList list of mission items proxies whose details the dialog is showing.
          */
-        public void onDetailDialogDismissed(List<MissionItemProxy> itemList);
+        void onDetailDialogDismissed(List<MissionItemProxy> itemList);
 
         /**
          * Notifies the listener that the mission item proxy was changed.
@@ -90,7 +90,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
          * @param oldNewItemsList a list of pairs containing the previous,
          *                        and the new mission item proxy.
          */
-        public void onWaypointTypeChanged(MissionItemType newType, List<Pair<MissionItemProxy,
+        void onWaypointTypeChanged(MissionItemType newType, List<Pair<MissionItemProxy,
                 List<MissionItemProxy>>> oldNewItemsList);
     }
 

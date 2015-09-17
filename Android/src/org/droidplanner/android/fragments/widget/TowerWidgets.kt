@@ -2,16 +2,21 @@ package org.droidplanner.android.fragments.widget
 
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
-import android.support.v4.app.Fragment
 import org.droidplanner.android.R
-import org.droidplanner.android.fragments.WidgetsListFragment
-import org.droidplanner.android.fragments.widget.MiniWidgetSoloLinkVideo
-import kotlin.platform.platformStatic
+import org.droidplanner.android.fragments.widget.diagnostics.FullWidgetDiagnostics
 
 /**
  * Created by Fredia Huya-Kouadio on 8/25/15.
  */
 public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId: Int, @StringRes val descriptionResId: Int, val prefKey: String) {
+
+    VEHICLE_DIAGNOSTICS(R.id.tower_widget_vehicle_diagnostics, R.string.label_widget_vehicle_diagnostics, R.string.description_widget_vehicle_diagnostics, "pref_widget_vehicle_diagnostics") {
+        override fun getMinimizedFragment() = MiniWidgetDiagnostics()
+
+        override fun canMaximize() = true
+
+        override fun getMaximizedFragment() = FullWidgetDiagnostics()
+    },
 
     TELEMETRY_INFO(R.id.tower_widget_telemetry_info, R.string.label_widget_telemetry_info, R.string.description_widget_telemetry_info, "pref_widget_telemetry_info") {
 
@@ -29,15 +34,8 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
         override fun getMinimizedFragment() = MiniWidgetSoloLinkVideo()
 
         override fun getMaximizedFragment() = FullWidgetSoloLinkVideo()
-    },
-
-    EKF_STATUS(R.id.tower_widget_ekf_status, R.string.label_widget_ekf_status, R.string.description_widget_ekf_status, "pref_widget_ekf_status"){
-        override fun getMinimizedFragment() = MiniWidgetEkfStatus()
-
-        override fun canMaximize() = true
-
-        override fun getMaximizedFragment() = FullWidgetEkfStatus()
-    };
+    }
+    ;
 
     abstract fun getMinimizedFragment(): TowerWidget
 
@@ -48,20 +46,20 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
     open fun getMaximizedFragment(): TowerWidget? = null
 
     companion object {
-        @platformStatic fun getWidgetById(@IdRes id: Int): TowerWidgets? {
-            return when(id){
+        @JvmStatic fun getWidgetById(@IdRes id: Int): TowerWidgets? {
+            return when (id) {
                 TELEMETRY_INFO.idRes -> TELEMETRY_INFO
                 SOLO_VIDEO.idRes -> SOLO_VIDEO
-                EKF_STATUS.idRes -> EKF_STATUS
+                VEHICLE_DIAGNOSTICS.idRes -> VEHICLE_DIAGNOSTICS
                 else -> null
             }
         }
 
-        @platformStatic fun getWidgetByPrefKey(prefKey: String): TowerWidgets?{
-            return when(prefKey){
+        @JvmStatic fun getWidgetByPrefKey(prefKey: String): TowerWidgets? {
+            return when (prefKey) {
                 TELEMETRY_INFO.prefKey -> TELEMETRY_INFO
                 SOLO_VIDEO.prefKey -> SOLO_VIDEO
-                EKF_STATUS.prefKey -> EKF_STATUS
+                VEHICLE_DIAGNOSTICS.prefKey -> VEHICLE_DIAGNOSTICS
                 else -> null
             }
         }

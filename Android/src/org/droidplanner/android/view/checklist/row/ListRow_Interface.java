@@ -5,13 +5,13 @@ import org.droidplanner.android.view.checklist.CheckListItem;
 import android.view.View;
 
 public interface ListRow_Interface {
-	public interface OnRowItemChangeListener {
-		public void onRowItemChanged(CheckListItem listItem);
+	interface OnRowItemChangeListener {
+		void onRowItemChanged(CheckListItem listItem);
 
-		public void onRowItemGetData(CheckListItem listItem, String sysTag);
+		void onRowItemGetData(CheckListItem listItem, String sysTag);
 	}
 
-	public View getView(View convertView);
+	View getView(View convertView);
 
-	public int getViewType();
+	int getViewType();
 }

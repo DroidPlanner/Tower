@@ -141,36 +141,36 @@ public class SlidingDrawer extends ViewGroup {
     /**
      * Callback invoked when the drawer is opened.
      */
-    public static interface OnDrawerOpenListener {
+    public interface OnDrawerOpenListener {
         /**
          * Invoked when the drawer becomes fully open.
          */
-        public void onDrawerOpened();
+        void onDrawerOpened();
     }
 
     /**
      * Callback invoked when the drawer is closed.
      */
-    public static interface OnDrawerCloseListener {
+    public interface OnDrawerCloseListener {
         /**
          * Invoked when the drawer becomes fully closed.
          */
-        public void onDrawerClosed();
+        void onDrawerClosed();
     }
 
     /**
      * Callback invoked when the drawer is scrolled.
      */
-    public static interface OnDrawerScrollListener {
+    public interface OnDrawerScrollListener {
         /**
          * Invoked when the user starts dragging/flinging the drawer's handle.
          */
-        public void onScrollStarted();
+        void onScrollStarted();
 
         /**
          * Invoked when the user stops dragging/flinging the drawer's handle.
          */
-        public void onScrollEnded();
+        void onScrollEnded();
     }
 
     /**
