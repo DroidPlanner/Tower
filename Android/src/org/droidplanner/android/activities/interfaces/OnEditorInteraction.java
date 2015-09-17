@@ -5,9 +5,9 @@ import com.o3dr.services.android.lib.coordinate.LatLong;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 
 public interface OnEditorInteraction {
-	public void onItemClick(MissionItemProxy item, boolean zoomToFit);
+	void onItemClick(MissionItemProxy item, boolean zoomToFit);
 
-	public void onMapClick(LatLong coord);
+	void onMapClick(LatLong coord);
 
-	public void onListVisibilityChanged();
+	void onListVisibilityChanged();
 }

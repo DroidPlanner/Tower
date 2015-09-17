@@ -43,12 +43,12 @@ public class VibrationViewer : GraphDiagnosticViewer() {
             .setFormatter(SimpleAxisValueFormatter())
 
     override fun updateVibrationView(vibration: Vibration){
-        val vibrations = listOf(vibration.getVibrationX(),
-                vibration.getVibrationY(),
-                vibration.getVibrationZ())
+        val vibrations = listOf(vibration.vibrationX,
+                vibration.vibrationY,
+                vibration.vibrationZ)
 
         var maxVibration = 0f
-        val cols = chartData.getColumns()
+        val cols = chartData.columns
         val colsCount = cols.size() - 1
         for(i in 0..colsCount){
             val vibValue = vibrations.get(i)
@@ -58,7 +58,7 @@ public class VibrationViewer : GraphDiagnosticViewer() {
             else dangerStatusColor
 
             val col = cols.get(i)
-            for(value in col.getValues()){
+            for(value in col.values){
                 value.setTarget(vibValue)
                 value.setColor(vibColor)
             }
@@ -66,7 +66,7 @@ public class VibrationViewer : GraphDiagnosticViewer() {
 
         graph?.startDataAnimation()
 
-        val parentFragment = getParentFragment()
+        val parentFragment = parentFragment
         if(parentFragment is FullWidgetDiagnostics){
             val label = getText(LABEL_ID)
             val widgetTitle =
@@ -81,7 +81,7 @@ public class VibrationViewer : GraphDiagnosticViewer() {
     override fun disableGraph(){
         super.disableGraph()
 
-        val parentFragment = getParentFragment()
+        val parentFragment = parentFragment
         if(parentFragment is FullWidgetDiagnostics){
             parentFragment.setAdapterViewTitle(2, getText(LABEL_ID))
         }

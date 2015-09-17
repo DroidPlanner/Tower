@@ -69,14 +69,14 @@ public class EkfStatusViewer : GraphDiagnosticViewer() {
     }
 
     override fun updateEkfView(ekfStatus: EkfStatus){
-        val variances = listOf(ekfStatus.getVelocityVariance(),
-                ekfStatus.getHorizontalPositionVariance(),
-                ekfStatus.getVerticalPositionVariance(),
-                ekfStatus.getCompassVariance(),
-                ekfStatus.getTerrainAltitudeVariance())
+        val variances = listOf(ekfStatus.velocityVariance,
+                ekfStatus.horizontalPositionVariance,
+                ekfStatus.verticalPositionVariance,
+                ekfStatus.compassVariance,
+                ekfStatus.terrainAltitudeVariance)
 
         var maxVariance = 0f
-        val cols = chartData.getColumns()
+        val cols = chartData.columns
         val colsCount = cols.size() -1
         for( i in 0..colsCount){
             val variance = variances.get(i)
@@ -86,7 +86,7 @@ public class EkfStatusViewer : GraphDiagnosticViewer() {
             else dangerStatusColor
 
             val col = cols.get(i)
-            for (value in col.getValues()) {
+            for (value in col.values) {
                 value.setTarget(variance)
                 value.setColor(varianceColor)
             }
@@ -94,7 +94,7 @@ public class EkfStatusViewer : GraphDiagnosticViewer() {
 
         graph?.startDataAnimation()
 
-        val parentFragment = getParentFragment()
+        val parentFragment = parentFragment
         if(parentFragment is FullWidgetDiagnostics){
             val label = getText(LABEL_ID)
             val widgetTitle =
@@ -109,7 +109,7 @@ public class EkfStatusViewer : GraphDiagnosticViewer() {
     override fun disableGraph(){
         super.disableGraph()
 
-        val parentFragment = getParentFragment()
+        val parentFragment = parentFragment
         if(parentFragment is FullWidgetDiagnostics){
             parentFragment.setAdapterViewTitle(0, getText(LABEL_ID))
         }

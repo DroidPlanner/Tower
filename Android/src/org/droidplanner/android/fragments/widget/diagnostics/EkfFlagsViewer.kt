@@ -24,16 +24,16 @@ public class EkfFlagsViewer : BaseWidgetDiagnostic() {
 
     private val ekfFlagsViews: HashMap<EkfStatus.EkfFlags, TextView?> = HashMap()
 
-    private val okFlagDrawable: Drawable? by Delegates.lazy {
-        getResources()?.getDrawable(R.drawable.ic_check_box_green_500_24dp)
+    private val okFlagDrawable: Drawable? by lazy(LazyThreadSafetyMode.NONE) {
+        resources?.getDrawable(R.drawable.ic_check_box_green_500_24dp)
     }
 
-    private val badFlagDrawable: Drawable? by Delegates.lazy {
-        getResources()?.getDrawable(R.drawable.ic_cancel_red_500_24dp)
+    private val badFlagDrawable: Drawable? by lazy(LazyThreadSafetyMode.NONE) {
+        resources?.getDrawable(R.drawable.ic_cancel_red_500_24dp)
     }
 
-    private val unknownFlagDrawable: Drawable? by Delegates.lazy {
-        getResources()?.getDrawable(R.drawable.ic_help_orange_500_24dp)
+    private val unknownFlagDrawable: Drawable? by lazy(LazyThreadSafetyMode.NONE) {
+        resources?.getDrawable(R.drawable.ic_help_orange_500_24dp)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {

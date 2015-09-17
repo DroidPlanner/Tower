@@ -33,8 +33,8 @@ import kotlin.properties.Delegates
  */
 public class FullWidgetDiagnostics : TowerWidget(){
 
-    private val viewAdapter by Delegates.lazy {
-        DiagnosticViewAdapter(getContext(), getChildFragmentManager())
+    private val viewAdapter by lazy(LazyThreadSafetyMode.NONE) {
+        DiagnosticViewAdapter(context, childFragmentManager)
     }
 
     private var tabPageIndicator: TabPageIndicator? = null
@@ -47,8 +47,8 @@ public class FullWidgetDiagnostics : TowerWidget(){
         super.onViewCreated(view, savedInstanceState)
 
         val viewPager = view.findViewById(R.id.diagnostics_view_pager) as ViewPager?
-        viewPager?.setAdapter(viewAdapter)
-        viewPager?.setOffscreenPageLimit(2)
+        viewPager?.adapter = viewAdapter
+        viewPager?.offscreenPageLimit = 2
 
         tabPageIndicator = view.findViewById(R.id.pager_title_strip) as TabPageIndicator?
         tabPageIndicator?.setViewPager(viewPager)

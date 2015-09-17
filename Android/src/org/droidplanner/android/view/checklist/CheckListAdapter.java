@@ -26,9 +26,9 @@ import android.widget.TextView;
 public class CheckListAdapter extends ListXmlAdapter implements OnRowItemChangeListener {
 
 	public interface OnCheckListItemUpdateListener {
-		public void onRowItemChanged(CheckListItem checkListItem);
+		void onRowItemChanged(CheckListItem checkListItem);
 
-		public void onRowItemGetData(CheckListItem checkListItem, String mSysTag);
+		void onRowItemGetData(CheckListItem checkListItem, String mSysTag);
 	}
 
 	private OnCheckListItemUpdateListener listener;

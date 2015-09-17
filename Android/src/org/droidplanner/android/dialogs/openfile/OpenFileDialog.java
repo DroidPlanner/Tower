@@ -15,11 +15,11 @@ import java.lang.ref.WeakReference;
 public abstract class OpenFileDialog implements OnClickListener {
 
 	public interface FileReader {
-		public String getPath();
+		String getPath();
 
-		public String[] getFileList();
+		String[] getFileList();
 
-		public boolean openFile(String file);
+		boolean openFile(String file);
 	}
 
 	protected abstract FileReader createReader();

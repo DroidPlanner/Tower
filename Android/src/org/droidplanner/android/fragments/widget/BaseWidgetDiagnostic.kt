@@ -58,7 +58,7 @@ public abstract class BaseWidgetDiagnostic : TowerWidget(){
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            when (intent.getAction()) {
+            when (intent.action) {
                 AttributeEvent.STATE_EKF_REPORT -> updateEkfStatus()
 
                 AttributeEvent.STATE_CONNECTED,
@@ -75,12 +75,12 @@ public abstract class BaseWidgetDiagnostic : TowerWidget(){
     }
 
     private fun updateEkfStatus(){
-        if (!isAdded())
+        if (!isAdded)
             return
 
-        val state: State? = getDrone()?.getAttribute(AttributeType.STATE)
-        val ekfStatus = state?.getEkfStatus()
-        if (state == null || !state.isTelemetryLive() || ekfStatus == null) {
+        val state: State? = drone?.getAttribute(AttributeType.STATE)
+        val ekfStatus = state?.ekfStatus
+        if (state == null || !state.isTelemetryLive || ekfStatus == null) {
             disableEkfView()
         }
         else{
@@ -89,12 +89,12 @@ public abstract class BaseWidgetDiagnostic : TowerWidget(){
     }
 
     private fun updateVibrationStatus(){
-        if(!isAdded())
+        if(!isAdded)
             return
 
-        val state: State? = getDrone()?.getAttribute(AttributeType.STATE)
-        val vibration = state?.getVehicleVibration()
-        if(state == null || !state.isTelemetryLive() || vibration == null){
+        val state: State? = drone?.getAttribute(AttributeType.STATE)
+        val vibration = state?.vehicleVibration
+        if(state == null || !state.isTelemetryLive || vibration == null){
             disableVibrationView()
         }
         else{
@@ -115,11 +115,11 @@ public abstract class BaseWidgetDiagnostic : TowerWidget(){
     override fun onApiConnected() {
         updateEkfStatus()
         updateVibrationStatus()
-        getBroadcastManager().registerReceiver(receiver, filter)
+        broadcastManager.registerReceiver(receiver, filter)
     }
 
     override fun onApiDisconnected() {
-        getBroadcastManager().unregisterReceiver(receiver)
+        broadcastManager.unregisterReceiver(receiver)
         updateEkfStatus()
         updateVibrationStatus()
     }

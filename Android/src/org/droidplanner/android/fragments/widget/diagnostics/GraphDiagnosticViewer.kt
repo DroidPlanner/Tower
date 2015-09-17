@@ -55,28 +55,28 @@ public abstract class GraphDiagnosticViewer : BaseWidgetDiagnostic() {
 
     private fun setupGraph(view: View){
         graph = view.findViewById(R.id.column_chart) as ColumnChartView?
-        graph?.setValueSelectionEnabled(true)
-        graph?.setZoomEnabled(false)
-        graph?.setViewportCalculationEnabled(false)
+        graph?.isValueSelectionEnabled = true
+        graph?.isZoomEnabled = false
+        graph?.isViewportCalculationEnabled = false
 
-        val viewPort = getViewPort(graph?.getMaximumViewport())
-        graph?.setMaximumViewport(viewPort)
-        graph?.setCurrentViewport(viewPort)
+        val viewPort = getViewPort(graph?.maximumViewport)
+        graph?.maximumViewport = viewPort
+        graph?.currentViewport = viewPort
 
         val axisY = getYAxis()
-        chartData.setAxisYLeft(axisY)
+        chartData.axisYLeft = axisY
 
         val axisX = getXAxis()
-        chartData.setAxisXBottom(axisX)
+        chartData.axisXBottom = axisX
 
         chartData.setColumns(getColumns())
 
-        graph?.setColumnChartData(chartData)
+        graph?.columnChartData = chartData
     }
 
     protected open fun disableGraph(){
-        for (column in chartData.getColumns()) {
-            for (value in column.getValues()) {
+        for (column in chartData.columns) {
+            for (value in column.values) {
                 value.setTarget(0f)
                 value.setColor(disabledColor)
             }

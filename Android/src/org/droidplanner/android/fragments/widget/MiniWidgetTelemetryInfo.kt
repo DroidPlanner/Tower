@@ -37,7 +37,7 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
 
     private val receiver = object : BroadcastReceiver(){
         override fun onReceive(context: Context, intent: Intent) {
-            when(intent.getAction()){
+            when(intent.action){
                 AttributeEvent.ATTITUDE_UPDATED -> onOrientationUpdate()
                 AttributeEvent.SPEED_UPDATED -> onSpeedUpdate()
             }
@@ -75,7 +75,7 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
     override fun onStart() {
         super.onStart()
 
-        val prefs = PreferenceManager.getDefaultSharedPreferences(getContext())
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         headingModeFPV = prefs.getBoolean("pref_heading_mode", false)
     }
 
@@ -83,11 +83,11 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
 
     override fun onApiConnected() {
         updateAllTelem()
-        getBroadcastManager().registerReceiver(receiver, filter)
+        broadcastManager.registerReceiver(receiver, filter)
     }
 
     override fun onApiDisconnected() {
-        getBroadcastManager().unregisterReceiver(receiver)
+        broadcastManager.unregisterReceiver(receiver)
     }
 
     private fun updateAllTelem() {
@@ -96,16 +96,16 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
     }
 
     private fun onOrientationUpdate() {
-        if(!isAdded())
+        if(!isAdded)
             return
 
-        val drone = getDrone()
+        val drone = drone
 
         val attitude = drone.getAttribute<Attitude>(AttributeType.ATTITUDE) ?: return
 
-        val r = attitude.getRoll().toFloat()
-        val p = attitude.getPitch().toFloat()
-        var y = attitude.getYaw().toFloat()
+        val r = attitude.roll.toFloat()
+        val p = attitude.pitch.toFloat()
+        var y = attitude.yaw.toFloat()
 
         if (!headingModeFPV and (y < 0)) {
             y += 360
@@ -113,25 +113,25 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
 
         attitudeIndicator?.setAttitude(r, p, y)
 
-        roll?.setText(java.lang.String.format(Locale.US,"%3.0f\u00B0", r))
-        pitch?.setText(java.lang.String.format(Locale.US,"%3.0f\u00B0", p))
-        yaw?.setText(java.lang.String.format(Locale.US, "%3.0f\u00B0", y))
+        roll?.text = java.lang.String.format(Locale.US,"%3.0f\u00B0", r)
+        pitch?.text = java.lang.String.format(Locale.US,"%3.0f\u00B0", p)
+        yaw?.text = java.lang.String.format(Locale.US, "%3.0f\u00B0", y)
 
     }
 
     private fun onSpeedUpdate() {
-        if(!isAdded())
+        if(!isAdded)
             return
 
-        val drone = getDrone()
+        val drone = drone
         val speed = drone.getAttribute<Speed>(AttributeType.SPEED) ?: return
 
-        val groundSpeedValue =  speed.getGroundSpeed()
-        val verticalSpeedValue = speed.getVerticalSpeed()
+        val groundSpeedValue =  speed.groundSpeed
+        val verticalSpeedValue = speed.verticalSpeed
 
-        val speedUnitProvider = getSpeedUnitProvider()
+        val speedUnitProvider = speedUnitProvider
 
-        horizontalSpeed?.setText(getString(R.string.horizontal_speed_telem, speedUnitProvider.boxBaseValueToTarget(groundSpeedValue).toString()))
-        verticalSpeed?.setText(getString(R.string.vertical_speed_telem, speedUnitProvider.boxBaseValueToTarget(verticalSpeedValue).toString()))
+        horizontalSpeed?.text = getString(R.string.horizontal_speed_telem, speedUnitProvider.boxBaseValueToTarget(groundSpeedValue).toString())
+        verticalSpeed?.text = getString(R.string.vertical_speed_telem, speedUnitProvider.boxBaseValueToTarget(verticalSpeedValue).toString())
     }
 }

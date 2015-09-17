@@ -16,28 +16,28 @@ import kotlin.properties.Delegates
  */
 public class MiniWidgetDiagnostics : BaseWidgetDiagnostic() {
 
-    private val okFlagDrawable: Drawable? by Delegates.lazy {
-        getResources()?.getDrawable(R.drawable.ic_check_box_green_500_18dp)
+    private val okFlagDrawable: Drawable? by lazy(LazyThreadSafetyMode.NONE) {
+        resources?.getDrawable(R.drawable.ic_check_box_green_500_18dp)
     }
 
-    private val badFlagDrawable: Drawable? by Delegates.lazy {
-        getResources()?.getDrawable(R.drawable.ic_cancel_red_500_18dp)
+    private val badFlagDrawable: Drawable? by lazy(LazyThreadSafetyMode.NONE) {
+        resources?.getDrawable(R.drawable.ic_cancel_red_500_18dp)
     }
 
-    private val warningFlagDrawable by Delegates.lazy {
-        getResources()?.getDrawable(R.drawable.ic_warning_orange_500_18dp)
+    private val warningFlagDrawable by lazy(LazyThreadSafetyMode.NONE) {
+        resources?.getDrawable(R.drawable.ic_warning_orange_500_18dp)
     }
 
-    private val unknownFlagDrawable: Drawable? by Delegates.lazy {
-        getResources()?.getDrawable(R.drawable.ic_help_grey_600_18dp)
+    private val unknownFlagDrawable: Drawable? by lazy(LazyThreadSafetyMode.NONE) {
+        resources?.getDrawable(R.drawable.ic_help_grey_600_18dp)
     }
 
-    private val ekfStatusView by Delegates.lazy {
-        getView()?.findViewById(R.id.ekf_status) as TextView?
+    private val ekfStatusView by lazy(LazyThreadSafetyMode.NONE) {
+        view?.findViewById(R.id.ekf_status) as TextView?
     }
 
-    private val vibrationStatus by Delegates.lazy {
-        getView()?.findViewById(R.id.vibration_status) as TextView?
+    private val vibrationStatus by lazy(LazyThreadSafetyMode.NONE) {
+        view?.findViewById(R.id.vibration_status) as TextView?
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -45,10 +45,10 @@ public class MiniWidgetDiagnostics : BaseWidgetDiagnostic() {
     }
 
     override fun updateEkfView(ekfStatus: EkfStatus) {
-        val ekfVar = Math.max(ekfStatus.getVelocityVariance(),
-                Math.max(ekfStatus.getHorizontalPositionVariance(),
-                        Math.max(ekfStatus.getVerticalPositionVariance(),
-                                Math.max(ekfStatus.getCompassVariance(), ekfStatus.getTerrainAltitudeVariance()))))
+        val ekfVar = Math.max(ekfStatus.velocityVariance,
+                Math.max(ekfStatus.horizontalPositionVariance,
+                        Math.max(ekfStatus.verticalPositionVariance,
+                                Math.max(ekfStatus.compassVariance, ekfStatus.terrainAltitudeVariance))))
 
         val statusDrawable = if (ekfVar < BaseWidgetDiagnostic.GOOD_VARIANCE_THRESHOLD) okFlagDrawable
         else if (ekfVar < BaseWidgetDiagnostic.WARNING_VARIANCE_THRESHOLD) warningFlagDrawable
@@ -62,8 +62,8 @@ public class MiniWidgetDiagnostics : BaseWidgetDiagnostic() {
     }
 
     override fun updateVibrationView(vibration: Vibration){
-        val vibSummary = Math.max(vibration.getVibrationX(),
-                Math.max(vibration.getVibrationY(), vibration.getVibrationZ()))
+        val vibSummary = Math.max(vibration.vibrationX,
+                Math.max(vibration.vibrationY, vibration.vibrationZ))
 
         val statusDrawable = if(vibSummary < BaseWidgetDiagnostic.GOOD_VIBRATION_THRESHOLD) okFlagDrawable
         else if(vibSummary < BaseWidgetDiagnostic.WARNING_VIBRATION_THRESHOLD) warningFlagDrawable
