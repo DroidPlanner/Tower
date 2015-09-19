@@ -21,6 +21,7 @@ import com.o3dr.android.client.apis.solo.SoloCameraApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Attitude;
+import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.Speed;
 import com.o3dr.services.android.lib.model.AbstractCommandListener;
 import com.o3dr.services.android.lib.model.SimpleCommandListener;
@@ -42,6 +43,8 @@ public class TelemetryFragment extends ApiListenerFragment {
     static {
         eventFilter.addAction(AttributeEvent.ATTITUDE_UPDATED);
         eventFilter.addAction(AttributeEvent.SPEED_UPDATED);
+        eventFilter.addAction(AttributeEvent.GPS_POSITION);
+        eventFilter.addAction(AttributeEvent.HOME_UPDATED);
         eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
     }
 
@@ -58,6 +61,10 @@ public class TelemetryFragment extends ApiListenerFragment {
                 case AttributeEvent.SPEED_UPDATED:
                     onSpeedUpdate();
                     break;
+                case AttributeEvent.GPS_POSITION:
+                case AttributeEvent.HOME_UPDATED:
+                    onPositionUpdate();
+                    break;
 
                 case AttributeEvent.STATE_CONNECTED:
                     tryStreamingVideo();
@@ -66,6 +73,7 @@ public class TelemetryFragment extends ApiListenerFragment {
         }
     };
 
+
     private AttitudeIndicator attitudeIndicator;
     private TextView roll;
     private TextView yaw;
@@ -73,6 +81,9 @@ public class TelemetryFragment extends ApiListenerFragment {
 
     private TextView horizontalSpeed;
     private TextView verticalSpeed;
+
+    private TextView latitude;
+    private TextView longitude;
 
     private View videoContainer;
     private TextureView videoView;
@@ -90,6 +101,9 @@ public class TelemetryFragment extends ApiListenerFragment {
 
         horizontalSpeed = (TextView) view.findViewById(R.id.horizontal_speed_telem);
         verticalSpeed = (TextView) view.findViewById(R.id.vertical_speed_telem);
+
+        latitude = (TextView) view.findViewById(R.id.latitude_telem);
+        longitude = (TextView) view.findViewById(R.id.longitude_telem);
 
         videoContainer = view.findViewById(R.id.minimized_video_container);
         videoContainer.setVisibility(View.GONE);
@@ -270,4 +284,24 @@ public class TelemetryFragment extends ApiListenerFragment {
         verticalSpeed.setText(getString(R.string.vertical_speed_telem, speedUnitProvider.boxBaseValueToTarget(verticalSpeedValue).toString()));
     }
 
+
+    private void onPositionUpdate() {
+        if(!isAttached())
+            return;
+
+        final Drone drone = getDrone();
+        final Gps droneGps = drone.getAttribute(AttributeType.GPS);
+
+        if (droneGps != null && droneGps.isValid()) {
+
+            final double latitudeValue = droneGps.getPosition().getLatitude();
+            final double longitudeValue = droneGps.getPosition().getLongitude();
+
+            latitude.setText(getString(R.string.latitude_telem, latitudeValue));
+            longitude.setText(getString(R.string.longitude_telem, longitudeValue));
+
+        }
+
+
+    }
 }
