@@ -454,6 +454,10 @@
     <string name="horizontal_speed_telem">hs: %s</string>
     <string name="vertical_speed_empty">vs: —</string>
     <string name="vertical_speed_telem">vs: %s</string>
+    <string name="latitude_empty">lat: —</string>
+    <string name="latitude_telem">lat: %s</string>
+    <string name="longitude_empty">long: —</string>
+    <string name="longitude_telem">long: %s</string>	
     <string name="menu_kill_switch">Kill Switch</string>
     <string name="label_clear_selected">Clear selected</string>
     <string name="unsaved_param_warning">You have unsaved changes</string>
