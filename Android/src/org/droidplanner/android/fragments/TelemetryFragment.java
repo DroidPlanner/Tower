@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.SurfaceTexture;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -295,8 +296,8 @@ public class TelemetryFragment extends ApiListenerFragment {
             final double latitudeValue = droneGps.getPosition().getLatitude();
             final double longitudeValue = droneGps.getPosition().getLongitude();
 
-            latitude.setText(getString(R.string.latitude_telem, latitudeValue));
-            longitude.setText(getString(R.string.longitude_telem, longitudeValue));
+            latitude.setText(getString(R.string.latitude_telem, Location.convert(latitudeValue, Location.FORMAT_DEGREES)));
+            longitude.setText(getString(R.string.longitude_telem, Location.convert(longitudeValue, Location.FORMAT_DEGREES)));
 
         }
 
