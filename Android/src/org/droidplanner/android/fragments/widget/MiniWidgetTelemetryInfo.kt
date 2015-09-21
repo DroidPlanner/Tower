@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.preference.PreferenceManager
@@ -14,6 +15,7 @@ import android.widget.TextView
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
 import com.o3dr.services.android.lib.drone.attribute.AttributeType
 import com.o3dr.services.android.lib.drone.property.Attitude
+import com.o3dr.services.android.lib.drone.property.Gps
 import com.o3dr.services.android.lib.drone.property.Speed
 import org.droidplanner.android.R
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment
@@ -35,6 +37,8 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
             temp.addAction(AttributeEvent.ATTITUDE_UPDATED)
             temp.addAction(AttributeEvent.SPEED_UPDATED)
             temp.addAction(AttributeEvent.STATE_UPDATED)
+		    temp.addAction(AttributeEvent.GPS_POSITION);
+            temp.addAction(AttributeEvent.HOME_UPDATED);
             return temp
         }
     }
@@ -45,9 +49,10 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
                 AttributeEvent.ATTITUDE_UPDATED -> onOrientationUpdate()
                 AttributeEvent.SPEED_UPDATED -> onSpeedUpdate()
                 AttributeEvent.STATE_UPDATED -> updateFlightTimer()
+                AttributeEvent.GPS_POSITION ->  onPositionUpdate()
+                AttributeEvent.HOME_UPDATED ->  onPositionUpdate()
             }
         }
-
     }
 
     private val flightTimeUpdater = object : Runnable{
@@ -76,6 +81,9 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
     private var horizontalSpeed: TextView? = null
     private var verticalSpeed: TextView? = null
 
+    private var latitude: TextView? = null
+    private var longitude: TextView? = null
+
     private var headingModeFPV: Boolean = false
 
     private var flightTimer : TextView? = null
@@ -97,6 +105,9 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
         verticalSpeed = view.findViewById(R.id.vertical_speed_telem) as TextView?
 
         flightTimer = view.findViewById(R.id.flight_timer) as TextView?
+
+        latitude = view.findViewById(R.id.latitude_telem) as TextView?
+        longitude = view.findViewById(R.id.longitude_telem) as TextView?
     }
 
     override fun onStart() {
@@ -120,6 +131,7 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
     private fun updateAllTelem() {
         onOrientationUpdate()
         onSpeedUpdate()
+        onPositionUpdate()
         updateFlightTimer()
     }
 
@@ -169,5 +181,23 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
 
         horizontalSpeed?.text = getString(R.string.horizontal_speed_telem, speedUnitProvider.boxBaseValueToTarget(groundSpeedValue).toString())
         verticalSpeed?.text = getString(R.string.vertical_speed_telem, speedUnitProvider.boxBaseValueToTarget(verticalSpeedValue).toString())
+    }
+
+	private fun onPositionUpdate() {
+        if (!isAdded)
+            return
+
+        val drone = drone
+        val droneGps = drone.getAttribute<Gps>(AttributeType.GPS) ?: return
+
+        if (droneGps.isValid) {
+
+            val latitudeValue = droneGps.position.latitude
+            val longitudeValue = droneGps.position.longitude
+
+            latitude?.text = getString(R.string.latitude_telem, Location.convert(latitudeValue, Location.FORMAT_DEGREES).toString())
+            longitude?.text = getString(R.string.longitude_telem, Location.convert(longitudeValue, Location.FORMAT_DEGREES).toString())
+
+        }
     }
 }
