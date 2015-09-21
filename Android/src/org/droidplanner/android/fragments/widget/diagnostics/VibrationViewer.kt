@@ -14,7 +14,7 @@ import lecho.lib.hellocharts.formatter.SimpleColumnChartValueFormatter
 import lecho.lib.hellocharts.model.Axis
 import lecho.lib.hellocharts.model.Viewport
 import org.droidplanner.android.R
-import org.droidplanner.android.fragments.widget.BaseWidgetDiagnostic
+import org.droidplanner.android.fragments.widget.diagnostics.BaseWidgetDiagnostic
 
 /**
  * Created by Fredia Huya-Kouadio on 9/15/15.

@@ -1,4 +1,4 @@
-package org.droidplanner.android.fragments.widget
+package org.droidplanner.android.fragments.widget.diagnostics
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle

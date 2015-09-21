@@ -1,4 +1,4 @@
-package org.droidplanner.android.fragments.widget
+package org.droidplanner.android.fragments.widget.diagnostics
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -9,6 +9,8 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeType
 import com.o3dr.services.android.lib.drone.property.EkfStatus
 import com.o3dr.services.android.lib.drone.property.State
 import com.o3dr.services.android.lib.drone.property.Vibration
+import org.droidplanner.android.fragments.widget.TowerWidget
+import org.droidplanner.android.fragments.widget.TowerWidgets
 
 /**
  * Created by Fredia Huya-Kouadio on 8/30/15.

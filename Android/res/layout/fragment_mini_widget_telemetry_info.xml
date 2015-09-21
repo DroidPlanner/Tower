@@ -7,24 +7,6 @@
     android:orientation="vertical"
     android:padding="5dp">
 
-    <me.grantland.widget.AutofitTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        tools:text="00:00"
-        android:id="@+id/flight_timer"
-        android:text="@string/unset_timer"
-        android:textStyle="bold"
-        android:drawableLeft="@drawable/ic_schedule_black_18dp"
-        android:drawableStart="@drawable/ic_schedule_black_18dp"
-        />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="5dp"
-        android:background="@color/light_grey" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -127,38 +109,5 @@
         android:singleLine="true"
         android:text="@string/vertical_speed_empty"
         tools:text="vs: 1000 mph" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="5dp"
-        android:background="@color/light_grey" />
-
-    <TextView
-        android:id="@+id/latitude_telem"
-        style="@style/largeTelemetryText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawablePadding="10dp"
-        android:singleLine="true"
-        android:text="@string/latitude_empty"
-        tools:text="Lat: " />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="5dp"
-        android:background="@color/light_grey" />
-
-    <TextView
-        android:id="@+id/longitude_telem"
-        style="@style/largeTelemetryText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawablePadding="10dp"
-        android:singleLine="true"
-        android:text="@string/longitude_empty"
-        tools:text="Long: " />
-
 
 </LinearLayout>

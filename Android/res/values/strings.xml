@@ -460,9 +460,9 @@
     <string name="vertical_speed_empty">vs: —</string>
     <string name="vertical_speed_telem">vs: %s</string>
     <string name="latitude_empty">Lat: —</string>
-    <string name="latitude_telem">Lat: %s</string>
+    <string name="latitude_telem">Lat: %s°</string>
     <string name="longitude_empty">Long: —</string>
-    <string name="longitude_telem">Long: %s</string>
+    <string name="longitude_telem">Long: %s°</string>
     <string name="menu_kill_switch">Kill Switch</string>
     <string name="label_clear_selected">Clear selected</string>
     <string name="unsaved_param_warning">You have unsaved changes</string>
@@ -484,6 +484,10 @@
     <string name="pref_tower_widgets_title">Widgets Preferences</string>
     <string name="pref_tower_widgets_category">Tower Widgets</string>
     <string name="pref_widgets_list_category">Widgets list</string>
+    <string name="label_widget_flight_timer">Flight Timer</string>
+    <string name="description_widget_flight_timer">Displays the vehicle flight time</string>
+    <string name="label_widget_geo_info">Geo Info</string>
+    <string name="description_widget_geo_info">Displays vehicle geographical information (Lat/Long)</string>
     <string name="label_ekf">ekf</string>
     <string name="label_velocity_var_abbrev">vel</string>
     <string name="label_horizontal_position_var_abbrev">h.pos</string>

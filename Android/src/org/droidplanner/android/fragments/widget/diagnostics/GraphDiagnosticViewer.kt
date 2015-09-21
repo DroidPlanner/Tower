@@ -9,7 +9,7 @@ import lecho.lib.hellocharts.formatter.SimpleColumnChartValueFormatter
 import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.view.ColumnChartView
 import org.droidplanner.android.R
-import org.droidplanner.android.fragments.widget.BaseWidgetDiagnostic
+import org.droidplanner.android.fragments.widget.diagnostics.BaseWidgetDiagnostic
 import java.util.*
 
 /**
