@@ -8,9 +8,7 @@ import android.graphics.Matrix
 import android.graphics.SurfaceTexture
 import android.os.Bundle
 import android.view.*
-import android.widget.Button
 import android.widget.TextView
-import com.o3dr.android.client.Drone
 import com.o3dr.android.client.apis.GimbalApi
 import com.o3dr.android.client.apis.solo.SoloCameraApi
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
@@ -19,9 +17,7 @@ import com.o3dr.services.android.lib.drone.companion.solo.SoloEvents
 import com.o3dr.services.android.lib.drone.companion.solo.tlv.SoloGoproState
 import com.o3dr.services.android.lib.model.AbstractCommandListener
 import org.droidplanner.android.R
-import org.droidplanner.android.fragments.helpers.ApiListenerFragment
 import timber.log.Timber
-import kotlin.properties.Delegates
 
 /**
  * Created by Fredia Huya-Kouadio on 7/19/15.
@@ -41,16 +37,16 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
         }
     }
 
-    private val receiver = object : BroadcastReceiver(){
+    private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            when(intent.action){
+            when (intent.action) {
                 AttributeEvent.STATE_CONNECTED -> {
                     tryStreamingVideo()
-                    checkGoproControlSupport()
+                    onGoproStateUpdate()
                 }
 
                 SoloEvents.SOLO_GOPRO_STATE_UPDATED -> {
-                    checkGoproControlSupport()
+                    onGoproStateUpdate()
                 }
             }
         }
@@ -80,10 +76,10 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
     }
 
     private val orientationListener = object : GimbalApi.GimbalOrientationListener {
-        override fun onGimbalOrientationUpdate(orientation: GimbalApi.GimbalOrientation){
+        override fun onGimbalOrientationUpdate(orientation: GimbalApi.GimbalOrientation) {
         }
 
-        override fun onGimbalOrientationCommandError(code: Int){
+        override fun onGimbalOrientationCommandError(code: Int) {
             Timber.e("command failed with error code: %d", code)
         }
     }
@@ -92,7 +88,7 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
         return inflater?.inflate(R.layout.fragment_widget_sololink_video, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         textureView?.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
@@ -119,7 +115,7 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
         takePhotoButton?.setOnClickListener {
             Timber.d("Taking photo.. cheeze!")
             val drone = drone
-            if(drone != null) {
+            if (drone != null) {
                 //TODO: fix when camera control support is stable on sololink
                 SoloCameraApi.getApi(drone).takePhoto(null)
             }
@@ -128,7 +124,7 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
         recordVideo?.setOnClickListener {
             Timber.d("Recording video!")
             val drone = drone
-            if(drone != null){
+            if (drone != null) {
                 //TODO: fix when camera control support is stable on sololink
                 SoloCameraApi.getApi(drone).toggleVideoRecording(null)
             }
@@ -137,30 +133,30 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
 
     override fun onApiConnected() {
         tryStreamingVideo()
-        checkGoproControlSupport()
+        onGoproStateUpdate()
         broadcastManager.registerReceiver(receiver, filter)
     }
 
-    override fun onResume(){
+    override fun onResume() {
         super.onResume()
         tryStreamingVideo()
     }
 
-    override fun onPause(){
+    override fun onPause() {
         super.onPause()
         tryStoppingVideoStream()
     }
 
     override fun onApiDisconnected() {
         tryStoppingVideoStream()
-        checkGoproControlSupport()
+        onGoproStateUpdate()
         broadcastManager.unregisterReceiver(receiver)
     }
 
     override fun getWidgetType() = TowerWidgets.SOLO_VIDEO
 
     private fun tryStreamingVideo() {
-        if(surfaceRef == null)
+        if (surfaceRef == null)
             return
 
         val drone = drone
@@ -228,11 +224,11 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
         })
     }
 
-    private fun tryStoppingVideoStream(){
+    private fun tryStoppingVideoStream() {
         val drone = drone
 
         Timber.d("Stopping video stream with tag %s", TAG)
-        SoloCameraApi.getApi(drone).stopVideoStream(TAG, object : AbstractCommandListener(){
+        SoloCameraApi.getApi(drone).stopVideoStream(TAG, object : AbstractCommandListener() {
             override fun onError(error: Int) {
                 Timber.d("Unable to stop video stream: %d", error)
             }
@@ -248,27 +244,31 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
         })
     }
 
-    private fun checkGoproControlSupport(){
+    private fun onGoproStateUpdate() {
         val goproState: SoloGoproState? = drone?.getAttribute(SoloAttributes.SOLO_GOPRO_STATE)
-        widgetButtonBar?.visibility = if (goproState == null)
-            View.GONE
-        else
-            View.VISIBLE
+        if(goproState == null){
+            widgetButtonBar?.visibility = View.GONE
+        }
+        else {
+            widgetButtonBar?.visibility = View.VISIBLE
+
+            //Update the video recording button
+            recordVideo?.isActivated = goproState.recording == SoloGoproState.RECORDING_ON
+        }
     }
 
-    private fun adjustAspectRatio(textureView: TextureView){
+    private fun adjustAspectRatio(textureView: TextureView) {
         val viewWidth = textureView.width
         val viewHeight = textureView.height
-        val aspectRatio: Float = 9f/16f
+        val aspectRatio: Float = 9f / 16f
 
         val newWidth: Int
         val newHeight: Int
-        if(viewHeight > (viewWidth * aspectRatio)){
+        if (viewHeight > (viewWidth * aspectRatio)) {
             //limited by narrow width; restrict height
             newWidth = viewWidth
             newHeight = (viewWidth * aspectRatio).toInt()
-        }
-        else{
+        } else {
             //limited by short height; restrict width
             newWidth = (viewHeight / aspectRatio).toInt();
             newHeight = viewHeight
