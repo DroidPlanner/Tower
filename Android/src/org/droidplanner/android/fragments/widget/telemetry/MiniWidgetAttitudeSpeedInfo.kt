@@ -24,7 +24,7 @@ import java.util.*
 /**
  * Created by Fredia Huya-Kouadio on 8/27/15.
  */
-public class MiniWidgetTelemetryInfo : TowerWidget() {
+public class MiniWidgetAttitudeSpeedInfo : TowerWidget() {
 
     companion object {
         private val filter = initFilter()
@@ -59,7 +59,7 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
     private var headingModeFPV: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.fragment_mini_widget_telemetry_info, container, false)
+        return inflater?.inflate(R.layout.fragment_mini_widget_attitude_speed_info, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -82,7 +82,7 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
         headingModeFPV = prefs.getBoolean("pref_heading_mode", false)
     }
 
-    override fun getWidgetType() = TowerWidgets.TELEMETRY_INFO
+    override fun getWidgetType() = TowerWidgets.ATTITUDE_SPEED_INFO
 
     override fun onApiConnected() {
         updateAllTelem()

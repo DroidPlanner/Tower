@@ -477,8 +477,8 @@
     <!-- Telemetry widget labels -->
     <string name="label_widget_solo_video">Solo Video</string>
     <string name="description_widget_solo_video">Displays the video stream from a connected Solo vehicle</string>
-    <string name="label_widget_telemetry_info">Telemetry Data</string>
-    <string name="description_widget_telemetry_info">Displays vehicle telemetry info</string>
+    <string name="label_widget_attitude_speed_info">Speed &amp; Attitude Info</string>
+    <string name="description_widget_attitude_speed_info">Displays vehicle speed and attitude data</string>
     <string name="label_widget_vehicle_diagnostics">Diagnostics</string>
     <string name="description_widget_vehicle_diagnostics">Displays the vehicle diagnostics stats</string>
     <string name="pref_tower_widgets_title">Widgets Preferences</string>

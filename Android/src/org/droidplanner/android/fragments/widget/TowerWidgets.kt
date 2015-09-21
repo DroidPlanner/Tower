@@ -7,7 +7,7 @@ import org.droidplanner.android.fragments.widget.diagnostics.FullWidgetDiagnosti
 import org.droidplanner.android.fragments.widget.diagnostics.MiniWidgetDiagnostics
 import org.droidplanner.android.fragments.widget.telemetry.MiniWidgetFlightTimer
 import org.droidplanner.android.fragments.widget.telemetry.MiniWidgetGeoInfo
-import org.droidplanner.android.fragments.widget.telemetry.MiniWidgetTelemetryInfo
+import org.droidplanner.android.fragments.widget.telemetry.MiniWidgetAttitudeSpeedInfo
 
 /**
  * Created by Fredia Huya-Kouadio on 8/25/15.
@@ -39,9 +39,9 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
         override fun getMaximizedFragment() = FullWidgetSoloLinkVideo()
     },
 
-    TELEMETRY_INFO(R.id.tower_widget_telemetry_info, R.string.label_widget_telemetry_info, R.string.description_widget_telemetry_info, "pref_widget_telemetry_info") {
+    ATTITUDE_SPEED_INFO(R.id.tower_widget_attitude_speed_info, R.string.label_widget_attitude_speed_info, R.string.description_widget_attitude_speed_info, "pref_widget_attitude_speed_info") {
 
-        override fun getMinimizedFragment() = MiniWidgetTelemetryInfo()
+        override fun getMinimizedFragment() = MiniWidgetAttitudeSpeedInfo()
 
         override fun isEnabledByDefault() = true
     },
@@ -63,7 +63,7 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
         @JvmStatic fun getWidgetById(@IdRes id: Int): TowerWidgets? {
             return when (id) {
                 FLIGHT_TIMER.idRes -> FLIGHT_TIMER
-                TELEMETRY_INFO.idRes -> TELEMETRY_INFO
+                ATTITUDE_SPEED_INFO.idRes -> ATTITUDE_SPEED_INFO
                 SOLO_VIDEO.idRes -> SOLO_VIDEO
                 VEHICLE_DIAGNOSTICS.idRes -> VEHICLE_DIAGNOSTICS
                 GEO_INFO.idRes -> GEO_INFO
@@ -74,7 +74,7 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
         @JvmStatic fun getWidgetByPrefKey(prefKey: String): TowerWidgets? {
             return when (prefKey) {
                 FLIGHT_TIMER.prefKey -> FLIGHT_TIMER
-                TELEMETRY_INFO.prefKey -> TELEMETRY_INFO
+                ATTITUDE_SPEED_INFO.prefKey -> ATTITUDE_SPEED_INFO
                 SOLO_VIDEO.prefKey -> SOLO_VIDEO
                 VEHICLE_DIAGNOSTICS.prefKey -> VEHICLE_DIAGNOSTICS
                 GEO_INFO.prefKey -> GEO_INFO
