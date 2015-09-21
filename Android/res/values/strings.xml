@@ -508,5 +508,6 @@
     <string name="label_secondary">Secondary</string>
     <string name="label_primary">Primary</string>
     <string name="label_clipping">Clipping</string>
+    <string name="unset_timer">--:--</string>
 
 </resources>

@@ -7,6 +7,24 @@
     android:orientation="vertical"
     android:padding="5dp">
 
+    <me.grantland.widget.AutofitTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        tools:text="00:00"
+        android:id="@+id/flight_timer"
+        android:text="@string/unset_timer"
+        android:textStyle="bold"
+        android:drawableLeft="@drawable/ic_schedule_black_18dp"
+        android:drawableStart="@drawable/ic_schedule_black_18dp"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"
+        android:background="@color/light_grey" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
@@ -25,12 +26,15 @@ import java.util.*
 public class MiniWidgetTelemetryInfo : TowerWidget() {
 
     companion object {
+        private val FLIGHT_TIMER_PERIOD = 1000L // 1 second
+
         private val filter = initFilter()
 
         private fun initFilter(): IntentFilter {
             val temp = IntentFilter()
             temp.addAction(AttributeEvent.ATTITUDE_UPDATED)
             temp.addAction(AttributeEvent.SPEED_UPDATED)
+            temp.addAction(AttributeEvent.STATE_UPDATED)
             return temp
         }
     }
@@ -40,10 +44,29 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
             when(intent.action){
                 AttributeEvent.ATTITUDE_UPDATED -> onOrientationUpdate()
                 AttributeEvent.SPEED_UPDATED -> onSpeedUpdate()
+                AttributeEvent.STATE_UPDATED -> updateFlightTimer()
             }
         }
 
     }
+
+    private val flightTimeUpdater = object : Runnable{
+        override fun run(){
+            handler.removeCallbacks(this)
+            val drone = drone
+            if(!drone.isConnected())
+                return
+
+            val timeInSecs = drone.flightTime
+            val mins = timeInSecs / 60L
+            val secs = timeInSecs % 60L
+            flightTimer?.text = java.lang.String.format("%02d:%02d", mins, secs)
+
+            handler.postDelayed(this, FLIGHT_TIMER_PERIOD)
+        }
+    }
+
+    private val handler = Handler()
 
     private var attitudeIndicator: AttitudeIndicator? = null
     private var roll: TextView? = null
@@ -55,6 +78,8 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
 
     private var headingModeFPV: Boolean = false
 
+    private var flightTimer : TextView? = null
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         return inflater?.inflate(R.layout.fragment_mini_widget_telemetry_info, container, false)
     }
@@ -62,14 +87,16 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)
 
-        attitudeIndicator = view.findViewById(R.id.aiView) as AttitudeIndicator
+        attitudeIndicator = view.findViewById(R.id.aiView) as AttitudeIndicator?
 
-        roll = view.findViewById(R.id.rollValueText) as TextView
-        yaw = view.findViewById(R.id.yawValueText) as TextView
-        pitch = view.findViewById(R.id.pitchValueText) as TextView
+        roll = view.findViewById(R.id.rollValueText) as TextView?
+        yaw = view.findViewById(R.id.yawValueText) as TextView?
+        pitch = view.findViewById(R.id.pitchValueText) as TextView?
 
-        horizontalSpeed = view.findViewById(R.id.horizontal_speed_telem) as TextView
-        verticalSpeed = view.findViewById(R.id.vertical_speed_telem) as TextView
+        horizontalSpeed = view.findViewById(R.id.horizontal_speed_telem) as TextView?
+        verticalSpeed = view.findViewById(R.id.vertical_speed_telem) as TextView?
+
+        flightTimer = view.findViewById(R.id.flight_timer) as TextView?
     }
 
     override fun onStart() {
@@ -93,6 +120,15 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
     private fun updateAllTelem() {
         onOrientationUpdate()
         onSpeedUpdate()
+        updateFlightTimer()
+    }
+
+    private fun updateFlightTimer(){
+        handler.removeCallbacks(flightTimeUpdater)
+        if(drone.isConnected)
+            flightTimeUpdater.run()
+        else
+            flightTimer?.text = "00:00"
     }
 
     private fun onOrientationUpdate() {
