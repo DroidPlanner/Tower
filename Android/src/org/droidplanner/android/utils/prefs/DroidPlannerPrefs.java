@@ -44,7 +44,7 @@ public class DroidPlannerPrefs {
 	private static final boolean DEFAULT_MAX_VOLUME_ON_START = false;
 
 	private static final String PREF_PERMANENT_NOTIFICATION = "pref_permanent_notification";
-	private static final boolean DEFAULT_PERMANENT_NOTIFICATION = true;
+	private static final boolean DEFAULT_PERMANENT_NOTIFICATION = false;
 
 	public static final String PREF_MAPS_PROVIDERS = "pref_maps_providers_key";
 	private static final String DEFAULT_MAPS_PROVIDER = DPMapProvider.DEFAULT_MAP_PROVIDER.name();
