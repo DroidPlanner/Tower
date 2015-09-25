@@ -4,8 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Altitude;
 import com.o3dr.services.android.lib.drone.property.Battery;
@@ -26,6 +29,7 @@ import com.o3dr.services.android.lib.drone.property.Signal;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.Type;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
+import com.o3dr.services.android.lib.gcs.returnToMe.ReturnToMeState;
 import com.o3dr.services.android.lib.util.MathUtils;
 
 import org.beyene.sius.unit.length.LengthUnit;
@@ -54,7 +58,6 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         eventFilter.addAction(AttributeEvent.GPS_POSITION);
         eventFilter.addAction(AttributeEvent.GPS_COUNT);
         eventFilter.addAction(AttributeEvent.GPS_FIX);
-        eventFilter.addAction(AttributeEvent.HOME_UPDATED);
         eventFilter.addAction(AttributeEvent.SIGNAL_UPDATED);
         eventFilter.addAction(AttributeEvent.STATE_VEHICLE_MODE);
         eventFilter.addAction(AttributeEvent.TYPE_UPDATED);
@@ -62,7 +65,18 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
 
         eventFilter.addAction(SettingsFragment.ACTION_PREF_HDOP_UPDATE);
         eventFilter.addAction(SettingsFragment.ACTION_PREF_UNIT_SYSTEM_UPDATE);
+
+        eventFilter.addAction(AttributeEvent.RETURN_TO_ME_STATE_UPDATE);
+        eventFilter.addAction(AttributeEvent.HOME_UPDATED);
     }
+
+    private final Runnable resetHomeTelemContainerBg = new Runnable() {
+        @Override
+        public void run() {
+            if(homeTelemContainer != null)
+                homeTelemContainer.setBackgroundDrawable(null);
+        }
+    };
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
@@ -85,6 +99,16 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                     updateAllTelem();
                     break;
 
+                case AttributeEvent.RETURN_TO_ME_STATE_UPDATE:
+                    final @ReturnToMeState.ReturnToMeStates int state = intent.getIntExtra(AttributeEventExtra.EXTRA_RETURN_TO_ME_STATE, ReturnToMeState.STATE_IDLE);
+                    if(state == ReturnToMeState.STATE_UPDATING_HOME){
+                        //Change the home telem background for 1 second
+                        if(homeTelemContainer != null){
+                            handler.removeCallbacks(resetHomeTelemContainerBg);
+                            homeTelemContainer.setBackgroundColor(Color.YELLOW);
+                            handler.postDelayed(resetHomeTelemContainerBg, 1000l);
+                        }
+                    }
                 case AttributeEvent.GPS_POSITION:
                 case AttributeEvent.HOME_UPDATED:
                     updateHomeTelem();
@@ -124,8 +148,11 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
 
     };
 
+    private final Handler handler = new Handler();
+
     private DroidPlannerPrefs appPrefs;
 
+    private View homeTelemContainer;
     private TextView homeTelem;
     private TextView altitudeTelem;
 
@@ -163,6 +190,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final int popupHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
         final Drawable popupBg = getResources().getDrawable(android.R.color.transparent);
 
+        homeTelemContainer = view.findViewById(R.id.bar_home_container);
         homeTelem = (TextView) view.findViewById(R.id.bar_home);
         altitudeTelem = (TextView) view.findViewById(R.id.bar_altitude);
 
@@ -408,6 +436,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final Drone drone = getDrone();
 
         String update = getString(R.string.empty_content);
+        int drawableResId = R.drawable.ic_home_grey_700_18dp;
         if (drone.isConnected()) {
             final Gps droneGps = drone.getAttribute(AttributeType.GPS);
             final Home droneHome = drone.getAttribute(AttributeType.HOME);
@@ -415,9 +444,16 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                 LengthUnit distanceToHome = getLengthUnitProvider().boxBaseValueToTarget
                         (MathUtils.getDistance2D(droneHome.getCoordinate(), droneGps.getPosition()));
                 update = String.format("%s", distanceToHome);
+
+                final ReturnToMeState returnToMe = drone.getAttribute(AttributeType.RETURN_TO_ME_STATE);
+                if(returnToMe.getState() == ReturnToMeState.STATE_UPDATING_HOME){
+                    //Change the home telemetry icon
+                    drawableResId = R.drawable.ic_person_grey_700_18dp;
+                }
             }
         }
 
+        homeTelem.setCompoundDrawablesWithIntrinsicBounds(drawableResId, 0, 0, 0);
         homeTelem.setText(update);
     }
 

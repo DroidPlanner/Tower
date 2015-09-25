@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.crashlytics.android.Crashlytics;
 import com.o3dr.android.client.ControlTower;
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.android.client.interfaces.DroneListener;
 import com.o3dr.android.client.interfaces.TowerListener;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
@@ -23,6 +24,7 @@ import com.o3dr.services.android.lib.drone.connection.ConnectionParameter;
 import com.o3dr.services.android.lib.drone.connection.ConnectionResult;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 import com.o3dr.services.android.lib.drone.connection.DroneSharePrefs;
+import com.o3dr.services.android.lib.model.AbstractCommandListener;
 
 import io.fabric.sdk.android.Fabric;
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
@@ -345,6 +347,23 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
             case AttributeEvent.STATE_CONNECTED:
                 handler.removeCallbacks(disconnectionTask);
                 notificationHandler.init();
+
+                VehicleApi.getApi(drone).enableReturnToMe(dpPrefs.isReturnToMeEnabled(), new AbstractCommandListener() {
+                    @Override
+                    public void onSuccess() {
+                        Timber.i("Return to me op succeed.");
+                    }
+
+                    @Override
+                    public void onError(int i) {
+                        Timber.e("Return to me op failed: %d", i);
+                    }
+
+                    @Override
+                    public void onTimeout() {
+                        Timber.w("Return to me op timed out.");
+                    }
+                });
                 break;
 
             case AttributeEvent.STATE_DISCONNECTED:

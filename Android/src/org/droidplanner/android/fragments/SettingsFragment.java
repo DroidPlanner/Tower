@@ -31,6 +31,7 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.Type;
+import com.o3dr.services.android.lib.model.AbstractCommandListener;
 
 import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.DroidPlannerApp;
@@ -49,6 +50,8 @@ import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 import java.util.HashSet;
 import java.util.Locale;
+
+import timber.log.Timber;
 
 /**
  * Implements the application settings screen.
@@ -318,7 +321,22 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                     final Drone drone = dpApp.getDrone();
                     if(drone.isConnected()) {
                         final boolean isEnabled = (Boolean) newValue;
-                        VehicleApi.getApi(drone).enableReturnToMe(isEnabled, null);
+                        VehicleApi.getApi(drone).enableReturnToMe(isEnabled, new AbstractCommandListener() {
+                            @Override
+                            public void onSuccess() {
+                                Timber.i("Return to me op succeed.");
+                            }
+
+                            @Override
+                            public void onError(int i) {
+                                Timber.e("Return to me op failed: %d", i);
+                            }
+
+                            @Override
+                            public void onTimeout() {
+                                Timber.w("Return to me op timed out.");
+                            }
+                        });
                     }
                     return true;
                 }
