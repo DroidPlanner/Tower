@@ -345,11 +345,11 @@ public class TTSNotificationProvider implements OnInitListener,
 			if (ttsLanguage == null || tts.isLanguageAvailable(ttsLanguage) == TextToSpeech.LANG_NOT_SUPPORTED) {
 				ttsLanguage = Locale.US;
 				if(sdkVersion >= Build.VERSION_CODES.LOLLIPOP) {
-					final List<Locale> availableLanguages = new ArrayList<>(tts.getAvailableLanguages());
-
-					if (!availableLanguages.isEmpty()) {
-						//Pick the first available language.
-						ttsLanguage = availableLanguages.get(0);
+					final Set<Locale> languagesSet = tts.getAvailableLanguages();
+					if(languagesSet != null && !languagesSet.isEmpty()) {
+						final List<Locale> availableLanguages = new ArrayList<>(languagesSet);
+							//Pick the first available language.
+							ttsLanguage = availableLanguages.get(0);
 					}
 				}
 			}

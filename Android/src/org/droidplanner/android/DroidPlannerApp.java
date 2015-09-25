@@ -342,20 +342,21 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
             case AttributeEvent.STATE_CONNECTED:
                 handler.removeCallbacks(disconnectionTask);
 
-                VehicleApi.getApi(drone).enableReturnToMe(dpPrefs.isReturnToMeEnabled(), new AbstractCommandListener() {
+                final boolean isReturnToMeOn = dpPrefs.isReturnToMeEnabled();
+                VehicleApi.getApi(drone).enableReturnToMe(isReturnToMeOn, new AbstractCommandListener() {
                     @Override
                     public void onSuccess() {
-                        Timber.i("Return to me op succeed.");
+                        Timber.i("Return to me %s successfully.", isReturnToMeOn ? "started" : "stopped");
                     }
 
                     @Override
                     public void onError(int i) {
-                        Timber.e("Return to me op failed: %d", i);
+                        Timber.e("%s return to me failed: %d", isReturnToMeOn ? "Starting" : "Stopping", i);
                     }
 
                     @Override
                     public void onTimeout() {
-                        Timber.w("Return to me op timed out.");
+                        Timber.w("%s return to me timed out.", isReturnToMeOn ? "Starting": "Stopping");
                     }
                 });
                 break;

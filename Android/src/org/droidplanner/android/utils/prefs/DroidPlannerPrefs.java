@@ -483,4 +483,8 @@ public class DroidPlannerPrefs {
 	public boolean isReturnToMeEnabled(){
 		return prefs.getBoolean(PREF_RETURN_TO_ME, DEFAULT_RETURN_TO_ME);
 	}
+
+	public void enableReturnToMe(boolean isEnabled){
+		prefs.edit().putBoolean(PREF_RETURN_TO_ME, isEnabled).apply();
+	}
 }

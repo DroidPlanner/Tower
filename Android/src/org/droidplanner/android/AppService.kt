@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Binder
-import android.os.IBinder
 import android.support.v4.content.LocalBroadcastManager
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra
@@ -29,11 +28,17 @@ public class AppService : Service() {
         }
     }
 
-    private val receiver = object : BroadcastReceiver(){
+    private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            when(intent?.action){
-                AttributeEvent.STATE_CONNECTED -> notificationHandler?.init()
-                AttributeEvent.STATE_DISCONNECTED -> notificationHandler?.terminate()
+            when (intent?.action) {
+                AttributeEvent.STATE_CONNECTED -> {
+                    notificationHandler?.init()
+                }
+
+                AttributeEvent.STATE_DISCONNECTED -> {
+                    notificationHandler?.terminate()
+                }
+
                 AttributeEvent.AUTOPILOT_ERROR -> {
                     val errorName = intent?.getStringExtra(AttributeEventExtra.EXTRA_AUTOPILOT_ERROR_ID)
                     notificationHandler?.onAutopilotError(errorName)
@@ -42,13 +47,13 @@ public class AppService : Service() {
         }
     }
 
-    class BinderHandler : Binder(){}
+    class BinderHandler : Binder() {}
 
     private val binder = BinderHandler()
 
-    private var notificationHandler : NotificationHandler? = null
+    private var notificationHandler: NotificationHandler? = null
 
-    override fun onCreate(){
+    override fun onCreate() {
         super.onCreate()
 
         val dpApp = application as DroidPlannerApp
@@ -56,14 +61,14 @@ public class AppService : Service() {
 
         notificationHandler = NotificationHandler(applicationContext, drone)
 
-        if(drone.isConnected){
+        if (drone.isConnected) {
             notificationHandler?.init()
         }
 
         LocalBroadcastManager.getInstance(applicationContext).registerReceiver(receiver, filter)
     }
 
-    override fun onDestroy(){
+    override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(applicationContext).unregisterReceiver(receiver)
 

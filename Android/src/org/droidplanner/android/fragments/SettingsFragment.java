@@ -312,36 +312,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                 }
             });
         }
-
-        final CheckBoxPreference returnToMe = (CheckBoxPreference) findPreference(DroidPlannerPrefs.PREF_RETURN_TO_ME);
-        if(returnToMe != null){
-            returnToMe.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    final Drone drone = dpApp.getDrone();
-                    if(drone.isConnected()) {
-                        final boolean isEnabled = (Boolean) newValue;
-                        VehicleApi.getApi(drone).enableReturnToMe(isEnabled, new AbstractCommandListener() {
-                            @Override
-                            public void onSuccess() {
-                                Timber.i("Return to me op succeed.");
-                            }
-
-                            @Override
-                            public void onError(int i) {
-                                Timber.e("Return to me op failed: %d", i);
-                            }
-
-                            @Override
-                            public void onTimeout() {
-                                Timber.w("Return to me op timed out.");
-                            }
-                        });
-                    }
-                    return true;
-                }
-            });
-        }
     }
 
     private void setupUnitSystemPreferences(){

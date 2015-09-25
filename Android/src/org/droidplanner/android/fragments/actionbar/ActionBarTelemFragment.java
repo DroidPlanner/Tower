@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -70,11 +69,11 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         eventFilter.addAction(AttributeEvent.HOME_UPDATED);
     }
 
-    private final Runnable resetHomeTelemContainerBg = new Runnable() {
+    private final Runnable resetHomeTelemBg = new Runnable() {
         @Override
         public void run() {
-            if(homeTelemContainer != null)
-                homeTelemContainer.setBackgroundDrawable(null);
+            if(homeTelem != null)
+                homeTelem.setBackgroundDrawable(null);
         }
     };
 
@@ -103,10 +102,10 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                     final @ReturnToMeState.ReturnToMeStates int state = intent.getIntExtra(AttributeEventExtra.EXTRA_RETURN_TO_ME_STATE, ReturnToMeState.STATE_IDLE);
                     if(state == ReturnToMeState.STATE_UPDATING_HOME){
                         //Change the home telem background for 1 second
-                        if(homeTelemContainer != null){
-                            handler.removeCallbacks(resetHomeTelemContainerBg);
-                            homeTelemContainer.setBackgroundColor(Color.YELLOW);
-                            handler.postDelayed(resetHomeTelemContainerBg, 1000l);
+                        if(homeTelem != null){
+                            handler.removeCallbacks(resetHomeTelemBg);
+                            homeTelem.setBackgroundResource(R.color.orange);
+                            handler.postDelayed(resetHomeTelemBg, 1000l);
                         }
                     }
                 case AttributeEvent.GPS_POSITION:
@@ -152,7 +151,6 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
 
     private DroidPlannerPrefs appPrefs;
 
-    private View homeTelemContainer;
     private TextView homeTelem;
     private TextView altitudeTelem;
 
@@ -190,8 +188,15 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final int popupHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
         final Drawable popupBg = getResources().getDrawable(android.R.color.transparent);
 
-        homeTelemContainer = view.findViewById(R.id.bar_home_container);
         homeTelem = (TextView) view.findViewById(R.id.bar_home);
+        homeTelem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Launch dialog to allow the user to select between rtl and rtm
+
+            }
+        });
+
         altitudeTelem = (TextView) view.findViewById(R.id.bar_altitude);
 
         gpsTelem = (TextView) view.findViewById(R.id.bar_gps);

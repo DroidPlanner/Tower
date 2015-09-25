@@ -149,6 +149,8 @@
             android:theme="@style/CustomActionBarTheme.Transparent"
             android:launchMode="singleTask"/>
 
+        <service android:name=".AppService" />
+
     </application>
 
 </manifest>

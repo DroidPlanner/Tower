@@ -57,8 +57,10 @@ public class EmergencyBeepNotificationProvider implements NotificationHandler.No
     @Override
     public void onTerminate() {
         LocalBroadcastManager.getInstance(context).unregisterReceiver(eventReceiver);
-        mPool.release();
-        mPool = null;
+        if(mPool != null) {
+            mPool.release();
+            mPool = null;
+        }
     }
 
 }
