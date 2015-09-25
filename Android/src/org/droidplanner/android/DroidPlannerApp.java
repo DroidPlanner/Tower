@@ -19,17 +19,14 @@ import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.android.client.interfaces.DroneListener;
 import com.o3dr.android.client.interfaces.TowerListener;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
-import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.o3dr.services.android.lib.drone.connection.ConnectionParameter;
 import com.o3dr.services.android.lib.drone.connection.ConnectionResult;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 import com.o3dr.services.android.lib.drone.connection.DroneSharePrefs;
 import com.o3dr.services.android.lib.model.AbstractCommandListener;
 
-import io.fabric.sdk.android.Fabric;
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader;
-import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
@@ -39,6 +36,7 @@ import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 public class DroidPlannerApp extends Application implements DroneListener, TowerListener {
@@ -130,14 +128,13 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
     private MissionProxy missionProxy;
     private DroidPlannerPrefs dpPrefs;
     private LocalBroadcastManager lbm;
-    private NotificationHandler notificationHandler;
     private MapDownloader mapDownloader;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        if(!BuildConfig.DEBUG) {
+        if (!BuildConfig.DEBUG) {
             Fabric.with(this, new Crashlytics());
         }
 
@@ -150,8 +147,6 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
         controlTower = new ControlTower(context);
         drone = new Drone(context);
         missionProxy = new MissionProxy(context, this.drone);
-
-        notificationHandler = new NotificationHandler(context, drone);
 
         final Thread.UncaughtExceptionHandler dpExceptionHandler = new Thread.UncaughtExceptionHandler() {
             @Override
@@ -204,7 +199,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
     public void removeApiListener(ApiListener listener) {
         if (listener != null) {
             apiListeners.remove(listener);
-            if(controlTower.isTowerConnected())
+            if (controlTower.isTowerConnected())
                 listener.onApiDisconnected();
         }
 
@@ -293,7 +288,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
 
             case ConnectionType.TYPE_UDP:
                 extraParams.putInt(ConnectionType.EXTRA_UDP_SERVER_PORT, dpPrefs.getUdpServerPort());
-                if(dpPrefs.isUdpPingEnabled()){
+                if (dpPrefs.isUdpPingEnabled()) {
                     extraParams.putString(ConnectionType.EXTRA_UDP_PING_RECEIVER_IP, dpPrefs.getUdpPingReceiverIp());
                     extraParams.putInt(ConnectionType.EXTRA_UDP_PING_RECEIVER_PORT, dpPrefs.getUdpPingReceiverPort());
                     extraParams.putByteArray(ConnectionType.EXTRA_UDP_PING_PAYLOAD, "Hello".getBytes());
@@ -346,7 +341,6 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
         switch (event) {
             case AttributeEvent.STATE_CONNECTED:
                 handler.removeCallbacks(disconnectionTask);
-                notificationHandler.init();
 
                 VehicleApi.getApi(drone).enableReturnToMe(dpPrefs.isReturnToMeEnabled(), new AbstractCommandListener() {
                     @Override
@@ -367,14 +361,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
                 break;
 
             case AttributeEvent.STATE_DISCONNECTED:
-                notificationHandler.terminate();
                 shouldWeTerminate();
-                break;
-
-            case AttributeEvent.AUTOPILOT_ERROR:
-                final String errorName = extras.getString(AttributeEventExtra.EXTRA_AUTOPILOT_ERROR_ID);
-                if(notificationHandler != null)
-                    notificationHandler.onAutopilotError(errorName);
                 break;
         }
 
