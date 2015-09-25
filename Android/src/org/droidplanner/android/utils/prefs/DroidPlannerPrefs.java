@@ -40,12 +40,6 @@ public class DroidPlannerPrefs {
 	private static final String PREF_KEEP_SCREEN_ON = "pref_keep_screen_bright";
 	private static final boolean DEFAULT_KEEP_SCREEN_ON = false;
 
-	private static final String PREF_MAX_VOLUME_ON_START = "pref_request_max_volume";
-	private static final boolean DEFAULT_MAX_VOLUME_ON_START = false;
-
-	private static final String PREF_PERMANENT_NOTIFICATION = "pref_permanent_notification";
-	private static final boolean DEFAULT_PERMANENT_NOTIFICATION = false;
-
 	public static final String PREF_MAPS_PROVIDERS = "pref_maps_providers_key";
 	private static final String DEFAULT_MAPS_PROVIDER = DPMapProvider.DEFAULT_MAP_PROVIDER.name();
 
@@ -311,21 +305,6 @@ public class DroidPlannerPrefs {
 	 */
 	public boolean keepScreenOn() {
 		return prefs.getBoolean(PREF_KEEP_SCREEN_ON, DEFAULT_KEEP_SCREEN_ON);
-	}
-
-	/**
-	 * @return true if Volume should be set to 100% on app start
-	 */
-	public boolean maxVolumeOnStart() {
-		return prefs.getBoolean(PREF_MAX_VOLUME_ON_START, DEFAULT_MAX_VOLUME_ON_START);
-	}
-
-	/**
-	 * @return true if the status bar notification should be permanent when
-	 *         connected.
-	 */
-	public boolean isNotificationPermanent() {
-		return prefs.getBoolean(PREF_PERMANENT_NOTIFICATION, DEFAULT_PERMANENT_NOTIFICATION);
 	}
 
 	/**

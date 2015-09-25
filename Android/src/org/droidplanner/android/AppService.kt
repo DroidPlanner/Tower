@@ -37,6 +37,7 @@ public class AppService : Service() {
 
                 AttributeEvent.STATE_DISCONNECTED -> {
                     notificationHandler?.terminate()
+                    stopSelf()
                 }
 
                 AttributeEvent.AUTOPILOT_ERROR -> {

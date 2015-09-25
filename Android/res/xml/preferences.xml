@@ -79,13 +79,6 @@
                     android:summary="@string/pref_ui_realtime_footprints_summary"
                     android:title="@string/pref_ui_realtime_footprints_title" />
             </PreferenceCategory>
-            <PreferenceCategory android:title="@string/pref_title_notifications" >
-                <CheckBoxPreference
-                    android:defaultValue="true"
-                    android:key="pref_permanent_notification"
-                    android:summary="@string/pref_permanent_notification_summary"
-                    android:title="@string/pref_permanent_notification_title" />
-            </PreferenceCategory>
             <PreferenceCategory android:title="@string/pref_title_tts" >
                 <CheckBoxPreference
                     android:defaultValue="true"
@@ -154,11 +147,6 @@
                             android:title="@string/pref_ground_collision_warning_title"/>
                     </PreferenceCategory>
                 </PreferenceScreen>
-
-                <CheckBoxPreference
-                    android:defaultValue="false"
-                    android:key="pref_request_max_volume"
-                    android:title="@string/pref_request_max_volume" />
             </PreferenceCategory>
 
             <PreferenceCategory android:title="@string/pref_misc_title">

@@ -238,21 +238,12 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
 
         unitSystem = UnitManager.getUnitSystem(getApplicationContext());
         dpApp.addApiListener(this);
-        maxVolumeIfEnabled();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         dpApp.removeApiListener(this);
-    }
-
-    private void maxVolumeIfEnabled() {
-        if (mAppPrefs.maxVolumeOnStart()) {
-            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
-                    audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
-        }
     }
 
     @Override

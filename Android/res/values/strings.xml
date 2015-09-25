@@ -342,9 +342,6 @@
     <string name="pref_usage_statistics_title">Send usage statistics</string>
     <string name="pref_usage_statistics_summary">Help improve DroidPlanner by sending usage statistics.</string>
 
-    <string name="pref_permanent_notification_title">Enable permanent notification</string>
-    <string name="pref_permanent_notification_summary">Enable to make status bar notification permanent when connected.</string>
-
     <string name="zoom_fit">Zoom to Fit</string>
     <string name="open_mission_file">Import from file</string>
     <string name="save_mission_file">Export to file</string>

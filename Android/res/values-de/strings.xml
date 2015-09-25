@@ -217,8 +217,6 @@
     <string name="zoom_fit">Zoom anpassen</string>
     <string name="open_mission_file">Missiondatei öffnen</string>
     <string name="save_mission_file">Missiondatei speichern</string>
-    <string name="pref_permanent_notification_title">Permanente Benachrichtigung aktivieren</string>
-    <string name="pref_permanent_notification_summary">Aktivieren um Benachrichtugung permanent in der Statusleiste zu behalten.</string>
     <string name="pref_ui_gps_hdop_title">Satelliten HDOP anzeigen</string>
     <string name="pref_ui_gps_hdop_summary">Satelliten HDOP statt FIX in der Satelliteninfoliste anzeigen</string>
     <string name="app_settings">App-Einstellungen</string>

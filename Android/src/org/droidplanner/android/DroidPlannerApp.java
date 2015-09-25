@@ -341,6 +341,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
         switch (event) {
             case AttributeEvent.STATE_CONNECTED:
                 handler.removeCallbacks(disconnectionTask);
+                startService(new Intent(getApplicationContext(), AppService.class));
 
                 final boolean isReturnToMeOn = dpPrefs.isReturnToMeEnabled();
                 VehicleApi.getApi(drone).enableReturnToMe(isReturnToMeOn, new AbstractCommandListener() {
