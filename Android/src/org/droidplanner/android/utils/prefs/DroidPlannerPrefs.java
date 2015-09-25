@@ -156,6 +156,9 @@ public class DroidPlannerPrefs {
 
 	public static final String PREF_TOWER_WIDGETS = "pref_tower_widgets";
 
+	public static final String PREF_RETURN_TO_ME = "pref_enable_return_to_me";
+	public static final boolean DEFAULT_RETURN_TO_ME = false;
+
 	// Public for legacy usage
 	public SharedPreferences prefs;
 
@@ -475,5 +478,9 @@ public class DroidPlannerPrefs {
 
 	public boolean isWidgetEnabled(TowerWidgets widget){
 		return prefs.getBoolean(widget.getPrefKey(), widget.isEnabledByDefault());
+	}
+
+	public boolean isReturnToMeEnabled(){
+		return prefs.getBoolean(PREF_RETURN_TO_ME, DEFAULT_RETURN_TO_ME);
 	}
 }

@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
@@ -297,12 +298,28 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                 }
             });
         }
+
         final CheckBoxPreference killSwitch = (CheckBoxPreference) findPreference(DroidPlannerPrefs.PREF_ENABLE_KILL_SWITCH);
         if(killSwitch != null) {
             killSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     lbm.sendBroadcast(new Intent(ACTION_ADVANCED_MENU_UPDATED));
+                    return true;
+                }
+            });
+        }
+
+        final CheckBoxPreference returnToMe = (CheckBoxPreference) findPreference(DroidPlannerPrefs.PREF_RETURN_TO_ME);
+        if(returnToMe != null){
+            returnToMe.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    final Drone drone = dpApp.getDrone();
+                    if(drone.isConnected()) {
+                        final boolean isEnabled = (Boolean) newValue;
+                        VehicleApi.getApi(drone).enableReturnToMe(isEnabled, null);
+                    }
                     return true;
                 }
             });
@@ -723,7 +740,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     @Override
     public void onApiConnected() {
         Drone drone = dpApp.getDrone();
-        State droneState = drone.getAttribute(AttributeType.STATE);
         Type droneType = drone.getAttribute(AttributeType.TYPE);
 
         updateFirmwareVersionPreference(droneType);

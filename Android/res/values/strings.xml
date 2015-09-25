@@ -517,5 +517,7 @@
     <string name="label_primary">Primary</string>
     <string name="label_clipping">Clipping</string>
     <string name="unset_timer">--:--</string>
+    <string name="pref_enable_return_to_me_title">Enable Return To Me</string>
+    <string name="pref_enable_return_to_me_summary">Vehicle will return to the last known user location on RTL</string>
 
 </resources>

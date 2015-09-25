@@ -316,6 +316,12 @@
                     android:summary="@string/pref_enable_kill_switch_summary"
                     android:title="@string/pref_enable_kill_switch_title"/>
 
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="pref_enable_return_to_me"
+                    android:summary="@string/pref_enable_return_to_me_summary"
+                    android:title="@string/pref_enable_return_to_me_title"/>
+
             </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>
