@@ -112,7 +112,6 @@ public class DroidPlannerPrefs {
     private static final String PREF_BT_DEVICE_NAME = "pref_bluetooth_device_name";
     public static final String PREF_BT_DEVICE_ADDRESS = "pref_bluetooth_device_address";
 
-    public static final String PREF_STORAGE = "pref_storage";
     public static final String PREF_FIRMWARE_VERSION = "pref_firmware_version";
     public static final String PREF_VEHICLE_TYPE = "pref_vehicle_type";
 

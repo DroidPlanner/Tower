@@ -197,11 +197,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                     });
         }
 
-        final Preference storagePref = findPreference(DroidPlannerPrefs.PREF_STORAGE);
-        if (storagePref != null) {
-            storagePref.setSummary(DirectoryPath.getPublicDataPath());
-        }
-
         try {
             Preference versionPref = findPreference(DroidPlannerPrefs.PREF_APP_VERSION);
             if (versionPref != null) {
