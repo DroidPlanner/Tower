@@ -6,19 +6,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
-import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Altitude;
 import com.o3dr.services.android.lib.drone.property.Battery;
@@ -33,13 +28,13 @@ import com.o3dr.services.android.lib.util.MathUtils;
 
 import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
+import org.droidplanner.android.dialogs.SelectionListDialog;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
-import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.view.spinners.ModeAdapter;
-import org.droidplanner.android.view.spinners.SpinnerSelfSelect;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -65,22 +60,15 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         eventFilter.addAction(SettingsFragment.ACTION_PREF_HDOP_UPDATE);
         eventFilter.addAction(SettingsFragment.ACTION_PREF_UNIT_SYSTEM_UPDATE);
 
+        eventFilter.addAction(DroidPlannerPrefs.ACTION_PREF_RETURN_TO_ME_UPDATED);
         eventFilter.addAction(AttributeEvent.RETURN_TO_ME_STATE_UPDATE);
         eventFilter.addAction(AttributeEvent.HOME_UPDATED);
     }
 
-    private final Runnable resetHomeTelemBg = new Runnable() {
-        @Override
-        public void run() {
-            if(homeTelem != null)
-                homeTelem.setBackgroundDrawable(null);
-        }
-    };
-
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(getActivity() == null)
+            if (getActivity() == null)
                 return;
 
             switch (intent.getAction()) {
@@ -98,16 +86,8 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                     updateAllTelem();
                     break;
 
+                case DroidPlannerPrefs.ACTION_PREF_RETURN_TO_ME_UPDATED:
                 case AttributeEvent.RETURN_TO_ME_STATE_UPDATE:
-                    final @ReturnToMeState.ReturnToMeStates int state = intent.getIntExtra(AttributeEventExtra.EXTRA_RETURN_TO_ME_STATE, ReturnToMeState.STATE_IDLE);
-                    if(state == ReturnToMeState.STATE_UPDATING_HOME){
-                        //Change the home telem background for 1 second
-                        if(homeTelem != null){
-                            handler.removeCallbacks(resetHomeTelemBg);
-                            homeTelem.setBackgroundResource(R.color.orange);
-                            handler.postDelayed(resetHomeTelemBg, 1000l);
-                        }
-                    }
                 case AttributeEvent.GPS_POSITION:
                 case AttributeEvent.HOME_UPDATED:
                     updateHomeTelem();
@@ -147,8 +127,6 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
 
     };
 
-    private final Handler handler = new Handler();
-
     private DroidPlannerPrefs appPrefs;
 
     private TextView homeTelem;
@@ -163,10 +141,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
     private TextView signalTelem;
     private PopupWindow signalPopup;
 
-    private ImageView flightModeIcon;
-    private SpinnerSelfSelect flightModeTelem;
-    private int lastDroneType = -1;
-    private ModeAdapter modeAdapter;
+    private TextView flightModeTelem;
 
     private String emptyString;
 
@@ -193,7 +168,8 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             @Override
             public void onClick(View v) {
                 //Launch dialog to allow the user to select between rtl and rtm
-
+                final SelectionListDialog selectionDialog = SelectionListDialog.newInstance(new ReturnToHomeAdapter(context, getDrone(), appPrefs));
+                selectionDialog.show(getChildFragmentManager(), "Return to home type.");
             }
         });
 
@@ -201,7 +177,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
 
         gpsTelem = (TextView) view.findViewById(R.id.bar_gps);
         final View gpsPopupView = inflater.inflate(R.layout.popup_info_gps, (ViewGroup) view, false);
-        gpsPopup = new PopupWindow(gpsPopupView,popupWidth, popupHeight, true);
+        gpsPopup = new PopupWindow(gpsPopupView, popupWidth, popupHeight, true);
         gpsPopup.setBackgroundDrawable(popupBg);
         gpsTelem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,27 +208,35 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             }
         });
 
-        flightModeIcon = (ImageView) view.findViewById(R.id.bar_flight_mode_icon);
-        flightModeTelem = (SpinnerSelfSelect) view.findViewById(R.id.bar_flight_mode);
-        modeAdapter = new ModeAdapter(context, R.layout.spinner_drop_down_flight_mode);
+        flightModeTelem = (TextView) view.findViewById(R.id.bar_flight_mode);
+        flightModeTelem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Launch dialog to allow the user to select vehicle modes
+                final Drone drone = getDrone();
+
+                final SelectionListDialog selectionDialog = SelectionListDialog.newInstance(new FlightModeAdapter(context, drone));
+                selectionDialog.show(getChildFragmentManager(), "Flight modes selection.");
+            }
+        });
 
         appPrefs = new DroidPlannerPrefs(context);
     }
 
-    private void showTelemBar(){
+    private void showTelemBar() {
         final View view = getView();
-        if(view != null)
+        if (view != null)
             view.setVisibility(View.VISIBLE);
     }
 
-    private void hideTelemBar(){
+    private void hideTelemBar() {
         final View view = getView();
-        if(view != null)
+        if (view != null)
             view.setVisibility(View.GONE);
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         hideTelemBar();
         super.onStart();
     }
@@ -260,29 +244,10 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
     @Override
     public void onApiConnected() {
         final Drone drone = getDrone();
-        if(drone.isConnected())
+        if (drone.isConnected())
             showTelemBar();
         else
             hideTelemBar();
-
-        flightModeTelem.setAdapter(modeAdapter);
-        flightModeTelem.setOnSpinnerItemSelectedListener(new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {
-            @Override
-            public void onSpinnerItemSelected(Spinner spinner, int position) {
-                final Drone drone = getDrone();
-                if (drone.isConnected()) {
-                    final VehicleMode newMode = (VehicleMode) spinner.getItemAtPosition(position);
-                    drone.changeVehicleMode(newMode);
-
-                    //Record the attempt to change flight modes
-                    final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                            .setCategory(GAUtils.Category.FLIGHT)
-                            .setAction("Flight mode changed")
-                            .setLabel(newMode.getLabel());
-                    GAUtils.sendEvent(eventBuilder);
-                }
-            }
-        });
 
         updateAllTelem();
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
@@ -306,29 +271,13 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final Drone drone = getDrone();
 
         final boolean isDroneConnected = drone.isConnected();
-        final int droneType;
+        final State droneState = drone.getAttribute(AttributeType.STATE);
         if (isDroneConnected) {
-            flightModeIcon.setImageResource(R.drawable.ic_navigation_light_blue_a400_18dp);
-            Type type = drone.getAttribute(AttributeType.TYPE);
-            droneType = type.getDroneType();
+            flightModeTelem.setText(droneState.getVehicleMode().getLabel());
+            flightModeTelem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_navigation_light_blue_a400_18dp, 0, R.drawable.ic_more_vert_black_18dp, 0);
         } else {
-            flightModeIcon.setImageResource(R.drawable.ic_navigation_grey_700_18dp);
-            droneType = -1;
-        }
-
-        if (droneType != lastDroneType) {
-            final List<VehicleMode> flightModes = VehicleMode.getVehicleModePerDroneType(droneType);
-
-            modeAdapter.clear();
-            modeAdapter.addAll(flightModes);
-            modeAdapter.notifyDataSetChanged();
-
-            lastDroneType = droneType;
-        }
-
-        if (isDroneConnected) {
-            final State droneState = drone.getAttribute(AttributeType.STATE);
-            flightModeTelem.forcedSetSelection(modeAdapter.getPosition(droneState.getVehicleMode()));
+            flightModeTelem.setText(emptyString);
+            flightModeTelem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_navigation_grey_700_18dp, 0, 0, 0);
         }
     }
 
@@ -344,7 +293,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         TextView remFadeView = (TextView) popupView.findViewById(R.id.bar_signal_remfade);
 
         final Signal droneSignal = drone.getAttribute(AttributeType.SIGNAL);
-        if(!drone.isConnected() || !droneSignal.isValid()){
+        if (!drone.isConnected() || !droneSignal.isValid()) {
             signalTelem.setText(emptyString);
             signalTelem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_signal_cellular_null_grey_700_18dp,
                     0, 0, 0);
@@ -353,10 +302,9 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             remRssiView.setText("RemRSSI: " + emptyString);
             noiseView.setText("Noise: " + emptyString);
             remNoiseView.setText("RemNoise: " + emptyString);
-            fadeView.setText("Fade: "  + emptyString);
+            fadeView.setText("Fade: " + emptyString);
             remFadeView.setText("RemFade: " + emptyString);
-        }
-        else{
+        } else {
             final int signalStrength = (int) droneSignal.getSignalStrength();
             final int signalIcon;
             if (signalStrength >= 100)
@@ -410,7 +358,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                 update = String.format(Locale.ENGLISH, "%s", fixStatus);
             }
 
-            switch(fixStatus){
+            switch (fixStatus) {
                 case Gps.LOCK_3D:
                 case Gps.LOCK_3D_DGPS:
                 case Gps.LOCK_3D_RTK:
@@ -441,7 +389,10 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final Drone drone = getDrone();
 
         String update = getString(R.string.empty_content);
-        int drawableResId = R.drawable.ic_home_grey_700_18dp;
+        int drawableResId = appPrefs.isReturnToMeEnabled()
+                ? R.drawable.ic_person_grey_700_18dp
+                : R.drawable.ic_home_grey_700_18dp;
+
         if (drone.isConnected()) {
             final Gps droneGps = drone.getAttribute(AttributeType.GPS);
             final Home droneHome = drone.getAttribute(AttributeType.HOME);
@@ -451,14 +402,21 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                 update = String.format("%s", distanceToHome);
 
                 final ReturnToMeState returnToMe = drone.getAttribute(AttributeType.RETURN_TO_ME_STATE);
-                if(returnToMe.getState() == ReturnToMeState.STATE_UPDATING_HOME){
-                    //Change the home telemetry icon
-                    drawableResId = R.drawable.ic_person_grey_700_18dp;
+                switch (returnToMe.getState()) {
+                    case ReturnToMeState.STATE_UPDATING_HOME:
+                        //Change the home telemetry icon
+                        drawableResId = R.drawable.ic_person_blue_a400_18dp;
+                        break;
+
+                    case ReturnToMeState.STATE_USER_LOCATION_INACCURATE:
+                    case ReturnToMeState.STATE_USER_LOCATION_UNAVAILABLE:
+                    case ReturnToMeState.STATE_WAITING_FOR_VEHICLE_GPS:
+                        drawableResId = R.drawable.ic_person_red_500_18dp;
                 }
             }
         }
 
-        homeTelem.setCompoundDrawablesWithIntrinsicBounds(drawableResId, 0, 0, 0);
+        homeTelem.setCompoundDrawablesWithIntrinsicBounds(drawableResId, 0, R.drawable.ic_more_vert_black_18dp, 0);
         homeTelem.setText(update);
     }
 
@@ -495,31 +453,23 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             final double battRemain = droneBattery.getBatteryRemain();
             update = String.format(Locale.ENGLISH, "%2.0f%%", battRemain);
 
-            if(battRemain >= 100){
+            if (battRemain >= 100) {
                 batteryIcon = R.drawable.ic_battery_circle_8_36dp;
-            }
-            else if(battRemain >= 87.5){
+            } else if (battRemain >= 87.5) {
                 batteryIcon = R.drawable.ic_battery_circle_7_36dp;
-            }
-            else if(battRemain >= 75){
+            } else if (battRemain >= 75) {
                 batteryIcon = R.drawable.ic_battery_circle_6_36dp;
-            }
-            else if(battRemain >= 62.5){
+            } else if (battRemain >= 62.5) {
                 batteryIcon = R.drawable.ic_battery_circle_5_36dp;
-            }
-            else if(battRemain >= 50){
+            } else if (battRemain >= 50) {
                 batteryIcon = R.drawable.ic_battery_circle_4_36dp;
-            }
-            else if(battRemain >= 37.5){
+            } else if (battRemain >= 37.5) {
                 batteryIcon = R.drawable.ic_battery_circle_3_36dp;
-            }
-            else if(battRemain >= 25){
+            } else if (battRemain >= 25) {
                 batteryIcon = R.drawable.ic_battery_circle_2_36dp;
-            }
-            else if(battRemain >= 12.5){
+            } else if (battRemain >= 12.5) {
                 batteryIcon = R.drawable.ic_battery_circle_1_36dp;
-            }
-            else{
+            } else {
                 batteryIcon = R.drawable.ic_battery_circle_0_36dp;
             }
         }
@@ -531,10 +481,9 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
 
     private String electricChargeToString(double chargeInmAh) {
         double absCharge = Math.abs(chargeInmAh);
-        if(absCharge >= 1000){
+        if (absCharge >= 1000) {
             return String.format(Locale.US, "%2.1f Ah", chargeInmAh / 1000);
-        }
-        else{
+        } else {
             return String.format(Locale.ENGLISH, "%2.0f mAh", chargeInmAh);
         }
     }
@@ -549,4 +498,5 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             this.altitudeTelem.setText(altUnit.toString());
         }
     }
+
 }

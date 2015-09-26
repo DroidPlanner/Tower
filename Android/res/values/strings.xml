@@ -515,4 +515,7 @@
     <string name="label_clipping">Clipping</string>
     <string name="unset_timer">--:--</string>
 
+    <string name="label_rtl">Return to Launch</string>
+    <string name="label_rtm">Return to Me</string>
+
 </resources>

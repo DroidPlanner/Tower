@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="?android:attr/buttonBarStyle"
     android:layout_width="match_parent"
@@ -9,7 +8,8 @@
     android:gravity="center"
     tools:layout_margin="10dp">
 
-    <TableRow style="?android:attr/buttonBarStyle"
+    <TableRow
+        style="?android:attr/buttonBarStyle"
         android:gravity="center_vertical">
 
         <FrameLayout
@@ -23,8 +23,8 @@
                 android:id="@+id/bar_battery"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_gravity="center"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:drawableLeft="@drawable/ic_battery_circle_8_36dp"
                 android:drawablePadding="@dimen/info_bar_drawable_padding"
                 android:drawableStart="@drawable/ic_battery_circle_8_36dp"
@@ -33,32 +33,27 @@
                 tools:text="100%" />
         </FrameLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="@dimen/info_bar_flight_mode_width"
-            android:minHeight="40dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:minHeight="40dp">
 
-            <ImageView
-                android:id="@+id/bar_flight_mode_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_navigation_grey_700_18dp"
-                android:scaleType="fitCenter"/>
-
-            <org.droidplanner.android.view.spinners.SpinnerSelfSelect
+            <TextView
                 android:id="@+id/bar_flight_mode"
                 style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="start"
-                app:isSelectable="false" />
-        </LinearLayout>
+                android:drawablePadding="@dimen/info_bar_drawable_padding"
+                android:drawableLeft="@drawable/ic_navigation_grey_700_18dp"
+                android:drawableStart="@drawable/ic_navigation_grey_700_18dp"
+                android:drawableRight="@drawable/ic_more_vert_black_18dp"
+                android:drawableEnd="@drawable/ic_more_vert_black_18dp"
+                android:text="@string/empty_content"
+                android:textSize="@dimen/info_bar_text_size"
+                tools:text="Acro" />
+        </FrameLayout>
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -74,8 +69,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:drawableLeft="@drawable/ic_signal_cellular_null_grey_700_18dp"
-                android:drawableStart="@drawable/ic_signal_cellular_null_grey_700_18dp"
                 android:drawablePadding="@dimen/info_bar_drawable_padding"
+                android:drawableStart="@drawable/ic_signal_cellular_null_grey_700_18dp"
                 android:text="@string/empty_content"
                 android:textSize="@dimen/info_bar_text_size"
                 tools:text="100 %" />
@@ -83,7 +78,8 @@
 
     </TableRow>
 
-    <TableRow style="?android:attr/buttonBarStyle"
+    <TableRow
+        style="?android:attr/buttonBarStyle"
         android:gravity="center_vertical">
 
         <FrameLayout
@@ -102,6 +98,8 @@
                 android:drawableLeft="@drawable/ic_home_grey_700_18dp"
                 android:drawablePadding="@dimen/info_bar_drawable_padding"
                 android:drawableStart="@drawable/ic_home_grey_700_18dp"
+                android:drawableRight="@drawable/ic_more_vert_black_18dp"
+                android:drawableEnd="@drawable/ic_more_vert_black_18dp"
                 android:text="@string/empty_content"
                 android:textSize="@dimen/info_bar_text_size"
                 tools:text="1000 m" />

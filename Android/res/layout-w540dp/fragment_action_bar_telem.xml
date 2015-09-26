@@ -30,32 +30,27 @@
             tools:text="100%" />
     </FrameLayout>
 
-    <LinearLayout
-        android:layout_width="@dimen/info_bar_flight_mode_width"
-        android:minHeight="40dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:layout_weight="1">
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:minWidth="@dimen/info_bar_flight_mode_width">
 
-        <ImageView
-            android:id="@+id/bar_flight_mode_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_navigation_grey_700_18dp"
-            android:scaleType="fitCenter"/>
-
-        <org.droidplanner.android.view.spinners.SpinnerSelfSelect
+        <TextView
             android:id="@+id/bar_flight_mode"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center"
-            app:isSelectable="false" />
-    </LinearLayout>
+            android:drawableLeft="@drawable/ic_navigation_grey_700_18dp"
+            android:drawablePadding="@dimen/info_bar_drawable_padding"
+            android:drawableStart="@drawable/ic_navigation_grey_700_18dp"
+            android:drawableRight="@drawable/ic_more_vert_black_18dp"
+            android:drawableEnd="@drawable/ic_more_vert_black_18dp"
+            android:text="@string/empty_content"
+            android:textSize="@dimen/info_bar_text_size"
+            tools:text="Acro" />
+    </FrameLayout>
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -92,6 +87,8 @@
             android:drawableLeft="@drawable/ic_home_grey_700_18dp"
             android:drawablePadding="@dimen/info_bar_drawable_padding"
             android:drawableStart="@drawable/ic_home_grey_700_18dp"
+            android:drawableRight="@drawable/ic_more_vert_black_18dp"
+            android:drawableEnd="@drawable/ic_more_vert_black_18dp"
             android:text="@string/empty_content"
             android:textSize="@dimen/info_bar_text_size"
             tools:text="1000 m" />

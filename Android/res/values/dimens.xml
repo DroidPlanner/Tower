@@ -38,7 +38,7 @@
     <!-- Dimension for the info bar -->
     <dimen name="info_bar_text_size">12sp</dimen>
     <dimen name="info_bar_drawable_padding">3dp</dimen>
-    <dimen name="info_bar_flight_mode_width">100dp</dimen>
+    <dimen name="info_bar_flight_mode_width">110dp</dimen>
 
     <!-- Dimensions for the number picker dialog -->
     <dimen name="margin_left_right_card_wheel_horizontal_view">8dp</dimen>
