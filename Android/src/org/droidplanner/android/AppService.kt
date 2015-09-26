@@ -73,14 +73,14 @@ public class AppService : Service() {
         dpApp.createFileStartLogging()
         val drone = dpApp.drone
 
+        if(NetworkUtils.isOnSoloNetwork(applicationContext)){
+            bringUpCellularNetwork(applicationContext)
+        }
+
         notificationHandler = NotificationHandler(applicationContext, drone)
 
         if (drone.isConnected) {
             notificationHandler?.init()
-
-            if(NetworkUtils.isOnSoloNetwork(applicationContext)){
-                bringUpCellularNetwork(applicationContext)
-            }
         }
 
         LocalBroadcastManager.getInstance(applicationContext).registerReceiver(receiver, filter)
