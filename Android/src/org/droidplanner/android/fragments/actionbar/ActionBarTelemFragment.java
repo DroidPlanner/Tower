@@ -433,7 +433,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             dischargeView.setText("D: " + emptyString);
             currentView.setText("C: " + emptyString);
             voltageView.setText("V: " + emptyString);
-            batteryIcon = R.drawable.ic_battery_circle_0_36dp;
+            batteryIcon = R.drawable.ic_battery_circle_0_24dp;
         } else {
             Double discharge = droneBattery.getBatteryDischarge();
             String dischargeText;
@@ -451,23 +451,23 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             update = String.format(Locale.ENGLISH, "%2.0f%%", battRemain);
 
             if (battRemain >= 100) {
-                batteryIcon = R.drawable.ic_battery_circle_8_36dp;
+                batteryIcon = R.drawable.ic_battery_circle_8_24dp;
             } else if (battRemain >= 87.5) {
-                batteryIcon = R.drawable.ic_battery_circle_7_36dp;
+                batteryIcon = R.drawable.ic_battery_circle_7_24dp;
             } else if (battRemain >= 75) {
-                batteryIcon = R.drawable.ic_battery_circle_6_36dp;
+                batteryIcon = R.drawable.ic_battery_circle_6_24dp;
             } else if (battRemain >= 62.5) {
-                batteryIcon = R.drawable.ic_battery_circle_5_36dp;
+                batteryIcon = R.drawable.ic_battery_circle_5_24dp;
             } else if (battRemain >= 50) {
-                batteryIcon = R.drawable.ic_battery_circle_4_36dp;
+                batteryIcon = R.drawable.ic_battery_circle_4_24dp;
             } else if (battRemain >= 37.5) {
-                batteryIcon = R.drawable.ic_battery_circle_3_36dp;
+                batteryIcon = R.drawable.ic_battery_circle_3_24dp;
             } else if (battRemain >= 25) {
-                batteryIcon = R.drawable.ic_battery_circle_2_36dp;
+                batteryIcon = R.drawable.ic_battery_circle_2_24dp;
             } else if (battRemain >= 12.5) {
-                batteryIcon = R.drawable.ic_battery_circle_1_36dp;
+                batteryIcon = R.drawable.ic_battery_circle_1_24dp;
             } else {
-                batteryIcon = R.drawable.ic_battery_circle_0_36dp;
+                batteryIcon = R.drawable.ic_battery_circle_0_24dp;
             }
         }
 
