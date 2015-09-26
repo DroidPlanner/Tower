@@ -56,7 +56,6 @@
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:id="@+id/navigation_drawer_container"
-        android:background="@android:color/white"
         android:layout_gravity="start"
         tools:layout_gravity=""
         android:orientation="vertical"
@@ -66,6 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:background="@android:color/white"
             >
 
             <LinearLayout
@@ -159,14 +159,13 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
             android:background="@color/light_grey"/>
 
         <TextView
             style="@style/navigationDrawerEntry"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/white"
             android:id="@+id/navigation_settings"
             android:drawableLeft="@drawable/ic_settings_grey600_24dp"
             android:drawableStart="@drawable/ic_settings_grey600_24dp"
