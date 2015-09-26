@@ -1018,14 +1018,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
         }.execute();
     }
 
-    protected Context getContext(){
-        final Activity activity = getActivity();
-        if(activity == null)
-            return null;
-
-        return activity.getApplicationContext();
-    }
-
     protected void clearMap() {
         getMapAsync(new OnMapReadyCallback() {
             @Override

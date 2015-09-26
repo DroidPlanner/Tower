@@ -519,5 +519,7 @@
     <string name="pref_vehicle_home_update_warning_title">Vehicle Home Update</string>
     <string name="pref_vehicle_home_update_warning_summary">Warns about vehicle home location updates while in flight.</string>
     <string name="warning_vehicle_home_updated">Vehicle home updated</string>
+    <string name="label_photo">Photo</string>
+    <string name="label_record">Record</string>
 
 </resources>

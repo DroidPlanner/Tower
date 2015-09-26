@@ -423,7 +423,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final View batteryPopupView = batteryPopup.getContentView();
         final TextView dischargeView = (TextView) batteryPopupView.findViewById(R.id.bar_power_discharge);
         final TextView currentView = (TextView) batteryPopupView.findViewById(R.id.bar_power_current);
-        final TextView voltageView = (TextView) batteryPopupView.findViewById(R.id.bar_power_voltage);
+        final TextView remainView = (TextView) batteryPopupView.findViewById(R.id.bar_power_remain);
 
         String update;
         Battery droneBattery;
@@ -432,7 +432,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             update = emptyString;
             dischargeView.setText("D: " + emptyString);
             currentView.setText("C: " + emptyString);
-            voltageView.setText("V: " + emptyString);
+            remainView.setText("R: " + emptyString);
             batteryIcon = R.drawable.ic_battery_circle_0_24dp;
         } else {
             Double discharge = droneBattery.getBatteryDischarge();
@@ -444,11 +444,13 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             }
 
             dischargeView.setText(dischargeText);
-            voltageView.setText(String.format(Locale.ENGLISH, "V: %2.1f V", droneBattery.getBatteryVoltage()));
-            currentView.setText(String.format("C: %2.1f A", droneBattery.getBatteryCurrent()));
 
             final double battRemain = droneBattery.getBatteryRemain();
-            update = String.format(Locale.ENGLISH, "%2.0f%%", battRemain);
+            remainView.setText(String.format(Locale.ENGLISH, "R: %2.0f %%", battRemain));
+            currentView.setText(String.format("C: %2.1f A", droneBattery.getBatteryCurrent()));
+
+
+            update = String.format(Locale.ENGLISH, "%2.1f V", droneBattery.getBatteryVoltage());
 
             if (battRemain >= 100) {
                 batteryIcon = R.drawable.ic_battery_circle_8_24dp;

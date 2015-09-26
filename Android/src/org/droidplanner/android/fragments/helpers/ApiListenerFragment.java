@@ -62,10 +62,6 @@ public abstract class ApiListenerFragment extends Fragment implements DroidPlann
 		return broadcastManager;
 	}
 
-    public Context getContext(){
-        return getActivity().getApplicationContext();
-    }
-
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);

@@ -26,7 +26,7 @@
             android:drawableStart="@drawable/ic_battery_circle_8_24dp"
             android:text="@string/empty_content"
             android:textSize="@dimen/info_bar_text_size"
-            tools:text="100%" />
+            tools:text="18.2 V" />
     </FrameLayout>
 
     <FrameLayout
