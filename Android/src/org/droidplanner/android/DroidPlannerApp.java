@@ -35,6 +35,7 @@ import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
@@ -58,6 +59,8 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
 
     public static final String ACTION_DRONE_EVENT = Utils.PACKAGE_NAME + ".ACTION_DRONE_EVENT";
     public static final String EXTRA_DRONE_EVENT = "extra_drone_event";
+
+    private static final AtomicBoolean isCellularNetworkOn = new AtomicBoolean(false);
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -382,5 +385,13 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
 
         if (!TextUtils.isEmpty(errorMsg))
             Log.e(TAG, errorMsg);
+    }
+
+    public static void setCellularNetworkAvailability(boolean isAvailable){
+        isCellularNetworkOn.set(isAvailable);
+    }
+
+    public static boolean isCellularNetworkAvailable(){
+        return isCellularNetworkOn.get();
     }
 }
