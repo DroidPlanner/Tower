@@ -49,6 +49,14 @@ def versionMinor = 2
 def versionPatch = 0
 def versionBuild = 4 //bump for dogfood builds, public betas, etc.
 
+//Logging levels
+def logLevelVerbose = 2;
+def logLevelDebug = 3;
+def logLevelInfo = 4;
+def logLevelWarn = 5;
+def logLevelError = 6;
+def logLevelAssert = 7;
+
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
@@ -59,6 +67,9 @@ android {
         targetSdkVersion 22
         versionCode versionMajor * 100000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "Tower-v${versionMajor}.${versionMinor}.${versionPatch}"
+
+        buildConfigField "boolean", "WRITE_LOG_FILE", "true"
+        buildConfigField "int", "LOG_FILE_LEVEL", "$logLevelDebug"
     }
 
     compileOptions {
@@ -124,17 +135,20 @@ android {
             applicationIdSuffix ".beta"
             versionNameSuffix ".beta.${versionBuild}"
             resValue "string", "app_title", "Tower Beta"
+            debuggable true
         }
 
         beta {
             signingConfig signingConfigs.release
             versionNameSuffix ".beta.${versionBuild}"
             resValue "string", "app_title", "Tower"
+            debuggable true
         }
 
         release {
             signingConfig signingConfigs.release
             resValue "string", "app_title", "Tower"
+            buildConfigField "boolean", "WRITE_LOG_FILE", "false"
         }
     }
 }
