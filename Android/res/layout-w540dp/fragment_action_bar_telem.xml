@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="?android:attr/buttonBarStyle"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="@dimen/action_bar_telem_height"
     android:layout_gravity="center"
-    android:gravity="center_vertical|end">
+    android:gravity="center_vertical|end"
+    android:orientation="horizontal">
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -20,8 +19,8 @@
             android:id="@+id/bar_battery"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
-            android:layout_gravity="center"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:drawableLeft="@drawable/ic_battery_circle_8_36dp"
             android:drawablePadding="@dimen/info_bar_drawable_padding"
             android:drawableStart="@drawable/ic_battery_circle_8_36dp"
@@ -43,10 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:drawableLeft="@drawable/ic_navigation_grey_700_18dp"
-            android:drawablePadding="@dimen/info_bar_drawable_padding"
             android:drawableStart="@drawable/ic_navigation_grey_700_18dp"
-            android:drawableRight="@drawable/ic_more_vert_black_18dp"
-            android:drawableEnd="@drawable/ic_more_vert_black_18dp"
             android:text="@string/empty_content"
             android:textSize="@dimen/info_bar_text_size"
             tools:text="Acro" />
@@ -63,11 +59,11 @@
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_signal_cellular_null_grey_700_18dp"
-            android:drawableStart="@drawable/ic_signal_cellular_null_grey_700_18dp"
-            android:drawablePadding="@dimen/info_bar_drawable_padding"
-            android:text="@string/empty_content"
             android:layout_gravity="center"
+            android:drawableLeft="@drawable/ic_signal_cellular_null_grey_700_18dp"
+            android:drawablePadding="@dimen/info_bar_drawable_padding"
+            android:drawableStart="@drawable/ic_signal_cellular_null_grey_700_18dp"
+            android:text="@string/empty_content"
             android:textSize="@dimen/info_bar_text_size"
             tools:text="100 %" />
     </FrameLayout>
@@ -81,14 +77,11 @@
         <TextView
             android:id="@+id/bar_home"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:drawableLeft="@drawable/ic_home_grey_700_18dp"
-            android:drawablePadding="@dimen/info_bar_drawable_padding"
             android:drawableStart="@drawable/ic_home_grey_700_18dp"
-            android:drawableRight="@drawable/ic_more_vert_black_18dp"
-            android:drawableEnd="@drawable/ic_more_vert_black_18dp"
             android:text="@string/empty_content"
             android:textSize="@dimen/info_bar_text_size"
             tools:text="1000 m" />
@@ -102,14 +95,14 @@
         android:minWidth="80dp">
 
         <TextView
-            style="?android:attr/buttonBarButtonStyle"
             android:id="@+id/bar_altitude"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:drawableLeft="@drawable/ic_file_upload_grey_700_18dp"
             android:drawablePadding="@dimen/info_bar_drawable_padding"
             android:drawableStart="@drawable/ic_file_upload_grey_700_18dp"
-            android:drawableLeft="@drawable/ic_file_upload_grey_700_18dp"
             android:text="@string/empty_content"
             android:textSize="@dimen/info_bar_text_size"
             tools:text="1000 m" />

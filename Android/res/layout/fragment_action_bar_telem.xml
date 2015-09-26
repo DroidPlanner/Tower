@@ -45,11 +45,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:drawablePadding="@dimen/info_bar_drawable_padding"
                 android:drawableLeft="@drawable/ic_navigation_grey_700_18dp"
                 android:drawableStart="@drawable/ic_navigation_grey_700_18dp"
-                android:drawableRight="@drawable/ic_more_vert_black_18dp"
-                android:drawableEnd="@drawable/ic_more_vert_black_18dp"
                 android:text="@string/empty_content"
                 android:textSize="@dimen/info_bar_text_size"
                 tools:text="Acro" />
@@ -92,14 +89,11 @@
             <TextView
                 android:id="@+id/bar_home"
                 style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:drawableLeft="@drawable/ic_home_grey_700_18dp"
-                android:drawablePadding="@dimen/info_bar_drawable_padding"
                 android:drawableStart="@drawable/ic_home_grey_700_18dp"
-                android:drawableRight="@drawable/ic_more_vert_black_18dp"
-                android:drawableEnd="@drawable/ic_more_vert_black_18dp"
                 android:text="@string/empty_content"
                 android:textSize="@dimen/info_bar_text_size"
                 tools:text="1000 m" />

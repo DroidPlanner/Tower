@@ -21,8 +21,6 @@ import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.Home;
 import com.o3dr.services.android.lib.drone.property.Signal;
 import com.o3dr.services.android.lib.drone.property.State;
-import com.o3dr.services.android.lib.drone.property.Type;
-import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.gcs.returnToMe.ReturnToMeState;
 import com.o3dr.services.android.lib.util.MathUtils;
 
@@ -31,11 +29,9 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.SelectionListDialog;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
+import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.view.spinners.ModeAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -123,8 +119,6 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                     break;
             }
         }
-
-
     };
 
     private DroidPlannerPrefs appPrefs;
@@ -169,7 +163,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             public void onClick(View v) {
                 //Launch dialog to allow the user to select between rtl and rtm
                 final SelectionListDialog selectionDialog = SelectionListDialog.newInstance(new ReturnToHomeAdapter(context, getDrone(), appPrefs));
-                selectionDialog.show(getChildFragmentManager(), "Return to home type.");
+                Utils.showDialog(selectionDialog, getChildFragmentManager(), "Return to home type", true);
             }
         });
 
@@ -216,7 +210,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                 final Drone drone = getDrone();
 
                 final SelectionListDialog selectionDialog = SelectionListDialog.newInstance(new FlightModeAdapter(context, drone));
-                selectionDialog.show(getChildFragmentManager(), "Flight modes selection.");
+                Utils.showDialog(selectionDialog, getChildFragmentManager(), "Flight modes selection", true);
             }
         });
 
@@ -274,7 +268,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         final State droneState = drone.getAttribute(AttributeType.STATE);
         if (isDroneConnected) {
             flightModeTelem.setText(droneState.getVehicleMode().getLabel());
-            flightModeTelem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_navigation_light_blue_a400_18dp, 0, R.drawable.ic_more_vert_black_18dp, 0);
+            flightModeTelem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_navigation_light_blue_a400_18dp, 0, 0, 0);
         } else {
             flightModeTelem.setText(emptyString);
             flightModeTelem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_navigation_grey_700_18dp, 0, 0, 0);
@@ -403,6 +397,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
 
                 final ReturnToMeState returnToMe = drone.getAttribute(AttributeType.RETURN_TO_ME_STATE);
                 switch (returnToMe.getState()) {
+
                     case ReturnToMeState.STATE_UPDATING_HOME:
                         //Change the home telemetry icon
                         drawableResId = R.drawable.ic_person_blue_a400_18dp;
@@ -411,12 +406,14 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                     case ReturnToMeState.STATE_USER_LOCATION_INACCURATE:
                     case ReturnToMeState.STATE_USER_LOCATION_UNAVAILABLE:
                     case ReturnToMeState.STATE_WAITING_FOR_VEHICLE_GPS:
+                    case ReturnToMeState.STATE_ERROR_UPDATING_HOME:
                         drawableResId = R.drawable.ic_person_red_500_18dp;
+                        break;
                 }
             }
         }
 
-        homeTelem.setCompoundDrawablesWithIntrinsicBounds(drawableResId, 0, R.drawable.ic_more_vert_black_18dp, 0);
+        homeTelem.setCompoundDrawablesWithIntrinsicBounds(drawableResId, 0, 0, 0);
         homeTelem.setText(update);
     }
 
