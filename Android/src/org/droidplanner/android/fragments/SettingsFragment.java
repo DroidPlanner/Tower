@@ -197,11 +197,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                     });
         }
 
-        final Preference storagePref = findPreference(DroidPlannerPrefs.PREF_STORAGE);
-        if (storagePref != null) {
-            storagePref.setSummary(DirectoryPath.getPublicDataPath());
-        }
-
         try {
             Preference versionPref = findPreference(DroidPlannerPrefs.PREF_APP_VERSION);
             if (versionPref != null) {
@@ -415,14 +410,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setupAltitudePreferenceHelper(DroidPlannerPrefs.PREF_ALT_MAX_VALUE, dpPrefs.getMaxAltitude());
         setupAltitudePreferenceHelper(DroidPlannerPrefs.PREF_ALT_MIN_VALUE, dpPrefs.getMinAltitude());
         setupAltitudePreferenceHelper(DroidPlannerPrefs.PREF_ALT_DEFAULT_VALUE, dpPrefs.getDefaultAltitude());
-    }
-
-    private Context getContext(){
-        final Activity activity = getActivity();
-        if(activity == null)
-            return null;
-
-        return activity.getApplicationContext();
     }
 
     private void setupAltitudePreferenceHelper(final String prefKey, double defaultAlt){

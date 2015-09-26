@@ -158,8 +158,6 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
         setupMapboxTileProviderPreferences(sharedPref)
     }
 
-    private fun getContext(): Context? = activity?.applicationContext
-
     private fun isMapboxIdSet() = !TextUtils.isEmpty(getMapboxId(getContext()))
 
     private fun isMapboxAccessTokenSet() = !TextUtils.isEmpty(getMapboxAccessToken(getContext()))

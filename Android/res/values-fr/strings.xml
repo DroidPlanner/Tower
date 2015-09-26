@@ -63,7 +63,6 @@
     <string name="pref_udp_server_port">Port du Serveur UDP</string>
     <string name="about">A propos</string>
     <string name="version">Version</string>
-    <string name="storage_folder">Dossier de stockage</string>
 
 
     <!-- Toast Message --> <!-- 100% -->
@@ -406,8 +405,6 @@
     <string name="pref_dronie_creation_message">Merci de se positionner à 8 mètres avant de commencer le dronie.</string>
 
 
-    <string name="pref_licenses">Licences</string>
-    <string name="pref_licenses_summary">Librairies (et leurs licences) utilisées dans ce projet</string>
     <string name="upload_params">Transférer les paramètres</string>
     <string name="download_params">Télécharger les paramètres</string>
     <string name="import_from_device">Importer d\'un fichier</string>

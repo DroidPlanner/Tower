@@ -3,6 +3,8 @@
 
     <!-- Generic strings -->
     <string name="settings">Settings</string>
+    <string name="label_general">General</string>
+    <string name="label_other">Others</string>
     <string name="menu_drone_setup">Drone Setup</string>
     <string name="app_settings">App Settings</string>
     <string name="flight_data">Flight Data</string>
@@ -51,7 +53,6 @@
     <string name="pref_udp_server_port">UDP Server Port</string>
     <string name="about">About</string>
     <string name="version">Version</string>
-    <string name="storage_folder">Storage Folder</string>
     <!-- Toast Message -->
     <string name="user_autopan_long_press">Long press to activate user auto panning.</string>
     <string name="drone_autopan_long_press">Long press to activate drone auto panning.</string>
@@ -340,7 +341,7 @@
     <string name="empty_content" translatable="false">--</string>
     <string name="usage_statistics">Usage Statistics</string>
     <string name="pref_usage_statistics_title">Send usage statistics</string>
-    <string name="pref_usage_statistics_summary">Help improve DroidPlanner by sending usage statistics.</string>
+    <string name="pref_usage_statistics_summary">Help improve Tower by sending usage statistics.</string>
 
     <string name="zoom_fit">Zoom to Fit</string>
     <string name="open_mission_file">Import from file</string>
@@ -374,8 +375,6 @@
     <string name="pref_dialog_selection_reset_desc"><![CDATA[Reset selection through: Settings -> User Interface -> Preference Dialogs]]></string>
     <string name="pref_dronie_creation_title">Create dronie?</string>
     <string name="pref_dronie_creation_message">Please stand back 8m before starting the dronie.</string>
-    <string name="pref_licenses">Licenses</string>
-    <string name="pref_licenses_summary">Libraries (and their licenses) used in this project</string>
     <string name="upload_params">Upload parameters</string>
     <string name="upload">Upload</string>
     <string name="download_params">Download parameters</string>
@@ -520,5 +519,7 @@
     <string name="pref_vehicle_home_update_warning_title">Vehicle Home Update</string>
     <string name="pref_vehicle_home_update_warning_summary">Warns about vehicle home location updates while in flight.</string>
     <string name="warning_vehicle_home_updated">Vehicle home updated</string>
+    <string name="label_photo">Photo</string>
+    <string name="label_record">Record</string>
 
 </resources>
