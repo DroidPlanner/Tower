@@ -342,9 +342,6 @@
     <string name="pref_usage_statistics_title">Send usage statistics</string>
     <string name="pref_usage_statistics_summary">Help improve DroidPlanner by sending usage statistics.</string>
 
-    <string name="pref_permanent_notification_title">Enable permanent notification</string>
-    <string name="pref_permanent_notification_summary">Enable to make status bar notification permanent when connected.</string>
-
     <string name="zoom_fit">Zoom to Fit</string>
     <string name="open_mission_file">Import from file</string>
     <string name="save_mission_file">Export to file</string>
@@ -460,9 +457,9 @@
     <string name="vertical_speed_empty">vs: —</string>
     <string name="vertical_speed_telem">vs: %s</string>
     <string name="latitude_empty">Lat: —</string>
-    <string name="latitude_telem">Lat: %s</string>
+    <string name="latitude_telem">Lat: %s°</string>
     <string name="longitude_empty">Long: —</string>
-    <string name="longitude_telem">Long: %s</string>
+    <string name="longitude_telem">Long: %s°</string>
     <string name="menu_kill_switch">Kill Switch</string>
     <string name="label_clear_selected">Clear selected</string>
     <string name="unsaved_param_warning">You have unsaved changes</string>
@@ -477,13 +474,17 @@
     <!-- Telemetry widget labels -->
     <string name="label_widget_solo_video">Solo Video</string>
     <string name="description_widget_solo_video">Displays the video stream from a connected Solo vehicle</string>
-    <string name="label_widget_telemetry_info">Telemetry Data</string>
-    <string name="description_widget_telemetry_info">Displays vehicle telemetry info</string>
+    <string name="label_widget_attitude_speed_info">Speed &amp; Attitude Info</string>
+    <string name="description_widget_attitude_speed_info">Displays vehicle speed and attitude data</string>
     <string name="label_widget_vehicle_diagnostics">Diagnostics</string>
     <string name="description_widget_vehicle_diagnostics">Displays the vehicle diagnostics stats</string>
     <string name="pref_tower_widgets_title">Widgets Preferences</string>
     <string name="pref_tower_widgets_category">Tower Widgets</string>
     <string name="pref_widgets_list_category">Widgets list</string>
+    <string name="label_widget_flight_timer">Flight Timer</string>
+    <string name="description_widget_flight_timer">Displays the vehicle flight time</string>
+    <string name="label_widget_geo_info">Geo Info</string>
+    <string name="description_widget_geo_info">Displays vehicle geographical information (Lat/Long)</string>
     <string name="label_ekf">ekf</string>
     <string name="label_velocity_var_abbrev">vel</string>
     <string name="label_horizontal_position_var_abbrev">h.pos</string>
@@ -512,5 +513,12 @@
     <string name="label_secondary">Secondary</string>
     <string name="label_primary">Primary</string>
     <string name="label_clipping">Clipping</string>
+    <string name="unset_timer">--:--</string>
+
+    <string name="label_rtl">Return to Launch</string>
+    <string name="label_rtm">Return to Me</string>
+    <string name="pref_vehicle_home_update_warning_title">Vehicle Home Update</string>
+    <string name="pref_vehicle_home_update_warning_summary">Warns about vehicle home location updates while in flight.</string>
+    <string name="warning_vehicle_home_updated">Vehicle home updated</string>
 
 </resources>

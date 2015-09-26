@@ -234,8 +234,6 @@
     <string name="pref_licenses">Licenze</string>
     <string name="pref_licenses_summary">Librerie (e le proprie licenze) usate in questo progetto</string>
     <string name="pref_misc_title">Varie</string>
-    <string name="pref_permanent_notification_summary">Attiva per rendere sempre presente la notifica quando connesso</string>
-    <string name="pref_permanent_notification_title">Attiva per rendere la notifica sempre presente</string>
     <string name="pref_request_max_volume">Imposta il volume al massimo all\'avvio</string>
     <string name="pref_title_tts">Sintesi vocale</string>
     <string name="pref_title_tts_periodic_status">Status Intevallo</string>

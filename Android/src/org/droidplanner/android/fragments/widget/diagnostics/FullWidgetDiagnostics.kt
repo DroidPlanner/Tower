@@ -21,7 +21,7 @@ import lecho.lib.hellocharts.model.SubcolumnValue
 import lecho.lib.hellocharts.view.ColumnChartView
 import org.droidplanner.android.R
 import org.droidplanner.android.activities.WidgetActivity
-import org.droidplanner.android.fragments.widget.BaseWidgetDiagnostic
+import org.droidplanner.android.fragments.widget.diagnostics.BaseWidgetDiagnostic
 import org.droidplanner.android.fragments.widget.TowerWidget
 import org.droidplanner.android.fragments.widget.TowerWidgets
 import org.droidplanner.android.view.viewPager.TabPageIndicator

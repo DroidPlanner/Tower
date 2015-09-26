@@ -113,7 +113,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
                         mToggleConnectionIntent)
                 .setContentIntent(mNotificationIntent)
                 .setContentText(summaryText)
-                .setOngoing(mAppPrefs.isNotificationPermanent())
+                .setOngoing(false)
                 .setSmallIcon(R.drawable.ic_stat_notify)
                 .setColor(mContext.getResources().getColor(R.color.stat_notify_connected));
 

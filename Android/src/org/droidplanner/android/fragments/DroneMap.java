@@ -230,7 +230,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 		drone = getDrone();
 		missionProxy = getMissionProxy();
 
-		home = new GraphicHome(drone);
+		home = new GraphicHome(drone, getContext());
 		graphicDrone = new GraphicDrone(drone);
 		guided = new GraphicGuided(drone);
 

@@ -81,6 +81,7 @@ public class TTSNotificationProvider implements OnInitListener,
         eventFilter.addAction(AttributeEvent.ALTITUDE_UPDATED);
         eventFilter.addAction(AttributeEvent.SIGNAL_WEAK);
         eventFilter.addAction(AttributeEvent.WARNING_NO_GPS);
+		eventFilter.addAction(AttributeEvent.HOME_UPDATED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -97,24 +98,29 @@ public class TTSNotificationProvider implements OnInitListener,
                     if (droneState != null)
                         speakArmedState(droneState.isArmed());
                     break;
+
                 case AttributeEvent.BATTERY_UPDATED:
                     Battery droneBattery = drone.getAttribute(AttributeType.BATTERY);
                     if (droneBattery != null)
                         batteryDischargeNotification(droneBattery.getBatteryRemain());
                     break;
+
                 case AttributeEvent.STATE_VEHICLE_MODE:
                     if (droneState != null)
                         speakMode(droneState.getVehicleMode());
                     break;
+
                 case AttributeEvent.MISSION_SENT:
                     Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT).show();
                     speak("Waypoints saved to Drone");
                     break;
+
                 case AttributeEvent.GPS_FIX:
                     Gps droneGps = drone.getAttribute(AttributeType.GPS);
                     if (droneGps != null)
                         speakGpsMode(droneGps.getFixType());
                     break;
+
                 case AttributeEvent.MISSION_RECEIVED:
                     Toast.makeText(context, "Waypoints received from Drone", Toast.LENGTH_SHORT).show();
                     speak("Waypoints received");
@@ -146,9 +152,11 @@ public class TTSNotificationProvider implements OnInitListener,
 						speak("Going for waypoint " + currentWaypoint);
 					}
                     break;
+
                 case AttributeEvent.FOLLOW_START:
                     speak("Following");
                     break;
+
                 case AttributeEvent.ALTITUDE_UPDATED:
 					final Altitude altitude = drone.getAttribute(AttributeType.ALTITUDE);
 					if(mAppPrefs.hasExceededMaxAltitude(altitude.getAltitude())) {
@@ -161,6 +169,7 @@ public class TTSNotificationProvider implements OnInitListener,
 						isMaxAltExceeded.set(false);
 					}
                     break;
+
                 case AttributeEvent.AUTOPILOT_ERROR:
                     if(mAppPrefs.getWarningOnAutopilotWarning()) {
                         String errorId = intent.getStringExtra(AttributeEventExtra.EXTRA_AUTOPILOT_ERROR_ID);
@@ -170,14 +179,25 @@ public class TTSNotificationProvider implements OnInitListener,
                         }
                     }
                     break;
+
                 case AttributeEvent.SIGNAL_WEAK:
                     if (mAppPrefs.getWarningOnLowSignalStrength()) {
                         speak("Warning, weak signal");
                     }
                     break;
+
                 case AttributeEvent.WARNING_NO_GPS:
                     speak("Error, no gps lock yet");
                     break;
+
+				case AttributeEvent.HOME_UPDATED:
+					if(droneState.isFlying()){
+						//Warn the user the home location was just updated while in flight.
+						if(mAppPrefs.getWarningOnVehicleHomeUpdate()){
+							speak(context.getString(R.string.warning_vehicle_home_updated));
+						}
+					}
+					break;
             }
         }
     };
@@ -345,11 +365,11 @@ public class TTSNotificationProvider implements OnInitListener,
 			if (ttsLanguage == null || tts.isLanguageAvailable(ttsLanguage) == TextToSpeech.LANG_NOT_SUPPORTED) {
 				ttsLanguage = Locale.US;
 				if(sdkVersion >= Build.VERSION_CODES.LOLLIPOP) {
-					final List<Locale> availableLanguages = new ArrayList<>(tts.getAvailableLanguages());
-
-					if (!availableLanguages.isEmpty()) {
-						//Pick the first available language.
-						ttsLanguage = availableLanguages.get(0);
+					final Set<Locale> languagesSet = tts.getAvailableLanguages();
+					if(languagesSet != null && !languagesSet.isEmpty()) {
+						final List<Locale> availableLanguages = new ArrayList<>(languagesSet);
+							//Pick the first available language.
+							ttsLanguage = availableLanguages.get(0);
 					}
 				}
 			}

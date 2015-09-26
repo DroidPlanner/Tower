@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.o3dr.services.android.lib.drone.property.EkfStatus
 import org.droidplanner.android.R
-import org.droidplanner.android.fragments.widget.BaseWidgetDiagnostic
+import org.droidplanner.android.fragments.widget.diagnostics.BaseWidgetDiagnostic
 import java.util.*
 import kotlin.properties.Delegates
 

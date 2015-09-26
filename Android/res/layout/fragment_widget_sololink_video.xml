@@ -33,7 +33,7 @@
             app:elevation="6dp"
             app:borderWidth="0dp"
             android:layout_margin="5dp"
-            android:src="@drawable/ic_camera_alt_black_36dp"
+            android:src="@drawable/ic_camera_drawable"
             android:text="Photo" />
 
         <android.support.design.widget.FloatingActionButton
@@ -45,7 +45,7 @@
             app:elevation="6dp"
             app:borderWidth="0dp"
             android:layout_margin="5dp"
-            android:src="@drawable/ic_videocam_black_36dp"
+            android:src="@drawable/on_off_videocam"
             android:text="Record" />
     </LinearLayout>
 

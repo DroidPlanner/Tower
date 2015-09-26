@@ -19,7 +19,7 @@ dependencies {
     compile 'com.android.support:design:22.2.1'
 
     //DroneKit-Android client library.
-    compile 'com.o3dr.android:dronekit-android:2.6.2'
+    compile 'com.o3dr.android:dronekit-android:2.6.6'
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')
