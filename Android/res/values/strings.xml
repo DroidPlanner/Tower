@@ -517,5 +517,8 @@
 
     <string name="label_rtl">Return to Launch</string>
     <string name="label_rtm">Return to Me</string>
+    <string name="pref_vehicle_home_update_warning_title">Vehicle Home Update</string>
+    <string name="pref_vehicle_home_update_warning_summary">Warns about vehicle home location updates while in flight.</string>
+    <string name="warning_vehicle_home_updated">Vehicle home updated</string>
 
 </resources>

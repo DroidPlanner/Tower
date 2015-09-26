@@ -129,11 +129,13 @@
                             android:key="tts_low_signal"
                             android:summary="@string/pref_tts_warning_low_signal_strength_summary"
                             android:title="@string/pref_tts_warning_low_signal_strength" />
+
                         <CheckBoxPreference
                             android:defaultValue="true"
                             android:key="tts_lost_signal"
                             android:summary="@string/pref_tts_warning_lost_signal_summary"
                             android:title="@string/pref_tts_warning_lost_signal" />
+
                         <CheckBoxPreference
                             android:defaultValue="true"
                             android:key="tts_autopilot_warning"
@@ -145,6 +147,13 @@
                             android:key="pref_ground_collision_warning"
                             android:summary="@string/pref_ground_collision_warning_summary"
                             android:title="@string/pref_ground_collision_warning_title"/>
+
+                        <CheckBoxPreference
+                            android:defaultValue="true"
+                            android:key="pref_vehicle_home_update_warning"
+                            android:summary="@string/pref_vehicle_home_update_warning_summary"
+                            android:title="@string/pref_vehicle_home_update_warning_title"/>
+
                     </PreferenceCategory>
                 </PreferenceScreen>
             </PreferenceCategory>

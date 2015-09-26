@@ -154,6 +154,9 @@ public class DroidPlannerPrefs {
     public static final String PREF_RETURN_TO_ME = "pref_enable_return_to_me";
     public static final boolean DEFAULT_RETURN_TO_ME = false;
 
+    public static final String PREF_VEHICLE_HOME_UPDATE_WARNING = "pref_vehicle_home_update_warning";
+    public static final boolean DEFAULT_VEHICLE_HOME_UPDATE_WARNING = true;
+
     // Public for legacy usage
     public final SharedPreferences prefs;
     private final LocalBroadcastManager lbm;
@@ -469,5 +472,9 @@ public class DroidPlannerPrefs {
     public void enableReturnToMe(boolean isEnabled) {
         prefs.edit().putBoolean(PREF_RETURN_TO_ME, isEnabled).apply();
         lbm.sendBroadcast(new Intent(ACTION_PREF_RETURN_TO_ME_UPDATED).putExtra(PREF_RETURN_TO_ME, isEnabled));
+    }
+
+    public boolean getWarningOnVehicleHomeUpdate(){
+        return prefs.getBoolean(PREF_VEHICLE_HOME_UPDATE_WARNING, DEFAULT_VEHICLE_HOME_UPDATE_WARNING);
     }
 }
