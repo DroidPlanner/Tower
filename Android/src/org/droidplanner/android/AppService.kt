@@ -70,6 +70,7 @@ public class AppService : Service() {
         super.onCreate()
 
         val dpApp = application as DroidPlannerApp
+        dpApp.createFileStartLogging()
         val drone = dpApp.drone
 
         notificationHandler = NotificationHandler(applicationContext, drone)
@@ -92,6 +93,9 @@ public class AppService : Service() {
         notificationHandler?.terminate()
 
         bringDownCellularNetwork()
+
+        val dpApp = application as DroidPlannerApp
+        dpApp.closeLogFile()
     }
 
     override fun onBind(intent: Intent?) = binder

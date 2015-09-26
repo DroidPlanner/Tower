@@ -28,6 +28,7 @@ import com.o3dr.services.android.lib.model.AbstractCommandListener;
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader;
 import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.utils.LogToFileTree;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.IO.ExceptionWriter;
@@ -133,13 +134,11 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
     private LocalBroadcastManager lbm;
     private MapDownloader mapDownloader;
 
+    private LogToFileTree logToFileTree;
+
     @Override
     public void onCreate() {
         super.onCreate();
-
-        if (!BuildConfig.DEBUG) {
-            Fabric.with(this, new Crashlytics());
-        }
 
         final Context context = getApplicationContext();
 
@@ -166,7 +165,14 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
         GAUtils.startNewSession(context);
 
         if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
+            if (BuildConfig.WRITE_LOG_FILE) {
+                logToFileTree = new LogToFileTree();
+                Timber.plant(logToFileTree);
+            } else {
+                Timber.plant(new Timber.DebugTree());
+            }
+        } else {
+            Fabric.with(context, new Crashlytics());
         }
 
         final IntentFilter intentFilter = new IntentFilter();
@@ -393,5 +399,17 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
 
     public static boolean isCellularNetworkAvailable(){
         return isCellularNetworkOn.get();
+    }
+
+    public void createFileStartLogging() {
+        if (logToFileTree != null) {
+            logToFileTree.createFileStartLogging(getApplicationContext());
+        }
+    }
+
+    public void closeLogFile() {
+        if(logToFileTree != null) {
+            logToFileTree.stopLoggingThread();
+        }
     }
 }
