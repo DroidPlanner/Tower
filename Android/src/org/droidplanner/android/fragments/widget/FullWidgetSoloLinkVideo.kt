@@ -8,13 +8,16 @@ import android.graphics.Matrix
 import android.graphics.SurfaceTexture
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
 import android.widget.TextView
 import com.o3dr.android.client.apis.GimbalApi
 import com.o3dr.android.client.apis.solo.SoloCameraApi
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
+import com.o3dr.services.android.lib.drone.attribute.AttributeType
 import com.o3dr.services.android.lib.drone.companion.solo.SoloAttributes
 import com.o3dr.services.android.lib.drone.companion.solo.SoloEvents
 import com.o3dr.services.android.lib.drone.companion.solo.tlv.SoloGoproState
+import com.o3dr.services.android.lib.drone.property.Attitude
 import com.o3dr.services.android.lib.model.AbstractCommandListener
 import org.droidplanner.android.R
 import timber.log.Timber
@@ -73,6 +76,10 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
 
     private val recordVideo by lazy(LazyThreadSafetyMode.NONE) {
         view?.findViewById(R.id.sololink_record_video_button)
+    }
+
+    private val touchCircleImage by lazy(LazyThreadSafetyMode.NONE){
+        view?.findViewById(R.id.sololink_gimbal_joystick)
     }
 
     private val orientationListener = object : GimbalApi.GimbalOrientationListener {
@@ -178,37 +185,77 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
                     var startX: Float = 0f
                     var startY: Float = 0f
                     val gimbalApi = GimbalApi.getApi(drone)
-                    val orientation = gimbalApi.gimbalOrientation
-                    var pitch = orientation.pitch
-                    var yaw = orientation.yaw
 
                     override fun onTouch(view: View, event: MotionEvent): Boolean {
-                        val conversionX = view.width / 90
-                        val conversionY = view.height / 90
+                        return moveCopter(view, event)
+                    }
+
+                    private fun yawRotateTo(view: View, event: MotionEvent): Double {
+                        val drone = drone ?: return -1.0
+
+                        val attitude = drone.getAttribute<Attitude>(AttributeType.ATTITUDE)
+                        var currYaw = attitude.getYaw()
+
+                        //yaw value is between -180 and 180. Convert so the value is between 0 to 360
+                        if (currYaw < 0) {
+                            currYaw += 360.0
+                        }
+
+                        val degreeIntervals = (360f / view.width).toDouble()
+                        val rotateDeg = (degreeIntervals * (event.x - startX)).toFloat()
+                        var rotateTo = currYaw.toFloat() + rotateDeg
+
+                        //Ensure value stays in range between 0 and 360
+                        rotateTo = (rotateTo + 360) % 360
+                        return rotateTo.toDouble()
+                    }
+
+                    private fun moveCopter(view: View, event: MotionEvent): Boolean {
+                        val xTouch = event.x
+                        val yTouch = event.y
+
+                        val touchWidth = touchCircleImage?.width?:0
+                        val touchHeight = touchCircleImage?.height?:0
+                        val centerTouchX = (touchWidth / 2f).toFloat()
+                        val centerTouchY = (touchHeight / 2f).toFloat()
+
                         when (event.action) {
                             MotionEvent.ACTION_DOWN -> {
+                                touchCircleImage?.setVisibility(View.VISIBLE)
+                                touchCircleImage?.setX(xTouch - centerTouchX)
+                                touchCircleImage?.setY(yTouch - centerTouchY)
                                 startX = event.x
                                 startY = event.y
                                 gimbalApi.startGimbalControl(orientationListener)
                                 return true
                             }
                             MotionEvent.ACTION_MOVE -> {
-                                val vX = event.x - startX
-                                val vY = event.y - startY
-                                pitch += vY / conversionX
-                                yaw += vX / conversionY
-                                //                        Timber.d("drag %f, %f", yaw, pitch)
-                                gimbalApi.updateGimbalOrientation(pitch, yaw, orientation.roll, orientationListener)
-                                startX = event.x
-                                startY = event.y
-                                pitch = Math.min(pitch, 0f)
-                                pitch = Math.max(pitch, -90f)
+                                val yawRotateTo = yawRotateTo(view, event).toFloat()
+                                sendYawAndPitch(view, event, yawRotateTo)
+                                touchCircleImage?.setVisibility(View.VISIBLE)
+                                touchCircleImage?.setX(xTouch - centerTouchX)
+                                touchCircleImage?.setY(yTouch - centerTouchY)
                                 return true
                             }
-                            MotionEvent.ACTION_UP -> gimbalApi.stopGimbalControl(orientationListener)
-
+                            MotionEvent.ACTION_UP -> {
+                                touchCircleImage?.setVisibility(View.GONE)
+                                gimbalApi.stopGimbalControl(orientationListener)
+                            }
                         }
                         return false
+                    }
+
+                    private fun sendYawAndPitch(view: View, event: MotionEvent, rotateTo: Float) {
+                        val orientation = gimbalApi.getGimbalOrientation()
+
+                        val degreeIntervals = 90f / view.height
+                        val pitchDegree = (degreeIntervals * (startY - event.y)).toFloat()
+                        val pitchTo = orientation.getPitch() + pitchDegree
+
+                        Timber.d("Pitch %f roll %f yaw %f", orientation.getPitch(), orientation.getRoll(), rotateTo)
+                        Timber.d("degreeIntervals: %f pitchDegree: %f, pitchTo: %f", degreeIntervals, pitchDegree, pitchTo)
+
+                        gimbalApi.updateGimbalOrientation(pitchTo, orientation.getRoll(), rotateTo, orientationListener)
                     }
                 }
 
