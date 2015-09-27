@@ -352,6 +352,9 @@ public class TTSNotificationProvider implements OnInitListener,
 	@SuppressLint("NewApi")
 	@Override
 	public void onInit(int status) {
+		if(tts == null)
+			return;
+
 		if (status == TextToSpeech.SUCCESS) {
 			// TODO: check if the language is available
 			Locale ttsLanguage;

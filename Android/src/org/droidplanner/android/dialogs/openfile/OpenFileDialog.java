@@ -63,7 +63,7 @@ public abstract class OpenFileDialog implements OnClickListener {
         private final ProgressDialog progressDialog;
 
         public OpenFileAsyncTask(OpenFileDialog dialog){
-            containerRef = new WeakReference<OpenFileDialog>(dialog);
+            containerRef = new WeakReference<>(dialog);
             progressDialog = new ProgressDialog(dialog.context);
             progressDialog.setTitle("Processing...");
             progressDialog.setMessage("Please wait.");
@@ -88,7 +88,8 @@ public abstract class OpenFileDialog implements OnClickListener {
 
         @Override
         protected void onCancelled(){
-            progressDialog.dismiss();
+            if(progressDialog.isShowing())
+                progressDialog.dismiss();
         }
 
         @Override
@@ -105,7 +106,8 @@ public abstract class OpenFileDialog implements OnClickListener {
                 ref.onDataLoaded(ref.reader);
             }
 
-            progressDialog.dismiss();
+            if(progressDialog.isShowing())
+                progressDialog.dismiss();
         }
     }
 

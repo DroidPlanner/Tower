@@ -658,32 +658,45 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
         }
 
         if (mDroneLeashPath == null) {
-            PolylineOptions flightPath = new PolylineOptions();
+            final PolylineOptions flightPath = new PolylineOptions();
             flightPath.color(DRONE_LEASH_DEFAULT_COLOR).width(
-                    DroneHelper.scaleDpToPixels(DRONE_LEASH_DEFAULT_WIDTH,
-                            getResources()));
-            mDroneLeashPath = getMap().addPolyline(flightPath);
-        }
+                    DroneHelper.scaleDpToPixels(DRONE_LEASH_DEFAULT_WIDTH, getResources()));
 
-        mDroneLeashPath.setPoints(pathPoints);
+            getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    mDroneLeashPath = getMap().addPolyline(flightPath);
+                    mDroneLeashPath.setPoints(pathPoints);
+                }
+            });
+        }
+        else {
+            mDroneLeashPath.setPoints(pathPoints);
+        }
     }
 
     @Override
     public void updateMissionPath(PathSource pathSource) {
         List<LatLong> pathCoords = pathSource.getPathPoints();
-        final List<LatLng> pathPoints = new ArrayList<LatLng>(pathCoords.size());
+        final List<LatLng> pathPoints = new ArrayList<>(pathCoords.size());
         for (LatLong coord : pathCoords) {
             pathPoints.add(DroneHelper.CoordToLatLang(coord));
         }
 
         if (missionPath == null) {
-            PolylineOptions pathOptions = new PolylineOptions();
-            pathOptions.color(MISSION_PATH_DEFAULT_COLOR).width(
-                    MISSION_PATH_DEFAULT_WIDTH);
-            missionPath = getMap().addPolyline(pathOptions);
+            final PolylineOptions pathOptions = new PolylineOptions();
+            pathOptions.color(MISSION_PATH_DEFAULT_COLOR).width(MISSION_PATH_DEFAULT_WIDTH);
+            getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    missionPath = getMap().addPolyline(pathOptions);
+                    missionPath.setPoints(pathPoints);
+                }
+            });
         }
-
-        missionPath.setPoints(pathPoints);
+        else {
+            missionPath.setPoints(pathPoints);
+        }
     }
 
 
