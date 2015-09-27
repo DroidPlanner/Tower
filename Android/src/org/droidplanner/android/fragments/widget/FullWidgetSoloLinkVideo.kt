@@ -300,7 +300,8 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
             widgetButtonBar?.visibility = View.VISIBLE
 
             //Update the video recording button
-            recordVideo?.isActivated = goproState.recording == SoloGoproState.RECORDING_ON
+            recordVideo?.isActivated = goproState.captureMode == SoloGoproState.CAPTURE_MODE_VIDEO
+                    && goproState.recording == SoloGoproState.RECORDING_ON
         }
     }
 
