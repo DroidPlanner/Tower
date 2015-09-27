@@ -3,6 +3,8 @@
 
     <!-- Generic strings -->
     <string name="settings">Settings</string>
+    <string name="label_general">General</string>
+    <string name="label_other">Others</string>
     <string name="menu_drone_setup">Drone Setup</string>
     <string name="app_settings">App Settings</string>
     <string name="flight_data">Flight Data</string>
@@ -40,6 +42,7 @@
     <string name="pref_enable_tts_summary">Audible messages for important events</string>
     <string name="pref_request_max_volume">Set Volume To Max On Start</string>
     <string name="pref_connection">Connection Preferences</string>
+    <string name="pref_connection_subtitle">USB, TCP and UDP settings</string>
     <string name="pref_usb">USB Connection</string>
     <string name="pref_baud_type">Telemetry link speed</string>
     <string name="pref_baud_type_summary">Baud Rate of the USB Telemetry Link</string>
@@ -50,7 +53,6 @@
     <string name="pref_udp_server_port">UDP Server Port</string>
     <string name="about">About</string>
     <string name="version">Version</string>
-    <string name="storage_folder">Storage Folder</string>
     <!-- Toast Message -->
     <string name="user_autopan_long_press">Long press to activate user auto panning.</string>
     <string name="drone_autopan_long_press">Long press to activate drone auto panning.</string>
@@ -134,8 +136,11 @@
     <string name="waypointInfo_SetServo">Move a servo to a particular PWM value.</string>
     <string name="waypointInfo_EpmGrabber">Release the payload of the EPM grabber</string>
     <string name="waypointInfo_ROI">Sets a location and altitude to point copter towards and to aim an optional camera.</string>
+    <string name="waypointType_Do_Jump">Do Jump</string>
+    <string name="waypointInfo_DoJump">Jump to a specific waypoint.</string>
     <!-- Custom waypoint info -->
     <string name="pwm">PWM</string>
+    <string name="repeat_count">Repeat Count</string>
 
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">One cannot add new waypoints after LAND or RTL</string>
@@ -244,6 +249,7 @@
     <string name="telemetry_default_value">0.0</string>
     <string name="climb_rate_label">Climb Rate</string>
     <string name="altitude_label">Altitude</string>
+    <string name="label_pitch">Pitch</string>
     <string name="roi_height_label">ROI Height</string>
     <string name="speed_label">Speed</string>
     <string name="length_label">Length</string>
@@ -335,10 +341,7 @@
     <string name="empty_content" translatable="false">--</string>
     <string name="usage_statistics">Usage Statistics</string>
     <string name="pref_usage_statistics_title">Send usage statistics</string>
-    <string name="pref_usage_statistics_summary">Help improve DroidPlanner by sending usage statistics.</string>
-
-    <string name="pref_permanent_notification_title">Enable permanent notification</string>
-    <string name="pref_permanent_notification_summary">Enable to make status bar notification permanent when connected.</string>
+    <string name="pref_usage_statistics_summary">Help improve Tower by sending usage statistics.</string>
 
     <string name="zoom_fit">Zoom to Fit</string>
     <string name="open_mission_file">Import from file</string>
@@ -372,8 +375,6 @@
     <string name="pref_dialog_selection_reset_desc"><![CDATA[Reset selection through: Settings -> User Interface -> Preference Dialogs]]></string>
     <string name="pref_dronie_creation_title">Create dronie?</string>
     <string name="pref_dronie_creation_message">Please stand back 8m before starting the dronie.</string>
-    <string name="pref_licenses">Licenses</string>
-    <string name="pref_licenses_summary">Libraries (and their licenses) used in this project</string>
     <string name="upload_params">Upload parameters</string>
     <string name="upload">Upload</string>
     <string name="download_params">Download parameters</string>
@@ -454,6 +455,10 @@
     <string name="horizontal_speed_telem">hs: %s</string>
     <string name="vertical_speed_empty">vs: —</string>
     <string name="vertical_speed_telem">vs: %s</string>
+    <string name="latitude_empty">Lat: —</string>
+    <string name="latitude_telem">Lat: %s°</string>
+    <string name="longitude_empty">Long: —</string>
+    <string name="longitude_telem">Long: %s°</string>
     <string name="menu_kill_switch">Kill Switch</string>
     <string name="label_clear_selected">Clear selected</string>
     <string name="unsaved_param_warning">You have unsaved changes</string>
@@ -468,13 +473,17 @@
     <!-- Telemetry widget labels -->
     <string name="label_widget_solo_video">Solo Video</string>
     <string name="description_widget_solo_video">Displays the video stream from a connected Solo vehicle</string>
-    <string name="label_widget_telemetry_info">Telemetry Data</string>
-    <string name="description_widget_telemetry_info">Displays vehicle telemetry info</string>
-    <string name="label_widget_ekf_status">EKF Status</string>
-    <string name="description_widget_ekf_status">Displays the vehicle EKF status</string>
+    <string name="label_widget_attitude_speed_info">Speed &amp; Attitude Info</string>
+    <string name="description_widget_attitude_speed_info">Displays vehicle speed and attitude data</string>
+    <string name="label_widget_vehicle_diagnostics">Diagnostics</string>
+    <string name="description_widget_vehicle_diagnostics">Displays the vehicle diagnostics stats</string>
     <string name="pref_tower_widgets_title">Widgets Preferences</string>
     <string name="pref_tower_widgets_category">Tower Widgets</string>
     <string name="pref_widgets_list_category">Widgets list</string>
+    <string name="label_widget_flight_timer">Flight Timer</string>
+    <string name="description_widget_flight_timer">Displays the vehicle flight time</string>
+    <string name="label_widget_geo_info">Geo Info</string>
+    <string name="description_widget_geo_info">Displays vehicle geographical information (Lat/Long)</string>
     <string name="label_ekf">ekf</string>
     <string name="label_velocity_var_abbrev">vel</string>
     <string name="label_horizontal_position_var_abbrev">h.pos</string>
@@ -495,5 +504,22 @@
     <string name="label_absolute_predicted_estimate">Absolute predicted estimate</string>
     <string name="label_relative_predicted_estimate">Relative predicted estimate</string>
     <string name="error_no_video">no video available</string>
+    <string name="label_repeat_indefinitely">Repeat indefinitely</string>
+    <string name="title_ekf_status_viewer">EKF</string>
+    <string name="title_vibration_viewer">Vibration</string>
+    <string name="title_ekf_flags_viewer">Flags</string>
+    <string name="label_tertiary">Tertiary</string>
+    <string name="label_secondary">Secondary</string>
+    <string name="label_primary">Primary</string>
+    <string name="label_clipping">Clipping</string>
+    <string name="unset_timer">--:--</string>
+
+    <string name="label_rtl">Return to Launch</string>
+    <string name="label_rtm">Return to Me</string>
+    <string name="pref_vehicle_home_update_warning_title">Vehicle Home Update</string>
+    <string name="pref_vehicle_home_update_warning_summary">Warns about vehicle home location updates while in flight.</string>
+    <string name="warning_vehicle_home_updated">Vehicle home updated</string>
+    <string name="label_photo">Photo</string>
+    <string name="label_record">Record</string>
 
 </resources>

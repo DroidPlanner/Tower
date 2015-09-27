@@ -70,7 +70,8 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
             MissionItemType.EPM_GRIPPER,
             MissionItemType.YAW_CONDITION,
             MissionItemType.SET_SERVO,
-            MissionItemType.SPLINE_SURVEY
+            MissionItemType.SPLINE_SURVEY,
+            MissionItemType.DO_JUMP
     };
 
     public interface OnMissionDetailListener {
@@ -80,7 +81,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
          *
          * @param itemList list of mission items proxies whose details the dialog is showing.
          */
-        public void onDetailDialogDismissed(List<MissionItemProxy> itemList);
+        void onDetailDialogDismissed(List<MissionItemProxy> itemList);
 
         /**
          * Notifies the listener that the mission item proxy was changed.
@@ -89,7 +90,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
          * @param oldNewItemsList a list of pairs containing the previous,
          *                        and the new mission item proxy.
          */
-        public void onWaypointTypeChanged(MissionItemType newType, List<Pair<MissionItemProxy,
+        void onWaypointTypeChanged(MissionItemType newType, List<Pair<MissionItemProxy,
                 List<MissionItemProxy>>> oldNewItemsList);
     }
 
@@ -258,6 +259,9 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
             case YAW_CONDITION:
                 fragment = new MissionConditionYawFragment();
                 break;
+            case DO_JUMP:
+                fragment = new MissionDoJumpFragment();
+                break;
             default:
                 fragment = null;
                 break;
@@ -367,6 +371,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
                 list.remove(MissionItemType.RETURN_TO_LAUNCH);
                 list.remove(MissionItemType.EPM_GRIPPER);
                 list.remove(MissionItemType.CAMERA_TRIGGER);
+                list.remove(MissionItemType.DO_JUMP);
             }
         } else {
             //Invalid state. We should not have been able to get here.

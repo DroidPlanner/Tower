@@ -25,11 +25,13 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.Type;
+import com.o3dr.services.android.lib.model.AbstractCommandListener;
 
 import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.DroidPlannerApp;
@@ -48,6 +50,8 @@ import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 import java.util.HashSet;
 import java.util.Locale;
+
+import timber.log.Timber;
 
 /**
  * Implements the application settings screen.
@@ -193,11 +197,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                     });
         }
 
-        final Preference storagePref = findPreference(DroidPlannerPrefs.PREF_STORAGE);
-        if (storagePref != null) {
-            storagePref.setSummary(DirectoryPath.getPublicDataPath());
-        }
-
         try {
             Preference versionPref = findPreference(DroidPlannerPrefs.PREF_APP_VERSION);
             if (versionPref != null) {
@@ -297,6 +296,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                 }
             });
         }
+
         final CheckBoxPreference killSwitch = (CheckBoxPreference) findPreference(DroidPlannerPrefs.PREF_ENABLE_KILL_SWITCH);
         if(killSwitch != null) {
             killSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -410,14 +410,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setupAltitudePreferenceHelper(DroidPlannerPrefs.PREF_ALT_MAX_VALUE, dpPrefs.getMaxAltitude());
         setupAltitudePreferenceHelper(DroidPlannerPrefs.PREF_ALT_MIN_VALUE, dpPrefs.getMinAltitude());
         setupAltitudePreferenceHelper(DroidPlannerPrefs.PREF_ALT_DEFAULT_VALUE, dpPrefs.getDefaultAltitude());
-    }
-
-    private Context getContext(){
-        final Activity activity = getActivity();
-        if(activity == null)
-            return null;
-
-        return activity.getApplicationContext();
     }
 
     private void setupAltitudePreferenceHelper(final String prefKey, double defaultAlt){
@@ -723,7 +715,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     @Override
     public void onApiConnected() {
         Drone drone = dpApp.getDrone();
-        State droneState = drone.getAttribute(AttributeType.STATE);
         Type droneType = drone.getAttribute(AttributeType.TYPE);
 
         updateFirmwareVersionPreference(droneType);

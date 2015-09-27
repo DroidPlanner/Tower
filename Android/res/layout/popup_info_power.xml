@@ -33,7 +33,7 @@
             android:textSize="@dimen/info_bar_text_size"/>
 
         <TextView
-            android:id="@+id/bar_power_voltage"
+            android:id="@+id/bar_power_remain"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

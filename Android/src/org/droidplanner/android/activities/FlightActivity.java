@@ -3,13 +3,18 @@ package org.droidplanner.android.activities;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.FlightDataFragment;
 import org.droidplanner.android.fragments.WidgetsListFragment;
 import org.droidplanner.android.fragments.actionbar.ActionBarTelemFragment;
+import org.droidplanner.android.view.SlidingDrawer;
 
-public class FlightActivity extends DrawerNavigationUI {
+public class FlightActivity extends DrawerNavigationUI implements SlidingUpPanelLayout.PanelSlideListener {
 
     private static final String EXTRA_IS_ACTION_DRAWER_OPENED = "extra_is_action_drawer_opened";
     private static final boolean DEFAULT_IS_ACTION_DRAWER_OPENED = true;
@@ -107,4 +112,55 @@ public class FlightActivity extends DrawerNavigationUI {
         return true;
     }
 
+    @Override
+    public void onPanelSlide(View view, float v) {
+        //Update the bottom margin for the action drawer
+        final View flightActionBar = ((ViewGroup)view).getChildAt(0);
+        final int[] viewLocs = new int[2];
+        flightActionBar.getLocationInWindow(viewLocs);
+        updateActionDrawerBottomMargin(viewLocs[0] + flightActionBar.getWidth(), (int) (view.getHeight() * v));
+    }
+
+    @Override
+    public void onPanelCollapsed(View view) {
+        //Reset the bottom margin for the action drawer
+        final View flightActionBar = ((ViewGroup)view).getChildAt(0);
+        final int[] viewLocs = new int[2];
+        flightActionBar.getLocationInWindow(viewLocs);
+        updateActionDrawerBottomMargin(viewLocs[0] + flightActionBar.getWidth(), 0);
+    }
+
+    @Override
+    public void onPanelExpanded(View view) {
+        //Update the bottom margin for the action drawer
+        final View flightActionBar = ((ViewGroup)view).getChildAt(0);
+        final int[] viewLocs = new int[2];
+        flightActionBar.getLocationInWindow(viewLocs);
+        updateActionDrawerBottomMargin(viewLocs[0] + flightActionBar.getWidth(), view.getHeight());
+    }
+
+    @Override
+    public void onPanelAnchored(View view) {
+
+    }
+
+    @Override
+    public void onPanelHidden(View view) {
+        final View flightActionBar = ((ViewGroup)view).getChildAt(0);
+        final int[] viewLocs = new int[2];
+        flightActionBar.getLocationInWindow(viewLocs);
+        updateActionDrawerBottomMargin(viewLocs[0] + flightActionBar.getWidth(), 0);
+    }
+
+    private void updateActionDrawerBottomMargin(int rightEdge, int bottomMargin){
+        final View actionDrawer = getActionDrawer();
+        final int[] actionDrawerLocs = new int[2];
+        actionDrawer.getLocationInWindow(actionDrawerLocs);
+
+        if(actionDrawerLocs[0] <= rightEdge) {
+            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) actionDrawer.getLayoutParams();
+            lp.bottomMargin = bottomMargin;
+            actionDrawer.requestLayout();
+        }
+    }
 }

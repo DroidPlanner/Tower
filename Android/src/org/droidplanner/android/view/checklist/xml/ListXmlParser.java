@@ -18,7 +18,7 @@ import android.os.Environment;
 public abstract class ListXmlParser {
 
 	public interface OnXmlParserError {
-		public void onError();
+		void onError();
 	}
 
 	protected OnXmlParserError errorListener;

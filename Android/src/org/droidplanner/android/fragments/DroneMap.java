@@ -210,7 +210,6 @@ public abstract class DroneMap extends ApiListenerFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
 		final View view = inflater.inflate(R.layout.fragment_drone_map, viewGroup, false);
-		mAppPrefs = new DroidPlannerPrefs(context);
 		updateMapFragment();
 		return view;
 	}
@@ -231,7 +230,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 		drone = getDrone();
 		missionProxy = getMissionProxy();
 
-		home = new GraphicHome(drone);
+		home = new GraphicHome(drone, getContext());
 		graphicDrone = new GraphicDrone(drone);
 		guided = new GraphicGuided(drone);
 
@@ -288,6 +287,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		context = activity.getApplicationContext();
+		mAppPrefs = new DroidPlannerPrefs(context);
 	}
 
 	public final void postUpdate() {

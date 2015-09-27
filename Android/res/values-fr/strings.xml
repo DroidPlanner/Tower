@@ -63,7 +63,6 @@
     <string name="pref_udp_server_port">Port du Serveur UDP</string>
     <string name="about">A propos</string>
     <string name="version">Version</string>
-    <string name="storage_folder">Dossier de stockage</string>
 
 
     <!-- Toast Message --> <!-- 100% -->
@@ -370,8 +369,6 @@
     <string name="usage_statistics">Statistiques d\'Utilisation</string>
     <string name="pref_usage_statistics_title">Envoyer les statistiques d\'utilisation</string>
     <string name="pref_usage_statistics_summary">Cocher pour améliorer Tower en envoyant les statistiques d\'utilisation.</string>
-    <string name="pref_permanent_notification_title">Active les notifications permanentes</string>
-    <string name="pref_permanent_notification_summary">Cocher pour afficher la barre de notifications en permanence.</string>
     <string name="zoom_fit">Zoom adapté</string>
     <string name="open_mission_file">Importer d\'un fichier</string>
     <string name="save_mission_file">Exporter vers un fichier</string>
@@ -408,8 +405,6 @@
     <string name="pref_dronie_creation_message">Merci de se positionner à 8 mètres avant de commencer le dronie.</string>
 
 
-    <string name="pref_licenses">Licences</string>
-    <string name="pref_licenses_summary">Librairies (et leurs licences) utilisées dans ce projet</string>
     <string name="upload_params">Transférer les paramètres</string>
     <string name="download_params">Télécharger les paramètres</string>
     <string name="import_from_device">Importer d\'un fichier</string>

@@ -66,6 +66,7 @@ import com.o3dr.services.android.lib.util.googleApi.GoogleApiClientManager.Googl
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.SettingsFragment;
+import org.droidplanner.android.graphic.map.GraphicHome;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
@@ -217,7 +218,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
         @Override
         public void doRun() {
             final LocationRequest locationReq = LocationRequest.create()
-                    .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                     .setFastestInterval(USER_LOCATION_UPDATE_FASTEST_INTERVAL)
                     .setInterval(USER_LOCATION_UPDATE_INTERVAL)
                     .setSmallestDisplacement(USER_LOCATION_UPDATE_MIN_DISPLACEMENT);
@@ -657,32 +658,45 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
         }
 
         if (mDroneLeashPath == null) {
-            PolylineOptions flightPath = new PolylineOptions();
+            final PolylineOptions flightPath = new PolylineOptions();
             flightPath.color(DRONE_LEASH_DEFAULT_COLOR).width(
-                    DroneHelper.scaleDpToPixels(DRONE_LEASH_DEFAULT_WIDTH,
-                            getResources()));
-            mDroneLeashPath = getMap().addPolyline(flightPath);
-        }
+                    DroneHelper.scaleDpToPixels(DRONE_LEASH_DEFAULT_WIDTH, getResources()));
 
-        mDroneLeashPath.setPoints(pathPoints);
+            getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    mDroneLeashPath = getMap().addPolyline(flightPath);
+                    mDroneLeashPath.setPoints(pathPoints);
+                }
+            });
+        }
+        else {
+            mDroneLeashPath.setPoints(pathPoints);
+        }
     }
 
     @Override
     public void updateMissionPath(PathSource pathSource) {
         List<LatLong> pathCoords = pathSource.getPathPoints();
-        final List<LatLng> pathPoints = new ArrayList<LatLng>(pathCoords.size());
+        final List<LatLng> pathPoints = new ArrayList<>(pathCoords.size());
         for (LatLong coord : pathCoords) {
             pathPoints.add(DroneHelper.CoordToLatLang(coord));
         }
 
         if (missionPath == null) {
-            PolylineOptions pathOptions = new PolylineOptions();
-            pathOptions.color(MISSION_PATH_DEFAULT_COLOR).width(
-                    MISSION_PATH_DEFAULT_WIDTH);
-            missionPath = getMap().addPolyline(pathOptions);
+            final PolylineOptions pathOptions = new PolylineOptions();
+            pathOptions.color(MISSION_PATH_DEFAULT_COLOR).width(MISSION_PATH_DEFAULT_WIDTH);
+            getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    missionPath = getMap().addPolyline(pathOptions);
+                    missionPath.setPoints(pathPoints);
+                }
+            });
         }
-
-        missionPath.setPoints(pathPoints);
+        else {
+            missionPath.setPoints(pathPoints);
+        }
     }
 
 
@@ -849,8 +863,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
             public void onMarkerDragStart(Marker marker) {
                 if (mMarkerDragListener != null) {
                     final MarkerInfo markerInfo = mBiMarkersMap.getKey(marker);
-                    markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
-                    mMarkerDragListener.onMarkerDragStart(markerInfo);
+                    if(!(markerInfo instanceof GraphicHome)) {
+                        markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
+                        mMarkerDragListener.onMarkerDragStart(markerInfo);
+                    }
                 }
             }
 
@@ -858,8 +874,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
             public void onMarkerDrag(Marker marker) {
                 if (mMarkerDragListener != null) {
                     final MarkerInfo markerInfo = mBiMarkersMap.getKey(marker);
-                    markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
-                    mMarkerDragListener.onMarkerDrag(markerInfo);
+                    if(!(markerInfo instanceof GraphicHome)) {
+                        markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
+                        mMarkerDragListener.onMarkerDrag(markerInfo);
+                    }
                 }
             }
 
@@ -1011,14 +1029,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
                 }
             }
         }.execute();
-    }
-
-    protected Context getContext(){
-        final Activity activity = getActivity();
-        if(activity == null)
-            return null;
-
-        return activity.getApplicationContext();
     }
 
     protected void clearMap() {

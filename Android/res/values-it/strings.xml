@@ -43,7 +43,6 @@
     <string name="pref_server_udp">Connessione UDP</string>
     <string name="pref_udp_server_port">Porta Server UDP</string>
     <string name="version">Versione</string>
-    <string name="storage_folder">Cartella Memoria</string>
 
     <!-- Connection State -->
     <string name="menu_connect">Connetti</string>
@@ -231,11 +230,7 @@
     <string name="pref_dronie_creation_title">Creare dronie?</string>
     <string name="pref_forget_bluetooth_device_address">Dimentica dispositivo predefinito</string>
     <string name="pref_forget_bluetooth_device_address_confirm">Sei sicuro?</string>
-    <string name="pref_licenses">Licenze</string>
-    <string name="pref_licenses_summary">Librerie (e le proprie licenze) usate in questo progetto</string>
     <string name="pref_misc_title">Varie</string>
-    <string name="pref_permanent_notification_summary">Attiva per rendere sempre presente la notifica quando connesso</string>
-    <string name="pref_permanent_notification_title">Attiva per rendere la notifica sempre presente</string>
     <string name="pref_request_max_volume">Imposta il volume al massimo all\'avvio</string>
     <string name="pref_title_tts">Sintesi vocale</string>
     <string name="pref_title_tts_periodic_status">Status Intevallo</string>
@@ -259,7 +254,7 @@
     <string name="waypointInfo_EpmGrabber">Rilascia il carico dell\'EPM</string>
     <string name="waypointInfo_SetServo">Muove il servo al valore PWM specificato.</string>
     <string name="waypointType_BuildingMapper">Sacansione struttura</string>
-    <string name="pref_usage_statistics_summary">Aiuta a migliorare DroidPlanner inviando statistiche di utilizzo anonime.</string>
+    <string name="pref_usage_statistics_summary">Aiuta a migliorare Tower inviando statistiche di utilizzo anonime.</string>
     <string name="pref_usage_statistics_title">Invia statistiche utilizzo</string>
     <string name="speed_label">Velocità</string>
     <string name="status_file_opened">File aperto</string>

@@ -47,6 +47,13 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
      */
     protected final static long FLIGHT_TIMER_PERIOD = 1000l; // 1 second
 
+    private final Runnable removeNotification = new Runnable() {
+        @Override
+        public void run() {
+            NotificationManagerCompat.from(mContext).cancelAll();
+        }
+    };
+
     private final Handler mHandler = new Handler();
 
     /**
@@ -92,14 +99,63 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 
         mToggleConnectionIntent = PendingIntent
                 .getBroadcast(mContext, 0, new Intent(DroidPlannerApp.ACTION_TOGGLE_DRONE_CONNECTION), 0);
+    }
 
-        LocalBroadcastManager.getInstance(context).registerReceiver(eventReceiver, eventFilter);
+    @Override
+    public void init(){
+        mHandler.removeCallbacks(removeNotification);
+
+        final String summaryText = mContext.getString(R.string.connected);
+
+        mInboxBuilder = new InboxStyleBuilder().setSummary(summaryText);
+        mNotificationBuilder = new NotificationCompat.Builder(mContext)
+                .addAction(R.drawable.ic_action_io, mContext.getText(R.string.menu_disconnect),
+                        mToggleConnectionIntent)
+                .setContentIntent(mNotificationIntent)
+                .setContentText(summaryText)
+                .setOngoing(false)
+                .setSmallIcon(R.drawable.ic_stat_notify)
+                .setColor(mContext.getResources().getColor(R.color.stat_notify_connected));
+
+        updateFlightMode(drone);
+        updateDroneState(drone);
+        updateBattery(drone);
+        updateGps(drone);
+        updateHome(drone);
+        updateRadio(drone);
+
+        showNotification();
+
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(eventReceiver, eventFilter);
+    }
+
+    /**
+     * Dismiss the app status bar notification.
+     */
+    @Override
+    public void onTerminate() {
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(eventReceiver);
+
+        mInboxBuilder = null;
+
+        if (mNotificationBuilder != null) {
+            mNotificationBuilder = new NotificationCompat.Builder(mContext)
+                    .addAction(R.drawable.ic_action_io,
+                            mContext.getText(R.string.menu_connect), mToggleConnectionIntent)
+                    .setContentIntent(mNotificationIntent)
+                    .setContentTitle(mContext.getString(R.string.disconnected))
+                    .setOngoing(false).setContentText("")
+                    .setSmallIcon(R.drawable.ic_stat_notify);
+        }
+
+        showNotification();
+
+        mHandler.postDelayed(removeNotification, 2000L);
     }
 
     private static final IntentFilter eventFilter = new IntentFilter();
 
     static {
-        eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
         eventFilter.addAction(AttributeEvent.BATTERY_UPDATED);
         eventFilter.addAction(AttributeEvent.GPS_POSITION);
         eventFilter.addAction(AttributeEvent.GPS_FIX);
@@ -109,7 +165,6 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
         eventFilter.addAction(AttributeEvent.STATE_UPDATED);
         eventFilter.addAction(AttributeEvent.STATE_VEHICLE_MODE);
         eventFilter.addAction(AttributeEvent.TYPE_UPDATED);
-        eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -118,26 +173,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
             boolean showNotification = true;
             final String action = intent.getAction();
             switch (action) {
-                case AttributeEvent.STATE_CONNECTED:
-                    final String summaryText = mContext.getString(R.string.connected);
 
-                    mInboxBuilder = new InboxStyleBuilder().setSummary(summaryText);
-                    mNotificationBuilder = new NotificationCompat.Builder(mContext)
-                            .addAction(R.drawable.ic_action_io, mContext.getText(R.string.menu_disconnect),
-                                    mToggleConnectionIntent)
-                            .setContentIntent(mNotificationIntent)
-                            .setContentText(summaryText)
-                            .setOngoing(mAppPrefs.isNotificationPermanent())
-                            .setSmallIcon(R.drawable.ic_stat_notify)
-                            .setColor(context.getResources().getColor(R.color.stat_notify_connected));
-
-                    updateFlightMode(drone);
-                    updateDroneState(drone);
-                    updateBattery(drone);
-                    updateGps(drone);
-                    updateHome(drone);
-                    updateRadio(drone);
-                    break;
                 case AttributeEvent.GPS_POSITION:
                     updateHome(drone);
                     break;
@@ -160,20 +196,6 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
                 case AttributeEvent.STATE_VEHICLE_MODE:
                 case AttributeEvent.TYPE_UPDATED:
                     updateFlightMode(drone);
-                    break;
-
-                case AttributeEvent.STATE_DISCONNECTED:
-                    mInboxBuilder = null;
-
-                    if (mNotificationBuilder != null) {
-                        mNotificationBuilder = new NotificationCompat.Builder(mContext)
-                                .addAction(R.drawable.ic_action_io,
-                                        mContext.getText(R.string.menu_connect), mToggleConnectionIntent)
-                                .setContentIntent(mNotificationIntent)
-                                .setContentTitle(mContext.getString(R.string.disconnected))
-                                .setOngoing(false).setContentText("")
-                                .setSmallIcon(R.drawable.ic_stat_notify);
-                    }
                     break;
 
                 default:
@@ -292,15 +314,6 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 
         NotificationManagerCompat.from(mContext).notify(NOTIFICATION_ID,
                 mNotificationBuilder.build());
-    }
-
-    /**
-     * Dismiss the app status bar notification.
-     */
-    @Override
-    public void onTerminate() {
-        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(eventReceiver);
-        NotificationManagerCompat.from(mContext).cancelAll();
     }
 
     private static class InboxStyleBuilder {

@@ -23,11 +23,13 @@ public class EmergencyBeepNotificationProvider implements NotificationHandler.No
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (Drone.ACTION_GROUND_COLLISION_IMMINENT.equals(action)) {
-                if (appPrefs.getImminentGroundCollisionWarning() && intent.getBooleanExtra(Drone
-                        .EXTRA_IS_GROUND_COLLISION_IMMINENT, false)) {
-                    mPool.play(beepBeep, 1f, 1f, 1, 1, 1f);
-                } else {
-                    mPool.stop(beepBeep);
+                if(mPool != null) {
+                    if (appPrefs.getImminentGroundCollisionWarning() && intent.getBooleanExtra(Drone
+                            .EXTRA_IS_GROUND_COLLISION_IMMINENT, false)) {
+                        mPool.play(beepBeep, 1f, 1f, 1, 1, 1f);
+                    } else {
+                        mPool.stop(beepBeep);
+                    }
                 }
             }
         }
@@ -42,6 +44,10 @@ public class EmergencyBeepNotificationProvider implements NotificationHandler.No
     public EmergencyBeepNotificationProvider(Context context) {
         this.context = context;
         appPrefs = new DroidPlannerPrefs(context);
+    }
+
+    @Override
+    public void init(){
         mPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
         beepBeep = mPool.load(context, R.raw.beep_beep, 1);
 
@@ -50,8 +56,11 @@ public class EmergencyBeepNotificationProvider implements NotificationHandler.No
 
     @Override
     public void onTerminate() {
-        mPool.release();
         LocalBroadcastManager.getInstance(context).unregisterReceiver(eventReceiver);
+        if(mPool != null) {
+            mPool.release();
+            mPool = null;
+        }
     }
 
 }

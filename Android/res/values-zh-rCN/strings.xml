@@ -50,7 +50,6 @@
     <string name="pref_udp_server_port">UDP服务器端口</string>
     <string name="about">关于（翻译：APM中文网 四季天书/酷酷小狼）</string>
     <string name="version">版本</string>
-    <string name="storage_folder">存储路径</string>
     <!-- Toast Message -->
     <string name="user_autopan_long_press">长按图示可以启动地图中使用者位置置中</string>
     <string name="drone_autopan_long_press">长按图示可以启动地图中无人机位置自动置中</string>
@@ -331,10 +330,7 @@
     <string name="firmware_version">固件版本</string>
     <string name="usage_statistics">使用统计</string>
     <string name="pref_usage_statistics_title">发送使用统计</string>
-    <string name="pref_usage_statistics_summary">发送使用统计资料能帮助DroidPlanner增进平台完成度</string>
-
-    <string name="pref_permanent_notification_title">启动通知</string>
-    <string name="pref_permanent_notification_summary">当连接时，在状态列上显示通知内容。</string>
+    <string name="pref_usage_statistics_summary">发送使用统计资料能帮助Tower增进平台完成度</string>
 
     <string name="zoom_fit">符合显示范围</string>
     <string name="open_mission_file">打开任务文件</string>
@@ -367,8 +363,6 @@
     <string name="pref_dialog_selection_reset_desc"><![CDATA[通过重新选择：设置->用户界面->选择对话框]]></string>
     <string name="pref_dronie_creation_title">创建 dronie？</string>
     <string name="pref_dronie_creation_message">在dronie起飞前请站在飞机后面8m远的距离。</string>
-    <string name="pref_licenses">许可</string>
-    <string name="pref_licenses_summary">在这个项目中使用的库（和他们的许可）</string>
     <string name="import_from_device">从设备导入</string>
     <string name="export_to_device">导出到设备</string>
     <string name="pref_title_local">本地化</string>

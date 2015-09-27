@@ -1,4 +1,4 @@
-package org.droidplanner.android.fragments.widget
+package org.droidplanner.android.fragments.widget.telemetry
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -15,14 +15,16 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeType
 import com.o3dr.services.android.lib.drone.property.Attitude
 import com.o3dr.services.android.lib.drone.property.Speed
 import org.droidplanner.android.R
-import org.droidplanner.android.fragments.helpers.ApiListenerFragment
+import org.droidplanner.android.fragments.widget.TowerWidget
+import org.droidplanner.android.fragments.widget.TowerWidgets
 import org.droidplanner.android.view.AttitudeIndicator
+import java.lang.String
 import java.util.*
 
 /**
  * Created by Fredia Huya-Kouadio on 8/27/15.
  */
-public class MiniWidgetTelemetryInfo : TowerWidget() {
+public class MiniWidgetAttitudeSpeedInfo : TowerWidget() {
 
     companion object {
         private val filter = initFilter()
@@ -31,18 +33,19 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
             val temp = IntentFilter()
             temp.addAction(AttributeEvent.ATTITUDE_UPDATED)
             temp.addAction(AttributeEvent.SPEED_UPDATED)
+            temp.addAction(AttributeEvent.GPS_POSITION)
+            temp.addAction(AttributeEvent.HOME_UPDATED)
             return temp
         }
     }
 
-    private val receiver = object : BroadcastReceiver(){
+    private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            when(intent.getAction()){
+            when (intent.action) {
                 AttributeEvent.ATTITUDE_UPDATED -> onOrientationUpdate()
                 AttributeEvent.SPEED_UPDATED -> onSpeedUpdate()
             }
         }
-
     }
 
     private var attitudeIndicator: AttitudeIndicator? = null
@@ -55,39 +58,39 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
 
     private var headingModeFPV: Boolean = false
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?{
-        return inflater?.inflate(R.layout.fragment_mini_widget_telemetry_info, container, false)
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater?.inflate(R.layout.fragment_mini_widget_attitude_speed_info, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        attitudeIndicator = view.findViewById(R.id.aiView) as AttitudeIndicator
+        attitudeIndicator = view.findViewById(R.id.aiView) as AttitudeIndicator?
 
-        roll = view.findViewById(R.id.rollValueText) as TextView
-        yaw = view.findViewById(R.id.yawValueText) as TextView
-        pitch = view.findViewById(R.id.pitchValueText) as TextView
+        roll = view.findViewById(R.id.rollValueText) as TextView?
+        yaw = view.findViewById(R.id.yawValueText) as TextView?
+        pitch = view.findViewById(R.id.pitchValueText) as TextView?
 
-        horizontalSpeed = view.findViewById(R.id.horizontal_speed_telem) as TextView
-        verticalSpeed = view.findViewById(R.id.vertical_speed_telem) as TextView
+        horizontalSpeed = view.findViewById(R.id.horizontal_speed_telem) as TextView?
+        verticalSpeed = view.findViewById(R.id.vertical_speed_telem) as TextView?
     }
 
     override fun onStart() {
         super.onStart()
 
-        val prefs = PreferenceManager.getDefaultSharedPreferences(getContext())
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         headingModeFPV = prefs.getBoolean("pref_heading_mode", false)
     }
 
-    override fun getWidgetType() = TowerWidgets.TELEMETRY_INFO
+    override fun getWidgetType() = TowerWidgets.ATTITUDE_SPEED_INFO
 
     override fun onApiConnected() {
         updateAllTelem()
-        getBroadcastManager().registerReceiver(receiver, filter)
+        broadcastManager.registerReceiver(receiver, filter)
     }
 
     override fun onApiDisconnected() {
-        getBroadcastManager().unregisterReceiver(receiver)
+        broadcastManager.unregisterReceiver(receiver)
     }
 
     private fun updateAllTelem() {
@@ -96,16 +99,16 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
     }
 
     private fun onOrientationUpdate() {
-        if(!isAdded())
+        if (!isAdded)
             return
 
-        val drone = getDrone()
+        val drone = drone
 
         val attitude = drone.getAttribute<Attitude>(AttributeType.ATTITUDE) ?: return
 
-        val r = attitude.getRoll().toFloat()
-        val p = attitude.getPitch().toFloat()
-        var y = attitude.getYaw().toFloat()
+        val r = attitude.roll.toFloat()
+        val p = attitude.pitch.toFloat()
+        var y = attitude.yaw.toFloat()
 
         if (!headingModeFPV and (y < 0)) {
             y += 360
@@ -113,25 +116,25 @@ public class MiniWidgetTelemetryInfo : TowerWidget() {
 
         attitudeIndicator?.setAttitude(r, p, y)
 
-        roll?.setText(java.lang.String.format(Locale.US,"%3.0f\u00B0", r))
-        pitch?.setText(java.lang.String.format(Locale.US,"%3.0f\u00B0", p))
-        yaw?.setText(java.lang.String.format(Locale.US, "%3.0f\u00B0", y))
+        roll?.text = String.format(Locale.US, "%3.0f\u00B0", r)
+        pitch?.text = String.format(Locale.US, "%3.0f\u00B0", p)
+        yaw?.text = String.format(Locale.US, "%3.0f\u00B0", y)
 
     }
 
     private fun onSpeedUpdate() {
-        if(!isAdded())
+        if (!isAdded)
             return
 
-        val drone = getDrone()
+        val drone = drone
         val speed = drone.getAttribute<Speed>(AttributeType.SPEED) ?: return
 
-        val groundSpeedValue =  speed.getGroundSpeed()
-        val verticalSpeedValue = speed.getVerticalSpeed()
+        val groundSpeedValue = speed.groundSpeed
+        val verticalSpeedValue = speed.verticalSpeed
 
-        val speedUnitProvider = getSpeedUnitProvider()
+        val speedUnitProvider = speedUnitProvider
 
-        horizontalSpeed?.setText(getString(R.string.horizontal_speed_telem, speedUnitProvider.boxBaseValueToTarget(groundSpeedValue).toString()))
-        verticalSpeed?.setText(getString(R.string.vertical_speed_telem, speedUnitProvider.boxBaseValueToTarget(verticalSpeedValue).toString()))
+        horizontalSpeed?.text = getString(R.string.horizontal_speed_telem, speedUnitProvider.boxBaseValueToTarget(groundSpeedValue).toString())
+        verticalSpeed?.text = getString(R.string.vertical_speed_telem, speedUnitProvider.boxBaseValueToTarget(verticalSpeedValue).toString())
     }
 }

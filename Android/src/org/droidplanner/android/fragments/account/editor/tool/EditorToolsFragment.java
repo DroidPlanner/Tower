@@ -40,17 +40,17 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
     private static final String STATE_SELECTED_TOOL = "selected_tool";
 
     public enum EditorTools {
-        MARKER, DRAW, TRASH, SELECTOR, NONE;
+        MARKER, DRAW, TRASH, SELECTOR, NONE
     }
 
     public interface EditorToolListener {
-        public void editorToolChanged(EditorTools tools);
+        void editorToolChanged(EditorTools tools);
 
-        public void enableGestureDetection(boolean enable);
+        void enableGestureDetection(boolean enable);
 
-        public void skipMarkerClickEvents(boolean skip);
+        void skipMarkerClickEvents(boolean skip);
 
-        public void zoomToFitSelected();
+        void zoomToFitSelected();
     }
 
     private static final IntentFilter eventFilter = new IntentFilter();

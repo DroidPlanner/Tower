@@ -45,7 +45,6 @@
     <string name="pref_udp_server_port">UDP 伺服器通訊埠</string>
     <string name="about">關於</string>
     <string name="version">版本</string>
-    <string name="storage_folder">儲存路徑</string>
     <!-- Toast Message -->
     <string name="user_autopan_long_press">長按圖示可啟動地圖中使用者位置置中。</string>
     <string name="drone_autopan_long_press">長按圖示可啟動地圖中無人機位置自動置中。</string>
@@ -292,10 +291,7 @@
     <string name="firmware_version">韌體版本</string>
     <string name="usage_statistics">統計使用習慣</string>
     <string name="pref_usage_statistics_title">發送使用習慣統計</string>
-    <string name="pref_usage_statistics_summary">發送使用習慣統計資料能幫助 DroidPlanner 增進平台完成度</string>
-
-    <string name="pref_permanent_notification_title">啟用通知</string>
-    <string name="pref_permanent_notification_summary">當連線時，在狀態列上顯示通知內容。</string>
+    <string name="pref_usage_statistics_summary">發送使用習慣統計資料能幫助 Tower 增進平台完成度</string>
 
     <string name="zoom_fit">符合顯示範圍</string>
     <string name="open_mission_file">打開任務檔</string>

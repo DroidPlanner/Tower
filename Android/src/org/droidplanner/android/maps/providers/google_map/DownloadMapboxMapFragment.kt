@@ -14,7 +14,7 @@ public class DownloadMapboxMapFragment : DroneMap() {
         return when(target){
             AutoPanMode.DISABLED -> true
             else -> {
-                Toast.makeText(getActivity(), "Auto pan is not supported on this map.", Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, "Auto pan is not supported on this map.", Toast.LENGTH_LONG).show()
                 false
             }
         }
