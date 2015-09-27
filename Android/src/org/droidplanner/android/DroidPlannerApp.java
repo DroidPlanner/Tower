@@ -171,7 +171,9 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
             } else {
                 Timber.plant(new Timber.DebugTree());
             }
-        } else {
+        }
+
+        if(BuildConfig.ENABLE_CRASHLYTICS) {
             Fabric.with(context, new Crashlytics());
         }
 
