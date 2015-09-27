@@ -113,9 +113,7 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
             LatLongAlt coordinate = guidedState == null ? null : guidedState.getCoordinate();
 
             final double baseValue = Math.min(maxAlt,
-                    Math.max(minAlt,
-                            Math.max(coordinate == null ? defaultAlt : coordinate.getAltitude(),
-                                    defaultAlt)));
+                    Math.max(minAlt, coordinate == null ? defaultAlt : coordinate.getAltitude()));
             final LengthUnit initialValue = getLengthUnitProvider().boxBaseValueToTarget(baseValue);
             mAltitudeWheel.setCurrentValue(initialValue);
         }
