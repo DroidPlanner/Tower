@@ -46,7 +46,7 @@ dependencies {
 def versionMajor = 3
 def versionMinor = 2
 def versionPatch = 0
-def versionBuild = 4 //bump for dogfood builds, public betas, etc.
+def versionBuild = 5 //bump for dogfood builds, public betas, etc.
 
 //Logging levels
 def logLevelVerbose = 2;
@@ -58,7 +58,7 @@ def logLevelAssert = 7;
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "22.0.1"
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId 'org.droidplanner.android'
