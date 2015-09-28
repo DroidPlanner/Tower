@@ -1,3 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    </resources>
+    <dimen name="action_drawer_margin_bottom">0dp</dimen>
+</resources>

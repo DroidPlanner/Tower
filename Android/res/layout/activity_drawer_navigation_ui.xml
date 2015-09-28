@@ -32,6 +32,7 @@
                 android:layout_gravity="end"
                 app:content="@+id/action_drawer_content"
                 app:handle="@+id/slideButtonLeft"
+                android:layout_marginBottom="@dimen/action_drawer_margin_bottom"
                 android:orientation="horizontal">
 
                 <View
