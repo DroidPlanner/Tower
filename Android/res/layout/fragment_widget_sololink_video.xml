@@ -35,11 +35,7 @@
             android:id="@+id/sololink_take_picture_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:backgroundTint="@android:color/white"
-            app:fabSize="normal"
-            app:elevation="6dp"
-            app:borderWidth="0dp"
-            android:layout_margin="5dp"
+            style="@style/Fab.SoloVideo"
             android:src="@drawable/ic_camera_drawable"
             android:text="@string/label_photo" />
 
@@ -47,11 +43,7 @@
             android:id="@+id/sololink_record_video_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:backgroundTint="@android:color/white"
-            app:fabSize="normal"
-            app:elevation="6dp"
-            app:borderWidth="0dp"
-            android:layout_margin="5dp"
+            style="@style/Fab.SoloVideo"
             android:src="@drawable/on_off_videocam"
             android:text="@string/label_record" />
     </LinearLayout>
@@ -68,5 +60,5 @@
         android:textAllCaps="true"
         android:textColor="@android:color/white"
         android:visibility="gone"
-        tools:visibility="visible" />
+        tools:visibility="gone" />
 </RelativeLayout>

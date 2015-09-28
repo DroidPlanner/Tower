@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Fab.GenericMissionControl">
+        <item name="android:layout_marginBottom">5dp</item>
+    </style>
+
+    <style name="Fab.MyLocation">
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="backgroundTint">@android:color/white</item>
+        <item name="fabSize">mini</item>
+    </style>
+
+    <style name="Fab.SoloVideo">
+        <item name="android:layout_margin">5dp</item>
+        <item name="fabSize">normal</item>
+        <item name="backgroundTint">@android:color/white</item>
+    </style>
+
+</resources>
