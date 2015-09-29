@@ -493,5 +493,32 @@
         <item name="android:drawableRight">@drawable/ic_help_orange_500_24dp</item>
     </style>
 
+    <style name="Fab" >
+        <item name="elevation">6dp</item>
+        <item name="borderWidth">0dp</item>
+    </style>
+
+    <style name="Fab.GenericMissionControl">
+        <item name="android:layout_marginBottom">-14dp</item>
+        <item name="android:layout_marginTop">-15dp</item>
+    </style>
+
+    <style name="Fab.MyLocation">
+        <item name="android:layout_marginBottom">-15dp</item>
+        <item name="android:layout_marginTop">-16dp</item>
+        <item name="android:layout_marginStart">-12dp</item>
+        <item name="backgroundTint">@android:color/white</item>
+        <item name="fabSize">mini</item>
+    </style>
+
+    <style name="Fab.SoloVideo">
+        <item name="android:layout_marginBottom">-14dp</item>
+        <item name="android:layout_marginTop">-15dp</item>
+        <item name="android:layout_marginStart">-6dp</item>
+        <item name="android:layout_marginEnd">-6dp</item>
+        <item name="fabSize">normal</item>
+        <item name="backgroundTint">@android:color/white</item>
+    </style>
+
 </resources>
 

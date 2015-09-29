@@ -412,6 +412,15 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setupAltitudePreferenceHelper(DroidPlannerPrefs.PREF_ALT_DEFAULT_VALUE, dpPrefs.getDefaultAltitude());
     }
 
+    @Override
+    public Context getContext() {
+        final Activity activity = getActivity();
+        if (activity == null)
+            return null;
+
+        return activity.getApplicationContext();
+    }
+
     private void setupAltitudePreferenceHelper(final String prefKey, double defaultAlt){
         final LengthUnitProvider lup = getLengthUnitProvider();
 

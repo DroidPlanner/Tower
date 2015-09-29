@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/location_button_container"
     android:layout_width="wrap_content"
@@ -9,50 +8,34 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/my_location_button"
+        style="@style/Fab.MyLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:src="@drawable/ic_location"
-        app:backgroundTint="@android:color/white"
-        app:borderWidth="0dp"
-        app:elevation="6dp"
-        app:fabSize="mini" />
+        android:src="@drawable/ic_location" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/drone_location_button"
+        style="@style/Fab.MyLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_navigate"
-        app:backgroundTint="@android:color/white"
-        app:borderWidth="0dp"
-        app:elevation="6dp"
-        app:fabSize="mini" />
+        android:src="@drawable/ic_navigate" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/zoom_to_fit_button"
+        style="@style/Fab.MyLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         android:src="@drawable/ic_expand"
         android:visibility="gone"
-        app:backgroundTint="@android:color/white"
-        app:borderWidth="0dp"
-        app:elevation="6dp"
-        app:fabSize="mini"
         tools:visibility="visible" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/toggle_action_drawer"
+        style="@style/Fab.MyLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         android:src="@drawable/ic_flip"
         android:visibility="gone"
-        app:backgroundTint="@android:color/white"
-        app:borderWidth="0dp"
-        app:elevation="6dp"
-        app:fabSize="mini"
         tools:visibility="visible" />
 </LinearLayout>
