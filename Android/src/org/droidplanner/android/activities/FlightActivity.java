@@ -114,20 +114,24 @@ public class FlightActivity extends DrawerNavigationUI implements SlidingUpPanel
 
     @Override
     public void onPanelSlide(View view, float v) {
+        final int bottomMargin = (int) getResources().getDimension(R.dimen.action_drawer_margin_bottom);
+
         //Update the bottom margin for the action drawer
         final View flightActionBar = ((ViewGroup)view).getChildAt(0);
         final int[] viewLocs = new int[2];
         flightActionBar.getLocationInWindow(viewLocs);
-        updateActionDrawerBottomMargin(viewLocs[0] + flightActionBar.getWidth(), (int) (view.getHeight() * v));
+        updateActionDrawerBottomMargin(viewLocs[0] + flightActionBar.getWidth(), Math.max((int) (view.getHeight() * v), bottomMargin));
     }
 
     @Override
     public void onPanelCollapsed(View view) {
+        final int bottomMargin = (int) getResources().getDimension(R.dimen.action_drawer_margin_bottom);
+
         //Reset the bottom margin for the action drawer
         final View flightActionBar = ((ViewGroup)view).getChildAt(0);
         final int[] viewLocs = new int[2];
         flightActionBar.getLocationInWindow(viewLocs);
-        updateActionDrawerBottomMargin(viewLocs[0] + flightActionBar.getWidth(), 0);
+        updateActionDrawerBottomMargin(viewLocs[0] + flightActionBar.getWidth(), bottomMargin);
     }
 
     @Override
@@ -146,21 +150,25 @@ public class FlightActivity extends DrawerNavigationUI implements SlidingUpPanel
 
     @Override
     public void onPanelHidden(View view) {
+        final int bottomMargin = (int) getResources().getDimension(R.dimen.action_drawer_margin_bottom);
+
         final View flightActionBar = ((ViewGroup)view).getChildAt(0);
         final int[] viewLocs = new int[2];
         flightActionBar.getLocationInWindow(viewLocs);
-        updateActionDrawerBottomMargin(viewLocs[0] + flightActionBar.getWidth(), 0);
+        updateActionDrawerBottomMargin(viewLocs[0] + flightActionBar.getWidth(), bottomMargin);
     }
 
     private void updateActionDrawerBottomMargin(int rightEdge, int bottomMargin){
-        final View actionDrawer = getActionDrawer();
+        final ViewGroup actionDrawerParent = (ViewGroup) getActionDrawer();
+        final View actionDrawer = ((ViewGroup)actionDrawerParent.getChildAt(1)).getChildAt(0);
+
         final int[] actionDrawerLocs = new int[2];
         actionDrawer.getLocationInWindow(actionDrawerLocs);
 
         if(actionDrawerLocs[0] <= rightEdge) {
-            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) actionDrawer.getLayoutParams();
+            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) actionDrawerParent.getLayoutParams();
             lp.bottomMargin = bottomMargin;
-            actionDrawer.requestLayout();
+            actionDrawerParent.requestLayout();
         }
     }
 }
