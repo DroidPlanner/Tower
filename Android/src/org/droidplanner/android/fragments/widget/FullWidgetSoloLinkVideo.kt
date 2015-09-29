@@ -173,6 +173,7 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
         SoloCameraApi.getApi(drone).startVideoStream(surfaceRef, TAG, object : AbstractCommandListener() {
             override fun onError(error: Int) {
                 Timber.d("Unable to start video stream: %d", error)
+                GimbalApi.getApi(drone).stopGimbalControl(orientationListener)
                 textureView?.setOnTouchListener(null)
                 videoStatus?.visibility = View.VISIBLE
             }
@@ -181,10 +182,11 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
                 videoStatus?.visibility = View.GONE
                 Timber.d("Video stream started successfully")
 
+                GimbalApi.getApi(drone).startGimbalControl(orientationListener)
+
                 val gimbalTracker = object : View.OnTouchListener {
                     var startX: Float = 0f
                     var startY: Float = 0f
-                    val gimbalApi = GimbalApi.getApi(drone)
 
                     override fun onTouch(view: View, event: MotionEvent): Boolean {
                         return moveCopter(view, event)
@@ -226,7 +228,6 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
                                 touchCircleImage?.setY(yTouch - centerTouchY)
                                 startX = event.x
                                 startY = event.y
-                                gimbalApi.startGimbalControl(orientationListener)
                                 return true
                             }
                             MotionEvent.ACTION_MOVE -> {
@@ -239,14 +240,13 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
                             }
                             MotionEvent.ACTION_UP -> {
                                 touchCircleImage?.setVisibility(View.GONE)
-                                gimbalApi.stopGimbalControl(orientationListener)
                             }
                         }
                         return false
                     }
 
                     private fun sendYawAndPitch(view: View, event: MotionEvent, rotateTo: Float) {
-                        val orientation = gimbalApi.getGimbalOrientation()
+                        val orientation = GimbalApi.getApi(drone).getGimbalOrientation()
 
                         val degreeIntervals = 90f / view.height
                         val pitchDegree = (degreeIntervals * (startY - event.y)).toFloat()
@@ -255,7 +255,7 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
                         Timber.d("Pitch %f roll %f yaw %f", orientation.getPitch(), orientation.getRoll(), rotateTo)
                         Timber.d("degreeIntervals: %f pitchDegree: %f, pitchTo: %f", degreeIntervals, pitchDegree, pitchTo)
 
-                        gimbalApi.updateGimbalOrientation(pitchTo, orientation.getRoll(), rotateTo, orientationListener)
+                        GimbalApi.getApi(drone).updateGimbalOrientation(pitchTo, orientation.getRoll(), rotateTo, orientationListener)
                     }
                 }
 
@@ -264,6 +264,7 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
 
             override fun onTimeout() {
                 Timber.d("Timed out while trying to start the video stream")
+                GimbalApi.getApi(drone).stopGimbalControl(orientationListener)
                 textureView?.setOnTouchListener(null)
                 videoStatus?.visibility = View.VISIBLE
             }
@@ -282,6 +283,7 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
 
             override fun onSuccess() {
                 Timber.d("Video streaming stopped successfully.")
+                GimbalApi.getApi(drone).stopGimbalControl(orientationListener)
             }
 
             override fun onTimeout() {

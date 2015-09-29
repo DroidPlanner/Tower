@@ -444,6 +444,23 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
 
         if (isEnabled) {
             mSlidingPanel.setSlidingEnabled(true);
+            mSlidingPanel.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    if(mSlidingPanel.isPanelExpanded()){
+                        slidingPanelListenerMgr.onPanelExpanded(mSlidingPanel.getChildAt(1));
+                    }
+                    else if(mSlidingPanel.isPanelAnchored()){
+                        slidingPanelListenerMgr.onPanelAnchored(mSlidingPanel.getChildAt(1));
+                    }
+                    else if(mSlidingPanel.isPanelHidden()){
+                        slidingPanelListenerMgr.onPanelHidden(mSlidingPanel.getChildAt(1));
+                    }
+
+                    mSlidingPanel.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+            });
+
         } else {
             if (!mSlidingPanelCollapsing.get()) {
                 if (mSlidingPanel.isPanelExpanded()) {
