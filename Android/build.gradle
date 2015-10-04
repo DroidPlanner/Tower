@@ -130,20 +130,12 @@ android {
             resValue "string", "app_title", "Tower Dev"
         }
 
-        betaInternal {
+        beta {
             signingConfig signingConfigs.release
             applicationIdSuffix ".beta"
             versionNameSuffix ".beta.${versionBuild}"
             resValue "string", "app_title", "Tower Beta"
             debuggable true
-            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "true"
-        }
-
-        beta {
-            signingConfig signingConfigs.release
-            versionNameSuffix ".beta.${versionBuild}"
-            resValue "string", "app_title", "Tower"
-            buildConfigField "boolean", "WRITE_LOG_FILE", "false"
             buildConfigField "boolean", "ENABLE_CRASHLYTICS", "true"
         }
 
