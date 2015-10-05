@@ -10,24 +10,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
-import com.MAVLink.common.msg_attitude;
-import com.MAVLink.common.msg_command_long;
-import com.MAVLink.common.msg_set_position_target_local_ned;
-import com.MAVLink.enums.MAV_CMD;
 import com.o3dr.android.client.Drone;
-import com.o3dr.android.client.MavlinkObserver;
-import com.o3dr.android.client.apis.ExperimentalApi;
+import com.o3dr.android.client.apis.ControlApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Attitude;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
-import com.o3dr.services.android.lib.mavlink.MavlinkMessageWrapper;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.actionbar.ActionBarTelemFragment;
 import org.droidplanner.android.fragments.widget.MiniWidgetSoloLinkVideo;
-import org.droidplanner.android.widgets.JoystickView;
+import org.droidplanner.android.view.JoystickView;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -40,11 +34,7 @@ import timber.log.Timber;
  */
 public class ControlActivity extends DrawerNavigationUI {
 
-    private static final int ignoreVel = ((1 << 3) | (1 << 4) | (1 << 5));
-    private static final int ignoreAcc = ((1 << 6) | (1 << 7) | (1 << 8));
-    private static final int ignorePos = ((1 << 0) | (1 << 1) | (1 << 2));
-
-    private static final float MAX_VEL = 5f, MAX_VEL_Z = 5f, MAX_YAW_RATE = 5f;
+    private static final float MAX_VEL = 5f, MAX_VEL_Z = 5f;
 
     private final static IntentFilter eventFilter = new IntentFilter();
 
@@ -58,6 +48,7 @@ public class ControlActivity extends DrawerNavigationUI {
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case AttributeEvent.ATTITUDE_UPDATED:
+                    updateYawParams();
                     break;
 
                 case AttributeEvent.STATE_VEHICLE_MODE:
@@ -116,12 +107,11 @@ public class ControlActivity extends DrawerNavigationUI {
             }
         }, 0, 33, TimeUnit.MILLISECONDS);
 
-
         FragmentManager fm = getSupportFragmentManager();
-        Fragment actionBarFragment = fm.findFragmentById(R.id.widget_view);
-        if (!(actionBarFragment instanceof MiniWidgetSoloLinkVideo)) {
-            actionBarFragment = new MiniWidgetSoloLinkVideo();
-            fm.beginTransaction().replace(R.id.widget_view, actionBarFragment).commit();
+        Fragment miniVideoFragment = fm.findFragmentById(R.id.widget_view);
+        if (!(miniVideoFragment instanceof MiniWidgetSoloLinkVideo)) {
+            miniVideoFragment = new MiniWidgetSoloLinkVideo();
+            fm.beginTransaction().replace(R.id.widget_view, miniVideoFragment).commit();
         }
     }
 
@@ -137,13 +127,8 @@ public class ControlActivity extends DrawerNavigationUI {
         heading /= Math.PI;
         heading *= 180f;
         if (Math.abs(yaw) > 0.05) {
-            msg_command_long msgYaw = new msg_command_long();
-            msgYaw.command = MAV_CMD.MAV_CMD_CONDITION_YAW;
-            msgYaw.param1 = (360 + (heading + yaw * 30f)) % 360;
-            msgYaw.param2 = Math.abs(yaw) * 30f;
-            msgYaw.param3 = Math.signum(yaw);
-            msgYaw.param4 = 0;
-            ExperimentalApi.getApi(dpApp.getDrone()).sendMavlinkMessage(new MavlinkMessageWrapper(msgYaw));
+            ControlApi.getApi(dpApp.getDrone()).turnTo((360 + (heading + yaw * 30f)) % 360,
+                    Math.abs(yaw) * 30f, Float.compare(Math.signum(yaw), 1f) == 0, false, null);
         }
     }
 
@@ -172,13 +157,7 @@ public class ControlActivity extends DrawerNavigationUI {
             throttle = -throttle;
         }
         Timber.d("x: %f, y: %f, z: %f, yaw: %f", x, y, throttle, yaw);
-        msg_set_position_target_local_ned msg = new msg_set_position_target_local_ned();
-        msg.vz = throttle * MAX_VEL_Z;
-        msg.vy = y * MAX_VEL;
-        msg.vx = x * MAX_VEL;
-        msg.yaw_rate = yaw * MAX_YAW_RATE;
-        msg.type_mask = ignoreAcc | ignorePos;
-        ExperimentalApi.getApi(dpApp.getDrone()).sendMavlinkMessage(new MavlinkMessageWrapper(msg));
+        ControlApi.getApi(dpApp.getDrone()).setVelocity(x * MAX_VEL, y * MAX_VEL, throttle * MAX_VEL_Z, null);
     }
 
     @Override
@@ -214,27 +193,11 @@ public class ControlActivity extends DrawerNavigationUI {
         getBroadcastManager().registerReceiver(receiver, eventFilter);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        dpApp.getDrone().addMavlinkObserver(new MavlinkObserver() {
-            @Override
-            public void onMavlinkMessageReceived(MavlinkMessageWrapper mavlinkMessageWrapper) {
-                if (mavlinkMessageWrapper.getMavLinkMessage().msgid == msg_attitude.MAVLINK_MSG_ID_ATTITUDE) {
-                    msg_attitude msg = (msg_attitude) mavlinkMessageWrapper.getMavLinkMessage();
-                    lastYaw = msg.yaw;
-//                    Timber.d("yaw: %f",lastYaw);
-                    lastYawSpeed = msg.yawspeed;
-                    lastReceived = System.currentTimeMillis();
-                }
-            }
-        });
-    }
-
     private void updateYawParams() {
         final Drone drone = dpApp.getDrone();
         final Attitude attitude = drone.getAttribute(AttributeType.ATTITUDE);
         lastYaw = (float) attitude.getYaw();
-//        lastYawSpeed =
+        lastYawSpeed = attitude.getYawSpeed();
+        lastReceived = System.currentTimeMillis();
     }
 }

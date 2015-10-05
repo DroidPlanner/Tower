@@ -1,4 +1,4 @@
-package org.droidplanner.android.widgets;
+package org.droidplanner.android.view;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
@@ -11,16 +11,22 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
-
-import timber.log.Timber;
 
 /**
  * Created by Toby on 8/5/2015.
  */
 public class JoystickView extends View {
-    private float x = 0f,y = 0f;
+
+    public enum Axis {
+        X, Y
+    }
+
+    public interface JoystickListener {
+        void joystickMoved(float x, float y);
+    }
+
+    private float x = 0f, y = 0f;
     private float uiX, uiY;
     private boolean springX, springY;
     private boolean lockedX, lockedY;
@@ -41,54 +47,50 @@ public class JoystickView extends View {
     public JoystickView(Context context, AttributeSet attrs) {
         super(context, attrs);
         vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+
         MAX_SIZE = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
         MIN_SIZE = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+
         major = MIN_SIZE;
         minor = MIN_SIZE;
     }
 
-    public enum Axis {
-        X, Y
-    }
-
-    public interface JoystickListener{
-        void joystickMoved(float x, float y);
-    }
     public JoystickView(Context context) {
         super(context);
         vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
-    public void setReticle(Bitmap reticle){
+    public void setReticle(Bitmap reticle) {
         this.reticle = reticle;
+        invalidate();
     }
 
-    public Bitmap getReticle(){
+    public Bitmap getReticle() {
         return reticle;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()){
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                float top = (y + 1f)/2f * getHeight();
-                float left = (x+ 1f)/2f * getWidth();
-                float dist = (float)Math.sqrt(Math.pow((double)(top - event.getY()), 2.0) + Math.pow((double)(left- event.getX()), 2.0));
-                if(animator != null){
+                float top = (y + 1f) / 2f * getHeight();
+                float left = (x + 1f) / 2f * getWidth();
+                float dist = (float) Math.sqrt(Math.pow((double) (top - event.getY()), 2.0) + Math.pow((double) (left - event.getX()), 2.0));
+                if (animator != null) {
                     animator.cancel();
                 }
-                if(dist < THRESHOLD){
+                if (dist < THRESHOLD) {
                     engaged = true;
-                    if(vibrator.hasVibrator()) {
+                    if (vibrator.hasVibrator()) {
                         vibrator.vibrate(50);
                     }
                 }
                 lastEvent = System.currentTimeMillis();
-
                 return true;
+
             case MotionEvent.ACTION_MOVE:
-                if(engaged) {
-                    float delta = (System.currentTimeMillis() - lastEvent)/1000f;
+                if (engaged) {
+                    float delta = (System.currentTimeMillis() - lastEvent) / 1000f;
                     lastEvent = System.currentTimeMillis();
                     float lastY = y;
                     float lastX = x;
@@ -135,12 +137,13 @@ public class JoystickView extends View {
                 minor = Math.min(event.getTouchMinor(), MAX_SIZE);
                 minor = Math.max(minor, MIN_SIZE);
                 return true;
+
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_OUTSIDE:
                 engaged = false;
                 final float xStart = x, yStart = y;
-                final float majorStart= major, minorStart = minor;
-                if(springX  || springY) {
+                final float majorStart = major, minorStart = minor;
+                if (springX || springY) {
                     animator = ValueAnimator.ofFloat(0f, 1f);
                     animator.setInterpolator(new AccelerateInterpolator());
                     animator.setDuration(500);
@@ -167,10 +170,10 @@ public class JoystickView extends View {
 
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            if(springX) {
+                            if (springX) {
                                 x = 0f;
                             }
-                            if(springY) {
+                            if (springY) {
                                 y = 0f;
                             }
                             dispatchMove();
@@ -189,36 +192,45 @@ public class JoystickView extends View {
                     animator.start();
                 }
                 return true;
+
             default:
                 return false;
         }
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        float top = (y + 1f)/2f * canvas.getHeight();
-        float left = (x+ 1f)/2f * canvas.getWidth();
-        canvas.drawBitmap(reticle, left - reticle.getWidth() / 2, top - reticle.getHeight() / 2, null);
-        Paint paint = new Paint();
-        paint.setStrokeWidth(5f);
-        paint.setARGB(255, 255, 128, 0);
-        canvas.drawCircle(left, top, minor, paint);
-        canvas.drawLine(canvas.getWidth() / 2f, canvas.getHeight() / 2f, left, top, paint);
+    private final Paint reticlePaint = new Paint();
+    {
+        reticlePaint.setStrokeWidth(5f);
+        reticlePaint.setARGB(255, 255, 128, 0);
     }
 
-    public void setSpring(Axis axis, boolean spring){
-        switch (axis){
+    @Override
+    protected void onDraw(Canvas canvas) {
+        final int canvasHeight = canvas.getHeight();
+        final int canvasWidth = canvas.getWidth();
+
+        float top = (y + 1f) / 2f * canvasHeight;
+        float left = (x + 1f) / 2f * canvasWidth;
+
+        canvas.drawBitmap(reticle, left - reticle.getWidth() / 2, top - reticle.getHeight() / 2, null);
+        canvas.drawCircle(left, top, minor, reticlePaint);
+        canvas.drawLine(canvasWidth / 2f, canvasHeight / 2f, left, top, reticlePaint);
+    }
+
+    public void setSpring(Axis axis, boolean spring) {
+        switch (axis) {
             case X:
                 springX = spring;
                 break;
+
             case Y:
                 springY = spring;
                 break;
         }
     }
 
-    public boolean getSpring(Axis axis){
-        switch (axis){
+    public boolean getSpring(Axis axis) {
+        switch (axis) {
             case X:
                 return springX;
             case Y:
@@ -227,8 +239,8 @@ public class JoystickView extends View {
         return false;
     }
 
-    public float getAxis(Axis axis){
-        switch (axis){
+    public float getAxis(Axis axis) {
+        switch (axis) {
             case X:
                 return x;
             case Y:
@@ -237,19 +249,19 @@ public class JoystickView extends View {
         return 1f;
     }
 
-    public void setJoystickListener(JoystickListener listener){
+    public void setJoystickListener(JoystickListener listener) {
         this.listener = listener;
     }
 
-    private void dispatchMove(){
-        if(listener != null){
+    private void dispatchMove() {
+        if (listener != null) {
             listener.joystickMoved(x, -y);
 
         }
     }
 
-    public void setHaptic(Axis axis, boolean haptic){
-        switch(axis){
+    public void setHaptic(Axis axis, boolean haptic) {
+        switch (axis) {
             case X:
                 hapticX = haptic;
                 break;
@@ -259,15 +271,14 @@ public class JoystickView extends View {
         }
     }
 
-    private float mapAxis(float value){
+    private float mapAxis(float value) {
         float absVal = Math.abs(value);
-        if(absVal < 0.05f){
+        if (absVal < 0.05f) {
             return 0;
         }
+
         absVal -= .05f;
         absVal /= .095f;
-        return (float)Math.pow(absVal, 2) * Math.signum(value);
+        return (float) Math.pow(absVal, 2) * Math.signum(value);
     }
-
-
 }
