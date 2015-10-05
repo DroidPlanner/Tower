@@ -12,8 +12,7 @@ import android.view.ViewGroup;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.calibration.imu.FragmentSetupIMU;
-import org.droidplanner.android.fragments.calibration.mag.FragmentSetupMAG;
-import org.droidplanner.android.widgets.viewPager.TabPageIndicator;
+import org.droidplanner.android.view.viewPager.TabPageIndicator;
 
 /**
  * Used to calibrate the drone's compass and accelerometer.
@@ -54,15 +53,11 @@ public class SensorSetupFragment extends Fragment {
                 case 0:
                 default:
                     return new FragmentSetupIMU();
-                case 1:
-                    return new FragmentSetupMAG();
             }
         }
 
         @Override
         public int getCount() {
-            //Enable mag calibration when it's fully working.
-//            return 2;
             return 1;
         }
 
@@ -72,8 +67,6 @@ public class SensorSetupFragment extends Fragment {
                 case 0:
                 default:
                     return FragmentSetupIMU.getTitle(context);
-                case 1:
-                    return FragmentSetupMAG.getTitle(context);
             }
         }
     }

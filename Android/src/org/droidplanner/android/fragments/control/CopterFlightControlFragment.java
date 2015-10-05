@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
@@ -21,28 +21,26 @@ import com.o3dr.services.android.lib.drone.property.GuidedState;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.gcs.follow.FollowState;
-import com.o3dr.services.android.lib.gcs.follow.FollowType;
+import com.o3dr.services.android.lib.model.SimpleCommandListener;
 
 import org.droidplanner.android.R;
-import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.dialogs.SlideToUnlockDialog;
-import org.droidplanner.android.dialogs.YesNoDialog;
-import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
-import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
+import org.droidplanner.android.dialogs.SupportYesNoDialog;
+import org.droidplanner.android.dialogs.SupportYesNoWithPrefsDialog;
+import org.droidplanner.android.fragments.FlightDataFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.analytics.GAUtils;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 /**
  * Provide functionality for flight action button specific to copters.
  */
-public class CopterFlightControlFragment extends ApiListenerFragment implements View.OnClickListener,
-        FlightControlManagerFragment.SlidingUpHeader {
-
-    private static final String TAG = CopterFlightControlFragment.class.getSimpleName();
+public class CopterFlightControlFragment extends BaseFlightControlFragment implements SupportYesNoDialog.Listener {
 
     private static final String ACTION_FLIGHT_ACTION_BUTTON = "Copter flight action button";
-    private static final double TAKEOFF_ALTITUDE = 10.0;
+
+    private static final String DRONIE_CREATION_DIALOG_TAG = "Confirm dronie creation";
 
     private static final IntentFilter eventFilter = new IntentFilter();
 
@@ -126,9 +124,9 @@ public class CopterFlightControlFragment extends ApiListenerFragment implements 
                     //Get the bearing of the dronie mission.
                     float bearing = intent.getFloatExtra(AttributeEventExtra.EXTRA_MISSION_DRONIE_BEARING, -1);
                     if (bearing >= 0) {
-                        final FlightActivity flightActivity = (FlightActivity) getActivity();
-                        if (flightActivity != null) {
-                            flightActivity.updateMapBearing(bearing);
+                        final FlightControlManagerFragment parent = (FlightControlManagerFragment) getParentFragment();
+                        if (parent != null) {
+                            parent.updateMapBearing(bearing);
                         }
                     }
                     break;
@@ -167,7 +165,7 @@ public class CopterFlightControlFragment extends ApiListenerFragment implements 
         mArmedButtons = view.findViewById(R.id.mc_armed_buttons);
         mInFlightButtons = view.findViewById(R.id.mc_in_flight_buttons);
 
-        final Button connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
+        final View connectBtn = view.findViewById(R.id.mc_connectBtn);
         connectBtn.setOnClickListener(this);
 
         homeBtn = (Button) view.findViewById(R.id.mc_homeBtn);
@@ -203,6 +201,7 @@ public class CopterFlightControlFragment extends ApiListenerFragment implements 
 
     @Override
     public void onApiConnected() {
+        super.onApiConnected();
         missionProxy = getMissionProxy();
 
         setupButtonsByFlightState();
@@ -214,6 +213,7 @@ public class CopterFlightControlFragment extends ApiListenerFragment implements 
 
     @Override
     public void onApiDisconnected() {
+        super.onApiDisconnected();
         getBroadcastManager().unregisterReceiver(eventReceiver);
     }
 
@@ -277,13 +277,7 @@ public class CopterFlightControlFragment extends ApiListenerFragment implements 
                 break;
 
             case R.id.mc_follow:
-                FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
-                if (followState != null) {
-                    if (followState.isEnabled())
-                        drone.disableFollowMe();
-                    else
-                        drone.enableFollowMe(FollowType.LEASH);
-                }
+                toggleFollowMe();
                 break;
 
             case R.id.mc_dronieBtn:
@@ -303,29 +297,22 @@ public class CopterFlightControlFragment extends ApiListenerFragment implements 
     }
 
     private void getDronieConfirmation() {
-        YesNoWithPrefsDialog ynd = YesNoWithPrefsDialog.newInstance(getActivity()
-                        .getApplicationContext(), getString(R.string.pref_dronie_creation_title),
-                getString(R.string.pref_dronie_creation_message), new YesNoDialog.Listener() {
-                    @Override
-                    public void onYes() {
-                        missionProxy.makeAndUploadDronie(getDrone());
-                    }
-
-                    @Override
-                    public void onNo() {
-                    }
-                }, getString(R.string.pref_warn_on_dronie_creation_key));
+        SupportYesNoWithPrefsDialog ynd = SupportYesNoWithPrefsDialog.newInstance(getActivity()
+                        .getApplicationContext(), DRONIE_CREATION_DIALOG_TAG,
+                getString(R.string.pref_dronie_creation_title),
+                getString(R.string.pref_dronie_creation_message), DroidPlannerPrefs.PREF_WARN_ON_DRONIE_CREATION, this);
 
         if (ynd != null) {
-            ynd.show(getChildFragmentManager(), "Confirm dronie creation");
+            ynd.show(getChildFragmentManager(), DRONIE_CREATION_DIALOG_TAG);
         }
     }
 
-    private void getTakeOffConfirmation(){
+    private void getTakeOffConfirmation() {
         final SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("take off", new Runnable() {
             @Override
             public void run() {
-                getDrone().doGuidedTakeoff(TAKEOFF_ALTITUDE);
+                final double takeOffAltitude = getAppPrefs().getDefaultAltitude();
+                getDrone().doGuidedTakeoff(takeOffAltitude);
             }
         });
         unlockDialog.show(getChildFragmentManager(), "Slide to take off");
@@ -335,9 +322,16 @@ public class CopterFlightControlFragment extends ApiListenerFragment implements 
         final SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("take off in auto", new Runnable() {
             @Override
             public void run() {
-                Drone drone = getDrone();
-                drone.doGuidedTakeoff(TAKEOFF_ALTITUDE);
-                drone.changeVehicleMode(VehicleMode.COPTER_AUTO);
+
+                final double takeOffAltitude = getAppPrefs().getDefaultAltitude();
+
+                final Drone drone = getDrone();
+                VehicleApi.getApi(drone).takeoff(takeOffAltitude, new SimpleCommandListener() {
+                    @Override
+                    public void onSuccess() {
+                        VehicleApi.getApi(drone).setVehicleMode(VehicleMode.COPTER_AUTO);
+                    }
+                });
             }
         });
         unlockDialog.show(getChildFragmentManager(), "Slide to take off in auto");
@@ -349,7 +343,7 @@ public class CopterFlightControlFragment extends ApiListenerFragment implements 
             public void run() {
                 getDrone().arm(true);
             }
-        }) ;
+        });
         unlockDialog.show(getChildFragmentManager(), "Slide To Arm");
     }
 
@@ -470,5 +464,19 @@ public class CopterFlightControlFragment extends ApiListenerFragment implements 
 
         final State droneState = drone.getAttribute(AttributeType.STATE);
         return droneState.isArmed() && droneState.isFlying();
+    }
+
+    @Override
+    public void onDialogYes(String dialogTag) {
+        switch (dialogTag) {
+            case DRONIE_CREATION_DIALOG_TAG:
+                missionProxy.makeAndUploadDronie(getDrone());
+                break;
+        }
+    }
+
+    @Override
+    public void onDialogNo(String dialogTag) {
+
     }
 }

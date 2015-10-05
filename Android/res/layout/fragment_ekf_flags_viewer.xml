@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="3dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@string/label_flags"
+                android:textStyle="bold" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/ekf_attitude_flag"
+                        style="@style/EkfStatus.Flag.Entry"
+                        android:text="@string/label_attitude_estimate" />
+
+                    <TextView
+                        android:id="@+id/ekf_const_pos_flag"
+                        style="@style/EkfStatus.Flag.Entry"
+                        android:text="@string/label_constant_position_mode" />
+
+                    <TextView
+                        style="@style/EkfStatus.Flag.Title"
+                        android:text="@string/label_velocity" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/light_grey" />
+
+                    <TextView
+                        android:id="@+id/ekf_velocity_vert_flag"
+                        style="@style/EkfStatus.Flag.Entry"
+                        android:text="@string/label_velocity_estimate" />
+
+                    <TextView
+                        android:id="@+id/ekf_velocity_horiz_flag"
+                        style="@style/EkfStatus.Flag.Entry"
+                        android:text="@string/label_horizontal_estimate" />
+
+                    <TextView
+                        style="@style/EkfStatus.Flag.Title"
+                        android:text="@string/label_horizontal_position" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/light_grey" />
+
+                    <TextView
+                        android:id="@+id/ekf_position_horiz_rel_flag"
+                        style="@style/EkfStatus.Flag.Entry"
+                        android:text="@string/label_relative_estimate" />
+
+                    <TextView
+                        android:id="@+id/ekf_position_horiz_abs_flag"
+                        style="@style/EkfStatus.Flag.Entry"
+                        android:text="@string/label_absolute_estimate" />
+
+                    <TextView
+                        android:id="@+id/ekf_position_horiz_pred_rel_flag"
+                        style="@style/EkfStatus.Flag.Entry"
+                        android:text="@string/label_relative_predicted_estimate" />
+
+                    <TextView
+                        android:id="@+id/ekf_position_horiz_pred_abs_flag"
+                        style="@style/EkfStatus.Flag.Entry"
+                        android:text="@string/label_absolute_predicted_estimate" />
+
+                    <TextView
+                        style="@style/EkfStatus.Flag.Title"
+                        android:text="@string/label_vertical_position" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/light_grey" />
+
+                    <TextView
+                        android:id="@+id/ekf_position_vert_agl_flag"
+                        style="@style/EkfStatus.Flag.Entry"
+                        android:text="@string/label_above_ground_estimate" />
+
+                    <TextView
+                        android:id="@+id/ekf_position_vert_abs_flag"
+                        style="@style/EkfStatus.Flag.Entry"
+                        android:text="@string/label_absolute_estimate" />
+
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</FrameLayout>

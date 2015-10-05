@@ -33,8 +33,7 @@ import org.droidplanner.android.utils.analytics.GAUtils;
 /**
  * Provides functionality for flight action buttons specific to planes.
  */
-public class PlaneFlightControlFragment extends ApiListenerFragment implements
-        View.OnClickListener, FlightControlManagerFragment.SlidingUpHeader {
+public class PlaneFlightControlFragment extends BaseFlightControlFragment {
 
     private static final String ACTION_FLIGHT_ACTION_BUTTON = "Copter flight action button";
 
@@ -146,7 +145,7 @@ public class PlaneFlightControlFragment extends ApiListenerFragment implements
         armedButtons = view.findViewById(R.id.mc_armed_buttons);
         mInFlightButtons = view.findViewById(R.id.mc_connected_buttons);
 
-        final Button connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
+        final View connectBtn = view.findViewById(R.id.mc_connectBtn);
         connectBtn.setOnClickListener(this);
 
         homeBtn = (Button) view.findViewById(R.id.mc_homeBtn);
@@ -270,6 +269,8 @@ public class PlaneFlightControlFragment extends ApiListenerFragment implements
 
     @Override
     public void onApiConnected() {
+        super.onApiConnected();
+
         setupButtonsByFlightState();
         updateFlightModeButtons();
         updateFollowButton();
@@ -278,6 +279,7 @@ public class PlaneFlightControlFragment extends ApiListenerFragment implements
 
     @Override
     public void onApiDisconnected() {
+        super.onApiDisconnected();
         getBroadcastManager().unregisterReceiver(eventReceiver);
     }
 
@@ -340,11 +342,7 @@ public class PlaneFlightControlFragment extends ApiListenerFragment implements
                 break;
 
             case R.id.mc_follow: {
-                final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
-                if (followState.isEnabled()) {
-                    drone.disableFollowMe();
-                } else
-                    drone.enableFollowMe(FollowType.LEASH);
+                toggleFollowMe();
                 break;
             }
 

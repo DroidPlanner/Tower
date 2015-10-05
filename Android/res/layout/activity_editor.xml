@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_gesture_map"/>
 
-    <org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout
+    <org.droidplanner.android.view.FitsSystemWindowsRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
@@ -48,28 +48,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             layout="@layout/button_my_location"
-            android:layout_alignRight="@+id/actionbar_container"
-            android:layout_alignEnd="@+id/actionbar_container"
+            android:layout_alignLeft="@+id/actionbar_container"
+            android:layout_alignStart="@+id/actionbar_container"
             android:layout_below="@+id/editorInfoWindow"
             android:layout_alignWithParentIfMissing="true"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_centerVertical="true"
-            android:layout_above="@+id/mission_list_fragment"
-            android:layout_below="@+id/actionbar_container"
-            android:gravity="center">
-
-            <fragment
-                android:id="@+id/editor_tools_fragment"
-                android:name="org.droidplanner.android.fragments.EditorToolsFragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:layout="@layout/fragment_editor_tools"
-                />
-        </LinearLayout>
 
         <fragment
             android:id="@+id/mission_list_fragment"
@@ -79,6 +61,6 @@
             tools:layout="@layout/fragment_editor_list"
             android:layout_alignParentBottom="true"
             />
-    </org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout>
+    </org.droidplanner.android.view.FitsSystemWindowsRelativeLayout>
 
 </RelativeLayout>

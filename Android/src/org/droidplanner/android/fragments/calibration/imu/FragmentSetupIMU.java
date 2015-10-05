@@ -17,10 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.CalibrationApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.State;
+import com.o3dr.services.android.lib.model.SimpleCommandListener;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
@@ -35,7 +37,6 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
     private static final IntentFilter intentFilter = new IntentFilter();
     static {
         intentFilter.addAction(AttributeEvent.CALIBRATION_IMU);
-        intentFilter.addAction(AttributeEvent.CALIBRATION_IMU_ERROR);
         intentFilter.addAction(AttributeEvent.CALIBRATION_IMU_TIMEOUT);
         intentFilter.addAction(AttributeEvent.STATE_CONNECTED);
         intentFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
@@ -71,13 +72,6 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
                             relayInstructions(message);
                     }
                     break;
-                case AttributeEvent.CALIBRATION_IMU_ERROR: {
-                    String message = intent.getStringExtra(AttributeEventExtra.EXTRA_CALIBRATION_IMU_MESSAGE);
-                    if (message != null) {
-                        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-                    }
-                    break;
-                }
             }
         }
     };
@@ -262,6 +256,12 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
 	private void startCalibration() {
         Drone dpApi = getDrone();
 		if (dpApi.isConnected()) {
+            CalibrationApi.getApi(getDrone()).startIMUCalibration(new SimpleCommandListener(){
+                @Override
+                public void onError(int error){
+                    Toast.makeText(getActivity(), R.string.imu_calibration_start_error, Toast.LENGTH_LONG).show();
+                }
+            });
 			dpApi.startIMUCalibration();
 		}
 	}

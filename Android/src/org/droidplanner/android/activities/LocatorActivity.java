@@ -6,6 +6,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,8 +40,6 @@ import java.util.List;
  */
 public class LocatorActivity extends DrawerNavigationUI implements LocatorListFragment.OnLocatorListListener,
         LocationListener {
-
-    private static final String TAG = LocatorActivity.class.getSimpleName();
 
     private static final String STATE_LAST_SELECTED_POSITION = "STATE_LAST_SELECTED_POSITION";
     private static final int TLOG_PICKER_REQUEST_CODE = 101;
@@ -88,7 +87,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
         azimuthView = (TextView) findViewById(R.id.azimuthView);
         altitudeView = (TextView) findViewById(R.id.altitudeView);
 
-        final ImageButton zoomToFit = (ImageButton) findViewById(R.id.zoom_to_fit_button);
+        final FloatingActionButton zoomToFit = (FloatingActionButton) findViewById(R.id.zoom_to_fit_button);
         zoomToFit.setVisibility(View.VISIBLE);
         zoomToFit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +98,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
             }
         });
 
-        ImageButton mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
+        FloatingActionButton mGoToMyLocation = (FloatingActionButton) findViewById(R.id.my_location_button);
         mGoToMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,7 +113,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
             }
         });
 
-        ImageButton mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
+        FloatingActionButton mGoToDroneLocation = (FloatingActionButton) findViewById(R.id.drone_location_button);
         mGoToDroneLocation.setVisibility(View.GONE);
 
         // clear prev state if this is a fresh start
@@ -278,7 +277,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
                 distanceView.setText(R.string.status_waiting_for_gps, TextView.BufferType.NORMAL);
                 azimuthView.setText("");
             } else {
-                final double distance = MathUtils.getDistance(lastGCSPosition, msgCoord);
+                final double distance = MathUtils.getDistance2D(lastGCSPosition, msgCoord);
                 final LengthUnit convertedDistance = lengthUnitProvider.boxBaseValueToTarget(distance);
                 String distanceText = getString(R.string.editor_info_window_distance, convertedDistance.toString());
                 if (lastGCSBearingTo != Float.MAX_VALUE) {

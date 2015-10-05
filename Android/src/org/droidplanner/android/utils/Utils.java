@@ -3,10 +3,15 @@ package org.droidplanner.android.utils;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Looper;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
-import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.util.Locale;
 
 /**
@@ -16,20 +21,8 @@ public class Utils {
 
     public static final String PACKAGE_NAME = "org.droidplanner.android";
 
-	/**
-	 * Returns the map provider selected by the user.
-	 * 
-	 * @param context
-	 *            application context
-	 * @return selected map provider
-	 */
-	public static DPMapProvider getMapProvider(Context context) {
-		DroidPlannerPrefs prefs = new DroidPlannerPrefs(context);
-		final String mapProviderName = prefs.getMapProviderName();
-
-		return mapProviderName == null ? DPMapProvider.DEFAULT_MAP_PROVIDER : DPMapProvider
-				.getMapProvider(mapProviderName);
-	}
+	public static final int MIN_DISTANCE = 0; //meter
+	public static final int MAX_DISTANCE = 1000; // meters
 
 	/**
 	 * Used to update the user interface language.
@@ -47,4 +40,31 @@ public class Utils {
 			res.updateConfiguration(config, res.getDisplayMetrics());
 		}
 	}
+
+	public static boolean runningOnMainThread() {
+		return  Looper.myLooper() == Looper.getMainLooper();
+	}
+
+	public static String readAll(Reader rd) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		int cp;
+		while ((cp = rd.read()) != -1) {
+			sb.append((char) cp);
+		}
+		return sb.toString();
+	}
+
+	public static void showDialog(DialogFragment dialog, FragmentManager fragmentManager, String tag, boolean allowStateLoss) {
+		if (allowStateLoss) {
+			final FragmentTransaction transaction = fragmentManager.beginTransaction();
+			transaction.add(dialog, tag);
+			transaction.commitAllowingStateLoss();
+		} else {
+			dialog.show(fragmentManager, tag);
+		}
+
+	}
+
+	//Private constructor to prevent instantiation.
+	private Utils(){}
 }

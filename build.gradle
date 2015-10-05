@@ -1,11 +1,22 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+    ext.kotlin_version = '0.13.1513'
+
     repositories {
         jcenter()
+        mavenCentral()
+        maven { url 'https://maven.fabric.io/public' }
+        maven {
+            url 'https://repos.zeroturnaround.com/nexus/content/repositories/zt-public-releases'
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.0'
+        classpath 'com.android.tools.build:gradle:1.2.3'
+        // This does not break the build when Android Studio is missing the JRebel for Android plugin.
+        classpath 'com.zeroturnaround.jrebel.android:jr-android-gradle:0.9.+'
+        classpath 'io.fabric.tools:gradle:1.19.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
@@ -24,6 +35,7 @@ def getMavenRepoUrl(){
 allprojects {
     repositories {
         jcenter()
+        mavenCentral()
 
         maven {
             url getMavenRepoUrl()
@@ -32,6 +44,8 @@ allprojects {
                 password getMavenApiKey()
             }
         }
+
+        maven { url 'https://maven.fabric.io/public' }
 
         flatDir {
             dirs 'libs'

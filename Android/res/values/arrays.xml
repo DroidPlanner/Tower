@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
     <!-- Do not change the names here, instead extract the strings -->
@@ -38,12 +38,28 @@
     </string-array>
 
 
+    <string-array name="TileProviders">
+        <item>@string/pref_tile_provider_google</item>
+        <item>@string/pref_tile_provider_mapbox</item>
+    </string-array>
+    <string-array name="TileProviderValues">
+        <item>google</item>
+        <item>mapbox</item>
+    </string-array>
+
     <string-array name="MapTypes">
         <item>@string/menu_map_type_satellite</item>
         <item>@string/menu_map_type_hybrid</item>
         <item>@string/menu_map_type_normal</item>
         <item>@string/menu_map_type_terrain</item>
     </string-array>
+    <string-array name="MapTypeValues">
+        <item>satellite</item>
+        <item>hybrid</item>
+        <item>normal</item>
+        <item>terrain</item>
+    </string-array>
+
     <string-array name="TelemetryBaudTypes">
         <item name="38400">38400</item>
         <item name="57600">57600</item>
@@ -128,10 +144,10 @@
     </string-array>
     <string-array name="FligthMode_PWM_Range">
         <item>&lt; 1230</item>
-        <item>1230 &#8211; 1360</item>
-        <item>1360 &#8211; 1490</item>
-        <item>1490 &#8211; 1620</item>
-        <item>1620 &#8211; 1749</item>
+        <item>1230 – 1360</item>
+        <item>1360 – 1490</item>
+        <item>1490 – 1620</item>
+        <item>1620 – 1749</item>
         <item>&gt; 1750</item>
     </string-array>
     <string-array name="CH6_Options">

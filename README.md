@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/DroidPlanner/Tower.svg?branch=master)](https://travis-ci.org/DroidPlanner/Tower)
-[![Issue Stats](http://issuestats.com/github/DroidPlanner/droidplanner/badge/pr)](http://issuestats.com/github/DroidPlanner/droidplanner)
-[![Issue Stats](http://issuestats.com/github/DroidPlanner/droidplanner/badge/issue)](http://issuestats.com/github/DroidPlanner/droidplanner)
+[![Build Status](https://travis-ci.org/DroidPlanner/Tower.svg?branch=develop)](https://travis-ci.org/DroidPlanner/Tower)
+[![Issue Stats](http://issuestats.com/github/DroidPlanner/Tower/badge/pr)](http://issuestats.com/github/DroidPlanner/Tower)
+[![Issue Stats](http://issuestats.com/github/DroidPlanner/Tower/badge/issue)](http://issuestats.com/github/DroidPlanner/Tower)
 
 # Tower
 
@@ -34,7 +34,7 @@ To do so, follow the instructions on the [3DR Services github page](https://gith
 ### Contributing
 
 Tower is in active development. If you would like to contribute to the project,
-see the [Build Setup wiki page](https://github.com/DroidPlanner/droidplanner/wiki).
+see the [Build Setup wiki page](https://github.com/DroidPlanner/Tower/wiki/Build-Setup).
 
 If you aren't a developer but want to help out, you can do so by improving the documentation in the Wiki or by writing user guides.
 

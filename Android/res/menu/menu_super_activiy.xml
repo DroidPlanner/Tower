@@ -15,27 +15,19 @@
         <item
             android:id="@+id/menu_upload_mission"
             app:showAsAction="never"
+            android:icon="@drawable/ic_cloud_upload_grey_700_24dp"
             android:title="@string/upload_mission"/>
         <item
             android:id="@+id/menu_download_mission"
             app:showAsAction="never"
+            android:icon="@drawable/ic_cloud_download_grey_700_24dp"
             android:title="@string/download_mission"/>
-
         <item
-            android:id="@+id/menu_advanced"
+            android:id="@+id/menu_kill_switch"
+            app:showAsAction="never"
             android:enabled="false"
             android:visible="false"
-            android:title="@string/pref_advanced"
-            app:showAsAction="never">
-            <menu>
-                <item
-                    android:id="@+id/menu_kill_switch"
-                    app:showAsAction="never"
-                    android:enabled="false"
-                    android:visible="false"
-                    android:title="KILL SWITCH"/>
-            </menu>
-        </item>
+            android:title="@string/menu_kill_switch"/>
 
     </group>
 

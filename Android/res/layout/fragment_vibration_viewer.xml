@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_weight="1">
+
+        <lecho.lib.hellocharts.view.ColumnChartView
+            android:id="@+id/column_chart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="3dp"
+        android:layout_weight="2">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stretchColumns="*"
+            android:padding="5dp">
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_span="2"
+                    android:gravity="center"
+                    android:text="@string/label_clipping"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView android:text="@string/label_clipping" />
+
+                <TextView
+                    android:id="@+id/primary_clipping_value"
+                    tools:background="@android:color/holo_red_light"
+                    android:text="@string/empty_content"
+                    android:gravity="center"
+                    tools:text="200" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView android:text="@string/label_secondary" />
+
+                <TextView
+                    android:id="@+id/secondary_clipping_value"
+                    tools:background="@android:color/holo_green_light"
+                    android:gravity="center"
+                    tools:text="0"
+                    android:text="@string/empty_content"/>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView android:text="@string/label_tertiary" />
+
+                <TextView
+                    android:id="@+id/tertiary_clipping_value"
+                    tools:background="@android:color/holo_green_light"
+                    android:gravity="center"
+                    tools:text="200"
+                    android:text="@string/empty_content"/>
+            </TableRow>
+
+        </TableLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

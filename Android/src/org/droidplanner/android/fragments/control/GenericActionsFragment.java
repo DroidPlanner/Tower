@@ -16,8 +16,7 @@ import org.droidplanner.android.fragments.control.FlightControlManagerFragment;
 /**
  * Provides action buttons functionality for generic drone type.
  */
-public class GenericActionsFragment extends Fragment implements View.OnClickListener,
-        FlightControlManagerFragment.SlidingUpHeader {
+public class GenericActionsFragment extends BaseFlightControlFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,7 +28,7 @@ public class GenericActionsFragment extends Fragment implements View.OnClickList
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        Button connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
+        View connectBtn = view.findViewById(R.id.mc_connectBtn);
         connectBtn.setOnClickListener(this);
     }
 

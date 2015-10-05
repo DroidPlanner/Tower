@@ -28,7 +28,7 @@
                 android:layout_alignBottom="@+id/bt_device_list_title"
                 android:id="@+id/bt_scan_container">
 
-                <org.droidplanner.android.widgets.NiceProgressView
+                <org.droidplanner.android.view.NiceProgressView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"

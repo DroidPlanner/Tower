@@ -15,6 +15,7 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
+import com.o3dr.services.android.lib.drone.mission.item.complex.SplineSurvey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
 import com.o3dr.services.android.lib.drone.property.CameraProxy;
@@ -26,17 +27,16 @@ import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.CamerasAdapter;
 import org.droidplanner.android.utils.unit.providers.area.AreaUnitProvider;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
+import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.view.spinnerWheel.adapters.LengthWheelAdapter;
+import org.droidplanner.android.view.spinnerWheel.adapters.NumericWheelAdapter;
+import org.droidplanner.android.view.spinners.SpinnerSelfSelect;
 
 import java.util.Collections;
 import java.util.List;
 
-public class MissionSurveyFragment extends MissionDetailFragment implements
-        CardWheelHorizontalView.OnCardWheelScrollListener, SpinnerSelfSelect.OnSpinnerItemSelectedListener,
-        Drone.OnMissionItemsBuiltCallback {
+public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragment implements
+        CardWheelHorizontalView.OnCardWheelScrollListener, Drone.OnMissionItemsBuiltCallback {
 
     private static final String TAG = MissionSurveyFragment.class.getSimpleName();
 
@@ -52,11 +52,29 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
         }
     };
 
+    private final SpinnerSelfSelect.OnSpinnerItemSelectedListener cameraSpinnerListener = new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {
+        @Override
+        public void onSpinnerItemSelected(Spinner spinner, int position) {
+            if (spinner.getId() == id.cameraFileSpinner) {
+                if(cameraAdapter.isEmpty())
+                    return;
+
+                CameraDetail cameraInfo = cameraAdapter.getItem(position);
+                for (T survey : getMissionItems()) {
+                    survey.getSurveyDetail().setCameraDetail(cameraInfo);
+                }
+
+                onScrollingEnded(mAnglePicker, 0, 0);
+            }
+        }
+    };
+
     private CardWheelHorizontalView<Integer> mOverlapPicker;
     private CardWheelHorizontalView<Integer> mAnglePicker;
     private CardWheelHorizontalView<LengthUnit> mAltitudePicker;
     private CardWheelHorizontalView<Integer> mSidelapPicker;
 
+    public TextView waypointType;
     public TextView distanceBetweenLinesTextView;
     public TextView areaTextView;
     public TextView distanceTextView;
@@ -74,8 +92,8 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
     }
 
     @Override
-    protected List<Survey> getMissionItems() {
-        return (List<Survey>) super.getMissionItems();
+    protected List<T> getMissionItems() {
+        return (List<T>) super.getMissionItems();
     }
 
     @Override
@@ -85,6 +103,8 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
         final View view = getView();
         final Context context = getContext();
 
+        waypointType = (TextView) view.findViewById(id.WaypointType);
+
         CameraProxy camera = getDrone().getAttribute(AttributeType.CAMERA);
         List<CameraDetail> cameraDetails = camera == null
                 ? Collections.<CameraDetail>emptyList()
@@ -93,7 +113,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 
         cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
         cameraSpinner.setAdapter(cameraAdapter);
-        cameraSpinner.setOnSpinnerItemSelectedListener(this);
+        cameraSpinner.setOnSpinnerItemSelectedListener(cameraSpinnerListener);
 
         mAnglePicker = (CardWheelHorizontalView) view.findViewById(id.anglePicker);
         mAnglePicker.setViewAdapter(new NumericWheelAdapter(context, R.layout.wheel_text_centered, 0, 180, "%dº"));
@@ -107,7 +127,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
         final LengthUnitProvider lengthUP = getLengthUnitProvider();
         mAltitudePicker = (CardWheelHorizontalView) view.findViewById(R.id.altitudePicker);
         mAltitudePicker.setViewAdapter(new LengthWheelAdapter(context, R.layout.wheel_text_centered,
-                lengthUP.boxBaseValueToTarget(0), lengthUP.boxBaseValueToTarget(200)));
+                lengthUP.boxBaseValueToTarget(MIN_ALTITUDE), lengthUP.boxBaseValueToTarget(MAX_ALTITUDE)));
 
         areaTextView = (TextView) view.findViewById(id.areaTextView);
         distanceBetweenLinesTextView = (TextView) view.findViewById(id.distanceBetweenLinesTextView);
@@ -126,7 +146,11 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
         mSidelapPicker.addScrollListener(this);
         mAltitudePicker.addScrollListener(this);
 
-        typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
+        final T referenceItem = getMissionItems().get(0);
+        if (referenceItem instanceof SplineSurvey)
+            typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SPLINE_SURVEY));
+        else
+            typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
 
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
@@ -135,18 +159,6 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
     public void onApiDisconnected() {
         super.onApiDisconnected();
         getBroadcastManager().unregisterReceiver(eventReceiver);
-    }
-
-    @Override
-    public void onSpinnerItemSelected(Spinner spinner, int position) {
-        if (spinner.getId() == id.cameraFileSpinner) {
-            CameraDetail cameraInfo = cameraAdapter.getItem(position);
-            for (Survey survey : getMissionItems()) {
-                survey.getSurveyDetail().setCameraDetail(cameraInfo);
-            }
-
-            onScrollingEnded(mAnglePicker, 0, 0);
-        }
     }
 
     @Override
@@ -168,9 +180,9 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
             case R.id.sidelapPicker:
                 final Drone drone = getDrone();
                 try {
-                    final List<Survey> surveyList = getMissionItems();
+                    final List<T> surveyList = getMissionItems();
                     if (!surveyList.isEmpty()) {
-                        for (final Survey survey : surveyList) {
+                        for (final T survey : surveyList) {
                             SurveyDetail surveyDetail = survey.getSurveyDetail();
                             surveyDetail.setAltitude(mAltitudePicker.getCurrentValue().toBase().getValue());
                             surveyDetail.setAngle(mAnglePicker.getCurrentValue());
@@ -178,10 +190,10 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
                             surveyDetail.setSidelap(mSidelapPicker.getCurrentValue());
                         }
 
-                        final MissionItem.ComplexItem<Survey>[] surveys = surveyList
+                        final MissionItem.ComplexItem<T>[] surveys = surveyList
                                 .toArray(new MissionItem.ComplexItem[surveyList.size()]);
 
-                        drone.buildMissionItemsAsync(this, surveys);
+                        drone.buildMissionItemsAsync(surveys, this);
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Error while building the survey.", e);
@@ -190,7 +202,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
         }
     }
 
-    private void checkIfValid(Survey survey) {
+    private void checkIfValid(T survey) {
         if (mAltitudePicker == null)
             return;
 
@@ -209,18 +221,18 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
     }
 
     private void updateCamera() {
-        List<Survey> surveyList = getMissionItems();
+        List<T> surveyList = getMissionItems();
         if (!surveyList.isEmpty()) {
-            Survey survey = surveyList.get(0);
+            T survey = surveyList.get(0);
             final int cameraSelection = cameraAdapter.getPosition(survey.getSurveyDetail().getCameraDetail());
             cameraSpinner.setSelection(Math.max(cameraSelection, 0));
         }
     }
 
     private void updateSeekBars() {
-        List<Survey> surveyList = getMissionItems();
+        List<T> surveyList = getMissionItems();
         if (!surveyList.isEmpty()) {
-            Survey survey = surveyList.get(0);
+            T survey = surveyList.get(0);
             SurveyDetail surveyDetail = survey.getSurveyDetail();
             if (surveyDetail != null) {
                 mAnglePicker.setCurrentValue((int) surveyDetail.getAngle());
@@ -235,10 +247,14 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 
     private void updateTextViews() {
         boolean setDefault = true;
-        List<Survey> surveyList = getMissionItems();
+        List<T> surveyList = getMissionItems();
         if (!surveyList.isEmpty()) {
-            Survey survey = surveyList.get(0);
+            T survey = surveyList.get(0);
             SurveyDetail surveyDetail = survey.getSurveyDetail();
+            if(survey instanceof SplineSurvey){
+                waypointType.setText(getResources().getText(R.string.waypointType_Spline_Survey));
+            }
+
             try {
                 final LengthUnitProvider lengthUnitProvider = getLengthUnitProvider();
                 final AreaUnitProvider areaUnitProvider = getAreaUnitProvider();
@@ -262,6 +278,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 
                 areaTextView.setText(String.format("%s: %s", getString(R.string.area),
                         areaUnitProvider.boxBaseValueToTarget(survey.getPolygonArea())));
+
 
                 lengthView.setText(String.format("%s: %s", getString(R.string.mission_length),
                         lengthUnitProvider.boxBaseValueToTarget(survey.getGridLength())));
@@ -293,8 +310,8 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 
     @Override
     public void onMissionItemsBuilt(MissionItem.ComplexItem[] complexItems) {
-        for (MissionItem.ComplexItem<Survey> item : complexItems) {
-            checkIfValid((Survey) item);
+        for (MissionItem.ComplexItem<T> item : complexItems) {
+            checkIfValid((T) item);
         }
 
         getMissionProxy().notifyMissionUpdate();

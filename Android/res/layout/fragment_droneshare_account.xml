@@ -93,7 +93,7 @@
                 />
         </LinearLayout>
 
-        <org.droidplanner.android.widgets.NiceProgressView
+        <org.droidplanner.android.view.NiceProgressView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

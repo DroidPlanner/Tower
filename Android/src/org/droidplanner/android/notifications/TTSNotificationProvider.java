@@ -1,5 +1,6 @@
 package org.droidplanner.android.notifications;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -31,8 +32,12 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -44,9 +49,9 @@ public class TTSNotificationProvider implements OnInitListener,
 	private static final String CLAZZ_NAME = TTSNotificationProvider.class.getName();
 	private static final String TAG = TTSNotificationProvider.class.getSimpleName();
 
-	private static final double BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT = 10;
+	private static final long WARNING_DELAY = 1500l; //ms
 
-    private static final double MAX_ALTITUDE = 121.92; //meters
+	private static final double BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT = 10;
 
 	/**
 	 * Utterance id for the periodic status speech.
@@ -70,13 +75,13 @@ public class TTSNotificationProvider implements OnInitListener,
         eventFilter.addAction(AttributeEvent.HEARTBEAT_FIRST);
         eventFilter.addAction(AttributeEvent.HEARTBEAT_TIMEOUT);
         eventFilter.addAction(AttributeEvent.HEARTBEAT_RESTORED);
-        eventFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
         eventFilter.addAction(AttributeEvent.MISSION_ITEM_UPDATED);
         eventFilter.addAction(AttributeEvent.FOLLOW_START);
         eventFilter.addAction(AttributeEvent.AUTOPILOT_ERROR);
         eventFilter.addAction(AttributeEvent.ALTITUDE_UPDATED);
         eventFilter.addAction(AttributeEvent.SIGNAL_WEAK);
         eventFilter.addAction(AttributeEvent.WARNING_NO_GPS);
+		eventFilter.addAction(AttributeEvent.HOME_UPDATED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -93,39 +98,45 @@ public class TTSNotificationProvider implements OnInitListener,
                     if (droneState != null)
                         speakArmedState(droneState.isArmed());
                     break;
+
                 case AttributeEvent.BATTERY_UPDATED:
                     Battery droneBattery = drone.getAttribute(AttributeType.BATTERY);
                     if (droneBattery != null)
                         batteryDischargeNotification(droneBattery.getBatteryRemain());
                     break;
+
                 case AttributeEvent.STATE_VEHICLE_MODE:
                     if (droneState != null)
                         speakMode(droneState.getVehicleMode());
                     break;
+
                 case AttributeEvent.MISSION_SENT:
                     Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT).show();
                     speak("Waypoints saved to Drone");
                     break;
+
                 case AttributeEvent.GPS_FIX:
                     Gps droneGps = drone.getAttribute(AttributeType.GPS);
                     if (droneGps != null)
                         speakGpsMode(droneGps.getFixType());
                     break;
+
                 case AttributeEvent.MISSION_RECEIVED:
                     Toast.makeText(context, "Waypoints received from Drone", Toast.LENGTH_SHORT).show();
                     speak("Waypoints received");
                     break;
+
                 case AttributeEvent.HEARTBEAT_FIRST:
-                    watchdogCallback.setDrone(drone);
-                    scheduleWatchdog();
                     speak("Connected");
                     break;
+
                 case AttributeEvent.HEARTBEAT_TIMEOUT:
                     if (mAppPrefs.getWarningOnLostOrRestoredSignal()) {
                         speak("Data link lost, check connection.");
                         handler.removeCallbacks(watchdogCallback);
                     }
                     break;
+
                 case AttributeEvent.HEARTBEAT_RESTORED:
                     watchdogCallback.setDrone(drone);
                     scheduleWatchdog();
@@ -133,23 +144,32 @@ public class TTSNotificationProvider implements OnInitListener,
                         speak("Data link restored");
                     }
                     break;
-                case AttributeEvent.STATE_DISCONNECTED:
-                    handler.removeCallbacks(watchdogCallback);
-                    break;
+
                 case AttributeEvent.MISSION_ITEM_UPDATED:
                     int currentWaypoint = intent.getIntExtra(AttributeEventExtra.EXTRA_MISSION_CURRENT_WAYPOINT, 0);
-                    speak("Going for waypoint " + currentWaypoint);
+					if(currentWaypoint != 0) {
+						//Zeroth waypoint is the home location.
+						speak("Going for waypoint " + currentWaypoint);
+					}
                     break;
+
                 case AttributeEvent.FOLLOW_START:
                     speak("Following");
                     break;
+
                 case AttributeEvent.ALTITUDE_UPDATED:
-                    if (mAppPrefs.getWarningOn400ftExceeded()) {
-                        final Altitude altitude = drone.getAttribute(AttributeType.ALTITUDE);
-                        if (altitude.getAltitude() > MAX_ALTITUDE)
-                            speak("warning, 400 feet exceeded");
-                    }
+					final Altitude altitude = drone.getAttribute(AttributeType.ALTITUDE);
+					if(mAppPrefs.hasExceededMaxAltitude(altitude.getAltitude())) {
+						if (isMaxAltExceeded.compareAndSet(false, true)) {
+							handler.postDelayed(maxAltitudeExceededWarning, WARNING_DELAY);
+						}
+					}
+					else{
+						handler.removeCallbacks(maxAltitudeExceededWarning);
+						isMaxAltExceeded.set(false);
+					}
                     break;
+
                 case AttributeEvent.AUTOPILOT_ERROR:
                     if(mAppPrefs.getWarningOnAutopilotWarning()) {
                         String errorId = intent.getStringExtra(AttributeEventExtra.EXTRA_AUTOPILOT_ERROR_ID);
@@ -159,14 +179,25 @@ public class TTSNotificationProvider implements OnInitListener,
                         }
                     }
                     break;
+
                 case AttributeEvent.SIGNAL_WEAK:
                     if (mAppPrefs.getWarningOnLowSignalStrength()) {
                         speak("Warning, weak signal");
                     }
                     break;
+
                 case AttributeEvent.WARNING_NO_GPS:
                     speak("Error, no gps lock yet");
                     break;
+
+				case AttributeEvent.HOME_UPDATED:
+					if(droneState.isFlying()){
+						//Warn the user the home location was just updated while in flight.
+						if(mAppPrefs.getWarningOnVehicleHomeUpdate()){
+							speak(context.getString(R.string.warning_vehicle_home_updated));
+						}
+					}
+					break;
             }
         }
     };
@@ -200,6 +231,16 @@ public class TTSNotificationProvider implements OnInitListener,
 			if (PERIODIC_STATUS_UTTERANCE_ID.equals(utteranceId)) {
 				mIsPeriodicStatusStarted.set(false);
 			}
+		}
+	};
+
+	private final AtomicBoolean isMaxAltExceeded = new AtomicBoolean(false);
+
+	private final Runnable maxAltitudeExceededWarning = new Runnable() {
+		@Override
+		public void run() {
+			speak("Warning, max altitude exceeded!");
+			handler.removeCallbacks(maxAltitudeExceededWarning);
 		}
 	};
 
@@ -238,26 +279,26 @@ public class TTSNotificationProvider implements OnInitListener,
 		private void speakPeriodic(Drone drone) {
 			// Drop the message if the previous one is not done yet.
 			if (mIsPeriodicStatusStarted.compareAndSet(false, true)) {
-				final SparseBooleanArray speechPrefs = mAppPrefs.getPeriodicSpeechPrefs();
+				final Map<String, Boolean> speechPrefs = mAppPrefs.getPeriodicSpeechPrefs();
 
 				mMessageBuilder.setLength(0);
-				if (speechPrefs.get(R.string.pref_tts_periodic_bat_volt_key)) {
+				if (speechPrefs.get(DroidPlannerPrefs.PREF_TTS_PERIODIC_BAT_VOLT)) {
                     final Battery droneBattery = drone.getAttribute(AttributeType.BATTERY);
 					mMessageBuilder.append(String.format("battery %2.1f volts. ", droneBattery.getBatteryVoltage()));
 				}
 
-				if (speechPrefs.get(R.string.pref_tts_periodic_alt_key)) {
+				if (speechPrefs.get(DroidPlannerPrefs.PREF_TTS_PERIODIC_ALT)) {
                     final Altitude altitude = drone.getAttribute(AttributeType.ALTITUDE);
 					mMessageBuilder.append("altitude, ").append((int) (altitude.getAltitude())).append(" meters. ");
 				}
 
-				if (speechPrefs.get(R.string.pref_tts_periodic_airspeed_key)) {
+				if (speechPrefs.get(DroidPlannerPrefs.PREF_TTS_PERIODIC_AIRSPEED)) {
                     final Speed droneSpeed = drone.getAttribute(AttributeType.SPEED);
 					mMessageBuilder.append("airspeed, ").append((int) (droneSpeed.getAirSpeed()))
                             .append(" meters per second. ");
 				}
 
-				if (speechPrefs.get(R.string.pref_tts_periodic_rssi_key)) {
+				if (speechPrefs.get(DroidPlannerPrefs.PREF_TTS_PERIODIC_RSSI)) {
                     final Signal signal = drone.getAttribute(AttributeType.SIGNAL);
 					mMessageBuilder.append("r s s i, ").append((int) signal.getRssi()).append(" decibels");
 				}
@@ -278,10 +319,26 @@ public class TTSNotificationProvider implements OnInitListener,
 	TTSNotificationProvider(Context context, Drone drone) {
 		this.context = context;
 		this.drone = drone;
-		tts = new TextToSpeech(context, this);
 		mAppPrefs = new DroidPlannerPrefs(context);
+	}
 
-        LocalBroadcastManager.getInstance(context).registerReceiver(eventReceiver, eventFilter);
+	@Override
+	public void init(){
+		tts = new TextToSpeech(context, this);
+		LocalBroadcastManager.getInstance(context).registerReceiver(eventReceiver, eventFilter);
+	}
+
+	@Override
+	public void onTerminate() {
+		LocalBroadcastManager.getInstance(context).unregisterReceiver(eventReceiver);
+
+		handler.removeCallbacks(watchdogCallback);
+		speak("Disconnected");
+
+		if (tts != null) {
+			tts.shutdown();
+			tts = null;
+		}
 	}
 
 	private void scheduleWatchdog() {
@@ -292,19 +349,37 @@ public class TTSNotificationProvider implements OnInitListener,
 		}
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	public void onInit(int status) {
+		if(tts == null)
+			return;
+
 		if (status == TextToSpeech.SUCCESS) {
 			// TODO: check if the language is available
 			Locale ttsLanguage;
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			final int sdkVersion = Build.VERSION.SDK_INT;
+			if (sdkVersion >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
 				ttsLanguage = tts.getDefaultLanguage();
 			} else {
 				ttsLanguage = tts.getLanguage();
 			}
 
-			if (ttsLanguage == null) {
+			if (ttsLanguage == null || tts.isLanguageAvailable(ttsLanguage) == TextToSpeech.LANG_NOT_SUPPORTED) {
 				ttsLanguage = Locale.US;
+				if(sdkVersion >= Build.VERSION_CODES.LOLLIPOP) {
+					final Set<Locale> languagesSet = tts.getAvailableLanguages();
+					if(languagesSet != null && !languagesSet.isEmpty()) {
+						final List<Locale> availableLanguages = new ArrayList<>(languagesSet);
+							//Pick the first available language.
+							ttsLanguage = availableLanguages.get(0);
+					}
+				}
+			}
+
+			if(tts.isLanguageAvailable(ttsLanguage) == TextToSpeech.LANG_MISSING_DATA){
+				context.startActivity(new Intent(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA)
+						.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 			}
 
 			int supportStatus = tts.setLanguage(ttsLanguage);
@@ -330,6 +405,11 @@ public class TTSNotificationProvider implements OnInitListener,
 
 				LocalBroadcastManager.getInstance(context).registerReceiver(
 						mSpeechIntervalUpdateReceiver, intentFilter);
+
+				//Announce the connection event
+				watchdogCallback.setDrone(drone);
+				scheduleWatchdog();
+				speak("Connected");
 			}
 		} else {
 			// Notify the user that the tts engine is not available.
@@ -361,7 +441,7 @@ public class TTSNotificationProvider implements OnInitListener,
 	}
 
 	private boolean shouldEnableTTS() {
-		return mAppPrefs.prefs.getBoolean("pref_enable_tts", false);
+		return mAppPrefs.isTtsEnabled();
 	}
 
 	private void speakArmedState(boolean armed) {
@@ -420,19 +500,15 @@ public class TTSNotificationProvider implements OnInitListener,
 		case 3:
 			speak("GPS 3D Lock");
 			break;
+		case 4:
+			speak("GPS 3D+DGPS Lock");
+			break;
+		case 5:
+			speak("GPS 3D+RTK Lock");
+			break;
 		default:
 			speak("Lost GPS Lock");
 			break;
 		}
-	}
-
-	@Override
-	public void onTerminate() {
-		if (tts != null) {
-			tts.shutdown();
-            tts = null;
-		}
-
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(eventReceiver);
 	}
 }

@@ -9,6 +9,8 @@ import org.droidplanner.android.utils.prefs.AutoPanMode;
 
 import android.graphics.Color;
 import android.location.LocationListener;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.property.FootPrint;
@@ -18,44 +20,44 @@ import com.o3dr.services.android.lib.drone.property.FootPrint;
  */
 public interface DPMap {
 
-	public static final String PACKAGE_NAME = DPMap.class.getPackage().getName();
+	String PACKAGE_NAME = DPMap.class.getPackage().getName();
 
-	public static final String EXTRA_MAX_FLIGHT_PATH_SIZE = PACKAGE_NAME + ""
+	String EXTRA_MAX_FLIGHT_PATH_SIZE = PACKAGE_NAME + ""
 			+ ".EXTRA_MAX_FLIGHT_PATH_SIZE";
 
-	public static final int FLIGHT_PATH_DEFAULT_COLOR = 0xfffd693f;
-	public static final int FLIGHT_PATH_DEFAULT_WIDTH = 6;
+	int FLIGHT_PATH_DEFAULT_COLOR = 0xfffd693f;
+	int FLIGHT_PATH_DEFAULT_WIDTH = 6;
 
-	public static final int MISSION_PATH_DEFAULT_COLOR = Color.WHITE;
-	public static final int MISSION_PATH_DEFAULT_WIDTH = 4;
+	int MISSION_PATH_DEFAULT_COLOR = Color.WHITE;
+	int MISSION_PATH_DEFAULT_WIDTH = 4;
 
-	public static final int DRONE_LEASH_DEFAULT_COLOR = Color.WHITE;
-	public static final int DRONE_LEASH_DEFAULT_WIDTH = 2;
+	int DRONE_LEASH_DEFAULT_COLOR = Color.WHITE;
+	int DRONE_LEASH_DEFAULT_WIDTH = 2;
 
-	public static final int POLYGONS_PATH_DEFAULT_COLOR = Color.RED;
-	public static final int POLYGONS_PATH_DEFAULT_WIDTH = 4;
+	int POLYGONS_PATH_DEFAULT_COLOR = Color.RED;
+	int POLYGONS_PATH_DEFAULT_WIDTH = 4;
 	
-	public static final int FOOTPRINT_DEFAULT_COLOR = 0;
-	public static final int FOOTPRINT_DEFAULT_WIDTH = 2;
-	public static final int FOOTPRINT_FILL_COLOR = Color.argb(80, 0, 0, 200);
+	int FOOTPRINT_DEFAULT_COLOR = 0;
+	int FOOTPRINT_DEFAULT_WIDTH = 2;
+	int FOOTPRINT_FILL_COLOR = Color.argb(80, 0, 0, 200);
 	
-	public static final String PREF_LAT = "pref_map_lat";
-	public static final float DEFAULT_LATITUDE = 37.8575523f;
+	String PREF_LAT = "pref_map_lat";
+	float DEFAULT_LATITUDE = 37.8575523f;
 
-	public static final String PREF_LNG = "pref_map_lng";
-	public static final float DEFAULT_LONGITUDE = -122.292767f;
+	String PREF_LNG = "pref_map_lng";
+	float DEFAULT_LONGITUDE = -122.292767f;
 
-	public static final String PREF_BEA = "pref_map_bea";
-	public static final int DEFAULT_BEARING = 0;
+	String PREF_BEA = "pref_map_bea";
+	int DEFAULT_BEARING = 0;
 
-	public static final String PREF_TILT = "pref_map_tilt";
-	public static final int DEFAULT_TILT = 0;
+	String PREF_TILT = "pref_map_tilt";
+	int DEFAULT_TILT = 0;
 
-	public static final String PREF_ZOOM = "pref_map_zoom";
-	public static final int DEFAULT_ZOOM_LEVEL = 17;
+	String PREF_ZOOM = "pref_map_zoom";
+	int DEFAULT_ZOOM_LEVEL = 17;
 
 	interface PathSource {
-		public List<LatLong> getPathPoints();
+		List<LatLong> getPathPoints();
 	}
 
 	/**
@@ -133,76 +135,125 @@ public interface DPMap {
 
 	}
 
+	class VisibleMapArea implements Parcelable {
+		public final LatLong nearLeft;
+		public final LatLong nearRight;
+		public final LatLong farLeft;
+		public final LatLong farRight;
+
+		public VisibleMapArea(LatLong farLeft, LatLong nearLeft, LatLong nearRight, LatLong farRight) {
+			this.farLeft = farLeft;
+			this.nearLeft = nearLeft;
+			this.nearRight = nearRight;
+			this.farRight = farRight;
+		}
+
+		@Override
+		public int describeContents() {
+			return 0;
+		}
+
+		@Override
+		public void writeToParcel(Parcel dest, int flags) {
+			dest.writeParcelable(this.nearLeft, 0);
+			dest.writeParcelable(this.nearRight, 0);
+			dest.writeParcelable(this.farLeft, 0);
+			dest.writeParcelable(this.farRight, 0);
+		}
+
+		protected VisibleMapArea(Parcel in) {
+			this.nearLeft = in.readParcelable(LatLong.class.getClassLoader());
+			this.nearRight = in.readParcelable(LatLong.class.getClassLoader());
+			this.farLeft = in.readParcelable(LatLong.class.getClassLoader());
+			this.farRight = in.readParcelable(LatLong.class.getClassLoader());
+		}
+
+		public static final Parcelable.Creator<VisibleMapArea> CREATOR = new Parcelable.Creator<VisibleMapArea>() {
+			public VisibleMapArea createFromParcel(Parcel source) {
+				return new VisibleMapArea(source);
+			}
+
+			public VisibleMapArea[] newArray(int size) {
+				return new VisibleMapArea[size];
+			}
+		};
+	}
+
 	/**
 	 * Adds a coordinate to the drone's flight path.
 	 * 
 	 * @param coord
 	 *            drone's coordinate
 	 */
-	public void addFlightPathPoint(LatLong coord);
+	void addFlightPathPoint(LatLong coord);
 
 	/**
 	 * Draw the footprint of the camera in the ground
 	 * @param footprintToBeDraw
 	 */
-	public void addCameraFootprint(FootPrint footprintToBeDraw);
+	void addCameraFootprint(FootPrint footprintToBeDraw);
 
 	/**
 	 * Remove all markers from the map.
 	 */
-	public void clearMarkers();
+	void clearMarkers();
 
 	/**
 	 * Clears the drone's flight path.
 	 */
-	public void clearFlightPath();
+	void clearFlightPath();
 
 	/**
 	 * @return the map center coordinates.
 	 */
-	public LatLong getMapCenter();
+	LatLong getMapCenter();
 
 	/**
 	 * @return the map current zoom level.
 	 */
-	public float getMapZoomLevel();
+	float getMapZoomLevel();
 
 	/**
 	 * @return a list of marker info currently on the map.
 	 */
-	public Set<MarkerInfo> getMarkerInfoList();
+	Set<MarkerInfo> getMarkerInfoList();
 
 	/**
 	 * @return the map maximum zoom level.
 	 */
-	public float getMaxZoomLevel();
+	float getMaxZoomLevel();
 
 	/**
 	 * @return the map minimum zoom level.
 	 */
-	public float getMinZoomLevel();
+	float getMinZoomLevel();
 
 	/**
 	 * @return this map's provider.
 	 */
-	public DPMapProvider getProvider();
+	DPMapProvider getProvider();
+
+	/**
+	 * @return the bounds of the map area visible on screen.
+	 */
+	VisibleMapArea getVisibleMapArea();
 
 	/**
 	 * Move the map to the drone location.
 	 */
-	public void goToDroneLocation();
+	void goToDroneLocation();
 
 	/**
 	 * Move the map to the user location.
 	 */
-	public void goToMyLocation();
+	void goToMyLocation();
 
 	/**
 	 * Restores the map's camera settings from preferences.
 	 */
-	public void loadCameraPosition();
+	void loadCameraPosition();
 
-	public List<LatLong> projectPathIntoMap(List<LatLong> pathPoints);
+	List<LatLong> projectPathIntoMap(List<LatLong> pathPoints);
 
 	/**
 	 * Remove the markers whose info is in the list from the map.
@@ -210,12 +261,12 @@ public interface DPMap {
 	 * @param markerInfoList
 	 *            list of markers to remove.
 	 */
-	public void removeMarkers(Collection<MarkerInfo> markerInfoList);
+	void removeMarkers(Collection<MarkerInfo> markerInfoList);
 
 	/**
 	 * Stores the map camera settings.
 	 */
-	public void saveCameraPosition();
+	void saveCameraPosition();
 
 	/**
 	 * Enable map auto panning on the passed target type.
@@ -223,7 +274,7 @@ public interface DPMap {
 	 * @param mode
 	 *            auto pan target (user / drone / disabled).
 	 */
-	public void selectAutoPanMode(AutoPanMode mode);
+	void selectAutoPanMode(AutoPanMode mode);
 
 	/**
 	 * Adds padding around the edges of the map.
@@ -241,7 +292,7 @@ public interface DPMap {
 	 *            the number of pixels of padding to be added on the bottom of
 	 *            the map.
 	 */
-	public void setMapPadding(int left, int top, int right, int bottom);
+	void setMapPadding(int left, int top, int right, int bottom);
 
 	/**
 	 * Sets a callback that's invoked when the map is tapped.
@@ -250,7 +301,7 @@ public interface DPMap {
 	 *            The callback that's invoked when the map is tapped. To unset
 	 *            the callback, use null.
 	 */
-	public void setOnMapClickListener(OnMapClickListener listener);
+	void setOnMapClickListener(OnMapClickListener listener);
 
 	/**
 	 * Sets a callback that's invoked when the map is long pressed.
@@ -259,7 +310,7 @@ public interface DPMap {
 	 *            The callback that's invoked when the map is long pressed. To
 	 *            unset the callback, use null.
 	 */
-	public void setOnMapLongClickListener(OnMapLongClickListener listener);
+	void setOnMapLongClickListener(OnMapLongClickListener listener);
 
 	/**
 	 * Sets a callback that's invoked when a marker is clicked.
@@ -268,7 +319,7 @@ public interface DPMap {
 	 *            The callback that's invoked when a marker is clicked. To unset
 	 *            the callback, use null.
 	 */
-	public void setOnMarkerClickListener(OnMarkerClickListener listener);
+	void setOnMarkerClickListener(OnMarkerClickListener listener);
 
 	/**
 	 * Sets a callback that's invoked when a marker is dragged.
@@ -277,13 +328,13 @@ public interface DPMap {
 	 *            The callback that's invoked on marker drag events. To unset
 	 *            the callback, use null.
 	 */
-	public void setOnMarkerDragListener(OnMarkerDragListener listener);
+	void setOnMarkerDragListener(OnMarkerDragListener listener);
 
     /**
      * Sets a callback that's invoked when the user location is updated.
      * @param listener
      */
-    public void setLocationListener(LocationListener listener);
+	void setLocationListener(LocationListener listener);
 
 	/**
 	 * Updates the map's center, and zoom level.
@@ -293,13 +344,13 @@ public interface DPMap {
 	 * @param zoomLevel
 	 *            zoom level for the map
 	 */
-	public void updateCamera(LatLong coord, float zoomLevel);
+	void updateCamera(LatLong coord, float zoomLevel);
 
     /**
      * Updates the map's bearing.
      * @param bearing direction that the camera is pointing in.
      */
-    public void updateCameraBearing(float bearing);
+	void updateCameraBearing(float bearing);
 
 	/**
 	 * Updates the drone leash path on the map.
@@ -307,7 +358,7 @@ public interface DPMap {
 	 * @param pathSource
 	 *            source to use to generate the drone leash path.
 	 */
-	public void updateDroneLeashPath(PathSource pathSource);
+	void updateDroneLeashPath(PathSource pathSource);
 
 	/**
 	 * Adds / updates the marker corresponding to the given marker info
@@ -316,7 +367,7 @@ public interface DPMap {
 	 * @param markerInfo
 	 *            used to generate / update the marker
 	 */
-	public void updateMarker(MarkerInfo markerInfo);
+	void updateMarker(MarkerInfo markerInfo);
 
 	/**
 	 * Adds / updates the marker corresponding to the given marker info
@@ -327,7 +378,7 @@ public interface DPMap {
 	 * @param isDraggable
 	 *            overwrites markerInfo draggable preference
 	 */
-	public void updateMarker(MarkerInfo markerInfo, boolean isDraggable);
+	void updateMarker(MarkerInfo markerInfo, boolean isDraggable);
 
 	/**
 	 * Adds / updates the markers corresponding to the given list of markers
@@ -336,7 +387,7 @@ public interface DPMap {
 	 * @param markersInfos
 	 *            source for the new markers to add/update
 	 */
-	public void updateMarkers(List<MarkerInfo> markersInfos);
+	void updateMarkers(List<MarkerInfo> markersInfos);
 
 	/**
 	 * Adds / updates the markers corresponding to the given list of markers
@@ -347,7 +398,7 @@ public interface DPMap {
 	 * @param isDraggable
 	 *            overwrites markerInfo draggable preference
 	 */
-	public void updateMarkers(List<MarkerInfo> markersInfos, boolean isDraggable);
+	void updateMarkers(List<MarkerInfo> markersInfos, boolean isDraggable);
 
 	/**
 	 * Updates the mission path on the map.
@@ -355,13 +406,13 @@ public interface DPMap {
 	 * @param pathSource
 	 *            source to use to draw the mission path
 	 */
-	public void updateMissionPath(PathSource pathSource);
+	void updateMissionPath(PathSource pathSource);
 	
 	/**
 	 * Updates the polygons on the map.
 	 * 
 	 */
-    public void updatePolygonsPaths(List<List<LatLong>> paths);
+	void updatePolygonsPaths(List<List<LatLong>> paths);
 
 	/**
 	 * Zoom to fit coordinates on map
@@ -369,20 +420,20 @@ public interface DPMap {
 	 * @param coords
 	 *            to be displayed
 	 */
-	public void zoomToFit(List<LatLong> coords);
+	void zoomToFit(List<LatLong> coords);
 
     /**
      * Zoom to fit my location and the given coordinates on map
      * @param coords
      */
-    public void zoomToFitMyLocation(List<LatLong> coords);
+	void zoomToFitMyLocation(List<LatLong> coords);
     
     /**
      * Ignore marker clicks on the map and instead report the event as a mapClick
      * @param skip if it should skip further events
      */
-    public void skipMarkerClickEvents(boolean skip);
+	void skipMarkerClickEvents(boolean skip);
 
-	public void updateRealTimeFootprint(FootPrint footprint);
+	void updateRealTimeFootprint(FootPrint footprint);
     
 }

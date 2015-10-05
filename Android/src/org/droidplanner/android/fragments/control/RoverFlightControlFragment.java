@@ -25,7 +25,7 @@ import org.droidplanner.android.utils.analytics.GAUtils;
 /**
  * Created by Fredia Huya-Kouadio on 3/4/15.
  */
-public class RoverFlightControlFragment extends ApiListenerFragment implements FlightControlManagerFragment.SlidingUpHeader, View.OnClickListener {
+public class RoverFlightControlFragment extends BaseFlightControlFragment {
 
     private static final String ACTION_FLIGHT_ACTION_BUTTON = "Rover flight action button";
 
@@ -78,7 +78,7 @@ public class RoverFlightControlFragment extends ApiListenerFragment implements F
         mDisconnectedButtons = view.findViewById(R.id.mc_disconnected_buttons);
         mActiveButtons = view.findViewById(R.id.mc_connected_buttons);
 
-        final Button connectBtn = (Button) view.findViewById(R.id.mc_connectBtn);
+        final View connectBtn = view.findViewById(R.id.mc_connectBtn);
         connectBtn.setOnClickListener(this);
 
         homeBtn = (Button) view.findViewById(R.id.mc_homeBtn);
@@ -147,6 +147,7 @@ public class RoverFlightControlFragment extends ApiListenerFragment implements F
 
     @Override
     public void onApiConnected() {
+        super.onApiConnected();
         setupButtonsByFlightState();
         updateFlightModeButtons();
         getBroadcastManager().registerReceiver(eventReceiver, intentFilter);
@@ -154,6 +155,7 @@ public class RoverFlightControlFragment extends ApiListenerFragment implements F
 
     @Override
     public void onApiDisconnected() {
+        super.onApiDisconnected();
         getBroadcastManager().unregisterReceiver(eventReceiver);
     }
 
