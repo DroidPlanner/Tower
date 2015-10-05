@@ -4,13 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.view.View;
 
 import com.MAVLink.common.msg_attitude;
 import com.MAVLink.common.msg_command_long;
@@ -22,12 +20,9 @@ import com.o3dr.android.client.apis.ExperimentalApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Attitude;
-import com.o3dr.services.android.lib.drone.property.Gps;
-import com.o3dr.services.android.lib.drone.property.Home;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.mavlink.MavlinkMessageWrapper;
-import com.o3dr.services.android.lib.util.MathUtils;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.actionbar.ActionBarTelemFragment;
@@ -52,6 +47,7 @@ public class ControlActivity extends DrawerNavigationUI {
     private static final float MAX_VEL = 5f, MAX_VEL_Z = 5f, MAX_YAW_RATE = 5f;
 
     private final static IntentFilter eventFilter = new IntentFilter();
+
     static {
         eventFilter.addAction(AttributeEvent.ATTITUDE_UPDATED);
         eventFilter.addAction(AttributeEvent.STATE_VEHICLE_MODE);
@@ -62,7 +58,6 @@ public class ControlActivity extends DrawerNavigationUI {
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case AttributeEvent.ATTITUDE_UPDATED:
-                    attitudeUpdated();
                     break;
 
                 case AttributeEvent.STATE_VEHICLE_MODE:
@@ -78,28 +73,6 @@ public class ControlActivity extends DrawerNavigationUI {
     private long lastReceived;
     private float lastYaw, lastYawSpeed;
     private VehicleMode mode;
-
-    private Fragment actionBarFragment;
-    private View flightModeIcon;
-
-    private void attitudeUpdated() {
-        Drone drone = dpApp.getDrone();
-        if (drone == null)
-            return;
-
-        Attitude att = drone.getAttribute(AttributeType.ATTITUDE);
-        Home home = drone.getAttribute(AttributeType.HOME);
-        Gps gps = drone.getAttribute(AttributeType.GPS);
-
-        if (flightModeIcon == null) {
-            flightModeIcon = findViewById(R.id.bar_flight_mode_icon);
-        }
-
-        if (att != null && gps != null && gps.isValid() && home != null && home.isValid() && flightModeIcon != null) {
-            double heading = MathUtils.getHeadingFromCoordinates(home.getCoordinate(), gps.getPosition());
-            flightModeIcon.animate().rotation((float) ((360 + heading - att.getYaw()) % (360))).start();
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -145,14 +118,14 @@ public class ControlActivity extends DrawerNavigationUI {
 
 
         FragmentManager fm = getSupportFragmentManager();
-        actionBarFragment = fm.findFragmentById(R.id.widget_view);
+        Fragment actionBarFragment = fm.findFragmentById(R.id.widget_view);
         if (!(actionBarFragment instanceof MiniWidgetSoloLinkVideo)) {
             actionBarFragment = new MiniWidgetSoloLinkVideo();
             fm.beginTransaction().replace(R.id.widget_view, actionBarFragment).commit();
         }
     }
 
-    private float computeHeading(){
+    private float computeHeading() {
         return lastYaw + lastYawSpeed * ((System.currentTimeMillis() - lastReceived) / 1000f);
     }
 
@@ -258,7 +231,7 @@ public class ControlActivity extends DrawerNavigationUI {
         });
     }
 
-    private void updateYawParams(){
+    private void updateYawParams() {
         final Drone drone = dpApp.getDrone();
         final Attitude attitude = drone.getAttribute(AttributeType.ATTITUDE);
         lastYaw = (float) attitude.getYaw();
