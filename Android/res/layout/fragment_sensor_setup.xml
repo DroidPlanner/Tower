@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <org.droidplanner.android.widgets.viewPager.TabPageIndicator
+    <org.droidplanner.android.view.viewPager.TabPageIndicator
         android:id="@+id/configuration_tab_strip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

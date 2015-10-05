@@ -20,17 +20,37 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.R.id;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.CamerasAdapter;
+import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
-import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
+import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.view.spinnerWheel.adapters.LengthWheelAdapter;
+import org.droidplanner.android.view.spinnerWheel.adapters.NumericWheelAdapter;
+import org.droidplanner.android.view.spinners.SpinnerSelfSelect;
 
 import java.util.Collections;
 import java.util.List;
 
 public class MissionStructureScannerFragment extends MissionDetailFragment implements
         CardWheelHorizontalView.OnCardWheelScrollListener, CompoundButton.OnCheckedChangeListener, Drone.OnMissionItemsBuiltCallback {
+
+    private final SpinnerSelfSelect.OnSpinnerItemSelectedListener cameraSpinnerListener = new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {
+        @Override
+        public void onSpinnerItemSelected(Spinner spinner, int position) {
+            if (spinner.getId() == id.cameraFileSpinner) {
+
+                if(cameraAdapter.isEmpty())
+                    return;
+
+                CameraDetail cameraInfo = cameraAdapter.getItem(position);
+                for (StructureScanner scan : getMissionItems()) {
+                    SurveyDetail surveyDetail = scan.getSurveyDetail();
+                    surveyDetail.setCameraDetail(cameraInfo);
+                }
+
+                submitForBuilding();
+            }
+        }
+    };
 
     private CamerasAdapter cameraAdapter;
 
@@ -55,14 +75,14 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
         cameraAdapter = new CamerasAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, cameraDetails);
         SpinnerSelfSelect cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
         cameraSpinner.setAdapter(cameraAdapter);
-        cameraSpinner.setOnSpinnerItemSelectedListener(this);
+        cameraSpinner.setOnSpinnerItemSelectedListener(cameraSpinnerListener);
 
         final LengthUnitProvider lengthUP = getLengthUnitProvider();
 
         CardWheelHorizontalView<LengthUnit> radiusPicker = (CardWheelHorizontalView) view
                 .findViewById(R.id.radiusPicker);
         radiusPicker.setViewAdapter(new LengthWheelAdapter(context, R.layout.wheel_text_centered,
-                lengthUP.boxBaseValueToTarget(2), lengthUP.boxBaseValueToTarget(100)));
+                lengthUP.boxBaseValueToTarget(Utils.MIN_DISTANCE), lengthUP.boxBaseValueToTarget(Utils.MAX_DISTANCE)));
         radiusPicker.addScrollListener(this);
 
         CardWheelHorizontalView<LengthUnit> startAltitudeStepPicker = (CardWheelHorizontalView) view
@@ -79,7 +99,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 
         CardWheelHorizontalView<Integer> numberStepsPicker = (CardWheelHorizontalView<Integer>) view
                 .findViewById(R.id.stepsPicker);
-        numberStepsPicker.setViewAdapter(new NumericWheelAdapter(context, R.layout.wheel_text_centered, 1, 10, "%d"));
+        numberStepsPicker.setViewAdapter(new NumericWheelAdapter(context, R.layout.wheel_text_centered, 1, 100, "%d"));
         numberStepsPicker.addScrollListener(this);
 
         CheckBox checkBoxAdvanced = (CheckBox) view.findViewById(R.id.checkBoxSurveyCrossHatch);
@@ -158,20 +178,6 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
         }
 
         submitForBuilding();
-    }
-
-    @Override
-    public void onSpinnerItemSelected(Spinner spinner, int position) {
-        if (spinner.getId() == id.cameraFileSpinner) {
-
-            CameraDetail cameraInfo = cameraAdapter.getItem(position);
-            for (StructureScanner scan : getMissionItems()) {
-                SurveyDetail surveyDetail = scan.getSurveyDetail();
-                surveyDetail.setCameraDetail(cameraInfo);
-            }
-
-            submitForBuilding();
-        }
     }
 
     @Override

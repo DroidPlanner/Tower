@@ -21,14 +21,32 @@ import javax.net.ssl.SSLSocketFactory;
  * Created by Fredia Huya-Kouadio on 5/11/15.
  */
 public class NetworkUtils {
+
+    private static final String SOLO_LINK_WIFI_PREFIX = "SoloLink_";
+
     public static boolean isNetworkAvailable(Context context) {
+        if(context == null)
+            return false;
+
         ConnectivityManager connectivityManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    public static boolean isOnSoloNetwork(Context context) {
+        if (context == null){
+            return false;
+        }
+
+        final String connectedSSID = getCurrentWifiLink(context);
+        return connectedSSID != null && connectedSSID.startsWith(SOLO_LINK_WIFI_PREFIX);
+    }
+
     public static String getCurrentWifiLink(Context context) {
+        if(context == null)
+            return null;
+
         final WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
         final WifiInfo connectedWifi = wifiMgr.getConnectionInfo();

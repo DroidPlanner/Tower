@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
@@ -29,27 +30,30 @@ public class SupportYesNoWithPrefsDialog extends SupportYesNoDialog {
     protected final static String EXTRA_PREF_KEY = "extra_dialog_pref_key";
 
 
-    public static SupportYesNoWithPrefsDialog newInstance(Context context, String title,
-                                                   String msg, Listener listener, String prefKey) {
-        return newInstance(context, title, msg, context.getString(android.R.string.yes),
-                context.getString(android.R.string.no), listener, prefKey);
+    public static SupportYesNoWithPrefsDialog newInstance(Context context, String dialogTag,
+                                                          String title,
+                                                          String msg, String prefKey, Listener listener) {
+        return newInstance(context, dialogTag, title, msg, context.getString(android.R.string.yes),
+                context.getString(android.R.string.no), prefKey, listener);
     }
 
-    public static SupportYesNoWithPrefsDialog newInstance(Context context, String title, String msg,
-                                                   String positiveLabel, String negativeLabel,
-                                                   Listener listener, String prefKey){
-        if (prefKey != null && !prefKey.isEmpty()) {
-            final DroidPlannerPrefs prefs = new DroidPlannerPrefs(context);
-            final String preference = prefs.prefs.getString(prefKey,
-                    context.getString(DEFAULT_PREFERENCE_ID));
+    public static SupportYesNoWithPrefsDialog newInstance(Context context, String dialogTag,
+                                                          String title, String msg,
+                                                          String positiveLabel, String negativeLabel,
+                                                          String prefKey, Listener listener) {
+        if (dialogTag == null)
+            throw new IllegalArgumentException("The dialog tag must not be null!");
 
-            if(!preference.equals(context.getString(PREFERENCE_ASK_ID))) {
-                if(listener != null){
+        if (!TextUtils.isEmpty(prefKey)) {
+            final DroidPlannerPrefs prefs = new DroidPlannerPrefs(context);
+            final String preference = prefs.prefs.getString(prefKey, context.getString(DEFAULT_PREFERENCE_ID));
+
+            if (!preference.equals(context.getString(PREFERENCE_ASK_ID))) {
+                if (listener != null) {
                     if (preference.equals(context.getString(PREFERENCE_ALWAYS_ID))) {
-                        listener.onYes();
-                    }
-                    else if(preference.equals(context.getString(PREFERENCE_NEVER_ID))){
-                        listener.onNo();
+                        listener.onDialogYes(dialogTag);
+                    } else if (preference.equals(context.getString(PREFERENCE_NEVER_ID))) {
+                        listener.onDialogNo(dialogTag);
                     }
                 }
 
@@ -60,6 +64,7 @@ public class SupportYesNoWithPrefsDialog extends SupportYesNoDialog {
         SupportYesNoWithPrefsDialog dialog = new SupportYesNoWithPrefsDialog();
 
         Bundle b = new Bundle();
+        b.putString(EXTRA_DIALOG_TAG, dialogTag);
         b.putString(EXTRA_TITLE, title);
         b.putString(EXTRA_MESSAGE, msg);
         b.putString(EXTRA_POSITIVE_LABEL, positiveLabel);
@@ -67,8 +72,6 @@ public class SupportYesNoWithPrefsDialog extends SupportYesNoDialog {
         b.putString(EXTRA_PREF_KEY, prefKey);
 
         dialog.setArguments(b);
-
-        dialog.mListener = listener;
 
         return dialog;
     }
@@ -88,37 +91,40 @@ public class SupportYesNoWithPrefsDialog extends SupportYesNoDialog {
 
         final Bundle arguments = getArguments();
         final String prefKey = arguments.getString(EXTRA_PREF_KEY);
-        if (prefKey == null || prefKey.isEmpty()) {
+        if (TextUtils.isEmpty(prefKey)) {
             return builder;
         }
+
+        final String dialogTag = arguments.getString(EXTRA_DIALOG_TAG);
 
         builder.setPositiveButton(arguments.getString(EXTRA_POSITIVE_LABEL), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 savePreferences(prefKey, true);
-                mListener.onYes();
+                if (mListener != null)
+                    mListener.onDialogYes(dialogTag);
             }
         }).setNegativeButton(arguments.getString(EXTRA_NEGATIVE_LABEL), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 savePreferences(prefKey, false);
-                mListener.onNo();
+                if (mListener != null)
+                    mListener.onDialogNo(dialogTag);
             }
         });
 
         return builder;
     }
 
-    private void savePreferences(final String prefKey, final boolean isPositiveResponse){
-        if(mCheckbox != null) {
+    private void savePreferences(final String prefKey, final boolean isPositiveResponse) {
+        if (mCheckbox != null) {
             final SharedPreferences.Editor editor = mPrefs.prefs.edit();
             final boolean dontShow = mCheckbox.isChecked();
-            if(dontShow){
+            if (dontShow) {
                 Toast.makeText(getActivity(), R.string.pref_dialog_selection_reset_desc, Toast.LENGTH_LONG).show();
                 editor.putString(prefKey,
                         getString(isPositiveResponse ? PREFERENCE_ALWAYS_ID : PREFERENCE_NEVER_ID));
-            }
-            else{
+            } else {
                 editor.putString(prefKey, getString(PREFERENCE_ASK_ID));
             }
 
@@ -152,7 +158,7 @@ public class SupportYesNoWithPrefsDialog extends SupportYesNoDialog {
         return contentView;
     }
 
-    private boolean isDontShowEnabled(String prefKey){
+    private boolean isDontShowEnabled(String prefKey) {
         final String askSelection = getString(R.string.pref_dialog_entry_ask);
         final String preference = mPrefs.prefs.getString(prefKey, askSelection);
 

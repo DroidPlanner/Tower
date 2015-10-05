@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item type="id" name="mapFragment"/>
-    
+    <item type="id" name="tower_widget_solo_video" />
+    <item type="id" name="tower_widget_attitude_speed_info" />
+    <item type="id" name="tower_widget_vehicle_diagnostics" />
+    <item type="id" name="tower_widget_flight_timer" />
+    <item type="id" name="tower_widget_geo_info" />
 </resources>

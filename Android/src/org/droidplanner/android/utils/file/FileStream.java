@@ -28,7 +28,7 @@ public class FileStream {
     }
 
 	public static FileOutputStream getExceptionFileStream(Context context) throws FileNotFoundException {
-		File myDir = new File(DirectoryPath.getLogCatPath(context));
+		File myDir = new File(DirectoryPath.getCrashLogPath(context));
 		myDir.mkdirs();
 		File file = new File(myDir, getTimeStamp() + ".txt");
 		if (file.exists())

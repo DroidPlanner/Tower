@@ -11,14 +11,12 @@ import android.widget.TextView;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.droidplanner.android.R;
-import org.droidplanner.android.widgets.SlideButton;
+import org.droidplanner.android.view.SlideButton;
 
 /**
  * Created by Fredia Huya-Kouadio on 4/6/15.
  */
 public abstract class SlideToUnlockDialog extends DialogFragment implements SeekBar.OnSeekBarChangeListener{
-
-    private static final String TAG = SlideToUnlockDialog.class.getSimpleName();
 
     public static final String EXTRA_UNLOCK_ACTION = "extra_unlock_action";
 
@@ -56,6 +54,12 @@ public abstract class SlideToUnlockDialog extends DialogFragment implements Seek
     public void onStart(){
         super.onStart();
         getDialog().setCanceledOnTouchOutside(true);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        dismiss();
     }
 
     @Override

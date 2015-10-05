@@ -2,6 +2,7 @@ package org.droidplanner.android.fragments.mode;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,33 +16,36 @@ import com.o3dr.services.android.lib.drone.property.Type;
 
 import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
-import org.droidplanner.android.activities.FlightActivity;
+import org.droidplanner.android.fragments.FlightDataFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.LengthWheelAdapter;
+import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.view.spinnerWheel.adapters.LengthWheelAdapter;
 
 public class ModeGuidedFragment extends ApiListenerFragment implements
         CardWheelHorizontalView.OnCardWheelScrollListener<LengthUnit>, FlightMapFragment.OnGuidedClickListener {
 
     private CardWheelHorizontalView<LengthUnit> mAltitudeWheel;
-    protected FlightActivity parentActivity;
+    protected FlightDataFragment parent;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (!(activity instanceof FlightActivity))
-            throw new IllegalStateException("Parent activity must be an instance of " + FlightActivity.class.getName());
 
-        parentActivity = (FlightActivity) activity;
+        final Fragment parentFragment = getParentFragment().getParentFragment();
+        if (!(parentFragment instanceof FlightDataFragment)) {
+            throw new IllegalStateException("Parent fragment must be an instance of " + FlightDataFragment.class.getName());
+        }
+
+        parent = (FlightDataFragment) parentFragment;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        parentActivity = null;
+        parent = null;
     }
 
     @Override
@@ -99,20 +103,22 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
         final Drone drone = getDrone();
 
         if (mAltitudeWheel != null) {
-            final int defaultAlt = getAppPrefs().getDefaultAltitude();
+            final DroidPlannerPrefs dpPrefs = getAppPrefs();
+
+            final double maxAlt = dpPrefs.getMaxAltitude();
+            final double minAlt = dpPrefs.getMinAltitude();
+            final double defaultAlt = dpPrefs.getDefaultAltitude();
 
             GuidedState guidedState = drone.getAttribute(AttributeType.GUIDED_STATE);
             LatLongAlt coordinate = guidedState == null ? null : guidedState.getCoordinate();
 
-            final LengthUnit initialValue = getLengthUnitProvider().boxBaseValueToTarget(
-                    Math.max(guidedState == null
-                                    ? defaultAlt
-                                    : coordinate == null ? defaultAlt : coordinate.getAltitude(),
-                            defaultAlt));
+            final double baseValue = Math.min(maxAlt,
+                    Math.max(minAlt, coordinate == null ? defaultAlt : coordinate.getAltitude()));
+            final LengthUnit initialValue = getLengthUnitProvider().boxBaseValueToTarget(baseValue);
             mAltitudeWheel.setCurrentValue(initialValue);
         }
 
-        parentActivity.setGuidedClickListener(this);
+        parent.setGuidedClickListener(this);
         Type droneType = drone.getAttribute(AttributeType.TYPE);
         if (droneType.getDroneType() == Type.TYPE_ROVER) {
             mAltitudeWheel.setVisibility(View.GONE);
@@ -123,7 +129,7 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
 
     @Override
     public void onApiDisconnected() {
-        parentActivity.setGuidedClickListener(null);
+        parent.setGuidedClickListener(null);
     }
 
     @Override

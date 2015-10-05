@@ -9,8 +9,8 @@ android:
 
 before_script:
     - echo yes | android update sdk -u -a -t tools
-    - echo yes | android update sdk -u -a -t build-tools-22.0.1
-    - echo yes | android update sdk -u -a -t android-22,android-21,android-20
+    - echo yes | android update sdk -u -a -t build-tools-23.0.1,build-tools-22.0.1
+    - echo yes | android update sdk -u -a -t android-23,android-22,android-21,android-20
     - echo yes | android update sdk -u -a -t extra-google-m2repository
     - echo yes | android update sdk -u -a -t extra-android-m2repository
     - echo yes | android update sdk -u -a -t extra-android-support,extra-google-google_play_services

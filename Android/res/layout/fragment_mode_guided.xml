@@ -15,7 +15,7 @@
         android:background="@drawable/mode_desc_rectangle"
         android:text="@string/mode_guided"/>
 
-    <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+    <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
         android:id="@+id/altitude_spinner"
         android:orientation="horizontal"
         android:layout_width="match_parent"
