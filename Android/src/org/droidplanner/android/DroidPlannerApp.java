@@ -164,17 +164,15 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
         GAUtils.initGATracker(this);
         GAUtils.startNewSession(context);
 
-        if (BuildConfig.DEBUG) {
-            if (BuildConfig.WRITE_LOG_FILE) {
-                logToFileTree = new LogToFileTree();
-                Timber.plant(logToFileTree);
-            } else {
-                Timber.plant(new Timber.DebugTree());
-            }
-        }
-
         if(BuildConfig.ENABLE_CRASHLYTICS) {
             Fabric.with(context, new Crashlytics());
+        }
+
+        if (BuildConfig.WRITE_LOG_FILE) {
+            logToFileTree = new LogToFileTree();
+            Timber.plant(logToFileTree);
+        } else if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
         }
 
         final IntentFilter intentFilter = new IntentFilter();
