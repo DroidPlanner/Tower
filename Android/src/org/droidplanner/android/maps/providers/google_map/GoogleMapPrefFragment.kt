@@ -150,15 +150,13 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
     }
 
     private fun setupPreferences() {
-        val context = getActivity().getApplicationContext()
+        val context = activity.applicationContext
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
 
         setupTileProvidersPreferences(sharedPref)
         setupGoogleTileProviderPreferences(sharedPref)
         setupMapboxTileProviderPreferences(sharedPref)
     }
-
-    private fun getContext(): Context? = getActivity()?.getApplicationContext()
 
     private fun isMapboxIdSet() = !TextUtils.isEmpty(getMapboxId(getContext()))
 
@@ -175,11 +173,11 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
 
     private fun enableTileProvider(tileProviderPref: ListPreference?, provider: String, persistPreference: Boolean){
         if(persistPreference){
-            tileProviderPref?.setValue(provider)
+            tileProviderPref?.value = provider
             setMapTileProvider(getContext(), provider)
         }
 
-        tileProviderPref?.setSummary(provider)
+        tileProviderPref?.summary = provider
         toggleTileProviderPrefs(provider)
     }
 
@@ -204,7 +202,7 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
                     }
 
                     //Check if the mapbox access token is set
-                    accessTokenDialog?.show(getFragmentManager(),
+                    accessTokenDialog?.show(fragmentManager,
                             MAPBOX_ACCESS_TOKEN_DIALOG_TAG)
                 }
             }
@@ -234,7 +232,7 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
 
         if(tileProvidersPref != null){
             val tileProvider = sharedPref.getString(tileProvidersKey, DEFAULT_TILE_PROVIDER)
-            tileProvidersPref?.setSummary(tileProvider)
+            tileProvidersPref?.summary = tileProvider
             tileProvidersPref?.setOnPreferenceChangeListener { preference, newValue ->
                     val updatedTileProvider = newValue.toString()
 
@@ -258,7 +256,7 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
                                 }
                             }
 
-                            inputDialog?.show(getFragmentManager(), MAPBOX_ID_DIALOG_TAG)
+                            inputDialog?.show(fragmentManager, MAPBOX_ID_DIALOG_TAG)
                         }
                     }
 
@@ -279,9 +277,9 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
         val mapTypeKey = PREF_MAP_TYPE
         val mapTypePref = findPreference(mapTypeKey)
         mapTypePref?.let {
-            mapTypePref.setSummary(sharedPref.getString(mapTypeKey, DEFAULT_MAP_TYPE))
+            mapTypePref.summary = sharedPref.getString(mapTypeKey, DEFAULT_MAP_TYPE)
             mapTypePref.setOnPreferenceChangeListener { preference, newValue ->
-                    mapTypePref.setSummary(newValue.toString())
+                    mapTypePref.summary = newValue.toString()
                     true
             }
         }
@@ -293,7 +291,7 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
         //Setup mapbox map download button
         val downloadMapPref = findPreference(PREF_MAPBOX_MAP_DOWNLOAD)
         downloadMapPref?.setOnPreferenceClickListener {
-            startActivity(Intent(getContext(), javaClass<DownloadMapboxMapActivity>()))
+            startActivity(Intent(getContext(), DownloadMapboxMapActivity::class.java))
             true
         }
 
@@ -301,7 +299,7 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
         val mapboxIdPref = findPreference(PREF_MAPBOX_ID)
         if(mapboxIdPref != null) {
             val mapboxId = sharedPref.getString(PREF_MAPBOX_ID, null)
-            mapboxId?.let { mapboxIdPref.setSummary(mapboxId)}
+            mapboxId?.let { mapboxIdPref.summary = mapboxId }
             mapboxIdPref.setOnPreferenceChangeListener { preference, newValue ->
                 val newMapboxId = newValue.toString()
                 if(TextUtils.isEmpty(newMapboxId)){
@@ -318,7 +316,7 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
         val mapboxTokenPref = findPreference(PREF_MAPBOX_ACCESS_TOKEN)
         if(mapboxTokenPref != null) {
             val mapboxToken = sharedPref.getString(PREF_MAPBOX_ACCESS_TOKEN, null)
-            mapboxToken?.let { mapboxTokenPref.setSummary(mapboxToken)}
+            mapboxToken?.let { mapboxTokenPref.summary = mapboxToken }
             mapboxTokenPref.setOnPreferenceChangeListener {preference, newValue ->
                 val mapboxAccessToken = newValue.toString()
                 if(TextUtils.isEmpty(mapboxAccessToken)){
@@ -347,7 +345,7 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
                 getString(R.string.pref_hint_mapbox_id)
             } else
                 id
-            mapboxIdPref.setSummary(summary)
+            mapboxIdPref.summary = summary
         }
 
         if(persist)
@@ -363,7 +361,7 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
             }
             else
                 token
-            mapboxTokenPref.setSummary(summary)
+            mapboxTokenPref.summary = summary
         }
 
         if(persist)
@@ -394,7 +392,7 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
 
     private fun enableTileProviderPrefs(prefKey: String, enable: Boolean){
         val prefCategory = findPreference(prefKey) as PreferenceCategory?
-        prefCategory?.setEnabled(enable)
+        prefCategory?.isEnabled = enable
     }
 
     override fun getMapProvider(): DPMapProvider? = DPMapProvider.GOOGLE_MAP

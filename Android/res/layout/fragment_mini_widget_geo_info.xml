@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="5dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:id="@+id/mini_widget_geo_info_layout"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/latitude_telem"
+        style="@style/largeTelemetryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="10dp"
+        android:singleLine="true"
+        android:text="@string/latitude_empty"
+        tools:text="Lat: " />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"
+        android:background="@color/light_grey" />
+
+    <TextView
+        android:id="@+id/longitude_telem"
+        style="@style/largeTelemetryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="10dp"
+        android:singleLine="true"
+        android:text="@string/longitude_empty"
+        tools:text="Long: " />
+
+</LinearLayout>

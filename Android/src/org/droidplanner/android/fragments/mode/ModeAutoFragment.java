@@ -56,9 +56,13 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener, 
             switch (action){
                 case AttributeEvent.MISSION_RECEIVED:
                 case AttributeEvent.MISSION_UPDATED:
-                    mission = drone.getAttribute(AttributeType.MISSION);
-                    waypointSelectorAdapter = new NumericWheelAdapter(getActivity().getApplicationContext(),  R.layout.wheel_text_centered, getFirstWaypoint(), getLastWaypoint(), "%3d");
-                    waypointSelector.setViewAdapter(waypointSelectorAdapter);
+                    final MissionProxy missionProxy = getMissionProxy();
+                    if(missionProxy != null) {
+                        mission = drone.getAttribute(AttributeType.MISSION);
+                        waypointSelectorAdapter = new NumericWheelAdapter(context, R.layout.wheel_text_centered,
+                                missionProxy.getFirstWaypoint(), missionProxy.getLastWaypoint(), "%3d");
+                        waypointSelector.setViewAdapter(waypointSelectorAdapter);
+                    }
                     break;
 
                 case AttributeEvent.MISSION_ITEM_UPDATED:
@@ -95,8 +99,22 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener, 
         waypointSelector = (CardWheelHorizontalView<Integer>) view.findViewById(R.id.waypoint_selector);
         waypointSelector.addScrollListener(this);
         mission = drone.getAttribute(AttributeType.MISSION);
-        waypointSelectorAdapter = new NumericWheelAdapter(getActivity().getApplicationContext(),  R.layout.wheel_text_centered, getFirstWaypoint(), getLastWaypoint(), "%3d");
+
+        final DroidPlannerApp dpApp = (DroidPlannerApp) getActivity().getApplication();
+
+        final MissionProxy missionProxy = getMissionProxy();
+        waypointSelectorAdapter = new NumericWheelAdapter(getActivity().getApplicationContext(),
+                R.layout.wheel_text_centered,
+                missionProxy.getFirstWaypoint(), missionProxy.getLastWaypoint(), "%3d");
         waypointSelector.setViewAdapter(waypointSelectorAdapter);
+    }
+
+    private MissionProxy getMissionProxy(){
+        final Activity activity = getActivity();
+        if(activity == null)
+            return null;
+
+        return ((DroidPlannerApp) activity.getApplication()).getMissionProxy();
     }
 
     @Override
@@ -208,24 +226,6 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener, 
         remainingMissionLength = getRemainingMissionLength();
         missionProgress.setProgress((int) ((totalLength - remainingMissionLength)));
         missionFinished = remainingMissionLength < 5;
-    }
-
-    private int getFirstWaypoint(){
-        MissionProxy proxy = ((DroidPlannerApp) getActivity().getApplication()).getMissionProxy();
-        if(proxy.getMarkersInfos().size() > 0) {
-            MissionItemMarkerInfo info = (MissionItemMarkerInfo) proxy.getMarkersInfos().get(0);
-            return proxy.getOrder(info.getMarkerOrigin());
-        }
-        return 0;
-    }
-
-    private int getLastWaypoint(){
-        MissionProxy proxy = ((DroidPlannerApp) getActivity().getApplication()).getMissionProxy();
-        if(proxy.getMarkersInfos().size() > 0) {
-            MissionItemMarkerInfo info = (MissionItemMarkerInfo) proxy.getMarkersInfos().get(proxy.getMarkersInfos().size()-1);
-            return proxy.getOrder(info.getMarkerOrigin());
-        }
-        return 0;
     }
 
     @Override

@@ -32,7 +32,7 @@ public class MissionConditionYawFragment extends MissionDetailFragment
         YawCondition item = (YawCondition) getMissionItems().get(0);
 
         final NumericWheelAdapter adapter = new NumericWheelAdapter(getContext(),
-                R.layout.wheel_text_centered, 0, 359, "%d deg");
+                R.layout.wheel_text_centered, 0, 359, "%d°");
         final CardWheelHorizontalView<Integer> cardAltitudePicker = (CardWheelHorizontalView<Integer>) view
                 .findViewById(R.id.picker1);
         cardAltitudePicker.setViewAdapter(adapter);

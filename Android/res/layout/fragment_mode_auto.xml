@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -33,46 +32,39 @@
         android:layout_margin="5dp"
         android:background="@drawable/button_blue"
         android:gravity="center"
-        android:weightSum="1.0"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="1.0">
 
-        <com.andexert.library.RippleView
+        <ImageView
+            android:id="@+id/mc_pause"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight=".5">
+            android:layout_weight=".5"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_pause_white_24dp" />
 
-            <ImageView
-                android:id="@+id/mc_pause"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_pause_white_24dp" />
-        </com.andexert.library.RippleView>
 
-        <com.andexert.library.RippleView
+        <ImageView
+            android:id="@+id/mc_restart"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight=".5">
-
-            <ImageView
-                android:id="@+id/mc_restart"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_replay_white_24dp" />
-        </com.andexert.library.RippleView>
+            android:layout_weight=".5"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_replay_white_24dp" />
 
     </LinearLayout>
 
     <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
         android:id="@+id/waypoint_selector"
-        android:orientation="horizontal"
+        style="@style/missionItemDetailCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/missionItemDetailCard"
-        android:text="@string/waypoint_label"/>
+        android:orientation="horizontal"
+        android:text="@string/waypoint_label" />
 
 </LinearLayout>
 

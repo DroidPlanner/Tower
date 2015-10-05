@@ -13,6 +13,13 @@
         android:layout_height="match_parent"
         android:minHeight="85dp" />
 
+    <ImageView
+        android:id="@+id/sololink_gimbal_joystick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/touch_circle"
+        android:visibility="gone"/>
+
     <LinearLayout
         android:id="@+id/widget_button_bar"
         android:layout_width="wrap_content"
@@ -28,25 +35,17 @@
             android:id="@+id/sololink_take_picture_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:backgroundTint="@color/flight_action_row_bg_selector"
-            app:fabSize="normal"
-            app:elevation="6dp"
-            app:borderWidth="0dp"
-            android:layout_margin="5dp"
-            android:src="@drawable/ic_camera_alt_black_36dp"
-            android:text="Photo" />
+            style="@style/Fab.SoloVideo"
+            android:src="@drawable/ic_camera_drawable"
+            android:text="@string/label_photo" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/sololink_record_video_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:backgroundTint="@color/flight_action_row_bg_selector"
-            app:fabSize="normal"
-            app:elevation="6dp"
-            app:borderWidth="0dp"
-            android:layout_margin="5dp"
-            android:src="@drawable/ic_videocam_black_36dp"
-            android:text="Record" />
+            style="@style/Fab.SoloVideo"
+            android:src="@drawable/on_off_videocam"
+            android:text="@string/label_record" />
     </LinearLayout>
 
     <me.grantland.widget.AutofitTextView
@@ -61,5 +60,5 @@
         android:textAllCaps="true"
         android:textColor="@android:color/white"
         android:visibility="gone"
-        tools:visibility="visible" />
+        tools:visibility="gone" />
 </RelativeLayout>

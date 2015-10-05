@@ -34,7 +34,6 @@
     <string name="pref_udp_server_port">UDP Server Port</string>
     <string name="about">Über</string>
     <string name="version">Version</string>
-    <string name="storage_folder">Speicherordner</string>
     <string name="menu_connect">Verbinden</string>
     <string name="menu_disconnect">Trennen</string>
     <string name="connected">Verbunden</string>
@@ -217,8 +216,6 @@
     <string name="zoom_fit">Zoom anpassen</string>
     <string name="open_mission_file">Missiondatei öffnen</string>
     <string name="save_mission_file">Missiondatei speichern</string>
-    <string name="pref_permanent_notification_title">Permanente Benachrichtigung aktivieren</string>
-    <string name="pref_permanent_notification_summary">Aktivieren um Benachrichtugung permanent in der Statusleiste zu behalten.</string>
     <string name="pref_ui_gps_hdop_title">Satelliten HDOP anzeigen</string>
     <string name="pref_ui_gps_hdop_summary">Satelliten HDOP statt FIX in der Satelliteninfoliste anzeigen</string>
     <string name="app_settings">App-Einstellungen</string>
@@ -235,7 +232,7 @@
     <string name="pref_maps_title">Karten</string>
     <string name="pref_title_notifications">Benachrichtigungen</string>
     <string name="pref_title_screen">Bildschirm</string>
-    <string name="pref_usage_statistics_summary">Mithelfen, DroidPlanner zu verbessern, indem Nutzungsstatistiken eingesendet werden.</string>
+    <string name="pref_usage_statistics_summary">Mithelfen, Tower zu verbessern, indem Nutzungsstatistiken eingesendet werden.</string>
     <string name="pref_usage_statistics_title">Nutzungsstatistiken senden</string>
     <string name="usage_statistics">Nutzungsstatistiken</string>
     <string name="waypointType_SplineWaypoint">Kurvenwegpunkt</string>
@@ -293,8 +290,6 @@
     <string name="structure_scan_start_alt">Starthöhe</string>
     <string name="structure_scan_step_height">Erhöhungsschritt</string>
     <string name="stucture_scanner_cross_hatch">Gitterschnitt</string>
-    <string name="pref_licenses">Lizenzen</string>
-    <string name="pref_licenses_summary">Verwendete Bibliotheken (und deren Lizenzen)</string>
     <string name="editor_info_window_heading">Kurs: %.0f</string>
     <string name="account_label">Konto</string>
     <string name="delete_selected_waypoints_confirm">Gewählte Wegpunkte von der Karte löschen?</string>

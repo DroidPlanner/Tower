@@ -226,11 +226,7 @@ public class DroneshareLoginFragment extends Fragment {
     private Boolean validateField(EditText field) {
         // Trigger text changed to see if we have any errors:
         field.setText(field.getText());
-        if (field.getError() != null) {
-            return false; // Invalid, the text field will display an error
-        } else {
-            return true; // Valid
-        }
+        return field.getError() == null;
     }
 
     private static abstract class TextValidator implements TextWatcher {

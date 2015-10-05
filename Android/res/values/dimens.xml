@@ -38,7 +38,7 @@
     <!-- Dimension for the info bar -->
     <dimen name="info_bar_text_size">12sp</dimen>
     <dimen name="info_bar_drawable_padding">3dp</dimen>
-    <dimen name="info_bar_flight_mode_width">100dp</dimen>
+    <dimen name="info_bar_flight_mode_width">110dp</dimen>
 
     <!-- Dimensions for the number picker dialog -->
     <dimen name="margin_left_right_card_wheel_horizontal_view">8dp</dimen>
@@ -46,9 +46,10 @@
     <dimen name="telem_widget_bg_corner_radius">2dp</dimen>
     <dimen name="slide_button_padding_top">0dp</dimen>
     <dimen name="flight_actions_container_width">370dp</dimen>
-    <dimen name="flight_actions_container_height">260dp</dimen>
+    <dimen name="flight_actions_container_height">180dp</dimen>
 
     <dimen name="toolbar_min_height">56dp</dimen>
     <dimen name="action_bar_telem_height">96dp</dimen>
     <dimen name="action_drawer_width">260dp</dimen>
-    </resources>
+    <dimen name="action_drawer_margin_bottom">80dp</dimen>
+</resources>

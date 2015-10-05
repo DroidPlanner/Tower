@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="?android:attr/buttonBarStyle"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="@dimen/action_bar_telem_height"
     android:layout_gravity="center"
-    android:gravity="center_vertical|end">
+    android:gravity="center_vertical|end"
+    android:orientation="horizontal">
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -20,42 +19,34 @@
             android:id="@+id/bar_battery"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
-            android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_battery_circle_8_36dp"
+            android:layout_gravity="center"
+            android:drawableLeft="@drawable/ic_battery_circle_8_24dp"
             android:drawablePadding="@dimen/info_bar_drawable_padding"
-            android:drawableStart="@drawable/ic_battery_circle_8_36dp"
+            android:drawableStart="@drawable/ic_battery_circle_8_24dp"
             android:text="@string/empty_content"
             android:textSize="@dimen/info_bar_text_size"
-            tools:text="100%" />
+            tools:text="18.2 V" />
     </FrameLayout>
 
-    <LinearLayout
-        android:layout_width="@dimen/info_bar_flight_mode_width"
-        android:minHeight="40dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:layout_weight="1">
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:minWidth="@dimen/info_bar_flight_mode_width">
 
-        <ImageView
-            android:id="@+id/bar_flight_mode_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_navigation_grey_700_18dp"
-            android:scaleType="fitCenter"/>
-
-        <org.droidplanner.android.view.spinners.SpinnerSelfSelect
+        <TextView
             android:id="@+id/bar_flight_mode"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center"
-            app:isSelectable="false" />
-    </LinearLayout>
+            android:drawableLeft="@drawable/ic_navigation_grey_700_18dp"
+            android:drawableStart="@drawable/ic_navigation_grey_700_18dp"
+            android:text="@string/empty_content"
+            android:textSize="@dimen/info_bar_text_size"
+            tools:text="Acro" />
+    </FrameLayout>
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -68,11 +59,11 @@
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_signal_cellular_null_grey_700_18dp"
-            android:drawableStart="@drawable/ic_signal_cellular_null_grey_700_18dp"
-            android:drawablePadding="@dimen/info_bar_drawable_padding"
-            android:text="@string/empty_content"
             android:layout_gravity="center"
+            android:drawableLeft="@drawable/ic_signal_cellular_null_grey_700_18dp"
+            android:drawablePadding="@dimen/info_bar_drawable_padding"
+            android:drawableStart="@drawable/ic_signal_cellular_null_grey_700_18dp"
+            android:text="@string/empty_content"
             android:textSize="@dimen/info_bar_text_size"
             tools:text="100 %" />
     </FrameLayout>
@@ -86,11 +77,10 @@
         <TextView
             android:id="@+id/bar_home"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:drawableLeft="@drawable/ic_home_grey_700_18dp"
-            android:drawablePadding="@dimen/info_bar_drawable_padding"
             android:drawableStart="@drawable/ic_home_grey_700_18dp"
             android:text="@string/empty_content"
             android:textSize="@dimen/info_bar_text_size"
@@ -105,14 +95,14 @@
         android:minWidth="80dp">
 
         <TextView
-            style="?android:attr/buttonBarButtonStyle"
             android:id="@+id/bar_altitude"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:drawableLeft="@drawable/ic_file_upload_grey_700_18dp"
             android:drawablePadding="@dimen/info_bar_drawable_padding"
             android:drawableStart="@drawable/ic_file_upload_grey_700_18dp"
-            android:drawableLeft="@drawable/ic_file_upload_grey_700_18dp"
             android:text="@string/empty_content"
             android:textSize="@dimen/info_bar_text_size"
             tools:text="1000 m" />

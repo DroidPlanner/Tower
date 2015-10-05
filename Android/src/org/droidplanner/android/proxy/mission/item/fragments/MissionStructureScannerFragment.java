@@ -20,6 +20,7 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.R.id;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.CamerasAdapter;
+import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
 import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.view.spinnerWheel.adapters.LengthWheelAdapter;
@@ -81,7 +82,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
         CardWheelHorizontalView<LengthUnit> radiusPicker = (CardWheelHorizontalView) view
                 .findViewById(R.id.radiusPicker);
         radiusPicker.setViewAdapter(new LengthWheelAdapter(context, R.layout.wheel_text_centered,
-                lengthUP.boxBaseValueToTarget(2), lengthUP.boxBaseValueToTarget(100)));
+                lengthUP.boxBaseValueToTarget(Utils.MIN_DISTANCE), lengthUP.boxBaseValueToTarget(Utils.MAX_DISTANCE)));
         radiusPicker.addScrollListener(this);
 
         CardWheelHorizontalView<LengthUnit> startAltitudeStepPicker = (CardWheelHorizontalView) view
@@ -98,7 +99,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
 
         CardWheelHorizontalView<Integer> numberStepsPicker = (CardWheelHorizontalView<Integer>) view
                 .findViewById(R.id.stepsPicker);
-        numberStepsPicker.setViewAdapter(new NumericWheelAdapter(context, R.layout.wheel_text_centered, 1, 10, "%d"));
+        numberStepsPicker.setViewAdapter(new NumericWheelAdapter(context, R.layout.wheel_text_centered, 1, 100, "%d"));
         numberStepsPicker.addScrollListener(this);
 
         CheckBox checkBoxAdvanced = (CheckBox) view.findViewById(R.id.checkBoxSurveyCrossHatch);

@@ -35,6 +35,7 @@ import org.droidplanner.android.fragments.mode.FlightModePanel;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.view.SlidingDrawer;
 
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -113,6 +114,7 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
 
     private final AtomicBoolean mSlidingPanelCollapsing = new AtomicBoolean(false);
 
+    private final String disablePanelSlidingLabel = "disablingListener";
     private final SlidingUpPanelLayout.PanelSlideListener mDisablePanelSliding = new
             SlidingUpPanelLayout.PanelSlideListener() {
                 @Override
@@ -126,7 +128,7 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
                     mSlidingPanelCollapsing.set(false);
 
                     //Remove the panel slide listener
-                    mSlidingPanel.setPanelSlideListener(null);
+                    slidingPanelListenerMgr.removePanelSlideListener(disablePanelSlidingLabel);
                 }
 
                 @Override
@@ -169,17 +171,72 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
 
     private DrawerNavigationUI navActivity;
 
+    private static class SlidingPanelListenerManager implements SlidingUpPanelLayout.PanelSlideListener {
+        private final HashMap<String, SlidingUpPanelLayout.PanelSlideListener> panelListenerClients = new HashMap<>();
+
+        public void addPanelSlideListener(String label, SlidingUpPanelLayout.PanelSlideListener listener){
+            panelListenerClients.put(label, listener);
+        }
+
+        public void removePanelSlideListener(String label){
+            panelListenerClients.remove(label);
+        }
+
+        @Override
+        public void onPanelSlide(View view, float v) {
+            for(SlidingUpPanelLayout.PanelSlideListener listener: panelListenerClients.values()){
+                listener.onPanelSlide(view, v);
+            }
+        }
+
+        @Override
+        public void onPanelCollapsed(View view) {
+            for(SlidingUpPanelLayout.PanelSlideListener listener: panelListenerClients.values()){
+                listener.onPanelCollapsed(view);
+            }
+        }
+
+        @Override
+        public void onPanelExpanded(View view) {
+            for(SlidingUpPanelLayout.PanelSlideListener listener: panelListenerClients.values()){
+                listener.onPanelExpanded(view);
+            }
+        }
+
+        @Override
+        public void onPanelAnchored(View view) {
+            for(SlidingUpPanelLayout.PanelSlideListener listener: panelListenerClients.values()){
+                listener.onPanelAnchored(view);
+            }
+        }
+
+        @Override
+        public void onPanelHidden(View view) {
+            for(SlidingUpPanelLayout.PanelSlideListener listener: panelListenerClients.values()){
+                listener.onPanelHidden(view);
+            }
+        }
+    }
+
+    private final String parentActivityPanelListenerLabel = "parentListener";
+
+    private final SlidingPanelListenerManager slidingPanelListenerMgr = new SlidingPanelListenerManager();
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         if (activity instanceof DrawerNavigationUI)
             navActivity = (DrawerNavigationUI) activity;
+
+        if(activity instanceof SlidingUpPanelLayout.PanelSlideListener)
+            slidingPanelListenerMgr.addPanelSlideListener(parentActivityPanelListenerLabel, (SlidingUpPanelLayout.PanelSlideListener) activity);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         navActivity = null;
+        slidingPanelListenerMgr.removePanelSlideListener(parentActivityPanelListenerLabel);
     }
 
     @Override
@@ -201,6 +258,7 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
         final FragmentManager fm = getChildFragmentManager();
 
         mSlidingPanel = (SlidingUpPanelLayout) view.findViewById(R.id.slidingPanelContainer);
+        mSlidingPanel.setPanelSlideListener(slidingPanelListenerMgr);
         warningView = (TextView) view.findViewById(R.id.failsafeTextView);
 
         setupMapFragment();
@@ -386,10 +444,27 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
 
         if (isEnabled) {
             mSlidingPanel.setSlidingEnabled(true);
+            mSlidingPanel.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    if(mSlidingPanel.isPanelExpanded()){
+                        slidingPanelListenerMgr.onPanelExpanded(mSlidingPanel.getChildAt(1));
+                    }
+                    else if(mSlidingPanel.isPanelAnchored()){
+                        slidingPanelListenerMgr.onPanelAnchored(mSlidingPanel.getChildAt(1));
+                    }
+                    else if(mSlidingPanel.isPanelHidden()){
+                        slidingPanelListenerMgr.onPanelHidden(mSlidingPanel.getChildAt(1));
+                    }
+
+                    mSlidingPanel.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+            });
+
         } else {
             if (!mSlidingPanelCollapsing.get()) {
                 if (mSlidingPanel.isPanelExpanded()) {
-                    mSlidingPanel.setPanelSlideListener(mDisablePanelSliding);
+                    slidingPanelListenerMgr.addPanelSlideListener(disablePanelSlidingLabel, mDisablePanelSliding);
                     mSlidingPanel.collapsePanel();
                     mSlidingPanelCollapsing.set(true);
                 } else {
