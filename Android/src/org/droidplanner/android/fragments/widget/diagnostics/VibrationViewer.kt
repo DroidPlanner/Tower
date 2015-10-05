@@ -147,7 +147,7 @@ public class VibrationViewer : GraphDiagnosticViewer() {
         fun disableClippingValue(index: Int){
             val clippingView = clippingViews.get(index)
             clippingView?.setText(R.string.empty_content)
-            clippingView?.background = null
+            clippingView?.setBackgroundDrawable(null)
 
             lastClippingValues.set(index, -1L)
         }

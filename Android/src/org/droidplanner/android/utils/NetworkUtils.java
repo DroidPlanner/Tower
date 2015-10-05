@@ -50,8 +50,8 @@ public class NetworkUtils {
         final WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
         final WifiInfo connectedWifi = wifiMgr.getConnectionInfo();
-        final String connectedSSID = connectedWifi == null ? null : connectedWifi.getSSID().replace("\"", "");
-        return connectedSSID;
+        final String ssid = connectedWifi == null ? null : connectedWifi.getSSID();
+        return ssid == null ? null : ssid.replace("\"", "");
     }
 
     public static HttpURLConnection getHttpURLConnection(final URL url) {
