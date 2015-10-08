@@ -70,6 +70,9 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if(!isAdded())
+                return;
+
             final String action = intent.getAction();
             switch (action) {
                 case AttributeEvent.AUTOPILOT_ERROR:
