@@ -863,7 +863,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
             public void onMarkerDragStart(Marker marker) {
                 if (mMarkerDragListener != null) {
                     final MarkerInfo markerInfo = mBiMarkersMap.getKey(marker);
-                    if(!(markerInfo instanceof GraphicHome)) {
+                    if (!(markerInfo instanceof GraphicHome)) {
                         markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
                         mMarkerDragListener.onMarkerDragStart(markerInfo);
                     }
@@ -874,7 +874,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
             public void onMarkerDrag(Marker marker) {
                 if (mMarkerDragListener != null) {
                     final MarkerInfo markerInfo = mBiMarkersMap.getKey(marker);
-                    if(!(markerInfo instanceof GraphicHome)) {
+                    if (!(markerInfo instanceof GraphicHome)) {
                         markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
                         mMarkerDragListener.onMarkerDrag(markerInfo);
                     }
@@ -1023,7 +1023,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
                         case HttpURLConnection.HTTP_UNAUTHORIZED:
                         case HttpURLConnection.HTTP_NOT_FOUND:
                             //Invalid mapbox credentials
-                            Toast.makeText(getContext(), R.string.alert_invalid_mapbox_credentials, Toast.LENGTH_LONG).show();
+                            final Context context = getContext();
+                            if(context != null) {
+                                Toast.makeText(context, R.string.alert_invalid_mapbox_credentials, Toast.LENGTH_LONG).show();
+                            }
                             break;
                     }
                 }
