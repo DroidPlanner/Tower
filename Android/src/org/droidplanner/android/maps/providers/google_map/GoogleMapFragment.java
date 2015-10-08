@@ -1133,7 +1133,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     @Override
     public void onUnavailableGooglePlayServices(int i) {
         final Activity activity = getActivity();
-        if (activity != null) {
+        if (isAdded()) {
             GooglePlayServicesUtil.showErrorDialogFragment(i, getActivity(), 0, new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
