@@ -8,6 +8,11 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.ControlApi;
+import com.o3dr.android.client.apis.VehicleApi;
+
+import org.droidplanner.android.dialogs.SlideToUnlockDialog;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import java.io.IOException;
@@ -71,6 +76,30 @@ public class Utils {
 
 	public static float fromDegToRad(float deg) {
 		return (float) (deg * Math.PI / 180f);
+	}
+
+	public static void getTakeOffConfirmation(final DroidPlannerPrefs dpPrefs, FragmentManager fm, final Drone drone){
+		getActionConfirmation("take off", fm, new Runnable() {
+			@Override
+			public void run() {
+				final double takeOffAltitude = dpPrefs.getDefaultAltitude();
+				ControlApi.getApi(drone).takeoff(takeOffAltitude, null);
+			}
+		});
+	}
+
+	public static void getArmingConfirmation(FragmentManager fm, final Drone drone){
+		getActionConfirmation("arm", fm, new Runnable() {
+			@Override
+			public void run() {
+				VehicleApi.getApi(drone).arm(true);
+			}
+		});
+	}
+
+	private static void getActionConfirmation(String actionDescription, FragmentManager fm, Runnable onConfirm){
+		final SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance(actionDescription, onConfirm);
+		showDialog(unlockDialog, fm, actionDescription, true);
 	}
 
 	//Private constructor to prevent instantiation.

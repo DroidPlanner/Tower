@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.ControlApi;
+import com.o3dr.android.client.apis.FollowApi;
 import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
@@ -30,6 +32,7 @@ import org.droidplanner.android.dialogs.SupportYesNoDialog;
 import org.droidplanner.android.dialogs.SupportYesNoWithPrefsDialog;
 import org.droidplanner.android.fragments.FlightDataFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
@@ -229,28 +232,28 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment imple
                 break;
 
             case R.id.mc_armBtn:
-                getArmingConfirmation();
+                Utils.getArmingConfirmation(getChildFragmentManager(), drone);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Arm");
                 break;
 
             case R.id.mc_disarmBtn:
-                getDrone().arm(false);
+                VehicleApi.getApi(drone).arm(false);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Disarm");
                 break;
 
             case R.id.mc_land:
-                getDrone().changeVehicleMode(VehicleMode.COPTER_LAND);
+                VehicleApi.getApi(drone).setVehicleMode(VehicleMode.COPTER_LAND);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode
                         .COPTER_LAND.getLabel());
                 break;
 
             case R.id.mc_takeoff:
-                getTakeOffConfirmation();
+                Utils.getTakeOffConfirmation(getAppPrefs(), getChildFragmentManager(), drone);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Takeoff");
                 break;
 
             case R.id.mc_homeBtn:
-                getDrone().changeVehicleMode(VehicleMode.COPTER_RTL);
+                VehicleApi.getApi(drone).setVehicleMode(VehicleMode.COPTER_RTL);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode.COPTER_RTL
                         .getLabel());
                 break;
@@ -258,16 +261,16 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment imple
             case R.id.mc_pause: {
                 final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
                 if (followState.isEnabled()) {
-                    drone.disableFollowMe();
+                    FollowApi.getApi(drone).disableFollowMe();
                 }
 
-                drone.pauseAtCurrentLocation();
+                ControlApi.getApi(drone).pauseAtCurrentLocation(null);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Pause");
                 break;
             }
 
             case R.id.mc_autoBtn:
-                getDrone().changeVehicleMode(VehicleMode.COPTER_AUTO);
+                VehicleApi.getApi(drone).setVehicleMode(VehicleMode.COPTER_AUTO);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode.COPTER_AUTO.getLabel());
                 break;
 
@@ -307,17 +310,6 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment imple
         }
     }
 
-    private void getTakeOffConfirmation() {
-        final SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("take off", new Runnable() {
-            @Override
-            public void run() {
-                final double takeOffAltitude = getAppPrefs().getDefaultAltitude();
-                getDrone().doGuidedTakeoff(takeOffAltitude);
-            }
-        });
-        unlockDialog.show(getChildFragmentManager(), "Slide to take off");
-    }
-
     private void getTakeOffInAutoConfirmation() {
         final SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("take off in auto", new Runnable() {
             @Override
@@ -335,16 +327,6 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment imple
             }
         });
         unlockDialog.show(getChildFragmentManager(), "Slide to take off in auto");
-    }
-
-    private void getArmingConfirmation() {
-        SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("arm", new Runnable() {
-            @Override
-            public void run() {
-                getDrone().arm(true);
-            }
-        });
-        unlockDialog.show(getChildFragmentManager(), "Slide To Arm");
     }
 
     private void updateFlightModeButtons() {

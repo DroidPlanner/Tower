@@ -60,6 +60,7 @@ public class ControlActivity extends DrawerNavigationUI {
 
                 case AttributeEvent.STATE_VEHICLE_MODE:
                 case AttributeEvent.STATE_UPDATED:
+                case AttributeEvent.STATE_ARMING:
                     updateVehicleReadiness();
                     break;
             }
@@ -94,8 +95,7 @@ public class ControlActivity extends DrawerNavigationUI {
     private final View.OnClickListener takeOffClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //Take off at 10 meters altitude
-            ControlApi.getApi(dpApp.getDrone()).takeoff(10.0, null);
+            Utils.getTakeOffConfirmation(dpApp.getAppPreferences(), getSupportFragmentManager(), dpApp.getDrone());
         }
     };
 
@@ -103,6 +103,13 @@ public class ControlActivity extends DrawerNavigationUI {
         @Override
         public void onClick(View v) {
             VehicleApi.getApi(dpApp.getDrone()).setVehicleMode(VehicleMode.COPTER_LAND);
+        }
+    };
+
+    private final View.OnClickListener armClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Utils.getArmingConfirmation(getSupportFragmentManager(), dpApp.getDrone());
         }
     };
 
@@ -259,7 +266,7 @@ public class ControlActivity extends DrawerNavigationUI {
         final boolean isFlying = state.isFlying();
 
         enableJoysticks(state.getVehicleMode() == VehicleMode.COPTER_GUIDED && isFlying);
-        toggleTakeOffLand(isFlying);
+        toggleTakeOffLand(state);
     }
 
     private void enableJoysticks(boolean enable) {
@@ -272,10 +279,20 @@ public class ControlActivity extends DrawerNavigationUI {
         }
     }
 
-    private void toggleTakeOffLand(boolean isFlying){
-        if(takeOffLand != null){
-            takeOffLand.setText(isFlying ? R.string.label_land : R.string.label_take_off);
-            takeOffLand.setOnClickListener(isFlying ? landClickListener : takeOffClickListener);
+    private void toggleTakeOffLand(State state){
+        if(takeOffLand != null && state != null){
+            if(state.isFlying()){
+                takeOffLand.setText(R.string.label_land);
+                takeOffLand.setOnClickListener(landClickListener);
+            }
+            else if(state.isArmed()){
+                takeOffLand.setText(R.string.label_take_off);
+                takeOffLand.setOnClickListener(takeOffClickListener);
+            }
+            else{
+                takeOffLand.setText(R.string.mission_control_arm);
+                takeOffLand.setOnClickListener(armClickListener);
+            }
         }
     }
 }

@@ -83,6 +83,10 @@ public class JoystickView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if(!isEnabled()){
+            return false;
+        }
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 float top = (y + 1f) / 2f * getHeight();
@@ -261,7 +265,7 @@ public class JoystickView extends View {
     }
 
     private void dispatchMove() {
-        if (listener != null) {
+        if (listener != null && isEnabled()) {
             listener.joystickMoved(x, -y);
 
         }
