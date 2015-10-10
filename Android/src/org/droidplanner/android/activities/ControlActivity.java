@@ -4,14 +4,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.android.client.apis.ControlApi;
+import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Attitude;
@@ -19,9 +22,12 @@ import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.FlightMapFragment;
 import org.droidplanner.android.fragments.actionbar.ActionBarTelemFragment;
 import org.droidplanner.android.fragments.widget.MiniWidgetSoloLinkVideo;
+import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.view.JoystickView;
+import org.droidplanner.android.view.JoystickView.JoystickListener;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -41,6 +47,7 @@ public class ControlActivity extends DrawerNavigationUI {
     static {
         eventFilter.addAction(AttributeEvent.ATTITUDE_UPDATED);
         eventFilter.addAction(AttributeEvent.STATE_VEHICLE_MODE);
+        eventFilter.addAction(AttributeEvent.STATE_UPDATED);
     }
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -52,66 +59,116 @@ public class ControlActivity extends DrawerNavigationUI {
                     break;
 
                 case AttributeEvent.STATE_VEHICLE_MODE:
-                    State state = dpApp.getDrone().getAttribute(AttributeType.STATE);
-                    mode = state.getVehicleMode();
+                case AttributeEvent.STATE_UPDATED:
+                    updateVehicleReadiness();
                     break;
             }
         }
     };
 
+    private final JoystickListener leftJoystickListener = new JoystickListener() {
+        @Override
+        public void joystickMoved(float x, float y) {
+            float heading = computeHeading();
+            sendMove(heading);
+            sendYaw(heading);
+        }
+    };
+
+    private final JoystickListener rightJoystickListener = new JoystickListener() {
+        @Override
+        public void joystickMoved(float x, float y) {
+            float heading = computeHeading();
+            sendMove(heading);
+        }
+    };
+
+    private final Runnable yawUpdater = new Runnable() {
+        @Override
+        public void run() {
+            float heading = computeHeading();
+            sendYaw(heading);
+        }
+    };
+
+    private final View.OnClickListener takeOffClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //Take off at 10 meters altitude
+            ControlApi.getApi(dpApp.getDrone()).takeoff(10.0, null);
+        }
+    };
+
+    private final View.OnClickListener landClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            VehicleApi.getApi(dpApp.getDrone()).setVehicleMode(VehicleMode.COPTER_LAND);
+        }
+    };
+
     private JoystickView leftJoystick, rightJoystick;
+    private Button takeOffLand;
 
     private long lastReceived;
     private float lastYaw, lastYawSpeed;
-    private VehicleMode mode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_control);
 
-        final Bitmap reticle = BitmapFactory.decodeResource(getResources(), R.drawable.ic_control_grey_600_24dp);
+        takeOffLand = (Button) findViewById(R.id.take_off_land_button);
 
         leftJoystick = (JoystickView) findViewById(R.id.left_joystick);
-        leftJoystick.setReticle(reticle);
         leftJoystick.setSpring(JoystickView.Axis.X, true);
         leftJoystick.setSpring(JoystickView.Axis.Y, true);
         leftJoystick.setHaptic(JoystickView.Axis.Y, true);
-        leftJoystick.setJoystickListener(new JoystickView.JoystickListener() {
-            @Override
-            public void joystickMoved(float x, float y) {
-                float heading = computeHeading();
-                sendMove(heading);
-                sendYaw(heading);
-            }
-        });
+        leftJoystick.setJoystickListener(leftJoystickListener);
 
         rightJoystick = (JoystickView) findViewById(R.id.right_joystick);
-        rightJoystick.setReticle(reticle);
         rightJoystick.setSpring(JoystickView.Axis.Y, true);
         rightJoystick.setSpring(JoystickView.Axis.X, true);
-        rightJoystick.setJoystickListener(new JoystickView.JoystickListener() {
-            @Override
-            public void joystickMoved(float x, float y) {
-                float heading = computeHeading();
-                sendMove(heading);
-            }
-        });
+        rightJoystick.setJoystickListener(rightJoystickListener);
 
         ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                float heading = computeHeading();
-                sendYaw(heading);
-            }
-        }, 0, 33, TimeUnit.MILLISECONDS);
+        scheduledExecutorService.scheduleAtFixedRate(yawUpdater, 0, 33, TimeUnit.MILLISECONDS);
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment miniVideoFragment = fm.findFragmentById(R.id.widget_view);
-        if (!(miniVideoFragment instanceof MiniWidgetSoloLinkVideo)) {
-            miniVideoFragment = new MiniWidgetSoloLinkVideo();
+        if (!(miniVideoFragment instanceof FlightMapFragment)) {
+            miniVideoFragment = new FlightMapFragment();
             fm.beginTransaction().replace(R.id.widget_view, miniVideoFragment).commit();
+        }
+    }
+
+    private void toggleMapVideo(){
+        final FragmentManager fm = getSupportFragmentManager();
+        Fragment widgetFragment = fm.findFragmentById(R.id.widget_view);
+        if(widgetFragment == null || widgetFragment instanceof MiniWidgetSoloLinkVideo){
+            //Default is the mapview
+            widgetFragment = new FlightMapFragment();
+        }
+        else {
+            //Assuming that the widget fragment is the map view
+            widgetFragment = new MiniWidgetSoloLinkVideo();
+        }
+        fm.beginTransaction().replace(R.id.widget_view, widgetFragment).commit();
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu){
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_control_activity, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.menu_toggle_map_video:
+                toggleMapVideo();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -120,13 +177,9 @@ public class ControlActivity extends DrawerNavigationUI {
     }
 
     private void sendYaw(float heading) {
-        if (mode == null || !mode.equals(VehicleMode.COPTER_GUIDED))
-            return;
-
         float yaw = leftJoystick.getAxis(JoystickView.Axis.X);
-        heading /= Math.PI;
-        heading *= 180f;
-        if (Math.abs(yaw) > 0.05) {
+        heading = Utils.fromDegToRad(heading);
+        if (Math.abs(yaw) > JoystickView.DEADZONE) {
             ControlApi.getApi(dpApp.getDrone()).turnTo((360 + (heading + yaw * 30f)) % 360,
                     Math.abs(yaw) * 30f, Float.compare(Math.signum(yaw), 1f) == 0, false, null);
         }
@@ -137,25 +190,22 @@ public class ControlActivity extends DrawerNavigationUI {
         float x = rightJoystick.getAxis(JoystickView.Axis.X);
         float y = rightJoystick.getAxis(JoystickView.Axis.Y);
         float yaw = leftJoystick.getAxis(JoystickView.Axis.X);
-        if (mode != null && mode.equals(VehicleMode.COPTER_GUIDED)) {
-            if (x != 0 && y != 0) {
-                double theta = Math.atan(y / x);
-                if (theta < 0) {
-                    theta += Math.PI;
-                }
-                if (y < 0) {
-                    theta += Math.PI;
-                }
-                theta += Math.PI / 2;
-                double magnitude = Math.sqrt(x * x + y * y);
-                x = (float) (Math.cos(heading + theta) * magnitude);
-                y = (float) (Math.sin(heading + theta) * magnitude);
 
+        if (x != 0 && y != 0) {
+            double theta = Math.atan(y / x);
+            if (theta < 0) {
+                theta += Math.PI;
             }
-        } else {
-            y = -y;
-            throttle = -throttle;
+            if (y < 0) {
+                theta += Math.PI;
+            }
+            theta += Math.PI / 2;
+            double magnitude = Math.sqrt(x * x + y * y);
+            x = (float) (Math.cos(heading + theta) * magnitude);
+            y = (float) (Math.sin(heading + theta) * magnitude);
+
         }
+
         Timber.d("x: %f, y: %f, z: %f, yaw: %f", x, y, throttle, yaw);
         ControlApi.getApi(dpApp.getDrone()).setVelocity(x * MAX_VEL, y * MAX_VEL, throttle * MAX_VEL_Z, null);
     }
@@ -190,6 +240,8 @@ public class ControlActivity extends DrawerNavigationUI {
     @Override
     public void onApiConnected() {
         super.onApiConnected();
+        updateYawParams();
+        updateVehicleReadiness();
         getBroadcastManager().registerReceiver(receiver, eventFilter);
     }
 
@@ -199,5 +251,31 @@ public class ControlActivity extends DrawerNavigationUI {
         lastYaw = (float) attitude.getYaw();
         lastYawSpeed = attitude.getYawSpeed();
         lastReceived = System.currentTimeMillis();
+    }
+
+    private void updateVehicleReadiness() {
+        final Drone drone = dpApp.getDrone();
+        final State state = drone.getAttribute(AttributeType.STATE);
+        final boolean isFlying = state.isFlying();
+
+        enableJoysticks(state.getVehicleMode() == VehicleMode.COPTER_GUIDED && isFlying);
+        toggleTakeOffLand(isFlying);
+    }
+
+    private void enableJoysticks(boolean enable) {
+        if (leftJoystick != null) {
+            leftJoystick.setEnabled(enable);
+        }
+
+        if (rightJoystick != null) {
+            rightJoystick.setEnabled(enable);
+        }
+    }
+
+    private void toggleTakeOffLand(boolean isFlying){
+        if(takeOffLand != null){
+            takeOffLand.setText(isFlying ? R.string.label_land : R.string.label_take_off);
+            takeOffLand.setOnClickListener(isFlying ? landClickListener : takeOffClickListener);
+        }
     }
 }

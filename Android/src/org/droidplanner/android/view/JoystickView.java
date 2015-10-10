@@ -4,7 +4,9 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Vibrator;
 import android.util.AttributeSet;
@@ -12,6 +14,8 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+
+import org.droidplanner.android.R;
 
 /**
  * Created by Toby on 8/5/2015.
@@ -30,7 +34,7 @@ public class JoystickView extends View {
     private float uiX, uiY;
     private boolean springX, springY;
     private boolean lockedX, lockedY;
-    private Bitmap reticle;
+    private final Bitmap reticle;
     private JoystickListener listener;
     private boolean engaged;
     private ValueAnimator animator;
@@ -38,35 +42,43 @@ public class JoystickView extends View {
     private static float MAX_SIZE = 300;
     private static float MIN_SIZE = 50;
     private static final int THRESHOLD = 200;
-    private static final float DEADZONE = 0.05f;
+    public static final float DEADZONE = 0.05f;
     private static final float SPEED_THRESHOLD = 0.0005f;
     private long lastEvent;
-    private Vibrator vibrator;
+    private final Vibrator vibrator;
     private boolean hapticX, hapticY;
+
+    private final Paint reticlePaint = new Paint();
+    private final Paint disabledReticlePaint = new Paint();
+    {
+        reticlePaint.setStrokeWidth(5f);
+        reticlePaint.setARGB(255, 255, 128, 0);
+
+        disabledReticlePaint.setStrokeWidth(5f);
+        disabledReticlePaint.setColor(Color.GRAY);
+    }
 
     public JoystickView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+
+        if(isInEditMode()){
+            vibrator = null;
+        }
+        else {
+            vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        }
 
         MAX_SIZE = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
         MIN_SIZE = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
 
         major = MIN_SIZE;
         minor = MIN_SIZE;
+
+        this.reticle = BitmapFactory.decodeResource(getResources(), R.drawable.ic_control_grey_600_24dp);
     }
 
     public JoystickView(Context context) {
-        super(context);
-        vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-    }
-
-    public void setReticle(Bitmap reticle) {
-        this.reticle = reticle;
-        invalidate();
-    }
-
-    public Bitmap getReticle() {
-        return reticle;
+        this(context, null);
     }
 
     @Override
@@ -198,23 +210,18 @@ public class JoystickView extends View {
         }
     }
 
-    private final Paint reticlePaint = new Paint();
-    {
-        reticlePaint.setStrokeWidth(5f);
-        reticlePaint.setARGB(255, 255, 128, 0);
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
         final int canvasHeight = canvas.getHeight();
         final int canvasWidth = canvas.getWidth();
 
-        float top = (y + 1f) / 2f * canvasHeight;
-        float left = (x + 1f) / 2f * canvasWidth;
+        float top = isEnabled() ? (y + 1f) / 2f * canvasHeight: canvasHeight / 2f;
+        float left = isEnabled() ? (x + 1f) / 2f * canvasWidth : canvasWidth / 2f;
+        final Paint paint = isEnabled() ? reticlePaint : disabledReticlePaint;
 
         canvas.drawBitmap(reticle, left - reticle.getWidth() / 2, top - reticle.getHeight() / 2, null);
-        canvas.drawCircle(left, top, minor, reticlePaint);
-        canvas.drawLine(canvasWidth / 2f, canvasHeight / 2f, left, top, reticlePaint);
+        canvas.drawCircle(left, top, minor, paint);
+        canvas.drawLine(canvasWidth / 2f, canvasHeight / 2f, left, top, paint);
     }
 
     public void setSpring(Axis axis, boolean spring) {
@@ -273,7 +280,7 @@ public class JoystickView extends View {
 
     private float mapAxis(float value) {
         float absVal = Math.abs(value);
-        if (absVal < 0.05f) {
+        if (absVal < DEADZONE) {
             return 0;
         }
 

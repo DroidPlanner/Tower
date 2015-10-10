@@ -30,13 +30,28 @@
             android:id="@+id/left_joystick"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:enabled="false"
             android:layout_weight=".5" />
 
         <org.droidplanner.android.view.JoystickView
             android:id="@+id/right_joystick"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:enabled="true"
             android:layout_weight=".5" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/take_off_land_button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:text="@string/label_take_off"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"/>
 
 </RelativeLayout>

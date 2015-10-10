@@ -522,5 +522,8 @@
     <string name="warning_vehicle_home_updated">Vehicle home updated</string>
     <string name="label_photo">Photo</string>
     <string name="label_record">Record</string>
+    <string name="label_take_off">Take Off</string>
+    <string name="label_land">Land</string>
+    <string name="menu_toggle_map_video">Toggle map / video</string>
 
 </resources>
