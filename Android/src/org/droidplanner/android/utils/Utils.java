@@ -65,6 +65,14 @@ public class Utils {
 
 	}
 
+	public static float fromRadToDeg(float rad) {
+		return (float) (rad * 180f / Math.PI);
+	}
+
+	public static float fromDegToRad(float deg) {
+		return (float) (deg * Math.PI / 180f);
+	}
+
 	//Private constructor to prevent instantiation.
 	private Utils(){}
 }

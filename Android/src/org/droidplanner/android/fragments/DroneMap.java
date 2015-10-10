@@ -134,7 +134,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 	private final Runnable mUpdateMap = new Runnable() {
 		@Override
 		public void run() {
-			if (getActivity() == null && mMapFragment == null)
+			if (getActivity() == null || mMapFragment == null)
 				return;
 
 			final List<MarkerInfo> missionMarkerInfos = missionProxy.getMarkersInfos();
