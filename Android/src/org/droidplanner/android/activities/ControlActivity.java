@@ -48,6 +48,7 @@ public class ControlActivity extends DrawerNavigationUI {
         eventFilter.addAction(AttributeEvent.ATTITUDE_UPDATED);
         eventFilter.addAction(AttributeEvent.STATE_VEHICLE_MODE);
         eventFilter.addAction(AttributeEvent.STATE_UPDATED);
+        eventFilter.addAction(AttributeEvent.STATE_ARMING);
     }
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
