@@ -63,7 +63,7 @@ android {
     defaultConfig {
         applicationId 'org.droidplanner.android'
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode versionMajor * 100000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "Tower-v${versionMajor}.${versionMinor}.${versionPatch}"
 

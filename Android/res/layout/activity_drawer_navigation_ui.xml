@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/drawer_layout"
-    >
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
         <FrameLayout
             android:id="@+id/content_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
         <org.droidplanner.android.view.FitsSystemWindowsFrameLayout
             android:layout_width="wrap_content"
@@ -26,14 +26,14 @@
 
             <org.droidplanner.android.view.SlidingDrawer
                 android:id="@+id/action_drawer_container"
-                android:minWidth="170dp"
                 android:layout_width="@dimen/action_drawer_width"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                app:content="@+id/action_drawer_content"
-                app:handle="@+id/slideButtonLeft"
                 android:layout_marginBottom="@dimen/action_drawer_margin_bottom"
-                android:orientation="horizontal">
+                android:minWidth="170dp"
+                android:orientation="horizontal"
+                app:content="@+id/action_drawer_content"
+                app:handle="@+id/slideButtonLeft">
 
                 <View
                     android:id="@+id/slideButtonLeft"
@@ -41,137 +41,23 @@
                     android:layout_height="0dp"
                     android:clickable="false"
                     android:focusable="false"
-                    android:focusableInTouchMode="false"/>
+                    android:focusableInTouchMode="false" />
 
                 <FrameLayout
                     android:id="@+id/action_drawer_content"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
+                    android:layout_height="wrap_content" />
 
             </org.droidplanner.android.view.SlidingDrawer>
         </org.droidplanner.android.view.FitsSystemWindowsFrameLayout>
     </FrameLayout>
 
-    <LinearLayout
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
+    <android.support.design.widget.NavigationView
         android:id="@+id/navigation_drawer_container"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="start"
-        tools:layout_gravity=""
-        android:orientation="vertical"
-        android:fitsSystemWindows="true">
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/navigation_account"
-                    style="@style/navigationDrawerEntry"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_account_circle_grey600_24dp"
-                    android:drawableStart="@drawable/ic_account_circle_grey600_24dp"
-                    android:text="@string/account_label"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@color/light_grey"/>
-
-                <TextView
-                    android:id="@+id/navigation_flight_data"
-                    style="@style/navigationDrawerEntry"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_flight_grey600_24dp"
-                    android:drawableStart="@drawable/ic_flight_grey600_24dp"
-                    android:text="@string/flight_data"
-                    />
-
-                <TextView
-                    android:id="@+id/navigation_editor"
-                    style="@style/navigationDrawerEntry"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_edit_grey600_24dp"
-                    android:drawableStart="@drawable/ic_edit_grey600_24dp"
-                    android:text="@string/editor"/>
-
-                <TextView
-                    android:id="@+id/navigation_locator"
-                    style="@style/navigationDrawerEntry"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_history_grey600_24dp"
-                    android:drawableStart="@drawable/ic_history_grey600_24dp"
-                    android:text="@string/locator"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@color/light_grey"/>
-
-                <TextView
-                    style="@style/navigationDrawerEntry"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/navigation_params"
-                    android:drawableLeft="@drawable/ic_action_database"
-                    android:drawableStart="@drawable/ic_action_database"
-                    android:text="@string/screen_parameters"/>
-
-                <TextView
-                    style="@style/navigationDrawerEntry"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/navigation_checklist"
-                    android:drawableLeft="@drawable/ic_action_paste"
-                    android:drawableStart="@drawable/ic_action_paste"
-                    android:text="@string/screen_checklist"
-                    />
-
-                <TextView
-                    style="@style/navigationDrawerEntry"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/navigation_calibration"
-                    android:drawableLeft="@drawable/ic_action_gear"
-                    android:drawableStart="@drawable/ic_action_gear"
-                    android:text="@string/screen_cal"
-                    />
-
-            </LinearLayout>
-        </ScrollView>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/light_grey"/>
-
-        <TextView
-            style="@style/navigationDrawerEntry"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:id="@+id/navigation_settings"
-            android:drawableLeft="@drawable/ic_settings_grey600_24dp"
-            android:drawableStart="@drawable/ic_settings_grey600_24dp"
-            android:text="@string/settings"/>
-
-    </LinearLayout>
-
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/navigation_drawer_items" />
 </android.support.v4.widget.DrawerLayout>
