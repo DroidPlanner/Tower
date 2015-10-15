@@ -24,6 +24,7 @@ import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.control.BaseFlightControlFragment;
 import org.droidplanner.android.view.SlidingDrawer;
+import org.w3c.dom.Text;
 
 /**
  * This abstract activity provides its children access to a navigation drawer
@@ -53,6 +54,13 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
      * When the navigation drawer closes, the intent is used to navigate to the desired location.
      */
     private Intent mNavigationIntent;
+
+    /**
+     * Navigation drawer view
+     */
+    private NavigationView navigationView;
+
+    private TextView accountLabel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,8 +125,10 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
         contentLayout.addView(contentView);
         setContentView(mDrawerLayout);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_drawer_container);
+        navigationView = (NavigationView) findViewById(R.id.navigation_drawer_container);
         navigationView.setNavigationItemSelectedListener(this);
+
+        accountLabel = (TextView) findViewById(R.id.account_screen_label);
 
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -154,7 +164,9 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
         });
     }
 
-    // Manage Navigation drawer menu items
+    /**
+     * Manage Navigation drawer menu items
+     */
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
@@ -163,33 +175,35 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
         switch (id) {
             case R.id.navigation_flight_data:
                 mNavigationIntent = new Intent(this, FlightActivity.class);
-
                 break;
+
             case R.id.navigation_editor:
                 mNavigationIntent = new Intent(this, EditorActivity.class);
                 break;
+
             case R.id.navigation_locator:
                 mNavigationIntent = new Intent(this, LocatorActivity.class);
                 break;
+
             case R.id.navigation_params:
                 mNavigationIntent = new Intent(this, ConfigurationActivity.class)
-                        .putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_ID, R.id.navigation_calibration);
+                        .putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_ID, id);
                 break;
+
             case R.id.navigation_checklist:
                 mNavigationIntent = new Intent(this, ConfigurationActivity.class)
-                        .putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_ID, R.id.navigation_checklist);
+                        .putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_ID, id);
                 break;
+
             case R.id.navigation_calibration:
                 mNavigationIntent = new Intent(this, ConfigurationActivity.class)
-                        .putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_ID, R.id.navigation_calibration);
+                        .putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_ID, id);
                 break;
+
             case R.id.navigation_settings:
                 mNavigationIntent = new Intent(this, SettingsActivity.class);
                 break;
         }
-
-//        if (mNavigationIntent != null)
-//            startActivity(mNavigationIntent);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -227,6 +241,25 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateNavigationDrawer();
+    }
+
+    private void updateNavigationDrawer() {
+        final int navDrawerEntryId = getNavigationDrawerMenuItemId();
+        switch (navDrawerEntryId) {
+            case R.id.navigation_account:
+                accountLabel.setTypeface(null, Typeface.BOLD);
+                break;
+
+            default:
+                navigationView.setCheckedItem(navDrawerEntryId);
+                break;
+        }
     }
 
     @Override
@@ -275,5 +308,5 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
         actionDrawer.lock();
     }
 
-    protected abstract int getNavigationDrawerEntryId();
+    protected abstract int getNavigationDrawerMenuItemId();
 }
