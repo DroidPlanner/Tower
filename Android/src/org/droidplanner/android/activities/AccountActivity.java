@@ -71,7 +71,7 @@ public class AccountActivity extends DrawerNavigationUI implements AccountLoginL
     }
 
     @Override
-    protected int getNavigationDrawerEntryId() {
+    protected int getNavigationDrawerMenuItemId() {
         return R.id.navigation_account;
     }
 }
