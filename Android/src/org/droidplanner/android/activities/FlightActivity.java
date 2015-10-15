@@ -103,7 +103,7 @@ public class FlightActivity extends DrawerNavigationUI implements SlidingUpPanel
     }
 
     @Override
-    protected int getNavigationDrawerEntryId() {
+    protected int getNavigationDrawerMenuItemId() {
         return R.id.navigation_flight_data;
     }
 
