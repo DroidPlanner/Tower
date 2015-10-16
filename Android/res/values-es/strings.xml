@@ -375,7 +375,7 @@
     <string name="pref_dronie_creation_title">Crear dronie?</string>
     <string name="pref_dronie_creation_message">Por favor situese 8 metros por detrás antes de comenzar el dronie.</string>
     <string name="upload_params">Subir parámetros</string>
-    <string name="upload">Upload</string>
+    <string name="upload">Cargar</string>
     <string name="download_params">Descargar parámetros</string>
     <string name="import_from_device">Importar de fichero</string>
     <string name="export_to_device">Exportar a fichero</string>
