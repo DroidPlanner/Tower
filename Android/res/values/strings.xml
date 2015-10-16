@@ -16,7 +16,7 @@
     <string name="screen_cal">Calibration</string>
     <string name="screen_checklist">Checklist</string>
     <string name="screen_parameters">Parameters</string>
-    
+
     <!-- App Settings/Preferences -->
     <string name="pref_connection_type">Telemetry Connection Type</string>
     <string name="pref_connection_type_summary">Which link to use to connect to the drone</string>
@@ -211,7 +211,7 @@
     <string name="setup_imu_step">To start calibration, press Calibrate.</string>
     <string name="setup_imu_timeleft">Time left before next orientation:</string>
 
-    
+
     <!-- Flight Setup Resource Strings -->
     <string name="setup_fm_title">Flight Mode Configuration</string>
     <string name="setup_fm_side_title">Update Flight Mode</string>
@@ -265,7 +265,7 @@
     <string name="mission_control_takeoff">Takeoff</string>
     <string name="mission_control_pause">Pause</string>
     <string name="mission_control_auto">Auto</string>
-    <string name="mission_control_follow">Follow</string>    
+    <string name="mission_control_follow">Follow</string>
     <string name="mission_control_dronie">Dronie</string>
     <string name="mission_control_condition_yaw_angle">Target angle</string>
     <string name="mission_control_condition_yaw_relative">Relative Angle</string>
@@ -372,7 +372,7 @@
     <string name="pref_dialog_entry_always">Always</string>
     <string name="pref_dialog_entry_never">Never</string>
     <string name="pref_dialog_entry_ask">Ask</string>
-    <string name="pref_dialog_selection_reset_desc"><![CDATA[Reset selection through: Settings -> User Interface -> Preference Dialogs]]></string>
+    <string name="pref_dialog_selection_reset_desc"><![CDATA[Reset selection through: Settings --> Others -> Preference Dialogs]]></string>
     <string name="pref_dronie_creation_title">Create dronie?</string>
     <string name="pref_dronie_creation_message">Please stand back 8m before starting the dronie.</string>
     <string name="upload_params">Upload parameters</string>
@@ -518,8 +518,55 @@
     <string name="label_rtm">Return to Me</string>
     <string name="pref_vehicle_home_update_warning_title">Vehicle Home Update</string>
     <string name="pref_vehicle_home_update_warning_summary">Warns about vehicle home location updates while in flight.</string>
-    <string name="warning_vehicle_home_updated">Vehicle home updated</string>
     <string name="label_photo">Photo</string>
     <string name="label_record">Record</string>
+
+    <!--START TTS Notification Provider Strings-->
+    <string name="toast_mission_sent">Waypoints sent</string>
+    <string name="speak_mission_sent">Waypoints saved to Drone</string>
+    <string name="toast_mission_received">Waypoints received from Drone</string>
+    <string name="speak_mission_received">Waypoints received</string>
+    <string name="speak_heartbeat_first">Connected</string>
+    <string name="speak_heartbeat_timeout">Data link lost, check connection.</string>
+    <string name="speak_heartbeat_restored">Data link restored</string>
+    <string name="speak_mission_item_updated">"Going for waypoint "</string>
+    <string name="speak_follow_start">Following</string>
+    <string name="speak_warning_signal_weak">Warning, weak signal</string>
+    <string name="speak_warning_no_gps">Error, no gps lock yet</string>
+    <string name="speak_warning_vehicle_home_updated">Vehicle home updated</string>
+    <string name="speak_warning_max_alt_exceed">Warning, max altitude exceeded!</string>
+
+    <!-- Periodic Status Preferences -->
+    <string name="periodic_status_bat_volt">"battery %2.1f volts. "</string>
+    <string name="periodic_status_altitude">"altitude, "</string>
+    <string name="periodic_status_altitude_meters">" meters. "</string>
+    <string name="periodic_status_airspeed">"airspeed, "</string>
+    <string name="periodic_status_airspeed_meters_per_second">" meters per second. "</string>
+    <string name="periodic_status_rssi">"r s s i, "</string>
+    <string name="periodic_status_rssi_decibels">" decibels"</string>
+
+    <string name="speak_disconected">Disconnected</string>
+    <string name="toast_error_tts_lang">Unable to set \'Text to Speech\' language!</string>
+    <string name="warn_tts_accessibility">Please make sure \'Text to Speech\' is enabled in the system accessibility settings.</string>
+    <string name="speak_armed">Armed</string>
+    <string name="speak_disarmed">Disarmed</string>
+    <string name="speak_battery_notification">Battery at</string>
+    <string name="fly_mode_wire_a">Fly by wire A</string>
+    <string name="fly_mode_wire_b">Fly by wire B</string>
+    <string name="fly_mode_acro">Acrobatic</string>
+    <string name="fly_mode_alt_hold">Altitude hold</string>
+    <string name="fly_mode_pos_hold">Position hold</string>
+    <string name="fly_mode_rtl">Return to launch</string>
+    <string name="fly_mode_mode">"Mode "</string>
+
+    <!--Gps modes-->
+    <string name="gps_mode_2d_lock">GPS 2D Lock</string>
+    <string name="gps_mode_3d_lock">GPS 3D Lock</string>
+    <string name="gps_mode_3d_dgps_lock">GPS 3D+DGPS Lock</string>
+    <string name="gps_mode_3d_rtk_lock">GPS 3D+RTK Lock</string>
+    <string name="gps_mode_lost_gps_lock">Lost GPS Lock</string>
+    <string name="speak_connected">Connected</string>
+    <!--END TTS Notification Provider Strings-->
+
 
 </resources>
