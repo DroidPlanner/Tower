@@ -142,7 +142,7 @@
     <string name="repeat_count">Repeat Count</string>
 
     <!-- Waypoint editor -->
-    <string name="editor_err_land_rtl_added">No podemos añadir nuevos waypoints despues de un LAND o RTL</string>
+    <string name="editor_err_land_rtl_added">No podemos añadir nuevos waypoints después de un LAND o RTL</string>
     <string name="editor_info_window">Distancia: 0.0m, Tiempo de vuelo: 0:00</string>
     <string name="editor_info_window_distance">Distancia: %s</string>
     <string name="editor_info_window_flight_time">Tiempo de vuelo: %1$02d:%2$02d</string>
@@ -371,7 +371,7 @@
     <string name="pref_dialog_entry_always">Siempre</string>
     <string name="pref_dialog_entry_never">Nunca</string>
     <string name="pref_dialog_entry_ask">Preguntar</string>
-    <string name="pref_dialog_selection_reset_desc"><![CDATA[Reset selection through: Ajustes --> Otros -> Preferencias de los diálogos]]></string>
+    <string name="pref_dialog_selection_reset_desc"><![CDATA[Resetea la selección en: Ajustes ––> Otros -> Preferencias de los diálogos]]></string>
     <string name="pref_dronie_creation_title">Crear dronie?</string>
     <string name="pref_dronie_creation_message">Por favor situese 8 metros por detrás antes de comenzar el dronie.</string>
     <string name="upload_params">Subir parámetros</string>
@@ -436,8 +436,8 @@
     <string name="instructions_map_download_selection">Aleje o acerque el área del mapa a guardar</string>
     <string name="instructions_tap_to_save_map">Tocar para guardar el mapa</string>
     <string name="label_map_saved">Área de mapa guardada!</string>
-    <string name="label_invalid_mapbox_id">Invalid mapbox id</string>
-    <string name="label_invalid_mapbox_access_token">Invalid mapbox access token</string>
+    <string name="label_invalid_mapbox_id">Id de Mapbox incorrecto</string>
+    <string name="label_invalid_mapbox_access_token">Access token de Mapbox incorrecto</string>
     <string name="alert_invalid_mapbox_credentials">Credenciales incorrectas de mapbox! Por favor actualiza tus ajustes de mapbox.</string>
     <string name="vehicle_type">Tipo de vehículo</string>
     <string name="label_type_copter">Helicóptero</string>
@@ -528,7 +528,7 @@
     <string name="speak_heartbeat_first">Conectado</string>
     <string name="speak_heartbeat_timeout">Enlace de datos perdido, compruebe la conexión.</string>
     <string name="speak_heartbeat_restored">Enlace de datos restaurado</string>
-    <string name="speak_mission_item_updated">"Llendo al punto de la ruta "</string>
+    <string name="speak_mission_item_updated">"Yendo al punto de la ruta "</string>
     <string name="speak_follow_start">Siguiendo</string>
     <string name="speak_warning_signal_weak">Atención, Señal débil</string>
     <string name="speak_warning_no_gps">Error, posición gps no encontrada</string>

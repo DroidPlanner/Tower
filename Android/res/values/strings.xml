@@ -372,7 +372,7 @@
     <string name="pref_dialog_entry_always">Always</string>
     <string name="pref_dialog_entry_never">Never</string>
     <string name="pref_dialog_entry_ask">Ask</string>
-    <string name="pref_dialog_selection_reset_desc"><![CDATA[Reset selection through: Settings --> Others -> Preference Dialogs]]></string>
+    <string name="pref_dialog_selection_reset_desc"><![CDATA[Reset selection through: Settings ––> Others -> Preference Dialogs]]></string>
     <string name="pref_dronie_creation_title">Create dronie?</string>
     <string name="pref_dronie_creation_message">Please stand back 8m before starting the dronie.</string>
     <string name="upload_params">Upload parameters</string>
