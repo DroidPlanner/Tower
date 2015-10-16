@@ -158,7 +158,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     }
 
     @Override
-    protected int getNavigationDrawerEntryId() {
+    protected int getNavigationDrawerMenuItemId() {
         return R.id.navigation_locator;
     }
 
