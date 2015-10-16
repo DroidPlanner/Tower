@@ -190,7 +190,7 @@
     <string name="setup_radio_cal_desc">Pulse calibrar para comenzar la calibración de la emisora. Asegurese que la emisora esta encendida y transmitiendo.</string>
     <string name="setup_radio_title_minmax">Set Min &amp; Max values</string>
     <string name="setup_radio_title_complete">Calibración completada</string>
-    <string name="setup_radio_desc_minmax">Move the joysticks all the way out several times and toggle the switches, levers and knobs to all possible positions.</string>
+    <string name="setup_radio_desc_minmax">Mueva las palancas de mando en todas las direcciones varias veces y cambiar los interruptores, palancas y perillas para todas las posiciones posibles.</string>
     <string name="setup_radio_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle.</string>
 
     <!-- Compass Setup Resource Strings -->
