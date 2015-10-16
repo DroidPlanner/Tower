@@ -347,7 +347,7 @@
     <string name="save_mission_file">Exportar a fichero</string>
 
     <string name="pref_ui_gps_hdop_summary">Display HDOP instead of FIX in satellite info bar item</string>
-    <string name="pref_ui_gps_hdop_title">Display Satellite HDOP</string>
+    <string name="pref_ui_gps_hdop_title">Mostrar HDOP</string>
 
     <!-- Help -->
     <string name="label_steps_count">Número de pasos</string>
