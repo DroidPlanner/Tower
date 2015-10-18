@@ -1,6 +1,7 @@
 package org.droidplanner.android.fragments.widget.video
 
 import android.app.DialogFragment
+import android.content.Context
 import android.os.Bundle
 import android.support.annotation.IntDef
 import android.text.TextUtils
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.Toast
@@ -41,6 +43,14 @@ class WidgetVideoPreferences : DialogFragment() {
 
         val udpPortView = view.findViewById(R.id.custom_video_provider_udp_port) as EditText?
 
+        fun hideSoftInput() {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (imm != null && imm.isActive(udpPortView)) {
+                imm.hideSoftInputFromWindow(udpPortView?.getWindowToken(), 0)
+                udpPortView?.setVisibility(View.INVISIBLE)
+            }
+        }
+
         val currentUdpPort = appPrefs.customVideoUdpPort
         val currentEntry = if(currentUdpPort == -1) "" else "$currentUdpPort"
         udpPortView?.setText(currentEntry)
@@ -48,6 +58,8 @@ class WidgetVideoPreferences : DialogFragment() {
         udpPortView?.setOnEditorActionListener { textView, actionId, keyEvent ->
             when(actionId){
                 EditorInfo.IME_ACTION_DONE, EditorInfo.IME_NULL -> {
+                    hideSoftInput()
+
                     val entry = textView.text
                     try {
                         if (!TextUtils.isEmpty(entry)) {
