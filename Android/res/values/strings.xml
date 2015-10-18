@@ -520,6 +520,7 @@
     <string name="pref_vehicle_home_update_warning_summary">Warns about vehicle home location updates while in flight.</string>
     <string name="label_photo">Photo</string>
     <string name="label_record">Record</string>
+    <string name="label_widgets_list">Widgets List</string>
 
     <!--START TTS Notification Provider Strings-->
     <string name="toast_mission_sent">Waypoints sent</string>
