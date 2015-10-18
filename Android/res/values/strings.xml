@@ -573,5 +573,11 @@
     <string name="speak_connected">Connected</string>
     <!--END TTS Notification Provider Strings-->
 
+    <!-- Selectable values for the period of the speech output. -->
+    <string name="period_15_sec">15 sec.</string>
+    <string name="period_30_sec">30 sec.</string>
+    <string name="period_45_sec">45 sec.</string>
+    <string name="period_60_sec">60 sec.</string>
+
 
 </resources>
