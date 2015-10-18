@@ -30,7 +30,7 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
     companion object {
         private val filter = initFilter()
 
-        private val TAG = FullWidgetSoloLinkVideo::class.java.simpleName
+        @JvmStatic protected val TAG = FullWidgetSoloLinkVideo::class.java.simpleName
 
         private fun initFilter(): IntentFilter {
             val temp = IntentFilter()

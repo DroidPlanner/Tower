@@ -22,7 +22,7 @@ public class MiniWidgetSoloLinkVideo : BaseVideoWidget() {
     companion object {
         private val filter = IntentFilter(AttributeEvent.STATE_CONNECTED)
 
-        private val TAG = MiniWidgetSoloLinkVideo::class.java.simpleName
+        @JvmStatic protected val TAG = MiniWidgetSoloLinkVideo::class.java.simpleName
     }
 
     private val receiver = object : BroadcastReceiver() {
