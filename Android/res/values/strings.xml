@@ -521,6 +521,10 @@
     <string name="label_photo">Photo</string>
     <string name="label_record">Record</string>
     <string name="label_widgets_list">Widgets List</string>
+    <string name="label_solo_video_stream">Solo video stream</string>
+    <string name="label_custom_video_stream">Custom video stream</string>
+    <string name="hint_custom_video_stream_udp_port">0000</string>
+    <string name="label_udp_port">UDP Port:</string>
 
     <!--START TTS Notification Provider Strings-->
     <string name="toast_mission_sent">Waypoints sent</string>

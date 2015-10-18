@@ -9,16 +9,10 @@
     <RadioButton
         android:id="@+id/solo_video_stream_check"
         android:layout_width="match_parent"
+        android:background="?android:attr/selectableItemBackground"
         android:layout_height="wrap_content"
         android:minHeight="48dp"
-        android:text="Solo video stream"/>
-
-    <RadioButton
-        android:id="@+id/custom_video_stream_check"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:text="Custom video stream"/>
+        android:text="@string/label_solo_video_stream"/>
 
     <View
         android:layout_height="1px"
@@ -26,15 +20,38 @@
         android:layout_margin="5dp"
         android:background="@android:color/darker_gray"/>
 
-    <EditText
-        android:id="@+id/custom_video_provider_udp_port"
+    <RadioButton
+        android:id="@+id/custom_video_stream_check"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
         android:minHeight="48dp"
-        android:gravity="center"
-        android:enabled="false"
-        android:inputType="number"
-        android:imeOptions="actionDone"
-        android:hint="Custom video provider udp port"/>
+        android:text="@string/label_custom_video_stream"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_udp_port"
+            android:layout_margin="10dp"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/custom_video_provider_udp_port"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:gravity="center"
+            android:enabled="false"
+            android:inputType="number"
+            android:imeOptions="actionDone"
+            android:hint="@string/hint_custom_video_stream_udp_port"/>
+
+    </LinearLayout>
 
 </RadioGroup>
