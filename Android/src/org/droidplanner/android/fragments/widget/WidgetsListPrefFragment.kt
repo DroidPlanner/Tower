@@ -19,6 +19,11 @@ import org.droidplanner.android.utils.prefs.DroidPlannerPrefs
  */
 class WidgetsListPrefFragment : DialogFragment() {
 
+    override fun onCreate(savedInstanceState: Bundle?){
+        super.onCreate(savedInstanceState)
+        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.CustomDialogTheme)
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_widgets_list_pref, container, false)
     }

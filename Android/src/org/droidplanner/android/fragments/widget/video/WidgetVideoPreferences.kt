@@ -31,6 +31,11 @@ class WidgetVideoPreferences : DialogFragment() {
     @Retention(AnnotationRetention.SOURCE)
     annotation class VideoType
 
+    override fun onCreate(savedInstanceState: Bundle?){
+        super.onCreate(savedInstanceState)
+        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.CustomDialogTheme)
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_widget_video_preferences, container, false)
     }
@@ -45,9 +50,8 @@ class WidgetVideoPreferences : DialogFragment() {
 
         fun hideSoftInput() {
             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            if (imm != null && imm.isActive(udpPortView)) {
+            if (imm.isActive(udpPortView)) {
                 imm.hideSoftInputFromWindow(udpPortView?.getWindowToken(), 0)
-                udpPortView?.setVisibility(View.INVISIBLE)
             }
         }
 
@@ -80,13 +84,6 @@ class WidgetVideoPreferences : DialogFragment() {
         }
 
         val radioGroup = view.findViewById(R.id.video_widget_pref) as RadioGroup?
-
-        val currentVideoType = appPrefs.videoWidgetType
-        when(currentVideoType){
-            SOLO_VIDEO_TYPE -> radioGroup?.check(R.id.solo_video_stream_check)
-            CUSTOM_VIDEO_TYPE -> radioGroup?.check(R.id.custom_video_stream_check)
-        }
-
         radioGroup?.setOnCheckedChangeListener { radioGroup, checkedId ->
             when (checkedId) {
                 R.id.solo_video_stream_check -> {
@@ -99,6 +96,12 @@ class WidgetVideoPreferences : DialogFragment() {
                     appPrefs.videoWidgetType = CUSTOM_VIDEO_TYPE
                 }
             }
+        }
+
+        val currentVideoType = appPrefs.videoWidgetType
+        when(currentVideoType){
+            SOLO_VIDEO_TYPE -> radioGroup?.check(R.id.solo_video_stream_check)
+            CUSTOM_VIDEO_TYPE -> radioGroup?.check(R.id.custom_video_stream_check)
         }
     }
 }
