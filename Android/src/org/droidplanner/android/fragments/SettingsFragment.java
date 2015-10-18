@@ -39,6 +39,7 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
 import org.droidplanner.android.dialogs.ClearBTDialogPreference;
 import org.droidplanner.android.fragments.widget.TowerWidgets;
+import org.droidplanner.android.fragments.widget.WidgetsListPrefFragment;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
@@ -221,9 +222,9 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     }
 
     private void setupWidgetsPreferences(){
-        final PreferenceScreen widgetsPref = (PreferenceScreen) findPreference(DroidPlannerPrefs.PREF_TOWER_WIDGETS);
+        final Preference widgetsPref = findPreference(DroidPlannerPrefs.PREF_TOWER_WIDGETS);
         if(widgetsPref != null){
-            final Activity activity = getActivity();
+            /*final Activity activity = getActivity();
             final Preference.OnPreferenceChangeListener widgetPrefChangeListener = new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -245,7 +246,15 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                 widgetPref.setOnPreferenceChangeListener(widgetPrefChangeListener);
 
                 widgetsPref.addPreference(widgetPref);
-            }
+            }*/
+
+            widgetsPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    new WidgetsListPrefFragment().show(getFragmentManager(), "Widgets List Preferences");
+                    return true;
+                }
+            });
         }
     }
 

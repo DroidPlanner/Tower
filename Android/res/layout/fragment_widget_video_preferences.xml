@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:id="@+id/video_widget_pref"
+    android:orientation="vertical">
+
+    <RadioButton
+        android:id="@+id/solo_video_stream_check"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:text="Solo video stream"/>
+
+    <RadioButton
+        android:id="@+id/custom_video_stream_check"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:text="Custom video stream"/>
+
+    <View
+        android:layout_height="1px"
+        android:layout_width="match_parent"
+        android:layout_margin="5dp"
+        android:background="@android:color/darker_gray"/>
+
+    <EditText
+        android:id="@+id/custom_video_provider_udp_port"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:gravity="center"
+        android:enabled="false"
+        android:inputType="number"
+        android:imeOptions="actionDone"
+        android:hint="Custom video provider udp port"/>
+
+</RadioGroup>

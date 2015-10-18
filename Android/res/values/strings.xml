@@ -521,5 +521,6 @@
     <string name="warning_vehicle_home_updated">Vehicle home updated</string>
     <string name="label_photo">Photo</string>
     <string name="label_record">Record</string>
+    <string name="label_widgets_list">Widgets List</string>
 
 </resources>
