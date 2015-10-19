@@ -520,6 +520,11 @@
     <string name="pref_vehicle_home_update_warning_summary">Warns about vehicle home location updates while in flight.</string>
     <string name="label_photo">Photo</string>
     <string name="label_record">Record</string>
+    <string name="label_widgets_list">Widgets List</string>
+    <string name="label_solo_video_stream">Solo video stream</string>
+    <string name="label_custom_video_stream">Custom video stream</string>
+    <string name="hint_custom_video_stream_udp_port">0000</string>
+    <string name="label_udp_port">UDP Port:</string>
 
     <!--START TTS Notification Provider Strings-->
     <string name="toast_mission_sent">Waypoints sent</string>
@@ -529,7 +534,7 @@
     <string name="speak_heartbeat_first">Connected</string>
     <string name="speak_heartbeat_timeout">Data link lost, check connection.</string>
     <string name="speak_heartbeat_restored">Data link restored</string>
-    <string name="speak_mission_item_updated">"Going for waypoint "</string>
+    <string name="speak_mission_item_updated">"Going for waypoint %d"</string>
     <string name="speak_follow_start">Following</string>
     <string name="speak_warning_signal_weak">Warning, weak signal</string>
     <string name="speak_warning_no_gps">Error, no gps lock yet</string>
@@ -538,19 +543,16 @@
 
     <!-- Periodic Status Preferences -->
     <string name="periodic_status_bat_volt">"battery %2.1f volts. "</string>
-    <string name="periodic_status_altitude">"altitude, "</string>
-    <string name="periodic_status_altitude_meters">" meters. "</string>
-    <string name="periodic_status_airspeed">"airspeed, "</string>
-    <string name="periodic_status_airspeed_meters_per_second">" meters per second. "</string>
-    <string name="periodic_status_rssi">"r s s i, "</string>
-    <string name="periodic_status_rssi_decibels">" decibels"</string>
+    <string name="periodic_status_altitude">"altitude, %d meters. "</string>
+    <string name="periodic_status_airspeed">"airspeed, %d meters per second. "</string>
+    <string name="periodic_status_rssi">"r s s i, %d decibels"</string>
 
     <string name="speak_disconected">Disconnected</string>
     <string name="toast_error_tts_lang">Unable to set \'Text to Speech\' language!</string>
     <string name="warn_tts_accessibility">Please make sure \'Text to Speech\' is enabled in the system accessibility settings.</string>
     <string name="speak_armed">Armed</string>
     <string name="speak_disarmed">Disarmed</string>
-    <string name="speak_battery_notification">Battery at</string>
+    <string name="speak_battery_notification">Battery at %d%%</string>
     <string name="fly_mode_wire_a">Fly by wire A</string>
     <string name="fly_mode_wire_b">Fly by wire B</string>
     <string name="fly_mode_acro">Acrobatic</string>

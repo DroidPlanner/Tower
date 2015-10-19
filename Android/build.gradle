@@ -18,13 +18,12 @@ dependencies {
     compile 'com.android.support:design:23.0.1'
 
     //DroneKit-Android client library.
-    compile 'com.o3dr.android:dronekit-android:2.6.6'
+    compile 'com.o3dr.android:dronekit-android:2.6.8-beta'
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')
 
     compile files('libs/droneapi-java-0.3-SNAPSHOT.jar')
-    compile files('libs/j2xx.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
     compile files('libs/jeromq-0.3.4.jar')
     compile files('libs/sius-0.3.0-SNAPSHOT.jar')

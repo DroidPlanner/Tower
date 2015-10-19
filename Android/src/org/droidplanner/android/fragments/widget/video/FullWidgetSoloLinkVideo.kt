@@ -1,4 +1,4 @@
-package org.droidplanner.android.fragments.widget
+package org.droidplanner.android.fragments.widget.video
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -8,7 +8,6 @@ import android.graphics.Matrix
 import android.graphics.SurfaceTexture
 import android.os.Bundle
 import android.view.*
-import android.widget.ImageView
 import android.widget.TextView
 import com.o3dr.android.client.apis.GimbalApi
 import com.o3dr.android.client.apis.solo.SoloCameraApi
@@ -16,6 +15,7 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
 import com.o3dr.services.android.lib.drone.attribute.AttributeType
 import com.o3dr.services.android.lib.drone.companion.solo.SoloAttributes
 import com.o3dr.services.android.lib.drone.companion.solo.SoloEvents
+import com.o3dr.services.android.lib.drone.companion.solo.tlv.SoloGoproConstants
 import com.o3dr.services.android.lib.drone.companion.solo.tlv.SoloGoproState
 import com.o3dr.services.android.lib.drone.property.Attitude
 import com.o3dr.services.android.lib.model.AbstractCommandListener
@@ -25,12 +25,12 @@ import timber.log.Timber
 /**
  * Created by Fredia Huya-Kouadio on 7/19/15.
  */
-public class FullWidgetSoloLinkVideo : TowerWidget() {
+public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
 
     companion object {
         private val filter = initFilter()
 
-        private val TAG = FullWidgetSoloLinkVideo::class.java.simpleName
+        @JvmStatic protected val TAG = FullWidgetSoloLinkVideo::class.java.simpleName
 
         private fun initFilter(): IntentFilter {
             val temp = IntentFilter()
@@ -78,7 +78,7 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
         view?.findViewById(R.id.sololink_record_video_button)
     }
 
-    private val touchCircleImage by lazy(LazyThreadSafetyMode.NONE){
+    private val touchCircleImage by lazy(LazyThreadSafetyMode.NONE) {
         view?.findViewById(R.id.sololink_gimbal_joystick)
     }
 
@@ -160,8 +160,6 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
         broadcastManager.unregisterReceiver(receiver)
     }
 
-    override fun getWidgetType() = TowerWidgets.SOLO_VIDEO
-
     private fun tryStreamingVideo() {
         if (surfaceRef == null)
             return
@@ -169,8 +167,7 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
         val drone = drone
         videoStatus?.visibility = View.GONE
 
-        Timber.d("Starting video stream with tag %s", TAG)
-        SoloCameraApi.getApi(drone).startVideoStream(surfaceRef, TAG, object : AbstractCommandListener() {
+        startVideoStream(surfaceRef, TAG, object : AbstractCommandListener() {
             override fun onError(error: Int) {
                 Timber.d("Unable to start video stream: %d", error)
                 GimbalApi.getApi(drone).stopGimbalControl(orientationListener)
@@ -216,8 +213,8 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
                         val xTouch = event.x
                         val yTouch = event.y
 
-                        val touchWidth = touchCircleImage?.width?:0
-                        val touchHeight = touchCircleImage?.height?:0
+                        val touchWidth = touchCircleImage?.width ?: 0
+                        val touchHeight = touchCircleImage?.height ?: 0
                         val centerTouchX = (touchWidth / 2f).toFloat()
                         val centerTouchY = (touchHeight / 2f).toFloat()
 
@@ -275,8 +272,7 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
     private fun tryStoppingVideoStream() {
         val drone = drone
 
-        Timber.d("Stopping video stream with tag %s", TAG)
-        SoloCameraApi.getApi(drone).stopVideoStream(TAG, object : AbstractCommandListener() {
+        stopVideoStream(TAG, object : AbstractCommandListener() {
             override fun onError(error: Int) {
                 Timber.d("Unable to stop video stream: %d", error)
             }
@@ -295,15 +291,14 @@ public class FullWidgetSoloLinkVideo : TowerWidget() {
 
     private fun onGoproStateUpdate() {
         val goproState: SoloGoproState? = drone?.getAttribute(SoloAttributes.SOLO_GOPRO_STATE)
-        if(goproState == null){
+        if (goproState == null) {
             widgetButtonBar?.visibility = View.GONE
-        }
-        else {
+        } else {
             widgetButtonBar?.visibility = View.VISIBLE
 
             //Update the video recording button
-            recordVideo?.isActivated = goproState.captureMode == SoloGoproState.CAPTURE_MODE_VIDEO
-                    && goproState.recording == SoloGoproState.RECORDING_ON
+            recordVideo?.isActivated = goproState.captureMode == SoloGoproConstants.CAPTURE_MODE_VIDEO
+                    && goproState.recording == SoloGoproConstants.RECORDING_ON
         }
     }
 
