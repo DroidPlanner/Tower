@@ -528,7 +528,7 @@
     <string name="speak_heartbeat_first">Conectado</string>
     <string name="speak_heartbeat_timeout">Enlace de datos perdido, compruebe la conexión.</string>
     <string name="speak_heartbeat_restored">Enlace de datos restaurado</string>
-    <string name="speak_mission_item_updated">"Yendo al punto de la ruta "</string>
+    <string name="speak_mission_item_updated">"Yendo al punto de la ruta %d"</string>
     <string name="speak_follow_start">Siguiendo</string>
     <string name="speak_warning_signal_weak">Atención, Señal débil</string>
     <string name="speak_warning_no_gps">Error, posición gps no encontrada</string>
@@ -537,19 +537,16 @@
 
     <!-- Periodic Status Preferences -->
     <string name="periodic_status_bat_volt">"batería %2.1f voltios. "</string>
-    <string name="periodic_status_altitude">"altitud, "</string>
-    <string name="periodic_status_altitude_meters">" metros. "</string>
-    <string name="periodic_status_airspeed">"Velocidad relativa al aire, "</string>
-    <string name="periodic_status_airspeed_meters_per_second">" metros por segundo. "</string>
-    <string name="periodic_status_rssi">"r s s i, "</string>
-    <string name="periodic_status_rssi_decibels">" decibelios"</string>
+    <string name="periodic_status_altitude">"altitud, %d metros. "</string>
+    <string name="periodic_status_airspeed">"Velocidad relativa al aire, %d metros por segundo. "</string>
+    <string name="periodic_status_rssi">"r s s i, %d decibelios"</string>
 
     <string name="speak_disconected">Desconectado</string>
     <string name="toast_error_tts_lang">No se puede establecer \'Síntesis de voz\' en su idioma!</string>
     <string name="warn_tts_accessibility">Asegúrese que \'Síntesis de voz\' está habilitado en los ajustes de accesibilidad.</string>
     <string name="speak_armed">Armado</string>
     <string name="speak_disarmed">Desarmado</string>
-    <string name="speak_battery_notification">Batería al</string>
+    <string name="speak_battery_notification">Batería al %d%%</string>
 
     <string name="fly_mode_wire_a">Fly by wire A</string>
     <string name="fly_mode_wire_b">Fly by wire B</string>

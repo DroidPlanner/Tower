@@ -148,7 +148,7 @@ public class TTSNotificationProvider implements OnInitListener,
                     int currentWaypoint = intent.getIntExtra(AttributeEventExtra.EXTRA_MISSION_CURRENT_WAYPOINT, 0);
                     if (currentWaypoint != 0) {
                         //Zeroth waypoint is the home location.
-                        speak(context.getString(R.string.speak_mission_item_updated) + currentWaypoint);
+                        speak(context.getString(R.string.speak_mission_item_updated, currentWaypoint));
                     }
                     break;
 
@@ -283,30 +283,23 @@ public class TTSNotificationProvider implements OnInitListener,
                 mMessageBuilder.setLength(0);
                 if (speechPrefs.get(DroidPlannerPrefs.PREF_TTS_PERIODIC_BAT_VOLT)) {
                     final Battery droneBattery = drone.getAttribute(AttributeType.BATTERY);
-                    mMessageBuilder.append(String.format(context.getString(R.string.periodic_status_bat_volt),
+                    mMessageBuilder.append(context.getString(R.string.periodic_status_bat_volt,
                             droneBattery.getBatteryVoltage()));
                 }
 
                 if (speechPrefs.get(DroidPlannerPrefs.PREF_TTS_PERIODIC_ALT)) {
                     final Altitude altitude = drone.getAttribute(AttributeType.ALTITUDE);
-                    mMessageBuilder.append(context.getString(R.string.periodic_status_altitude))
-                            .append((int) (altitude.getAltitude()))
-                            .append(context.getString(R.string.periodic_status_altitude_meters));
+                    mMessageBuilder.append(context.getString(R.string.periodic_status_altitude, (int) (altitude.getAltitude())));
                 }
 
                 if (speechPrefs.get(DroidPlannerPrefs.PREF_TTS_PERIODIC_AIRSPEED)) {
                     final Speed droneSpeed = drone.getAttribute(AttributeType.SPEED);
-                    mMessageBuilder.append(context.getString(R.string.periodic_status_airspeed))
-                            .append((int) (droneSpeed.getAirSpeed()))
-                            .append(context.getString(R.string.periodic_status_airspeed_meters_per_second));
+                    mMessageBuilder.append(context.getString(R.string.periodic_status_airspeed, (int) (droneSpeed.getAirSpeed())));
                 }
-
 
                 if (speechPrefs.get(DroidPlannerPrefs.PREF_TTS_PERIODIC_RSSI)) {
                     final Signal signal = drone.getAttribute(AttributeType.SIGNAL);
-                    mMessageBuilder.append(context.getString(R.string.periodic_status_rssi))
-                            .append((int) signal.getRssi())
-                            .append(context.getString(R.string.periodic_status_rssi_decibels));
+                    mMessageBuilder.append(context.getString(R.string.periodic_status_rssi, (int) signal.getRssi()));
                 }
 
                 speak(mMessageBuilder.toString(), true, PERIODIC_STATUS_UTTERANCE_ID);
@@ -461,7 +454,7 @@ public class TTSNotificationProvider implements OnInitListener,
         if (lastBatteryDischargeNotification > (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT)
                 || lastBatteryDischargeNotification + 1 < (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT)) {
             lastBatteryDischargeNotification = (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT);
-            speak(context.getString(R.string.speak_battery_notification) + (int) battRemain + "%");
+            speak(context.getString(R.string.speak_battery_notification, (int) battRemain));
         }
     }
 
