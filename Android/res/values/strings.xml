@@ -481,6 +481,7 @@
     <string name="pref_tower_widgets_category">Tower Widgets</string>
     <string name="pref_widgets_list_category">Widgets list</string>
     <string name="label_widget_flight_timer">Flight Timer</string>
+    <string name="description_reset_flight_timer">Reset flight timer?</string>
     <string name="description_widget_flight_timer">Displays the vehicle flight time</string>
     <string name="label_widget_geo_info">Geo Info</string>
     <string name="description_widget_geo_info">Displays vehicle geographical information (Lat/Long)</string>

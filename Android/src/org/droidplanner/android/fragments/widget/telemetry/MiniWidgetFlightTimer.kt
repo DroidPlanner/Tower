@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
 import org.droidplanner.android.R
+import org.droidplanner.android.dialogs.SupportYesNoDialog
 import org.droidplanner.android.fragments.widget.TowerWidget
 import org.droidplanner.android.fragments.widget.TowerWidgets
 import java.lang.String
@@ -19,10 +20,12 @@ import java.lang.String
 /**
  * Created by Fredia Huya-Kouadio on 9/20/15.
  */
-public class MiniWidgetFlightTimer : TowerWidget() {
+public class MiniWidgetFlightTimer : TowerWidget(), SupportYesNoDialog.Listener {
 
     companion object {
         private val FLIGHT_TIMER_PERIOD = 1000L; //1 second
+
+        @JvmStatic protected val RESET_TIMER_TAG = "reset_timer_tag"
 
         private val filter = IntentFilter(AttributeEvent.STATE_UPDATED)
     }
@@ -62,7 +65,28 @@ public class MiniWidgetFlightTimer : TowerWidget() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)
 
+        val context = activity.applicationContext
+
         flightTimer = view.findViewById(R.id.flight_timer) as TextView?
+        flightTimer?.setOnClickListener {
+            //Bring up a dialog allowing the user to reset the timer.
+            val resetTimerDialog = SupportYesNoDialog.newInstance(context, RESET_TIMER_TAG,
+                    context.getString(R.string.label_widget_flight_timer),
+                    context.getString(R.string.description_reset_flight_timer))
+            resetTimerDialog.show(childFragmentManager, RESET_TIMER_TAG)
+        }
+    }
+
+    override fun onDialogNo(dialogTag: kotlin.String?) {
+    }
+
+    override fun onDialogYes(dialogTag: kotlin.String?) {
+        when(dialogTag){
+            RESET_TIMER_TAG -> {
+                drone.resetFlightTimer()
+                updateFlightTimer()
+            }
+        }
     }
 
     override fun getWidgetType() = TowerWidgets.FLIGHT_TIMER
