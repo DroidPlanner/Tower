@@ -44,8 +44,8 @@ dependencies {
 //Decomposed version name and code (https://plus.google.com/+JakeWharton/posts/6f5TcVPRZij)
 def versionMajor = 3
 def versionMinor = 2
-def versionPatch = 0
-def versionBuild = 7 //bump for dogfood builds, public betas, etc.
+def versionPatch = 1
+def versionBuild = 0 //bump for dogfood builds, public betas, etc.
 
 //Logging levels
 def logLevelVerbose = 2;
