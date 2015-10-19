@@ -14,7 +14,7 @@
 
     <!-- Drone Setup tabs -->
     <string name="screen_cal">Calibración</string>
-    <string name="screen_checklist">Checklist</string>
+    <string name="screen_checklist">Chequeo</string>
     <string name="screen_parameters">Parámetros</string>
 
     <!-- App Settings/Preferences -->
@@ -144,8 +144,8 @@
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">No podemos añadir nuevos waypoints después de un LAND o RTL</string>
     <string name="editor_info_window">Distancia: 0.0m, Tiempo de vuelo: 0:00</string>
-    <string name="editor_info_window_distance">Distancia: %s</string>
-    <string name="editor_info_window_flight_time">Tiempo de vuelo: %1$02d:%2$02d</string>
+    <string name="editor_info_window_distance">Dist.: %s</string>
+    <string name="editor_info_window_flight_time">T. de vuelo: %1$02d:%2$02d</string>
     <string name="editor_info_window_heading">Heading: %.0f°</string>
     <string name="distance_to_home">Distancia a casa</string>
     <string name="loiter_time">Tiempo en Loiter</string>
@@ -228,9 +228,9 @@
     <string name="setup_ch_title">Channel Options Configuration</string>
     <string name="setup_ch_tune_title">Channel 6 - Tuning Function</string>
     <string name="setup_ch_options_title">Channel Options - CH7 &amp; CH8</string>
-    <string name="setup_ch_CH7_options">Channel 7 Options:</string>
-    <string name="setup_ch_CH6_options">Channel 6 Tuning:</string>
-    <string name="setup_ch_CH8_options">Channel 8 Tuning:</string>
+    <string name="setup_ch_CH7_options">Opciones canal 7 Options:</string>
+    <string name="setup_ch_CH6_options">Ajustes canal 6:</string>
+    <string name="setup_ch_CH8_options">Ajustes canal 8:</string>
     <string name="setup_ch_tune_low">Tune Value - Low:</string>
     <string name="setup_ch_tune_high">Tune Value - High:</string>
 
@@ -337,7 +337,6 @@
     <string name="pref_title_screen">Pantalla</string>
     <string name="pref_title_notifications">Notificaciones</string>
     <string name="firmware_version">Versión de firmware</string>
-    <string name="empty_content" translatable="false">--</string>
     <string name="usage_statistics">Estadísticas de uso</string>
     <string name="pref_usage_statistics_title">Enviar estadísticas de uso</string>
     <string name="pref_usage_statistics_summary">Ayude a mejorar Tower enviando estadísticas de uso.</string>
@@ -390,17 +389,17 @@
     <string name="label_sign_up">Registrarse</string>
     <string name="label_login">iniciar sesión</string>
     <string name="label_logout">Salir</string>
-    <string name="delete_selected_waypoints_confirm">Clear selected waypoints from the map?</string>
-    <string name="delete_selected_waypoints_title">Clear selected waypoints</string>
+    <string name="delete_selected_waypoints_confirm">¿Quere eliminar los waypoints seleccionados del mapa?</string>
+    <string name="delete_selected_waypoints_title">Eliminar los waypoints seleccionados</string>
     <string name="label_select_all">Seleccionar todo</string>
     <string name="guided_scan_roi_set_message">Ubicación del objetivo seleccionada</string>
-    <string name="mode_follow_guided_scan">Vehicle follows the user while remaining locked on a point of interest. Long click on the map to select the point of interest.</string>
+    <string name="mode_follow_guided_scan">El vehículo sigue al usuario mientras permanece fijo en un punto de interés. Haga una pulsación larga en el mapa para seleccionar el punto de interés.</string>
     <string name="pref_no_saved_bluetooth_device_title">No hay dispositivos bluetooth.</string>
-    <string name="label_mission_item_type_selection">Select Waypoint Type</string>
-    <string name="label_mission_item_type_no_selection">No available option</string>
-    <string name="description_mission_item_type_selection">Click on the spinner to select a type for the selected waypoints.</string>
-    <string name="description_mission_item_type_no_selection">No type option is available for the selected items.</string>
-    <string name="label_vehicle_details">Vehicle details</string>
+    <string name="label_mission_item_type_selection">Selecciona el tipo de Waypoint</string>
+    <string name="label_mission_item_type_no_selection">Opción no disponible</string>
+    <string name="description_mission_item_type_selection">Haga click en el spinner para seleccionar un tipo para el waypoints seleccionado.</string>
+    <string name="description_mission_item_type_no_selection">Ningún tipo de opción está disponible para los items seleccionados.</string>
+    <string name="label_vehicle_details">Detalles del vehículo</string>
     <string name="pref_ground_collision_warning_title">Colisión inminente</string>
     <string name="pref_ground_collision_warning_summary">Aviso cuando hay una colisión inminente.</string>
     <string name="pref_map_rotation_title">Habilitar la rotación del mapa</string>
