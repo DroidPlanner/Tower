@@ -9,7 +9,7 @@
     <string name="app_settings">Ajustes de la aplicación</string>
     <string name="flight_data">Datos del vuelo</string>
     <string name="editor">Editor</string>
-    <string name="upload_mission">Subir misión</string>
+    <string name="upload_mission">Cargar misión</string>
     <string name="download_mission">Descargar misión</string>
 
     <!-- Drone Setup tabs -->
