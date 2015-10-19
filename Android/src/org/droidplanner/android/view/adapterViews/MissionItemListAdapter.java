@@ -23,6 +23,7 @@ import com.o3dr.services.android.lib.drone.mission.item.spatial.Land;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.RegionOfInterest;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
 
+import org.beyene.sius.unit.composition.speed.SpeedUnit;
 import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
@@ -31,6 +32,8 @@ import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.utils.ReorderRecyclerView;
 import org.droidplanner.android.utils.unit.UnitManager;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
+import org.droidplanner.android.utils.unit.providers.speed.SpeedUnitProvider;
+import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 /**
  * Created by fhuya on 12/9/14.
@@ -56,11 +59,15 @@ public class MissionItemListAdapter extends ReorderRecyclerView.ReorderAdapter<M
     private final MissionProxy missionProxy;
     private final OnEditorInteraction editorListener;
     private final LengthUnitProvider lengthUnitProvider;
+    private final SpeedUnitProvider speedUnitProvider;
 
     public MissionItemListAdapter(Context context, MissionProxy missionProxy, OnEditorInteraction editorListener) {
         this.missionProxy = missionProxy;
         this.editorListener = editorListener;
-        this.lengthUnitProvider = UnitManager.getUnitSystem(context).getLengthUnitProvider();
+
+        final UnitSystem unitSystem = UnitManager.getUnitSystem(context);
+        this.lengthUnitProvider = unitSystem.getLengthUnitProvider();
+        this.speedUnitProvider = unitSystem.getSpeedUnitProvider();
         setHasStableIds(true);
     }
 
@@ -202,7 +209,12 @@ public class MissionItemListAdapter extends ReorderRecyclerView.ReorderAdapter<M
                 altitudeView.setTextColor(Color.YELLOW);
             else
                 altitudeView.setTextColor(Color.WHITE);
-        } else {
+        }else if(missionItem instanceof ChangeSpeed){
+            final double speed = ((ChangeSpeed) missionItem).getSpeed();
+            final SpeedUnit convertedSpeed = speedUnitProvider.boxBaseValueToTarget(speed);
+            altitudeView.setText(convertedSpeed.toString());
+        }
+        else {
             altitudeView.setText("");
         }
     }
