@@ -81,7 +81,6 @@ public class YesNoDialog extends DialogFragment {
         final String dialogTag = arguments.getString(EXTRA_DIALOG_TAG);
 
         AlertDialog.Builder b = new AlertDialog.Builder(getActivity())
-                .setIcon(R.drawable.arma)
                 .setTitle(arguments.getString(EXTRA_TITLE))
                 .setView(generateContentView(savedInstanceState))
                 .setPositiveButton(arguments.getString(EXTRA_POSITIVE_LABEL), new DialogInterface.OnClickListener() {

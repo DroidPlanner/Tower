@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.Button
@@ -24,6 +25,7 @@ import org.droidplanner.android.R
 import org.droidplanner.android.activities.helpers.SuperUI
 import org.droidplanner.android.fragments.FlightDataFragment
 import org.droidplanner.android.fragments.FlightMapFragment
+import org.droidplanner.android.fragments.actionbar.ActionBarTelemFragment
 import org.droidplanner.android.fragments.widget.TowerWidget
 import org.droidplanner.android.fragments.widget.TowerWidgets
 import org.droidplanner.android.fragments.widget.video.FullWidgetSoloLinkVideo
@@ -53,6 +55,16 @@ public class WidgetActivity : SuperUI() {
         handleIntent(intent)
     }
 
+    override fun addToolbarFragment() {
+        val toolbarId = toolbarId
+        val fm = supportFragmentManager
+        var actionBarTelem: Fragment? = fm.findFragmentById(toolbarId)
+        if (actionBarTelem == null) {
+            actionBarTelem = ActionBarTelemFragment()
+            fm.beginTransaction().add(toolbarId, actionBarTelem).commit()
+        }
+    }
+
     override fun onNewIntent(intent: Intent?){
         super.onNewIntent(intent)
         if(intent != null)
@@ -67,8 +79,7 @@ public class WidgetActivity : SuperUI() {
         if(widget != null){
             setToolbarTitle(widget.labelResId)
 
-            val currentWidget = fm.findFragmentById(R.id.widget_view) as TowerWidget?
-            val currentWidgetType = if(currentWidget == null) null else currentWidget.getWidgetType()
+            val currentWidgetType = (fm.findFragmentById(R.id.widget_view) as TowerWidget?)?.getWidgetType()
 
             if(widget == currentWidgetType)
                 return
