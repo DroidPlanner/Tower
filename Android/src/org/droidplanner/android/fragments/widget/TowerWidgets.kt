@@ -1,5 +1,7 @@
 package org.droidplanner.android.fragments.widget
 
+import android.app.DialogFragment
+import android.app.Fragment
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
 import org.droidplanner.android.R
@@ -8,6 +10,9 @@ import org.droidplanner.android.fragments.widget.diagnostics.MiniWidgetDiagnosti
 import org.droidplanner.android.fragments.widget.telemetry.MiniWidgetFlightTimer
 import org.droidplanner.android.fragments.widget.telemetry.MiniWidgetGeoInfo
 import org.droidplanner.android.fragments.widget.telemetry.MiniWidgetAttitudeSpeedInfo
+import org.droidplanner.android.fragments.widget.video.FullWidgetSoloLinkVideo
+import org.droidplanner.android.fragments.widget.video.MiniWidgetSoloLinkVideo
+import org.droidplanner.android.fragments.widget.video.WidgetVideoPreferences
 
 /**
  * Created by Fredia Huya-Kouadio on 8/25/15.
@@ -37,6 +42,10 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
         override fun getMinimizedFragment() = MiniWidgetSoloLinkVideo()
 
         override fun getMaximizedFragment() = FullWidgetSoloLinkVideo()
+
+        override fun hasPreferences() = true
+
+        override fun getPrefFragment() = WidgetVideoPreferences()
     },
 
     ATTITUDE_SPEED_INFO(R.id.tower_widget_attitude_speed_info, R.string.label_widget_attitude_speed_info, R.string.description_widget_attitude_speed_info, "pref_widget_attitude_speed_info") {
@@ -58,6 +67,10 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
     open fun isEnabledByDefault() = false
 
     open fun getMaximizedFragment(): TowerWidget? = null
+
+    open fun hasPreferences() = false
+
+    open fun getPrefFragment(): DialogFragment? = null
 
     companion object {
         @JvmStatic fun getWidgetById(@IdRes id: Int): TowerWidgets? {

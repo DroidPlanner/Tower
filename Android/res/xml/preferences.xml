@@ -96,11 +96,9 @@
             android:title="@string/pref_ui">
 
             <PreferenceCategory android:title="@string/pref_tower_widgets_category">
-                <PreferenceScreen
+                <Preference
                     android:key="pref_tower_widgets"
-                    android:title="@string/pref_tower_widgets_title">
-                    <PreferenceCategory android:title="@string/pref_widgets_list_category" />
-                </PreferenceScreen>
+                    android:title="@string/pref_tower_widgets_title"/>
             </PreferenceCategory>
 
             <PreferenceCategory android:title="@string/pref_title_local">
