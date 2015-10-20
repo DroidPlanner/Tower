@@ -16,6 +16,7 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.0.1'
     compile 'com.android.support:recyclerview-v7:23.0.1'
     compile 'com.android.support:design:23.0.1'
+    compile 'com.jcraft:jsch:0.1.51'
 
     //DroneKit-Android client library.
     compile 'com.o3dr.android:dronekit-android:2.6.8-beta'
@@ -69,6 +70,8 @@ android {
         buildConfigField "boolean", "WRITE_LOG_FILE", "true"
         buildConfigField "int", "LOG_FILE_LEVEL", "$logLevelDebug"
         buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
+        buildConfigField "String", "SOLO_LINK_IP" , getSoloLinkIp()
+        multiDexEnabled true
     }
 
     compileOptions {
@@ -175,4 +178,8 @@ def getAppKeyPassword() {
 
 def getAppKey() {
     return hasProperty('ORG_DROIDPLANNER_ANDROID_KEY_ALIAS') ? ORG_DROIDPLANNER_ANDROID_KEY_ALIAS : ''
+}
+
+def getSoloLinkIp(){
+    return hasProperty('SOLO_LINK_IP') ? SOLO_LINK_IP : ''
 }

@@ -48,4 +48,6 @@
     <color name="medium_grey">#3C3C3C</color>
     <color name="grey700">#616161</color>
 
+    <color name="red">#E84C3D</color>
+    <color name="blue">#3290CC</color>
 </resources>

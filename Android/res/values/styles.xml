@@ -520,5 +520,11 @@
         <item name="backgroundTint">@android:color/white</item>
     </style>
 
+    <style name="ProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/blue_progress_bar</item>
+        <item name="android:minHeight">10dp</item>
+        <item name="android:maxHeight">15dp</item>
+    </style>
+
 </resources>
 
