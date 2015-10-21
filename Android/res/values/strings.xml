@@ -119,6 +119,7 @@
     <string name="waypointType_Circle">Circle</string>
     <string name="waypointType_Loiter">Loiter</string>
     <string name="waypointType_ROI">Region of Interest</string>
+    <string name="waypointType_ResetROI">Reset ROI</string>
     <string name="waypointType_Survey">Survey</string>
     <string name="waypointType_Spline_Survey">Spline Survey</string>
     <string name="waypointType_BuildingMapper">Structure Scan</string>
@@ -576,6 +577,7 @@
     <string name="period_30_sec">30 sec.</string>
     <string name="period_45_sec">45 sec.</string>
     <string name="period_60_sec">60 sec.</string>
+    <string name="waypoint_description_reset_roi">Reset the current region of interest lock.</string>
 
 
 </resources>
