@@ -15,7 +15,6 @@ import org.droidplanner.android.R
 import org.droidplanner.android.dialogs.SupportYesNoDialog
 import org.droidplanner.android.fragments.widget.TowerWidget
 import org.droidplanner.android.fragments.widget.TowerWidgets
-import java.lang.String
 
 /**
  * Created by Fredia Huya-Kouadio on 9/20/15.
@@ -26,6 +25,8 @@ public class MiniWidgetFlightTimer : TowerWidget(), SupportYesNoDialog.Listener 
         private val FLIGHT_TIMER_PERIOD = 1000L; //1 second
 
         @JvmStatic protected val RESET_TIMER_TAG = "reset_timer_tag"
+
+        @JvmStatic protected val EXTRA_TOTAL_FLIGHT_TIME = "extra_total_flight_time"
 
         private val filter = IntentFilter(AttributeEvent.STATE_UPDATED)
     }
@@ -46,17 +47,33 @@ public class MiniWidgetFlightTimer : TowerWidget(), SupportYesNoDialog.Listener 
                 return
 
             val timeInSecs = drone.flightTime
-            val mins = timeInSecs / 60L
-            val secs = timeInSecs % 60L
-            flightTimer?.text = String.format("%02d:%02d", mins, secs)
+            flightTimer?.text = formatTime(timeInSecs)
 
+            if(timeInSecs < lastFlightTime){
+                //A reset must have occurred
+                lastFlightTime = timeInSecs
+            }
+
+            totalFlightTime += timeInSecs - lastFlightTime
+            totalFlightTimer?.text = formatTime(totalFlightTime)
+
+            lastFlightTime = timeInSecs
             handler.postDelayed(this, FLIGHT_TIMER_PERIOD)
         }
     }
 
+    private fun formatTime(timeInSecs: Long): String {
+        val mins = timeInSecs / 60L
+        val secs = timeInSecs % 60L
+        return java.lang.String.format("%02d:%02d", mins, secs)
+    }
+
+    private var lastFlightTime = 0L // seconds
+    private var totalFlightTime = 0L //seconds
     private val handler = Handler()
 
     private var flightTimer : TextView? = null
+    private var totalFlightTimer : TextView? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         return inflater?.inflate(R.layout.fragment_mini_widget_flight_timer, container, false)
@@ -67,14 +84,26 @@ public class MiniWidgetFlightTimer : TowerWidget(), SupportYesNoDialog.Listener 
 
         val context = activity.applicationContext
 
-        flightTimer = view.findViewById(R.id.flight_timer) as TextView?
-        flightTimer?.setOnClickListener {
+        if (savedInstanceState != null)
+            totalFlightTime = savedInstanceState.getLong(EXTRA_TOTAL_FLIGHT_TIME)
+
+        view.findViewById(R.id.flight_timer_layout)?.setOnClickListener {
             //Bring up a dialog allowing the user to reset the timer.
             val resetTimerDialog = SupportYesNoDialog.newInstance(context, RESET_TIMER_TAG,
                     context.getString(R.string.label_widget_flight_timer),
                     context.getString(R.string.description_reset_flight_timer))
             resetTimerDialog.show(childFragmentManager, RESET_TIMER_TAG)
         }
+
+        flightTimer = view.findViewById(R.id.flight_timer) as TextView?
+
+        totalFlightTimer = view.findViewById(R.id.total_flight_timer) as TextView?
+        totalFlightTimer?.text = formatTime(totalFlightTime)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle){
+        super.onSaveInstanceState(outState)
+        outState.putLong(EXTRA_TOTAL_FLIGHT_TIME, totalFlightTime)
     }
 
     override fun onDialogNo(dialogTag: kotlin.String?) {
@@ -84,6 +113,8 @@ public class MiniWidgetFlightTimer : TowerWidget(), SupportYesNoDialog.Listener 
         when(dialogTag){
             RESET_TIMER_TAG -> {
                 drone.resetFlightTimer()
+                lastFlightTime = 0L
+
                 updateFlightTimer()
             }
         }

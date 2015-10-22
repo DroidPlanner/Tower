@@ -150,7 +150,7 @@ public class ControlActivity extends DrawerNavigationUI {
     }
 
     private void toggleMapVideo(){
-        final FragmentManager fm = getSupportFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
         Fragment widgetFragment = fm.findFragmentById(R.id.widget_view);
         if(widgetFragment == null || widgetFragment instanceof MiniWidgetSoloLinkVideo){
             //Default is the mapview
@@ -188,8 +188,7 @@ public class ControlActivity extends DrawerNavigationUI {
         float yaw = leftJoystick.getAxis(JoystickView.Axis.X);
         heading = Utils.fromDegToRad(heading);
         if (Math.abs(yaw) > JoystickView.DEADZONE) {
-            ControlApi.getApi(dpApp.getDrone()).turnTo((360 + (heading + yaw * 30f)) % 360,
-                    Math.abs(yaw) * 30f, Float.compare(Math.signum(yaw), 1f) == 0, false, null);
+            ControlApi.getApi(dpApp.getDrone()).turnTo((360 + (heading + yaw * 30f)) % 360, yaw * 30f, false, null);
         }
     }
 
@@ -215,13 +214,13 @@ public class ControlActivity extends DrawerNavigationUI {
         }
 
         Timber.d("x: %f, y: %f, z: %f, yaw: %f", x, y, throttle, yaw);
-        ControlApi.getApi(dpApp.getDrone()).moveAtVelocity(x * MAX_VEL, y * MAX_VEL, throttle * MAX_VEL_Z, null);
+        ControlApi.getApi(dpApp.getDrone()).moveAtVelocity(ControlApi.EARTH_NED_COORDINATE_FRAME, x * MAX_VEL, y * MAX_VEL, throttle * MAX_VEL_Z, null);
     }
 
     @Override
     protected void addToolbarFragment() {
-        final int toolbarId = getToolbarId();
-        final FragmentManager fm = getSupportFragmentManager();
+        int toolbarId = getToolbarId();
+        FragmentManager fm = getSupportFragmentManager();
         Fragment actionBarTelem = fm.findFragmentById(toolbarId);
         if (actionBarTelem == null) {
             actionBarTelem = new ActionBarTelemFragment();
@@ -254,17 +253,17 @@ public class ControlActivity extends DrawerNavigationUI {
     }
 
     private void updateYawParams() {
-        final Drone drone = dpApp.getDrone();
-        final Attitude attitude = drone.getAttribute(AttributeType.ATTITUDE);
+        Drone drone = dpApp.getDrone();
+        Attitude attitude = drone.getAttribute(AttributeType.ATTITUDE);
         lastYaw = (float) attitude.getYaw();
         lastYawSpeed = attitude.getYawSpeed();
         lastReceived = System.currentTimeMillis();
     }
 
     private void updateVehicleReadiness() {
-        final Drone drone = dpApp.getDrone();
-        final State state = drone.getAttribute(AttributeType.STATE);
-        final boolean isFlying = state.isFlying();
+        Drone drone = dpApp.getDrone();
+        State state = drone.getAttribute(AttributeType.STATE);
+        boolean isFlying = state.isFlying();
 
         enableJoysticks(state.getVehicleMode() == VehicleMode.COPTER_GUIDED && isFlying);
         toggleTakeOffLand(state);
