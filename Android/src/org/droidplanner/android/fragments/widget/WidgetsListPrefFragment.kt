@@ -53,7 +53,7 @@ class WidgetsListPrefFragment : DialogFragment() {
                         view.findViewById(R.id.widget_pref_info))
             }
 
-            viewHolder.prefIcon?.visibility = if(towerWidget.hasPreferences()) View.VISIBLE else View.INVISIBLE
+            viewHolder.prefIcon?.visibility = if(towerWidget.hasPreferences()) View.VISIBLE else View.GONE
             viewHolder.prefIcon?.setOnClickListener { towerWidget.getPrefFragment()?.show(fm, "Widget pref dialog") }
 
             viewHolder.prefTitle?.setText(towerWidget.labelResId)
