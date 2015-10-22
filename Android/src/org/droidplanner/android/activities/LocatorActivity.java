@@ -11,12 +11,11 @@ import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.MAVLink.common.msg_global_position_int;
-import com.o3dr.android.client.data.tlog.TLogPicker;
+import com.o3dr.android.client.utils.data.tlog.TLogPicker;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.data.ServiceDataContract;
 import com.o3dr.services.android.lib.util.MathUtils;
@@ -73,7 +72,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         locatorMapFragment = ((LocatorMapFragment) fragmentManager.findFragmentById(R.id.locator_map_fragment));
-        if(locatorMapFragment == null){
+        if (locatorMapFragment == null) {
             locatorMapFragment = new LocatorMapFragment();
             fragmentManager.beginTransaction().add(R.id.locator_map_fragment, locatorMapFragment).commit();
         }
@@ -158,7 +157,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     }
 
     @Override
-    protected int getNavigationDrawerEntryId() {
+    protected int getNavigationDrawerMenuItemId() {
         return R.id.navigation_locator;
     }
 
@@ -192,7 +191,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
         //Get the file's absolute path from the incoming intent
         final String tlogAbsolutePath = returnIntent.getStringExtra(ServiceDataContract.EXTRA_TLOG_ABSOLUTE_PATH);
 
-        if(tlogOpener != null)
+        if (tlogOpener != null)
             tlogOpener.cancel(true);
 
         tlogOpener = new OpenTLogFileAsyncTask(this);

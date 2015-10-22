@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 
 import org.droidplanner.android.fragments.widget.TowerWidgets;
+import org.droidplanner.android.fragments.widget.video.WidgetVideoPreferences;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.unit.systems.UnitSystem;
@@ -155,6 +156,9 @@ public class DroidPlannerPrefs {
 
     public static final String PREF_VEHICLE_HOME_UPDATE_WARNING = "pref_vehicle_home_update_warning";
     public static final boolean DEFAULT_VEHICLE_HOME_UPDATE_WARNING = true;
+
+    private static final String PREF_WIDGET_VIDEO_TYPE = "pref_widget_video_type";
+    private static final String PREF_CUSTOM_VIDEO_UDP_PORT = "pref_custom_video_udp_port";
 
     // Public for legacy usage
     public final SharedPreferences prefs;
@@ -464,6 +468,10 @@ public class DroidPlannerPrefs {
         return prefs.getBoolean(PREF_IS_TTS_ENABLED, DEFAULT_TTS_ENABLED);
     }
 
+    public void enableWidget(TowerWidgets widget, boolean enable){
+        prefs.edit().putBoolean(widget.getPrefKey(), enable).apply();
+    }
+
     public boolean isWidgetEnabled(TowerWidgets widget) {
         return prefs.getBoolean(widget.getPrefKey(), widget.isEnabledByDefault());
     }
@@ -479,5 +487,23 @@ public class DroidPlannerPrefs {
 
     public boolean getWarningOnVehicleHomeUpdate(){
         return prefs.getBoolean(PREF_VEHICLE_HOME_UPDATE_WARNING, DEFAULT_VEHICLE_HOME_UPDATE_WARNING);
+    }
+
+    public void setVideoWidgetType(@WidgetVideoPreferences.VideoType int videoType){
+        prefs.edit().putInt(PREF_WIDGET_VIDEO_TYPE, videoType).apply();
+    }
+
+    @WidgetVideoPreferences.VideoType
+    public int getVideoWidgetType(){
+        @WidgetVideoPreferences.VideoType final int videoType = prefs.getInt(PREF_WIDGET_VIDEO_TYPE, WidgetVideoPreferences.SOLO_VIDEO_TYPE);
+        return videoType;
+    }
+
+    public void setCustomVideoUdpPort(int udpPort){
+        prefs.edit().putInt(PREF_CUSTOM_VIDEO_UDP_PORT, udpPort).apply();
+    }
+
+    public int getCustomVideoUdpPort(){
+        return prefs.getInt(PREF_CUSTOM_VIDEO_UDP_PORT, -1);
     }
 }

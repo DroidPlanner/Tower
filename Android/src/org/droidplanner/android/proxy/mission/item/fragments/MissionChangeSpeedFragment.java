@@ -29,7 +29,7 @@ public class MissionChangeSpeedFragment extends MissionDetailFragment implements
 
         final SpeedUnitProvider speedUnitProvider = getSpeedUnitProvider();
         final SpeedWheelAdapter adapter = new SpeedWheelAdapter(getContext(), R.layout.wheel_text_centered,
-                speedUnitProvider.boxBaseValueToTarget(1), speedUnitProvider.boxBaseValueToTarget(20));
+                speedUnitProvider.boxBaseValueToTarget(0), speedUnitProvider.boxBaseValueToTarget(20));
         CardWheelHorizontalView<SpeedUnit> cardAltitudePicker = (CardWheelHorizontalView<SpeedUnit>) view.findViewById
                 (R.id.picker1);
         cardAltitudePicker.setViewAdapter(adapter);

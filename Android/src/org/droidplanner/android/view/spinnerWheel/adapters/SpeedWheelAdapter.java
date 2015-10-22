@@ -33,7 +33,7 @@ public class SpeedWheelAdapter extends AbstractWheelTextAdapter<SpeedUnit>{
             throw new IllegalArgumentException("Starting value must be less or equal to the ending value.");
 
         unitsList.clear();
-        for(int i = startValue; i <= endValue; i++){
+        for(double i = startValue; i <= endValue; i+=0.5){
             unitsList.add((SpeedUnit) startSpeed.valueOf(i));
         }
     }
@@ -55,8 +55,16 @@ public class SpeedWheelAdapter extends AbstractWheelTextAdapter<SpeedUnit>{
 
     @Override
     public int getItemIndex(SpeedUnit item) {
-        SpeedUnit floorItem = (SpeedUnit) item.valueOf(Math.round(item.getValue()));
+        final double roundedValue = roundToClosestUnit(item.getValue());
+        final SpeedUnit floorItem = (SpeedUnit) item.valueOf(roundedValue);
         return unitsList.indexOf(floorItem);
+    }
+
+    private double roundToClosestUnit(double value){
+        final int valuex10 = (int) (value * 10);
+        final int divider = valuex10 / 5;
+        final double roundedValue = (divider * 5) / 10.0;
+        return roundedValue;
     }
 
     @Override
