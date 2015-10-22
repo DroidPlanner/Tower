@@ -72,7 +72,7 @@ public class ControlActivity extends DrawerNavigationUI {
         @Override
         public void joystickMoved(float x, float y) {
             float heading = computeHeading();
-            sendMove(heading);
+            sendMove();
             sendYaw(heading);
         }
     };
@@ -80,8 +80,7 @@ public class ControlActivity extends DrawerNavigationUI {
     private final JoystickListener rightJoystickListener = new JoystickListener() {
         @Override
         public void joystickMoved(float x, float y) {
-            float heading = computeHeading();
-            sendMove(heading);
+            sendMove();
         }
     };
 
@@ -186,35 +185,19 @@ public class ControlActivity extends DrawerNavigationUI {
 
     private void sendYaw(float heading) {
         float yaw = leftJoystick.getAxis(JoystickView.Axis.X);
-        heading = Utils.fromDegToRad(heading);
         if (Math.abs(yaw) > JoystickView.DEADZONE) {
-            ControlApi.getApi(dpApp.getDrone()).turnTo((360 + (heading + yaw * 30f)) % 360, yaw * 30f, false, null);
+            Timber.d("yaw: %f", yaw);
+            ControlApi.getApi(dpApp.getDrone()).turnTo((360 + (heading + yaw * 30f)) % 360, yaw, false, null);
         }
     }
 
-    private void sendMove(float heading) {
+    private void sendMove() {
         float throttle = leftJoystick.getAxis(JoystickView.Axis.Y);
         float x = rightJoystick.getAxis(JoystickView.Axis.X);
-        float y = rightJoystick.getAxis(JoystickView.Axis.Y);
-        float yaw = leftJoystick.getAxis(JoystickView.Axis.X);
+        float y = rightJoystick.getAxis(JoystickView.Axis.Y) * -1;
 
-        if (x != 0 && y != 0) {
-            double theta = Math.atan(y / x);
-            if (theta < 0) {
-                theta += Math.PI;
-            }
-            if (y < 0) {
-                theta += Math.PI;
-            }
-            theta += Math.PI / 2;
-            double magnitude = Math.sqrt(x * x + y * y);
-            x = (float) (Math.cos(heading + theta) * magnitude);
-            y = (float) (Math.sin(heading + theta) * magnitude);
-
-        }
-
-        Timber.d("x: %f, y: %f, z: %f, yaw: %f", x, y, throttle, yaw);
-        ControlApi.getApi(dpApp.getDrone()).moveAtVelocity(ControlApi.EARTH_NED_COORDINATE_FRAME, x * MAX_VEL, y * MAX_VEL, throttle * MAX_VEL_Z, null);
+        Timber.d("x: %f, y: %f, z: %f", x, y, throttle);
+        ControlApi.getApi(dpApp.getDrone()).moveAtVelocity(ControlApi.VEHICLE_COORDINATE_FRAME, y, x, throttle, null);
     }
 
     @Override

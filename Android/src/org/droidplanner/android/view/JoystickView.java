@@ -267,7 +267,6 @@ public class JoystickView extends View {
     private void dispatchMove() {
         if (listener != null && isEnabled()) {
             listener.joystickMoved(x, -y);
-
         }
     }
 
