@@ -24,7 +24,7 @@ import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.FlightMapFragment;
 import org.droidplanner.android.fragments.actionbar.ActionBarTelemFragment;
-import org.droidplanner.android.fragments.widget.MiniWidgetSoloLinkVideo;
+import org.droidplanner.android.fragments.widget.video.MiniWidgetSoloLinkVideo;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.view.JoystickView;
 import org.droidplanner.android.view.JoystickView.JoystickListener;
@@ -215,7 +215,7 @@ public class ControlActivity extends DrawerNavigationUI {
         }
 
         Timber.d("x: %f, y: %f, z: %f, yaw: %f", x, y, throttle, yaw);
-        ControlApi.getApi(dpApp.getDrone()).setVelocity(x * MAX_VEL, y * MAX_VEL, throttle * MAX_VEL_Z, null);
+        ControlApi.getApi(dpApp.getDrone()).moveAtVelocity(x * MAX_VEL, y * MAX_VEL, throttle * MAX_VEL_Z, null);
     }
 
     @Override
@@ -235,7 +235,7 @@ public class ControlActivity extends DrawerNavigationUI {
     }
 
     @Override
-    protected int getNavigationDrawerEntryId() {
+    protected int getNavigationDrawerMenuItemId() {
         return R.id.navigation_control;
     }
 
