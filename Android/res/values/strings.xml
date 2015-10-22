@@ -119,6 +119,7 @@
     <string name="waypointType_Circle">Circle</string>
     <string name="waypointType_Loiter">Loiter</string>
     <string name="waypointType_ROI">Region of Interest</string>
+    <string name="waypointType_ResetROI">Reset ROI</string>
     <string name="waypointType_Survey">Survey</string>
     <string name="waypointType_Spline_Survey">Spline Survey</string>
     <string name="waypointType_BuildingMapper">Structure Scan</string>
@@ -482,6 +483,7 @@
     <string name="pref_tower_widgets_category">Tower Widgets</string>
     <string name="pref_widgets_list_category">Widgets list</string>
     <string name="label_widget_flight_timer">Flight Timer</string>
+    <string name="description_reset_flight_timer">Reset flight timer?</string>
     <string name="description_widget_flight_timer">Displays the vehicle flight time</string>
     <string name="label_widget_geo_info">Geo Info</string>
     <string name="description_widget_geo_info">Displays vehicle geographical information (Lat/Long)</string>
@@ -579,6 +581,7 @@
     <string name="period_30_sec">30 sec.</string>
     <string name="period_45_sec">45 sec.</string>
     <string name="period_60_sec">60 sec.</string>
+    <string name="waypoint_description_reset_roi">Reset the current region of interest lock.</string>
 
 
 </resources>
