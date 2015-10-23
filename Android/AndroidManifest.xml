@@ -154,8 +154,7 @@
         <activity
             android:name=".activities.GeoTagActivity"
             android:label="@string/geo_tag_label"
-            android:launchMode="singleTop"
-            android:screenOrientation="landscape"/>
+            android:launchMode="singleTop"/>
 
         <service android:name=".AppService"/>
 

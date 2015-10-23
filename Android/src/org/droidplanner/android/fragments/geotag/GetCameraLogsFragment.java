@@ -37,7 +37,7 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
     private static final String SSH_USERNAME = "root";
     private static final String SSH_PASSWORD = "TjSDBkAu";
     private static final SshConnection soloSshLink = new SshConnection(BuildConfig.SOLO_LINK_IP, SSH_USERNAME, SSH_PASSWORD);
-    private static final String CAMERA_TLOG_FILE = "/log/camera_msgs.tlog";
+    private static final String CAMERA_TLOG_FILE = "/usr/bin/camera_msgs.tlog";//"/log/camera_msgs.tlog";
 
     private static final int NUMBER_OF_RETRIES = 3;
 
@@ -75,8 +75,8 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
     private TextView secondaryInstruction;
     private Button geotagButton;
 
-    private AnimationDrawable phoneControlDotsAnimation;
-    private AnimationDrawable controlCopterDotsAnimation;
+    private ImageView phoneControlDots;
+    private ImageView controlCopterDots;
 
     private int currState = STATE_INIT;
 
@@ -93,12 +93,8 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
         secondaryInstruction = (TextView) view.findViewById(R.id.secondary_instruction_text);
         geotagButton = (Button) view.findViewById(R.id.geotag_button);
 
-
-        ImageView phoneControlDots = (ImageView) view.findViewById(R.id.phone_control_dots);
-        ImageView controlCopterDots = (ImageView) view.findViewById(R.id.control_copter_dots);
-
-        phoneControlDotsAnimation = (AnimationDrawable) phoneControlDots.getDrawable();
-        controlCopterDotsAnimation = (AnimationDrawable) controlCopterDots.getDrawable();
+        phoneControlDots = (ImageView) view.findViewById(R.id.phone_control_dots);
+        controlCopterDots = (ImageView) view.findViewById(R.id.control_copter_dots);
 
         updateState(STATE_DISCONNECTED);
         geotagButton.setOnClickListener(new View.OnClickListener() {
@@ -122,10 +118,6 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
 
         if (getDrone().isConnected()) {
             updateState(STATE_CONNECTED_NOT_STARTED);
-        }
-
-        if (activity != null) {
-            activity.updateTitle(R.string.transfer_photo_label);
         }
     }
 
@@ -151,17 +143,18 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
                 geotagButton.setText(R.string.menu_connect);
                 secondaryInstruction.setVisibility(View.INVISIBLE);
                 geotagButton.setActivated(false);
+                disconnectedUI();
                 //stopAnimation();
                 break;
             case STATE_CONNECTED_NOT_STARTED:
-                //stopAnimation();
                 instructionText.setText(R.string.ready_to_transfer_message);
                 geotagButton.setText(R.string.label_begin);
                 secondaryInstruction.setVisibility(View.VISIBLE);
                 geotagButton.setActivated(false);
+                connectedNotStartedUI();
                 break;
             case STATE_LOADING_LOGS:
-                //startAnimation();
+                startAnimation();
                 instructionText.setText(R.string.transferring_data);
                 geotagButton.setText(R.string.button_setup_cancel);
                 secondaryInstruction.setVisibility(View.VISIBLE);
@@ -181,7 +174,20 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
         asyncTask.execute();
     }
 
+    private void disconnectedUI() {
+        phoneControlDots.setImageResource(R.drawable.red_loading_dots);
+        controlCopterDots.setImageResource(R.drawable.red_loading_dots);
+    }
+
+    private void connectedNotStartedUI() {
+        phoneControlDots.setImageResource(R.drawable.blue_loading_dots1);
+        controlCopterDots.setImageResource(R.drawable.blue_loading_dots1);
+    }
+
     private void stopAnimation() {
+        AnimationDrawable phoneControlDotsAnimation = (AnimationDrawable) phoneControlDots.getDrawable();
+        AnimationDrawable controlCopterDotsAnimation = (AnimationDrawable) controlCopterDots.getDrawable();
+
         if (phoneControlDotsAnimation.isRunning()) {
             phoneControlDotsAnimation.stop();
         }
@@ -192,6 +198,12 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
     }
 
     private void startAnimation() {
+        phoneControlDots.setImageResource(R.drawable.blue_loading_dots);
+        controlCopterDots.setImageResource(R.drawable.blue_loading_dots);
+
+        AnimationDrawable phoneControlDotsAnimation = (AnimationDrawable) phoneControlDots.getDrawable();
+        AnimationDrawable controlCopterDotsAnimation = (AnimationDrawable) controlCopterDots.getDrawable();
+
         phoneControlDotsAnimation.start();
         controlCopterDotsAnimation.start();
     }

@@ -29,8 +29,10 @@ import org.droidplanner.android.activities.GeoTagActivity;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import timber.log.Timber;
 
@@ -52,6 +54,9 @@ public class GeoTagImagesFragment extends Fragment {
     private ImageView phone;
 
     private Animation sdCardAnim;
+
+    private Collection<File> geotaggedList;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -99,15 +104,11 @@ public class GeoTagImagesFragment extends Fragment {
                         cancelGeoTagging();
                         break;
                     case STATE_DONE_GEOTAGGING:
-                        activity.finishedGeotagging();
+                        activity.finishedGeotagging(geotaggedList);
                         break;
                 }
             }
         });
-
-        if (activity != null) {
-            activity.updateTitle(R.string.geo_tag_label);
-        }
     }
 
     private void startGeoTagging() {
@@ -140,7 +141,7 @@ public class GeoTagImagesFragment extends Fragment {
                 break;
             case STATE_DONE_GEOTAGGING:
                 geotagButton.setActivated(true);
-                geotagButton.setText(R.string.button_setup_done);
+                geotagButton.setText(R.string.button_setup_next);
                 checkImage.setVisibility(View.VISIBLE);
                 sdCard.setVisibility(View.GONE);
                 phone.setVisibility(View.GONE);
@@ -204,7 +205,11 @@ public class GeoTagImagesFragment extends Fragment {
 
             @Override
             public void onFailed(Exception e) {
-                failedLoading(e.getMessage());
+                if (e instanceof NoSuchElementException) {
+                    failedLoading("No camera message events found");
+                } else {
+                    failedLoading(e.getMessage());
+                }
             }
         });
 
@@ -273,6 +278,7 @@ public class GeoTagImagesFragment extends Fragment {
 
         @Override
         public void onResult(HashMap<File, File> geotaggedFiles, HashMap<File, Exception> failedFiles) {
+            geotaggedList = geotaggedFiles.values();
             updateState(STATE_DONE_GEOTAGGING);
             instructionText.setText(String.format(getString(R.string.photos_geootagged), geotaggedFiles.size()));
             geoTagTask = null;

@@ -587,4 +587,6 @@
     <string name="geotagging">Geotagging using photo location data.</string>
     <string name="photos_geootagged">%s photos have been geotagged and saved.</string>
     <string name="failed_geotag">Failed to geotag images. %s</string>
+    <string name="upload_images">Upload Images</string>
+    <string name="uploading_images">Uploading Images</string>
 </resources>
