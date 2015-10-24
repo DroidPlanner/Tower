@@ -186,7 +186,6 @@ public class ControlActivity extends DrawerNavigationUI {
     private void sendYaw(float heading) {
         float yaw = leftJoystick.getAxis(JoystickView.Axis.X);
         if (Math.abs(yaw) > JoystickView.DEADZONE) {
-            Timber.d("yaw: %f", yaw);
             ControlApi.getApi(dpApp.getDrone()).turnTo((360 + (heading + yaw * 30f)) % 360, yaw, false, null);
         }
     }
@@ -196,7 +195,6 @@ public class ControlActivity extends DrawerNavigationUI {
         float x = rightJoystick.getAxis(JoystickView.Axis.X);
         float y = rightJoystick.getAxis(JoystickView.Axis.Y) * -1;
 
-        Timber.d("x: %f, y: %f, z: %f", x, y, throttle);
         ControlApi.getApi(dpApp.getDrone()).moveAtVelocity(ControlApi.VEHICLE_COORDINATE_FRAME, y, x, throttle, null);
     }
 
