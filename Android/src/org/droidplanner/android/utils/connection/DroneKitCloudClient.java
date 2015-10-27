@@ -1,7 +1,5 @@
 package org.droidplanner.android.utils.connection;
 
-import android.util.Log;
-
 import com.google.gson.JsonParseException;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.HttpUrl;
@@ -747,7 +745,6 @@ public class DroneKitCloudClient {
         Map<String, String> headerParams = new HashMap<>();
         headerParams.put(TOKEN_KEY, parameterToString(token));
 
-        Log.d("CHAVI", "body: " + postBody.toString());
 
         try {
             String response = invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams);
@@ -1671,7 +1668,6 @@ public class DroneKitCloudClient {
 
     public String invokeAPI(String host, String path, String method, List<Pair> queryParams, Object body, Map<String, String> headerParams) throws ApiException {
         HttpUrl httpUrl = createUrl(host, path, queryParams);
-        Log.d("CHAVI", "url: " + httpUrl);
 
         //headerParams.put("Accept", "application/json");
         headerParams.put("Content-Type", "application/json");
@@ -1697,7 +1693,6 @@ public class DroneKitCloudClient {
 
             String responseBody = response.body().string();
 
-            Log.d("CHAVI", "response code: " + response.code() + " response " + responseBody);
             int code = response.code();
             String responseString = null;
             if (code == 204) {
@@ -1736,7 +1731,6 @@ public class DroneKitCloudClient {
                 .post(requestBody)
                 .build();
 
-            Log.d("CHAVI", "request: " + request.urlString() + " body: " + request.body().toString());
             Response response = client.newCall(request).execute();
 
             String responseBody = response.body().string();
@@ -1782,7 +1776,7 @@ public class DroneKitCloudClient {
             .post(requestBody)
             .build();
 
-        Log.d("CHAVI", "request: " + request.urlString() + " body: " + request.body().toString() + " serializedBody: " + serializedBody);
+
         Response response = client.newCall(request).execute();
         return response;
     }
@@ -1833,7 +1827,6 @@ public class DroneKitCloudClient {
 
         String responseBody = response.body().string();
 
-        Log.d("CHAVI", "response code: " + response.code() + " response " + responseBody);
         int code = response.code();
         String responseString = null;
         if (code == 204) {
@@ -1866,7 +1859,6 @@ public class DroneKitCloudClient {
 
             String responseBody = response.body().string();
 
-            Log.d("CHAVI", "response code: " + response.code() + " response " + responseBody);
             int code = response.code();
             String responseString = null;
             if (code == 204) {
