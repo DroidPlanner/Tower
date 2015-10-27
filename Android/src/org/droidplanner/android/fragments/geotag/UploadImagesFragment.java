@@ -30,6 +30,7 @@ import com.squareup.okhttp.Response;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.GeoTagActivity;
+import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefFragment;
 import org.droidplanner.android.utils.NetworkUtils;
 import org.droidplanner.android.utils.connection.DroneKitCloudClient;
 
@@ -89,6 +90,8 @@ public class UploadImagesFragment extends Fragment {
                     finishedUploading(intent);
                     break;
                 case GeoTagImagesService.STATE_DRONEKIT_LOGGED_IN:
+                    String token = intent.getStringExtra(GeoTagImagesService.EXTRA_TOKEN);
+                    GoogleMapPrefFragment.PrefManager.setDroneKitToken(getContext(), token);
                     updateText("User logged in");
                     break;
                 case GeoTagImagesService.STATE_VEHICLE_CHOSEN:
@@ -118,6 +121,7 @@ public class UploadImagesFragment extends Fragment {
                     String recapId = intent.getStringExtra(GeoTagImagesService.EXTRA_RECAP_ID);
                     updateText("Recap job created: " + recapId);
                     Timber.d("Recap result: " + recapId);
+                    GoogleMapPrefFragment.PrefManager.setLastRecapId(getContext(), recapId);
                     break;
             }
         }

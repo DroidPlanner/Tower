@@ -20,7 +20,6 @@ import com.o3dr.android.client.utils.data.tlog.TLogParserFilter;
 import com.o3dr.android.client.utils.geotag.GeoTagAsyncTask;
 
 import org.droidplanner.android.BuildConfig;
-import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefFragment;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.connection.DroneKitCloudClient;
 import org.droidplanner.android.utils.connection.SshConnection;
@@ -108,7 +107,7 @@ public class GeoTagImagesService extends Service {
     public static final String EXTRA_MISSION_NAME = PACKAGE_NAME + ".EXTRA_MISSION_NAME";
     public static final String EXTRA_URL = PACKAGE_NAME + ".EXTRA_URL";
     public static final String EXTRA_RECAP_ID = PACKAGE_NAME + ".EXTRA_RECAP_ID";
-
+    public static final String EXTRA_TOKEN = PACKAGE_NAME + ".EXTRA_TOKEN";
 
     private AsyncTask asyncTask;
     private GeoTagTask geoTagTask;
@@ -357,9 +356,10 @@ public class GeoTagImagesService extends Service {
                 if (token == null) {
                     return;
                 }
-                sendUpdates(STATE_DRONEKIT_LOGGED_IN, null);
 
-                GoogleMapPrefFragment.PrefManager.setDroneKitToken(getApplicationContext(), token.getToken());
+                Bundle bundle = new Bundle();
+                bundle.putString(EXTRA_TOKEN, token.getToken());
+                sendUpdates(STATE_DRONEKIT_LOGGED_IN, bundle);
 
                 if (executor.isShutdown()) {
                     return;
@@ -397,7 +397,7 @@ public class GeoTagImagesService extends Service {
                     return;
                 }
 
-                Bundle bundle = new Bundle();
+                bundle = new Bundle();
                 bundle.putString(EXTRA_MISSION_NAME, missionName);
                 sendUpdates(STATE_MISSION_CREATED, bundle);
 
@@ -657,7 +657,6 @@ public class GeoTagImagesService extends Service {
                 Bundle bundle = new Bundle();
                 bundle.putString(EXTRA_RECAP_ID, recapResult.getId());
                 sendUpdates(STATE_RECAP_JOB_CREATED, bundle);
-                GoogleMapPrefFragment.PrefManager.setLastRecapId(getApplicationContext(), recapResult.getId());
                 return;
             }
         }
