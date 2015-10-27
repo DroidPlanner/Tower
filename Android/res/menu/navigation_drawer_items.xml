@@ -7,17 +7,17 @@
         <item
             android:id="@+id/navigation_flight_data"
             android:icon="@drawable/ic_menu_flight_data_grey600_24dp"
-            android:title="@string/flight_data" />
+            android:title="@string/flight_data"/>
 
         <item
             android:id="@+id/navigation_editor"
             android:icon="@drawable/ic_menu_editor_grey600_24dp"
-            android:title="@string/editor" />
+            android:title="@string/editor"/>
 
         <item
             android:id="@+id/navigation_locator"
             android:icon="@drawable/ic_menu_flight_history_grey600_24dp"
-            android:title="@string/locator" />
+            android:title="@string/locator"/>
 
     </group>
 
@@ -27,20 +27,28 @@
         <item
             android:id="@+id/navigation_params"
             android:icon="@drawable/ic_menu_parameters_grey600_24dp"
-            android:title="@string/screen_parameters" />
+            android:title="@string/screen_parameters"/>
 
         <item
             android:id="@+id/navigation_checklist"
             android:icon="@drawable/ic_menu_checklist_grey600_24dp"
-            android:title="@string/screen_checklist" />
+            android:title="@string/screen_checklist"/>
 
         <item
             android:id="@+id/navigation_calibration"
             android:icon="@drawable/ic_menu_calibration_grey600_24dp"
-            android:title="@string/screen_cal" />
+            android:title="@string/screen_cal"/>
 
     </group>
 
+    <group
+        android:id="@+id/geotag_screens"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_geotag"
+            android:icon="@drawable/ic_cloud_upload_grey_700_24dp"
+            android:title="@string/geo_tag_label"/>
+    </group>
     <group
         android:id="@+id/settings_screen"
         android:checkableBehavior="single">
@@ -48,7 +56,7 @@
         <item
             android:id="@+id/navigation_settings"
             android:icon="@drawable/ic_menu_settings_grey600_24dp"
-            android:title="@string/settings" />
+            android:title="@string/settings"/>
     </group>
 
 </menu>

@@ -16,6 +16,7 @@
     <string name="screen_cal">Calibration</string>
     <string name="screen_checklist">Checklist</string>
     <string name="screen_parameters">Parameters</string>
+    <string name="geo_tag_label">Geotag Images</string>
 
     <!-- App Settings/Preferences -->
     <string name="pref_connection_type">Telemetry Connection Type</string>
@@ -210,7 +211,6 @@
     <string name="setup_imu_completed">Accelerometer calibration completed. If it was not successful, please recalibrate.</string>
     <string name="setup_imu_step">To start calibration, press Calibrate.</string>
     <string name="setup_imu_timeleft">Time left before next orientation:</string>
-
 
     <!-- Flight Setup Resource Strings -->
     <string name="setup_fm_title">Flight Mode Configuration</string>
@@ -575,6 +575,18 @@
     <string name="period_30_sec">30 sec.</string>
     <string name="period_45_sec">45 sec.</string>
     <string name="period_60_sec">60 sec.</string>
-
-
+    
+    <string name="label_begin">Begin</string>
+    <string name="geotag_photos">Geotag Photos</string>
+    <string name="device_powered_on_message">Make sure Solo and Controller are powered on.</string>
+    <string name="transfer_photo_label">Transfer Photo Location Data</string>
+    <string name="ready_to_transfer_message">Ready to transfer location data from Solo to app.</string>
+    <string name="do_not_turn_off">Do not turn system off.</string>
+    <string name="transferring_data">Transferring photo location data to app.</string>
+    <string name="insert_sdcard">Insert GoPro SD card into mobile device.</string>
+    <string name="geotagging">Geotagging using photo location data.</string>
+    <string name="photos_geootagged">%s photos have been geotagged and saved.</string>
+    <string name="failed_geotag">Failed to geotag images. %s</string>
+    <string name="upload_images">Upload Images</string>
+    <string name="uploading_images">Uploading Images</string>
 </resources>

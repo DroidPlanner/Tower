@@ -112,4 +112,8 @@ public abstract class ApiListenerFragment extends Fragment implements DroidPlann
         areaUnitProvider = unitSystem.getAreaUnitProvider();
         speedUnitProvider = unitSystem.getSpeedUnitProvider();
     }
+
+    public void connectToDrone() {
+        dpApp.connectToDrone();
+    }
 }

@@ -16,20 +16,23 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.0.1'
     compile 'com.android.support:recyclerview-v7:23.0.1'
     compile 'com.android.support:design:23.0.1'
+    compile 'com.jcraft:jsch:0.1.51'
 
     //DroneKit-Android client library.
-    compile 'com.o3dr.android:dronekit-android:2.6.8-beta'
+    //compile 'com.o3dr.android:dronekit-android:2.6.8-beta'
+    compile(name:'dronekit-android.2.6.8', ext:'aar')
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')
+    compile(name:'swagger-android-client-debug-1.0.0', ext:'aar')
 
     compile files('libs/droneapi-java-0.3-SNAPSHOT.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
     compile files('libs/jeromq-0.3.4.jar')
     compile files('libs/sius-0.3.0-SNAPSHOT.jar')
 
-    compile 'com.squareup.okhttp:okhttp:2.3.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.3.0'
+    compile 'com.squareup.okhttp:okhttp:2.5.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'
 
     compile 'com.jakewharton.timber:timber:3.1.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -39,6 +42,10 @@ dependencies {
 
     //Charts and graph library
     compile 'com.github.lecho:hellocharts-library:1.5.5@aar'
+
+    compile "io.swagger:swagger-annotations:1.5.0"
+    compile "com.google.code.gson:gson:2.3.1"
+    compile 'com.squareup.mimecraft:mimecraft:1.1.1'
 }
 
 //Decomposed version name and code (https://plus.google.com/+JakeWharton/posts/6f5TcVPRZij)
@@ -61,7 +68,7 @@ android {
 
     defaultConfig {
         applicationId 'org.droidplanner.android'
-        minSdkVersion 14
+        minSdkVersion 19
         targetSdkVersion 22
         versionCode versionMajor * 100000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "Tower-v${versionMajor}.${versionMinor}.${versionPatch}"
@@ -69,6 +76,8 @@ android {
         buildConfigField "boolean", "WRITE_LOG_FILE", "true"
         buildConfigField "int", "LOG_FILE_LEVEL", "$logLevelDebug"
         buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
+        buildConfigField "String", "SOLO_LINK_IP" , getSoloLinkIp()
+        multiDexEnabled true
     }
 
     compileOptions {
@@ -144,6 +153,10 @@ android {
             buildConfigField "boolean", "ENABLE_CRASHLYTICS", "true"
         }
     }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 }
 
 /**
@@ -175,4 +188,8 @@ def getAppKeyPassword() {
 
 def getAppKey() {
     return hasProperty('ORG_DROIDPLANNER_ANDROID_KEY_ALIAS') ? ORG_DROIDPLANNER_ANDROID_KEY_ALIAS : ''
+}
+
+def getSoloLinkIp(){
+    return hasProperty('SOLO_LINK_IP') ? SOLO_LINK_IP : ''
 }

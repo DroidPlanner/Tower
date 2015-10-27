@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
     package="org.droidplanner.android"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto">
 
     <supports-screens
@@ -15,7 +16,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
 
     <uses-feature android:name="android.hardware.screen.portrait"/>
 
@@ -63,12 +64,12 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="5ee4471ba6e8cd8858006c8166469bba33d64b2f" />
+            android:value="5ee4471ba6e8cd8858006c8166469bba33d64b2f"/>
 
         <activity
             android:name=".activities.AccountActivity"
-            android:launchMode="singleTop"
-            android:label="@string/account_label"/>
+            android:label="@string/account_label"
+            android:launchMode="singleTop"/>
 
         <activity
             android:name=".activities.FlightActivity"
@@ -99,19 +100,19 @@
         </activity>
         <activity
             android:name=".activities.ConfigurationActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:label="@string/menu_drone_setup"
             android:launchMode="singleTop"
-            android:label="@string/menu_drone_setup"/>
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity
             android:name=".activities.SettingsActivity"
-            android:launchMode="singleTop"
-            android:label="@string/settings"/>
+            android:label="@string/settings"
+            android:launchMode="singleTop"/>
 
         <activity
             android:name=".activities.helpers.MapPreferencesActivity"
-            android:launchMode="singleTop"
             android:label="@string/activity_title_map_provider_preferences"
+            android:launchMode="singleTop"
             android:parentActivityName=".activities.SettingsActivity">
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
@@ -138,19 +139,24 @@
 
         <activity
             android:name=".activities.helpers.BluetoothDevicesActivity"
-            android:noHistory="true"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
+            android:noHistory="true"
             android:theme="@style/CustomDialogTheme"/>
 
         <activity
             android:name=".maps.providers.google_map.DownloadMapboxMapActivity"
-            android:noHistory="true"
             android:excludeFromRecents="true"
-            android:theme="@style/CustomActionBarTheme.Transparent"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:theme="@style/CustomActionBarTheme.Transparent"/>
 
-        <service android:name=".AppService" />
+        <activity
+            android:name=".activities.GeoTagActivity"
+            android:label="@string/geo_tag_label"
+            android:launchMode="singleTop"/>
+
+        <service android:name=".AppService"/>
 
     </application>
 
