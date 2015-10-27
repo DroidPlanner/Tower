@@ -108,11 +108,11 @@
     <string name="waypointType_Waypoint">Waypoint</string>
     <string name="waypointType_SplineWaypoint">Spline Waypoint</string>
     <string name="waypointType_TakeOff">Despegar</string>
-    <string name="waypointType_RTL">Volver al lugar de lanzamiento</string>
+    <string name="waypointType_RTL">Volver al inicio</string>
     <string name="waypointType_Land">Aterrizar</string>
     <string name="waypointType_Change_Speed">Cambiar velocidad</string>
     <string name="waypointType_Condition_Yaw">Set Yaw</string>
-    <string name="waypointType_Camera_Trigger">Camera Trigger</string>
+    <string name="waypointType_Camera_Trigger">Disparador de cámara</string>
     <string name="waypointType_Set_Servo">Set Servo</string>
     <string name="waypointType_EPM">EPM</string>
     <string name="waypointType_Circle">Circulo</string>
@@ -124,7 +124,7 @@
 
     <!-- Waypoint info -->
     <string name="waypointInfo_Land">Aterrizar el vehículo en la posición actual. Debe salir manualmente del modo Auto para desarmar los motores.</string>
-    <string name="waypointInfo_LoiterN">Orbit the current location for the desired number of turns.</string>
+    <string name="waypointInfo_LoiterN">Orbita alrededor de la localización actual con un número deseado de giros.</string>
     <string name="waypointInfo_LoiterT">Hold the current location for the desired number of seconds or indefinitely to end the mission.</string>
     <string name="waypointInfo_RTL">Send the vehicle to the home location set when armed. An altitude of 0 will return to home at the RTL altitude parameter.</string>
     <string name="waypointInfo_TakeOff">Lift off from the ground to the specified altitude before proceeding to the next waypoint.</string>
@@ -136,16 +136,16 @@
     <string name="waypointInfo_EpmGrabber">Release the payload of the EPM grabber</string>
     <string name="waypointInfo_ROI">Sets a location and altitude to point copter towards and to aim an optional camera.</string>
     <string name="waypointType_Do_Jump">Do Jump</string>
-    <string name="waypointInfo_DoJump">Jump to a specific waypoint.</string>
+    <string name="waypointInfo_DoJump">Saltar a un waypoint específico.</string>
     <!-- Custom waypoint info -->
     <string name="pwm">PWM</string>
-    <string name="repeat_count">Repeat Count</string>
+    <string name="repeat_count">Número de repeticiones</string>
 
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">No podemos añadir nuevos waypoints después de un LAND o RTL</string>
     <string name="editor_info_window">Distancia: 0.0m, Tiempo de vuelo: 0:00</string>
-    <string name="editor_info_window_distance">Dist.: %s</string>
-    <string name="editor_info_window_flight_time">T. de vuelo: %1$02d:%2$02d</string>
+    <string name="editor_info_window_distance">Distancia: %s</string>
+    <string name="editor_info_window_flight_time">Tiempo de vuelo: %1$02d:%2$02d</string>
     <string name="editor_info_window_heading">Heading: %.0f°</string>
     <string name="distance_to_home">Distancia a casa</string>
     <string name="loiter_time">Tiempo en Loiter</string>
@@ -191,7 +191,7 @@
     <string name="setup_radio_title_minmax">Set Min &amp; Max values</string>
     <string name="setup_radio_title_complete">Calibración completada</string>
     <string name="setup_radio_desc_minmax">Mueva las palancas de mando en todas las direcciones varias veces y cambiar los interruptores, palancas y perillas para todas las posiciones posibles.</string>
-    <string name="setup_radio_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle.</string>
+    <string name="setup_radio_desc_complete">RC calibración completada. Pulse \'Guardar\' para cargar los datos al vehículo.</string>
 
     <!-- Compass Setup Resource Strings -->
     <string name="setup_mag_title">Calibración de la brújula</string>
@@ -214,7 +214,7 @@
     <!-- Flight Setup Resource Strings -->
     <string name="setup_fm_title">Configuración de los modos de vuelo</string>
     <string name="setup_fm_side_title">Actualizar modos de vuelo</string>
-    <string name="setup_fm_side_desc">Press \'Send\' to update the new flight modes to vehicle.</string>
+    <string name="setup_fm_side_desc">Pulse \'Enviar\' para actualizar los nuevos modos de vuelo al vehículo.</string>
     <string name="setup_fm_mode1">1.</string>
     <string name="setup_fm_mode2">2.</string>
     <string name="setup_fm_mode3">3.</string>
@@ -225,9 +225,9 @@
     <string name="setup_fm_super">Modo super simple</string>
 
     <!-- Channel Options Setup Resource Strings -->
-    <string name="setup_ch_title">Channel Options Configuration</string>
-    <string name="setup_ch_tune_title">Channel 6 - Tuning Function</string>
-    <string name="setup_ch_options_title">Channel Options - CH7 &amp; CH8</string>
+    <string name="setup_ch_title">Opciones de configuración de canal</string>
+    <string name="setup_ch_tune_title">Canal 6 - Tuning Function</string>
+    <string name="setup_ch_options_title">Opciones de canal - CH7 &amp; CH8</string>
     <string name="setup_ch_CH7_options">Opciones canal 7 Options:</string>
     <string name="setup_ch_CH6_options">Ajustes canal 6:</string>
     <string name="setup_ch_CH8_options">Ajustes canal 8:</string>
@@ -235,7 +235,7 @@
     <string name="setup_ch_tune_high">Tune Value - High:</string>
 
     <!-- Servo functions Setup Resource Strings -->
-    <string name="setup_sf_title">Servo Function Configuration</string>
+    <string name="setup_sf_title">Función de configuración de servo</string>
     <string name="setup_sf_servo_title">Servo Functions Configuration</string>
     <string name="setup_sf_servo5">Servo 5:</string>
     <string name="setup_sf_servo6">Servo 6:</string>
@@ -266,8 +266,8 @@
     <string name="mission_control_auto">Auto</string>
     <string name="mission_control_follow">Sígueme</string>
     <string name="mission_control_dronie">Dronie</string>
-    <string name="mission_control_condition_yaw_angle">Target angle</string>
-    <string name="mission_control_condition_yaw_relative">Relative Angle</string>
+    <string name="mission_control_condition_yaw_angle">Ángulo del objetivo</string>
+    <string name="mission_control_condition_yaw_relative">Ángulo relativo</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="guided_mode_warning">"Pulse OK para acceder al modo guiado. \nPara cambiar de ubicación, presione prolongadamente el mapa.</string>
@@ -345,7 +345,7 @@
     <string name="open_mission_file">Importar de fichero</string>
     <string name="save_mission_file">Exportar a fichero</string>
 
-    <string name="pref_ui_gps_hdop_summary">Display HDOP instead of FIX in satellite info bar item</string>
+    <string name="pref_ui_gps_hdop_summary">Mostrar HDOP en lugar de FIX en la barra de información de satélite</string>
     <string name="pref_ui_gps_hdop_title">Mostrar HDOP</string>
 
     <!-- Help -->
@@ -491,7 +491,7 @@
     <string name="label_attitude_estimate">Attitude estimate</string>
     <string name="label_flags">Flags</string>
     <string name="label_constant_position_mode">Constant position mode</string>
-    <string name="label_velocity">Velocity</string>
+    <string name="label_velocity">Velocidad</string>
     <string name="label_velocity_estimate">Vertical estimada</string>
     <string name="label_horizontal_estimate">Horizontal estimada</string>
     <string name="label_horizontal_position">Posición horizontal</string>
