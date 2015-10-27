@@ -19,8 +19,7 @@ dependencies {
     compile 'com.jcraft:jsch:0.1.51'
 
     //DroneKit-Android client library.
-    //compile 'com.o3dr.android:dronekit-android:2.6.8-beta'
-    compile(name:'dronekit-android.2.6.8', ext:'aar')
+    compile 'com.o3dr.android:dronekit-android:2.6.8-beta'
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')

@@ -1,13 +1,12 @@
 package org.droidplanner.android.fragments.geotag;
 
-import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.net.Uri;
-import android.os.Build;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,23 +17,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.o3dr.android.client.utils.data.tlog.TLogParser;
-import com.o3dr.android.client.utils.data.tlog.TLogParserCallback;
-import com.o3dr.android.client.utils.data.tlog.TLogParserFilter;
-import com.o3dr.android.client.utils.geotag.GeoTagAsyncTask;
-
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.GeoTagActivity;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import timber.log.Timber;
 
 /**
  * Created by chavi on 10/15/15.
@@ -45,7 +32,8 @@ public class GeoTagImagesFragment extends Fragment {
     private static final int STATE_DONE_GEOTAGGING = 2;
 
     private GeoTagActivity activity;
-    private GeoTagTask geoTagTask;
+    private LocalBroadcastManager lbm;
+
     private TextView instructionText;
     private Button geotagButton;
     private ProgressBar progressBar;
@@ -55,7 +43,31 @@ public class GeoTagImagesFragment extends Fragment {
 
     private Animation sdCardAnim;
 
-    private Collection<File> geotaggedList;
+    private ArrayList<File> files;
+
+    private static final IntentFilter filter = new IntentFilter();
+    static {
+        filter.addAction(GeoTagImagesService.STATE_FINISHED_GEOTAGGING);
+        filter.addAction(GeoTagImagesService.STATE_PROGRESS_UPDATE_GEOTAGGING);
+    }
+
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case GeoTagImagesService.STATE_FINISHED_GEOTAGGING:
+                    finishedGeotagging(intent);
+                    break;
+                case GeoTagImagesService.STATE_PROGRESS_UPDATE_GEOTAGGING:
+                    int total = intent.getIntExtra(GeoTagImagesService.EXTRA_TOTAL, 0);
+                    int progress = intent.getIntExtra(GeoTagImagesService.EXTRA_PROGRESS, 0);
+                    updateState(STATE_GEOTAGGING);
+                    progressBar.setMax(total);
+                    progressBar.setProgress(progress);
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onAttach(Context context) {
@@ -65,7 +77,9 @@ public class GeoTagImagesFragment extends Fragment {
             throw new UnsupportedOperationException("Activity is not instance of GeoTagActivity");
         }
 
-        this.activity = (GeoTagActivity) context;
+        activity = (GeoTagActivity) context;
+        lbm = LocalBroadcastManager.getInstance(context);
+
     }
 
     @Override
@@ -91,6 +105,8 @@ public class GeoTagImagesFragment extends Fragment {
 
         sdCardAnim = AnimationUtils.loadAnimation(getContext(), R.anim.sd_card_anim);
 
+        updateState(STATE_INIT);
+
         geotagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,24 +120,49 @@ public class GeoTagImagesFragment extends Fragment {
                         cancelGeoTagging();
                         break;
                     case STATE_DONE_GEOTAGGING:
-                        activity.finishedGeotagging(geotaggedList);
+                        if (activity != null) {
+                            activity.finishedGeotagging(files);
+                        }
                         break;
                 }
             }
         });
+
+        if (activity != null) {
+            activity.updateTitle(R.string.geo_tag_label);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        lbm.registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        lbm.unregisterReceiver(receiver);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        activity = null;
     }
 
     private void startGeoTagging() {
-        File folder = getContext().getExternalFilesDir(null);
-        File tlogFile = new File(folder.getPath() + "/camera_msgs.tlog");
-        Timber.d("path: " + tlogFile.getPath());
-
-        geoTagImages(getContext(), tlogFile);
+        Context context = getContext();
+        Intent intent = new Intent(context, GeoTagImagesService.class);
+        intent.setAction(GeoTagImagesService.ACTION_START_GEOTAGGING);
+        getContext().startService(intent);
     }
 
     private void cancelGeoTagging() {
-        geoTagTask.cancel(true);
-        geoTagTask = null;
+        Context context = getContext();
+        Intent intent = new Intent(context, GeoTagImagesService.class);
+        intent.setAction(GeoTagImagesService.ACTION_CANCEL_GEOTAGGING);
+        getContext().startService(intent);
     }
 
     private void updateState(int state) {
@@ -131,13 +172,16 @@ public class GeoTagImagesFragment extends Fragment {
                 geotagButton.setActivated(false);
                 currState = STATE_INIT;
                 geotagButton.setText(R.string.label_begin);
-                sdCard.clearAnimation();
+                sdCard.setVisibility(View.VISIBLE);
+                sdCard.startAnimation(sdCardAnim);
+                progressBar.setProgress(0);
                 break;
             case STATE_GEOTAGGING:
                 geotagButton.setActivated(true);
                 instructionText.setText(R.string.geotagging);
                 geotagButton.setText(R.string.button_setup_cancel);
-                sdCard.startAnimation(sdCardAnim);
+                sdCard.clearAnimation();
+                sdCard.setVisibility(View.GONE);
                 break;
             case STATE_DONE_GEOTAGGING:
                 geotagButton.setActivated(true);
@@ -154,146 +198,15 @@ public class GeoTagImagesFragment extends Fragment {
         instructionText.setText(String.format(getString(R.string.failed_geotag), message));
     }
 
-    private void geoTagImages(final Context context, File tlogFile) {
-        final String extMount = getExternalStorage(context);
-        if (extMount == null) {
-            return;
-        }
-
-        final ArrayList<File> photoFiles = new ArrayList<>();
-
-        List<File> photos = searchDir(extMount);
-        if (photos != null) {
-            photoFiles.addAll(photos);
-        }
-
-        if (photoFiles.size() == 0) {
-            failedLoading("No photos on SD card for GoPro device.");
-            return;
-        }
-
-        Uri uri = Uri.fromFile(tlogFile);
-        Handler handler = new Handler();
-        TLogParser.getAllEventsAsync(handler, uri, new TLogParserFilter() {
-
-            @Override
-            public boolean includeEvent(TLogParser.Event event) {
-                return 180 == event.getMavLinkMessage().msgid;
-            }
-
-            @Override
-            public boolean shouldIterate() {
-                return true;
-            }
-
-
-        }, new TLogParserCallback() {
-            @TargetApi(Build.VERSION_CODES.KITKAT)
-            @Override
-            public void onResult(List<TLogParser.Event> eventList) {
-                if (eventList.size() < 0) {
-                    failedLoading("No camera message events found");
-                    return;
-                }
-
-                if (geoTagTask != null) {
-                    geoTagTask.cancel(true);
-                }
-                geoTagTask = new GeoTagTask(context, eventList, photoFiles);
-                geoTagTask.execute();
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                if (e instanceof NoSuchElementException) {
-                    failedLoading("No camera message events found");
-                } else {
-                    failedLoading(e.getMessage());
-                }
-            }
-        });
-
-    }
-
-    private String getExternalStorage(Context context) {
-        boolean hasNullFile = false;
-
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            File[] files = context.getExternalFilesDirs(null);
-            for (File extFile : files) {
-                if (extFile == null) {
-                    hasNullFile = true;
-                } else if (Environment.isExternalStorageRemovable(extFile)) {
-                    return findRootPath(extFile);
-                }
-            }
-        }
-        if (hasNullFile) {
-            failedLoading("No external storage device found.");
-        } else {
-            failedLoading("Incompatible device. No external SD card reader found.");
-        }
-        return null;
-    }
-
-    private static String findRootPath(File extFile) {
-        File currPath = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            currPath = extFile;
-            try {
-                while (Environment.isExternalStorageRemovable(currPath.getParentFile())) {
-                    currPath = currPath.getParentFile();
-                }
-            } catch (IllegalArgumentException e) {
-                //swallow
-                return currPath.getAbsolutePath();
-            }
-        }
-        return currPath.getAbsolutePath();
-    }
-
-    private static List<File> searchDir(String mount) {
-        File photoDir = new File(mount + "/DCIM");
-        File[] goProDirs = photoDir.listFiles();
-        if (goProDirs == null || goProDirs.length == 0) {
-            return null;
-        }
-
-        List<File> photoFiles = new ArrayList<>();
-
-        for (File picDir : goProDirs) {
-            if (picDir.getName().toLowerCase().contains("gopro")) {
-                photoFiles.addAll(Arrays.asList(picDir.listFiles()));
-            }
-        }
-
-        return photoFiles;
-    }
-
-    private class GeoTagTask extends GeoTagAsyncTask {
-
-        public GeoTagTask(Context context, List<TLogParser.Event> events, ArrayList<File> photos) {
-            super(context, events, photos);
-        }
-
-        @Override
-        public void onResult(HashMap<File, File> geotaggedFiles, HashMap<File, Exception> failedFiles) {
-            geotaggedList = geotaggedFiles.values();
+    private void finishedGeotagging(Intent intent) {
+        boolean success = intent.getBooleanExtra(GeoTagImagesService.EXTRA_SUCCESS, false);
+        if (success) {
+            files = (ArrayList<File>)intent.getSerializableExtra(GeoTagImagesService.EXTRA_GEOTAGGED_FILES);
             updateState(STATE_DONE_GEOTAGGING);
-            instructionText.setText(String.format(getString(R.string.photos_geootagged), geotaggedFiles.size()));
-            geoTagTask = null;
-        }
-
-        @Override
-        public void onProgress(int numProcessed, int numTotal) {
-            progressBar.setMax(numTotal);
-            progressBar.setProgress(numProcessed);
-        }
-
-        @Override
-        public void onFailed(Exception e) {
-            failedLoading(e.getMessage());
-            geoTagTask = null;
+            instructionText.setText(String.format(getString(R.string.photos_geotagged), files.size()));
+        } else {
+            String failure = intent.getStringExtra(GeoTagImagesService.EXTRA_FAILURE_MESSAGE);
+            failedLoading(failure);
         }
     }
 }
