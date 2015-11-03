@@ -38,6 +38,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import timber.log.Timber;
+
 /**
  * Implements DroidPlanner audible notifications.
  */
@@ -89,7 +91,7 @@ public class TTSNotificationProvider implements OnInitListener,
             if (tts == null)
                 return;
 
-            final String action = intent.getAction();
+            String action = intent.getAction();
             State droneState = drone.getAttribute(AttributeType.STATE);
 
             switch (action) {
@@ -157,7 +159,7 @@ public class TTSNotificationProvider implements OnInitListener,
                     break;
 
                 case AttributeEvent.ALTITUDE_UPDATED:
-                    final Altitude altitude = drone.getAttribute(AttributeType.ALTITUDE);
+                    Altitude altitude = drone.getAttribute(AttributeType.ALTITUDE);
                     if (mAppPrefs.hasExceededMaxAltitude(altitude.getAltitude())) {
                         if (isMaxAltExceeded.compareAndSet(false, true)) {
                             handler.postDelayed(maxAltitudeExceededWarning, WARNING_DELAY);
@@ -171,7 +173,7 @@ public class TTSNotificationProvider implements OnInitListener,
                 case AttributeEvent.AUTOPILOT_ERROR:
                     if (mAppPrefs.getWarningOnAutopilotWarning()) {
                         String errorId = intent.getStringExtra(AttributeEventExtra.EXTRA_AUTOPILOT_ERROR_ID);
-                        final ErrorType errorType = ErrorType.getErrorById(errorId);
+                        ErrorType errorType = ErrorType.getErrorById(errorId);
                         if (errorType != null && errorType != ErrorType.NO_ERROR) {
                             speak(errorType.getLabel(context).toString());
                         }
@@ -207,7 +209,7 @@ public class TTSNotificationProvider implements OnInitListener,
     private final BroadcastReceiver mSpeechIntervalUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
+            String action = intent.getAction();
 
             if (SettingsFragment.ACTION_UPDATED_STATUS_PERIOD.equals(action)) {
                 scheduleWatchdog();
@@ -264,7 +266,7 @@ public class TTSNotificationProvider implements OnInitListener,
             handler.removeCallbacks(watchdogCallback);
 
             if (drone != null) {
-                final State droneState = drone.getAttribute(AttributeType.STATE);
+                State droneState = drone.getAttribute(AttributeType.STATE);
                 if (droneState.isConnected() && droneState.isArmed())
                     speakPeriodic(drone);
             }
@@ -278,27 +280,27 @@ public class TTSNotificationProvider implements OnInitListener,
         private void speakPeriodic(Drone drone) {
             // Drop the message if the previous one is not done yet.
             if (mIsPeriodicStatusStarted.compareAndSet(false, true)) {
-                final Map<String, Boolean> speechPrefs = mAppPrefs.getPeriodicSpeechPrefs();
+                Map<String, Boolean> speechPrefs = mAppPrefs.getPeriodicSpeechPrefs();
 
                 mMessageBuilder.setLength(0);
                 if (speechPrefs.get(DroidPlannerPrefs.PREF_TTS_PERIODIC_BAT_VOLT)) {
-                    final Battery droneBattery = drone.getAttribute(AttributeType.BATTERY);
+                    Battery droneBattery = drone.getAttribute(AttributeType.BATTERY);
                     mMessageBuilder.append(context.getString(R.string.periodic_status_bat_volt,
                             droneBattery.getBatteryVoltage()));
                 }
 
                 if (speechPrefs.get(DroidPlannerPrefs.PREF_TTS_PERIODIC_ALT)) {
-                    final Altitude altitude = drone.getAttribute(AttributeType.ALTITUDE);
+                    Altitude altitude = drone.getAttribute(AttributeType.ALTITUDE);
                     mMessageBuilder.append(context.getString(R.string.periodic_status_altitude, (int) (altitude.getAltitude())));
                 }
 
                 if (speechPrefs.get(DroidPlannerPrefs.PREF_TTS_PERIODIC_AIRSPEED)) {
-                    final Speed droneSpeed = drone.getAttribute(AttributeType.SPEED);
+                    Speed droneSpeed = drone.getAttribute(AttributeType.SPEED);
                     mMessageBuilder.append(context.getString(R.string.periodic_status_airspeed, (int) (droneSpeed.getAirSpeed())));
                 }
 
                 if (speechPrefs.get(DroidPlannerPrefs.PREF_TTS_PERIODIC_RSSI)) {
-                    final Signal signal = drone.getAttribute(AttributeType.SIGNAL);
+                    Signal signal = drone.getAttribute(AttributeType.SIGNAL);
                     mMessageBuilder.append(context.getString(R.string.periodic_status_rssi, (int) signal.getRssi()));
                 }
 
@@ -357,7 +359,7 @@ public class TTSNotificationProvider implements OnInitListener,
         if (status == TextToSpeech.SUCCESS) {
             // TODO: check if the language is available
             Locale ttsLanguage;
-            final int sdkVersion = Build.VERSION.SDK_INT;
+            int sdkVersion = Build.VERSION.SDK_INT;
             if (sdkVersion >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 ttsLanguage = tts.getDefaultLanguage();
             } else {
@@ -367,11 +369,15 @@ public class TTSNotificationProvider implements OnInitListener,
             if (ttsLanguage == null || tts.isLanguageAvailable(ttsLanguage) == TextToSpeech.LANG_NOT_SUPPORTED) {
                 ttsLanguage = Locale.US;
                 if (sdkVersion >= Build.VERSION_CODES.LOLLIPOP) {
-                    final Set<Locale> languagesSet = tts.getAvailableLanguages();
-                    if (languagesSet != null && !languagesSet.isEmpty()) {
-                        final List<Locale> availableLanguages = new ArrayList<>(languagesSet);
-                        //Pick the first available language.
-                        ttsLanguage = availableLanguages.get(0);
+                    try {
+                        Set<Locale> languagesSet = tts.getAvailableLanguages();
+                        if (languagesSet != null && !languagesSet.isEmpty()) {
+                            List<Locale> availableLanguages = new ArrayList<>(languagesSet);
+                            //Pick the first available language.
+                            ttsLanguage = availableLanguages.get(0);
+                        }
+                    }catch(NullPointerException e){
+                        Timber.w(e, "Caught an exception while retrieving the list of available languages.");
                     }
                 }
             }
@@ -398,7 +404,7 @@ public class TTSNotificationProvider implements OnInitListener,
                 tts.setOnUtteranceCompletedListener(mSpeechCompleteListener);
 
                 // Register the broadcast receiver
-                final IntentFilter intentFilter = new IntentFilter();
+                IntentFilter intentFilter = new IntentFilter();
                 intentFilter.addAction(ACTION_SPEAK_MESSAGE);
                 intentFilter.addAction(SettingsFragment.ACTION_UPDATED_STATUS_PERIOD);
 
@@ -426,7 +432,7 @@ public class TTSNotificationProvider implements OnInitListener,
     private void speak(String string, boolean append, String utteranceId) {
         if (tts != null) {
             if (shouldEnableTTS()) {
-                final int queueType = append ? TextToSpeech.QUEUE_ADD : TextToSpeech.QUEUE_FLUSH;
+                int queueType = append ? TextToSpeech.QUEUE_ADD : TextToSpeech.QUEUE_FLUSH;
 
                 mTtsParams.clear();
                 if (utteranceId != null) {
