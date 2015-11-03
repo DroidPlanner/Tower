@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,29 +17,14 @@ import android.widget.TextView;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 
-import org.droidplanner.android.BuildConfig;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.GeoTagActivity;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
-import org.droidplanner.android.utils.connection.SshConnection;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-
-import timber.log.Timber;
 
 /**
  * Created by chavi on 10/15/15.
  */
 public class GetCameraLogsFragment extends ApiListenerFragment {
-    private static final String SSH_USERNAME = "root";
-    private static final String SSH_PASSWORD = "TjSDBkAu";
-    private static final SshConnection soloSshLink = new SshConnection(BuildConfig.SOLO_LINK_IP, SSH_USERNAME, SSH_PASSWORD);
-    private static final String CAMERA_TLOG_FILE = "/usr/bin/camera_msgs.tlog";//"/log/camera_msgs.tlog";
-
-    private static final int NUMBER_OF_RETRIES = 3;
-
     private static final int STATE_INIT = -1;
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTED_NOT_STARTED = 1;
@@ -52,6 +36,7 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
     static {
         filter.addAction(AttributeEvent.STATE_CONNECTED);
         filter.addAction(AttributeEvent.STATE_DISCONNECTED);
+        filter.addAction(GeoTagImagesService.STATE_FINISHED_LOADING_LOGS);
     }
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -64,11 +49,19 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
                 case AttributeEvent.STATE_DISCONNECTED:
                     updateState(STATE_DISCONNECTED);
                     break;
+                case GeoTagImagesService.STATE_FINISHED_LOADING_LOGS:
+                    boolean success = intent.getBooleanExtra(GeoTagImagesService.EXTRA_SUCCESS, false);
+                    if (success) {
+                        updateState(STATE_DONE_LOGS);
+                    } else {
+                        //add ui for this
+                        updateState(STATE_INIT);
+                    }
+                    break;
             }
         }
     };
 
-    private AsyncTask asyncTask;
     private GeoTagActivity activity;
 
     private TextView instructionText;
@@ -119,6 +112,10 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
         if (getDrone().isConnected()) {
             updateState(STATE_CONNECTED_NOT_STARTED);
         }
+
+        if (activity != null) {
+            activity.updateTitle(R.string.transfer_photo_label);
+        }
     }
 
     @Override
@@ -144,7 +141,6 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
                 secondaryInstruction.setVisibility(View.INVISIBLE);
                 geotagButton.setActivated(false);
                 disconnectedUI();
-                //stopAnimation();
                 break;
             case STATE_CONNECTED_NOT_STARTED:
                 instructionText.setText(R.string.ready_to_transfer_message);
@@ -161,17 +157,18 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
                 geotagButton.setActivated(true);
                 break;
             case STATE_DONE_LOGS:
-                activity.finishedLoadingLogs();
+                if (activity != null) {
+                    activity.finishedLoadingLogs();
+                }
                 break;
         }
     }
 
     private void startLoadingLogs() {
-        if (asyncTask != null) {
-            asyncTask.cancel(true);
-        }
-        asyncTask = new DownloadCameraTlogs(getContext());
-        asyncTask.execute();
+        Context context = getContext();
+        Intent intent = new Intent(context, GeoTagImagesService.class);
+        intent.setAction(GeoTagImagesService.ACTION_START_LOADING_LOGS);
+        getContext().startService(intent);
     }
 
     private void disconnectedUI() {
@@ -219,91 +216,21 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
         this.activity = (GeoTagActivity) activity;
     }
 
-    private class DownloadCameraTlogs extends AsyncTask<Object, Integer, Boolean> {
+    @Override
+    public void onStart() {
+        super.onStart();
+        getBroadcastManager().registerReceiver(receiver, filter);
+    }
 
-        private WeakReference<Context> weakContext;
+    @Override
+    public void onStop() {
+        super.onStop();
+        getBroadcastManager().unregisterReceiver(receiver);
+    }
 
-        private DownloadCameraTlogs(Context context) {
-            this.weakContext = new WeakReference<>(context);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Boolean doInBackground(Object... params) {
-            Timber.d("Downloading the logs from Artoo");
-
-            try {
-
-                Context context = weakContext.get();
-                if (context != null) {
-                    File folder = context.getExternalFilesDir(null);
-                    if (folder == null) {
-                        return false;
-                    }
-
-                    final boolean isSoloDownloadSuccessful = downloadFileFromDevice
-                        (CAMERA_TLOG_FILE, folder, soloSshLink, NUMBER_OF_RETRIES);
-
-                    return isSoloDownloadSuccessful;
-
-                }
-            } catch (IOException e) {
-                Timber.e("Unable to download the file to the phone.", e);
-            } catch (NullPointerException e) {
-                Timber.e("Unable to create file path. ", e);
-            }
-            return false;
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-            super.onProgressUpdate(progress);
-        }
-
-        /**
-         * After completing background task Dismiss the progress dialog
-         */
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-                updateState(STATE_DONE_LOGS);
-            }
-        }
-
-        /**
-         * Download a file from from the given source, to the specified destination.
-         *
-         * @param file        File to download.
-         * @param destination Folder destination.
-         * @return true if successful.
-         * @throws IOException
-         */
-        private boolean downloadFileFromDevice(String file, File destination, SshConnection connection, int numberOfRetries) throws IOException {
-            boolean gotOne = false;
-            try {
-                //Try to download the file
-                for (int retries = 0; retries < numberOfRetries; retries++) {
-                    final boolean downloadResult = connection.downloadFile(destination.getAbsolutePath(), file);
-                    gotOne = gotOne || downloadResult;
-                    if (!downloadResult) {
-                        Timber.w("Unable to download file " + file + " to the phone. Trying again");
-                        //Delete corrupted file
-                        final File corruptedFile = new File(destination, file);
-                        corruptedFile.delete();
-                    } else {
-                        //File downloaded
-                        break;
-                    }
-                }
-            } catch (IOException e) {
-                Timber.w("Unable to download file", e);
-            }
-
-            Timber.i("Logs were downloaded to the device");
-            return gotOne;
-
-        }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        activity = null;
     }
 }

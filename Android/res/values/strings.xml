@@ -585,8 +585,9 @@
     <string name="transferring_data">Transferring photo location data to app.</string>
     <string name="insert_sdcard">Insert GoPro SD card into mobile device.</string>
     <string name="geotagging">Geotagging using photo location data.</string>
-    <string name="photos_geootagged">%s photos have been geotagged and saved.</string>
+    <string name="photos_geotagged">%s photos have been geotagged and saved.</string>
     <string name="failed_geotag">Failed to geotag images. %s</string>
     <string name="upload_images">Upload Images</string>
     <string name="uploading_images">Uploading Images</string>
+    <string name="get_recap_image">Get ReCap Image</string>
 </resources>

@@ -156,7 +156,13 @@
             android:label="@string/geo_tag_label"
             android:launchMode="singleTop"/>
 
+        <activity
+            android:name=".activities.GetRecapImageActivity"
+            android:label="Get Recap Image"
+            android:launchMode="singleTop"/>
+
         <service android:name=".AppService"/>
+        <service android:name=".fragments.geotag.GeoTagImagesService"/>
 
     </application>
 

@@ -2,7 +2,7 @@
     <translate
         android:duration="1500"
         android:fromXDelta="0%"
-        android:toXDelta="-20%p"
+        android:toXDelta="-25%p"
         android:repeatCount="infinite"
         android:repeatMode="restart"/>
 </set>

@@ -1,7 +1,5 @@
 package org.droidplanner.android.utils.connection;
 
-import android.util.Log;
-
 import com.google.gson.JsonParseException;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.HttpUrl;
@@ -60,23 +58,14 @@ import timber.log.Timber;
  */
 public class DroneKitCloudClient {
     public static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
-    private static String basePath = "http://dronekitcloudv2staging-1257415351.us-east-1.elb.amazonaws.com/api/v2";
-
-    private final String CONTENT_TYPE = "application/json";
+    private static final String basePath = "http://dronekitcloudv2staging-1257415351.us-east-1.elb.amazonaws.com/api/v2";
+    private static final String TOKEN_KEY = "Token";
+    private static final String API_KEY = "apiKey";
 
     private OkHttpClient client = new OkHttpClient();
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
-    public void setBasePath(String basePath) {
-        this.basePath = basePath;
-    }
-
-    public String getBasePath() {
-        return basePath;
-    }
 
     HostnameVerifier hostnameVerifier = new HostnameVerifier() {
         @Override
@@ -144,30 +133,20 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/actions/logreader/{mediaId}".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "mediaId" + "\\}", escapeString(mediaId.toString()));
+        String path = "/actions/logreader/{mediaId}".replaceAll("\\{" + "mediaId" + "\\}", escapeString(mediaId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
-        // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
         queryParams.addAll(parameterToPairs("", "start", start));
-
         queryParams.addAll(parameterToPairs("", "end", end));
-
         queryParams.addAll(parameterToPairs("multi", "types", types));
-
         queryParams.addAll(parameterToPairs("multi", "fields", fields));
-
         queryParams.addAll(parameterToPairs("", "frequency", frequency));
 
-
-        headerParams.put("Token", parameterToString(token));
+        // header params
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams);
@@ -207,22 +186,16 @@ public class DroneKitCloudClient {
             throw new ApiException(400, "Missing the required parameter 'body' when calling actionsRecapPost");
         }
 
-
         // create path and map variables
-        String path = "/actions/recap".replaceAll("\\{format\\}", "json");
+        String path = "/actions/recap";
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-        headerParams.put("Token", parameterToString(token));
-
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams);
@@ -239,12 +212,9 @@ public class DroneKitCloudClient {
     /**
      * @param apiKey The API key assigned to you
      * @param token  auth token given by /auth/signIn
-     * @param body   Gets authorization url for Recap. Client needs to redirect to authorization URL and record the verifier token, then send it to /users/{userId}/recap_callback
      * @return RecapAuth
      */
-    public RecapAuth actionsRecapAuthPost(String apiKey, String token, Object body) throws ApiException {
-        Object postBody = body;
-
+    public RecapAuth actionsRecapAuthPost(String apiKey, String token) throws ApiException {
         // verify the required parameter 'apiKey' is set
         if (apiKey == null) {
             throw new ApiException(400, "Missing the required parameter 'apiKey' when calling actionsRecapAuthPost");
@@ -255,26 +225,18 @@ public class DroneKitCloudClient {
             throw new ApiException(400, "Missing the required parameter 'token' when calling actionsRecapAuthPost");
         }
 
-        // verify the required parameter 'body' is set
-//        if (body == null) {
-//            throw new ApiException(400, "Missing the required parameter 'body' when calling actionsRecapAuthPost");
-//        }
-
 
         // create path and map variables
-        String path = "/actions/recap/auth".replaceAll("\\{format\\}", "json");
+        String path = "/actions/recap/auth";
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
+        Map<String, String> headerParams = new HashMap<>();
 
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
 
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-        headerParams.put("Token", parameterToString(token));
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         HttpUrl httpUrl = createUrl(basePath, path, queryParams);
 
@@ -286,7 +248,9 @@ public class DroneKitCloudClient {
         }
 
         try {
-            String response = authRecap(httpUrl, headersBuilder.build(), token);
+            JSONObject body = new JSONObject();
+            body.put("param", basePath + "/actions/recap/auth/callback?token=" + token);
+            String response = authRecap(httpUrl, headersBuilder.build(), token, body);
             if (response != null) {
                 return (RecapAuth) deserialize(response, "", RecapAuth.class);
             } else {
@@ -295,9 +259,10 @@ public class DroneKitCloudClient {
         } catch (ApiException ex) {
             throw ex;
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ApiException(500, e.getMessage());
+        } catch (JSONException e) {
+            throw new ApiException(500, e.getMessage());
         }
-        return null;
     }
 
     /**
@@ -326,18 +291,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/actions/recap/auth/callback".replaceAll("\\{format\\}", "json");
+        String path = "/actions/recap/auth/callback";
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-        headerParams.put("Token", parameterToString(token));
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams);
@@ -371,19 +333,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/actions/recap/auth/logout".replaceAll("\\{format\\}", "json");
+        String path = "/actions/recap/auth/logout";
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-        headerParams.put("Token", parameterToString(token));
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         HttpUrl httpUrl = createUrl(basePath, path, queryParams);
 
@@ -434,19 +392,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/actions/recap/{recapId}".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "recapId" + "\\}", escapeString(recapId.toString()));
+        String path = "/actions/recap/{recapId}".replaceAll("\\{" + "recapId" + "\\}", escapeString(recapId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-        headerParams.put("Token", parameterToString(token));
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams);
@@ -488,19 +442,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/actions/recap/{recapId}/properties".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "recapId" + "\\}", escapeString(recapId.toString()));
+        String path = "/actions/recap/{recapId}/properties".replaceAll("\\{" + "recapId" + "\\}", escapeString(recapId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-        headerParams.put("Token", parameterToString(token));
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams);
@@ -542,19 +492,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/actions/recap/{recapId}/properties/all".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "recapId" + "\\}", escapeString(recapId.toString()));
+        String path = "/actions/recap/{recapId}/properties/all".replaceAll("\\{" + "recapId" + "\\}", escapeString(recapId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-        headerParams.put("Token", parameterToString(token));
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
 
         try {
@@ -597,20 +543,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/actions/recap/{recapId}/results".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "recapId" + "\\}", escapeString(recapId.toString()));
+        String path = "/actions/recap/{recapId}/results".replaceAll("\\{" + "recapId" + "\\}", escapeString(recapId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-        headerParams.put("Token", parameterToString(token));
-
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams);
@@ -646,17 +587,14 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/auth/signIn".replaceAll("\\{format\\}", "json");
+        String path = "/auth/signIn";
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
+        Map<String, String> headerParams = new HashMap<>();
 
         try {
             String response = invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams);
@@ -698,19 +636,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/media/{mediaId}".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "mediaId" + "\\}", escapeString(mediaId.toString()));
+        String path = "/media/{mediaId}".replaceAll("\\{" + "mediaId" + "\\}", escapeString(mediaId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-        headerParams.put("Token", parameterToString(token));
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams);
@@ -752,19 +686,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/media/{mediaId}".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "mediaId" + "\\}", escapeString(mediaId.toString()));
+        String path = "/media/{mediaId}".replaceAll("\\{" + "mediaId" + "\\}", escapeString(mediaId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-        headerParams.put("Token", parameterToString(token));
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams);
@@ -805,21 +735,16 @@ public class DroneKitCloudClient {
         }
 
         // create path and map variables
-        String path = "/missions".replaceAll("\\{format\\}", "json");
-        Log.d("CHAVI", "path: " + path);
+        String path = "/missions";
+
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-        headerParams.put("Token", parameterToString(token));
-
-        Log.d("CHAVI", "body: " + postBody.toString());
 
         try {
             String response = invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams);
@@ -859,21 +784,16 @@ public class DroneKitCloudClient {
             throw new ApiException(400, "Missing the required parameter 'token' when calling missionsMissionIdGet");
         }
 
-
         // create path and map variables
-        String path = "/missions/{missionId}".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "missionId" + "\\}", escapeString(missionId.toString()));
+        String path = "/missions/{missionId}".replaceAll("\\{" + "missionId" + "\\}", escapeString(missionId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-        headerParams.put("Token", parameterToString(token));
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams);
@@ -915,19 +835,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/missions/{missionId}".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "missionId" + "\\}", escapeString(missionId.toString()));
+        String path = "/missions/{missionId}".replaceAll("\\{" + "missionId" + "\\}", escapeString(missionId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-        headerParams.put("Token", parameterToString(token));
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams);
@@ -969,21 +885,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/missions/{missionId}/media".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "missionId" + "\\}", escapeString(missionId.toString()));
+        String path = "/missions/{missionId}/media".replaceAll("\\{" + "missionId" + "\\}", escapeString(missionId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-
-        headerParams.put("Token", parameterToString(token));
-
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams);
@@ -1035,7 +945,6 @@ public class DroneKitCloudClient {
             throw new ApiException(400, "Missing the required parameter 'mediaType' when calling missionsMissionIdMediaPost");
         }
 
-        //postBody = RequestBody.create(MediaType.parse(mediaType), file);
         postBody = new MultipartBuilder()
             .type(MultipartBuilder.FORM)
             .addFormDataPart("file", file.getName(),
@@ -1043,21 +952,15 @@ public class DroneKitCloudClient {
             .build();
 
         // create path and map variables
-        String path = "/missions/{missionId}/media".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "missionId" + "\\}", escapeString(missionId.toString()));
+        String path = "/missions/{missionId}/media".replaceAll("\\{" + "missionId" + "\\}", escapeString(missionId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-
-        headerParams.put("Token", parameterToString(token));
-
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
         headerParams.put("mediaType", parameterToString(mediaType));
 
         try {
@@ -1094,18 +997,14 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/users".replaceAll("\\{format\\}", "json");
+        String path = "/users";
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
+        Map<String, String> headerParams = new HashMap<>();
 
         try {
             String response = invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams);
@@ -1141,20 +1040,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/users/me".replaceAll("\\{format\\}", "json");
+        String path = "/users/me";
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-
-        headerParams.put("Token", parameterToString(token));
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
 
         try {
@@ -1192,21 +1086,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/users/me".replaceAll("\\{format\\}", "json");
+        String path = "/users/me";
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-
-        headerParams.put("Token", parameterToString(token));
-
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams);
@@ -1248,21 +1136,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/users/{userId}".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "userId" + "\\}", escapeString(userId.toString()));
+        String path = "/users/{userId}".replaceAll("\\{" + "userId" + "\\}", escapeString(userId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-
-        headerParams.put("Token", parameterToString(token));
-
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams);
@@ -1303,23 +1185,16 @@ public class DroneKitCloudClient {
             throw new ApiException(400, "Missing the required parameter 'token' when calling usersUserIdPost");
         }
 
-
         // create path and map variables
-        String path = "/users/{userId}".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "userId" + "\\}", escapeString(userId.toString()));
+        String path = "/users/{userId}".replaceAll("\\{" + "userId" + "\\}", escapeString(userId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-
-        headerParams.put("Token", parameterToString(token));
-
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams);
@@ -1361,20 +1236,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/users/{userId}".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "userId" + "\\}", escapeString(userId.toString()));
+        String path = "/users/{userId}".replaceAll("\\{" + "userId" + "\\}", escapeString(userId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-
-        headerParams.put("Token", parameterToString(token));
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
 
         try {
@@ -1411,18 +1281,14 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/users/{userId}/missions".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "userId" + "\\}", escapeString(userId.toString()));
+        String path = "/users/{userId}/missions".replaceAll("\\{" + "userId" + "\\}", escapeString(userId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        headerParams.put("Token", parameterToString(token));
-
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams);
@@ -1462,23 +1328,16 @@ public class DroneKitCloudClient {
             throw new ApiException(400, "Missing the required parameter 'token' when calling usersUserIdVehiclesGet");
         }
 
-
         // create path and map variables
-        String path = "/users/{userId}/vehicles".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "userId" + "\\}", escapeString(userId.toString()));
+        String path = "/users/{userId}/vehicles".replaceAll("\\{" + "userId" + "\\}", escapeString(userId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-
-        headerParams.put("Token", parameterToString(token));
-
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams);
@@ -1520,19 +1379,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/vehicles".replaceAll("\\{format\\}", "json");
+        String path = "/vehicles";
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-        headerParams.put("Token", parameterToString(token));
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams);
@@ -1574,21 +1429,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/vehicles/{vehicleId}".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "vehicleId" + "\\}", escapeString(vehicleId.toString()));
+        String path = "/vehicles/{vehicleId}".replaceAll("\\{" + "vehicleId" + "\\}", escapeString(vehicleId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-
-        headerParams.put("Token", parameterToString(token));
-
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams);
@@ -1630,21 +1479,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/vehicles/{vehicleId}".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "vehicleId" + "\\}", escapeString(vehicleId.toString()));
+        String path = "/vehicles/{vehicleId}".replaceAll("\\{" + "vehicleId" + "\\}", escapeString(vehicleId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-
-        headerParams.put("Token", parameterToString(token));
-
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams);
@@ -1686,21 +1529,15 @@ public class DroneKitCloudClient {
 
 
         // create path and map variables
-        String path = "/vehicles/{vehicleId}/missions".replaceAll("\\{format\\}", "json").replaceAll("\\{" + "vehicleId" + "\\}", escapeString(vehicleId.toString()));
+        String path = "/vehicles/{vehicleId}/missions".replaceAll("\\{" + "vehicleId" + "\\}", escapeString(vehicleId.toString()));
 
         // query params
-        List<Pair> queryParams = new ArrayList<Pair>();
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.addAll(parameterToPairs("", API_KEY, apiKey));
+
         // header params
-        Map<String, String> headerParams = new HashMap<String, String>();
-        // form params
-        Map<String, String> formParams = new HashMap<String, String>();
-
-
-        queryParams.addAll(parameterToPairs("", "apiKey", apiKey));
-
-
-        headerParams.put("Token", parameterToString(token));
-
+        Map<String, String> headerParams = new HashMap<>();
+        headerParams.put(TOKEN_KEY, parameterToString(token));
 
         try {
             String response = invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams);
@@ -1714,13 +1551,8 @@ public class DroneKitCloudClient {
         }
     }
 
-
     public static String formatDateTime(Date datetime) {
         return DATE_TIME_FORMAT.format(datetime);
-    }
-
-    public static String formatDate(Date date) {
-        return DATE_FORMAT.format(date);
     }
 
     public static String parameterToString(Object param) {
@@ -1746,7 +1578,7 @@ public class DroneKitCloudClient {
       Format to {@code Pair} objects.
     */
     public static List<Pair> parameterToPairs(String collectionFormat, String name, Object value) {
-        List<Pair> params = new ArrayList<Pair>();
+        List<Pair> params = new ArrayList<>();
 
         // preconditions
         if (name == null || name.isEmpty() || value == null) {
@@ -1830,16 +1662,14 @@ public class DroneKitCloudClient {
                 return null;
             }
         } catch (Exception e) {
-            Log.d("CHAVI", "exception in serialize: " + e);
             throw new ApiException(500, e.getMessage());
         }
     }
 
     public String invokeAPI(String host, String path, String method, List<Pair> queryParams, Object body, Map<String, String> headerParams) throws ApiException {
         HttpUrl httpUrl = createUrl(host, path, queryParams);
-        Log.d("CHAVI", "url: " + httpUrl);
 
-        headerParams.put("Accept", "application/json");
+        //headerParams.put("Accept", "application/json");
         headerParams.put("Content-Type", "application/json");
         Headers.Builder headersBuilder = new Headers.Builder();
         for (String key : headerParams.keySet()) {
@@ -1863,7 +1693,6 @@ public class DroneKitCloudClient {
 
             String responseBody = response.body().string();
 
-            Log.d("CHAVI", "response code: " + response.code() + " response " + responseBody);
             int code = response.code();
             String responseString = null;
             if (code == 204) {
@@ -1902,7 +1731,6 @@ public class DroneKitCloudClient {
                 .post(requestBody)
                 .build();
 
-            Log.d("CHAVI", "request: " + request.urlString() + " body: " + request.body().toString());
             Response response = client.newCall(request).execute();
 
             String responseBody = response.body().string();
@@ -1948,7 +1776,7 @@ public class DroneKitCloudClient {
             .post(requestBody)
             .build();
 
-        Log.d("CHAVI", "request: " + request.urlString() + " body: " + request.body().toString() + " serializedBody: " + serializedBody);
+
         Response response = client.newCall(request).execute();
         return response;
     }
@@ -1987,46 +1815,33 @@ public class DroneKitCloudClient {
         return response;
     }
 
-    public String authRecap(HttpUrl url, Headers headers, String token) throws IOException, ApiException {
+    public String authRecap(HttpUrl url, Headers headers, String token, JSONObject requestBodyJson) throws IOException, ApiException {
+        RequestBody requestBody = RequestBody.create(JSON, requestBodyJson.toString());
+        Request request = new Request.Builder()
+            .url(url)
+            .headers(headers)
+            .post(requestBody)
+            .build();
 
-        try {
-            JSONObject jsonObject = new JSONObject();
+        Response response = client.newCall(request).execute();
 
-            jsonObject.put("param", basePath + "/actions/recap/auth/callback?token=" + token);
+        String responseBody = response.body().string();
 
-            RequestBody requestBody = RequestBody.create(JSON, jsonObject.toString());
-            Request request = new Request.Builder()
-                .url(url)
-                .headers(headers)
-                .post(requestBody)
-                .build();
-
-            Response response = client.newCall(request).execute();
-
-            String responseBody = response.body().string();
-
-            Log.d("CHAVI", "response code: " + response.code() + " response " + responseBody);
-            int code = response.code();
-            String responseString = null;
-            if (code == 204) {
-                responseString = "";
-                return responseString;
-            } else if (code >= 200 && code < 300) {
-                return responseBody;
+        int code = response.code();
+        String responseString = null;
+        if (code == 204) {
+            responseString = "";
+            return responseString;
+        } else if (code >= 200 && code < 300) {
+            return responseBody;
+        } else {
+            if (response.message() != null) {
+                responseString = response.message();
             } else {
-                if (response.message() != null) {
-                    responseString = response.message();
-                } else {
-                    responseString = "no data";
-                }
+                responseString = "no data";
             }
-            throw new ApiException(code, responseString);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-        return null;
-
+        throw new ApiException(code, responseString);
     }
 
     public String logoutRecap(HttpUrl url, Headers headers) throws ApiException {
@@ -2044,7 +1859,6 @@ public class DroneKitCloudClient {
 
             String responseBody = response.body().string();
 
-            Log.d("CHAVI", "response code: " + response.code() + " response " + responseBody);
             int code = response.code();
             String responseString = null;
             if (code == 204) {

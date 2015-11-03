@@ -11,6 +11,8 @@
         android:id="@+id/fragment_geotag_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginBottom="60dp"
+        android:layout_marginTop="60dp"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
@@ -18,31 +20,41 @@
         <ImageView
             android:id="@+id/phone"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.7"
             android:src="@drawable/phone"/>
 
         <ImageView
             android:id="@+id/phone_control_dots"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="30dp"/>
+            android:layout_height="0dp"
+            android:layout_margin="50dp"
+            android:layout_weight="1"
+            android:rotation="90"
+            android:src="@drawable/blue_loading_dots"/>
 
         <ImageView
             android:id="@+id/control"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:src="@drawable/controller"/>
 
         <ImageView
             android:id="@+id/control_copter_dots"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="30dp"/>
+            android:layout_height="0dp"
+            android:layout_margin="50dp"
+            android:layout_weight="1"
+            android:rotation="90"
+            android:src="@drawable/blue_loading_dots"/>
 
         <ImageView
             android:id="@+id/copter"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:src="@drawable/solo"/>
 
     </LinearLayout>
 
