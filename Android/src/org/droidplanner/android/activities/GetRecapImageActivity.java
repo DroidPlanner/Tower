@@ -111,9 +111,17 @@ public class GetRecapImageActivity extends DrawerNavigationUI {
                 String token = GoogleMapPrefFragment.PrefManager.getDroneKitToken(getApplicationContext());
                 try {
                     SceneResult recapResult = defaultApi.actionsRecapRecapIdResultsGet(lastRecapId, "key", token);
-                    updateText(recapResult.toString());
+                    if (recapResult.getError()) {
+                        updateText("Failed to get recap job");
+                    } else {
+                        updateText(recapResult.getUrl());
+                    }
                 } catch (ApiException e) {
-                    updateText("Failed to get recap job " + e + " code: " + e.getCode());
+                    if (e.getCode() == 500) {
+                        updateText("Image url not ready. Job is not complete");
+                    } else {
+                        updateText("Failed to get recap job " + e + " code: " + e.getCode());
+                    }
                 }
             }
         });

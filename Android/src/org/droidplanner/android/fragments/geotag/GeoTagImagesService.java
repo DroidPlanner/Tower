@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.o3dr.android.client.utils.data.tlog.TLogParser;
@@ -165,7 +164,6 @@ public class GeoTagImagesService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -356,6 +354,8 @@ public class GeoTagImagesService extends Service {
                 if (token == null) {
                     return;
                 }
+
+                logoutRecap(token.getToken());
 
                 Bundle bundle = new Bundle();
                 bundle.putString(EXTRA_TOKEN, token.getToken());
@@ -667,8 +667,8 @@ public class GeoTagImagesService extends Service {
     private RecapResult startRecapJob(StringBuilder message) {
 
         Params params = new Params();
-        params.setFormat("obj");
-        params.setQuality("9");
+        params.setFormat("ortho");
+        params.setQuality("10");
         params.setService("recap");
 
         ArrayList<ItemId> missionList = new ArrayList<>(1);
@@ -698,9 +698,9 @@ public class GeoTagImagesService extends Service {
         lbm.sendBroadcast(intent);
     }
 
-    private void logoutRecap() {
+    private void logoutRecap(String token) {
         try {
-            User user = defaultApi.actionsRecapAuthLogoutPost(API_KEY, token.getToken());
+            User user = defaultApi.actionsRecapAuthLogoutPost(API_KEY, token);
             Timber.d("logged out of recap " + user.getEmail());
         } catch (ApiException e) {
             Timber.e("Failed to logout " + e + " code: " + e.getCode());

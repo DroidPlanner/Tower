@@ -77,8 +77,8 @@ public class DroneKitCloudClient {
     };
 
     public DroneKitCloudClient() {
-        client.setConnectTimeout(100, TimeUnit.SECONDS);
-        client.setReadTimeout(100, TimeUnit.SECONDS);
+        client.setConnectTimeout(5, TimeUnit.MINUTES);
+        client.setReadTimeout(5, TimeUnit.MINUTES);
     }
 
 
@@ -1678,6 +1678,7 @@ public class DroneKitCloudClient {
 
         Response response = null;
 
+        Timber.d("Request url %s", httpUrl);
         try {
             if ("GET".equals(method)) {
                 response = getRequest(httpUrl, headersBuilder.build());
@@ -1694,6 +1695,7 @@ public class DroneKitCloudClient {
             String responseBody = response.body().string();
 
             int code = response.code();
+            Timber.d("Response code %s body %s", code, responseBody);
             String responseString = null;
             if (code == 204) {
                 responseString = "";
@@ -1769,6 +1771,7 @@ public class DroneKitCloudClient {
     public Response postRequest(HttpUrl url, Headers headers, Object body) throws IOException, ApiException {
 
         String serializedBody = serialize(body);
+        Timber.d("post body: " + serializedBody);
         RequestBody requestBody = RequestBody.create(JSON, serializedBody);
         Request request = new Request.Builder()
             .url(url)
