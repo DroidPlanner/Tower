@@ -40,13 +40,10 @@ import timber.log.Timber;
  */
 public class ControlActivity extends DrawerNavigationUI {
 
-    private static final float MAX_VEL = 5f, MAX_VEL_Z = 5f;
-
     private final static IntentFilter eventFilter = new IntentFilter();
 
     static {
         eventFilter.addAction(AttributeEvent.ATTITUDE_UPDATED);
-        eventFilter.addAction(AttributeEvent.STATE_VEHICLE_MODE);
         eventFilter.addAction(AttributeEvent.STATE_UPDATED);
         eventFilter.addAction(AttributeEvent.STATE_ARMING);
     }
@@ -59,7 +56,6 @@ public class ControlActivity extends DrawerNavigationUI {
                     updateYawParams();
                     break;
 
-                case AttributeEvent.STATE_VEHICLE_MODE:
                 case AttributeEvent.STATE_UPDATED:
                 case AttributeEvent.STATE_ARMING:
                     updateVehicleReadiness();
@@ -195,7 +191,7 @@ public class ControlActivity extends DrawerNavigationUI {
         float x = rightJoystick.getAxis(JoystickView.Axis.X);
         float y = rightJoystick.getAxis(JoystickView.Axis.Y) * -1;
 
-        ControlApi.getApi(dpApp.getDrone()).moveAtVelocity(ControlApi.VEHICLE_COORDINATE_FRAME, y, x, throttle, null);
+        ControlApi.getApi(dpApp.getDrone()).manualControl(y, x, throttle, null);
     }
 
     @Override
@@ -243,10 +239,19 @@ public class ControlActivity extends DrawerNavigationUI {
 
     private void updateVehicleReadiness() {
         Drone drone = dpApp.getDrone();
-        State state = drone.getAttribute(AttributeType.STATE);
-        boolean isFlying = state.isFlying();
+        ControlApi.getApi(drone).enableManualControl(true, new ControlApi.ManualControlStateListener() {
+            @Override
+            public void onManualControlEnabled() {
+                enableJoysticks(true);
+            }
 
-        enableJoysticks(state.getVehicleMode() == VehicleMode.COPTER_GUIDED && isFlying);
+            @Override
+            public void onManualControlDisabled() {
+                enableJoysticks(false);
+            }
+        });
+
+        State state = drone.getAttribute(AttributeType.STATE);
         toggleTakeOffLand(state);
     }
 

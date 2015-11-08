@@ -22,7 +22,7 @@ public class ParamsAdapterItem implements Parcelable {
         formatter.applyPattern("0.###");
     }
 
-	private Parameter parameter;
+	private final Parameter parameter;
 
 	private String dirtyValue;
 	private Validation validation;
