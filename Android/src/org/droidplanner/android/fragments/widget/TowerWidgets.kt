@@ -52,7 +52,7 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
 
         override fun canMaximize() = true
 
-        override fun isEnabledByDefault() = true
+        override fun isEnabledByDefault() = false
 
         override fun getMinimizedFragment() = MiniWidgetUVCLinkVideo()
 
