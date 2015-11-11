@@ -25,7 +25,7 @@
     <string name="pref_maps_providers_title">Provedores de mapas</string>
     <string name="pref_ui">Interface de Usuário</string>
     <string name="pref_ui_language_english">Inglês como idioma de interface</string>
-    <string name="pref_ui_language_english_summary">Usar o idioma Inglês (em vez da linguagem do sistema). Requer reinicialização do aplicativo.</string>
+    <string name="pref_ui_language_english_summary">Usar o idioma Inglês em vez do idioma do sistema. Requer reinicialização do aplicativo.</string>
     <string name="pref_keep_screen_bright">Mantenha a tela acesa</string>
     <string name="pref_keep_screen_bright_summary">Selecione para manter a tela acesa e o brilho ao máximo(afeta a vida da bateria)</string>
     <string name="pref_lock_screen_orientation">Bloquear orientação da tela</string>
@@ -294,10 +294,10 @@
     <string name="pref_tts_periodic_bat_volt_summary">Ler tensão da bateria.</string>
     <string name="pref_tts_periodic_alt">Altitude</string>
     <string name="pref_tts_periodic_alt_summary">Ler altitude.</string>
-    <string name="pref_tts_periodic_rssi">Força do Sinal (RSSI)</string>
-    <string name="pref_tts_periodic_rssi_summary">Read Received Signal Strength Indication</string>
-    <string name="pref_tts_periodic_airspeed">Velocidade do vento</string>
-    <string name="pref_tts_periodic_airspeed_summary">Ler velocidade do vento.</string>
+    <string name="pref_tts_periodic_rssi">Intensidade do Sinal (RSSI)</string>
+    <string name="pref_tts_periodic_rssi_summary">Ler Intensidade do Sinal (RSSI)</string>
+    <string name="pref_tts_periodic_airspeed">Velocidade aerodinâmica</string>
+    <string name="pref_tts_periodic_airspeed_summary">Ler velocidade aerodinâmica.</string>
     <string name="pref_title_tts_warnings">Avisos</string>
     <string name="pref_tts_warning_low_signal_strength">Baixa Intensidade do sinal</string>
     <string name="pref_tts_warning_low_signal_strength_summary">Adverte quando a conexão com o drone é ruim.</string>
@@ -515,13 +515,13 @@
 
     <string name="label_rtl">Return to Launch (RTL)</string>
     <string name="label_rtm">Return to Me (RTM)</string>
-    <string name="pref_vehicle_home_update_warning_title">Vehicle Home Update</string>
+    <string name="pref_vehicle_home_update_warning_title">Atualização da localização inicial do veículo</string>
     <string name="pref_vehicle_home_update_warning_summary">Adverte sobre atualizações da localização inicial do veículo, enquanto em vôo.</string>
     <string name="label_photo">Foto</string>
     <string name="label_record">Gravar</string>
     <string name="label_widgets_list">Lista de Widgets</string>
-    <string name="label_solo_video_stream">Solo video stream</string>
-    <string name="label_custom_video_stream">Custom video stream</string>
+    <string name="label_solo_video_stream">Streaming de video do 3DR Solo</string>
+    <string name="label_custom_video_stream">Streaming de video customizado</string>
     <string name="hint_custom_video_stream_udp_port">0000</string>
     <string name="label_udp_port">Porta UDP:</string>
 
@@ -531,13 +531,13 @@
     <string name="toast_mission_received">Waypoints recebidos do Drone</string>
     <string name="speak_mission_received">Waypoints recebidos</string>
     <string name="speak_heartbeat_first">Conectado</string>
-    <string name="speak_heartbeat_timeout">Data link perdido, verifique a conexão.</string>
-    <string name="speak_heartbeat_restored">Data link restaurado</string>
+    <string name="speak_heartbeat_timeout">Link de dados perdido, verifique a conexão.</string>
+    <string name="speak_heartbeat_restored">Link de dados restaurado</string>
     <string name="speak_mission_item_updated">"Indo para o waypoint %d"</string>
     <string name="speak_follow_start">Seguindo</string>
     <string name="speak_warning_signal_weak">Atenção, sinal fraco</string>
-    <string name="speak_warning_no_gps">Erro, sem triangulão de GPS ainda</string>
-    <string name="speak_warning_vehicle_home_updated">Posição de inicio do veículo atualizada</string>
+    <string name="speak_warning_no_gps">Atenção, sem triangulão de GPS</string>
+    <string name="speak_warning_vehicle_home_updated">A posição de início do veículo foi atualizada</string>
     <string name="speak_warning_max_alt_exceed">Atenção, altitude máxima excedida!</string>
 
     <!-- Periodic Status Preferences -->
@@ -549,8 +549,8 @@
     <string name="speak_disconected">Desconectado</string>
     <string name="toast_error_tts_lang">Não é possível definir o idioma a ser utilizado na \'Conversão de Texto em Voz\'</string>
     <string name="warn_tts_accessibility">Por favor, certifique-se que a \'Conversão de Texto em Voz\' está ativada.</string>
-    <string name="speak_armed">Armado</string>
-    <string name="speak_disarmed">Desarmado</string>
+    <string name="speak_armed">Veículo armado</string>
+    <string name="speak_disarmed">Veículo desarmado</string>
     <string name="speak_battery_notification">Bateria em %d%%</string>
 
     <string name="fly_mode_wire_a">Fly by wire A</string>
