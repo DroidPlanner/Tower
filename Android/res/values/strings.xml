@@ -474,6 +474,8 @@
     <!-- Telemetry widget labels -->
     <string name="label_widget_solo_video">Solo Video</string>
     <string name="description_widget_solo_video">Displays the video stream from a connected Solo vehicle</string>
+    <string name="label_widget_uvc_video">UVC Video</string>
+    <string name="description_widget_uvc_video">Displays the video stream from a connected UVC device</string>
     <string name="label_widget_attitude_speed_info">Speed &amp; Attitude Info</string>
     <string name="description_widget_attitude_speed_info">Displays vehicle speed and attitude data</string>
     <string name="label_widget_vehicle_diagnostics">Diagnostics</string>
