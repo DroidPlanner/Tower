@@ -440,7 +440,7 @@
     <string name="label_invalid_mapbox_access_token">Token de acesso incorreto</string>
     <string name="alert_invalid_mapbox_credentials">Credenciais incorretas! Por favor, atualizar suas configurações do MapBox.</string>
     <string name="vehicle_type">Tipo de veículo</string>
-    <string name="label_type_copter">Helicóptero</string>
+    <string name="label_type_copter">Helicóptero/Drone</string>
     <string name="label_type_plane">Avião</string>
     <string name="label_type_rover">Rover</string>
     <string name="label_type_unknown">Desconhecido</string>
@@ -471,15 +471,18 @@
 
     <!-- Telemetry widget labels -->
     <string name="label_widget_solo_video">Solo Video</string>
-    <string name="description_widget_solo_video">Displays the video stream from a connected Solo vehicle</string>
+    <string name="description_widget_solo_video">Mostra o streaming de video do 3DR solo</string>
+    <string name="label_widget_uvc_video">UVC Video</string>
+    <string name="description_widget_uvc_video">Mostra o streaming de video usando um dispositivo UVC</string>
     <string name="label_widget_attitude_speed_info">Velocidade &amp; Atitude</string>
     <string name="description_widget_attitude_speed_info">Mostra a velocidade do veículo e os dados de atitude</string>
     <string name="label_widget_vehicle_diagnostics">Diagnósticos</string>
     <string name="description_widget_vehicle_diagnostics">Mostra o status de diagnósticos do veículo</string>
     <string name="pref_tower_widgets_title">Preferências de Widgets</string>
     <string name="pref_tower_widgets_category">Tower Widgets</string>
-    <string name="pref_widgets_list_category">Listado de Widgets</string>
+    <string name="pref_widgets_list_category">Lista de Widgets</string>
     <string name="label_widget_flight_timer">Tempo de vôo</string>
+    <string name="description_reset_flight_timer">Zerar o tempo de vôo?</string>
     <string name="description_widget_flight_timer">Mostra o tempo de vôo do veículo</string>
     <string name="label_widget_geo_info">Geo Info</string>
     <string name="description_widget_geo_info">Mostra as coordenadas do veículo</string>
@@ -489,7 +492,7 @@
     <string name="label_vertical_position_var_abbrev">v.pos</string>
     <string name="label_mag_var_abbrev">mag</string>
     <string name="label_terrain_var_abbrev">ter</string>
-    <string name="label_attitude_estimate">Attitude estimada</string>
+    <string name="label_attitude_estimate">Atitude estimada</string>
     <string name="label_flags">Flags</string>
     <string name="label_constant_position_mode">Constant position mode</string>
     <string name="label_velocity">Velocidade</string>
@@ -552,7 +555,6 @@
     <string name="speak_armed">Veículo armado</string>
     <string name="speak_disarmed">Veículo desarmado</string>
     <string name="speak_battery_notification">Bateria em %d%%</string>
-
     <string name="fly_mode_wire_a">Fly by wire A</string>
     <string name="fly_mode_wire_b">Fly by wire B</string>
     <string name="fly_mode_acro">Acrobatic</string>
@@ -569,5 +571,14 @@
     <string name="gps_mode_lost_gps_lock">Sinal de GPS Perdido</string>
     <string name="speak_connected">Conectado</string>
     <!--END TTS Notification Provider Strings-->
+
+    <!-- Selectable values for the period of the speech output. -->
+    <string name="period_15_sec">15 seg.</string>
+    <string name="period_30_sec">30 seg.</string>
+    <string name="period_45_sec">45 seg.</string>
+    <string name="period_60_sec">60 seg.</string>
+    <string name="waypoint_description_reset_roi">Reset the current region of interest lock.</string>
+
+
 
 </resources>
