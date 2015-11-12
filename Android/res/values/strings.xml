@@ -27,7 +27,8 @@
     <string name="pref_ui_language_english">English as UI Language</string>
     <string name="pref_ui_language_english_summary">Use English language (instead of system language). Requires app restart.</string>
     <string name="pref_keep_screen_bright">Keep Screen On</string>
-    <string name="pref_keep_screen_bright_summary">Check to keep the screen on and bright (affect battery life)</string>
+    <string name="pref_keep_screen_bright_summary">Check to keep the screen on and bright (affect
+        battery life)</string>
     <string name="pref_lock_screen_orientation">Lock Screen Orientation</string>
     <string name="pref_lock_screen_orientation_summary">Locks screen to the orientation which is present when connecting</string>
     <string name="pref_advanced">Advanced</string>
