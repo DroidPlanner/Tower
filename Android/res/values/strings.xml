@@ -581,5 +581,10 @@
     <string name="period_60_sec">60 sec.</string>
     <string name="waypoint_description_reset_roi">Reset the current region of interest lock.</string>
 
+    <string name="uvc_device_select">Select UVC device</string>
+    <string name="uvc_device">Device</string>
+    <string name="uvc_device_refresh">Refresh</string>
+    <string name="uvc_device_no_device">No UVC device found</string>
+
 
 </resources>

@@ -13,10 +13,10 @@ import android.view.TextureView
 import android.view.View
 import android.widget.TextView
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
-import com.serenegiant.usb.CameraDialog
 import com.serenegiant.usb.USBMonitor
 import com.serenegiant.usb.UVCCamera
 import org.droidplanner.android.R
+import org.droidplanner.android.dialogs.UVCDialog
 import org.droidplanner.android.fragments.widget.TowerWidget
 import org.droidplanner.android.fragments.widget.TowerWidgets
 import java.util.concurrent.LinkedBlockingQueue
@@ -61,7 +61,7 @@ abstract class BaseUVCVideoWidget : TowerWidget() , USBMonitor.OnDeviceConnectLi
             when (intent.action) {
                 AttributeEvent.STATE_CONNECTED -> {
                     if (!isActive && !isPreview){
-                        CameraDialog.showDialog(activity,mUSBMonitor);
+                        UVCDialog.showDialog(activity,mUSBMonitor);
                     }
                 }
                 AttributeEvent.STATE_ARMING -> {

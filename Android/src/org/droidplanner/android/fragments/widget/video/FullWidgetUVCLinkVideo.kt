@@ -1,26 +1,17 @@
 package org.droidplanner.android.fragments.widget
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.graphics.Matrix
-import android.graphics.SurfaceTexture
+
 import android.hardware.usb.UsbDevice
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
-import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
-import com.serenegiant.usb.CameraDialog
+
 import com.serenegiant.usb.USBMonitor
-import com.serenegiant.usb.UVCCamera
 import org.droidplanner.android.R
+import org.droidplanner.android.dialogs.UVCDialog
 import org.droidplanner.android.fragments.widget.video.BaseUVCVideoWidget
-import timber.log.Timber
-import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.ThreadPoolExecutor
-import java.util.concurrent.TimeUnit
+
 
 
 public class FullWidgetUVCLinkVideo : BaseUVCVideoWidget() {
@@ -46,7 +37,7 @@ public class FullWidgetUVCLinkVideo : BaseUVCVideoWidget() {
 
         takePhotoButton?.setOnClickListener {
             if (mUVCCamera == null) {
-                CameraDialog.showDialog(activity,mUSBMonitor);
+                UVCDialog.showDialog(activity,mUSBMonitor);
             } else {
                 mUVCCamera?.destroy()
                 mUVCCamera = null
