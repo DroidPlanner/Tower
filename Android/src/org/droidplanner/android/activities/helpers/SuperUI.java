@@ -253,49 +253,55 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
         final MenuItem toggleConnectionItem = menu.findItem(R.id.menu_connect);
 
         Drone drone = dpApp.getDrone();
-        if (drone != null && drone.isConnected()) {
-            menu.setGroupEnabled(R.id.menu_group_connected, true);
-            menu.setGroupVisible(R.id.menu_group_connected, true);
-
-            final MenuItem killSwitchItem = menu.findItem(R.id.menu_kill_switch);
-            final boolean isKillEnabled = mAppPrefs.isKillSwitchEnabled();
-            if(killSwitchItem != null && isKillEnabled) {
-                CapabilityApi.getApi(drone).checkFeatureSupport(CapabilityApi.FeatureIds.KILL_SWITCH, new CapabilityApi.FeatureSupportListener() {
-                    @Override
-                    public void onFeatureSupportResult(String s, int i, Bundle bundle) {
-                        switch (i) {
-                            case CapabilityApi.FEATURE_SUPPORTED:
-                                killSwitchItem.setEnabled(true);
-                                killSwitchItem.setVisible(true);
-                                break;
-
-                            default:
-                                killSwitchItem.setEnabled(false);
-                                killSwitchItem.setVisible(false);
-                                break;
-                        }
-                    }
-                });
-
-            }
-
-            final boolean areMissionMenusEnabled = enableMissionMenus();
-
-            final MenuItem sendMission = menu.findItem(R.id.menu_upload_mission);
-            sendMission.setEnabled(areMissionMenusEnabled);
-            sendMission.setVisible(areMissionMenusEnabled);
-
-            final MenuItem loadMission = menu.findItem(R.id.menu_download_mission);
-            loadMission.setEnabled(areMissionMenusEnabled);
-            loadMission.setVisible(areMissionMenusEnabled);
-
-            toggleConnectionItem.setTitle(R.string.menu_disconnect);
-        } else {
+        if (drone == null || !drone.isConnected()){
             menu.setGroupEnabled(R.id.menu_group_connected, false);
             menu.setGroupVisible(R.id.menu_group_connected, false);
 
             toggleConnectionItem.setTitle(R.string.menu_connect);
+
+            return super.onCreateOptionsMenu(menu);
         }
+
+        menu.setGroupEnabled(R.id.menu_group_connected, true);
+        menu.setGroupVisible(R.id.menu_group_connected, true);
+
+        final MenuItem killSwitchItem = menu.findItem(R.id.menu_kill_switch);
+        killSwitchItem.setEnabled(false);
+        killSwitchItem.setVisible(false);
+
+        final boolean isKillEnabled = mAppPrefs.isKillSwitchEnabled();
+        if(killSwitchItem != null && isKillEnabled) {
+            CapabilityApi.getApi(drone).checkFeatureSupport(CapabilityApi.FeatureIds.KILL_SWITCH, new CapabilityApi.FeatureSupportListener() {
+                @Override
+                public void onFeatureSupportResult(String s, int i, Bundle bundle) {
+                    switch (i) {
+                        case CapabilityApi.FEATURE_SUPPORTED:
+                            killSwitchItem.setEnabled(true);
+                            killSwitchItem.setVisible(true);
+                            break;
+
+                        default:
+                            killSwitchItem.setEnabled(false);
+                            killSwitchItem.setVisible(false);
+                            break;
+                    }
+                }
+            });
+
+        }
+
+        final boolean areMissionMenusEnabled = enableMissionMenus();
+
+        final MenuItem sendMission = menu.findItem(R.id.menu_upload_mission);
+        sendMission.setEnabled(areMissionMenusEnabled);
+        sendMission.setVisible(areMissionMenusEnabled);
+
+        final MenuItem loadMission = menu.findItem(R.id.menu_download_mission);
+        loadMission.setEnabled(areMissionMenusEnabled);
+        loadMission.setVisible(areMissionMenusEnabled);
+
+        toggleConnectionItem.setTitle(R.string.menu_disconnect);
+
         return super.onCreateOptionsMenu(menu);
     }
 
