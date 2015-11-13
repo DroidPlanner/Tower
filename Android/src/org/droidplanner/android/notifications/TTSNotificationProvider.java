@@ -420,10 +420,10 @@ public class TTSNotificationProvider implements OnInitListener,
     }
 
     private void speak(String string) {
-        speak(string, false, null);
+        speak(string, true, null);
     }
 
-    private void speak(String string, boolean append, String utteranceId) {
+    private void speak(final String string, boolean append, String utteranceId) {
         if (tts != null) {
             if (shouldEnableTTS()) {
                 final int queueType = append ? TextToSpeech.QUEUE_ADD : TextToSpeech.QUEUE_FLUSH;
@@ -434,6 +434,7 @@ public class TTSNotificationProvider implements OnInitListener,
                 }
 
                 tts.speak(string, queueType, mTtsParams);
+
             }
         }
     }

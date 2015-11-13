@@ -530,9 +530,9 @@
 
     <!--START TTS Notification Provider Strings-->
     <string name="toast_mission_sent">Waypoints enviados</string>
-    <string name="speak_mission_sent">Waypoints enviados ao Drone</string>
+    <string name="speak_mission_sent">Weypoints enviados ao Drone</string>
     <string name="toast_mission_received">Waypoints recebidos do Drone</string>
-    <string name="speak_mission_received">Waypoints recebidos</string>
+    <string name="speak_mission_received">Weypoints recebidos</string>
     <string name="speak_heartbeat_first">Conectado</string>
     <string name="speak_heartbeat_timeout">Link de dados perdido, verifique a conexão.</string>
     <string name="speak_heartbeat_restored">Link de dados restaurado</string>

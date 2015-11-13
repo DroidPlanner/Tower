@@ -13,6 +13,8 @@ import android.view.TextureView
 import android.view.View
 import android.widget.TextView
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
+import com.o3dr.services.android.lib.drone.attribute.AttributeType
+import com.o3dr.services.android.lib.drone.property.State
 import com.serenegiant.usb.USBMonitor
 import com.serenegiant.usb.UVCCamera
 import org.droidplanner.android.R
@@ -61,12 +63,15 @@ abstract class BaseUVCVideoWidget : TowerWidget() , USBMonitor.OnDeviceConnectLi
             when (intent.action) {
                 AttributeEvent.STATE_CONNECTED -> {
                     if (!isActive && !isPreview){
-                        UVCDialog.showDialog(activity,mUSBMonitor);
+                       startVideoStreaming();
                     }
                 }
                 AttributeEvent.STATE_ARMING -> {
                     if (!isActive && !isPreview){
-
+                        val droneState = drone.getAttribute<State>(AttributeType.STATE)
+                        if (droneState.isArmed){
+                            startVideoStreaming();
+                        }
                     }
                 }
             }
@@ -147,6 +152,7 @@ abstract class BaseUVCVideoWidget : TowerWidget() , USBMonitor.OnDeviceConnectLi
         mUVCCamera?.destroy()
         isActive = false
         isPreview = false
+        usbDevice = device
 
         EXECUTER.execute(object : Runnable {
             override fun run() {
@@ -184,6 +190,7 @@ abstract class BaseUVCVideoWidget : TowerWidget() , USBMonitor.OnDeviceConnectLi
 
     override fun onDettach(device: UsbDevice?) {
         if (usbDevice?.equals(device)!!){
+            mUVCCamera?.close()
             isActive = false
             isPreview = false
             videoStatus?.visibility = View.VISIBLE
@@ -194,6 +201,22 @@ abstract class BaseUVCVideoWidget : TowerWidget() , USBMonitor.OnDeviceConnectLi
         isActive = false
         isPreview = false
         videoStatus?.visibility = View.VISIBLE
+    }
+
+    protected fun startVideoStreaming(){
+        if (mUVCCamera == null) {
+            if (usbDevice != null && mUSBMonitor?.hasPermission(usbDevice)!!){
+                mUSBMonitor?.requestPermission(usbDevice);
+            }else{
+                UVCDialog.showDialog(activity,mUSBMonitor);
+            }
+        }
+    }
+    protected fun stopVideoStreaming(){
+        mUVCCamera?.destroy()
+        mUVCCamera = null
+        isActive = false
+        isPreview = false
     }
 
     protected fun adjustAspectRatio(textureView: TextureView) {

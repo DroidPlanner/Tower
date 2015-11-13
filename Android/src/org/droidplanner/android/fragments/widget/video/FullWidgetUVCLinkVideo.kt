@@ -36,13 +36,10 @@ public class FullWidgetUVCLinkVideo : BaseUVCVideoWidget() {
         super.onViewCreated(view, savedInstanceState)
 
         takePhotoButton?.setOnClickListener {
-            if (mUVCCamera == null) {
-                UVCDialog.showDialog(activity,mUSBMonitor);
-            } else {
-                mUVCCamera?.destroy()
-                mUVCCamera = null
-                isActive = false
-                isPreview = false
+            if (isActive && isPreview){
+                stopVideoStreaming();
+            }else{
+                startVideoStreaming();
             }
         }
 

@@ -1,7 +1,6 @@
 package org.droidplanner.android.fragments.widget
 
 import android.app.DialogFragment
-import android.app.Fragment
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
 import org.droidplanner.android.R
