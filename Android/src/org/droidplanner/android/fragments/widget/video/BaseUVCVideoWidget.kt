@@ -132,6 +132,8 @@ abstract class BaseUVCVideoWidget : TowerWidget() , USBMonitor.OnDeviceConnectLi
         super.onDestroy()
         mUVCCamera?.destroy()
         mUSBMonitor?.destroy()
+        mUVCCamera = null
+        mUSBMonitor = null
         isActive = false
         isPreview = false
     }
@@ -150,6 +152,7 @@ abstract class BaseUVCVideoWidget : TowerWidget() , USBMonitor.OnDeviceConnectLi
         videoStatus?.visibility = View.GONE
 
         mUVCCamera?.destroy()
+        mUVCCamera = null
         isActive = false
         isPreview = false
         usbDevice = device
@@ -180,7 +183,7 @@ abstract class BaseUVCVideoWidget : TowerWidget() , USBMonitor.OnDeviceConnectLi
     }
 
     override fun onDisconnect(device: UsbDevice?, ctrlBlock: USBMonitor.UsbControlBlock) {
-        if (usbDevice?.equals(device)!!){
+        if (usbDevice != null && usbDevice?.equals(device)!!){
             mUVCCamera?.close()
             isActive = false
             isPreview = false
@@ -189,7 +192,7 @@ abstract class BaseUVCVideoWidget : TowerWidget() , USBMonitor.OnDeviceConnectLi
     }
 
     override fun onDettach(device: UsbDevice?) {
-        if (usbDevice?.equals(device)!!){
+        if (usbDevice != null && usbDevice?.equals(device)!!){
             mUVCCamera?.close()
             isActive = false
             isPreview = false
