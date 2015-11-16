@@ -48,10 +48,6 @@
             android:id="@+id/navigation_geotag"
             android:icon="@drawable/ic_cloud_upload_grey_700_24dp"
             android:title="@string/geo_tag_label"/>
-        <item
-            android:id="@+id/navigation_get_recap_image"
-            android:icon="@drawable/ic_cloud_upload_grey_700_24dp"
-            android:title="@string/get_recap_image"/>
     </group>
     <group
         android:id="@+id/settings_screen"

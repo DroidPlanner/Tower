@@ -206,10 +206,6 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
             case R.id.navigation_geotag:
                 mNavigationIntent = new Intent(this, GeoTagActivity.class);
                 break;
-
-            case R.id.navigation_get_recap_image:
-                mNavigationIntent = new Intent(this, GetRecapImageActivity.class);
-                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

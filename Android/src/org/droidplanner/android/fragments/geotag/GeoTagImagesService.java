@@ -1,13 +1,11 @@
 package org.droidplanner.android.fragments.geotag;
 
-import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
@@ -42,6 +40,7 @@ public class GeoTagImagesService extends Service {
     private static final SshConnection soloSshLink = new SshConnection(BuildConfig.SOLO_LINK_IP, SSH_USERNAME, SSH_PASSWORD);
     private static final String CAMERA_TLOG_FILE = "/log/camera_msgs.tlog";
     private static final int NUMBER_OF_RETRIES = 3;
+    private static final String GEO_TAG_ROOT_NAME = "GeoTag";
 
     private static final String PACKAGE_NAME = Utils.PACKAGE_NAME;
 
@@ -51,11 +50,8 @@ public class GeoTagImagesService extends Service {
     public static final String ACTION_CANCEL_GEOTAGGING = PACKAGE_NAME + ".action.CANCEL_GEOTAGGING";
 
     public static final String STATE_FINISHED_LOADING_LOGS = PACKAGE_NAME + ".FINISHED_LOADING_LOGS";
-
     public static final String STATE_FINISHED_GEOTAGGING = PACKAGE_NAME + ".FINISHED_GEOTAGGING";
     public static final String STATE_PROGRESS_UPDATE_GEOTAGGING = PACKAGE_NAME + ".PROGRESS_UPDATE_GEOTAGGING";
-
-    public static final String STATE_FINISHED_CLOUD_UPLOADING = PACKAGE_NAME + ".FINISHED_CLOUD_UPLOADING";
 
     public static final String EXTRA_SUCCESS = PACKAGE_NAME + ".EXTRA_SUCCESS";
     public static final String EXTRA_FAILURE_MESSAGE = PACKAGE_NAME + ".EXTRA_FAILURE_MESSAGE";
@@ -63,10 +59,9 @@ public class GeoTagImagesService extends Service {
     public static final String EXTRA_TOTAL = PACKAGE_NAME + ".EXTRA_TOTAL";
     public static final String EXTRA_GEOTAGGED_FILES = PACKAGE_NAME + ".EXTRA_GEOTAGGED_FILES";
 
-    private AsyncTask asyncTask;
+    private AsyncTask getTlogsTask;
     private GeoTagTask geoTagTask;
     private LocalBroadcastManager lbm;
-
 
     @Override
     public void onCreate() {
@@ -94,7 +89,6 @@ public class GeoTagImagesService extends Service {
             case ACTION_CANCEL_GEOTAGGING:
                 cancelGeoTagging();
                 break;
-
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -105,15 +99,18 @@ public class GeoTagImagesService extends Service {
     }
 
     private void startLoadingLogs() {
-        if (asyncTask != null) {
-            asyncTask.cancel(true);
+        if (getTlogsTask != null) {
+            getTlogsTask.cancel(true);
         }
-        asyncTask = new DownloadCameraTlogs(getApplicationContext());
-        asyncTask.execute();
+        getTlogsTask = new DownloadCameraTlogs(getApplicationContext());
+        getTlogsTask.execute();
     }
 
     private void cancelLoadingLogs() {
-
+        if (getTlogsTask != null) {
+            getTlogsTask.cancel(true);
+            getTlogsTask = null;
+        }
     }
 
     private void startGeoTagging() {
@@ -165,7 +162,6 @@ public class GeoTagImagesService extends Service {
 
 
         }, new TLogParserCallback() {
-            @TargetApi(Build.VERSION_CODES.KITKAT)
             @Override
             public void onResult(List<TLogParser.Event> eventList) {
                 if (eventList.size() < 0) {
@@ -176,7 +172,10 @@ public class GeoTagImagesService extends Service {
                 if (geoTagTask != null) {
                     geoTagTask.cancel(true);
                 }
-                geoTagTask = new GeoTagTask(context, eventList, photoFiles);
+
+                File file = new File(getSaveRootDir(context), GEO_TAG_ROOT_NAME);
+
+                geoTagTask = new GeoTagTask(file, eventList, photoFiles);
                 geoTagTask.execute();
             }
 
@@ -189,7 +188,6 @@ public class GeoTagImagesService extends Service {
                 }
             }
         });
-
     }
 
     private String getExternalStorage(Context context) {
@@ -251,21 +249,6 @@ public class GeoTagImagesService extends Service {
         Intent intent = new Intent(STATE_FINISHED_GEOTAGGING);
         intent.putExtra(EXTRA_SUCCESS, false);
         intent.putExtra(EXTRA_FAILURE_MESSAGE, failure);
-        lbm.sendBroadcast(intent);
-    }
-
-    private void sendFailedCloudUploadIntent(String failure) {
-        Intent intent = new Intent(STATE_FINISHED_CLOUD_UPLOADING);
-        intent.putExtra(EXTRA_SUCCESS, false);
-        intent.putExtra(EXTRA_FAILURE_MESSAGE, failure);
-        lbm.sendBroadcast(intent);
-    }
-
-    private void sendUpdates(String action, Bundle extras) {
-        Intent intent = new Intent(action);
-        if (extras != null) {
-            intent.putExtras(extras);
-        }
         lbm.sendBroadcast(intent);
     }
 
@@ -352,10 +335,26 @@ public class GeoTagImagesService extends Service {
         }
     }
 
+    private File getSaveRootDir(Context context) {
+        File saveDir = context.getExternalFilesDir(null);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            File dirs[] = context.getExternalFilesDirs(null);
+            for (File dir : dirs) {
+                // dir can be null if the device contains an external SD card slot but no SD card is present.
+                if (dir != null && Environment.isExternalStorageRemovable(dir)) {
+                    saveDir = dir;
+                    break;
+                }
+            }
+        }
+        return saveDir;
+    }
+
     private class GeoTagTask extends GeoTagAsyncTask {
 
-        public GeoTagTask(Context context, List<TLogParser.Event> events, ArrayList<File> photos) {
-            super(context, events, photos);
+        public GeoTagTask(File rootDir, List<TLogParser.Event> events, ArrayList<File> photos) {
+            super(rootDir, events, photos);
         }
 
         @Override

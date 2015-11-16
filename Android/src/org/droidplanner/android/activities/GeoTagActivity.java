@@ -7,8 +7,13 @@ import android.support.v4.app.FragmentManager;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.actionbar.ActionBarGeoTagFragment;
+import org.droidplanner.android.fragments.geotag.FinishGeoTagFragment;
 import org.droidplanner.android.fragments.geotag.GeoTagImagesFragment;
+import org.droidplanner.android.fragments.geotag.GeoTagImagesService;
 import org.droidplanner.android.fragments.geotag.GetCameraLogsFragment;
+
+import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by chavi on 10/15/15.
@@ -57,8 +62,16 @@ public class GeoTagActivity extends DrawerNavigationUI {
         }
     }
 
-    public void finishedGeotagging() {
-        finish();
+    public void finishedGeotagging(ArrayList<File> files) {
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.fragment_geotag_layout);
+        if (fragment == null || !(fragment instanceof FinishGeoTagFragment)) {
+            fragment = new FinishGeoTagFragment();
+            Bundle args = new Bundle();
+            args.putSerializable(GeoTagImagesService.EXTRA_GEOTAGGED_FILES, files);
+            fragment.setArguments(args);
+            fm.beginTransaction().replace(R.id.fragment_geotag_layout, fragment).commit();
+        }
     }
 
     public void updateTitle(@StringRes int title) {

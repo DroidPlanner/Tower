@@ -29,7 +29,6 @@ import java.util.ArrayList;
 public class GeoTagImagesFragment extends Fragment {
     private static final int STATE_INIT = 0;
     private static final int STATE_GEOTAGGING = 1;
-    private static final int STATE_DONE_GEOTAGGING = 2;
 
     private GeoTagActivity activity;
     private LocalBroadcastManager lbm;
@@ -37,13 +36,8 @@ public class GeoTagImagesFragment extends Fragment {
     private TextView instructionText;
     private Button geotagButton;
     private ProgressBar progressBar;
-    private ImageView checkImage;
     private ImageView sdCard;
-    private ImageView phone;
-
     private Animation sdCardAnim;
-
-    private ArrayList<File> files;
 
     private static final IntentFilter filter = new IntentFilter();
     static {
@@ -51,7 +45,7 @@ public class GeoTagImagesFragment extends Fragment {
         filter.addAction(GeoTagImagesService.STATE_PROGRESS_UPDATE_GEOTAGGING);
     }
 
-    BroadcastReceiver receiver = new BroadcastReceiver() {
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
@@ -74,7 +68,7 @@ public class GeoTagImagesFragment extends Fragment {
         super.onAttach(context);
 
         if (!(context instanceof GeoTagActivity)) {
-            throw new UnsupportedOperationException("Activity is not instance of GeoTagActivity");
+            throw new IllegalStateException("Activity is not instance of " + GeoTagActivity.class.getSimpleName());
         }
 
         activity = (GeoTagActivity) context;
@@ -96,9 +90,7 @@ public class GeoTagImagesFragment extends Fragment {
         instructionText = (TextView) view.findViewById(R.id.instruction_text);
         geotagButton = (Button) view.findViewById(R.id.geotag_button);
         progressBar = (ProgressBar) view.findViewById(R.id.geotag_progress);
-        checkImage = (ImageView) view.findViewById(R.id.check_image);
         sdCard = (ImageView) view.findViewById(R.id.sd_card);
-        phone = (ImageView) view.findViewById(R.id.phone);
 
         instructionText.setText(R.string.insert_sdcard);
         geotagButton.setText(R.string.label_begin);
@@ -118,11 +110,6 @@ public class GeoTagImagesFragment extends Fragment {
                     case STATE_GEOTAGGING:
                         updateState(STATE_INIT);
                         cancelGeoTagging();
-                        break;
-                    case STATE_DONE_GEOTAGGING:
-                        if (activity != null) {
-                            activity.finishedGeotagging();
-                        }
                         break;
                 }
             }
@@ -183,13 +170,6 @@ public class GeoTagImagesFragment extends Fragment {
                 sdCard.clearAnimation();
                 sdCard.setVisibility(View.GONE);
                 break;
-            case STATE_DONE_GEOTAGGING:
-                geotagButton.setActivated(true);
-                geotagButton.setText(R.string.button_setup_next);
-                checkImage.setVisibility(View.VISIBLE);
-                sdCard.setVisibility(View.GONE);
-                phone.setVisibility(View.GONE);
-                break;
         }
     }
 
@@ -201,9 +181,8 @@ public class GeoTagImagesFragment extends Fragment {
     private void finishedGeotagging(Intent intent) {
         boolean success = intent.getBooleanExtra(GeoTagImagesService.EXTRA_SUCCESS, false);
         if (success) {
-            files = (ArrayList<File>)intent.getSerializableExtra(GeoTagImagesService.EXTRA_GEOTAGGED_FILES);
-            updateState(STATE_DONE_GEOTAGGING);
-            instructionText.setText(String.format(getString(R.string.photos_geotagged), files.size()));
+            ArrayList<File> files = (ArrayList<File>) intent.getSerializableExtra(GeoTagImagesService.EXTRA_GEOTAGGED_FILES);
+            activity.finishedGeotagging(files);
         } else {
             String failure = intent.getStringExtra(GeoTagImagesService.EXTRA_FAILURE_MESSAGE);
             failedLoading(failure);
