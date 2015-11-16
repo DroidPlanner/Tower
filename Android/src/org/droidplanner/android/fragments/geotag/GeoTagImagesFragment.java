@@ -121,7 +121,7 @@ public class GeoTagImagesFragment extends Fragment {
                         break;
                     case STATE_DONE_GEOTAGGING:
                         if (activity != null) {
-                            activity.finishedGeotagging(files);
+                            activity.finishedGeotagging();
                         }
                         break;
                 }
