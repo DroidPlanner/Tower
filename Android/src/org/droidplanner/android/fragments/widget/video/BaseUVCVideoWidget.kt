@@ -4,17 +4,16 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.Matrix
 import android.graphics.SurfaceTexture
 import android.hardware.usb.UsbDevice
 import android.os.Bundle
-import android.view.Surface
-import android.view.TextureView
-import android.view.View
+import android.util.Log
+import android.view.*
 import android.widget.TextView
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
 import com.o3dr.services.android.lib.drone.attribute.AttributeType
 import com.o3dr.services.android.lib.drone.property.State
+import com.serenegiant.usb.DeviceFilter
 import com.serenegiant.usb.USBMonitor
 import com.serenegiant.usb.UVCCamera
 import org.droidplanner.android.R
@@ -24,9 +23,9 @@ import org.droidplanner.android.fragments.widget.TowerWidgets
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
+import android.graphics.Matrix
 
-
-abstract class BaseUVCVideoWidget : TowerWidget() , USBMonitor.OnDeviceConnectListener{
+abstract class BaseUVCVideoWidget : TowerWidget(){
 
     companion object {
 
@@ -40,9 +39,10 @@ abstract class BaseUVCVideoWidget : TowerWidget() , USBMonitor.OnDeviceConnectLi
         }
     }
 
-    override fun getWidgetType() = TowerWidgets.UVC_VIDEO
+    protected val DEBUG = true    // TODO set false when production
+    protected val TAG = "BaseUVCVideoWidget"
 
-    protected var surfaceRef: Surface? = null
+    override fun getWidgetType() = TowerWidgets.UVC_VIDEO
 
     // for thread pool
     protected val CORE_POOL_SIZE = 1   // initial/minimum threads
@@ -54,24 +54,21 @@ abstract class BaseUVCVideoWidget : TowerWidget() , USBMonitor.OnDeviceConnectLi
     // for accessing USB and USB camera
     protected var mUSBMonitor: USBMonitor? = null
     protected var mUVCCamera: UVCCamera? = null
-    protected var isActive: Boolean = false
     protected var isPreview:Boolean = false
     protected var usbDevice: UsbDevice? = null
+    protected var mPreviewSurface: Surface? = null
+
 
     protected val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action) {
                 AttributeEvent.STATE_CONNECTED -> {
-                    if (!isActive && !isPreview){
-                       startVideoStreaming();
-                    }
+                    startVideoStreaming()
                 }
                 AttributeEvent.STATE_ARMING -> {
-                    if (!isActive && !isPreview){
-                        val droneState = drone.getAttribute<State>(AttributeType.STATE)
-                        if (droneState.isArmed){
-                            startVideoStreaming();
-                        }
+                    val droneState = drone.getAttribute<State>(AttributeType.STATE)
+                    if (droneState.isArmed){
+                        startVideoStreaming()
                     }
                 }
             }
@@ -86,140 +83,176 @@ abstract class BaseUVCVideoWidget : TowerWidget() , USBMonitor.OnDeviceConnectLi
         view?.findViewById(R.id.uvc_video_status) as TextView?
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
-        super.onViewCreated(view, savedInstanceState)
-
-        mUSBMonitor = USBMonitor(context, this)
-
-        textureView?.surfaceTextureListener = object : TextureView.SurfaceTextureListener{
-            override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, width: Int, height: Int) {
-                adjustAspectRatio(textureView as TextureView);
-                surfaceRef = Surface(surface)
-            }
-
-            override fun onSurfaceTextureDestroyed(surface: SurfaceTexture?): Boolean {
-                surfaceRef = null
-                return true
-            }
-
-            override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture?, width: Int, height: Int) {
-
-            }
-
-            override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
-
-            }
-        }
-    }
-
     override fun onApiConnected() {
+        if (DEBUG) Log.v(TAG, "onApiConnected:")
+
         broadcastManager.registerReceiver(receiver, filter)
     }
 
-    override fun onResume(){
-        super.onResume()
-        mUSBMonitor?.register()
-        mUVCCamera?.startPreview()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
+        super.onViewCreated(view, savedInstanceState)
+
+        textureView?.setSurfaceTextureListener(mSurfaceTextureListener)
+
+        mUSBMonitor = USBMonitor(activity, mOnDeviceConnectListener)
+
+        if (DEBUG) Log.v(TAG, "onViewCreated:")
+
     }
 
-    override fun onPause(){
+    override fun onResume() {
+        super.onResume()
+        if (DEBUG) Log.v(TAG, "onResume:")
+
+        mUSBMonitor?.register()
+    }
+
+    override fun onPause() {
         super.onPause()
+        if (DEBUG) Log.v(TAG, "onPause:")
+
         mUSBMonitor?.unregister()
-        mUVCCamera?.stopPreview()
+        mUVCCamera?.close()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        if (DEBUG) Log.v(TAG, "onDestroy:")
+
         mUVCCamera?.destroy()
-        mUSBMonitor?.destroy()
         mUVCCamera = null
-        mUSBMonitor = null
-        isActive = false
         isPreview = false
+        mUSBMonitor?.destroy()
+        mUSBMonitor = null
     }
 
     override fun onApiDisconnected() {
         broadcastManager.unregisterReceiver(receiver)
+        if (DEBUG) Log.v(TAG, "onApiDisconnected:")
     }
 
 
-    override fun onAttach(device: UsbDevice?) {
+    private val mOnDeviceConnectListener = object : USBMonitor.OnDeviceConnectListener {
+        override fun onAttach(device: UsbDevice) {
+            if (DEBUG) Log.v(TAG, "onAttach:")
+            startVideoStreaming()
+        }
 
-    }
+        override fun onConnect(device: UsbDevice, ctrlBlock: USBMonitor.UsbControlBlock, createNew: Boolean) {
+            if (DEBUG) Log.v(TAG, "onConnect:")
 
-    override fun onConnect(device: UsbDevice?, ctrlBlock: USBMonitor.UsbControlBlock, createNew: Boolean) {
+            usbDevice = device
+            mUVCCamera?.destroy()
+            mUVCCamera = UVCCamera()
 
-        videoStatus?.visibility = View.GONE
+            videoStatus?.visibility = View.GONE
 
-        mUVCCamera?.destroy()
-        mUVCCamera = null
-        isActive = false
-        isPreview = false
-        usbDevice = device
+            EXECUTER.execute(object : Runnable {
+                override fun run() {
+                    mUVCCamera?.open(ctrlBlock)
 
-        EXECUTER.execute(object : Runnable {
-            override fun run() {
-                mUVCCamera = UVCCamera()
-                mUVCCamera?.open(ctrlBlock)
-                try {
-                    mUVCCamera?.setPreviewSize(UVCCamera.DEFAULT_PREVIEW_WIDTH, UVCCamera.DEFAULT_PREVIEW_HEIGHT, UVCCamera.FRAME_FORMAT_MJPEG)
-                } catch (e: IllegalArgumentException) {
+                    if (DEBUG) Log.i(TAG, "supportedSize:" + mUVCCamera?.getSupportedSize())
+
+                    mPreviewSurface?.release()
+                    mPreviewSurface = null
+
                     try {
-                        mUVCCamera?.setPreviewSize(UVCCamera.DEFAULT_PREVIEW_WIDTH, UVCCamera.DEFAULT_PREVIEW_HEIGHT, UVCCamera.DEFAULT_PREVIEW_MODE)
-                    } catch (e1: IllegalArgumentException) {
-                        mUVCCamera?.destroy()
-                        mUVCCamera = null
+                        mUVCCamera?.setPreviewSize(UVCCamera.DEFAULT_PREVIEW_WIDTH, UVCCamera.DEFAULT_PREVIEW_HEIGHT, UVCCamera.FRAME_FORMAT_MJPEG)
+                    } catch (e: IllegalArgumentException) {
+                        try {
+                            // fallback to YUV mode
+                            mUVCCamera?.setPreviewSize(UVCCamera.DEFAULT_PREVIEW_WIDTH, UVCCamera.DEFAULT_PREVIEW_HEIGHT, UVCCamera.DEFAULT_PREVIEW_MODE)
+                        } catch (e1: IllegalArgumentException) {
+                            mUVCCamera?.destroy()
+                            mUVCCamera = null
+                        }
                     }
 
-                }
-                if ((mUVCCamera != null) && (surfaceRef != null)) {
-                    isActive = true
-                    mUVCCamera?.setPreviewDisplay(surfaceRef)
-                    mUVCCamera?.startPreview()
-                    isPreview = true
-                }
-            }
-        })
-    }
+                    if (mUVCCamera != null) {
+                        val st = textureView?.getSurfaceTexture()
+                        if (st != null) {
+                            mPreviewSurface = Surface(st)
+                            mUVCCamera?.setPreviewDisplay(mPreviewSurface)
+                            mUVCCamera?.startPreview()
+                        }
 
-    override fun onDisconnect(device: UsbDevice?, ctrlBlock: USBMonitor.UsbControlBlock) {
-        if (usbDevice != null && usbDevice?.equals(device)!!){
+                    }
+                }
+            })
+        }
+
+        override fun onDisconnect(device: UsbDevice, ctrlBlock: USBMonitor.UsbControlBlock) {
+            if (DEBUG) Log.v(TAG, "onDisconnect:")
+
             mUVCCamera?.close()
-            isActive = false
+            mPreviewSurface?.release()
+            mPreviewSurface = null
             isPreview = false
+
             videoStatus?.visibility = View.VISIBLE
         }
-    }
 
-    override fun onDettach(device: UsbDevice?) {
-        if (usbDevice != null && usbDevice?.equals(device)!!){
+        override fun onDettach(device: UsbDevice) {
+            if (DEBUG) Log.v(TAG, "onDettach:")
+
             mUVCCamera?.close()
-            isActive = false
+            mPreviewSurface?.release()
+            mPreviewSurface = null
             isPreview = false
+
             videoStatus?.visibility = View.VISIBLE
         }
-    }
 
-    override fun onCancel() {
-        isActive = false
-        isPreview = false
-        videoStatus?.visibility = View.VISIBLE
+        override fun onCancel() {
+            videoStatus?.visibility = View.VISIBLE
+        }
     }
 
     protected fun startVideoStreaming(){
-        if (mUVCCamera == null) {
-            if (usbDevice != null && mUSBMonitor?.hasPermission(usbDevice)!!){
+        if (DEBUG) Log.v(TAG, "startVideoStreaming:")
+
+        if(!isPreview) {
+            if (usbDevice != null) {
                 mUSBMonitor?.requestPermission(usbDevice);
-            }else{
-                UVCDialog.showDialog(activity,mUSBMonitor);
+            } else {
+                //UVC Device Filter
+                val uvcFilter = DeviceFilter.getDeviceFilters(activity, R.xml.uvc_device_filter)
+                val uvcDevices = mUSBMonitor?.getDeviceList(uvcFilter[0])
+                if (uvcDevices == null || uvcDevices?.isEmpty()!!) {
+                    if (DEBUG) Log.v(TAG, getString(R.string.uvc_device_no_device))
+                } else {
+                    if (uvcDevices?.size()?.compareTo(1) == 0) {
+                        usbDevice = uvcDevices?.get(0);
+                        mUSBMonitor?.requestPermission(usbDevice)
+                    } else {
+                        UVCDialog.showDialog(activity, mUSBMonitor)
+                    }
+                }
             }
+        }else{
+            mUVCCamera?.startPreview();
         }
     }
-    protected fun stopVideoStreaming(){
-        mUVCCamera?.destroy()
-        mUVCCamera = null
-        isActive = false
-        isPreview = false
+
+    private val mSurfaceTextureListener = object : TextureView.SurfaceTextureListener {
+
+        override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
+            adjustAspectRatio(textureView as TextureView)
+            startVideoStreaming()
+        }
+
+        override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {
+        }
+
+        override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
+            mPreviewSurface?.release()
+            mPreviewSurface = null
+            return true
+        }
+
+        override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
+
+        }
     }
 
     protected fun adjustAspectRatio(textureView: TextureView) {
@@ -249,5 +282,7 @@ abstract class BaseUVCVideoWidget : TowerWidget() , USBMonitor.OnDeviceConnectLi
         txform.postTranslate(xoff, yoff);
         textureView.setTransform(txform);
     }
+
+
 
 }

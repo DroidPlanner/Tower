@@ -1,15 +1,11 @@
 package org.droidplanner.android.fragments.widget
 
 
-import android.hardware.usb.UsbDevice
+
 import android.os.Bundle
 import android.view.*
-import android.widget.TextView
 import android.widget.Toast
-
-import com.serenegiant.usb.USBMonitor
 import org.droidplanner.android.R
-import org.droidplanner.android.dialogs.UVCDialog
 import org.droidplanner.android.fragments.widget.video.BaseUVCVideoWidget
 
 
@@ -36,11 +32,7 @@ public class FullWidgetUVCLinkVideo : BaseUVCVideoWidget() {
         super.onViewCreated(view, savedInstanceState)
 
         takePhotoButton?.setOnClickListener {
-            if (isActive && isPreview){
-                stopVideoStreaming();
-            }else{
-                startVideoStreaming();
-            }
+            Toast.makeText(context, "NOT implemented YET", Toast.LENGTH_SHORT).show()
         }
 
         recordVideo?.setOnClickListener {
@@ -49,27 +41,6 @@ public class FullWidgetUVCLinkVideo : BaseUVCVideoWidget() {
 
         widgetButtonBar?.visibility = View.VISIBLE
 
-    }
-
-
-    override fun onAttach(device: UsbDevice?) {
-        super.onAttach(device);
-    }
-
-    override fun onConnect(device: UsbDevice?, ctrlBlock: USBMonitor.UsbControlBlock, createNew: Boolean) {
-        super.onConnect(device, ctrlBlock, createNew)
-    }
-
-    override fun onDisconnect(device: UsbDevice?, ctrlBlock: USBMonitor.UsbControlBlock) {
-        super.onDisconnect(device, ctrlBlock)
-    }
-
-    override fun onDettach(device: UsbDevice?) {
-        super.onDettach(device)
-    }
-
-    override fun onCancel() {
-        super.onCancel()
     }
 
 }
