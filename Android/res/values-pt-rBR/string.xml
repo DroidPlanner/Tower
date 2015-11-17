@@ -261,9 +261,9 @@
     <string name="mission_control_home">Casa</string>
     <string name="mission_control_arm">Armar</string>
     <string name="mission_control_disarm">Desarmar</string>
-    <string name="mission_control_land">Aterrizar</string>
+    <string name="mission_control_land">Pousar</string>
     <string name="mission_control_takeoff">Decolar</string>
-    <string name="mission_control_pause">Pausa</string>
+    <string name="mission_control_pause">Pausar</string>
     <string name="mission_control_auto">Auto</string>
     <string name="mission_control_follow">Follow Me</string>
     <string name="mission_control_dronie">Dronie</string>
