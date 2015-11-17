@@ -174,6 +174,7 @@ abstract class BaseUVCVideoWidget : TowerWidget(){
                             mPreviewSurface = Surface(st)
                             mUVCCamera?.setPreviewDisplay(mPreviewSurface)
                             mUVCCamera?.startPreview()
+                            isPreview = true
                         }
 
                     }
@@ -211,26 +212,22 @@ abstract class BaseUVCVideoWidget : TowerWidget(){
     protected fun startVideoStreaming(){
         if (DEBUG) Log.v(TAG, "startVideoStreaming:")
 
-        if(!isPreview) {
-            if (usbDevice != null) {
-                mUSBMonitor?.requestPermission(usbDevice);
+        if (usbDevice != null) {
+            mUSBMonitor?.requestPermission(usbDevice);
+        } else {
+            //UVC Device Filter
+            val uvcFilter = DeviceFilter.getDeviceFilters(activity, R.xml.uvc_device_filter)
+            val uvcDevices = mUSBMonitor?.getDeviceList(uvcFilter[0])
+            if (uvcDevices == null || uvcDevices?.isEmpty()!!) {
+                if (DEBUG) Log.v(TAG, getString(R.string.uvc_device_no_device))
             } else {
-                //UVC Device Filter
-                val uvcFilter = DeviceFilter.getDeviceFilters(activity, R.xml.uvc_device_filter)
-                val uvcDevices = mUSBMonitor?.getDeviceList(uvcFilter[0])
-                if (uvcDevices == null || uvcDevices?.isEmpty()!!) {
-                    if (DEBUG) Log.v(TAG, getString(R.string.uvc_device_no_device))
+                if (uvcDevices?.size()?.compareTo(1) == 0) {
+                    usbDevice = uvcDevices?.get(0);
+                    mUSBMonitor?.requestPermission(usbDevice)
                 } else {
-                    if (uvcDevices?.size()?.compareTo(1) == 0) {
-                        usbDevice = uvcDevices?.get(0);
-                        mUSBMonitor?.requestPermission(usbDevice)
-                    } else {
-                        UVCDialog.showDialog(activity, mUSBMonitor)
-                    }
+                    UVCDialog.showDialog(activity, mUSBMonitor)
                 }
             }
-        }else{
-            mUVCCamera?.startPreview();
         }
     }
 
@@ -258,7 +255,7 @@ abstract class BaseUVCVideoWidget : TowerWidget(){
     protected fun adjustAspectRatio(textureView: TextureView) {
         val viewWidth = textureView.width
         val viewHeight = textureView.height
-        val aspectRatio: Float = 9f / 16f
+        val aspectRatio: Float = 3f / 4f
 
         val newWidth: Int
         val newHeight: Int

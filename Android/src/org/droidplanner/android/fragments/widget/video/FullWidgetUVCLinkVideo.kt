@@ -36,10 +36,10 @@ public class FullWidgetUVCLinkVideo : BaseUVCVideoWidget() {
         }
 
         recordVideo?.setOnClickListener {
-            Toast.makeText(context, "Recording is NOT implemented YET", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "NOT implemented YET", Toast.LENGTH_SHORT).show()
         }
 
-        widgetButtonBar?.visibility = View.VISIBLE
+        widgetButtonBar?.visibility = View.INVISIBLE
 
     }
 
