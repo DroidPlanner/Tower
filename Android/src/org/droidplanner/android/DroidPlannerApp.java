@@ -1,12 +1,13 @@
 package org.droidplanner.android;
 
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -41,7 +42,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
-public class DroidPlannerApp extends Application implements DroneListener, TowerListener {
+public class DroidPlannerApp extends MultiDexApplication implements DroneListener, TowerListener {
 
     private static final long DELAY_TO_DISCONNECTION = 1000l; // ms
 
@@ -140,6 +141,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
     public void onCreate() {
         super.onCreate();
 
+        MultiDex.install(this);
         final Context context = getApplicationContext();
 
         dpPrefs = new DroidPlannerPrefs(context);

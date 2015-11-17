@@ -46,6 +46,7 @@ dependencies {
     //Charts and graph library
     compile 'com.github.lecho:hellocharts-library:1.5.5@aar'
     compile 'com.jcraft:jsch:0.1.51'
+    compile 'com.android.support:multidex:1.0.0'
 }
 
 //Decomposed version name and code (https://plus.google.com/+JakeWharton/posts/6f5TcVPRZij)

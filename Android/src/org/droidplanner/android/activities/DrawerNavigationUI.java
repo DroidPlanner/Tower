@@ -3,6 +3,7 @@ package org.droidplanner.android.activities;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.LocalBroadcastManager;
@@ -126,6 +127,9 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
 
         navigationView = (NavigationView) findViewById(R.id.navigation_drawer_container);
         navigationView.setNavigationItemSelectedListener(this);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            navigationView.getMenu().findItem(R.id.navigation_geotag).setVisible(false);
+        }
 
         accountLabel = (TextView) findViewById(R.id.account_screen_label);
 
