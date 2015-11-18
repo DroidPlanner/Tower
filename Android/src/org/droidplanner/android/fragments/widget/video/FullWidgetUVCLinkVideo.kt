@@ -5,6 +5,9 @@ package org.droidplanner.android.fragments.widget
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent
+import com.o3dr.services.android.lib.drone.attribute.AttributeType
+import com.o3dr.services.android.lib.drone.property.State
 import org.droidplanner.android.R
 import org.droidplanner.android.fragments.widget.video.BaseUVCVideoWidget
 
@@ -38,6 +41,30 @@ public class FullWidgetUVCLinkVideo : BaseUVCVideoWidget() {
         recordVideo?.setOnClickListener {
             Toast.makeText(context, "NOT implemented YET", Toast.LENGTH_SHORT).show()
         }
+
+        textureView?.setOnClickListener {
+            when (aspectRatio) {
+                aspectRatio_4_3 -> {
+                    aspectRatio = aspectRatio_16_9
+                    Toast.makeText(context, "Aspect Ratio 16:9", Toast.LENGTH_SHORT).show()
+                }
+                aspectRatio_16_9 -> {
+                    aspectRatio = aspectRatio_21_9
+                    Toast.makeText(context, "Aspect Ratio 21:9", Toast.LENGTH_SHORT).show()
+                }
+                aspectRatio_21_9 -> {
+                    aspectRatio = aspectRatio_1_1
+                    Toast.makeText(context, "Aspect Ratio 1:1", Toast.LENGTH_SHORT).show()
+                }
+                aspectRatio_1_1 -> {
+                    aspectRatio = aspectRatio_4_3
+                    Toast.makeText(context, "Aspect Ratio 4:3", Toast.LENGTH_SHORT).show()
+                }
+            }
+            adjustAspectRatio(textureView as TextureView)
+        }
+
+
 
         widgetButtonBar?.visibility = View.INVISIBLE
 

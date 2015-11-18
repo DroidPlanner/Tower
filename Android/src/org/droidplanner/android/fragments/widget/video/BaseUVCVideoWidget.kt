@@ -24,6 +24,7 @@ import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 import android.graphics.Matrix
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs
 
 abstract class BaseUVCVideoWidget : TowerWidget(){
 
@@ -37,9 +38,11 @@ abstract class BaseUVCVideoWidget : TowerWidget(){
             temp.addAction(AttributeEvent.STATE_ARMING)
             return temp
         }
+
     }
 
-    protected val DEBUG = true    // TODO set false when production
+    protected val DEBUG = true
+
     protected val TAG = "BaseUVCVideoWidget"
 
     override fun getWidgetType() = TowerWidgets.UVC_VIDEO
@@ -57,6 +60,14 @@ abstract class BaseUVCVideoWidget : TowerWidget(){
     protected var isPreview:Boolean = false
     protected var usbDevice: UsbDevice? = null
     protected var mPreviewSurface: Surface? = null
+
+    //Aspect ratio
+    protected var aspectRatio_4_3: Float = 3f / 4f
+    protected var aspectRatio_16_9: Float = 9f / 16f
+    protected var aspectRatio_21_9: Float = 9f / 21f
+    protected var aspectRatio_1_1: Float = 1f / 1f
+    protected var aspectRatio: Float = aspectRatio_4_3
+
 
 
     protected val receiver = object : BroadcastReceiver() {
@@ -105,6 +116,7 @@ abstract class BaseUVCVideoWidget : TowerWidget(){
         if (DEBUG) Log.v(TAG, "onResume:")
 
         mUSBMonitor?.register()
+        aspectRatio = appPrefs.uvcVideoAspectRatio
     }
 
     override fun onPause() {
@@ -113,6 +125,7 @@ abstract class BaseUVCVideoWidget : TowerWidget(){
 
         mUSBMonitor?.unregister()
         mUVCCamera?.close()
+        appPrefs.uvcVideoAspectRatio = aspectRatio
     }
 
     override fun onDestroy() {
@@ -255,7 +268,6 @@ abstract class BaseUVCVideoWidget : TowerWidget(){
     protected fun adjustAspectRatio(textureView: TextureView) {
         val viewWidth = textureView.width
         val viewHeight = textureView.height
-        val aspectRatio: Float = 3f / 4f
 
         val newWidth: Int
         val newHeight: Int

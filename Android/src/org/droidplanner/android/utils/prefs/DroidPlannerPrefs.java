@@ -160,6 +160,8 @@ public class DroidPlannerPrefs {
     private static final String PREF_WIDGET_VIDEO_TYPE = "pref_widget_video_type";
     private static final String PREF_CUSTOM_VIDEO_UDP_PORT = "pref_custom_video_udp_port";
 
+    public static final String PREF_UVC_VIDEO_ASPECT_RATIO = "pref_uvc_video_aspect_ratio";
+
     // Public for legacy usage
     public final SharedPreferences prefs;
     private final LocalBroadcastManager lbm;
@@ -501,5 +503,13 @@ public class DroidPlannerPrefs {
 
     public int getCustomVideoUdpPort(){
         return prefs.getInt(PREF_CUSTOM_VIDEO_UDP_PORT, -1);
+    }
+
+    public void setUVCVideoAspectRatio(Float aspectRatio){
+        prefs.edit().putFloat(PREF_UVC_VIDEO_ASPECT_RATIO, aspectRatio).apply();
+    }
+
+    public Float getUVCVideoAspectRatio(){
+        return prefs.getFloat(PREF_UVC_VIDEO_ASPECT_RATIO, 3f / 4f);
     }
 }
