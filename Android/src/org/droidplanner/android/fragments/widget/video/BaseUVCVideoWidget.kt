@@ -41,7 +41,7 @@ abstract class BaseUVCVideoWidget : TowerWidget(){
 
     }
 
-    protected val DEBUG = true
+    protected val DEBUG = false
 
     protected val TAG = "BaseUVCVideoWidget"
 
