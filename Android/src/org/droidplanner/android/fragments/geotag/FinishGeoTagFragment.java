@@ -12,12 +12,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.droidplanner.android.R;
-
-import java.io.File;
-import java.util.ArrayList;
+import org.droidplanner.android.activities.GeoTagActivity;
 
 /**
- * Created by chavi on 11/16/15.
+ * Fragment that handles UI for successfully geotagged images.
  */
 public class FinishGeoTagFragment extends Fragment {
 
@@ -58,11 +56,8 @@ public class FinishGeoTagFragment extends Fragment {
         int numFiles = 0;
         Bundle args = getArguments();
         if (args != null) {
-            ArrayList<File> files = (ArrayList<File>) args.getSerializable(GeoTagImagesService.EXTRA_GEOTAGGED_FILES);
-            numFiles = files.size();
-            if (files != null && numFiles > 0) {
-                parent = files.get(0).getParent();
-            }
+            numFiles = args.getInt(GeoTagActivity.NUM_IMAGE_FILES);
+            parent = args.getString(GeoTagActivity.PARENT_DIR);
         }
 
         if (parent != null) {

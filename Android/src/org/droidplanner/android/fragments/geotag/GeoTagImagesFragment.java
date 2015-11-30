@@ -1,5 +1,6 @@
 package org.droidplanner.android.fragments.geotag;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +25,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * Created by chavi on 10/15/15.
+ * Fragment that handles UI for geotagging images.
  */
 public class GeoTagImagesFragment extends Fragment {
     private static final int STATE_INIT = 0;
@@ -67,11 +68,12 @@ public class GeoTagImagesFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if (!(context instanceof GeoTagActivity)) {
+        Activity activity = getActivity();
+        if (!(activity instanceof GeoTagActivity)) {
             throw new IllegalStateException("Activity is not instance of " + GeoTagActivity.class.getSimpleName());
         }
 
-        activity = (GeoTagActivity) context;
+        this.activity = (GeoTagActivity) activity;
         lbm = LocalBroadcastManager.getInstance(context);
 
     }
@@ -140,16 +142,20 @@ public class GeoTagImagesFragment extends Fragment {
 
     private void startGeoTagging() {
         Context context = getContext();
-        Intent intent = new Intent(context, GeoTagImagesService.class);
-        intent.setAction(GeoTagImagesService.ACTION_START_GEOTAGGING);
-        getContext().startService(intent);
+        if (context != null) {
+            Intent intent = new Intent(context, GeoTagImagesService.class);
+            intent.setAction(GeoTagImagesService.ACTION_START_GEOTAGGING);
+            context.startService(intent);
+        }
     }
 
     private void cancelGeoTagging() {
         Context context = getContext();
-        Intent intent = new Intent(context, GeoTagImagesService.class);
-        intent.setAction(GeoTagImagesService.ACTION_CANCEL_GEOTAGGING);
-        getContext().startService(intent);
+        if (context != null) {
+            Intent intent = new Intent(context, GeoTagImagesService.class);
+            intent.setAction(GeoTagImagesService.ACTION_CANCEL_GEOTAGGING);
+            context.startService(intent);
+        }
     }
 
     private void updateState(int state) {
@@ -181,8 +187,10 @@ public class GeoTagImagesFragment extends Fragment {
     private void finishedGeotagging(Intent intent) {
         boolean success = intent.getBooleanExtra(GeoTagImagesService.EXTRA_SUCCESS, false);
         if (success) {
-            ArrayList<File> files = (ArrayList<File>) intent.getSerializableExtra(GeoTagImagesService.EXTRA_GEOTAGGED_FILES);
-            activity.finishedGeotagging(files);
+            if (activity != null) {
+                ArrayList<File> files = (ArrayList<File>) intent.getSerializableExtra(GeoTagImagesService.EXTRA_GEOTAGGED_FILES);
+                activity.finishedGeotagging(files);
+            }
         } else {
             String failure = intent.getStringExtra(GeoTagImagesService.EXTRA_FAILURE_MESSAGE);
             failedLoading(failure);
