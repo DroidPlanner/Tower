@@ -44,29 +44,30 @@ public class FullWidgetUVCLinkVideo : BaseUVCVideoWidget() {
 
         textureView?.setOnClickListener {
             when (aspectRatio) {
-                aspectRatio_4_3 -> {
-                    aspectRatio = aspectRatio_16_9
+                ASPECT_RATIO_4_3 -> {
+                    aspectRatio = ASPECT_RATIO_16_9
                     Toast.makeText(context, "Aspect Ratio 16:9", Toast.LENGTH_SHORT).show()
                 }
-                aspectRatio_16_9 -> {
-                    aspectRatio = aspectRatio_21_9
+                ASPECT_RATIO_16_9 -> {
+                    aspectRatio = ASPECT_RATIO_21_9
                     Toast.makeText(context, "Aspect Ratio 21:9", Toast.LENGTH_SHORT).show()
                 }
-                aspectRatio_21_9 -> {
-                    aspectRatio = aspectRatio_1_1
+                ASPECT_RATIO_21_9 -> {
+                    aspectRatio = ASPECT_RATIO_1_1
                     Toast.makeText(context, "Aspect Ratio 1:1", Toast.LENGTH_SHORT).show()
                 }
-                aspectRatio_1_1 -> {
-                    aspectRatio = aspectRatio_4_3
+                ASPECT_RATIO_1_1 -> {
+                    aspectRatio = ASPECT_RATIO_4_3
                     Toast.makeText(context, "Aspect Ratio 4:3", Toast.LENGTH_SHORT).show()
                 }
             }
             adjustAspectRatio(textureView as TextureView)
         }
 
-
-
+        takePhotoButton?.visibility = View.GONE
+        recordVideo?.visibility = View.GONE
         widgetButtonBar?.visibility = View.INVISIBLE
+
 
     }
 

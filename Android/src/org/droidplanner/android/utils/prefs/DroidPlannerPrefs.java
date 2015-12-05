@@ -161,6 +161,7 @@ public class DroidPlannerPrefs {
     private static final String PREF_CUSTOM_VIDEO_UDP_PORT = "pref_custom_video_udp_port";
 
     public static final String PREF_UVC_VIDEO_ASPECT_RATIO = "pref_uvc_video_aspect_ratio";
+    private static final float DEFAULT_UVC_VIDEO_ASPECT_RATIO = 3f / 4f;
 
     // Public for legacy usage
     public final SharedPreferences prefs;
@@ -510,6 +511,6 @@ public class DroidPlannerPrefs {
     }
 
     public Float getUVCVideoAspectRatio(){
-        return prefs.getFloat(PREF_UVC_VIDEO_ASPECT_RATIO, 3f / 4f);
+        return prefs.getFloat(PREF_UVC_VIDEO_ASPECT_RATIO, DEFAULT_UVC_VIDEO_ASPECT_RATIO);
     }
 }

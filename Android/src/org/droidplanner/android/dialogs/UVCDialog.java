@@ -1,13 +1,13 @@
 package org.droidplanner.android.dialogs;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.hardware.usb.UsbDevice;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,26 +40,11 @@ public class UVCDialog extends DialogFragment {
      * @param parent FragmentActivity
      * @return
      */
-    public static UVCDialog showDialog(final Activity parent) {
-        UVCDialog dialog = newInstance();
-        try {
-            dialog.show(parent.getFragmentManager(), TAG);
-        } catch (final IllegalStateException e) {
-            dialog = null;
-        }
-        return dialog;
-    }
-
-    /**
-     * Helper method
-     * @param parent FragmentActivity
-     * @return
-     */
-    public static UVCDialog showDialog(final Activity parent, USBMonitor mUSBMonitor) {
+    public static UVCDialog showDialog(final FragmentActivity parent, USBMonitor mUSBMonitor) {
         UVCDialog dialog = newInstance();
         dialog.mUSBMonitor = mUSBMonitor;
         try {
-            dialog.show(parent.getFragmentManager(), TAG);
+            dialog.show(parent.getSupportFragmentManager() ,TAG);
         } catch (final IllegalStateException e) {
             dialog = null;
         }
@@ -68,8 +53,6 @@ public class UVCDialog extends DialogFragment {
 
     public static UVCDialog newInstance() {
         final UVCDialog dialog = new UVCDialog();
-        final Bundle args = new Bundle();
-        dialog.setArguments(args);
         return dialog;
     }
 
@@ -78,31 +61,12 @@ public class UVCDialog extends DialogFragment {
     }
 
     @Override
-    public void onAttach(final Activity activity) {
-        super.onAttach(activity);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState == null)
-            savedInstanceState = getArguments();
-    }
-
-    @Override
-    public void onSaveInstanceState(final Bundle saveInstanceState) {
-        final Bundle args = getArguments();
-        if (args != null) saveInstanceState.putAll(args);
-        super.onSaveInstanceState(saveInstanceState);
-    }
-
-    @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(initView());
         builder.setTitle(R.string.uvc_device_select);
         builder.setPositiveButton(android.R.string.ok, mOnDialogClickListener);
-        builder.setNegativeButton(android.R.string.cancel , mOnDialogClickListener);
+        builder.setNegativeButton(android.R.string.cancel, mOnDialogClickListener);
         builder.setNeutralButton(R.string.uvc_device_refresh, null);
         final Dialog dialog = builder.create();
         dialog.setCancelable(true);
@@ -119,18 +83,12 @@ public class UVCDialog extends DialogFragment {
         mSpinner = (Spinner)rootView.findViewById(R.id.spinner1);
         final View empty = rootView.findViewById(android.R.id.empty);
         mSpinner.setEmptyView(empty);
-        return rootView;
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
         updateDevices();
         final Button button = (Button)getDialog().findViewById(android.R.id.button3);
         if (button != null) {
             button.setOnClickListener(mOnClickListener);
         }
+        return rootView;
     }
 
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -151,7 +109,7 @@ public class UVCDialog extends DialogFragment {
                 case DialogInterface.BUTTON_POSITIVE:
                     final Object item = mSpinner.getSelectedItem();
                     if (item instanceof UsbDevice) {
-                        mUSBMonitor.requestPermission((UsbDevice)item);
+                        if (mUSBMonitor != null) mUSBMonitor.requestPermission((UsbDevice)item);
                     }
                     break;
             }
@@ -159,10 +117,13 @@ public class UVCDialog extends DialogFragment {
     };
 
     public void updateDevices() {
-        mUSBMonitor.dumpDevices();
-        final List<DeviceFilter> filter = DeviceFilter.getDeviceFilters(getActivity(), R.xml.uvc_device_filter);
-        mDeviceListAdapter = new DeviceListAdapter(getActivity(), mUSBMonitor.getDeviceList(filter.get(0)));
-        mSpinner.setAdapter(mDeviceListAdapter);
+        if (getActivity() != null && mUSBMonitor != null){
+            final List<DeviceFilter> filter = DeviceFilter.getDeviceFilters(getActivity(), R.xml.uvc_device_filter);
+            if (!filter.isEmpty()){
+                mDeviceListAdapter = new DeviceListAdapter(getActivity(), mUSBMonitor.getDeviceList(filter.get(0)));
+                mSpinner.setAdapter(mDeviceListAdapter);
+            }
+        }
     }
 
     private static final class DeviceListAdapter extends BaseAdapter {
@@ -182,10 +143,7 @@ public class UVCDialog extends DialogFragment {
 
         @Override
         public UsbDevice getItem(final int position) {
-            if ((position >= 0) && (position < mList.size()))
-                return mList.get(position);
-            else
-                return null;
+            return mList.get(position);
         }
 
         @Override

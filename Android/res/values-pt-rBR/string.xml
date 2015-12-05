@@ -14,7 +14,7 @@
 
     <!-- Drone Setup tabs -->
     <string name="screen_cal">Calibração</string>
-    <string name="screen_checklist">Lista de Verificações</string>
+    <string name="screen_checklist">Checklist</string>
     <string name="screen_parameters">Parâmetros</string>
 
     <!-- App Settings/Preferences -->

@@ -54,6 +54,13 @@ abstract class BaseUVCVideoWidget : TowerWidget(){
     protected val EXECUTER: ThreadPoolExecutor = ThreadPoolExecutor(CORE_POOL_SIZE, MAX_POOL_SIZE, KEEP_ALIVE_TIME.toLong(),
             TimeUnit.SECONDS, LinkedBlockingQueue<Runnable>())
 
+    //Aspect ratio
+    protected val ASPECT_RATIO_4_3: Float = 3f / 4f
+    protected val ASPECT_RATIO_16_9: Float = 9f / 16f
+    protected val ASPECT_RATIO_21_9: Float = 9f / 21f
+    protected val ASPECT_RATIO_1_1: Float = 1f / 1f
+    protected var aspectRatio: Float = ASPECT_RATIO_4_3
+
     // for accessing USB and USB camera
     protected var mUSBMonitor: USBMonitor? = null
     protected var mUVCCamera: UVCCamera? = null
@@ -61,26 +68,12 @@ abstract class BaseUVCVideoWidget : TowerWidget(){
     protected var usbDevice: UsbDevice? = null
     protected var mPreviewSurface: Surface? = null
 
-    //Aspect ratio
-    protected var aspectRatio_4_3: Float = 3f / 4f
-    protected var aspectRatio_16_9: Float = 9f / 16f
-    protected var aspectRatio_21_9: Float = 9f / 21f
-    protected var aspectRatio_1_1: Float = 1f / 1f
-    protected var aspectRatio: Float = aspectRatio_4_3
-
-
 
     protected val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action) {
                 AttributeEvent.STATE_CONNECTED -> {
                     startVideoStreaming()
-                }
-                AttributeEvent.STATE_ARMING -> {
-                    val droneState = drone.getAttribute<State>(AttributeType.STATE)
-                    if (droneState.isArmed){
-                        startVideoStreaming()
-                    }
                 }
             }
         }

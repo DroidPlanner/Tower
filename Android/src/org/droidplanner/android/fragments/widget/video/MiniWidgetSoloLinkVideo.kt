@@ -31,7 +31,6 @@ public class MiniWidgetSoloLinkVideo : BaseVideoWidget() {
                 AttributeEvent.STATE_CONNECTED -> tryStreamingVideo()
             }
         }
-
     }
 
     private var surfaceRef: Surface? = null
