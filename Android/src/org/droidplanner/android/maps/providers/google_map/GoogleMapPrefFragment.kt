@@ -59,6 +59,10 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
         val PREF_ENABLE_OFFLINE_LAYER = "pref_enable_offline_map_layer"
         val DEFAULT_OFFLINE_LAYER_ENABLED = false
 
+        val PREF_LAST_MISSION_ID = "pref_mission_id"
+
+        val PREF_DRONEKIT_TOKEN = "pref_dronekit_token"
+
         fun getMapType(context: Context?): Int {
             var mapType = GoogleMap.MAP_TYPE_SATELLITE
             context?.let {
@@ -135,6 +139,34 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
             context?.let {
                 val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
                 sharedPref.edit().putString(PREF_MAPBOX_ACCESS_TOKEN, mapboxToken).apply()
+            }
+        }
+
+        fun getLastRecapId(context: Context?): String {
+            return if(context == null) "" else {
+                val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+                sharedPref.getString(PREF_LAST_MISSION_ID, "")
+            }
+        }
+
+        fun setLastRecapId(context: Context?, missionId: String?) {
+            context?.let {
+                val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+                sharedPref.edit().putString(PREF_LAST_MISSION_ID, missionId).apply()
+            }
+        }
+
+        fun getDroneKitToken(context: Context?): String {
+            return if(context == null) "" else {
+                val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
+                sharedPrefs.getString(PREF_DRONEKIT_TOKEN, "");
+            }
+        }
+
+        fun setDroneKitToken(context: Context?, token: String?) {
+            context?.let {
+                val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+                sharedPref.edit().putString(PREF_DRONEKIT_TOKEN, token).apply()
             }
         }
     }

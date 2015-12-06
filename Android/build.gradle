@@ -24,7 +24,7 @@ dependencies {
     compile "com.android.support:design:${support_lib_version}"
 
     //DroneKit-Android client library.
-    compile 'com.o3dr.android:dronekit-android:2.6.8-beta2'
+    compile 'com.o3dr.android:dronekit-android:2.7.0'
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')
@@ -36,7 +36,7 @@ dependencies {
 
     compile "com.squareup.okhttp:okhttp:${okhttp_version}"
     compile "com.squareup.okhttp:okhttp-urlconnection:${okhttp_version}"
-
+    
     compile 'com.jakewharton.timber:timber:3.1.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile('com.crashlytics.sdk.android:crashlytics:2.5.0@aar') {
@@ -45,6 +45,8 @@ dependencies {
 
     //Charts and graph library
     compile 'com.github.lecho:hellocharts-library:1.5.5@aar'
+    compile 'com.jcraft:jsch:0.1.51'
+    compile 'com.android.support:multidex:1.0.0'
 }
 
 //Decomposed version name and code (https://plus.google.com/+JakeWharton/posts/6f5TcVPRZij)
@@ -75,6 +77,8 @@ android {
         buildConfigField "boolean", "WRITE_LOG_FILE", "true"
         buildConfigField "int", "LOG_FILE_LEVEL", "$logLevelDebug"
         buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
+        buildConfigField "String", "SOLO_LINK_IP" , getSoloLinkIp()
+        multiDexEnabled true
     }
 
     compileOptions {
@@ -181,4 +185,8 @@ def getAppKeyPassword() {
 
 def getAppKey() {
     return hasProperty('ORG_DROIDPLANNER_ANDROID_KEY_ALIAS') ? ORG_DROIDPLANNER_ANDROID_KEY_ALIAS : ''
+}
+
+def getSoloLinkIp(){
+    return hasProperty('SOLO_LINK_IP') ? SOLO_LINK_IP : ''
 }

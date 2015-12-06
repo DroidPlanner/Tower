@@ -3,6 +3,7 @@ package org.droidplanner.android.activities;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.LocalBroadcastManager;
@@ -24,7 +25,6 @@ import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.control.BaseFlightControlFragment;
 import org.droidplanner.android.view.SlidingDrawer;
-import org.w3c.dom.Text;
 
 /**
  * This abstract activity provides its children access to a navigation drawer
@@ -127,6 +127,9 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
 
         navigationView = (NavigationView) findViewById(R.id.navigation_drawer_container);
         navigationView.setNavigationItemSelectedListener(this);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            navigationView.getMenu().findItem(R.id.navigation_geotag).setVisible(false);
+        }
 
         accountLabel = (TextView) findViewById(R.id.account_screen_label);
 
@@ -202,6 +205,10 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
 
             case R.id.navigation_settings:
                 mNavigationIntent = new Intent(this, SettingsActivity.class);
+                break;
+
+            case R.id.navigation_geotag:
+                mNavigationIntent = new Intent(this, GeoTagActivity.class);
                 break;
         }
 
