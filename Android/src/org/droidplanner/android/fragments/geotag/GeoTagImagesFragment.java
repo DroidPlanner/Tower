@@ -28,6 +28,10 @@ import java.util.ArrayList;
  * Fragment that handles UI for geotagging images.
  */
 public class GeoTagImagesFragment extends Fragment {
+    private static final String ARG_STATE = "state";
+    private static final String ARG_TOTAL = "total";
+    private static final String ARG_PROGRESS = "progress";
+
     private static final int STATE_INIT = 0;
     private static final int STATE_GEOTAGGING = 1;
 
@@ -39,6 +43,9 @@ public class GeoTagImagesFragment extends Fragment {
     private ProgressBar progressBar;
     private ImageView sdCard;
     private Animation sdCardAnim;
+
+    private int total = 0;
+    private int progress = 0;
 
     private static final IntentFilter filter = new IntentFilter();
     static {
@@ -54,11 +61,9 @@ public class GeoTagImagesFragment extends Fragment {
                     finishedGeotagging(intent);
                     break;
                 case GeoTagImagesService.STATE_PROGRESS_UPDATE_GEOTAGGING:
-                    int total = intent.getIntExtra(GeoTagImagesService.EXTRA_TOTAL, 0);
-                    int progress = intent.getIntExtra(GeoTagImagesService.EXTRA_PROGRESS, 0);
+                    total = intent.getIntExtra(GeoTagImagesService.EXTRA_TOTAL, 0);
+                    progress = intent.getIntExtra(GeoTagImagesService.EXTRA_PROGRESS, 0);
                     updateState(STATE_GEOTAGGING);
-                    progressBar.setMax(total);
-                    progressBar.setProgress(progress);
                     break;
             }
         }
@@ -83,11 +88,25 @@ public class GeoTagImagesFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_geotag_images, container, false);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(ARG_STATE, currState);
+        outState.putInt(ARG_TOTAL, total);
+        outState.putInt(ARG_PROGRESS, progress);
+        super.onSaveInstanceState(outState);
+    }
+
     int currState = STATE_INIT;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (savedInstanceState != null) {
+            currState = savedInstanceState.getInt(ARG_STATE, STATE_INIT);
+            total = savedInstanceState.getInt(ARG_TOTAL);
+            progress = savedInstanceState.getInt(ARG_PROGRESS);
+        }
 
         instructionText = (TextView) view.findViewById(R.id.instruction_text);
         geotagButton = (Button) view.findViewById(R.id.geotag_button);
@@ -99,7 +118,7 @@ public class GeoTagImagesFragment extends Fragment {
 
         sdCardAnim = AnimationUtils.loadAnimation(getContext(), R.anim.sd_card_anim);
 
-        updateState(STATE_INIT);
+        updateState(currState);
 
         geotagButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +194,8 @@ public class GeoTagImagesFragment extends Fragment {
                 geotagButton.setText(R.string.button_setup_cancel);
                 sdCard.clearAnimation();
                 sdCard.setVisibility(View.GONE);
+                progressBar.setMax(total);
+                progressBar.setProgress(progress);
                 break;
         }
     }

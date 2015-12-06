@@ -70,8 +70,8 @@ public class GeoTagActivity extends DrawerNavigationUI {
         if (!(fragment instanceof FinishGeoTagFragment)) {
             fragment = new FinishGeoTagFragment();
             Bundle args = new Bundle();
-            args.putInt(NUM_IMAGE_FILES, files.size());
             if (files != null && files.size() > 0) {
+                args.putInt(NUM_IMAGE_FILES, files.size());
                 args.putString(PARENT_DIR, files.get(0).getParent());
             }
             fragment.setArguments(args);

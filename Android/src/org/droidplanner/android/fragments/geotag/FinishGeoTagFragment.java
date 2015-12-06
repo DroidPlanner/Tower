@@ -61,9 +61,9 @@ public class FinishGeoTagFragment extends Fragment {
         }
 
         if (parent != null) {
-            filesText.setText(String.format(getString(R.string.photos_geotagged), String.valueOf(numFiles), parent));
+            filesText.setText(getString(R.string.photos_geotagged, String.valueOf(numFiles), parent));
         } else {
-            filesText.setText(getString(R.string.no_files_geotagged));
+            filesText.setText(R.string.no_files_geotagged);
         }
     }
 

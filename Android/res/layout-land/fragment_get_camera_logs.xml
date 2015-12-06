@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:toosl="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/transparent"
     android:gravity="center"
     android:orientation="vertical">
@@ -12,11 +13,12 @@
         android:id="@+id/fragment_geotag_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginEnd="150dp"
-        android:layout_marginLeft="150dp"
-        android:layout_marginRight="150dp"
-        android:layout_marginStart="150dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
         android:layout_weight="1"
+        android:weightSum="5"
         android:gravity="center">
 
         <ImageView
@@ -92,7 +94,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/geotag_button"
-        android:gravity="center"
         android:minWidth="200dp"
-        android:textColor="@color/button_text"/>
+        android:textColor="@color/button_text"
+        tools:text="test"/>
 </LinearLayout>

@@ -11,12 +11,13 @@
     <LinearLayout
         android:id="@+id/fragment_geotag_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="150dp"
-        android:layout_marginTop="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="5">
 
         <ImageView
             android:id="@+id/phone"
@@ -29,8 +30,8 @@
             android:id="@+id/phone_control_dots"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_margin="50dp"
-            android:layout_weight="1"
+            android:layout_margin="60dp"
+            android:layout_weight="0.05"
             android:rotation="90"
             android:src="@drawable/blue_loading_dots"/>
 
@@ -45,8 +46,8 @@
             android:id="@+id/control_copter_dots"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_margin="50dp"
-            android:layout_weight="1"
+            android:layout_margin="60dp"
+            android:layout_weight="0.05"
             android:rotation="90"
             android:src="@drawable/blue_loading_dots"/>
 
@@ -54,7 +55,7 @@
             android:id="@+id/copter"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:src="@drawable/solo"/>
 
     </LinearLayout>

@@ -59,6 +59,9 @@ public class GeoTagImagesService extends Service {
     public static final String EXTRA_TOTAL = PACKAGE_NAME + ".EXTRA_TOTAL";
     public static final String EXTRA_GEOTAGGED_FILES = PACKAGE_NAME + ".EXTRA_GEOTAGGED_FILES";
 
+    private static final int CAMERA_TRIGGER_MSG_ID = 180;
+    private static final String IMAGE_PATH = "/DCIM";
+
     private AsyncTask getTlogsTask;
     private GeoTagTask geoTagTask;
     private LocalBroadcastManager lbm;
@@ -114,11 +117,11 @@ public class GeoTagImagesService extends Service {
     }
 
     private void startGeoTagging() {
-        File folder = getApplicationContext().getExternalFilesDir(null);
+        File folder = getExternalFilesDir(null);
         File tlogFile = new File(folder.getPath() + "/camera_msgs.tlog");
         Timber.d("path: " + tlogFile.getPath());
 
-        geoTagImages(getApplicationContext(), tlogFile);
+        geoTagImages(tlogFile);
     }
 
     private void cancelGeoTagging() {
@@ -128,20 +131,15 @@ public class GeoTagImagesService extends Service {
         }
     }
 
-    private void geoTagImages(final Context context, File tlogFile) {
-        final String extMount = getExternalStorage(context);
+    private void geoTagImages(File tlogFile) {
+        final String extMount = getExternalStorage();
         if (extMount == null) {
             return;
         }
 
-        final ArrayList<File> photoFiles = new ArrayList<>();
+        final ArrayList<File> photos = searchDir(extMount);
 
-        List<File> photos = searchDir(extMount);
-        if (photos != null) {
-            photoFiles.addAll(photos);
-        }
-
-        if (photoFiles.size() == 0) {
+        if (photos.isEmpty()) {
             sendFailedGeotaggingIntent("No photos on SD card for GoPro device.");
             return;
         }
@@ -152,7 +150,7 @@ public class GeoTagImagesService extends Service {
 
             @Override
             public boolean includeEvent(TLogParser.Event event) {
-                return 180 == event.getMavLinkMessage().msgid;
+                return CAMERA_TRIGGER_MSG_ID == event.getMavLinkMessage().msgid;
             }
 
             @Override
@@ -164,7 +162,7 @@ public class GeoTagImagesService extends Service {
         }, new TLogParserCallback() {
             @Override
             public void onResult(List<TLogParser.Event> eventList) {
-                if (eventList.size() < 0) {
+                if (eventList.isEmpty()) {
                     sendFailedGeotaggingIntent("No camera message events found");
                     return;
                 }
@@ -173,9 +171,9 @@ public class GeoTagImagesService extends Service {
                     geoTagTask.cancel(true);
                 }
 
-                File file = new File(getSaveRootDir(context), GEO_TAG_ROOT_NAME);
+                File file = new File(getSaveRootDir(), GEO_TAG_ROOT_NAME);
 
-                geoTagTask = new GeoTagTask(file, eventList, photoFiles);
+                geoTagTask = new GeoTagTask(file, eventList, photos);
                 geoTagTask.execute();
             }
 
@@ -190,11 +188,11 @@ public class GeoTagImagesService extends Service {
         });
     }
 
-    private String getExternalStorage(Context context) {
+    private String getExternalStorage() {
         boolean hasNullFile = false;
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            File[] files = context.getExternalFilesDirs(null);
+            File[] files = getExternalFilesDirs(null);
             for (File extFile : files) {
                 if (extFile == null) {
                     hasNullFile = true;
@@ -212,6 +210,10 @@ public class GeoTagImagesService extends Service {
     }
 
     private static String findRootPath(File extFile) {
+        if (extFile == null) {
+            return null;
+        }
+
         File currPath = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             currPath = extFile;
@@ -227,14 +229,14 @@ public class GeoTagImagesService extends Service {
         return currPath.getAbsolutePath();
     }
 
-    private static List<File> searchDir(String mount) {
-        File photoDir = new File(mount + "/DCIM");
+    private static ArrayList<File> searchDir(String mount) {
+        File photoDir = new File(mount + IMAGE_PATH);
         File[] goProDirs = photoDir.listFiles();
         if (goProDirs == null || goProDirs.length == 0) {
             return null;
         }
 
-        List<File> photoFiles = new ArrayList<>();
+        ArrayList<File> photoFiles = new ArrayList<>();
 
         for (File picDir : goProDirs) {
             if (picDir.getName().toLowerCase().contains("gopro")) {
@@ -268,7 +270,7 @@ public class GeoTagImagesService extends Service {
 
                 Context context = weakContext.get();
                 if (context != null) {
-                    File folder = context.getExternalFilesDir(null);
+                    File folder = getExternalFilesDir(null);
                     if (folder == null) {
                         return false;
                     }
@@ -335,11 +337,11 @@ public class GeoTagImagesService extends Service {
         }
     }
 
-    private File getSaveRootDir(Context context) {
-        File saveDir = context.getExternalFilesDir(null);
+    private File getSaveRootDir() {
+        File saveDir = getExternalFilesDir(null);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            File dirs[] = context.getExternalFilesDirs(null);
+            File dirs[] = getExternalFilesDirs(null);
             for (File dir : dirs) {
                 // dir can be null if the device contains an external SD card slot but no SD card is present.
                 if (dir != null && Environment.isExternalStorageRemovable(dir)) {

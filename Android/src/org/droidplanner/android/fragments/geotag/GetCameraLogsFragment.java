@@ -25,7 +25,8 @@ import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
  * Created by chavi on 10/15/15.
  */
 public class GetCameraLogsFragment extends ApiListenerFragment {
-    private static final int STATE_INIT = -1;
+    private static final String ARG_STATE = "state";
+
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTED_NOT_STARTED = 1;
     private static final int STATE_LOADING_LOGS = 2;
@@ -54,8 +55,7 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
                     if (success) {
                         updateState(STATE_DONE_LOGS);
                     } else {
-                        //add ui for this
-                        updateState(STATE_INIT);
+                        updateState(STATE_CONNECTED_NOT_STARTED);
                     }
                     break;
             }
@@ -71,7 +71,7 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
     private ImageView phoneControlDots;
     private ImageView controlCopterDots;
 
-    private int currState = STATE_INIT;
+    private int currState = STATE_DISCONNECTED;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -79,8 +79,18 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(ARG_STATE, currState);
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (savedInstanceState != null) {
+            currState = savedInstanceState.getInt(ARG_STATE, STATE_DISCONNECTED);
+        }
 
         instructionText = (TextView) view.findViewById(R.id.instruction_text);
         secondaryInstruction = (TextView) view.findViewById(R.id.secondary_instruction_text);
@@ -89,7 +99,7 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
         phoneControlDots = (ImageView) view.findViewById(R.id.phone_control_dots);
         controlCopterDots = (ImageView) view.findViewById(R.id.control_copter_dots);
 
-        updateState(STATE_DISCONNECTED);
+        updateState(currState);
         geotagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,10 +139,6 @@ public class GetCameraLogsFragment extends ApiListenerFragment {
     }
 
     private void updateState(int state) {
-        if (currState == state) {
-            return;
-        }
-
         currState = state;
         switch (currState) {
             case STATE_DISCONNECTED:
