@@ -1,12 +1,10 @@
 apply plugin: 'com.android.application'
-// This does not break the build when Android Studio is missing the JRebel for Android plugin.
-apply plugin: 'com.zeroturnaround.jrebel.android'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 
 ext {
     play_services_version = '7.8.0'
-    support_lib_version = '23.0.1'
+    support_lib_version = '23.1.1'
     okhttp_version = '2.3.0'
 }
 
@@ -24,7 +22,7 @@ dependencies {
     compile "com.android.support:design:${support_lib_version}"
 
     //DroneKit-Android client library.
-    compile 'com.o3dr.android:dronekit-android:2.6.8-beta2'
+    compile 'com.o3dr.android:dronekit-android:2.7.0'
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')
@@ -64,7 +62,7 @@ def logLevelAssert = 7;
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId 'org.droidplanner.android'
