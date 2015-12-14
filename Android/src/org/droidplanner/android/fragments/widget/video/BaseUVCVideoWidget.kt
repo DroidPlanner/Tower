@@ -35,7 +35,6 @@ abstract class BaseUVCVideoWidget : TowerWidget(){
         private fun initFilter(): IntentFilter {
             val temp = IntentFilter()
             temp.addAction(AttributeEvent.STATE_CONNECTED)
-            temp.addAction(AttributeEvent.STATE_ARMING)
             return temp
         }
 
