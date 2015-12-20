@@ -2,12 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 
-ext {
-    play_services_version = '7.8.0'
-    support_lib_version = '23.1.1'
-    okhttp_version = '2.3.0'
-}
-
 dependencies {
     compile "com.google.android.gms:play-services-maps:${play_services_version}"
     compile "com.google.android.gms:play-services-location:${play_services_version}"
@@ -22,7 +16,7 @@ dependencies {
     compile "com.android.support:design:${support_lib_version}"
 
     //DroneKit-Android client library.
-    compile 'com.o3dr.android:dronekit-android:2.7.0'
+    compile 'com.o3dr.android:dronekit-android:2.8.0-beta4'
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')
