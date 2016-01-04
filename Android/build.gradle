@@ -28,6 +28,7 @@ dependencies {
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')
+    compile(name:'libuvccamera-release', ext:'aar')
 
     compile files('libs/droneapi-java-0.3-SNAPSHOT.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
@@ -75,6 +76,10 @@ android {
         buildConfigField "boolean", "WRITE_LOG_FILE", "true"
         buildConfigField "int", "LOG_FILE_LEVEL", "$logLevelDebug"
         buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
+
+        // Enabling multidex support.
+        multiDexEnabled true
+
     }
 
     compileOptions {

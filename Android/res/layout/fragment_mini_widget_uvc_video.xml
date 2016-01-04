@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="85dp"
+    android:background="@android:color/black">
+
+    <TextureView
+        android:id="@+id/uvc_video_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:minHeight="85dp" />
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/uvc_video_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="@string/error_no_video"
+        android:textColor="@android:color/white"
+        android:background="@android:color/black"
+        android:textAllCaps="true"
+        android:visibility="visible"
+        tools:visibility="visible"/>
+</FrameLayout>
