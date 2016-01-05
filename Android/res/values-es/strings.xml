@@ -113,7 +113,7 @@
     <string name="waypointType_Change_Speed">Cambiar velocidad</string>
     <string name="waypointType_Condition_Yaw">Set Yaw</string>
     <string name="waypointType_Camera_Trigger">Disparador de cámara</string>
-    <string name="waypointType_Set_Servo">Set Servo</string>
+    <string name="waypointType_Set_Servo">Setear Servo</string>
     <string name="waypointType_EPM">EPM</string>
     <string name="waypointType_Circle">Circulo</string>
     <string name="waypointType_Loiter">Loiter</string>
@@ -562,6 +562,22 @@
     <string name="gps_mode_3d_rtk_lock">GPS 3D+RTK Lock</string>
     <string name="gps_mode_lost_gps_lock">Lost GPS Lock</string>
     <string name="speak_connected">Conectado</string>
+    <string name="description_reset_flight_timer">¿Resetear el contador de vuelo?</string>
+    <string name="description_widget_uvc_video">Muestra el vídeo desde un dispositivo UCV conectado</string>
+    <string name="label_custom_video_stream">Flujo de vídeo personalizado</string>
+    <string name="label_udp_port">Puerto UDP:</string>
+    <string name="label_widget_uvc_video">Vídeo UVC</string>
+    <string name="label_solo_video_stream">Flujo de vídeo de Solo</string>
+    <string name="label_widgets_list">Lista de Widgets</string>
+    <string name="period_15_sec">15 seg.</string>
+    <string name="period_30_sec">30 seg.</string>
+    <string name="period_45_sec">45 seg.</string>
+    <string name="period_60_sec">60 seg.</string>
+    <string name="uvc_device">Dispositivo</string>
+    <string name="uvc_device_no_device">No se encuentra el dispositivo UVC</string>
+    <string name="uvc_device_refresh">Actualizar</string>
+    <string name="uvc_device_select">Selecciona el dispositivo UVC</string>
+    <string name="waypointType_ResetROI">Resetear ROI</string>
     <!--END TTS Notification Provider Strings-->
 
 </resources>
