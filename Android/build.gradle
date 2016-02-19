@@ -57,13 +57,13 @@ def logLevelError = 6;
 def logLevelAssert = 7;
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion android_build_sdk_version
+    buildToolsVersion android_build_tools_version
 
     defaultConfig {
         applicationId 'org.droidplanner.android'
-        minSdkVersion 14
-        targetSdkVersion 22
+        minSdkVersion android_build_min_sdk_version
+        targetSdkVersion android_build_target_sdk_version
         versionCode versionMajor * 100000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "Tower-v${versionMajor}.${versionMinor}.${versionPatch}"
 
