@@ -23,8 +23,8 @@ import timber.log.Timber
 class WidgetVideoPreferences : DialogFragment() {
 
     companion object {
-        @JvmStatic const val SOLO_VIDEO_TYPE = 0
-        @JvmStatic const val CUSTOM_VIDEO_TYPE = 1
+        const val SOLO_VIDEO_TYPE = 0
+        const val CUSTOM_VIDEO_TYPE = 1
     }
 
     @IntDef(SOLO_VIDEO_TYPE.toLong(), CUSTOM_VIDEO_TYPE.toLong())

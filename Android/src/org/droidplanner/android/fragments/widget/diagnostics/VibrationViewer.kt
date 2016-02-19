@@ -72,7 +72,7 @@ public class VibrationViewer : GraphDiagnosticViewer() {
 
         var maxVibration = 0f
         val cols = chartData.columns
-        val colsCount = cols.size() - 1
+        val colsCount = cols.size - 1
         for(i in 0..colsCount){
             val vibValue = vibrations.get(i)
             maxVibration = Math.max(maxVibration, vibValue)

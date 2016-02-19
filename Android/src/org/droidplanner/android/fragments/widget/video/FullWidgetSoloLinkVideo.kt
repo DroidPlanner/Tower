@@ -167,7 +167,7 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
         val drone = drone
         videoStatus?.visibility = View.GONE
 
-        startVideoStream(surfaceRef, TAG, object : AbstractCommandListener() {
+        startVideoStream(surfaceRef!!, TAG, object : AbstractCommandListener() {
             override fun onError(error: Int) {
                 Timber.d("Unable to start video stream: %d", error)
                 GimbalApi.getApi(drone).stopGimbalControl(orientationListener)

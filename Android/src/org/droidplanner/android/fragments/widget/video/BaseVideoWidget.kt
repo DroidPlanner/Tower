@@ -16,7 +16,7 @@ abstract class BaseVideoWidget : TowerWidget() {
 
     override fun getWidgetType() = TowerWidgets.SOLO_VIDEO
 
-    protected fun startVideoStream(surface: Surface?, tag: String, listener: AbstractCommandListener?) {
+    protected fun startVideoStream(surface: Surface, tag: String, listener: AbstractCommandListener?) {
         val appPrefs = appPrefs
         val videoType = appPrefs.videoWidgetType
         when (videoType) {

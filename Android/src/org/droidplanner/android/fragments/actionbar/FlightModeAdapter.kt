@@ -33,7 +33,7 @@ public class FlightModeAdapter(context: Context, val drone: Drone) : SelectionLi
         flightModes = VehicleMode.getVehicleModePerDroneType(type.droneType)
     }
 
-    override fun getCount() = flightModes.size()
+    override fun getCount() = flightModes.size
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View{
         val vehicleMode = flightModes[position]

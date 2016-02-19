@@ -77,7 +77,7 @@ public class EkfStatusViewer : GraphDiagnosticViewer() {
 
         var maxVariance = 0f
         val cols = chartData.columns
-        val colsCount = cols.size() -1
+        val colsCount = cols.size -1
         for( i in 0..colsCount){
             val variance = variances.get(i)
             maxVariance = Math.max(maxVariance, variance)
