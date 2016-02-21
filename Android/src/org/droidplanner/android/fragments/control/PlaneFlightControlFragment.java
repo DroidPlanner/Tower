@@ -14,6 +14,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.ControlApi;
+import com.o3dr.android.client.apis.FollowApi;
+import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.GuidedState;
@@ -319,7 +322,7 @@ public class PlaneFlightControlFragment extends BaseFlightControlFragment {
                 break;
 
             case R.id.mc_homeBtn:
-                drone.changeVehicleMode(VehicleMode.PLANE_RTL);
+                VehicleApi.getApi(drone).setVehicleMode(VehicleMode.PLANE_RTL);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON)
                         .setLabel(VehicleMode.PLANE_RTL.getLabel());
                 break;
@@ -327,17 +330,17 @@ public class PlaneFlightControlFragment extends BaseFlightControlFragment {
             case R.id.mc_pause: {
                 final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
                 if (followState.isEnabled()) {
-                    drone.disableFollowMe();
+                    FollowApi.getApi(drone).disableFollowMe();
                 }
 
-                drone.pauseAtCurrentLocation();
+                ControlApi.getApi(drone).pauseAtCurrentLocation(null);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Pause");
                 break;
             }
 
             case R.id.mc_TakeoffInAutoBtn:
             case R.id.mc_autoBtn:
-                drone.changeVehicleMode(VehicleMode.PLANE_AUTO);
+                VehicleApi.getApi(drone).setVehicleMode(VehicleMode.PLANE_AUTO);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode.PLANE_AUTO.getLabel());
                 break;
 
