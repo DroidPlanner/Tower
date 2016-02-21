@@ -7,10 +7,10 @@ buildscript {
 
         play_services_version = '8.4.0'
         support_lib_version = '23.0.1'
-        okhttp_version = '2.3.0'
+        okhttp_version = '2.5.0'
 
         android_build_sdk_version = 23
-        android_build_tools_version = '23.0.1'
+        android_build_tools_version = '23.0.2'
         android_build_target_sdk_version = 22
         android_build_min_sdk_version = 14
     }
