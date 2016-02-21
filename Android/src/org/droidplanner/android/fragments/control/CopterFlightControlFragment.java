@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.ControlApi;
+import com.o3dr.android.client.apis.FollowApi;
 import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
@@ -234,12 +236,12 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment imple
                 break;
 
             case R.id.mc_disarmBtn:
-                getDrone().arm(false);
+                VehicleApi.getApi(drone).arm(false);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Disarm");
                 break;
 
             case R.id.mc_land:
-                getDrone().changeVehicleMode(VehicleMode.COPTER_LAND);
+                VehicleApi.getApi(drone).setVehicleMode(VehicleMode.COPTER_LAND);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode
                         .COPTER_LAND.getLabel());
                 break;
@@ -250,7 +252,7 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment imple
                 break;
 
             case R.id.mc_homeBtn:
-                getDrone().changeVehicleMode(VehicleMode.COPTER_RTL);
+                VehicleApi.getApi(drone).setVehicleMode(VehicleMode.COPTER_RTL);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode.COPTER_RTL
                         .getLabel());
                 break;
@@ -258,16 +260,16 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment imple
             case R.id.mc_pause: {
                 final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
                 if (followState.isEnabled()) {
-                    drone.disableFollowMe();
+                    FollowApi.getApi(drone).disableFollowMe();
                 }
 
-                drone.pauseAtCurrentLocation();
+                ControlApi.getApi(drone).pauseAtCurrentLocation(null);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Pause");
                 break;
             }
 
             case R.id.mc_autoBtn:
-                getDrone().changeVehicleMode(VehicleMode.COPTER_AUTO);
+                VehicleApi.getApi(drone).setVehicleMode(VehicleMode.COPTER_AUTO);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode.COPTER_AUTO.getLabel());
                 break;
 
@@ -312,7 +314,7 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment imple
             @Override
             public void run() {
                 final double takeOffAltitude = getAppPrefs().getDefaultAltitude();
-                getDrone().doGuidedTakeoff(takeOffAltitude);
+                ControlApi.getApi(getDrone()).takeoff(takeOffAltitude, null);
             }
         });
         unlockDialog.show(getChildFragmentManager(), "Slide to take off");
@@ -326,7 +328,7 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment imple
                 final double takeOffAltitude = getAppPrefs().getDefaultAltitude();
 
                 final Drone drone = getDrone();
-                VehicleApi.getApi(drone).takeoff(takeOffAltitude, new SimpleCommandListener() {
+                ControlApi.getApi(drone).takeoff(takeOffAltitude, new SimpleCommandListener() {
                     @Override
                     public void onSuccess() {
                         VehicleApi.getApi(drone).setVehicleMode(VehicleMode.COPTER_AUTO);
@@ -370,6 +372,10 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment imple
                 if (guidedState.isInitialized() && !followState.isEnabled()) {
                     pauseBtn.setActivated(true);
                 }
+                break;
+
+            case COPTER_BRAKE:
+                pauseBtn.setActivated(true);
                 break;
 
             case COPTER_RTL:
