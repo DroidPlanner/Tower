@@ -7,12 +7,12 @@ import java.util.List;
 import org.droidplanner.android.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
-import org.droidplanner.android.widgets.checklist.CheckListAdapter;
-import org.droidplanner.android.widgets.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
-import org.droidplanner.android.widgets.checklist.CheckListItem;
-import org.droidplanner.android.widgets.checklist.CheckListSysLink;
-import org.droidplanner.android.widgets.checklist.CheckListXmlParser;
-import org.droidplanner.android.widgets.checklist.xml.ListXmlParser.OnXmlParserError;
+import org.droidplanner.android.view.checklist.CheckListAdapter;
+import org.droidplanner.android.view.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
+import org.droidplanner.android.view.checklist.CheckListItem;
+import org.droidplanner.android.view.checklist.CheckListSysLink;
+import org.droidplanner.android.view.checklist.CheckListXmlParser;
+import org.droidplanner.android.view.checklist.xml.ListXmlParser.OnXmlParserError;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;

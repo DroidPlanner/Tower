@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="48dp"
+    android:orientation="horizontal"
+    android:background="?android:attr/selectableItemBackground"
+    android:paddingStart="15dp"
+    android:paddingEnd="15dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
+
+    <TextView
+        android:id="@+id/item_selectable_option"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:drawablePadding="15dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        tools:drawableStart="@drawable/ic_person_grey_700_18dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        tools:text="Return to Home" />
+
+    <RadioButton
+        android:id="@+id/item_selectable_check"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>

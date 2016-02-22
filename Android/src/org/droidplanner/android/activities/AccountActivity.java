@@ -1,18 +1,12 @@
 package org.droidplanner.android.activities;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-
-import com.geeksville.apiproxy.LoginFailedException;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.AccountLoginListener;
 import org.droidplanner.android.fragments.account.DroneshareAccountFragment;
 import org.droidplanner.android.fragments.account.DroneshareLoginFragment;
-import org.droidplanner.android.utils.connection.DroneshareClient;
 
 /**
  * Created by Fredia Huya-Kouadio on 1/22/15.
@@ -28,7 +22,7 @@ public class AccountActivity extends DrawerNavigationUI implements AccountLoginL
 
         if (savedInstanceState == null) {
             Fragment droneShare;
-            if(mAppPrefs.isDroneshareEnabled())
+            if (mAppPrefs.isDroneshareEnabled())
                 droneShare = new DroneshareAccountFragment();
             else
                 droneShare = new DroneshareLoginFragment();
@@ -42,7 +36,7 @@ public class AccountActivity extends DrawerNavigationUI implements AccountLoginL
         if (!(currentFragment instanceof DroneshareAccountFragment)) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.droneshare_account, new DroneshareAccountFragment())
-                    .commit();
+                    .commitAllowingStateLoss();
         }
     }
 
@@ -57,7 +51,7 @@ public class AccountActivity extends DrawerNavigationUI implements AccountLoginL
         if (!(currentFragment instanceof DroneshareLoginFragment)) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.droneshare_account, new DroneshareLoginFragment())
-                    .commit();
+                    .commitAllowingStateLoss();
         }
     }
 
@@ -71,7 +65,7 @@ public class AccountActivity extends DrawerNavigationUI implements AccountLoginL
     }
 
     @Override
-    protected int getNavigationDrawerEntryId() {
+    protected int getNavigationDrawerMenuItemId() {
         return R.id.navigation_account;
     }
 }

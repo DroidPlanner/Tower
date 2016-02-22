@@ -9,8 +9,8 @@ import com.o3dr.services.android.lib.drone.mission.item.command.ChangeSpeed;
 import org.beyene.sius.unit.composition.speed.SpeedUnit;
 import org.droidplanner.android.R;
 import org.droidplanner.android.utils.unit.providers.speed.SpeedUnitProvider;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.SpeedWheelAdapter;
+import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.view.spinnerWheel.adapters.SpeedWheelAdapter;
 
 public class MissionChangeSpeedFragment extends MissionDetailFragment implements
         CardWheelHorizontalView.OnCardWheelScrollListener<SpeedUnit> {
@@ -29,7 +29,7 @@ public class MissionChangeSpeedFragment extends MissionDetailFragment implements
 
         final SpeedUnitProvider speedUnitProvider = getSpeedUnitProvider();
         final SpeedWheelAdapter adapter = new SpeedWheelAdapter(getContext(), R.layout.wheel_text_centered,
-                speedUnitProvider.boxBaseValueToTarget(1), speedUnitProvider.boxBaseValueToTarget(20));
+                speedUnitProvider.boxBaseValueToTarget(0), speedUnitProvider.boxBaseValueToTarget(20));
         CardWheelHorizontalView<SpeedUnit> cardAltitudePicker = (CardWheelHorizontalView<SpeedUnit>) view.findViewById
                 (R.id.picker1);
         cardAltitudePicker.setViewAdapter(adapter);

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<me.grantland.widget.AutofitTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/flight_timer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="36dp"
+    android:paddingStart="5dp"
+    android:paddingEnd="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:drawableLeft="@drawable/ic_schedule_black_18dp"
+    android:drawableStart="@drawable/ic_schedule_black_18dp"
+    android:gravity="center"
+    android:text="@string/unset_timer"
+    android:textStyle="bold"
+    tools:text="00:00" />

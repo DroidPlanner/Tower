@@ -28,7 +28,6 @@
     <string name="pref_keep_screen_bright_summary">勾選以防止螢幕進入休眠狀態(會影響電池使用時間)</string>
     <string name="pref_lock_screen_orientation">鎖定螢幕旋轉</string>
     <string name="pref_lock_screen_orientation_summary">連結無人機時，螢幕會將會鎖定在目前的旋轉方向</string>
-    <string name="pref_flight_data">飛行數據</string>
     <string name="pref_advanced">進階</string>
     <string name="pref_map_type">地圖樣式</string>
     <string name="pref_map_type_summary">使用哪種地圖樣式</string>
@@ -46,7 +45,6 @@
     <string name="pref_udp_server_port">UDP 伺服器通訊埠</string>
     <string name="about">關於</string>
     <string name="version">版本</string>
-    <string name="storage_folder">儲存路徑</string>
     <!-- Toast Message -->
     <string name="user_autopan_long_press">長按圖示可啟動地圖中使用者位置置中。</string>
     <string name="drone_autopan_long_press">長按圖示可啟動地圖中無人機位置自動置中。</string>
@@ -256,8 +254,6 @@
     <string name="pref_tts_periodic_airspeed">空速</string>
     <string name="pref_tts_periodic_airspeed_summary">廣播空速數值。</string>
     <string name="pref_title_tts_warnings">警訊廣播設定</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded">超過 400 英呎</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">在許多的情況下飛行高度超過 400 英呎是非法行為。</string>
     <string name="pref_tts_warning_low_signal_strength">訊號強度偏弱</string>
     <string name="pref_tts_warning_low_signal_strength_summary">當與無人機連線困難時會發出的警告。</string>
     <string name="pref_tts_warning_lost_signal">連線狀態</string>
@@ -295,10 +291,7 @@
     <string name="firmware_version">韌體版本</string>
     <string name="usage_statistics">統計使用習慣</string>
     <string name="pref_usage_statistics_title">發送使用習慣統計</string>
-    <string name="pref_usage_statistics_summary">發送使用習慣統計資料能幫助 DroidPlanner 增進平台完成度</string>
-
-    <string name="pref_permanent_notification_title">啟用通知</string>
-    <string name="pref_permanent_notification_summary">當連線時，在狀態列上顯示通知內容。</string>
+    <string name="pref_usage_statistics_summary">發送使用習慣統計資料能幫助 Tower 增進平台完成度</string>
 
     <string name="zoom_fit">符合顯示範圍</string>
     <string name="open_mission_file">打開任務檔</string>

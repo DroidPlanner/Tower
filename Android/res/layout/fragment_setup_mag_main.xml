@@ -12,13 +12,13 @@
         android:background="#151515"
         android:layout_weight="1">
 
-        <org.droidplanner.android.widgets.scatterplot.ScatterPlot
+        <org.droidplanner.android.view.scatterplot.ScatterPlot
             android:id="@+id/scatterPlot1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"/>
 
-        <org.droidplanner.android.widgets.scatterplot.ScatterPlot
+        <org.droidplanner.android.view.scatterplot.ScatterPlot
             android:id="@+id/scatterPlot2"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

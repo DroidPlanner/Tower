@@ -4,16 +4,19 @@ import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 
 import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 
 /**
  */
 public class PolygonMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
 
 	private LatLong mPoint;
+	private final MissionItemProxy markerOrigin;
     private final Survey survey;
     private final int polygonIndex;
 
-	public PolygonMarkerInfo(LatLong point, Survey mSurvey, int index) {
+	public PolygonMarkerInfo(LatLong point, MissionItemProxy origin, Survey mSurvey, int index) {
+		this.markerOrigin = origin;
 		mPoint = point;
 		survey = mSurvey;
 		polygonIndex = index;
@@ -56,5 +59,9 @@ public class PolygonMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
 	@Override
 	public boolean isFlat() {
 		return true;
+	}
+
+	public MissionItemProxy getMarkerOrigin() {
+		return markerOrigin;
 	}
 }

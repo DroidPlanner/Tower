@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout
+    <org.droidplanner.android.view.FitsSystemWindowsRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -34,9 +34,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_below="@+id/actionbar_container"
-            android:layout_alignLeft="@+id/actionbar_container"
-            android:layout_alignStart="@+id/actionbar_container"
-            android:visibility="invisible">
+            android:layout_alignRight="@+id/actionbar_container"
+            android:layout_alignEnd="@+id/actionbar_container"
+            android:visibility="invisible"
+            tools:visibility="visible">
 
             <TextView
                 android:id="@+id/latView"
@@ -75,12 +76,12 @@
             layout="@layout/button_my_location"
             android:layout_below="@+id/actionbar_container"
             android:layout_marginTop="8dp"
-            android:layout_alignRight="@+id/actionbar_container"
-            android:layout_alignEnd="@+id/actionbar_container"
+            android:layout_alignStart="@+id/actionbar_container"
+            android:layout_alignLeft="@+id/actionbar_container"
             />
-    </org.droidplanner.android.widgets.FitsSystemWindowsRelativeLayout>
+    </org.droidplanner.android.view.FitsSystemWindowsRelativeLayout>
 
-    <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
+    <org.droidplanner.android.view.FitsSystemWindowsFrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -95,6 +96,6 @@
             android:layout_height="@dimen/editor_mission_fragment_height"
             tools:layout="@layout/fragment_locator_list"
             />
-    </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
+    </org.droidplanner.android.view.FitsSystemWindowsFrameLayout>
 
 </RelativeLayout>

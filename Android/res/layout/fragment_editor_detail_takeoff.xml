@@ -5,7 +5,7 @@
     style="@style/missionItemDetailLayout"
     >
 
-    <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
+    <org.droidplanner.android.view.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,12 +35,14 @@
             android:layout_marginTop="5dp"
             android:layout_height="54dp"
             android:layout_toRightOf="@id/WaypointIndex"
+            android:layout_toEndOf="@id/WaypointIndex"
             android:layout_alignParentTop="true"
             android:background="@drawable/wp_title_div"/>
 
         <RelativeLayout
             android:id="@+id/title_content"
             android:layout_toRightOf="@id/title_div"
+            android:layout_toEndOf="@id/title_div"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -50,6 +52,7 @@
                 android:id="@+id/WaypointType"
                 style="@style/missionHeaderTitle"
                 android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/waypointType_TakeOff"/>
@@ -58,6 +61,7 @@
                 android:id="@+id/DistanceLabel"
                 style="@style/missionHeaderlabel"
                 android:layout_alignLeft="@id/WaypointType"
+                android:layout_alignStart="@id/WaypointType"
                 android:layout_below="@id/WaypointType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -71,6 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignBottom="@id/title_rect"
         android:src="@drawable/ic_menu_hint"
         android:layout_margin="10dp"
@@ -92,13 +97,22 @@
             android:background="@drawable/mode_desc_rectangle"
             android:text="@string/waypointInfo_TakeOff"/>
 
-        <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
             android:id="@+id/altitudePicker"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/missionItemDetailCard"
             android:text="@string/altitude_label"
+            />
+
+        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
+            android:id="@+id/pitchPicker"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/missionItemDetailCard"
+            android:text="@string/label_pitch"
             />
 
     </LinearLayout>

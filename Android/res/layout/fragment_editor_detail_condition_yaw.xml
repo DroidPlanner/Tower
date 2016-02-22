@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/missionItemDetailLayout" >
 
-    <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
+    <org.droidplanner.android.view.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -57,6 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/WaypointType"
+                android:layout_alignStart="@id/WaypointType"
                 android:layout_below="@id/WaypointType" />
         </RelativeLayout>
     </RelativeLayout>
@@ -67,6 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/title_rect"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_margin="10dp"
         android:src="@drawable/ic_menu_hint"
         tools:ignore="ContentDescription" />
@@ -86,7 +88,7 @@
             android:padding="12dp"
             android:text="@string/waypointInfo_CondYaw" />
 
-        <org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView
+        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
             android:id="@+id/picker1"
             style="@style/missionItemDetailCard"
             android:layout_width="match_parent"
@@ -94,7 +96,7 @@
             android:orientation="vertical"
             android:text="@string/mission_control_condition_yaw_angle" >
 
-        </org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView>
+        </org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView>
 
         <CheckBox
             android:id="@+id/checkBox1"

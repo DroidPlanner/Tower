@@ -3,25 +3,25 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_write_parameters"
-        app:showAsAction="never"
-        android:icon="@drawable/ic_action_upload"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_cloud_upload_grey_700_24dp"
         android:title="@string/upload_params"/>
 
     <item
         android:id="@+id/menu_download_parameters"
-        app:showAsAction="never"
-        android:icon="@drawable/ic_refresh_black_48dp"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_cloud_download_grey_700_24dp"
         android:title="@string/download_params" />
 
     <item
         android:id="@+id/menu_open_parameters"
-        app:showAsAction="never"
-        android:icon="@drawable/ic_action_folder_open"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_folder_open_grey_700_24dp"
         android:title="@string/import_from_device"/>
     <item
         android:id="@+id/menu_save_parameters"
-        app:showAsAction="never"
-        android:icon="@drawable/ic_action_save"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_save_grey_700_24dp"
         android:title="@string/export_to_device"/>
 
 </menu>

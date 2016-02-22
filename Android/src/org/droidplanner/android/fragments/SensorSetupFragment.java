@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.calibration.imu.FragmentSetupIMU;
-import org.droidplanner.android.widgets.viewPager.TabPageIndicator;
+import org.droidplanner.android.view.viewPager.TabPageIndicator;
 
 /**
  * Used to calibrate the drone's compass and accelerometer.

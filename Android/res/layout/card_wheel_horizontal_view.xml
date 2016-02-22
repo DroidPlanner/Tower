@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <org.droidplanner.android.widgets.spinnerWheel.WheelHorizontalView
+    <org.droidplanner.android.view.spinnerWheel.WheelHorizontalView
         android:id="@+id/horizontalSpinnerWheel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         app:isAllVisible="false"
         app:isCyclic="false"
         app:itemsDimmedAlpha="150"
-        app:selectionDivider="@android:color/holo_blue_dark"
+        app:selectionDivider="@android:color/holo_blue_light"
         app:selectionDividerWidth="2dp"
         app:selectionDividerActiveAlpha="100"
         app:selectionDividerDimmedAlpha="255"
@@ -29,7 +29,7 @@
         style="@style/missionItemNumberPickerView"
         tools:text="22"
         android:layout_gravity="center"
-        android:inputType="numberSigned"
+        android:inputType="numberSigned|numberDecimal"
         android:imeOptions="actionDone"
         android:visibility="invisible"
         android:layout_width="60dp"

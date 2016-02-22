@@ -1,11 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
-    <!-- Do not translate the following strings -->
-    <string name="app_title" translatable="false">Tower</string>
-
     <!-- Generic strings -->
     <string name="settings">Settings</string>
+    <string name="label_general">General</string>
+    <string name="label_other">Others</string>
     <string name="menu_drone_setup">Drone Setup</string>
     <string name="app_settings">App Settings</string>
     <string name="flight_data">Flight Data</string>
@@ -17,7 +16,7 @@
     <string name="screen_cal">Calibration</string>
     <string name="screen_checklist">Checklist</string>
     <string name="screen_parameters">Parameters</string>
-    
+
     <!-- App Settings/Preferences -->
     <string name="pref_connection_type">Telemetry Connection Type</string>
     <string name="pref_connection_type_summary">Which link to use to connect to the drone</string>
@@ -32,7 +31,6 @@
         battery life)</string>
     <string name="pref_lock_screen_orientation">Lock Screen Orientation</string>
     <string name="pref_lock_screen_orientation_summary">Locks screen to the orientation which is present when connecting</string>
-    <string name="pref_flight_data">Flight Data</string>
     <string name="pref_advanced">Advanced</string>
     <string name="pref_map_type">Map Type</string>
     <string name="pref_map_type_summary">Which type of map to use</string>
@@ -44,6 +42,7 @@
     <string name="pref_enable_tts_summary">Audible messages for important events</string>
     <string name="pref_request_max_volume">Set Volume To Max On Start</string>
     <string name="pref_connection">Connection Preferences</string>
+    <string name="pref_connection_subtitle">USB, TCP and UDP settings</string>
     <string name="pref_usb">USB Connection</string>
     <string name="pref_baud_type">Telemetry link speed</string>
     <string name="pref_baud_type_summary">Baud Rate of the USB Telemetry Link</string>
@@ -54,7 +53,6 @@
     <string name="pref_udp_server_port">UDP Server Port</string>
     <string name="about">About</string>
     <string name="version">Version</string>
-    <string name="storage_folder">Storage Folder</string>
     <!-- Toast Message -->
     <string name="user_autopan_long_press">Long press to activate user auto panning.</string>
     <string name="drone_autopan_long_press">Long press to activate drone auto panning.</string>
@@ -121,7 +119,9 @@
     <string name="waypointType_Circle">Circle</string>
     <string name="waypointType_Loiter">Loiter</string>
     <string name="waypointType_ROI">Region of Interest</string>
-    <string name="waypointType_Survey">Survey Polygon</string>
+    <string name="waypointType_ResetROI">Reset ROI</string>
+    <string name="waypointType_Survey">Survey</string>
+    <string name="waypointType_Spline_Survey">Spline Survey</string>
     <string name="waypointType_BuildingMapper">Structure Scan</string>
 
     <!-- Waypoint info -->
@@ -137,8 +137,11 @@
     <string name="waypointInfo_SetServo">Move a servo to a particular PWM value.</string>
     <string name="waypointInfo_EpmGrabber">Release the payload of the EPM grabber</string>
     <string name="waypointInfo_ROI">Sets a location and altitude to point copter towards and to aim an optional camera.</string>
+    <string name="waypointType_Do_Jump">Do Jump</string>
+    <string name="waypointInfo_DoJump">Jump to a specific waypoint.</string>
     <!-- Custom waypoint info -->
     <string name="pwm">PWM</string>
+    <string name="repeat_count">Repeat Count</string>
 
     <!-- Waypoint editor -->
     <string name="editor_err_land_rtl_added">One cannot add new waypoints after LAND or RTL</string>
@@ -209,7 +212,7 @@
     <string name="setup_imu_step">To start calibration, press Calibrate.</string>
     <string name="setup_imu_timeleft">Time left before next orientation:</string>
 
-    
+
     <!-- Flight Setup Resource Strings -->
     <string name="setup_fm_title">Flight Mode Configuration</string>
     <string name="setup_fm_side_title">Update Flight Mode</string>
@@ -247,10 +250,12 @@
     <string name="telemetry_default_value">0.0</string>
     <string name="climb_rate_label">Climb Rate</string>
     <string name="altitude_label">Altitude</string>
+    <string name="label_pitch">Pitch</string>
     <string name="roi_height_label">ROI Height</string>
     <string name="speed_label">Speed</string>
     <string name="length_label">Length</string>
     <string name="channel_label">Channel</string>
+    <string name="waypoint_label">Waypoint</string>
     <string name="ground_speed_label">Ground Speed</string>
     <string name="air_speed_label">Air Speed</string>
     <string name="default_angle_value">--°</string>
@@ -261,7 +266,7 @@
     <string name="mission_control_takeoff">Takeoff</string>
     <string name="mission_control_pause">Pause</string>
     <string name="mission_control_auto">Auto</string>
-    <string name="mission_control_follow">Follow</string>    
+    <string name="mission_control_follow">Follow</string>
     <string name="mission_control_dronie">Dronie</string>
     <string name="mission_control_condition_yaw_angle">Target angle</string>
     <string name="mission_control_condition_yaw_relative">Relative Angle</string>
@@ -295,8 +300,6 @@
     <string name="pref_tts_periodic_airspeed">Airspeed</string>
     <string name="pref_tts_periodic_airspeed_summary">Read airspeed.</string>
     <string name="pref_title_tts_warnings">Warnings</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded">400ft. Exceeded</string>
-    <string name="pref_tts_warning_400ft_ceiling_exceeded_summary">In many situations it is illegal to fly above 400ft.</string>
     <string name="pref_tts_warning_low_signal_strength">Low Signal Strength</string>
     <string name="pref_tts_warning_low_signal_strength_summary">Warns when connection to drone is bad.</string>
     <string name="pref_tts_warning_lost_signal">Connection Status</string>
@@ -339,10 +342,7 @@
     <string name="empty_content" translatable="false">--</string>
     <string name="usage_statistics">Usage Statistics</string>
     <string name="pref_usage_statistics_title">Send usage statistics</string>
-    <string name="pref_usage_statistics_summary">Help improve DroidPlanner by sending usage statistics.</string>
-
-    <string name="pref_permanent_notification_title">Enable permanent notification</string>
-    <string name="pref_permanent_notification_summary">Enable to make status bar notification permanent when connected.</string>
+    <string name="pref_usage_statistics_summary">Help improve Tower by sending usage statistics.</string>
 
     <string name="zoom_fit">Zoom to Fit</string>
     <string name="open_mission_file">Import from file</string>
@@ -373,12 +373,11 @@
     <string name="pref_dialog_entry_always">Always</string>
     <string name="pref_dialog_entry_never">Never</string>
     <string name="pref_dialog_entry_ask">Ask</string>
-    <string name="pref_dialog_selection_reset_desc"><![CDATA[Reset selection through: Settings -> User Interface -> Preference Dialogs]]></string>
+    <string name="pref_dialog_selection_reset_desc"><![CDATA[Reset selection through: Settings ––> Others -> Preference Dialogs]]></string>
     <string name="pref_dronie_creation_title">Create dronie?</string>
     <string name="pref_dronie_creation_message">Please stand back 8m before starting the dronie.</string>
-    <string name="pref_licenses">Licenses</string>
-    <string name="pref_licenses_summary">Libraries (and their licenses) used in this project</string>
     <string name="upload_params">Upload parameters</string>
+    <string name="upload">Upload</string>
     <string name="download_params">Download parameters</string>
     <string name="import_from_device">Import from file</string>
     <string name="export_to_device">Export to file</string>
@@ -409,7 +408,7 @@
     <string name="pref_map_rotation_title">Enable map rotation</string>
     <string name="pref_map_rotation_summary">Check to enable the ability to rotate the map.</string>
     <string name="pref_advance_menu_title">Advanced Menu Options</string>
-    <string name="pref_enable_kill_switch_summary">If enabled, a Kill Switch option will appear in the menu, allowing immediate vehicle disarming.</string>
+    <string name="pref_enable_kill_switch_summary">If enabled, a Kill Switch option will appear in the menu, allowing immediate vehicle disarming. Only supported on multi-rotor vehicles</string>
     <string name="pref_enable_kill_switch_title">Enable Kill Switch</string>
     <string name="pref_enable_udp_server_title">Enable UDP server ping</string>
     <string name="pref_udp_server_ping_summary">Enable to allow the app to periodically ping the udp server.</string>
@@ -447,5 +446,145 @@
     <string name="label_type_plane">Plane</string>
     <string name="label_type_rover">Rover</string>
     <string name="label_type_unknown">Unknown</string>
+    <string name="mode_auto_current_command">Current command:</string>
+    <string name="mode_auto_estimated_finish">Estimated to finish:</string>
+    <string name="mission_control_label">Mission control:</string>
+    <string name="wp_speed">WP Speed:</string>
+    <string name="mission_progress">Mission progress:</string>
+    <string name="imu_calibration_start_error">Unable to start imu calibration</string>
+    <string name="horizontal_speed_empty">hs: —</string>
+    <string name="horizontal_speed_telem">hs: %s</string>
+    <string name="vertical_speed_empty">vs: —</string>
+    <string name="vertical_speed_telem">vs: %s</string>
+    <string name="latitude_empty">Lat: —</string>
+    <string name="latitude_telem">Lat: %s°</string>
+    <string name="longitude_empty">Long: —</string>
+    <string name="longitude_telem">Long: %s°</string>
+    <string name="menu_kill_switch">Kill Switch</string>
+    <string name="label_clear_selected">Clear selected</string>
+    <string name="unsaved_param_warning">You have unsaved changes</string>
+    <string name="error_kill_switch_unsupported">KILL SWITCH command is not supported!</string>
+    <string name="error_kill_switch_failed">KILL SWITCH command failed!</string>
+    <string name="pref_max_alt_warning_title">Max altitude exceeded warning</string>
+    <string name="pref_max_alt_warning_summary">Enable for repeated warnings when flying above the set max altitude.</string>
+    <string name="mission_upload_title">Mission Upload</string>
+    <string name="mission_upload_message">Do you want to append a Takeoff and RTL to your mission?</string>
+    <string name="label_skip">Skip</string>
+
+    <!-- Telemetry widget labels -->
+    <string name="label_widget_solo_video">Solo Video</string>
+    <string name="description_widget_solo_video">Displays the video stream from a connected Solo vehicle</string>
+    <string name="label_widget_uvc_video">UVC Video</string>
+    <string name="description_widget_uvc_video">Displays the video stream from a connected UVC device</string>
+    <string name="label_widget_attitude_speed_info">Speed &amp; Attitude Info</string>
+    <string name="description_widget_attitude_speed_info">Displays vehicle speed and attitude data</string>
+    <string name="label_widget_vehicle_diagnostics">Diagnostics</string>
+    <string name="description_widget_vehicle_diagnostics">Displays the vehicle diagnostics stats</string>
+    <string name="pref_tower_widgets_title">Widgets Preferences</string>
+    <string name="pref_tower_widgets_category">Tower Widgets</string>
+    <string name="pref_widgets_list_category">Widgets list</string>
+    <string name="label_widget_flight_timer">Flight Timer</string>
+    <string name="description_reset_flight_timer">Reset flight timer?</string>
+    <string name="description_widget_flight_timer">Displays the vehicle flight time</string>
+    <string name="label_widget_geo_info">Geo Info</string>
+    <string name="description_widget_geo_info">Displays vehicle geographical information (Lat/Long)</string>
+    <string name="label_ekf">ekf</string>
+    <string name="label_velocity_var_abbrev">vel</string>
+    <string name="label_horizontal_position_var_abbrev">h.pos</string>
+    <string name="label_vertical_position_var_abbrev">v.pos</string>
+    <string name="label_mag_var_abbrev">mag</string>
+    <string name="label_terrain_var_abbrev">ter</string>
+    <string name="label_attitude_estimate">Attitude estimate</string>
+    <string name="label_flags">Flags</string>
+    <string name="label_constant_position_mode">Constant position mode</string>
+    <string name="label_velocity">Velocity</string>
+    <string name="label_velocity_estimate">Vertical estimate</string>
+    <string name="label_horizontal_estimate">Horizontal estimate</string>
+    <string name="label_horizontal_position">Horizontal Position</string>
+    <string name="label_relative_estimate">Relative estimate</string>
+    <string name="label_absolute_estimate">Absolute estimate</string>
+    <string name="label_above_ground_estimate">Above ground estimate</string>
+    <string name="label_vertical_position">Vertical Position</string>
+    <string name="label_absolute_predicted_estimate">Absolute predicted estimate</string>
+    <string name="label_relative_predicted_estimate">Relative predicted estimate</string>
+    <string name="error_no_video">no video available</string>
+    <string name="label_repeat_indefinitely">Repeat indefinitely</string>
+    <string name="title_ekf_status_viewer">EKF</string>
+    <string name="title_vibration_viewer">Vibration</string>
+    <string name="title_ekf_flags_viewer">Flags</string>
+    <string name="label_tertiary">Tertiary</string>
+    <string name="label_secondary">Secondary</string>
+    <string name="label_primary">Primary</string>
+    <string name="label_clipping">Clipping</string>
+    <string name="unset_timer">--:--</string>
+
+    <string name="label_rtl">Return to Launch</string>
+    <string name="label_rtm">Return to Me</string>
+    <string name="pref_vehicle_home_update_warning_title">Vehicle Home Update</string>
+    <string name="pref_vehicle_home_update_warning_summary">Warns about vehicle home location updates while in flight.</string>
+    <string name="label_photo">Photo</string>
+    <string name="label_record">Record</string>
+    <string name="label_widgets_list">Widgets List</string>
+    <string name="label_solo_video_stream">Solo video stream</string>
+    <string name="label_custom_video_stream">Custom video stream</string>
+    <string name="hint_custom_video_stream_udp_port">0000</string>
+    <string name="label_udp_port">UDP Port:</string>
+
+    <!--START TTS Notification Provider Strings-->
+    <string name="toast_mission_sent">Waypoints sent</string>
+    <string name="speak_mission_sent">Waypoints saved to Drone</string>
+    <string name="toast_mission_received">Waypoints received from Drone</string>
+    <string name="speak_mission_received">Waypoints received</string>
+    <string name="speak_heartbeat_first">Connected</string>
+    <string name="speak_heartbeat_timeout">Data link lost, check connection.</string>
+    <string name="speak_heartbeat_restored">Data link restored</string>
+    <string name="speak_mission_item_updated">"Going for waypoint %d"</string>
+    <string name="speak_follow_start">Following</string>
+    <string name="speak_warning_signal_weak">Warning, weak signal</string>
+    <string name="speak_warning_no_gps">Error, no gps lock yet</string>
+    <string name="speak_warning_vehicle_home_updated">Vehicle home updated</string>
+    <string name="speak_warning_max_alt_exceed">Warning, max altitude exceeded!</string>
+
+    <!-- Periodic Status Preferences -->
+    <string name="periodic_status_bat_volt">"battery %2.1f volts. "</string>
+    <string name="periodic_status_altitude">"altitude, %d meters. "</string>
+    <string name="periodic_status_airspeed">"airspeed, %d meters per second. "</string>
+    <string name="periodic_status_rssi">"r s s i, %d decibels"</string>
+
+    <string name="speak_disconected">Disconnected</string>
+    <string name="toast_error_tts_lang">Unable to set \'Text to Speech\' language!</string>
+    <string name="warn_tts_accessibility">Please make sure \'Text to Speech\' is enabled in the system accessibility settings.</string>
+    <string name="speak_armed">Armed</string>
+    <string name="speak_disarmed">Disarmed</string>
+    <string name="speak_battery_notification">Battery at %d%%</string>
+    <string name="fly_mode_wire_a">Fly by wire A</string>
+    <string name="fly_mode_wire_b">Fly by wire B</string>
+    <string name="fly_mode_acro">Acrobatic</string>
+    <string name="fly_mode_alt_hold">Altitude hold</string>
+    <string name="fly_mode_pos_hold">Position hold</string>
+    <string name="fly_mode_rtl">Return to launch</string>
+    <string name="fly_mode_mode">"Mode "</string>
+
+    <!--Gps modes-->
+    <string name="gps_mode_2d_lock">GPS 2D Lock</string>
+    <string name="gps_mode_3d_lock">GPS 3D Lock</string>
+    <string name="gps_mode_3d_dgps_lock">GPS 3D+DGPS Lock</string>
+    <string name="gps_mode_3d_rtk_lock">GPS 3D+RTK Lock</string>
+    <string name="gps_mode_lost_gps_lock">Lost GPS Lock</string>
+    <string name="speak_connected">Connected</string>
+    <!--END TTS Notification Provider Strings-->
+
+    <!-- Selectable values for the period of the speech output. -->
+    <string name="period_15_sec">15 sec.</string>
+    <string name="period_30_sec">30 sec.</string>
+    <string name="period_45_sec">45 sec.</string>
+    <string name="period_60_sec">60 sec.</string>
+    <string name="waypoint_description_reset_roi">Reset the current region of interest lock.</string>
+
+    <string name="uvc_device_select">Select UVC device</string>
+    <string name="uvc_device">Device</string>
+    <string name="uvc_device_refresh">Refresh</string>
+    <string name="uvc_device_no_device">No UVC device found</string>
+
 
 </resources>

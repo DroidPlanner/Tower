@@ -10,8 +10,8 @@ import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.command.YawCondition;
 
 import org.droidplanner.android.R;
-import org.droidplanner.android.widgets.spinnerWheel.CardWheelHorizontalView;
-import org.droidplanner.android.widgets.spinnerWheel.adapters.NumericWheelAdapter;
+import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
+import org.droidplanner.android.view.spinnerWheel.adapters.NumericWheelAdapter;
 
 public class MissionConditionYawFragment extends MissionDetailFragment
         implements CardWheelHorizontalView.OnCardWheelScrollListener<Integer>,
@@ -32,7 +32,7 @@ public class MissionConditionYawFragment extends MissionDetailFragment
         YawCondition item = (YawCondition) getMissionItems().get(0);
 
         final NumericWheelAdapter adapter = new NumericWheelAdapter(getContext(),
-                R.layout.wheel_text_centered, 0, 359, "%d deg");
+                R.layout.wheel_text_centered, 0, 359, "%d°");
         final CardWheelHorizontalView<Integer> cardAltitudePicker = (CardWheelHorizontalView<Integer>) view
                 .findViewById(R.id.picker1);
         cardAltitudePicker.setViewAdapter(adapter);

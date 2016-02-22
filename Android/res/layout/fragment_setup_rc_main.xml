@@ -16,7 +16,7 @@
         android:gravity="center"
         android:layout_margin="3dp">
 
-        <org.droidplanner.android.widgets.FillBar.FillBar
+        <org.droidplanner.android.view.FillBar.FillBar
             android:id="@+id/fillBar_throttle"
             android:layout_width="@dimen/fillbar_thickness"
             android:layout_height="@dimen/fillbar_length"
@@ -25,7 +25,7 @@
             android:layout_marginRight="20dp"
             android:layout_toLeftOf="@+id/stickLeft"/>
 
-        <org.droidplanner.android.widgets.RcStick.RcStick
+        <org.droidplanner.android.view.RcStick.RcStick
             android:id="@+id/stickLeft"
             android:layout_width="@dimen/setup_rc_stick_width"
             android:layout_height="@dimen/setup_rc_stick_height"
@@ -42,7 +42,7 @@
             android:text="Throttle: 1000\nYaw: 1500"
             />
 
-        <org.droidplanner.android.widgets.FillBar.FillBar
+        <org.droidplanner.android.view.FillBar.FillBar
             android:id="@+id/fillBar_yaw"
             android:layout_width="@dimen/fillbar_length"
             android:layout_height="@dimen/fillbar_thickness"
@@ -61,7 +61,7 @@
         android:gravity="center"
         android:layout_margin="3dp">
 
-        <org.droidplanner.android.widgets.FillBar.FillBar
+        <org.droidplanner.android.view.FillBar.FillBar
             android:id="@+id/fillBar_pitch"
             android:layout_width="@dimen/fillbar_thickness"
             android:layout_height="@dimen/fillbar_length"
@@ -70,7 +70,7 @@
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@+id/stickRight"/>
 
-        <org.droidplanner.android.widgets.RcStick.RcStick
+        <org.droidplanner.android.view.RcStick.RcStick
             android:id="@+id/stickRight"
             android:layout_width="@dimen/setup_rc_stick_width"
             android:layout_height="@dimen/setup_rc_stick_height"
@@ -87,7 +87,7 @@
             android:text="Roll: 1500\nPitch: 1500"
             />
 
-        <org.droidplanner.android.widgets.FillBar.FillBar
+        <org.droidplanner.android.view.FillBar.FillBar
             android:id="@+id/fillBar_roll"
             android:layout_width="@dimen/fillbar_length"
             android:layout_height="@dimen/fillbar_thickness"
@@ -107,7 +107,7 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <org.droidplanner.android.widgets.FillBar.FillBar
+        <org.droidplanner.android.view.FillBar.FillBar
             android:id="@+id/fillBar_ch_5"
             android:layout_width="@dimen/fillbar_length"
             android:layout_height="@dimen/fillbar_thickness"
@@ -122,7 +122,7 @@
             android:text="Ch 5: 1500"
             />
 
-        <org.droidplanner.android.widgets.FillBar.FillBar
+        <org.droidplanner.android.view.FillBar.FillBar
             android:id="@+id/fillBar_ch_6"
             android:layout_width="@dimen/fillbar_length"
             android:layout_height="@dimen/fillbar_thickness"
@@ -137,7 +137,7 @@
             android:text="Ch 5: 1500"
             />
 
-        <org.droidplanner.android.widgets.FillBar.FillBar
+        <org.droidplanner.android.view.FillBar.FillBar
             android:id="@+id/fillBar_ch_7"
             android:layout_width="@dimen/fillbar_length"
             android:layout_height="@dimen/fillbar_thickness"
@@ -152,7 +152,7 @@
             android:text="Ch 5: 1500"
             />
 
-        <org.droidplanner.android.widgets.FillBar.FillBar
+        <org.droidplanner.android.view.FillBar.FillBar
             android:id="@+id/fillBar_ch_8"
             android:layout_width="@dimen/fillbar_length"
             android:layout_height="@dimen/fillbar_thickness"

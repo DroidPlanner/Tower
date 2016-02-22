@@ -28,7 +28,7 @@
             android:layout_marginEnd="10dp"
             android:scaleType="center"/>
 
-        <org.droidplanner.android.widgets.SlideButton
+        <org.droidplanner.android.view.SlideButton
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:minHeight="48dp"

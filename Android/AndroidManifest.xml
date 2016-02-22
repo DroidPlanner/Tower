@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.droidplanner.android">
+    package="org.droidplanner.android"
+    android:installLocation="auto">
 
     <supports-screens
         android:requiresSmallestWidthDp="320"/>
@@ -14,6 +15,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <uses-feature android:name="android.hardware.screen.portrait"/>
 
@@ -59,6 +61,10 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"/>
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="5ee4471ba6e8cd8858006c8166469bba33d64b2f" />
+
         <activity
             android:name=".activities.AccountActivity"
             android:launchMode="singleTop"
@@ -75,6 +81,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
         </activity>
         <activity
             android:name=".activities.EditorActivity"
@@ -120,6 +127,17 @@
             android:theme="@style/CustomActionBarTheme.Transparent"/>
 
         <activity
+            android:name=".activities.WidgetActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activities.FlightActivity"
+            >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.FlightActivity"/>
+        </activity>
+
+        <activity
             android:name=".activities.helpers.BluetoothDevicesActivity"
             android:noHistory="true"
             android:excludeFromRecents="true"
@@ -132,6 +150,8 @@
             android:excludeFromRecents="true"
             android:theme="@style/CustomActionBarTheme.Transparent"
             android:launchMode="singleTask"/>
+
+        <service android:name=".AppService" />
 
     </application>
 

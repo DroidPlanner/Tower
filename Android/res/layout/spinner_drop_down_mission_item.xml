@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheckedTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@android:id/text1"
+    tools:text="Sample"
+    style="?android:attr/spinnerDropDownItemStyle"
+    android:singleLine="true"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:ellipsize="marquee"
+    android:textColor="@android:color/black"
+    android:gravity="start|center_vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:drawablePadding="@dimen/info_bar_drawable_padding"
+    android:textAllCaps="true"
+    android:textSize="16sp" />
