@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group
         android:id="@+id/flight_screens"
@@ -18,6 +19,11 @@
             android:id="@+id/navigation_locator"
             android:icon="@drawable/ic_menu_flight_history_grey600_24dp"
             android:title="@string/locator" />
+
+        <item android:id="@+id/navigation_fvp_goggle"
+            android:icon="@drawable/ic_vr_google_24dp"
+            android:title="FPV"
+            app:actionLayout="@layout/navigation_fpv_menu_item"/>
 
     </group>
 
