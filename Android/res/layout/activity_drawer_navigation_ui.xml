@@ -51,12 +51,18 @@
         </org.droidplanner.android.view.FitsSystemWindowsFrameLayout>
     </FrameLayout>
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/navigation_drawer_container"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/navigation_drawer_items" />
+        android:id="@+id/navigation_drawer"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.NavigationView
+            android:id="@+id/navigation_drawer_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:headerLayout="@layout/nav_header_main"
+            app:menu="@menu/navigation_drawer_items" />
+    </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

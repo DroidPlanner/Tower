@@ -12,6 +12,7 @@ import android.widget.Button;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.State;
@@ -177,18 +178,18 @@ public class RoverFlightControlFragment extends BaseFlightControlFragment {
                 break;
 
             case R.id.mc_homeBtn:
-                drone.changeVehicleMode(VehicleMode.ROVER_RTL);
+                VehicleApi.getApi(drone).setVehicleMode(VehicleMode.ROVER_RTL);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode.ROVER_RTL.getLabel());
                 break;
 
             case R.id.mc_pause: {
-                drone.changeVehicleMode(VehicleMode.ROVER_HOLD);
+                VehicleApi.getApi(drone).setVehicleMode(VehicleMode.ROVER_HOLD);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode.ROVER_HOLD.getLabel());
                 break;
             }
 
             case R.id.mc_autoBtn:
-                drone.changeVehicleMode(VehicleMode.ROVER_AUTO);
+                VehicleApi.getApi(drone).setVehicleMode(VehicleMode.ROVER_AUTO);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel(VehicleMode.ROVER_AUTO.getLabel());
                 break;
 

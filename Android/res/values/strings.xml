@@ -7,7 +7,7 @@
     <string name="label_other">Others</string>
     <string name="menu_drone_setup">Drone Setup</string>
     <string name="app_settings">App Settings</string>
-    <string name="flight_data">Flight Data</string>
+    <string name="flight_data">Vehicle Data</string>
     <string name="editor">Editor</string>
     <string name="upload_mission">Upload mission</string>
     <string name="download_mission">Download mission</string>
@@ -360,7 +360,7 @@
     <string name="label_enter_filename">Enter Filename</string>
 
     <!-- Drone locator strings -->
-    <string name="locator">Flight History</string>
+    <string name="locator">Vehicle History</string>
     <string name="open_tlog_file">Open log file</string>
     <string name="status_waiting_for_gps">Waiting for GPS…</string>
 
