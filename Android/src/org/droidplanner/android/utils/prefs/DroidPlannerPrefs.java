@@ -163,6 +163,12 @@ public class DroidPlannerPrefs {
     public static final String PREF_UVC_VIDEO_ASPECT_RATIO = "pref_uvc_video_aspect_ratio";
     private static final float DEFAULT_UVC_VIDEO_ASPECT_RATIO = 3f / 4f;
 
+    public static final String PREF_USE_RELAYED_LOCATIONS = "pref_use_relayed_locations";
+    private static final boolean DEFAULT_USE_RELAYED_LOCATIONS = false;
+
+    public static final String PREF_BROADCAST_DRONE_LOCATION = "pref_broadcast_drone_locations";
+    private static final boolean DEFAULT_BROADCAST_DRONE_LOCATION = false;
+
     // Public for legacy usage
     public final SharedPreferences prefs;
     private final LocalBroadcastManager lbm;
@@ -512,5 +518,21 @@ public class DroidPlannerPrefs {
 
     public Float getUVCVideoAspectRatio(){
         return prefs.getFloat(PREF_UVC_VIDEO_ASPECT_RATIO, DEFAULT_UVC_VIDEO_ASPECT_RATIO);
+    }
+
+    public boolean isUsingRelayedLocations() {
+        return prefs.getBoolean(PREF_USE_RELAYED_LOCATIONS, DEFAULT_USE_RELAYED_LOCATIONS);
+    }
+
+    public void setUsingRelayedLocations(boolean use) {
+        prefs.edit().putBoolean(PREF_USE_RELAYED_LOCATIONS, use).commit();
+    }
+
+    public boolean isBroadcastingDroneLocationUpdates() {
+        return prefs.getBoolean(PREF_BROADCAST_DRONE_LOCATION, DEFAULT_BROADCAST_DRONE_LOCATION);
+    }
+
+    public void setBroadcastDroneLocation(boolean bcast) {
+        prefs.edit().putBoolean(PREF_BROADCAST_DRONE_LOCATION, bcast).commit();
     }
 }

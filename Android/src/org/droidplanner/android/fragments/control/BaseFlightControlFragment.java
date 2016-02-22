@@ -5,7 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,12 +14,10 @@ import com.o3dr.android.client.Drone;
 import com.o3dr.android.client.apis.FollowApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.gcs.follow.FollowState;
-import com.o3dr.services.android.lib.gcs.follow.FollowType;
 
-import org.droidplanner.android.activities.DrawerNavigationUI;
-import org.droidplanner.android.fragments.FlightDataFragment;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
+import org.droidplanner.android.locationrelay.LocationRelay;
 import org.droidplanner.android.utils.location.CheckLocationSettings;
 
 /**
@@ -27,6 +25,8 @@ import org.droidplanner.android.utils.location.CheckLocationSettings;
  */
 public abstract class BaseFlightControlFragment extends ApiListenerFragment implements View.OnClickListener,
         FlightControlManagerFragment.SlidingUpHeader {
+
+    static final String TAG = BaseFlightControlFragment.class.getSimpleName();
 
     public static final int FOLLOW_SETTINGS_UPDATE = 147;
 
@@ -79,6 +79,7 @@ public abstract class BaseFlightControlFragment extends ApiListenerFragment impl
         final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
         if (followState.isEnabled()) {
             FollowApi.getApi(drone).disableFollowMe();
+            LocationRelay.get().setDroneFollowing(false);
         } else {
             enableFollowMe(drone);
         }
@@ -98,7 +99,22 @@ public abstract class BaseFlightControlFragment extends ApiListenerFragment impl
                 new Runnable() {
                     @Override
                     public void run() {
-                        FollowApi.getApi(drone).enableFollowMe(FollowType.LEASH);
+                        final boolean useExternal = LocationRelay.get().isUsingExternalLocations();
+                        Log.v(TAG, "useExternal=" + useExternal);
+
+                        final FollowApi api = FollowApi.getApi(drone);
+                        if(api != null) {
+                            api.useExternalLocations(LocationRelay.get().isUsingExternalLocations());
+                            // NOTE: This was FollowType.LEASH, but for some reason I wasn't
+                            // able to select anything ELSE. It would just stop following.
+                            // So now a selection from ModeFollowFragment results in the selected
+                            // FollowType being updated.
+                            api.enableFollowMe(LocationRelay.get().getSelectedFollowType());
+                            LocationRelay.get().setDroneFollowing(true);
+                        }
+                        else {
+                            Log.w(TAG, "No Follow API");
+                        }
                     }
                 });
 

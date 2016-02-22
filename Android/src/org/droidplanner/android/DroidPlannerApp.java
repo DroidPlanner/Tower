@@ -26,6 +26,7 @@ import com.o3dr.services.android.lib.drone.connection.DroneSharePrefs;
 import com.o3dr.services.android.lib.model.AbstractCommandListener;
 
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
+import org.droidplanner.android.locationrelay.LocationRelay;
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.LogToFileTree;
@@ -44,6 +45,8 @@ import timber.log.Timber;
 public class DroidPlannerApp extends MultiDexApplication implements DroneListener, TowerListener {
 
     private static final long DELAY_TO_DISCONNECTION = 1000l; // ms
+
+    private static DroidPlannerApp sInstance;
 
     private static final String TAG = DroidPlannerApp.class.getSimpleName();
 
@@ -81,6 +84,15 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
             }
         }
     };
+
+    public static DroidPlannerApp get() {
+        return sInstance;
+    }
+
+    public DroidPlannerApp() {
+        super();
+        sInstance = this;
+    }
 
     @Override
     public void onTowerConnected() {
@@ -177,6 +189,8 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
 
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_TOGGLE_DRONE_CONNECTION);
+
+        LocationRelay.init(this); // NOT getApplicationContext(), we refer to DroidPlannerApp in LocationRelay
 
         registerReceiver(broadcastReceiver, intentFilter);
     }

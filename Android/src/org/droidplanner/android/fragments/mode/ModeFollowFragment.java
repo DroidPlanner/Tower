@@ -28,6 +28,7 @@ import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.DroneMap;
 import org.droidplanner.android.graphic.map.GuidedScanROIMarkerInfo;
+import org.droidplanner.android.locationrelay.LocationRelay;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -224,9 +225,14 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         final FollowType type = adapter.getItem(position);
 
+        LocationRelay.get().setSelectedFollowType(type);
+
         final Drone drone = getDrone();
         if (drone.isConnected()) {
-            drone.enableFollowMe(type);
+            FollowApi api = FollowApi.getApi(drone);
+            if(api != null) {
+                api.enableFollowMe(type);
+            }
         }
     }
 
