@@ -34,13 +34,15 @@ dependencies {
 
     compile 'com.jakewharton.timber:timber:3.1.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.0@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
 
     //Charts and graph library
     compile 'com.github.lecho:hellocharts-library:1.5.5@aar'
 }
+
+def versionPrefix = "Tower-v"
 
 //Decomposed version name and code (https://plus.google.com/+JakeWharton/posts/6f5TcVPRZij)
 def versionMajor = 3
@@ -64,12 +66,17 @@ android {
         applicationId 'org.droidplanner.android'
         minSdkVersion android_build_min_sdk_version
         targetSdkVersion android_build_target_sdk_version
-        versionCode versionMajor * 100000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
-        versionName "Tower-v${versionMajor}.${versionMinor}.${versionPatch}"
+        versionCode computeVersionCode(versionMajor, versionMinor, versionPatch, versionBuild)
+        versionName generateVersionName(versionPrefix, versionMajor, versionMinor, versionPatch)
 
         buildConfigField "boolean", "WRITE_LOG_FILE", "true"
         buildConfigField "int", "LOG_FILE_LEVEL", "$logLevelDebug"
         buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
+
+        //Manifest placeholders (http://tools.android.com/tech-docs/new-build-system/user-guide/manifest-merger#TOC-Placeholder-support)
+        manifestPlaceholders = [
+            fabricApiKey:getFabricApiKey()
+        ]
 
         // Enabling multidex support.
         multiDexEnabled true
@@ -121,32 +128,80 @@ android {
             def file = output.outputFile
             if (file != null && file.name.endsWith('.apk')) {
                 def buildType = variant.buildType.getName()
+                def flavorName = variant.getFlavorName()
                 def versionCode = defaultConfig.versionCode
-                output.outputFile = new File(file.parent, "tower-${buildType}.${versionCode}.apk")
+                output.outputFile = new File(file.parent, "tower-${flavorName}-${buildType}.${versionCode}.apk")
             }
+        }
+    }
+
+    android.variantFilter { variant ->
+        def flavors = variant.getFlavors()
+        if (!flavors.isEmpty()) {
+            def flavorName = flavors.get(0).name
+            def buildTypeName = variant.buildType.name
+
+            //Filter out the variants we're not interested in building.
+            def ignoreVariant = true
+            switch (buildTypeName) {
+                case "release":
+                    switch (flavorName) {
+                        case "prod":
+                        case "beta":
+                            ignoreVariant = false
+                            break
+                    }
+                    break;
+
+                case "debug":
+                    switch (flavorName) {
+                        case "dev":
+                            ignoreVariant = false
+                            break
+                    }
+                    break;
+            }
+
+            variant.setIgnore(ignoreVariant);
+        }
+    }
+
+    productFlavors {
+        dev {
+            applicationIdSuffix ".debug"
+            resValue "string", "app_title", "Tower Dev"
+            versionName generateVersionName(versionPrefix, versionMajor, versionMinor, versionPatch, "debug.${versionBuild}")
+
+            //Enable or disable crashlytics based on the availability of the api key
+            ext.enableCrashlytics = false
+        }
+
+        beta {
+            applicationIdSuffix ".beta"
+            resValue "string", "app_title", "Tower Beta"
+            versionName generateVersionName(versionPrefix, versionMajor, versionMinor, versionPatch, "beta.${versionBuild}")
+
+            //Enable or disable crashlytics based on the availability of the api key
+            ext.enableCrashlytics = hasFabricApiKey()
+        }
+
+        prod {
+            resValue "string", "app_title", "Tower"
+            buildConfigField "boolean", "WRITE_LOG_FILE", "false"
+
+            //Enable or disable crashlytics based on the availability of the api key
+            ext.enableCrashlytics = hasFabricApiKey()
         }
     }
 
     buildTypes {
         debug {
-            applicationIdSuffix ".debug"
-            versionNameSuffix ".debug.${versionBuild}"
-            resValue "string", "app_title", "Tower Dev"
-        }
-
-        beta {
-            signingConfig signingConfigs.release
-            applicationIdSuffix ".beta"
-            versionNameSuffix ".beta.${versionBuild}"
-            resValue "string", "app_title", "Tower Beta"
-            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "true"
+            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
         }
 
         release {
             signingConfig signingConfigs.release
-            resValue "string", "app_title", "Tower"
-            buildConfigField "boolean", "WRITE_LOG_FILE", "false"
-            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "true"
+            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "${hasFabricApiKey()}"
         }
     }
 }
@@ -180,4 +235,12 @@ def getAppKeyPassword() {
 
 def getAppKey() {
     return hasProperty('ORG_DROIDPLANNER_ANDROID_KEY_ALIAS') ? ORG_DROIDPLANNER_ANDROID_KEY_ALIAS : ''
+}
+
+def getFabricApiKey(){
+    return hasFabricApiKey() ? COM_O3DR_FABRIC_API_KEY : ''
+}
+
+def hasFabricApiKey(){
+    return hasProperty('COM_O3DR_FABRIC_API_KEY')
 }
