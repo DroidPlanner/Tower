@@ -217,6 +217,9 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
                         .setData(Uri.parse("https://play.google.com/store/apps/details?id=" + appId));
             }
         }
+        else {
+            launchIntent.putExtra("meavydev.DronePro.launchFPV", "Tower");
+        }
 
         return launchIntent;
     }
