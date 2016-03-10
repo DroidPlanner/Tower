@@ -1,5 +1,6 @@
 package org.droidplanner.android.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,10 +9,13 @@ import android.view.ViewGroup;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import org.droidplanner.android.BuildConfig;
 import org.droidplanner.android.R;
+import org.droidplanner.android.dialogs.DialogMaterialFragment;
 import org.droidplanner.android.fragments.FlightDataFragment;
 import org.droidplanner.android.fragments.WidgetsListFragment;
 import org.droidplanner.android.fragments.actionbar.ActionBarTelemFragment;
+import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.view.SlidingDrawer;
 
 public class FlightActivity extends DrawerNavigationUI implements SlidingUpPanelLayout.PanelSlideListener {
@@ -95,6 +99,20 @@ public class FlightActivity extends DrawerNavigationUI implements SlidingUpPanel
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(EXTRA_IS_ACTION_DRAWER_OPENED, isActionDrawerOpened());
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        final Context context = getApplicationContext();
+        //Show the changelog if this is the first time the app is launched since update/install
+        if(BuildConfig.DEBUG || Utils.getAppVersionCode(context) > mAppPrefs.getSavedAppVersionCode()) {
+            DialogMaterialFragment changelog = new DialogMaterialFragment();
+            changelog.show(getSupportFragmentManager(), "Changelog Dialog");
+
+            mAppPrefs.updateSavedAppVersionCode(context);
+        }
     }
 
     @Override

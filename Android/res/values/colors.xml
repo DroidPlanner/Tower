@@ -48,4 +48,9 @@
     <color name="medium_grey">#3C3C3C</color>
     <color name="grey700">#616161</color>
 
+    <color name="primary_dark">#388E3C</color>
+    <color name="primary_light">#C8E6C9</color>
+    <color name="accent">#795548</color>
+    <color name="primary_text">#212121</color>
+
 </resources>
