@@ -38,7 +38,7 @@ import kotlin.properties.Delegates
 public class WidgetActivity : SuperUI() {
 
     companion object {
-        val EXTRA_WIDGET_ID = "extra_widget_id"
+        const val EXTRA_WIDGET_ID = "extra_widget_id"
     }
 
     override fun onCreate(savedInstanceState: Bundle?){

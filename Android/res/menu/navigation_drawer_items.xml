@@ -6,7 +6,7 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_flight_data"
-            android:icon="@drawable/ic_menu_flight_data_grey600_24dp"
+            android:icon="@drawable/ic_track_changes_24dp"
             android:title="@string/flight_data" />
 
         <item
