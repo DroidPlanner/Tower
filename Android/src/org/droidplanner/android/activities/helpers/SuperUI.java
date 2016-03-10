@@ -32,6 +32,7 @@ import com.o3dr.services.android.lib.model.SimpleCommandListener;
 import org.droidplanner.android.AppService;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
+import org.droidplanner.android.dialogs.DialogMaterialFragment;
 import org.droidplanner.android.dialogs.SlideToUnlockDialog;
 import org.droidplanner.android.dialogs.SupportYesNoDialog;
 import org.droidplanner.android.dialogs.SupportYesNoWithPrefsDialog;
@@ -236,8 +237,17 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
     protected void onStart() {
         super.onStart();
 
-        unitSystem = UnitManager.getUnitSystem(getApplicationContext());
+        final Context context = getApplicationContext();
+        unitSystem = UnitManager.getUnitSystem(context);
         dpApp.addApiListener(this);
+
+        //Show the changelog if this is the first time the app is launched since update/install
+        if(Utils.getAppVersionCode(context) > mAppPrefs.getSavedAppVersionCode()) {
+            DialogMaterialFragment changelog = new DialogMaterialFragment();
+            changelog.show(getSupportFragmentManager(), "Changelog Dialog");
+
+            mAppPrefs.updateSavedAppVersionCode(context);
+        }
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.droidplanner.android.utils.prefs;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -17,6 +18,8 @@ import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import timber.log.Timber;
 
 /**
  * Provides structured access to Droidplanner preferences
@@ -107,6 +110,8 @@ public class DroidPlannerPrefs {
 
     public static final String PREF_APP_VERSION = "pref_version";
 
+    private static final String PREF_APP_VERSION_CODE = "pref_app_version_code";
+
     private static final String PREF_IS_TTS_ENABLED = "pref_enable_tts";
     private static final boolean DEFAULT_TTS_ENABLED = false;
 
@@ -178,6 +183,25 @@ public class DroidPlannerPrefs {
         // return
         // prefs.getBoolean(PREF_LIVE_UPLOAD_ENABLED, DEFAULT_LIVE_UPLOAD_ENABLED);
         return false;
+    }
+
+    /**
+     * Return the last saved app version code
+     * @return
+     */
+    public int getSavedAppVersionCode(){
+        return prefs.getInt(PREF_APP_VERSION_CODE, 0);
+    }
+
+    /**
+     * Update the saved app version code.
+     * @param context Application context
+     */
+    public void updateSavedAppVersionCode(Context context) {
+        int versionCode = Utils.getAppVersionCode(context);
+        if (versionCode != Utils.INVALID_APP_VERSION_CODE) {
+            prefs.edit().putInt(PREF_APP_VERSION_CODE, versionCode).apply();
+        }
     }
 
     public String getDroneshareLogin() {
