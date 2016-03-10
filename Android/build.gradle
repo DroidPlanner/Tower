@@ -17,6 +17,9 @@ dependencies {
     compile "com.android.support:recyclerview-v7:${support_lib_version}"
     compile "com.android.support:design:${support_lib_version}"
 
+    // Android library to display the changelog
+    compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
+
     //DroneKit-Android client library.
     compile 'com.o3dr.android:dronekit-android:2.8.0'
 
