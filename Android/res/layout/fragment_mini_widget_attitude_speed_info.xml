@@ -25,8 +25,7 @@
             android:drawableStart="@drawable/yaw_icon"
             android:focusable="true"
             android:gravity="start|center_vertical"
-            android:text="@string/default_angle_value"
-            android:textSize="16sp" />
+            android:text="@string/default_angle_value" />
 
         <TextView
             android:id="@+id/pitchValueText"
@@ -42,8 +41,7 @@
             android:drawablePadding="2dp"
             android:drawableStart="@drawable/pitch_icon"
             android:gravity="start|center_vertical"
-            android:text="@string/default_angle_value"
-            android:textSize="16sp" />
+            android:text="@string/default_angle_value" />
 
         <TextView
             android:id="@+id/rollValueText"
@@ -59,8 +57,7 @@
             android:drawablePadding="2dp"
             android:drawableStart="@drawable/roll_icon"
             android:gravity="start|center_vertical"
-            android:text="@string/default_angle_value"
-            android:textSize="16sp" />
+            android:text="@string/default_angle_value" />
 
         <org.droidplanner.android.view.AttitudeIndicator
             android:id="@+id/aiView"
