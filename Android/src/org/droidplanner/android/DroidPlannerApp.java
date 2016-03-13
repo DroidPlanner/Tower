@@ -30,7 +30,6 @@ import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.M
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.LogToFileTree;
 import org.droidplanner.android.utils.Utils;
-import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.IO.ExceptionWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
@@ -142,7 +141,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
 
         final Context context = getApplicationContext();
 
-        dpPrefs = new DroidPlannerPrefs(context);
+        dpPrefs = DroidPlannerPrefs.getInstance(context);
         lbm = LocalBroadcastManager.getInstance(context);
         mapDownloader = new MapDownloader(context);
 
@@ -160,9 +159,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
 
         exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(dpExceptionHandler);
-
-        GAUtils.initGATracker(this);
-        GAUtils.startNewSession(context);
 
         if(BuildConfig.ENABLE_CRASHLYTICS) {
             Fabric.with(context, new Crashlytics());

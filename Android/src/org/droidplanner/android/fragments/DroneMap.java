@@ -287,7 +287,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		context = activity.getApplicationContext();
-		mAppPrefs = new DroidPlannerPrefs(context);
+		mAppPrefs = DroidPlannerPrefs.getInstance(context);
 	}
 
 	public final void postUpdate() {

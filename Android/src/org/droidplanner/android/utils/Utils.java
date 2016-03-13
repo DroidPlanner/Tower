@@ -36,7 +36,7 @@ public class Utils {
 	 *            Application context
 	 */
 	public static void updateUILanguage(Context context) {
-		DroidPlannerPrefs prefs = new DroidPlannerPrefs(context);
+		DroidPlannerPrefs prefs = DroidPlannerPrefs.getInstance(context);
 		if (prefs.isEnglishDefaultLanguage()) {
 			Configuration config = new Configuration();
 			config.locale = Locale.ENGLISH;

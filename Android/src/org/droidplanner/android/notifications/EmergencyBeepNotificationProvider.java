@@ -43,7 +43,7 @@ public class EmergencyBeepNotificationProvider implements NotificationHandler.No
 
     public EmergencyBeepNotificationProvider(Context context) {
         this.context = context;
-        appPrefs = new DroidPlannerPrefs(context);
+        appPrefs = DroidPlannerPrefs.getInstance(context);
     }
 
     @Override

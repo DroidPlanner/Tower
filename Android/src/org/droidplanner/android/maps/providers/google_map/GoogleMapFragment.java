@@ -319,7 +319,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
         mGApiClientMgr = new GoogleApiClientManager(context, new Handler(), apisList);
         mGApiClientMgr.setManagerListener(this);
 
-        mAppPrefs = new DroidPlannerPrefs(context);
+        mAppPrefs = DroidPlannerPrefs.getInstance(context);
 
         final Bundle args = getArguments();
         if (args != null) {

@@ -44,7 +44,7 @@ class WidgetVideoPreferences : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val context = activity.applicationContext
-        val appPrefs = DroidPlannerPrefs(context)
+        val appPrefs = DroidPlannerPrefs.getInstance(context)
 
         val udpPortView = view.findViewById(R.id.custom_video_provider_udp_port) as EditText?
 

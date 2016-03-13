@@ -21,7 +21,7 @@ dependencies {
     compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
 
     //DroneKit-Android client library.
-    compile 'com.o3dr.android:dronekit-android:2.8.0'
+    compile 'com.o3dr.android:dronekit-android:2.8.1'
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')

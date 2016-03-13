@@ -30,7 +30,6 @@ import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
 import com.o3dr.services.android.lib.util.MathUtils;
 
-import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
@@ -39,7 +38,6 @@ import org.droidplanner.android.proxy.mission.item.markers.PolygonMarkerInfo;
 import org.droidplanner.android.proxy.mission.item.markers.SurveyMarkerInfoProvider;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
-import org.droidplanner.android.utils.collection.CircularQueue;
 import org.droidplanner.android.utils.file.IO.MissionReader;
 import org.droidplanner.android.utils.file.IO.MissionWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -106,7 +104,7 @@ public class MissionProxy implements DPMap.PathSource {
         lbm = LocalBroadcastManager.getInstance(context);
         lbm.registerReceiver(eventReceiver, eventFilter);
 
-        dpPrefs = new DroidPlannerPrefs(context);
+        dpPrefs = DroidPlannerPrefs.getInstance(context);
     }
 
     public void setDrone(Drone drone){

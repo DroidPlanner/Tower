@@ -123,7 +123,7 @@ public class ParamsFragment extends ApiListenerListFragment implements SupportEd
 
         setHasOptionsMenu(true);
 
-        mPrefs = new DroidPlannerPrefs(getActivity().getApplicationContext());
+        mPrefs = DroidPlannerPrefs.getInstance(getActivity().getApplicationContext());
 
         // create adapter
         if (savedInstanceState != null) {

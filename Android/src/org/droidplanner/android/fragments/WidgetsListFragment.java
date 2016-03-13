@@ -20,8 +20,6 @@ import org.droidplanner.android.fragments.widget.TowerWidget;
 import org.droidplanner.android.fragments.widget.TowerWidgets;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
-import timber.log.Timber;
-
 public class WidgetsListFragment extends Fragment {
 
     private static final IntentFilter filter = new IntentFilter(SettingsFragment.ACTION_WIDGET_PREFERENCE_UPDATED);
@@ -59,7 +57,7 @@ public class WidgetsListFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
         widgetsContainer = (ViewGroup) view.findViewById(R.id.widgets_list_container);
-        dpPrefs = new DroidPlannerPrefs(getActivity().getApplicationContext());
+        dpPrefs = DroidPlannerPrefs.getInstance(getActivity().getApplicationContext());
     }
 
     @Override

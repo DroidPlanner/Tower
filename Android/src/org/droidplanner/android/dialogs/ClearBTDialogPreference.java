@@ -1,10 +1,10 @@
 package org.droidplanner.android.dialogs;
 
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-
 import android.content.Context;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
+
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 public class ClearBTDialogPreference extends DialogPreference {
 
@@ -18,7 +18,7 @@ public class ClearBTDialogPreference extends DialogPreference {
 
 	public ClearBTDialogPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		mAppPrefs = new DroidPlannerPrefs(context.getApplicationContext());
+		mAppPrefs = DroidPlannerPrefs.getInstance(context);
 	}
 
 	@Override
