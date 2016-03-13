@@ -20,7 +20,7 @@ public class UnitManager {
 
     public static UnitSystem getUnitSystem(Context context){
         if(dpPrefs == null)
-            dpPrefs = new DroidPlannerPrefs(context);
+            dpPrefs = DroidPlannerPrefs.getInstance(context);
 
         final int unitSystemType = dpPrefs.getUnitSystemType();
         switch(unitSystemType){

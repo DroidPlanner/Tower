@@ -43,7 +43,7 @@ public class YesNoWithPrefsDialog extends YesNoDialog {
             throw new IllegalArgumentException("The dialog tag must not be null!");
 
         if (!TextUtils.isEmpty(prefKey)) {
-            final DroidPlannerPrefs prefs = new DroidPlannerPrefs(context);
+            final DroidPlannerPrefs prefs = DroidPlannerPrefs.getInstance(context);
             final String preference = prefs.prefs.getString(prefKey, context.getString(DEFAULT_PREFERENCE_ID));
 
             if (!preference.equals(context.getString(PREFERENCE_ASK_ID))) {
@@ -80,7 +80,7 @@ public class YesNoWithPrefsDialog extends YesNoDialog {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPrefs = new DroidPlannerPrefs(getActivity());
+        mPrefs = DroidPlannerPrefs.getInstance(getActivity());
     }
 
     @Override

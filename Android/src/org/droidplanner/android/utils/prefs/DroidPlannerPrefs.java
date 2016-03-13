@@ -3,7 +3,6 @@ package org.droidplanner.android.utils.prefs;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -18,8 +17,6 @@ import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import timber.log.Timber;
 
 /**
  * Provides structured access to Droidplanner preferences
@@ -172,7 +169,17 @@ public class DroidPlannerPrefs {
     public final SharedPreferences prefs;
     private final LocalBroadcastManager lbm;
 
-    public DroidPlannerPrefs(Context context) {
+    private static DroidPlannerPrefs instance;
+
+    public static synchronized DroidPlannerPrefs getInstance(Context context) {
+        if (instance == null) {
+            instance = new DroidPlannerPrefs(context);
+        }
+
+        return instance;
+    }
+
+    private DroidPlannerPrefs(Context context) {
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         lbm = LocalBroadcastManager.getInstance(context);
     }

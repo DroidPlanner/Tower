@@ -9,7 +9,6 @@ import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.LocalBroadcastManager;
@@ -30,10 +29,8 @@ import com.o3dr.services.android.lib.drone.attribute.error.CommandExecutionError
 import com.o3dr.services.android.lib.model.SimpleCommandListener;
 
 import org.droidplanner.android.AppService;
-import org.droidplanner.android.BuildConfig;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
-import org.droidplanner.android.dialogs.DialogMaterialFragment;
 import org.droidplanner.android.dialogs.SlideToUnlockDialog;
 import org.droidplanner.android.dialogs.SupportYesNoDialog;
 import org.droidplanner.android.dialogs.SupportYesNoWithPrefsDialog;
@@ -172,10 +169,8 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
         dpApp = (DroidPlannerApp) getApplication();
         lbm = LocalBroadcastManager.getInstance(context);
 
-        mAppPrefs = new DroidPlannerPrefs(context);
+        mAppPrefs = DroidPlannerPrefs.getInstance(context);
         unitSystem = UnitManager.getUnitSystem(context);
-
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		/*
          * Used to supplant wake lock acquisition (previously in

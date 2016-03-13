@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.dialogs.OkDialog;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.control.BaseFlightControlFragment;
 import org.droidplanner.android.view.SlidingDrawer;
@@ -218,6 +219,8 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
             }
         }
         else {
+            OkDialog.newInstance(getApplicationContext(), "", "Starting FPV...").show(getSupportFragmentManager(), "FPV launch dialog");
+
             launchIntent.putExtra("meavydev.DronePro.launchFPV", "Tower");
         }
 

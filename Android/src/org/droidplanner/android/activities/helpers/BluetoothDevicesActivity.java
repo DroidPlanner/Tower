@@ -1,15 +1,5 @@
 package org.droidplanner.android.activities.helpers;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import org.droidplanner.android.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-
-import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -18,9 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +18,15 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.R;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * This is used to show the user a list of bluetooth devices to connect to.
@@ -134,7 +130,7 @@ public class BluetoothDevicesActivity extends AppCompatActivity {
 			// Stores the mac address in the shared preferences,
 			// so the bluetooth client can retrieve it on connection.
             final Context context = getApplicationContext();
-			DroidPlannerPrefs mAppPrefs = new DroidPlannerPrefs(context);
+			DroidPlannerPrefs mAppPrefs = DroidPlannerPrefs.getInstance(context);
             mAppPrefs.setBluetoothDeviceName(device.getName());
             mAppPrefs.setBluetoothDeviceAddress(device.getAddress());
 
