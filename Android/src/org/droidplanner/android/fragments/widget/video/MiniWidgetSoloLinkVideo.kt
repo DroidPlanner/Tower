@@ -31,7 +31,6 @@ public class MiniWidgetSoloLinkVideo : BaseVideoWidget() {
                 AttributeEvent.STATE_CONNECTED -> tryStreamingVideo()
             }
         }
-
     }
 
     private var surfaceRef: Surface? = null
@@ -102,7 +101,7 @@ public class MiniWidgetSoloLinkVideo : BaseVideoWidget() {
 
         videoStatus?.visibility = View.GONE
 
-        startVideoStream(surfaceRef, TAG, object : AbstractCommandListener() {
+        startVideoStream(surfaceRef!!, TAG, object : AbstractCommandListener() {
             override fun onError(error: Int) {
                 Timber.d("Unable to start video stream: %d", error)
                 videoStatus?.visibility = View.VISIBLE

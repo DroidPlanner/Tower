@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/black"
+    android:minHeight="85dp">
+
+    <TextureView
+        android:id="@+id/uvc_video_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:minHeight="85dp" />
+
+    <LinearLayout
+        android:id="@+id/widget_button_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/uvc_take_picture_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:backgroundTint="@android:color/white"
+            app:fabSize="normal"
+            app:elevation="6dp"
+            app:borderWidth="0dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_camera_drawable"
+            android:text="@string/label_photo" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/uvc_record_video_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:backgroundTint="@android:color/white"
+            app:fabSize="normal"
+            app:elevation="6dp"
+            app:borderWidth="0dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/on_off_videocam"
+            android:text="@string/label_record" />
+    </LinearLayout>
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/uvc_video_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@android:color/black"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="@string/error_no_video"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"
+        android:visibility="visible"
+        tools:visibility="visible" />
+</RelativeLayout>

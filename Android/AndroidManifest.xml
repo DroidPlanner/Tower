@@ -63,7 +63,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="5ee4471ba6e8cd8858006c8166469bba33d64b2f" />
+            android:value="${fabricApiKey}" />
 
         <activity
             android:name=".activities.AccountActivity"
@@ -81,6 +81,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
         </activity>
         <activity
             android:name=".activities.EditorActivity"

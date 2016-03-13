@@ -76,7 +76,7 @@ public class DroneshareAccountFragment extends Fragment {
 
         final Context context = getActivity().getApplicationContext();
 
-        dpPrefs = new DroidPlannerPrefs(context);
+        dpPrefs = DroidPlannerPrefs.getInstance(context);
         final String username = dpPrefs.getDroneshareLogin();
         final String password = dpPrefs.getDronesharePassword();
 

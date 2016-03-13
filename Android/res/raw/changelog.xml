@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<changelog bulletedList="true">
+
+    <!-- It is a template file for changelog.xml -->
+
+    <!-- Library uses res/raw/changelog.xml file.
+        If you want to use a custom file you can specify
+        chg:changeLogFileResourceId="@raw/custom_changelog"
+        in your View component in layout file -->
+
+
+    <changelogversion versionName="3.2.1" changeDate="Mar 12,2016">
+        <changelogtext>[b]UVC[/b] devices support by [i]Guilherme Blanco[/i]</changelogtext>
+        <changelogtext>Google Cardboard [b]FPV[/b] support thanks to [b]DronePro[/b] by [i]Shawn Fraser[/i]</changelogtext>
+        <changelogtext>Add ability to set a custom video stream. Check the [i][b]Tower Wiki[/b][/i] for setup instructions</changelogtext>
+        <changelogtext>Add [i]Reset ROI[/i] mission item</changelogtext>
+
+        <changelogtext>Remove support for [b]Droneshare[/b] accounts as the site is closing down</changelogtext>
+
+        <changelogtext>Navigation Drawer update to Material Design by [i]jandrop[/i]</changelogtext>
+        <changelogtext>Improve spanish translation</changelogtext>
+        <changelogtext>Improve german translation</changelogtext>
+        <changelogtext>Improve chinese translation</changelogtext>
+
+    </changelogversion>
+
+</changelog>

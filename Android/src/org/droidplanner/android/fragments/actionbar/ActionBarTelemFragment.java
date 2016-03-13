@@ -214,7 +214,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             }
         });
 
-        appPrefs = new DroidPlannerPrefs(context);
+        appPrefs = DroidPlannerPrefs.getInstance(context);
     }
 
     private void showTelemBar() {

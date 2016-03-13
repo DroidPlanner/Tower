@@ -318,7 +318,7 @@ public class TTSNotificationProvider implements OnInitListener,
     TTSNotificationProvider(Context context, Drone drone) {
         this.context = context;
         this.drone = drone;
-        mAppPrefs = new DroidPlannerPrefs(context);
+        mAppPrefs =  DroidPlannerPrefs.getInstance(context);
     }
 
     @Override
@@ -420,7 +420,7 @@ public class TTSNotificationProvider implements OnInitListener,
     }
 
     private void speak(String string) {
-        speak(string, false, null);
+        speak(string, true, null);
     }
 
     private void speak(String string, boolean append, String utteranceId) {
@@ -434,6 +434,7 @@ public class TTSNotificationProvider implements OnInitListener,
                 }
 
                 tts.speak(string, queueType, mTtsParams);
+
             }
         }
     }

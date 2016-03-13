@@ -1,12 +1,12 @@
 package org.droidplanner.android;
 
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.multidex.MultiDexApplication;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -30,7 +30,6 @@ import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.M
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.LogToFileTree;
 import org.droidplanner.android.utils.Utils;
-import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.IO.ExceptionWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
@@ -41,7 +40,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
-public class DroidPlannerApp extends Application implements DroneListener, TowerListener {
+public class DroidPlannerApp extends MultiDexApplication implements DroneListener, TowerListener {
 
     private static final long DELAY_TO_DISCONNECTION = 1000l; // ms
 
@@ -142,7 +141,7 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
 
         final Context context = getApplicationContext();
 
-        dpPrefs = new DroidPlannerPrefs(context);
+        dpPrefs = DroidPlannerPrefs.getInstance(context);
         lbm = LocalBroadcastManager.getInstance(context);
         mapDownloader = new MapDownloader(context);
 
@@ -160,9 +159,6 @@ public class DroidPlannerApp extends Application implements DroneListener, Tower
 
         exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(dpExceptionHandler);
-
-        GAUtils.initGATracker(this);
-        GAUtils.startNewSession(context);
 
         if(BuildConfig.ENABLE_CRASHLYTICS) {
             Fabric.with(context, new Crashlytics());

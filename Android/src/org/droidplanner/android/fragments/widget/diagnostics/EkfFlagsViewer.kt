@@ -54,7 +54,7 @@ public class EkfFlagsViewer : BaseWidgetDiagnostic() {
     }
 
     private fun disableEkfFlags(){
-        for(flagView in ekfFlagsViews.values())
+        for(flagView in ekfFlagsViews.values)
             flagView?.setCompoundDrawablesWithIntrinsicBounds(null, null, unknownFlagDrawable, null)
     }
 

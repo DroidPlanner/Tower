@@ -37,7 +37,7 @@ class WidgetsListPrefFragment : DialogFragment() {
 
     class WidgetsAdapter(context: Context, val fm : FragmentManager) : ArrayAdapter<TowerWidgets>(context, 0, TowerWidgets.values()){
 
-        val appPrefs = DroidPlannerPrefs(context)
+        val appPrefs = DroidPlannerPrefs.getInstance(context)
         val lbm = LocalBroadcastManager.getInstance(context)
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -53,7 +53,7 @@ class WidgetsListPrefFragment : DialogFragment() {
                         view.findViewById(R.id.widget_pref_info))
             }
 
-            viewHolder.prefIcon?.visibility = if(towerWidget.hasPreferences()) View.VISIBLE else View.INVISIBLE
+            viewHolder.prefIcon?.visibility = if(towerWidget.hasPreferences()) View.VISIBLE else View.GONE
             viewHolder.prefIcon?.setOnClickListener { towerWidget.getPrefFragment()?.show(fm, "Widget pref dialog") }
 
             viewHolder.prefTitle?.setText(towerWidget.labelResId)

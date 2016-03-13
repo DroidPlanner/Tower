@@ -10,9 +10,11 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:src="@drawable/ic_action_gear"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
         android:background="?android:attr/selectableItemBackground"
         android:scaleType="center"
         android:id="@+id/widget_pref_icon"/>
@@ -26,10 +28,10 @@
         android:background="?android:attr/selectableItemBackground"
         android:gravity="center_vertical"
         android:padding="5dp"
-        android:layout_toEndOf="@+id/widget_pref_icon"
-        android:layout_toRightOf="@+id/widget_pref_icon"
-        android:layout_toStartOf="@+id/widget_check"
-        android:layout_toLeftOf="@+id/widget_check">
+        android:layout_toStartOf="@+id/widget_pref_icon"
+        android:layout_toLeftOf="@+id/widget_pref_icon"
+        android:layout_toEndOf="@+id/widget_check"
+        android:layout_toRightOf="@+id/widget_check">
 
         <TextView
             android:id="@+id/widget_pref_title"
@@ -50,11 +52,13 @@
 
     <CheckBox
         android:id="@+id/widget_check"
-        android:layout_width="48dp"
+        android:layout_width="wrap_content"
         android:background="?android:attr/selectableItemBackground"
-        android:layout_height="48dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"/>
 
 </RelativeLayout>

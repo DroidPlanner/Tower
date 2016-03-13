@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dip"/>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
     <CheckBox
         android:id="@+id/yes_no_dont_show_checkbox"

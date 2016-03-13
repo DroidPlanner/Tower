@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/navigation_account"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
+    android:layout_height="72dp"
     android:background="@color/header_background"
-    android:gravity="bottom"
-    android:orientation="vertical"
+    android:gravity="center"
+    android:orientation="horizontal"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
@@ -13,15 +13,12 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:src="@drawable/ic_account_circle_white_48dp" />
+        android:src="@drawable/ic_launcher" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:text="@string/account_label"
-        android:id="@+id/account_screen_label"
+        android:text="@string/app_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
 </LinearLayout>

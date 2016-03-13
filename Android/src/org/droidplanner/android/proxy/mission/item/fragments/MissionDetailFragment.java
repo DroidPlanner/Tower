@@ -71,7 +71,8 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
             MissionItemType.YAW_CONDITION,
             MissionItemType.SET_SERVO,
             MissionItemType.SPLINE_SURVEY,
-            MissionItemType.DO_JUMP
+            MissionItemType.DO_JUMP,
+            MissionItemType.RESET_ROI
     };
 
     public interface OnMissionDetailListener {
@@ -119,46 +120,46 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
     private final SpinnerSelfSelect.OnSpinnerItemSelectedListener missionItemSpinnerListener = new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {
         @Override
         public void onSpinnerItemSelected(Spinner spinner, int position) {
-            final MissionItemType selectedType = commandAdapter.getItem(position);
+            MissionItemType selectedType = commandAdapter.getItem(position);
 
             try {
                 if (mSelectedProxies.isEmpty())
                     return;
 
-                final List<Pair<MissionItemProxy, List<MissionItemProxy>>> updatesList = new ArrayList<>(
+                List<Pair<MissionItemProxy, List<MissionItemProxy>>> updatesList = new ArrayList<>(
                         mSelectedProxies.size());
 
                 for (MissionItemProxy missionItemProxy : mSelectedProxies) {
-                    final MissionItem oldItem = missionItemProxy.getMissionItem();
-                    final MissionItemType previousType = oldItem.getType();
+                    MissionItem oldItem = missionItemProxy.getMissionItem();
+                    MissionItemType previousType = oldItem.getType();
 
                     if (previousType != selectedType) {
-                        final List<MissionItemProxy> newItems = new ArrayList<>();
+                        List<MissionItemProxy> newItems = new ArrayList<>();
 
                         if (previousType == MissionItemType.SURVEY || previousType == MissionItemType.SPLINE_SURVEY) {
                             switch(selectedType){
                                 case SURVEY: {
-                                    final Survey newItem = new Survey((Survey)oldItem);
+                                    Survey newItem = new Survey((Survey)oldItem);
                                     newItems.add(new MissionItemProxy(mMissionProxy, newItem));
                                     break;
                                 }
 
                                 case SPLINE_SURVEY: {
-                                    final SplineSurvey newItem = new SplineSurvey((Survey) oldItem);
+                                    SplineSurvey newItem = new SplineSurvey((Survey) oldItem);
                                     newItems.add(new MissionItemProxy(mMissionProxy, newItem));
                                     break;
                                 }
 
                                 default: {
-                                    final Survey previousSurvey = (Survey) oldItem;
-                                    final SurveyDetail surveyDetail = previousSurvey.getSurveyDetail();
-                                    final double altitude = surveyDetail == null
+                                    Survey previousSurvey = (Survey) oldItem;
+                                    SurveyDetail surveyDetail = previousSurvey.getSurveyDetail();
+                                    double altitude = surveyDetail == null
                                             ? mMissionProxy.getLastAltitude()
                                             : surveyDetail.getAltitude();
 
-                                    final List<LatLong> polygonPoints = previousSurvey.getPolygonPoints();
+                                    List<LatLong> polygonPoints = previousSurvey.getPolygonPoints();
                                     for (LatLong coordinate : polygonPoints) {
-                                        final MissionItem newItem = selectedType.getNewItem();
+                                        MissionItem newItem = selectedType.getNewItem();
                                         if (newItem instanceof MissionItem.SpatialItem) {
                                             ((MissionItem.SpatialItem) newItem).setCoordinate(new LatLongAlt(coordinate
                                                     .getLatitude(), coordinate.getLongitude(), altitude));
@@ -171,7 +172,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
                             }
 
                         } else {
-                            final MissionItem newItem = selectedType.getNewItem();
+                            MissionItem newItem = selectedType.getNewItem();
 
                             if (oldItem instanceof MissionItem.SpatialItem && newItem instanceof
                                     MissionItem.SpatialItem) {
@@ -262,6 +263,11 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
             case DO_JUMP:
                 fragment = new MissionDoJumpFragment();
                 break;
+
+            case RESET_ROI:
+                fragment = new MissionResetROIFragment();
+                break;
+
             default:
                 fragment = null;
                 break;
@@ -274,7 +280,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
-        final DroidPlannerPrefs dpPrefs = getAppPrefs();
+        DroidPlannerPrefs dpPrefs = getAppPrefs();
         MIN_ALTITUDE = dpPrefs.getMinAltitude();
         MAX_ALTITUDE = dpPrefs.getMaxAltitude();
     }
@@ -291,7 +297,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
             mSelectedItems.add(mip.getMissionItem());
         }
 
-        final View view = getView();
+        View view = getView();
         if (view == null) return;
 
         distanceView = (TextView) view.findViewById(R.id.DistanceValue);
@@ -305,8 +311,8 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
         List<MissionItemType> list = new LinkedList<>(Arrays.asList(SUPPORTED_MISSION_ITEM_TYPES));
 
         if (mSelectedProxies.size() == 1) {
-            final MissionItemProxy itemProxy = mSelectedProxies.get(0);
-            final MissionItem currentItem = itemProxy.getMissionItem();
+            MissionItemProxy itemProxy = mSelectedProxies.get(0);
+            MissionItem currentItem = itemProxy.getMissionItem();
 
             if (currentItem instanceof Survey) {
                 list.clear();
@@ -340,9 +346,9 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
                 list.remove(MissionItemType.STRUCTURE_SCANNER);
             }
 
-            final TextView waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
+            TextView waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
             if (waypointIndex != null) {
-                final int itemOrder = mMissionProxy.getOrder(itemProxy);
+                int itemOrder = mMissionProxy.getOrder(itemProxy);
                 waypointIndex.setText(String.valueOf(itemOrder));
             }
 
@@ -372,16 +378,21 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
                 list.remove(MissionItemType.EPM_GRIPPER);
                 list.remove(MissionItemType.CAMERA_TRIGGER);
                 list.remove(MissionItemType.DO_JUMP);
+                list.remove(MissionItemType.RESET_ROI);
             }
         } else {
             //Invalid state. We should not have been able to get here.
             //If the parent activity is listening, it will remove this fragment when the selection is empty.
             mMissionProxy.selection.notifySelectionUpdate();
+
+            //Dismiss this dialog fragment
+            dismiss();
+            return;
         }
 
         if(getResource() == R.layout.fragment_editor_detail_generic) {
-            final TextView spinnerTitle = (TextView) view.findViewById(R.id.WaypointType);
-            final TextView spinnerDescription = (TextView) view.findViewById(R.id.mission_item_type_selection_description);
+            TextView spinnerTitle = (TextView) view.findViewById(R.id.WaypointType);
+            TextView spinnerDescription = (TextView) view.findViewById(R.id.mission_item_type_selection_description);
 
             if (list.isEmpty()) {
                 if (spinnerTitle != null)
@@ -423,16 +434,16 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
 
         boolean hideDistanceInfo = true;
 
-        final Drone drone = getDrone();
-        final Home home = drone == null ? null : drone.<Home>getAttribute(AttributeType.HOME);
+        Drone drone = getDrone();
+        Home home = drone == null ? null : drone.<Home>getAttribute(AttributeType.HOME);
 
         if(home != null && home.isValid() && mSelectedProxies.size() == 1) {
-            final MissionItemProxy itemProxy = mSelectedProxies.get(0);
-            final MissionItem item = itemProxy.getMissionItem();
+            MissionItemProxy itemProxy = mSelectedProxies.get(0);
+            MissionItem item = itemProxy.getMissionItem();
             if(item instanceof MissionItem.SpatialItem) {
-                final LatLongAlt itemCoordinate = ((MissionItem.SpatialItem)item).getCoordinate();
-                final LatLongAlt homeCoordinate = home.getCoordinate();
-                final double homeDistance = MathUtils.getDistance3D(homeCoordinate, itemCoordinate);
+                LatLongAlt itemCoordinate = ((MissionItem.SpatialItem)item).getCoordinate();
+                LatLongAlt homeCoordinate = home.getCoordinate();
+                double homeDistance = MathUtils.getDistance3D(homeCoordinate, itemCoordinate);
                 if(homeDistance > 0) {
                     hideDistanceInfo = false;
 
@@ -469,7 +480,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
 
     private boolean hasSpatialOrComplexItems(List<MissionItemProxy> items) {
         for (MissionItemProxy item : items) {
-            final MissionItem missionItem = item.getMissionItem();
+            MissionItem missionItem = item.getMissionItem();
             if (missionItem instanceof MissionItem.SpatialItem || missionItem instanceof MissionItem.ComplexItem)
                 return true;
         }

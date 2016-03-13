@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dialog_uvc_vertical_margin"
+    android:paddingLeft="@dimen/dialog_uvc_horizontal_margin"
+    android:paddingRight="@dimen/dialog_uvc_horizontal_margin"
+    android:paddingTop="@dimen/dialog_uvc_vertical_margin"
+    tools:context="org.droidplanner.android.dialogs.UVCDialog" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/uvc_device" />
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@id/android:empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/uvc_device_no_device" />
+
+</LinearLayout>

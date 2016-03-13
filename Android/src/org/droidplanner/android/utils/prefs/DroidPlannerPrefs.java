@@ -107,6 +107,8 @@ public class DroidPlannerPrefs {
 
     public static final String PREF_APP_VERSION = "pref_version";
 
+    private static final String PREF_APP_VERSION_CODE = "pref_app_version_code";
+
     private static final String PREF_IS_TTS_ENABLED = "pref_enable_tts";
     private static final boolean DEFAULT_TTS_ENABLED = false;
 
@@ -160,11 +162,24 @@ public class DroidPlannerPrefs {
     private static final String PREF_WIDGET_VIDEO_TYPE = "pref_widget_video_type";
     private static final String PREF_CUSTOM_VIDEO_UDP_PORT = "pref_custom_video_udp_port";
 
+    public static final String PREF_UVC_VIDEO_ASPECT_RATIO = "pref_uvc_video_aspect_ratio";
+    private static final float DEFAULT_UVC_VIDEO_ASPECT_RATIO = 3f / 4f;
+
     // Public for legacy usage
     public final SharedPreferences prefs;
     private final LocalBroadcastManager lbm;
 
-    public DroidPlannerPrefs(Context context) {
+    private static DroidPlannerPrefs instance;
+
+    public static synchronized DroidPlannerPrefs getInstance(Context context) {
+        if (instance == null) {
+            instance = new DroidPlannerPrefs(context);
+        }
+
+        return instance;
+    }
+
+    private DroidPlannerPrefs(Context context) {
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         lbm = LocalBroadcastManager.getInstance(context);
     }
@@ -175,6 +190,25 @@ public class DroidPlannerPrefs {
         // return
         // prefs.getBoolean(PREF_LIVE_UPLOAD_ENABLED, DEFAULT_LIVE_UPLOAD_ENABLED);
         return false;
+    }
+
+    /**
+     * Return the last saved app version code
+     * @return
+     */
+    public int getSavedAppVersionCode(){
+        return prefs.getInt(PREF_APP_VERSION_CODE, 0);
+    }
+
+    /**
+     * Update the saved app version code.
+     * @param context Application context
+     */
+    public void updateSavedAppVersionCode(Context context) {
+        int versionCode = Utils.getAppVersionCode(context);
+        if (versionCode != Utils.INVALID_APP_VERSION_CODE) {
+            prefs.edit().putInt(PREF_APP_VERSION_CODE, versionCode).apply();
+        }
     }
 
     public String getDroneshareLogin() {
@@ -501,5 +535,13 @@ public class DroidPlannerPrefs {
 
     public int getCustomVideoUdpPort(){
         return prefs.getInt(PREF_CUSTOM_VIDEO_UDP_PORT, -1);
+    }
+
+    public void setUVCVideoAspectRatio(Float aspectRatio){
+        prefs.edit().putFloat(PREF_UVC_VIDEO_ASPECT_RATIO, aspectRatio).apply();
+    }
+
+    public Float getUVCVideoAspectRatio(){
+        return prefs.getFloat(PREF_UVC_VIDEO_ASPECT_RATIO, DEFAULT_UVC_VIDEO_ASPECT_RATIO);
     }
 }
