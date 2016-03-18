@@ -586,5 +586,12 @@
     <string name="uvc_device_refresh">Refresh</string>
     <string name="uvc_device_no_device">No UVC device found</string>
 
+    <!-- Location relay -->
+    <string name="pref_cat_location_relay">Location Relay</string>
+    <string name="pref_use_relayed_locations_title">Explicit Locations in Follow</string>
+    <string name="pref_use_relayed_locations_summary">Use locations supplied by external apps instead of GPS location in Follow mode</string>
+    <string name="pref_broadcast_drone_loc_title">Broadcast Drone Location</string>
+    <string name="pref_broadcast_drone_loc_summary">Broadcast drone location updates for use by other apps</string>
+
 
 </resources>

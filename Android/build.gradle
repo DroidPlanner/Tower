@@ -18,7 +18,10 @@ dependencies {
     compile "com.android.support:design:${support_lib_version}"
 
     //DroneKit-Android client library.
-    compile 'com.o3dr.android:dronekit-android:2.8.0'
+//    compile 'com.o3dr.android:dronekit-android:2.8.0'
+
+    // Custom dronekit-android
+    compile(name:"dronekit-android.2.8.0", ext:"aar")
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')
@@ -61,7 +64,7 @@ android {
     buildToolsVersion android_build_tools_version
 
     defaultConfig {
-        applicationId 'org.droidplanner.android'
+        applicationId 'org.droidplanner.android.locationrelay'
         minSdkVersion android_build_min_sdk_version
         targetSdkVersion android_build_target_sdk_version
         versionCode versionMajor * 100000 + versionMinor * 1000 + versionPatch * 100 + versionBuild

@@ -46,7 +46,7 @@
     <dimen name="telem_widget_bg_corner_radius">2dp</dimen>
     <dimen name="slide_button_padding_top">0dp</dimen>
     <dimen name="flight_actions_container_width">370dp</dimen>
-    <dimen name="flight_actions_container_height">180dp</dimen>
+    <dimen name="flight_actions_container_height">240dp</dimen>
 
     <dimen name="toolbar_min_height">56dp</dimen>
     <dimen name="action_bar_telem_height">96dp</dimen>

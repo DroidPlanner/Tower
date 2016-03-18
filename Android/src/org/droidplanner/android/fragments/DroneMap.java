@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,8 @@ import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
 import org.droidplanner.android.graphic.map.GraphicHome;
+import org.droidplanner.android.graphic.map.GraphicTarget;
+import org.droidplanner.android.locationrelay.LocationRelay;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
@@ -57,6 +60,9 @@ public abstract class DroneMap extends ApiListenerFragment {
 		eventFilter.addAction(AttributeEvent.ATTITUDE_UPDATED);
 		eventFilter.addAction(AttributeEvent.HOME_UPDATED);
         eventFilter.addAction(ACTION_UPDATE_MAP);
+
+        eventFilter.addAction(LocationRelay.EVT_INTERNAL_TARGET_LOCATION);
+        eventFilter.addAction(LocationRelay.EVT_FOLLOW_STOPPED);
 	}
 
     private static final List<MarkerInfo> NO_EXTERNAL_MARKERS = Collections.emptyList();
@@ -77,7 +83,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 
                 case AttributeEvent.GPS_POSITION: {
                     mMapFragment.updateMarker(graphicDrone);
-                    mMapFragment.updateDroneLeashPath(guided);
+                    mMapFragment.updateDroneLeashPath(graphicGuided);
                     final Gps droneGps = drone.getAttribute(AttributeType.GPS);
                     if (droneGps != null && droneGps.isValid()) {
                         mMapFragment.addFlightPathPoint(droneGps.getPosition());
@@ -85,9 +91,27 @@ public abstract class DroneMap extends ApiListenerFragment {
                     break;
                 }
 
+				case LocationRelay.EVT_INTERNAL_TARGET_LOCATION: {
+                    Location androidLoc = intent.getParcelableExtra(LocationRelay.EXTRA_LOCATION);
+                    if(androidLoc != null) {
+                        LatLong ll = new LatLong(androidLoc.getLatitude(), androidLoc.getLongitude());
+                        graphicTarget.setPosition(ll);
+                        mMapFragment.updateMarker(graphicTarget);
+                    }
+					break;
+				}
+
+                case LocationRelay.EVT_FOLLOW_STOPPED: {
+                    graphicTarget.setPosition(null);
+					List<MarkerInfo> list = new ArrayList<MarkerInfo>(1);
+					list.add(graphicTarget);
+					mMapFragment.removeMarkers(list);
+                    break;
+                }
+
                 case AttributeEvent.GUIDED_POINT_UPDATED:
-                    mMapFragment.updateMarker(guided);
-                    mMapFragment.updateDroneLeashPath(guided);
+                    mMapFragment.updateMarker(graphicGuided);
+                    mMapFragment.updateDroneLeashPath(graphicGuided);
                     break;
 
                 case AttributeEvent.HEARTBEAT_FIRST:
@@ -142,19 +166,19 @@ public abstract class DroneMap extends ApiListenerFragment {
 
 			final boolean isThereMissionMarkers = !missionMarkerInfos.isEmpty();
             final boolean isThereExternalMarkers = !externalMarkers.isEmpty();
-			final boolean isHomeValid = home.isValid();
-			final boolean isGuidedVisible = guided.isVisible();
+			final boolean isHomeValid = graphicHome.isValid();
+			final boolean isGuidedVisible = graphicGuided.isVisible();
 
 			// Get the list of markers currently on the map.
 			final Set<MarkerInfo> markersOnTheMap = mMapFragment.getMarkerInfoList();
 
 			if (!markersOnTheMap.isEmpty()) {
 				if (isHomeValid) {
-					markersOnTheMap.remove(home);
+					markersOnTheMap.remove(graphicHome);
 				}
 
 				if (isGuidedVisible) {
-					markersOnTheMap.remove(guided);
+					markersOnTheMap.remove(graphicGuided);
 				}
 
 				if (isThereMissionMarkers) {
@@ -168,11 +192,11 @@ public abstract class DroneMap extends ApiListenerFragment {
 			}
 
 			if (isHomeValid) {
-				mMapFragment.updateMarker(home);
+				mMapFragment.updateMarker(graphicHome);
 			}
 
 			if (isGuidedVisible) {
-				mMapFragment.updateMarker(guided);
+				mMapFragment.updateMarker(graphicGuided);
 			}
 
 			if (isThereMissionMarkers) {
@@ -196,9 +220,10 @@ public abstract class DroneMap extends ApiListenerFragment {
 
 	protected DroidPlannerPrefs mAppPrefs;
 
-	private GraphicHome home;
+	private GraphicHome graphicHome;
+    private GraphicTarget graphicTarget;
 	public GraphicDrone graphicDrone;
-	public GraphicGuided guided;
+	public GraphicGuided graphicGuided;
 
 	protected MissionProxy missionProxy;
 	public Drone drone;
@@ -230,9 +255,10 @@ public abstract class DroneMap extends ApiListenerFragment {
 		drone = getDrone();
 		missionProxy = getMissionProxy();
 
-		home = new GraphicHome(drone, getContext());
+		graphicHome = new GraphicHome(drone, getContext());
 		graphicDrone = new GraphicDrone(drone);
-		guided = new GraphicGuided(drone);
+		graphicGuided = new GraphicGuided(drone);
+        graphicTarget = new GraphicTarget(getContext());
 
 		postUpdate();
 	}

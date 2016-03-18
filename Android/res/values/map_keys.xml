@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The one that came in the box... -->
+    <!--<string name="map_key">AIzaSyCN2XBLjIAD7NzTZJDN7BrHanE08PGL5eE</string>-->
+
+    <!-- MY map key (org.droidplanner.android.locationrelay, debug SHA1) -->
+    <!--<string name="map_key">AIzaSyBx1hwhyKNBg570cBzlskGh70PJWsRQo1U</string>-->
+
+    <!-- MY map key (org.droidplanner.android.locationrelay.debug, debug SHA1) -->
+    <string name="map_key">AIzaSyBNyovtMi9qnDFD_377Sx6A8hDGNy4zOaQ</string>
+</resources>

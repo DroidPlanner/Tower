@@ -232,6 +232,22 @@
             android:key="pref_advanced"
             android:title="@string/label_other">
 
+            <PreferenceCategory android:title="@string/pref_cat_location_relay">
+                <CheckBoxPreference
+                    android:key="pref_use_relayed_locations"
+                    android:title="@string/pref_use_relayed_locations_title"
+                    android:summary="@string/pref_use_relayed_locations_summary"
+                    android:defaultValue="false"
+                    />
+
+                <CheckBoxPreference
+                    android:key="pref_broadcast_drone_locations"
+                    android:title="@string/pref_broadcast_drone_loc_title"
+                    android:summary="@string/pref_broadcast_drone_loc_summary"
+                    android:defaultValue="false"
+                    />
+            </PreferenceCategory>
+
             <PreferenceCategory android:title="@string/pref_advanced">
                 <CheckBoxPreference
                     android:defaultValue="false"
