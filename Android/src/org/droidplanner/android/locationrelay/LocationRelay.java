@@ -173,7 +173,6 @@ public class LocationRelay {
     private boolean mUseExternalLocations;
     private boolean mIsDroneFollowing;
     private long mLastLocationSendTime = 0;
-    private FollowType mSelectedFollowType = FollowType.LEASH;
 
     private LocationRelay(Context context) {
         super();
@@ -190,8 +189,22 @@ public class LocationRelay {
         return ((DroidPlannerApp)mContext).getDrone();
     }
 
-    public FollowType getSelectedFollowType() { return mSelectedFollowType; }
-    public void setSelectedFollowType(FollowType type) { mSelectedFollowType = type; }
+    public FollowType getSelectedFollowType() {
+        FollowType type = FollowType.LEASH;
+        int pref = DroidPlannerApp.get().getAppPreferences().getLastFollowMode();
+        for(FollowType t: FollowType.values()) {
+            if(t.ordinal() == pref) {
+                type = t;
+                break;
+            }
+        }
+
+        return type;
+    }
+
+    public void setSelectedFollowType(FollowType type) {
+        DroidPlannerApp.get().getAppPreferences().setLastFollowMode(type.ordinal());
+    }
 
     public boolean isFollowing(Drone drone) {
         if(drone != null) {
