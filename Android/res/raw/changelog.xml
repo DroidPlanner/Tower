@@ -9,7 +9,7 @@
         in your View component in layout file -->
 
 
-    <changelogversion versionName="3.2.1" changeDate="Mar 12,2016">
+    <changelogversion versionName="3.2.1" changeDate="Mar 31,2016">
         <changelogimprovement>[b]UVC[/b] devices support by [i]Guilherme Blanco[/i]</changelogimprovement>
         <changelogimprovement>Google Cardboard [b]FPV[/b] support thanks to [b]DronePro[/b] by [i]Shawn Fraser[/i]</changelogimprovement>
         <changelogimprovement>Add ability to set a custom video stream. Check the [i][b]Tower Wiki[/b][/i] for setup instructions</changelogimprovement>

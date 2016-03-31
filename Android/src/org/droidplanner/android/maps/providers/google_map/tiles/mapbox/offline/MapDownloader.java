@@ -5,9 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
-import android.util.Log;
-
-import com.google.android.gms.maps.model.VisibleRegion;
 
 import org.droidplanner.android.data.DatabaseState;
 import org.droidplanner.android.maps.DPMap;
@@ -108,7 +105,7 @@ public class MapDownloader {
             downloadsScheduler.shutdownNow();
         }
 
-        final int processorsCount = (int) (Runtime.getRuntime().availableProcessors() * 1.5f);
+        final int processorsCount = (int) (Runtime.getRuntime().availableProcessors() * 0.5f);
         Timber.v("Using " + processorsCount + " processors.");
         downloadsScheduler = Executors.newFixedThreadPool(processorsCount);
     }

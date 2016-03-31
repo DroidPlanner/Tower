@@ -435,6 +435,7 @@
     <string name="pref_title_download_menu_option">Add \'Download Map\' to menu</string>
     <string name="pref_title_enable_offline_map_layer">Enable offline map layer</string>
     <string name="label_download_map">Download Map</string>
+    <string name="instructions_map_download_warning">Area too large, zoom in.</string>
     <string name="instructions_map_download_selection">Pan and zoom to adjust the map area to save</string>
     <string name="instructions_tap_to_save_map">Tap to save the map</string>
     <string name="label_map_saved">Map area saved!</string>
