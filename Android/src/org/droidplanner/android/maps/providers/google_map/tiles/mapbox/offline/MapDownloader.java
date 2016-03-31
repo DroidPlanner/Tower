@@ -5,9 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
-import android.util.Log;
-
-import com.google.android.gms.maps.model.VisibleRegion;
 
 import org.droidplanner.android.data.DatabaseState;
 import org.droidplanner.android.maps.DPMap;
