@@ -25,8 +25,7 @@ public class DownloadMapboxMapActivity : AppCompatActivity() {
     }
 
     private val mapDownloader: MapDownloader by lazy(LazyThreadSafetyMode.NONE) {
-        val dpApp = application as DroidPlannerApp
-        dpApp.mapDownloader
+        MapDownloader(applicationContext)
     }
 
     private val mapboxId: String by lazy(LazyThreadSafetyMode.NONE) {

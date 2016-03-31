@@ -105,7 +105,7 @@ public class MapDownloader {
             downloadsScheduler.shutdownNow();
         }
 
-        final int processorsCount = (int) (Runtime.getRuntime().availableProcessors() * 0.5f);
+        final int processorsCount = (int) (Runtime.getRuntime().availableProcessors() * 1.5f);
         Timber.v("Using " + processorsCount + " processors.");
         downloadsScheduler = Executors.newFixedThreadPool(processorsCount);
     }
