@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -144,20 +145,19 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
                 }
             };
 
-    private final Runnable hideWarningView = new Runnable() {
+    private final Runnable hideWarningViewCb = new Runnable() {
         @Override
         public void run() {
-            handler.removeCallbacks(this);
-
-            if (warningView != null && warningView.getVisibility() != View.GONE)
-                warningView.setVisibility(View.GONE);
+            hideWarningView();
         }
     };
 
     private final Handler handler = new Handler();
 
     private View actionbarShadow;
-    private TextView warningView;
+
+    private View warningContainer;
+    private TextView warningText;
 
     private FlightMapFragment mapFragment;
     private FlightControlManagerFragment flightActions;
@@ -259,7 +259,16 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
 
         mSlidingPanel = (SlidingUpPanelLayout) view.findViewById(R.id.slidingPanelContainer);
         mSlidingPanel.setPanelSlideListener(slidingPanelListenerMgr);
-        warningView = (TextView) view.findViewById(R.id.failsafeTextView);
+
+        warningText = (TextView) view.findViewById(R.id.failsafeTextView);
+        warningContainer = view.findViewById(R.id.warningContainer);
+        ImageView closeWarningView = (ImageView) view.findViewById(R.id.close_warning_view);
+        closeWarningView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideWarningView();
+            }
+        });
 
         setupMapFragment();
 
@@ -351,6 +360,13 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
                     .add(R.id.sliding_drawer_content, flightModePanel)
                     .commit();
         }
+    }
+
+    private void hideWarningView(){
+        handler.removeCallbacks(hideWarningViewCb);
+
+        if (warningContainer != null && warningContainer.getVisibility() != View.GONE)
+            warningContainer.setVisibility(View.GONE);
     }
 
     public void updateActionbarShadow(int shadowHeight){
@@ -500,11 +516,11 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
         switch (logLevel) {
             case Log.ERROR:
             case Log.WARN:
-                handler.removeCallbacks(hideWarningView);
+                handler.removeCallbacks(hideWarningViewCb);
 
-                warningView.setText(errorMsg);
-                warningView.setVisibility(View.VISIBLE);
-                handler.postDelayed(hideWarningView, WARNING_VIEW_DISPLAY_TIMEOUT);
+                warningText.setText(errorMsg);
+                warningContainer.setVisibility(View.VISIBLE);
+                handler.postDelayed(hideWarningViewCb, WARNING_VIEW_DISPLAY_TIMEOUT);
                 break;
         }
     }
