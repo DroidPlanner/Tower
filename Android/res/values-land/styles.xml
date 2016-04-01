@@ -4,4 +4,10 @@
         <item name="android:gravity">start</item>
         <item name="android:paddingLeft">55dp</item>
     </style>
+
+    <style name="warningPanelGravity">
+        <item name="android:layout_gravity">start</item>
+        <item name="android:layout_marginLeft">55dp</item>
+        <item name="android:layout_alignParentLeft">true</item>
+    </style>
 </resources>

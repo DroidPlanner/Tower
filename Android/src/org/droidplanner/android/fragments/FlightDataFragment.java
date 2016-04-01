@@ -96,9 +96,9 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
                 case AttributeEvent.FOLLOW_START:
                     //Extend the sliding drawer if collapsed.
                     if (!mSlidingPanelCollapsing.get()
-                            && mSlidingPanel.isSlidingEnabled()
-                            && !mSlidingPanel.isPanelExpanded()) {
-                        mSlidingPanel.expandPanel();
+                            && mSlidingPanel.isEnabled()
+                            && mSlidingPanel.getPanelState() != SlidingUpPanelLayout.PanelState.EXPANDED) {
+                        mSlidingPanel.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                     }
                     break;
 
@@ -123,25 +123,17 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
                 }
 
                 @Override
-                public void onPanelCollapsed(View view) {
-                    mSlidingPanel.setSlidingEnabled(false);
-                    mSlidingPanel.setPanelHeight(mFlightActionsView.getHeight());
-                    mSlidingPanelCollapsing.set(false);
+                public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+                    switch(newState){
+                        case COLLAPSED:
+                            mSlidingPanel.setEnabled(false);
+                            mSlidingPanel.setPanelHeight(mFlightActionsView.getHeight());
+                            mSlidingPanelCollapsing.set(false);
 
-                    //Remove the panel slide listener
-                    slidingPanelListenerMgr.removePanelSlideListener(disablePanelSlidingLabel);
-                }
-
-                @Override
-                public void onPanelExpanded(View view) {
-                }
-
-                @Override
-                public void onPanelAnchored(View view) {
-                }
-
-                @Override
-                public void onPanelHidden(View view) {
+                            //Remove the panel slide listener
+                            slidingPanelListenerMgr.removePanelSlideListener(disablePanelSlidingLabel);
+                            break;
+                    }
                 }
             };
 
@@ -190,30 +182,9 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
         }
 
         @Override
-        public void onPanelCollapsed(View view) {
+        public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
             for(SlidingUpPanelLayout.PanelSlideListener listener: panelListenerClients.values()){
-                listener.onPanelCollapsed(view);
-            }
-        }
-
-        @Override
-        public void onPanelExpanded(View view) {
-            for(SlidingUpPanelLayout.PanelSlideListener listener: panelListenerClients.values()){
-                listener.onPanelExpanded(view);
-            }
-        }
-
-        @Override
-        public void onPanelAnchored(View view) {
-            for(SlidingUpPanelLayout.PanelSlideListener listener: panelListenerClients.values()){
-                listener.onPanelAnchored(view);
-            }
-        }
-
-        @Override
-        public void onPanelHidden(View view) {
-            for(SlidingUpPanelLayout.PanelSlideListener listener: panelListenerClients.values()){
-                listener.onPanelHidden(view);
+                listener.onPanelStateChanged(panel, previousState, newState);
             }
         }
     }
@@ -258,7 +229,7 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
         final FragmentManager fm = getChildFragmentManager();
 
         mSlidingPanel = (SlidingUpPanelLayout) view.findViewById(R.id.slidingPanelContainer);
-        mSlidingPanel.setPanelSlideListener(slidingPanelListenerMgr);
+        mSlidingPanel.addPanelSlideListener(slidingPanelListenerMgr);
 
         warningText = (TextView) view.findViewById(R.id.failsafeTextView);
         warningContainer = view.findViewById(R.id.warningContainer);
@@ -459,18 +430,16 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
                 (api);
 
         if (isEnabled) {
-            mSlidingPanel.setSlidingEnabled(true);
+            mSlidingPanel.setEnabled(true);
             mSlidingPanel.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
-                    if(mSlidingPanel.isPanelExpanded()){
-                        slidingPanelListenerMgr.onPanelExpanded(mSlidingPanel.getChildAt(1));
-                    }
-                    else if(mSlidingPanel.isPanelAnchored()){
-                        slidingPanelListenerMgr.onPanelAnchored(mSlidingPanel.getChildAt(1));
-                    }
-                    else if(mSlidingPanel.isPanelHidden()){
-                        slidingPanelListenerMgr.onPanelHidden(mSlidingPanel.getChildAt(1));
+                    SlidingUpPanelLayout.PanelState panelState = mSlidingPanel.getPanelState();
+                    switch(panelState){
+                        case EXPANDED:
+                        case ANCHORED:
+                        case HIDDEN:
+                            slidingPanelListenerMgr.onPanelStateChanged(mSlidingPanel.getChildAt(1), panelState, panelState);
                     }
 
                     mSlidingPanel.getViewTreeObserver().removeGlobalOnLayoutListener(this);
@@ -479,12 +448,13 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
 
         } else {
             if (!mSlidingPanelCollapsing.get()) {
-                if (mSlidingPanel.isPanelExpanded()) {
+                SlidingUpPanelLayout.PanelState panelState = mSlidingPanel.getPanelState();
+                if (panelState == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     slidingPanelListenerMgr.addPanelSlideListener(disablePanelSlidingLabel, mDisablePanelSliding);
-                    mSlidingPanel.collapsePanel();
+                    mSlidingPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                     mSlidingPanelCollapsing.set(true);
                 } else {
-                    mSlidingPanel.setSlidingEnabled(false);
+                    mSlidingPanel.setEnabled(false);
                     mSlidingPanelCollapsing.set(false);
                 }
             }

@@ -1,34 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <FrameLayout
+        android:id="@+id/flight_map_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         android:id="@+id/slidingPanelContainer"
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:gravity="bottom"
-        android:layout_weight="1"
-        sothree:dragView="@+id/flightActionsFragment"
-        sothree:fadeColor="@android:color/transparent"
-        sothree:overlay="true"
-        sothree:paralaxOffset="0dp"
-        sothree:shadowHeight="0dp">
+        android:layout_above="@+id/warningContainer"
+        sothree:umanoDragView="@+id/flightActionsFragment"
+        sothree:umanoFadeColor="@android:color/transparent"
+        sothree:umanoOverlay="true"
+        sothree:umanoParallaxOffset="0dp"
+        sothree:umanoShadowHeight="0dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
             >
-
-            <FrameLayout
-                android:id="@+id/flight_map_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
 
             <View
                 android:id="@+id/actionbar_shadow"
@@ -90,13 +89,15 @@
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
     <LinearLayout
+        style="@style/warningPanelGravity"
         android:id="@+id/warningContainer"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/flight_actions_container_width"
         android:layout_height="56dp"
         android:orientation="horizontal"
         android:visibility="gone"
         tools:visibility="visible"
-        android:background="#D8ee2d3e">
+        android:background="#D8ee2d3e"
+        android:layout_alignParentBottom="true">
 
         <TextView
             android:id="@+id/failsafeTextView"
@@ -116,4 +117,4 @@
             android:scaleType="center"
             android:src="@drawable/close"/>
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
