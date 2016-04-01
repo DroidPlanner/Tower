@@ -140,27 +140,22 @@ public class FlightActivity extends DrawerNavigationUI implements SlidingUpPanel
     }
 
     @Override
-    public void onPanelCollapsed(View view) {
-        resetActionDrawerBottomMargin();
-    }
+    public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+        switch(newState){
+            case COLLAPSED:
+            case HIDDEN:
+                resetActionDrawerBottomMargin();
+                break;
 
-    @Override
-    public void onPanelExpanded(View view) {
-        //Update the bottom margin for the action drawer
-        final View flightActionBar = ((ViewGroup)view).getChildAt(0);
-        final int[] viewLocs = new int[2];
-        flightActionBar.getLocationInWindow(viewLocs);
-        updateActionDrawerBottomMargin(viewLocs[0] + flightActionBar.getWidth(), view.getHeight());
-    }
-
-    @Override
-    public void onPanelAnchored(View view) {
-
-    }
-
-    @Override
-    public void onPanelHidden(View view) {
-        resetActionDrawerBottomMargin();
+            case EXPANDED:
+                //Update the bottom margin for the action drawer
+                ViewGroup slidingPanel = (ViewGroup) ((ViewGroup)panel).getChildAt(1);
+                final View flightActionBar = slidingPanel.getChildAt(0);
+                final int[] viewLocs = new int[2];
+                flightActionBar.getLocationInWindow(viewLocs);
+                updateActionDrawerBottomMargin(viewLocs[0] + flightActionBar.getWidth(), slidingPanel.getHeight());
+                break;
+        }
     }
 
     private void updateActionDrawerBottomMargin(int rightEdge, int bottomMargin){
@@ -171,16 +166,24 @@ public class FlightActivity extends DrawerNavigationUI implements SlidingUpPanel
         actionDrawer.getLocationInWindow(actionDrawerLocs);
 
         if(actionDrawerLocs[0] <= rightEdge) {
-            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) actionDrawerParent.getLayoutParams();
-            lp.bottomMargin = bottomMargin;
-            actionDrawerParent.requestLayout();
+            updateActionDrawerBottomMargin(bottomMargin);
         }
     }
 
-    private void resetActionDrawerBottomMargin(){
+    private int getActionDrawerBottomMargin(){
         final ViewGroup actionDrawerParent = (ViewGroup) getActionDrawer();
         ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) actionDrawerParent.getLayoutParams();
-        lp.bottomMargin = (int) getResources().getDimension(R.dimen.action_drawer_margin_bottom);;
+        return lp.bottomMargin;
+    }
+
+    private void updateActionDrawerBottomMargin(int newBottomMargin){
+        final ViewGroup actionDrawerParent = (ViewGroup) getActionDrawer();
+        ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) actionDrawerParent.getLayoutParams();
+        lp.bottomMargin = newBottomMargin;
         actionDrawerParent.requestLayout();
+    }
+
+    private void resetActionDrawerBottomMargin(){
+        updateActionDrawerBottomMargin((int) getResources().getDimension(R.dimen.action_drawer_margin_bottom));
     }
 }

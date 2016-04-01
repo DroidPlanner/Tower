@@ -50,7 +50,9 @@ public class NetworkUtils {
         final WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
         final WifiInfo connectedWifi = wifiMgr.getConnectionInfo();
-        final String connectedSSID = connectedWifi == null ? null : connectedWifi.getSSID().replace("\"", "");
+        final String connectedSSID = connectedWifi == null || connectedWifi.getSSID() == null
+            ? null
+            : connectedWifi.getSSID().replace("\"", "");
         return connectedSSID;
     }
 
