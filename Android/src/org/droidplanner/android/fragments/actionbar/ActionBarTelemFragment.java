@@ -408,6 +408,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                     case ReturnToMeState.STATE_WAITING_FOR_VEHICLE_GPS:
                     case ReturnToMeState.STATE_ERROR_UPDATING_HOME:
                         drawableResId = R.drawable.ic_person_red_500_18dp;
+                        update = getString(R.string.empty_content);
                         break;
                 }
             }

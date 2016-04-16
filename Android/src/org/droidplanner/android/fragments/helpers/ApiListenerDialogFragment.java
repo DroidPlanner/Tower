@@ -71,7 +71,7 @@ public abstract class ApiListenerDialogFragment extends DialogFragment implement
     }
 
     protected DroidPlannerPrefs getAppPrefs(){
-        return dpApp.getAppPreferences();
+        return DroidPlannerPrefs.getInstance(getContext());
     }
 
     @Override
