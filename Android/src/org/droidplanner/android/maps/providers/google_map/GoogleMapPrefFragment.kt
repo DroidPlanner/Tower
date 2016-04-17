@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.preference.ListPreference
-import android.preference.Preference
 import android.preference.PreferenceCategory
 import android.preference.PreferenceManager
 import android.text.TextUtils
@@ -16,9 +15,7 @@ import org.droidplanner.android.R
 import org.droidplanner.android.dialogs.EditInputDialog
 import org.droidplanner.android.maps.providers.DPMapProvider
 import org.droidplanner.android.maps.providers.MapProviderPreferences
-import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefConstants.GOOGLE_TILE_PROVIDER
-import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefConstants.MAPBOX_TILE_PROVIDER
-import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefConstants.TileProvider
+import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefConstants.*
 
 /**
  * This is the google map provider preferences. It stores and handles all preferences related to google map.
@@ -44,7 +41,7 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
         val PREF_MAP_TYPE = "pref_map_type"
         val DEFAULT_MAP_TYPE = MAP_TYPE_SATELLITE
 
-        val PREF_MAPBOX_TILE_PROVIDER_SETTINGS = "pref_mapbox_tile_provider_settings"
+        const val PREF_MAPBOX_TILE_PROVIDER_SETTINGS = "pref_mapbox_tile_provider_settings"
 
         val PREF_MAPBOX_MAP_DOWNLOAD = "pref_mapbox_map_download"
 
@@ -58,6 +55,16 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
 
         val PREF_ENABLE_OFFLINE_LAYER = "pref_enable_offline_map_layer"
         val DEFAULT_OFFLINE_LAYER_ENABLED = false
+
+        const val PREF_ARCGIS_TILE_PROVIDER_SETTINGS = "pref_arcgis_tile_provider_settings"
+
+        const val PREF_ARCGIS_MAP_TYPE = "pref_arcgis_service"
+        const val DEFAULT_ARCGIS_MAP_TYPE = R.string.label_nat_geo_world_map
+
+        fun getArcGISMapType(context: Context): String {
+            val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+            return sharedPref.getString(PREF_ARCGIS_MAP_TYPE, context.getString(DEFAULT_ARCGIS_MAP_TYPE))
+        }
 
         fun getMapType(context: Context?): Int {
             var mapType = GoogleMap.MAP_TYPE_SATELLITE
@@ -368,18 +375,29 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
             setMapboxAccessToken(getContext(), token)
     }
 
-    private fun toggleTileProviderPrefs(tileProvider: String){
+    private fun toggleTileProviderPrefs(@TileProvider tileProvider: String){
         when(tileProvider){
             GoogleMapPrefConstants.GOOGLE_TILE_PROVIDER -> {
+                disableTileProviderPrefs()
                 enableGoogleTileProviderPrefs(true)
-                enableMapboxTileProviderPrefs(false)
             }
 
             GoogleMapPrefConstants.MAPBOX_TILE_PROVIDER -> {
-                enableGoogleTileProviderPrefs(false)
+                disableTileProviderPrefs()
                 enableMapboxTileProviderPrefs(true)
             }
+
+            GoogleMapPrefConstants.ARC_GIS_TILE_PROVIDER -> {
+                disableTileProviderPrefs()
+                enableArcGISTileProviderPrefs(true)
+            }
         }
+    }
+
+    private fun disableTileProviderPrefs(){
+        enableGoogleTileProviderPrefs(false)
+        enableMapboxTileProviderPrefs(false)
+        enableArcGISTileProviderPrefs(false)
     }
 
     private fun enableGoogleTileProviderPrefs(enable: Boolean){
@@ -388,6 +406,10 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
 
     private fun enableMapboxTileProviderPrefs(enable: Boolean){
         enableTileProviderPrefs(PREF_MAPBOX_TILE_PROVIDER_SETTINGS, enable)
+    }
+
+    private fun enableArcGISTileProviderPrefs(enable: Boolean){
+        enableTileProviderPrefs(PREF_ARCGIS_TILE_PROVIDER_SETTINGS, enable)
     }
 
     private fun enableTileProviderPrefs(prefKey: String, enable: Boolean){

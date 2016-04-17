@@ -37,6 +37,7 @@
     <string name="pref_tile_provider_title">Map Tile Provider</string>
     <string name="pref_tile_provider_google">Google</string>
     <string name="pref_tile_provider_mapbox">Mapbox</string>
+    <string name="pref_tile_provider_arcgis">ArcGIS</string>
     <string name="pref_tile_provider_summary">Which map tile provider to use</string>
     <string name="pref_enable_tts">Enable Speech output</string>
     <string name="pref_enable_tts_summary">Audible messages for important events</string>
@@ -586,6 +587,14 @@
     <string name="uvc_device">Device</string>
     <string name="uvc_device_refresh">Refresh</string>
     <string name="uvc_device_no_device">No UVC device found</string>
+    <string name="pref_title_arcgis_tile_provider">ArcGIS Tile Provider</string>
 
-
+    <!-- Arc GIS -->
+    <string name="label_nat_geo_world_map">National Geographic World Map</string>
+    <string name="label_world_imagery">World Imagery</string>
+    <string name="label_world_physical_map">World Physical Map</string>
+    <string name="label_world_shaded_relief">World Shaded Relief</string>
+    <string name="label_world_street_map">World Street Map</string>
+    <string name="label_world_terrain_base">World Terrain Base</string>
+    <string name="label_world_topo_map">World Topographic Map</string>
 </resources>
