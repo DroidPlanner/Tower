@@ -162,6 +162,7 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
 
         setupTileProvidersPreferences(sharedPref)
         setupGoogleTileProviderPreferences(sharedPref)
+        setupArcGISTileProviderPreferences(sharedPref)
         setupMapboxTileProviderPreferences(sharedPref)
     }
 
@@ -289,6 +290,16 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
                     mapTypePref.summary = newValue.toString()
                     true
             }
+        }
+    }
+
+    private fun setupArcGISTileProviderPreferences(sharedPref: SharedPreferences){
+        val mapTypeKey = PREF_ARCGIS_MAP_TYPE
+        val mapTypePref = findPreference(mapTypeKey) ?: return
+        mapTypePref.summary = sharedPref.getString(mapTypeKey, getString(DEFAULT_ARCGIS_MAP_TYPE))
+        mapTypePref.setOnPreferenceChangeListener { preference, newValue ->
+            mapTypePref.summary = newValue.toString()
+            true
         }
     }
 

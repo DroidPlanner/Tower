@@ -288,7 +288,7 @@
 
     <!-- Text To Speech -->
     <string name="pref_title_tts">Speech Output</string>
-    <string name="pref_title_tts_periodic_status">Periodic Status</string>
+    <string name="pref_title_tts_periodic_status">Periodic Telemetry Status Report</string>
     <string name="pref_tts_periodic_summary">What is included in the periodic status.</string>
     <string name="pref_tts_periodic_period">Period</string>
     <string name="pref_tts_periodic_period_summary">How often periodic status is read.</string>
@@ -597,4 +597,6 @@
     <string name="label_world_street_map">World Street Map</string>
     <string name="label_world_terrain_base">World Terrain Base</string>
     <string name="label_world_topo_map">World Topographic Map</string>
+    <string name="pref_title_tile_provider_preferences">Tile Provider Preferences</string>
+    <string name="pref_advanced_settings_title">Advanced Settings</string>
 </resources>

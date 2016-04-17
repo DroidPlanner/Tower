@@ -216,30 +216,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     private void setupWidgetsPreferences(){
         final Preference widgetsPref = findPreference(DroidPlannerPrefs.PREF_TOWER_WIDGETS);
         if(widgetsPref != null){
-            /*final Activity activity = getActivity();
-            final Preference.OnPreferenceChangeListener widgetPrefChangeListener = new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    final boolean addWidget = (boolean) newValue;
-                    lbm.sendBroadcast(new Intent(ACTION_WIDGET_PREFERENCE_UPDATED)
-                            .putExtra(EXTRA_ADD_WIDGET, addWidget)
-                            .putExtra(EXTRA_WIDGET_PREF_KEY, preference.getKey()));
-                    return true;
-                }
-            };
-
-            final TowerWidgets[] widgets = TowerWidgets.values();
-            for(TowerWidgets widget: widgets){
-                final CheckBoxPreference widgetPref = new CheckBoxPreference(activity);
-                widgetPref.setKey(widget.getPrefKey());
-                widgetPref.setTitle(widget.getLabelResId());
-                widgetPref.setSummary(widget.getDescriptionResId());
-                widgetPref.setChecked(dpPrefs.isWidgetEnabled(widget));
-                widgetPref.setOnPreferenceChangeListener(widgetPrefChangeListener);
-
-                widgetsPref.addPreference(widgetPref);
-            }*/
-
             widgetsPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -272,12 +248,14 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             mapsProvidersPref.setEntries(providersNames);
             mapsProvidersPref.setEntryValues(providersNamesValues);
             mapsProvidersPref.setValue(defaultProviderName);
+            mapsProvidersPref.setSummary(defaultProviderName.toLowerCase(Locale.ENGLISH).replace('_', ' '));
             mapsProvidersPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     // Update the map provider settings preference.
                     final String mapProviderName = newValue.toString();
+                    mapsProvidersPref.setSummary(mapProviderName.toLowerCase(Locale.ENGLISH).replace('_', ' '));
                     return updateMapSettingsPreference(mapProviderName);
                 }
             });
@@ -631,8 +609,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         final DPMapProvider mapProvider = DPMapProvider.getMapProvider(mapProviderName);
         if (mapProvider == null)
             return false;
-
-
 
         final Preference providerPrefs = findPreference(DroidPlannerPrefs.PREF_MAPS_PROVIDER_SETTINGS);
         if (providerPrefs != null) {

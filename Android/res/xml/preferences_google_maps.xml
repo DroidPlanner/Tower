@@ -13,7 +13,7 @@
         android:title="@string/pref_tile_provider_title"/>
 
     <PreferenceScreen
-        android:title="Tile Provider Preferences">
+        android:title="@string/pref_title_tile_provider_preferences">
 
         <PreferenceCategory
             android:enabled="false"
@@ -81,7 +81,7 @@
 
             <Preference
                 android:key="pref_mapbox_learn_more"
-                android:title="Learn more about mapbox map"
+                android:title="Learn more about Mapbox maps"
                 />
 
         </PreferenceCategory>
