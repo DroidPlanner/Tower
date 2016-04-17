@@ -13,10 +13,10 @@
         android:title="@string/pref_tile_provider_title"/>
 
     <PreferenceScreen
-        android:title="@string/pref_title_tile_provider_preferences">
+        android:title="@string/pref_title_tile_provider_preferences"
+        android:key="pref_tile_provider_settings">
 
         <PreferenceCategory
-            android:enabled="false"
             android:key="pref_arcgis_tile_provider_settings"
             android:title="@string/pref_title_arcgis_tile_provider">
 
@@ -31,7 +31,6 @@
         </PreferenceCategory>
 
         <PreferenceCategory
-            android:enabled="false"
             android:key="pref_google_tile_provider_settings"
             android:title="@string/pref_title_google_tile_provider">
             <ListPreference
@@ -44,7 +43,6 @@
         </PreferenceCategory>
 
         <PreferenceCategory
-            android:enabled="false"
             android:key="pref_mapbox_tile_provider_settings"
             android:title="@string/pref_title_mapbox_tile_provider">
 
