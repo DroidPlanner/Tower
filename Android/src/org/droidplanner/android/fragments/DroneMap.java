@@ -207,6 +207,10 @@ public abstract class DroneMap extends ApiListenerFragment {
 
 	protected abstract boolean isMissionDraggable();
 
+	public DPMap getMapFragment(){
+		return mMapFragment;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
 		final View view = inflater.inflate(R.layout.fragment_drone_map, viewGroup, false);
@@ -287,7 +291,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		context = activity.getApplicationContext();
-		mAppPrefs = new DroidPlannerPrefs(context);
+		mAppPrefs = DroidPlannerPrefs.getInstance(context);
 	}
 
 	public final void postUpdate() {

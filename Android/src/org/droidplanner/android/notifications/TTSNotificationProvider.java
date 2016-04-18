@@ -318,7 +318,7 @@ public class TTSNotificationProvider implements OnInitListener,
     TTSNotificationProvider(Context context, Drone drone) {
         this.context = context;
         this.drone = drone;
-        mAppPrefs = new DroidPlannerPrefs(context);
+        mAppPrefs =  DroidPlannerPrefs.getInstance(context);
     }
 
     @Override

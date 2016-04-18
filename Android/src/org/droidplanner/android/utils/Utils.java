@@ -1,6 +1,7 @@
 package org.droidplanner.android.utils;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Looper;
@@ -14,6 +15,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 /**
  * Contains application related functions.
  */
@@ -24,6 +27,8 @@ public class Utils {
 	public static final int MIN_DISTANCE = 0; //meter
 	public static final int MAX_DISTANCE = 1000; // meters
 
+	public static final int INVALID_APP_VERSION_CODE = -1;
+
 	/**
 	 * Used to update the user interface language.
 	 * 
@@ -31,7 +36,7 @@ public class Utils {
 	 *            Application context
 	 */
 	public static void updateUILanguage(Context context) {
-		DroidPlannerPrefs prefs = new DroidPlannerPrefs(context);
+		DroidPlannerPrefs prefs = DroidPlannerPrefs.getInstance(context);
 		if (prefs.isEnglishDefaultLanguage()) {
 			Configuration config = new Configuration();
 			config.locale = Locale.ENGLISH;
@@ -63,6 +68,18 @@ public class Utils {
 			dialog.show(fragmentManager, tag);
 		}
 
+	}
+
+	public static int getAppVersionCode(Context context){
+		int versionCode = INVALID_APP_VERSION_CODE;
+		try {
+			versionCode = context.getPackageManager()
+                .getPackageInfo(context.getPackageName(), 0).versionCode;
+		} catch (PackageManager.NameNotFoundException e) {
+			Timber.e(e, "Unable to retrieve the app version code.");
+		}
+
+		return versionCode;
 	}
 
 	//Private constructor to prevent instantiation.

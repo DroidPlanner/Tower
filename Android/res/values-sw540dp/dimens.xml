@@ -37,6 +37,6 @@
     <dimen name="setup_action_button_width">120dp</dimen>
 
     <!-- Dimensions for the setup tuning screen -->
-    <dimen name="info_bar_text_size">15sp</dimen>
+    <dimen name="info_bar_text_size">14sp</dimen>
     <dimen name="action_drawer_width">300dp</dimen>
     </resources>

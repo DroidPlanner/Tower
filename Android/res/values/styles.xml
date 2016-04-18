@@ -446,6 +446,11 @@
         <item name="android:gravity">center_horizontal</item>
     </style>
 
+    <style name="warningPanelGravity">
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
     <style name="Telemetry" />
 
     <style name="Telemetry.Entry" >

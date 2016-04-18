@@ -1,7 +1,10 @@
 package org.droidplanner.android.activities;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.LocalBroadcastManager;
@@ -19,6 +22,7 @@ import android.widget.LinearLayout;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.dialogs.OkDialog;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.control.BaseFlightControlFragment;
 import org.droidplanner.android.view.SlidingDrawer;
@@ -184,11 +188,43 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
             case R.id.navigation_settings:
                 mNavigationIntent = new Intent(this, SettingsActivity.class);
                 break;
+
+            case R.id.navigation_fvp_goggle:
+                mNavigationIntent = launchFpvApp();
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private Intent launchFpvApp(){
+        final String appId = "meavydev.DronePro";
+
+        //Check if the dronepro app is installed.
+        final PackageManager pm = getPackageManager();
+        Intent launchIntent = pm.getLaunchIntentForPackage(appId);
+        if(launchIntent == null){
+
+            //Search for the dronepro app in the play store
+            launchIntent = new Intent(Intent.ACTION_VIEW)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .setData(Uri.parse("market://details?id=" + appId));
+
+            if(pm.resolveActivity(launchIntent, PackageManager.MATCH_DEFAULT_ONLY) == null){
+                launchIntent = new Intent(Intent.ACTION_VIEW)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .setData(Uri.parse("https://play.google.com/store/apps/details?id=" + appId));
+            }
+        }
+        else {
+            OkDialog.newInstance(getApplicationContext(), "", "Starting FPV...").show(getSupportFragmentManager(), "FPV launch dialog");
+
+            launchIntent.putExtra("meavydev.DronePro.launchFPV", "Tower");
+        }
+
+        return launchIntent;
     }
 
     protected void onToolbarLayoutChange(int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {

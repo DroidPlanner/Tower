@@ -26,11 +26,9 @@ import com.o3dr.services.android.lib.drone.connection.DroneSharePrefs;
 import com.o3dr.services.android.lib.model.AbstractCommandListener;
 
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
-import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.LogToFileTree;
 import org.droidplanner.android.utils.Utils;
-import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.IO.ExceptionWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
@@ -100,10 +98,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         notifyApiDisconnected();
     }
 
-    public DroidPlannerPrefs getAppPreferences() {
-        return dpPrefs;
-    }
-
     public interface ApiListener {
         void onApiConnected();
 
@@ -132,7 +126,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
     private MissionProxy missionProxy;
     private DroidPlannerPrefs dpPrefs;
     private LocalBroadcastManager lbm;
-    private MapDownloader mapDownloader;
 
     private LogToFileTree logToFileTree;
 
@@ -141,14 +134,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         super.onCreate();
 
         final Context context = getApplicationContext();
-
-        dpPrefs = new DroidPlannerPrefs(context);
-        lbm = LocalBroadcastManager.getInstance(context);
-        mapDownloader = new MapDownloader(context);
-
-        controlTower = new ControlTower(context);
-        drone = new Drone(context);
-        missionProxy = new MissionProxy(context, this.drone);
 
         final Thread.UncaughtExceptionHandler dpExceptionHandler = new Thread.UncaughtExceptionHandler() {
             @Override
@@ -161,13 +146,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(dpExceptionHandler);
 
-        GAUtils.initGATracker(this);
-        GAUtils.startNewSession(context);
-
-        if(BuildConfig.ENABLE_CRASHLYTICS) {
-            Fabric.with(context, new Crashlytics());
-        }
-
         if (BuildConfig.WRITE_LOG_FILE) {
             logToFileTree = new LogToFileTree();
             Timber.plant(logToFileTree);
@@ -175,14 +153,21 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
             Timber.plant(new Timber.DebugTree());
         }
 
+        if(BuildConfig.ENABLE_CRASHLYTICS) {
+            Fabric.with(context, new Crashlytics());
+        }
+
+        dpPrefs = DroidPlannerPrefs.getInstance(context);
+        lbm = LocalBroadcastManager.getInstance(context);
+
+        controlTower = new ControlTower(context);
+        drone = new Drone(context);
+        missionProxy = new MissionProxy(context, this.drone);
+
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_TOGGLE_DRONE_CONNECTION);
 
         registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    public MapDownloader getMapDownloader() {
-        return mapDownloader;
     }
 
     public void addApiListener(ApiListener listener) {

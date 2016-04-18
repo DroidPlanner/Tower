@@ -19,7 +19,6 @@ import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
-import com.o3dr.services.android.lib.drone.property.GuidedState;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.gcs.follow.FollowState;
@@ -30,7 +29,6 @@ import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.dialogs.SlideToUnlockDialog;
 import org.droidplanner.android.dialogs.SupportYesNoDialog;
 import org.droidplanner.android.dialogs.SupportYesNoWithPrefsDialog;
-import org.droidplanner.android.fragments.FlightDataFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -363,15 +361,6 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment imple
         switch (flightMode) {
             case COPTER_AUTO:
                 autoBtn.setActivated(true);
-                break;
-
-            case COPTER_GUIDED:
-                final Drone drone = getDrone();
-                final GuidedState guidedState = drone.getAttribute(AttributeType.GUIDED_STATE);
-                final FollowState followState = drone.getAttribute(AttributeType.FOLLOW_STATE);
-                if (guidedState.isInitialized() && !followState.isEnabled()) {
-                    pauseBtn.setActivated(true);
-                }
                 break;
 
             case COPTER_BRAKE:

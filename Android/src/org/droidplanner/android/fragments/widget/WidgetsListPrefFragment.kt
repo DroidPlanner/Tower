@@ -37,7 +37,7 @@ class WidgetsListPrefFragment : DialogFragment() {
 
     class WidgetsAdapter(context: Context, val fm : FragmentManager) : ArrayAdapter<TowerWidgets>(context, 0, TowerWidgets.values()){
 
-        val appPrefs = DroidPlannerPrefs(context)
+        val appPrefs = DroidPlannerPrefs.getInstance(context)
         val lbm = LocalBroadcastManager.getInstance(context)
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
