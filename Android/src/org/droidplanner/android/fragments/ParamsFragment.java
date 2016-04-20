@@ -1,5 +1,6 @@
 package org.droidplanner.android.fragments;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -416,7 +417,11 @@ public class ParamsFragment extends ApiListenerListFragment implements SupportEd
     }
 
     private void startProgress() {
-        progressDialog = new ProgressDialog(getActivity());
+        final Activity activity = getActivity();
+        if(activity == null)
+            return;
+
+        progressDialog = new ProgressDialog(activity);
         progressDialog.setTitle(R.string.refreshing_parameters);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setIndeterminate(true);
