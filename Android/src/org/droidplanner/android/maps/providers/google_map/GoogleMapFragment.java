@@ -384,7 +384,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
         final @GoogleMapPrefConstants.TileProvider String tileProvider = GoogleMapPrefFragment.PrefManager
                 .getMapTileProvider(context);
 
-        return GoogleMapPrefConstants.MAPBOX_TILE_PROVIDER.equals(tileProvider)
+        return (GoogleMapPrefConstants.MAPBOX_TILE_PROVIDER.equals(tileProvider)
+            || GoogleMapPrefConstants.ARC_GIS_TILE_PROVIDER.equals(tileProvider))
                 && GoogleMapPrefFragment.PrefManager.addDownloadMenuOption(context);
     }
 

@@ -38,7 +38,7 @@
                 <LinearLayout
                     android:id="@+id/download_map_warning"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="66dp"
                     android:background="@android:color/holo_orange_light"
                     android:gravity="center"
                     android:orientation="vertical"
@@ -60,7 +60,7 @@
                 <LinearLayout
                     android:id="@+id/download_map_instructions"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="66dp"
                     android:background="?selectableItemBackground"
                     android:gravity="center"
                     android:orientation="vertical"
