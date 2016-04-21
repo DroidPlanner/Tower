@@ -73,6 +73,7 @@ import org.droidplanner.android.maps.providers.google_map.tiles.TileProviderMana
 import org.droidplanner.android.maps.providers.google_map.tiles.arcgis.ArcGISTileProviderManager;
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.MapboxTileProviderManager;
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.MapboxUtils;
+import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.utils.collection.HashBiMap;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
@@ -394,6 +395,14 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
             oldFlightPath.clear();
             flightPath.setPoints(oldFlightPath);
         }
+    }
+
+    @Override
+    public void downloadMapTiles(MapDownloader mapDownloader, VisibleMapArea mapRegion, int minimumZ, int maximumZ) {
+        if(tileProviderManager == null)
+            return;
+
+        tileProviderManager.downloadMapTiles(mapDownloader, mapRegion, minimumZ, maximumZ);
     }
 
     @Override
@@ -989,7 +998,13 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
                 offlineTileOverlay = null;
             }
 
-            //TODO: finish support for the offline tile provider for arc gis
+            if(prefManager.isOfflineMapLayerEnabled(context)){
+                options = new TileOverlayOptions()
+                    .tileProvider(tileProviderManager.getOfflineTileProvider())
+                    .zIndex(OFFLINE_TILE_PROVIDER_Z_INDEX);
+
+                offlineTileOverlay = map.addTileOverlay(options);
+            }
         }
     }
 

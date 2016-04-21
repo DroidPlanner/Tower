@@ -6,18 +6,16 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import com.google.android.gms.maps.model.CameraPosition
-import org.droidplanner.android.DroidPlannerApp
 import org.droidplanner.android.R
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader
-import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloaderListener
+import org.droidplanner.android.maps.providers.google_map.tiles.offline.MapDownloaderListener
 import org.droidplanner.android.utils.prefs.AutoPanMode
 import java.net.HttpURLConnection
-import kotlin.properties.Delegates
 
 /**
  * Created by Fredia Huya-Kouadio on 6/17/15.
  */
-public class DownloadMapboxMapActivity : AppCompatActivity() {
+class DownloadMapboxMapActivity : AppCompatActivity() {
 
     companion object {
         const val MAP_CACHE_MIN_ZOOM_LEVEL = 14
@@ -26,14 +24,6 @@ public class DownloadMapboxMapActivity : AppCompatActivity() {
 
     private val mapDownloader: MapDownloader by lazy(LazyThreadSafetyMode.NONE) {
         MapDownloader(applicationContext)
-    }
-
-    private val mapboxId: String by lazy(LazyThreadSafetyMode.NONE) {
-        GoogleMapPrefFragment.PrefManager.getMapboxId(applicationContext)
-    }
-
-    private val mapboxAccessToken: String by lazy(LazyThreadSafetyMode.NONE) {
-        GoogleMapPrefFragment.PrefManager.getMapboxAccessToken(applicationContext)
     }
 
     private val mapDownloadListener = object : MapDownloaderListener {
@@ -75,14 +65,14 @@ public class DownloadMapboxMapActivity : AppCompatActivity() {
         override fun sqlLiteError(error: Throwable?) {
         }
 
-        override fun stateChanged(newState: MapDownloader.MBXOfflineMapDownloaderState?) {
+        override fun stateChanged(newState: MapDownloader.OfflineMapDownloaderState?) {
             when (newState) {
-                MapDownloader.MBXOfflineMapDownloaderState.MBXOfflineMapDownloaderStateRunning -> {
+                MapDownloader.OfflineMapDownloaderState.RUNNING -> {
                     enableDownloadInstructions(false)
                     enableDownloadProgress(true, resetProgress = true)
                 }
 
-                MapDownloader.MBXOfflineMapDownloaderState.MBXOfflineMapDownloaderStateCanceling -> {
+                MapDownloader.OfflineMapDownloaderState.CANCELLING -> {
                     enableDownloadProgress(false, true)
                     enableDownloadInstructions(true)
                 }
@@ -178,7 +168,7 @@ public class DownloadMapboxMapActivity : AppCompatActivity() {
             googleMap.setOnCameraChangeListener { onMapCameraChange(it) }
         }
 
-        if (mapDownloader.state == MapDownloader.MBXOfflineMapDownloaderState.MBXOfflineMapDownloaderStateRunning) {
+        if (mapDownloader.state == MapDownloader.OfflineMapDownloaderState.RUNNING) {
             enableDownloadInstructions(false)
             enableDownloadProgress(true, true)
         }
@@ -199,8 +189,7 @@ public class DownloadMapboxMapActivity : AppCompatActivity() {
     }
 
     private fun triggerMapDownload() {
-        val mapArea = downloadMapFragment?.visibleMapArea
-        mapDownloader.beginDownloadingMapID(mapboxId, mapboxAccessToken, mapArea, 0, MAP_CACHE_ZOOM_LEVEL)
+        downloadMapFragment?.downloadMapTiles(mapDownloader, 0, MAP_CACHE_ZOOM_LEVEL)
     }
 
     private fun enableDownloadInstructions(enabled: Boolean) {

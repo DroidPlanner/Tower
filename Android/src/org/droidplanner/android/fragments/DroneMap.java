@@ -28,6 +28,7 @@ import org.droidplanner.android.graphic.map.GraphicHome;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
@@ -239,6 +240,13 @@ public abstract class DroneMap extends ApiListenerFragment {
 		guided = new GraphicGuided(drone);
 
 		postUpdate();
+	}
+
+	public void downloadMapTiles(MapDownloader mapDownloader, int minimumZ, int maximumZ){
+		if(mMapFragment == null)
+			return;
+
+		mMapFragment.downloadMapTiles(mapDownloader, getVisibleMapArea(), minimumZ, maximumZ);
 	}
 
 	@Override

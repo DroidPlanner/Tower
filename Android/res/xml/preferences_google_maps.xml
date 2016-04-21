@@ -28,6 +28,21 @@
                 android:summary="@string/pref_map_type_summary"
                 android:title="@string/pref_map_type"/>
 
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="pref_enable_offline_map_layer"
+                android:title="@string/pref_title_enable_offline_map_layer"/>
+
+            <Preference
+                android:key="pref_mapbox_map_download"
+                android:summary="@string/pref_summary_mapbox_map_download"
+                android:title="@string/pref_title_mapbox_map_download"/>
+
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="pref_download_menu_option"
+                android:title="@string/pref_title_download_menu_option"/>
+
         </PreferenceCategory>
 
         <PreferenceCategory
