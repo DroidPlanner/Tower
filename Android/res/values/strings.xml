@@ -599,4 +599,5 @@
     <string name="label_world_topo_map">World Topographic Map</string>
     <string name="pref_title_tile_provider_preferences">Tile Provider Preferences</string>
     <string name="pref_advanced_settings_title">Advanced Settings</string>
+    <string name="label_fpv">FPV</string>
 </resources>
