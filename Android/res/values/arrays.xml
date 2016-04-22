@@ -52,10 +52,7 @@
     <string-array name="ArcGisMapTypes">
         <item>@string/label_nat_geo_world_map</item>
         <item>@string/label_world_imagery</item>
-        <item>@string/label_world_physical_map</item>
-        <item>@string/label_world_shaded_relief</item>
         <item>@string/label_world_street_map</item>
-        <item>@string/label_world_terrain_base</item>
         <item>@string/label_world_topo_map</item>
     </string-array>
 

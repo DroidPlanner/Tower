@@ -592,10 +592,7 @@
     <!-- Arc GIS -->
     <string name="label_nat_geo_world_map">National Geographic World Map</string>
     <string name="label_world_imagery">World Imagery</string>
-    <string name="label_world_physical_map">World Physical Map</string>
-    <string name="label_world_shaded_relief">World Shaded Relief</string>
     <string name="label_world_street_map">World Street Map</string>
-    <string name="label_world_terrain_base">World Terrain Base</string>
     <string name="label_world_topo_map">World Topographic Map</string>
     <string name="pref_title_tile_provider_preferences">Tile Provider Preferences</string>
     <string name="pref_advanced_settings_title">Advanced Settings</string>
