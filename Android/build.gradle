@@ -60,6 +60,8 @@ def logLevelWarn = 5;
 def logLevelError = 6;
 def logLevelAssert = 7;
 
+def NATIVE_LIB_DIR = 'jni/libs'
+
 android {
     compileSdkVersion android_build_sdk_version
     buildToolsVersion android_build_tools_version
@@ -83,6 +85,11 @@ android {
         // Enabling multidex support.
         multiDexEnabled true
 
+        // tracker
+        ndk {
+            abiFilters "armeabi-v7a"
+        }
+
     }
 
     compileOptions {
@@ -99,6 +106,9 @@ android {
             renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
+
+            jni.srcDirs = ['jni/src']
+            jniLibs.srcDir "$NATIVE_LIB_DIR/"
         }
 
         // Move the build types to build-types/<type>

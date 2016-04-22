@@ -50,6 +50,15 @@
     </group>
 
     <group
+        android:id="@+id/extras_screen"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/tracker_prototype"
+            android:icon="@drawable/ic_track_changes_24dp"
+            android:title="@string/label_ar_training"/>
+    </group>
+
+    <group
         android:id="@+id/settings_screen"
         android:checkableBehavior="single">
 

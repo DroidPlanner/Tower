@@ -587,5 +587,5 @@
     <string name="uvc_device_refresh">Refresh</string>
     <string name="uvc_device_no_device">No UVC device found</string>
 
-
+    <string name="label_ar_training">Visual Tracker</string>
 </resources>

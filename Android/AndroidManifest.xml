@@ -6,6 +6,7 @@
     <supports-screens
         android:requiresSmallestWidthDp="320"/>
 
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -69,6 +70,11 @@
             android:name=".activities.AccountActivity"
             android:launchMode="singleTop"
             android:label="@string/account_label"/>
+
+        <activity
+            android:name=".utils.ar.TrackerActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="userLandscape"/>
 
         <activity
             android:name=".activities.FlightActivity"

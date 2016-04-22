@@ -1,6 +1,5 @@
 package org.droidplanner.android.activities;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -18,13 +17,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.dialogs.OkDialog;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.control.BaseFlightControlFragment;
+import org.droidplanner.android.utils.ar.TrackerActivity;
 import org.droidplanner.android.view.SlidingDrawer;
 
 /**
@@ -191,6 +190,10 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
 
             case R.id.navigation_fvp_goggle:
                 mNavigationIntent = launchFpvApp();
+                break;
+
+            case R.id.tracker_prototype:
+                mNavigationIntent = new Intent(this, TrackerActivity.class);
                 break;
         }
 
