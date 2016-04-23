@@ -6,9 +6,10 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.preference.ListPreference
-import android.preference.Preference
 import android.preference.PreferenceCategory
 import android.preference.PreferenceManager
+import android.preference.PreferenceScreen
+import android.support.v4.util.ArrayMap
 import android.text.TextUtils
 import android.widget.Toast
 import com.google.android.gms.maps.GoogleMap
@@ -16,14 +17,12 @@ import org.droidplanner.android.R
 import org.droidplanner.android.dialogs.EditInputDialog
 import org.droidplanner.android.maps.providers.DPMapProvider
 import org.droidplanner.android.maps.providers.MapProviderPreferences
-import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefConstants.GOOGLE_TILE_PROVIDER
-import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefConstants.MAPBOX_TILE_PROVIDER
-import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefConstants.TileProvider
+import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefConstants.*
 
 /**
  * This is the google map provider preferences. It stores and handles all preferences related to google map.
  */
-public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.Listener {
+class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.Listener {
 
     companion object PrefManager {
 
@@ -39,12 +38,14 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
 
         val PREF_TILE_PROVIDERS = "pref_google_map_tile_providers"
 
+        const val PREF_TILE_PROVIDER_SETTINGS_SCREEN = "pref_tile_provider_settings"
+
         val PREF_GOOGLE_TILE_PROVIDER_SETTINGS = "pref_google_tile_provider_settings"
 
         val PREF_MAP_TYPE = "pref_map_type"
         val DEFAULT_MAP_TYPE = MAP_TYPE_SATELLITE
 
-        val PREF_MAPBOX_TILE_PROVIDER_SETTINGS = "pref_mapbox_tile_provider_settings"
+        const val PREF_MAPBOX_TILE_PROVIDER_SETTINGS = "pref_mapbox_tile_provider_settings"
 
         val PREF_MAPBOX_MAP_DOWNLOAD = "pref_mapbox_map_download"
 
@@ -58,6 +59,16 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
 
         val PREF_ENABLE_OFFLINE_LAYER = "pref_enable_offline_map_layer"
         val DEFAULT_OFFLINE_LAYER_ENABLED = false
+
+        const val PREF_ARCGIS_TILE_PROVIDER_SETTINGS = "pref_arcgis_tile_provider_settings"
+
+        const val PREF_ARCGIS_MAP_TYPE = "pref_arcgis_service"
+        const val DEFAULT_ARCGIS_MAP_TYPE = R.string.label_nat_geo_world_map
+
+        fun getArcGISMapType(context: Context): String {
+            val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+            return sharedPref.getString(PREF_ARCGIS_MAP_TYPE, context.getString(DEFAULT_ARCGIS_MAP_TYPE))
+        }
 
         fun getMapType(context: Context?): Int {
             var mapType = GoogleMap.MAP_TYPE_SATELLITE
@@ -142,6 +153,11 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
     private val accessTokenDialog = EditInputDialog.newInstance(MAPBOX_ACCESS_TOKEN_DIALOG_TAG, "Enter mapbox access token", "mapbox access token", false)
 
     private var tileProvidersPref: ListPreference? = null
+    private val tileProviderSettingsScreen: PreferenceScreen by lazy {
+        findPreference(PREF_TILE_PROVIDER_SETTINGS_SCREEN) as PreferenceScreen
+    }
+
+    private val providerSettingsScreens = ArrayMap<@TileProvider String, PreferenceCategory>(3)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super<MapProviderPreferences>.onCreate(savedInstanceState)
@@ -153,9 +169,11 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
         val context = activity.applicationContext
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
 
-        setupTileProvidersPreferences(sharedPref)
         setupGoogleTileProviderPreferences(sharedPref)
+        setupArcGISTileProviderPreferences(sharedPref)
         setupMapboxTileProviderPreferences(sharedPref)
+
+        setupTileProvidersPreferences(sharedPref)
     }
 
     private fun isMapboxIdSet() = !TextUtils.isEmpty(getMapboxId(getContext()))
@@ -227,6 +245,11 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
     }
 
     private fun setupTileProvidersPreferences(sharedPref: SharedPreferences) {
+        //Populate the map of tile providers to their settings screen
+        providerSettingsScreens.put(GoogleMapPrefConstants.GOOGLE_TILE_PROVIDER, findPreference(PREF_GOOGLE_TILE_PROVIDER_SETTINGS) as PreferenceCategory)
+        providerSettingsScreens.put(GoogleMapPrefConstants.MAPBOX_TILE_PROVIDER, findPreference(PREF_MAPBOX_TILE_PROVIDER_SETTINGS) as PreferenceCategory)
+        providerSettingsScreens.put(GoogleMapPrefConstants.ARC_GIS_TILE_PROVIDER, findPreference(PREF_ARCGIS_TILE_PROVIDER_SETTINGS) as PreferenceCategory)
+
         val tileProvidersKey = PREF_TILE_PROVIDERS
         tileProvidersPref = findPreference(tileProvidersKey) as ListPreference?
 
@@ -279,9 +302,19 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
         mapTypePref?.let {
             mapTypePref.summary = sharedPref.getString(mapTypeKey, DEFAULT_MAP_TYPE)
             mapTypePref.setOnPreferenceChangeListener { preference, newValue ->
-                    mapTypePref.summary = newValue.toString()
-                    true
+                mapTypePref.summary = newValue.toString()
+                true
             }
+        }
+    }
+
+    private fun setupArcGISTileProviderPreferences(sharedPref: SharedPreferences){
+        val mapTypeKey = PREF_ARCGIS_MAP_TYPE
+        val mapTypePref = findPreference(mapTypeKey) ?: return
+        mapTypePref.summary = sharedPref.getString(mapTypeKey, getString(DEFAULT_ARCGIS_MAP_TYPE))
+        mapTypePref.setOnPreferenceChangeListener { preference, newValue ->
+            mapTypePref.summary = newValue.toString()
+            true
         }
     }
 
@@ -368,31 +401,10 @@ public class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.L
             setMapboxAccessToken(getContext(), token)
     }
 
-    private fun toggleTileProviderPrefs(tileProvider: String){
-        when(tileProvider){
-            GoogleMapPrefConstants.GOOGLE_TILE_PROVIDER -> {
-                enableGoogleTileProviderPrefs(true)
-                enableMapboxTileProviderPrefs(false)
-            }
-
-            GoogleMapPrefConstants.MAPBOX_TILE_PROVIDER -> {
-                enableGoogleTileProviderPrefs(false)
-                enableMapboxTileProviderPrefs(true)
-            }
-        }
-    }
-
-    private fun enableGoogleTileProviderPrefs(enable: Boolean){
-        enableTileProviderPrefs(PREF_GOOGLE_TILE_PROVIDER_SETTINGS, enable)
-    }
-
-    private fun enableMapboxTileProviderPrefs(enable: Boolean){
-        enableTileProviderPrefs(PREF_MAPBOX_TILE_PROVIDER_SETTINGS, enable)
-    }
-
-    private fun enableTileProviderPrefs(prefKey: String, enable: Boolean){
-        val prefCategory = findPreference(prefKey) as PreferenceCategory?
-        prefCategory?.isEnabled = enable
+    private fun toggleTileProviderPrefs(@TileProvider tileProvider: String){
+        tileProviderSettingsScreen.removeAll()
+        val providerSettingsScreen = providerSettingsScreens[tileProvider] ?: return
+        tileProviderSettingsScreen.addPreference(providerSettingsScreen)
     }
 
     override fun getMapProvider(): DPMapProvider? = DPMapProvider.GOOGLE_MAP

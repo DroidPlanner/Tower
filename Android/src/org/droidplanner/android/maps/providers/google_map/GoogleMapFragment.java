@@ -52,7 +52,6 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
-import com.google.android.gms.maps.model.TileProvider;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
@@ -70,9 +69,11 @@ import org.droidplanner.android.graphic.map.GraphicHome;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
-import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.MapboxTileProvider;
+import org.droidplanner.android.maps.providers.google_map.tiles.TileProviderManager;
+import org.droidplanner.android.maps.providers.google_map.tiles.arcgis.ArcGISTileProviderManager;
+import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.MapboxTileProviderManager;
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.MapboxUtils;
-import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.OfflineTileProvider;
+import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.utils.collection.HashBiMap;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
@@ -266,11 +267,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     /*
     Tile overlay
      */
-    private TileOverlay onlineTileProvider;
-    private TileOverlay offlineTileProvider;
+    private TileOverlay onlineTileOverlay;
+    private TileOverlay offlineTileOverlay;
 
-    private String mapboxId;
-    private String mapboxAccessToken;
+    private TileProviderManager tileProviderManager;
 
     private final OnMapReadyCallback loadCameraPositionTask = new OnMapReadyCallback() {
         @Override
@@ -384,7 +384,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
         final @GoogleMapPrefConstants.TileProvider String tileProvider = GoogleMapPrefFragment.PrefManager
                 .getMapTileProvider(context);
 
-        return GoogleMapPrefConstants.MAPBOX_TILE_PROVIDER.equals(tileProvider)
+        return (GoogleMapPrefConstants.MAPBOX_TILE_PROVIDER.equals(tileProvider)
+            || GoogleMapPrefConstants.ARC_GIS_TILE_PROVIDER.equals(tileProvider))
                 && GoogleMapPrefFragment.PrefManager.addDownloadMenuOption(context);
     }
 
@@ -395,6 +396,14 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
             oldFlightPath.clear();
             flightPath.setPoints(oldFlightPath);
         }
+    }
+
+    @Override
+    public void downloadMapTiles(MapDownloader mapDownloader, VisibleMapArea mapRegion, int minimumZ, int maximumZ) {
+        if(tileProviderManager == null)
+            return;
+
+        tileProviderManager.downloadMapTiles(mapDownloader, mapRegion, minimumZ, maximumZ);
     }
 
     @Override
@@ -934,26 +943,70 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
             case GoogleMapPrefConstants.MAPBOX_TILE_PROVIDER:
                 setupMapboxTileProvider(context, map);
                 break;
+
+            case GoogleMapPrefConstants.ARC_GIS_TILE_PROVIDER:
+                setupArcGISTileProvider(context, map);
+                break;
         }
     }
 
     private void setupGoogleTileProvider(Context context, GoogleMap map){
-        //Reset the mapbox id and access token
-        mapboxId = null;
-        mapboxAccessToken = null;
+        //Reset the tile provider manager
+        tileProviderManager = null;
 
         //Remove the mapbox tile providers
-        if(offlineTileProvider != null){
-            offlineTileProvider.remove();
-            offlineTileProvider = null;
+        if(offlineTileOverlay != null){
+            offlineTileOverlay.remove();
+            offlineTileOverlay = null;
         }
 
-        if(onlineTileProvider != null){
-            onlineTileProvider.remove();
-            onlineTileProvider = null;
+        if(onlineTileOverlay != null){
+            onlineTileOverlay.remove();
+            onlineTileOverlay = null;
         }
 
         map.setMapType(GoogleMapPrefFragment.PrefManager.getMapType(context));
+    }
+
+    private void setupArcGISTileProvider(Context context, GoogleMap map){
+        Timber.i("Enabling ArcGIS tile provider.");
+
+        //Remove the default google map layer
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        final GoogleMapPrefFragment.PrefManager prefManager = GoogleMapPrefFragment.PrefManager;
+        String selectedMap = prefManager.getArcGISMapType(context);
+
+        if(!(tileProviderManager instanceof ArcGISTileProviderManager)
+            || !selectedMap.equals(((ArcGISTileProviderManager) tileProviderManager).getSelectedMap())){
+
+            //Setup the online tile overlay
+            if(onlineTileOverlay != null){
+                onlineTileOverlay.remove();
+                onlineTileOverlay = null;
+            }
+
+            tileProviderManager = new ArcGISTileProviderManager(context, selectedMap);
+            TileOverlayOptions options = new TileOverlayOptions()
+                .tileProvider(tileProviderManager.getOnlineTileProvider())
+                .zIndex(ONLINE_TILE_PROVIDER_Z_INDEX);
+
+            onlineTileOverlay = map.addTileOverlay(options);
+
+            //Setup the offline tile overlay
+            if(offlineTileOverlay != null){
+                offlineTileOverlay.remove();
+                offlineTileOverlay = null;
+            }
+
+            if(prefManager.isOfflineMapLayerEnabled(context)){
+                options = new TileOverlayOptions()
+                    .tileProvider(tileProviderManager.getOfflineTileProvider())
+                    .zIndex(OFFLINE_TILE_PROVIDER_Z_INDEX);
+
+                offlineTileOverlay = map.addTileOverlay(options);
+            }
+        }
     }
 
     private void setupMapboxTileProvider(Context context, GoogleMap map){
@@ -967,45 +1020,37 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
         final String mapboxAccessToken = prefManager.getMapboxAccessToken(context);
         final int maxZoomLevel = (int) map.getMaxZoomLevel();
 
-        boolean wereCredentialsUpdated = !mapboxId.equals(this.mapboxId)
-                || !mapboxAccessToken.equals(this.mapboxAccessToken);
+        if (!(tileProviderManager instanceof MapboxTileProviderManager)
+            || !mapboxId.equals(((MapboxTileProviderManager) tileProviderManager).getMapboxId())
+            || !mapboxAccessToken.equals(((MapboxTileProviderManager) tileProviderManager).getMapboxAccessToken())) {
 
-        if(wereCredentialsUpdated || onlineTileProvider == null){
-            if(onlineTileProvider != null)
-                onlineTileProvider.remove();
+            //Setup the online tile overlay
+            if (onlineTileOverlay != null) {
+                onlineTileOverlay.remove();
+                onlineTileOverlay = null;
+            }
 
-            final TileProvider tileProvider = new MapboxTileProvider(mapboxId, mapboxAccessToken, maxZoomLevel);
-            final TileOverlayOptions options = new TileOverlayOptions()
-                    .tileProvider(tileProvider)
-                    .zIndex(ONLINE_TILE_PROVIDER_Z_INDEX);
+            tileProviderManager = new MapboxTileProviderManager(context, mapboxId, mapboxAccessToken, maxZoomLevel);
+            TileOverlayOptions options = new TileOverlayOptions()
+                .tileProvider(tileProviderManager.getOnlineTileProvider())
+                .zIndex(ONLINE_TILE_PROVIDER_Z_INDEX);
 
-            onlineTileProvider = map.addTileOverlay(options);
-        }
+            onlineTileOverlay = map.addTileOverlay(options);
 
-        //Check if the offline provider is enabled as well.
-        if (prefManager.isOfflineMapLayerEnabled(context)) {
-            if(wereCredentialsUpdated || offlineTileProvider == null){
-                if(offlineTileProvider != null)
-                    offlineTileProvider.remove();
+            //Setup the offline tile overlay
+            if(offlineTileOverlay != null){
+                offlineTileOverlay.remove();
+                offlineTileOverlay = null;
+            }
 
-                final TileProvider tileProvider = new OfflineTileProvider(context, mapboxId, mapboxAccessToken,
-                        maxZoomLevel);
-                final TileOverlayOptions options = new TileOverlayOptions()
-                        .tileProvider(tileProvider)
-                        .zIndex(OFFLINE_TILE_PROVIDER_Z_INDEX);
+            if(prefManager.isOfflineMapLayerEnabled(context)){
+                options = new TileOverlayOptions()
+                    .tileProvider(tileProviderManager.getOfflineTileProvider())
+                    .zIndex(OFFLINE_TILE_PROVIDER_Z_INDEX);
 
-                offlineTileProvider = map.addTileOverlay(options);
+                offlineTileOverlay = map.addTileOverlay(options);
             }
         }
-        else{
-            if(offlineTileProvider != null){
-                offlineTileProvider.remove();
-                offlineTileProvider = null;
-            }
-        }
-
-        this.mapboxId = mapboxId;
-        this.mapboxAccessToken = mapboxAccessToken;
 
         //Check if the mapbox credentials are valid.
         new AsyncTask<Void, Void, Integer>(){

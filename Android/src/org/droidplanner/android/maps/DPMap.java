@@ -1,12 +1,5 @@
 package org.droidplanner.android.maps;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import org.droidplanner.android.maps.providers.DPMapProvider;
-import org.droidplanner.android.utils.prefs.AutoPanMode;
-
 import android.graphics.Color;
 import android.location.LocationListener;
 import android.os.Parcel;
@@ -14,6 +7,14 @@ import android.os.Parcelable;
 
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.property.FootPrint;
+
+import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Defines the functionality expected from the map providers.
@@ -202,6 +203,15 @@ public interface DPMap {
 	 * Clears the drone's flight path.
 	 */
 	void clearFlightPath();
+
+	/**
+	 * Download the map tiles if supported
+	 * @param mapDownloader
+	 * @param mapRegion
+	 * @param minimumZ
+	 * @param maximumZ
+     */
+	void downloadMapTiles(MapDownloader mapDownloader, DPMap.VisibleMapArea mapRegion, int minimumZ, int maximumZ);
 
 	/**
 	 * @return the map center coordinates.
