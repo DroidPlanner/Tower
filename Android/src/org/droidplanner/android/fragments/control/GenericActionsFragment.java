@@ -3,6 +3,7 @@ package org.droidplanner.android.fragments.control;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,6 @@ import com.o3dr.android.client.Drone;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-
-import java.util.Arrays;
 
 /**
  * Provides action buttons functionality for generic drone type.
@@ -40,8 +39,12 @@ public class GenericActionsFragment extends BaseFlightControlFragment {
         final String[] connectionTypes = res.getStringArray(R.array.TelemetryConnectionTypes);
         final String[] connectionTypeValues = res.getStringArray(R.array.TelemetryConnectionTypesValues);
 
+        final SparseArray<String> valuesToLabels = new SparseArray<>();
+        for(int i = 0; i < connectionTypes.length; i++){
+            valuesToLabels.append(Integer.parseInt(connectionTypeValues[i]), connectionTypes[i]);
+        }
+
         final int savedConnectionType = prefs.getConnectionParameterType();
-        final int selectedConnectionIndex = Arrays.binarySearch(connectionTypeValues, String.valueOf(savedConnectionType));
 
         View connectBtn = view.findViewById(R.id.mc_connectBtn);
         connectBtn.setOnClickListener(this);
@@ -50,7 +53,7 @@ public class GenericActionsFragment extends BaseFlightControlFragment {
 
         Spinner connectionsSpinner = (Spinner) view.findViewById(R.id.telem_connection_type);
         connectionsSpinner.setAdapter(connectionsAdapter);
-        connectionsSpinner.setSelection(connectionsAdapter.getPosition(connectionTypes[selectedConnectionIndex]));
+        connectionsSpinner.setSelection(connectionsAdapter.getPosition(valuesToLabels.get(savedConnectionType)));
         connectionsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

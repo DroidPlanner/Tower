@@ -11,6 +11,8 @@ dependencies {
 
     compile "com.android.support:support-v4:${support_lib_version}"
     compile "com.android.support:appcompat-v7:${support_lib_version}"
+    compile "com.android.support:preference-v7:${support_lib_version}"
+    compile "com.android.support:preference-v14:${support_lib_version}"
     compile "com.android.support:cardview-v7:${support_lib_version}"
     compile "com.android.support:recyclerview-v7:${support_lib_version}"
     compile "com.android.support:design:${support_lib_version}"

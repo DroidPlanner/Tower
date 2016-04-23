@@ -33,7 +33,6 @@ import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
-import org.droidplanner.android.dialogs.ClearBTDialogPreference;
 import org.droidplanner.android.fragments.widget.WidgetsListPrefFragment;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.Utils;
@@ -204,10 +203,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setupWidgetsPreferences();
         setupMapProviders();
         setupPeriodicControls();
-        setupConnectionPreferences();
         setupAdvancedMenu();
         setupUnitSystemPreferences();
-        setupBluetoothDevicePreferences();
         setupImminentGroundCollisionWarningPreference();
         setupMapPreferences();
         setupAltitudePreferences();
@@ -351,38 +348,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         }
 
         preference.setSummary(summaryResId);
-    }
-
-    private void setupConnectionPreferences() {
-        ListPreference connectionTypePref = (ListPreference) findPreference(DroidPlannerPrefs.PREF_CONNECTION_TYPE);
-        if (connectionTypePref != null) {
-            int defaultConnectionType = dpPrefs.getConnectionParameterType();
-            updateConnectionPreferenceSummary(connectionTypePref, defaultConnectionType);
-            connectionTypePref
-                    .setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                        @Override
-                        public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            int connectionType = Integer.parseInt((String) newValue);
-                            updateConnectionPreferenceSummary(preference, connectionType);
-                            return true;
-                        }
-                    });
-        }
-    }
-
-    private void setupBluetoothDevicePreferences(){
-        final ClearBTDialogPreference preference = (ClearBTDialogPreference) findPreference(DroidPlannerPrefs.PREF_BT_DEVICE_ADDRESS);
-        if(preference != null){
-            updateBluetoothDevicePreference(preference, dpPrefs.getBluetoothDeviceAddress());
-            preference.setOnResultListener(new ClearBTDialogPreference.OnResultListener() {
-                @Override
-                public void onResult(boolean result) {
-                    if (result) {
-                        updateBluetoothDevicePreference(preference, dpPrefs.getBluetoothDeviceAddress());
-                    }
-                }
-            });
-        }
     }
 
     private void setupAltitudePreferences(){
