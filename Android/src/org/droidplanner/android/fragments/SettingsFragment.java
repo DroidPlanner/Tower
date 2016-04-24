@@ -17,7 +17,6 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -26,7 +25,6 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
-import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 import com.o3dr.services.android.lib.drone.property.Type;
 
 import org.beyene.sius.unit.length.LengthUnit;
@@ -459,53 +457,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     private LengthUnitProvider getLengthUnitProvider(){
         final UnitSystem unitSystem = UnitManager.getUnitSystem(getActivity().getApplicationContext());
         return unitSystem.getLengthUnitProvider();
-    }
-
-    private void updateBluetoothDevicePreference(Preference preference, String deviceAddress){
-        if(TextUtils.isEmpty(deviceAddress)) {
-            preference.setEnabled(false);
-            preference.setTitle(R.string.pref_no_saved_bluetooth_device_title);
-            preference.setSummary("");
-        }
-        else{
-            preference.setEnabled(true);
-            preference.setSummary(deviceAddress);
-
-            final String deviceName = dpPrefs.getBluetoothDeviceName();
-            if(deviceName != null){
-                preference.setTitle(getString(R.string.pref_forget_bluetooth_device_title, deviceName));
-            }
-            else
-                preference.setTitle(getString(R.string.pref_forget_bluetooth_device_address));
-        }
-    }
-
-    private void updateConnectionPreferenceSummary(Preference preference, int connectionType) {
-        String connectionName;
-        switch (connectionType) {
-            case ConnectionType.TYPE_USB:
-                connectionName = "USB";
-                break;
-
-            case ConnectionType.TYPE_UDP:
-                connectionName = "UDP";
-                break;
-
-            case ConnectionType.TYPE_TCP:
-                connectionName = "TCP";
-                break;
-
-            case ConnectionType.TYPE_BLUETOOTH:
-                connectionName = "BLUETOOTH";
-                break;
-
-            default:
-                connectionName = null;
-                break;
-        }
-
-        if (connectionName != null)
-            preference.setSummary(connectionName);
     }
 
     private void initSummaryPerPrefs() {

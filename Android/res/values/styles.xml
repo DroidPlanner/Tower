@@ -525,5 +525,20 @@
         <item name="backgroundTint">@android:color/white</item>
     </style>
 
+    <style name="Divider"/>
+
+    <style name="Divider.Shadow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2dp</item>
+    </style>
+
+    <style name="Divider.Shadow.Above">
+        <item name="android:background">@drawable/above_shadow</item>
+    </style>
+
+    <style name="Divider.Shadow.Below">
+        <item name="android:background">@drawable/below_shadow</item>
+    </style>
+
 </resources>
 

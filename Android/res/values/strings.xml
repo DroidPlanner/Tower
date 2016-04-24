@@ -44,13 +44,13 @@
     <string name="pref_request_max_volume">Set Volume To Max On Start</string>
     <string name="pref_connection">Connection Preferences</string>
     <string name="pref_connection_subtitle">USB, TCP and UDP settings</string>
-    <string name="pref_usb">USB Connection</string>
+    <string name="pref_usb">USB Connection Settings</string>
     <string name="pref_baud_type">Telemetry link speed</string>
     <string name="pref_baud_type_summary">Baud Rate of the USB Telemetry Link</string>
-    <string name="pref_server">TCP connection</string>
+    <string name="pref_server">TCP Connection Settings</string>
     <string name="pref_server_ip">Server IP</string>
     <string name="pref_server_port">Server Port</string>
-    <string name="pref_server_udp">UDP connection</string>
+    <string name="pref_server_udp">UDP Connection Settings</string>
     <string name="pref_udp_server_port">UDP Server Port</string>
     <string name="about">About</string>
     <string name="version">Version</string>
@@ -319,7 +319,7 @@
     <string name="email_address">Email address</string>
 
     <!-- BLuetooth -->
-    <string name="pref_bluetooth">BLUETOOTH CONNECTION</string>
+    <string name="pref_bluetooth">Bluetooth Connection Settings</string>
     <string name="pref_forget_bluetooth_device_title">Forget %s device</string>
     <string name="pref_forget_bluetooth_device_address">Forget default device</string>
     <string name="pref_forget_bluetooth_device_address_confirm">Are you sure?</string>

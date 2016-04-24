@@ -50,7 +50,7 @@
 
         </RelativeLayout>
         <!-- Sliding layout -->
-        <LinearLayout
+        <RelativeLayout
             style="@style/slidingPanelGravity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,28 +64,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
+                android:layout_alignParentTop="true"
                 tools:layout="@layout/fragment_flight_actions_bar"/>
 
             <android.support.v7.widget.CardView
                 android:layout_width="@dimen/flight_actions_container_width"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/flight_actions_container_height"
+                android:layout_below="@+id/flightActionsFragment"
                 android:clickable="true">
 
-                <ScrollView
-                    android:layout_width="@dimen/flight_actions_container_width"
-                    android:layout_height="wrap_content"
-                    android:background="@color/transparent_light_grey"
-                    android:minHeight="@dimen/flight_actions_container_height"
-                    >
-
                     <FrameLayout
+                        android:background="@color/transparent_light_grey"
                         android:id="@+id/sliding_drawer_content"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         tools:layout="@layout/fragment_flight_mode_panel"/>
-                </ScrollView>
             </android.support.v7.widget.CardView>
-        </LinearLayout>
+
+        </RelativeLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
     <LinearLayout

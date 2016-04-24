@@ -1,96 +1,141 @@
 package org.droidplanner.android.fragments.mode;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceCategory;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.PreferenceScreen;
+import android.text.TextUtils;
+
+import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.dialogs.ClearBTDialogPreference;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 public class ModeDisconnectedFragment extends PreferenceFragmentCompat {
 
-//	private final static IntentFilter filter = new IntentFilter(DroidPlannerPrefs.PREF_CONNECTION_TYPE);
-//
-//	private final BroadcastReceiver receiver = new BroadcastReceiver() {
-//		@Override
-//		public void onReceive(Context context, Intent intent) {
-//			switch(intent.getAction()){
-//				case DroidPlannerPrefs.PREF_CONNECTION_TYPE:
-//					updateConnectionSettings();
-//					break;
-//			}
-//		}
-//	};
+	private final static IntentFilter filter = new IntentFilter(DroidPlannerPrefs.PREF_CONNECTION_TYPE);
+
+	private final BroadcastReceiver receiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			switch(intent.getAction()){
+				case DroidPlannerPrefs.PREF_CONNECTION_TYPE:
+					updateConnectionSettings();
+					break;
+			}
+		}
+	};
 
 	private DroidPlannerPrefs prefs;
 
+	private PreferenceScreen rootPref;
+	private PreferenceCategory usbPrefs;
+	private PreferenceCategory tcpPrefs;
+	private PreferenceCategory udpPrefs;
+	private PreferenceCategory bluetoothPrefs;
+
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
-//        prefs = DroidPlannerPrefs.getInstance(getActivity().getApplicationContext());
+        prefs = DroidPlannerPrefs.getInstance(getActivity().getApplicationContext());
         setPreferencesFromResource(R.xml.preferences_connection, s);
+
+		loadConnectionPreferences();
+        setupBluetoothDevicePreferences();
     }
 
-//	@Override
-//	public void onStart(){
-//		super.onStart();
-//		updateConnectionSettings();
-//		LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(receiver, filter);
-//	}
-//
-//	private void updateConnectionSettings() {
-//		final int connectionType = prefs.getConnectionParameterType();
-//		switch(connectionType){
-//			case ConnectionType.TYPE_USB:
-//				break;
-//
-//			case ConnectionType.TYPE_TCP:
-//				break;
-//
-//			case ConnectionType.TYPE_UDP:
-//				break;
-//
-//			case ConnectionType.TYPE_BLUETOOTH:
-//				break;
-//
-//			case ConnectionType.TYPE_SOLO:
-//				break;
-//		}
-//	}
-//
-//	@Override
-//	public void onStop(){
-//		super.onStop();
-//		LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(receiver);
-//	}
+	@Override
+	public void onStart(){
+		super.onStart();
+		updateConnectionSettings();
+		LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(receiver, filter);
+	}
 
-//    private void setupConnectionPreferences() {
-//        ListPreference connectionTypePref = (ListPreference) findPreference(DroidPlannerPrefs.PREF_CONNECTION_TYPE);
-//        if (connectionTypePref != null) {
-//            int defaultConnectionType = dpPrefs.getConnectionParameterType();
-//            updateConnectionPreferenceSummary(connectionTypePref, defaultConnectionType);
-//            connectionTypePref
-//                .setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-//                    @Override
-//                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-//                        int connectionType = Integer.parseInt((String) newValue);
-//                        updateConnectionPreferenceSummary(preference, connectionType);
-//                        return true;
-//                    }
-//                });
-//        }
-//    }
-//
-//    private void setupBluetoothDevicePreferences(){
-//        final ClearBTDialogPreference preference = (ClearBTDialogPreference) findPreference(DroidPlannerPrefs.PREF_BT_DEVICE_ADDRESS);
-//        if(preference != null){
-//            updateBluetoothDevicePreference(preference, dpPrefs.getBluetoothDeviceAddress());
-//            preference.setOnResultListener(new ClearBTDialogPreference.OnResultListener() {
-//                @Override
-//                public void onResult(boolean result) {
-//                    if (result) {
-//                        updateBluetoothDevicePreference(preference, dpPrefs.getBluetoothDeviceAddress());
-//                    }
-//                }
-//            });
-//        }
-//    }
+	private void updateConnectionSettings() {
+        if(this.rootPref == null)
+            return;
+
+		hideAllPrefs();
+
+		final int connectionType = prefs.getConnectionParameterType();
+		switch(connectionType){
+			case ConnectionType.TYPE_USB:
+				this.rootPref.addPreference(this.usbPrefs);
+				break;
+
+			case ConnectionType.TYPE_TCP:
+				this.rootPref.addPreference(this.tcpPrefs);
+				break;
+
+			case ConnectionType.TYPE_UDP:
+				this.rootPref.addPreference(this.udpPrefs);
+				break;
+
+			case ConnectionType.TYPE_BLUETOOTH:
+				this.rootPref.addPreference(this.bluetoothPrefs);
+				break;
+
+			case ConnectionType.TYPE_SOLO:
+				break;
+		}
+	}
+
+	@Override
+	public void onStop(){
+		super.onStop();
+		LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(receiver);
+	}
+
+	private void hideAllPrefs(){
+		if(this.rootPref != null)
+			this.rootPref.removeAll();
+	}
+
+	private void loadConnectionPreferences(){
+		this.rootPref = getPreferenceScreen();
+		this.usbPrefs = (PreferenceCategory) findPreference("pref_usb");
+		this.tcpPrefs = (PreferenceCategory) findPreference("pref_server");
+		this.udpPrefs = (PreferenceCategory) findPreference("pref_server_udp");
+		this.bluetoothPrefs = (PreferenceCategory) findPreference("pref_bluetooth");
+	}
+
+    private void setupBluetoothDevicePreferences(){
+        final ClearBTDialogPreference preference = (ClearBTDialogPreference) findPreference(DroidPlannerPrefs.PREF_BT_DEVICE_ADDRESS);
+        if(preference != null){
+            updateBluetoothDevicePreference(preference, prefs.getBluetoothDeviceAddress());
+            preference.setOnResultListener(new ClearBTDialogPreference.OnResultListener() {
+                @Override
+                public void onResult(boolean result) {
+                    if (result) {
+                        updateBluetoothDevicePreference(preference, prefs.getBluetoothDeviceAddress());
+                    }
+                }
+            });
+        }
+    }
+
+    private void updateBluetoothDevicePreference(Preference preference, String deviceAddress){
+        if(TextUtils.isEmpty(deviceAddress)) {
+            preference.setEnabled(false);
+            preference.setTitle(R.string.pref_no_saved_bluetooth_device_title);
+            preference.setSummary("");
+        }
+        else{
+            preference.setEnabled(true);
+            preference.setSummary(deviceAddress);
+
+            final String deviceName = prefs.getBluetoothDeviceName();
+            if(deviceName != null){
+                preference.setTitle(getString(R.string.pref_forget_bluetooth_device_title, deviceName));
+            }
+            else
+                preference.setTitle(getString(R.string.pref_forget_bluetooth_device_address));
+        }
+    }
 }
