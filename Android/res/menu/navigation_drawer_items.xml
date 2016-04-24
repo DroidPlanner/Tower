@@ -22,11 +22,6 @@
             android:visible="false"
             android:enabled="false"/>
 
-        <item android:id="@+id/navigation_fvp_goggle"
-            android:icon="@drawable/ic_vr_google_24dp"
-            android:title="FPV"
-            app:actionLayout="@layout/navigation_fpv_menu_item"/>
-
     </group>
 
     <group
