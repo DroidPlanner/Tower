@@ -6,6 +6,8 @@
     <!-- Dimension for the flight control buttons -->
     <dimen name="flightControlPadding">10dp</dimen>
     <dimen name="flightControlTextSize">12sp</dimen>
+    <dimen name="flight_action_width">72dp</dimen>
+    <dimen name="flight_action_height">72dp</dimen>
     <dimen name="fragment_mission_control_padding_left">50dp</dimen>
     <dimen name="fragment_mission_control_padding_right">50dp</dimen>
 

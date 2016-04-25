@@ -3,15 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
 
     <include
+        tools:visibility="gone"
         layout="@layout/fragment_generic_mission_control"/>
 
     <android.support.v7.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        tools:visibility="visible"
+        tools:layout_height="@dimen/mission_control_bar_height"
         android:id="@+id/mc_disarmed_buttons"
         android:layout_gravity="center_horizontal">
 
@@ -75,7 +79,7 @@
         android:layout_width="@dimen/flight_actions_container_width"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        tools:visibility="visible"
+        tools:visibility="gone"
         android:id="@+id/mc_in_flight_buttons"
         android:layout_gravity="center_horizontal">
 
