@@ -215,10 +215,10 @@
 
     <style name="ModeDetailText">
         <item name="android:textColor">@color/greyText</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">13sp</item>
 	    <item name="android:textStyle">italic</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
-        <item name="android:padding">16dp</item>
+        <item name="android:padding">8dp</item>
         </style>
 
     <style name="modeControl">
