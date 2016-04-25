@@ -58,4 +58,6 @@
     <dimen name="dialog_uvc_button_size">48dp</dimen>
     <dimen name="list_item_uvc_font_size">18sp</dimen>
     <dimen name="list_item_uvc_height_min">32dp</dimen>
+
+    <dimen name="mission_control_bar_height">90dp</dimen>
 </resources>

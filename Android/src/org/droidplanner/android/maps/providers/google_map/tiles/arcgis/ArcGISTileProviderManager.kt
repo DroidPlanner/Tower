@@ -40,10 +40,7 @@ class ArcGISTileProviderManager(val context: Context, val selectedMap: String) :
     internal enum class MapType(@StringRes val labelResId: Int, val maxZoomLevel: Int, val baseUrl: String) {
         NAT_GEO_WORLD_MAP(R.string.label_nat_geo_world_map, 16, "http://services.arcgisonline.com/arcgis/rest/services/NatGeo_World_Map/MapServer/tile"),
         WORLD_IMAGERY(R.string.label_world_imagery, 23, "http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile"),
-        WORLD_PHYSICAL_MAP(R.string.label_world_physical_map, 8, "http://services.arcgisonline.com/arcgis/rest/services/World_Physical_Map/MapServer/tile"),
-        WORLD_SHADED_RELIEF(R.string.label_world_shaded_relief, 13, "http://services.arcgisonline.com/arcgis/rest/services/World_Shaded_Relief/MapServer/tile"),
         WORLD_STREET_MAP(R.string.label_world_street_map, 23, "http://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/tile"),
-        WORLD_TERRAIN_BASE(R.string.label_world_terrain_base, 13, "http://services.arcgisonline.com/arcgis/rest/services/World_Terrain_Base/MapServer/tile"),
         WORLD_TOPO_MAP(R.string.label_world_topo_map, 23, "http://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile");
 
         internal fun getMapTypeUrl(zoom: Int, x: Int, y: Int): String? {

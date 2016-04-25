@@ -264,6 +264,7 @@ public class DroidPlannerPrefs {
 
     public void setConnectionParameterType(int connectionType) {
         prefs.edit().putString(PREF_CONNECTION_TYPE, String.valueOf(connectionType)).apply();
+        lbm.sendBroadcast(new Intent(PREF_CONNECTION_TYPE));
     }
 
     /**

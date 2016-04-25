@@ -1,7 +1,7 @@
 package org.droidplanner.android.dialogs;
 
 import android.content.Context;
-import android.preference.DialogPreference;
+import android.support.v7.preference.DialogPreference;
 import android.util.AttributeSet;
 
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -21,9 +21,9 @@ public class ClearBTDialogPreference extends DialogPreference {
 		mAppPrefs = DroidPlannerPrefs.getInstance(context);
 	}
 
-	@Override
 	protected void onDialogClosed(boolean positiveResult) {
-		super.onDialogClosed(positiveResult);
+		//TODO: figure out replacement
+//		super.onDialogClosed(positiveResult);
 		if (positiveResult) {
 			mAppPrefs.setBluetoothDeviceAddress("");
 		}

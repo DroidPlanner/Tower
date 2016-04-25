@@ -127,7 +127,6 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
                     switch(newState){
                         case COLLAPSED:
                             mSlidingPanel.setEnabled(false);
-                            mSlidingPanel.setPanelHeight(mFlightActionsView.getHeight());
                             mSlidingPanelCollapsing.set(false);
 
                             //Remove the panel slide listener
@@ -155,7 +154,6 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
     private FlightControlManagerFragment flightActions;
 
     private SlidingUpPanelLayout mSlidingPanel;
-    private View mFlightActionsView;
 
     private FloatingActionButton mGoToMyLocation;
     private FloatingActionButton mGoToDroneLocation;
@@ -312,17 +310,6 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
             fm.beginTransaction().add(R.id.flightActionsFragment, flightActions).commit();
         }
 
-        mFlightActionsView = view.findViewById(R.id.flightActionsFragment);
-        mFlightActionsView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver
-                .OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (!mSlidingPanelCollapsing.get()) {
-                    mSlidingPanel.setPanelHeight(mFlightActionsView.getHeight());
-                }
-            }
-        });
-
         // Add the mode info panel fragment
         FlightModePanel flightModePanel = (FlightModePanel) fm.findFragmentById(R.id.sliding_drawer_content);
         if (flightModePanel == null) {
@@ -426,8 +413,7 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
             return;
         }
 
-        final boolean isEnabled = flightActions != null && flightActions.isSlidingUpPanelEnabled
-                (api);
+        final boolean isEnabled = flightActions != null && flightActions.isSlidingUpPanelEnabled(api);
 
         if (isEnabled) {
             mSlidingPanel.setEnabled(true);
@@ -435,13 +421,7 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
                 @Override
                 public void onGlobalLayout() {
                     SlidingUpPanelLayout.PanelState panelState = mSlidingPanel.getPanelState();
-                    switch(panelState){
-                        case EXPANDED:
-                        case ANCHORED:
-                        case HIDDEN:
-                            slidingPanelListenerMgr.onPanelStateChanged(mSlidingPanel.getChildAt(1), panelState, panelState);
-                    }
-
+                    slidingPanelListenerMgr.onPanelStateChanged(mSlidingPanel, panelState, panelState);
                     mSlidingPanel.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
             });
@@ -503,8 +483,7 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
      */
     private boolean isGooglePlayServicesValid(boolean showErrorDialog) {
         // Check for the google play services is available
-        final int playStatus = GooglePlayServicesUtil
-                .isGooglePlayServicesAvailable(getContext());
+        final int playStatus = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getContext());
         final boolean isValid = playStatus == ConnectionResult.SUCCESS;
 
         if (!isValid && showErrorDialog) {
