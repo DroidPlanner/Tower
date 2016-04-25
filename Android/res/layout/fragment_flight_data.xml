@@ -22,7 +22,8 @@
         sothree:umanoFadeColor="@android:color/transparent"
         sothree:umanoOverlay="true"
         sothree:umanoParallaxOffset="0dp"
-        sothree:umanoShadowHeight="0dp">
+        sothree:umanoShadowHeight="0dp"
+        sothree:umanoPanelHeight="@dimen/mission_control_bar_height">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -62,7 +63,7 @@
             <org.droidplanner.android.view.FitsSystemWindowsFrameLayout
                 android:id="@+id/flightActionsFragment"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/mission_control_bar_height"
                 android:fitsSystemWindows="true"
                 android:layout_alignParentTop="true"
                 tools:layout="@layout/fragment_flight_actions_bar"/>
@@ -71,6 +72,7 @@
                 android:layout_width="@dimen/flight_actions_container_width"
                 android:layout_height="@dimen/flight_actions_container_height"
                 android:layout_below="@+id/flightActionsFragment"
+                android:layout_marginTop="8dp"
                 android:clickable="true">
 
                     <FrameLayout
