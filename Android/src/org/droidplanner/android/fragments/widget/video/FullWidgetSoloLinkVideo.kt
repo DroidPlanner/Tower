@@ -9,6 +9,7 @@ import android.graphics.Matrix
 import android.graphics.SurfaceTexture
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.view.*
 import android.widget.TextView
 import com.o3dr.android.client.apis.GimbalApi
@@ -43,6 +44,8 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
         }
     }
 
+    private val handler = Handler()
+
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action) {
@@ -57,6 +60,12 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
             }
         }
 
+    }
+
+    private val resetGimbalControl = Runnable {
+        if(drone != null) {
+            GimbalApi.getApi(drone).stopGimbalControl(orientationListener)
+        }
     }
 
     private var surfaceRef: Surface? = null
@@ -214,8 +223,6 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
                 videoStatus?.visibility = View.GONE
                 Timber.d("Video stream started successfully")
 
-                GimbalApi.getApi(drone).startGimbalControl(orientationListener)
-
                 val gimbalTracker = object : View.OnTouchListener {
                     var startX: Float = 0f
                     var startY: Float = 0f
@@ -255,6 +262,9 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
 
                         when (event.action) {
                             MotionEvent.ACTION_DOWN -> {
+                                handler.removeCallbacks(resetGimbalControl)
+                                GimbalApi.getApi(drone).startGimbalControl(orientationListener)
+
                                 touchCircleImage?.setVisibility(View.VISIBLE)
                                 touchCircleImage?.setX(xTouch - centerTouchX)
                                 touchCircleImage?.setY(yTouch - centerTouchY)
@@ -272,6 +282,7 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
                             }
                             MotionEvent.ACTION_UP -> {
                                 touchCircleImage?.setVisibility(View.GONE)
+                                handler.postDelayed(resetGimbalControl, 3500L)
                             }
                         }
                         return false
