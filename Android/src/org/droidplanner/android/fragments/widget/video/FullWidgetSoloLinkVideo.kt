@@ -23,7 +23,7 @@ import com.o3dr.services.android.lib.drone.companion.solo.tlv.SoloGoproState
 import com.o3dr.services.android.lib.drone.property.Attitude
 import com.o3dr.services.android.lib.model.AbstractCommandListener
 import org.droidplanner.android.R
-import org.droidplanner.android.dialogs.OkDialog
+import org.droidplanner.android.dialogs.LoadingDialog
 import timber.log.Timber
 
 /**
@@ -62,11 +62,17 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
 
     }
 
-    private val resetGimbalControl = Runnable {
-        if(drone != null) {
-            GimbalApi.getApi(drone).stopGimbalControl(orientationListener)
+    private val resetGimbalControl = object: Runnable {
+
+        override fun run() {
+            if (drone != null) {
+                GimbalApi.getApi(drone).stopGimbalControl(orientationListener)
+            }
+            handler.removeCallbacks(this)
         }
     }
+
+    private var fpvLoader: LoadingDialog? = null
 
     private var surfaceRef: Surface? = null
 
@@ -173,13 +179,30 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
             if (pm.resolveActivity(launchIntent, PackageManager.MATCH_DEFAULT_ONLY) == null) {
                 launchIntent = Intent(Intent.ACTION_VIEW).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).setData(Uri.parse("https://play.google.com/store/apps/details?id=" + appId))
             }
+
+            startActivity(launchIntent)
+
         } else {
-            OkDialog.newInstance(activity.getApplicationContext(), "", "Starting FPV...").show(activity.getSupportFragmentManager(), "FPV launch dialog")
+            if(fpvLoader == null) {
+                launchIntent.putExtra("meavydev.DronePro.launchFPV", "Tower")
 
-            launchIntent.putExtra("meavydev.DronePro.launchFPV", "Tower")
+                fpvLoader = LoadingDialog.newInstance("Starting FPV...", object : LoadingDialog.Listener {
+                    override fun onStarted() {
+                        handler.postDelayed( {startActivity(launchIntent) }, 500L)
+                    }
+
+                    override fun onCancel() {
+                        fpvLoader = null
+                    }
+
+                    override fun onDismiss() {
+                        fpvLoader = null
+                    }
+
+                });
+                fpvLoader?.show(childFragmentManager, "FPV launch dialog")
+            }
         }
-
-        startActivity(launchIntent)
     }
 
     override fun onApiConnected() {
@@ -196,6 +219,12 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
     override fun onPause() {
         super.onPause()
         tryStoppingVideoStream()
+    }
+
+    override fun onStop(){
+        super.onStop()
+        fpvLoader?.dismiss()
+        fpvLoader = null
     }
 
     override fun onApiDisconnected() {
