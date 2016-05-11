@@ -33,7 +33,9 @@ import org.droidplanner.android.utils.file.IO.ExceptionWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.fabric.sdk.android.Fabric;
@@ -41,7 +43,7 @@ import timber.log.Timber;
 
 public class DroidPlannerApp extends MultiDexApplication implements DroneListener, TowerListener {
 
-    private static final long DELAY_TO_DISCONNECTION = 1000l; // ms
+    private static final long DELAY_TO_DISCONNECTION = 1000L; // ms
 
     private static final String TAG = DroidPlannerApp.class.getSimpleName();
 
@@ -56,8 +58,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
 
     public static final String EXTRA_CONNECTION_FAILED_ERROR_MESSAGE = "extra_connection_failed_error_message";
 
-    public static final String ACTION_DRONE_EVENT = Utils.PACKAGE_NAME + ".ACTION_DRONE_EVENT";
-    public static final String EXTRA_DRONE_EVENT = "extra_drone_event";
+    private static final long EVENTS_DISPATCHING_PERIOD = 200L; //MS
 
     private static final AtomicBoolean isCellularNetworkOn = new AtomicBoolean(false);
 
@@ -114,6 +115,30 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
             handler.removeCallbacks(this);
         }
     };
+
+    private final Runnable eventsDispatcher = new Runnable() {
+        @Override
+        public void run() {
+            handler.removeCallbacks(this);
+
+            //Go through the events buffer and empty it
+            for(Map.Entry<String, Bundle> entry: eventsBuffer.entrySet()){
+                String event = entry.getKey();
+                Bundle extras = entry.getValue();
+
+                final Intent droneIntent = new Intent(event);
+                if (extras != null)
+                    droneIntent.putExtras(extras);
+                lbm.sendBroadcast(droneIntent);
+            }
+
+            eventsBuffer.clear();
+
+            handler.postDelayed(this, EVENTS_DISPATCHING_PERIOD);
+        }
+    };
+
+    private final Map<String, Bundle> eventsBuffer = new LinkedHashMap<>(200);
 
     private final Handler handler = new Handler();
     private final List<ApiListener> apiListeners = new ArrayList<ApiListener>();
@@ -333,7 +358,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
     @Override
     public void onDroneEvent(String event, Bundle extras) {
         switch (event) {
-            case AttributeEvent.STATE_CONNECTED:
+            case AttributeEvent.STATE_CONNECTED: {
                 handler.removeCallbacks(disconnectionTask);
                 startService(new Intent(getApplicationContext(), AppService.class));
 
@@ -351,22 +376,38 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
 
                     @Override
                     public void onTimeout() {
-                        Timber.w("%s return to me timed out.", isReturnToMeOn ? "Starting": "Stopping");
+                        Timber.w("%s return to me timed out.", isReturnToMeOn ? "Starting" : "Stopping");
                     }
                 });
-                break;
 
-            case AttributeEvent.STATE_DISCONNECTED:
+                final Intent droneIntent = new Intent(event);
+                if (extras != null)
+                    droneIntent.putExtras(extras);
+                lbm.sendBroadcast(droneIntent);
+
+                handler.postDelayed(eventsDispatcher, EVENTS_DISPATCHING_PERIOD);
+                break;
+            }
+
+            case AttributeEvent.STATE_DISCONNECTED: {
+                handler.removeCallbacks(eventsDispatcher);
+
                 shouldWeTerminate();
+
+                final Intent droneIntent = new Intent(event);
+                if (extras != null)
+                    droneIntent.putExtras(extras);
+                lbm.sendBroadcast(droneIntent);
                 break;
+            }
+
+            default: {
+                //Buffer the remaining events, and only fire them at 30hz
+                //TODO: remove this once the buffer is placed on the 3DR Services side
+                eventsBuffer.put(event, extras);
+                break;
+            }
         }
-
-        lbm.sendBroadcast(new Intent(ACTION_DRONE_EVENT).putExtra(EXTRA_DRONE_EVENT, event));
-
-        final Intent droneIntent = new Intent(event);
-        if (extras != null)
-            droneIntent.putExtras(extras);
-        lbm.sendBroadcast(droneIntent);
     }
 
     @Override
