@@ -342,6 +342,7 @@ public class DroidPlannerPrefs {
         final SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PREF_BT_DEVICE_ADDRESS, newAddress)
                 .apply();
+        lbm.sendBroadcast(new Intent(PREF_BT_DEVICE_ADDRESS));
     }
 
     /**

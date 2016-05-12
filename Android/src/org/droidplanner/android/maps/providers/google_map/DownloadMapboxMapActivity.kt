@@ -89,11 +89,11 @@ class DownloadMapboxMapActivity : AppCompatActivity() {
     private var downloadMapFragment: DownloadMapboxMapFragment? = null
 
     private val downloadMapWarning: View by lazy {
-        findViewById(R.id.download_map_warning)
+        findViewById(R.id.download_map_warning) as View
     }
 
     private val downloadMapContainer: View by lazy {
-        findViewById(R.id.download_map_container)
+        findViewById(R.id.download_map_container) as View
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

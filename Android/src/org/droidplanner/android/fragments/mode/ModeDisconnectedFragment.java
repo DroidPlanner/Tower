@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceCategory;
@@ -16,11 +17,16 @@ import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.ClearBTDialogPreference;
+import org.droidplanner.android.dialogs.ClearBTPreferenceFragmentCompat;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 public class ModeDisconnectedFragment extends PreferenceFragmentCompat {
 
-	private final static IntentFilter filter = new IntentFilter(DroidPlannerPrefs.PREF_CONNECTION_TYPE);
+	private final static IntentFilter filter = new IntentFilter();
+	static {
+		filter.addAction(DroidPlannerPrefs.PREF_CONNECTION_TYPE);
+		filter.addAction(DroidPlannerPrefs.PREF_BT_DEVICE_ADDRESS);
+	}
 
 	private final BroadcastReceiver receiver = new BroadcastReceiver() {
 		@Override
@@ -28,6 +34,10 @@ public class ModeDisconnectedFragment extends PreferenceFragmentCompat {
 			switch(intent.getAction()){
 				case DroidPlannerPrefs.PREF_CONNECTION_TYPE:
 					updateConnectionSettings();
+					break;
+
+				case DroidPlannerPrefs.PREF_BT_DEVICE_ADDRESS:
+					updateBluetoothDevicePreference();
 					break;
 			}
 		}
@@ -47,15 +57,35 @@ public class ModeDisconnectedFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.preferences_connection, s);
 
 		loadConnectionPreferences();
-        setupBluetoothDevicePreferences();
+        updateBluetoothDevicePreference();
     }
 
 	@Override
 	public void onStart(){
 		super.onStart();
+
+        DialogFragment dialogFragment = getDialogFragment();
+        if(dialogFragment != null){
+            dialogFragment.dismissAllowingStateLoss();
+        }
+
 		updateConnectionSettings();
 		LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(receiver, filter);
 	}
+
+    @Override
+    public void onDisplayPreferenceDialog(Preference preference) {
+        if (preference instanceof ClearBTDialogPreference) {
+            DialogFragment dialogFragment = getDialogFragment();
+            if (dialogFragment == null) {
+                dialogFragment = ClearBTPreferenceFragmentCompat.newInstance(preference);
+                dialogFragment.setTargetFragment(this, 0);
+                dialogFragment.show(getFragmentManager(), "android.support.v7.preference.PreferenceFragment.DIALOG");
+            }
+        } else {
+            super.onDisplayPreferenceDialog(preference);
+        }
+    }
 
 	private void updateConnectionSettings() {
         if(this.rootPref == null)
@@ -89,8 +119,17 @@ public class ModeDisconnectedFragment extends PreferenceFragmentCompat {
 	@Override
 	public void onStop(){
 		super.onStop();
+        DialogFragment dialogFragment = getDialogFragment();
+        if(dialogFragment != null){
+            dialogFragment.dismissAllowingStateLoss();
+        }
+
 		LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(receiver);
 	}
+
+    private DialogFragment getDialogFragment(){
+        return (DialogFragment) getFragmentManager().findFragmentByTag("android.support.v7.preference.PreferenceFragment.DIALOG");
+    }
 
 	private void hideAllPrefs(){
 		if(this.rootPref != null)
@@ -105,22 +144,13 @@ public class ModeDisconnectedFragment extends PreferenceFragmentCompat {
 		this.bluetoothPrefs = (PreferenceCategory) findPreference("pref_bluetooth");
 	}
 
-    private void setupBluetoothDevicePreferences(){
-        final ClearBTDialogPreference preference = (ClearBTDialogPreference) findPreference(DroidPlannerPrefs.PREF_BT_DEVICE_ADDRESS);
-        if(preference != null){
-            updateBluetoothDevicePreference(preference, prefs.getBluetoothDeviceAddress());
-            preference.setOnResultListener(new ClearBTDialogPreference.OnResultListener() {
-                @Override
-                public void onResult(boolean result) {
-                    if (result) {
-                        updateBluetoothDevicePreference(preference, prefs.getBluetoothDeviceAddress());
-                    }
-                }
-            });
-        }
-    }
+    private void updateBluetoothDevicePreference(){
+		final ClearBTDialogPreference preference = (ClearBTDialogPreference) findPreference(DroidPlannerPrefs.PREF_BT_DEVICE_ADDRESS);
+        if(preference == null)
+            return;
 
-    private void updateBluetoothDevicePreference(Preference preference, String deviceAddress){
+		String deviceAddress = prefs.getBluetoothDeviceAddress();
+
         if(TextUtils.isEmpty(deviceAddress)) {
             preference.setEnabled(false);
             preference.setTitle(R.string.pref_no_saved_bluetooth_device_title);

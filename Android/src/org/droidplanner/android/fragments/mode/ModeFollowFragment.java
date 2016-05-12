@@ -149,6 +149,10 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
             updateModeDescription(followType);
         }
 
+        if(params != null){
+            params.setClassLoader(getContext().getClassLoader());
+        }
+
         if(!Utils.equalBundles(params, lastFollowParams)) {
             lastFollowParams = params;
 
