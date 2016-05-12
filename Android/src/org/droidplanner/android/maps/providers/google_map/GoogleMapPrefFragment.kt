@@ -5,10 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.preference.ListPreference
-import android.preference.PreferenceCategory
-import android.preference.PreferenceManager
-import android.preference.PreferenceScreen
+import android.preference.*
 import android.support.v4.util.ArrayMap
 import android.text.TextUtils
 import android.widget.Toast
@@ -47,6 +44,7 @@ class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.Listener
 
         const val PREF_MAPBOX_TILE_PROVIDER_SETTINGS = "pref_mapbox_tile_provider_settings"
 
+        const val PREF_ARCGIS_MAP_DOWNLOAD = "pref_arcgis_map_download"
         val PREF_MAPBOX_MAP_DOWNLOAD = "pref_mapbox_map_download"
 
         val PREF_DOWNLOAD_MENU_OPTION = "pref_download_menu_option"
@@ -128,7 +126,7 @@ class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.Listener
             }
         }
 
-        fun setMapboxId(context: Context?, mapboxId: String?){
+        private fun setMapboxId(context: Context?, mapboxId: String?){
             context?.let {
                 val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
                 sharedPref.edit().putString(PREF_MAPBOX_ID, mapboxId).apply()
@@ -142,7 +140,7 @@ class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.Listener
             }
         }
 
-        fun setMapboxAccessToken(context: Context?, mapboxToken: String?){
+        private fun setMapboxAccessToken(context: Context?, mapboxToken: String?){
             context?.let {
                 val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
                 sharedPref.edit().putString(PREF_MAPBOX_ACCESS_TOKEN, mapboxToken).apply()
@@ -218,10 +216,11 @@ class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.Listener
                     if (isMapboxAccessTokenSet()) {
                         enableTileProvider(tileProvidersPref, MAPBOX_TILE_PROVIDER, true)
                     }
-
-                    //Check if the mapbox access token is set
-                    accessTokenDialog?.show(fragmentManager,
-                            MAPBOX_ACCESS_TOKEN_DIALOG_TAG)
+                    else {
+                        //Check if the mapbox access token is set
+                        accessTokenDialog?.show(fragmentManager,
+                                MAPBOX_ACCESS_TOKEN_DIALOG_TAG)
+                    }
                 }
             }
 
@@ -267,14 +266,12 @@ class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.Listener
                             //Show a dialog requesting the user to enter its mapbox id and access token
                             acceptChange = false
 
-                            val inputDialog = if(!isMapboxIdSet()){
+                            val inputDialog = if (!isMapboxIdSet()) {
                                 EditInputDialog.newInstance(MAPBOX_ID_DIALOG_TAG, "Enter mapbox id", "mapbox id", false)
-                            }
-                            else{
-                                if(!isMapboxAccessTokenSet()){
+                            } else {
+                                if (!isMapboxAccessTokenSet()) {
                                     accessTokenDialog
-                                }
-                                else{
+                                } else {
                                     null
                                 }
                             }
@@ -309,12 +306,35 @@ class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.Listener
     }
 
     private fun setupArcGISTileProviderPreferences(sharedPref: SharedPreferences){
-        val mapTypeKey = PREF_ARCGIS_MAP_TYPE
-        val mapTypePref = findPreference(mapTypeKey) ?: return
-        mapTypePref.summary = sharedPref.getString(mapTypeKey, getString(DEFAULT_ARCGIS_MAP_TYPE))
-        mapTypePref.setOnPreferenceChangeListener { preference, newValue ->
-            mapTypePref.summary = newValue.toString()
+        val context = getContext()
+
+        //Setup mapbox map download button
+        val downloadMapPref = findPreference(PREF_ARCGIS_MAP_DOWNLOAD)
+        downloadMapPref?.setOnPreferenceClickListener {
+            startActivity(Intent(context, DownloadMapboxMapActivity::class.java))
             true
+        }
+
+        val mapTypeKey = PREF_ARCGIS_MAP_TYPE
+        val mapTypePref = findPreference(mapTypeKey)
+        mapTypePref?.let {
+            mapTypePref.summary = sharedPref.getString(mapTypeKey, getString(DEFAULT_ARCGIS_MAP_TYPE))
+            mapTypePref.setOnPreferenceChangeListener { preference, newValue ->
+                mapTypePref.summary = newValue.toString()
+                true
+            }
+        }
+
+        //Offline layer checkbox
+        val offlineLayerPref = findPreference(PREF_ENABLE_OFFLINE_LAYER) as CheckBoxPreference?
+        offlineLayerPref?.let {
+            offlineLayerPref.isChecked = sharedPref.getBoolean(PREF_ENABLE_OFFLINE_LAYER, DEFAULT_OFFLINE_LAYER_ENABLED)
+        }
+
+        //Download menu option
+        val downloadMenuPref = findPreference(PREF_DOWNLOAD_MENU_OPTION) as CheckBoxPreference?
+        downloadMenuPref?.let {
+            downloadMenuPref.isChecked = sharedPref.getBoolean(PREF_DOWNLOAD_MENU_OPTION, DEFAULT_DOWNLOAD_MENU_OPTION)
         }
     }
 
@@ -324,8 +344,20 @@ class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.Listener
         //Setup mapbox map download button
         val downloadMapPref = findPreference(PREF_MAPBOX_MAP_DOWNLOAD)
         downloadMapPref?.setOnPreferenceClickListener {
-            startActivity(Intent(getContext(), DownloadMapboxMapActivity::class.java))
+            startActivity(Intent(context, DownloadMapboxMapActivity::class.java))
             true
+        }
+
+        //Offline layer checkbox
+        val offlineLayerPref = findPreference(PREF_ENABLE_OFFLINE_LAYER) as CheckBoxPreference?
+        offlineLayerPref?.let {
+            offlineLayerPref.isChecked = sharedPref.getBoolean(PREF_ENABLE_OFFLINE_LAYER, DEFAULT_OFFLINE_LAYER_ENABLED)
+        }
+
+        //Download menu option
+        val downloadMenuPref = findPreference(PREF_DOWNLOAD_MENU_OPTION) as CheckBoxPreference?
+        downloadMenuPref?.let {
+            downloadMenuPref.isChecked = sharedPref.getBoolean(PREF_DOWNLOAD_MENU_OPTION, DEFAULT_DOWNLOAD_MENU_OPTION)
         }
 
         //Setup mapbox map id
@@ -376,8 +408,10 @@ class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.Listener
             val summary = if (TextUtils.isEmpty(id)) {
                 enableTileProvider(GOOGLE_TILE_PROVIDER, true)
                 getString(R.string.pref_hint_mapbox_id)
-            } else
+            } else {
                 id
+            }
+
             mapboxIdPref.summary = summary
         }
 
@@ -392,8 +426,9 @@ class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.Listener
                 enableTileProvider(GOOGLE_TILE_PROVIDER, true)
                 getString(R.string.pref_hint_mapbox_access_token)
             }
-            else
+            else {
                 token
+            }
             mapboxTokenPref.summary = summary
         }
 
@@ -405,6 +440,15 @@ class GoogleMapPrefFragment : MapProviderPreferences(), EditInputDialog.Listener
         tileProviderSettingsScreen.removeAll()
         val providerSettingsScreen = providerSettingsScreens[tileProvider] ?: return
         tileProviderSettingsScreen.addPreference(providerSettingsScreen)
+
+        val context = activity.applicationContext
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+
+        when(tileProvider){
+            GoogleMapPrefConstants.GOOGLE_TILE_PROVIDER -> setupGoogleTileProviderPreferences(sharedPref)
+            GoogleMapPrefConstants.MAPBOX_TILE_PROVIDER -> setupMapboxTileProviderPreferences(sharedPref)
+            GoogleMapPrefConstants.ARC_GIS_TILE_PROVIDER -> setupArcGISTileProviderPreferences(sharedPref)
+        }
     }
 
     override fun getMapProvider(): DPMapProvider? = DPMapProvider.GOOGLE_MAP

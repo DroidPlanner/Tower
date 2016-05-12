@@ -34,7 +34,7 @@
                 android:title="@string/pref_title_enable_offline_map_layer"/>
 
             <Preference
-                android:key="pref_mapbox_map_download"
+                android:key="pref_arcgis_map_download"
                 android:summary="@string/pref_summary_mapbox_map_download"
                 android:title="@string/pref_title_mapbox_map_download"/>
 
