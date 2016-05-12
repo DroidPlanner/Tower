@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.ControlApi;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
@@ -92,8 +93,9 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
         switch (cardWheel.getId()) {
             case R.id.altitude_spinner:
                 final Drone drone = getDrone();
-                if (drone.isConnected())
-                    drone.setGuidedAltitude(endValue.toBase().getValue());
+                if (drone.isConnected()) {
+                    ControlApi.getApi(drone).climbTo(endValue.toBase().getValue());
+                }
                 break;
         }
     }
@@ -135,7 +137,8 @@ public class ModeGuidedFragment extends ApiListenerFragment implements
     @Override
     public void onGuidedClick(LatLong coord) {
         final Drone drone = getDrone();
-        if (drone != null)
-            drone.sendGuidedPoint(coord, false);
+        if (drone != null) {
+            ControlApi.getApi(drone).goTo(coord, false, null);
+        }
     }
 }

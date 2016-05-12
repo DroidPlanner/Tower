@@ -91,30 +91,37 @@ public class OkDialog extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        getDialog().setCanceledOnTouchOutside(dismissDialogWithoutClicking);
-        getDialog().setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                if (listener != null) {
-                    listener.onCancel();
+        Dialog dialog = getDialog();
+        if(dialog != null) {
+            dialog.setCanceledOnTouchOutside(dismissDialogWithoutClicking);
+            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    if (listener != null) {
+                        listener.onCancel();
+                    }
                 }
-            }
-        });
+            });
 
-        getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                if (listener != null) {
-                    listener.onDismiss();
+            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    if (listener != null) {
+                        listener.onDismiss();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        getDialog().setOnDismissListener(null);
+        Dialog dialog = getDialog();
+        if(dialog != null) {
+            dialog.setOnDismissListener(null);
+        }
+
         dismissAllowingStateLoss();
     }
 
