@@ -22,6 +22,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:paddingTop="8dp"
-    chg:rowHeaderLayoutId="@layout/changelogrowheader_material_layout"
-    chg:rowLayoutId="@layout/changelogrow_material_layout" />
+    android:paddingTop="4dp"
+    chg:rowHeaderLayoutId="@layout/layout_changelog_row_header"
+    chg:rowLayoutId="@layout/layout_changelog_row" />
