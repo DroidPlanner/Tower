@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chg_rowheader"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="56dp"
+    android:orientation="horizontal"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp">
+
+
+    <!-- ChangeLog Header [Version] You have to use the id="chg_headerVersion" -->
+    <TextView
+        android:id="@+id/chg_headerVersion"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:textAllCaps="true"
+        android:textColor="@color/chglib_material_color_text_1"
+        android:textSize="@dimen/chglib_material_list_suheader_fontsize"
+        android:textStyle="bold"
+        tools:text="VERSION 1.5" />
+
+    <!-- ChangeLog Header [Date] You have to use the id="chg_headerDate" -->
+    <TextView
+        android:id="@+id/chg_headerDate"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        tools:text="JUNE 17,2013"
+        android:textAllCaps="true"
+        android:textColor="@color/chglib_material_color_text_1"
+        android:textSize="@dimen/chglib_material_list_suheader_fontsize"
+        android:textStyle="bold" />
+
+
+</LinearLayout>

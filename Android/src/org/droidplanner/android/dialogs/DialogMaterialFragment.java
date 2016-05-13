@@ -18,7 +18,6 @@
 package org.droidplanner.android.dialogs;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -27,7 +26,6 @@ import android.view.LayoutInflater;
 
 import org.droidplanner.android.R;
 
-import it.gmariotti.changelibs.library.view.ChangeLogListView;
 import it.gmariotti.changelibs.library.view.ChangeLogRecyclerView;
 
 
@@ -43,8 +41,7 @@ public class DialogMaterialFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(
-            Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         ChangeLogRecyclerView chgList = (ChangeLogRecyclerView) layoutInflater.inflate(R.layout.demo_changelog_fragment_dialogmaterial, null);
 
         return new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle)

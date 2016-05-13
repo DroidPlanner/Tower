@@ -2,6 +2,7 @@ package org.droidplanner.android.maps.providers.google_map.tiles.mapbox;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.text.TextUtils;
 
 import org.droidplanner.android.maps.DPMap;
@@ -32,6 +33,8 @@ import timber.log.Timber;
  * Manager for the mapbox online and offline tile providers
  */
 public class MapboxTileProviderManager extends TileProviderManager {
+
+    private final Handler handler = new Handler();
 
     private final Context context;
     private final String mapboxId;
@@ -172,7 +175,12 @@ public class MapboxTileProviderManager extends TileProviderManager {
                         [self notifyDelegateOfHTTPStatusError:((NSHTTPURLResponse *)response).statusCode url:response.URL];
 */
                     } finally {
-                        mapDownloader.startDownloadProcess(mapId, urls);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mapDownloader.startDownloadProcess(mapId, urls);
+                            }
+                        });
                     }
                 }
             });

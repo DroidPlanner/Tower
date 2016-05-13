@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.Spinner;
 
@@ -67,7 +66,7 @@ public class UVCDialog extends DialogFragment {
         builder.setTitle(R.string.uvc_device_select);
         builder.setPositiveButton(android.R.string.ok, mOnDialogClickListener);
         builder.setNegativeButton(android.R.string.cancel, mOnDialogClickListener);
-        builder.setNeutralButton(R.string.uvc_device_refresh, null);
+        builder.setNeutralButton(R.string.uvc_device_refresh, mOnDialogClickListener);
         final Dialog dialog = builder.create();
         dialog.setCancelable(true);
         dialog.setCanceledOnTouchOutside(true);
@@ -84,22 +83,8 @@ public class UVCDialog extends DialogFragment {
         final View empty = rootView.findViewById(android.R.id.empty);
         mSpinner.setEmptyView(empty);
         updateDevices();
-        final Button button = (Button)getDialog().findViewById(android.R.id.button3);
-        if (button != null) {
-            button.setOnClickListener(mOnClickListener);
-        }
-        return rootView;
-    }
 
-    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(final View v) {
-            switch (v.getId()) {
-                case android.R.id.button3:
-                    updateDevices();
-                    break;
-            }
-        }
+        return rootView;
     };
 
     private final DialogInterface.OnClickListener mOnDialogClickListener = new DialogInterface.OnClickListener() {
@@ -111,6 +96,10 @@ public class UVCDialog extends DialogFragment {
                     if (item instanceof UsbDevice) {
                         if (mUSBMonitor != null) mUSBMonitor.requestPermission((UsbDevice)item);
                     }
+                    break;
+
+                case DialogInterface.BUTTON_NEUTRAL:
+                    updateDevices();
                     break;
             }
         }
