@@ -3,7 +3,7 @@ package org.droidplanner.android.data;
 import android.content.Context;
 import android.text.TextUtils;
 
-import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.OfflineDatabaseHandler;
+import org.droidplanner.android.maps.providers.google_map.tiles.offline.db.OfflineDatabaseHandler;
 
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,12 +17,12 @@ public class DatabaseState {
 
     public static OfflineDatabaseHandler getOfflineDatabaseHandlerForMapId(Context context, String dbName) {
         final String lowerMapId = dbName.toLowerCase(Locale.US);
-        if (databaseHandlers.containsKey(lowerMapId)) {
-            return databaseHandlers.get(dbName);
+        OfflineDatabaseHandler dbh = databaseHandlers.get(lowerMapId);
+        if(dbh == null){
+            dbh = new OfflineDatabaseHandler(context, lowerMapId);
+            databaseHandlers.put(lowerMapId, dbh);
         }
 
-        OfflineDatabaseHandler dbh = new OfflineDatabaseHandler(context, lowerMapId);
-        databaseHandlers.put(lowerMapId, dbh);
         return dbh;
     }
 

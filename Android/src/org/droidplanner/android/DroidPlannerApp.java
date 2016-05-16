@@ -26,16 +26,16 @@ import com.o3dr.services.android.lib.drone.connection.DroneSharePrefs;
 import com.o3dr.services.android.lib.model.AbstractCommandListener;
 
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
-import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.LogToFileTree;
 import org.droidplanner.android.utils.Utils;
-import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.IO.ExceptionWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.fabric.sdk.android.Fabric;
@@ -43,7 +43,7 @@ import timber.log.Timber;
 
 public class DroidPlannerApp extends MultiDexApplication implements DroneListener, TowerListener {
 
-    private static final long DELAY_TO_DISCONNECTION = 1000l; // ms
+    private static final long DELAY_TO_DISCONNECTION = 1000L; // ms
 
     private static final String TAG = DroidPlannerApp.class.getSimpleName();
 
@@ -58,8 +58,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
 
     public static final String EXTRA_CONNECTION_FAILED_ERROR_MESSAGE = "extra_connection_failed_error_message";
 
-    public static final String ACTION_DRONE_EVENT = Utils.PACKAGE_NAME + ".ACTION_DRONE_EVENT";
-    public static final String EXTRA_DRONE_EVENT = "extra_drone_event";
+    private static final long EVENTS_DISPATCHING_PERIOD = 200L; //MS
 
     private static final AtomicBoolean isCellularNetworkOn = new AtomicBoolean(false);
 
@@ -100,10 +99,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         notifyApiDisconnected();
     }
 
-    public DroidPlannerPrefs getAppPreferences() {
-        return dpPrefs;
-    }
-
     public interface ApiListener {
         void onApiConnected();
 
@@ -121,6 +116,30 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         }
     };
 
+    private final Runnable eventsDispatcher = new Runnable() {
+        @Override
+        public void run() {
+            handler.removeCallbacks(this);
+
+            //Go through the events buffer and empty it
+            for(Map.Entry<String, Bundle> entry: eventsBuffer.entrySet()){
+                String event = entry.getKey();
+                Bundle extras = entry.getValue();
+
+                final Intent droneIntent = new Intent(event);
+                if (extras != null)
+                    droneIntent.putExtras(extras);
+                lbm.sendBroadcast(droneIntent);
+            }
+
+            eventsBuffer.clear();
+
+            handler.postDelayed(this, EVENTS_DISPATCHING_PERIOD);
+        }
+    };
+
+    private final Map<String, Bundle> eventsBuffer = new LinkedHashMap<>(200);
+
     private final Handler handler = new Handler();
     private final List<ApiListener> apiListeners = new ArrayList<ApiListener>();
 
@@ -132,7 +151,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
     private MissionProxy missionProxy;
     private DroidPlannerPrefs dpPrefs;
     private LocalBroadcastManager lbm;
-    private MapDownloader mapDownloader;
 
     private LogToFileTree logToFileTree;
 
@@ -141,14 +159,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         super.onCreate();
 
         final Context context = getApplicationContext();
-
-        dpPrefs = new DroidPlannerPrefs(context);
-        lbm = LocalBroadcastManager.getInstance(context);
-        mapDownloader = new MapDownloader(context);
-
-        controlTower = new ControlTower(context);
-        drone = new Drone(context);
-        missionProxy = new MissionProxy(context, this.drone);
 
         final Thread.UncaughtExceptionHandler dpExceptionHandler = new Thread.UncaughtExceptionHandler() {
             @Override
@@ -161,13 +171,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(dpExceptionHandler);
 
-        GAUtils.initGATracker(this);
-        GAUtils.startNewSession(context);
-
-        if(BuildConfig.ENABLE_CRASHLYTICS) {
-            Fabric.with(context, new Crashlytics());
-        }
-
         if (BuildConfig.WRITE_LOG_FILE) {
             logToFileTree = new LogToFileTree();
             Timber.plant(logToFileTree);
@@ -175,14 +178,21 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
             Timber.plant(new Timber.DebugTree());
         }
 
+        if(BuildConfig.ENABLE_CRASHLYTICS) {
+            Fabric.with(context, new Crashlytics());
+        }
+
+        dpPrefs = DroidPlannerPrefs.getInstance(context);
+        lbm = LocalBroadcastManager.getInstance(context);
+
+        controlTower = new ControlTower(context);
+        drone = new Drone(context);
+        missionProxy = new MissionProxy(context, this.drone);
+
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_TOGGLE_DRONE_CONNECTION);
 
         registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    public MapDownloader getMapDownloader() {
-        return mapDownloader;
     }
 
     public void addApiListener(ApiListener listener) {
@@ -348,7 +358,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
     @Override
     public void onDroneEvent(String event, Bundle extras) {
         switch (event) {
-            case AttributeEvent.STATE_CONNECTED:
+            case AttributeEvent.STATE_CONNECTED: {
                 handler.removeCallbacks(disconnectionTask);
                 startService(new Intent(getApplicationContext(), AppService.class));
 
@@ -366,22 +376,38 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
 
                     @Override
                     public void onTimeout() {
-                        Timber.w("%s return to me timed out.", isReturnToMeOn ? "Starting": "Stopping");
+                        Timber.w("%s return to me timed out.", isReturnToMeOn ? "Starting" : "Stopping");
                     }
                 });
-                break;
 
-            case AttributeEvent.STATE_DISCONNECTED:
+                final Intent droneIntent = new Intent(event);
+                if (extras != null)
+                    droneIntent.putExtras(extras);
+                lbm.sendBroadcast(droneIntent);
+
+                handler.postDelayed(eventsDispatcher, EVENTS_DISPATCHING_PERIOD);
+                break;
+            }
+
+            case AttributeEvent.STATE_DISCONNECTED: {
+                handler.removeCallbacks(eventsDispatcher);
+
                 shouldWeTerminate();
+
+                final Intent droneIntent = new Intent(event);
+                if (extras != null)
+                    droneIntent.putExtras(extras);
+                lbm.sendBroadcast(droneIntent);
                 break;
+            }
+
+            default: {
+                //Buffer the remaining events, and only fire them at 30hz
+                //TODO: remove this once the buffer is placed on the 3DR Services side
+                eventsBuffer.put(event, extras);
+                break;
+            }
         }
-
-        lbm.sendBroadcast(new Intent(ACTION_DRONE_EVENT).putExtra(EXTRA_DRONE_EVENT, event));
-
-        final Intent droneIntent = new Intent(event);
-        if (extras != null)
-            droneIntent.putExtras(extras);
-        lbm.sendBroadcast(droneIntent);
     }
 
     @Override

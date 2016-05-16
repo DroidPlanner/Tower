@@ -51,7 +51,7 @@ public abstract class ApiListenerFragment extends Fragment implements DroidPlann
     protected MissionProxy getMissionProxy() { return dpApp.getMissionProxy(); }
 
     protected DroidPlannerPrefs getAppPrefs(){
-        return dpApp.getAppPreferences();
+        return DroidPlannerPrefs.getInstance(getContext());
     }
 
 	public Drone getDrone() {

@@ -215,10 +215,10 @@
 
     <style name="ModeDetailText">
         <item name="android:textColor">@color/greyText</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">13sp</item>
 	    <item name="android:textStyle">italic</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
-        <item name="android:padding">16dp</item>
+        <item name="android:padding">8dp</item>
         </style>
 
     <style name="modeControl">
@@ -446,6 +446,11 @@
         <item name="android:gravity">center_horizontal</item>
     </style>
 
+    <style name="warningPanelGravity">
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
     <style name="Telemetry" />
 
     <style name="Telemetry.Entry" >
@@ -518,6 +523,21 @@
         <item name="android:layout_marginEnd">-6dp</item>
         <item name="fabSize">normal</item>
         <item name="backgroundTint">@android:color/white</item>
+    </style>
+
+    <style name="Divider"/>
+
+    <style name="Divider.Shadow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2dp</item>
+    </style>
+
+    <style name="Divider.Shadow.Above">
+        <item name="android:background">@drawable/above_shadow</item>
+    </style>
+
+    <style name="Divider.Shadow.Below">
+        <item name="android:background">@drawable/below_shadow</item>
     </style>
 
 </resources>

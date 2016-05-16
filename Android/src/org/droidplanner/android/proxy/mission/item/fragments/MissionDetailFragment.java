@@ -384,6 +384,10 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
             //Invalid state. We should not have been able to get here.
             //If the parent activity is listening, it will remove this fragment when the selection is empty.
             mMissionProxy.selection.notifySelectionUpdate();
+
+            //Dismiss this dialog fragment
+            dismiss();
+            return;
         }
 
         if(getResource() == R.layout.fragment_editor_detail_generic) {

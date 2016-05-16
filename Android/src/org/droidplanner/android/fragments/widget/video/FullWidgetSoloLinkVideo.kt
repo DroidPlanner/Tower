@@ -4,9 +4,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.graphics.Matrix
 import android.graphics.SurfaceTexture
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.view.*
 import android.widget.TextView
 import com.o3dr.android.client.apis.GimbalApi
@@ -20,6 +23,7 @@ import com.o3dr.services.android.lib.drone.companion.solo.tlv.SoloGoproState
 import com.o3dr.services.android.lib.drone.property.Attitude
 import com.o3dr.services.android.lib.model.AbstractCommandListener
 import org.droidplanner.android.R
+import org.droidplanner.android.dialogs.LoadingDialog
 import timber.log.Timber
 
 /**
@@ -40,6 +44,8 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
         }
     }
 
+    private val handler = Handler()
+
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action) {
@@ -55,6 +61,18 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
         }
 
     }
+
+    private val resetGimbalControl = object: Runnable {
+
+        override fun run() {
+            if (drone != null) {
+                GimbalApi.getApi(drone).stopGimbalControl(orientationListener)
+            }
+            handler.removeCallbacks(this)
+        }
+    }
+
+    private var fpvLoader: LoadingDialog? = null
 
     private var surfaceRef: Surface? = null
 
@@ -76,6 +94,10 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
 
     private val recordVideo by lazy(LazyThreadSafetyMode.NONE) {
         view?.findViewById(R.id.sololink_record_video_button)
+    }
+
+    private val fpvVideo by lazy(LazyThreadSafetyMode.NONE) {
+        view?.findViewById(R.id.sololink_vr_video_button)
     }
 
     private val touchCircleImage by lazy(LazyThreadSafetyMode.NONE) {
@@ -136,6 +158,51 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
                 SoloCameraApi.getApi(drone).toggleVideoRecording(null)
             }
         }
+
+        fpvVideo?.setOnClickListener {
+            launchFpvApp()
+        }
+    }
+
+    private fun launchFpvApp() {
+        val appId = "meavydev.DronePro"
+
+        //Check if the dronepro app is installed.
+        val activity = activity ?: return
+        val pm = activity.getPackageManager()
+        var launchIntent: Intent? = pm.getLaunchIntentForPackage(appId)
+        if (launchIntent == null) {
+
+            //Search for the dronepro app in the play store
+            launchIntent = Intent(Intent.ACTION_VIEW).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).setData(Uri.parse("market://details?id=" + appId))
+
+            if (pm.resolveActivity(launchIntent, PackageManager.MATCH_DEFAULT_ONLY) == null) {
+                launchIntent = Intent(Intent.ACTION_VIEW).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).setData(Uri.parse("https://play.google.com/store/apps/details?id=" + appId))
+            }
+
+            startActivity(launchIntent)
+
+        } else {
+            if(fpvLoader == null) {
+                launchIntent.putExtra("meavydev.DronePro.launchFPV", "Tower")
+
+                fpvLoader = LoadingDialog.newInstance("Starting FPV...", object : LoadingDialog.Listener {
+                    override fun onStarted() {
+                        handler.postDelayed( {startActivity(launchIntent) }, 500L)
+                    }
+
+                    override fun onCancel() {
+                        fpvLoader = null
+                    }
+
+                    override fun onDismiss() {
+                        fpvLoader = null
+                    }
+
+                });
+                fpvLoader?.show(childFragmentManager, "FPV launch dialog")
+            }
+        }
     }
 
     override fun onApiConnected() {
@@ -152,6 +219,12 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
     override fun onPause() {
         super.onPause()
         tryStoppingVideoStream()
+    }
+
+    override fun onStop(){
+        super.onStop()
+        fpvLoader?.dismiss()
+        fpvLoader = null
     }
 
     override fun onApiDisconnected() {
@@ -178,8 +251,6 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
             override fun onSuccess() {
                 videoStatus?.visibility = View.GONE
                 Timber.d("Video stream started successfully")
-
-                GimbalApi.getApi(drone).startGimbalControl(orientationListener)
 
                 val gimbalTracker = object : View.OnTouchListener {
                     var startX: Float = 0f
@@ -220,6 +291,9 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
 
                         when (event.action) {
                             MotionEvent.ACTION_DOWN -> {
+                                handler.removeCallbacks(resetGimbalControl)
+                                GimbalApi.getApi(drone).startGimbalControl(orientationListener)
+
                                 touchCircleImage?.setVisibility(View.VISIBLE)
                                 touchCircleImage?.setX(xTouch - centerTouchX)
                                 touchCircleImage?.setY(yTouch - centerTouchY)
@@ -237,6 +311,7 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
                             }
                             MotionEvent.ACTION_UP -> {
                                 touchCircleImage?.setVisibility(View.GONE)
+                                handler.postDelayed(resetGimbalControl, 3500L)
                             }
                         }
                         return false

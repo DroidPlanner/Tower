@@ -9,7 +9,6 @@ import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.LocalBroadcastManager;
@@ -170,10 +169,8 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
         dpApp = (DroidPlannerApp) getApplication();
         lbm = LocalBroadcastManager.getInstance(context);
 
-        mAppPrefs = new DroidPlannerPrefs(context);
+        mAppPrefs = DroidPlannerPrefs.getInstance(context);
         unitSystem = UnitManager.getUnitSystem(context);
-
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		/*
          * Used to supplant wake lock acquisition (previously in
@@ -236,7 +233,8 @@ public abstract class SuperUI extends AppCompatActivity implements DroidPlannerA
     protected void onStart() {
         super.onStart();
 
-        unitSystem = UnitManager.getUnitSystem(getApplicationContext());
+        final Context context = getApplicationContext();
+        unitSystem = UnitManager.getUnitSystem(context);
         dpApp.addApiListener(this);
     }
 

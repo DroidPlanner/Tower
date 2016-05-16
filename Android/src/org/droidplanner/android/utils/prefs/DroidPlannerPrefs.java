@@ -107,6 +107,8 @@ public class DroidPlannerPrefs {
 
     public static final String PREF_APP_VERSION = "pref_version";
 
+    private static final String PREF_APP_VERSION_CODE = "pref_app_version_code";
+
     private static final String PREF_IS_TTS_ENABLED = "pref_enable_tts";
     private static final boolean DEFAULT_TTS_ENABLED = false;
 
@@ -167,7 +169,17 @@ public class DroidPlannerPrefs {
     public final SharedPreferences prefs;
     private final LocalBroadcastManager lbm;
 
-    public DroidPlannerPrefs(Context context) {
+    private static DroidPlannerPrefs instance;
+
+    public static synchronized DroidPlannerPrefs getInstance(Context context) {
+        if (instance == null) {
+            instance = new DroidPlannerPrefs(context);
+        }
+
+        return instance;
+    }
+
+    private DroidPlannerPrefs(Context context) {
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         lbm = LocalBroadcastManager.getInstance(context);
     }
@@ -178,6 +190,25 @@ public class DroidPlannerPrefs {
         // return
         // prefs.getBoolean(PREF_LIVE_UPLOAD_ENABLED, DEFAULT_LIVE_UPLOAD_ENABLED);
         return false;
+    }
+
+    /**
+     * Return the last saved app version code
+     * @return
+     */
+    public int getSavedAppVersionCode(){
+        return prefs.getInt(PREF_APP_VERSION_CODE, 0);
+    }
+
+    /**
+     * Update the saved app version code.
+     * @param context Application context
+     */
+    public void updateSavedAppVersionCode(Context context) {
+        int versionCode = Utils.getAppVersionCode(context);
+        if (versionCode != Utils.INVALID_APP_VERSION_CODE) {
+            prefs.edit().putInt(PREF_APP_VERSION_CODE, versionCode).apply();
+        }
     }
 
     public String getDroneshareLogin() {
@@ -233,6 +264,7 @@ public class DroidPlannerPrefs {
 
     public void setConnectionParameterType(int connectionType) {
         prefs.edit().putString(PREF_CONNECTION_TYPE, String.valueOf(connectionType)).apply();
+        lbm.sendBroadcast(new Intent(PREF_CONNECTION_TYPE));
     }
 
     /**
@@ -310,6 +342,7 @@ public class DroidPlannerPrefs {
         final SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PREF_BT_DEVICE_ADDRESS, newAddress)
                 .apply();
+        lbm.sendBroadcast(new Intent(PREF_BT_DEVICE_ADDRESS));
     }
 
     /**

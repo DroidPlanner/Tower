@@ -1,34 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/mc_disconnected_buttons"
-    android:layout_width="wrap_content"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:visibility="visible"
+    android:layout_width="@dimen/flight_actions_container_width"
     android:layout_gravity="center_horizontal">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/mc_connectBtn"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:src="@drawable/ic_connect_active"
-        style="@style/Fab.GenericMissionControl"
-        app:backgroundTint="@color/flight_action_row_bg_selector"
-        app:fabSize="normal" />
-
-    <TextView
-        android:text="@string/menu_connect"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/mc_disconnected_buttons"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:layout_height="wrap_content"
-        android:background="@drawable/transparent_to_black_gradient"
-        android:paddingRight="15dp"
-        android:paddingLeft="15dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:gravity="center"
-        android:textSize="@dimen/flightControlTextSize"
-        android:textColor="@android:color/white"/>
-</LinearLayout>
+        android:visibility="visible"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="?selectableItemBackground"
+        tools:visibility="visible"
+        >
+
+        <Spinner
+            android:id="@+id/telem_connection_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:minHeight="48dp"/>
+
+        <Button
+            android:id="@+id/mc_connectBtn"
+            style="@style/flightControlButton.Row"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_connect_active"
+            android:text="@string/menu_connect"
+            tools:ignore="ContentDescription"/>
+
+        <ImageView
+            android:id="@+id/reveal_toggler"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/flight_action_row_bg_selector"
+            android:scaleType="center"
+            android:src="@drawable/ic_more_vert_black_24dp"/>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

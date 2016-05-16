@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/flyoutPanelLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
     >
 
-    <TextView
-        android:id="@+id/ModeDetail"
-        style="@style/ModeDetailText"
+    <LinearLayout
+        style="@style/flyoutPanelLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/mode_desc_rectangle"
-        android:text="@string/mode_guided"/>
+        android:orientation="vertical"
+        >
 
-    <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
-        android:id="@+id/altitude_spinner"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/missionItemDetailCard"
-        android:text="@string/altitude_label"/>
+        <TextView
+            android:id="@+id/ModeDetail"
+            style="@style/ModeDetailText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/mode_desc_rectangle"
+            android:text="@string/mode_guided"/>
 
-</LinearLayout>
+        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
+            android:id="@+id/altitude_spinner"
+            style="@style/missionItemDetailCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:text="@string/altitude_label"/>
+
+    </LinearLayout>
+</ScrollView>

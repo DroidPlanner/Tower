@@ -53,7 +53,7 @@ public class DroneshareLoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        prefs = new DroidPlannerPrefs(getActivity());
+        prefs = DroidPlannerPrefs.getInstance(getActivity().getApplicationContext());
     }
 
     @Override

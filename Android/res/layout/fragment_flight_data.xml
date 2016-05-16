@@ -1,100 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.sothree.slidinguppanel.SlidingUpPanelLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:sothree="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/slidingPanelContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="bottom"
-    sothree:shadowHeight="0dp"
-    sothree:paralaxOffset="0dp"
-    sothree:fadeColor="@android:color/transparent"
-    sothree:dragView="@+id/flightActionsFragment"
-    sothree:overlay="true">
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/flight_map_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        android:id="@+id/slidingPanelContainer"
+        xmlns:sothree="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        >
+        android:gravity="bottom"
+        android:layout_above="@+id/warningContainer"
+        sothree:umanoDragView="@+id/flightActionsFragment"
+        sothree:umanoFadeColor="@android:color/transparent"
+        sothree:umanoOverlay="true"
+        sothree:umanoParallaxOffset="0dp"
+        sothree:umanoShadowHeight="0dp"
+        sothree:umanoPanelHeight="@dimen/mission_control_bar_height">
 
-        <FrameLayout
-            android:id="@+id/flight_map_fragment"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            >
 
-        <View
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            <View
+                android:id="@+id/actionbar_shadow"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+
+            <include
+                layout="@layout/button_my_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/actionbar_shadow"
+                android:layout_alignStart="@+id/actionbar_shadow"
+                android:layout_below="@+id/actionbar_shadow"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginTop="8dp"
+                />
+
+        </RelativeLayout>
+        <!-- Sliding layout -->
+        <LinearLayout
+            style="@style/slidingPanelGravity"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:id="@+id/actionbar_shadow"/>
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:orientation="vertical"
+            >
+
+            <org.droidplanner.android.view.FitsSystemWindowsFrameLayout
+                android:id="@+id/flightActionsFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/mission_control_bar_height"
+                android:fitsSystemWindows="true"
+                tools:layout="@layout/fragment_flight_actions_bar"/>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="@dimen/flight_actions_container_width"
+                android:layout_height="@dimen/flight_actions_container_height"
+                android:layout_marginTop="8dp"
+                android:clickable="true">
+
+                    <FrameLayout
+                        android:background="@color/transparent_light_grey"
+                        android:id="@+id/sliding_drawer_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:layout="@layout/fragment_flight_mode_panel"/>
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+    <LinearLayout
+        style="@style/warningPanelGravity"
+        android:id="@+id/warningContainer"
+        android:layout_width="@dimen/flight_actions_container_width"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:background="#D8ee2d3e"
+        android:layout_alignParentBottom="true">
 
         <TextView
             android:id="@+id/failsafeTextView"
             style="@style/editorMissionOverviewText"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:background="#D8ee2d3e"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="start|center_vertical"
-            android:visibility="gone"
-            android:paddingLeft="55dp"
-            android:layout_below="@+id/actionbar_shadow"
-            android:layout_alignLeft="@+id/actionbar_shadow"
-            android:layout_alignStart="@+id/actionbar_shadow"
-            android:layout_alignRight="@+id/actionbar_shadow"
-            android:layout_alignEnd="@+id/actionbar_shadow"
+            android:background="?attr/selectableItemBackground"
             />
 
-        <include
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            layout="@layout/button_my_location"
-            android:layout_marginTop="8dp"
-            android:layout_gravity="center_vertical|start"
-            android:layout_below="@+id/actionbar_shadow"
-            android:layout_alignLeft="@+id/actionbar_shadow"
-            android:layout_alignStart="@+id/actionbar_shadow"
-            />
-
-    </RelativeLayout>
-    <!-- Sliding layout -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:focusable="false"
-        android:clickable="false"
-        style="@style/slidingPanelGravity"
-        >
-
-        <org.droidplanner.android.view.FitsSystemWindowsFrameLayout
-            android:id="@+id/flightActionsFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:layout="@layout/fragment_flight_actions_bar"
-            android:fitsSystemWindows="true"/>
-
-        <android.support.v7.widget.CardView
-            android:layout_width="@dimen/flight_actions_container_width"
-            android:layout_height="wrap_content"
-            android:clickable="true">
-
-            <ScrollView
-                android:layout_width="@dimen/flight_actions_container_width"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/flight_actions_container_height"
-                android:background="@color/transparent_light_grey"
-                >
-
-                <FrameLayout
-                    android:id="@+id/sliding_drawer_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:layout="@layout/fragment_flight_mode_panel"/>
-            </ScrollView>
-        </android.support.v7.widget.CardView>
+        <ImageView
+            android:id="@+id/close_warning_view"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackground"
+            android:scaleType="center"
+            android:src="@drawable/close"/>
     </LinearLayout>
-</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+</RelativeLayout>

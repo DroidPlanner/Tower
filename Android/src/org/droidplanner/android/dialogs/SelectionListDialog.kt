@@ -5,16 +5,14 @@ import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.ListView
-import android.widget.Toast
 import org.droidplanner.android.R
 import org.droidplanner.android.fragments.actionbar.SelectionListAdapter
 
 /**
  * Created by Fredia Huya-Kouadio on 9/25/15.
  */
-public abstract class SelectionListDialog : DialogFragment(), SelectionListAdapter.SelectionListener {
+abstract class SelectionListDialog : DialogFragment(), SelectionListAdapter.SelectionListener {
 
     companion object {
         @JvmStatic public fun newInstance(viewAdapter: SelectionListAdapter<*>?): SelectionListDialog {
@@ -29,7 +27,7 @@ public abstract class SelectionListDialog : DialogFragment(), SelectionListAdapt
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NO_TITLE, 0)
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.CustomDialogTheme)
         isCancelable = true
     }
 

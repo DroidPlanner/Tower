@@ -6,7 +6,7 @@ buildscript {
         kotlin_version = '1.0.0'
 
         play_services_version = '8.4.0'
-        support_lib_version = '23.1.1'
+        support_lib_version = '23.4.0'
         okhttp_version = '2.5.0'
 
         android_build_sdk_version = 23
@@ -22,7 +22,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
-        classpath 'io.fabric.tools:gradle:1.19.2'
+        classpath 'io.fabric.tools:gradle:1.21.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -37,6 +37,20 @@ def getMavenApiKey(){
 
 def getMavenRepoUrl(){
     return hasProperty('COM_O3DR_MAVEN_REPO_URL') ? COM_O3DR_MAVEN_REPO_URL : ''
+}
+
+def computeVersionCode(int versionMajor, int versionMinor, int versionPatch, int versionBuild = 0){
+    return versionMajor * 100000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+}
+
+def generateVersionName(String versionPrefix, int versionMajor, int versionMinor, int versionPatch, String versionSuffix = ""){
+    def versionName = "${versionPrefix}${versionMajor}.${versionMinor}.${versionPatch}"
+
+    if(versionSuffix != null && !versionSuffix.isEmpty() && versionSuffix != "release"){
+        versionName += "-${versionSuffix}"
+    }
+
+    return versionName
 }
 
 allprojects {
