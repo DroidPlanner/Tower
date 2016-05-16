@@ -29,7 +29,7 @@
         style="@style/missionItemNumberPickerView"
         tools:text="22"
         android:layout_gravity="center"
-        android:inputType="numberSigned"
+        android:inputType="numberSigned|numberDecimal"
         android:imeOptions="actionDone"
         android:visibility="invisible"
         android:layout_width="60dp"

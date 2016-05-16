@@ -1,12 +1,5 @@
 package org.droidplanner.android.utils.analytics;
 
-import java.util.Map;
-
-import org.droidplanner.android.BuildConfig;
-import org.droidplanner.android.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-
 import android.content.Context;
 import android.util.Log;
 
@@ -14,6 +7,13 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
+
+import org.droidplanner.android.BuildConfig;
+import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.R;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+
+import java.util.Map;
 
 /**
  * Components related to google analytics logic.
@@ -97,7 +97,7 @@ public class GAUtils {
 			// (http://stackoverflow.com/a/23256722/1088814)
 			analytics.enableAutoActivityReports(app);
 
-			analytics.setAppOptOut(!new DroidPlannerPrefs(context).isUsageStatisticsEnabled());
+			analytics.setAppOptOut(!DroidPlannerPrefs.getInstance(context).isUsageStatisticsEnabled());
 
 			// If we're in debug mode, set log level to verbose.
 			if (BuildConfig.DEBUG) {
@@ -109,7 +109,7 @@ public class GAUtils {
 	}
 
 	public static void startNewSession(Context context) {
-		final DroidPlannerPrefs prefs = new DroidPlannerPrefs(context);
+		final DroidPlannerPrefs prefs = DroidPlannerPrefs.getInstance(context);
 
 		final String login = prefs.getDroneshareLogin();
 		final String password = prefs.getDronesharePassword();

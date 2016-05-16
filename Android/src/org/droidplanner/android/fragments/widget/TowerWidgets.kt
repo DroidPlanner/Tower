@@ -1,5 +1,6 @@
 package org.droidplanner.android.fragments.widget
 
+import android.app.DialogFragment
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
 import org.droidplanner.android.R
@@ -8,6 +9,9 @@ import org.droidplanner.android.fragments.widget.diagnostics.MiniWidgetDiagnosti
 import org.droidplanner.android.fragments.widget.telemetry.MiniWidgetFlightTimer
 import org.droidplanner.android.fragments.widget.telemetry.MiniWidgetGeoInfo
 import org.droidplanner.android.fragments.widget.telemetry.MiniWidgetAttitudeSpeedInfo
+import org.droidplanner.android.fragments.widget.video.FullWidgetSoloLinkVideo
+import org.droidplanner.android.fragments.widget.video.MiniWidgetSoloLinkVideo
+import org.droidplanner.android.fragments.widget.video.WidgetVideoPreferences
 
 /**
  * Created by Fredia Huya-Kouadio on 8/25/15.
@@ -37,7 +41,23 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
         override fun getMinimizedFragment() = MiniWidgetSoloLinkVideo()
 
         override fun getMaximizedFragment() = FullWidgetSoloLinkVideo()
+
+        override fun hasPreferences() = true
+
+        override fun getPrefFragment() = WidgetVideoPreferences()
     },
+
+    UVC_VIDEO(R.id.tower_widget_uvc_video, R.string.label_widget_uvc_video, R.string.description_widget_uvc_video, "pref_widget_uvc_video") {
+
+        override fun canMaximize() = true
+
+        override fun isEnabledByDefault() = false
+
+        override fun getMinimizedFragment() = MiniWidgetUVCLinkVideo()
+
+        override fun getMaximizedFragment() = FullWidgetUVCLinkVideo()
+    },
+
 
     ATTITUDE_SPEED_INFO(R.id.tower_widget_attitude_speed_info, R.string.label_widget_attitude_speed_info, R.string.description_widget_attitude_speed_info, "pref_widget_attitude_speed_info") {
 
@@ -59,12 +79,17 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
 
     open fun getMaximizedFragment(): TowerWidget? = null
 
+    open fun hasPreferences() = false
+
+    open fun getPrefFragment(): DialogFragment? = null
+
     companion object {
         @JvmStatic fun getWidgetById(@IdRes id: Int): TowerWidgets? {
             return when (id) {
                 FLIGHT_TIMER.idRes -> FLIGHT_TIMER
                 ATTITUDE_SPEED_INFO.idRes -> ATTITUDE_SPEED_INFO
                 SOLO_VIDEO.idRes -> SOLO_VIDEO
+                UVC_VIDEO.idRes -> UVC_VIDEO
                 VEHICLE_DIAGNOSTICS.idRes -> VEHICLE_DIAGNOSTICS
                 GEO_INFO.idRes -> GEO_INFO
                 else -> null
@@ -76,6 +101,7 @@ public enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId:
                 FLIGHT_TIMER.prefKey -> FLIGHT_TIMER
                 ATTITUDE_SPEED_INFO.prefKey -> ATTITUDE_SPEED_INFO
                 SOLO_VIDEO.prefKey -> SOLO_VIDEO
+                UVC_VIDEO.prefKey -> UVC_VIDEO
                 VEHICLE_DIAGNOSTICS.prefKey -> VEHICLE_DIAGNOSTICS
                 GEO_INFO.prefKey -> GEO_INFO
                 else -> null

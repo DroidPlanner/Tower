@@ -28,6 +28,7 @@ import org.droidplanner.android.graphic.map.GraphicHome;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
@@ -207,6 +208,10 @@ public abstract class DroneMap extends ApiListenerFragment {
 
 	protected abstract boolean isMissionDraggable();
 
+	public DPMap getMapFragment(){
+		return mMapFragment;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
 		final View view = inflater.inflate(R.layout.fragment_drone_map, viewGroup, false);
@@ -235,6 +240,13 @@ public abstract class DroneMap extends ApiListenerFragment {
 		guided = new GraphicGuided(drone);
 
 		postUpdate();
+	}
+
+	public void downloadMapTiles(MapDownloader mapDownloader, int minimumZ, int maximumZ){
+		if(mMapFragment == null)
+			return;
+
+		mMapFragment.downloadMapTiles(mapDownloader, getVisibleMapArea(), minimumZ, maximumZ);
 	}
 
 	@Override
@@ -287,7 +299,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		context = activity.getApplicationContext();
-		mAppPrefs = new DroidPlannerPrefs(context);
+		mAppPrefs = DroidPlannerPrefs.getInstance(context);
 	}
 
 	public final void postUpdate() {

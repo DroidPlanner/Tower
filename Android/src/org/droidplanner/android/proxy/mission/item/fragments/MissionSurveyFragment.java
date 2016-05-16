@@ -146,11 +146,13 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
         mSidelapPicker.addScrollListener(this);
         mAltitudePicker.addScrollListener(this);
 
-        final T referenceItem = getMissionItems().get(0);
-        if (referenceItem instanceof SplineSurvey)
-            typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SPLINE_SURVEY));
-        else
-            typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
+        if(!getMissionItems().isEmpty()) {
+            final T referenceItem = getMissionItems().get(0);
+            if (referenceItem instanceof SplineSurvey)
+                typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SPLINE_SURVEY));
+            else
+                typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
+        }
 
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }

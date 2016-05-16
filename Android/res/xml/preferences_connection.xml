@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:key="pref_usb"
+        android:title="@string/pref_usb">
+
+        <ListPreference
+            android:defaultValue="57600"
+            android:entries="@array/TelemetryBaudTypes"
+            android:entryValues="@array/TelemetryBaudTypes"
+            android:key="pref_baud_type"
+            android:summary="@string/pref_baud_type_summary"
+            android:title="@string/pref_baud_type"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_server"
+        android:title="@string/pref_server">
+        <EditTextPreference
+            android:defaultValue="192.168.40.100"
+            android:gravity="center"
+            android:key="pref_server_ip"
+            android:title="@string/pref_server_ip"/>
+        <EditTextPreference
+            android:defaultValue="9761"
+            android:gravity="center"
+            android:inputType="number"
+            android:key="pref_server_port"
+            android:title="@string/pref_server_port"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_server_udp"
+        android:title="@string/pref_server_udp">
+        <EditTextPreference
+            android:defaultValue="14550"
+            android:gravity="center"
+            android:inputType="number"
+            android:key="pref_udp_server_port"
+            android:title="@string/pref_udp_server_port"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_enable_udp_server_ping"
+            android:summary="@string/pref_udp_server_ping_summary"
+            android:title="@string/pref_enable_udp_server_title"/>
+
+        <EditTextPreference
+            android:dependency="pref_enable_udp_server_ping"
+            android:gravity="center"
+            android:key="pref_udp_ping_receiver_ip"
+            android:title="@string/pref_udp_ping_receiver_ip_title"/>
+
+        <EditTextPreference
+            android:dependency="pref_enable_udp_server_ping"
+            android:gravity="center"
+            android:inputType="number"
+            android:key="pref_udp_ping_receiver_port"
+            android:title="@string/pref_udp_ping_receiver_port_title"/>
+
+        <EditTextPreference/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_bluetooth"
+        android:title="@string/pref_bluetooth">
+        <org.droidplanner.android.dialogs.ClearBTDialogPreference
+            android:defaultValue=""
+            android:dialogMessage="@string/pref_forget_bluetooth_device_address_confirm"
+            android:gravity="center"
+            android:key="pref_bluetooth_device_address"
+            android:positiveButtonText="@string/pref_bluetooth_forget"
+            android:title="@string/pref_forget_bluetooth_device_address"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

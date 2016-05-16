@@ -71,7 +71,7 @@ public class FlightModePanel extends ApiListenerFragment{
 		} else {
             VehicleMode mode = droneState.getVehicleMode();
             if(mode == null){
-                infoPanel = new ModeDisconnectedFragment();
+                infoPanel = new ModeDefaultFragment();
             }
             else {
                 switch (mode) {
@@ -139,7 +139,7 @@ public class FlightModePanel extends ApiListenerFragment{
                         break;
 
                     default:
-                        infoPanel = new ModeDisconnectedFragment();
+                        infoPanel = new ModeDefaultFragment();
                         break;
                 }
             }

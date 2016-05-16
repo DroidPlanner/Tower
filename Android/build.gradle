@@ -1,40 +1,44 @@
 apply plugin: 'com.android.application'
-// This does not break the build when Android Studio is missing the JRebel for Android plugin.
-apply plugin: 'com.zeroturnaround.jrebel.android'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 
 dependencies {
-    compile 'com.google.android.gms:play-services-maps:7.8.0'
-    compile 'com.google.android.gms:play-services-location:7.8.0'
-    compile 'com.google.android.gms:play-services-analytics:7.8.0'
+    compile 'com.android.support:multidex:1.0.1'
 
-    compile 'com.sothree.slidinguppanel:library:2.0.2'
+    compile "com.google.android.gms:play-services-maps:${play_services_version}"
+    compile "com.google.android.gms:play-services-location:${play_services_version}"
+    compile "com.google.android.gms:play-services-analytics:${play_services_version}"
 
-    compile 'com.android.support:support-v4:23.0.1'
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:cardview-v7:23.0.1'
-    compile 'com.android.support:recyclerview-v7:23.0.1'
-    compile 'com.android.support:design:23.0.1'
+    compile "com.android.support:support-v4:${support_lib_version}"
+    compile "com.android.support:appcompat-v7:${support_lib_version}"
+    compile "com.android.support:preference-v7:${support_lib_version}"
+    compile "com.android.support:preference-v14:${support_lib_version}"
+    compile "com.android.support:cardview-v7:${support_lib_version}"
+    compile "com.android.support:recyclerview-v7:${support_lib_version}"
+    compile "com.android.support:design:${support_lib_version}"
+
+    // Android library to display the changelog
+    compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
 
     //DroneKit-Android client library.
-    compile 'com.o3dr.android:dronekit-android:2.6.6'
+    compile 'com.o3dr.android:dronekit-android:2.9.0'
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')
+    compile(name:'libuvccamera-release', ext:'aar')
+    compile(name:'sliding-up-panel-3.3.0', ext:'aar')
 
     compile files('libs/droneapi-java-0.3-SNAPSHOT.jar')
-    compile files('libs/j2xx.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
     compile files('libs/jeromq-0.3.4.jar')
     compile files('libs/sius-0.3.0-SNAPSHOT.jar')
 
-    compile 'com.squareup.okhttp:okhttp:2.3.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.3.0'
+    compile "com.squareup.okhttp:okhttp:${okhttp_version}"
+    compile "com.squareup.okhttp:okhttp-urlconnection:${okhttp_version}"
 
     compile 'com.jakewharton.timber:timber:3.1.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.0@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
 
@@ -42,11 +46,13 @@ dependencies {
     compile 'com.github.lecho:hellocharts-library:1.5.5@aar'
 }
 
+def versionPrefix = "Tower-v"
+
 //Decomposed version name and code (https://plus.google.com/+JakeWharton/posts/6f5TcVPRZij)
 def versionMajor = 3
 def versionMinor = 2
-def versionPatch = 0
-def versionBuild = 7 //bump for dogfood builds, public betas, etc.
+def versionPatch = 1
+def versionBuild = 8 //bump for dogfood builds, public betas, etc.
 
 //Logging levels
 def logLevelVerbose = 2;
@@ -57,19 +63,28 @@ def logLevelError = 6;
 def logLevelAssert = 7;
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileSdkVersion android_build_sdk_version
+    buildToolsVersion android_build_tools_version
 
     defaultConfig {
         applicationId 'org.droidplanner.android'
-        minSdkVersion 14
-        targetSdkVersion 22
-        versionCode versionMajor * 100000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
-        versionName "Tower-v${versionMajor}.${versionMinor}.${versionPatch}"
+        minSdkVersion android_build_min_sdk_version
+        targetSdkVersion android_build_target_sdk_version
+        versionCode computeVersionCode(versionMajor, versionMinor, versionPatch, versionBuild)
+        versionName generateVersionName(versionPrefix, versionMajor, versionMinor, versionPatch)
 
         buildConfigField "boolean", "WRITE_LOG_FILE", "true"
         buildConfigField "int", "LOG_FILE_LEVEL", "$logLevelDebug"
         buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
+
+        //Manifest placeholders (http://tools.android.com/tech-docs/new-build-system/user-guide/manifest-merger#TOC-Placeholder-support)
+        manifestPlaceholders = [
+            fabricApiKey:getFabricApiKey()
+        ]
+
+        // Enabling multidex support.
+        multiDexEnabled true
+
     }
 
     compileOptions {
@@ -117,32 +132,80 @@ android {
             def file = output.outputFile
             if (file != null && file.name.endsWith('.apk')) {
                 def buildType = variant.buildType.getName()
+                def flavorName = variant.getFlavorName()
                 def versionCode = defaultConfig.versionCode
-                output.outputFile = new File(file.parent, "tower-${buildType}.${versionCode}.apk")
+                output.outputFile = new File(file.parent, "tower-${flavorName}-${buildType}.${versionCode}.apk")
             }
+        }
+    }
+
+    android.variantFilter { variant ->
+        def flavors = variant.getFlavors()
+        if (!flavors.isEmpty()) {
+            def flavorName = flavors.get(0).name
+            def buildTypeName = variant.buildType.name
+
+            //Filter out the variants we're not interested in building.
+            def ignoreVariant = true
+            switch (buildTypeName) {
+                case "release":
+                    switch (flavorName) {
+                        case "prod":
+                        case "beta":
+                            ignoreVariant = false
+                            break
+                    }
+                    break;
+
+                case "debug":
+                    switch (flavorName) {
+                        case "dev":
+                            ignoreVariant = false
+                            break
+                    }
+                    break;
+            }
+
+            variant.setIgnore(ignoreVariant);
+        }
+    }
+
+    productFlavors {
+        dev {
+            applicationIdSuffix ".debug"
+            resValue "string", "app_title", "Tower Dev"
+            versionName generateVersionName(versionPrefix, versionMajor, versionMinor, versionPatch, "debug.${versionBuild}")
+
+            //Enable or disable crashlytics based on the availability of the api key
+            ext.enableCrashlytics = false
+        }
+
+        beta {
+            applicationIdSuffix ".beta"
+            resValue "string", "app_title", "Tower Beta"
+            versionName generateVersionName(versionPrefix, versionMajor, versionMinor, versionPatch, "beta.${versionBuild}")
+
+            //Enable or disable crashlytics based on the availability of the api key
+            ext.enableCrashlytics = hasFabricApiKey()
+        }
+
+        prod {
+            resValue "string", "app_title", "Tower"
+            buildConfigField "boolean", "WRITE_LOG_FILE", "false"
+
+            //Enable or disable crashlytics based on the availability of the api key
+            ext.enableCrashlytics = hasFabricApiKey()
         }
     }
 
     buildTypes {
         debug {
-            applicationIdSuffix ".debug"
-            versionNameSuffix ".debug.${versionBuild}"
-            resValue "string", "app_title", "Tower Dev"
-        }
-
-        beta {
-            signingConfig signingConfigs.release
-            applicationIdSuffix ".beta"
-            versionNameSuffix ".beta.${versionBuild}"
-            resValue "string", "app_title", "Tower Beta"
-            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "true"
+            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
         }
 
         release {
             signingConfig signingConfigs.release
-            resValue "string", "app_title", "Tower"
-            buildConfigField "boolean", "WRITE_LOG_FILE", "false"
-            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "true"
+            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "${hasFabricApiKey()}"
         }
     }
 }
@@ -176,4 +239,12 @@ def getAppKeyPassword() {
 
 def getAppKey() {
     return hasProperty('ORG_DROIDPLANNER_ANDROID_KEY_ALIAS') ? ORG_DROIDPLANNER_ANDROID_KEY_ALIAS : ''
+}
+
+def getFabricApiKey(){
+    return hasFabricApiKey() ? COM_O3DR_FABRIC_API_KEY : ''
+}
+
+def hasFabricApiKey(){
+    return hasProperty('COM_O3DR_FABRIC_API_KEY')
 }

@@ -1,19 +1,5 @@
 package org.droidplanner.android.fragments;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.droidplanner.android.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
-import org.droidplanner.android.view.checklist.CheckListAdapter;
-import org.droidplanner.android.view.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
-import org.droidplanner.android.view.checklist.CheckListItem;
-import org.droidplanner.android.view.checklist.CheckListSysLink;
-import org.droidplanner.android.view.checklist.CheckListXmlParser;
-import org.droidplanner.android.view.checklist.xml.ListXmlParser.OnXmlParserError;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -25,19 +11,40 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+
+import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
+import org.droidplanner.android.view.checklist.CheckListAdapter;
+import org.droidplanner.android.view.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
+import org.droidplanner.android.view.checklist.CheckListItem;
+import org.droidplanner.android.view.checklist.CheckListSysLink;
+import org.droidplanner.android.view.checklist.CheckListXmlParser;
+import org.droidplanner.android.view.checklist.xml.ListXmlParser.OnXmlParserError;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class ChecklistFragment extends ApiListenerFragment implements OnXmlParserError,
 		OnCheckListItemUpdateListener {
 
-    private final static IntentFilter intentFilter = new IntentFilter(DroidPlannerApp
-            .ACTION_DRONE_EVENT);
+    private final static IntentFilter intentFilter = new IntentFilter();
+	static {
+		intentFilter.addAction(AttributeEvent.BATTERY_UPDATED);
+		intentFilter.addAction(AttributeEvent.GPS_COUNT);
+		intentFilter.addAction(AttributeEvent.GPS_FIX);
+		intentFilter.addAction(AttributeEvent.GPS_POSITION);
+		intentFilter.addAction(AttributeEvent.STATE_CONNECTED);
+		intentFilter.addAction(AttributeEvent.STATE_DISCONNECTED);
+		intentFilter.addAction(AttributeEvent.STATE_UPDATED);
+		intentFilter.addAction(AttributeEvent.STATE_ARMING);
+	}
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            if(DroidPlannerApp.ACTION_DRONE_EVENT.equals(action)){
-                onInfoUpdate();
-            }
+			onInfoUpdate();
         }
     };
 

@@ -38,5 +38,11 @@ public class MapboxTileProvider extends UrlTileProvider {
         return null;
     }
 
+    public String getMapboxAccessToken() {
+        return mapboxAccessToken;
+    }
 
+    public String getMapboxId() {
+        return mapboxId;
+    }
 }

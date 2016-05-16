@@ -21,6 +21,7 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeEventExtra;
 
 import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.utils.NetworkUtils;
+import org.droidplanner.android.utils.analytics.GAUtils;
 
 import timber.log.Timber;
 
@@ -84,6 +85,9 @@ public class AppService extends Service {
         if (NetworkUtils.isOnSoloNetwork(context)) {
             bringUpCellularNetwork(context);
         }
+
+        GAUtils.initGATracker(dpApp);
+        GAUtils.startNewSession(context);
 
         notificationHandler = new NotificationHandler(context, drone);
 

@@ -7,7 +7,7 @@
     <string name="label_other">Others</string>
     <string name="menu_drone_setup">Drone Setup</string>
     <string name="app_settings">App Settings</string>
-    <string name="flight_data">Flight Data</string>
+    <string name="flight_data">Vehicle Data</string>
     <string name="editor">Editor</string>
     <string name="upload_mission">Upload mission</string>
     <string name="download_mission">Download mission</string>
@@ -16,7 +16,7 @@
     <string name="screen_cal">Calibration</string>
     <string name="screen_checklist">Checklist</string>
     <string name="screen_parameters">Parameters</string>
-    
+
     <!-- App Settings/Preferences -->
     <string name="pref_connection_type">Telemetry Connection Type</string>
     <string name="pref_connection_type_summary">Which link to use to connect to the drone</string>
@@ -37,19 +37,20 @@
     <string name="pref_tile_provider_title">Map Tile Provider</string>
     <string name="pref_tile_provider_google">Google</string>
     <string name="pref_tile_provider_mapbox">Mapbox</string>
+    <string name="pref_tile_provider_arcgis">ArcGIS</string>
     <string name="pref_tile_provider_summary">Which map tile provider to use</string>
     <string name="pref_enable_tts">Enable Speech output</string>
     <string name="pref_enable_tts_summary">Audible messages for important events</string>
     <string name="pref_request_max_volume">Set Volume To Max On Start</string>
     <string name="pref_connection">Connection Preferences</string>
     <string name="pref_connection_subtitle">USB, TCP and UDP settings</string>
-    <string name="pref_usb">USB Connection</string>
+    <string name="pref_usb">USB Connection Settings</string>
     <string name="pref_baud_type">Telemetry link speed</string>
     <string name="pref_baud_type_summary">Baud Rate of the USB Telemetry Link</string>
-    <string name="pref_server">TCP connection</string>
+    <string name="pref_server">TCP Connection Settings</string>
     <string name="pref_server_ip">Server IP</string>
     <string name="pref_server_port">Server Port</string>
-    <string name="pref_server_udp">UDP connection</string>
+    <string name="pref_server_udp">UDP Connection Settings</string>
     <string name="pref_udp_server_port">UDP Server Port</string>
     <string name="about">About</string>
     <string name="version">Version</string>
@@ -119,6 +120,7 @@
     <string name="waypointType_Circle">Circle</string>
     <string name="waypointType_Loiter">Loiter</string>
     <string name="waypointType_ROI">Region of Interest</string>
+    <string name="waypointType_ResetROI">Reset ROI</string>
     <string name="waypointType_Survey">Survey</string>
     <string name="waypointType_Spline_Survey">Spline Survey</string>
     <string name="waypointType_BuildingMapper">Structure Scan</string>
@@ -211,7 +213,7 @@
     <string name="setup_imu_step">To start calibration, press Calibrate.</string>
     <string name="setup_imu_timeleft">Time left before next orientation:</string>
 
-    
+
     <!-- Flight Setup Resource Strings -->
     <string name="setup_fm_title">Flight Mode Configuration</string>
     <string name="setup_fm_side_title">Update Flight Mode</string>
@@ -265,7 +267,7 @@
     <string name="mission_control_takeoff">Takeoff</string>
     <string name="mission_control_pause">Pause</string>
     <string name="mission_control_auto">Auto</string>
-    <string name="mission_control_follow">Follow</string>    
+    <string name="mission_control_follow">Follow</string>
     <string name="mission_control_dronie">Dronie</string>
     <string name="mission_control_condition_yaw_angle">Target angle</string>
     <string name="mission_control_condition_yaw_relative">Relative Angle</string>
@@ -286,7 +288,7 @@
 
     <!-- Text To Speech -->
     <string name="pref_title_tts">Speech Output</string>
-    <string name="pref_title_tts_periodic_status">Periodic Status</string>
+    <string name="pref_title_tts_periodic_status">Periodic Telemetry Status Report</string>
     <string name="pref_tts_periodic_summary">What is included in the periodic status.</string>
     <string name="pref_tts_periodic_period">Period</string>
     <string name="pref_tts_periodic_period_summary">How often periodic status is read.</string>
@@ -317,7 +319,7 @@
     <string name="email_address">Email address</string>
 
     <!-- BLuetooth -->
-    <string name="pref_bluetooth">BLUETOOTH CONNECTION</string>
+    <string name="pref_bluetooth">Bluetooth Connection Settings</string>
     <string name="pref_forget_bluetooth_device_title">Forget %s device</string>
     <string name="pref_forget_bluetooth_device_address">Forget default device</string>
     <string name="pref_forget_bluetooth_device_address_confirm">Are you sure?</string>
@@ -359,7 +361,7 @@
     <string name="label_enter_filename">Enter Filename</string>
 
     <!-- Drone locator strings -->
-    <string name="locator">Flight History</string>
+    <string name="locator">Vehicle History</string>
     <string name="open_tlog_file">Open log file</string>
     <string name="status_waiting_for_gps">Waiting for GPS…</string>
 
@@ -372,7 +374,7 @@
     <string name="pref_dialog_entry_always">Always</string>
     <string name="pref_dialog_entry_never">Never</string>
     <string name="pref_dialog_entry_ask">Ask</string>
-    <string name="pref_dialog_selection_reset_desc"><![CDATA[Reset selection through: Settings -> User Interface -> Preference Dialogs]]></string>
+    <string name="pref_dialog_selection_reset_desc"><![CDATA[Reset selection through: Settings ––> Others -> Preference Dialogs]]></string>
     <string name="pref_dronie_creation_title">Create dronie?</string>
     <string name="pref_dronie_creation_message">Please stand back 8m before starting the dronie.</string>
     <string name="upload_params">Upload parameters</string>
@@ -434,6 +436,7 @@
     <string name="pref_title_download_menu_option">Add \'Download Map\' to menu</string>
     <string name="pref_title_enable_offline_map_layer">Enable offline map layer</string>
     <string name="label_download_map">Download Map</string>
+    <string name="instructions_map_download_warning">Area too large, zoom in.</string>
     <string name="instructions_map_download_selection">Pan and zoom to adjust the map area to save</string>
     <string name="instructions_tap_to_save_map">Tap to save the map</string>
     <string name="label_map_saved">Map area saved!</string>
@@ -473,6 +476,8 @@
     <!-- Telemetry widget labels -->
     <string name="label_widget_solo_video">Solo Video</string>
     <string name="description_widget_solo_video">Displays the video stream from a connected Solo vehicle</string>
+    <string name="label_widget_uvc_video">UVC Video</string>
+    <string name="description_widget_uvc_video">Displays the video stream from a connected UVC device</string>
     <string name="label_widget_attitude_speed_info">Speed &amp; Attitude Info</string>
     <string name="description_widget_attitude_speed_info">Displays vehicle speed and attitude data</string>
     <string name="label_widget_vehicle_diagnostics">Diagnostics</string>
@@ -481,6 +486,7 @@
     <string name="pref_tower_widgets_category">Tower Widgets</string>
     <string name="pref_widgets_list_category">Widgets list</string>
     <string name="label_widget_flight_timer">Flight Timer</string>
+    <string name="description_reset_flight_timer">Reset flight timer?</string>
     <string name="description_widget_flight_timer">Displays the vehicle flight time</string>
     <string name="label_widget_geo_info">Geo Info</string>
     <string name="description_widget_geo_info">Displays vehicle geographical information (Lat/Long)</string>
@@ -518,8 +524,77 @@
     <string name="label_rtm">Return to Me</string>
     <string name="pref_vehicle_home_update_warning_title">Vehicle Home Update</string>
     <string name="pref_vehicle_home_update_warning_summary">Warns about vehicle home location updates while in flight.</string>
-    <string name="warning_vehicle_home_updated">Vehicle home updated</string>
     <string name="label_photo">Photo</string>
     <string name="label_record">Record</string>
+    <string name="label_widgets_list">Widgets List</string>
+    <string name="label_solo_video_stream">Solo video stream</string>
+    <string name="label_custom_video_stream">Custom video stream</string>
+    <string name="hint_custom_video_stream_udp_port">0000</string>
+    <string name="label_udp_port">UDP Port:</string>
 
+    <!--START TTS Notification Provider Strings-->
+    <string name="toast_mission_sent">Waypoints sent</string>
+    <string name="speak_mission_sent">Waypoints saved to Drone</string>
+    <string name="toast_mission_received">Waypoints received from Drone</string>
+    <string name="speak_mission_received">Waypoints received</string>
+    <string name="speak_heartbeat_first">Connected</string>
+    <string name="speak_heartbeat_timeout">Data link lost, check connection.</string>
+    <string name="speak_heartbeat_restored">Data link restored</string>
+    <string name="speak_mission_item_updated">"Going for waypoint %d"</string>
+    <string name="speak_follow_start">Following</string>
+    <string name="speak_warning_signal_weak">Warning, weak signal</string>
+    <string name="speak_warning_no_gps">Error, no gps lock yet</string>
+    <string name="speak_warning_vehicle_home_updated">Vehicle home updated</string>
+    <string name="speak_warning_max_alt_exceed">Warning, max altitude exceeded!</string>
+
+    <!-- Periodic Status Preferences -->
+    <string name="periodic_status_bat_volt">"battery %2.1f volts. "</string>
+    <string name="periodic_status_altitude">"altitude, %d meters. "</string>
+    <string name="periodic_status_airspeed">"airspeed, %d meters per second. "</string>
+    <string name="periodic_status_rssi">"r s s i, %d decibels"</string>
+
+    <string name="speak_disconected">Disconnected</string>
+    <string name="toast_error_tts_lang">Unable to set \'Text to Speech\' language!</string>
+    <string name="warn_tts_accessibility">Please make sure \'Text to Speech\' is enabled in the system accessibility settings.</string>
+    <string name="speak_armed">Armed</string>
+    <string name="speak_disarmed">Disarmed</string>
+    <string name="speak_battery_notification">Battery at %d%%</string>
+    <string name="fly_mode_wire_a">Fly by wire A</string>
+    <string name="fly_mode_wire_b">Fly by wire B</string>
+    <string name="fly_mode_acro">Acrobatic</string>
+    <string name="fly_mode_alt_hold">Altitude hold</string>
+    <string name="fly_mode_pos_hold">Position hold</string>
+    <string name="fly_mode_rtl">Return to launch</string>
+    <string name="fly_mode_mode">"Mode "</string>
+
+    <!--Gps modes-->
+    <string name="gps_mode_2d_lock">GPS 2D Lock</string>
+    <string name="gps_mode_3d_lock">GPS 3D Lock</string>
+    <string name="gps_mode_3d_dgps_lock">GPS 3D+DGPS Lock</string>
+    <string name="gps_mode_3d_rtk_lock">GPS 3D+RTK Lock</string>
+    <string name="gps_mode_lost_gps_lock">Lost GPS Lock</string>
+    <string name="speak_connected">Connected</string>
+    <!--END TTS Notification Provider Strings-->
+
+    <!-- Selectable values for the period of the speech output. -->
+    <string name="period_15_sec">15 sec.</string>
+    <string name="period_30_sec">30 sec.</string>
+    <string name="period_45_sec">45 sec.</string>
+    <string name="period_60_sec">60 sec.</string>
+    <string name="waypoint_description_reset_roi">Reset the current region of interest lock.</string>
+
+    <string name="uvc_device_select">Select UVC device</string>
+    <string name="uvc_device">Device</string>
+    <string name="uvc_device_refresh">Refresh</string>
+    <string name="uvc_device_no_device">No UVC device found</string>
+    <string name="pref_title_arcgis_tile_provider">ArcGIS Tile Provider</string>
+
+    <!-- Arc GIS -->
+    <string name="label_nat_geo_world_map">National Geographic World Map</string>
+    <string name="label_world_imagery">World Imagery</string>
+    <string name="label_world_street_map">World Street Map</string>
+    <string name="label_world_topo_map">World Topographic Map</string>
+    <string name="pref_title_tile_provider_preferences">Tile Provider Preferences</string>
+    <string name="pref_advanced_settings_title">Advanced Settings</string>
+    <string name="label_fpv">FPV</string>
 </resources>

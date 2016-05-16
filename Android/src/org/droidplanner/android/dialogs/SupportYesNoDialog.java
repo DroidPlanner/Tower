@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.TextView;
@@ -81,7 +80,6 @@ public class SupportYesNoDialog extends DialogFragment {
         final String dialogTag = arguments.getString(EXTRA_DIALOG_TAG);
 
         AlertDialog.Builder b = new AlertDialog.Builder(getActivity())
-                .setIcon(R.drawable.arma)
                 .setTitle(arguments.getString(EXTRA_TITLE))
                 .setView(generateContentView(savedInstanceState))
                 .setPositiveButton(arguments.getString(EXTRA_POSITIVE_LABEL), new DialogInterface.OnClickListener() {

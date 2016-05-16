@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 
 import org.droidplanner.android.fragments.widget.TowerWidgets;
+import org.droidplanner.android.fragments.widget.video.WidgetVideoPreferences;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.unit.systems.UnitSystem;
@@ -106,6 +107,8 @@ public class DroidPlannerPrefs {
 
     public static final String PREF_APP_VERSION = "pref_version";
 
+    private static final String PREF_APP_VERSION_CODE = "pref_app_version_code";
+
     private static final String PREF_IS_TTS_ENABLED = "pref_enable_tts";
     private static final boolean DEFAULT_TTS_ENABLED = false;
 
@@ -156,11 +159,27 @@ public class DroidPlannerPrefs {
     public static final String PREF_VEHICLE_HOME_UPDATE_WARNING = "pref_vehicle_home_update_warning";
     public static final boolean DEFAULT_VEHICLE_HOME_UPDATE_WARNING = true;
 
+    private static final String PREF_WIDGET_VIDEO_TYPE = "pref_widget_video_type";
+    private static final String PREF_CUSTOM_VIDEO_UDP_PORT = "pref_custom_video_udp_port";
+
+    public static final String PREF_UVC_VIDEO_ASPECT_RATIO = "pref_uvc_video_aspect_ratio";
+    private static final float DEFAULT_UVC_VIDEO_ASPECT_RATIO = 3f / 4f;
+
     // Public for legacy usage
     public final SharedPreferences prefs;
     private final LocalBroadcastManager lbm;
 
-    public DroidPlannerPrefs(Context context) {
+    private static DroidPlannerPrefs instance;
+
+    public static synchronized DroidPlannerPrefs getInstance(Context context) {
+        if (instance == null) {
+            instance = new DroidPlannerPrefs(context);
+        }
+
+        return instance;
+    }
+
+    private DroidPlannerPrefs(Context context) {
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         lbm = LocalBroadcastManager.getInstance(context);
     }
@@ -171,6 +190,25 @@ public class DroidPlannerPrefs {
         // return
         // prefs.getBoolean(PREF_LIVE_UPLOAD_ENABLED, DEFAULT_LIVE_UPLOAD_ENABLED);
         return false;
+    }
+
+    /**
+     * Return the last saved app version code
+     * @return
+     */
+    public int getSavedAppVersionCode(){
+        return prefs.getInt(PREF_APP_VERSION_CODE, 0);
+    }
+
+    /**
+     * Update the saved app version code.
+     * @param context Application context
+     */
+    public void updateSavedAppVersionCode(Context context) {
+        int versionCode = Utils.getAppVersionCode(context);
+        if (versionCode != Utils.INVALID_APP_VERSION_CODE) {
+            prefs.edit().putInt(PREF_APP_VERSION_CODE, versionCode).apply();
+        }
     }
 
     public String getDroneshareLogin() {
@@ -226,6 +264,7 @@ public class DroidPlannerPrefs {
 
     public void setConnectionParameterType(int connectionType) {
         prefs.edit().putString(PREF_CONNECTION_TYPE, String.valueOf(connectionType)).apply();
+        lbm.sendBroadcast(new Intent(PREF_CONNECTION_TYPE));
     }
 
     /**
@@ -303,6 +342,7 @@ public class DroidPlannerPrefs {
         final SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PREF_BT_DEVICE_ADDRESS, newAddress)
                 .apply();
+        lbm.sendBroadcast(new Intent(PREF_BT_DEVICE_ADDRESS));
     }
 
     /**
@@ -460,6 +500,10 @@ public class DroidPlannerPrefs {
         return prefs.getBoolean(PREF_IS_TTS_ENABLED, DEFAULT_TTS_ENABLED);
     }
 
+    public void enableWidget(TowerWidgets widget, boolean enable){
+        prefs.edit().putBoolean(widget.getPrefKey(), enable).apply();
+    }
+
     public boolean isWidgetEnabled(TowerWidgets widget) {
         return prefs.getBoolean(widget.getPrefKey(), widget.isEnabledByDefault());
     }
@@ -475,5 +519,31 @@ public class DroidPlannerPrefs {
 
     public boolean getWarningOnVehicleHomeUpdate(){
         return prefs.getBoolean(PREF_VEHICLE_HOME_UPDATE_WARNING, DEFAULT_VEHICLE_HOME_UPDATE_WARNING);
+    }
+
+    public void setVideoWidgetType(@WidgetVideoPreferences.VideoType int videoType){
+        prefs.edit().putInt(PREF_WIDGET_VIDEO_TYPE, videoType).apply();
+    }
+
+    @WidgetVideoPreferences.VideoType
+    public int getVideoWidgetType(){
+        @WidgetVideoPreferences.VideoType final int videoType = prefs.getInt(PREF_WIDGET_VIDEO_TYPE, WidgetVideoPreferences.SOLO_VIDEO_TYPE);
+        return videoType;
+    }
+
+    public void setCustomVideoUdpPort(int udpPort){
+        prefs.edit().putInt(PREF_CUSTOM_VIDEO_UDP_PORT, udpPort).apply();
+    }
+
+    public int getCustomVideoUdpPort(){
+        return prefs.getInt(PREF_CUSTOM_VIDEO_UDP_PORT, -1);
+    }
+
+    public void setUVCVideoAspectRatio(Float aspectRatio){
+        prefs.edit().putFloat(PREF_UVC_VIDEO_ASPECT_RATIO, aspectRatio).apply();
+    }
+
+    public Float getUVCVideoAspectRatio(){
+        return prefs.getFloat(PREF_UVC_VIDEO_ASPECT_RATIO, DEFAULT_UVC_VIDEO_ASPECT_RATIO);
     }
 }

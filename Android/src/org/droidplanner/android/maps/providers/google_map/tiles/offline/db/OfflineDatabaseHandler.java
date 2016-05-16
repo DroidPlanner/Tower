@@ -1,4 +1,4 @@
-package org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline;
+package org.droidplanner.android.maps.providers.google_map.tiles.offline.db;
 
 import android.content.Context;
 import android.database.Cursor;

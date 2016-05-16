@@ -6,64 +6,98 @@
 
     <ListPreference
         android:defaultValue="google"
+        android:entries="@array/TileProviders"
+        android:entryValues="@array/TileProviderValues"
         android:key="pref_google_map_tile_providers"
         android:summary="@string/pref_tile_provider_summary"
-        android:title="@string/pref_tile_provider_title"
-        android:entries="@array/TileProviders"
-        android:entryValues="@array/TileProviderValues"/>
+        android:title="@string/pref_tile_provider_title"/>
 
-    <PreferenceCategory
-        android:title="@string/pref_title_google_tile_provider"
-        android:key="pref_google_tile_provider_settings">
-        <ListPreference
-            android:defaultValue="satellite"
-            android:entries="@array/MapTypes"
-            android:entryValues="@array/MapTypeValues"
-            android:key="pref_map_type"
-            android:summary="@string/pref_map_type_summary"
-            android:title="@string/pref_map_type"/>
-    </PreferenceCategory>
+    <PreferenceScreen
+        android:title="@string/pref_title_tile_provider_preferences"
+        android:key="pref_tile_provider_settings">
 
-    <PreferenceCategory
-        android:title="@string/pref_title_mapbox_tile_provider"
-        android:key="pref_mapbox_tile_provider_settings">
+        <PreferenceCategory
+            android:key="pref_arcgis_tile_provider_settings"
+            android:title="@string/pref_title_arcgis_tile_provider">
 
-        <CheckBoxPreference
-            android:key="pref_enable_offline_map_layer"
-            android:defaultValue="false"
-            android:title="@string/pref_title_enable_offline_map_layer"/>
+            <ListPreference
+                android:defaultValue="@string/label_nat_geo_world_map"
+                android:entries="@array/ArcGisMapTypes"
+                android:entryValues="@array/ArcGisMapTypes"
+                android:key="pref_arcgis_service"
+                android:summary="@string/pref_map_type_summary"
+                android:title="@string/pref_map_type"/>
 
-        <Preference
-            android:key="pref_mapbox_map_download"
-            android:title="@string/pref_title_mapbox_map_download"
-            android:summary="@string/pref_summary_mapbox_map_download"/>
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="pref_enable_offline_map_layer"
+                android:title="@string/pref_title_enable_offline_map_layer"/>
 
-        <CheckBoxPreference
-            android:title="@string/pref_title_download_menu_option"
-            android:defaultValue="false"
-            android:key="pref_download_menu_option"/>
+            <Preference
+                android:key="pref_arcgis_map_download"
+                android:summary="@string/pref_summary_mapbox_map_download"
+                android:title="@string/pref_title_mapbox_map_download"/>
 
-        <EditTextPreference
-            android:key="pref_mapbox_id"
-            android:title="@string/pref_title_mapbox_id"
-            android:hint="@string/pref_hint_mapbox_id"
-            android:gravity="center"
-            android:selectAllOnFocus="true"
-            android:summary="@string/pref_summary_mapbox_id"/>
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="pref_download_menu_option"
+                android:title="@string/pref_title_download_menu_option"/>
 
-        <EditTextPreference
-            android:key="pref_mapbox_access_token"
-            android:title="@string/pref_title_mapbox_access_token"
-            android:hint="@string/pref_hint_mapbox_access_token"
-            android:gravity="center"
-            android:selectAllOnFocus="true"
-            android:summary="@string/pref_summary_mapbox_access_token"/>
+        </PreferenceCategory>
 
-    </PreferenceCategory>
+        <PreferenceCategory
+            android:key="pref_google_tile_provider_settings"
+            android:title="@string/pref_title_google_tile_provider">
+            <ListPreference
+                android:defaultValue="satellite"
+                android:entries="@array/MapTypes"
+                android:entryValues="@array/MapTypeValues"
+                android:key="pref_map_type"
+                android:summary="@string/pref_map_type_summary"
+                android:title="@string/pref_map_type"/>
+        </PreferenceCategory>
 
-    <Preference
-        android:key="pref_mapbox_learn_more"
-        android:title="Learn more about mapbox map"
-        />
+        <PreferenceCategory
+            android:key="pref_mapbox_tile_provider_settings"
+            android:title="@string/pref_title_mapbox_tile_provider">
 
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="pref_enable_offline_map_layer"
+                android:title="@string/pref_title_enable_offline_map_layer"/>
+
+            <Preference
+                android:key="pref_mapbox_map_download"
+                android:summary="@string/pref_summary_mapbox_map_download"
+                android:title="@string/pref_title_mapbox_map_download"/>
+
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="pref_download_menu_option"
+                android:title="@string/pref_title_download_menu_option"/>
+
+            <EditTextPreference
+                android:gravity="center"
+                android:hint="@string/pref_hint_mapbox_id"
+                android:key="pref_mapbox_id"
+                android:selectAllOnFocus="true"
+                android:summary="@string/pref_summary_mapbox_id"
+                android:title="@string/pref_title_mapbox_id"/>
+
+            <EditTextPreference
+                android:gravity="center"
+                android:hint="@string/pref_hint_mapbox_access_token"
+                android:key="pref_mapbox_access_token"
+                android:selectAllOnFocus="true"
+                android:summary="@string/pref_summary_mapbox_access_token"
+                android:title="@string/pref_title_mapbox_access_token"/>
+
+            <Preference
+                android:key="pref_mapbox_learn_more"
+                android:title="Learn more about Mapbox maps"
+                />
+
+        </PreferenceCategory>
+
+    </PreferenceScreen>
 </PreferenceScreen>

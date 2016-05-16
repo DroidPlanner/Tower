@@ -11,6 +11,8 @@
     <color name="white_grey">#f7f6f6</color>
     <color name="navigation_entry_color">#212121</color>
 
+    <color name="header_background">#068FD3</color>
+
     <color name="orange">#FAAF4C</color>
     <color name="ground_speed_label">#0a5242</color>
 
@@ -45,5 +47,10 @@
     <color name="very_dark_grey">#1C1C1C</color>
     <color name="medium_grey">#3C3C3C</color>
     <color name="grey700">#616161</color>
+
+    <color name="primary_dark">#388E3C</color>
+    <color name="primary_light">#C8E6C9</color>
+    <color name="accent">#795548</color>
+    <color name="primary_text">#212121</color>
 
 </resources>

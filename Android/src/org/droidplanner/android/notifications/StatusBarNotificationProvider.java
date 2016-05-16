@@ -92,7 +92,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
     StatusBarNotificationProvider(Context context, Drone api) {
         mContext = context;
         this.drone = api;
-        mAppPrefs = new DroidPlannerPrefs(context);
+        mAppPrefs = DroidPlannerPrefs.getInstance(context);
 
         mNotificationIntent = PendingIntent.getActivity(mContext, 0, new Intent(mContext,
                 FlightActivity.class), 0);

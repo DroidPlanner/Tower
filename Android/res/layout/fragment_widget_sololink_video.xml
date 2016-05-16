@@ -46,6 +46,14 @@
             style="@style/Fab.SoloVideo"
             android:src="@drawable/on_off_videocam"
             android:text="@string/label_record" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/sololink_vr_video_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Fab.SoloVideo"
+            android:src="@drawable/ic_vr_google"
+            android:text="@string/label_fpv"/>
     </LinearLayout>
 
     <me.grantland.widget.AutofitTextView

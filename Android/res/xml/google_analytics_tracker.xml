@@ -8,7 +8,7 @@
            tools:ignore="TypographyDashes">
 
     <!-- Google Analytics tracking id -->
-    <string name="ga_trackingId">UA-51862927-1</string>
+    <string name="ga_trackingId">UA-51862927-2</string>
 
     <!-- Frequency of automatic dispatch in seconds -->
     <integer name="ga_dispatchPeriod">600</integer>

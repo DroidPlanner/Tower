@@ -41,7 +41,7 @@ public abstract class SlideToUnlockDialog extends DialogFragment implements Seek
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NO_FRAME, 0);
+        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.CustomDialogTheme);
         setCancelable(true);
     }
 

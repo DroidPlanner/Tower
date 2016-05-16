@@ -1,70 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/ModeDetail"
-        style="@style/ModeDetailText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/mode_desc_rectangle"
-        android:text="@string/mode_auto" />
-
-    <ProgressBar
-        android:id="@+id/mission_progress"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_marginBottom="10dp"
-        android:animationResolution="@android:integer/config_shortAnimTime"
-        android:indeterminate="false"
-        android:max="100"
-        android:progress="0"
-        android:progressBackgroundTint="@android:color/holo_blue_dark"
-        android:progressTint="@android:color/holo_blue_dark" />
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="5dp"
-        android:background="@drawable/button_blue"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:weightSum="1.0">
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/mc_pause"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".5"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_pause_white_24dp" />
+        <TextView
+            android:id="@+id/ModeDetail"
+            style="@style/ModeDetailText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/mode_desc_rectangle"
+            android:text="@string/mode_auto"/>
+
+        <ProgressBar
+            android:id="@+id/mission_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginBottom="10dp"
+            android:animationResolution="@android:integer/config_shortAnimTime"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="0"
+            android:progressBackgroundTint="@android:color/holo_blue_dark"
+            android:progressTint="@android:color/holo_blue_dark"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/button_blue"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="1.0">
+
+            <ImageView
+                android:id="@+id/mc_pause"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".5"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_pause_white_24dp"/>
 
 
-        <ImageView
-            android:id="@+id/mc_restart"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".5"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_replay_white_24dp" />
+            <ImageView
+                android:id="@+id/mc_restart"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".5"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_replay_white_24dp"/>
+
+        </LinearLayout>
+
+        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
+            android:id="@+id/waypoint_selector"
+            style="@style/missionItemDetailCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:text="@string/waypoint_label"/>
 
     </LinearLayout>
-
-    <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
-        android:id="@+id/waypoint_selector"
-        style="@style/missionItemDetailCard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:text="@string/waypoint_label" />
-
-</LinearLayout>
-
+</ScrollView>

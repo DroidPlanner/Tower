@@ -30,35 +30,64 @@
             android:layout_margin="15dp"
             android:layout_alignParentBottom="true">
 
-            <LinearLayout
-                android:id="@+id/download_map_instructions"
+            <FrameLayout
+                android:id="@+id/download_map_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="visible"
-                tools:visibility="visible"
-                android:padding="10dp"
-                >
+                android:layout_height="wrap_content">
 
-                <me.grantland.widget.AutofitTextView
-                    style="@style/AlertMessage.Title"
+                <LinearLayout
+                    android:id="@+id/download_map_warning"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="66dp"
+                    android:background="@android:color/holo_orange_light"
                     android:gravity="center"
-                    android:lines="1"
-                    android:text="@string/instructions_map_download_selection"/>
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:visibility="gone"
+                    tools:visibility="gone">
 
-                <me.grantland.widget.AutofitTextView
-                    style="@style/AlertMessage.Subtitle"
+                    <me.grantland.widget.AutofitTextView
+                        style="@style/AlertMessage.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:text="@string/instructions_map_download_warning"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/download_map_instructions"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="66dp"
+                    android:background="?selectableItemBackground"
                     android:gravity="center"
-                    android:lines="1"
-                    android:text="@string/instructions_tap_to_save_map"
-                    />
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:visibility="visible"
+                    tools:visibility="visible"
+                    >
 
-            </LinearLayout>
+                    <me.grantland.widget.AutofitTextView
+                        style="@style/AlertMessage.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:text="@string/instructions_map_download_selection"/>
+
+                    <me.grantland.widget.AutofitTextView
+                        style="@style/AlertMessage.Subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:text="@string/instructions_tap_to_save_map"
+                        />
+
+                </LinearLayout>
+            </FrameLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
