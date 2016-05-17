@@ -19,9 +19,9 @@ For help, visit the [Tower Discuss forum](http://discuss.ardupilot.org/c/ground-
 
 ![Droidplanner 3.0 beta screenshot](https://cloud.githubusercontent.com/assets/914968/5420988/c11105e0-8211-11e4-9f07-92727d7c78ab.png)
 
-The next version of Droidplanner is under development, and we would love your help in beta testing the new version. To join the beta:
+The next version of Tower is under development, and we would love your help with beta testing. To join the beta:
  1. Access and download the beta through https://play.google.com/store/apps/details?id=org.droidplanner.android.beta.
- 2. Send feedback: Post your feedback in the [Tower Discuss forum](http://discuss.ardupilot.org/c/ground-control-software/tower). We want to hear what you think!
+ 2. Post your feedback in the [Tower Discuss forum](http://discuss.ardupilot.org/c/ground-control-software/tower). We want to hear what you think!
 
 #### Requirement
 In order to run **Tower** on your device, the latest version of **3DR Services** must be installed.
