@@ -17,7 +17,7 @@ For help, visit the [Tower Discuss forum](http://discuss.ardupilot.org/c/ground-
 
 ### Tower beta
 
-![Droidplanner 3.0 beta screenshot](https://cloud.githubusercontent.com/assets/914968/5420988/c11105e0-8211-11e4-9f07-92727d7c78ab.png)
+![Droidplanner 3.0 beta screenshot](http://api.ning.com/files/qe5*yho6iFTs6PSl5XqUIDQ9TwN1-tU7Ni93QgCXyWp*zymrcfqPDH4*5ZagwrNcep7*6kr2vgdlccbwytoYqxHwbSDG5yJR/v3.2.1.flight.tablet.land.png)
 
 The next version of Tower is under development, and we would love your help with beta testing. To join the beta:
  1. Access and download the beta through https://play.google.com/store/apps/details?id=org.droidplanner.android.beta.
