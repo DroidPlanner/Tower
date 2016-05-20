@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-include sdk/OpenCV3-android-sdk/sdk/native/jni/OpenCV.mk
+include /Users/fredia/Playground/libs/OpenCV-android-sdk/sdk/native/jni/OpenCV.mk
 
 LOCAL_MODULE    := tracker-jni
 
