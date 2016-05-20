@@ -49,10 +49,10 @@ dependencies {
 def versionPrefix = "Tower-v"
 
 //Decomposed version name and code (https://plus.google.com/+JakeWharton/posts/6f5TcVPRZij)
-def versionMajor = 3
-def versionMinor = 2
-def versionPatch = 1
-def versionBuild = 8 //bump for dogfood builds, public betas, etc.
+def versionMajor = 4
+def versionMinor = 0
+def versionPatch = 0
+def versionBuild = 0 //bump for dogfood builds, public betas, etc.
 
 //Logging levels
 def logLevelVerbose = 2;

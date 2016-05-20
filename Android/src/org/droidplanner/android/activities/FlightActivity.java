@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import org.droidplanner.android.BuildConfig;
 import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.DialogMaterialFragment;
 import org.droidplanner.android.fragments.FlightDataFragment;
@@ -105,7 +106,7 @@ public class FlightActivity extends DrawerNavigationUI implements SlidingUpPanel
 
         final Context context = getApplicationContext();
         //Show the changelog if this is the first time the app is launched since update/install
-        if(Utils.getAppVersionCode(context) > mAppPrefs.getSavedAppVersionCode()) {
+        if(BuildConfig.DEBUG || Utils.getAppVersionCode(context) > mAppPrefs.getSavedAppVersionCode()) {
             DialogMaterialFragment changelog = new DialogMaterialFragment();
             changelog.show(getSupportFragmentManager(), "Changelog Dialog");
 

@@ -8,6 +8,9 @@
         chg:changeLogFileResourceId="@raw/custom_changelog"
         in your View component in layout file -->
 
+    <changelogversion versionName="4.0.0" changeDate="May 19, 2016">
+        <changelogimprovement>Introducing [b]Standalone[/b] mode: Tower can now be used without 3DR Services</changelogimprovement>
+    </changelogversion>
 
     <changelogversion versionName="3.2.1" changeDate="May 12,2016">
         <changelogimprovement>[b]UVC[/b] devices support by [i]Guilherme Blanco[/i]</changelogimprovement>
