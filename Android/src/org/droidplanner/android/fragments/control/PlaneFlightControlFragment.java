@@ -290,7 +290,7 @@ public class PlaneFlightControlFragment extends BaseFlightControlFragment {
         SlideToUnlockDialog unlockDialog = new SlideToUnlockDialog() {
             @Override
             public void onSliderUnlocked() {
-                getDrone().arm(true);
+                VehicleApi.getApi(getDrone()).arm(true);
             }
         };
 
@@ -317,7 +317,7 @@ public class PlaneFlightControlFragment extends BaseFlightControlFragment {
                 break;
 
             case R.id.mc_disarmBtn:
-                getDrone().arm(false);
+                VehicleApi.getApi(drone).arm(false);
                 eventBuilder.setAction(ACTION_FLIGHT_ACTION_BUTTON).setLabel("Disarm");
                 break;
 

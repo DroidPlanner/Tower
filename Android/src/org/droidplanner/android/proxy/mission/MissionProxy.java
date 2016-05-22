@@ -10,6 +10,7 @@ import android.util.Pair;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.MissionApi;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
@@ -756,7 +757,7 @@ public class MissionProxy implements DPMap.PathSource {
     }
 
     public void sendMissionToAPM(Drone drone) {
-        drone.setMission(generateMission(), true);
+        MissionApi.getApi(drone).setMission(generateMission(), true);
 
         int missionItemsCount = missionItemProxies.size();
 
@@ -803,7 +804,7 @@ public class MissionProxy implements DPMap.PathSource {
     }
 
     public void makeAndUploadDronie(Drone drone) {
-        drone.generateDronie();
+        MissionApi.getApi(drone).generateDronie();
     }
 
     public List<List<LatLong>> getPolygonsPath() {
@@ -826,7 +827,7 @@ public class MissionProxy implements DPMap.PathSource {
             return false;
 
         Mission mission = reader.getMission();
-        drone.setMission(mission, false);
+        MissionApi.getApi(drone).setMission(mission, false);
 
         load(mission);
         return true;

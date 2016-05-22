@@ -243,7 +243,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 
         final Drone drone = getDrone();
         if (drone.isConnected()) {
-            drone.enableFollowMe(type);
+            FollowApi.getApi(drone).enableFollowMe(type);
         }
     }
 

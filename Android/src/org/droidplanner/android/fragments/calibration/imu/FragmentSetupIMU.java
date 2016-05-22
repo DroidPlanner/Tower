@@ -249,20 +249,19 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
 	private void sendAck(int step) {
         Drone dpApi = getDrone();
 		if (dpApi.isConnected()) {
-			dpApi.sendIMUCalibrationAck(step);
+            CalibrationApi.getApi(dpApi).sendIMUAck(step);
 		}
 	}
 
 	private void startCalibration() {
         Drone dpApi = getDrone();
 		if (dpApi.isConnected()) {
-            CalibrationApi.getApi(getDrone()).startIMUCalibration(new SimpleCommandListener(){
+            CalibrationApi.getApi(dpApi).startIMUCalibration(new SimpleCommandListener(){
                 @Override
                 public void onError(int error){
                     Toast.makeText(getActivity(), R.string.imu_calibration_start_error, Toast.LENGTH_LONG).show();
                 }
             });
-			dpApi.startIMUCalibration();
 		}
 	}
 

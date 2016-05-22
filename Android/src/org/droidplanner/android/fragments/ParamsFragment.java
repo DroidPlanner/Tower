@@ -343,7 +343,7 @@ public class ParamsFragment extends ApiListenerListFragment implements SupportEd
 
         final int parametersCount = parametersList.size();
         if (parametersCount > 0) {
-            drone.writeParameters(new Parameters(parametersList));
+            VehicleApi.getApi(drone).writeParameters(new Parameters(parametersList));
             adapter.notifyDataSetChanged();
             Toast.makeText(getActivity(),
                     parametersCount + " " + getString(R.string.msg_parameters_written_to_drone),

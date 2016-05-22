@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -17,12 +18,12 @@ import com.o3dr.android.client.ControlTower;
 import com.o3dr.android.client.Drone;
 import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.android.client.interfaces.DroneListener;
+import com.o3dr.android.client.interfaces.LinkListener;
 import com.o3dr.android.client.interfaces.TowerListener;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.connection.ConnectionParameter;
-import com.o3dr.services.android.lib.drone.connection.ConnectionResult;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
-import com.o3dr.services.android.lib.drone.connection.DroneSharePrefs;
+import com.o3dr.services.android.lib.gcs.link.LinkConnectionStatus;
 import com.o3dr.services.android.lib.model.AbstractCommandListener;
 
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
@@ -41,7 +42,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
-public class DroidPlannerApp extends MultiDexApplication implements DroneListener, TowerListener {
+public class DroidPlannerApp extends MultiDexApplication implements DroneListener, TowerListener, LinkListener {
 
     private static final long DELAY_TO_DISCONNECTION = 1000L; // ms
 
@@ -50,13 +51,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
     public static final String ACTION_TOGGLE_DRONE_CONNECTION = Utils.PACKAGE_NAME
             + ".ACTION_TOGGLE_DRONE_CONNECTION";
     public static final String EXTRA_ESTABLISH_CONNECTION = "extra_establish_connection";
-
-    public static final String ACTION_DRONE_CONNECTION_FAILED = Utils.PACKAGE_NAME
-            + ".ACTION_DRONE_CONNECTION_FAILED";
-
-    public static final String EXTRA_CONNECTION_FAILED_ERROR_CODE = "extra_connection_failed_error_code";
-
-    public static final String EXTRA_CONNECTION_FAILED_ERROR_MESSAGE = "extra_connection_failed_error_message";
 
     private static final long EVENTS_DISPATCHING_PERIOD = 200L; //MS
 
@@ -97,6 +91,22 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
     public void onTowerDisconnected() {
         Timber.d("Disconnection from the control tower.");
         notifyApiDisconnected();
+    }
+
+    @Override
+    public void onLinkStateUpdated(@NonNull LinkConnectionStatus connectionStatus) {
+        switch(connectionStatus.getStatusCode()){
+            case LinkConnectionStatus.FAILED:
+                Bundle extras = connectionStatus.getExtras();
+                String errorMsg = null;
+                if (extras != null) {
+                    errorMsg = extras.getString(LinkConnectionStatus.EXTRA_ERROR_MSG);
+                }
+
+                Toast.makeText(getApplicationContext(), "Connection failed: " + errorMsg,
+                    Toast.LENGTH_LONG).show();
+                break;
+        }
     }
 
     public interface ApiListener {
@@ -262,7 +272,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
 
         if (!isDroneConnected) {
             Timber.d("Connecting to drone using parameter %s", connParams);
-            drone.connect(connParams);
+            drone.connect(connParams, this);
         }
     }
 
@@ -293,32 +303,25 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
 
     private ConnectionParameter retrieveConnectionParameters() {
         final int connectionType = dpPrefs.getConnectionParameterType();
-        Bundle extraParams = new Bundle();
-        final DroneSharePrefs droneSharePrefs = new DroneSharePrefs(dpPrefs.getDroneshareLogin(),
-                dpPrefs.getDronesharePassword(), dpPrefs.isDroneshareEnabled(),
-                dpPrefs.isLiveUploadEnabled());
 
         ConnectionParameter connParams;
         switch (connectionType) {
             case ConnectionType.TYPE_USB:
-                extraParams.putInt(ConnectionType.EXTRA_USB_BAUD_RATE, dpPrefs.getUsbBaudRate());
-                connParams = new ConnectionParameter(connectionType, extraParams, droneSharePrefs);
+                connParams = ConnectionParameter.newUsbConnection(dpPrefs.getUsbBaudRate());
                 break;
 
             case ConnectionType.TYPE_UDP:
-                extraParams.putInt(ConnectionType.EXTRA_UDP_SERVER_PORT, dpPrefs.getUdpServerPort());
                 if (dpPrefs.isUdpPingEnabled()) {
-                    extraParams.putString(ConnectionType.EXTRA_UDP_PING_RECEIVER_IP, dpPrefs.getUdpPingReceiverIp());
-                    extraParams.putInt(ConnectionType.EXTRA_UDP_PING_RECEIVER_PORT, dpPrefs.getUdpPingReceiverPort());
-                    extraParams.putByteArray(ConnectionType.EXTRA_UDP_PING_PAYLOAD, "Hello".getBytes());
+                    connParams = ConnectionParameter.newUdpConnection(dpPrefs.getUdpServerPort(),
+                        dpPrefs.getUdpPingReceiverIp(), dpPrefs.getUdpPingReceiverPort(), "Hello".getBytes());
                 }
-                connParams = new ConnectionParameter(connectionType, extraParams, droneSharePrefs);
+                else{
+                    connParams = ConnectionParameter.newUdpConnection(dpPrefs.getUdpServerPort());
+                }
                 break;
 
             case ConnectionType.TYPE_TCP:
-                extraParams.putString(ConnectionType.EXTRA_TCP_SERVER_IP, dpPrefs.getTcpServerIp());
-                extraParams.putInt(ConnectionType.EXTRA_TCP_SERVER_PORT, dpPrefs.getTcpServerPort());
-                connParams = new ConnectionParameter(connectionType, extraParams, droneSharePrefs);
+                connParams = ConnectionParameter.newTcpConnection(dpPrefs.getTcpServerIp(), dpPrefs.getTcpServerPort());
                 break;
 
             case ConnectionType.TYPE_BLUETOOTH:
@@ -330,8 +333,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
                 } else {
-                    extraParams.putString(ConnectionType.EXTRA_BLUETOOTH_ADDRESS, btAddress);
-                    connParams = new ConnectionParameter(connectionType, extraParams, droneSharePrefs);
+                    connParams = ConnectionParameter.newBluetoothConnection(btAddress);
                 }
                 break;
 
@@ -342,17 +344,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         }
 
         return connParams;
-    }
-
-    @Override
-    public void onDroneConnectionFailed(ConnectionResult result) {
-        String errorMsg = result.getErrorMessage();
-        Toast.makeText(getApplicationContext(), "Connection failed: " + errorMsg,
-                Toast.LENGTH_LONG).show();
-
-        lbm.sendBroadcast(new Intent(ACTION_DRONE_CONNECTION_FAILED)
-                .putExtra(EXTRA_CONNECTION_FAILED_ERROR_CODE, result.getErrorCode())
-                .putExtra(EXTRA_CONNECTION_FAILED_ERROR_MESSAGE, result.getErrorMessage()));
     }
 
     @Override
