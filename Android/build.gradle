@@ -20,8 +20,10 @@ dependencies {
     // Android library to display the changelog
     compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
 
-    //DroneKit-Android client library.
-    compile 'org.droidplanner.android:tower-lib:0.0.0-alpha12'
+    //Tower-Lib
+    //TODO: revert before play store release
+    //compile 'org.droidplanner.android:tower-lib:0.0.0-alpha12'
+    compile project(':ClientLib')
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')

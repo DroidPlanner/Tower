@@ -1,2 +1,10 @@
 //Android projects
 include ':Android'
+
+//Linking to the Tower-lib project to improve development flow
+include ':ClientLib'
+include ':Mavlink'
+
+def towerLibPath = '../tower-lib' //Edit this value to point to your 'tower-lib' project directory
+project(':ClientLib').projectDir = new File("$towerLibPath/ClientLib")
+project(':Mavlink').projectDir = new File("$towerLibPath/dependencyLibs/Mavlink")
