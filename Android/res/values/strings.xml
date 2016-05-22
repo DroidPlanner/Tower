@@ -490,6 +490,8 @@
     <string name="description_widget_flight_timer">Displays the vehicle flight time</string>
     <string name="label_widget_geo_info">Geo Info</string>
     <string name="description_widget_geo_info">Displays vehicle geographical information (Lat/Long)</string>
+    <string name="label_widget_weather_info">Weather</string>
+    <string name="description_widget_weather_info">Displays weather information</string>
     <string name="label_ekf">ekf</string>
     <string name="label_velocity_var_abbrev">vel</string>
     <string name="label_horizontal_position_var_abbrev">h.pos</string>
@@ -597,4 +599,17 @@
     <string name="pref_title_tile_provider_preferences">Tile Provider Preferences</string>
     <string name="pref_advanced_settings_title">Advanced Settings</string>
     <string name="label_fpv">FPV</string>
+
+    <string name="label_empty" translatable="false">--</string>
+
+    <!-- Weather Info -->
+    <string name="wunderground_url" translatable="false">http://api.wunderground.com/api/%1$s/geolookup/conditions/q/%2$s,%3$s.json</string>
+    <string name="label_flight_conditions">Flight Conditions</string>
+    <string name="label_weather_good">Good</string>
+    <string name="weather_wind_velocity_imperial" translatable="false">%1$s mph %2$s</string>
+    <string name="weather_wind_velocity_metric" translatable="false">%1$s kph %2$s</string>
+    <string name="weather_temperature_imperial" translatable="false">%1$sº F</string>
+    <string name="weather_temperature_metric" translatable="false">%1$sº C</string>
+    <string name="weather_rain_imperial" translatable="false">%1$s in</string>
+    <string name="weather_rain_metric" translatable="false">%1$s mm</string>
 </resources>

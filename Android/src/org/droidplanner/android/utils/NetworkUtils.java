@@ -76,4 +76,8 @@ public class NetworkUtils {
         connection.setRequestProperty("User-Agent", MapboxUtils.getUserAgent());
         return connection;
     }
+
+    public static OkHttpClient getHttpClient() {
+        return new OkHttpClient();
+    }
 }

@@ -540,5 +540,24 @@
         <item name="android:background">@drawable/below_shadow</item>
     </style>
 
+    <style name="Widget.Weather" />
+
+    <style name="Widget.Weather.Title">
+        <item name="android:gravity">center</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name="android:drawablePadding">20dp</item>
+    </style>
+
+    <style name="Widget.Weather.Info">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+    </style>
+
 </resources>
 
