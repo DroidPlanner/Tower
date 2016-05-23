@@ -8,6 +8,7 @@
     <color name="transparent_light_grey">#d0EFEFEF</color>
     <color name="light_grey">#EFEFEF</color>
     <color name="white">#fafafa</color>
+    <color name="white_pressed">#F2F2F2</color>
     <color name="white_grey">#f7f6f6</color>
     <color name="navigation_entry_color">#212121</color>
 
@@ -52,5 +53,10 @@
     <color name="primary_light">#C8E6C9</color>
     <color name="accent">#795548</color>
     <color name="primary_text">#212121</color>
+
+    <color name="primary_text_color">@color/light_grey</color>
+    <color name="secondary_text_color">@color/medium_grey</color>
+
+    <color name="dark_green">#009B12</color>
 
 </resources>
