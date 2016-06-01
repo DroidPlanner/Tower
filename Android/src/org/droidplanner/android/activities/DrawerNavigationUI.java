@@ -26,7 +26,10 @@ import org.droidplanner.android.view.SlidingDrawer;
  * This abstract activity provides its children access to a navigation drawer
  * interface.
  */
-public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawer.OnDrawerOpenListener, SlidingDrawer.OnDrawerCloseListener, NavigationView.OnNavigationItemSelectedListener {
+public abstract class DrawerNavigationUI extends SuperUI implements
+    SlidingDrawer.OnDrawerOpenListener,
+    SlidingDrawer.OnDrawerCloseListener,
+    NavigationView.OnNavigationItemSelectedListener {
 
     /**
      * Activates the navigation drawer when the home button is clicked.
@@ -54,7 +57,12 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
     /**
      * Navigation drawer view
      */
-    private NavigationView navigationView;
+    private NavigationView navigationMenu;
+
+    /**
+     * Navigation view settings menu
+     */
+    private NavigationView settingsMenu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -119,8 +127,11 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
         contentLayout.addView(contentView);
         setContentView(mDrawerLayout);
 
-        navigationView = (NavigationView) findViewById(R.id.navigation_drawer_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationMenu = (NavigationView) findViewById(R.id.navigation_drawer_view);
+        navigationMenu.setNavigationItemSelectedListener(this);
+
+        settingsMenu = (NavigationView) findViewById(R.id.navigation_drawer_settings);
+        settingsMenu.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -230,11 +241,11 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
     }
 
     private void updateNavigationDrawer() {
-        final int navDrawerEntryId = getNavigationDrawerMenuItemId();
-        switch (navDrawerEntryId) {
-            default:
-                navigationView.setCheckedItem(navDrawerEntryId);
-                break;
+        navigationMenu.setCheckedItem(getNavigationDrawerMenuItemId());
+
+        MenuItem settings = settingsMenu.getMenu().findItem(R.id.navigation_settings);
+        if(settings != null){
+            settings.setChecked(false);
         }
     }
 
