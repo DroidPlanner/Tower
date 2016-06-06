@@ -351,8 +351,4 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
 			textViewTimeOut.setText(timeLeftStr + "0s");
 		}
 	}
-
-	public static CharSequence getTitle(Context context) {
-		return context.getText(R.string.setup_imu_title);
-	}
 }

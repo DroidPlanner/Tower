@@ -14,6 +14,7 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.android.utils.sound.SoundManager;
 import org.droidplanner.android.utils.unit.UnitManager;
 import org.droidplanner.android.utils.unit.providers.area.AreaUnitProvider;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
@@ -57,6 +58,10 @@ public abstract class ApiListenerFragment extends Fragment implements DroidPlann
 	public Drone getDrone() {
 		return dpApp.getDrone();
 	}
+
+    protected SoundManager getSoundManager(){
+        return dpApp.getSoundManager();
+    }
 
 	protected LocalBroadcastManager getBroadcastManager() {
 		return broadcastManager;

@@ -38,9 +38,14 @@
             android:title="@string/screen_checklist" />
 
         <item
-            android:id="@+id/navigation_calibration"
+            android:id="@+id/navigation_imu_calibration"
             android:icon="@drawable/ic_menu_calibration_grey600_24dp"
-            android:title="@string/screen_cal" />
+            android:title="@string/setup_imu_title" />
+
+        <item
+            android:id="@+id/navigation_compass_calibration"
+            android:icon="@drawable/ic_action_compass"
+            android:title="@string/setup_mag_title"/>
 
     </group>
 

@@ -33,6 +33,7 @@ import org.droidplanner.android.utils.LogToFileTree;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.file.IO.ExceptionWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.android.utils.sound.SoundManager;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -164,6 +165,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
     private LocalBroadcastManager lbm;
 
     private LogToFileTree logToFileTree;
+    private SoundManager soundManager;
 
     @Override
     public void onCreate() {
@@ -195,6 +197,8 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         if(BuildConfig.ENABLE_CRASHLYTICS) {
             Fabric.with(context, new Crashlytics());
         }
+
+        soundManager = new SoundManager(context);
 
         dpPrefs = DroidPlannerPrefs.getInstance(context);
         lbm = LocalBroadcastManager.getInstance(context);
@@ -432,5 +436,9 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         if(logToFileTree != null) {
             logToFileTree.stopLoggingThread();
         }
+    }
+
+    public SoundManager getSoundManager() {
+        return soundManager;
     }
 }

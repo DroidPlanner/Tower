@@ -617,4 +617,9 @@
     <string name="weather_temperature_metric" translatable="false">%1$sº C</string>
     <string name="weather_rain_imperial" translatable="false">%1$s in</string>
     <string name="weather_rain_metric" translatable="false">%1$s mm</string>
+
+    <string name="label_try_again">Try Again</string>
+    <string name="label_alright">Alright!</string>
+    <string name="label_compass_calibration_failed">Compass Calibration unsuccessful.\nBe sure to stay away from metal objects and reinforced concrete.</string>
+    <string name="label_ready_to_fly">Go Fly</string>
 </resources>

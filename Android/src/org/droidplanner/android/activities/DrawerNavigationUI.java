@@ -186,9 +186,14 @@ public abstract class DrawerNavigationUI extends SuperUI implements
                         .putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_ID, id);
                 break;
 
-            case R.id.navigation_calibration:
+            case R.id.navigation_imu_calibration:
                 mNavigationIntent = new Intent(this, ConfigurationActivity.class)
                         .putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_ID, id);
+                break;
+
+            case R.id.navigation_compass_calibration:
+                mNavigationIntent = new Intent(this, ConfigurationActivity.class)
+                    .putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_ID, id);
                 break;
 
             case R.id.navigation_settings:
