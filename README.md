@@ -4,6 +4,8 @@
 
 # Tower
 
+[![Join the chat at https://gitter.im/DroidPlanner/Tower](https://badges.gitter.im/DroidPlanner/Tower.svg)](https://gitter.im/DroidPlanner/Tower?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Tower is a Ground Control Station (GCS) Android app built atop [3DR Services](https://github.com/dronekit/dronekit-android), for UAVs
 running Ardupilot software.
 
