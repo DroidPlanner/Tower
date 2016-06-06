@@ -39,7 +39,7 @@ def getMavenApiKey(){
 }
 
 def getMavenRepoUrl(){
-    return hasProperty('DROIDPLANNER_MAVEN_REPO_URL') ? DROIDPLANNER_MAVEN_REPO_URL : 'https://dl.bintray.com/3d-robotics/maven'
+    return hasProperty('DROIDPLANNER_MAVEN_REPO_URL') ? DROIDPLANNER_MAVEN_REPO_URL : 'https://dl.bintray.com/fredia/droidplanner'
 }
 
 def computeVersionCode(int versionMajor, int versionMinor, int versionPatch, int versionBuild = 0){
