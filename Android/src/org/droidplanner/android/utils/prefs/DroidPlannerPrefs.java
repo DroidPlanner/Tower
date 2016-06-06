@@ -165,6 +165,8 @@ public class DroidPlannerPrefs {
     public static final String PREF_UVC_VIDEO_ASPECT_RATIO = "pref_uvc_video_aspect_ratio";
     private static final float DEFAULT_UVC_VIDEO_ASPECT_RATIO = 3f / 4f;
 
+    public static final String PREF_WEATHER_INFO = "pref_weather_info";
+
     // Public for legacy usage
     public final SharedPreferences prefs;
     private final LocalBroadcastManager lbm;
@@ -209,6 +211,14 @@ public class DroidPlannerPrefs {
         if (versionCode != Utils.INVALID_APP_VERSION_CODE) {
             prefs.edit().putInt(PREF_APP_VERSION_CODE, versionCode).apply();
         }
+    }
+
+    public void setPrefWeatherInfo(String weatherInfo) {
+        prefs.edit().putString(PREF_WEATHER_INFO, weatherInfo).apply();
+    }
+
+    public String getPrefWeatherInfo() {
+        return prefs.getString(PREF_WEATHER_INFO, "");
     }
 
     public String getDroneshareLogin() {

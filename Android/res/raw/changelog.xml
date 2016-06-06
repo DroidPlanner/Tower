@@ -10,6 +10,7 @@
 
     <changelogversion versionName="4.0.0" changeDate="May 19, 2016">
         <changelogimprovement>Introducing [b]standalone[/b] mode - Tower can now be used without 3DR Services</changelogimprovement>
+        <changelogimprovement>Add weather widget</changelogimprovement>
     </changelogversion>
 
     <!--<changelogversion versionName="3.2.1" changeDate="May 12,2016">-->
