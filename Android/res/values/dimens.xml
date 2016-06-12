@@ -57,4 +57,6 @@
     <dimen name="list_item_uvc_height_min">32dp</dimen>
 
     <dimen name="mission_control_bar_height">90dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="appbar_padding_top">8dp</dimen>
 </resources>
