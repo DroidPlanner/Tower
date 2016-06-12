@@ -22,7 +22,7 @@ dependencies {
 
     //Tower-Lib
     //TODO: revert before play store release
-    compile 'org.droidplanner.android:tower-lib:0.0.0-alpha12'
+    compile 'org.droidplanner.android:tower-lib:0.0.0-alpha13'
 //    compile project(':ClientLib')
 
     compile 'me.grantland:autofittextview:0.2.1'

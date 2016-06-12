@@ -18,9 +18,7 @@
         <item
             android:id="@+id/navigation_locator"
             android:icon="@drawable/ic_menu_flight_history_grey600_24dp"
-            android:title="@string/locator"
-            android:visible="false"
-            android:enabled="false"/>
+            android:title="@string/locator"/>
 
     </group>
 
