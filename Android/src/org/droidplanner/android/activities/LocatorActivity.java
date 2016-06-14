@@ -173,7 +173,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_open_tlog_file:
-                TLogPicker.startTLogPicker(this, TLOG_PICKER_REQUEST_CODE);
+//                TLogPicker.startTLogPicker(this, TLOG_PICKER_REQUEST_CODE);
                 return true;
 
             default:

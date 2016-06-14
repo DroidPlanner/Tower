@@ -29,6 +29,7 @@ class TLogActivity : DrawerNavigationUI() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.menu_locator, menu)
         return true
     }
@@ -37,6 +38,7 @@ class TLogActivity : DrawerNavigationUI() {
          when(item.itemId){
             R.id.menu_open_tlog_file -> {
                 // Open a dialog showing the app generated tlog files
+
                 return true
             }
 

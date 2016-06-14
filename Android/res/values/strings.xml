@@ -612,4 +612,5 @@
     <string name="weather_temperature_metric" translatable="false">%1$sº C</string>
     <string name="weather_rain_imperial" translatable="false">%1$s in</string>
     <string name="weather_rain_metric" translatable="false">%1$s mm</string>
+    <string name="label_tlogs_title">Telemetry Logs</string>
 </resources>

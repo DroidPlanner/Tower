@@ -34,6 +34,7 @@ import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.file.IO.ExceptionWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -295,6 +296,13 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
             Timber.d("Disconnecting from drone.");
             drone.disconnect();
         }
+    }
+
+    public File getTLogsDirectory(){
+        if(controlTower == null)
+            return null;
+
+        return controlTower.getTLogsDirectory();
     }
 
     public Drone getDrone() {

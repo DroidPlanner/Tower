@@ -20,6 +20,7 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.control.BaseFlightControlFragment;
+import org.droidplanner.android.tlogs.TLogActivity;
 import org.droidplanner.android.view.SlidingDrawer;
 
 /**
@@ -162,7 +163,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
                 break;
 
             case R.id.navigation_locator:
-                mNavigationIntent = new Intent(this, LocatorActivity.class);
+                mNavigationIntent = new Intent(this, TLogActivity.class);
                 break;
 
             case R.id.navigation_params:
