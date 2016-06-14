@@ -1,5 +1,6 @@
 package org.droidplanner.android.tlogs
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.LinearLayoutManager
@@ -11,9 +12,21 @@ import org.droidplanner.android.DroidPlannerApp
 import org.droidplanner.android.R
 
 /**
+ * TLog data picker dialog
  * Created by fhuya on 6/12/2016.
  */
 class TLogDataPicker : DialogFragment(){
+
+    private var selectionListener : TLogDataAdapter.TLogSelectionListener? = null
+
+    override fun onAttach(activity: Activity){
+        if(activity !is TLogDataAdapter.TLogSelectionListener){
+            throw IllegalStateException("Parent activity must implement " +
+                    "${TLogDataAdapter.TLogSelectionListener::class.java.name}")
+        }
+
+        selectionListener = activity
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View? {
         return inflater.inflate(R.layout.fragment_tlog_data_picker, container, false)
@@ -29,6 +42,8 @@ class TLogDataPicker : DialogFragment(){
         val layoutMgr = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         tlogsView?.setLayoutManager(layoutMgr)
 
-        tlogsView?.adapter = TLogDataAdapter(activity.getApplication() as DroidPlannerApp)
+        val adapter = TLogDataAdapter(activity.getApplication() as DroidPlannerApp)
+        adapter.setTLogSelectionListener(selectionListener)
+        tlogsView?.adapter = adapter
     }
 }
