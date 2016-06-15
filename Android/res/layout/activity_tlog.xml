@@ -39,4 +39,20 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
+    <FrameLayout
+        android:id="@+id/progress_bar_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_dark"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <org.droidplanner.android.view.NiceProgressView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="?android:progressBarStyleLarge"/>
+
+    </FrameLayout>
+
 </android.support.design.widget.CoordinatorLayout>

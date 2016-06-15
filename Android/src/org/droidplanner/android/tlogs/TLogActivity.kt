@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import com.o3dr.android.client.utils.data.tlog.TLogParserCallback
 import org.droidplanner.android.R
@@ -27,6 +28,7 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
             Timber.w("Unable to load tlog data: ${e?.message ?: ""}")
             loadedEvents.clear()
             notifyTLogSubscribers()
+            loadingProgress?.visibility = View.VISIBLE
         }
 
         override fun onResult(events: MutableList<TLogParser.Event>) {
@@ -34,11 +36,16 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
             loadedEvents.clear()
             loadedEvents.addAll(events)
             notifyTLogSubscribers()
+            loadingProgress?.visibility = View.VISIBLE
         }
     }
 
     private val tlogSubscribers = HashSet<TLogDataSubscriber>()
     private val loadedEvents = ArrayList<TLogParser.Event>()
+
+    private val loadingProgress by lazy {
+        findViewById(R.id.progress_bar_container)
+    }
 
     override fun getNavigationDrawerMenuItemId() = R.id.navigation_locator
 
@@ -79,6 +86,7 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
         Timber.i("Loading tlog data from ${tlogFile.name}")
 
         // TODO: Show a loading progress bar
+        loadingProgress?.visibility = View.VISIBLE
         TLogParser.getAllEventsAsync(handler, Uri.fromFile(tlogFile), tlogParserCb)
     }
 

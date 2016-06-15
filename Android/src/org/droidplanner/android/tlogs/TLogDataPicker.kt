@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import org.droidplanner.android.DroidPlannerApp
 import org.droidplanner.android.R
+import org.droidplanner.android.tlogs.TLogDataAdapter.TLogSelectionListener
+import java.io.File
 
 /**
  * TLog data picker dialog
@@ -18,6 +20,13 @@ import org.droidplanner.android.R
 class TLogDataPicker : DialogFragment(){
 
     private var selectionListener : TLogDataAdapter.TLogSelectionListener? = null
+
+    private val selectionListenerWrapper = object : TLogSelectionListener {
+        override fun onTLogSelected(tlogFile: File) {
+            selectionListener?.onTLogSelected(tlogFile)
+            dismissAllowingStateLoss()
+        }
+    }
 
     override fun onAttach(activity: Activity){
         if(activity !is TLogDataAdapter.TLogSelectionListener){
@@ -43,7 +52,7 @@ class TLogDataPicker : DialogFragment(){
         tlogsView?.setLayoutManager(layoutMgr)
 
         val adapter = TLogDataAdapter(activity.getApplication() as DroidPlannerApp)
-        adapter.setTLogSelectionListener(selectionListener)
+        adapter.setTLogSelectionListener(selectionListenerWrapper)
         tlogsView?.adapter = adapter
     }
 }
