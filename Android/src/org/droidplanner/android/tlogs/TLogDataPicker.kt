@@ -29,12 +29,18 @@ class TLogDataPicker : DialogFragment(){
     }
 
     override fun onAttach(activity: Activity){
+        super.onAttach(activity)
         if(activity !is TLogDataAdapter.TLogSelectionListener){
             throw IllegalStateException("Parent activity must implement " +
                     "${TLogDataAdapter.TLogSelectionListener::class.java.name}")
         }
 
         selectionListener = activity
+    }
+
+    override fun onDetach(){
+        super.onDetach()
+        selectionListener = null
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View? {

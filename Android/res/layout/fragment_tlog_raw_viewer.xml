@@ -14,13 +14,6 @@
         android:layout_gravity="center"
         tools:text="No telemetry data!"/>
 
-    <org.droidplanner.android.view.NiceProgressView
-        android:id="@+id/tlog_data_load_progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        style="?android:progressBarStyleLarge"/>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/tlog_raw_data"
         android:layout_width="match_parent"

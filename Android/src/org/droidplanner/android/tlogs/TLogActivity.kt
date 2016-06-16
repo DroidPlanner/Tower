@@ -60,6 +60,8 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
 
         val tabLayout = findViewById(R.id.tabs) as TabLayout?
         tabLayout?.setupWithViewPager(viewPager)
+
+        //TODO: reload the loaded tlog events (if they exists)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

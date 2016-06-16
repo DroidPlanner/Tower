@@ -1,7 +1,6 @@
 package org.droidplanner.android.tlogs
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -10,21 +9,16 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import org.droidplanner.android.R
-import org.droidplanner.android.view.NiceProgressView
 
 /**
  * @author ne0fhyk (Fredia Huya-Kouadio)
  */
-class TLogRawViewer : Fragment(), TLogDataSubscriber {
+class TLogRawViewer : TLogDataSubscriber() {
 
     private val tlogEventsAdapter = TLogRawEventAdapter()
 
     private val noTLogView by lazy {
         getView()?.findViewById(R.id.no_tlog_selected) as TextView?
-    }
-
-    private val dataLoadProgress by lazy {
-        getView()?.findViewById(R.id.tlog_data_load_progress) as NiceProgressView?
     }
 
     private val rawData by lazy {
@@ -58,19 +52,11 @@ class TLogRawViewer : Fragment(), TLogDataSubscriber {
 
     private fun stateNoData(){
         noTLogView?.visibility = View.VISIBLE
-        dataLoadProgress?.visibility = View.GONE
-        rawData?.visibility = View.GONE
-    }
-
-    private fun stateLoadingData(){
-        noTLogView?.visibility = View.GONE
-        dataLoadProgress?.visibility = View.VISIBLE
         rawData?.visibility = View.GONE
     }
 
     private fun stateDataLoaded(){
         noTLogView?.visibility = View.GONE
-        dataLoadProgress?.visibility = View.GONE
         rawData?.visibility = View.VISIBLE
     }
 }
