@@ -1,4 +1,4 @@
-package org.droidplanner.android.tlogs
+package org.droidplanner.android.tlogs.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

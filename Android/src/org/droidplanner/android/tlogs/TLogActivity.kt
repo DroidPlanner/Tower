@@ -12,6 +12,8 @@ import com.o3dr.android.client.utils.data.tlog.TLogParser
 import com.o3dr.android.client.utils.data.tlog.TLogParserCallback
 import org.droidplanner.android.R
 import org.droidplanner.android.activities.DrawerNavigationUI
+import org.droidplanner.android.tlogs.adapter.TLogDataAdapter
+import org.droidplanner.android.tlogs.adapter.TLogViewerAdapter
 import timber.log.Timber
 import java.io.File
 import java.util.*

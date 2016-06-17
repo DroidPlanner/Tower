@@ -10,7 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import org.droidplanner.android.DroidPlannerApp
 import org.droidplanner.android.R
-import org.droidplanner.android.tlogs.TLogDataAdapter.TLogSelectionListener
+import org.droidplanner.android.tlogs.adapter.TLogDataAdapter
+import org.droidplanner.android.tlogs.adapter.TLogDataAdapter.TLogSelectionListener
 import java.io.File
 
 /**

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import org.droidplanner.android.R
+import org.droidplanner.android.tlogs.adapter.TLogRawEventAdapter
 
 /**
  * @author ne0fhyk (Fredia Huya-Kouadio)
