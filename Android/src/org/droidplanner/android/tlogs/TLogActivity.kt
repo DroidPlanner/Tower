@@ -21,6 +21,10 @@ import java.util.*
  */
 class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener, TLogDataProvider {
 
+    private companion object {
+        const val EXTRA_LOADED_EVENTS = "extra_loaded_events"
+    }
+
     private val handler = Handler()
 
     private val tlogParserCb = object : TLogParserCallback {
@@ -61,7 +65,13 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
         val tabLayout = findViewById(R.id.tabs) as TabLayout?
         tabLayout?.setupWithViewPager(viewPager)
 
-        //TODO: reload the loaded tlog events (if they exists)
+        // Reload the loaded tlog events (if they exists)
+        if(savedInstanceState != null){
+            val savedEvents = savedInstanceState.getSerializable(EXTRA_LOADED_EVENTS) as ArrayList<TLogParser.Event>?
+            if (savedEvents != null){
+                loadedEvents.addAll(savedEvents)
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -80,6 +90,13 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
             }
 
             else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle){
+        super.onSaveInstanceState(outState)
+        if(loadedEvents.isNotEmpty()){
+            outState.putSerializable(EXTRA_LOADED_EVENTS, loadedEvents)
         }
     }
 
