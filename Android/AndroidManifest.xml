@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:tools="http://schemas.android.com/tools"
-          package="org.droidplanner.android"
+<manifest package="org.droidplanner.android"
           xmlns:android="http://schemas.android.com/apk/res/android"
           android:installLocation="auto">
 
@@ -108,8 +107,7 @@
             android:name=".activities.helpers.MapPreferencesActivity"
             android:label="@string/activity_title_map_provider_preferences"
             android:launchMode="singleTop"
-            android:parentActivityName=".activities.SettingsActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.SettingsActivity">
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
@@ -129,8 +127,7 @@
         <activity
             android:name=".activities.WidgetActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".activities.FlightActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.FlightActivity">
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data

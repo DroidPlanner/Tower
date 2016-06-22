@@ -20,9 +20,9 @@ dependencies {
     // Android library to display the changelog
     compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
 
-    //Tower-Lib
+    //DroneKit-Android client lib
     //TODO: revert before play store release
-    compile 'org.droidplanner.android:tower-lib:0.0.0-alpha14'
+    compile 'com.o3dr.android:dronekit-android:3.0.0-alpha1'
 //    compile project(':ClientLib')
 
     compile 'me.grantland:autofittextview:0.2.1'
