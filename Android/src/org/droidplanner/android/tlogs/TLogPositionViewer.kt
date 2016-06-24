@@ -53,11 +53,13 @@ class TLogPositionViewer : TLogDataSubscriber() {
             adapter = tlogPositionAdapter
         }
         jumpToBeginning?.setOnClickListener {
-            // TODO: Jump to the beginning of the list
+            // Jump to the beginning of the list
+            eventsView?.scrollToPosition(0)
         }
 
         jumpToEnd?.setOnClickListener {
-            // TODO: Jump to the end of the list
+            // Jump to the end of the list
+            eventsView?.scrollToPosition(tlogPositionAdapter.itemCount -1)
         }
     }
 
@@ -68,5 +70,9 @@ class TLogPositionViewer : TLogDataSubscriber() {
 
         // Refresh the adapter
         tlogPositionAdapter.loadTLogPositionEvents(positionEvents)
+
+        val twoOrMore = tlogPositionAdapter.itemCount > 1
+        jumpToBeginning?.isEnabled = twoOrMore
+        jumpToEnd?.isEnabled = twoOrMore
     }
 }

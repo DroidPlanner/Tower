@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import org.droidplanner.android.R
+import org.droidplanner.android.tlogs.TLogEventClickListener
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,6 +24,12 @@ class TLogPositionEventAdapter : RecyclerView.Adapter<TLogPositionEventAdapter.V
 
     private val positionEvents = ArrayList< TLogParser.Event>()
 
+    var tlogEventClickListener: TLogEventClickListener? = null
+//        private get
+//        set(value){
+//            value
+//        }
+
     fun loadTLogPositionEvents(events: List<TLogParser.Event>){
         positionEvents.clear()
         positionEvents.addAll(events)
@@ -32,7 +39,11 @@ class TLogPositionEventAdapter : RecyclerView.Adapter<TLogPositionEventAdapter.V
     override fun getItemCount() = positionEvents.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.thumbnail.text = dateFormatter.format(positionEvents[position].timestamp)
+        val event = positionEvents[position]
+        holder.thumbnail.text = dateFormatter.format(event.timestamp)
+        holder.thumbnail.setOnClickListener {
+            tlogEventClickListener?.onTLogEventClick(event)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder? {
