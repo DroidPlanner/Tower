@@ -1,4 +1,4 @@
-package org.droidplanner.android.tlogs
+package org.droidplanner.android.tlog.viewers
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -9,13 +9,15 @@ import android.view.ViewGroup
 import com.MAVLink.common.msg_global_position_int
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import org.droidplanner.android.R
-import org.droidplanner.android.tlogs.adapter.TLogPositionEventAdapter
+import org.droidplanner.android.tlog.adapters.TLogPositionEventAdapter
+import org.droidplanner.android.tlog.event.TLogEventDetail
+import org.droidplanner.android.tlog.event.TLogEventMapFragment
 import java.util.*
 
 /**
  * @author ne0fhyk (Fredia Huya-Kouadio)
  */
-class TLogPositionViewer : TLogDataSubscriber() {
+class TLogPositionViewer : TLogViewer() {
 
     private val tlogPositionAdapter = TLogPositionEventAdapter()
 
@@ -33,6 +35,8 @@ class TLogPositionViewer : TLogDataSubscriber() {
         getView()?.findViewById(R.id.jump_to_end)
     }
 
+    private var tlogEventMap : TLogEventMapFragment? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         return inflater.inflate(R.layout.fragment_tlog_position_viewer, container, false)
     }
@@ -41,10 +45,16 @@ class TLogPositionViewer : TLogDataSubscriber() {
         super.onViewCreated(view, savedInstanceState)
 
         val fm = childFragmentManager
-        var tlogEventMap = fm.findFragmentById(R.id.tlog_map_container) as TLogEventMapFragment?
+        tlogEventMap = fm.findFragmentById(R.id.tlog_map_container) as TLogEventMapFragment?
         if(tlogEventMap == null){
             tlogEventMap = TLogEventMapFragment()
             fm.beginTransaction().add(R.id.tlog_map_container, tlogEventMap).commit()
+        }
+
+        var tlogEventDetail = fm.findFragmentById(R.id.tlog_event_detail) as TLogEventDetail?
+        if(tlogEventDetail == null){
+            tlogEventDetail = TLogEventDetail()
+            fm.beginTransaction().add(R.id.tlog_event_detail, tlogEventDetail).commit()
         }
 
         eventsView?.apply {
@@ -74,5 +84,9 @@ class TLogPositionViewer : TLogDataSubscriber() {
         val twoOrMore = tlogPositionAdapter.itemCount > 1
         jumpToBeginning?.isEnabled = twoOrMore
         jumpToEnd?.isEnabled = twoOrMore
+
+        // Refresh the map.
+        tlogEventMap?.onTLogDataLoaded(positionEvents)
     }
 }
+

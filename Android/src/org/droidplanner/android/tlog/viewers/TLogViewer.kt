@@ -1,13 +1,14 @@
-package org.droidplanner.android.tlogs
+package org.droidplanner.android.tlog.viewers
 
 import android.app.Activity
-import com.o3dr.android.client.utils.data.tlog.TLogParser
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment
+import org.droidplanner.android.tlog.interfaces.TLogDataProvider
+import org.droidplanner.android.tlog.interfaces.TLogDataSubscriber
 
 /**
  * @author ne0fhyk (Fredia Huya-Kouadio)
  */
-abstract class TLogDataSubscriber : ApiListenerFragment() {
+abstract class TLogViewer : ApiListenerFragment(), TLogDataSubscriber {
 
     private var tlogDataProvider : TLogDataProvider? = null
 
@@ -40,5 +41,4 @@ abstract class TLogDataSubscriber : ApiListenerFragment() {
         tlogDataProvider?.unregisterForTLogDataUpdate(this)
     }
 
-    abstract fun onTLogDataLoaded(events: List<TLogParser.Event>)
 }

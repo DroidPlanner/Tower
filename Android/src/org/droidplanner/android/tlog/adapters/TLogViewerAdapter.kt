@@ -1,10 +1,10 @@
-package org.droidplanner.android.tlogs.adapter
+package org.droidplanner.android.tlog.adapters
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import org.droidplanner.android.tlogs.TLogPositionViewer
-import org.droidplanner.android.tlogs.TLogRawViewer
+import org.droidplanner.android.tlog.viewers.TLogPositionViewer
+import org.droidplanner.android.tlog.viewers.TLogRawViewer
 
 /**
  * Return the appropriate fragment for the selected tlog data viewer.

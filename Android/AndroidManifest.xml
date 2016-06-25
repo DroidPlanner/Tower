@@ -120,7 +120,7 @@
             android:launchMode="singleTop"
             android:theme="@style/CustomActionBarTheme.Transparent"/>
         <activity
-            android:name=".tlogs.TLogActivity"
+            android:name=".tlog.TLogActivity"
             android:label="@string/locator"
             android:launchMode="singleTop"
             android:theme="@style/CustomActionBarTheme.Transparent"/>

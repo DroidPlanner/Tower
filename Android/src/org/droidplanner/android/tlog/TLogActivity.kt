@@ -1,4 +1,4 @@
-package org.droidplanner.android.tlogs
+package org.droidplanner.android.tlog
 
 import android.net.Uri
 import android.os.Bundle
@@ -12,8 +12,10 @@ import com.o3dr.android.client.utils.data.tlog.TLogParser
 import com.o3dr.android.client.utils.data.tlog.TLogParserCallback
 import org.droidplanner.android.R
 import org.droidplanner.android.activities.DrawerNavigationUI
-import org.droidplanner.android.tlogs.adapter.TLogDataAdapter
-import org.droidplanner.android.tlogs.adapter.TLogViewerAdapter
+import org.droidplanner.android.tlog.adapters.TLogDataAdapter
+import org.droidplanner.android.tlog.adapters.TLogViewerAdapter
+import org.droidplanner.android.tlog.interfaces.TLogDataProvider
+import org.droidplanner.android.tlog.viewers.TLogViewer
 import timber.log.Timber
 import java.io.File
 import java.util.*
@@ -46,7 +48,7 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
         }
     }
 
-    private val tlogSubscribers = HashSet<TLogDataSubscriber>()
+    private val tlogSubscribers = HashSet<TLogViewer>()
     private val loadedEvents = ArrayList<TLogParser.Event>()
 
     private val loadingProgress by lazy {
@@ -111,12 +113,12 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
         TLogParser.getAllEventsAsync(handler, Uri.fromFile(tlogFile), tlogParserCb)
     }
 
-    override fun registerForTLogDataUpdate(subscriber: TLogDataSubscriber) {
+    override fun registerForTLogDataUpdate(subscriber: TLogViewer) {
         subscriber.onTLogDataLoaded(loadedEvents)
         tlogSubscribers.add(subscriber)
     }
 
-    override fun unregisterForTLogDataUpdate(subscriber: TLogDataSubscriber) {
+    override fun unregisterForTLogDataUpdate(subscriber: TLogViewer) {
         tlogSubscribers.remove(subscriber)
     }
 

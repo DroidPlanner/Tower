@@ -20,7 +20,7 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.control.BaseFlightControlFragment;
-import org.droidplanner.android.tlogs.TLogActivity;
+import org.droidplanner.android.tlog.TLogActivity;
 import org.droidplanner.android.view.SlidingDrawer;
 
 /**

@@ -1,4 +1,4 @@
-package org.droidplanner.android.tlogs.adapter
+package org.droidplanner.android.tlog.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import org.droidplanner.android.R
-import org.droidplanner.android.tlogs.TLogEventClickListener
+import org.droidplanner.android.tlog.event.TLogEventClickListener
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,10 +25,10 @@ class TLogPositionEventAdapter : RecyclerView.Adapter<TLogPositionEventAdapter.V
     private val positionEvents = ArrayList< TLogParser.Event>()
 
     var tlogEventClickListener: TLogEventClickListener? = null
-//        private get
-//        set(value){
-//            value
-//        }
+
+    fun setTLogEventClickListener(listener: TLogEventClickListener?){
+        tlogEventClickListener = listener
+    }
 
     fun loadTLogPositionEvents(events: List<TLogParser.Event>){
         positionEvents.clear()

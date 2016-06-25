@@ -1,4 +1,4 @@
-package org.droidplanner.android.tlogs
+package org.droidplanner.android.tlog.viewers
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -9,12 +9,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import org.droidplanner.android.R
-import org.droidplanner.android.tlogs.adapter.TLogRawEventAdapter
+import org.droidplanner.android.tlog.adapters.TLogRawEventAdapter
 
 /**
  * @author ne0fhyk (Fredia Huya-Kouadio)
  */
-class TLogRawViewer : TLogDataSubscriber() {
+class TLogRawViewer : TLogViewer() {
 
     private val tlogEventsAdapter = TLogRawEventAdapter()
 
