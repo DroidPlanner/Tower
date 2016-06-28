@@ -8,7 +8,7 @@ import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 
 /**
  */
-public class PolygonMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
+public class PolygonMarkerInfo extends MarkerInfo {
 
 	private LatLong mPoint;
 	private final MissionItemProxy markerOrigin;

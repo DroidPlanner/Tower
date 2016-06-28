@@ -1,23 +1,23 @@
 package org.droidplanner.android.proxy.mission.item.markers;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.android.maps.MarkerWithText;
-import org.droidplanner.android.proxy.mission.MissionProxy;
-import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
-
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 
+import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.maps.MarkerWithText;
+import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Template class and factory for a mission item's marker source.
  */
-public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
+public abstract class MissionItemMarkerInfo extends MarkerInfo {
 
 	protected final MissionItemProxy mMarkerOrigin;
 

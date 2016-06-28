@@ -1,8 +1,5 @@
 package org.droidplanner.android.graphic.map;
 
-import org.droidplanner.android.R;
-import org.droidplanner.android.maps.MarkerInfo;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -17,9 +14,12 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Home;
 import com.o3dr.services.android.lib.model.AbstractCommandListener;
 
+import org.droidplanner.android.R;
+import org.droidplanner.android.maps.MarkerInfo;
+
 import timber.log.Timber;
 
-public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
+public class GraphicHome extends MarkerInfo {
 
 	private final Drone drone;
 	private final Context context;

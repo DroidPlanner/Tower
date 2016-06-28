@@ -7,6 +7,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import com.google.android.gms.maps.model.CameraPosition
 import org.droidplanner.android.R
+import org.droidplanner.android.maps.GoogleMapFragment
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader
 import org.droidplanner.android.maps.providers.google_map.tiles.offline.MapDownloaderListener
 import org.droidplanner.android.utils.prefs.AutoPanMode

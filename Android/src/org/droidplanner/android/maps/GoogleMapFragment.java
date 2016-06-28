@@ -1,4 +1,4 @@
-package org.droidplanner.android.maps.providers.google_map;
+package org.droidplanner.android.maps;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -66,9 +66,10 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.graphic.map.GraphicHome;
-import org.droidplanner.android.maps.DPMap;
-import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.maps.providers.google_map.DownloadMapboxMapActivity;
+import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefConstants;
+import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefFragment;
 import org.droidplanner.android.maps.providers.google_map.tiles.TileProviderManager;
 import org.droidplanner.android.maps.providers.google_map.tiles.arcgis.ArcGISTileProviderManager;
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.MapboxTileProviderManager;
@@ -90,7 +91,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import timber.log.Timber;
 
-public class GoogleMapFragment extends SupportMapFragment implements DPMap, GoogleApiClientManager.ManagerListener {
+public class GoogleMapFragment extends SupportMapFragment implements DPMap,
+    GoogleApiClientManager.ManagerListener {
 
     private static final long USER_LOCATION_UPDATE_INTERVAL = 30000; // ms
     private static final long USER_LOCATION_UPDATE_FASTEST_INTERVAL = 5000; // ms
@@ -1193,5 +1195,69 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Goog
     @Override
     public void onManagerStopped() {
 
+    }
+
+    private static class ProxyMapMarker implements MarkerInfo.ProxyMarker {
+
+        private final Marker marker;
+
+        ProxyMapMarker(Marker marker){
+            this.marker = marker;
+        }
+
+        @Override
+        public void setAlpha(float alpha) {
+
+        }
+
+        @Override
+        public void setAnchor(float anchorU, float anchorV) {
+
+        }
+
+        @Override
+        public void setDraggable(boolean draggable) {
+
+        }
+
+        @Override
+        public void setFlat(boolean flat) {
+
+        }
+
+        @Override
+        public void setIcon(Bitmap icon) {
+
+        }
+
+        @Override
+        public void setInfoWindowAnchor(float anchorU, float anchorV) {
+
+        }
+
+        @Override
+        public void setPosition(LatLong coord) {
+
+        }
+
+        @Override
+        public void setRotation(float rotation) {
+
+        }
+
+        @Override
+        public void setSnippet(String snippet) {
+
+        }
+
+        @Override
+        public void setTitle(String title) {
+
+        }
+
+        @Override
+        public void setVisible(boolean visible) {
+
+        }
     }
 }
