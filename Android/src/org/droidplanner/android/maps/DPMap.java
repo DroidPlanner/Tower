@@ -14,7 +14,6 @@ import org.droidplanner.android.utils.prefs.AutoPanMode;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Defines the functionality expected from the map providers.
@@ -57,129 +56,6 @@ public interface DPMap {
 	String PREF_ZOOM = "pref_map_zoom";
 	int DEFAULT_ZOOM_LEVEL = 17;
 
-	interface PathSource {
-		List<LatLong> getPathPoints();
-	}
-
-	/**
-	 * Implemented by classes interested in map click events.
-	 */
-	interface OnMapClickListener {
-		/**
-		 * Triggered when the map is clicked.
-		 * 
-		 * @param coord
-		 *            location where the map was clicked.
-		 */
-		void onMapClick(LatLong coord);
-	}
-
-	/**
-	 * Implemented by classes interested in map long click events.
-	 */
-	interface OnMapLongClickListener {
-		/**
-		 * Triggered when the map is long clicked.
-		 * 
-		 * @param coord
-		 *            location where the map was long clicked.
-		 */
-		void onMapLongClick(LatLong coord);
-	}
-
-	/**
-	 * Implemented by classes interested in marker(s) click events.
-	 */
-	interface OnMarkerClickListener {
-		/**
-		 * Triggered when a marker is clicked.
-		 * 
-		 * @param markerInfo
-		 *            info about the clicked marker
-		 * @return true if the listener has consumed the event.
-		 */
-		boolean onMarkerClick(MarkerInfo markerInfo);
-	}
-
-	/**
-	 * Callback interface for drag events on markers.
-	 */
-	interface OnMarkerDragListener {
-		/**
-		 * Called repeatedly while a marker is being dragged. The marker's
-		 * location can be accessed via {@link MarkerInfo#getPosition()}
-		 * 
-		 * @param markerInfo
-		 *            info about the marker that was dragged.
-		 */
-		void onMarkerDrag(MarkerInfo markerInfo);
-
-		/**
-		 * Called when a marker has finished being dragged. The marker's
-		 * location can be accessed via {@link MarkerInfo#getPosition()}
-		 * 
-		 * @param markerInfo
-		 *            info about the marker that was dragged.
-		 */
-		void onMarkerDragEnd(MarkerInfo markerInfo);
-
-		/**
-		 * Called when a marker starts being dragged. The marker's location can
-		 * be accessed via {@link MarkerInfo#getPosition()}; this position may
-		 * be different to the position prior to the start of the drag because
-		 * the marker is popped up above the touch point.
-		 * 
-		 * @param markerInfo
-		 *            info about the marker that was dragged.
-		 */
-		void onMarkerDragStart(MarkerInfo markerInfo);
-
-	}
-
-	class VisibleMapArea implements Parcelable {
-		public final LatLong nearLeft;
-		public final LatLong nearRight;
-		public final LatLong farLeft;
-		public final LatLong farRight;
-
-		public VisibleMapArea(LatLong farLeft, LatLong nearLeft, LatLong nearRight, LatLong farRight) {
-			this.farLeft = farLeft;
-			this.nearLeft = nearLeft;
-			this.nearRight = nearRight;
-			this.farRight = farRight;
-		}
-
-		@Override
-		public int describeContents() {
-			return 0;
-		}
-
-		@Override
-		public void writeToParcel(Parcel dest, int flags) {
-			dest.writeParcelable(this.nearLeft, 0);
-			dest.writeParcelable(this.nearRight, 0);
-			dest.writeParcelable(this.farLeft, 0);
-			dest.writeParcelable(this.farRight, 0);
-		}
-
-		protected VisibleMapArea(Parcel in) {
-			this.nearLeft = in.readParcelable(LatLong.class.getClassLoader());
-			this.nearRight = in.readParcelable(LatLong.class.getClassLoader());
-			this.farLeft = in.readParcelable(LatLong.class.getClassLoader());
-			this.farRight = in.readParcelable(LatLong.class.getClassLoader());
-		}
-
-		public static final Parcelable.Creator<VisibleMapArea> CREATOR = new Parcelable.Creator<VisibleMapArea>() {
-			public VisibleMapArea createFromParcel(Parcel source) {
-				return new VisibleMapArea(source);
-			}
-
-			public VisibleMapArea[] newArray(int size) {
-				return new VisibleMapArea[size];
-			}
-		};
-	}
-
 	/**
 	 * Adds a coordinate to the drone's flight path.
 	 * 
@@ -194,6 +70,23 @@ public interface DPMap {
 	 */
 	void addCameraFootprint(FootPrint footprintToBeDraw);
 
+	/**
+	 * Adds the marker corresponding to the given marker info
+	 * argument.
+	 *
+	 * @param markerInfo
+	 *            used to generate
+	 */
+	void addMarker(MarkerInfo markerInfo);
+
+	/**
+	 * Adds the markers corresponding to the given list of markers
+	 * infos.
+	 *
+	 * @param markerInfoList
+	 *            source for the new markers to add
+	 */
+	void addMarkers(List<MarkerInfo> markerInfoList);
 	/**
 	 * Remove all markers from the map.
 	 */
@@ -222,11 +115,6 @@ public interface DPMap {
 	 * @return the map current zoom level.
 	 */
 	float getMapZoomLevel();
-
-	/**
-	 * @return a list of marker info currently on the map.
-	 */
-	Set<MarkerInfo> getMarkerInfoList();
 
 	/**
 	 * @return the map maximum zoom level.
@@ -264,6 +152,12 @@ public interface DPMap {
 	void loadCameraPosition();
 
 	List<LatLong> projectPathIntoMap(List<LatLong> pathPoints);
+
+	/**
+	 * Remove the marker described by the given marker info
+	 * @param markerInfo
+     */
+	void removeMarker(MarkerInfo markerInfo);
 
 	/**
 	 * Remove the markers whose info is in the list from the map.
@@ -371,46 +265,6 @@ public interface DPMap {
 	void updateDroneLeashPath(PathSource pathSource);
 
 	/**
-	 * Adds / updates the marker corresponding to the given marker info
-	 * argument.
-	 * 
-	 * @param markerInfo
-	 *            used to generate / update the marker
-	 */
-	void updateMarker(MarkerInfo markerInfo);
-
-	/**
-	 * Adds / updates the marker corresponding to the given marker info
-	 * argument.
-	 * 
-	 * @param markerInfo
-	 *            used to generate / update the marker
-	 * @param isDraggable
-	 *            overwrites markerInfo draggable preference
-	 */
-	void updateMarker(MarkerInfo markerInfo, boolean isDraggable);
-
-	/**
-	 * Adds / updates the markers corresponding to the given list of markers
-	 * infos.
-	 * 
-	 * @param markersInfos
-	 *            source for the new markers to add/update
-	 */
-	void updateMarkers(List<MarkerInfo> markersInfos);
-
-	/**
-	 * Adds / updates the markers corresponding to the given list of markers
-	 * infos.
-	 * 
-	 * @param markersInfos
-	 *            source for the new markers to add/update
-	 * @param isDraggable
-	 *            overwrites markerInfo draggable preference
-	 */
-	void updateMarkers(List<MarkerInfo> markersInfos, boolean isDraggable);
-
-	/**
 	 * Updates the mission path on the map.
 	 * 
 	 * @param pathSource
@@ -445,5 +299,128 @@ public interface DPMap {
 	void skipMarkerClickEvents(boolean skip);
 
 	void updateRealTimeFootprint(FootPrint footprint);
+
+	interface PathSource {
+		List<LatLong> getPathPoints();
+	}
+
+	/**
+	 * Implemented by classes interested in map click events.
+	 */
+	interface OnMapClickListener {
+		/**
+		 * Triggered when the map is clicked.
+		 *
+		 * @param coord
+		 *            location where the map was clicked.
+		 */
+		void onMapClick(LatLong coord);
+	}
+
+	/**
+	 * Implemented by classes interested in map long click events.
+	 */
+	interface OnMapLongClickListener {
+		/**
+		 * Triggered when the map is long clicked.
+		 *
+		 * @param coord
+		 *            location where the map was long clicked.
+		 */
+		void onMapLongClick(LatLong coord);
+	}
+
+	/**
+	 * Implemented by classes interested in marker(s) click events.
+	 */
+	interface OnMarkerClickListener {
+		/**
+		 * Triggered when a marker is clicked.
+		 *
+		 * @param markerInfo
+		 *            info about the clicked marker
+		 * @return true if the listener has consumed the event.
+		 */
+		boolean onMarkerClick(MarkerInfo markerInfo);
+	}
+
+	/**
+	 * Callback interface for drag events on markers.
+	 */
+	interface OnMarkerDragListener {
+		/**
+		 * Called repeatedly while a marker is being dragged. The marker's
+		 * location can be accessed via {@link MarkerInfo#getPosition()}
+		 *
+		 * @param markerInfo
+		 *            info about the marker that was dragged.
+		 */
+		void onMarkerDrag(MarkerInfo markerInfo);
+
+		/**
+		 * Called when a marker has finished being dragged. The marker's
+		 * location can be accessed via {@link MarkerInfo#getPosition()}
+		 *
+		 * @param markerInfo
+		 *            info about the marker that was dragged.
+		 */
+		void onMarkerDragEnd(MarkerInfo markerInfo);
+
+		/**
+		 * Called when a marker starts being dragged. The marker's location can
+		 * be accessed via {@link MarkerInfo#getPosition()}; this position may
+		 * be different to the position prior to the start of the drag because
+		 * the marker is popped up above the touch point.
+		 *
+		 * @param markerInfo
+		 *            info about the marker that was dragged.
+		 */
+		void onMarkerDragStart(MarkerInfo markerInfo);
+
+	}
+
+	class VisibleMapArea implements Parcelable {
+		public final LatLong nearLeft;
+		public final LatLong nearRight;
+		public final LatLong farLeft;
+		public final LatLong farRight;
+
+		public VisibleMapArea(LatLong farLeft, LatLong nearLeft, LatLong nearRight, LatLong farRight) {
+			this.farLeft = farLeft;
+			this.nearLeft = nearLeft;
+			this.nearRight = nearRight;
+			this.farRight = farRight;
+		}
+
+		@Override
+		public int describeContents() {
+			return 0;
+		}
+
+		@Override
+		public void writeToParcel(Parcel dest, int flags) {
+			dest.writeParcelable(this.nearLeft, 0);
+			dest.writeParcelable(this.nearRight, 0);
+			dest.writeParcelable(this.farLeft, 0);
+			dest.writeParcelable(this.farRight, 0);
+		}
+
+		protected VisibleMapArea(Parcel in) {
+			this.nearLeft = in.readParcelable(LatLong.class.getClassLoader());
+			this.nearRight = in.readParcelable(LatLong.class.getClassLoader());
+			this.farLeft = in.readParcelable(LatLong.class.getClassLoader());
+			this.farRight = in.readParcelable(LatLong.class.getClassLoader());
+		}
+
+		public static final Parcelable.Creator<VisibleMapArea> CREATOR = new Parcelable.Creator<VisibleMapArea>() {
+			public VisibleMapArea createFromParcel(Parcel source) {
+				return new VisibleMapArea(source);
+			}
+
+			public VisibleMapArea[] newArray(int size) {
+				return new VisibleMapArea[size];
+			}
+		};
+	}
     
 }

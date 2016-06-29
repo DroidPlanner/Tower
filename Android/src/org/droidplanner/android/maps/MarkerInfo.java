@@ -19,6 +19,15 @@ public abstract class MarkerInfo {
 		proxyMarkerRef = new WeakReference<>(proxyMarker);
 	}
 
+	void removeProxyMarker(){
+		ProxyMarker proxyMarker = proxyMarkerRef.get();
+		if(proxyMarker != null){
+			proxyMarker.removeMarker();
+		}
+
+		proxyMarkerRef.clear();
+	}
+
 	protected void updateProxy(){
 		ProxyMarker proxy = proxyMarkerRef.get();
 		if(proxy == null){
@@ -28,6 +37,10 @@ public abstract class MarkerInfo {
 		proxy.setAlpha(getAlpha());
 		proxy.setAnchor(getAnchorU(), getAnchorV());
 		//TODO: complete
+	}
+
+	public final boolean isOnMap(){
+		return proxyMarkerRef.get() != null;
 	}
 
 	/**
@@ -211,5 +224,9 @@ public abstract class MarkerInfo {
          */
 		void setVisible (boolean visible);
 
+		/**
+		 * Remove the marker from the map.
+		 */
+		void removeMarker();
 	}
 }
