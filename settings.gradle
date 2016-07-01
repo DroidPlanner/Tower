@@ -1,10 +1,2 @@
 //Android projects
 include ':Android'
-
-//Linking to the dronekit-android project to improve development flow
-include ':ClientLib'
-include ':Mavlink'
-
-def dkaLibPath = '../dronekit-android' //Edit this value to point to your 'tower-lib' project directory
-project(':ClientLib').projectDir = new File("$dkaLibPath/ClientLib")
-project(':Mavlink').projectDir = new File("$dkaLibPath/dependencyLibs/Mavlink")
