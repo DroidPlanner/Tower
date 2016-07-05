@@ -19,6 +19,10 @@ public abstract class MarkerInfo {
 		proxyMarkerRef = new WeakReference<>(proxyMarker);
 	}
 
+	ProxyMarker getProxyMarker(){
+		return proxyMarkerRef.get();
+	}
+
 	void removeProxyMarker(){
 		ProxyMarker proxyMarker = proxyMarkerRef.get();
 		if(proxyMarker != null){
@@ -28,7 +32,7 @@ public abstract class MarkerInfo {
 		proxyMarkerRef.clear();
 	}
 
-	protected void updateProxy(){
+	public final void updateMarker(){
 		ProxyMarker proxy = proxyMarkerRef.get();
 		if(proxy == null){
 			return;
@@ -36,7 +40,14 @@ public abstract class MarkerInfo {
 
 		proxy.setAlpha(getAlpha());
 		proxy.setAnchor(getAnchorU(), getAnchorV());
-		//TODO: complete
+		proxy.setInfoWindowAnchor(getInfoWindowAnchorU(), getInfoWindowAnchorV());
+		proxy.setPosition(getPosition());
+		proxy.setRotation(getRotation());
+		proxy.setSnippet(getSnippet());
+		proxy.setTitle(getTitle());
+		proxy.setDraggable(isDraggable());
+		proxy.setFlat(isFlat());
+		proxy.setVisible(isVisible());
 	}
 
 	public final boolean isOnMap(){

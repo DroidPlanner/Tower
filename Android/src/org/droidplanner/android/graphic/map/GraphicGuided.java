@@ -65,7 +65,6 @@ public class GraphicGuided extends MarkerInfo implements PathSource {
 		return guidedPoint == null ? null : guidedPoint.getCoordinate();
 	}
 
-	@Override
 	public void setPosition(LatLong coord) {
 		try {
 			ControlApi.getApi(drone).goTo(coord, true, null);

@@ -87,6 +87,9 @@ public interface DPMap {
 	 *            source for the new markers to add
 	 */
 	void addMarkers(List<MarkerInfo> markerInfoList);
+
+	void addMarkers(List<MarkerInfo> markerInfoList, boolean isDraggable);
+
 	/**
 	 * Remove all markers from the map.
 	 */

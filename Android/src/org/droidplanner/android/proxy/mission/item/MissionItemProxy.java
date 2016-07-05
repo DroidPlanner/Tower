@@ -9,10 +9,8 @@ import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.Circle;
 import com.o3dr.services.android.lib.util.MathUtils;
 
-import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
-import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +40,6 @@ public class MissionItemProxy {
 	 */
 	private final MissionProxy mMission;
 
-	/**
-	 * This is the marker source for this mission item render.
-	 */
-	private final List<MarkerInfo> mMarkerInfos;
-
     /**
      * Used by the mission item list adapter to provide drag and drop support.
      */
@@ -57,7 +50,6 @@ public class MissionItemProxy {
 
 		mMission = mission;
 		mMissionItem = missionItem;
-		mMarkerInfos = MissionItemMarkerInfo.newInstance(this);
 
 		if(mMissionItem instanceof SplineSurvey){
 			mMission.getDrone().buildMissionItemsAsync(new SplineSurvey[]{(SplineSurvey) mMissionItem}, missionItemBuiltListener);
@@ -91,10 +83,6 @@ public class MissionItemProxy {
 
 	public MissionDetailFragment getDetailFragment() {
 		return MissionDetailFragment.newInstance(mMissionItem.getType());
-	}
-
-	public List<MarkerInfo> getMarkerInfos() {
-		return mMarkerInfos;
 	}
 
 	/**

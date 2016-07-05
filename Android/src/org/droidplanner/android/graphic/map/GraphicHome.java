@@ -57,7 +57,6 @@ public class GraphicHome extends MarkerInfo {
 		return droneHome.getCoordinate();
 	}
 
-	@Override
 	public void setPosition(LatLong position){
 		//Move the home location
 		final Home currentHome = drone.getAttribute(AttributeType.HOME);
