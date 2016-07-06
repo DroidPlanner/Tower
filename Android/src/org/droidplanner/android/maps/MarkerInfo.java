@@ -5,53 +5,49 @@ import android.graphics.Bitmap;
 
 import com.o3dr.services.android.lib.coordinate.LatLong;
 
-import java.lang.ref.WeakReference;
-
 /**
  * Defines the methods expected from a MarkerInfo instance. The marker info
  * object is used to gather information to generate a marker.
  */
 public abstract class MarkerInfo {
 
-	private WeakReference<ProxyMarker> proxyMarkerRef = new WeakReference<>(null);
+	private ProxyMarker proxyMarker;
 
 	void setProxyMarker(ProxyMarker proxyMarker){
-		proxyMarkerRef = new WeakReference<>(proxyMarker);
+		this.proxyMarker = proxyMarker;
 	}
 
 	ProxyMarker getProxyMarker(){
-		return proxyMarkerRef.get();
+		return proxyMarker;
 	}
 
 	void removeProxyMarker(){
-		ProxyMarker proxyMarker = proxyMarkerRef.get();
 		if(proxyMarker != null){
 			proxyMarker.removeMarker();
 		}
 
-		proxyMarkerRef.clear();
+		this.proxyMarker = null;
 	}
 
 	public final void updateMarker(){
-		ProxyMarker proxy = proxyMarkerRef.get();
-		if(proxy == null){
+		if(proxyMarker == null){
 			return;
 		}
 
-		proxy.setAlpha(getAlpha());
-		proxy.setAnchor(getAnchorU(), getAnchorV());
-		proxy.setInfoWindowAnchor(getInfoWindowAnchorU(), getInfoWindowAnchorV());
-		proxy.setPosition(getPosition());
-		proxy.setRotation(getRotation());
-		proxy.setSnippet(getSnippet());
-		proxy.setTitle(getTitle());
-		proxy.setDraggable(isDraggable());
-		proxy.setFlat(isFlat());
-		proxy.setVisible(isVisible());
+		proxyMarker.setAlpha(getAlpha());
+		proxyMarker.setAnchor(getAnchorU(), getAnchorV());
+		proxyMarker.setInfoWindowAnchor(getInfoWindowAnchorU(), getInfoWindowAnchorV());
+		proxyMarker.setPosition(getPosition());
+		proxyMarker.setRotation(getRotation());
+		proxyMarker.setSnippet(getSnippet());
+		proxyMarker.setTitle(getTitle());
+		proxyMarker.setDraggable(isDraggable());
+		proxyMarker.setFlat(isFlat());
+		proxyMarker.setVisible(isVisible());
 	}
 
 	public final boolean isOnMap(){
-		return proxyMarkerRef.get() != null;
+		return proxyMarker != null;
 	}
 
 	/**
