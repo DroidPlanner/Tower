@@ -21,7 +21,7 @@ dependencies {
     compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
 
     //DroneKit-Android client lib
-    compile 'com.o3dr.android:dronekit-android:3.0.0-alpha2'
+    compile 'com.o3dr.android:dronekit-android:3.0.0-alpha3'
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')
@@ -70,6 +70,10 @@ def logLevelAssert = 7;
 android {
     compileSdkVersion android_build_sdk_version
     buildToolsVersion android_build_tools_version
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 
     defaultConfig {
         applicationId 'org.droidplanner.android'
