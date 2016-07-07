@@ -139,4 +139,36 @@ public class MissionItemProxy {
     public long getStableId(){
         return stableId;
     }
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof MissionItemProxy)) {
+			return false;
+		}
+
+		MissionItemProxy that = (MissionItemProxy) o;
+
+		if (stableId != that.stableId) {
+			return false;
+		}
+		if (mMissionItem != null ? !mMissionItem.equals(that.mMissionItem) : that.mMissionItem != null) {
+			return false;
+		}
+		if (mMission != null ? !mMission.equals(that.mMission) : that.mMission != null) {
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = mMissionItem != null ? mMissionItem.hashCode() : 0;
+		result = 31 * result + (mMission != null ? mMission.hashCode() : 0);
+		result = 31 * result + (int) (stableId ^ (stableId >>> 32));
+		return result;
+	}
 }

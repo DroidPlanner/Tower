@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -35,9 +36,10 @@ import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public abstract class DroneMap extends ApiListenerFragment {
 
@@ -68,20 +70,20 @@ public abstract class DroneMap extends ApiListenerFragment {
 			final String action = intent.getAction();
             switch (action) {
                 case ACTION_UPDATE_MAP:
-					guided.updateMarker();
+					guided.updateMarker(getResources());
 					break;
 
 				case AttributeEvent.HOME_UPDATED:
-					home.updateMarker();
+					home.updateMarker(getResources());
 					break;
 
                 case MissionProxy.ACTION_MISSION_PROXY_UPDATE:
-					home.updateMarker();
+					home.updateMarker(getResources());
 					onMissionUpdate();
                     break;
 
                 case AttributeEvent.GPS_POSITION: {
-					graphicDrone.updateMarker();
+					graphicDrone.updateMarker(getResources());
                     mMapFragment.updateDroneLeashPath(guided);
                     final Gps droneGps = drone.getAttribute(AttributeType.GPS);
                     if (droneGps != null && droneGps.isValid()) {
@@ -91,19 +93,19 @@ public abstract class DroneMap extends ApiListenerFragment {
                 }
 
                 case AttributeEvent.GUIDED_POINT_UPDATED:
-					guided.updateMarker();
+					guided.updateMarker(getResources());
                     mMapFragment.updateDroneLeashPath(guided);
                     break;
 
                 case AttributeEvent.HEARTBEAT_FIRST:
                 case AttributeEvent.HEARTBEAT_RESTORED:
 				case AttributeEvent.STATE_CONNECTED:
-					graphicDrone.updateMarker();
+					graphicDrone.updateMarker(getResources());
                     break;
 
                 case AttributeEvent.STATE_DISCONNECTED:
                 case AttributeEvent.HEARTBEAT_TIMEOUT:
-					graphicDrone.updateMarker();
+					graphicDrone.updateMarker(getResources());
                     break;
 
                 case AttributeEvent.CAMERA_FOOTPRINTS_UPDATED: {
@@ -134,7 +136,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 		}
 	};
 
-    private final List<MarkerInfo> missionMarkers = new ArrayList<>();
+    private final Map<MissionItemProxy, List<MarkerInfo>> missionMarkers = new HashMap<>();
 	private final LinkedList<MarkerInfo> externalMarkersToAdd = new LinkedList<>();
 
 	protected DPMap mMapFragment;
@@ -186,24 +188,46 @@ public abstract class DroneMap extends ApiListenerFragment {
 	}
 
     protected final void onMissionUpdate(){
+        Resources res = getResources();
+
         mMapFragment.updateMissionPath(missionProxy);
 
         mMapFragment.updatePolygonsPaths(missionProxy.getPolygonsPath());
 
+		List<MissionItemProxy> proxyMissionItems = missionProxy.getItems();
         // Clear the previous proxy mission item markers.
-        mMapFragment.removeMarkers(missionMarkers);
-        missionMarkers.clear();
+		Map<MissionItemProxy, List<MarkerInfo>> newMissionMarkers = new HashMap<>(proxyMissionItems.size());
 
-        List<MissionItemProxy> proxyMissionItems = missionProxy.getItems();
-        // Create the markers info for the new proxy mission items.
-        for(MissionItemProxy proxyItem : proxyMissionItems){
-            List<MarkerInfo> proxyMarkers = MissionItemMarkerInfo.newInstance(proxyItem);
-            if(proxyMarkers != null && !proxyMarkers.isEmpty()){
-                // Add the new markers to the map.
-                mMapFragment.addMarkers(proxyMarkers, isMissionDraggable());
-                missionMarkers.addAll(proxyMarkers);
-            }
-        }
+		for(MissionItemProxy proxyItem : proxyMissionItems){
+			List<MarkerInfo> proxyMarkers = missionMarkers.remove(proxyItem);
+			if(proxyMarkers == null){
+				proxyMarkers = MissionItemMarkerInfo.newInstance(proxyItem);
+
+				if(!proxyMarkers.isEmpty()){
+					// Add the new markers to the map.
+					mMapFragment.addMarkers(proxyMarkers, isMissionDraggable());
+				}
+			}
+			else {
+				//Refresh the proxy markers
+				for(MarkerInfo marker: proxyMarkers){
+                    if (marker.isOnMap()) {
+                        marker.updateMarker(res);
+                    } else {
+                        mMapFragment.addMarker(marker);
+                    }
+                }
+			}
+            newMissionMarkers.put(proxyItem, proxyMarkers);
+		}
+
+		// Remove the now invalid mission items
+		for(List<MarkerInfo> invalidMarkers : missionMarkers.values()) {
+			mMapFragment.removeMarkers(invalidMarkers);
+		}
+		missionMarkers.clear();
+
+        missionMarkers.putAll(newMissionMarkers);
     }
 
 	public void downloadMapTiles(MapDownloader mapDownloader, int minimumZ, int maximumZ){

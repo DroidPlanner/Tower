@@ -29,7 +29,7 @@ public abstract class MarkerInfo {
 		this.proxyMarker = null;
 	}
 
-	public final void updateMarker(){
+	public final void updateMarker(Resources res){
 		if(proxyMarker == null){
 			return;
 		}
@@ -44,6 +44,7 @@ public abstract class MarkerInfo {
 		proxyMarker.setDraggable(isDraggable());
 		proxyMarker.setFlat(isFlat());
 		proxyMarker.setVisible(isVisible());
+		proxyMarker.setIcon(getIcon(res));
 	}
 
 	public final boolean isOnMap(){
