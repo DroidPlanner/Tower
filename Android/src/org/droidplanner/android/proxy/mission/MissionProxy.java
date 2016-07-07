@@ -468,13 +468,6 @@ public class MissionProxy implements DPMap.PathSource {
         notifyMissionUpdate();
     }
 
-    /**
-     * Reverse the order of the mission items renders.
-     */
-    public void reverse() {
-        Collections.reverse(missionItemProxies);
-    }
-
     public void swap(int fromIndex, int toIndex) {
         MissionItemProxy from = missionItemProxies.get(fromIndex);
         MissionItemProxy to = missionItemProxies.get(toIndex);

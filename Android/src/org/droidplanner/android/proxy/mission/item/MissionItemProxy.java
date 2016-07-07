@@ -10,7 +10,6 @@ import com.o3dr.services.android.lib.drone.mission.item.spatial.Circle;
 import com.o3dr.services.android.lib.util.MathUtils;
 
 import org.droidplanner.android.proxy.mission.MissionProxy;
-import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +20,6 @@ import java.util.List;
  * as well as providing methods for rendering it on the Android UI.
  */
 public class MissionItemProxy {
-
-    private final Drone.OnMissionItemsBuiltCallback missionItemBuiltListener = new Drone.OnMissionItemsBuiltCallback() {
-        @Override
-        public void onMissionItemsBuilt(MissionItem.ComplexItem[] complexItems) {
-            mMission.notifyMissionUpdate(false);
-        }
-    };
-
 
     /**
 	 * This is the mission item object this class is built around.
@@ -51,6 +42,13 @@ public class MissionItemProxy {
 		mMission = mission;
 		mMissionItem = missionItem;
 
+        final Drone.OnMissionItemsBuiltCallback missionItemBuiltListener = new Drone.OnMissionItemsBuiltCallback() {
+            @Override
+            public void onMissionItemsBuilt(MissionItem.ComplexItem[] complexItems) {
+                mMission.notifyMissionUpdate(false);
+            }
+        };
+
 		if(mMissionItem instanceof SplineSurvey){
 			mMission.getDrone().buildMissionItemsAsync(new SplineSurvey[]{(SplineSurvey) mMissionItem}, missionItemBuiltListener);
 		}else if(mMissionItem instanceof Survey){
@@ -70,8 +68,6 @@ public class MissionItemProxy {
 		return mMission;
 	}
 
-    public MissionProxy getMission(){return mMission;}
-
 	/**
 	 * Provides access to the mission item instance.
 	 * 
@@ -79,10 +75,6 @@ public class MissionItemProxy {
 	 */
 	public MissionItem getMissionItem() {
 		return mMissionItem;
-	}
-
-	public MissionDetailFragment getDetailFragment() {
-		return MissionDetailFragment.newInstance(mMissionItem.getType());
 	}
 
 	/**
