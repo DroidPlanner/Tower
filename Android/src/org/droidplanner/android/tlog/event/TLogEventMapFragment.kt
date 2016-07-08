@@ -11,7 +11,7 @@ import org.droidplanner.android.utils.prefs.AutoPanMode
  * TODO: add marker to the map for when a single tlog position event is selected
  * @author ne0fhyk (Fredia Huya-Kouadio)
  */
-class TLogEventMapFragment : DroneMap(), TLogDataSubscriber {
+class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventClickListener {
 
     override fun isMissionDraggable() = false
 
@@ -27,6 +27,10 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber {
     }
 
     override fun onTLogDataLoaded(events: List<TLogParser.Event>) {
+
+    }
+
+    override fun onTLogEventClick(event: TLogParser.Event) {
 
     }
 }

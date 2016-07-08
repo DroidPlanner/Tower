@@ -194,6 +194,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 
         mMapFragment.updatePolygonsPaths(missionProxy.getPolygonsPath());
 
+        //TODO: improve mission markers rendering performance
 		List<MissionItemProxy> proxyMissionItems = missionProxy.getItems();
         // Clear the previous proxy mission item markers.
 		Map<MissionItemProxy, List<MarkerInfo>> newMissionMarkers = new HashMap<>(proxyMissionItems.size());

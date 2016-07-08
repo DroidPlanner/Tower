@@ -91,6 +91,12 @@ public interface DPMap {
 	void addMarkers(List<MarkerInfo> markerInfoList, boolean isDraggable);
 
 	/**
+	 * Adds the polyline corresponding to the given polyline info
+	 * @param polylineInfo Used to generate a map polyline
+     */
+	void addPolyline(PolylineInfo polylineInfo);
+
+	/**
 	 * Remove all markers from the map.
 	 */
 	void clearMarkers();
@@ -99,6 +105,11 @@ public interface DPMap {
 	 * Clears the drone's flight path.
 	 */
 	void clearFlightPath();
+
+	/**
+	 * Remove all polylines from the map.
+	 */
+	void clearPolylines();
 
 	/**
 	 * Download the map tiles if supported
@@ -169,6 +180,12 @@ public interface DPMap {
 	 *            list of markers to remove.
 	 */
 	void removeMarkers(Collection<MarkerInfo> markerInfoList);
+
+	/**
+	 * Remove the polyline described by the given polyline info
+	 * @param polylineInfo
+     */
+	void removePolyline(PolylineInfo polylineInfo);
 
 	/**
 	 * Stores the map camera settings.
