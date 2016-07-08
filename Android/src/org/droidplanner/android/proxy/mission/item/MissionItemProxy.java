@@ -2,6 +2,7 @@ package org.droidplanner.android.proxy.mission.item;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SplineSurvey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
@@ -93,17 +94,17 @@ public class MissionItemProxy {
 				break;
 
 			case CIRCLE:
-                		Circle circle = (Circle) mMissionItem;
-				for (int i = 0; i <= 360*circle.getTurns(); i += 10) {
-					double startHeading = 0;
-					if (previousPoint != null) {
-						startHeading = MathUtils.getHeadingFromCoordinates(circle.getCoordinate(),
-								previousPoint);
-					}
-					pathPoints.add(MathUtils.newCoordFromBearingAndDistance(circle.getCoordinate(),
-							startHeading + i, circle.getRadius()));
-				}
-				break;
+                Circle circle = (Circle) mMissionItem;
+                LatLongAlt circleCenter = circle.getCoordinate();
+                double circleRadius = circle.getRadius();
+                double startHeading = previousPoint == null ? 0
+                    : MathUtils.getHeadingFromCoordinates(circleCenter, previousPoint);
+                int circleTurnsAngle = 360 * circle.getTurns();
+                for (int i = 0; i <= circleTurnsAngle; i += 10) {
+                    pathPoints.add(MathUtils.newCoordFromBearingAndDistance(circleCenter,
+                        startHeading + i, circleRadius));
+                }
+                break;
 
 			case SPLINE_SURVEY:
 			case SURVEY:
