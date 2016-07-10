@@ -1,5 +1,6 @@
 package org.droidplanner.android.maps
 
+import android.graphics.Color
 import com.o3dr.services.android.lib.coordinate.LatLong
 
 /**
@@ -30,13 +31,13 @@ abstract class PolylineInfo {
     }
 
     abstract fun getPoints(): List<LatLong>
-    abstract fun getColor(): Int
-    abstract fun getWidth(): Float
-    abstract fun getZIndex(): Float
 
-    fun isClickable() = false
-    fun isGeodesic() = false
-    fun isVisible() = false
+    open fun getZIndex() = 0F
+    open fun getColor() = Color.BLACK
+    open fun getWidth() = 4F
+    open fun isClickable() = false
+    open fun isGeodesic() = true
+    open fun isVisible() = true
 
     /**
      * Proxy interface to the actual map polyline implementation

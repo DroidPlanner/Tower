@@ -27,6 +27,7 @@ import org.droidplanner.android.graphic.map.GraphicGuided;
 import org.droidplanner.android.graphic.map.GraphicHome;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.maps.PolylineInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader;
 import org.droidplanner.android.proxy.mission.MissionProxy;
@@ -138,6 +139,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 
     private final Map<MissionItemProxy, List<MarkerInfo>> missionMarkers = new HashMap<>();
 	private final LinkedList<MarkerInfo> externalMarkersToAdd = new LinkedList<>();
+    private final LinkedList<PolylineInfo> externalPolylinesToAdd = new LinkedList<>();
 
 	protected DPMap mMapFragment;
 
@@ -266,7 +268,14 @@ public abstract class DroneMap extends ApiListenerFragment {
 				mMapFragment.addMarker(markerInfo);
 			}
 		}
-	}
+        if (!externalPolylinesToAdd.isEmpty()) {
+            for(PolylineInfo polylineInfo = externalPolylinesToAdd.poll();
+                polylineInfo != null && !externalPolylinesToAdd.isEmpty();
+                polylineInfo = externalPolylinesToAdd.poll()){
+                mMapFragment.addPolyline(polylineInfo);
+            }
+        }
+    }
 
 	@Override
 	public void onPause() {
@@ -378,6 +387,18 @@ public abstract class DroneMap extends ApiListenerFragment {
 		}
 	}
 
+    public void addPolyline(PolylineInfo polylineInfo) {
+        if (polylineInfo == null)
+            return;
+
+        if(mMapFragment != null) {
+            mMapFragment.addPolyline(polylineInfo);
+        }
+        else {
+            externalPolylinesToAdd.add(polylineInfo);
+        }
+    }
+
 	public void removeMarker(MarkerInfo markerInfo){
 		if(markerInfo == null)
 			return;
@@ -389,6 +410,18 @@ public abstract class DroneMap extends ApiListenerFragment {
 			externalMarkersToAdd.remove(markerInfo);
 		}
 	}
+
+    public void removePolyline(PolylineInfo polylineInfo) {
+        if(polylineInfo == null)
+            return;
+
+        if(mMapFragment != null){
+            mMapFragment.removePolyline(polylineInfo);
+        }
+        else{
+            externalPolylinesToAdd.remove(polylineInfo);
+        }
+    }
 
 	public DPMap.VisibleMapArea getVisibleMapArea(){
 		return mMapFragment == null ? null : mMapFragment.getVisibleMapArea();
