@@ -15,8 +15,6 @@ import org.droidplanner.android.utils.prefs.AutoPanMode
 import java.util.*
 
 /**
- * TODO: Add polylines to the map to represent the tlog position events trail
- * TODO: add marker to the map for when a single tlog position event is selected
  * @author ne0fhyk (Fredia Huya-Kouadio)
  */
 class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventClickListener {

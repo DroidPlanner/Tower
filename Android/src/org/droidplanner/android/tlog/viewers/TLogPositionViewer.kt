@@ -10,6 +10,7 @@ import com.MAVLink.common.msg_global_position_int
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import org.droidplanner.android.R
 import org.droidplanner.android.tlog.adapters.TLogPositionEventAdapter
+import org.droidplanner.android.tlog.event.TLogEventClickListener
 import org.droidplanner.android.tlog.event.TLogEventDetail
 import org.droidplanner.android.tlog.event.TLogEventMapFragment
 import java.util.*
@@ -17,7 +18,7 @@ import java.util.*
 /**
  * @author ne0fhyk (Fredia Huya-Kouadio)
  */
-class TLogPositionViewer : TLogViewer() {
+class TLogPositionViewer : TLogViewer(), TLogEventClickListener {
 
     private val tlogPositionAdapter = TLogPositionEventAdapter()
 
@@ -62,6 +63,8 @@ class TLogPositionViewer : TLogViewer() {
             layoutManager = LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = tlogPositionAdapter
         }
+        tlogPositionAdapter.setTLogEventClickListener(this)
+
         jumpToBeginning?.setOnClickListener {
             // Jump to the beginning of the list
             eventsView?.scrollToPosition(0)
@@ -87,6 +90,13 @@ class TLogPositionViewer : TLogViewer() {
 
         // Refresh the map.
         tlogEventMap?.onTLogDataLoaded(positionEvents)
+    }
+
+    override fun onTLogEventClick(event: TLogParser.Event) {
+        //TODO: Show the detail window for this event
+
+        //Propagate the click event to the map
+        tlogEventMap?.onTLogEventClick(event)
     }
 }
 

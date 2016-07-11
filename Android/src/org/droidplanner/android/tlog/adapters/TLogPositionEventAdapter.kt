@@ -24,7 +24,7 @@ class TLogPositionEventAdapter : RecyclerView.Adapter<TLogPositionEventAdapter.V
 
     private val positionEvents = ArrayList< TLogParser.Event>()
 
-    var tlogEventClickListener: TLogEventClickListener? = null
+    private var tlogEventClickListener: TLogEventClickListener? = null
 
     fun setTLogEventClickListener(listener: TLogEventClickListener?){
         tlogEventClickListener = listener
