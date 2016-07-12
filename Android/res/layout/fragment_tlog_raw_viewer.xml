@@ -18,6 +18,8 @@
         android:id="@+id/tlog_raw_data"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false"/>
 
 </android.support.design.widget.CoordinatorLayout>

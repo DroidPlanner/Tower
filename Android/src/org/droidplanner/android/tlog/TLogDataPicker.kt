@@ -20,6 +20,10 @@ import java.io.File
  */
 class TLogDataPicker : DialogFragment(){
 
+    private val noTLogMessageView by lazy {
+        getView()?.findViewById(R.id.no_tlogs_message)
+    }
+
     private var selectionListener : TLogDataAdapter.TLogSelectionListener? = null
 
     private val selectionListenerWrapper = object : TLogSelectionListener {
@@ -51,6 +55,10 @@ class TLogDataPicker : DialogFragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)
 
+        noTLogMessageView?.setOnClickListener {
+            dismissAllowingStateLoss()
+        }
+
         val tlogsView = view.findViewById(R.id.tlogs_selector) as RecyclerView?
         tlogsView?.setHasFixedSize(true)
 
@@ -61,5 +69,14 @@ class TLogDataPicker : DialogFragment(){
         val adapter = TLogDataAdapter(activity.getApplication() as DroidPlannerApp)
         adapter.setTLogSelectionListener(selectionListenerWrapper)
         tlogsView?.adapter = adapter
+
+        if (adapter.itemCount == 0) {
+            tlogsView?.visibility = View.GONE
+            noTLogMessageView?.visibility = View.VISIBLE
+        }
+        else {
+            tlogsView?.visibility = View.VISIBLE
+            noTLogMessageView?.visibility = View.GONE
+        }
     }
 }

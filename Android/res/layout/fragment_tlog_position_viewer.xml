@@ -21,22 +21,28 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="?attr/colorPrimary">
 
         <ImageView
             android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:id="@+id/jump_to_beginning"/>
+            android:layout_height="match_parent"
+            android:id="@+id/jump_to_beginning"
+            android:src="@drawable/ic_arrow_left_black"
+            android:background="?selectableItemBackground"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/event_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
 
         <ImageView
             android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:id="@+id/jump_to_end"/>
+            android:layout_height="match_parent"
+            android:id="@+id/jump_to_end"
+            android:src="@drawable/ic_arrow_right_black"
+            android:background="?selectableItemBackground"/>
     </LinearLayout>
 
 </RelativeLayout>

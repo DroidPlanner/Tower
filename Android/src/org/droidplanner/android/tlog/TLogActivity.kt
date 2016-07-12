@@ -36,7 +36,7 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
             Timber.w("Unable to load tlog data: ${e?.message ?: ""}")
             loadedEvents.clear()
             notifyTLogSubscribers()
-            loadingProgress?.visibility = View.VISIBLE
+            loadingProgress?.visibility = View.GONE
         }
 
         override fun onResult(events: MutableList<TLogParser.Event>) {
@@ -44,7 +44,7 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
             loadedEvents.clear()
             loadedEvents.addAll(events)
             notifyTLogSubscribers()
-            loadingProgress?.visibility = View.VISIBLE
+            loadingProgress?.visibility = View.GONE
         }
     }
 
