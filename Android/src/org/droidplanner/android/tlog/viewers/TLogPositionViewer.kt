@@ -24,6 +24,10 @@ class TLogPositionViewer : TLogViewer(), TLogEventClickListener {
 
     private val positionEvents = ArrayList<TLogParser.Event>()
 
+    private val noDataView by lazy {
+        getView()?.findViewById(R.id.no_data_message)
+    }
+
     private val eventsView by lazy {
         getView()?.findViewById(R.id.event_list) as RecyclerView?
     }
@@ -90,6 +94,12 @@ class TLogPositionViewer : TLogViewer(), TLogEventClickListener {
 
         // Refresh the map.
         tlogEventMap?.onTLogDataLoaded(positionEvents)
+
+        if(positionEvents.isEmpty()){
+            stateNoData()
+        } else {
+            stateDataLoaded()
+        }
     }
 
     override fun onTLogEventClick(event: TLogParser.Event) {
@@ -97,6 +107,16 @@ class TLogPositionViewer : TLogViewer(), TLogEventClickListener {
 
         //Propagate the click event to the map
         tlogEventMap?.onTLogEventClick(event)
+    }
+
+    private fun stateNoData(){
+        noDataView?.visibility = View.VISIBLE
+        eventsView?.visibility = View.GONE
+    }
+
+    private fun stateDataLoaded(){
+        noDataView?.visibility = View.GONE
+        eventsView?.visibility = View.VISIBLE
     }
 }
 

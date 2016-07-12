@@ -2,17 +2,7 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <TextView
-        android:id="@+id/no_tlog_selected"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:visibility="visible"
-        android:layout_gravity="center"
-        tools:text="No telemetry data!"/>
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/tlog_raw_data"
@@ -21,5 +11,15 @@
         android:visibility="gone"
         android:scrollbars="vertical"
         android:fadeScrollbars="false"/>
+
+    <TextView
+        android:id="@+id/no_tlog_selected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:visibility="visible"
+        android:layout_gravity="center"
+        android:text="@string/no_tlog_data_loaded"
+        android:textStyle="bold"/>
 
 </android.support.design.widget.CoordinatorLayout>
