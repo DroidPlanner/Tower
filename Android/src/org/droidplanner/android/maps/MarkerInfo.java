@@ -77,9 +77,7 @@ public abstract class MarkerInfo {
 	/**
 	 * @return marker's icon resource id.
 	 */
-    public Bitmap getIcon(Resources res) {
-        return null;
-    }
+    public abstract Bitmap getIcon(Resources res);
 
 	/**
 	 * @return horizontal distance normalized to [0, 1] of the info window
@@ -100,9 +98,7 @@ public abstract class MarkerInfo {
 	/**
 	 * @return marker's map coordinate.
 	 */
-    public LatLong getPosition() {
-        return null;
-    }
+    public abstract LatLong getPosition();
 
 	/**
 	 * Updates the marker info's position.
@@ -110,8 +106,7 @@ public abstract class MarkerInfo {
 	 * @param coord
 	 *            position update.
 	 */
-    public void setPosition(LatLong coord) {
-    }
+    public void setPosition(LatLong coord) {}
 
 	/**
 	 * @return marker's rotation.

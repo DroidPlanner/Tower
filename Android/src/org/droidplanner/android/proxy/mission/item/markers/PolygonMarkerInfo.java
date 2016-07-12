@@ -1,5 +1,8 @@
 package org.droidplanner.android.proxy.mission.item.markers;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 
@@ -39,6 +42,11 @@ public class PolygonMarkerInfo extends MarkerInfo {
 	@Override
 	public float getAnchorV() {
 		return 0.5f;
+	}
+
+	@Override
+	public Bitmap getIcon(Resources res) {
+		return null;
 	}
 
 	@Override

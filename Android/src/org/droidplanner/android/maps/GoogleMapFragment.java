@@ -1345,7 +1345,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
         @Override
         public void setIcon(Bitmap icon) {
-            marker.setIcon(BitmapDescriptorFactory.fromBitmap(icon));
+            if(icon != null) {
+                marker.setIcon(BitmapDescriptorFactory.fromBitmap(icon));
+            }
         }
 
         @Override
@@ -1355,7 +1357,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
         @Override
         public void setPosition(LatLong coord) {
-            marker.setPosition(DroneHelper.coordToLatLng(coord));
+            if(coord != null) {
+                marker.setPosition(DroneHelper.coordToLatLng(coord));
+            }
         }
 
         @Override
