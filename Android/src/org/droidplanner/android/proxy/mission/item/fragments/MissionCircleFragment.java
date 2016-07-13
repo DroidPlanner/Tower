@@ -53,7 +53,7 @@ public class MissionCircleFragment extends MissionDetailFragment implements
         loiterTurnPicker.addScrollListener(this);
 
         final LengthWheelAdapter loiterRadiusAdapter = new LengthWheelAdapter(context, R.layout.wheel_text_centered,
-                lengthUP.boxBaseValueToTarget(Utils.MIN_DISTANCE), lengthUP.boxBaseValueToTarget(Utils.MAX_DISTANCE));
+                lengthUP.boxBaseValueToTarget(Utils.MIN_DISTANCE), lengthUP.boxBaseValueToTarget(Utils.MAX_RADIUS));
         CardWheelHorizontalView<LengthUnit> loiterRadiusPicker = (CardWheelHorizontalView<LengthUnit>) view
                 .findViewById(R.id.loiterRadiusPicker);
         loiterRadiusPicker.setViewAdapter(loiterRadiusAdapter);
