@@ -113,8 +113,8 @@ public class MissionItemProxy {
 				break;
 
 			case CIRCLE:
-				for (int i = 0; i <= 360; i += 10) {
-					Circle circle = (Circle) mMissionItem;
+                		Circle circle = (Circle) mMissionItem;
+				for (int i = 0; i <= 360*circle.getTurns(); i += 10) {
 					double startHeading = 0;
 					if (previousPoint != null) {
 						startHeading = MathUtils.getHeadingFromCoordinates(circle.getCoordinate(),

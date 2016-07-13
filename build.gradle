@@ -36,7 +36,8 @@ def getMavenApiKey(){
 }
 
 def getMavenRepoUrl(){
-    return hasProperty('COM_O3DR_MAVEN_REPO_URL') ? COM_O3DR_MAVEN_REPO_URL : ''
+    return hasProperty('COM_O3DR_MAVEN_REPO_URL') ? COM_O3DR_MAVEN_REPO_URL :
+            'https://dl.bintray.com/3d-robotics/maven'
 }
 
 def computeVersionCode(int versionMajor, int versionMinor, int versionPatch, int versionBuild = 0){
