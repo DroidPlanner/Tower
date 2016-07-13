@@ -74,6 +74,10 @@ android {
     compileSdkVersion android_build_sdk_version
     buildToolsVersion android_build_tools_version
 
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
     defaultConfig {
         applicationId 'org.droidplanner.android'
         minSdkVersion android_build_min_sdk_version

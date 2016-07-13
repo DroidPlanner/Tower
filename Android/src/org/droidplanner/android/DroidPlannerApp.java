@@ -393,6 +393,8 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
                 if (extras != null)
                     droneIntent.putExtras(extras);
                 lbm.sendBroadcast(droneIntent);
+
+                //TODO: fire the droneshare log uploader
                 break;
             }
 
