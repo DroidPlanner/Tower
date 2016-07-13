@@ -151,7 +151,17 @@
             android:theme="@style/CustomActionBarTheme.Transparent"
             android:launchMode="singleTask"/>
 
+        <receiver
+            android:name=".droneshare.NetworkConnectivityReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+
+        </receiver>
+
         <service android:name=".AppService" />
+        <service android:name=".droneshare.UploaderService" />
 
     </application>
 
