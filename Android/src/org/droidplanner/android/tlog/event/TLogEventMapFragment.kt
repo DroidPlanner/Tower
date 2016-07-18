@@ -40,7 +40,7 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventClickListe
         for(event in events){
             val globalPositionInt = event.mavLinkMessage as msg_global_position_int
             eventsPolylineInfo.addCoord(
-                    LatLong(globalPositionInt.lat.toDouble(), globalPositionInt.lon.toDouble()))
+                    LatLong(globalPositionInt.lat.toDouble()/ 1E7, globalPositionInt.lon.toDouble()/ 1E7))
         }
         eventsPolylineInfo.update(this)
     }
@@ -71,15 +71,14 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventClickListe
                 updatePolyline()
             }
             else {
-                mapHandle.addPolyline(this)
+                if(eventCoords.isNotEmpty())
+                    mapHandle.addPolyline(this)
             }
         }
 
         override fun getPoints(): List<LatLong> {
             return eventCoords
         }
-
-        override fun isVisible() = eventCoords.isNotEmpty()
 
         override fun getColor() = 0xfffd693f.toInt()
 
@@ -99,7 +98,7 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventClickListe
 
         override fun getPosition() =
                 if(selectedGlobalPosition == null) null
-                else LatLong(selectedGlobalPosition!!.lat.toDouble(), selectedGlobalPosition!!.lon.toDouble())
+                else LatLong(selectedGlobalPosition!!.lat.toDouble() / 1E7, selectedGlobalPosition!!.lon.toDouble() / 1E7)
 
         override fun getIcon(res: Resources) = BitmapFactory.decodeResource(res, R.drawable.ic_wp_map_selected)
     }

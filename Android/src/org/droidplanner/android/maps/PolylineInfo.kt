@@ -32,11 +32,11 @@ abstract class PolylineInfo {
 
     abstract fun getPoints(): List<LatLong>
 
-    open fun getZIndex() = 0F
+    open fun getZIndex() = 1F
     open fun getColor() = Color.BLACK
-    open fun getWidth() = 4F
+    open fun getWidth() = 6F
     open fun isClickable() = false
-    open fun isGeodesic() = true
+    open fun isGeodesic() = false
     open fun isVisible() = true
 
     /**

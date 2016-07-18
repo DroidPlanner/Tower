@@ -63,7 +63,7 @@ public abstract class MarkerInfo {
 	 *         from the left edge.
 	 */
     public float getAnchorU() {
-        return 0;
+        return 0.5F;
     }
 
 	/**
@@ -71,7 +71,7 @@ public abstract class MarkerInfo {
 	 *         from the top edge.
 	 */
     public float getAnchorV() {
-        return 0;
+        return 0.5F;
     }
 
 	/**
