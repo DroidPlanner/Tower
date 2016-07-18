@@ -1,6 +1,7 @@
 package org.droidplanner.android.tlog.viewers
 
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -77,6 +78,16 @@ class TLogPositionViewer : TLogViewer(), TLogEventClickListener {
         jumpToEnd?.setOnClickListener {
             // Jump to the end of the list
             eventsView?.scrollToPosition(tlogPositionAdapter.itemCount -1)
+        }
+
+        val goToMyLocation = view.findViewById(R.id.my_location_button) as FloatingActionButton
+        goToMyLocation.setOnClickListener {
+            tlogEventMap?.goToMyLocation();
+        }
+
+        val goToDroneLocation = view.findViewById(R.id.drone_location_button) as FloatingActionButton
+        goToDroneLocation.setOnClickListener {
+            tlogEventMap?.goToDroneLocation()
         }
     }
 
