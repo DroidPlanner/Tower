@@ -42,6 +42,7 @@ class TLogPositionViewer : TLogViewer(), TLogEventClickListener {
     }
 
     private var tlogEventMap : TLogEventMapFragment? = null
+    private var tlogEventDetail : TLogEventDetail? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         return inflater.inflate(R.layout.fragment_tlog_position_viewer, container, false)
@@ -57,7 +58,7 @@ class TLogPositionViewer : TLogViewer(), TLogEventClickListener {
             fm.beginTransaction().add(R.id.tlog_map_container, tlogEventMap).commit()
         }
 
-        var tlogEventDetail = fm.findFragmentById(R.id.tlog_event_detail) as TLogEventDetail?
+        tlogEventDetail = fm.findFragmentById(R.id.tlog_event_detail) as TLogEventDetail?
         if(tlogEventDetail == null){
             tlogEventDetail = TLogEventDetail()
             fm.beginTransaction().add(R.id.tlog_event_detail, tlogEventDetail).commit()
@@ -114,7 +115,8 @@ class TLogPositionViewer : TLogViewer(), TLogEventClickListener {
     }
 
     override fun onTLogEventClick(event: TLogParser.Event) {
-        //TODO: Show the detail window for this event
+        // Show the detail window for this event
+        tlogEventDetail?.onTLogEventClick(event)
 
         //Propagate the click event to the map
         tlogEventMap?.onTLogEventClick(event)
