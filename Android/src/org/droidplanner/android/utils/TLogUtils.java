@@ -25,7 +25,12 @@ public class TLogUtils {
      * @return File to the tlogs directory
      */
     private static File getTLogsDirectory(Context context){
-        return new File(context.getExternalFilesDir(null), DIRECTORY_TLOGS);
+        File tlogDir = new File(context.getExternalFilesDir(null), DIRECTORY_TLOGS);
+        if(!tlogDir.isDirectory()){
+            tlogDir.mkdirs();
+        }
+
+        return tlogDir;
     }
 
     /**
