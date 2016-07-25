@@ -125,9 +125,12 @@ public class UploaderService extends IntentService {
                         }
 
                         onUploadSuccess(uploadFile, url, numUploaded);
-
-                        droneShareDb.commitUploadedData(uploadId, System.currentTimeMillis());
                     }
+                    else{
+                        Timber.w("TLog data file is not available.");
+                    }
+
+                    droneShareDb.commitUploadedData(uploadId, System.currentTimeMillis());
                 }
             } catch (IOException e) {
                 Timber.e(e, "Unable to complete tlog data upload");
