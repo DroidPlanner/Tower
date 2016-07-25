@@ -45,6 +45,7 @@ public class UploaderService extends IntentService {
     private DroneShareDB droneShareDb;
 
 	private NotificationManagerCompat notifyManager;
+    private Notification failedUploadNotification;
 
 	public UploaderService() {
 		super("DroneShare Uploader");
@@ -139,8 +140,6 @@ public class UploaderService extends IntentService {
             stopForeground(true);
 		}
 	}
-
-    private Notification failedUploadNotification;
 
     private void onUploadSuccess(File f, String viewURL, int numUploaded) {
         if (viewURL == null) {

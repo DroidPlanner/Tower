@@ -38,7 +38,7 @@ public final class SessionContract {
                         COLUMN_NAME_START_TIME + " INTEGER NOT NULL," +
                         COLUMN_NAME_END_TIME + " INTEGER," +
                         COLUMN_NAME_CONNECTION_TYPE + " TEXT NOT NULL," +
-                        COLUMN_NAME_TLOG_LOGGING_URI + " TEXT," +
+                        COLUMN_NAME_TLOG_LOGGING_URI + " TEXT" +
                         " )";
 
         public static final String SQL_DELETE_ENTRIES =
