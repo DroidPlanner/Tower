@@ -612,6 +612,11 @@
     <string name="weather_temperature_metric" translatable="false">%1$sº C</string>
     <string name="weather_rain_imperial" translatable="false">%1$s in</string>
     <string name="weather_rain_metric" translatable="false">%1$s mm</string>
+
+    <!-- DroneShare strings -->
+    <string name="uploader_success_message">Upload successful! Select to view…</string>
+    <string name="uploader_fail_retry_message">Will try again later</string>
+    <string name="uploader_notification_title">Droneshare upload</string>
     <string name="label_tlogs_title">Telemetry Logs</string>
     <string name="no_tlog_data_loaded">No tlog data loaded</string>
     <string name="no_tlog_position_data">No tlog position data</string>

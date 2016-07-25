@@ -147,7 +147,17 @@
             android:noHistory="true"
             android:theme="@style/CustomActionBarTheme.Transparent"/>
 
-        <service android:name=".AppService"/>
+        <receiver
+            android:name=".droneshare.NetworkConnectivityReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+
+        </receiver>
+
+        <service android:name=".AppService" />
+        <service android:name=".droneshare.UploaderService" />
 
     </application>
 
