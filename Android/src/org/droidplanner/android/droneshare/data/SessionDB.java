@@ -2,12 +2,16 @@ package org.droidplanner.android.droneshare.data;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
 import org.droidplanner.android.droneshare.data.SessionContract.SessionData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -71,5 +75,35 @@ public class SessionDB extends SQLiteOpenHelper {
 
         String selection = SessionData.COLUMN_NAME_END_TIME + " IS NULL";
         db.update(SessionData.TABLE_NAME, values, selection, null);
+    }
+
+    public List<SessionData> getCompletedSessions(boolean tlogLogged){
+        SQLiteDatabase db = getReadableDatabase();
+
+        String[] projection = {SessionData._ID, SessionData.COLUMN_NAME_START_TIME,
+            SessionData.COLUMN_NAME_END_TIME, SessionData.COLUMN_NAME_CONNECTION_TYPE,
+            SessionData.COLUMN_NAME_TLOG_LOGGING_URI};
+
+        String selection = SessionData.COLUMN_NAME_END_TIME + " IS NOT NULL";
+        if(tlogLogged){
+            selection += " AND " + SessionData.COLUMN_NAME_TLOG_LOGGING_URI + " IS NOT NULL";
+        }
+        String orderBy = SessionData.COLUMN_NAME_START_TIME + " ASC";
+
+        Cursor cursor = db.query(SessionData.TABLE_NAME, projection, selection, null, null, null, orderBy);
+        List<SessionData> sessionDataList = new ArrayList<>(cursor.getCount());
+        for(boolean hasNext = cursor.moveToFirst(); hasNext; hasNext = cursor.moveToNext()){
+            long id = cursor.getLong(cursor.getColumnIndex(SessionData._ID));
+            long startTime = cursor.getLong(cursor.getColumnIndex(SessionData.COLUMN_NAME_START_TIME));
+            long endTime = cursor.getLong(cursor.getColumnIndex(SessionData.COLUMN_NAME_END_TIME));
+            String connectionTypeLabel = cursor.getString(cursor.getColumnIndex(SessionData.COLUMN_NAME_CONNECTION_TYPE));
+            String tlogEncodedUri = cursor.getString(cursor.getColumnIndex(SessionData.COLUMN_NAME_TLOG_LOGGING_URI));
+            Uri tlogLoggingUri = Uri.parse(tlogEncodedUri);
+
+            sessionDataList.add(new SessionData(id, startTime, endTime, connectionTypeLabel, tlogLoggingUri));
+        }
+
+        cursor.close();
+        return sessionDataList;
     }
 }

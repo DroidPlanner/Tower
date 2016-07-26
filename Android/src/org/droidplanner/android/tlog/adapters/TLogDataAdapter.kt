@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.o3dr.android.client.utils.data.tlog.TLogUtils
 import org.droidplanner.android.DroidPlannerApp
 import org.droidplanner.android.R
 import java.io.File
@@ -18,7 +17,6 @@ import java.util.*
 class TLogDataAdapter(app: DroidPlannerApp) : RecyclerView.Adapter<TLogDataAdapter.ViewHolder>() {
 
     companion object {
-        private const val TLOG_FILENAME_EXT = ".tlog"
         private val dateFormatter = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US)
     }
 
@@ -29,41 +27,18 @@ class TLogDataAdapter(app: DroidPlannerApp) : RecyclerView.Adapter<TLogDataAdapt
     class ViewHolder(val container: View, val dataTimestamp: TextView) : RecyclerView.ViewHolder(container)
 
     private var tlogSelectionListener : TLogSelectionListener? = null
-    private val tlogsFiles = ArrayList<Pair<Date, File>>()
-
-    init {
-        // Query the tlogs directory, and populate the adapter with the files present
-        val tlogsDir = app.tLogsDirectory
-        if(tlogsDir != null && tlogsDir.isDirectory){
-            val files = tlogsDir.listFiles { fileDir, filename ->
-                // Check if this is a tlog file
-                filename.endsWith(TLOG_FILENAME_EXT)
-            }
-
-            for(file in files){
-                // Parse the filename to retrieve the creation date
-                val filename = file.name
-                val creationDate = TLogUtils.parseTLogConnectionTimestamp(filename) ?: continue
-
-                tlogsFiles.add(Pair(creationDate, file))
-            }
-
-            //Sort the tlog files per date
-            if(tlogsFiles.isNotEmpty()){
-                //TODO: use Collections.sort for the sorting
-            }
-        }
-    }
+    private val completedSessions = app.sessionDatabase.getCompletedSessions(true)
 
     fun setTLogSelectionListener(listener: TLogSelectionListener?){
         this.tlogSelectionListener = listener
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val (date, tlogFile) = tlogsFiles[position]
-        holder.dataTimestamp.text = dateFormatter.format(date)
+        val sessionData = completedSessions[position]
+        holder.dataTimestamp.text = dateFormatter.format(Date(sessionData.startTime))
         holder.dataTimestamp.setOnClickListener {
             // Notify the listener of the selected tlog file
+            val tlogFile = File(sessionData.tlogLoggingUri.path)
             tlogSelectionListener?.onTLogSelected(tlogFile)
         }
     }
@@ -74,5 +49,5 @@ class TLogDataAdapter(app: DroidPlannerApp) : RecyclerView.Adapter<TLogDataAdapt
         return ViewHolder(containerView, dataTimestamp)
     }
 
-    override fun getItemCount() = tlogsFiles.size
+    override fun getItemCount() = completedSessions.size
 }
