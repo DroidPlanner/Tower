@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_title_baidu_maps">
+        <ListPreference
+            android:defaultValue="satellite"
+            android:entries="@array/MapTypes"
+            android:entryValues="@array/MapTypeValues"
+            android:key="pref_baidu_map_type"
+            android:summary="@string/pref_map_type_summary"
+            android:title="@string/pref_map_type"/>
+
+        <org.droidplanner.android.maps.providers.baidu_map.BaiduMapOfflineMapPreference
+            android:title="@string/pref_baidu_map_offline_preference_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
