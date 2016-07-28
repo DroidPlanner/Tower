@@ -329,8 +329,11 @@
     <string name="pref_map_provider_settings_summary">Configure the selected map provider</string>
     <string name="pref_map_provider_settings_title">Map Provider Preferences</string>
     <string name="pref_title_google_maps">Google Maps Preferences</string>
+    <string name="pref_title_baidu_maps">Baidu Maps Preferences</string>
     <string name="pref_title_google_tile_provider">Google Tile Provider</string>
     <string name="activity_title_map_provider_preferences">Map Provider Preferences</string>
+    <string name="pref_baidu_map_offline_preference_title">Baidu Offline map download</string>
+
     <string name="pref_ui_realtime_footprints_title">Realtime camera footprint</string>
     <string name="pref_ui_realtime_footprints_summary">Display the camera projection on the ground in realtime</string>
 

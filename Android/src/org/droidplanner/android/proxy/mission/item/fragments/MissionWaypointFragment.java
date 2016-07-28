@@ -45,9 +45,11 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
         altitudePicker.setViewAdapter(altitudeAdapter);
         altitudePicker.addScrollListener(this);
 
-        final Waypoint item = (Waypoint) getMissionItems().get(0);
-        delayPicker.setCurrentValue((int) item.getDelay());
-        altitudePicker.setCurrentValue(lengthUP.boxBaseValueToTarget(item.getCoordinate().getAltitude()));
+        if(getMissionItems().size() > 0) {
+            final Waypoint item = (Waypoint) getMissionItems().get(0);
+            delayPicker.setCurrentValue((int) item.getDelay());
+            altitudePicker.setCurrentValue(lengthUP.boxBaseValueToTarget(item.getCoordinate().getAltitude()));
+        }
     }
 
     @Override
