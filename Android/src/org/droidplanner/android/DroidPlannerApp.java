@@ -319,21 +319,30 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         ConnectionParameter connParams;
         switch (connectionType) {
             case ConnectionType.TYPE_USB:
-                connParams = ConnectionParameter.newUsbConnection(dpPrefs.getUsbBaudRate(), tlogLoggingUri);
+                connParams = ConnectionParameter.newUsbConnection(dpPrefs.getUsbBaudRate(),
+                    tlogLoggingUri, EVENTS_DISPATCHING_PERIOD);
                 break;
 
             case ConnectionType.TYPE_UDP:
                 if (dpPrefs.isUdpPingEnabled()) {
-                    connParams = ConnectionParameter.newUdpConnection(dpPrefs.getUdpServerPort(),
-                        dpPrefs.getUdpPingReceiverIp(), dpPrefs.getUdpPingReceiverPort(), "Hello".getBytes(), tlogLoggingUri);
+                    connParams = ConnectionParameter.newUdpWithPingConnection(
+                        dpPrefs.getUdpServerPort(),
+                        dpPrefs.getUdpPingReceiverIp(),
+                        dpPrefs.getUdpPingReceiverPort(),
+                        "Hello".getBytes(),
+                        ConnectionType.DEFAULT_UDP_PING_PERIOD,
+                        tlogLoggingUri,
+                        EVENTS_DISPATCHING_PERIOD);
                 }
                 else{
-                    connParams = ConnectionParameter.newUdpConnection(dpPrefs.getUdpServerPort(), tlogLoggingUri);
+                    connParams = ConnectionParameter.newUdpConnection(dpPrefs.getUdpServerPort(),
+                        tlogLoggingUri, EVENTS_DISPATCHING_PERIOD);
                 }
                 break;
 
             case ConnectionType.TYPE_TCP:
-                connParams = ConnectionParameter.newTcpConnection(dpPrefs.getTcpServerIp(), dpPrefs.getTcpServerPort(), tlogLoggingUri);
+                connParams = ConnectionParameter.newTcpConnection(dpPrefs.getTcpServerIp(),
+                    dpPrefs.getTcpServerPort(), tlogLoggingUri, EVENTS_DISPATCHING_PERIOD);
                 break;
 
             case ConnectionType.TYPE_BLUETOOTH:
@@ -345,7 +354,8 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
                 } else {
-                    connParams = ConnectionParameter.newBluetoothConnection(btAddress, tlogLoggingUri);
+                    connParams = ConnectionParameter.newBluetoothConnection(btAddress,
+                        tlogLoggingUri, EVENTS_DISPATCHING_PERIOD);
                 }
                 break;
 
