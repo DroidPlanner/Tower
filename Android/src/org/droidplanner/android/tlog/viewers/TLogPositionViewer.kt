@@ -15,7 +15,6 @@ import org.droidplanner.android.tlog.event.TLogEventDetail
 import org.droidplanner.android.tlog.event.TLogEventListener
 import org.droidplanner.android.tlog.event.TLogEventMapFragment
 import org.droidplanner.android.view.FastScroller
-import org.droidplanner.android.view.ScrollingLinearLayoutManager
 import java.util.*
 
 /**
@@ -64,7 +63,7 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
 
         eventsView?.apply {
             setHasFixedSize(true)
-            layoutManager = ScrollingLinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false, 16)
+            layoutManager = LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = tlogPositionAdapter
         }
         fastScroller.setRecyclerView(eventsView!!)
