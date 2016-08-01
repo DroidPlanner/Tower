@@ -88,7 +88,7 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         for(event in events){
             if(event.mavLinkMessage is msg_global_position_int) {
                 // Events should be at least 1 second apart.
-                if(lastEventTimestamp == -1L || event.timestamp - lastEventTimestamp > 1000L){
+                if(lastEventTimestamp == -1L || (event.timestamp/1000 - lastEventTimestamp/1000) >= 1L){
                     lastEventTimestamp = event.timestamp
                     positionEvents.add(event)
                 }
@@ -99,7 +99,11 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         tlogPositionAdapter.loadTLogPositionEvents(positionEvents)
 
         // Refresh the map.
+        tlogEventMap?.onTLogEventSelected(null)
         tlogEventMap?.onTLogDataLoaded(positionEvents)
+
+        // Refresh the event detail window
+        tlogEventDetail?.onTLogEventSelected(null)
 
         if(positionEvents.isEmpty()){
             stateNoData()

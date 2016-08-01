@@ -48,6 +48,7 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventListener {
     override fun onTLogEventSelected(event: TLogParser.Event?) {
         if(event == null){
             selectedPositionMarkerInfo.selectedGlobalPosition = null
+            eventsPolylineInfo.zoomToFit(this)
         }
         else{
             //Add a marker for the selected event
@@ -81,6 +82,10 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventListener {
                 if(eventCoords.isNotEmpty())
                     mapHandle.addPolyline(this)
             }
+            zoomToFit(mapHandle)
+        }
+
+        fun zoomToFit(mapHandle: TLogEventMapFragment){
             mapHandle.mMapFragment.zoomToFit(eventCoords)
         }
 
