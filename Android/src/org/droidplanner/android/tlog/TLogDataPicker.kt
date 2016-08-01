@@ -10,9 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import org.droidplanner.android.DroidPlannerApp
 import org.droidplanner.android.R
+import org.droidplanner.android.droneshare.data.SessionContract
 import org.droidplanner.android.tlog.adapters.TLogDataAdapter
 import org.droidplanner.android.tlog.adapters.TLogDataAdapter.TLogSelectionListener
-import java.io.File
 
 /**
  * TLog data picker dialog
@@ -27,8 +27,8 @@ class TLogDataPicker : DialogFragment(){
     private var selectionListener : TLogDataAdapter.TLogSelectionListener? = null
 
     private val selectionListenerWrapper = object : TLogSelectionListener {
-        override fun onTLogSelected(tlogFile: File) {
-            selectionListener?.onTLogSelected(tlogFile)
+        override fun onTLogSelected(tlogSession: SessionContract.SessionData) {
+            selectionListener?.onTLogSelected(tlogSession)
             dismissAllowingStateLoss()
         }
     }

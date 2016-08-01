@@ -10,21 +10,19 @@ import android.view.ViewGroup
 import com.MAVLink.common.msg_global_position_int
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import org.droidplanner.android.R
+import org.droidplanner.android.droneshare.data.SessionContract
 import org.droidplanner.android.tlog.adapters.TLogPositionEventAdapter
 import org.droidplanner.android.tlog.event.TLogEventDetail
 import org.droidplanner.android.tlog.event.TLogEventListener
 import org.droidplanner.android.tlog.event.TLogEventMapFragment
 import org.droidplanner.android.view.FastScroller
-import java.util.*
 
 /**
  * @author ne0fhyk (Fredia Huya-Kouadio)
  */
 class TLogPositionViewer : TLogViewer(), TLogEventListener {
 
-    private val tlogPositionAdapter = TLogPositionEventAdapter()
-
-    private val positionEvents = ArrayList<TLogParser.Event>()
+    private var tlogPositionAdapter : TLogPositionEventAdapter? = null
 
     private val noDataView by lazy {
         getView()?.findViewById(R.id.no_data_message)
@@ -38,8 +36,12 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         getView()?.findViewById(R.id.fast_scroller) as FastScroller
     }
 
+    private val newPositionEvents = mutableListOf<TLogParser.Event>()
+
     private var tlogEventMap : TLogEventMapFragment? = null
     private var tlogEventDetail : TLogEventDetail? = null
+
+    private var lastEventTimestamp = -1L
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         return inflater.inflate(R.layout.fragment_tlog_position_viewer, container, false)
@@ -64,10 +66,13 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         eventsView?.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = tlogPositionAdapter
         }
+
+        tlogPositionAdapter = TLogPositionEventAdapter(eventsView!!)
+        eventsView?.adapter = tlogPositionAdapter
+
         fastScroller.setRecyclerView(eventsView!!)
-        tlogPositionAdapter.setTLogEventClickListener(this)
+        tlogPositionAdapter?.setTLogEventClickListener(this)
 
         val goToMyLocation = view.findViewById(R.id.my_location_button) as FloatingActionButton
         goToMyLocation.setOnClickListener {
@@ -80,35 +85,41 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         }
     }
 
-    override fun onTLogDataLoaded(events: List<TLogParser.Event>) {
+    override fun onTLogSelected(tlogSession: SessionContract.SessionData) {
+        tlogPositionAdapter?.clear()
+        lastEventTimestamp = -1L
+        stateNoData()
+
+        // Refresh the map.
+        tlogEventMap?.onTLogSelected(tlogSession)
+        tlogEventDetail?.onTLogEventSelected(null)
+    }
+
+    override fun onTLogDataLoaded(events: List<TLogParser.Event>, hasMore: Boolean) {
         // Parse the event list and retrieve only the position events.
-        positionEvents.clear()
-        var lastEventTimestamp = -1L
+        newPositionEvents.clear()
+
         for(event in events){
             if(event.mavLinkMessage is msg_global_position_int) {
                 // Events should be at least 1 second apart.
                 if(lastEventTimestamp == -1L || (event.timestamp/1000 - lastEventTimestamp/1000) >= 1L){
                     lastEventTimestamp = event.timestamp
-                    positionEvents.add(event)
+                    newPositionEvents.add(event)
                 }
             }
         }
 
         // Refresh the adapter
-        tlogPositionAdapter.loadTLogPositionEvents(positionEvents)
+        tlogPositionAdapter?.addItems(newPositionEvents)
+        tlogPositionAdapter?.setHasMoreData(hasMore)
 
-        // Refresh the map.
-        tlogEventMap?.onTLogEventSelected(null)
-        tlogEventMap?.onTLogDataLoaded(positionEvents)
-
-        // Refresh the event detail window
-        tlogEventDetail?.onTLogEventSelected(null)
-
-        if(positionEvents.isEmpty()){
+        if(tlogPositionAdapter?.itemCount == 0){
             stateNoData()
         } else {
             stateDataLoaded()
         }
+
+        tlogEventMap?.onTLogDataLoaded(newPositionEvents, hasMore)
     }
 
     override fun onTLogEventSelected(event: TLogParser.Event?) {

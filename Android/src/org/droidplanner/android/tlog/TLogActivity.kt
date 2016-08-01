@@ -1,6 +1,5 @@
 package org.droidplanner.android.tlog
 
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.TabLayout
@@ -9,15 +8,15 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.o3dr.android.client.utils.data.tlog.TLogParser
-import com.o3dr.android.client.utils.data.tlog.TLogParserCallback
 import org.droidplanner.android.R
 import org.droidplanner.android.activities.DrawerNavigationUI
+import org.droidplanner.android.droneshare.data.SessionContract
+import org.droidplanner.android.droneshare.data.SessionContract.SessionData
 import org.droidplanner.android.tlog.adapters.TLogDataAdapter
 import org.droidplanner.android.tlog.adapters.TLogViewerAdapter
 import org.droidplanner.android.tlog.interfaces.TLogDataProvider
 import org.droidplanner.android.tlog.viewers.TLogViewer
 import timber.log.Timber
-import java.io.File
 import java.util.*
 
 /**
@@ -27,39 +26,42 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
 
     private companion object {
         const val EXTRA_LOADED_EVENTS = "extra_loaded_events"
+        const val EXTRA_CURRENT_SESSION_ID = "extra_current_session_id"
     }
 
     private val handler = Handler()
 
-    private val tlogParserCb = object : TLogParserCallback {
-        override fun onFailed(e: Exception?) {
-            Timber.w("Unable to load tlog data: ${e?.message ?: ""}")
-            loadedEvents.clear()
-            notifyTLogSubscribers()
-            loadingProgress?.visibility = View.GONE
-        }
-
-        override fun onResult(events: MutableList<TLogParser.Event>) {
-            Timber.i("Loaded ${events.size} tlog events")
-            loadedEvents.clear()
-            loadedEvents.addAll(events)
-            notifyTLogSubscribers()
-            loadingProgress?.visibility = View.GONE
-        }
-    }
-
     private val tlogSubscribers = HashSet<TLogViewer>()
     private val loadedEvents = ArrayList<TLogParser.Event>()
 
+    private var dataLoader: TLogDataLoader? = null
+    private var currentSessionData: SessionData? = null
+
     private val loadingProgress by lazy {
         findViewById(R.id.progress_bar_container)
+    }
+
+    private val onLoadMore = object : Runnable {
+        override fun run() {
+            handler.removeCallbacks(this)
+
+            val newItems = fetchMore()
+            if (newItems.isNotEmpty()) {
+                Timber.i("Adding ${newItems.size} items")
+
+                loadedEvents.addAll(newItems)
+                notifyTLogSubscribers(newItems, true)
+            }
+            handler.postDelayed(this, 100L)
+        }
+
     }
 
     override fun getNavigationDrawerMenuItemId() = R.id.navigation_locator
 
     override fun getToolbarId() = R.id.toolbar
 
-    override fun onCreate(savedInstanceState: Bundle?){
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tlog)
 
@@ -70,10 +72,15 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
         tabLayout?.setupWithViewPager(viewPager)
 
         // Reload the loaded tlog events (if they exists)
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             val savedEvents = savedInstanceState.getSerializable(EXTRA_LOADED_EVENTS) as ArrayList<TLogParser.Event>?
-            if (savedEvents != null){
+            if (savedEvents != null) {
                 loadedEvents.addAll(savedEvents)
+            }
+
+            val sessionId = savedInstanceState.getLong(EXTRA_CURRENT_SESSION_ID, -1L)
+            if(sessionId != -1L){
+                currentSessionData = dpApp.sessionDatabase.getSessionData(sessionId)
             }
         }
     }
@@ -85,7 +92,7 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-         when(item.itemId){
+        when (item.itemId) {
             R.id.menu_open_tlog_file -> {
                 // Open a dialog showing the app generated tlog files
                 val tlogPicker = TLogDataPicker()
@@ -97,24 +104,49 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle){
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        if(loadedEvents.isNotEmpty()){
+        if (loadedEvents.isNotEmpty()) {
             outState.putSerializable(EXTRA_LOADED_EVENTS, loadedEvents)
+        }
+
+        if(currentSessionData != null){
+            outState.putLong(EXTRA_CURRENT_SESSION_ID, currentSessionData!!.id)
         }
     }
 
-    override fun onTLogSelected(tlogFile: File) {
-        // Load the events from the selected tlog file
-        Timber.i("Loading tlog data from ${tlogFile.name}")
+    override fun onTLogSelected(tlogSession: SessionContract.SessionData) {
+        if(tlogSession.equals(currentSessionData))
+            return
 
-        // TODO: Show a loading progress bar
+        currentSessionData = tlogSession
+
+        // Load the events from the selected tlog file
+        Timber.i("Loading tlog data from ${tlogSession.tlogLoggingUri.path}")
+
+        dataLoader?.cancel(true)
+
+        // Show a loading progress bar
         loadingProgress?.visibility = View.VISIBLE
-        TLogParser.getAllEventsAsync(handler, Uri.fromFile(tlogFile), tlogParserCb)
+        loadedEvents.clear()
+
+        dataLoader = TLogDataLoader(this, handler)
+        dataLoader?.execute(tlogSession.tlogLoggingUri)
+
+        notifyTLogSelected(tlogSession)
+        handler.post(onLoadMore)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        dataLoader?.cancel(true)
+        dataLoader = null
+
+        handler.removeCallbacks(onLoadMore)
     }
 
     override fun registerForTLogDataUpdate(subscriber: TLogViewer) {
-        subscriber.onTLogDataLoaded(loadedEvents)
+        subscriber.onTLogDataLoaded(loadedEvents, false)
         tlogSubscribers.add(subscriber)
     }
 
@@ -122,9 +154,47 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
         tlogSubscribers.remove(subscriber)
     }
 
-    private fun notifyTLogSubscribers(){
-        for(subscriber in tlogSubscribers){
-            subscriber.onTLogDataLoaded(loadedEvents)
+    private fun notifyTLogSelected(tlogSession: SessionContract.SessionData) {
+        for (subscriber in tlogSubscribers) {
+            subscriber.onTLogSelected(tlogSession)
         }
     }
+
+    private fun notifyTLogSubscribers(loadedEvents: List<TLogParser.Event>, hasMore: Boolean) {
+        for (subscriber in tlogSubscribers) {
+            subscriber.onTLogDataLoaded(loadedEvents, hasMore)
+        }
+    }
+
+    fun onTLogLoadCompleted(result: Boolean) {
+        if (result) {
+            Timber.i("Loaded ${loadedEvents.size} tlog events")
+        } else {
+            Timber.w("Unable to load tlog data")
+        }
+
+        val lastBatch = fetchMore()
+        Timber.i("Adding last batch of ${lastBatch.size} items")
+        if (lastBatch.isNotEmpty()) {
+            loadedEvents.addAll(lastBatch)
+        }
+        notifyTLogSubscribers(lastBatch, false)
+
+        loadingProgress?.visibility = View.GONE
+    }
+
+    private fun fetchMore(): List<TLogParser.Event> {
+        if (dataLoader == null)
+            return Collections.emptyList()
+
+        val nextBatch = mutableListOf<TLogParser.Event>()
+        var event = dataLoader?.allEvents?.poll()
+        while (event != null) {
+            nextBatch.add(event)
+            event = dataLoader?.allEvents?.poll()
+        }
+
+        return nextBatch
+    }
+
 }

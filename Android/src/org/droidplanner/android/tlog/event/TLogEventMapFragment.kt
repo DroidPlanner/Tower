@@ -7,6 +7,7 @@ import com.MAVLink.common.msg_global_position_int
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import com.o3dr.services.android.lib.coordinate.LatLong
 import org.droidplanner.android.R
+import org.droidplanner.android.droneshare.data.SessionContract
 import org.droidplanner.android.fragments.DroneMap
 import org.droidplanner.android.maps.MarkerInfo
 import org.droidplanner.android.maps.PolylineInfo
@@ -35,8 +36,7 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventListener {
         }
     }
 
-    override fun onTLogDataLoaded(events: List<TLogParser.Event>) {
-        eventsPolylineInfo.clear()
+    override fun onTLogDataLoaded(events: List<TLogParser.Event>, hasMore: Boolean) {
         for(event in events){
             val globalPositionInt = event.mavLinkMessage as msg_global_position_int
             eventsPolylineInfo.addCoord(
@@ -56,7 +56,15 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventListener {
             selectedPositionMarkerInfo.selectedGlobalPosition = globalPositionInt
             mMapFragment.zoomToFit(listOf(LatLong(globalPositionInt.lat.toDouble()/ 1E7, globalPositionInt.lon.toDouble()/ 1E7)))
         }
-        selectedPositionMarkerInfo.update(this)
+        selectedPositionMarkerInfo.updateMarker(this)
+    }
+
+    override fun onTLogSelected(tlogSession: SessionContract.SessionData) {
+        eventsPolylineInfo.clear()
+        eventsPolylineInfo.update(this)
+
+        selectedPositionMarkerInfo.selectedGlobalPosition = null
+        selectedPositionMarkerInfo.updateMarker(this)
     }
 
     private class TLogEventsPolylineInfo : PolylineInfo() {
@@ -99,13 +107,6 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventListener {
 
     private class GlobalPositionMarkerInfo : MarkerInfo() {
         var selectedGlobalPosition : msg_global_position_int? = null
-
-        fun update(mapHandle: TLogEventMapFragment){
-            if(isOnMap)
-                updateMarker(mapHandle.resources)
-            else
-                mapHandle.addMarker(this)
-        }
 
         override fun isVisible() = selectedGlobalPosition != null
 

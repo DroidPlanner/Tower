@@ -71,20 +71,20 @@ public abstract class DroneMap extends ApiListenerFragment {
 			final String action = intent.getAction();
             switch (action) {
                 case ACTION_UPDATE_MAP:
-					guided.updateMarker(getResources());
+					guided.updateMarker(DroneMap.this);
 					break;
 
 				case AttributeEvent.HOME_UPDATED:
-					home.updateMarker(getResources());
+					home.updateMarker(DroneMap.this);
 					break;
 
                 case MissionProxy.ACTION_MISSION_PROXY_UPDATE:
-					home.updateMarker(getResources());
+					home.updateMarker(DroneMap.this);
 					onMissionUpdate();
                     break;
 
                 case AttributeEvent.GPS_POSITION: {
-					graphicDrone.updateMarker(getResources());
+					graphicDrone.updateMarker(DroneMap.this);
                     mMapFragment.updateDroneLeashPath(guided);
                     final Gps droneGps = drone.getAttribute(AttributeType.GPS);
                     if (droneGps != null && droneGps.isValid()) {
@@ -94,19 +94,19 @@ public abstract class DroneMap extends ApiListenerFragment {
                 }
 
                 case AttributeEvent.GUIDED_POINT_UPDATED:
-					guided.updateMarker(getResources());
+					guided.updateMarker(DroneMap.this);
                     mMapFragment.updateDroneLeashPath(guided);
                     break;
 
                 case AttributeEvent.HEARTBEAT_FIRST:
                 case AttributeEvent.HEARTBEAT_RESTORED:
 				case AttributeEvent.STATE_CONNECTED:
-					graphicDrone.updateMarker(getResources());
+					graphicDrone.updateMarker(DroneMap.this);
                     break;
 
                 case AttributeEvent.STATE_DISCONNECTED:
                 case AttributeEvent.HEARTBEAT_TIMEOUT:
-					graphicDrone.updateMarker(getResources());
+					graphicDrone.updateMarker(DroneMap.this);
                     break;
 
                 case AttributeEvent.CAMERA_FOOTPRINTS_UPDATED: {
@@ -215,7 +215,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 				//Refresh the proxy markers
 				for(MarkerInfo marker: proxyMarkers){
                     if (marker.isOnMap()) {
-                        marker.updateMarker(res);
+                        marker.updateMarker(DroneMap.this);
                     } else {
                         mMapFragment.addMarker(marker);
                     }

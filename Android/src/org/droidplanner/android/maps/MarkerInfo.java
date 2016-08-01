@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 
 import com.o3dr.services.android.lib.coordinate.LatLong;
 
+import org.droidplanner.android.fragments.DroneMap;
+
 /**
  * Defines the methods expected from a MarkerInfo instance. The marker info
  * object is used to gather information to generate a marker.
@@ -29,22 +31,24 @@ public abstract class MarkerInfo {
 		this.proxyMarker = null;
 	}
 
-	public final void updateMarker(Resources res){
+	public final void updateMarker(DroneMap droneMap){
 		if(proxyMarker == null){
-			return;
+			droneMap.addMarker(this);
 		}
-
-		proxyMarker.setAlpha(getAlpha());
-		proxyMarker.setAnchor(getAnchorU(), getAnchorV());
-		proxyMarker.setInfoWindowAnchor(getInfoWindowAnchorU(), getInfoWindowAnchorV());
-		proxyMarker.setPosition(getPosition());
-		proxyMarker.setRotation(getRotation());
-		proxyMarker.setSnippet(getSnippet());
-		proxyMarker.setTitle(getTitle());
-		proxyMarker.setDraggable(isDraggable());
-		proxyMarker.setFlat(isFlat());
-		proxyMarker.setVisible(isVisible());
-		proxyMarker.setIcon(getIcon(res));
+		else {
+			Resources res = droneMap.getResources();
+			proxyMarker.setAlpha(getAlpha());
+			proxyMarker.setAnchor(getAnchorU(), getAnchorV());
+			proxyMarker.setInfoWindowAnchor(getInfoWindowAnchorU(), getInfoWindowAnchorV());
+			proxyMarker.setPosition(getPosition());
+			proxyMarker.setRotation(getRotation());
+			proxyMarker.setSnippet(getSnippet());
+			proxyMarker.setTitle(getTitle());
+			proxyMarker.setDraggable(isDraggable());
+			proxyMarker.setFlat(isFlat());
+			proxyMarker.setVisible(isVisible());
+			proxyMarker.setIcon(getIcon(res));
+		}
 	}
 
 	public final boolean isOnMap(){

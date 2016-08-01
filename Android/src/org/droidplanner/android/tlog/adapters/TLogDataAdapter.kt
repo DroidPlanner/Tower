@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import org.droidplanner.android.DroidPlannerApp
 import org.droidplanner.android.R
-import java.io.File
+import org.droidplanner.android.droneshare.data.SessionContract.SessionData
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -21,7 +21,7 @@ class TLogDataAdapter(app: DroidPlannerApp) : RecyclerView.Adapter<TLogDataAdapt
     }
 
     interface TLogSelectionListener {
-        fun onTLogSelected(tlogFile: File)
+        fun onTLogSelected(tlogSession: SessionData)
     }
 
     class ViewHolder(val container: View, val dataTimestamp: TextView) : RecyclerView.ViewHolder(container)
@@ -38,8 +38,7 @@ class TLogDataAdapter(app: DroidPlannerApp) : RecyclerView.Adapter<TLogDataAdapt
         holder.dataTimestamp.text = dateFormatter.format(Date(sessionData.startTime))
         holder.dataTimestamp.setOnClickListener {
             // Notify the listener of the selected tlog file
-            val tlogFile = File(sessionData.tlogLoggingUri.path)
-            tlogSelectionListener?.onTLogSelected(tlogFile)
+            tlogSelectionListener?.onTLogSelected(sessionData)
         }
     }
 

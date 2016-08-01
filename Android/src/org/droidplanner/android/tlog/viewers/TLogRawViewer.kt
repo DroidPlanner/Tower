@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import org.droidplanner.android.R
+import org.droidplanner.android.droneshare.data.SessionContract
 import org.droidplanner.android.tlog.adapters.TLogRawEventAdapter
 import org.droidplanner.android.view.FastScroller
 
@@ -17,7 +18,7 @@ import org.droidplanner.android.view.FastScroller
  */
 class TLogRawViewer : TLogViewer() {
 
-    private val tlogEventsAdapter = TLogRawEventAdapter()
+    private var tlogEventsAdapter : TLogRawEventAdapter? = null
 
     private val noTLogView by lazy {
         getView()?.findViewById(R.id.no_tlog_selected) as TextView?
@@ -41,16 +42,25 @@ class TLogRawViewer : TLogViewer() {
         rawData?.apply{
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(getContext())
-            adapter = tlogEventsAdapter
         }
+
+        tlogEventsAdapter = TLogRawEventAdapter(rawData!!, null)
+        rawData?.adapter = tlogEventsAdapter
 
         fastScroller.setRecyclerView(rawData!!)
     }
 
-    override fun onTLogDataLoaded(events: List<TLogParser.Event>){
+    override fun onTLogSelected(tlogSession: SessionContract.SessionData){
+        tlogEventsAdapter?.clear()
+        stateNoData()
+    }
+
+    override fun onTLogDataLoaded(events: List<TLogParser.Event>, hasMore: Boolean){
         // Refresh the recycler view
-        tlogEventsAdapter.loadTLogEvents(events)
-        if(events.isEmpty()){
+        tlogEventsAdapter?.addItems(events)
+        tlogEventsAdapter?.setHasMoreData(hasMore)
+
+        if(tlogEventsAdapter?.itemCount == 0){
             stateNoData()
         }
         else{

@@ -58,5 +58,25 @@ public final class SessionContract {
             this.connectionTypeLabel = connectionTypeLabel;
             this.tlogLoggingUri = tlogLoggingUri;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof SessionData)) {
+                return false;
+            }
+
+            SessionData that = (SessionData) o;
+
+            return tlogLoggingUri != null ? tlogLoggingUri.equals(that.tlogLoggingUri) : that.tlogLoggingUri == null;
+
+        }
+
+        @Override
+        public int hashCode() {
+            return tlogLoggingUri != null ? tlogLoggingUri.hashCode() : 0;
+        }
     }
 }

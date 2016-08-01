@@ -36,7 +36,7 @@ public class LocatorMapFragment extends DroneMap {
 
     public void updateLastPosition(LatLong lastPosition) {
         graphicLocator.setLastPosition(lastPosition);
-        graphicLocator.updateMarker(getResources());
+        graphicLocator.updateMarker(this);
     }
 
     public void zoomToFit() {
