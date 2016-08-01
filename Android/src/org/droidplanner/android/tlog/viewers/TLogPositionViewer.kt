@@ -11,15 +11,17 @@ import com.MAVLink.common.msg_global_position_int
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import org.droidplanner.android.R
 import org.droidplanner.android.tlog.adapters.TLogPositionEventAdapter
-import org.droidplanner.android.tlog.event.TLogEventClickListener
 import org.droidplanner.android.tlog.event.TLogEventDetail
+import org.droidplanner.android.tlog.event.TLogEventListener
 import org.droidplanner.android.tlog.event.TLogEventMapFragment
+import org.droidplanner.android.view.FastScroller
+import org.droidplanner.android.view.ScrollingLinearLayoutManager
 import java.util.*
 
 /**
  * @author ne0fhyk (Fredia Huya-Kouadio)
  */
-class TLogPositionViewer : TLogViewer(), TLogEventClickListener {
+class TLogPositionViewer : TLogViewer(), TLogEventListener {
 
     private val tlogPositionAdapter = TLogPositionEventAdapter()
 
@@ -33,12 +35,8 @@ class TLogPositionViewer : TLogViewer(), TLogEventClickListener {
         getView()?.findViewById(R.id.event_list) as RecyclerView?
     }
 
-    private val jumpToBeginning by lazy {
-        getView()?.findViewById(R.id.jump_to_beginning)
-    }
-
-    private val jumpToEnd by lazy {
-        getView()?.findViewById(R.id.jump_to_end)
+    private val fastScroller by lazy {
+        getView()?.findViewById(R.id.fast_scroller) as FastScroller
     }
 
     private var tlogEventMap : TLogEventMapFragment? = null
@@ -66,20 +64,11 @@ class TLogPositionViewer : TLogViewer(), TLogEventClickListener {
 
         eventsView?.apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = ScrollingLinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false, 16)
             adapter = tlogPositionAdapter
         }
+        fastScroller.setRecyclerView(eventsView!!)
         tlogPositionAdapter.setTLogEventClickListener(this)
-
-        jumpToBeginning?.setOnClickListener {
-            // Jump to the beginning of the list
-            eventsView?.scrollToPosition(0)
-        }
-
-        jumpToEnd?.setOnClickListener {
-            // Jump to the end of the list
-            eventsView?.scrollToPosition(tlogPositionAdapter.itemCount -1)
-        }
 
         val goToMyLocation = view.findViewById(R.id.my_location_button) as FloatingActionButton
         goToMyLocation.setOnClickListener {
@@ -95,14 +84,19 @@ class TLogPositionViewer : TLogViewer(), TLogEventClickListener {
     override fun onTLogDataLoaded(events: List<TLogParser.Event>) {
         // Parse the event list and retrieve only the position events.
         positionEvents.clear()
-        positionEvents.addAll( events.filter { event -> event.mavLinkMessage is msg_global_position_int })
+        var lastEventTimestamp = -1L
+        for(event in events){
+            if(event.mavLinkMessage is msg_global_position_int) {
+                // Events should be at least 1 second apart.
+                if(lastEventTimestamp == -1L || event.timestamp - lastEventTimestamp > 1000L){
+                    lastEventTimestamp = event.timestamp
+                    positionEvents.add(event)
+                }
+            }
+        }
 
         // Refresh the adapter
         tlogPositionAdapter.loadTLogPositionEvents(positionEvents)
-
-        val twoOrMore = tlogPositionAdapter.itemCount > 1
-        jumpToBeginning?.isEnabled = twoOrMore
-        jumpToEnd?.isEnabled = twoOrMore
 
         // Refresh the map.
         tlogEventMap?.onTLogDataLoaded(positionEvents)
@@ -114,22 +108,24 @@ class TLogPositionViewer : TLogViewer(), TLogEventClickListener {
         }
     }
 
-    override fun onTLogEventClick(event: TLogParser.Event) {
+    override fun onTLogEventSelected(event: TLogParser.Event?) {
         // Show the detail window for this event
-        tlogEventDetail?.onTLogEventClick(event)
+        tlogEventDetail?.onTLogEventSelected(event)
 
         //Propagate the click event to the map
-        tlogEventMap?.onTLogEventClick(event)
+        tlogEventMap?.onTLogEventSelected(event)
     }
 
     private fun stateNoData(){
         noDataView?.visibility = View.VISIBLE
         eventsView?.visibility = View.GONE
+        fastScroller.visibility = View.GONE
     }
 
     private fun stateDataLoaded(){
         noDataView?.visibility = View.GONE
         eventsView?.visibility = View.VISIBLE
+        fastScroller.visibility = View.VISIBLE
     }
 }
 

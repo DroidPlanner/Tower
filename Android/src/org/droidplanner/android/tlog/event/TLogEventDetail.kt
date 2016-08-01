@@ -12,7 +12,11 @@ import org.droidplanner.android.R
 /**
  * TODO: Complete implementation for the TLog event detail class
  */
-class TLogEventDetail : Fragment(), TLogEventClickListener{
+class TLogEventDetail : Fragment(), TLogEventListener {
+
+    private val eventInfoContainer by lazy {
+        getView()?.findViewById(R.id.event_detail_container)
+    }
 
     private val eventInfoView by lazy {
         getView()?.findViewById(R.id.event_info_dump) as TextView?
@@ -26,8 +30,11 @@ class TLogEventDetail : Fragment(), TLogEventClickListener{
         super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun onTLogEventClick(event: TLogParser.Event) {
-        eventInfoView?.setText(event.mavLinkMessage.toString())
+    override fun onTLogEventSelected(event: TLogParser.Event?) {
+        eventInfoContainer?.visibility = if(event == null) View.GONE else View.VISIBLE
+        if(event != null) {
+            eventInfoView?.setText(event.mavLinkMessage.toString())
+        }
     }
 
 }

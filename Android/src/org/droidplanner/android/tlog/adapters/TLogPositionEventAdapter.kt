@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import org.droidplanner.android.R
-import org.droidplanner.android.tlog.event.TLogEventClickListener
+import org.droidplanner.android.tlog.event.TLogEventListener
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -24,10 +24,11 @@ class TLogPositionEventAdapter : RecyclerView.Adapter<TLogPositionEventAdapter.V
 
     private val positionEvents = ArrayList< TLogParser.Event>()
 
-    private var tlogEventClickListener: TLogEventClickListener? = null
+    private var selectedEvent: Pair<Int, TLogParser.Event>? = null
+    private var tlogEventListener: TLogEventListener? = null
 
-    fun setTLogEventClickListener(listener: TLogEventClickListener?){
-        tlogEventClickListener = listener
+    fun setTLogEventClickListener(listener: TLogEventListener?){
+        tlogEventListener = listener
     }
 
     fun loadTLogPositionEvents(events: List<TLogParser.Event>){
@@ -40,9 +41,23 @@ class TLogPositionEventAdapter : RecyclerView.Adapter<TLogPositionEventAdapter.V
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val event = positionEvents[position]
+        holder.container.isActivated = event == selectedEvent?.second
         holder.thumbnail.text = dateFormatter.format(event.timestamp)
         holder.thumbnail.setOnClickListener {
-            tlogEventClickListener?.onTLogEventClick(event)
+            if(event == selectedEvent?.second){
+                // Unselect the event
+                selectedEvent = null
+                tlogEventListener?.onTLogEventSelected(null)
+                notifyItemChanged(position)
+            }
+            else {
+                val previousPosition = selectedEvent?.first ?: -1
+                selectedEvent = Pair(position, event)
+                tlogEventListener?.onTLogEventSelected(event)
+                notifyItemChanged(position)
+                if(previousPosition != -1)
+                    notifyItemChanged(previousPosition)
+            }
         }
     }
 

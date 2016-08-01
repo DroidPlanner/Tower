@@ -473,7 +473,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
     private void endDroneSession() {
         //log into the database the disconnection time.
         if(currentSessionId != INVALID_SESSION_ID) {
-            this.sessionDB.endSession(currentSessionId, System.currentTimeMillis());
+            this.sessionDB.endSessions(System.currentTimeMillis(), currentSessionId);
         }
     }
 

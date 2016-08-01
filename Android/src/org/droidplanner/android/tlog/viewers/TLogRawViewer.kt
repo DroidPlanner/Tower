@@ -10,6 +10,7 @@ import android.widget.TextView
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import org.droidplanner.android.R
 import org.droidplanner.android.tlog.adapters.TLogRawEventAdapter
+import org.droidplanner.android.view.FastScroller
 
 /**
  * @author ne0fhyk (Fredia Huya-Kouadio)
@@ -20,6 +21,10 @@ class TLogRawViewer : TLogViewer() {
 
     private val noTLogView by lazy {
         getView()?.findViewById(R.id.no_tlog_selected) as TextView?
+    }
+
+    private val fastScroller by lazy {
+        getView()?.findViewById(R.id.raw_fastscroller) as FastScroller
     }
 
     private val rawData by lazy {
@@ -38,6 +43,8 @@ class TLogRawViewer : TLogViewer() {
             layoutManager = LinearLayoutManager(getContext())
             adapter = tlogEventsAdapter
         }
+
+        fastScroller.setRecyclerView(rawData!!)
     }
 
     override fun onTLogDataLoaded(events: List<TLogParser.Event>){
@@ -54,10 +61,12 @@ class TLogRawViewer : TLogViewer() {
     private fun stateNoData(){
         noTLogView?.visibility = View.VISIBLE
         rawData?.visibility = View.GONE
+        fastScroller.visibility = View.GONE
     }
 
     private fun stateDataLoaded(){
         noTLogView?.visibility = View.GONE
         rawData?.visibility = View.VISIBLE
+        fastScroller.visibility = View.VISIBLE
     }
 }

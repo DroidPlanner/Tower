@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                xmlns:tools="http://schemas.android.com/tools">
+                android:layout_height="match_parent">
 
     <FrameLayout
+        android:id="@+id/tlog_map_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/tlog_map_container"/>
+        android:layout_height="match_parent"/>
 
     <include
         layout="@layout/button_my_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_gravity="center_vertical|start"
         android:layout_margin="8dp"
         />
@@ -24,51 +24,47 @@
         android:id="@+id/tlog_event_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/tlog_events_list_container"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_above="@+id/tlog_events_list_container"/>
+        android:layout_alignParentRight="true"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/tlog_events_list_container"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="78dp"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:background="?attr/colorPrimary">
+        android:background="?attr/colorPrimary"
+        >
 
-        <ImageView
-            android:layout_width="48dp"
+        <org.droidplanner.android.view.FastScroller
+            android:id="@+id/fast_scroller"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/event_list"
+            android:layout_alignLeft="@+id/event_list"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/event_list"
+            android:layout_alignStart="@+id/event_list"
+            android:orientation="horizontal"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/event_list"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/jump_to_beginning"
-            android:src="@drawable/ic_arrow_left_black"
-            android:background="?selectableItemBackground"/>
+            android:layout_above="@+id/fast_scroller"
+            android:scrollbars="none"/>
 
-        <FrameLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/no_data_message"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/event_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-            <TextView
-                android:id="@+id/no_data_message"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/no_tlog_position_data"
-                android:visibility="gone"
-                tools:visibility="visible"/>
-        </FrameLayout>
-
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="match_parent"
-            android:id="@+id/jump_to_end"
-            android:src="@drawable/ic_arrow_right_black"
-            android:background="?selectableItemBackground"/>
-    </LinearLayout>
+            android:layout_above="@+id/fast_scroller"
+            android:gravity="center"
+            android:text="@string/no_tlog_position_data"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+    </RelativeLayout>
 
 </RelativeLayout>

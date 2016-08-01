@@ -17,7 +17,7 @@ import java.util.*
 /**
  * @author ne0fhyk (Fredia Huya-Kouadio)
  */
-class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventClickListener {
+class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventListener {
 
     private val eventsPolylineInfo = TLogEventsPolylineInfo()
     private val selectedPositionMarkerInfo = GlobalPositionMarkerInfo()
@@ -45,9 +45,16 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventClickListe
         eventsPolylineInfo.update(this)
     }
 
-    override fun onTLogEventClick(event: TLogParser.Event) {
-        //Add a marker for the selected event
-        selectedPositionMarkerInfo.selectedGlobalPosition = event.mavLinkMessage as msg_global_position_int
+    override fun onTLogEventSelected(event: TLogParser.Event?) {
+        if(event == null){
+            selectedPositionMarkerInfo.selectedGlobalPosition = null
+        }
+        else{
+            //Add a marker for the selected event
+            val globalPositionInt = event.mavLinkMessage as msg_global_position_int
+            selectedPositionMarkerInfo.selectedGlobalPosition = globalPositionInt
+            mMapFragment.zoomToFit(listOf(LatLong(globalPositionInt.lat.toDouble()/ 1E7, globalPositionInt.lon.toDouble()/ 1E7)))
+        }
         selectedPositionMarkerInfo.update(this)
     }
 
@@ -74,6 +81,7 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventClickListe
                 if(eventCoords.isNotEmpty())
                     mapHandle.addPolyline(this)
             }
+            mapHandle.mMapFragment.zoomToFit(eventCoords)
         }
 
         override fun getPoints(): List<LatLong> {

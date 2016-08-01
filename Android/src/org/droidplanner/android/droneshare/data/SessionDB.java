@@ -55,16 +55,32 @@ public class SessionDB extends SQLiteOpenHelper {
         return db.insert(SessionData.TABLE_NAME, null, values);
     }
 
-    public void endSession(long rowId, long endTimeInMillis){
+    public void endSessions(long endTimeInMillis, long... rowIds){
+        if(rowIds == null || rowIds.length == 0)
+            return;
+
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(SessionData.COLUMN_NAME_END_TIME, endTimeInMillis);
 
-        String selection = SessionData._ID + " LIKE ?";
-        String[] selectionArgs = {String.valueOf(rowId)};
+        boolean isFirst = true;
+        StringBuilder selection = new StringBuilder();
+        String[] selectionArgs = new String[rowIds.length];
+        int argIndex = 0;
+        for(long rowId : rowIds){
+            if(!isFirst) {
+                selection.append(" OR ");
+            }
+            else {
+                isFirst = false;
+            }
+            selection.append(SessionData._ID).append(" LIKE ?");
 
-        db.update(SessionData.TABLE_NAME, values, selection, selectionArgs);
+            selectionArgs[argIndex++] = String.valueOf(rowId);
+        }
+
+        db.update(SessionData.TABLE_NAME, values, selection.toString(), selectionArgs);
     }
 
     public void cleanupOpenedSessions(long endTimeInMillis){
@@ -75,6 +91,49 @@ public class SessionDB extends SQLiteOpenHelper {
 
         String selection = SessionData.COLUMN_NAME_END_TIME + " IS NULL";
         db.update(SessionData.TABLE_NAME, values, selection, null);
+    }
+
+    public SessionData getSessionData(long sessionId){
+        SQLiteDatabase db = getReadableDatabase();
+
+        String[] projection = {SessionData.COLUMN_NAME_START_TIME,
+            SessionData.COLUMN_NAME_END_TIME, SessionData.COLUMN_NAME_CONNECTION_TYPE,
+            SessionData.COLUMN_NAME_TLOG_LOGGING_URI};
+
+        String selection = SessionData._ID + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(sessionId)};
+
+        Cursor cursor = db.query(SessionData.TABLE_NAME, projection, selection, selectionArgs, null,
+            null, null);
+        SessionData sessionData = null;
+        if(cursor.moveToFirst()){
+            long startTime = cursor.getLong(cursor.getColumnIndex(SessionData.COLUMN_NAME_START_TIME));
+            long endTime = cursor.getLong(cursor.getColumnIndex(SessionData.COLUMN_NAME_END_TIME));
+            String connectionTypeLabel = cursor.getString(cursor.getColumnIndex(SessionData.COLUMN_NAME_CONNECTION_TYPE));
+            String tlogEncodedUri = cursor.getString(cursor.getColumnIndex(SessionData.COLUMN_NAME_TLOG_LOGGING_URI));
+            Uri tlogLoggingUri = Uri.parse(tlogEncodedUri);
+            sessionData = new SessionData(sessionId, startTime, endTime, connectionTypeLabel, tlogLoggingUri);
+        }
+
+        cursor.close();
+        return sessionData;
+    }
+
+    public long[] getOpenedSessions(){
+        SQLiteDatabase db = getReadableDatabase();
+
+        String[] projection = {SessionData._ID};
+        String selection = SessionData.COLUMN_NAME_END_TIME + "IS NULL";
+
+        Cursor cursor = db.query(SessionData.TABLE_NAME, projection, selection, null, null, null, null);
+        long[] sessionIds = new long[cursor.getCount()];
+        int index = 0;
+        for(boolean hasNext = cursor.moveToFirst(); hasNext; hasNext = cursor.moveToNext()){
+            sessionIds[index++] = cursor.getLong(cursor.getColumnIndex(SessionData._ID));
+        }
+
+        cursor.close();
+        return sessionIds;
     }
 
     public List<SessionData> getCompletedSessions(boolean tlogLogged){
