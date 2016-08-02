@@ -165,4 +165,13 @@ public class SessionDB extends SQLiteOpenHelper {
         cursor.close();
         return sessionDataList;
     }
+
+    public void removeSessionData(long id) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        String whereClause = SessionData._ID + " LIKE ?";
+        String[] whereArgs = {String.valueOf(id)};
+
+        db.delete(SessionData.TABLE_NAME, whereClause, whereArgs);
+    }
 }

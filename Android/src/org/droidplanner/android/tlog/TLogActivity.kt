@@ -22,10 +22,11 @@ import java.util.*
 /**
  * Created by fredia on 6/12/16.
  */
-class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener, TLogDataProvider {
+class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.Listener, TLogDataProvider {
 
-    private companion object {
-        const val EXTRA_LOADED_EVENTS = "extra_loaded_events"
+    companion object {
+        private const val EXTRA_LOADED_EVENTS = "extra_loaded_events"
+        private const val EXTRA_LOADING_DATA = "extra_loading_data"
         const val EXTRA_CURRENT_SESSION_ID = "extra_current_session_id"
     }
 
@@ -34,6 +35,7 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
     private val tlogSubscribers = HashSet<TLogViewer>()
     private val loadedEvents = ArrayList<TLogParser.Event>()
 
+    private var isLoadingData = false
     private var dataLoader: TLogDataLoader? = null
     private var currentSessionData: SessionData? = null
 
@@ -73,14 +75,23 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
 
         // Reload the loaded tlog events (if they exists)
         if (savedInstanceState != null) {
-            val savedEvents = savedInstanceState.getSerializable(EXTRA_LOADED_EVENTS) as ArrayList<TLogParser.Event>?
-            if (savedEvents != null) {
-                loadedEvents.addAll(savedEvents)
-            }
 
             val sessionId = savedInstanceState.getLong(EXTRA_CURRENT_SESSION_ID, -1L)
             if(sessionId != -1L){
                 currentSessionData = dpApp.sessionDatabase.getSessionData(sessionId)
+            }
+
+            val wasLoadingData = savedInstanceState.getBoolean(EXTRA_LOADING_DATA)
+            if(wasLoadingData){
+                if(currentSessionData != null){
+                    onTLogSelected(currentSessionData!!, true)
+                }
+            }
+            else{
+                val savedEvents = savedInstanceState.getSerializable(EXTRA_LOADED_EVENTS) as ArrayList<TLogParser.Event>?
+                if (savedEvents != null) {
+                    loadedEvents.addAll(savedEvents)
+                }
             }
         }
     }
@@ -96,6 +107,9 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
             R.id.menu_open_tlog_file -> {
                 // Open a dialog showing the app generated tlog files
                 val tlogPicker = TLogDataPicker()
+                tlogPicker.arguments = Bundle().apply{
+                    putLong(EXTRA_CURRENT_SESSION_ID, currentSessionData?.id?: -1L)
+                }
                 tlogPicker.show(supportFragmentManager, "TLog Data Picker")
                 return true
             }
@@ -106,7 +120,9 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        if (loadedEvents.isNotEmpty()) {
+        outState.putBoolean(EXTRA_LOADING_DATA, isLoadingData)
+
+        if (!isLoadingData && loadedEvents.isNotEmpty()) {
             outState.putSerializable(EXTRA_LOADED_EVENTS, loadedEvents)
         }
 
@@ -115,8 +131,12 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
         }
     }
 
-    override fun onTLogSelected(tlogSession: SessionContract.SessionData) {
-        if(tlogSession.equals(currentSessionData))
+    override fun onTLogSelected(tlogSession: SessionData){
+        onTLogSelected(tlogSession, false)
+    }
+
+    private fun onTLogSelected(tlogSession: SessionContract.SessionData, force: Boolean) {
+        if(!force && tlogSession.equals(currentSessionData))
             return
 
         currentSessionData = tlogSession
@@ -133,6 +153,7 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
         dataLoader = TLogDataLoader(this, handler)
         dataLoader?.execute(tlogSession.tlogLoggingUri)
 
+        isLoadingData = true
         notifyTLogSelected(tlogSession)
         handler.post(onLoadMore)
     }
@@ -146,7 +167,7 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
     }
 
     override fun registerForTLogDataUpdate(subscriber: TLogViewer) {
-        subscriber.onTLogDataLoaded(loadedEvents, false)
+        subscriber.onTLogDataLoaded(loadedEvents, isLoadingData)
         tlogSubscribers.add(subscriber)
     }
 
@@ -178,9 +199,13 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.TLogSelectionListener
         if (lastBatch.isNotEmpty()) {
             loadedEvents.addAll(lastBatch)
         }
+
+        isLoadingData = false
         notifyTLogSubscribers(lastBatch, false)
 
         loadingProgress?.visibility = View.GONE
+
+        dataLoader = null
     }
 
     private fun fetchMore(): List<TLogParser.Event> {

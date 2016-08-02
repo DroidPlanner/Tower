@@ -2,11 +2,7 @@ package org.droidplanner.android.view.adapterViews
 
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import org.droidplanner.android.R
 
 /**
  * @author ne0fhyk (Fredia Huya-Kouadio)
@@ -15,7 +11,7 @@ abstract class AbstractRecyclerViewFooterAdapter<T>(recyclerView: RecyclerView, 
         RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     private companion object {
-        private const val VISIBLE_THRESHOLD = 15
+        private const val VISIBLE_THRESHOLD = 5
 
         private const val ITEM_VIEW_TYPE_BASIC = 0
         private const val ITEM_VIEW_TYPE_FOOTER = 1
@@ -85,19 +81,21 @@ abstract class AbstractRecyclerViewFooterAdapter<T>(recyclerView: RecyclerView, 
     }
 
     fun addItems(newDataSetItems: List<T>) {
+        removeItem(null)
+
         val lastPos = dataSet.size
         dataSet.addAll(newDataSetItems)
         notifyItemRangeInserted(lastPos, newDataSetItems.size)
     }
 
-    fun addItem(item: T?) {
+    private fun addItem(item: T?) {
         if (!dataSet.contains(item)) {
             dataSet.add(item)
             notifyItemInserted(dataSet.size - 1)
         }
     }
 
-    fun removeItem(item: T?) {
+    private fun removeItem(item: T?) {
         val indexOfItem = dataSet.indexOf(item)
         if (indexOfItem != -1) {
             this.dataSet.removeAt(indexOfItem)
@@ -137,18 +135,10 @@ abstract class AbstractRecyclerViewFooterAdapter<T>(recyclerView: RecyclerView, 
 
     abstract fun onBindBasicItemView(genericHolder: RecyclerView.ViewHolder, position: Int)
 
-    fun onCreateFooterViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        //noinspection ConstantConditions
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.progress_bar, parent, false)
-        val progressBar = v.findViewById(R.id.progressBar) as ProgressBar
-        return ProgressViewHolder(v, progressBar)
-    }
+    abstract fun onCreateFooterViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder
 
-    fun onBindFooterView(genericHolder: RecyclerView.ViewHolder, position: Int) {
-        (genericHolder as ProgressViewHolder).progressBar.isIndeterminate = true
-    }
+    abstract fun onBindFooterView(genericHolder: RecyclerView.ViewHolder, position: Int)
 
-    class ProgressViewHolder(v: View, val progressBar: ProgressBar) : RecyclerView.ViewHolder(v)
 }
 
 interface OnLoadMoreListener {

@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import org.droidplanner.android.R
@@ -43,4 +44,17 @@ class TLogRawEventAdapter(recyclerView: RecyclerView, onLoadMoreListener: OnLoad
         val eventInfo = eventView.findViewById(R.id.event_info) as TextView
         return ViewHolder(eventView, eventInfo, eventTimestamp)
     }
+
+    override fun onCreateFooterViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        //noinspection ConstantConditions
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.progress_bar, parent, false)
+        val progressBar = v.findViewById(R.id.progressBar) as ProgressBar
+        return ProgressViewHolder(v, progressBar)
+    }
+
+    override fun onBindFooterView(genericHolder: RecyclerView.ViewHolder, position: Int) {
+        (genericHolder as ProgressViewHolder).progressBar.isIndeterminate = true
+    }
+
+    class ProgressViewHolder(v: View, val progressBar: ProgressBar) : RecyclerView.ViewHolder(v)
 }
