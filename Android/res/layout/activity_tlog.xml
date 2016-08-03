@@ -35,6 +35,17 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/tabs"/>
 
+    <TextView
+        android:id="@+id/tlog_session_title"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        tools:text="11/11/2011 12:12:12"
+        android:layout_below="@+id/tabs"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:background="@color/transparent_dark"/>
+
     <ProgressBar
         android:id="@+id/progress_bar_container"
         style="?android:progressBarStyleHorizontal"

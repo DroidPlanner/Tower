@@ -20,6 +20,10 @@ class TLogRawViewer : TLogViewer() {
 
     private var tlogEventsAdapter : TLogRawEventAdapter? = null
 
+    private val loadingData by lazy {
+        getView()?.findViewById(R.id.loading_tlog_data)
+    }
+
     private val noTLogView by lazy {
         getView()?.findViewById(R.id.no_tlog_selected) as TextView?
     }
@@ -52,7 +56,7 @@ class TLogRawViewer : TLogViewer() {
 
     override fun onTLogSelected(tlogSession: SessionContract.SessionData){
         tlogEventsAdapter?.clear()
-        stateNoData()
+        stateLoadingData()
     }
 
     override fun onTLogDataLoaded(events: List<TLogParser.Event>, hasMore: Boolean){
@@ -61,21 +65,35 @@ class TLogRawViewer : TLogViewer() {
         tlogEventsAdapter?.setHasMoreData(hasMore)
 
         if(tlogEventsAdapter?.itemCount == 0){
-            stateNoData()
+            if(hasMore){
+                stateLoadingData()
+            }
+            else {
+                stateNoData()
+            }
         }
         else{
             stateDataLoaded()
         }
     }
 
+    private fun stateLoadingData(){
+        noTLogView?.visibility = View.GONE
+        rawData?.visibility = View.GONE
+        fastScroller.visibility = View.GONE
+        loadingData?.visibility = View.VISIBLE
+    }
+
     private fun stateNoData(){
         noTLogView?.visibility = View.VISIBLE
         rawData?.visibility = View.GONE
         fastScroller.visibility = View.GONE
+        loadingData?.visibility = View.GONE
     }
 
     private fun stateDataLoaded(){
         noTLogView?.visibility = View.GONE
+        loadingData?.visibility = View.GONE
         rawData?.visibility = View.VISIBLE
         fastScroller.visibility = View.VISIBLE
     }

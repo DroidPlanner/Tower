@@ -20,7 +20,7 @@ class TLogDataAdapter(val app: DroidPlannerApp, val fragmentMgr: FragmentManager
         RecyclerView.Adapter<TLogDataAdapter.ViewHolder>() {
 
     companion object {
-        private val dateFormatter = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US)
+        val dateFormatter = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US)
     }
 
     interface Listener {

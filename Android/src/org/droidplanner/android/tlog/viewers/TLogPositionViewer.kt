@@ -28,6 +28,10 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         getView()?.findViewById(R.id.no_data_message)
     }
 
+    private val loadingData by lazy {
+        getView()?.findViewById(R.id.loading_tlog_data)
+    }
+
     private val eventsView by lazy {
         getView()?.findViewById(R.id.event_list) as RecyclerView?
     }
@@ -88,7 +92,7 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
     override fun onTLogSelected(tlogSession: SessionContract.SessionData) {
         tlogPositionAdapter?.clear()
         lastEventTimestamp = -1L
-        stateNoData()
+        stateLoadingData()
 
         // Refresh the map.
         tlogEventMap?.onTLogSelected(tlogSession)
@@ -114,7 +118,12 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         tlogPositionAdapter?.setHasMoreData(hasMore)
 
         if(tlogPositionAdapter?.itemCount == 0){
-            stateNoData()
+            if(hasMore){
+                stateLoadingData()
+            }
+            else {
+                stateNoData()
+            }
         } else {
             stateDataLoaded()
         }
@@ -130,16 +139,25 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         tlogEventMap?.onTLogEventSelected(event)
     }
 
+    private fun stateLoadingData() {
+        noDataView?.visibility = View.GONE
+        eventsView?.visibility = View.GONE
+        fastScroller.visibility = View.GONE
+        loadingData?.visibility = View.VISIBLE
+    }
+
     private fun stateNoData(){
         noDataView?.visibility = View.VISIBLE
         eventsView?.visibility = View.GONE
         fastScroller.visibility = View.GONE
+        loadingData?.visibility = View.GONE
     }
 
     private fun stateDataLoaded(){
         noDataView?.visibility = View.GONE
         eventsView?.visibility = View.VISIBLE
         fastScroller.visibility = View.VISIBLE
+        loadingData?.visibility = View.GONE
     }
 }
 

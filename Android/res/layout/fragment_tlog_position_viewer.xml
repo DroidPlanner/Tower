@@ -65,6 +65,16 @@
             android:text="@string/no_tlog_position_data"
             android:visibility="gone"
             tools:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/loading_tlog_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/fast_scroller"
+            android:gravity="center"
+            android:text="@string/loading_data"
+            android:visibility="gone"
+            tools:visibility="visible"/>
     </RelativeLayout>
 
 </RelativeLayout>

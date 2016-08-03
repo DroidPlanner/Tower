@@ -24,7 +24,7 @@ class TLogViewerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     override fun getPageTitle(position: Int): CharSequence? {
         return when(position){
-            0 -> "Raw"
+            0 -> "All"
             1 -> "Position"
             else -> throw IllegalStateException("Invalid viewer index.")
         }
