@@ -61,7 +61,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements
     /**
      * Navigation drawer view
      */
-    private NavigationView navigationMenu;
+    private NavigationView navigationView;
 
     /**
      * Navigation view settings menu
