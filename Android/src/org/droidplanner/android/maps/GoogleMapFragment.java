@@ -439,15 +439,11 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
         if (currentMode == target)
             return;
 
-        setAutoPanMode(currentMode, target);
+        mPanMode.compareAndSet(currentMode, target);
     }
 
     private Drone getDroneApi() {
         return dpApp.getDrone();
-    }
-
-    private void setAutoPanMode(AutoPanMode current, AutoPanMode update) {
-        mPanMode.compareAndSet(current, update);
     }
 
     @Override
@@ -468,7 +464,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
             }
 
             List<LatLng> oldFlightPath = flightPath.getPoints();
-            if (oldFlightPath.size() > maxFlightPathSize) {
+            while (oldFlightPath.size() > maxFlightPathSize) {
                 oldFlightPath.remove(0);
             }
             oldFlightPath.add(position);
