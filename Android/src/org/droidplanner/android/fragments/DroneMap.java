@@ -5,8 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -27,18 +27,20 @@ import org.droidplanner.android.graphic.map.GraphicGuided;
 import org.droidplanner.android.graphic.map.GraphicHome;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.maps.PolylineInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader;
 import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
+import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Map;
 
 public abstract class DroneMap extends ApiListenerFragment {
 
@@ -60,8 +62,6 @@ public abstract class DroneMap extends ApiListenerFragment {
         eventFilter.addAction(ACTION_UPDATE_MAP);
 	}
 
-    private static final List<MarkerInfo> NO_EXTERNAL_MARKERS = Collections.emptyList();
-
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -71,13 +71,20 @@ public abstract class DroneMap extends ApiListenerFragment {
 			final String action = intent.getAction();
             switch (action) {
                 case ACTION_UPDATE_MAP:
+					guided.updateMarker(DroneMap.this);
+					break;
+
 				case AttributeEvent.HOME_UPDATED:
+					home.updateMarker(DroneMap.this);
+					break;
+
                 case MissionProxy.ACTION_MISSION_PROXY_UPDATE:
-                    postUpdate();
+					home.updateMarker(DroneMap.this);
+					onMissionUpdate();
                     break;
 
                 case AttributeEvent.GPS_POSITION: {
-                    mMapFragment.updateMarker(graphicDrone);
+					graphicDrone.updateMarker(DroneMap.this);
                     mMapFragment.updateDroneLeashPath(guided);
                     final Gps droneGps = drone.getAttribute(AttributeType.GPS);
                     if (droneGps != null && droneGps.isValid()) {
@@ -87,19 +94,19 @@ public abstract class DroneMap extends ApiListenerFragment {
                 }
 
                 case AttributeEvent.GUIDED_POINT_UPDATED:
-                    mMapFragment.updateMarker(guided);
+					guided.updateMarker(DroneMap.this);
                     mMapFragment.updateDroneLeashPath(guided);
                     break;
 
                 case AttributeEvent.HEARTBEAT_FIRST:
                 case AttributeEvent.HEARTBEAT_RESTORED:
 				case AttributeEvent.STATE_CONNECTED:
-                    mMapFragment.updateMarker(graphicDrone);
+					graphicDrone.updateMarker(DroneMap.this);
                     break;
 
                 case AttributeEvent.STATE_DISCONNECTED:
                 case AttributeEvent.HEARTBEAT_TIMEOUT:
-                    mMapFragment.updateMarker(graphicDrone);
+					graphicDrone.updateMarker(DroneMap.this);
                     break;
 
                 case AttributeEvent.CAMERA_FOOTPRINTS_UPDATED: {
@@ -130,79 +137,20 @@ public abstract class DroneMap extends ApiListenerFragment {
 		}
 	};
 
-	private final Handler mHandler = new Handler();
-
-	private final Runnable mUpdateMap = new Runnable() {
-		@Override
-		public void run() {
-			if (getActivity() == null && mMapFragment == null)
-				return;
-
-			final List<MarkerInfo> missionMarkerInfos = missionProxy.getMarkersInfos();
-            final List<MarkerInfo> externalMarkers = collectMarkersFromProviders();
-
-			final boolean isThereMissionMarkers = !missionMarkerInfos.isEmpty();
-            final boolean isThereExternalMarkers = !externalMarkers.isEmpty();
-			final boolean isHomeValid = home.isValid();
-			final boolean isGuidedVisible = guided.isVisible();
-
-			// Get the list of markers currently on the map.
-			final Set<MarkerInfo> markersOnTheMap = mMapFragment.getMarkerInfoList();
-
-			if (!markersOnTheMap.isEmpty()) {
-				if (isHomeValid) {
-					markersOnTheMap.remove(home);
-				}
-
-				if (isGuidedVisible) {
-					markersOnTheMap.remove(guided);
-				}
-
-				if (isThereMissionMarkers) {
-					markersOnTheMap.removeAll(missionMarkerInfos);
-				}
-
-                if(isThereExternalMarkers)
-                    markersOnTheMap.removeAll(externalMarkers);
-
-				mMapFragment.removeMarkers(markersOnTheMap);
-			}
-
-			if (isHomeValid) {
-				mMapFragment.updateMarker(home);
-			}
-
-			if (isGuidedVisible) {
-				mMapFragment.updateMarker(guided);
-			}
-
-			if (isThereMissionMarkers) {
-				mMapFragment.updateMarkers(missionMarkerInfos, isMissionDraggable());
-			}
-
-            if(isThereExternalMarkers)
-                mMapFragment.updateMarkers(externalMarkers, false);
-
-			mMapFragment.updateMissionPath(missionProxy);
-
-			mMapFragment.updatePolygonsPaths(missionProxy.getPolygonsPath());
-
-			mHandler.removeCallbacks(this);
-		}
-	};
-
-    private final ConcurrentLinkedQueue<MapMarkerProvider> markerProviders = new ConcurrentLinkedQueue<>();
+    private final Map<MissionItemProxy, List<MarkerInfo>> missionMarkers = new HashMap<>();
+	private final LinkedList<MarkerInfo> externalMarkersToAdd = new LinkedList<>();
+    private final LinkedList<PolylineInfo> externalPolylinesToAdd = new LinkedList<>();
 
 	protected DPMap mMapFragment;
 
 	protected DroidPlannerPrefs mAppPrefs;
 
 	private GraphicHome home;
-	public GraphicDrone graphicDrone;
-	public GraphicGuided guided;
+	private GraphicDrone graphicDrone;
+	private GraphicGuided guided;
 
 	protected MissionProxy missionProxy;
-	public Drone drone;
+	protected Drone drone;
 
 	protected Context context;
 
@@ -220,12 +168,6 @@ public abstract class DroneMap extends ApiListenerFragment {
 	}
 
 	@Override
-	public void onDetach() {
-		super.onDetach();
-		mHandler.removeCallbacksAndMessages(null);
-	}
-
-	@Override
 	public void onApiConnected() {
 		if (mMapFragment != null)
 			mMapFragment.clearMarkers();
@@ -236,11 +178,60 @@ public abstract class DroneMap extends ApiListenerFragment {
 		missionProxy = getMissionProxy();
 
 		home = new GraphicHome(drone, getContext());
-		graphicDrone = new GraphicDrone(drone);
-		guided = new GraphicGuided(drone);
+		mMapFragment.addMarker(home);
 
-		postUpdate();
+		graphicDrone = new GraphicDrone(drone);
+		mMapFragment.addMarker(graphicDrone);
+
+		guided = new GraphicGuided(drone);
+		mMapFragment.addMarker(guided);
+
+		onMissionUpdate();
 	}
+
+    protected final void onMissionUpdate(){
+        Resources res = getResources();
+
+        mMapFragment.updateMissionPath(missionProxy);
+
+        mMapFragment.updatePolygonsPaths(missionProxy.getPolygonsPath());
+
+        //TODO: improve mission markers rendering performance
+		List<MissionItemProxy> proxyMissionItems = missionProxy.getItems();
+        // Clear the previous proxy mission item markers.
+		Map<MissionItemProxy, List<MarkerInfo>> newMissionMarkers = new HashMap<>(proxyMissionItems.size());
+
+		for(MissionItemProxy proxyItem : proxyMissionItems){
+			List<MarkerInfo> proxyMarkers = missionMarkers.remove(proxyItem);
+			if(proxyMarkers == null){
+				proxyMarkers = MissionItemMarkerInfo.newInstance(proxyItem);
+
+				if(!proxyMarkers.isEmpty()){
+					// Add the new markers to the map.
+					mMapFragment.addMarkers(proxyMarkers, isMissionDraggable());
+				}
+			}
+			else {
+				//Refresh the proxy markers
+				for(MarkerInfo marker: proxyMarkers){
+                    if (marker.isOnMap()) {
+                        marker.updateMarker(DroneMap.this);
+                    } else {
+                        mMapFragment.addMarker(marker);
+                    }
+                }
+			}
+            newMissionMarkers.put(proxyItem, proxyMarkers);
+		}
+
+		// Remove the now invalid mission items
+		for(List<MarkerInfo> invalidMarkers : missionMarkers.values()) {
+			mMapFragment.removeMarkers(invalidMarkers);
+		}
+		missionMarkers.clear();
+
+        missionMarkers.putAll(newMissionMarkers);
+    }
 
 	public void downloadMapTiles(MapDownloader mapDownloader, int minimumZ, int maximumZ){
 		if(mMapFragment == null)
@@ -269,7 +260,22 @@ public abstract class DroneMap extends ApiListenerFragment {
 			fm.beginTransaction().replace(R.id.map_fragment_container, (Fragment) mMapFragment)
 					.commit();
 		}
-	}
+
+		if(!externalMarkersToAdd.isEmpty()){
+			for(MarkerInfo markerInfo = externalMarkersToAdd.poll();
+                markerInfo != null && !externalMarkersToAdd.isEmpty();
+                markerInfo = externalMarkersToAdd.poll()){
+				mMapFragment.addMarker(markerInfo);
+			}
+		}
+        if (!externalPolylinesToAdd.isEmpty()) {
+            for(PolylineInfo polylineInfo = externalPolylinesToAdd.poll();
+                polylineInfo != null && !externalPolylinesToAdd.isEmpty();
+                polylineInfo = externalPolylinesToAdd.poll()){
+                mMapFragment.addPolyline(polylineInfo);
+            }
+        }
+    }
 
 	@Override
 	public void onPause() {
@@ -290,20 +296,10 @@ public abstract class DroneMap extends ApiListenerFragment {
 	}
 
 	@Override
-	public void onStop() {
-		super.onStop();
-		mHandler.removeCallbacksAndMessages(null);
-	}
-
-	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		context = activity.getApplicationContext();
 		mAppPrefs = DroidPlannerPrefs.getInstance(context);
-	}
-
-	public final void postUpdate() {
-		mHandler.post(mUpdateMap);
 	}
 
 	protected int getMaxFlightPathSize() {
@@ -379,38 +375,52 @@ public abstract class DroneMap extends ApiListenerFragment {
 		mMapFragment.skipMarkerClickEvents(skip);
 	}
 
-    public void addMapMarkerProvider(MapMarkerProvider provider){
-        if(provider != null) {
-            markerProviders.add(provider);
-            postUpdate();
+	public void addMarker(MarkerInfo markerInfo){
+		if(markerInfo == null)
+			return;
+
+		if(mMapFragment != null) {
+			mMapFragment.addMarker(markerInfo);
+		}
+		else{
+			externalMarkersToAdd.add(markerInfo);
+		}
+	}
+
+    public void addPolyline(PolylineInfo polylineInfo) {
+        if (polylineInfo == null)
+            return;
+
+        if(mMapFragment != null) {
+            mMapFragment.addPolyline(polylineInfo);
+        }
+        else {
+            externalPolylinesToAdd.add(polylineInfo);
         }
     }
 
-    public void removeMapMarkerProvider(MapMarkerProvider provider){
-        if(provider != null) {
-            markerProviders.remove(provider);
-            postUpdate();
+	public void removeMarker(MarkerInfo markerInfo){
+		if(markerInfo == null)
+			return;
+
+		if(mMapFragment != null){
+			mMapFragment.removeMarker(markerInfo);
+		}
+		else{
+			externalMarkersToAdd.remove(markerInfo);
+		}
+	}
+
+    public void removePolyline(PolylineInfo polylineInfo) {
+        if(polylineInfo == null)
+            return;
+
+        if(mMapFragment != null){
+            mMapFragment.removePolyline(polylineInfo);
         }
-    }
-
-    public interface MapMarkerProvider {
-        MarkerInfo[] getMapMarkers();
-    }
-
-    private List<MarkerInfo> collectMarkersFromProviders(){
-        if(markerProviders.isEmpty())
-            return NO_EXTERNAL_MARKERS;
-
-        List<MarkerInfo> markers = new ArrayList<>();
-        for(MapMarkerProvider provider : markerProviders){
-            MarkerInfo[] externalMarkers = provider.getMapMarkers();
-            Collections.addAll(markers, externalMarkers);
+        else{
+            externalPolylinesToAdd.remove(polylineInfo);
         }
-
-        if(markers.isEmpty())
-            return NO_EXTERNAL_MARKERS;
-
-        return markers;
     }
 
 	public DPMap.VisibleMapArea getVisibleMapArea(){

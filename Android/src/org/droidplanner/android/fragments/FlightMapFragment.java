@@ -138,7 +138,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
                     guidedClickListener.onGuidedClick(coord);
             } else {
                 GuidedDialog dialog = new GuidedDialog();
-                dialog.setCoord(DroneHelper.CoordToLatLang(coord));
+                dialog.setCoord(DroneHelper.coordToLatLng(coord));
                 dialog.setListener(this);
                 dialog.show(getChildFragmentManager(), "GUIDED dialog");
             }
@@ -148,7 +148,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
     @Override
     public void onForcedGuidedPoint(LatLng coord) {
         try {
-            ControlApi.getApi(drone).goTo(DroneHelper.LatLngToCoord(coord), true, null);
+            ControlApi.getApi(drone).goTo(DroneHelper.latLngToCoord(coord), true, null);
         } catch (Exception e) {
             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }

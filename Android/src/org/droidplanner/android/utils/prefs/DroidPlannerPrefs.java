@@ -272,7 +272,7 @@ public class DroidPlannerPrefs {
         return prefs.getBoolean(PREF_USAGE_STATISTICS, DEFAULT_USAGE_STATISTICS);
     }
 
-    public void setConnectionParameterType(int connectionType) {
+    public void setConnectionParameterType(@ConnectionType.Type int connectionType) {
         prefs.edit().putString(PREF_CONNECTION_TYPE, String.valueOf(connectionType)).apply();
         lbm.sendBroadcast(new Intent(PREF_CONNECTION_TYPE));
     }
@@ -280,8 +280,9 @@ public class DroidPlannerPrefs {
     /**
      * @return the selected mavlink connection type.
      */
-    public int getConnectionParameterType() {
-        return Integer.parseInt(prefs.getString(PREF_CONNECTION_TYPE, DEFAULT_CONNECTION_TYPE));
+    public @ConnectionType.Type int getConnectionParameterType() {
+        @ConnectionType.Type int connectionType = Integer.parseInt(prefs.getString(PREF_CONNECTION_TYPE, DEFAULT_CONNECTION_TYPE));
+        return connectionType;
     }
 
     public int getUnitSystemType() {

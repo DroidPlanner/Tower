@@ -569,10 +569,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 showItemDetail(selectMissionDetailType(selected));
             }
         }
-
-        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
-        if (planningMapFragment != null)
-            planningMapFragment.postUpdate();
     }
 
 }

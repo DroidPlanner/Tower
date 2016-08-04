@@ -33,6 +33,7 @@ import org.droidplanner.android.activities.DrawerNavigationUI;
 import org.droidplanner.android.fragments.control.FlightControlManagerFragment;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
+import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.view.SlidingDrawer;
 
@@ -508,11 +509,11 @@ public class FlightDataFragment extends ApiListenerFragment implements SlidingDr
         mapFragment.setGuidedClickListener(listener);
     }
 
-    public void addMapMarkerProvider(DroneMap.MapMarkerProvider provider) {
-        mapFragment.addMapMarkerProvider(provider);
+    public void addMarker(MarkerInfo markerInfo){
+        mapFragment.addMarker(markerInfo);
     }
 
-    public void removeMapMarkerProvider(DroneMap.MapMarkerProvider provider) {
-        mapFragment.removeMapMarkerProvider(provider);
+    public void removeMarker(MarkerInfo markerInfo){
+        mapFragment.removeMarker(markerInfo);
     }
 }

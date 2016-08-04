@@ -13,13 +13,13 @@ import com.o3dr.services.android.lib.drone.property.GuidedState;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.maps.DPMap.PathSource;
-import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.MarkerWithText;
+import org.droidplanner.android.maps.MarkerInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSource {
+public class GraphicGuided extends MarkerInfo implements PathSource {
 
 	private final static String TAG = GraphicGuided.class.getSimpleName();
 
@@ -65,7 +65,6 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSo
 		return guidedPoint == null ? null : guidedPoint.getCoordinate();
 	}
 
-	@Override
 	public void setPosition(LatLong coord) {
 		try {
 			ControlApi.getApi(drone).goTo(coord, true, null);

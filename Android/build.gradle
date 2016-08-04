@@ -20,10 +20,11 @@ dependencies {
     // Android library to display the changelog
     compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
 
-    //Tower-Lib
-    //TODO: revert before play store release
-    compile 'org.droidplanner.android:tower-lib:0.0.0-alpha12'
-//    compile project(':ClientLib')
+    //DroneKit-Android client lib
+    compile 'com.o3dr.android:dronekit-android:3.0.0-alpha6'
+    //Comment line above, and uncomment line below to use your local version of the dronekit-android client lib
+    //Don't forget to uncomment the lines in the settings.gradle file as well.
+//     compile project(':ClientLib')
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')

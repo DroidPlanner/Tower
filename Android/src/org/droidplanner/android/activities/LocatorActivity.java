@@ -15,9 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.MAVLink.common.msg_global_position_int;
-import com.o3dr.android.client.utils.data.tlog.TLogPicker;
 import com.o3dr.services.android.lib.coordinate.LatLong;
-import com.o3dr.services.android.lib.data.ServiceDataContract;
 import com.o3dr.services.android.lib.util.MathUtils;
 
 import org.beyene.sius.unit.length.LengthUnit;
@@ -34,6 +32,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * @deprecated
+ * TODO: remove this class, and its dependencies
+ *
  * This implements the map locator activity. The map locator activity allows the user to find
  * a lost drone using last known GPS positions from the tlogs.
  */
@@ -173,7 +174,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_open_tlog_file:
-                TLogPicker.startTLogPicker(this, TLOG_PICKER_REQUEST_CODE);
+//                TLogPicker.startTLogPicker(this, TLOG_PICKER_REQUEST_CODE);
                 return true;
 
             default:
@@ -188,14 +189,14 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
             return;
         }
 
-        //Get the file's absolute path from the incoming intent
-        final String tlogAbsolutePath = returnIntent.getStringExtra(ServiceDataContract.EXTRA_TLOG_ABSOLUTE_PATH);
-
-        if (tlogOpener != null)
-            tlogOpener.cancel(true);
-
-        tlogOpener = new OpenTLogFileAsyncTask(this);
-        tlogOpener.execute(tlogAbsolutePath);
+//        //Get the file's absolute path from the incoming intent
+//        final String tlogAbsolutePath = returnIntent.getStringExtra(ServiceDataContract.EXTRA_TLOG_ABSOLUTE_PATH);
+//
+//        if (tlogOpener != null)
+//            tlogOpener.cancel(true);
+//
+//        tlogOpener = new OpenTLogFileAsyncTask(this);
+//        tlogOpener.execute(tlogAbsolutePath);
     }
 
     /*

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="70dp"
+        android:padding="15dp"
+        android:text="@string/label_tlogs_title"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_alignParentTop="true"/>
+
+    <View
+        android:id="@+id/dialog_title_divider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/holo_blue_dark"
+        android:layout_below="@+id/dialog_title"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tlogs_selector"
+        android:layout_below="@+id/dialog_title_divider"
+        android:scrollbars="vertical"/>
+
+    <TextView
+        android:id="@+id/no_tlogs_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="56dp"
+        android:padding="16dp"
+        android:text="No available tlog files"
+        android:textStyle="bold"
+        android:background="?selectableItemBackground"
+        android:gravity="center"
+        android:layout_below="@+id/dialog_title_divider"
+        android:visibility="gone"
+        android:fadeScrollbars="false"
+        tools:visibility="visible"/>
+
+</RelativeLayout>

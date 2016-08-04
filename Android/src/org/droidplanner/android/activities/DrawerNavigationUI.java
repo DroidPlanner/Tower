@@ -2,6 +2,7 @@ package org.droidplanner.android.activities;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.LocalBroadcastManager;
@@ -15,11 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.control.BaseFlightControlFragment;
+import org.droidplanner.android.tlog.TLogActivity;
 import org.droidplanner.android.view.SlidingDrawer;
 
 /**
@@ -63,6 +67,8 @@ public abstract class DrawerNavigationUI extends SuperUI implements
      * Navigation view settings menu
      */
     private NavigationView settingsMenu;
+
+    private TextView accountLabel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -127,11 +133,26 @@ public abstract class DrawerNavigationUI extends SuperUI implements
         contentLayout.addView(contentView);
         setContentView(mDrawerLayout);
 
-        navigationMenu = (NavigationView) findViewById(R.id.navigation_drawer_view);
-        navigationMenu.setNavigationItemSelectedListener(this);
+        navigationView = (NavigationView) findViewById(R.id.navigation_drawer_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View navigationHeaderView = navigationView.getHeaderView(0);
+        accountLabel = (TextView) navigationHeaderView.findViewById(R.id.account_screen_label);
+
+        LinearLayout llAccount = (LinearLayout) navigationHeaderView.findViewById(R.id.navigation_account);
+        if(llAccount != null) {
+            llAccount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(), AccountActivity.class));
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                }
+            });
+        }
 
         settingsMenu = (NavigationView) findViewById(R.id.navigation_drawer_settings);
         settingsMenu.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
@@ -173,7 +194,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements
                 break;
 
             case R.id.navigation_locator:
-                mNavigationIntent = new Intent(this, LocatorActivity.class);
+                mNavigationIntent = new Intent(this, TLogActivity.class);
                 break;
 
             case R.id.navigation_params:
@@ -201,8 +222,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements
                 break;
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -246,7 +266,16 @@ public abstract class DrawerNavigationUI extends SuperUI implements
     }
 
     private void updateNavigationDrawer() {
-        navigationMenu.setCheckedItem(getNavigationDrawerMenuItemId());
+        final int navDrawerEntryId = getNavigationDrawerMenuItemId();
+        switch (navDrawerEntryId) {
+            case R.id.navigation_account:
+                accountLabel.setTypeface(null, Typeface.BOLD);
+                break;
+
+            default:
+                navigationView.setCheckedItem(navDrawerEntryId);
+                break;
+        }
 
         MenuItem settings = settingsMenu.getMenu().findItem(R.id.navigation_settings);
         if(settings != null){

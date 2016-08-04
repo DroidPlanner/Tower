@@ -20,6 +20,12 @@ public class LocatorMapFragment extends DroneMap {
     }
 
     @Override
+    public void onApiConnected(){
+        super.onApiConnected();
+        mMapFragment.addMarker(graphicLocator);
+    }
+
+    @Override
     public boolean setAutoPanMode(AutoPanMode target) {
         if(target == AutoPanMode.DISABLED)
             return true;
@@ -30,7 +36,7 @@ public class LocatorMapFragment extends DroneMap {
 
     public void updateLastPosition(LatLong lastPosition) {
         graphicLocator.setLastPosition(lastPosition);
-        mMapFragment.updateMarker(graphicLocator);
+        graphicLocator.updateMarker(this);
     }
 
     public void zoomToFit() {

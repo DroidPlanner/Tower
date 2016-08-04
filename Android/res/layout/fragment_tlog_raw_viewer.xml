@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/tlog_raw_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:scrollbars="none"/>
+
+    <org.droidplanner.android.view.FastScroller
+        android:id="@+id/raw_fastscroller"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/tlog_raw_data"
+        android:layout_alignBottom="@+id/tlog_raw_data"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"/>
+
+    <TextView
+        android:id="@+id/no_tlog_selected"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        android:layout_centerInParent="true"
+        android:visibility="visible"
+        android:gravity="center"
+        android:text="@string/no_tlog_data_loaded"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/loading_tlog_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:gravity="center"
+        android:text="@string/loading_data"
+        android:textStyle="bold"/>
+
+</RelativeLayout>
