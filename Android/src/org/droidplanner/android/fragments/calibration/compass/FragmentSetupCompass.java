@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.o3dr.android.client.Drone;
@@ -73,6 +74,9 @@ public class FragmentSetupCompass extends ApiListenerFragment {
         filter.addAction(AttributeEvent.CALIBRATION_MAG_CANCELLED);
         filter.addAction(AttributeEvent.CALIBRATION_MAG_COMPLETED);
         filter.addAction(AttributeEvent.CALIBRATION_MAG_PROGRESS);
+
+        filter.addAction(AttributeEvent.STATE_CONNECTED);
+        filter.addAction(AttributeEvent.STATE_DISCONNECTED);
     }
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -95,6 +99,13 @@ public class FragmentSetupCompass extends ApiListenerFragment {
                     final MagnetometerCalibrationProgress progress = intent.getParcelableExtra(AttributeEventExtra
                         .EXTRA_CALIBRATION_MAG_PROGRESS);
                     handleMagProgress(progress);
+                    break;
+
+                case AttributeEvent.STATE_CONNECTED:
+                    break;
+
+                case AttributeEvent.STATE_DISCONNECTED:
+                    cancelCalibration();
                     break;
             }
         }
@@ -196,7 +207,9 @@ public class FragmentSetupCompass extends ApiListenerFragment {
     @Override
     public void onApiDisconnected() {
         getBroadcastManager().unregisterReceiver(receiver);
-        cancelCalibration();
+        if(getActivity().isFinishing()) {
+            cancelCalibration();
+        }
         handler.removeCallbacksAndMessages(null);
     }
 
@@ -305,6 +318,13 @@ public class FragmentSetupCompass extends ApiListenerFragment {
     }
 
     private void proceedWithCalibration(@CompassCalibrationStep int step) {
+        final Drone drone = getDrone();
+        if(drone == null || !drone.isConnected()){
+            //TODO: send a message to the notification handler for toast and voice
+            Toast.makeText(getContext(), "Please connect drone before proceeding.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         switch (step) {
             case STEP_BEGIN_CALIBRATION:
             case STEP_CALIBRATION_FAILED:
@@ -338,10 +358,7 @@ public class FragmentSetupCompass extends ApiListenerFragment {
         if(!isAdded())
             return;
 
-        if (calibrationStep == step)
-            return;
-
-        if (!force && step < calibrationStep)
+        if (!force && step <= calibrationStep)
             return;
 
         calibrationStep = step;
