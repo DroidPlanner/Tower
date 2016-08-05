@@ -33,6 +33,7 @@ import com.o3dr.services.android.lib.drone.calibration.magnetometer.Magnetometer
 import com.o3dr.services.android.lib.drone.calibration.magnetometer.MagnetometerCalibrationStatus;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.sound.SoundManager;
@@ -44,7 +45,7 @@ import java.util.List;
 /**
  * Created by fredia on 5/22/16.
  */
-public class FragmentSetupCompass extends ApiListenerFragment {
+public class FragmentSetupCompass extends ApiListenerFragment implements ConfigurationActivity.ConfigurationScreen {
 
     private static final String EXTRA_CALIBRATION_STEP = "extra_calibration_step";
 
@@ -178,7 +179,7 @@ public class FragmentSetupCompass extends ApiListenerFragment {
             ? STEP_BEGIN_CALIBRATION
             : savedInstanceState.getInt(EXTRA_CALIBRATION_STEP, STEP_BEGIN_CALIBRATION);
 
-        updateUI(currentStep);
+        calibrationStep = currentStep;
     }
 
     @Override
@@ -189,6 +190,8 @@ public class FragmentSetupCompass extends ApiListenerFragment {
 
     @Override
     public void onApiConnected() {
+        updateUI(calibrationStep, true);
+
         final Drone drone = getDrone();
         final MagnetometerCalibrationStatus calibrationStatus = drone.getAttribute(AttributeType.MAGNETOMETER_CALIBRATION_STATUS);
         if (calibrationStatus != null
@@ -205,11 +208,20 @@ public class FragmentSetupCompass extends ApiListenerFragment {
     }
 
     @Override
-    public void onApiDisconnected() {
-        getBroadcastManager().unregisterReceiver(receiver);
-        if(getActivity().isFinishing()) {
+    public void onWindowFocusChanged(boolean hasFocus){
+        if(!hasFocus){
             cancelCalibration();
         }
+    }
+
+    @Override
+    public void onConfigurationReplaced(){
+        cancelCalibration();
+    }
+
+    @Override
+    public void onApiDisconnected() {
+        getBroadcastManager().unregisterReceiver(receiver);
         handler.removeCallbacksAndMessages(null);
     }
 

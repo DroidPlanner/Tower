@@ -65,12 +65,27 @@ public class ConfigurationActivity extends DrawerNavigationUI {
 		final int configScreenId = intent.getIntExtra(EXTRA_CONFIG_SCREEN_ID, mConfigScreenId);
         final Fragment currentFragment = getCurrentFragment();
         if(currentFragment == null || getIdForFragment(currentFragment) != configScreenId){
+            if(currentFragment instanceof ConfigurationScreen) {
+                ((ConfigurationScreen) currentFragment).onConfigurationReplaced();
+            }
+
             mConfigScreenId = configScreenId;
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.configuration_screen, getFragmentForId(configScreenId))
                     .commit();
         }
 	}
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus){
+        super.onWindowFocusChanged(hasFocus);
+
+        // Relay the information to the current fragment
+        Fragment currFrag = getCurrentFragment();
+        if(currFrag instanceof ConfigurationScreen){
+            ((ConfigurationScreen) currFrag).onWindowFocusChanged(hasFocus);
+        }
+    }
 
     private Fragment getCurrentFragment(){
         return getSupportFragmentManager().findFragmentById(R.id.configuration_screen);
@@ -118,5 +133,11 @@ public class ConfigurationActivity extends DrawerNavigationUI {
     @Override
     public void onApiConnected() {
         super.onApiConnected();
+    }
+
+    public interface ConfigurationScreen {
+        void onWindowFocusChanged(boolean hasFocus);
+
+        void onConfigurationReplaced();
     }
 }

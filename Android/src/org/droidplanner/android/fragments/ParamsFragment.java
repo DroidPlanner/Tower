@@ -32,6 +32,7 @@ import com.o3dr.services.android.lib.drone.property.Parameter;
 import com.o3dr.services.android.lib.drone.property.Parameters;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.dialogs.SupportEditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenParameterDialog;
@@ -47,7 +48,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-public class ParamsFragment extends ApiListenerListFragment implements SupportEditInputDialog.Listener {
+public class ParamsFragment extends ApiListenerListFragment implements
+    SupportEditInputDialog.Listener,
+    ConfigurationActivity.ConfigurationScreen {
 
     public static final String ADAPTER_ITEMS = ParamsFragment.class.getName() + ".adapter.items";
     private static final String PREF_PARAMS_FILTER_ON = "pref_params_filter_on";
@@ -459,5 +462,15 @@ public class ParamsFragment extends ApiListenerListFragment implements SupportEd
         }
 
         mLoadingProgress.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+
+    }
+
+    @Override
+    public void onConfigurationReplaced() {
+
     }
 }

@@ -14,6 +14,7 @@ import android.widget.ExpandableListView;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.view.checklist.CheckListAdapter;
 import org.droidplanner.android.view.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
@@ -26,8 +27,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ChecklistFragment extends ApiListenerFragment implements OnXmlParserError,
-		OnCheckListItemUpdateListener {
+public class ChecklistFragment extends ApiListenerFragment implements
+	OnXmlParserError,
+		OnCheckListItemUpdateListener,
+	ConfigurationActivity.ConfigurationScreen {
 
     private final static IntentFilter intentFilter = new IntentFilter();
 	static {
@@ -176,4 +179,13 @@ public class ChecklistFragment extends ApiListenerFragment implements OnXmlParse
         }
 	}
 
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+
+	}
+
+	@Override
+	public void onConfigurationReplaced() {
+
+	}
 }
