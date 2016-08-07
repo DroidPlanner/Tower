@@ -25,11 +25,10 @@ import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.model.SimpleCommandListener;
 
 import org.droidplanner.android.R;
-import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.notifications.TTSNotificationProvider;
 
-public class FragmentSetupIMU extends ApiListenerFragment implements ConfigurationActivity.ConfigurationScreen {
+public class FragmentSetupIMU extends ApiListenerFragment {
 
 	private final static long TIMEOUT_MAX = 30000l; //ms
     private final static long UPDATE_TIMEOUT_PERIOD = 100l; //ms
@@ -352,14 +351,4 @@ public class FragmentSetupIMU extends ApiListenerFragment implements Configurati
 			textViewTimeOut.setText(timeLeftStr + "0s");
 		}
 	}
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-
-    }
-
-    @Override
-    public void onConfigurationReplaced() {
-
-    }
 }

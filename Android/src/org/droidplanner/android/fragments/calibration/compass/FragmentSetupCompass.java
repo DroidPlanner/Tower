@@ -1,5 +1,6 @@
 package org.droidplanner.android.fragments.calibration.compass;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -45,7 +46,7 @@ import java.util.List;
 /**
  * Created by fredia on 5/22/16.
  */
-public class FragmentSetupCompass extends ApiListenerFragment implements ConfigurationActivity.ConfigurationScreen {
+public class FragmentSetupCompass extends ApiListenerFragment {
 
     private static final String EXTRA_CALIBRATION_STEP = "extra_calibration_step";
 
@@ -123,6 +124,8 @@ public class FragmentSetupCompass extends ApiListenerFragment implements Configu
 
     private final Handler handler = new Handler();
 
+    private ConfigurationActivity parentActivity;
+
     @CompassCalibrationStep
     private int calibrationStep;
 
@@ -139,6 +142,22 @@ public class FragmentSetupCompass extends ApiListenerFragment implements Configu
 
     private MenuItem cancelMenuItem;
     private boolean isCancelMenuEnabled = false;
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        if(!(activity instanceof ConfigurationActivity)){
+            throw new IllegalStateException("Parent activity must be an instance of " + ConfigurationActivity.class.getName());
+        }
+
+        parentActivity = (ConfigurationActivity) activity;
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        parentActivity = null;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -190,12 +209,12 @@ public class FragmentSetupCompass extends ApiListenerFragment implements Configu
 
     @Override
     public void onApiConnected() {
-        updateUI(calibrationStep, true);
-
         final Drone drone = getDrone();
         final MagnetometerCalibrationStatus calibrationStatus = drone.getAttribute(AttributeType.MAGNETOMETER_CALIBRATION_STATUS);
-        if (calibrationStatus != null
-            && !calibrationStatus.isCalibrationCancelled() && !calibrationStatus.isCalibrationComplete()) {
+        if (calibrationStatus == null || calibrationStatus.isCalibrationCancelled()) {
+            updateUI(STEP_CALIBRATION_CANCELLED);
+        } else {
+            updateUI(calibrationStep, true);
             final List<Integer> compassIds = calibrationStatus.getCompassIds();
             for (Integer compassId : compassIds)
                 handleMagProgress(calibrationStatus.getCalibrationProgress(compassId));
@@ -208,20 +227,13 @@ public class FragmentSetupCompass extends ApiListenerFragment implements Configu
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus){
-        if(!hasFocus){
-            cancelCalibration();
-        }
-    }
-
-    @Override
-    public void onConfigurationReplaced(){
-        cancelCalibration();
-    }
-
-    @Override
     public void onApiDisconnected() {
         getBroadcastManager().unregisterReceiver(receiver);
+        if(parentActivity.isFinishing()
+            || !parentActivity.hasWindowFocus()
+            || parentActivity.getCurrentFragment() != this){
+            cancelCalibration();
+        }
         handler.removeCallbacksAndMessages(null);
     }
 
@@ -377,6 +389,7 @@ public class FragmentSetupCompass extends ApiListenerFragment implements Configu
 
         switch (step) {
             case STEP_BEGIN_CALIBRATION:
+            case STEP_CALIBRATION_CANCELLED:
                 enableCancelMenu(false);
 
                 calibrationProgress.setVisibility(View.INVISIBLE);
@@ -444,7 +457,6 @@ public class FragmentSetupCompass extends ApiListenerFragment implements Configu
                 advicesContainer.setVisibility(View.GONE);
                 break;
 
-            case STEP_CALIBRATION_CANCELLED:
             case STEP_CALIBRATION_FAILED:
                 enableCancelMenu(false);
 
