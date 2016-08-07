@@ -130,11 +130,6 @@ public class ConfigurationActivity extends DrawerNavigationUI {
         }
     }
 
-    @Override
-    public void onApiConnected() {
-        super.onApiConnected();
-    }
-
     public interface ConfigurationScreen {
         void onWindowFocusChanged(boolean hasFocus);
 

@@ -33,11 +33,6 @@ public class SettingsActivity extends SuperUI {
     }
 
 	@Override
-	public void onApiConnected() {
-        super.onApiConnected();
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item){
 		switch(item.getItemId()){
 			case android.R.id.home:
