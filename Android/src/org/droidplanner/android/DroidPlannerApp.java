@@ -38,6 +38,7 @@ import org.droidplanner.android.utils.TLogUtils;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.file.IO.ExceptionWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.android.utils.sound.SoundManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,6 +146,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
     private LocalBroadcastManager lbm;
 
     private LogToFileTree logToFileTree;
+    private SoundManager soundManager;
 
     private long currentSessionId = INVALID_SESSION_ID;
     private SessionDB sessionDB;
@@ -158,6 +160,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
 
         dpPrefs = DroidPlannerPrefs.getInstance(context);
         lbm = LocalBroadcastManager.getInstance(context);
+        soundManager = new SoundManager(context);
 
         initLoggingAndAnalytics();
         initDronekit();
@@ -454,6 +457,10 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         if(logToFileTree != null) {
             logToFileTree.stopLoggingThread();
         }
+    }
+
+    public SoundManager getSoundManager() {
+        return soundManager;
     }
 
     private void startDroneSession(long startTime) {

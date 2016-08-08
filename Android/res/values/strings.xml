@@ -199,6 +199,11 @@
     <!-- Compass Setup Resource Strings -->
     <string name="setup_mag_title">Compass Calibration</string>
     <string name="setup_mag_start">Press Calibrate to start magnetometer calibration. Perform the calibration outdoors away from metal objects.</string>
+    <string name="label_solo_compass_calibration">Calibrate Compass</string>
+    <string name="instruction_compass_begin_calibration">Calibrating the compass ensures Solo can fly accurately.\nCalibrate Solo away from buildings, concrete, and metal structures.</string>
+    <string name="compass_calibration_instructions">Face North and rotate solo multiple times until each bar is green</string>
+    <string name="compass_calibration_sub_instructions">Stay away from metal objects and reinforced concrete.</string>
+    <string name="label_begin_calibration">Begin Calibration</string>
 
     <!-- Accelerometer Setup Resource Strings -->
     <string name="setup_imu_title">Accelerometer Calibration</string>
@@ -612,6 +617,11 @@
     <string name="weather_temperature_metric" translatable="false">%1$sº C</string>
     <string name="weather_rain_imperial" translatable="false">%1$s in</string>
     <string name="weather_rain_metric" translatable="false">%1$s mm</string>
+
+    <string name="label_try_again">Try Again</string>
+    <string name="label_alright">Alright!</string>
+    <string name="label_compass_calibration_failed">Compass Calibration unsuccessful.\nBe sure to stay away from metal objects and reinforced concrete.</string>
+    <string name="label_ready_to_fly">Go Fly</string>
 
     <!-- DroneShare strings -->
     <string name="uploader_success_message">Upload successful! Select to view…</string>

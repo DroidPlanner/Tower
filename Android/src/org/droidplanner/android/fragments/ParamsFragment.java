@@ -47,7 +47,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-public class ParamsFragment extends ApiListenerListFragment implements SupportEditInputDialog.Listener {
+public class ParamsFragment extends ApiListenerListFragment implements
+    SupportEditInputDialog.Listener {
 
     public static final String ADAPTER_ITEMS = ParamsFragment.class.getName() + ".adapter.items";
     private static final String PREF_PARAMS_FILTER_ON = "pref_params_filter_on";

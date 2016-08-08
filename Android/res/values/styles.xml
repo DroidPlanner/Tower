@@ -38,7 +38,6 @@
     </style>
 
     <style name="largeTelemetryText">
-        <item name="android:textColor">@color/very_dark_grey</item>
         <item name="android:textAppearance">?android:textAppearanceSmall</item>
         <item name="android:gravity">start</item>
     </style>
@@ -556,7 +555,8 @@
 
     <style name="Widget.Weather.Title">
         <item name="android:gravity">center</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:drawablePadding">20dp</item>
         <item name="android:layout_marginBottom">3dp</item>
     </style>
@@ -570,6 +570,36 @@
         <item name="android:drawablePadding">6dp</item>
         <item name="android:layout_marginBottom">2dp</item>
         <item name="android:textAppearance">?android:textAppearanceSmall</item>
+    </style>
+
+    <style name="Settings" />
+
+    <style name="Settings.Text">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Menu</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:background">@drawable/navigation_entry_bg</item>
+    </style>
+
+    <style name="Settings.Text.Primary">
+        <item name="android:textColor">@color/black_text</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="Settings.Text.Secondary">
+        <item name="android:textColor">@color/secondary_text_color</item>
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="Calibration" />
+
+    <style name="Calibration.Button">
+        <item name="android:minHeight">56dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Large</item>
+        <item name="android:background">@drawable/green_clickable_bg</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="CustomActionBarTheme.AppBarOverlay"

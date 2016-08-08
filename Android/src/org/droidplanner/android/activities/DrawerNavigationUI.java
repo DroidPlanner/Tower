@@ -1,6 +1,9 @@
 package org.droidplanner.android.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -19,6 +22,10 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.CapabilityApi;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.fragments.SettingsFragment;
@@ -30,7 +37,26 @@ import org.droidplanner.android.view.SlidingDrawer;
  * This abstract activity provides its children access to a navigation drawer
  * interface.
  */
-public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawer.OnDrawerOpenListener, SlidingDrawer.OnDrawerCloseListener, NavigationView.OnNavigationItemSelectedListener {
+public abstract class DrawerNavigationUI extends SuperUI implements
+    SlidingDrawer.OnDrawerOpenListener,
+    SlidingDrawer.OnDrawerCloseListener,
+    NavigationView.OnNavigationItemSelectedListener {
+
+    private static final IntentFilter filter = new IntentFilter();
+    static {
+        filter.addAction(AttributeEvent.TYPE_UPDATED);
+    }
+
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch(intent.getAction()){
+                case AttributeEvent.TYPE_UPDATED:
+                    updateCompassCalibrationAvailability();
+                    break;
+            }
+        }
+    };
 
     /**
      * Activates the navigation drawer when the home button is clicked.
@@ -60,7 +86,31 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
      */
     private NavigationView navigationView;
 
+    /**
+     * Compass calibration menu item. This is used to enable/disable access to compass calibration
+     * based on the vehicle type.
+     */
+    private MenuItem compassCalibration;
+
+    /**
+     * Navigation view settings menu
+     */
+    private NavigationView settingsMenu;
+
     private TextView accountLabel;
+
+    private final CapabilityApi.FeatureSupportListener featureSupportListener = new CapabilityApi.FeatureSupportListener() {
+        @Override
+        public void onFeatureSupportResult(String featureId, int result, Bundle resultInfo) {
+            switch(featureId) {
+                case CapabilityApi.FeatureIds.COMPASS_CALIBRATION:
+                    boolean isSupported = result == CapabilityApi.FEATURE_SUPPORTED;
+                    compassCalibration.setVisible(isSupported);
+                    compassCalibration.setEnabled(isSupported);
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -127,6 +177,8 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
 
         navigationView = (NavigationView) findViewById(R.id.navigation_drawer_view);
         navigationView.setNavigationItemSelectedListener(this);
+        Menu navigationMenu = navigationView.getMenu();
+        compassCalibration = navigationMenu.findItem(R.id.navigation_compass_calibration);
 
         View navigationHeaderView = navigationView.getHeaderView(0);
         accountLabel = (TextView) navigationHeaderView.findViewById(R.id.account_screen_label);
@@ -142,6 +194,34 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
             });
         }
 
+        settingsMenu = (NavigationView) findViewById(R.id.navigation_drawer_settings);
+        settingsMenu.setNavigationItemSelectedListener(this);
+
+    }
+
+    @Override
+    protected void onDroneConnected(){
+        super.onDroneConnected();
+        updateCompassCalibrationAvailability();
+        getBroadcastManager().registerReceiver(receiver, filter);
+    }
+
+    @Override
+    protected void onDroneDisconnected(){
+        super.onDroneDisconnected();
+        getBroadcastManager().unregisterReceiver(receiver);
+        updateCompassCalibrationAvailability();
+    }
+
+    private void updateCompassCalibrationAvailability() {
+        Drone drone = dpApp.getDrone();
+        if(drone != null){
+            CapabilityApi.getApi(drone).checkFeatureSupport(CapabilityApi.FeatureIds.COMPASS_CALIBRATION, featureSupportListener);
+        }
+        else{
+            compassCalibration.setVisible(false);
+            compassCalibration.setEnabled(false);
+        }
     }
 
     @Override
@@ -196,9 +276,14 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
                         .putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_ID, id);
                 break;
 
-            case R.id.navigation_calibration:
+            case R.id.navigation_imu_calibration:
                 mNavigationIntent = new Intent(this, ConfigurationActivity.class)
                         .putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_ID, id);
+                break;
+
+            case R.id.navigation_compass_calibration:
+                mNavigationIntent = new Intent(this, ConfigurationActivity.class)
+                    .putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_ID, id);
                 break;
 
             case R.id.navigation_settings:
@@ -259,6 +344,11 @@ public abstract class DrawerNavigationUI extends SuperUI implements SlidingDrawe
             default:
                 navigationView.setCheckedItem(navDrawerEntryId);
                 break;
+        }
+
+        MenuItem settings = settingsMenu.getMenu().findItem(R.id.navigation_settings);
+        if(settings != null){
+            settings.setChecked(false);
         }
     }
 

@@ -79,6 +79,9 @@ public class AppService extends Service {
 
         dpApp = (DroidPlannerApp) getApplication();
         dpApp.createFileStartLogging();
+
+        dpApp.getSoundManager().start();
+
         final Drone drone = dpApp.getDrone();
 
         final Context context = getApplicationContext();
@@ -105,6 +108,8 @@ public class AppService extends Service {
 
         if (notificationHandler != null)
             notificationHandler.terminate();
+
+        dpApp.getSoundManager().stop();
 
         bringDownCellularNetwork();
 

@@ -28,7 +28,7 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.notifications.TTSNotificationProvider;
 
-public class FragmentSetupIMU extends ApiListenerFragment  {
+public class FragmentSetupIMU extends ApiListenerFragment {
 
 	private final static long TIMEOUT_MAX = 30000l; //ms
     private final static long UPDATE_TIMEOUT_PERIOD = 100l; //ms
@@ -350,9 +350,5 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
 		} else {
 			textViewTimeOut.setText(timeLeftStr + "0s");
 		}
-	}
-
-	public static CharSequence getTitle(Context context) {
-		return context.getText(R.string.setup_imu_title);
 	}
 }
