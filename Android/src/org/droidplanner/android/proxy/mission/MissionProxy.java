@@ -32,11 +32,7 @@ import com.o3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
 import com.o3dr.services.android.lib.util.MathUtils;
 
 import org.droidplanner.android.maps.DPMap;
-import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
-import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
-import org.droidplanner.android.proxy.mission.item.markers.PolygonMarkerInfo;
-import org.droidplanner.android.proxy.mission.item.markers.SurveyMarkerInfoProvider;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.IO.MissionReader;
@@ -69,11 +65,13 @@ public class MissionProxy implements DPMap.PathSource {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (AttributeEvent.MISSION_DRONIE_CREATED.equals(action)
-                    || AttributeEvent.MISSION_UPDATED.equals(action)
-                    || AttributeEvent.MISSION_RECEIVED.equals(action)) {
-                Mission droneMission = drone.getAttribute(AttributeType.MISSION);
-                load(droneMission);
+            switch (action) {
+                case AttributeEvent.MISSION_DRONIE_CREATED:
+                case AttributeEvent.MISSION_UPDATED:
+                case AttributeEvent.MISSION_RECEIVED:
+                    Mission droneMission = drone.getAttribute(AttributeType.MISSION);
+                    load(droneMission);
+                    break;
             }
         }
     };
@@ -155,25 +153,10 @@ public class MissionProxy implements DPMap.PathSource {
     }
 
     /**
-     * @return the map markers corresponding to this mission's command set.
-     */
-    public List<MarkerInfo> getMarkersInfos() {
-        List<MarkerInfo> markerInfos = new ArrayList<MarkerInfo>();
-
-        for (MissionItemProxy itemProxy : missionItemProxies) {
-            List<MarkerInfo> itemMarkerInfos = itemProxy.getMarkerInfos();
-            if (itemMarkerInfos != null && !itemMarkerInfos.isEmpty()) {
-                markerInfos.addAll(itemMarkerInfos);
-            }
-        }
-        return markerInfos;
-    }
-
-    /**
      * Update the state for this object based on the state of the Mission
      * object.
      */
-    public void load(Mission mission) {
+    private void load(Mission mission) {
         load(mission, true);
     }
 
@@ -181,21 +164,23 @@ public class MissionProxy implements DPMap.PathSource {
         if (mission == null)
             return;
 
-        if (isNew) {
-            currentMission = null;
-            clearUndoBuffer();
+        if(!mission.equals(currentMission)) {
+            if (isNew) {
+                currentMission = null;
+                clearUndoBuffer();
+            }
+
+            selection.mSelectedItems.clear();
+            missionItemProxies.clear();
+
+            for (MissionItem item : mission.getMissionItems()) {
+                missionItemProxies.add(new MissionItemProxy(this, item));
+            }
+
+            selection.notifySelectionUpdate();
+
+            notifyMissionUpdate(isNew);
         }
-
-        selection.mSelectedItems.clear();
-        missionItemProxies.clear();
-
-        for (MissionItem item : mission.getMissionItems()) {
-            missionItemProxies.add(new MissionItemProxy(this, item));
-        }
-
-        selection.notifySelectionUpdate();
-
-        notifyMissionUpdate(isNew);
     }
 
     private void clearUndoBuffer(){
@@ -406,43 +391,21 @@ public class MissionProxy implements DPMap.PathSource {
      * @return The order of the first waypoint.
      */
     public int getFirstWaypoint(){
-        List<MarkerInfo> markerInfos = getMarkersInfos();
+        if(missionItemProxies.isEmpty())
+            return 0;
 
-        if(!markerInfos.isEmpty()) {
-            MarkerInfo markerInfo = markerInfos.get(0);
-            if(markerInfo instanceof MissionItemMarkerInfo){
-                return getOrder(((MissionItemMarkerInfo)markerInfo).getMarkerOrigin());
-            }
-            else if(markerInfo instanceof SurveyMarkerInfoProvider){
-                return getOrder(((SurveyMarkerInfoProvider)markerInfo).getMarkerOrigin());
-            }
-            else if(markerInfo instanceof PolygonMarkerInfo){
-                return getOrder(((PolygonMarkerInfo)markerInfo).getMarkerOrigin());
-            }
-        }
-
-        return 0;
+        return getOrder(missionItemProxies.get(0));
     }
 
     /**
      * @return The order for the last waypoint.
      */
     public int getLastWaypoint(){
-        List<MarkerInfo> markerInfos = getMarkersInfos();
+        int lastIndex = missionItemProxies.size() -1;
+        if(lastIndex < 0)
+            return 0;
 
-        if(!markerInfos.isEmpty()) {
-            MarkerInfo markerInfo = markerInfos.get(markerInfos.size() - 1);
-            if(markerInfo instanceof MissionItemMarkerInfo){
-                return getOrder(((MissionItemMarkerInfo)markerInfo).getMarkerOrigin());
-            }
-            else if(markerInfo instanceof SurveyMarkerInfoProvider){
-                return getOrder(((SurveyMarkerInfoProvider)markerInfo).getMarkerOrigin());
-            }
-            else if(markerInfo instanceof PolygonMarkerInfo){
-                return getOrder(((PolygonMarkerInfo)markerInfo).getMarkerOrigin());
-            }
-        }
-        return 0;
+        return getOrder(missionItemProxies.get(lastIndex));
     }
 
     /**
@@ -503,13 +466,6 @@ public class MissionProxy implements DPMap.PathSource {
         selection.addToSelection(itemsToSelect);
 
         notifyMissionUpdate();
-    }
-
-    /**
-     * Reverse the order of the mission items renders.
-     */
-    public void reverse() {
-        Collections.reverse(missionItemProxies);
     }
 
     public void swap(int fromIndex, int toIndex) {

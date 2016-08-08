@@ -100,8 +100,6 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener, 
         waypointSelector.addScrollListener(this);
         mission = drone.getAttribute(AttributeType.MISSION);
 
-        final DroidPlannerApp dpApp = (DroidPlannerApp) getActivity().getApplication();
-
         final MissionProxy missionProxy = getMissionProxy();
         waypointSelectorAdapter = new NumericWheelAdapter(getActivity().getApplicationContext(),
                 R.layout.wheel_text_centered,

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <View
+        android:layout_height="1dp"
+        android:layout_width="match_parent"
+        android:background="@android:color/holo_green_dark"
+        android:layout_gravity="center_vertical"/>
+
+    <ImageView
+        android:id="@+id/fastscroller_bubble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/fastscroller_track_padding"
+        android:layout_marginTop="@dimen/fastscroller_track_padding"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/horizontal_fastscroller_bubble"/>
+
+    <ImageButton
+        android:id="@+id/fastscroller_handle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/horizontal_fastscroller_handle"
+        android:elevation="4dp"
+        android:layout_gravity="center_vertical"
+        android:visibility="invisible"
+        tools:visibility="visible"/>
+
+</FrameLayout>

@@ -28,18 +28,15 @@ import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.DroneMap;
 import org.droidplanner.android.graphic.map.GuidedScanROIMarkerInfo;
-import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
 import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.view.spinnerWheel.adapters.LengthWheelAdapter;
 
-public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSelectedListener, DroneMap.MapMarkerProvider {
+public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSelectedListener {
 
     private static final double DEFAULT_MIN_RADIUS = 2; //meters
-
-    private static final int ROI_TARGET_MARKER_INDEX = 0;
 
     private static final IntentFilter eventFilter = new IntentFilter(AttributeEvent.FOLLOW_UPDATE);
 
@@ -61,15 +58,8 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
 
     private final GuidedScanROIMarkerInfo roiMarkerInfo = new GuidedScanROIMarkerInfo();
 
-    private final MarkerInfo[] emptyMarkers = {};
-    private final MarkerInfo[] markers = new MarkerInfo[1];
-
     private FollowType lastFollowType;
     private Bundle lastFollowParams;
-
-    {
-        markers[ROI_TARGET_MARKER_INDEX] = roiMarkerInfo;
-    }
 
     private TextView modeDescription;
     private Spinner spinner;
@@ -133,7 +123,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
             onFollowTypeUpdate(followType, followState.getParams());
         }
 
-        parent.addMapMarkerProvider(this);
+        parent.addMarker(roiMarkerInfo);
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
 
@@ -205,7 +195,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
     @Override
     public void onApiDisconnected() {
         super.onApiDisconnected();
-        parent.removeMapMarkerProvider(this);
+        parent.removeMarker(roiMarkerInfo);
         getBroadcastManager().unregisterReceiver(eventReceiver);
     }
 
@@ -286,14 +276,6 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
         } else {
             roiHeightWheel.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public MarkerInfo[] getMapMarkers() {
-        if (roiMarkerInfo.isVisible())
-            return markers;
-        else
-            return emptyMarkers;
     }
 
     private static class FollowTypesAdapter extends ArrayAdapter<FollowType> {

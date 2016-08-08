@@ -6,16 +6,28 @@ import android.location.Location;
 import com.google.android.gms.maps.model.LatLng;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DroneHelper {
-	static public LatLng CoordToLatLang(LatLong coord) {
+	static public LatLng coordToLatLng(LatLong coord) {
 		return new LatLng(coord.getLatitude(), coord.getLongitude());
 	}
 
-    public static LatLong LatLngToCoord(LatLng point) {
+	public static List<LatLng> coordToLatng(List<? extends LatLong> coords){
+		List<LatLng> points = new ArrayList<>(coords.size());
+		for(LatLong coord: coords){
+			points.add(coordToLatLng(coord));
+		}
+
+		return points;
+	}
+
+    public static LatLong latLngToCoord(LatLng point) {
         return new LatLong((float)point.latitude, (float) point.longitude);
     }
 
-	public static LatLong LocationToCoord(Location location) {
+	public static LatLong locationToCoord(Location location) {
 		return new LatLong((float) location.getLatitude(), (float) location.getLongitude());
 	}
 

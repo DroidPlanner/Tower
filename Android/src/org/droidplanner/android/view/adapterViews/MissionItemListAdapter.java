@@ -120,7 +120,7 @@ public class MissionItemListAdapter extends ReorderRecyclerView.ReorderAdapter<M
         final TextView nameView = viewHolder.nameView;
         final TextView altitudeView = viewHolder.altitudeView;
 
-        final MissionProxy missionProxy = proxy.getMission();
+        final MissionProxy missionProxy = proxy.getMissionProxy();
         final MissionItem missionItem = proxy.getMissionItem();
 
         nameView.setText(String.format("%3d", missionProxy.getOrder(proxy)));

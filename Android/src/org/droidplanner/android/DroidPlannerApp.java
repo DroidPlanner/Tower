@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -28,16 +29,18 @@ import com.o3dr.services.android.lib.model.AbstractCommandListener;
 import com.squareup.leakcanary.LeakCanary;
 
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
+import org.droidplanner.android.droneshare.UploaderService;
+import org.droidplanner.android.droneshare.data.DroneShareDB;
+import org.droidplanner.android.droneshare.data.SessionDB;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.LogToFileTree;
+import org.droidplanner.android.utils.TLogUtils;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.file.IO.ExceptionWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.fabric.sdk.android.Fabric;
@@ -54,6 +57,8 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
     public static final String EXTRA_ESTABLISH_CONNECTION = "extra_establish_connection";
 
     private static final long EVENTS_DISPATCHING_PERIOD = 200L; //MS
+
+    private static final long INVALID_SESSION_ID = -1L;
 
     private static final AtomicBoolean isCellularNetworkOn = new AtomicBoolean(false);
 
@@ -127,30 +132,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         }
     };
 
-    private final Runnable eventsDispatcher = new Runnable() {
-        @Override
-        public void run() {
-            handler.removeCallbacks(this);
-
-            //Go through the events buffer and empty it
-            for(Map.Entry<String, Bundle> entry: eventsBuffer.entrySet()){
-                String event = entry.getKey();
-                Bundle extras = entry.getValue();
-
-                final Intent droneIntent = new Intent(event);
-                if (extras != null)
-                    droneIntent.putExtras(extras);
-                lbm.sendBroadcast(droneIntent);
-            }
-
-            eventsBuffer.clear();
-
-            handler.postDelayed(this, EVENTS_DISPATCHING_PERIOD);
-        }
-    };
-
-    private final Map<String, Bundle> eventsBuffer = new LinkedHashMap<>(200);
-
     private final Handler handler = new Handler();
     private final List<ApiListener> apiListeners = new ArrayList<ApiListener>();
 
@@ -165,10 +146,25 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
 
     private LogToFileTree logToFileTree;
 
+    private long currentSessionId = INVALID_SESSION_ID;
+    private SessionDB sessionDB;
+    private DroneShareDB droneShareDb;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
+        final Context context = getApplicationContext();
+
+        dpPrefs = DroidPlannerPrefs.getInstance(context);
+        lbm = LocalBroadcastManager.getInstance(context);
+
+        initLoggingAndAnalytics();
+        initDronekit();
+        initDatabases();
+    }
+
+    private void initLoggingAndAnalytics(){
         //Init leak canary
         LeakCanary.install(this);
 
@@ -195,9 +191,10 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         if(BuildConfig.ENABLE_CRASHLYTICS) {
             Fabric.with(context, new Crashlytics());
         }
+    }
 
-        dpPrefs = DroidPlannerPrefs.getInstance(context);
-        lbm = LocalBroadcastManager.getInstance(context);
+    private void initDronekit(){
+        Context context = getApplicationContext();
 
         controlTower = new ControlTower(context);
         drone = new Drone(context);
@@ -207,6 +204,13 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         intentFilter.addAction(ACTION_TOGGLE_DRONE_CONNECTION);
 
         registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    private void initDatabases(){
+        Context context = getApplicationContext();
+        sessionDB = new SessionDB(context);
+        droneShareDb = new DroneShareDB(context);
+        cleanupDroneSessions();
     }
 
     public void addApiListener(ApiListener listener) {
@@ -306,26 +310,39 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
     }
 
     private ConnectionParameter retrieveConnectionParameters() {
-        final int connectionType = dpPrefs.getConnectionParameterType();
+        final @ConnectionType.Type int connectionType = dpPrefs.getConnectionParameterType();
+
+        // Generate the uri for logging the tlog data for this session.
+        Uri tlogLoggingUri = TLogUtils.getTLogLoggingUri(getApplicationContext(),
+            connectionType, System.currentTimeMillis());
 
         ConnectionParameter connParams;
         switch (connectionType) {
             case ConnectionType.TYPE_USB:
-                connParams = ConnectionParameter.newUsbConnection(dpPrefs.getUsbBaudRate());
+                connParams = ConnectionParameter.newUsbConnection(dpPrefs.getUsbBaudRate(),
+                    tlogLoggingUri, EVENTS_DISPATCHING_PERIOD);
                 break;
 
             case ConnectionType.TYPE_UDP:
                 if (dpPrefs.isUdpPingEnabled()) {
-                    connParams = ConnectionParameter.newUdpConnection(dpPrefs.getUdpServerPort(),
-                        dpPrefs.getUdpPingReceiverIp(), dpPrefs.getUdpPingReceiverPort(), "Hello".getBytes());
+                    connParams = ConnectionParameter.newUdpWithPingConnection(
+                        dpPrefs.getUdpServerPort(),
+                        dpPrefs.getUdpPingReceiverIp(),
+                        dpPrefs.getUdpPingReceiverPort(),
+                        "Hello".getBytes(),
+                        ConnectionType.DEFAULT_UDP_PING_PERIOD,
+                        tlogLoggingUri,
+                        EVENTS_DISPATCHING_PERIOD);
                 }
                 else{
-                    connParams = ConnectionParameter.newUdpConnection(dpPrefs.getUdpServerPort());
+                    connParams = ConnectionParameter.newUdpConnection(dpPrefs.getUdpServerPort(),
+                        tlogLoggingUri, EVENTS_DISPATCHING_PERIOD);
                 }
                 break;
 
             case ConnectionType.TYPE_TCP:
-                connParams = ConnectionParameter.newTcpConnection(dpPrefs.getTcpServerIp(), dpPrefs.getTcpServerPort());
+                connParams = ConnectionParameter.newTcpConnection(dpPrefs.getTcpServerIp(),
+                    dpPrefs.getTcpServerPort(), tlogLoggingUri, EVENTS_DISPATCHING_PERIOD);
                 break;
 
             case ConnectionType.TYPE_BLUETOOTH:
@@ -337,7 +354,8 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
                 } else {
-                    connParams = ConnectionParameter.newBluetoothConnection(btAddress);
+                    connParams = ConnectionParameter.newBluetoothConnection(btAddress,
+                        tlogLoggingUri, EVENTS_DISPATCHING_PERIOD);
                 }
                 break;
 
@@ -355,6 +373,9 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         switch (event) {
             case AttributeEvent.STATE_CONNECTED: {
                 handler.removeCallbacks(disconnectionTask);
+
+                startDroneSession(System.currentTimeMillis());
+
                 startService(new Intent(getApplicationContext(), AppService.class));
 
                 final boolean isReturnToMeOn = dpPrefs.isReturnToMeEnabled();
@@ -379,27 +400,28 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
                 if (extras != null)
                     droneIntent.putExtras(extras);
                 lbm.sendBroadcast(droneIntent);
-
-                handler.postDelayed(eventsDispatcher, EVENTS_DISPATCHING_PERIOD);
                 break;
             }
 
             case AttributeEvent.STATE_DISCONNECTED: {
-                handler.removeCallbacks(eventsDispatcher);
-
                 shouldWeTerminate();
 
                 final Intent droneIntent = new Intent(event);
                 if (extras != null)
                     droneIntent.putExtras(extras);
                 lbm.sendBroadcast(droneIntent);
+
+                endDroneSession();
+                // Fire the droneshare log uploader
+                UploaderService.kickStart(getApplicationContext());
                 break;
             }
 
             default: {
-                //Buffer the remaining events, and only fire them at 30hz
-                //TODO: remove this once the buffer is placed on the 3DR Services side
-                eventsBuffer.put(event, extras);
+                final Intent droneIntent = new Intent(event);
+                if (extras != null)
+                    droneIntent.putExtras(extras);
+                lbm.sendBroadcast(droneIntent);
                 break;
             }
         }
@@ -432,5 +454,42 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         if(logToFileTree != null) {
             logToFileTree.stopLoggingThread();
         }
+    }
+
+    private void startDroneSession(long startTime) {
+        ConnectionParameter connParams = drone.getConnectionParameter();
+        @ConnectionType.Type int connectionType = connParams.getConnectionType();
+        final String connectionTypeLabel = ConnectionType.getConnectionTypeLabel(connectionType);
+        Uri tlogLoggingUri = connParams.getTLogLoggingUri();
+
+        // Record the starting drone session
+        currentSessionId = this.sessionDB.startSession(startTime, connectionTypeLabel, tlogLoggingUri);
+        if(tlogLoggingUri != null && dpPrefs.isDroneshareEnabled()){
+            //Create an entry in the droneshare upload queue
+            droneShareDb.queueDataUploadEntry(dpPrefs.getDroneshareLogin(), currentSessionId);
+        }
+    }
+
+    private void endDroneSession() {
+        //log into the database the disconnection time.
+        if(currentSessionId != INVALID_SESSION_ID) {
+            this.sessionDB.endSessions(System.currentTimeMillis(), currentSessionId);
+        }
+    }
+
+    private void cleanupDroneSessions(){
+        //Cleanup all the opened drone sessions
+        sessionDB.cleanupOpenedSessions(System.currentTimeMillis());
+
+        // Check for droneshare logs to upload.
+        UploaderService.kickStart(getApplicationContext());
+    }
+
+    public DroneShareDB getDroneShareDatabase(){
+        return droneShareDb;
+    }
+
+    public SessionDB getSessionDatabase(){
+        return sessionDB;
     }
 }

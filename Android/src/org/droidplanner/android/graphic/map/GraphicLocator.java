@@ -9,7 +9,7 @@ import com.o3dr.services.android.lib.coordinate.LatLong;
 import org.droidplanner.android.R;
 import org.droidplanner.android.maps.MarkerInfo;
 
-public class GraphicLocator extends MarkerInfo.SimpleMarkerInfo {
+public class GraphicLocator extends MarkerInfo {
 
 	private LatLong lastPosition;
 

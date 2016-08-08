@@ -32,6 +32,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * @deprecated
+ * TODO: remove this class, and its dependencies
+ *
  * This implements the map locator activity. The map locator activity allows the user to find
  * a lost drone using last known GPS positions from the tlogs.
  */
@@ -186,7 +189,7 @@ public class LocatorActivity extends DrawerNavigationUI implements LocatorListFr
             return;
         }
 
-        //Get the file's absolute path from the incoming intent
+//        //Get the file's absolute path from the incoming intent
 //        final String tlogAbsolutePath = returnIntent.getStringExtra(ServiceDataContract.EXTRA_TLOG_ABSOLUTE_PATH);
 //
 //        if (tlogOpener != null)

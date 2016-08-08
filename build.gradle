@@ -10,7 +10,7 @@ buildscript {
         okhttp_version = '2.5.0'
 
         android_build_sdk_version = 23
-        android_build_tools_version = '23.0.2'
+        android_build_tools_version = '23.0.3'
         android_build_target_sdk_version = 22
         android_build_min_sdk_version = 14
     }
@@ -31,11 +31,11 @@ buildscript {
 }
 
 def getMavenUsername(){
-    return hasProperty('DROIDPLANNER_MAVEN_USERNAME') ? DROIDPLANNER_MAVEN_USERNAME : ''
+    return hasProperty('COM_O3DR_MAVEN_USERNAME') ? COM_O3DR_MAVEN_USERNAME : ''
 }
 
 def getMavenApiKey(){
-    return hasProperty('DROIDPLANNER_MAVEN_APIKEY') ? DROIDPLANNER_MAVEN_APIKEY : ''
+    return hasProperty('COM_O3DR_MAVEN_APIKEY') ? COM_O3DR_MAVEN_APIKEY : ''
 }
 
 def getMavenRepoUrl(){
