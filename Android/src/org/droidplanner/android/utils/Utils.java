@@ -28,6 +28,7 @@ public class Utils {
 
 	public static final int MIN_DISTANCE = 0; //meter
 	public static final int MAX_DISTANCE = 1000; // meters
+	public static final int MAX_RADIUS = 255; //meters, should be used with mission items which implement NAV_LOITER_TURNS
 
 	public static final int INVALID_APP_VERSION_CODE = -1;
 
