@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -162,6 +165,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
+		setHasOptionsMenu(true);
 		final View view = inflater.inflate(R.layout.fragment_drone_map, viewGroup, false);
 		updateMapFragment();
 		return view;
@@ -306,6 +310,12 @@ public abstract class DroneMap extends ApiListenerFragment {
 		return 0;
 	}
 
+	protected void clearFlightPath(){
+		if (mMapFragment != null) {
+			mMapFragment.clearFlightPath();
+		}
+	}
+
 	/**
 	 * Adds padding around the edges of the map.
 	 * 
@@ -333,6 +343,24 @@ public abstract class DroneMap extends ApiListenerFragment {
 	public List<LatLong> projectPathIntoMap(List<LatLong> path) {
 		return mMapFragment.projectPathIntoMap(path);
 	}
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_drone_map, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menu_map_clear_flight_path:
+                clearFlightPath();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 	/**
 	 * Set map panning mode on the specified target.
