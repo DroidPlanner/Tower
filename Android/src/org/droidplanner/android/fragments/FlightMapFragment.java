@@ -61,7 +61,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
             if (AttributeEvent.STATE_ARMING.equals(action)) {
                 final State droneState = drone.getAttribute(AttributeType.STATE);
                 if (droneState.isArmed()) {
-                    mMapFragment.clearFlightPath();
+                    clearFlightPath();
                 }
             }
         }
