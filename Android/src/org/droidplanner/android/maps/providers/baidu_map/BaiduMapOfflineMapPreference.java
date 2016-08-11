@@ -23,6 +23,8 @@ import com.baidu.mapapi.map.offline.MKOLUpdateElement;
 import com.baidu.mapapi.map.offline.MKOfflineMap;
 import com.baidu.mapapi.map.offline.MKOfflineMapListener;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.ArrayList;
 
 import org.droidplanner.android.R;
@@ -36,7 +38,7 @@ public class BaiduMapOfflineMapPreference extends DialogPreference implements MK
     private LocalMapAdapter mLAdapter = null;
     private LinearLayout mCityListLayout = null;
     private LinearLayout mLocalMapLayout = null;
-    private ArrayList<MKOLUpdateElement> mLocalMapList = null; // downloaded offline map list
+    private List<MKOLUpdateElement> mLocalMapList = null; // downloaded offline map list
     private static final int DATA_SIZE_ONE_KB = 1024 * 1024;
     private static final int DATA_SIZE_UNIT_KB = 1024;
     private static final double DATA_SIZE_UNIT_MB = 1024 * 1024.0;
@@ -86,7 +88,7 @@ public class BaiduMapOfflineMapPreference extends DialogPreference implements MK
         // get downloaded offline map info
         mLocalMapList = mOffline.getAllUpdateInfo();
         if (mLocalMapList == null) {
-            mLocalMapList = new ArrayList<MKOLUpdateElement>();
+            mLocalMapList = Collections.emptyList();
         }
 
         ListView localMapListView = (ListView) view.findViewById(R.id.localmaplist);
@@ -232,7 +234,7 @@ public class BaiduMapOfflineMapPreference extends DialogPreference implements MK
     public void updateView() {
         mLocalMapList = mOffline.getAllUpdateInfo();
         if (mLocalMapList == null) {
-            mLocalMapList = new ArrayList<MKOLUpdateElement>();
+            mLocalMapList = Collections.emptyList();;
         }
         mLAdapter.notifyDataSetChanged();
     }
@@ -295,8 +297,6 @@ public class BaiduMapOfflineMapPreference extends DialogPreference implements MK
      *  list adapter for managing offline map
      */
     public class LocalMapAdapter extends BaseAdapter {
-        private View currentView = null;
-
         @Override
         public int getCount() {
             return mLocalMapList.size();
@@ -315,10 +315,9 @@ public class BaiduMapOfflineMapPreference extends DialogPreference implements MK
         @Override
         public View getView(int index, View view, ViewGroup arg2) {
             MKOLUpdateElement e = (MKOLUpdateElement) getItem(index);
-            if (currentView == null) {
-                currentView = View.inflate(BaiduMapOfflineMapPreference.this.getContext(), R.layout.list_baidumap_offline_localmap_item, null);
+            if (view == null) {
+                view = View.inflate(BaiduMapOfflineMapPreference.this.getContext(), R.layout.list_baidumap_offline_localmap_item, null);
             }
-            view = currentView;
             initViewItem(view, e);
             return view;
         }
