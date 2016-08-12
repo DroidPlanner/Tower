@@ -122,7 +122,6 @@
     <string name="waypointType_Survey">Survey</string>
     <string name="waypointType_Spline_Survey">Spline Survey</string>
     <string name="waypointType_BuildingMapper">Structure Scan</string>
-    <string name="waypointType_Do_Jump">Do Jump</string>
 
     <!-- Waypoint info -->
     <string name="waypointInfo_Land">Pousa o veículo no local atual. Você deve sair manualmente do modo automático para desarmar os motores.</string>
@@ -137,7 +136,7 @@
     <string name="waypointInfo_SetServo">Movimenta um servo para um determinado valor PWM.</string>
     <string name="waypointInfo_EpmGrabber">Solta a carga do agarrador.</string>
     <string name="waypointInfo_ROI">Define a altitude e o local para onde o veículo deve apontar e mirar uma câmera.</string>
-    <string name="waypointInfo_DoJump">Salta para um waypoint específico.</string>
+	<string name="waypointInfo_DoJump">Salta para um waypoint específico.</string>
     <!-- Custom waypoint info -->
     <string name="pwm">PWM</string>
     <string name="repeat_count">Número de repetições</string>
@@ -200,7 +199,7 @@
 
     <!-- Accelerometer Setup Resource Strings -->
     <string name="setup_imu_title">Calibração do acelerômetro</string>
-    <string name="setup_imu_start">Aperte CALIBRAR para começar a calibração do IMU. Certifique-se que o veículo está situado em uma superfície plana antes de começar o processo de calibração.</string>
+    <string name="setup_imu_start">Aperte CALIBRAR para começar a calibração do IMU. Certifique-se que o veículo esteja situado em uma superfície plana antes de começar o processo de calibração.</string>
     <string name="setup_imu_normal">Coloque o veículo em sua posição NORMAL, garantindo que não se mova muito e aperte Próximo.</string>
     <string name="setup_imu_left"> Coloque o veículo sobre sua ESQUERDA, garantindo que não se mova muito e aperte Próximo.</string>
     <string name="setup_imu_right">Coloque o veículo sobre sua DIREITA, garantindo que não se mova muito e aperte Próximo.</string>
@@ -338,7 +337,7 @@
     <string name="pref_title_screen">Tela</string>
     <string name="pref_title_notifications">Notificações</string>
     <string name="firmware_version">Versão do firmware</string>
-    <string name="usage_statistics">Estatísticas de uso</string>
+	<string name="usage_statistics">Estatísticas de uso</string>
     <string name="pref_usage_statistics_title">Enviar estatísticas de uso</string>
     <string name="pref_usage_statistics_summary">Ajude a melhorar o Tower enviando as estatísticas de uso.</string>
 
@@ -433,6 +432,7 @@
     <string name="pref_title_download_menu_option">Adicionar \'Baixar Mapa\' ao menu</string>
     <string name="pref_title_enable_offline_map_layer">Habilitar camada de mapa offline</string>
     <string name="label_download_map">Baixar mapa</string>
+    <string name="instructions_map_download_warning">Área muito larga, aumente o zoom.</string>
     <string name="instructions_map_download_selection">Pan and zoom to adjust the map area to save</string>
     <string name="instructions_tap_to_save_map">Tocar para guardar o mapa</string>
     <string name="label_map_saved">Área do mapa salva!</string>
@@ -470,10 +470,10 @@
     <string name="label_skip">Pular</string>
 
     <!-- Telemetry widget labels -->
-    <string name="label_widget_solo_video">Solo Video</string>
-    <string name="description_widget_solo_video">Mostra o video do 3DR Solo</string>
-    <string name="label_widget_uvc_video">UVC Video</string>
-    <string name="description_widget_uvc_video">Mostra o video usando um dispositivo UVC</string>
+    <string name="label_widget_solo_video">Solo Vídeo</string>
+    <string name="description_widget_solo_video">Mostra o vídeo do 3DR Solo</string>
+    <string name="label_widget_uvc_video">UVC Vídeo</string>
+    <string name="description_widget_uvc_video">Mostra o vídeo usando um dispositivo UVC</string>
     <string name="label_widget_attitude_speed_info">Velocidade &amp; Atitude</string>
     <string name="description_widget_attitude_speed_info">Mostra a velocidade do veículo e os dados de atitude</string>
     <string name="label_widget_vehicle_diagnostics">Diagnósticos</string>
@@ -505,7 +505,7 @@
     <string name="label_vertical_position">Posição vertical</string>
     <string name="label_absolute_predicted_estimate">Absolute predicted estimate</string>
     <string name="label_relative_predicted_estimate">Relative predicted estimate</string>
-    <string name="error_no_video">Video não disponível</string>
+    <string name="error_no_video">Vídeo não disponível</string>
     <string name="label_repeat_indefinitely">Repetir indefinidamente</string>
     <string name="title_ekf_status_viewer">EKF</string>
     <string name="title_vibration_viewer">Vibração</string>
@@ -523,8 +523,8 @@
     <string name="label_photo">Foto</string>
     <string name="label_record">Gravar</string>
     <string name="label_widgets_list">Lista de Widgets</string>
-    <string name="label_solo_video_stream">Streaming de video do 3DR Solo</string>
-    <string name="label_custom_video_stream">Streaming de video customizado</string>
+    <string name="label_solo_video_stream">Streaming de vídeo do 3DR Solo</string>
+    <string name="label_custom_video_stream">Streaming de vídeo customizado</string>
     <string name="hint_custom_video_stream_udp_port">0000</string>
     <string name="label_udp_port">Porta UDP:</string>
 
@@ -583,5 +583,6 @@
     <string name="uvc_device">Dispositivo</string>
     <string name="uvc_device_refresh">Atualizar</string>
     <string name="uvc_device_no_device">Nenhum dispositivo UVC encontrado</string>
-
+    <string name="pref_advanced_settings_title">Configurações Avançadas</string>
+    
 </resources>
