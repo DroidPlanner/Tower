@@ -331,6 +331,7 @@
     <string name="pref_title_google_maps">Google Maps Preferences</string>
     <string name="pref_title_google_tile_provider">Google Tile Provider</string>
     <string name="activity_title_map_provider_preferences">Map Provider Preferences</string>
+
     <string name="pref_ui_realtime_footprints_title">Realtime camera footprint</string>
     <string name="pref_ui_realtime_footprints_summary">Display the camera projection on the ground in realtime</string>
 
@@ -597,4 +598,28 @@
     <string name="pref_title_tile_provider_preferences">Tile Provider Preferences</string>
     <string name="pref_advanced_settings_title">Advanced Settings</string>
     <string name="label_fpv">FPV</string>
+
+    <!-- BaiduMap -->
+    <string name="pref_title_baidu_maps">Baidu Maps Preferences</string>
+    <string name="pref_baidu_map_offline_preference_title">Baidu Offline map download</string>
+    <string name="pref_baidu_map_offline_preference_start">Start</string>
+    <string name="pref_baidu_map_offline_preference_stop">Stop</string>
+    <string name="pref_baidu_map_offline_preference_view">View</string>
+    <string name="pref_baidu_map_offline_preference_remove">Remove</string>
+    <string name="pref_baidu_map_offline_preference_search">Search</string>
+    <string name="pref_baidu_map_offline_preference_city_list">City list</string>
+    <string name="pref_baidu_map_offline_preference_download_manage">Download manage</string>
+    <string name="pref_baidu_map_offline_preference_downloaded_label">Downloaded:--</string>
+    <string name="pref_baidu_map_offline_preference_downloaded_cities">Downloaded cities</string>
+    <string name="pref_baidu_map_offline_preference_download_available">Download available</string>
+    <string name="pref_baidu_map_offline_preference_download_latest">Latest</string>
+    <string name="pref_baidu_map_offline_preference_hot_cities">Hot cities</string>
+    <string name="pref_baidu_map_offline_preference_all_cities">All cities</string>
+    <string name="pref_baidu_map_offline_preference_default_city">BeiJing</string>
+    <string name="pref_baidu_map_offline_preference_default_city_id">131</string>
+    <string name="pref_baidu_map_offline_download_start_message">Begin to download offline map. City ID: %d</string>
+    <string name="pref_baidu_map_offline_download_stop_message">Pause downloading offline map. City ID: %d</string>
+    <string name="pref_baidu_map_offline_download_remove_message">Remove offline map. City ID: %d</string>
+    <string name="baidu_map_sdk_initializer_permission_error_message">BaiduMap: API Keycode error, please check the keycode in AndroidManifest.xml!</string>
+    <string name="baidu_map_sdk_initializer_network_error_message">BaiduMap: Network error!</string>
 </resources>
