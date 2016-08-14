@@ -368,7 +368,7 @@ public class ParamsFragment extends ApiListenerListFragment implements
 
     private void saveParametersToFile() {
         final String defaultFilename = TextUtils.isEmpty(openedParamsFilename)
-                ? FileStream.getParameterFilename("Parameters-")
+                ? FileStream.getParameterFilename("Parameters")
                 : openedParamsFilename;
 
         final SupportEditInputDialog dialog = SupportEditInputDialog.newInstance(PARAMETERS_FILENAME_DIALOG_TAG,
