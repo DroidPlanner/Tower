@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.CircularArray;
-import android.text.TextUtils;
 import android.util.Pair;
 import android.widget.Toast;
 
@@ -780,8 +779,8 @@ public class MissionProxy implements DPMap.PathSource {
         return polygonPaths;
     }
 
-    public void writeMissionToFile(String filename) {
-        MissionApi.getApi(drone).saveMission(generateMission(), Uri.fromFile(new File(filename)), new AbstractCommandListener() {
+    public void writeMissionToFile(File saveFile) {
+        MissionApi.getApi(drone).saveMission(generateMission(), Uri.fromFile(saveFile), new AbstractCommandListener() {
             @Override
             public void onSuccess() {
                 Toast.makeText(context, R.string.file_saved_success, Toast.LENGTH_SHORT)
@@ -806,11 +805,11 @@ public class MissionProxy implements DPMap.PathSource {
         });
     }
 
-    public void readMissionFromFile(final String filepath){
-        if(TextUtils.isEmpty(filepath))
+    public void readMissionFromFile(final File file){
+        if(file == null)
             return;
 
-        Uri fileUri = Uri.fromFile(new File(filepath));
+        Uri fileUri = Uri.fromFile(file);
         MissionApi.getApi(drone).loadAndSetMission(fileUri, new MissionApi.LoadingCallback<Mission>() {
             @Override
             public void onLoadingStart() {

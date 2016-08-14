@@ -42,6 +42,7 @@ import org.droidplanner.android.utils.file.FileList;
 import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -114,7 +115,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     /**
      * If the mission was loaded from a file, the filename is stored here.
      */
-    private String openedMissionFilename;
+    private File openedMissionFile;
 
     private FloatingActionButton itemDetailToggle;
     private EditorListFragment editorListFragment;
@@ -152,7 +153,10 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         itemDetailToggle.setOnClickListener(this);
 
         if (savedInstanceState != null) {
-            openedMissionFilename = savedInstanceState.getString(EXTRA_OPENED_MISSION_FILENAME);
+            String openedMissionFilename = savedInstanceState.getString(EXTRA_OPENED_MISSION_FILENAME);
+            if(!TextUtils.isEmpty(openedMissionFilename)) {
+                openedMissionFile = new File(openedMissionFilename);
+            }
         }
 
         // Retrieve the item detail fragment using its tag
@@ -268,7 +272,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(EXTRA_OPENED_MISSION_FILENAME, openedMissionFilename);
+        outState.putString(EXTRA_OPENED_MISSION_FILENAME, openedMissionFile.getAbsolutePath());
     }
 
     @Override
@@ -304,11 +308,11 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         OpenFileDialog missionDialog = new OpenFileDialog() {
             @Override
             public void onFileSelected(String filepath) {
-                openedMissionFilename = filepath;
+                openedMissionFile = new File(filepath);
 
                 if(missionProxy != null) {
                     //TODO: check if progress dialog is needed here why the mission is being loaded.
-                    missionProxy.readMissionFromFile(openedMissionFilename);
+                    missionProxy.readMissionFromFile(openedMissionFile);
                 }
             }
         };
@@ -319,7 +323,10 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     public void onOk(String dialogTag, CharSequence input) {
         switch (dialogTag) {
             case MISSION_FILENAME_DIALOG_TAG:
-                missionProxy.writeMissionToFile(input.toString());
+                File saveFile = openedMissionFile == null
+                        ? new File(DirectoryPath.getWaypointsPath(), input.toString())
+                        : new File(openedMissionFile.getParent(), input.toString());
+                missionProxy.writeMissionToFile(saveFile);
                 break;
         }
     }
@@ -329,9 +336,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     }
 
     private void saveMissionFile() {
-        final String defaultFilename = TextUtils.isEmpty(openedMissionFilename)
+        final String defaultFilename = openedMissionFile == null
                 ? FileStream.getWaypointFilename("waypoints")
-                : openedMissionFilename;
+                : openedMissionFile.getName();
 
         final SupportEditInputDialog dialog = SupportEditInputDialog.newInstance(MISSION_FILENAME_DIALOG_TAG,
                 getString(R.string.label_enter_filename), defaultFilename, true);
