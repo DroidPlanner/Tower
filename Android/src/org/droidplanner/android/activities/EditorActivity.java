@@ -16,9 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
@@ -28,7 +26,6 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.dialogs.SupportEditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
-import org.droidplanner.android.dialogs.openfile.OpenMissionDialog;
 import org.droidplanner.android.fragments.EditorListFragment;
 import org.droidplanner.android.fragments.EditorMapFragment;
 import org.droidplanner.android.fragments.account.editor.tool.EditorToolsFragment;
@@ -40,9 +37,9 @@ import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
-import org.droidplanner.android.utils.analytics.GAUtils;
+import org.droidplanner.android.utils.file.DirectoryPath;
+import org.droidplanner.android.utils.file.FileList;
 import org.droidplanner.android.utils.file.FileStream;
-import org.droidplanner.android.utils.file.IO.mission.MissionReader;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 
 import java.util.List;
@@ -302,40 +299,26 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     }
 
     private void openMissionFile() {
-        OpenFileDialog missionDialog = new OpenMissionDialog() {
+        OpenFileDialog missionDialog = new OpenFileDialog() {
             @Override
-            public void waypointFileLoaded(MissionReader reader) {
-                openedMissionFilename = getSelectedFilename();
+            public void onFileSelected(String filepath) {
+                openedMissionFilename = filepath;
 
                 if(missionProxy != null) {
-                    missionProxy.readMissionFromFile(reader);
+                    //TODO: check if progress dialog is needed here why the mission is being loaded.
+                    missionProxy.readMissionFromFile(openedMissionFilename);
                     gestureMapFragment.getMapFragment().zoomToFit();
                 }
             }
         };
-        missionDialog.openDialog(this);
+        missionDialog.openDialog(this, DirectoryPath.getWaypointsPath(), FileList.getWaypointFileList());
     }
 
     @Override
     public void onOk(String dialogTag, CharSequence input) {
-        final Context context = getApplicationContext();
-
         switch (dialogTag) {
             case MISSION_FILENAME_DIALOG_TAG:
-                if (missionProxy.writeMissionToFile(input.toString())) {
-                    Toast.makeText(context, R.string.file_saved_success, Toast.LENGTH_SHORT)
-                            .show();
-
-                    final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                            .setCategory(GAUtils.Category.MISSION_PLANNING)
-                            .setAction("Mission saved to file")
-                            .setLabel("Mission items count");
-                    GAUtils.sendEvent(eventBuilder);
-
-                    break;
-                }
-
-                Toast.makeText(context, R.string.file_saved_error, Toast.LENGTH_SHORT).show();
+                missionProxy.writeMissionToFile(input.toString());
                 break;
         }
     }

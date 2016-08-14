@@ -33,10 +33,11 @@ import com.o3dr.services.android.lib.drone.property.Parameters;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.dialogs.SupportEditInputDialog;
-import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenParameterDialog;
 import org.droidplanner.android.dialogs.parameters.DialogParameterInfo;
 import org.droidplanner.android.fragments.helpers.ApiListenerListFragment;
+import org.droidplanner.android.utils.file.DirectoryPath;
+import org.droidplanner.android.utils.file.FileList;
 import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.file.IO.ParameterWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -354,14 +355,15 @@ public class ParamsFragment extends ApiListenerListFragment implements
     }
 
     private void openParametersFromFile() {
-        OpenFileDialog dialog = new OpenParameterDialog() {
+        OpenParameterDialog dialog = new OpenParameterDialog() {
             @Override
-            public void parameterFileLoaded(List<Parameter> parameters) {
-                openedParamsFilename = getSelectedFilename();
+            public void parameterFileLoaded(String filepath, List<Parameter> parameters) {
+                openedParamsFilename = filepath;
                 loadAdapter(parameters, true);
             }
         };
-        dialog.openDialog(getActivity());
+        dialog.openDialog(getActivity(), DirectoryPath.getParametersPath(),
+                FileList.getParametersFileList());
     }
 
     private void saveParametersToFile() {

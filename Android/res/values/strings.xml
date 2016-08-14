@@ -351,8 +351,8 @@
     <string name="pref_usage_statistics_summary">Help improve Tower by sending usage statistics.</string>
 
     <string name="zoom_fit">Zoom to Fit</string>
-    <string name="open_mission_file">Import from file</string>
-    <string name="save_mission_file">Export to file</string>
+    <string name="open_mission_file">Load</string>
+    <string name="save_mission_file">Save</string>
 
     <string name="pref_ui_gps_hdop_summary">Display HDOP instead of FIX in satellite info bar item</string>
     <string name="pref_ui_gps_hdop_title">Display Satellite HDOP</string>
