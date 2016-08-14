@@ -311,7 +311,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 openedMissionFile = new File(filepath);
 
                 if(missionProxy != null) {
-                    //TODO: check if progress dialog is needed here why the mission is being loaded.
                     missionProxy.readMissionFromFile(openedMissionFile);
                 }
             }
@@ -324,8 +323,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         switch (dialogTag) {
             case MISSION_FILENAME_DIALOG_TAG:
                 File saveFile = openedMissionFile == null
-                        ? new File(DirectoryPath.getWaypointsPath(), input.toString())
-                        : new File(openedMissionFile.getParent(), input.toString());
+                        ? new File(DirectoryPath.getWaypointsPath(), input.toString() + FileList.WAYPOINT_FILENAME_EXT)
+                        : new File(openedMissionFile.getParent(), input.toString() + FileList.WAYPOINT_FILENAME_EXT);
                 missionProxy.writeMissionToFile(saveFile);
                 break;
         }
@@ -337,13 +336,17 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
     private void saveMissionFile() {
         final String defaultFilename = openedMissionFile == null
-                ? FileStream.getWaypointFilename("waypoints")
+                ? getWaypointFilename("waypoints")
                 : openedMissionFile.getName();
 
         final SupportEditInputDialog dialog = SupportEditInputDialog.newInstance(MISSION_FILENAME_DIALOG_TAG,
                 getString(R.string.label_enter_filename), defaultFilename, true);
 
         dialog.show(getSupportFragmentManager(), MISSION_FILENAME_DIALOG_TAG);
+    }
+
+    private static String getWaypointFilename(String prefix){
+        return prefix + "-" + FileStream.getTimeStamp();
     }
 
     @Override
