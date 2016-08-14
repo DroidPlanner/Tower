@@ -125,8 +125,16 @@ public class EditInputDialog extends DialogFragment {
         if (contentView == null)
             return contentView;
 
+        final Bundle arguments = getArguments();
+        final CharSequence hint = arguments.getString(EXTRA_HINT);
+        final boolean hintIsValidEntry = arguments.getBoolean(EXTRA_HINT_IS_VALID_ENTRY);
         mEditText = (EditText) contentView.findViewById(R.id.dialog_edit_text_content);
-        mEditText.setHint(getArguments().getString(EXTRA_HINT));
+        if(hintIsValidEntry){
+            mEditText.setText(hint);
+        }
+        else {
+            mEditText.setHint(hint);
+        }
 
         return contentView;
     }

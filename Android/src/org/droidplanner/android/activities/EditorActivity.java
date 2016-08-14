@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -168,6 +169,27 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     }
 
     @Override
+    protected void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent){
+        if(intent == null || missionProxy == null)
+            return;
+
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if(Intent.ACTION_VIEW.equals(action) && "text/plain".equals(type)){
+            Uri loadUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+            if(loadUri != null){
+                openMissionFile(new File(loadUri.getPath()));
+            }
+        }
+    }
+
+    @Override
     protected float getActionDrawerTopMargin() {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics());
     }
@@ -193,6 +215,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             missionProxy.selection.addSelectionUpdateListener(this);
             itemDetailToggle.setVisibility(missionProxy.selection.getSelected().isEmpty() ? View.GONE : View.VISIBLE);
         }
+
+        handleIntent(getIntent());
 
         updateMissionLength();
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
@@ -273,7 +297,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(EXTRA_OPENED_MISSION_FILENAME, openedMissionFile.getAbsolutePath());
+        if(openedMissionFile != null) {
+            outState.putString(EXTRA_OPENED_MISSION_FILENAME, openedMissionFile.getAbsolutePath());
+        }
     }
 
     @Override
@@ -309,14 +335,22 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         OpenFileDialog missionDialog = new OpenFileDialog() {
             @Override
             public void onFileSelected(String filepath) {
-                openedMissionFile = new File(filepath);
-
-                if(missionProxy != null) {
-                    missionProxy.readMissionFromFile(openedMissionFile);
-                }
+                openMissionFile(new File(filepath));
             }
         };
         missionDialog.openDialog(this, DirectoryPath.getWaypointsPath(), FileList.getWaypointFileList());
+    }
+
+    private void openMissionFile(File missionFile){
+        if(missionFile.equals(openedMissionFile)){
+            // Nothing to do.
+            return;
+        }
+        openedMissionFile = missionFile;
+
+        if(missionProxy != null) {
+            missionProxy.readMissionFromFile(missionFile);
+        }
     }
 
     @Override
