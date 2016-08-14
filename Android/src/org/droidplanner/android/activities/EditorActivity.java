@@ -42,7 +42,7 @@ import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.FileStream;
-import org.droidplanner.android.utils.file.IO.MissionReader;
+import org.droidplanner.android.utils.file.IO.mission.MissionReader;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 
 import java.util.List;

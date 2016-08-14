@@ -3,7 +3,7 @@ include ':Android'
 
 //Uncomment block below to link to your local version of the dronekit-android client lib.
 //Don't forget to uncomment the lines in the Android/build.gradle file as well.
-/*
+
 //Linking to the dronekit-android project to improve development flow
 include ':ClientLib'
 include ':Mavlink'
@@ -11,4 +11,3 @@ include ':Mavlink'
 def dkAndroidLibPath = '../dronekit-android' //Edit this value to point to your 'dronekit-android' project directory
 project(':ClientLib').projectDir = new File("$dkAndroidLibPath/ClientLib")
 project(':Mavlink').projectDir = new File("$dkAndroidLibPath/dependencyLibs/Mavlink")
-*/

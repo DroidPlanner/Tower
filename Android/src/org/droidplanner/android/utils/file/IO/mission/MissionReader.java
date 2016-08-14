@@ -1,19 +1,19 @@
-package org.droidplanner.android.utils.file.IO;
+package org.droidplanner.android.utils.file.IO.mission;
 
 import android.util.Log;
 
-import java.io.FileInputStream;
-import java.nio.ByteBuffer;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import com.o3dr.services.android.lib.drone.mission.Mission;
+import com.o3dr.services.android.lib.util.ParcelableUtils;
 
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.android.utils.file.FileList;
 import org.droidplanner.android.utils.file.FileStream;
 
-import com.o3dr.services.android.lib.drone.mission.Mission;
-import com.o3dr.services.android.lib.util.ParcelableUtils;
+import java.io.FileInputStream;
+import java.nio.ByteBuffer;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Read a mission from a file.

@@ -35,8 +35,8 @@ import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
-import org.droidplanner.android.utils.file.IO.MissionReader;
-import org.droidplanner.android.utils.file.IO.MissionWriter;
+import org.droidplanner.android.utils.file.IO.mission.MissionReader;
+import org.droidplanner.android.utils.file.IO.mission.MissionWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import java.util.ArrayList;
