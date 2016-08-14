@@ -806,16 +806,27 @@ public class MissionProxy implements DPMap.PathSource {
         });
     }
 
-    public boolean readMissionFromFile(String filepath){
+    public void readMissionFromFile(final String filepath){
         if(TextUtils.isEmpty(filepath))
-            return false;
+            return;
 
         Uri fileUri = Uri.fromFile(new File(filepath));
-        Mission mission = MissionApi.getApi(drone).loadAndSetMission(fileUri);
-        if(mission != null){
-            load(mission);
-            return true;
-        }
-        return false;
+        MissionApi.getApi(drone).loadAndSetMission(fileUri, new MissionApi.LoadingCallback<Mission>() {
+            @Override
+            public void onLoadingStart() {
+                Toast.makeText(context, "Loading mission...", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLoadingComplete(Mission loaded) {
+                load(loaded);
+                Toast.makeText(context, "Mission loaded!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLoadingFailed() {
+                Toast.makeText(context, "Mission loading failed!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

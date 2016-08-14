@@ -77,8 +77,10 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             switch (action) {
-                case AttributeEvent.PARAMETERS_REFRESH_COMPLETED:
                 case MissionProxy.ACTION_MISSION_PROXY_UPDATE:
+                    gestureMapFragment.getMapFragment().zoomToFit();
+                    // FALL THROUGH
+                case AttributeEvent.PARAMETERS_REFRESH_COMPLETED:
                     updateMissionLength();
                     break;
 
@@ -307,7 +309,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 if(missionProxy != null) {
                     //TODO: check if progress dialog is needed here why the mission is being loaded.
                     missionProxy.readMissionFromFile(openedMissionFilename);
-                    gestureMapFragment.getMapFragment().zoomToFit();
                 }
             }
         };
