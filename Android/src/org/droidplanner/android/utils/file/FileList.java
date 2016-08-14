@@ -14,7 +14,8 @@ public class FileList {
 		FilenameFilter filter = new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String filename) {
-				return filename.contains(DEPRECATED_WAYPOINT_FILENAME_EXT);
+				return filename.contains(DEPRECATED_WAYPOINT_FILENAME_EXT)
+					|| filename.contains(WAYPOINT_FILENAME_EXT);
 			}
 		};
 		return getFileList(DirectoryPath.getWaypointsPath(), filter);

@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.TextView;
 
+import com.o3dr.android.client.utils.FileUtils;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
@@ -337,7 +338,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     private void saveMissionFile() {
         final String defaultFilename = openedMissionFile == null
                 ? getWaypointFilename("waypoints")
-                : openedMissionFile.getName();
+                : FileUtils.getFilenameWithoutExtension(openedMissionFile);
 
         final SupportEditInputDialog dialog = SupportEditInputDialog.newInstance(MISSION_FILENAME_DIALOG_TAG,
                 getString(R.string.label_enter_filename), defaultFilename, true);
