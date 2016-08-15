@@ -452,24 +452,42 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
     }
 
     @Override
-    public void addFlightPathPoint(LatLong coord) {
+    public void addFlightPathPoint(final LatLong coord) {
         final LatLng position = DroneHelper.coordToLatLng(coord);
 
-        if (maxFlightPathSize > 0) {
-            if (flightPath == null) {
-                PolylineOptions flightPathOptions = new PolylineOptions();
-                flightPathOptions.color(FLIGHT_PATH_DEFAULT_COLOR)
-                        .width(FLIGHT_PATH_DEFAULT_WIDTH).zIndex(1);
-                flightPath = getMap().addPolyline(flightPathOptions);
-            }
+        getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                if (maxFlightPathSize > 0) {
+                    if (flightPath == null) {
+                        PolylineOptions flightPathOptions = new PolylineOptions();
+                        flightPathOptions.color(FLIGHT_PATH_DEFAULT_COLOR)
+                                .width(FLIGHT_PATH_DEFAULT_WIDTH).zIndex(1);
+                        flightPath = googleMap.addPolyline(flightPathOptions);
+                    }
 
-            List<LatLng> oldFlightPath = flightPath.getPoints();
-            while (oldFlightPath.size() > maxFlightPathSize) {
-                oldFlightPath.remove(0);
+                    List<LatLng> oldFlightPath = flightPath.getPoints();
+                    while (oldFlightPath.size() > maxFlightPathSize) {
+                        oldFlightPath.remove(0);
+                    }
+                    oldFlightPath.add(position);
+                    flightPath.setPoints(oldFlightPath);
+                }
             }
-            oldFlightPath.add(position);
-            flightPath.setPoints(oldFlightPath);
+        });
+    }
+
+    @Override
+    public List<LatLong> getFlightPath(){
+        if(flightPath == null)
+            return null;
+
+        List<LatLng> flightPathPoints = flightPath.getPoints();
+        List<LatLong> flightPath = new ArrayList<>(flightPathPoints.size());
+        for(LatLng point : flightPathPoints){
+            flightPath.add(DroneHelper.latLngToCoord(point));
         }
+        return flightPath;
     }
 
     @Override

@@ -4,10 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -75,6 +76,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
+        setHasOptionsMenu(true);
         View view = super.onCreateView(inflater, viewGroup, bundle);
 
         mMapFragment.setOnMapLongClickListener(this);
@@ -102,8 +104,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 
     @Override
     protected int getMaxFlightPathSize() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return Integer.valueOf(prefs.getString("pref_max_flight_path_size", "0"));
+        return 1000;
     }
 
     @Override
@@ -127,6 +128,24 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
     public void onApiDisconnected() {
         super.onApiDisconnected();
         getBroadcastManager().unregisterReceiver(eventReceiver);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_flight_map, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menu_map_clear_flight_path:
+                clearFlightPath();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

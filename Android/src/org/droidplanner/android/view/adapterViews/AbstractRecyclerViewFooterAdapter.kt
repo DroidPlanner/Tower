@@ -80,6 +80,8 @@ abstract class AbstractRecyclerViewFooterAdapter<T>(recyclerView: RecyclerView, 
         notifyDataSetChanged()
     }
 
+    fun getItems() = dataSet
+
     fun addItems(newDataSetItems: List<T>) {
         removeItem(null)
 

@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.o3dr.android.client.utils.FileUtils;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.mission.Mission;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 
 import org.beyene.sius.unit.length.LengthUnit;
@@ -55,6 +56,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         EditorToolsFragment.EditorToolListener, MissionDetailFragment.OnMissionDetailListener,
         OnEditorInteraction, MissionSelection.OnSelectionUpdateListener, OnClickListener,
         OnLongClickListener, SupportEditInputDialog.Listener {
+
+    public static final String ACTION_VIEW_MISSION = "org.droidplanner.android.activities.ACTION_VIEW_MISSION";
+    public static final String EXTRA_MISSION = "extra_mission";
 
     private static final double DEFAULT_SPEED = 5; //meters per second.
 
@@ -179,13 +183,27 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             return;
 
         String action = intent.getAction();
-        String type = intent.getType();
+        if(TextUtils.isEmpty(action))
+            return;
 
-        if(Intent.ACTION_VIEW.equals(action) && "text/plain".equals(type)){
-            Uri loadUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-            if(loadUri != null){
-                openMissionFile(new File(loadUri.getPath()));
-            }
+        switch (action) {
+            case Intent.ACTION_VIEW:
+                String type = intent.getType();
+                if ("text/plain".equals(type)) {
+                    //TODO: need to fix uri access
+                    Uri loadUri = intent.getData();
+                    if (loadUri != null) {
+                        openMissionFile(new File(loadUri.getPath()));
+                    }
+                }
+                break;
+
+            case ACTION_VIEW_MISSION:
+                Mission mission = intent.getParcelableExtra(EXTRA_MISSION);
+                if(mission != null){
+                    missionProxy.load(mission);
+                }
+                break;
         }
     }
 

@@ -161,7 +161,7 @@ public class MissionProxy implements DPMap.PathSource {
      * Update the state for this object based on the state of the Mission
      * object.
      */
-    private void load(Mission mission) {
+    public void load(Mission mission) {
         load(mission, true);
     }
 

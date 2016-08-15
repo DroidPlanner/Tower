@@ -12,6 +12,7 @@ import org.droidplanner.android.fragments.DroneMap
 import org.droidplanner.android.maps.MarkerInfo
 import org.droidplanner.android.maps.PolylineInfo
 import org.droidplanner.android.tlog.interfaces.TLogDataSubscriber
+import org.droidplanner.android.tlog.viewers.TLogPositionViewer
 import org.droidplanner.android.utils.prefs.AutoPanMode
 import java.util.*
 
@@ -39,8 +40,7 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventListener {
     override fun onTLogDataLoaded(events: List<TLogParser.Event>, hasMore: Boolean) {
         for(event in events){
             val globalPositionInt = event.mavLinkMessage as msg_global_position_int
-            eventsPolylineInfo.addCoord(
-                    LatLong(globalPositionInt.lat.toDouble()/ 1E7, globalPositionInt.lon.toDouble()/ 1E7))
+            eventsPolylineInfo.addCoord(TLogPositionViewer.msg_global_position_intToLatLongAlt(globalPositionInt))
         }
         eventsPolylineInfo.update(this)
     }

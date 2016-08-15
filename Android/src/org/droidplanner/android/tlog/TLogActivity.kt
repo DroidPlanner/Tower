@@ -50,7 +50,7 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.Listener, TLogDataPro
 
     override fun getNavigationDrawerMenuItemId() = R.id.navigation_locator
 
-    override fun getToolbarId() = R.id.toolbar
+    override fun getToolbarId() = R.id.actionbar_toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,7 +86,6 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.Listener, TLogDataPro
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.menu_locator, menu)
         return true
     }

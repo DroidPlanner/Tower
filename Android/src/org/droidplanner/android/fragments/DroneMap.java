@@ -5,14 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -47,6 +43,7 @@ import java.util.Map;
 
 public abstract class DroneMap extends ApiListenerFragment {
 
+    private static final String EXTRA_DRONE_FLIGHT_PATH = "extra_drone_flight_path";
     public static final String ACTION_UPDATE_MAP = Utils.PACKAGE_NAME + ".action.UPDATE_MAP";
 
 	private static final IntentFilter eventFilter = new IntentFilter();
@@ -165,9 +162,8 @@ public abstract class DroneMap extends ApiListenerFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
-		setHasOptionsMenu(true);
 		final View view = inflater.inflate(R.layout.fragment_drone_map, viewGroup, false);
-		updateMapFragment();
+		updateMapFragment(bundle);
 		return view;
 	}
 
@@ -194,8 +190,6 @@ public abstract class DroneMap extends ApiListenerFragment {
 	}
 
     protected final void onMissionUpdate(){
-        Resources res = getResources();
-
         mMapFragment.updateMissionPath(missionProxy);
 
         mMapFragment.updatePolygonsPaths(missionProxy.getPolygonsPath());
@@ -249,7 +243,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 		getBroadcastManager().unregisterReceiver(eventReceiver);
 	}
 
-	private void updateMapFragment() {
+	private void updateMapFragment(Bundle savedInstanceState) {
 		// Add the map fragment instance (based on user preference)
 		final DPMapProvider mapProvider = mAppPrefs.getMapProvider();
 
@@ -279,6 +273,26 @@ public abstract class DroneMap extends ApiListenerFragment {
                 mMapFragment.addPolyline(polylineInfo);
             }
         }
+
+        if(savedInstanceState != null){
+            LatLong[] flightPathPoints = (LatLong[]) savedInstanceState.getParcelableArray(EXTRA_DRONE_FLIGHT_PATH);
+            if(flightPathPoints != null && flightPathPoints.length > 0){
+                for(LatLong point : flightPathPoints) {
+                    mMapFragment.addFlightPathPoint(point);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        if(mMapFragment != null) {
+            List<LatLong> flightPath = mMapFragment.getFlightPath();
+            if(flightPath != null && !flightPath.isEmpty()){
+                outState.putParcelableArray(EXTRA_DRONE_FLIGHT_PATH, flightPath.toArray(new LatLong[flightPath.size()]));
+            }
+        }
     }
 
 	@Override
@@ -296,7 +310,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-		updateMapFragment();
+		updateMapFragment(null);
 	}
 
 	@Override
@@ -343,24 +357,6 @@ public abstract class DroneMap extends ApiListenerFragment {
 	public List<LatLong> projectPathIntoMap(List<LatLong> path) {
 		return mMapFragment.projectPathIntoMap(path);
 	}
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_drone_map, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.menu_map_clear_flight_path:
-                clearFlightPath();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
 	/**
 	 * Set map panning mode on the specified target.
