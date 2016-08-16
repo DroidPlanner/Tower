@@ -41,7 +41,6 @@ import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -779,17 +778,17 @@ public class MissionProxy implements DPMap.PathSource {
         return polygonPaths;
     }
 
-    public void writeMissionToFile(File saveFile) {
-        MissionApi.getApi(drone).saveMission(generateMission(), Uri.fromFile(saveFile), new AbstractCommandListener() {
+    public void writeMissionToFile(Uri saveUri){
+        MissionApi.getApi(drone).saveMission(generateMission(), saveUri, new AbstractCommandListener() {
             @Override
             public void onSuccess() {
                 Toast.makeText(context, R.string.file_saved_success, Toast.LENGTH_SHORT)
-                        .show();
+                    .show();
 
                 final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                        .setCategory(GAUtils.Category.MISSION_PLANNING)
-                        .setAction("Mission saved to file")
-                        .setLabel("Mission items count");
+                    .setCategory(GAUtils.Category.MISSION_PLANNING)
+                    .setAction("Mission saved to file")
+                    .setLabel("Mission items count");
                 GAUtils.sendEvent(eventBuilder);
             }
 
@@ -805,11 +804,7 @@ public class MissionProxy implements DPMap.PathSource {
         });
     }
 
-    public void readMissionFromFile(final File file){
-        if(file == null)
-            return;
-
-        Uri fileUri = Uri.fromFile(file);
+    public void readMissionFromFile(final Uri fileUri){
         MissionApi.getApi(drone).loadAndSetMission(fileUri, new MissionApi.LoadingCallback<Mission>() {
             @Override
             public void onLoadingStart() {

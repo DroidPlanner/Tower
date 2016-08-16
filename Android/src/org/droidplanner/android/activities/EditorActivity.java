@@ -188,13 +188,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
         switch (action) {
             case Intent.ACTION_VIEW:
-                String type = intent.getType();
-                if ("text/plain".equals(type)) {
-                    //TODO: need to fix uri access
-                    Uri loadUri = intent.getData();
-                    if (loadUri != null) {
-                        openMissionFile(new File(loadUri.getPath()));
-                    }
+                Uri loadUri = intent.getData();
+                if (loadUri != null) {
+                    openMissionFile(loadUri);
                 }
                 break;
 
@@ -353,21 +349,21 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         OpenFileDialog missionDialog = new OpenFileDialog() {
             @Override
             public void onFileSelected(String filepath) {
-                openMissionFile(new File(filepath));
+                File missionFile = new File(filepath);
+                if(missionFile.equals(openedMissionFile)){
+                    // Nothing to do.
+                    return;
+                }
+                openedMissionFile = missionFile;
+                openMissionFile(Uri.fromFile(missionFile));
             }
         };
         missionDialog.openDialog(this, DirectoryPath.getWaypointsPath(), FileList.getWaypointFileList());
     }
 
-    private void openMissionFile(File missionFile){
-        if(missionFile.equals(openedMissionFile)){
-            // Nothing to do.
-            return;
-        }
-        openedMissionFile = missionFile;
-
+    private void openMissionFile(Uri missionUri){
         if(missionProxy != null) {
-            missionProxy.readMissionFromFile(missionFile);
+            missionProxy.readMissionFromFile(missionUri);
         }
     }
 
@@ -378,7 +374,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 File saveFile = openedMissionFile == null
                         ? new File(DirectoryPath.getWaypointsPath(), input.toString() + FileList.WAYPOINT_FILENAME_EXT)
                         : new File(openedMissionFile.getParent(), input.toString() + FileList.WAYPOINT_FILENAME_EXT);
-                missionProxy.writeMissionToFile(saveFile);
+                missionProxy.writeMissionToFile(Uri.fromFile(saveFile));
                 break;
         }
     }

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -14,6 +13,7 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.utils.file.FileList;
 
 import java.io.File;
+import java.util.TreeMap;
 
 public abstract class OpenFileDialog {
 
@@ -25,7 +25,7 @@ public abstract class OpenFileDialog {
 			return;
 		}
 
-        final ArrayMap<String, String> filteredFiles = new ArrayMap<>(fileList.length);
+        final TreeMap<String, String> filteredFiles = new TreeMap<>();
 		for(String filename : fileList){
             String filenameWithoutExt = FileUtils.getFilenameWithoutExtension(filename);
             String prevFilename = filteredFiles.get(filenameWithoutExt);
