@@ -33,12 +33,13 @@ class TLogDataLoader(activity: TLogActivity, val handler: Handler) : AsyncTask<U
     private val allEvents = ConcurrentLinkedQueue<TLogParser.Event>()
 
     override fun doInBackground(vararg params: Uri): Boolean {
+        val context = activityRef.get()?.applicationContext ?: return false
         try {
             for (uri in params) {
                 if(isCancelled)
                     break
 
-                val iterator = TLogIterator(uri, handler)
+                val iterator = TLogIterator(context, uri, handler)
                 iterator.start()
 
                 var eventCounter = 0

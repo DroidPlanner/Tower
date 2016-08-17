@@ -4,9 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.CircularArray;
 import android.util.Pair;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
@@ -29,14 +31,14 @@ import com.o3dr.services.android.lib.drone.mission.item.spatial.BaseSpatialItem;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.RegionOfInterest;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
+import com.o3dr.services.android.lib.model.AbstractCommandListener;
 import com.o3dr.services.android.lib.util.MathUtils;
 
+import org.droidplanner.android.R;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
-import org.droidplanner.android.utils.file.IO.MissionReader;
-import org.droidplanner.android.utils.file.IO.MissionWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import java.util.ArrayList;
@@ -90,6 +92,7 @@ public class MissionProxy implements DPMap.PathSource {
 
     private final LocalBroadcastManager lbm;
     private final DroidPlannerPrefs dpPrefs;
+    private final Context context;
     private Drone drone;
 
     private final CircularArray<Mission> undoBuffer = new CircularArray<>(UNDO_BUFFER_SIZE);
@@ -98,6 +101,7 @@ public class MissionProxy implements DPMap.PathSource {
     public MissionSelection selection = new MissionSelection();
 
     public MissionProxy(Context context, Drone drone) {
+        this.context = context;
         this.drone = drone;
         this.currentMission = generateMission(true);
         lbm = LocalBroadcastManager.getInstance(context);
@@ -156,7 +160,7 @@ public class MissionProxy implements DPMap.PathSource {
      * Update the state for this object based on the state of the Mission
      * object.
      */
-    private void load(Mission mission) {
+    public void load(Mission mission) {
         load(mission, true);
     }
 
@@ -774,18 +778,49 @@ public class MissionProxy implements DPMap.PathSource {
         return polygonPaths;
     }
 
-    public boolean writeMissionToFile(String filename) {
-        return MissionWriter.write(generateMission(), filename);
+    public void writeMissionToFile(Uri saveUri){
+        MissionApi.getApi(drone).saveMission(generateMission(), saveUri, new AbstractCommandListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(context, R.string.file_saved_success, Toast.LENGTH_SHORT)
+                    .show();
+
+                final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                    .setCategory(GAUtils.Category.MISSION_PLANNING)
+                    .setAction("Mission saved to file")
+                    .setLabel("Mission items count");
+                GAUtils.sendEvent(eventBuilder);
+            }
+
+            @Override
+            public void onError(int executionError) {
+                Toast.makeText(context, R.string.file_saved_error, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onTimeout() {
+                Toast.makeText(context, R.string.file_saved_error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    public boolean readMissionFromFile(MissionReader reader) {
-        if (reader == null)
-            return false;
+    public void readMissionFromFile(final Uri fileUri){
+        MissionApi.getApi(drone).loadAndSetMission(fileUri, new MissionApi.LoadingCallback<Mission>() {
+            @Override
+            public void onLoadingStart() {
+                Toast.makeText(context, "Loading mission...", Toast.LENGTH_SHORT).show();
+            }
 
-        Mission mission = reader.getMission();
-        MissionApi.getApi(drone).setMission(mission, false);
+            @Override
+            public void onLoadingComplete(Mission loaded) {
+                load(loaded);
+                Toast.makeText(context, "Mission loaded!", Toast.LENGTH_SHORT).show();
+            }
 
-        load(mission);
-        return true;
+            @Override
+            public void onLoadingFailed() {
+                Toast.makeText(context, "Mission loading failed!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -631,4 +631,5 @@
     <string name="no_tlog_data_loaded">No tlog data loaded</string>
     <string name="no_tlog_position_data">No tlog position data</string>
     <string name="menu_clear_flight_path">Clear flight path</string>
+    <string name="menu_export_as_mission">Export as mission</string>
 </resources>

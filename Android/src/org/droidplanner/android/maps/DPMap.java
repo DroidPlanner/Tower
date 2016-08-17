@@ -120,6 +120,8 @@ public interface DPMap {
      */
 	void downloadMapTiles(MapDownloader mapDownloader, DPMap.VisibleMapArea mapRegion, int minimumZ, int maximumZ);
 
+	List<LatLong> getFlightPath();
+
 	/**
 	 * @return the map center coordinates.
 	 */

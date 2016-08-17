@@ -7,4 +7,5 @@
     android:layout_height="wrap_content"
     android:padding="15dp"
     android:gravity="center"
+    android:selectAllOnFocus="true"
     />

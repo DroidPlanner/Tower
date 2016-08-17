@@ -1,15 +1,20 @@
 package org.droidplanner.android.tlog.viewers
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.MAVLink.common.msg_global_position_int
 import com.o3dr.android.client.utils.data.tlog.TLogParser
+import com.o3dr.services.android.lib.coordinate.LatLong
+import com.o3dr.services.android.lib.coordinate.LatLongAlt
+import com.o3dr.services.android.lib.drone.mission.Mission
+import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint
+import com.o3dr.services.android.lib.util.MathUtils
 import org.droidplanner.android.R
+import org.droidplanner.android.activities.EditorActivity
 import org.droidplanner.android.droneshare.data.SessionContract
 import org.droidplanner.android.tlog.adapters.TLogPositionEventAdapter
 import org.droidplanner.android.tlog.event.TLogEventDetail
@@ -21,6 +26,12 @@ import org.droidplanner.android.view.FastScroller
  * @author ne0fhyk (Fredia Huya-Kouadio)
  */
 class TLogPositionViewer : TLogViewer(), TLogEventListener {
+
+    companion object {
+        fun msg_global_position_intToLatLongAlt(position : msg_global_position_int): LatLongAlt {
+            return LatLongAlt(position.lat.toDouble()/ 1E7, position.lon.toDouble()/ 1E7, (position.relative_alt / 1000.0))
+        }
+    }
 
     private var tlogPositionAdapter : TLogPositionEventAdapter? = null
 
@@ -46,13 +57,19 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
     private var tlogEventDetail : TLogEventDetail? = null
 
     private var lastEventTimestamp = -1L
+    private var toleranceInPixels = 0.0
+
+    private var missionExportMenuItem: MenuItem? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_tlog_position_viewer, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)
+
+        toleranceInPixels = scaleDpToPixels(15.0).toDouble()
 
         val fm = childFragmentManager
         tlogEventMap = fm.findFragmentById(R.id.tlog_map_container) as TLogEventMapFragment?
@@ -87,6 +104,46 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         goToDroneLocation.setOnClickListener {
             tlogEventMap?.goToDroneLocation()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater){
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_tlog_position_viewer, menu)
+        missionExportMenuItem = menu.findItem(R.id.menu_export_mission)
+    }
+
+    override fun onOptionsItemSelected(item : MenuItem): Boolean {
+        when(item.itemId){
+            R.id.menu_export_mission -> {
+                // Generate a mission from the drone historical gps position.
+                val events = tlogPositionAdapter?.getItems() ?: return true
+                val positions = mutableListOf<LatLong>()
+                for(event in events){
+                    positions.add(msg_global_position_intToLatLongAlt(event!!.mavLinkMessage as msg_global_position_int))
+                }
+
+                // Simplify the generated path
+                val simplifiedPath = MathUtils.simplify(positions, toleranceInPixels)
+                val mission = Mission()
+                for(point in simplifiedPath){
+                    val missionItem = SplineWaypoint()
+                    missionItem.coordinate = point as LatLongAlt
+                    mission.addMissionItem(missionItem)
+                }
+
+                startActivity(Intent(activity, EditorActivity::class.java)
+                        .setAction(EditorActivity.ACTION_VIEW_MISSION)
+                        .putExtra(EditorActivity.EXTRA_MISSION, mission))
+                return true
+            }
+
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun scaleDpToPixels(value: Double): Int {
+        val scale = resources.displayMetrics.density
+        return Math.round(value * scale).toInt()
     }
 
     override fun onTLogSelected(tlogSession: SessionContract.SessionData) {
@@ -144,6 +201,11 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         eventsView?.visibility = View.GONE
         fastScroller.visibility = View.GONE
         loadingData?.visibility = View.VISIBLE
+
+        missionExportMenuItem?.apply {
+            setVisible(false)
+            setEnabled(false)
+        }
     }
 
     private fun stateNoData(){
@@ -151,6 +213,11 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         eventsView?.visibility = View.GONE
         fastScroller.visibility = View.GONE
         loadingData?.visibility = View.GONE
+
+        missionExportMenuItem?.apply {
+            setVisible(false)
+            setEnabled(false)
+        }
     }
 
     private fun stateDataLoaded(){
@@ -158,6 +225,11 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         eventsView?.visibility = View.VISIBLE
         fastScroller.visibility = View.VISIBLE
         loadingData?.visibility = View.GONE
+
+        missionExportMenuItem?.apply {
+            setVisible(true)
+            setEnabled(true)
+        }
     }
 }
 
