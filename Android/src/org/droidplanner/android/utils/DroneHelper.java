@@ -1,10 +1,15 @@
 package org.droidplanner.android.utils;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLongAlt;
+import com.o3dr.services.android.lib.drone.mission.Mission;
+import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
+import com.o3dr.services.android.lib.util.MathUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,4 +40,26 @@ public class DroneHelper {
 		final float scale = res.getDisplayMetrics().density;
 		return (int) Math.round(value * scale);
 	}
+
+    /**
+     * Export the given path as a Mission
+     * @param context
+     * @param pathPoints
+     * @return
+     */
+	public static Mission exportPathAsMission(Context context, List<LatLongAlt> pathPoints) {
+        Mission exportedMission = new Mission();
+        if(pathPoints != null && !pathPoints.isEmpty()) {
+            double toleranceInPixels = scaleDpToPixels(15, context.getResources());
+            List<LatLong> simplifiedPath = MathUtils.simplify(pathPoints, toleranceInPixels);
+
+            for(LatLong point : simplifiedPath) {
+                SplineWaypoint waypoint = new SplineWaypoint();
+                waypoint.setCoordinate((LatLongAlt) point);
+                exportedMission.addMissionItem(waypoint);
+            }
+        }
+
+        return exportedMission;
+    }
 }

@@ -632,4 +632,6 @@
     <string name="no_tlog_position_data">No tlog position data</string>
     <string name="menu_clear_flight_path">Clear flight path</string>
     <string name="menu_export_as_mission">Export as mission</string>
+    <string name="menu_export_flight_path_as_mission">Export flight path as mission</string>
+    <string name="error_empty_flight_path">Try flying a bit first :)</string>
 </resources>

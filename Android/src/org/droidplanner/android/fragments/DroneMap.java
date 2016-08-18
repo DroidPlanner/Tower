@@ -14,8 +14,10 @@ import android.view.ViewGroup;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.property.Altitude;
 import com.o3dr.services.android.lib.drone.property.CameraProxy;
 import com.o3dr.services.android.lib.drone.property.Gps;
 
@@ -86,10 +88,7 @@ public abstract class DroneMap extends ApiListenerFragment {
                 case AttributeEvent.GPS_POSITION: {
 					graphicDrone.updateMarker(DroneMap.this);
                     mMapFragment.updateDroneLeashPath(guided);
-                    final Gps droneGps = drone.getAttribute(AttributeType.GPS);
-                    if (droneGps != null && droneGps.isValid()) {
-                        mMapFragment.addFlightPathPoint(droneGps.getPosition());
-                    }
+                    updateFlightPath();
                     break;
                 }
 
@@ -136,6 +135,8 @@ public abstract class DroneMap extends ApiListenerFragment {
             }
 		}
 	};
+
+    protected final LinkedList<LatLongAlt> flightPathPoints = new LinkedList<>();
 
     private final Map<MissionItemProxy, List<MarkerInfo>> missionMarkers = new HashMap<>();
 	private final LinkedList<MarkerInfo> externalMarkersToAdd = new LinkedList<>();
@@ -188,6 +189,18 @@ public abstract class DroneMap extends ApiListenerFragment {
 
 		onMissionUpdate();
 	}
+
+    private void updateFlightPath(){
+        if(showFlightPath()) {
+            final Gps droneGps = drone.getAttribute(AttributeType.GPS);
+            if (droneGps != null && droneGps.isValid()) {
+                Altitude droneAltitude = drone.getAttribute(AttributeType.ALTITUDE);
+                LatLongAlt flightPoint = new LatLongAlt(droneGps.getPosition(),
+                    droneAltitude.getAltitude());
+                addFlightPathPoint(flightPoint);
+            }
+        }
+    }
 
     protected final void onMissionUpdate(){
         mMapFragment.updateMissionPath(missionProxy);
@@ -251,7 +264,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 		mMapFragment = (DPMap) fm.findFragmentById(R.id.map_fragment_container);
 		if (mMapFragment == null || mMapFragment.getProvider() != mapProvider) {
 			final Bundle mapArgs = new Bundle();
-			mapArgs.putInt(DPMap.EXTRA_MAX_FLIGHT_PATH_SIZE, getMaxFlightPathSize());
+			mapArgs.putBoolean(DPMap.EXTRA_SHOW_FLIGHT_PATH, showFlightPath());
 
 			mMapFragment = mapProvider.getMapFragment();
 			((Fragment) mMapFragment).setArguments(mapArgs);
@@ -275,22 +288,27 @@ public abstract class DroneMap extends ApiListenerFragment {
         }
 
         if(savedInstanceState != null){
-            LatLong[] flightPathPoints = (LatLong[]) savedInstanceState.getParcelableArray(EXTRA_DRONE_FLIGHT_PATH);
-            if(flightPathPoints != null && flightPathPoints.length > 0){
-                for(LatLong point : flightPathPoints) {
-                    mMapFragment.addFlightPathPoint(point);
+            flightPathPoints.clear();
+            LatLongAlt[] flightPoints = (LatLongAlt[]) savedInstanceState.getParcelableArray(EXTRA_DRONE_FLIGHT_PATH);
+            if(flightPoints != null && flightPoints.length > 0){
+                for(LatLongAlt point : flightPoints) {
+                    addFlightPathPoint(point);
                 }
             }
         }
+    }
+
+    private void addFlightPathPoint(LatLongAlt point) {
+        mMapFragment.addFlightPathPoint(point);
+        flightPathPoints.add(point);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
         if(mMapFragment != null) {
-            List<LatLong> flightPath = mMapFragment.getFlightPath();
-            if(flightPath != null && !flightPath.isEmpty()){
-                outState.putParcelableArray(EXTRA_DRONE_FLIGHT_PATH, flightPath.toArray(new LatLong[flightPath.size()]));
+            if(!flightPathPoints.isEmpty()){
+                outState.putParcelableArray(EXTRA_DRONE_FLIGHT_PATH, flightPathPoints.toArray(new LatLongAlt[flightPathPoints.size()]));
             }
         }
     }
@@ -320,14 +338,15 @@ public abstract class DroneMap extends ApiListenerFragment {
 		mAppPrefs = DroidPlannerPrefs.getInstance(context);
 	}
 
-	protected int getMaxFlightPathSize() {
-		return 0;
-	}
+	protected boolean showFlightPath(){
+        return false;
+    }
 
 	protected void clearFlightPath(){
 		if (mMapFragment != null) {
 			mMapFragment.clearFlightPath();
 		}
+        flightPathPoints.clear();
 	}
 
 	/**
