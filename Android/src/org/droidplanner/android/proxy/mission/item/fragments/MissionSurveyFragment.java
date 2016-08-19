@@ -38,7 +38,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragment implements
-        CardWheelHorizontalView.OnCardWheelScrollListener, Drone.OnMissionItemsBuiltCallback {
+        CardWheelHorizontalView.OnCardWheelScrollListener, Drone.OnMissionItemsBuiltCallback, CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = MissionSurveyFragment.class.getSimpleName();
 
@@ -149,6 +149,7 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
         mAltitudePicker.addScrollListener(this);
 
         CheckBox startCameraBeforeFirstWaypointCheck = (CheckBox) view.findViewById(id.check_start_camera_before_first_waypoint);
+        CheckBox lockCopterYawCheck = (CheckBox) view.findViewById(id.check_lock_copter_yaw);
 
         if(!getMissionItems().isEmpty()) {
             final T referenceItem = getMissionItems().get(0);
@@ -158,18 +159,15 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
                 typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
 
             startCameraBeforeFirstWaypointCheck.setChecked(referenceItem.isStartCameraBeforeFirstWaypoint());
-        }
-        startCameraBeforeFirstWaypointCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                final List<T> surveyList = getMissionItems();
-                if(!surveyList.isEmpty()) {
-                    for(T survey : surveyList) {
-                        survey.setStartCameraBeforeFirstWaypoint(isChecked);
-                    }
-                }
+
+            SurveyDetail surveyDetail = referenceItem.getSurveyDetail();
+            if(surveyDetail != null) {
+                lockCopterYawCheck.setChecked(surveyDetail.getLockOrientation());
             }
-        });
+        }
+
+        startCameraBeforeFirstWaypointCheck.setOnCheckedChangeListener(this);
+        lockCopterYawCheck.setOnCheckedChangeListener(this);
 
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
@@ -334,5 +332,27 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
         }
 
         getMissionProxy().notifyMissionUpdate();
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        final List<T> surveyList = getMissionItems();
+        if(!surveyList.isEmpty()) {
+            int viewId = buttonView.getId();
+            for(T survey : surveyList) {
+                switch(viewId) {
+                    case R.id.check_start_camera_before_first_waypoint:
+                    survey.setStartCameraBeforeFirstWaypoint(isChecked);
+                        break;
+
+                    case id.check_lock_copter_yaw:
+                        SurveyDetail surveyDetail = survey.getSurveyDetail();
+                        if(surveyDetail != null) {
+                            surveyDetail.setLockOrientation(isChecked);
+                        }
+                        break;
+                }
+            }
+        }
     }
 }

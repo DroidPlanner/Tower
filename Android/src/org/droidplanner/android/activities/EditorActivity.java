@@ -350,10 +350,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             @Override
             public void onFileSelected(String filepath) {
                 File missionFile = new File(filepath);
-                if(missionFile.equals(openedMissionFile)){
-                    // Nothing to do.
-                    return;
-                }
                 openedMissionFile = missionFile;
                 openMissionFile(Uri.fromFile(missionFile));
             }

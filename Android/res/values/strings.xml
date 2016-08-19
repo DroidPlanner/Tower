@@ -634,4 +634,6 @@
     <string name="menu_export_as_mission">Export as mission</string>
     <string name="menu_export_flight_path_as_mission">Export flight path as mission</string>
     <string name="error_empty_flight_path">Try flying a bit first :)</string>
+    <string name="start_camera_before_first_waypoint">Start camera before first waypoint</string>
+    <string name="lock_copter_orientation">Lock copter orientation</string>
 </resources>
