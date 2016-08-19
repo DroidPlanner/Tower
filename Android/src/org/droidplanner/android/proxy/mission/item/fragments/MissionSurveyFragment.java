@@ -207,6 +207,8 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
                             surveyDetail.setSidelap(mSidelapPicker.getCurrentValue());
                         }
 
+                        getAppPrefs().persistSurveyPreferences(surveyList.get(0));
+
                         final MissionItem.ComplexItem<T>[] surveys = surveyList
                                 .toArray(new MissionItem.ComplexItem[surveyList.size()]);
 
@@ -353,6 +355,8 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
                         break;
                 }
             }
+
+            getAppPrefs().persistSurveyPreferences(surveyList.get(0));
         }
     }
 }

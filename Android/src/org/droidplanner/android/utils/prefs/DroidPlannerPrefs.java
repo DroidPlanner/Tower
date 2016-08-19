@@ -7,7 +7,13 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
+import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
+import com.o3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
+import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
+import com.o3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
+import com.o3dr.services.android.lib.drone.property.CameraProxy;
 
 import org.droidplanner.android.fragments.widget.TowerWidgets;
 import org.droidplanner.android.fragments.widget.video.WidgetVideoPreferences;
@@ -16,6 +22,7 @@ import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -166,6 +173,15 @@ public class DroidPlannerPrefs {
     private static final float DEFAULT_UVC_VIDEO_ASPECT_RATIO = 3f / 4f;
 
     public static final String PREF_WEATHER_INFO = "pref_weather_info";
+
+    // Survey user preferences
+    private static final String PREF_SURVEY_CAMERA_NAME = "pref_survey_camera_name";
+    private static final String PREF_SURVEY_ALTITUDE = "pref_survey_altitude";
+    private static final String PREF_SURVEY_ANGLE = "pref_survey_angle";
+    private static final String PREF_SURVEY_OVERLAP = "pref_survey_overlap";
+    private static final String PREF_SURVEY_SIDELAP = "pref_survey_sidelap";
+    private static final String PREF_SURVEY_LOCK_ORIENTATION = "pref_survey_lock_orientation";
+    private static final String PREF_SURVEY_START_CAMERA_BEFORE_FIRST_WAYPOINT = "pref_survey_start_camera_before_first_waypoint";
 
     // Public for legacy usage
     public final SharedPreferences prefs;
@@ -556,5 +572,83 @@ public class DroidPlannerPrefs {
 
     public Float getUVCVideoAspectRatio(){
         return prefs.getFloat(PREF_UVC_VIDEO_ASPECT_RATIO, DEFAULT_UVC_VIDEO_ASPECT_RATIO);
+    }
+
+    public void persistSurveyPreferences(Survey survey){
+        if(survey == null || survey.getSurveyDetail() == null)
+            return;
+
+        SurveyDetail surveyDetail = survey.getSurveyDetail();
+
+        SharedPreferences.Editor editor = prefs.edit();
+        // Persist the camera.
+        editor.putString(PREF_SURVEY_CAMERA_NAME, surveyDetail.getCameraDetail().getName());
+
+        // Persist the survey angle.
+        editor.putFloat(PREF_SURVEY_ANGLE, (float) surveyDetail.getAngle());
+
+        // Persist the altitude.
+        editor.putFloat(PREF_SURVEY_ALTITUDE, (float) surveyDetail.getAltitude());
+
+        // Persist the overlap.
+        editor.putFloat(PREF_SURVEY_OVERLAP, (float) surveyDetail.getOverlap());
+
+        // Persist the sidelap.
+        editor.putFloat(PREF_SURVEY_SIDELAP, (float) surveyDetail.getSidelap());
+
+        // Persist the check for starting the camera before the first waypoint.
+        editor.putBoolean(PREF_SURVEY_START_CAMERA_BEFORE_FIRST_WAYPOINT, survey.isStartCameraBeforeFirstWaypoint());
+
+        // Persist the check for locking the copter orientation.
+        editor.putBoolean(PREF_SURVEY_LOCK_ORIENTATION, surveyDetail.getLockOrientation());
+
+        editor.apply();
+    }
+
+    public void loadSurveyPreferences(Drone drone, Survey loadTarget) {
+        if(drone == null || loadTarget == null)
+            return;
+
+        // Load the check for starting the camera before the first waypoint.
+        loadTarget.setStartCameraBeforeFirstWaypoint(prefs.getBoolean(PREF_SURVEY_START_CAMERA_BEFORE_FIRST_WAYPOINT, false));
+
+        SurveyDetail surveyDetail = loadTarget.getSurveyDetail();
+        if(surveyDetail == null){
+            surveyDetail = new SurveyDetail();
+            loadTarget.setSurveyDetail(surveyDetail);
+        }
+
+        // Load the check for locking the copter orientation.
+        surveyDetail.setLockOrientation(prefs.getBoolean(PREF_SURVEY_LOCK_ORIENTATION, false));
+
+        // Load the sidelap.
+        surveyDetail.setSidelap(prefs.getFloat(PREF_SURVEY_SIDELAP, 60));
+
+        // Load the overlap.
+        surveyDetail.setOverlap(prefs.getFloat(PREF_SURVEY_OVERLAP, 50));
+
+        // Load the altitude.
+        surveyDetail.setAltitude(prefs.getFloat(PREF_SURVEY_ALTITUDE, 50));
+
+        // Load the survey angle.
+        surveyDetail.setAngle(prefs.getFloat(PREF_SURVEY_ANGLE, 0));
+
+        // Load the camera name
+        String cameraName = prefs.getString(PREF_SURVEY_CAMERA_NAME, null);
+        if(!TextUtils.isEmpty(cameraName)){
+            CameraProxy camera = drone.getAttribute(AttributeType.CAMERA);
+            if(camera != null) {
+                // Load the available cameras
+                List<CameraDetail> cameraDetails = camera.getAvailableCameraInfos();
+                if(!cameraDetails.isEmpty()){
+                    for(CameraDetail cameraDetail : cameraDetails) {
+                        if (cameraName.equalsIgnoreCase(cameraDetail.getName())){
+                            surveyDetail.setCameraDetail(cameraDetail);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
