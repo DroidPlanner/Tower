@@ -164,6 +164,13 @@
                     </GridLayout>
                 </HorizontalScrollView>
 
+                <CheckBox
+                    android:id="@+id/check_start_camera_before_first_waypoint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Start camera before first waypoint"
+                    android:minHeight="48dp"/>
+
                 <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
                     android:id="@+id/anglePicker"
                     style="@style/missionItemDetailCard"

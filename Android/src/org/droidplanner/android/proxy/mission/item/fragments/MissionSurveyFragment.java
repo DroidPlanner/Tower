@@ -7,6 +7,8 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -146,13 +148,28 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
         mSidelapPicker.addScrollListener(this);
         mAltitudePicker.addScrollListener(this);
 
+        CheckBox startCameraBeforeFirstWaypointCheck = (CheckBox) view.findViewById(id.check_start_camera_before_first_waypoint);
+
         if(!getMissionItems().isEmpty()) {
             final T referenceItem = getMissionItems().get(0);
             if (referenceItem instanceof SplineSurvey)
                 typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SPLINE_SURVEY));
             else
                 typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
+
+            startCameraBeforeFirstWaypointCheck.setChecked(referenceItem.isStartCameraBeforeFirstWaypoint());
         }
+        startCameraBeforeFirstWaypointCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                final List<T> surveyList = getMissionItems();
+                if(!surveyList.isEmpty()) {
+                    for(T survey : surveyList) {
+                        survey.setStartCameraBeforeFirstWaypoint(isChecked);
+                    }
+                }
+            }
+        });
 
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
