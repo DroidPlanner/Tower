@@ -15,7 +15,7 @@ Used to Style the horizontal list of mission items.
     android:background="@drawable/ic_mission_button"
     android:padding="4dp"
     android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp"
+    android:layout_marginBottom="2dp"
     android:layout_marginLeft="2dp"
     android:layout_marginStart="2dp"
     >
