@@ -343,8 +343,8 @@ public class MissionProxy implements DPMap.PathSource {
     }
 
     public boolean isFirstItemTakeoff() {
-        return !missionItemProxies.isEmpty() && missionItemProxies.get(0).getMissionItem().getType() ==
-                MissionItemType.TAKEOFF;
+        return !missionItemProxies.isEmpty()
+            && missionItemProxies.get(0).getMissionItem().getType() == MissionItemType.TAKEOFF;
     }
 
     public boolean isLastItemLandOrRTL() {

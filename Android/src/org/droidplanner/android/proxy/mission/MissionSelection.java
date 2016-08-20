@@ -17,11 +17,12 @@ public class MissionSelection {
 	/**
 	 * Stores the selected mission items renders.
 	 */
-	public final List<MissionItemProxy> mSelectedItems = new ArrayList<MissionItemProxy>();
+	public final List<MissionItemProxy> mSelectedItems = new ArrayList<>();
+
 	/**
 	 * Stores the list of selection update listeners.
 	 */
-	public List<MissionSelection.OnSelectionUpdateListener> mSelectionsListeners = new ArrayList<MissionSelection.OnSelectionUpdateListener>();
+	public List<MissionSelection.OnSelectionUpdateListener> mSelectionsListeners = new ArrayList<>();
 
 	/**
 	 * Removes the given mission item render from the selected list.
