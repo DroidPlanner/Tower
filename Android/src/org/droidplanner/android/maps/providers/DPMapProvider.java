@@ -4,6 +4,9 @@ import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.GoogleMapFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefFragment;
 
+import org.droidplanner.android.maps.providers.baidu_map.BaiduMapFragment;
+import org.droidplanner.android.maps.providers.baidu_map.BaiduMapPrefFragment;
+
 /**
  * Contains a listing of the various map providers supported, and implemented in
  * DroidPlanner.
@@ -21,6 +24,16 @@ public enum DPMapProvider {
 		@Override
 		public MapProviderPreferences getMapProviderPreferences() {
 			return new GoogleMapPrefFragment();
+		}
+	},
+
+	BAIDU_MAP {
+		@Override
+		public DPMap getMapFragment() {	return new BaiduMapFragment(); }
+
+		@Override
+		public MapProviderPreferences getMapProviderPreferences() {
+			return new BaiduMapPrefFragment();
 		}
 	};
 

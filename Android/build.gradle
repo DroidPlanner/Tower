@@ -35,6 +35,7 @@ dependencies {
     compile files('libs/protobuf-java-2.5.0.jar')
     compile files('libs/jeromq-0.3.4.jar')
     compile files('libs/sius-0.3.0-SNAPSHOT.jar')
+    compile files('libs/BaiduLBS_Android.jar')
 
     compile "com.squareup.okhttp:okhttp:${okhttp_version}"
     compile "com.squareup.okhttp:okhttp-urlconnection:${okhttp_version}"
