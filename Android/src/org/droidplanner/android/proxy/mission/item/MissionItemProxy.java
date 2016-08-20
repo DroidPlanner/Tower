@@ -32,13 +32,7 @@ public class MissionItemProxy {
 	 */
 	private final MissionProxy mMission;
 
-    /**
-     * Used by the mission item list adapter to provide drag and drop support.
-     */
-    private final long stableId;
-
 	public MissionItemProxy(MissionProxy mission, MissionItem missionItem) {
-        this.stableId = System.nanoTime();
 
 		mMission = mission;
 		mMissionItem = missionItem;
@@ -126,13 +120,6 @@ public class MissionItemProxy {
 		return pathPoints;
 	}
 
-    /**
-     * @return stable id used by the recycler view adapter to provide drag and drop support.
-     */
-    public long getStableId(){
-        return stableId;
-    }
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
@@ -144,9 +131,6 @@ public class MissionItemProxy {
 
 		MissionItemProxy that = (MissionItemProxy) o;
 
-		if (stableId != that.stableId) {
-			return false;
-		}
 		if (mMissionItem != null ? !mMissionItem.equals(that.mMissionItem) : that.mMissionItem != null) {
 			return false;
 		}
@@ -161,7 +145,6 @@ public class MissionItemProxy {
 	public int hashCode() {
 		int result = mMissionItem != null ? mMissionItem.hashCode() : 0;
 		result = 31 * result + (mMission != null ? mMission.hashCode() : 0);
-		result = 31 * result + (int) (stableId ^ (stableId >>> 32));
 		return result;
 	}
 }
