@@ -2,6 +2,7 @@ package org.droidplanner.android.view.adapterViews;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Vibrator;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,10 +59,19 @@ public class MissionItemListAdapter extends RecyclerView.Adapter<MissionItemList
 
     }
 
+    private final View.OnLongClickListener vibrateOnLongPress = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            vibrator.vibrate(10L);
+            return true;
+        }
+    };
+
     private final MissionProxy missionProxy;
     private final OnEditorInteraction editorListener;
     private final LengthUnitProvider lengthUnitProvider;
     private final SpeedUnitProvider speedUnitProvider;
+    private final Vibrator vibrator;
 
     public MissionItemListAdapter(Context context, MissionProxy missionProxy, OnEditorInteraction editorListener) {
         this.missionProxy = missionProxy;
@@ -70,6 +80,8 @@ public class MissionItemListAdapter extends RecyclerView.Adapter<MissionItemList
         final UnitSystem unitSystem = UnitManager.getUnitSystem(context);
         this.lengthUnitProvider = unitSystem.getLengthUnitProvider();
         this.speedUnitProvider = unitSystem.getSpeedUnitProvider();
+
+        vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     @Override
@@ -112,6 +124,7 @@ public class MissionItemListAdapter extends RecyclerView.Adapter<MissionItemList
                 editorListener.onItemClick(proxy, true);
             }
         });
+        container.setOnLongClickListener(vibrateOnLongPress);
 
         final TextView nameView = viewHolder.nameView;
         final TextView altitudeView = viewHolder.altitudeView;

@@ -14,7 +14,7 @@
     <dimen name="editor_list_item_text_size">20sp</dimen>
 
     <!-- Dimension for the editor mission fragment -->
-    <dimen name="editor_mission_fragment_height">60dp</dimen>
+    <dimen name="editor_mission_fragment_height">70dp</dimen>
 
     <!-- Dimension for the setup and calibration screens -->
     <dimen name="setup_title_height">56dp</dimen>

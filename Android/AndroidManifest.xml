@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <uses-feature android:name="android.hardware.screen.portrait"/>
 
@@ -114,11 +115,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.SettingsActivity"/>
         </activity>
-        <activity
-            android:name=".activities.LocatorActivity"
-            android:label="@string/locator"
-            android:launchMode="singleTop"
-            android:theme="@style/CustomActionBarTheme.Transparent"/>
         <activity
             android:name=".tlog.TLogActivity"
             android:label="@string/locator"
