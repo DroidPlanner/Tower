@@ -8,11 +8,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.MAVLink.common.msg_global_position_int
 import com.o3dr.android.client.utils.data.tlog.TLogParser
-import com.o3dr.services.android.lib.coordinate.LatLong
 import com.o3dr.services.android.lib.coordinate.LatLongAlt
-import com.o3dr.services.android.lib.drone.mission.Mission
-import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint
-import com.o3dr.services.android.lib.util.MathUtils
 import org.droidplanner.android.R
 import org.droidplanner.android.activities.EditorActivity
 import org.droidplanner.android.droneshare.data.SessionContract
@@ -20,6 +16,7 @@ import org.droidplanner.android.tlog.adapters.TLogPositionEventAdapter
 import org.droidplanner.android.tlog.event.TLogEventDetail
 import org.droidplanner.android.tlog.event.TLogEventListener
 import org.droidplanner.android.tlog.event.TLogEventMapFragment
+import org.droidplanner.android.utils.DroneHelper
 import org.droidplanner.android.view.FastScroller
 
 /**
@@ -117,20 +114,12 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
             R.id.menu_export_mission -> {
                 // Generate a mission from the drone historical gps position.
                 val events = tlogPositionAdapter?.getItems() ?: return true
-                val positions = mutableListOf<LatLong>()
+                val positions = mutableListOf<LatLongAlt>()
                 for(event in events){
                     positions.add(msg_global_position_intToLatLongAlt(event!!.mavLinkMessage as msg_global_position_int))
                 }
 
-                // Simplify the generated path
-                val simplifiedPath = MathUtils.simplify(positions, toleranceInPixels)
-                val mission = Mission()
-                for(point in simplifiedPath){
-                    val missionItem = SplineWaypoint()
-                    missionItem.coordinate = point as LatLongAlt
-                    mission.addMissionItem(missionItem)
-                }
-
+                val mission = DroneHelper.exportPathAsMission(context, positions)
                 startActivity(Intent(activity, EditorActivity::class.java)
                         .setAction(EditorActivity.ACTION_VIEW_MISSION)
                         .putExtra(EditorActivity.EXTRA_MISSION, mission))

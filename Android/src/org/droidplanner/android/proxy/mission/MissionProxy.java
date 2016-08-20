@@ -228,6 +228,10 @@ public class MissionProxy implements DPMap.PathSource {
             survey = new Survey();
         }
         survey.setPolygonPoints(points);
+
+        // Load the last survey preferences.
+        dpPrefs.loadSurveyPreferences(drone, survey);
+
         addMissionItem(survey);
     }
 

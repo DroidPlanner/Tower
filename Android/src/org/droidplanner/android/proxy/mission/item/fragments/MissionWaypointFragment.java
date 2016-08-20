@@ -31,10 +31,13 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 
         typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.WAYPOINT));
 
+        final Waypoint item = (Waypoint) getMissionItems().get(0);
+
         final NumericWheelAdapter delayAdapter = new NumericWheelAdapter(context, R.layout.wheel_text_centered, 0, 60, "%d s");
         CardWheelHorizontalView<Integer> delayPicker = (CardWheelHorizontalView) view.findViewById(R.id
                 .waypointDelayPicker);
         delayPicker.setViewAdapter(delayAdapter);
+        delayPicker.setCurrentValue((int) item.getDelay());
         delayPicker.addScrollListener(this);
 
         final LengthUnitProvider lengthUP = getLengthUnitProvider();
@@ -43,11 +46,8 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
         CardWheelHorizontalView<LengthUnit> altitudePicker = (CardWheelHorizontalView) view.findViewById(R.id
                 .altitudePicker);
         altitudePicker.setViewAdapter(altitudeAdapter);
-        altitudePicker.addScrollListener(this);
-
-        final Waypoint item = (Waypoint) getMissionItems().get(0);
-        delayPicker.setCurrentValue((int) item.getDelay());
         altitudePicker.setCurrentValue(lengthUP.boxBaseValueToTarget(item.getCoordinate().getAltitude()));
+        altitudePicker.addScrollListener(this);
     }
 
     @Override

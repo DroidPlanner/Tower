@@ -18,11 +18,13 @@ import com.o3dr.android.client.apis.ControlApi;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.mission.Mission;
 import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.GuidedState;
 import com.o3dr.services.android.lib.drone.property.State;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.activities.EditorActivity;
 import org.droidplanner.android.dialogs.GuidedDialog;
 import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
 import org.droidplanner.android.graphic.map.GraphicHome;
@@ -103,8 +105,8 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
     }
 
     @Override
-    protected int getMaxFlightPathSize() {
-        return 1000;
+    protected boolean showFlightPath(){
+        return true;
     }
 
     @Override
@@ -141,6 +143,18 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
         switch(item.getItemId()) {
             case R.id.menu_map_clear_flight_path:
                 clearFlightPath();
+                return true;
+
+            case R.id.menu_export_flight_path_as_mission:
+                if (flightPathPoints.isEmpty()) {
+                    Toast.makeText(getContext(), R.string.error_empty_flight_path, Toast.LENGTH_LONG).show();
+                    return true;
+                }
+
+                Mission exportedMission = DroneHelper.exportPathAsMission(getContext(), flightPathPoints);
+                startActivity(new Intent(getActivity(), EditorActivity.class)
+                    .setAction(EditorActivity.ACTION_VIEW_MISSION)
+                    .putExtra(EditorActivity.EXTRA_MISSION, exportedMission));
                 return true;
 
             default:

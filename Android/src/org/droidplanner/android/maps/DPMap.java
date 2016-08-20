@@ -6,6 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.property.FootPrint;
 
 import org.droidplanner.android.maps.providers.DPMapProvider;
@@ -22,8 +23,8 @@ public interface DPMap {
 
 	String PACKAGE_NAME = DPMap.class.getPackage().getName();
 
-	String EXTRA_MAX_FLIGHT_PATH_SIZE = PACKAGE_NAME + ""
-			+ ".EXTRA_MAX_FLIGHT_PATH_SIZE";
+	String EXTRA_SHOW_FLIGHT_PATH = PACKAGE_NAME + ""
+			+ ".EXTRA_SHOW_FLIGHT_PATH";
 
 	int FLIGHT_PATH_DEFAULT_COLOR = 0xfffd693f;
 	int FLIGHT_PATH_DEFAULT_WIDTH = 6;
@@ -62,7 +63,7 @@ public interface DPMap {
 	 * @param coord
 	 *            drone's coordinate
 	 */
-	void addFlightPathPoint(LatLong coord);
+	void addFlightPathPoint(LatLongAlt coord);
 
 	/**
 	 * Draw the footprint of the camera in the ground
@@ -119,8 +120,6 @@ public interface DPMap {
 	 * @param maximumZ
      */
 	void downloadMapTiles(MapDownloader mapDownloader, DPMap.VisibleMapArea mapRegion, int minimumZ, int maximumZ);
-
-	List<LatLong> getFlightPath();
 
 	/**
 	 * @return the map center coordinates.

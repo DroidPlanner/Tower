@@ -55,6 +55,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.FootPrint;
@@ -253,7 +254,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
     private Polyline flightPath;
     private Polyline missionPath;
     private Polyline mDroneLeashPath;
-    private int maxFlightPathSize;
+    private boolean showFlightPath;
 
     /*
      * DP Map listeners
@@ -330,7 +331,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
         final Bundle args = getArguments();
         if (args != null) {
-            maxFlightPathSize = args.getInt(EXTRA_MAX_FLIGHT_PATH_SIZE);
+            showFlightPath = args.getBoolean(EXTRA_SHOW_FLIGHT_PATH);
         }
 
         return view;
@@ -452,13 +453,13 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
     }
 
     @Override
-    public void addFlightPathPoint(final LatLong coord) {
+    public void addFlightPathPoint(final LatLongAlt coord) {
         final LatLng position = DroneHelper.coordToLatLng(coord);
 
         getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                if (maxFlightPathSize > 0) {
+                if (showFlightPath) {
                     if (flightPath == null) {
                         PolylineOptions flightPathOptions = new PolylineOptions();
                         flightPathOptions.color(FLIGHT_PATH_DEFAULT_COLOR)
@@ -467,27 +468,11 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
                     }
 
                     List<LatLng> oldFlightPath = flightPath.getPoints();
-                    while (oldFlightPath.size() > maxFlightPathSize) {
-                        oldFlightPath.remove(0);
-                    }
                     oldFlightPath.add(position);
                     flightPath.setPoints(oldFlightPath);
                 }
             }
         });
-    }
-
-    @Override
-    public List<LatLong> getFlightPath(){
-        if(flightPath == null)
-            return null;
-
-        List<LatLng> flightPathPoints = flightPath.getPoints();
-        List<LatLong> flightPath = new ArrayList<>(flightPathPoints.size());
-        for(LatLng point : flightPathPoints){
-            flightPath.add(DroneHelper.latLngToCoord(point));
-        }
-        return flightPath;
     }
 
     @Override
