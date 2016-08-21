@@ -15,15 +15,15 @@ public abstract class MarkerInfo {
 
 	private ProxyMarker proxyMarker;
 
-	void setProxyMarker(ProxyMarker proxyMarker){
+	public void setProxyMarker(ProxyMarker proxyMarker){
 		this.proxyMarker = proxyMarker;
 	}
 
-	ProxyMarker getProxyMarker(){
+	public ProxyMarker getProxyMarker(){
 		return proxyMarker;
 	}
 
-	void removeProxyMarker(){
+	public final void removeProxyMarker(){
 		if(proxyMarker != null){
 			proxyMarker.removeMarker();
 		}
@@ -157,7 +157,7 @@ public abstract class MarkerInfo {
 	/**
      * Proxy interface to the actual map marker implementaton.
      */
-	interface ProxyMarker {
+	public interface ProxyMarker {
 		/**
 		 * Sets the alpha (opacity) of the marker.
 		 * @param alpha Value from 0 to 1, where 0 means the marker is completely transparent

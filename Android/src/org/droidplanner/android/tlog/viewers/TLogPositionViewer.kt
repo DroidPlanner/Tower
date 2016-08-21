@@ -16,7 +16,7 @@ import org.droidplanner.android.tlog.adapters.TLogPositionEventAdapter
 import org.droidplanner.android.tlog.event.TLogEventDetail
 import org.droidplanner.android.tlog.event.TLogEventListener
 import org.droidplanner.android.tlog.event.TLogEventMapFragment
-import org.droidplanner.android.utils.DroneHelper
+import org.droidplanner.android.utils.MapUtils
 import org.droidplanner.android.view.FastScroller
 
 /**
@@ -119,7 +119,7 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
                     positions.add(msg_global_position_intToLatLongAlt(event!!.mavLinkMessage as msg_global_position_int))
                 }
 
-                val mission = DroneHelper.exportPathAsMission(context, positions)
+                val mission = MapUtils.exportPathAsMission(context, positions)
                 startActivity(Intent(activity, EditorActivity::class.java)
                         .setAction(EditorActivity.ACTION_VIEW_MISSION)
                         .putExtra(EditorActivity.EXTRA_MISSION, mission))

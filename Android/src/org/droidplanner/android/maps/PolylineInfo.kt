@@ -9,9 +9,9 @@ import com.o3dr.services.android.lib.coordinate.LatLong
  */
 abstract class PolylineInfo {
 
-    protected var proxyPolyline: ProxyPolyline? = null
+    var proxyPolyline: ProxyPolyline? = null
 
-    protected fun removeProxy(){
+    fun removeProxy(){
         proxyPolyline?.remove()
         proxyPolyline = null
     }

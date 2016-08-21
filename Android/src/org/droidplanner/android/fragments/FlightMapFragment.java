@@ -30,7 +30,7 @@ import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
 import org.droidplanner.android.graphic.map.GraphicHome;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.android.utils.DroneHelper;
+import org.droidplanner.android.utils.MapUtils;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 
 public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
@@ -151,7 +151,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
                     return true;
                 }
 
-                Mission exportedMission = DroneHelper.exportPathAsMission(getContext(), flightPathPoints);
+                Mission exportedMission = MapUtils.exportPathAsMission(getContext(), flightPathPoints);
                 startActivity(new Intent(getActivity(), EditorActivity.class)
                     .setAction(EditorActivity.ACTION_VIEW_MISSION)
                     .putExtra(EditorActivity.EXTRA_MISSION, exportedMission));
@@ -171,7 +171,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
                     guidedClickListener.onGuidedClick(coord);
             } else {
                 GuidedDialog dialog = new GuidedDialog();
-                dialog.setCoord(DroneHelper.coordToLatLng(coord));
+                dialog.setCoord(MapUtils.coordToLatLng(coord));
                 dialog.setListener(this);
                 dialog.show(getChildFragmentManager(), "GUIDED dialog");
             }
@@ -181,7 +181,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
     @Override
     public void onForcedGuidedPoint(LatLng coord) {
         try {
-            ControlApi.getApi(drone).goTo(DroneHelper.latLngToCoord(coord), true, null);
+            ControlApi.getApi(drone).goTo(MapUtils.latLngToCoord(coord), true, null);
         } catch (Exception e) {
             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }

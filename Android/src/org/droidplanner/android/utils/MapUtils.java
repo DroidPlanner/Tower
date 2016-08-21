@@ -14,12 +14,12 @@ import com.o3dr.services.android.lib.util.MathUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DroneHelper {
+public class MapUtils {
 	static public LatLng coordToLatLng(LatLong coord) {
 		return new LatLng(coord.getLatitude(), coord.getLongitude());
 	}
 
-	public static List<LatLng> coordToLatng(List<? extends LatLong> coords){
+	public static List<LatLng> coordToLatLng(List<? extends LatLong> coords){
 		List<LatLng> points = new ArrayList<>(coords.size());
 		for(LatLong coord: coords){
 			points.add(coordToLatLng(coord));
@@ -61,5 +61,21 @@ public class DroneHelper {
         }
 
         return exportedMission;
+    }
+
+	public static List<com.baidu.mapapi.model.LatLng> coordToBaiduLatLng(List<? extends LatLong> coords) {
+        List<com.baidu.mapapi.model.LatLng> points = new ArrayList<>(coords.size());
+        for(LatLong coord: coords){
+            points.add(coordToBaiduLatLng(coord));
+        }
+        return points;
+	}
+
+	public static com.baidu.mapapi.model.LatLng coordToBaiduLatLng(LatLong coord) {
+        return new com.baidu.mapapi.model.LatLng(coord.getLatitude(), coord.getLongitude());
+    }
+
+	public static LatLong baiduLatLngToCoord(com.baidu.mapapi.model.LatLng point) {
+        return new LatLong((float)point.latitude, (float) point.longitude);
     }
 }
