@@ -8,6 +8,13 @@
         chg:changeLogFileResourceId="@raw/custom_changelog"
         in your View component in layout file -->
 
+    <!--
+    TODO: enable for version 4.1.0
+    <changelogversion versionName="4.1.0" changeDate="Sept 30, 2016">
+        <changelogimprovement>Add weather widget</changelogimprovement>
+    </changelogversion>
+    -->
+
     <changelogversion versionName="4.0.0" changeDate="August 21, 2016">
         <changelogimprovement>Introducing [b]standalone[/b] mode - Tower can now be used without 3DR Services</changelogimprovement>
         <changelogimprovement>Add support for Baidu Map</changelogimprovement>
@@ -15,7 +22,6 @@
         <changelogimprovement>Add an improved version of the vehicle history</changelogimprovement>
         <changelogimprovement>Add ability to export the vehicle flight path as a mission</changelogimprovement>
         <changelogimprovement>Add ability to export the vehicle flight history as a mission</changelogimprovement>
-        <changelogimprovement>Add weather widget</changelogimprovement>
         <changelogimprovement>Deprecated '.dpwp' mission file for '.txt' mission file to improve compatibility with other GCS</changelogimprovement>
         <changelogimprovment>Add ability to lock the copter yaw during a survey mission</changelogimprovment>
         <changelogimprovment>Add ability to start camera trigger after the first waypoint in a survey mission</changelogimprovment>

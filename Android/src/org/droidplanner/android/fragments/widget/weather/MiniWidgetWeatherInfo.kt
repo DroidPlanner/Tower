@@ -20,6 +20,7 @@ import org.droidplanner.android.R
 import org.droidplanner.android.fragments.widget.TowerWidget
 import org.droidplanner.android.fragments.widget.TowerWidgets
 import org.droidplanner.android.utils.NetworkUtils
+import org.droidplanner.android.utils.unit.UnitManager
 import org.droidplanner.android.utils.unit.systems.UnitSystem
 import org.json.JSONException
 import org.json.JSONObject
@@ -32,8 +33,8 @@ import java.io.IOException
 class MiniWidgetWeatherInfo : TowerWidget() {
 
     companion object {
-        //TODO: update the weather api token
-        private const val WEATHER_API_TOKEN = "a9ea38037d6fdb78"
+        //TODO: update the weather api token for version 4.1.0. The current one is not suited for production
+        private const val WEATHER_API_TOKEN = "a855ec2770848d99"
 
         private val JSON_LABEL_CURRENT_WEATHER = "current_observation"
         private val JSON_LABEL_DISPLAY_LOCATION = "display_location"
@@ -187,7 +188,7 @@ class MiniWidgetWeatherInfo : TowerWidget() {
             return
         }
 
-        val unitSystemType = appPrefs.unitSystemType
+        val unitSystemType = UnitManager.getUnitSystem(context).type
 
         var fullLocation = ""
         val displayLoc = jsonObject.optJSONObject(JSON_LABEL_DISPLAY_LOCATION)

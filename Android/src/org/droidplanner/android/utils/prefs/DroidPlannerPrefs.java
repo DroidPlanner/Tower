@@ -531,8 +531,8 @@ public class DroidPlannerPrefs {
         prefs.edit().putBoolean(widget.getPrefKey(), enable).apply();
     }
 
-    public boolean isWidgetEnabled(TowerWidgets widget) {
-        return prefs.getBoolean(widget.getPrefKey(), widget.isEnabledByDefault());
+    public boolean isWidgetVisible(TowerWidgets widget) {
+        return prefs.getBoolean(widget.getPrefKey(), widget.isVisibleByDefault());
     }
 
     public boolean isReturnToMeEnabled() {

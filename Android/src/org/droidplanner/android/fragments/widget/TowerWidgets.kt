@@ -22,7 +22,7 @@ enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId: Int, @
     FLIGHT_TIMER(R.id.tower_widget_flight_timer, R.string.label_widget_flight_timer, R.string.description_widget_flight_timer, "pref_widget_flight_timer"){
         override fun getMinimizedFragment() = MiniWidgetFlightTimer()
 
-        override fun isEnabledByDefault() = true
+        override fun internalIsVisibleByDefault() = true
     },
 
     VEHICLE_DIAGNOSTICS(R.id.tower_widget_vehicle_diagnostics, R.string.label_widget_vehicle_diagnostics, R.string.description_widget_vehicle_diagnostics, "pref_widget_vehicle_diagnostics") {
@@ -37,7 +37,7 @@ enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId: Int, @
 
         override fun canMaximize() = true
 
-        override fun isEnabledByDefault() = true
+        override fun internalIsVisibleByDefault() = true
 
         override fun getMinimizedFragment() = MiniWidgetSoloLinkVideo()
 
@@ -52,7 +52,7 @@ enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId: Int, @
 
         override fun canMaximize() = true
 
-        override fun isEnabledByDefault() = false
+        override fun internalIsVisibleByDefault() = false
 
         override fun getMinimizedFragment() = MiniWidgetUVCLinkVideo()
 
@@ -64,7 +64,7 @@ enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId: Int, @
 
         override fun getMinimizedFragment() = MiniWidgetAttitudeSpeedInfo()
 
-        override fun isEnabledByDefault() = true
+        override fun internalIsVisibleByDefault() = true
     },
 
     GEO_INFO(R.id.tower_widget_geo_info, R.string.label_widget_geo_info, R.string.description_widget_geo_info, "pref_widget_geo_info"){
@@ -74,6 +74,9 @@ enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId: Int, @
     //Weather widget
     WEATHER_INFO(R.id.tower_widget_weather_info, R.string.label_widget_weather_info, R.string.description_widget_weather_info, "pref_widget_weather_info"){
         override fun getMinimizedFragment() = MiniWidgetWeatherInfo()
+
+        //TODO: enable for version 4.1.0
+        override fun isEnabled() = false
     }
     ;
 
@@ -81,7 +84,11 @@ enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId: Int, @
 
     open fun canMaximize() = false
 
-    open fun isEnabledByDefault() = false
+    fun isVisibleByDefault() = isEnabled() && internalIsVisibleByDefault()
+
+    protected open fun internalIsVisibleByDefault() = false
+
+    protected open fun isEnabled() = true
 
     open fun getMaximizedFragment(): TowerWidget? = null
 
@@ -115,5 +122,7 @@ enum class TowerWidgets(@IdRes val idRes: Int, @StringRes val labelResId: Int, @
                 else -> null
             }
         }
+
+        @JvmStatic fun enabledWidgets() = TowerWidgets.values().filter { widget -> widget.isEnabled() }
     }
 }

@@ -35,7 +35,7 @@ class WidgetsListPrefFragment : DialogFragment() {
         widgetsListPref?.adapter = WidgetsAdapter(activity.applicationContext, fragmentManager)
     }
 
-    class WidgetsAdapter(context: Context, val fm : FragmentManager) : ArrayAdapter<TowerWidgets>(context, 0, TowerWidgets.values()){
+    class WidgetsAdapter(context: Context, val fm : FragmentManager) : ArrayAdapter<TowerWidgets>(context, 0, TowerWidgets.enabledWidgets()){
 
         val appPrefs = DroidPlannerPrefs.getInstance(context)
         val lbm = LocalBroadcastManager.getInstance(context)
@@ -60,7 +60,7 @@ class WidgetsListPrefFragment : DialogFragment() {
             viewHolder.prefSummary?.setText(towerWidget.descriptionResId)
 
             viewHolder.prefCheck?.setOnCheckedChangeListener(null)
-            viewHolder.prefCheck?.isChecked = appPrefs.isWidgetEnabled(towerWidget)
+            viewHolder.prefCheck?.isChecked = appPrefs.isWidgetVisible(towerWidget)
             viewHolder.prefCheck?.setOnCheckedChangeListener { compoundButton, b ->
                 appPrefs.enableWidget(towerWidget, b)
                 lbm.sendBroadcast(Intent(SettingsFragment.ACTION_WIDGET_PREFERENCE_UPDATED)
