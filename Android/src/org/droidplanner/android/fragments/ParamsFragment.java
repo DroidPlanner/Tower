@@ -48,7 +48,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-public class ParamsFragment extends ApiListenerListFragment implements
+public class
+ParamsFragment extends ApiListenerListFragment implements
     SupportEditInputDialog.Listener {
 
     public static final String ADAPTER_ITEMS = ParamsFragment.class.getName() + ".adapter.items";
