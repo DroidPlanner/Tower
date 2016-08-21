@@ -72,6 +72,7 @@ public class AppService extends Service {
 
     private NotificationHandler notificationHandler;
     private DroidPlannerApp dpApp;
+    private Drone drone;
 
     @Override
     public void onCreate() {
@@ -82,7 +83,7 @@ public class AppService extends Service {
 
         dpApp.getSoundManager().start();
 
-        final Drone drone = dpApp.getDrone();
+        drone = dpApp.getDrone();
 
         final Context context = getApplicationContext();
         if (NetworkUtils.isOnSoloNetwork(context)) {
@@ -124,6 +125,10 @@ public class AppService extends Service {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void bringUpCellularNetwork() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+            return;
+
+        // Wait until the drone is connected.
+        if(drone == null || !drone.isConnected())
             return;
 
         Timber.i("Setting up cellular network request.");
