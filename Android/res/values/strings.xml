@@ -648,7 +648,7 @@
     <string name="pref_baidu_map_offline_preference_search">Search</string>
     <string name="pref_baidu_map_offline_preference_city_list">City list</string>
     <string name="pref_baidu_map_offline_preference_download_manage">Download manage</string>
-    <string name="pref_baidu_map_offline_preference_downloaded_label">Downloaded:--</string>
+    <string name="pref_baidu_map_offline_preference_downloaded_label">Downloaded:—</string>
     <string name="pref_baidu_map_offline_preference_downloaded_cities">Downloaded cities</string>
     <string name="pref_baidu_map_offline_preference_download_available">Download available</string>
     <string name="pref_baidu_map_offline_preference_download_latest">Latest</string>
