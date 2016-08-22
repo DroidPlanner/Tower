@@ -6,7 +6,7 @@
     android:layout_height="@dimen/action_bar_telem_height"
     android:layout_gravity="center"
     android:gravity="center"
-    tools:layout_margin="10dp">
+    tools:layout_margin="40dp">
 
     <TableRow
         style="?android:attr/buttonBarStyle"
@@ -62,6 +62,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="75dp"
                 android:layout_gravity="center"
                 android:drawableLeft="@drawable/ic_signal_cellular_null_grey_700_18dp"
                 android:drawablePadding="@dimen/info_bar_drawable_padding"

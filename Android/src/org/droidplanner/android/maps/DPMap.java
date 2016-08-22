@@ -98,6 +98,11 @@ public interface DPMap {
 	void addPolyline(PolylineInfo polylineInfo);
 
 	/**
+	 * Clear all markers and polylines from the map.
+	 */
+	void clearAll();
+
+	/**
 	 * Remove all markers from the map.
 	 */
 	void clearMarkers();

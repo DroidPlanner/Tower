@@ -1,6 +1,5 @@
 package org.droidplanner.android.utils;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.location.Location;
 
@@ -43,14 +42,12 @@ public class MapUtils {
 
     /**
      * Export the given path as a Mission
-     * @param context
      * @param pathPoints
      * @return
      */
-	public static Mission exportPathAsMission(Context context, List<LatLongAlt> pathPoints) {
+	public static Mission exportPathAsMission(List<LatLongAlt> pathPoints, double toleranceInPixels) {
         Mission exportedMission = new Mission();
         if(pathPoints != null && !pathPoints.isEmpty()) {
-            double toleranceInPixels = scaleDpToPixels(15, context.getResources());
             List<LatLong> simplifiedPath = MathUtils.simplify(pathPoints, toleranceInPixels);
 
             for(LatLong point : simplifiedPath) {

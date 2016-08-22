@@ -254,6 +254,22 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
             List<LatLng> oldFlightPath = mFlightPath.getPoints();
             oldFlightPath.clear();
             mFlightPath.setPoints(oldFlightPath);
+            mFlightPath.remove();
+            mFlightPath = null;
+        }
+    }
+
+    private void clearDroneLeashPath(){
+        if(mDroneLeashPath != null){
+            mDroneLeashPath.remove();
+            mDroneLeashPath = null;
+        }
+    }
+
+    private void clearMissionPath(){
+        if(mMissionPath != null){
+            mMissionPath.remove();
+            mMissionPath = null;
         }
     }
 
@@ -313,6 +329,21 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
             if (oldFlightPath.size() >=2) { // BaiduMap Polyline overlay needs at least 2 points
                 mFlightPath.setPoints(oldFlightPath);
             }
+        }
+    }
+
+    @Override
+    public void clearAll(){
+        clearMarkers();
+        clearPolylines();
+        clearFlightPath();
+        clearMissionPath();
+        clearFootPrints();
+        clearPolygonPaths();
+        clearDroneLeashPath();
+        BaiduMap map = getBaiduMap();
+        if(map != null){
+            map.clear();
         }
     }
 
@@ -390,6 +421,20 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
             markerInfo.setProxyMarker(new ProxyMapMarker(marker));
             markersMap.put(marker, markerInfo);
         }
+    }
+
+    private void clearFootPrints(){
+        if(mFootprintPoly != null){
+            mFootprintPoly.remove();
+            mFootprintPoly = null;
+        }
+    }
+
+    private void clearPolygonPaths(){
+        for(Polygon polygon: mPolygonsPaths){
+            polygon.remove();
+        }
+        mPolygonsPaths.clear();
     }
 
     @Override

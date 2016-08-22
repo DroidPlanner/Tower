@@ -661,4 +661,5 @@
     <string name="pref_baidu_map_offline_download_remove_message">Remove offline map. City ID: %d</string>
     <string name="baidu_map_sdk_initializer_permission_error_message">BaiduMap: API Keycode error, please check the keycode in AndroidManifest.xml!</string>
     <string name="baidu_map_sdk_initializer_network_error_message">BaiduMap: Network error!</string>
+    <string name="warning_check_exported_mission">Please verify the exported mission!</string>
 </resources>

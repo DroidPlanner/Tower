@@ -151,10 +151,13 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
                     return true;
                 }
 
-                Mission exportedMission = MapUtils.exportPathAsMission(getContext(), flightPathPoints);
+                Mission exportedMission = MapUtils.exportPathAsMission(flightPathPoints, 0.00012);
                 startActivity(new Intent(getActivity(), EditorActivity.class)
                     .setAction(EditorActivity.ACTION_VIEW_MISSION)
                     .putExtra(EditorActivity.EXTRA_MISSION, exportedMission));
+
+                clearFlightPath();
+                Toast.makeText(getContext(), R.string.warning_check_exported_mission, Toast.LENGTH_LONG).show();
                 return true;
 
             default:

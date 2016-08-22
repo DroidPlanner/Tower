@@ -400,9 +400,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
     @Override
     public void clearFlightPath() {
         if (flightPath != null) {
-            List<LatLng> oldFlightPath = flightPath.getPoints();
-            oldFlightPath.clear();
-            flightPath.setPoints(oldFlightPath);
+            flightPath.remove();
+            flightPath = null;
         }
     }
 
@@ -476,12 +475,63 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
     }
 
     @Override
+    public void clearAll(){
+        clearUserMarker();
+        clearMarkers();
+        clearPolylines();
+        clearFlightPath();
+        clearMissionPath();
+        clearFootPrints();
+        clearPolygonPaths();
+        clearDroneLeashPath();
+        GoogleMap googleMap = getMap();
+        if(googleMap != null){
+            googleMap.clear();
+        }
+    }
+
+    private void clearUserMarker(){
+        if(userMarker != null){
+            userMarker.remove();
+            userMarker = null;
+        }
+    }
+
+    private void clearFootPrints(){
+        if(footprintPoly != null){
+            footprintPoly.remove();
+            footprintPoly = null;
+        }
+    }
+
+    private void clearPolygonPaths(){
+        for(Polygon polygon: polygonsPaths){
+            polygon.remove();
+        }
+        polygonsPaths.clear();
+    }
+
+    @Override
     public void clearMarkers() {
         for(MarkerInfo markerInfo : markersMap.values()){
             markerInfo.removeProxyMarker();
         }
 
         markersMap.clear();
+    }
+
+    private void clearDroneLeashPath(){
+        if(mDroneLeashPath != null){
+            mDroneLeashPath.remove();
+            mDroneLeashPath = null;
+        }
+    }
+
+    private void clearMissionPath(){
+        if(missionPath != null){
+            missionPath.remove();
+            missionPath = null;
+        }
     }
 
 
@@ -536,22 +586,20 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
     }
 
     @Override
-    public void addMarker(final MarkerInfo markerInfo){
-        if(markerInfo == null || markerInfo.isOnMap())
+    public void addMarker(final MarkerInfo markerInfo) {
+        if (markerInfo == null || markerInfo.isOnMap())
             return;
 
         final MarkerOptions options = fromMarkerInfo(markerInfo);
-        if(options == null)
+        if (options == null)
             return;
 
-        getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                Marker marker = googleMap.addMarker(options);
-                markerInfo.setProxyMarker(new ProxyMapMarker(marker));
-                markersMap.put(marker, markerInfo);
-            }
-        });
+        GoogleMap googleMap = getMap();
+        if (googleMap != null) {
+            Marker marker = googleMap.addMarker(options);
+            markerInfo.setProxyMarker(new ProxyMapMarker(marker));
+            markersMap.put(marker, markerInfo);
+        }
     }
 
     @Override
@@ -571,23 +619,21 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
         final PolylineOptions options = fromPolylineInfo(polylineInfo);
 
-        getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                Polyline polyline = googleMap.addPolyline(options);
-                polylineInfo.setProxyPolyline(new ProxyMapPolyline(polyline));
-                polylinesMap.put(polyline, polylineInfo);
-            }
-        });
+        GoogleMap googleMap = getMap();
+        if (googleMap != null) {
+            Polyline polyline = googleMap.addPolyline(options);
+            polylineInfo.setProxyPolyline(new ProxyMapPolyline(polyline));
+            polylinesMap.put(polyline, polylineInfo);
+        }
     }
 
-    private void addMarkers(final List<MarkerInfo> markerInfoList, int draggableType){
-        if(markerInfoList == null || markerInfoList.isEmpty())
+    private void addMarkers(final List<MarkerInfo> markerInfoList, int draggableType) {
+        if (markerInfoList == null || markerInfoList.isEmpty())
             return;
 
         final int infoCount = markerInfoList.size();
         final MarkerOptions[] optionsSet = new MarkerOptions[infoCount];
-        for(int i = 0; i < infoCount; i++){
+        for (int i = 0; i < infoCount; i++) {
             MarkerInfo markerInfo = markerInfoList.get(i);
             boolean isDraggable = draggableType == GET_DRAGGABLE_FROM_MARKER_INFO
                 ? markerInfo.isDraggable()
@@ -595,21 +641,19 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
             optionsSet[i] = markerInfo.isOnMap() ? null : fromMarkerInfo(markerInfo, isDraggable);
         }
 
-        getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                for (int i = 0; i < infoCount; i++) {
-                    MarkerOptions options = optionsSet[i];
-                    if(options == null)
-                        continue;
+        GoogleMap googleMap = getMap();
+        if (googleMap != null) {
+            for (int i = 0; i < infoCount; i++) {
+                MarkerOptions options = optionsSet[i];
+                if (options == null)
+                    continue;
 
-                    Marker marker = googleMap.addMarker(options);
-                    MarkerInfo markerInfo = markerInfoList.get(i);
-                    markerInfo.setProxyMarker(new ProxyMapMarker(marker));
-                    markersMap.put(marker, markerInfo);
-                }
+                Marker marker = googleMap.addMarker(options);
+                MarkerInfo markerInfo = markerInfoList.get(i);
+                markerInfo.setProxyMarker(new ProxyMapMarker(marker));
+                markersMap.put(marker, markerInfo);
             }
-        });
+        }
     }
 
     @Override

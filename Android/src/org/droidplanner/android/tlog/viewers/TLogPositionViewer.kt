@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
+import android.widget.Toast
 import com.MAVLink.common.msg_global_position_int
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import com.o3dr.services.android.lib.coordinate.LatLongAlt
@@ -28,6 +29,10 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         fun msg_global_position_intToLatLongAlt(position : msg_global_position_int): LatLongAlt {
             return LatLongAlt(position.lat.toDouble()/ 1E7, position.lon.toDouble()/ 1E7, (position.relative_alt / 1000.0))
         }
+
+        const val STATE_NO_DATA = 0
+        const val STATE_LOADING_DATA = 1
+        const val STATE_DATA_LOADED = 2
     }
 
     private var tlogPositionAdapter : TLogPositionEventAdapter? = null
@@ -56,6 +61,7 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
     private var lastEventTimestamp = -1L
     private var toleranceInPixels = 0.0
 
+    private var currentState = STATE_NO_DATA
     private var missionExportMenuItem: MenuItem? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
@@ -107,6 +113,10 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_tlog_position_viewer, menu)
         missionExportMenuItem = menu.findItem(R.id.menu_export_mission)
+        missionExportMenuItem?.apply {
+            isVisible = currentState == STATE_DATA_LOADED
+            isEnabled = currentState == STATE_DATA_LOADED
+        }
     }
 
     override fun onOptionsItemSelected(item : MenuItem): Boolean {
@@ -119,10 +129,11 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
                     positions.add(msg_global_position_intToLatLongAlt(event!!.mavLinkMessage as msg_global_position_int))
                 }
 
-                val mission = MapUtils.exportPathAsMission(context, positions)
+                val mission = MapUtils.exportPathAsMission(positions, 0.00012)
                 startActivity(Intent(activity, EditorActivity::class.java)
                         .setAction(EditorActivity.ACTION_VIEW_MISSION)
                         .putExtra(EditorActivity.EXTRA_MISSION, mission))
+                Toast.makeText(context, R.string.warning_check_exported_mission, Toast.LENGTH_LONG).show()
                 return true
             }
 
@@ -186,6 +197,8 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
     }
 
     private fun stateLoadingData() {
+        currentState = STATE_LOADING_DATA
+
         noDataView?.visibility = View.GONE
         eventsView?.visibility = View.GONE
         fastScroller.visibility = View.GONE
@@ -198,6 +211,8 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
     }
 
     private fun stateNoData(){
+        currentState = STATE_NO_DATA
+
         noDataView?.visibility = View.VISIBLE
         eventsView?.visibility = View.GONE
         fastScroller.visibility = View.GONE
@@ -210,6 +225,8 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
     }
 
     private fun stateDataLoaded(){
+        currentState = STATE_DATA_LOADED
+
         noDataView?.visibility = View.GONE
         eventsView?.visibility = View.VISIBLE
         fastScroller.visibility = View.VISIBLE

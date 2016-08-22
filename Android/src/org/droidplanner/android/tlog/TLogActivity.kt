@@ -85,6 +85,8 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.Listener, TLogDataPro
         }
     }
 
+    override fun addToolbarFragment(){}
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_locator, menu)
         return true
