@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.o3dr.android.client.apis.ControlApi;
 import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.mission.Mission;
@@ -31,6 +32,7 @@ import org.droidplanner.android.graphic.map.GraphicHome;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.utils.MapUtils;
+import org.droidplanner.android.utils.SpaceTime;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 
 public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
@@ -96,6 +98,12 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
             super.goToMyLocation();
             didZoomOnUserLocation = true;
         }
+    }
+
+    @Override
+    protected LatLongAlt getCurrentFlightPoint(){
+        LatLongAlt space = super.getCurrentFlightPoint();
+        return new SpaceTime(space, System.currentTimeMillis());
     }
 
     @Override

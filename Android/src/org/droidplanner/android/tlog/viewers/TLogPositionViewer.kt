@@ -9,7 +9,6 @@ import android.view.*
 import android.widget.Toast
 import com.MAVLink.common.msg_global_position_int
 import com.o3dr.android.client.utils.data.tlog.TLogParser
-import com.o3dr.services.android.lib.coordinate.LatLongAlt
 import org.droidplanner.android.R
 import org.droidplanner.android.activities.EditorActivity
 import org.droidplanner.android.droneshare.data.SessionContract
@@ -18,6 +17,7 @@ import org.droidplanner.android.tlog.event.TLogEventDetail
 import org.droidplanner.android.tlog.event.TLogEventListener
 import org.droidplanner.android.tlog.event.TLogEventMapFragment
 import org.droidplanner.android.utils.MapUtils
+import org.droidplanner.android.utils.SpaceTime
 import org.droidplanner.android.view.FastScroller
 
 /**
@@ -26,8 +26,15 @@ import org.droidplanner.android.view.FastScroller
 class TLogPositionViewer : TLogViewer(), TLogEventListener {
 
     companion object {
-        fun msg_global_position_intToLatLongAlt(position : msg_global_position_int): LatLongAlt {
-            return LatLongAlt(position.lat.toDouble()/ 1E7, position.lon.toDouble()/ 1E7, (position.relative_alt / 1000.0))
+        fun tlogEventToSpaceTime(event: TLogParser.Event): SpaceTime? {
+            if(event.mavLinkMessage !is msg_global_position_int)
+                return null
+
+            val position = event.mavLinkMessage as msg_global_position_int
+            return SpaceTime(position.lat.toDouble()/ 1E7,
+                    position.lon.toDouble()/ 1E7,
+                    (position.relative_alt / 1000.0),
+                    event.timestamp)
         }
 
         const val STATE_NO_DATA = 0
@@ -124,9 +131,13 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
             R.id.menu_export_mission -> {
                 // Generate a mission from the drone historical gps position.
                 val events = tlogPositionAdapter?.getItems() ?: return true
-                val positions = mutableListOf<LatLongAlt>()
+                val positions = mutableListOf<SpaceTime>()
                 for(event in events){
-                    positions.add(msg_global_position_intToLatLongAlt(event!!.mavLinkMessage as msg_global_position_int))
+                    if(event == null)
+                        continue
+
+                    val spaceTime = tlogEventToSpaceTime(event) ?: continue
+                    positions.add(spaceTime)
                 }
 
                 val mission = MapUtils.exportPathAsMission(positions, 0.00012)

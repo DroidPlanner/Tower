@@ -39,8 +39,8 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventListener {
 
     override fun onTLogDataLoaded(events: List<TLogParser.Event>, hasMore: Boolean) {
         for(event in events){
-            val globalPositionInt = event.mavLinkMessage as msg_global_position_int
-            eventsPolylineInfo.addCoord(TLogPositionViewer.msg_global_position_intToLatLongAlt(globalPositionInt))
+            val coord = TLogPositionViewer.tlogEventToSpaceTime(event) ?: continue
+            eventsPolylineInfo.addCoord(coord)
         }
         eventsPolylineInfo.update(this)
     }

@@ -38,7 +38,6 @@ import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -169,9 +168,9 @@ public abstract class DroneMap extends ApiListenerFragment {
 
 		if(bundle != null){
 			flightPathPoints.clear();
-			LatLongAlt[] flightPoints = (LatLongAlt[]) bundle.getParcelableArray(EXTRA_DRONE_FLIGHT_PATH);
-			if(flightPoints != null && flightPoints.length > 0){
-                Collections.addAll(flightPathPoints, flightPoints);
+			LinkedList<LatLongAlt> flightPoints = (LinkedList<LatLongAlt>) bundle.getSerializable(EXTRA_DRONE_FLIGHT_PATH);
+			if(flightPoints != null && !flightPoints.isEmpty()){
+                flightPathPoints.addAll(flightPoints);
 			}
 		}
 
@@ -182,8 +181,6 @@ public abstract class DroneMap extends ApiListenerFragment {
 	public void onApiConnected() {
 		if (mMapFragment != null)
 			mMapFragment.clearAll();
-
-		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 
 		drone = getDrone();
 		missionProxy = getMissionProxy();
@@ -202,19 +199,28 @@ public abstract class DroneMap extends ApiListenerFragment {
         }
 
 		onMissionUpdate();
+		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
 	}
 
     private void updateFlightPath(){
         if(showFlightPath()) {
-            final Gps droneGps = drone.getAttribute(AttributeType.GPS);
-            if (droneGps != null && droneGps.isValid()) {
-                Altitude droneAltitude = drone.getAttribute(AttributeType.ALTITUDE);
-                LatLongAlt point = new LatLongAlt(droneGps.getPosition(),
-                    droneAltitude.getAltitude());
-                mMapFragment.addFlightPathPoint(point);
-                flightPathPoints.add(point);
+            LatLongAlt currentFlightPoint = getCurrentFlightPoint();
+            if(currentFlightPoint != null){
+                mMapFragment.addFlightPathPoint(currentFlightPoint);
+                flightPathPoints.add(currentFlightPoint);
             }
         }
+    }
+
+    protected LatLongAlt getCurrentFlightPoint(){
+        final Gps droneGps = drone.getAttribute(AttributeType.GPS);
+        if (droneGps != null && droneGps.isValid()) {
+            Altitude droneAltitude = drone.getAttribute(AttributeType.ALTITUDE);
+            LatLongAlt point = new LatLongAlt(droneGps.getPosition(),
+                droneAltitude.getAltitude());
+            return point;
+        }
+        return null;
     }
 
     protected final void onMissionUpdate(){
@@ -308,7 +314,7 @@ public abstract class DroneMap extends ApiListenerFragment {
         super.onSaveInstanceState(outState);
         if(mMapFragment != null) {
             if(!flightPathPoints.isEmpty()){
-                outState.putParcelableArray(EXTRA_DRONE_FLIGHT_PATH, flightPathPoints.toArray(new LatLongAlt[flightPathPoints.size()]));
+                outState.putSerializable(EXTRA_DRONE_FLIGHT_PATH, flightPathPoints);
             }
         }
     }

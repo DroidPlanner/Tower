@@ -7,6 +7,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.mission.Mission;
+import com.o3dr.services.android.lib.drone.mission.item.command.ChangeSpeed;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
 import com.o3dr.services.android.lib.util.MathUtils;
 
@@ -45,12 +46,46 @@ public class MapUtils {
      * @param pathPoints
      * @return
      */
-	public static Mission exportPathAsMission(List<LatLongAlt> pathPoints, double toleranceInPixels) {
+	public static Mission exportPathAsMission(List<? extends LatLongAlt> pathPoints, double toleranceInPixels) {
         Mission exportedMission = new Mission();
         if(pathPoints != null && !pathPoints.isEmpty()) {
             List<LatLong> simplifiedPath = MathUtils.simplify(pathPoints, toleranceInPixels);
 
+            int pointsCount = simplifiedPath.size();
+            if(pointsCount > 3){
+                // When taking off and/or landing the altitude has a tendency to be a bit too low.
+                LatLongAlt first = (LatLongAlt) simplifiedPath.get(0);
+                LatLongAlt second = (LatLongAlt) simplifiedPath.get(1);
+                first.setAltitude((second.getAltitude() + first.getAltitude())/ 2.0);
+
+                LatLongAlt beforeLast = (LatLongAlt) simplifiedPath.get(pointsCount - 2);
+                LatLongAlt last = (LatLongAlt) simplifiedPath.get(pointsCount -1);
+                last.setAltitude((last.getAltitude() + beforeLast.getAltitude())/2.0);
+            }
+
+            SpaceTime lastPoint = null;
             for(LatLong point : simplifiedPath) {
+                if(point instanceof SpaceTime) {
+                    SpaceTime currentPoint = (SpaceTime) point;
+                    if(lastPoint != null) {
+                        // Calculate the speed used by the vehicle from the last point to the
+                        // current one.
+                        double distanceInM = MathUtils.getDistance3D(lastPoint, currentPoint);
+                        float deltaTimeInSecs = Math.abs(currentPoint.getTimeInMs()
+                            - lastPoint.getTimeInMs()) / 1000F;
+
+                        if (Float.compare(deltaTimeInSecs, 0f) != 0) {
+                            double speed = distanceInM / deltaTimeInSecs;
+                            ChangeSpeed speedMissionItem = new ChangeSpeed();
+                            speedMissionItem.setSpeed(speed);
+                            exportedMission.addMissionItem(speedMissionItem);
+                        }
+                    }
+                    lastPoint = currentPoint;
+                }
+                else {
+                    lastPoint = null;
+                }
                 SplineWaypoint waypoint = new SplineWaypoint();
                 waypoint.setCoordinate((LatLongAlt) point);
                 exportedMission.addMissionItem(waypoint);
