@@ -27,6 +27,15 @@ class TLogDataPicker : DialogFragment(){
     private var selectionListener : TLogDataAdapter.Listener? = null
 
     private val selectionListenerWrapper = object : Listener {
+
+        override fun onTLogDeleted(sessionId : Long) {
+            selectionListener?.onTLogDeleted(sessionId)
+        }
+
+        override fun onTLogRenamed(sessionId: Long, sessionLabel: String) {
+            selectionListener?.onTLogRenamed(sessionId, sessionLabel)
+        }
+
         override fun onTLogSelected(tlogSession: SessionContract.SessionData) {
             selectionListener?.onTLogSelected(tlogSession)
             dismissAllowingStateLoss()
@@ -59,7 +68,7 @@ class TLogDataPicker : DialogFragment(){
             dismissAllowingStateLoss()
         }
 
-        val currentSessionId = arguments?.getLong(TLogActivity.EXTRA_CURRENT_SESSION_ID, -1L) ?: -1L
+        val currentSessionId = arguments?.getLong(TLogActivity.EXTRA_CURRENT_SESSION_ID, TLogActivity.INVALID_SESSION_ID) ?: TLogActivity.INVALID_SESSION_ID
 
         val tlogsView = view.findViewById(R.id.tlogs_selector) as RecyclerView?
         tlogsView?.setHasFixedSize(true)
@@ -78,6 +87,7 @@ class TLogDataPicker : DialogFragment(){
         }
         else {
             tlogsView?.visibility = View.VISIBLE
+            tlogsView?.scrollToPosition(adapter.getIndexFor(currentSessionId))
             noTLogMessageView?.visibility = View.GONE
         }
     }

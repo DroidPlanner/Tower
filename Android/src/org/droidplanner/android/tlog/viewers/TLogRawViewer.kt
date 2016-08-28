@@ -54,6 +54,11 @@ class TLogRawViewer : TLogViewer() {
         fastScroller.setRecyclerView(rawData!!)
     }
 
+    override fun onTLogDataDeleted() {
+        tlogEventsAdapter?.clear()
+        stateNoData()
+    }
+
     override fun onTLogSelected(tlogSession: SessionContract.SessionData){
         tlogEventsAdapter?.clear()
         stateLoadingData()

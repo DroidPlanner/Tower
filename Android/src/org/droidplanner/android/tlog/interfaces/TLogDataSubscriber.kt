@@ -9,4 +9,5 @@ import org.droidplanner.android.droneshare.data.SessionContract
 interface TLogDataSubscriber {
     fun onTLogSelected(tlogSession: SessionContract.SessionData)
     fun onTLogDataLoaded(events: List<TLogParser.Event>, hasMore: Boolean = true)
+    fun onTLogDataDeleted()
 }

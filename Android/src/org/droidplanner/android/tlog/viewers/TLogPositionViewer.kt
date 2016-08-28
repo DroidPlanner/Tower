@@ -157,6 +157,15 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         return Math.round(value * scale).toInt()
     }
 
+    override fun onTLogDataDeleted() {
+        tlogPositionAdapter?.clear()
+        lastEventTimestamp = -1L
+        stateNoData()
+
+        tlogEventMap?.onTLogDataDeleted()
+        tlogEventDetail?.onTLogEventSelected(null)
+    }
+
     override fun onTLogSelected(tlogSession: SessionContract.SessionData) {
         tlogPositionAdapter?.clear()
         lastEventTimestamp = -1L

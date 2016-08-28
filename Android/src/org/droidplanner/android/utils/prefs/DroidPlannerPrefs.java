@@ -18,6 +18,7 @@ import com.o3dr.services.android.lib.drone.property.CameraProxy;
 import org.droidplanner.android.fragments.widget.TowerWidgets;
 import org.droidplanner.android.fragments.widget.video.WidgetVideoPreferences;
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.tlog.TLogActivity;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
@@ -182,6 +183,7 @@ public class DroidPlannerPrefs {
     private static final String PREF_SURVEY_SIDELAP = "pref_survey_sidelap";
     private static final String PREF_SURVEY_LOCK_ORIENTATION = "pref_survey_lock_orientation";
     private static final String PREF_SURVEY_START_CAMERA_BEFORE_FIRST_WAYPOINT = "pref_survey_start_camera_before_first_waypoint";
+    private static final String PREF_VEHICLE_HISTORY_SESSION_ID = "pref_vehicle_history_session_id";
 
     // Public for legacy usage
     public final SharedPreferences prefs;
@@ -650,5 +652,13 @@ public class DroidPlannerPrefs {
                 }
             }
         }
+    }
+
+    public void saveVehicleHistorySessionId(long sessionId) {
+        prefs.edit().putLong(PREF_VEHICLE_HISTORY_SESSION_ID, sessionId).apply();
+    }
+
+    public long getVehicleHistorySessionId(){
+        return prefs.getLong(PREF_VEHICLE_HISTORY_SESSION_ID, TLogActivity.INVALID_SESSION_ID);
     }
 }

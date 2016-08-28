@@ -4,13 +4,17 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
+import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import org.droidplanner.android.R
 import org.droidplanner.android.activities.DrawerNavigationUI
+import org.droidplanner.android.dialogs.OkDialog
+import org.droidplanner.android.dialogs.SupportEditInputDialog
 import org.droidplanner.android.droneshare.data.SessionContract
 import org.droidplanner.android.droneshare.data.SessionContract.SessionData
 import org.droidplanner.android.tlog.adapters.TLogDataAdapter
@@ -27,8 +31,9 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.Listener, TLogDataPro
 
     companion object {
         private const val EXTRA_LOADED_EVENTS = "extra_loaded_events"
-        private const val EXTRA_LOADING_DATA = "extra_loading_data"
         const val EXTRA_CURRENT_SESSION_ID = "extra_current_session_id"
+
+        const val INVALID_SESSION_ID = -1L
     }
 
     private val handler = Handler()
@@ -62,25 +67,19 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.Listener, TLogDataPro
         val tabLayout = findViewById(R.id.tabs) as TabLayout?
         tabLayout?.setupWithViewPager(viewPager)
 
-        // Reload the loaded tlog events (if they exists)
-        if (savedInstanceState != null) {
+        // Reload the loaded tlog events
+        val savedEvents = savedInstanceState?.getSerializable(EXTRA_LOADED_EVENTS) as ArrayList<TLogParser.Event>?
+        if (savedEvents != null) {
+            loadedEvents.addAll(savedEvents)
+        }
 
-            val sessionId = savedInstanceState.getLong(EXTRA_CURRENT_SESSION_ID, -1L)
-            if(sessionId != -1L){
-                currentSessionData = dpApp.sessionDatabase.getSessionData(sessionId)
-            }
-
-            val wasLoadingData = savedInstanceState.getBoolean(EXTRA_LOADING_DATA)
-            if(wasLoadingData){
-                if(currentSessionData != null){
-                    onTLogSelected(currentSessionData!!, true)
-                }
-            }
-            else{
-                val savedEvents = savedInstanceState.getSerializable(EXTRA_LOADED_EVENTS) as ArrayList<TLogParser.Event>?
-                if (savedEvents != null) {
-                    loadedEvents.addAll(savedEvents)
-                }
+        val sessionId = savedInstanceState
+                ?.getLong(EXTRA_CURRENT_SESSION_ID, mAppPrefs.vehicleHistorySessionId)
+                ?: mAppPrefs.vehicleHistorySessionId
+        if (sessionId != INVALID_SESSION_ID) {
+            currentSessionData = dpApp.sessionDatabase.getSessionData(sessionId)
+            if (currentSessionData != null && loadedEvents.isEmpty()) {
+                onTLogSelected(currentSessionData!!, true)
             }
         }
     }
@@ -104,13 +103,57 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.Listener, TLogDataPro
                 return true
             }
 
+            R.id.menu_rename_tlog_session -> {
+                if (currentSessionData != null) {
+                    val renameDialog = SupportEditInputDialog.newInstance(TLogDataAdapter.RENAME_SESSION_TAG,
+                            "Enter session label", currentSessionData!!.label, true,
+                            object : SupportEditInputDialog.Listener{
+                                override fun onOk(dialogTag: String?, input: CharSequence?) {
+                                    if (TextUtils.isEmpty(input)) {
+                                        Toast.makeText(applicationContext, R.string.warning_invalid_session_label_entry, Toast.LENGTH_LONG).show();
+                                    } else if (currentSessionData!!.label != input) {
+                                        dpApp.sessionDatabase.renameSession(currentSessionData!!.id, input.toString())
+                                        onTLogRenamed(currentSessionData!!.id, input.toString())
+                                    }
+                                }
+
+                                override fun onCancel(dialogTag: String?) {}
+
+                            })
+                    renameDialog.show(supportFragmentManager, TLogDataAdapter.RENAME_SESSION_TAG)
+                }
+                return true
+            }
+
+            R.id.menu_delete_tlog_session -> {
+                if (currentSessionData != null) {
+                    val confirmDialog = OkDialog.newInstance(applicationContext, "Delete?",
+                            "Delete session ${currentSessionData!!.label}?",
+                            object : OkDialog.Listener {
+                                override fun onOk() {
+                                    // Remove the session data entry from the database.
+                                    dpApp.sessionDatabase.removeSessionData(currentSessionData!!.id)
+                                    onTLogDeleted(currentSessionData!!.id)
+                                }
+
+                                override fun onCancel() {
+                                }
+
+                                override fun onDismiss() {
+                                }
+
+                            }, true)
+                    confirmDialog.show(supportFragmentManager, "Delete tlog session")
+                }
+                return true
+            }
+
             else -> return super.onOptionsItemSelected(item)
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean(EXTRA_LOADING_DATA, isLoadingData)
 
         if (!isLoadingData && loadedEvents.isNotEmpty()) {
             outState.putSerializable(EXTRA_LOADED_EVENTS, loadedEvents)
@@ -125,12 +168,35 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.Listener, TLogDataPro
         onTLogSelected(tlogSession, false)
     }
 
+    override fun onTLogRenamed(sessionId:Long, sessionLabel : String) {
+        if (sessionId == currentSessionData?.id) {
+            sessionTitleView?.text = sessionLabel
+        }
+    }
+
+    override fun onTLogDeleted(sessionId : Long) {
+        if (sessionId == currentSessionData?.id) {
+            mAppPrefs.saveVehicleHistorySessionId(INVALID_SESSION_ID)
+            currentSessionData = null
+            sessionTitleView?.visibility = View.GONE
+
+            dataLoader?.cancel(true)
+
+            loadingProgress?.visibility = View.GONE
+            loadedEvents.clear()
+            isLoadingData = false
+
+            notifyTLogDataDeleted()
+        }
+    }
+
     private fun onTLogSelected(tlogSession: SessionContract.SessionData, force: Boolean) {
         if(!force && tlogSession.equals(currentSessionData))
             return
 
+        mAppPrefs.saveVehicleHistorySessionId(tlogSession.id)
         currentSessionData = tlogSession
-        sessionTitleView?.text = TLogDataAdapter.dateFormatter.format(Date(tlogSession.startTime))
+        sessionTitleView?.text = tlogSession.label
         sessionTitleView?.visibility = View.VISIBLE
 
         // Load the events from the selected tlog file
@@ -167,6 +233,12 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.Listener, TLogDataPro
     private fun notifyTLogSelected(tlogSession: SessionContract.SessionData) {
         for (subscriber in tlogSubscribers) {
             subscriber.onTLogSelected(tlogSession)
+        }
+    }
+
+    private fun notifyTLogDataDeleted(){
+        for (subscriber in tlogSubscribers) {
+            subscriber.onTLogDataDeleted()
         }
     }
 

@@ -32,8 +32,11 @@ public class SessionDB extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(SessionContract.getSqlDeleteEntries());
-        onCreate(db);
+        if (oldVersion == 1) {
+            SessionContract.migrateFromV1(db);
+        } else {
+            Timber.w("Unrecognized database version %d for %s.", oldVersion, SessionContract.DB_NAME);
+        }
     }
 
     /**
@@ -48,6 +51,7 @@ public class SessionDB extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(SessionContract.SessionData.COLUMN_NAME_START_TIME, startTimeInMillis);
         values.put(SessionData.COLUMN_NAME_CONNECTION_TYPE, connectionType);
+        values.put(SessionData.COLUMN_NAME_LABEL, SessionData.getSessionLabel(startTimeInMillis));
         if(tlogLoggingUri != null) {
             values.put(SessionData.COLUMN_NAME_TLOG_LOGGING_URI, tlogLoggingUri.toString());
         }
@@ -83,22 +87,12 @@ public class SessionDB extends SQLiteOpenHelper {
         db.update(SessionData.TABLE_NAME, values, selection.toString(), selectionArgs);
     }
 
-    public void cleanupOpenedSessions(long endTimeInMillis){
-        SQLiteDatabase db = getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(SessionData.COLUMN_NAME_END_TIME, endTimeInMillis);
-
-        String selection = SessionData.COLUMN_NAME_END_TIME + " IS NULL";
-        db.update(SessionData.TABLE_NAME, values, selection, null);
-    }
-
     public SessionData getSessionData(long sessionId){
         SQLiteDatabase db = getReadableDatabase();
 
         String[] projection = {SessionData.COLUMN_NAME_START_TIME,
             SessionData.COLUMN_NAME_END_TIME, SessionData.COLUMN_NAME_CONNECTION_TYPE,
-            SessionData.COLUMN_NAME_TLOG_LOGGING_URI};
+            SessionData.COLUMN_NAME_TLOG_LOGGING_URI, SessionData.COLUMN_NAME_LABEL};
 
         String selection = SessionData._ID + " LIKE ?";
         String[] selectionArgs = {String.valueOf(sessionId)};
@@ -112,7 +106,9 @@ public class SessionDB extends SQLiteOpenHelper {
             String connectionTypeLabel = cursor.getString(cursor.getColumnIndex(SessionData.COLUMN_NAME_CONNECTION_TYPE));
             String tlogEncodedUri = cursor.getString(cursor.getColumnIndex(SessionData.COLUMN_NAME_TLOG_LOGGING_URI));
             Uri tlogLoggingUri = Uri.parse(tlogEncodedUri);
-            sessionData = new SessionData(sessionId, startTime, endTime, connectionTypeLabel, tlogLoggingUri);
+            String sessionLabel = cursor.getString(cursor.getColumnIndex(SessionData.COLUMN_NAME_LABEL));
+
+            sessionData = new SessionData(sessionId, startTime, endTime, connectionTypeLabel, tlogLoggingUri, sessionLabel);
         }
 
         cursor.close();
@@ -141,7 +137,7 @@ public class SessionDB extends SQLiteOpenHelper {
 
         String[] projection = {SessionData._ID, SessionData.COLUMN_NAME_START_TIME,
             SessionData.COLUMN_NAME_END_TIME, SessionData.COLUMN_NAME_CONNECTION_TYPE,
-            SessionData.COLUMN_NAME_TLOG_LOGGING_URI};
+            SessionData.COLUMN_NAME_TLOG_LOGGING_URI, SessionData.COLUMN_NAME_LABEL};
 
         String selection = SessionData.COLUMN_NAME_END_TIME + " IS NOT NULL";
         if(tlogLogged){
@@ -158,8 +154,9 @@ public class SessionDB extends SQLiteOpenHelper {
             String connectionTypeLabel = cursor.getString(cursor.getColumnIndex(SessionData.COLUMN_NAME_CONNECTION_TYPE));
             String tlogEncodedUri = cursor.getString(cursor.getColumnIndex(SessionData.COLUMN_NAME_TLOG_LOGGING_URI));
             Uri tlogLoggingUri = Uri.parse(tlogEncodedUri);
+            String sessionLabel = cursor.getString(cursor.getColumnIndex(SessionData.COLUMN_NAME_LABEL));
 
-            sessionDataList.add(new SessionData(id, startTime, endTime, connectionTypeLabel, tlogLoggingUri));
+            sessionDataList.add(new SessionData(id, startTime, endTime, connectionTypeLabel, tlogLoggingUri, sessionLabel));
         }
 
         cursor.close();
@@ -173,5 +170,27 @@ public class SessionDB extends SQLiteOpenHelper {
         String[] whereArgs = {String.valueOf(id)};
 
         db.delete(SessionData.TABLE_NAME, whereClause, whereArgs);
+    }
+
+    public void renameSession(long id, String label) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(SessionData.COLUMN_NAME_LABEL, label);
+
+        String whereClause = SessionData._ID + " LIKE ?";
+        String[] whereArgs = {String.valueOf(id)};
+
+        db.update(SessionData.TABLE_NAME, values, whereClause, whereArgs);
+    }
+
+    public void cleanupOpenedSessions(long endTimeInMillis){
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(SessionData.COLUMN_NAME_END_TIME, endTimeInMillis);
+
+        String selection = SessionData.COLUMN_NAME_END_TIME + " IS NULL";
+        db.update(SessionData.TABLE_NAME, values, selection, null);
     }
 }

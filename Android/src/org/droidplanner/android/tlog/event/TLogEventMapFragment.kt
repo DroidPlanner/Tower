@@ -45,6 +45,14 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventListener {
         eventsPolylineInfo.update(this)
     }
 
+    override fun onTLogDataDeleted() {
+        eventsPolylineInfo.clear()
+        eventsPolylineInfo.update(this)
+
+        selectedPositionMarkerInfo.selectedGlobalPosition = null
+        selectedPositionMarkerInfo.updateMarker(this)
+    }
+
     override fun onTLogEventSelected(event: TLogParser.Event?) {
         if(event == null){
             selectedPositionMarkerInfo.selectedGlobalPosition = null

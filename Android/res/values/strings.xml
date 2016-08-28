@@ -662,4 +662,7 @@
     <string name="baidu_map_sdk_initializer_permission_error_message">BaiduMap: API Keycode error, please check the keycode in AndroidManifest.xml!</string>
     <string name="baidu_map_sdk_initializer_network_error_message">BaiduMap: Network error!</string>
     <string name="warning_check_exported_mission">Please verify the exported mission!</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_rename">Rename</string>
+    <string name="warning_invalid_session_label_entry">Please enter a valid entry!</string>
 </resources>

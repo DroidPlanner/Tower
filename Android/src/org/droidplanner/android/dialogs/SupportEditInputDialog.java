@@ -49,12 +49,22 @@ public class SupportEditInputDialog extends DialogFragment {
         return dialog;
     }
 
+    public static SupportEditInputDialog newInstance(String dialogTag, String title, String hint,
+                                                     boolean hintIsValidEndtry, Listener listener) {
+        SupportEditInputDialog dialog = newInstance(dialogTag, title, hint, hintIsValidEndtry);
+        dialog.mListener = listener;
+        return dialog;
+    }
+
     protected Listener mListener;
     private EditText mEditText;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        if (mListener != null) {
+            return;
+        }
 
         Object parent = getParentFragment();
         if(parent == null)
@@ -133,5 +143,11 @@ public class SupportEditInputDialog extends DialogFragment {
         }
 
         return contentView;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        dismissAllowingStateLoss();
     }
 }
