@@ -136,6 +136,14 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventListener {
                 if(selectedGlobalPosition == null) null
                 else LatLong(selectedGlobalPosition!!.lat.toDouble() / 1E7, selectedGlobalPosition!!.lon.toDouble() / 1E7)
 
+        override fun getRotation(): Float {
+            val headingx100 = selectedGlobalPosition?.hdg ?: return 0f
+            val heading = headingx100 / 100f
+            if (heading < 0f || heading > 360f)
+                return 0f
+            return heading
+        }
+
         override fun getIcon(res: Resources) = BitmapFactory.decodeResource(res, R.drawable.quad_disconnect)
     }
 }

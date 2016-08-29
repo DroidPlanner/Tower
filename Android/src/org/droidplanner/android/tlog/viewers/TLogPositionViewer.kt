@@ -13,7 +13,6 @@ import org.droidplanner.android.R
 import org.droidplanner.android.activities.EditorActivity
 import org.droidplanner.android.droneshare.data.SessionContract
 import org.droidplanner.android.tlog.adapters.TLogPositionEventAdapter
-import org.droidplanner.android.tlog.event.TLogEventDetail
 import org.droidplanner.android.tlog.event.TLogEventListener
 import org.droidplanner.android.tlog.event.TLogEventMapFragment
 import org.droidplanner.android.utils.MapUtils
@@ -67,7 +66,6 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
     private val newPositionEvents = mutableListOf<TLogParser.Event>()
 
     private var tlogEventMap : TLogEventMapFragment? = null
-    private var tlogEventDetail : TLogEventDetail? = null
 
     private var lastEventTimestamp = -1L
     private var toleranceInPixels = 0.0
@@ -90,12 +88,6 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         if(tlogEventMap == null){
             tlogEventMap = TLogEventMapFragment()
             fm.beginTransaction().add(R.id.tlog_map_container, tlogEventMap).commit()
-        }
-
-        tlogEventDetail = fm.findFragmentById(R.id.tlog_event_detail) as TLogEventDetail?
-        if(tlogEventDetail == null){
-            tlogEventDetail = TLogEventDetail()
-            fm.beginTransaction().add(R.id.tlog_event_detail, tlogEventDetail).commit()
         }
 
         eventsView?.apply {
@@ -175,7 +167,6 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         stateNoData()
 
         tlogEventMap?.onClearTLogData()
-        tlogEventDetail?.onTLogEventSelected(null)
     }
 
     override fun onTLogSelected(tlogSession: SessionContract.SessionData) {
@@ -185,7 +176,6 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
 
         // Refresh the map.
         tlogEventMap?.onTLogSelected(tlogSession)
-        tlogEventDetail?.onTLogEventSelected(null)
     }
 
     override fun onApiDisconnected() {
@@ -226,9 +216,6 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
     }
 
     override fun onTLogEventSelected(event: TLogParser.Event?) {
-        // Show the detail window for this event
-        tlogEventDetail?.onTLogEventSelected(event)
-
         //Propagate the click event to the map
         tlogEventMap?.onTLogEventSelected(event)
     }

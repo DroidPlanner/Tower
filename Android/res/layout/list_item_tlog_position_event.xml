@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:minWidth="60dp"
+    android:minWidth="80dp"
     android:minHeight="60dp"
     android:layout_gravity="center"
     android:layout_margin="4dp"
@@ -14,11 +14,12 @@
     <RelativeLayout
         android:id="@+id/event_thumbnail"
         android:layout_width="wrap_content"
-        android:minWidth="60dp"
+        android:minWidth="80dp"
         android:minHeight="60dp"
         android:layout_height="wrap_content"
         android:background="@drawable/position_event_thumbnail_background"
-        android:padding="4dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         >
 
         <TextView
@@ -37,7 +38,7 @@
             android:layout_below="@+id/event_timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="200 m"
+            tools:text="2000.00m"
             android:drawableLeft="@drawable/ic_file_upload_grey_700_18dp"
             android:drawableStart="@drawable/ic_file_upload_grey_700_18dp"
             android:drawablePadding="5dp"

@@ -79,7 +79,8 @@ class TLogPositionEventAdapter(context : Context, recyclerView: RecyclerView) :
 
         val convertedAltitude = lengthUnitProvider.boxBaseValueToTarget(currentAltitude)
 
-        holder.altitude.text = convertedAltitude.toString()
+        val altitudeText = String.format(Locale.US, "%2.2f%s", convertedAltitude.getValue(), convertedAltitude.getUnitSymbol())
+        holder.altitude.text = altitudeText
         holder.altitude.setCompoundDrawablesWithIntrinsicBounds(altIcon, null, null, null)
         holder.thumbnail.setOnClickListener {
             if(event == selectedEvent?.second){
