@@ -21,7 +21,7 @@ dependencies {
     compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
 
     //DroneKit-Android client lib
-    compile 'com.o3dr.android:dronekit-android:3.0.0-beta2'
+    compile 'com.o3dr.android:dronekit-android:3.0.0-beta3'
     //Comment line above, and uncomment line below to use your local version of the dronekit-android client lib
     //Don't forget to uncomment the lines in the settings.gradle file as well.
 //     compile project(':ClientLib')
@@ -34,7 +34,7 @@ dependencies {
     compile files('libs/droneapi-java-0.3-SNAPSHOT.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
     compile files('libs/jeromq-0.3.4.jar')
-    compile files('libs/sius-0.3.0-SNAPSHOT.jar')
+    compile files('libs/sius-0.3.1-SNAPSHOT.jar')
     compile files('libs/BaiduLBS_Android.jar')
 
     compile "com.squareup.okhttp:okhttp:${okhttp_version}"

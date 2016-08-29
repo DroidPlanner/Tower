@@ -106,7 +106,10 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
     @Override
     protected LatLongAlt getCurrentFlightPoint(){
         LatLongAlt space = super.getCurrentFlightPoint();
-        return new SpaceTime(space, System.currentTimeMillis());
+        if (space != null) {
+            return new SpaceTime(space, System.currentTimeMillis());
+        }
+        return null;
     }
 
     @Override

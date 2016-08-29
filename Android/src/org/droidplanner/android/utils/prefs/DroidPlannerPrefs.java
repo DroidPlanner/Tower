@@ -37,6 +37,11 @@ import java.util.Map;
  */
 public class DroidPlannerPrefs {
 
+    /**
+     * Flag to select the header for the main navigation drawer.
+     */
+    public static final boolean ENABLE_DRONESHARE_ACCOUNT = false;
+
     /*
      * Default preference value
      */

@@ -31,6 +31,7 @@ import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.control.BaseFlightControlFragment;
 import org.droidplanner.android.tlog.TLogActivity;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.view.SlidingDrawer;
 
 /**
@@ -176,27 +177,33 @@ public abstract class DrawerNavigationUI extends SuperUI implements
         setContentView(mDrawerLayout);
 
         navigationView = (NavigationView) findViewById(R.id.navigation_drawer_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        Menu navigationMenu = navigationView.getMenu();
-        compassCalibration = navigationMenu.findItem(R.id.navigation_compass_calibration);
+        if (navigationView != null) {
+            navigationView.inflateHeaderView(DroidPlannerPrefs.ENABLE_DRONESHARE_ACCOUNT
+                ? R.layout.nav_header_droneshare
+                : R.layout.nav_header_main);
+            navigationView.setNavigationItemSelectedListener(this);
+            Menu navigationMenu = navigationView.getMenu();
+            compassCalibration = navigationMenu.findItem(R.id.navigation_compass_calibration);
 
-        View navigationHeaderView = navigationView.getHeaderView(0);
-        accountLabel = (TextView) navigationHeaderView.findViewById(R.id.account_screen_label);
+            View navigationHeaderView = navigationView.getHeaderView(0);
+            accountLabel = (TextView) navigationHeaderView.findViewById(R.id.account_screen_label);
 
-        LinearLayout llAccount = (LinearLayout) navigationHeaderView.findViewById(R.id.navigation_account);
-        if(llAccount != null) {
-            llAccount.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(getApplicationContext(), AccountActivity.class));
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
-                }
-            });
+            LinearLayout llAccount = (LinearLayout) navigationHeaderView.findViewById(R.id.navigation_account);
+            if (llAccount != null) {
+                llAccount.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(getApplicationContext(), AccountActivity.class));
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
+                    }
+                });
+            }
         }
 
         settingsMenu = (NavigationView) findViewById(R.id.navigation_drawer_settings);
-        settingsMenu.setNavigationItemSelectedListener(this);
-
+        if (settingsMenu != null) {
+            settingsMenu.setNavigationItemSelectedListener(this);
+        }
     }
 
     @Override
@@ -338,7 +345,9 @@ public abstract class DrawerNavigationUI extends SuperUI implements
         final int navDrawerEntryId = getNavigationDrawerMenuItemId();
         switch (navDrawerEntryId) {
             case R.id.navigation_account:
-                accountLabel.setTypeface(null, Typeface.BOLD);
+                if (accountLabel != null) {
+                    accountLabel.setTypeface(null, Typeface.BOLD);
+                }
                 break;
 
             default:
