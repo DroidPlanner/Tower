@@ -85,9 +85,7 @@
         <FrameLayout
             style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp">
+            android:layout_height="40dp">
 
             <Spinner
                 android:id="@+id/draw_items_spinner"
@@ -119,45 +117,45 @@
                 android:gravity="center"
                 tools:visibility="visible">
 
-                <me.grantland.widget.AutofitTextView
+                <TextView
                     android:id="@+id/clear_selected_button"
-                    style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:singleLine="true"
                     android:gravity="center"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:minHeight="36dp"
-                    android:text="@string/label_clear_selected"
                     android:textAllCaps="true"
+                    android:background="?selectableItemBackground"
+                    android:text="@string/label_clear_selected"
                     android:textColor="@android:color/black"
                     android:textStyle="normal" />
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:layout_margin="15dp"
+                    android:layout_margin="10dp"
                     android:background="@color/light_grey" />
 
-                <me.grantland.widget.AutofitTextView
+                <TextView
                     android:id="@+id/clear_mission_button"
-                    style="?android:attr/buttonBarButtonStyle"
+                    android:textAllCaps="true"
+                    android:background="?selectableItemBackground"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:singleLine="true"
                     android:gravity="center"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:minHeight="36dp"
                     android:text="@string/dlg_clear_mission_title"
-                    android:textAllCaps="true"
                     android:textColor="@android:color/black"
                     android:textStyle="normal" />
             </LinearLayout>
 
-            <me.grantland.widget.AutofitTextView
+            <TextView
                 android:id="@+id/select_all_button"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="match_parent"
@@ -166,9 +164,8 @@
                 android:gravity="center"
                 android:singleLine="true"
                 android:minHeight="36dp"
-                android:padding="10dp"
+                android:padding="5dp"
                 android:text="@string/label_select_all"
-                android:textAllCaps="true"
                 android:textColor="@android:color/black"
                 android:textStyle="normal"
                 android:visibility="gone" />

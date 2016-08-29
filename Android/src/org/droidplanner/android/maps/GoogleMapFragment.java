@@ -306,6 +306,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
     };
 
     private LocalBroadcastManager lbm;
+    private GoogleMap map;
 
     @Override
     public void onAttach(Activity activity) {
@@ -334,7 +335,19 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
             showFlightPath = args.getBoolean(EXTRA_SHOW_FLIGHT_PATH);
         }
 
+        // Load the map
+        getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                map = googleMap;
+            }
+        });
+
         return view;
+    }
+
+    private GoogleMap getMap() {
+        return map;
     }
 
     @Override

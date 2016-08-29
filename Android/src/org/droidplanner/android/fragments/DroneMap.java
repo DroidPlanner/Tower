@@ -224,6 +224,10 @@ public abstract class DroneMap extends ApiListenerFragment {
     }
 
     protected final void onMissionUpdate(){
+		if (!shouldUpdateMission()) {
+            return;
+        }
+
         mMapFragment.updateMissionPath(missionProxy);
 
         mMapFragment.updatePolygonsPaths(missionProxy.getPolygonsPath());
@@ -265,7 +269,11 @@ public abstract class DroneMap extends ApiListenerFragment {
         missionMarkers.putAll(newMissionMarkers);
     }
 
-	public void downloadMapTiles(MapDownloader mapDownloader, int minimumZ, int maximumZ){
+    protected boolean shouldUpdateMission() {
+        return true;
+    }
+
+    public void downloadMapTiles(MapDownloader mapDownloader, int minimumZ, int maximumZ){
 		if(mMapFragment == null)
 			return;
 

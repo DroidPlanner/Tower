@@ -19,7 +19,7 @@ import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
-import com.o3dr.services.android.lib.drone.mission.Mission;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.GuidedState;
 import com.o3dr.services.android.lib.drone.property.State;
@@ -31,9 +31,12 @@ import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
 import org.droidplanner.android.graphic.map.GraphicHome;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.MapUtils;
 import org.droidplanner.android.utils.SpaceTime;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
+
+import java.util.List;
 
 public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
         DPMap.OnMarkerClickListener, DPMap.OnMarkerDragListener, GuidedDialogListener {
@@ -159,10 +162,11 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
                     return true;
                 }
 
-                Mission exportedMission = MapUtils.exportPathAsMission(flightPathPoints, 0.00012);
-                startActivity(new Intent(getActivity(), EditorActivity.class)
-                    .setAction(EditorActivity.ACTION_VIEW_MISSION)
-                    .putExtra(EditorActivity.EXTRA_MISSION, exportedMission));
+                List<MissionItem> exportedMissionItems = MapUtils.exportPathAsMissionItems(flightPathPoints, 0.00012);
+                MissionProxy missionProxy = getMissionProxy();
+                missionProxy.clear();
+                missionProxy.addMissionItems(exportedMissionItems);
+                startActivity(new Intent(getActivity(), EditorActivity.class));
 
                 clearFlightPath();
                 Toast.makeText(getContext(), R.string.warning_check_exported_mission, Toast.LENGTH_LONG).show();

@@ -39,7 +39,7 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.Listener, TLogDataPro
     private val handler = Handler()
 
     private val tlogSubscribers = HashSet<TLogViewer>()
-    private val loadedEvents = ArrayList<TLogParser.Event>(100000)
+    private val loadedEvents = LinkedList<TLogParser.Event>()
 
     private var isLoadingData = false
     private var dataLoader: TLogDataLoader? = null
@@ -68,7 +68,7 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.Listener, TLogDataPro
         tabLayout?.setupWithViewPager(viewPager)
 
         // Reload the loaded tlog events
-        val savedEvents = savedInstanceState?.getSerializable(EXTRA_LOADED_EVENTS) as ArrayList<TLogParser.Event>?
+        val savedEvents = savedInstanceState?.getSerializable(EXTRA_LOADED_EVENTS) as LinkedList<TLogParser.Event>?
         if (savedEvents != null) {
             loadedEvents.addAll(savedEvents)
         }
@@ -238,7 +238,7 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.Listener, TLogDataPro
 
     private fun notifyTLogDataDeleted(){
         for (subscriber in tlogSubscribers) {
-            subscriber.onTLogDataDeleted()
+            subscriber.onClearTLogData()
         }
     }
 

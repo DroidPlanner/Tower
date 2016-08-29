@@ -140,10 +140,13 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
                     positions.add(spaceTime)
                 }
 
-                val mission = MapUtils.exportPathAsMission(positions, 0.00012)
-                startActivity(Intent(activity, EditorActivity::class.java)
-                        .setAction(EditorActivity.ACTION_VIEW_MISSION)
-                        .putExtra(EditorActivity.EXTRA_MISSION, mission))
+                val missionItems = MapUtils.exportPathAsMissionItems(positions, 0.00012)
+
+                val missionProxy = missionProxy
+                missionProxy.clear()
+                missionProxy.addMissionItems(missionItems)
+
+                startActivity(Intent(activity, EditorActivity::class.java))
                 Toast.makeText(context, R.string.warning_check_exported_mission, Toast.LENGTH_LONG).show()
                 return true
             }
@@ -157,12 +160,12 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         return Math.round(value * scale).toInt()
     }
 
-    override fun onTLogDataDeleted() {
+    override fun onClearTLogData() {
         tlogPositionAdapter?.clear()
         lastEventTimestamp = -1L
         stateNoData()
 
-        tlogEventMap?.onTLogDataDeleted()
+        tlogEventMap?.onClearTLogData()
         tlogEventDetail?.onTLogEventSelected(null)
     }
 
@@ -174,6 +177,11 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
         // Refresh the map.
         tlogEventMap?.onTLogSelected(tlogSession)
         tlogEventDetail?.onTLogEventSelected(null)
+    }
+
+    override fun onApiDisconnected() {
+        super.onApiDisconnected()
+        lastEventTimestamp = -1L
     }
 
     override fun onTLogDataLoaded(events: List<TLogParser.Event>, hasMore: Boolean) {

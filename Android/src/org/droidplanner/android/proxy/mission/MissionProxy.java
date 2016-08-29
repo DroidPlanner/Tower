@@ -160,7 +160,7 @@ public class MissionProxy implements DPMap.PathSource {
      * Update the state for this object based on the state of the Mission
      * object.
      */
-    public void load(Mission mission) {
+    private void load(Mission mission) {
         load(mission, true);
     }
 
@@ -283,7 +283,7 @@ public class MissionProxy implements DPMap.PathSource {
         addMissionItems(missionItemsToAdd);
     }
 
-    private void addMissionItems(List<MissionItem> missionItems) {
+    public void addMissionItems(List<MissionItem> missionItems) {
         for (MissionItem missionItem : missionItems) {
             missionItemProxies.add(new MissionItemProxy(this, missionItem));
         }

@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.o3dr.android.client.utils.FileUtils;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
-import com.o3dr.services.android.lib.drone.mission.Mission;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 
 import org.beyene.sius.unit.length.LengthUnit;
@@ -56,9 +55,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         EditorToolsFragment.EditorToolListener, MissionDetailFragment.OnMissionDetailListener,
         OnEditorInteraction, MissionSelection.OnSelectionUpdateListener, OnClickListener,
         OnLongClickListener, SupportEditInputDialog.Listener {
-
-    public static final String ACTION_VIEW_MISSION = "org.droidplanner.android.activities.ACTION_VIEW_MISSION";
-    public static final String EXTRA_MISSION = "extra_mission";
 
     private static final double DEFAULT_SPEED = 5; //meters per second.
 
@@ -191,13 +187,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 Uri loadUri = intent.getData();
                 if (loadUri != null) {
                     openMissionFile(loadUri);
-                }
-                break;
-
-            case ACTION_VIEW_MISSION:
-                Mission mission = intent.getParcelableExtra(EXTRA_MISSION);
-                if(mission != null){
-                    missionProxy.load(mission);
                 }
                 break;
         }

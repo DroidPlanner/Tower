@@ -6,12 +6,13 @@ import android.location.Location;
 import com.google.android.gms.maps.model.LatLng;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
-import com.o3dr.services.android.lib.drone.mission.Mission;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.command.ChangeSpeed;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
 import com.o3dr.services.android.lib.util.MathUtils;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class MapUtils {
@@ -46,8 +47,8 @@ public class MapUtils {
      * @param pathPoints
      * @return
      */
-	public static Mission exportPathAsMission(List<? extends LatLongAlt> pathPoints, double toleranceInPixels) {
-        Mission exportedMission = new Mission();
+	public static List<MissionItem> exportPathAsMissionItems(List<? extends LatLongAlt> pathPoints, double toleranceInPixels) {
+        List<MissionItem> exportedMissionItems = new LinkedList<>();
         if(pathPoints != null && !pathPoints.isEmpty()) {
             List<LatLong> simplifiedPath = MathUtils.simplify(pathPoints, toleranceInPixels);
 
@@ -78,7 +79,7 @@ public class MapUtils {
                             double speed = distanceInM / deltaTimeInSecs;
                             ChangeSpeed speedMissionItem = new ChangeSpeed();
                             speedMissionItem.setSpeed(speed);
-                            exportedMission.addMissionItem(speedMissionItem);
+                            exportedMissionItems.add(speedMissionItem);
                         }
                     }
                     lastPoint = currentPoint;
@@ -88,11 +89,11 @@ public class MapUtils {
                 }
                 SplineWaypoint waypoint = new SplineWaypoint();
                 waypoint.setCoordinate((LatLongAlt) point);
-                exportedMission.addMissionItem(waypoint);
+                exportedMissionItems.add(waypoint);
             }
         }
 
-        return exportedMission;
+        return exportedMissionItems;
     }
 
 	public static List<com.baidu.mapapi.model.LatLng> coordToBaiduLatLng(List<? extends LatLong> coords) {

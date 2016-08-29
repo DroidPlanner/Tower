@@ -54,7 +54,7 @@ class TLogRawViewer : TLogViewer() {
         fastScroller.setRecyclerView(rawData!!)
     }
 
-    override fun onTLogDataDeleted() {
+    override fun onClearTLogData() {
         tlogEventsAdapter?.clear()
         stateNoData()
     }

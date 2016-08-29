@@ -162,7 +162,7 @@
     <string name="structure_scan_step_height">Step height</string>
     <string name="stucture_scanner_cross_hatch">Cross Hatch</string>
 
-    <string name="dlg_clear_mission_title">Clear mission</string>
+    <string name="dlg_clear_mission_title">Mission</string>
     <string name="dlg_clear_mission_confirm">Clear all waypoints from the map?</string>
 
     <!-- Selection of map style -->
@@ -469,7 +469,7 @@
     <string name="longitude_empty">Long: —</string>
     <string name="longitude_telem">Long: %s°</string>
     <string name="menu_kill_switch">Kill Switch</string>
-    <string name="label_clear_selected">Clear selected</string>
+    <string name="label_clear_selected">Selected</string>
     <string name="unsaved_param_warning">You have unsaved changes</string>
     <string name="error_kill_switch_unsupported">KILL SWITCH command is not supported!</string>
     <string name="error_kill_switch_failed">KILL SWITCH command failed!</string>

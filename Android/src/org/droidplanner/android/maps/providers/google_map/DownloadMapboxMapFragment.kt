@@ -19,4 +19,8 @@ class DownloadMapboxMapFragment : DroneMap() {
             }
         }
     }
+
+    override fun shouldUpdateMission(): Boolean {
+        return false
+    }
 }

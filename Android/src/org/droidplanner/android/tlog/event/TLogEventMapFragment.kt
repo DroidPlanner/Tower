@@ -37,6 +37,16 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventListener {
         }
     }
 
+    override fun shouldUpdateMission(): Boolean {
+        return false
+    }
+
+    override fun onApiConnected() {
+        super.onApiConnected()
+        eventsPolylineInfo.update(this)
+        selectedPositionMarkerInfo.updateMarker(this)
+    }
+
     override fun onTLogDataLoaded(events: List<TLogParser.Event>, hasMore: Boolean) {
         for(event in events){
             val coord = TLogPositionViewer.tlogEventToSpaceTime(event) ?: continue
@@ -45,7 +55,7 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventListener {
         eventsPolylineInfo.update(this)
     }
 
-    override fun onTLogDataDeleted() {
+    override fun onClearTLogData() {
         eventsPolylineInfo.clear()
         eventsPolylineInfo.update(this)
 

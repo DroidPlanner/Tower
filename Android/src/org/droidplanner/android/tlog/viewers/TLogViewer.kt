@@ -22,23 +22,18 @@ abstract class TLogViewer : ApiListenerFragment(), TLogDataSubscriber {
         tlogDataProvider = activity
     }
 
-    override fun onApiConnected() {}
+    override fun onApiConnected() {
+        tlogDataProvider?.registerForTLogDataUpdate(this)
+    }
 
-    override fun onApiDisconnected() {}
+    override fun onApiDisconnected() {
+        tlogDataProvider?.unregisterForTLogDataUpdate(this)
+        onClearTLogData()
+    }
 
     override fun onDetach(){
         super.onDetach()
         tlogDataProvider = null
-    }
-
-    override fun onStart(){
-        super.onStart()
-        tlogDataProvider?.registerForTLogDataUpdate(this)
-    }
-
-    override fun onStop(){
-        super.onStop()
-        tlogDataProvider?.unregisterForTLogDataUpdate(this)
     }
 
 }
