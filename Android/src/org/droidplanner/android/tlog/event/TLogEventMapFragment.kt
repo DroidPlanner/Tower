@@ -66,7 +66,7 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventListener {
     override fun onTLogEventSelected(event: TLogParser.Event?) {
         if(event == null){
             selectedPositionMarkerInfo.selectedGlobalPosition = null
-            goToDroneLocation()
+            zoomToFit()
         }
         else{
             //Add a marker for the selected event
@@ -77,7 +77,7 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventListener {
         selectedPositionMarkerInfo.updateMarker(this)
     }
 
-    override fun goToDroneLocation(){
+    internal fun zoomToFit(){
         eventsPolylineInfo.zoomToFit(this)
     }
 
@@ -136,6 +136,6 @@ class TLogEventMapFragment : DroneMap(), TLogDataSubscriber, TLogEventListener {
                 if(selectedGlobalPosition == null) null
                 else LatLong(selectedGlobalPosition!!.lat.toDouble() / 1E7, selectedGlobalPosition!!.lon.toDouble() / 1E7)
 
-        override fun getIcon(res: Resources) = BitmapFactory.decodeResource(res, R.drawable.ic_wp_map_selected)
+        override fun getIcon(res: Resources) = BitmapFactory.decodeResource(res, R.drawable.quad_disconnect)
     }
 }

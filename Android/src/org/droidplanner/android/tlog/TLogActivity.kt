@@ -30,7 +30,6 @@ import java.util.*
 class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.Listener, TLogDataProvider {
 
     companion object {
-        private const val EXTRA_LOADED_EVENTS = "extra_loaded_events"
         const val EXTRA_CURRENT_SESSION_ID = "extra_current_session_id"
 
         const val INVALID_SESSION_ID = -1L
@@ -68,17 +67,12 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.Listener, TLogDataPro
         tabLayout?.setupWithViewPager(viewPager)
 
         // Reload the loaded tlog events
-        val savedEvents = savedInstanceState?.getSerializable(EXTRA_LOADED_EVENTS) as LinkedList<TLogParser.Event>?
-        if (savedEvents != null) {
-            loadedEvents.addAll(savedEvents)
-        }
-
         val sessionId = savedInstanceState
                 ?.getLong(EXTRA_CURRENT_SESSION_ID, mAppPrefs.vehicleHistorySessionId)
                 ?: mAppPrefs.vehicleHistorySessionId
         if (sessionId != INVALID_SESSION_ID) {
             currentSessionData = dpApp.sessionDatabase.getSessionData(sessionId)
-            if (currentSessionData != null && loadedEvents.isEmpty()) {
+            if (currentSessionData != null) {
                 onTLogSelected(currentSessionData!!, true)
             }
         }
@@ -154,10 +148,6 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.Listener, TLogDataPro
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-
-        if (!isLoadingData && loadedEvents.isNotEmpty()) {
-            outState.putSerializable(EXTRA_LOADED_EVENTS, loadedEvents)
-        }
 
         if(currentSessionData != null){
             outState.putLong(EXTRA_CURRENT_SESSION_ID, currentSessionData!!.id)

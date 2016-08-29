@@ -1,14 +1,20 @@
 package org.droidplanner.android.tlog.adapters
 
+import android.content.Context
+import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.MAVLink.common.msg_global_position_int
 import com.o3dr.android.client.utils.data.tlog.TLogParser
 import org.droidplanner.android.R
 import org.droidplanner.android.tlog.event.TLogEventListener
+import org.droidplanner.android.tlog.viewers.TLogPositionViewer
+import org.droidplanner.android.utils.unit.UnitManager
+import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider
 import org.droidplanner.android.view.adapterViews.AbstractRecyclerViewFooterAdapter
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,13 +22,28 @@ import java.util.*
 /**
  * @author ne0fhyk (Fredia Huya-Kouadio)
  */
-class TLogPositionEventAdapter(recyclerView: RecyclerView) :
+class TLogPositionEventAdapter(context : Context, recyclerView: RecyclerView) :
         AbstractRecyclerViewFooterAdapter<TLogParser.Event>(recyclerView, null) {
 
-    class ViewHolder(val container: View, val thumbnail: TextView) : RecyclerView.ViewHolder(container)
+    class ViewHolder(val container: View, val thumbnail : View, val timestamp: TextView, val altitude: TextView) :
+            RecyclerView.ViewHolder(container)
 
     companion object {
         private val dateFormatter = SimpleDateFormat("HH:mm:ss", Locale.US)
+    }
+
+    private val lessAltitudeIcon : Drawable
+    private val sameAltitudeIcon : Drawable
+    private val moreAltitudeIcon : Drawable
+    private val lengthUnitProvider : LengthUnitProvider
+
+    init {
+        val res = context.resources
+        lessAltitudeIcon = res.getDrawable(R.drawable.ic_file_download_black_24dp)
+        sameAltitudeIcon = res.getDrawable(R.drawable.ic_remove_black_24dp)
+        moreAltitudeIcon = res.getDrawable(R.drawable.ic_file_upload_grey_700_18dp)
+
+        lengthUnitProvider = UnitManager.getUnitSystem(context).lengthUnitProvider
     }
 
     private var selectedEvent: Pair<Int, TLogParser.Event>? = null
@@ -33,6 +54,7 @@ class TLogPositionEventAdapter(recyclerView: RecyclerView) :
     }
 
     fun clear(hasMore: Boolean = true){
+        selectedEvent = null
         resetItems(null)
         setHasMoreData(hasMore)
     }
@@ -42,7 +64,23 @@ class TLogPositionEventAdapter(recyclerView: RecyclerView) :
 
         val event = getItem(position)
         holder.container.isActivated = event == selectedEvent?.second
-        holder.thumbnail.text = dateFormatter.format(event.timestamp)
+        holder.timestamp.text = dateFormatter.format(event.timestamp)
+
+        val previousAltitude = if (position == 0) null else TLogPositionViewer.getEventAltitude(getItem(position -1).mavLinkMessage as msg_global_position_int)
+        val currentAltitude = TLogPositionViewer.getEventAltitude(event.mavLinkMessage as msg_global_position_int)
+
+        val altIcon = if (previousAltitude == null || previousAltitude < currentAltitude) {
+            moreAltitudeIcon
+        } else if (previousAltitude == currentAltitude) {
+            sameAltitudeIcon
+        } else {
+            lessAltitudeIcon
+        }
+
+        val convertedAltitude = lengthUnitProvider.boxBaseValueToTarget(currentAltitude)
+
+        holder.altitude.text = convertedAltitude.toString()
+        holder.altitude.setCompoundDrawablesWithIntrinsicBounds(altIcon, null, null, null)
         holder.thumbnail.setOnClickListener {
             if(event == selectedEvent?.second){
                 // Unselect the event
@@ -63,8 +101,10 @@ class TLogPositionEventAdapter(recyclerView: RecyclerView) :
 
     override fun onCreateBasicItemViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val container = LayoutInflater.from(parent.context).inflate(R.layout.list_item_tlog_position_event, parent, false)
-        val thumbnail = container.findViewById(R.id.position_event_thumbnail) as TextView
-        return ViewHolder(container, thumbnail)
+        val thumbnail = container.findViewById(R.id.event_thumbnail)
+        val timestamp = container.findViewById(R.id.event_timestamp) as TextView
+        val altitude = container.findViewById(R.id.event_altitude) as TextView
+        return ViewHolder(container, thumbnail, timestamp, altitude)
     }
 
     override fun onCreateFooterViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

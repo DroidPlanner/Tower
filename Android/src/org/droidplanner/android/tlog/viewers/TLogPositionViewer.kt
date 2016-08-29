@@ -33,8 +33,12 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
             val position = event.mavLinkMessage as msg_global_position_int
             return SpaceTime(position.lat.toDouble()/ 1E7,
                     position.lon.toDouble()/ 1E7,
-                    (position.relative_alt / 1000.0),
+                    getEventAltitude(position),
                     event.timestamp)
+        }
+
+        fun getEventAltitude(position: msg_global_position_int) : Double {
+            return (position.relative_alt / 1000.0)
         }
 
         const val STATE_NO_DATA = 0
@@ -99,7 +103,7 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
             layoutManager = LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false)
         }
 
-        tlogPositionAdapter = TLogPositionEventAdapter(eventsView!!)
+        tlogPositionAdapter = TLogPositionEventAdapter(context, eventsView!!)
         eventsView?.adapter = tlogPositionAdapter
 
         fastScroller.setRecyclerView(eventsView!!)
@@ -110,9 +114,14 @@ class TLogPositionViewer : TLogViewer(), TLogEventListener {
             tlogEventMap?.goToMyLocation();
         }
 
-        val goToDroneLocation = view.findViewById(R.id.drone_location_button) as FloatingActionButton
-        goToDroneLocation.setOnClickListener {
-            tlogEventMap?.goToDroneLocation()
+        view.findViewById(R.id.drone_location_button)?.visibility = View.GONE
+
+        // Setup the zoom to fit button
+        view.findViewById(R.id.zoom_to_fit_button)?.apply {
+            visibility = View.VISIBLE
+            setOnClickListener {
+                tlogEventMap?.zoomToFit()
+            }
         }
     }
 

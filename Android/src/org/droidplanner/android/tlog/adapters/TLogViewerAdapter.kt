@@ -14,8 +14,8 @@ import org.droidplanner.android.tlog.viewers.TLogRawViewer
 class TLogViewerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment? {
         return when(position){
-            0 -> TLogRawViewer()
-            1 -> TLogPositionViewer()
+            1 -> TLogRawViewer()
+            0 -> TLogPositionViewer()
             else -> throw IllegalStateException("Invalid viewer index.")
         }
     }
@@ -24,8 +24,8 @@ class TLogViewerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     override fun getPageTitle(position: Int): CharSequence? {
         return when(position){
-            0 -> "All"
-            1 -> "Position"
+            1 -> "All"
+            0 -> "Position"
             else -> throw IllegalStateException("Invalid viewer index.")
         }
     }
