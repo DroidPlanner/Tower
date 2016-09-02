@@ -168,7 +168,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 
 		if(bundle != null){
 			flightPathPoints.clear();
-			LinkedList<LatLongAlt> flightPoints = (LinkedList<LatLongAlt>) bundle.getSerializable(EXTRA_DRONE_FLIGHT_PATH);
+			List<LatLongAlt> flightPoints = (List<LatLongAlt>) bundle.getSerializable(EXTRA_DRONE_FLIGHT_PATH);
 			if(flightPoints != null && !flightPoints.isEmpty()){
                 flightPathPoints.addAll(flightPoints);
 			}
