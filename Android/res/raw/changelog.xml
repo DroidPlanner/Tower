@@ -15,19 +15,19 @@
     </changelogversion>
     -->
 
-    <changelogversion versionName="4.0.0" changeDate="August 21, 2016">
+    <changelogversion versionName="4.0.0" changeDate="Sept 4, 2016">
         <changelogimprovement>Introducing [b]standalone[/b] mode - Tower can now be used without 3DR Services</changelogimprovement>
-        <changelogimprovement>Add support for Baidu Map</changelogimprovement>
+        <!-- TODO: enable this when the correct dev key is added. <changelogimprovement>Add support for Baidu Map</changelogimprovement>-->
         <changelogimprovement>Add support for compass calibration for Solo and ArduCopter v3.4 or higher</changelogimprovement>
         <changelogimprovement>Add an improved version of the vehicle history</changelogimprovement>
         <changelogimprovement>Add ability to export the vehicle flight path as a mission</changelogimprovement>
         <changelogimprovement>Add ability to export the vehicle flight history as a mission</changelogimprovement>
         <changelogimprovement>Deprecated '.dpwp' mission file for '.txt' mission file to improve compatibility with other GCS</changelogimprovement>
-        <changelogimprovment>Add ability to lock the copter yaw during a survey mission</changelogimprovment>
-        <changelogimprovment>Add ability to start camera trigger after the first waypoint in a survey mission</changelogimprovment>
+        <changelogimprovement>Add ability to lock the copter yaw during a survey mission</changelogimprovement>
+        <changelogimprovement>Add ability to start camera trigger after the first waypoint in a survey mission</changelogimprovement>
 
         <changelogtext>Fix mission waypoint reordering</changelogtext>
-        <changelogtext>Save automatically last (spline) survey preferences</changelogtext>
+        <changelogtext>Save automatically last survey preferences</changelogtext>
         <changelogtext>Fix invalid altitude frame for Follow-Me and Guided mode</changelogtext>
         <changelogtext>Fix parameters editing for plane vehicles</changelogtext>
         <changelogtext>Fix Takeoff mission waypoint for plane vehicles</changelogtext>

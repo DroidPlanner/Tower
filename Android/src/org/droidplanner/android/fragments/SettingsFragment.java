@@ -227,7 +227,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
         final ListPreference mapsProvidersPref = (ListPreference) findPreference(mapsProvidersPrefKey);
         if (mapsProvidersPref != null) {
-            final DPMapProvider[] providers = DPMapProvider.values();
+            final DPMapProvider[] providers = DPMapProvider.getEnabledProviders();
             final int providersCount = providers.length;
 
             final CharSequence[] providersNames = new CharSequence[providersCount];

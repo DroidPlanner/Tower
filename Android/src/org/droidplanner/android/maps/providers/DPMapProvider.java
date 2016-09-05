@@ -37,6 +37,11 @@ public enum DPMapProvider {
 		}
 	};
 
+	private static DPMapProvider[] ENABLED_PROVIDERS = {
+		GOOGLE_MAP,
+		/*BAIDU_MAP*/ // Need valid developer key to activate.
+	};
+
 	/**
 	 * @return the fragment implementing the map.
 	 */
@@ -64,6 +69,10 @@ public enum DPMapProvider {
 		} catch (IllegalArgumentException e) {
 			return null;
 		}
+	}
+
+	public static DPMapProvider[] getEnabledProviders(){
+		return ENABLED_PROVIDERS;
 	}
 
 	/**
