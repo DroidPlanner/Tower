@@ -98,6 +98,7 @@
 
             <Spinner
                 android:id="@+id/valueSpinner"
+                android:spinnerMode="dialog"
                 style="@style/paramInfoText.content.values"
                 android:layout_marginRight="12dp"/>
         </LinearLayout>
