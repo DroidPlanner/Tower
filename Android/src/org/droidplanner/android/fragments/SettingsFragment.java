@@ -1,6 +1,7 @@
 package org.droidplanner.android.fragments;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.CheckBoxPreference;
@@ -206,6 +208,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setupImminentGroundCollisionWarningPreference();
         setupMapPreferences();
         setupAltitudePreferences();
+        setupCreditsPage();
     }
 
     private void setupWidgetsPreferences(){
@@ -627,5 +630,49 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     @Override
     public void onApiDisconnected() {
         lbm.unregisterReceiver(broadcastReceiver);
+    }
+
+    private void setupCreditsPage() {
+        Preference creatorPref = findPreference(DroidPlannerPrefs.PREF_PROJECT_CREATOR);
+        if(creatorPref != null) {
+            creatorPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    openWebUrl("https://github.com/arthurbenemann");
+                    return true;
+                }
+            });
+        }
+
+        Preference leadMaintainerPref = findPreference(DroidPlannerPrefs.PREF_PROJECT_LEAD_MAINTAINER);
+        if (leadMaintainerPref != null) {
+            leadMaintainerPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    openWebUrl("https://github.com/ne0fhyk");
+                    return true;
+                }
+            });
+        }
+
+        Preference contributorsPref = findPreference(DroidPlannerPrefs.PREF_PROJECT_CONTRIBUTORS);
+        if (contributorsPref != null) {
+            contributorsPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    openWebUrl("https://github.com/DroidPlanner/Tower/graphs/contributors");
+                    return true;
+                }
+            });
+        }
+    }
+
+    private void openWebUrl(String url) {
+        try {
+            Intent browseIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(browseIntent);
+        }catch(ActivityNotFoundException e) {
+            Toast.makeText(getContext(), R.string.warning_unable_to_open_web_url, Toast.LENGTH_LONG).show();
+        }
     }
 }

@@ -350,6 +350,9 @@
     <string name="usage_statistics">Usage Statistics</string>
     <string name="pref_usage_statistics_title">Send usage statistics</string>
     <string name="pref_usage_statistics_summary">Help improve Tower by sending usage statistics.</string>
+    <string name="project_creator">Project Creator</string>
+    <string name="project_lead_maintainer">Project Lead Maintainer</string>
+    <string name="project_contributors">Project Contributors</string>
 
     <string name="zoom_fit">Zoom to Fit</string>
     <string name="open_mission_file">Import from file</string>
@@ -665,4 +668,5 @@
     <string name="menu_delete">Delete</string>
     <string name="menu_rename">Rename</string>
     <string name="warning_invalid_session_label_entry">Please enter a valid entry!</string>
+    <string name="warning_unable_to_open_web_url">No app was found to handle this request. Please install a web broawer.</string>
 </resources>

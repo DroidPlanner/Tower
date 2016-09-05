@@ -189,6 +189,9 @@ public class DroidPlannerPrefs {
     private static final String PREF_SURVEY_LOCK_ORIENTATION = "pref_survey_lock_orientation";
     private static final String PREF_SURVEY_START_CAMERA_BEFORE_FIRST_WAYPOINT = "pref_survey_start_camera_before_first_waypoint";
     private static final String PREF_VEHICLE_HISTORY_SESSION_ID = "pref_vehicle_history_session_id";
+    public static final String PREF_PROJECT_CREATOR = "pref_project_creator";
+    public static final String PREF_PROJECT_LEAD_MAINTAINER = "pref_project_lead_maintainer";
+    public static final String PREF_PROJECT_CONTRIBUTORS = "pref_project_contributors";
 
     // Public for legacy usage
     public final SharedPreferences prefs;
