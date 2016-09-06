@@ -67,7 +67,7 @@
         <!-- BaiduMap key, please replace with your own key -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="3ZkUQlSKBi4weC7ZxXTyonGObmeitRMu" />
+            android:value="@string/baidu_api_key" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

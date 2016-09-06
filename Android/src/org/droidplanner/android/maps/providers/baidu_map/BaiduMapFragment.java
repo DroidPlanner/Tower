@@ -71,6 +71,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -97,11 +98,14 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
     public static final int LEASH_PATH = 0;
     public static final int MISSION_PATH = 1;
     public static final int FLIGHT_PATH = 2;
+    private int baseBottomPadding;
+
     @IntDef({LEASH_PATH, MISSION_PATH, FLIGHT_PATH})
     @Retention(RetentionPolicy.SOURCE)
     private @interface PolyLineType {}
 
     private boolean showFlightPath;
+    private List<LatLng> flightPathPoints = new LinkedList<>();
     private Polyline mFlightPath;
     private Polyline mMissionPath;
     private Polyline mDroneLeashPath;
@@ -174,7 +178,7 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
         final BaiduMapPrefFragment provider = (BaiduMapPrefFragment)(getProvider().getMapProviderPreferences());
         final Context context = getActivity().getApplicationContext();
 
-        int mapType =provider.getMapType(context);
+        int mapType = provider.getMapType(context);
         map.setMapType(mapType);
 
         MyLocationData locData = new MyLocationData.Builder()
@@ -195,7 +199,9 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
 			if (map == null || location == null || getActivity() == null)
 				return;
 
-            updateBDMapStatus(location);
+            if (mPanMode.get() == AutoPanMode.USER) {
+                updateBDMapStatus(location);
+            }
             notifyToLocatorActivity(location);
         }
     }
@@ -217,6 +223,7 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
         final Context context = getActivity().getApplicationContext();
         final View view = super.onCreateView(inflater, viewGroup, bundle);
 
+        baseBottomPadding = (int) getResources().getDimension(R.dimen.mission_control_bar_height);
         mAppPrefs = DroidPlannerPrefs.getInstance(context);
 
         final Bundle args = getArguments();
@@ -250,10 +257,8 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
 
     @Override
     public void clearFlightPath() {
+        flightPathPoints.clear();
         if (mFlightPath != null) {
-            List<LatLng> oldFlightPath = mFlightPath.getPoints();
-            oldFlightPath.clear();
-            mFlightPath.setPoints(oldFlightPath);
             mFlightPath.remove();
             mFlightPath = null;
         }
@@ -300,11 +305,7 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
         final AutoPanMode currentMode = mPanMode.get();
         if (currentMode == target) return;
 
-        setAutoPanMode(currentMode, target);
-    }
-
-    private void setAutoPanMode(AutoPanMode current, AutoPanMode update) {
-        mPanMode.compareAndSet(current, update);
+        mPanMode.compareAndSet(currentMode, target);
     }
 
     @Override
@@ -317,17 +318,22 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
         final LatLng position = MapUtils.coordToBaiduLatLng(coord);
 
         if (showFlightPath) {
-            if (mFlightPath == null) {
-                PolylineOptions flightPathOptions = new PolylineOptions();
-                flightPathOptions.color(FLIGHT_PATH_DEFAULT_COLOR)
-                        .width(FLIGHT_PATH_DEFAULT_WIDTH).zIndex(1);
-                mFlightPath = (Polyline)getBaiduMap().addOverlay(flightPathOptions);
-            }
-
-            List<LatLng> oldFlightPath = mFlightPath.getPoints();
-            oldFlightPath.add(position);
-            if (oldFlightPath.size() >=2) { // BaiduMap Polyline overlay needs at least 2 points
-                mFlightPath.setPoints(oldFlightPath);
+            flightPathPoints.add(position);
+            if (flightPathPoints.size() >= 2) {
+                if (mFlightPath == null) {
+                    PolylineOptions flightPathOptions = new PolylineOptions();
+                    flightPathOptions.color(FLIGHT_PATH_DEFAULT_COLOR)
+                        .width(FLIGHT_PATH_DEFAULT_WIDTH).zIndex(1)
+                    .points(flightPathPoints);
+                    mFlightPath = (Polyline) getBaiduMap().addOverlay(flightPathOptions);
+                } else {
+                    mFlightPath.setPoints(flightPathPoints);
+                }
+            } else {
+                if (mFlightPath != null) {
+                    mFlightPath.remove();
+                    mFlightPath = null;
+                }
             }
         }
     }
@@ -389,6 +395,9 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
         }
 
         final PolylineOptions options = fromPolylineInfo(polylineInfo);
+        if (options == null) {
+            return;
+        }
 
         Polyline polyline = (Polyline) getBaiduMap().addOverlay(options);
         polylineInfo.setProxyPolyline(new ProxyMapPolyline(polyline));
@@ -447,8 +456,13 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
     }
 
     private PolylineOptions fromPolylineInfo(PolylineInfo info) {
+        List<LatLng> points = MapUtils.coordToBaiduLatLng(info.getPoints());
+        if (points.size() <= 1) {
+            return null;
+        }
+
         return new PolylineOptions()
-            .points(MapUtils.coordToBaiduLatLng(info.getPoints()))
+            .points(points)
             .color(info.getColor())
             .visible(info.isVisible())
             .width((int) info.getWidth())
@@ -530,7 +544,7 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
 
     @Override
     public void setMapPadding(int left, int top, int right, int bottom) {
-        getBaiduMap().setViewPadding(left, top, right, bottom);
+        getBaiduMap().setViewPadding(left, top, right, bottom + baseBottomPadding);
     }
 
     @Override
@@ -871,10 +885,13 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
         mBDLocClient = new LocationClient(getActivity().getApplicationContext());
 		mBDLocClient.registerLocationListener(mBDLocListener);
 
+        // Hide the zoom control
+        map.setViewPadding(0, 0, 0, baseBottomPadding);
         UiSettings mUiSettings = map.getUiSettings();
         mUiSettings.setCompassEnabled(false);
         mUiSettings.setOverlookingGesturesEnabled(false);
-        mUiSettings.setZoomGesturesEnabled(false);
+        mUiSettings.setZoomGesturesEnabled(true);
+        mUiSettings.setRotateGesturesEnabled(mAppPrefs.isMapRotationEnabled());
     }
 
     private void setupMapOverlay(BaiduMap map) {

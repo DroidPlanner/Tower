@@ -61,7 +61,7 @@ def versionPrefix = "Tower-v"
 def versionMajor = 4
 def versionMinor = 0
 def versionPatch = 0
-def versionBuild = 1 //bump for dogfood builds, public betas, etc.
+def versionBuild = 2 //bump for dogfood builds, public betas, etc.
 
 //Logging levels
 def logLevelVerbose = 2;
@@ -189,6 +189,7 @@ android {
         dev {
             applicationIdSuffix ".debug"
             resValue "string", "app_title", "Tower Dev"
+            resValue "string", "baidu_api_key", ""
             versionName generateVersionName(versionPrefix, versionMajor, versionMinor, versionPatch, "debug.${versionBuild}")
 
             //Enable or disable crashlytics based on the availability of the api key
@@ -198,6 +199,7 @@ android {
         beta {
             applicationIdSuffix ".beta"
             resValue "string", "app_title", "Tower Beta"
+            resValue "string", "baidu_api_key", "4x7A3lUHEmzFxosafDa4bLP7yinmEnPh"
             versionName generateVersionName(versionPrefix, versionMajor, versionMinor, versionPatch, "beta.${versionBuild}")
 
             //Enable or disable crashlytics based on the availability of the api key
@@ -206,6 +208,7 @@ android {
 
         prod {
             resValue "string", "app_title", "Tower"
+            resValue "string", "baidu_api_key", "41mPy2URFjOL61GzyWk8U5oLhhwSYGWe"
             buildConfigField "boolean", "WRITE_LOG_FILE", "false"
 
             //Enable or disable crashlytics based on the availability of the api key
