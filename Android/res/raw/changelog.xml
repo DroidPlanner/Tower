@@ -26,8 +26,9 @@
         <changelogimprovement>Ability to lock the copter yaw during a survey mission</changelogimprovement>
         <changelogimprovement>Ability to start camera trigger after the first waypoint in a survey mission</changelogimprovement>
 
+        <changelogtext>Add Credits page</changelogtext>
         <changelogtext>Fix mission waypoint reordering</changelogtext>
-        <changelogtext>Save automatically last survey preferences</changelogtext>
+        <changelogtext>Autosave last survey preferences</changelogtext>
         <changelogtext>Fix invalid altitude frame for Follow-Me and Guided mode</changelogtext>
         <changelogtext>Fix parameters editing for plane vehicles</changelogtext>
         <changelogtext>Fix Takeoff mission waypoint for plane vehicles</changelogtext>
