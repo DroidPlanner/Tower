@@ -364,7 +364,7 @@
     <string name="status_waiting_for_gps">等待GPS...</string>
 
     <!-- Preference dialogs -->
-    <string name="unlock_slider_description">滑到 %s</string>
+    <string name="unlock_slider_description">滑到</string>
     <string name="pref_misc_title">其他设置</string>
     <string name="pref_dialogs_title">首选项</string>
     <string name="pref_auto_insert_mission_takeoff_rtl_land_title">自动载入TakeOff和

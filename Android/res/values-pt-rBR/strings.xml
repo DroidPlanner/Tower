@@ -362,7 +362,7 @@
     <string name="status_waiting_for_gps">Esperando por GPS…</string>
 
     <!-- Preference dialogs -->
-    <string name="unlock_slider_description">Deslize para %s</string>
+    <string name="unlock_slider_description">Deslize</string>
     <string name="pref_misc_title">Mais</string>
     <string name="pref_dialogs_title">Preferências de diálogos</string>
     <string name="pref_auto_insert_mission_takeoff_rtl_land_title">Inserir automaticamente \'TakeOff\' e
