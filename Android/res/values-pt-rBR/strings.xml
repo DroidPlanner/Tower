@@ -627,7 +627,7 @@
     <string name="pref_baidu_map_offline_preference_search">Procurar</string>
     <string name="pref_baidu_map_offline_preference_city_list">Lista de cidades</string>
     <string name="pref_baidu_map_offline_preference_download_manage">Gerenciador de download</string>
-    <string name="pref_baidu_map_offline_preference_downloaded_label">Transferido:â€”</string>
+    <string name="pref_baidu_map_offline_preference_downloaded_label">Transferido:—</string>
     <string name="pref_baidu_map_offline_preference_downloaded_cities">Cidades transferidas</string>
     <string name="pref_baidu_map_offline_preference_download_available">Download disponível</string>
     <string name="pref_baidu_map_offline_preference_download_latest">Mais recentes</string>
