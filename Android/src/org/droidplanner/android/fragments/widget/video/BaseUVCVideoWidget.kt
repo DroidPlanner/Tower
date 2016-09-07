@@ -138,7 +138,7 @@ abstract class BaseUVCVideoWidget : TowerWidget(){
 
 
     private val mOnDeviceConnectListener = object : USBMonitor.OnDeviceConnectListener {
-        override fun onAttach(device: UsbDevice) {
+        override fun onAttach(device: UsbDevice?) {
             if (DEBUG) Log.v(TAG, "onAttach:")
             startVideoStreaming()
         }

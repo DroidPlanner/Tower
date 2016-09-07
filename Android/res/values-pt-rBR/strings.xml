@@ -159,7 +159,7 @@
     <string name="structure_scan_step_height">Step height</string>
     <string name="stucture_scanner_cross_hatch">Cross Hatch</string>
 
-    <string name="dlg_clear_mission_title">Apagar missão</string>
+    <string name="dlg_clear_mission_title">Missão</string>
     <string name="dlg_clear_mission_confirm">Apagar todos os waypoints do mapa?</string>
 
     <!-- Selection of map style -->
@@ -486,6 +486,8 @@
     <string name="description_widget_flight_timer">Mostra o tempo de vôo do veículo</string>
     <string name="label_widget_geo_info">Geo Info</string>
     <string name="description_widget_geo_info">Mostra as coordenadas do veículo</string>
+    <string name="label_widget_weather_info">Clima</string>
+    <string name="description_widget_weather_info">Mostra as condições climáticas</string>
     <string name="label_ekf">ekf</string>
     <string name="label_velocity_var_abbrev">vel</string>
     <string name="label_horizontal_position_var_abbrev">h.pos</string>
@@ -585,4 +587,62 @@
     <string name="uvc_device_no_device">Nenhum dispositivo UVC encontrado</string>
     <string name="pref_advanced_settings_title">Configurações Avançadas</string>
 	<string name="pref_title_tile_provider_preferences">Preferências - Provedor de Tile</string>
+    <!-- Weather Info -->
+    <string name="wunderground_url" translatable="false">http://api.wunderground.com/api/%1$s/geolookup/conditions/q/%2$s,%3$s.json</string>
+    <string name="label_flight_conditions">Condições de voo</string>
+    <string name="label_weather_good">Bom</string>
+    <string name="weather_wind_velocity_imperial" translatable="false">%1$s mph %2$s</string>
+    <string name="weather_wind_velocity_metric" translatable="false">%1$s kph %2$s</string>
+    <string name="weather_temperature_imperial" translatable="false">%1$sÂº F</string>
+    <string name="weather_temperature_metric" translatable="false">%1$sÂº C</string>
+    <string name="weather_rain_imperial" translatable="false">%1$s in</string>
+    <string name="weather_rain_metric" translatable="false">%1$s mm</string>
+
+    <string name="label_try_again">Tente novamente</string>
+    <string name="label_alright">Tudo certo!</string>
+    <string name="label_compass_calibration_failed">A calibração da bússola falhou.\nCertifique-se de ficar longe de objetos de metal e concreto armado.</string>
+    <string name="label_ready_to_fly">Pronto para voar</string>
+
+    <!-- DroneShare strings -->
+    <string name="uploader_success_message">Upload bem sucedido!</string>
+    <string name="uploader_fail_retry_message">Tente novamente mais tarde</string>
+    <string name="uploader_notification_title">Droneshare upload</string>
+    <string name="label_tlogs_title">Logs da Telemetria</string>
+    <string name="no_tlog_data_loaded">TLog não carregado</string>
+    <string name="no_tlog_position_data">Nenhum arquivo TLog</string>
+    <string name="menu_clear_flight_path">Limpar a rota de voo</string>
+    <string name="menu_export_as_mission">Exportar como uma Missão</string>
+    <string name="menu_export_flight_path_as_mission">Exportar a rota de voo como uma Missão</string>
+    <string name="error_empty_flight_path">Tente voar um pouco primeiro :)</string>
+    <string name="start_camera_before_first_waypoint">Inicie a camêra antes do primeiro waypoint</string>
+    <string name="lock_copter_orientation">Travar a orientação do drone</string>
+
+    <!-- BaiduMap -->
+    <string name="pref_title_baidu_maps">Baidu Mapas - Preferências</string>
+    <string name="pref_baidu_map_offline_preference_title">Baidu - Download de mapas offline</string>
+    <string name="pref_baidu_map_offline_preference_start">Iniciar</string>
+    <string name="pref_baidu_map_offline_preference_stop">Parar</string>
+    <string name="pref_baidu_map_offline_preference_view">Ver</string>
+    <string name="pref_baidu_map_offline_preference_remove">Remover</string>
+    <string name="pref_baidu_map_offline_preference_search">Procurar</string>
+    <string name="pref_baidu_map_offline_preference_city_list">Lista de cidades</string>
+    <string name="pref_baidu_map_offline_preference_download_manage">Gerenciador de download</string>
+    <string name="pref_baidu_map_offline_preference_downloaded_label">Transferido:â€”</string>
+    <string name="pref_baidu_map_offline_preference_downloaded_cities">Cidades transferidas</string>
+    <string name="pref_baidu_map_offline_preference_download_available">Download disponível</string>
+    <string name="pref_baidu_map_offline_preference_download_latest">Mais recentes</string>
+    <string name="pref_baidu_map_offline_preference_hot_cities">Cidades </string>
+    <string name="pref_baidu_map_offline_preference_all_cities">Todas as cidades</string>
+    <string name="pref_baidu_map_offline_preference_default_city">BeiJing</string>
+    <string name="pref_baidu_map_offline_preference_default_city_id">131</string>
+    <string name="pref_baidu_map_offline_download_start_message">Começar a baixar mapa offline. Cidade ID: %d</string>
+    <string name="pref_baidu_map_offline_download_stop_message">Pausar o download de mapa offline. Cidade ID: %d</string>
+    <string name="pref_baidu_map_offline_download_remove_message">Remover o mapa offline. Cidade ID: %d</string>
+    <string name="baidu_map_sdk_initializer_permission_error_message">BaiduMap: API Keycode error, por favor, verifique o código de acesso em AndroidManifest.xml!</string>
+    <string name="baidu_map_sdk_initializer_network_error_message">BaiduMap: Network error!</string>
+    <string name="warning_check_exported_mission">Por favor, verifique a missão exportada!</string>
+    <string name="menu_delete">Deletar</string>
+    <string name="menu_rename">Renomear</string>
+    <string name="warning_invalid_session_label_entry">Por favor, insira uma entrada válida!</string>
+    <string name="warning_unable_to_open_web_url">Nenhuma app foi encontrado para tratar essa requisição. Por favor, instale um browser.</string>
 </resources>
