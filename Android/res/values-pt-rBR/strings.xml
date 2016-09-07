@@ -301,7 +301,7 @@
     <string name="pref_tts_warning_low_signal_strength">Baixa Intensidade do sinal</string>
     <string name="pref_tts_warning_low_signal_strength_summary">Adverte quando a conexão com o drone é ruim.</string>
     <string name="pref_tts_warning_lost_signal">Status da conexão</string>
-    <string name="pref_tts_warning_lost_signal_summary">Adverte quando a conexão com o drone é cortada ou restaurada.</string>
+    <string name="pref_tts_warning_lost_signal_summary">Adverte quando a conexão com o drone é perdida ou restaurada.</string>
     <string name="pref_tts_warning_autopilot_warnings">Advertências reportadas pela APM</string>
     <string name="pref_tts_warning_autopilot_warnings_summary">Adverte sobre falhas ao armar, bateria fraca, etc.</string>
     <string name="pref_tts_periodic_status_disabled">Status desabilitado</string>
