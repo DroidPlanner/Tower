@@ -50,7 +50,7 @@
 
             <TableRow>
 
-                <TextView android:text="@string/label_clipping" />
+                <TextView android:text="@string/label_primary" />
 
                 <TextView
                     android:id="@+id/primary_clipping_value"
