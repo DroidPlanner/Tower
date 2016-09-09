@@ -146,7 +146,7 @@ public class EditorListFragment extends ApiListenerFragment implements MissionSe
         if(isEnabled)
             recyclerView.setBackgroundResource(android.R.color.holo_red_light);
         else
-            recyclerView.setBackgroundResource(R.color.editor_bar);
+            recyclerView.setBackgroundResource(android.R.color.transparent);
     }
 
     @Override

@@ -135,7 +135,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             fragmentManager.beginTransaction().add(R.id.editor_map_fragment, gestureMapFragment).commit();
         }
 
-        editorListFragment = (EditorListFragment) fragmentManager.findFragmentById(R.id.mission_list_fragment);
+        editorToolsFragment = (EditorToolsFragment) fragmentManager.findFragmentById(R.id.mission_tools_fragment);
 
         infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
@@ -467,10 +467,10 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     @Override
     protected void addToolbarFragment(){
         final int toolbarId = getToolbarId();
-        editorToolsFragment = (EditorToolsFragment) fragmentManager.findFragmentById(toolbarId);
-        if (editorToolsFragment == null) {
-            editorToolsFragment = new EditorToolsFragment();
-            fragmentManager.beginTransaction().add(toolbarId, editorToolsFragment).commit();
+        editorListFragment = (EditorListFragment) fragmentManager.findFragmentById(toolbarId);
+        if (editorListFragment == null) {
+            editorListFragment = new EditorListFragment();
+            fragmentManager.beginTransaction().add(toolbarId, editorListFragment).commit();
         }
     }
 
