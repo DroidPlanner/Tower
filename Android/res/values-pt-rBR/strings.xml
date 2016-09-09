@@ -160,7 +160,7 @@
     <string name="stucture_scanner_cross_hatch">Cross Hatch</string>
 
     <string name="dlg_clear_mission_title">Missão</string>
-    <string name="dlg_clear_mission_confirm">Apagar todos os waypoints do mapa?</string>
+    <string name="dlg_clear_mission_confirm">Apagar todos os waypoints ?</string>
 
     <!-- Selection of map style -->
     <string name="menu_map_type_satellite">Satélite</string>
@@ -182,24 +182,24 @@
 
     <!-- Calibration data progress -->
     <string name="progress_title_downloading">Baixando dados de calibração</string>
-    <string name="progress_desc_downloading">DroidPlanner está baixando os dados de calibração do veículo. Se o sistema não está conectado, presione cancelar.</string>
+    <string name="progress_desc_downloading">Tower está baixando os dados de calibração do veículo. Se o sistema não está conectado, presione cancelar.</string>
 
     <!-- Radio Setup Resource Strings -->
-    <string name="setup_radio_title">Radio Channel Calibration</string>
-    <string name="setup_radio_cal_title">Start Calibration</string>
-    <string name="setup_radio_cal_desc">Press Calibrate to start the radio calibration. Ensure the radio transmitter is switched \'ON\' and transmitting.</string>
+    <string name="setup_radio_title">Calibração do Rádio</string>
+    <string name="setup_radio_cal_title">Iniciar Calibração</string>
+    <string name="setup_radio_cal_desc">Aperte Calibrar para iniciar a calibração do rádio. Certifique-se que o rádio esteja ligado e transmitindo.</string>
     <string name="setup_radio_title_minmax">Set Min &amp; Max values</string>
-    <string name="setup_radio_title_complete">Calibration complete</string>
-    <string name="setup_radio_desc_minmax">Move the joysticks all the way out several times and toggle the switches, levers and knobs to all possible positions.</string>
-    <string name="setup_radio_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle.</string>
+    <string name="setup_radio_title_complete">Calibração completa</string>
+    <string name="setup_radio_desc_minmax">Movo os joysticks em todas as direções de forma completa. Mova os switches e potenciômetros em todas as posições possíveis.</string>
+    <string name="setup_radio_desc_complete">Calibração do rádio completa. Aperte \'Salvar\' para enviar os dados ao veículo.</string>
 
     <!-- Compass Setup Resource Strings -->
-    <string name="setup_mag_title">Compass Calibration</string>
-    <string name="setup_mag_start">Press Calibrate to start magnetometer calibration. Perform the calibration outdoors away from metal objects.</string>
+    <string name="setup_mag_title">Calibração da bússola</string>
+    <string name="setup_mag_start">Aperte Calibrar para iniciar a calibração do magnetômetro. Realizar a calibração ao ar livre longe de objetos metálicos.</string>
 
     <!-- Accelerometer Setup Resource Strings -->
     <string name="setup_imu_title">Calibração do acelerômetro</string>
-    <string name="setup_imu_start">Aperte CALIBRAR para começar a calibração do IMU. Certifique-se que o veículo esteja situado em uma superfície plana antes de começar o processo de calibração.</string>
+    <string name="setup_imu_start">Aperte Calibrar para começar a calibração do IMU. Certifique-se que o veículo esteja situado em uma superfície plana antes de começar o processo de calibração.</string>
     <string name="setup_imu_normal">Coloque o veículo em sua posição NORMAL, garantindo que não se mova muito e aperte Próximo.</string>
     <string name="setup_imu_left"> Coloque o veículo sobre sua ESQUERDA, garantindo que não se mova muito e aperte Próximo.</string>
     <string name="setup_imu_right">Coloque o veículo sobre sua DIREITA, garantindo que não se mova muito e aperte Próximo.</string>
@@ -207,7 +207,7 @@
     <string name="setup_imu_noseup">Coloque o veículo com o NARIZ para CIMA, garantindo que não se mova muito e aperte Próximo.</string>
     <string name="setup_imu_back">Coloque o veículo com as COSTAS para BAIXO, garantindo que não se mova muito e aperte Próximo.</string>
     <string name="setup_imu_completed">Calibração do acelerômetro completa. Se a calibração não foi realizada com sucesso, por favor, recalibre.</string>
-    <string name="setup_imu_step">Para iniciar a calibração, aperte CALIBRAR.</string>
+    <string name="setup_imu_step">Para iniciar a calibração, aperte Calibrar.</string>
     <string name="setup_imu_timeleft">Tempo restante antes da próxima orientação:</string>
 
 
@@ -301,7 +301,7 @@
     <string name="pref_tts_warning_low_signal_strength">Baixa Intensidade do sinal</string>
     <string name="pref_tts_warning_low_signal_strength_summary">Adverte quando a conexão com o drone é ruim.</string>
     <string name="pref_tts_warning_lost_signal">Status da conexão</string>
-    <string name="pref_tts_warning_lost_signal_summary">Adverte quando a conexão com o drone é cortada ou restaurada.</string>
+    <string name="pref_tts_warning_lost_signal_summary">Adverte quando a conexão com o drone é perdida ou restaurada.</string>
     <string name="pref_tts_warning_autopilot_warnings">Advertências reportadas pela APM</string>
     <string name="pref_tts_warning_autopilot_warnings_summary">Adverte sobre falhas ao armar, bateria fraca, etc.</string>
     <string name="pref_tts_periodic_status_disabled">Status desabilitado</string>
@@ -319,7 +319,7 @@
     <string name="pref_bluetooth">Conexão bluetooth</string>
     <string name="pref_forget_bluetooth_device_title">Esquecer o dispositivo %s</string>
     <string name="pref_forget_bluetooth_device_address">Esquecer o dispositivo padrão</string>
-    <string name="pref_forget_bluetooth_device_address_confirm">Você tem certeza?</string>
+    <string name="pref_forget_bluetooth_device_address_confirm">Você tem certeza ?</string>
     <string name="pref_bluetooth_forget">Esquecer</string>
 
     <!-- Map providers -->
@@ -371,7 +371,7 @@
     <string name="pref_dialog_entry_never">Nunca</string>
     <string name="pref_dialog_entry_ask">Perguntar</string>
     <string name="pref_dialog_selection_reset_desc"><![CDATA[Redefinir a seleção através: Configurações ––> Outros -> Preferências de diálogos]]></string>
-    <string name="pref_dronie_creation_title">Criar dronie?</string>
+    <string name="pref_dronie_creation_title">Criar dronie ?</string>
     <string name="pref_dronie_creation_message">Por favor, afaste-se pelo menos 8m antes de começar o dronie.</string>
     <string name="upload_params">Enviar parâmetros</string>
     <string name="upload">Enviar</string>
@@ -389,14 +389,14 @@
     <string name="label_sign_up">Registrar-se</string>
     <string name="label_login">Login</string>
     <string name="label_logout">Logout</string>
-    <string name="delete_selected_waypoints_confirm">Deletar os waypoints selecionados do mapa?</string>
+    <string name="delete_selected_waypoints_confirm">Deletar os waypoints selecionados do mapa ?</string>
     <string name="delete_selected_waypoints_title">Deletar os waypoints selecionados</string>
     <string name="label_select_all">Selecionar todos</string>
     <string name="guided_scan_roi_set_message">Localização do alvo selecionada</string>
     <string name="mode_follow_guided_scan">Veículo segue o usuário enquanto permanece fixo em um ponto de interesse(ROI). Longo clique no mapa para selecionar o ponto de interesse(ROI).</string>
     <string name="pref_no_saved_bluetooth_device_title">Não existem dispositivos bluetooth.</string>
-    <string name="label_mission_item_type_selection">Seleccione o tipo de Waypoint</string>
-    <string name="label_mission_item_type_no_selection">Opção não disponible</string>
+    <string name="label_mission_item_type_selection">Selecione o tipo de Waypoint</string>
+    <string name="label_mission_item_type_no_selection">Opção não disponível</string>
     <string name="description_mission_item_type_selection">Clique no spinner para selecionar um tipo para o waypoint selecionado.</string>
     <string name="description_mission_item_type_no_selection">Nenhum tipo de opção está disponível para os items selecionados.</string>
     <string name="label_vehicle_details">Detalhes do veículo</string>
@@ -435,10 +435,10 @@
     <string name="instructions_map_download_warning">Área muito larga, aumente o zoom.</string>
     <string name="instructions_map_download_selection">Pan e zoom para ajustar a área do mapa para salvar</string>
     <string name="instructions_tap_to_save_map">Tocar para guardar o mapa</string>
-    <string name="label_map_saved">Área do mapa salva!</string>
+    <string name="label_map_saved">Área do mapa salva !</string>
     <string name="label_invalid_mapbox_id">id incorreto</string>
     <string name="label_invalid_mapbox_access_token">Token de acesso incorreto</string>
-    <string name="alert_invalid_mapbox_credentials">Credenciais incorretas! Por favor, atualizar suas configurações do MapBox.</string>
+    <string name="alert_invalid_mapbox_credentials">Credenciais incorretas ! Por favor, atualizar suas configurações do MapBox.</string>
     <string name="vehicle_type">Tipo de veículo</string>
     <string name="label_type_copter">Helicóptero/Drone</string>
     <string name="label_type_plane">Avião</string>
@@ -450,23 +450,23 @@
     <string name="wp_speed">Velocidade (WP):</string>
     <string name="mission_progress">Progresso da missão:</string>
     <string name="imu_calibration_start_error">Não é possível iniciar a calibração IMU</string>
-    <string name="horizontal_speed_empty">hs: —</string>
-    <string name="horizontal_speed_telem">hs: %s</string>
-    <string name="vertical_speed_empty">vs: —</string>
-    <string name="vertical_speed_telem">vs: %s</string>
+    <string name="horizontal_speed_empty">vel.h: —</string>
+    <string name="horizontal_speed_telem">vel.h: %s</string>
+    <string name="vertical_speed_empty">vel.v: —</string>
+    <string name="vertical_speed_telem">vel.v: %s</string>
     <string name="latitude_empty">Lat: —</string>
     <string name="latitude_telem">Lat: %s°</string>
     <string name="longitude_empty">Long: —</string>
     <string name="longitude_telem">Long: %s°</string>
     <string name="menu_kill_switch">Kill Switch</string>
-    <string name="label_clear_selected">Apagar selecionado</string>
+    <string name="label_clear_selected">Selecionado</string>
     <string name="unsaved_param_warning">Você tem mudanças não salvas</string>
-    <string name="error_kill_switch_unsupported">O comando KILL SWITCH não é suportado!</string>
-    <string name="error_kill_switch_failed">O comando KILL SWITCH falhou!</string>
+    <string name="error_kill_switch_unsupported">O comando KILL SWITCH não é suportado !</string>
+    <string name="error_kill_switch_failed">O comando KILL SWITCH falhou !</string>
     <string name="pref_max_alt_warning_title">Aviso de altitude máxima excedida</string>
     <string name="pref_max_alt_warning_summary">Ativar repetidas advertências ao voar acima da altitude máxima permitida.</string>
     <string name="mission_upload_title">Enviar missão</string>
-    <string name="mission_upload_message">Quer adicionar um Takeoff e RTL a sua missão?</string>
+    <string name="mission_upload_message">Quer adicionar um Takeoff e RTL a sua missão ?</string>
     <string name="label_skip">Pular</string>
 
     <!-- Telemetry widget labels -->
@@ -482,7 +482,7 @@
     <string name="pref_tower_widgets_category">Tower Widgets</string>
     <string name="pref_widgets_list_category">Lista de Widgets</string>
     <string name="label_widget_flight_timer">Tempo de vôo</string>
-    <string name="description_reset_flight_timer">Zerar o tempo de vôo?</string>
+    <string name="description_reset_flight_timer">Zerar o tempo de vôo ?</string>
     <string name="description_widget_flight_timer">Mostra o tempo de vôo do veículo</string>
     <string name="label_widget_geo_info">Geo Info</string>
     <string name="description_widget_geo_info">Mostra as coordenadas do veículo</string>
@@ -490,23 +490,23 @@
     <string name="description_widget_weather_info">Mostra as condições climáticas</string>
     <string name="label_ekf">ekf</string>
     <string name="label_velocity_var_abbrev">vel</string>
-    <string name="label_horizontal_position_var_abbrev">h.pos</string>
-    <string name="label_vertical_position_var_abbrev">v.pos</string>
+    <string name="label_horizontal_position_var_abbrev">pos.h</string>
+    <string name="label_vertical_position_var_abbrev">pos.v</string>
     <string name="label_mag_var_abbrev">mag</string>
     <string name="label_terrain_var_abbrev">ter</string>
     <string name="label_attitude_estimate">Atitude estimada</string>
     <string name="label_flags">Flags</string>
-    <string name="label_constant_position_mode">Constant position mode</string>
+    <string name="label_constant_position_mode">Modo de posição constante</string>
     <string name="label_velocity">Velocidade</string>
-    <string name="label_velocity_estimate">Vertical estimate</string>
-    <string name="label_horizontal_estimate">Horizontal estimate</string>
-    <string name="label_horizontal_position">Horizontal Position</string>
-    <string name="label_relative_estimate">Relative estimate</string>
-    <string name="label_absolute_estimate">Absolute estimate</string>
-    <string name="label_above_ground_estimate">Above ground estimate</string>
-    <string name="label_vertical_position">Posição vertical</string>
-    <string name="label_absolute_predicted_estimate">Absolute predicted estimate</string>
-    <string name="label_relative_predicted_estimate">Relative predicted estimate</string>
+    <string name="label_velocity_estimate">Vertical estimada</string>
+    <string name="label_horizontal_estimate">Horizontal estimada</string>
+    <string name="label_horizontal_position">Posição Horizontal</string>
+    <string name="label_relative_estimate">Relativa estimada</string>
+    <string name="label_absolute_estimate">Absoluta estimada</string>
+    <string name="label_above_ground_estimate">Altura do solo estimada</string>
+    <string name="label_vertical_position">Posição Vertical</string>
+    <string name="label_absolute_predicted_estimate">Previsão absoluta estimada</string>
+    <string name="label_relative_predicted_estimate">Previsão relativa estimada</string>
     <string name="error_no_video">Vídeo não disponível</string>
     <string name="label_repeat_indefinitely">Repetir indefinidamente</string>
     <string name="title_ekf_status_viewer">EKF</string>
@@ -532,18 +532,18 @@
 
     <!--START TTS Notification Provider Strings-->
     <string name="toast_mission_sent">Waypoints enviados</string>
-    <string name="speak_mission_sent">Weypoints enviados ao Drone</string>
+    <string name="speak_mission_sent">Ueipóints enviados ao Drone</string>
     <string name="toast_mission_received">Waypoints recebidos do Drone</string>
-    <string name="speak_mission_received">Weypoints recebidos</string>
+    <string name="speak_mission_received">Ueipóints recebidos</string>
     <string name="speak_heartbeat_first">Conectado</string>
     <string name="speak_heartbeat_timeout">Link de dados perdido, verifique a conexão.</string>
     <string name="speak_heartbeat_restored">Link de dados restaurado</string>
-    <string name="speak_mission_item_updated">"Indo para o waypoint %d"</string>
+    <string name="speak_mission_item_updated">"Indo para o ueipóint %d"</string>
     <string name="speak_follow_start">Seguindo</string>
     <string name="speak_warning_signal_weak">Atenção, sinal fraco</string>
     <string name="speak_warning_no_gps">Atenção, sem triangulão de GPS</string>
     <string name="speak_warning_vehicle_home_updated">A posição de início do veículo foi atualizada</string>
-    <string name="speak_warning_max_alt_exceed">Atenção, altitude máxima excedida!</string>
+    <string name="speak_warning_max_alt_exceed">Atenção, altitude máxima excedida !</string>
 
     <!-- Periodic Status Preferences -->
     <string name="periodic_status_bat_volt">"bateria %2.1f volts. "</string>
@@ -599,20 +599,20 @@
     <string name="weather_rain_metric" translatable="false">%1$s mm</string>
 
     <string name="label_try_again">Tente novamente</string>
-    <string name="label_alright">Tudo certo!</string>
+    <string name="label_alright">Tudo certo !</string>
     <string name="label_compass_calibration_failed">A calibração da bússola falhou.\nCertifique-se de ficar longe de objetos de metal e concreto armado.</string>
     <string name="label_ready_to_fly">Pronto para voar</string>
 
     <!-- DroneShare strings -->
-    <string name="uploader_success_message">Upload bem sucedido!</string>
+    <string name="uploader_success_message">Upload bem sucedido !</string>
     <string name="uploader_fail_retry_message">Tente novamente mais tarde</string>
     <string name="uploader_notification_title">Droneshare upload</string>
     <string name="label_tlogs_title">Logs da Telemetria</string>
     <string name="no_tlog_data_loaded">TLog não carregado</string>
     <string name="no_tlog_position_data">Nenhum arquivo TLog</string>
-    <string name="menu_clear_flight_path">Limpar a rota de voo</string>
+    <string name="menu_clear_flight_path">Limpar rota de voo</string>
     <string name="menu_export_as_mission">Exportar como uma Missão</string>
-    <string name="menu_export_flight_path_as_mission">Exportar a rota de voo como uma Missão</string>
+    <string name="menu_export_flight_path_as_mission">Exportar rota de voo</string>
     <string name="error_empty_flight_path">Tente voar um pouco primeiro :)</string>
     <string name="start_camera_before_first_waypoint">Inicie a camêra antes do primeiro waypoint</string>
     <string name="lock_copter_orientation">Travar a orientação do drone</string>
@@ -627,22 +627,22 @@
     <string name="pref_baidu_map_offline_preference_search">Procurar</string>
     <string name="pref_baidu_map_offline_preference_city_list">Lista de cidades</string>
     <string name="pref_baidu_map_offline_preference_download_manage">Gerenciador de download</string>
-    <string name="pref_baidu_map_offline_preference_downloaded_label">Transferido:â€”</string>
+    <string name="pref_baidu_map_offline_preference_downloaded_label">Transferido:—</string>
     <string name="pref_baidu_map_offline_preference_downloaded_cities">Cidades transferidas</string>
     <string name="pref_baidu_map_offline_preference_download_available">Download disponível</string>
     <string name="pref_baidu_map_offline_preference_download_latest">Mais recentes</string>
-    <string name="pref_baidu_map_offline_preference_hot_cities">Cidades </string>
+    <string name="pref_baidu_map_offline_preference_hot_cities">Cidades preferidas</string>
     <string name="pref_baidu_map_offline_preference_all_cities">Todas as cidades</string>
     <string name="pref_baidu_map_offline_preference_default_city">BeiJing</string>
     <string name="pref_baidu_map_offline_preference_default_city_id">131</string>
     <string name="pref_baidu_map_offline_download_start_message">Começar a baixar mapa offline. Cidade ID: %d</string>
     <string name="pref_baidu_map_offline_download_stop_message">Pausar o download de mapa offline. Cidade ID: %d</string>
     <string name="pref_baidu_map_offline_download_remove_message">Remover o mapa offline. Cidade ID: %d</string>
-    <string name="baidu_map_sdk_initializer_permission_error_message">BaiduMap: API Keycode error, por favor, verifique o código de acesso em AndroidManifest.xml!</string>
-    <string name="baidu_map_sdk_initializer_network_error_message">BaiduMap: Network error!</string>
-    <string name="warning_check_exported_mission">Por favor, verifique a missão exportada!</string>
+    <string name="baidu_map_sdk_initializer_permission_error_message">BaiduMap: API Keycode error, por favor, verifique o código de acesso em AndroidManifest.xml !</string>
+    <string name="baidu_map_sdk_initializer_network_error_message">BaiduMap: Network error !</string>
+    <string name="warning_check_exported_mission">Por favor, verifique a missão exportada !</string>
     <string name="menu_delete">Deletar</string>
     <string name="menu_rename">Renomear</string>
-    <string name="warning_invalid_session_label_entry">Por favor, insira uma entrada válida!</string>
-    <string name="warning_unable_to_open_web_url">Nenhuma app foi encontrado para tratar essa requisição. Por favor, instale um browser.</string>
+    <string name="warning_invalid_session_label_entry">Por favor, insira uma entrada válida !</string>
+    <string name="warning_unable_to_open_web_url">Nenhum app foi encontrado para tratar essa requisição. Por favor, instale um browser.</string>
 </resources>
