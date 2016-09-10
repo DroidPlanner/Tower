@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,14 +22,10 @@ import com.o3dr.services.android.lib.drone.property.GuidedState;
 import com.o3dr.services.android.lib.drone.property.State;
 import com.o3dr.services.android.lib.drone.property.VehicleMode;
 import com.o3dr.services.android.lib.gcs.follow.FollowState;
-import com.o3dr.services.android.lib.gcs.follow.FollowType;
 
 import org.droidplanner.android.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.dialogs.SlideToUnlockDialog;
-import org.droidplanner.android.dialogs.YesNoDialog;
-import org.droidplanner.android.dialogs.YesNoWithPrefsDialog;
-import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.analytics.GAUtils;
 
 /**
@@ -287,16 +282,12 @@ public class PlaneFlightControlFragment extends BaseFlightControlFragment {
     }
 
     private void getArmingConfirmation() {
-        SlideToUnlockDialog unlockDialog = new SlideToUnlockDialog() {
+        SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("arm", new Runnable() {
             @Override
-            public void onSliderUnlocked() {
+            public void run() {
                 VehicleApi.getApi(getDrone()).arm(true);
             }
-        };
-
-        Bundle args = new Bundle();
-        args.putString(SlideToUnlockDialog.EXTRA_UNLOCK_ACTION, "arm");
-        unlockDialog.setArguments(args);
+        });
         unlockDialog.show(getChildFragmentManager(), "Slide To Arm");
     }
 
