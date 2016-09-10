@@ -588,15 +588,8 @@
     <string name="pref_advanced_settings_title">Configurações Avançadas</string>
 	<string name="pref_title_tile_provider_preferences">Preferências - Provedor de Tile</string>
     <!-- Weather Info -->
-    <string name="wunderground_url" translatable="false">http://api.wunderground.com/api/%1$s/geolookup/conditions/q/%2$s,%3$s.json</string>
     <string name="label_flight_conditions">Condições de voo</string>
     <string name="label_weather_good">Bom</string>
-    <string name="weather_wind_velocity_imperial" translatable="false">%1$s mph %2$s</string>
-    <string name="weather_wind_velocity_metric" translatable="false">%1$s kph %2$s</string>
-    <string name="weather_temperature_imperial" translatable="false">%1$sÂº F</string>
-    <string name="weather_temperature_metric" translatable="false">%1$sÂº C</string>
-    <string name="weather_rain_imperial" translatable="false">%1$s in</string>
-    <string name="weather_rain_metric" translatable="false">%1$s mm</string>
 
     <string name="label_try_again">Tente novamente</string>
     <string name="label_alright">Tudo certo !</string>
