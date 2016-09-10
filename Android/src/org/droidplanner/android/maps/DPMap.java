@@ -318,12 +318,6 @@ public interface DPMap {
      */
 	void zoomToFitMyLocation(List<LatLong> coords);
     
-    /**
-     * Ignore marker clicks on the map and instead report the event as a mapClick
-     * @param skip if it should skip further events
-     */
-	void skipMarkerClickEvents(boolean skip);
-
 	void updateRealTimeFootprint(FootPrint footprint);
 
 	interface PathSource {

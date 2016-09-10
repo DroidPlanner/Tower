@@ -421,17 +421,6 @@ public abstract class DroneMap extends ApiListenerFragment {
 		mMapFragment.updateCameraBearing(bearing);
 	}
 
-	/**
-	 * Ignore marker clicks on the map and instead report the event as a
-	 * mapClick
-	 * 
-	 * @param skip
-	 *            if it should skip further events
-	 */
-	public void skipMarkerClickEvents(boolean skip) {
-		mMapFragment.skipMarkerClickEvents(skip);
-	}
-
 	public void addMarker(MarkerInfo markerInfo){
 		if(markerInfo == null)
 			return;

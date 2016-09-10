@@ -442,16 +442,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             gestureMapFragment.disableGestureDetection();
     }
 
-    @Override
-    public void skipMarkerClickEvents(boolean skip) {
-        if (gestureMapFragment == null)
-            return;
-
-        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
-        if (planningMapFragment != null)
-            planningMapFragment.skipMarkerClickEvents(skip);
-    }
-
     private void setupTool() {
         final EditorToolsImpl toolImpl = getToolImpl();
         toolImpl.setup();

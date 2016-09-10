@@ -265,8 +265,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
     private DPMap.OnMarkerDragListener mMarkerDragListener;
     private android.location.LocationListener mLocationListener;
 
-    protected boolean useMarkerClickAsMapClick = false;
-
     private List<Polygon> polygonsPaths = new ArrayList<>();
 
     protected DroidPlannerApp dpApp;
@@ -835,6 +833,11 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
     @Override
     public void updatePolygonsPaths(List<List<LatLong>> paths) {
+        GoogleMap map = getMap();
+        if (map == null) {
+            return;
+        }
+
         for (Polygon poly : polygonsPaths) {
             poly.remove();
         }
@@ -848,7 +851,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
                 pathPoints.add(MapUtils.coordToLatLng(coord));
             }
             pathOptions.addAll(pathPoints);
-            polygonsPaths.add(getMap().addPolygon(pathOptions));
+            polygonsPaths.add(map.addPolygon(pathOptions));
         }
 
     }
@@ -1027,11 +1030,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if (useMarkerClickAsMapClick) {
-                    onMapClickListener.onMapClick(marker.getPosition());
-                    return true;
-                }
-
                 if (mMarkerClickListener != null) {
                     final MarkerInfo markerInfo = markersMap.get(marker);
                     if (markerInfo != null)
@@ -1237,11 +1235,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
                 MapUtils.latLngToCoord(mapRegion.nearLeft),
                 MapUtils.latLngToCoord(mapRegion.nearRight),
                 MapUtils.latLngToCoord(mapRegion.farRight));
-    }
-
-    @Override
-    public void skipMarkerClickEvents(boolean skip) {
-        useMarkerClickAsMapClick = skip;
     }
 
     @Override

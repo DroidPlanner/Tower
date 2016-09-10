@@ -116,8 +116,6 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
     private DPMap.OnMarkerDragListener mMarkerDragListener;
     private android.location.LocationListener mLocationListener;
 
-    protected boolean mUseMarkerClickAsMapClick = false;
-
     protected DroidPlannerApp mDpApp;
     private Polygon mFootprintPoly;
     private List<Polygon> mPolygonsPaths = new ArrayList<Polygon>();
@@ -863,11 +861,6 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
         baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if (mUseMarkerClickAsMapClick) {
-                    onMapClickListener.onMapClick(marker.getPosition());
-                    return true;
-                }
-
                 if (mMarkerClickListener != null) {
                     final MarkerInfo markerInfo = markersMap.get(marker);
                     if (markerInfo != null)
@@ -927,11 +920,6 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
 
     public VisibleMapArea getVisibleMapArea(){
         return null; // No visible area interface in BaiduMap yet.
-    }
-
-    @Override
-    public void skipMarkerClickEvents(boolean skip) {
-        mUseMarkerClickAsMapClick = skip;
     }
 
     @Override

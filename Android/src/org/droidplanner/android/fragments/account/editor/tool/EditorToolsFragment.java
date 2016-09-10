@@ -48,8 +48,6 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
         void enableGestureDetection(boolean enable);
 
-        void skipMarkerClickEvents(boolean skip);
-
         void zoomToFitSelected();
     }
 
