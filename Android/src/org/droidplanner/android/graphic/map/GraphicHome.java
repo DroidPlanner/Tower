@@ -86,7 +86,8 @@ public class GraphicHome extends MarkerInfo {
 	@Override
 	public String getSnippet() {
         Home droneHome = drone.getAttribute(AttributeType.HOME);
-		return "Home " + (droneHome == null ? "N/A" : droneHome.getCoordinate().getAltitude());
+		LatLongAlt coordinate = droneHome == null ? null : droneHome.getCoordinate();
+		return "Home " + (coordinate == null ? "N/A" : coordinate.getAltitude());
 	}
 
 	@Override

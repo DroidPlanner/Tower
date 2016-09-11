@@ -1190,7 +1190,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
                         case HttpURLConnection.HTTP_UNAUTHORIZED:
                         case HttpURLConnection.HTTP_NOT_FOUND:
                             //Invalid mapbox credentials
-                            Toast.makeText(getContext(), R.string.alert_invalid_mapbox_credentials, Toast.LENGTH_LONG).show();
+                            Context context = getContext();
+                            if (context != null) {
+                                Toast.makeText(context, R.string.alert_invalid_mapbox_credentials, Toast.LENGTH_LONG).show();
+                            }
                             break;
                     }
                 }
