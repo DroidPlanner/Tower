@@ -120,6 +120,10 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
     private final SpinnerSelfSelect.OnSpinnerItemSelectedListener missionItemSpinnerListener = new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {
         @Override
         public void onSpinnerItemSelected(Spinner spinner, int position) {
+            if (position < 0 || position >=  commandAdapter.getCount()) {
+                return;
+            }
+
             MissionItemType selectedType = commandAdapter.getItem(position);
 
             try {
