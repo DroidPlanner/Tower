@@ -61,7 +61,7 @@ def versionPrefix = "Tower-v"
 def versionMajor = 4
 def versionMinor = 0
 def versionPatch = 0
-def versionBuild = 4 //bump for dogfood builds, public betas, etc.
+def versionBuild = 5 //bump for dogfood builds, public betas, etc.
 
 //Logging levels
 def logLevelVerbose = 2;
