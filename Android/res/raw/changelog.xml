@@ -15,7 +15,7 @@
     </changelogversion>
     -->
 
-    <changelogversion versionName="4.0.0" changeDate="Sept 6, 2016">
+    <changelogversion versionName="4.0.0" changeDate="Sept 21, 2016">
         <changelogimprovement>Remove dependency on 3DR Services</changelogimprovement>
         <changelogimprovement>Support for Baidu Map</changelogimprovement>
         <changelogimprovement>Support for compass calibration for Solo and ArduCopter v3.4 or higher</changelogimprovement>
