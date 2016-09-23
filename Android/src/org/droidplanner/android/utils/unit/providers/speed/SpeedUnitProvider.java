@@ -28,4 +28,6 @@ public abstract class SpeedUnitProvider {
 
         return Operation.convert(target, UnitIdentifier.METER_PER_SECOND);
     }
+
+    public abstract SpeedUnit boxTargetValue(double speedInTargetUnits);
 }

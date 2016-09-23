@@ -43,6 +43,7 @@ import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.android.utils.file.FileList;
 import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import java.io.File;
 import java.util.List;
@@ -55,8 +56,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         EditorToolsFragment.EditorToolListener, MissionDetailFragment.OnMissionDetailListener,
         OnEditorInteraction, MissionSelection.OnSelectionUpdateListener, OnClickListener,
         OnLongClickListener, SupportEditInputDialog.Listener {
-
-    private static final double DEFAULT_SPEED = 5; //meters per second.
 
     /**
      * Used to retrieve the item detail window when the activity is destroyed,
@@ -73,6 +72,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         eventFilter.addAction(MissionProxy.ACTION_MISSION_PROXY_UPDATE);
         eventFilter.addAction(AttributeEvent.MISSION_RECEIVED);
         eventFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_COMPLETED);
+        eventFilter.addAction(DroidPlannerPrefs.PREF_VEHICLE_DEFAULT_SPEED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -84,6 +84,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                     gestureMapFragment.getMapFragment().zoomToFit();
                     // FALL THROUGH
                 case AttributeEvent.PARAMETERS_REFRESH_COMPLETED:
+                case DroidPlannerPrefs.PREF_VEHICLE_DEFAULT_SPEED:
                     updateMissionLength();
                     break;
 
@@ -394,10 +395,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
             double missionLength = missionProxy.getMissionLength();
             LengthUnit convertedMissionLength = unitSystem.getLengthUnitProvider().boxBaseValueToTarget(missionLength);
-            double speedParameter = dpApp.getDrone().getSpeedParameter() / 100; //cm/s to m/s conversion.
-            if (speedParameter == 0)
-                speedParameter = DEFAULT_SPEED;
-
+            double speedParameter = dpApp.getVehicleSpeed();
             int time = (int) (missionLength / speedParameter);
 
             String infoString = getString(R.string.editor_info_window_distance, convertedMissionLength.toString())

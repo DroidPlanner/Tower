@@ -434,6 +434,10 @@
     <string name="pref_min_alt_title">Min altitude value</string>
     <string name="pref_default_alt_title">Default altitude value</string>
 
+    <!-- Speed preferences -->
+    <string name="pref_speed_title">Speed Preferences</string>
+    <string name="pref_default_speed_title">Mission editor default speed</string>
+
     <!-- Mapbox preferences -->
     <string name="pref_title_mapbox_tile_provider">Mapbox Tile Provider</string>
     <string name="pref_title_mapbox_map_download">Download Offline Map</string>
@@ -671,4 +675,6 @@
     <string name="menu_rename">Rename</string>
     <string name="warning_invalid_session_label_entry">Please enter a valid entry!</string>
     <string name="warning_unable_to_open_web_url">No app was found to handle this request. Please install a web broawer.</string>
+    <string name="warning_invalid_speed">Invalid speed value</string>
+    <string name="warning_invalid_altitude">Invalid altitude value</string>
 </resources>
