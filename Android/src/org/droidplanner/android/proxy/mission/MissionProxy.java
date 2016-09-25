@@ -763,6 +763,7 @@ public class MissionProxy implements DPMap.PathSource {
 
         double currentSpeed = dpApp.getVehicleSpeed();
         double accumulatedDistance = 0;
+        double accumulatedDelay = 0;
         LatLong lastPoint = null;
         List<Pair<Double, Double>> speedPerDistance = new LinkedList<>();
 
@@ -779,6 +780,11 @@ public class MissionProxy implements DPMap.PathSource {
                         }
                         lastPoint = point;
                     }
+                }
+                if (missionItem instanceof  Waypoint){
+                    accumulatedDelay += ((Waypoint) missionItem).getDelay();
+                }else if (missionItem instanceof  SplineWaypoint){
+                    accumulatedDelay += ((SplineWaypoint) missionItem).getDelay();
                 }
             } else if (missionItem instanceof ChangeSpeed) {
                 //  We're updating the vehicle speed, so let's store the distance accumulated at
@@ -813,8 +819,27 @@ public class MissionProxy implements DPMap.PathSource {
                     totalFlightTime += distance / speed;
                 }
             }
+            totalFlightTime += accumulatedDelay;
             return Pair.create(totalFlightDistance, totalFlightTime);
         }
+    }
+
+    public double getAccumulatedMissionDelay(){
+        double accumulatedDelay = 0; //time in decimal seconds
+        for (MissionItemProxy itemProxy : missionItemProxies) {
+            MissionItem missionItem = itemProxy.getMissionItem();
+            switch (missionItem.getType()) {
+                case WAYPOINT:
+                    accumulatedDelay += ((Waypoint) missionItem).getDelay();
+                    break;
+                case SPLINE_WAYPOINT:
+                    accumulatedDelay += ((SplineWaypoint) missionItem).getDelay();
+                    break;
+                default:
+                    break;
+            }
+        }
+        return accumulatedDelay;
     }
 
     public void makeAndUploadDronie(Drone drone) {
