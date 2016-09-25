@@ -47,6 +47,7 @@ import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import java.io.File;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * This implements the map editor activity. The map editor activity allows the
@@ -397,13 +398,17 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     private void updateMissionLength() {
         if (missionProxy != null) {
 
-            double missionLength = missionProxy.getMissionLength();
-            LengthUnit convertedMissionLength = unitSystem.getLengthUnitProvider().boxBaseValueToTarget(missionLength);
-            double speedParameter = dpApp.getVehicleSpeed();
-            int time = (int) (missionLength / speedParameter);
+            Pair<Double, Double> distanceAndTime = missionProxy.getMissionFlightTime();
+            LengthUnit convertedMissionLength = unitSystem.getLengthUnitProvider()
+                .boxBaseValueToTarget(distanceAndTime.first);
 
-            String infoString = getString(R.string.editor_info_window_distance, convertedMissionLength.toString())
-                    + ", " + getString(R.string.editor_info_window_flight_time, time / 60, time % 60);
+            double time = distanceAndTime.second;
+            String infoString = getString(R.string.editor_info_window_distance,
+                convertedMissionLength.toString()) +
+                ", " +
+                getString(R.string.editor_info_window_flight_time, time == Double.POSITIVE_INFINITY
+                    ? time
+                    : String.format(Locale.US, "%1$02d:%2$02d", ((int) time / 60), ((int) time % 60)));
 
             infoView.setText(infoString);
 

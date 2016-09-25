@@ -132,6 +132,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
                 case ACTION_PREF_UNIT_SYSTEM_UPDATE:
                     setupAltitudePreferences();
+                    setupSpeedPreferences();
                     break;
             }
         }
@@ -211,6 +212,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setupMapPreferences();
         setupAltitudePreferences();
         setupCreditsPage();
+        setupSpeedPreferences();
     }
 
     private void setupWidgetsPreferences(){

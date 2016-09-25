@@ -145,7 +145,7 @@
     <string name="editor_err_land_rtl_added">Não é possível adicionar novos waypoints depois de um LAND ou RTL</string>
     <string name="editor_info_window">Distância: 0.0m, Tempo de vôo: 0:00</string>
     <string name="editor_info_window_distance">Distância: %s</string>
-    <string name="editor_info_window_flight_time">Tempo de vôo: %1$02d:%2$02d</string>
+    <string name="editor_info_window_flight_time">Tempo de vôo: %s</string>
     <string name="editor_info_window_heading">Heading: %.0f°</string>
     <string name="distance_to_home">Distância até a casa</string>
     <string name="loiter_time">Tempo de Loiter</string>

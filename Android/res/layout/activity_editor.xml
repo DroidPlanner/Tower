@@ -53,6 +53,8 @@
             android:layout_alignStart="@+id/actionbar_container"
             android:layout_alignRight="@+id/actionbar_container"
             android:layout_alignEnd="@+id/actionbar_container"
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp"
             />
 
         <include

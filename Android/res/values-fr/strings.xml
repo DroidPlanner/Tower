@@ -165,7 +165,7 @@
     <string name="editor_err_land_rtl_added">On ne peut pas ajouter de nouveau Waypoints après un Atterrissage ou RTL.</string>
     <string name="editor_info_window">Distance: 0m, Temps de Vol estimé: 0:00</string>
     <string name="editor_info_window_distance">Distance: %s</string>
-    <string name="editor_info_window_flight_time">Temps de Vol estimé: %1$02d:%2$02d</string>
+    <string name="editor_info_window_flight_time">Temps de Vol estimé: %s</string>
     <string name="editor_info_window_heading">Cap: %.0f°</string>
     <string name="distance_to_home">Distance Point Home:</string>
     <string name="loiter_time">Temps d\'Attente</string>

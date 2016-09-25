@@ -756,21 +756,9 @@ public class MissionProxy implements DPMap.PathSource {
         GAUtils.sendEvent(eventBuilder);
     }
 
-    public double getMissionLength() {
-        List<LatLong> points = getPathPoints();
-        double length = 0;
-        if (points.size() > 1) {
-            for (int i = 1; i < points.size(); i++) {
-                length += MathUtils.getDistance2D(points.get(i - 1), points.get(i));
-            }
-        }
-
-        return length;
-    }
-
-    public double getMissionFlightTime() {
+    public Pair<Double, Double> getMissionFlightTime() {
         if (missionItemProxies.isEmpty()) {
-            return 0;
+            return Pair.create(0.0, 0.0);
         }
 
         double currentSpeed = dpApp.getVehicleSpeed();
@@ -803,22 +791,29 @@ public class MissionProxy implements DPMap.PathSource {
             }
         }
 
+        if (accumulatedDistance > 0) {
+            speedPerDistance.add(Pair.create(currentSpeed, accumulatedDistance));
+        }
+
         if (speedPerDistance.isEmpty()) {
-            return -1;
+            return Pair.create(0.0, 0.0);
         } else {
+            double totalFlightDistance = 0;
             double totalFlightTime = 0;
             for (Pair<Double, Double> entry : speedPerDistance) {
                 double speed = entry.first;
                 double distance = entry.second;
+
+                totalFlightDistance += distance;
                 if (speed <= 0) {
                     // No way the vehicle is completing its mission if the speed is less or equal to
                     // 0.
-                    return -1;
+                    totalFlightTime += Double.POSITIVE_INFINITY;
+                } else {
+                    totalFlightTime += distance / speed;
                 }
-
-                totalFlightTime += distance / speed;
             }
-            return totalFlightTime;
+            return Pair.create(totalFlightDistance, totalFlightTime);
         }
     }
 
