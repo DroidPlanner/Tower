@@ -22,6 +22,7 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.mission.item.command.ChangeSpeed;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SplineSurvey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
@@ -182,6 +183,10 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
                                     MissionItem.SpatialItem) {
                                 ((MissionItem.SpatialItem) newItem).setCoordinate(((MissionItem
                                         .SpatialItem) oldItem).getCoordinate());
+                            }
+
+                            if (newItem instanceof ChangeSpeed) {
+                                ((ChangeSpeed) newItem).setSpeed(getApplication().getVehicleSpeed());
                             }
 
                             newItems.add(new MissionItemProxy(mMissionProxy, newItem));
