@@ -201,7 +201,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
 
         controlTower = new ControlTower(context);
         drone = new Drone(context);
-        missionProxy = new MissionProxy(context, this.drone);
+        missionProxy = new MissionProxy(this, this.drone);
 
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_TOGGLE_DRONE_CONNECTION);
@@ -420,6 +420,14 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
                 break;
             }
 
+            case AttributeEvent.PARAMETERS_REFRESH_COMPLETED:
+                // Grab the vehicle default speed, and update the preferences.
+                double speedParameter = drone.getSpeedParameter() / 100; //cm/s to m/s conversion.
+                if (speedParameter != 0) {
+                    dpPrefs.setVehicleDefaultSpeed((float) speedParameter);
+                }
+                // FALL THROUGH
+
             default: {
                 final Intent droneIntent = new Intent(event);
                 if (extras != null)
@@ -494,6 +502,15 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
 
     public DroneShareDB getDroneShareDatabase(){
         return droneShareDb;
+    }
+
+    /** Return the vehicle speed in meters per second. */
+    public double getVehicleSpeed() {
+        double speedParameter = drone.getSpeedParameter() / 100; //cm/s to m/s conversion.
+        if (speedParameter == 0) {
+            speedParameter = dpPrefs.getVehicleDefaultSpeed();
+        }
+        return speedParameter;
     }
 
     public SessionDB getSessionDatabase(){

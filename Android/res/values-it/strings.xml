@@ -201,7 +201,7 @@
     <string name="editor_err_land_rtl_added">Non si possono aggiungere waypoints dopo LAN o RTL</string>
     <string name="editor_info_window">Distanza: 0m, Tempo di volo: 0:00</string>
     <string name="editor_info_window_distance">Distanza: %s</string>
-    <string name="editor_info_window_flight_time">Tempo di volo: %1$02d:%2$02d</string>
+    <string name="editor_info_window_flight_time">Tempo di volo: %s</string>
     <string name="editor_info_window_heading">Direzione: %.0f°</string>
     <string name="email_address">Indirizzo Email</string>
     <string name="locator">Cronologia Voli</string>

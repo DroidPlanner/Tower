@@ -29,6 +29,7 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Type;
 
+import org.beyene.sius.unit.composition.speed.SpeedUnit;
 import org.beyene.sius.unit.length.LengthUnit;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
@@ -40,6 +41,7 @@ import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.unit.UnitManager;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
+import org.droidplanner.android.utils.unit.providers.speed.SpeedUnitProvider;
 import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
 import java.util.HashSet;
@@ -130,6 +132,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
                 case ACTION_PREF_UNIT_SYSTEM_UPDATE:
                     setupAltitudePreferences();
+                    setupSpeedPreferences();
                     break;
             }
         }
@@ -209,6 +212,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setupMapPreferences();
         setupAltitudePreferences();
         setupCreditsPage();
+        setupSpeedPreferences();
     }
 
     private void setupWidgetsPreferences(){
@@ -357,6 +361,43 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setupAltitudePreferenceHelper(DroidPlannerPrefs.PREF_ALT_DEFAULT_VALUE, dpPrefs.getDefaultAltitude());
     }
 
+    private void setupSpeedPreferences() {
+        final SpeedUnitProvider sup = getSpeedUnitProvider();
+
+        final EditTextPreference defaultSpeedPref = (EditTextPreference) findPreference(DroidPlannerPrefs.PREF_VEHICLE_DEFAULT_SPEED);
+        if (defaultSpeedPref != null) {
+            final SpeedUnit defaultValue = sup.boxBaseValueToTarget(dpPrefs.getVehicleDefaultSpeed());
+
+            defaultSpeedPref.setText(String.format(Locale.US, "%2.1f", defaultValue.getValue()));
+            defaultSpeedPref.setSummary(defaultValue.toString());
+
+            defaultSpeedPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    final Context context = getContext();
+                    try {
+                        final double speedValue = Double.parseDouble(newValue.toString());
+
+                        final SpeedUnitProvider sup = getSpeedUnitProvider();
+                        final SpeedUnit newSpeedValue = sup.boxTargetValue(speedValue);
+                        final double speedPrefValue = sup.fromTargetToBase(newSpeedValue).getValue();
+
+                        defaultSpeedPref.setText(String.format(Locale.US, "%2.1f", newSpeedValue.getValue()));
+                        defaultSpeedPref.setSummary(newSpeedValue.toString());
+
+                        dpPrefs.setVehicleDefaultSpeed((float) speedPrefValue);
+
+                    }catch(NumberFormatException e) {
+                        if (context != null) {
+                            Toast.makeText(context, R.string.warning_invalid_speed, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    return false;
+                }
+            });
+        }
+    }
+
     @Override
     public Context getContext() {
         final Activity activity = getActivity();
@@ -448,7 +489,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                         }
                     } catch (NumberFormatException e) {
                         if(context != null){
-                            Toast.makeText(context, "Invalid altitude value: " + newValue, Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, R.string.warning_invalid_altitude, Toast.LENGTH_LONG).show();
                         }
                     }
                     return false;
@@ -460,6 +501,11 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     private LengthUnitProvider getLengthUnitProvider(){
         final UnitSystem unitSystem = UnitManager.getUnitSystem(getActivity().getApplicationContext());
         return unitSystem.getLengthUnitProvider();
+    }
+
+    private SpeedUnitProvider getSpeedUnitProvider() {
+        final UnitSystem unitSystem = UnitManager.getUnitSystem(getActivity().getApplicationContext());
+        return unitSystem.getSpeedUnitProvider();
     }
 
     private void initSummaryPerPrefs() {

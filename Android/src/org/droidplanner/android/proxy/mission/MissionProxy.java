@@ -21,6 +21,7 @@ import com.o3dr.services.android.lib.drone.mission.Mission;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem.SpatialItem;
+import com.o3dr.services.android.lib.drone.mission.item.command.ChangeSpeed;
 import com.o3dr.services.android.lib.drone.mission.item.command.ReturnToLaunch;
 import com.o3dr.services.android.lib.drone.mission.item.command.Takeoff;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SplineSurvey;
@@ -34,6 +35,7 @@ import com.o3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
 import com.o3dr.services.android.lib.model.AbstractCommandListener;
 import com.o3dr.services.android.lib.util.MathUtils;
 
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
@@ -43,6 +45,7 @@ import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -93,25 +96,23 @@ public class MissionProxy implements DPMap.PathSource {
     private final LocalBroadcastManager lbm;
     private final DroidPlannerPrefs dpPrefs;
     private final Context context;
-    private Drone drone;
+    private final DroidPlannerApp dpApp;
+    private final Drone drone;
 
     private final CircularArray<Mission> undoBuffer = new CircularArray<>(UNDO_BUFFER_SIZE);
 
     private Mission currentMission;
     public MissionSelection selection = new MissionSelection();
 
-    public MissionProxy(Context context, Drone drone) {
-        this.context = context;
+    public MissionProxy(DroidPlannerApp app, Drone drone) {
+        this.dpApp = app;
+        this.context = app.getApplicationContext();
         this.drone = drone;
         this.currentMission = generateMission(true);
         lbm = LocalBroadcastManager.getInstance(context);
         lbm.registerReceiver(eventReceiver, eventFilter);
 
         dpPrefs = DroidPlannerPrefs.getInstance(context);
-    }
-
-    public void setDrone(Drone drone){
-        this.drone = drone;
     }
 
     public void notifyMissionUpdate() {
@@ -755,16 +756,65 @@ public class MissionProxy implements DPMap.PathSource {
         GAUtils.sendEvent(eventBuilder);
     }
 
-    public double getMissionLength() {
-        List<LatLong> points = getPathPoints();
-        double length = 0;
-        if (points.size() > 1) {
-            for (int i = 1; i < points.size(); i++) {
-                length += MathUtils.getDistance2D(points.get(i - 1), points.get(i));
+    public Pair<Double, Double> getMissionFlightTime() {
+        if (missionItemProxies.isEmpty()) {
+            return Pair.create(0.0, 0.0);
+        }
+
+        double currentSpeed = dpApp.getVehicleSpeed();
+        double accumulatedDistance = 0;
+        LatLong lastPoint = null;
+        List<Pair<Double, Double>> speedPerDistance = new LinkedList<>();
+
+        for (MissionItemProxy proxy : missionItemProxies) {
+            final MissionItem missionItem = proxy.getMissionItem();
+            if (!(missionItem instanceof MissionItem.Command)) {
+                // If the mission item has a spatial component, retrieve that component.
+                List<LatLong> path = proxy.getPath(lastPoint);
+                if (!path.isEmpty()) {
+                    for (LatLong point : path) {
+                        if (lastPoint != null) {
+                            // Accumulate the distance between the last point and the current point.
+                            accumulatedDistance += MathUtils.getDistance2D(lastPoint, point);
+                        }
+                        lastPoint = point;
+                    }
+                }
+            } else if (missionItem instanceof ChangeSpeed) {
+                //  We're updating the vehicle speed, so let's store the distance accumulated at
+                // the current speed.
+                if (accumulatedDistance > 0) {
+                    speedPerDistance.add(Pair.create(currentSpeed, accumulatedDistance));
+                    accumulatedDistance = 0;
+                }
+                currentSpeed = ((ChangeSpeed) missionItem).getSpeed();
             }
         }
 
-        return length;
+        if (accumulatedDistance > 0) {
+            speedPerDistance.add(Pair.create(currentSpeed, accumulatedDistance));
+        }
+
+        if (speedPerDistance.isEmpty()) {
+            return Pair.create(0.0, 0.0);
+        } else {
+            double totalFlightDistance = 0;
+            double totalFlightTime = 0;
+            for (Pair<Double, Double> entry : speedPerDistance) {
+                double speed = entry.first;
+                double distance = entry.second;
+
+                totalFlightDistance += distance;
+                if (speed <= 0) {
+                    // No way the vehicle is completing its mission if the speed is less or equal to
+                    // 0.
+                    totalFlightTime += Double.POSITIVE_INFINITY;
+                } else {
+                    totalFlightTime += distance / speed;
+                }
+            }
+            return Pair.create(totalFlightDistance, totalFlightTime);
+        }
     }
 
     public void makeAndUploadDronie(Drone drone) {

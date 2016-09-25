@@ -279,7 +279,7 @@
     <string name="waypointType_Condition_Yaw">Gierwinkel setzen</string>
     <string name="waypointType_Set_Servo">Servo setzen</string>
     <string name="editor_info_window_distance">Distanz: %s</string>
-    <string name="editor_info_window_flight_time">Flugzeit: %1$02d:%2$02d</string>
+    <string name="editor_info_window_flight_time">Flugzeit: %s</string>
     <string name="mission_control_auto">Auto</string>
     <string name="mission_control_dronie">Dronie</string>
     <string name="mission_control_pause">Pause</string>

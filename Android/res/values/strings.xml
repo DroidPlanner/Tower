@@ -150,7 +150,7 @@
     <string name="editor_err_land_rtl_added">One cannot add new waypoints after LAND or RTL</string>
     <string name="editor_info_window">Distance: 0m, Flight time: 0:00</string>
     <string name="editor_info_window_distance">Distance: %s</string>
-    <string name="editor_info_window_flight_time">Flight Time: %1$02d:%2$02d</string>
+    <string name="editor_info_window_flight_time">Flight Time: %s</string>
     <string name="editor_info_window_heading">Heading: %.0f°</string>
     <string name="distance_to_home">Distance to home</string>
     <string name="loiter_time">Loiter Time</string>
@@ -434,6 +434,10 @@
     <string name="pref_min_alt_title">Min altitude value</string>
     <string name="pref_default_alt_title">Default altitude value</string>
 
+    <!-- Speed preferences -->
+    <string name="pref_speed_title">Speed Preferences</string>
+    <string name="pref_default_speed_title">Mission editor default speed</string>
+
     <!-- Mapbox preferences -->
     <string name="pref_title_mapbox_tile_provider">Mapbox Tile Provider</string>
     <string name="pref_title_mapbox_map_download">Download Offline Map</string>
@@ -671,4 +675,6 @@
     <string name="menu_rename">Rename</string>
     <string name="warning_invalid_session_label_entry">Please enter a valid entry!</string>
     <string name="warning_unable_to_open_web_url">No app was found to handle this request. Please install a web broawer.</string>
+    <string name="warning_invalid_speed">Invalid speed value</string>
+    <string name="warning_invalid_altitude">Invalid altitude value</string>
 </resources>

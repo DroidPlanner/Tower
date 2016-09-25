@@ -193,6 +193,9 @@ public class DroidPlannerPrefs {
     public static final String PREF_PROJECT_LEAD_MAINTAINER = "pref_project_lead_maintainer";
     public static final String PREF_PROJECT_CONTRIBUTORS = "pref_project_contributors";
 
+    public static final String PREF_VEHICLE_DEFAULT_SPEED = "pref_vehicle_default_speed";
+    private static final float DEFAULT_SPEED = 5; //meters per second.
+
     // Public for legacy usage
     public final SharedPreferences prefs;
     private final LocalBroadcastManager lbm;
@@ -668,5 +671,17 @@ public class DroidPlannerPrefs {
 
     public long getVehicleHistorySessionId(){
         return prefs.getLong(PREF_VEHICLE_HISTORY_SESSION_ID, TLogActivity.INVALID_SESSION_ID);
+    }
+
+    /**
+     * @return Vehicle default speed in meters per second.
+     */
+    public double getVehicleDefaultSpeed() {
+        return prefs.getFloat(PREF_VEHICLE_DEFAULT_SPEED, DEFAULT_SPEED);
+    }
+
+    public void setVehicleDefaultSpeed(float speedInMetersPerSecond) {
+        prefs.edit().putFloat(PREF_VEHICLE_DEFAULT_SPEED, speedInMetersPerSecond).apply();
+        lbm.sendBroadcast(new Intent(PREF_VEHICLE_DEFAULT_SPEED));
     }
 }

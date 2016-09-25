@@ -128,9 +128,10 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
     }
 
     private void onFollowTypeUpdate(FollowType followType, Bundle params) {
-
-        if(followType == null)
+        Context context = getContext();
+        if(followType == null || context == null) {
             return;
+        }
 
         if(followType != lastFollowType) {
             lastFollowType = followType;
@@ -140,7 +141,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
         }
 
         if(params != null){
-            params.setClassLoader(getContext().getClassLoader());
+            params.setClassLoader(context.getClassLoader());
         }
 
         if(!Utils.equalBundles(params, lastFollowParams)) {

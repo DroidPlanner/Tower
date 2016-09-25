@@ -211,6 +211,16 @@
 
             </PreferenceCategory>
 
+            <PreferenceCategory android:title="@string/pref_speed_title">
+                <EditTextPreference
+                    android:gravity="center"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:key="pref_vehicle_default_speed"
+                    android:persistent="false"
+                    android:selectAllOnFocus="true"
+                    android:title="@string/pref_default_speed_title"/>
+            </PreferenceCategory>
+
             <PreferenceCategory android:title="@string/pref_misc_title">
 
                 <PreferenceScreen
