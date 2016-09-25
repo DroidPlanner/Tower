@@ -73,6 +73,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         eventFilter.addAction(AttributeEvent.MISSION_RECEIVED);
         eventFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_COMPLETED);
         eventFilter.addAction(DroidPlannerPrefs.PREF_VEHICLE_DEFAULT_SPEED);
+        eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
+        eventFilter.addAction(AttributeEvent.HEARTBEAT_RESTORED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -85,6 +87,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                     // FALL THROUGH
                 case AttributeEvent.PARAMETERS_REFRESH_COMPLETED:
                 case DroidPlannerPrefs.PREF_VEHICLE_DEFAULT_SPEED:
+                case AttributeEvent.STATE_CONNECTED:
+                case AttributeEvent.HEARTBEAT_RESTORED:
                     updateMissionLength();
                     break;
 
