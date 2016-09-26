@@ -54,6 +54,9 @@ public class DroidPlannerPrefs {
     private static final String PREF_KEEP_SCREEN_ON = "pref_keep_screen_bright";
     private static final boolean DEFAULT_KEEP_SCREEN_ON = false;
 
+    public static final String PREF_ENABLE_ZOOM_TO_FIT = "pref_enable_zoom_to_fit";
+    public static final boolean DEFAULT_ENABLE_ZOOM_TO_FIT = true;
+
     public static final String PREF_MAPS_PROVIDERS = "pref_maps_providers_key";
     private static final String DEFAULT_MAPS_PROVIDER = DPMapProvider.DEFAULT_MAP_PROVIDER.name();
 
@@ -390,6 +393,13 @@ public class DroidPlannerPrefs {
      */
     public boolean keepScreenOn() {
         return prefs.getBoolean(PREF_KEEP_SCREEN_ON, DEFAULT_KEEP_SCREEN_ON);
+    }
+
+    /**
+     * @return true if zoom to fit is enable
+     */
+    public boolean isZoomToFitEnable(){
+        return prefs.getBoolean(PREF_ENABLE_ZOOM_TO_FIT, DEFAULT_ENABLE_ZOOM_TO_FIT);
     }
 
     /**

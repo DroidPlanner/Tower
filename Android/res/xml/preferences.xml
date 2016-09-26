@@ -41,6 +41,16 @@
                     android:title="@string/pref_ui_realtime_footprints_title" />
             </PreferenceCategory>
 
+            <PreferenceCategory android:title="@string/pref_title_editor">
+
+                <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:key="pref_enable_zoom_to_fit"
+                    android:summary="@string/pref_enable_zoom_to_fit_summary"
+                    android:title="@string/pref_enable_zoom_to_fit_title" />
+
+            </PreferenceCategory>
+
             <PreferenceCategory android:title="@string/pref_title_local">
 
                 <ListPreference

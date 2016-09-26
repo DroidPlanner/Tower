@@ -331,6 +331,11 @@
     <string name="pref_ui_realtime_footprints_title">Footprint da câmera em tempo real</string>
     <string name="pref_ui_realtime_footprints_summary">Visualizar a projeção da câmara sobre o terreno em tempo real</string>
 
+    <!-- Editor -->
+    <string name="pref_title_editor">Editor</string>
+    <string name="pref_enable_zoom_to_fit_title">Habilitar o auto zoom</string>
+    <string name="pref_enable_zoom_to_fit_summary">Selecionar para habilitar a capacidade de auto zoom quando adicionar um item à missão</string>
+
     <!-- Others (when possible move to a grouping above) -->
     <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
     <string name="msg_connect_first">Por favor, conecte primeiro</string>
