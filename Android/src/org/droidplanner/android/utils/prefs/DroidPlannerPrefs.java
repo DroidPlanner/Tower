@@ -14,6 +14,7 @@ import com.o3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
 import com.o3dr.services.android.lib.drone.property.CameraProxy;
+import com.o3dr.services.android.lib.gcs.follow.FollowType;
 
 import org.droidplanner.android.fragments.widget.TowerWidgets;
 import org.droidplanner.android.fragments.widget.video.WidgetVideoPreferences;
@@ -182,6 +183,9 @@ public class DroidPlannerPrefs {
     private static final float DEFAULT_UVC_VIDEO_ASPECT_RATIO = 3f / 4f;
 
     public static final String PREF_WEATHER_INFO = "pref_weather_info";
+
+    public static final String PREF_LAST_KNOWN_FOLLOW_MODE = "pref_last_known_follow_mode";
+    private static final String DEFAULT_FOLLOW_TYPE = "LEASH";
 
     // Survey user preferences
     private static final String PREF_SURVEY_CAMERA_NAME = "pref_survey_camera_name";
@@ -693,5 +697,19 @@ public class DroidPlannerPrefs {
     public void setVehicleDefaultSpeed(float speedInMetersPerSecond) {
         prefs.edit().putFloat(PREF_VEHICLE_DEFAULT_SPEED, speedInMetersPerSecond).apply();
         lbm.sendBroadcast(new Intent(PREF_VEHICLE_DEFAULT_SPEED));
+    }
+
+    /**  default follow mode
+     * @return FollowType
+     */
+    public FollowType getLastKnownFollowType() {
+        String followTypeString = prefs.getString(PREF_LAST_KNOWN_FOLLOW_MODE, DEFAULT_FOLLOW_TYPE);
+        FollowType followType = FollowType.valueOf(followTypeString);
+        return followType;
+    }
+
+    public void setLastKnownFollowType(FollowType followType) {
+        String followTypeString = String.valueOf(followType);
+        prefs.edit().putString(PREF_LAST_KNOWN_FOLLOW_MODE, followTypeString).apply();
     }
 }
