@@ -38,8 +38,6 @@ public abstract class BaseFlightControlFragment extends ApiListenerFragment impl
     private static final long FOLLOW_LOCATION_UPDATE_FASTEST_INTERVAL = 5000; // ms
     private static final float FOLLOW_LOCATION_UPDATE_MIN_DISPLACEMENT = 0; // m
 
-    private DroidPlannerPrefs dpPrefs = DroidPlannerPrefs.getInstance(null);
-
     private static final IntentFilter filter = new IntentFilter(SettingsFragment.ACTION_LOCATION_SETTINGS_UPDATED);
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -103,7 +101,7 @@ public abstract class BaseFlightControlFragment extends ApiListenerFragment impl
                 new Runnable() {
                     @Override
                     public void run() {
-                        FollowApi.getApi(drone).enableFollowMe(dpPrefs.getLastKnownFollowType());
+                        FollowApi.getApi(drone).enableFollowMe(getAppPrefs().getLastKnownFollowType());
                     }
                 });
 

@@ -232,7 +232,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         final FollowType type = adapter.getItem(position);
 
-        DroidPlannerPrefs.getInstance(null).setLastKnownFollowType(type);
+        getAppPrefs().setLastKnownFollowType(type);
 
         final Drone drone = getDrone();
         if (drone.isConnected()) {

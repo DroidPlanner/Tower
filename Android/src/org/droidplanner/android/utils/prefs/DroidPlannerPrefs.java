@@ -185,7 +185,7 @@ public class DroidPlannerPrefs {
     public static final String PREF_WEATHER_INFO = "pref_weather_info";
 
     public static final String PREF_LAST_KNOWN_FOLLOW_MODE = "pref_last_known_follow_mode";
-    private static final String DEFAULT_FOLLOW_TYPE = "LEASH";
+    private static final FollowType DEFAULT_FOLLOW_TYPE = FollowType.LEASH;
 
     // Survey user preferences
     private static final String PREF_SURVEY_CAMERA_NAME = "pref_survey_camera_name";
@@ -703,9 +703,9 @@ public class DroidPlannerPrefs {
      * @return FollowType
      */
     public FollowType getLastKnownFollowType() {
-        String followTypeString = prefs.getString(PREF_LAST_KNOWN_FOLLOW_MODE, DEFAULT_FOLLOW_TYPE);
+        String followTypeString = prefs.getString(PREF_LAST_KNOWN_FOLLOW_MODE, DEFAULT_FOLLOW_TYPE.name());
         FollowType followType = FollowType.valueOf(followTypeString);
-        return followType;
+        return (followType != null) ? followType : DEFAULT_FOLLOW_TYPE;
     }
 
     public void setLastKnownFollowType(FollowType followType) {
