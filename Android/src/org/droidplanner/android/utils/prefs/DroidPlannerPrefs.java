@@ -709,7 +709,7 @@ public class DroidPlannerPrefs {
     }
 
     public void setLastKnownFollowType(FollowType followType) {
-        String followTypeString = String.valueOf(followType);
+        String followTypeString = followType.name();
         prefs.edit().putString(PREF_LAST_KNOWN_FOLLOW_MODE, followTypeString).apply();
     }
 }
