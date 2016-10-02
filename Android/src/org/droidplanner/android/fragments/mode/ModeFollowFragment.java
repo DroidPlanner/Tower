@@ -232,6 +232,8 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         final FollowType type = adapter.getItem(position);
 
+        getAppPrefs().setLastKnownFollowType(type);
+
         final Drone drone = getDrone();
         if (drone.isConnected()) {
             FollowApi.getApi(drone).enableFollowMe(type);
