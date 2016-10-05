@@ -33,6 +33,8 @@ import java.util.List;
 public class MissionStructureScannerFragment extends MissionDetailFragment implements
         CardWheelHorizontalView.OnCardWheelScrollListener, CompoundButton.OnCheckedChangeListener, Drone.OnMissionItemsBuiltCallback {
 
+    private double MIN_STEP_HEIGHT = 0;
+
     private final SpinnerSelfSelect.OnSpinnerItemSelectedListener cameraSpinnerListener = new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {
         @Override
         public void onSpinnerItemSelected(Spinner spinner, int position) {
@@ -94,7 +96,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
         CardWheelHorizontalView<LengthUnit> endAltitudeStepPicker = (CardWheelHorizontalView) view
                 .findViewById(R.id.heightStepPicker);
         endAltitudeStepPicker.setViewAdapter(new LengthWheelAdapter(context, R.layout.wheel_text_centered,
-                lengthUP.boxBaseValueToTarget(MIN_ALTITUDE), lengthUP.boxBaseValueToTarget(MAX_ALTITUDE)));
+                lengthUP.boxBaseValueToTarget(MIN_STEP_HEIGHT), lengthUP.boxBaseValueToTarget(MAX_ALTITUDE)));
         endAltitudeStepPicker.addScrollListener(this);
 
         CardWheelHorizontalView<Integer> numberStepsPicker = (CardWheelHorizontalView<Integer>) view
@@ -146,6 +148,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
     public void onScrollingEnded(CardWheelHorizontalView cardWheel, Object startValue, Object endValue) {
         switch (cardWheel.getId()) {
             case R.id.radiusPicker: {
+
                 final double radius = ((LengthUnit) endValue).toBase().getValue();
                 for (StructureScanner item : getMissionItems()) {
                     item.setRadius(radius);
