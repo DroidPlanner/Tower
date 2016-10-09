@@ -317,7 +317,7 @@ public class DroidPlannerPrefs {
      * @return the selected mavlink connection type.
      */
     public @ConnectionType.Type int getConnectionParameterType() {
-        @ConnectionType.Type int connectionType = Integer.parseInt(prefs.getString(PREF_CONNECTION_TYPE, DEFAULT_CONNECTION_TYPE));
+        @ConnectionType.Type int connectionType = Integer.parseInt(prefs.getString(PREF_CONNECTION_TYPE, DEFAULT_CONNECTION_TYPE).trim());
         return connectionType;
     }
 
@@ -326,7 +326,7 @@ public class DroidPlannerPrefs {
         if (unitSystem == null)
             return DEFAULT_UNIT_SYSTEM;
 
-        return Integer.parseInt(unitSystem);
+        return Integer.parseInt(unitSystem.trim());
     }
 
     public void setUsbBaudRate(int baudRate) {
@@ -334,7 +334,7 @@ public class DroidPlannerPrefs {
     }
 
     public int getUsbBaudRate() {
-        return Integer.parseInt(prefs.getString(PREF_USB_BAUD_RATE, DEFAULT_USB_BAUD_RATE));
+        return Integer.parseInt(prefs.getString(PREF_USB_BAUD_RATE, DEFAULT_USB_BAUD_RATE).trim());
     }
 
     public void setTcpServerIp(String serverIp) {
@@ -350,7 +350,7 @@ public class DroidPlannerPrefs {
     }
 
     public int getTcpServerPort() {
-        return Integer.parseInt(prefs.getString(PREF_TCP_SERVER_PORT, DEFAULT_TCP_SERVER_PORT));
+        return Integer.parseInt(prefs.getString(PREF_TCP_SERVER_PORT, DEFAULT_TCP_SERVER_PORT).trim());
     }
 
     public void setUdpServerPort(int serverPort) {
@@ -358,7 +358,7 @@ public class DroidPlannerPrefs {
     }
 
     public int getUdpServerPort() {
-        return Integer.parseInt(prefs.getString(PREF_UDP_SERVER_PORT, DEFAULT_UDP_SERVER_PORT));
+        return Integer.parseInt(prefs.getString(PREF_UDP_SERVER_PORT, DEFAULT_UDP_SERVER_PORT).trim());
     }
 
     public boolean isUdpPingEnabled() {
@@ -370,7 +370,7 @@ public class DroidPlannerPrefs {
     }
 
     public int getUdpPingReceiverPort() {
-        return Integer.parseInt(prefs.getString(PREF_UDP_PING_RECEIVER_PORT, DEFAULT_UDP_SERVER_PORT));
+        return Integer.parseInt(prefs.getString(PREF_UDP_PING_RECEIVER_PORT, DEFAULT_UDP_SERVER_PORT).trim());
     }
 
     public String getBluetoothDeviceName() {
@@ -475,7 +475,7 @@ public class DroidPlannerPrefs {
     }
 
     public int getSpokenStatusInterval() {
-        return Integer.parseInt(prefs.getString(PREF_SPEECH_PERIOD, DEFAULT_SPEECH_PERIOD));
+        return Integer.parseInt(prefs.getString(PREF_SPEECH_PERIOD, DEFAULT_SPEECH_PERIOD).trim());
     }
 
     public boolean hasExceededMaxAltitude(double currentAltInMeters) {
@@ -543,7 +543,7 @@ public class DroidPlannerPrefs {
             return defaultValue;
 
         try {
-            final double maxAlt = Double.parseDouble(maxAltValue);
+            final double maxAlt = Double.parseDouble(maxAltValue.trim());
             return maxAlt;
         } catch (Exception e) {
             return defaultValue;

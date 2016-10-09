@@ -105,7 +105,7 @@ public class SupportEditInputDialog extends DialogFragment {
                             input = mEditText.getHint();
                         }
 
-                        String value = null;
+                        String value = "";
                         if (input != null)
                             value = input.toString().trim();
 
