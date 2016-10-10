@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -16,9 +17,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
+import com.o3dr.android.client.utils.FileUtils;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
@@ -28,7 +28,6 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.dialogs.SupportEditInputDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
-import org.droidplanner.android.dialogs.openfile.OpenMissionDialog;
 import org.droidplanner.android.fragments.EditorListFragment;
 import org.droidplanner.android.fragments.EditorMapFragment;
 import org.droidplanner.android.fragments.account.editor.tool.EditorToolsFragment;
@@ -40,12 +39,15 @@ import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
-import org.droidplanner.android.utils.analytics.GAUtils;
+import org.droidplanner.android.utils.file.DirectoryPath;
+import org.droidplanner.android.utils.file.FileList;
 import org.droidplanner.android.utils.file.FileStream;
-import org.droidplanner.android.utils.file.IO.MissionReader;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
+import java.io.File;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * This implements the map editor activity. The map editor activity allows the
@@ -55,8 +57,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         EditorToolsFragment.EditorToolListener, MissionDetailFragment.OnMissionDetailListener,
         OnEditorInteraction, MissionSelection.OnSelectionUpdateListener, OnClickListener,
         OnLongClickListener, SupportEditInputDialog.Listener {
-
-    private static final double DEFAULT_SPEED = 5; //meters per second.
 
     /**
      * Used to retrieve the item detail window when the activity is destroyed,
@@ -73,6 +73,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         eventFilter.addAction(MissionProxy.ACTION_MISSION_PROXY_UPDATE);
         eventFilter.addAction(AttributeEvent.MISSION_RECEIVED);
         eventFilter.addAction(AttributeEvent.PARAMETERS_REFRESH_COMPLETED);
+        eventFilter.addAction(DroidPlannerPrefs.PREF_VEHICLE_DEFAULT_SPEED);
+        eventFilter.addAction(AttributeEvent.STATE_CONNECTED);
+        eventFilter.addAction(AttributeEvent.HEARTBEAT_RESTORED);
     }
 
     private final BroadcastReceiver eventReceiver = new BroadcastReceiver() {
@@ -80,8 +83,13 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             switch (action) {
-                case AttributeEvent.PARAMETERS_REFRESH_COMPLETED:
                 case MissionProxy.ACTION_MISSION_PROXY_UPDATE:
+                    if (mAppPrefs.isZoomToFitEnable()) gestureMapFragment.getMapFragment().zoomToFit();
+                    // FALL THROUGH
+                case AttributeEvent.PARAMETERS_REFRESH_COMPLETED:
+                case DroidPlannerPrefs.PREF_VEHICLE_DEFAULT_SPEED:
+                case AttributeEvent.STATE_CONNECTED:
+                case AttributeEvent.HEARTBEAT_RESTORED:
                     updateMissionLength();
                     break;
 
@@ -115,7 +123,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     /**
      * If the mission was loaded from a file, the filename is stored here.
      */
-    private String openedMissionFilename;
+    private File openedMissionFile;
 
     private FloatingActionButton itemDetailToggle;
     private EditorListFragment editorListFragment;
@@ -133,7 +141,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             fragmentManager.beginTransaction().add(R.id.editor_map_fragment, gestureMapFragment).commit();
         }
 
-        editorListFragment = (EditorListFragment) fragmentManager.findFragmentById(R.id.mission_list_fragment);
+        editorToolsFragment = (EditorToolsFragment) fragmentManager.findFragmentById(R.id.mission_tools_fragment);
 
         infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
@@ -153,7 +161,10 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
         itemDetailToggle.setOnClickListener(this);
 
         if (savedInstanceState != null) {
-            openedMissionFilename = savedInstanceState.getString(EXTRA_OPENED_MISSION_FILENAME);
+            String openedMissionFilename = savedInstanceState.getString(EXTRA_OPENED_MISSION_FILENAME);
+            if(!TextUtils.isEmpty(openedMissionFilename)) {
+                openedMissionFile = new File(openedMissionFilename);
+            }
         }
 
         // Retrieve the item detail fragment using its tag
@@ -161,6 +172,30 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
         gestureMapFragment.setOnPathFinishedListener(this);
         openActionDrawer();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent){
+        if(intent == null || missionProxy == null)
+            return;
+
+        String action = intent.getAction();
+        if(TextUtils.isEmpty(action))
+            return;
+
+        switch (action) {
+            case Intent.ACTION_VIEW:
+                Uri loadUri = intent.getData();
+                if (loadUri != null) {
+                    openMissionFile(loadUri);
+                }
+                break;
+        }
     }
 
     @Override
@@ -189,6 +224,8 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             missionProxy.selection.addSelectionUpdateListener(this);
             itemDetailToggle.setVisibility(missionProxy.selection.getSelected().isEmpty() ? View.GONE : View.VISIBLE);
         }
+
+        handleIntent(getIntent());
 
         updateMissionLength();
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
@@ -269,7 +306,9 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(EXTRA_OPENED_MISSION_FILENAME, openedMissionFilename);
+        if(openedMissionFile != null) {
+            outState.putString(EXTRA_OPENED_MISSION_FILENAME, openedMissionFile.getAbsolutePath());
+        }
     }
 
     @Override
@@ -302,40 +341,31 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     }
 
     private void openMissionFile() {
-        OpenFileDialog missionDialog = new OpenMissionDialog() {
+        OpenFileDialog missionDialog = new OpenFileDialog() {
             @Override
-            public void waypointFileLoaded(MissionReader reader) {
-                openedMissionFilename = getSelectedFilename();
-
-                if(missionProxy != null) {
-                    missionProxy.readMissionFromFile(reader);
-                    gestureMapFragment.getMapFragment().zoomToFit();
-                }
+            public void onFileSelected(String filepath) {
+                File missionFile = new File(filepath);
+                openedMissionFile = missionFile;
+                openMissionFile(Uri.fromFile(missionFile));
             }
         };
-        missionDialog.openDialog(this);
+        missionDialog.openDialog(this, DirectoryPath.getWaypointsPath(), FileList.getWaypointFileList());
+    }
+
+    private void openMissionFile(Uri missionUri){
+        if(missionProxy != null) {
+            missionProxy.readMissionFromFile(missionUri);
+        }
     }
 
     @Override
     public void onOk(String dialogTag, CharSequence input) {
-        final Context context = getApplicationContext();
-
         switch (dialogTag) {
             case MISSION_FILENAME_DIALOG_TAG:
-                if (missionProxy.writeMissionToFile(input.toString())) {
-                    Toast.makeText(context, R.string.file_saved_success, Toast.LENGTH_SHORT)
-                            .show();
-
-                    final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                            .setCategory(GAUtils.Category.MISSION_PLANNING)
-                            .setAction("Mission saved to file")
-                            .setLabel("Mission items count");
-                    GAUtils.sendEvent(eventBuilder);
-
-                    break;
-                }
-
-                Toast.makeText(context, R.string.file_saved_error, Toast.LENGTH_SHORT).show();
+                File saveFile = openedMissionFile == null
+                        ? new File(DirectoryPath.getWaypointsPath(), input.toString() + FileList.WAYPOINT_FILENAME_EXT)
+                        : new File(openedMissionFile.getParent(), input.toString() + FileList.WAYPOINT_FILENAME_EXT);
+                missionProxy.writeMissionToFile(Uri.fromFile(saveFile));
                 break;
         }
     }
@@ -345,14 +375,18 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     }
 
     private void saveMissionFile() {
-        final String defaultFilename = TextUtils.isEmpty(openedMissionFilename)
-                ? FileStream.getWaypointFilename("waypoints")
-                : openedMissionFilename;
+        final String defaultFilename = openedMissionFile == null
+                ? getWaypointFilename("waypoints")
+                : FileUtils.getFilenameWithoutExtension(openedMissionFile);
 
         final SupportEditInputDialog dialog = SupportEditInputDialog.newInstance(MISSION_FILENAME_DIALOG_TAG,
                 getString(R.string.label_enter_filename), defaultFilename, true);
 
         dialog.show(getSupportFragmentManager(), MISSION_FILENAME_DIALOG_TAG);
+    }
+
+    private static String getWaypointFilename(String prefix){
+        return prefix + "-" + FileStream.getTimeStamp();
     }
 
     @Override
@@ -364,16 +398,17 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     private void updateMissionLength() {
         if (missionProxy != null) {
 
-            double missionLength = missionProxy.getMissionLength();
-            LengthUnit convertedMissionLength = unitSystem.getLengthUnitProvider().boxBaseValueToTarget(missionLength);
-            double speedParameter = dpApp.getDrone().getSpeedParameter() / 100; //cm/s to m/s conversion.
-            if (speedParameter == 0)
-                speedParameter = DEFAULT_SPEED;
+            Pair<Double, Double> distanceAndTime = missionProxy.getMissionFlightTime();
+            LengthUnit convertedMissionLength = unitSystem.getLengthUnitProvider()
+                .boxBaseValueToTarget(distanceAndTime.first);
 
-            int time = (int) (missionLength / speedParameter);
-
-            String infoString = getString(R.string.editor_info_window_distance, convertedMissionLength.toString())
-                    + ", " + getString(R.string.editor_info_window_flight_time, time / 60, time % 60);
+            double time = distanceAndTime.second;
+            String infoString = getString(R.string.editor_info_window_distance,
+                convertedMissionLength.toString()) +
+                ", " +
+                getString(R.string.editor_info_window_flight_time, time == Double.POSITIVE_INFINITY
+                    ? time
+                    : String.format(Locale.US, "%1$02d:%2$02d", ((int) time / 60), ((int) time % 60)));
 
             infoView.setText(infoString);
 
@@ -414,16 +449,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
             gestureMapFragment.disableGestureDetection();
     }
 
-    @Override
-    public void skipMarkerClickEvents(boolean skip) {
-        if (gestureMapFragment == null)
-            return;
-
-        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
-        if (planningMapFragment != null)
-            planningMapFragment.skipMarkerClickEvents(skip);
-    }
-
     private void setupTool() {
         final EditorToolsImpl toolImpl = getToolImpl();
         toolImpl.setup();
@@ -439,10 +464,10 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
     @Override
     protected void addToolbarFragment(){
         final int toolbarId = getToolbarId();
-        editorToolsFragment = (EditorToolsFragment) fragmentManager.findFragmentById(toolbarId);
-        if (editorToolsFragment == null) {
-            editorToolsFragment = new EditorToolsFragment();
-            fragmentManager.beginTransaction().add(toolbarId, editorToolsFragment).commit();
+        editorListFragment = (EditorListFragment) fragmentManager.findFragmentById(toolbarId);
+        if (editorListFragment == null) {
+            editorListFragment = new EditorListFragment();
+            fragmentManager.beginTransaction().add(toolbarId, editorListFragment).commit();
         }
     }
 
@@ -569,10 +594,6 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
                 showItemDetail(selectMissionDetailType(selected));
             }
         }
-
-        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
-        if (planningMapFragment != null)
-            planningMapFragment.postUpdate();
     }
 
 }

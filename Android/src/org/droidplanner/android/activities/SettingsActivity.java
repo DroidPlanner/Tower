@@ -3,14 +3,16 @@ package org.droidplanner.android.activities;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.fragments.SettingsFragment;
 
 /**
  * This activity holds the SettingsFragment.
  */
-public class SettingsActivity extends DrawerNavigationUI {
+public class SettingsActivity extends SuperUI {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -30,13 +32,15 @@ public class SettingsActivity extends DrawerNavigationUI {
         return R.id.actionbar_toolbar;
     }
 
-    @Override
-	protected int getNavigationDrawerMenuItemId() {
-		return R.id.navigation_settings;
-	}
-
 	@Override
-	public void onApiConnected() {
-        super.onApiConnected();
+	public boolean onOptionsItemSelected(MenuItem item){
+		switch(item.getItemId()){
+			case android.R.id.home:
+				onBackPressed();
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 }

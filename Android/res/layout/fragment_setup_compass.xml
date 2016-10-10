@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ProgressBar
+        android:id="@+id/compass_calibration_progress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        />
+
+    <LinearLayout
+        android:id="@+id/compass_calibration_instructions_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/compass_calibration_bottom_bar"
+        android:layout_below="@+id/compass_calibration_progress"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:visibility="visible"
+        tools:visiblity="gone">
+
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/compass_calibration_instructions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:text="@string/instruction_compass_begin_calibration"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:lines="2"
+            />
+
+        <ImageView
+            android:id="@+id/compass_calibration_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/compass_calibration_steps"/>
+
+    </LinearLayout>
+
+    <VideoView
+        android:id="@+id/compass_calibration_video"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/compass_calibration_bottom_bar"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/compass_calibration_progress"
+        android:visibility="gone"
+        tools:visibility="gone"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"/>
+
+    <FrameLayout
+        android:id="@+id/compass_calibration_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white_pressed"
+        >
+
+        <TextView
+            android:id="@+id/compass_calibration_button"
+            style="@style/Calibration.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:paddingEnd="40dp"
+            android:paddingStart="40dp"
+            android:visibility="visible"
+            tools:visibility="visible"
+            android:text="@string/label_begin_calibration"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/compass_calibration_advices_container"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            tools:visibility="gone"
+            android:gravity="center">
+
+            <me.grantland.widget.AutofitTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Settings.Text.Primary"
+                android:text="@string/compass_calibration_instructions"
+                android:layout_marginBottom="5dp"
+                android:background="@android:color/transparent"
+                android:singleLine="true"
+                android:gravity="center"/>
+
+            <me.grantland.widget.AutofitTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Settings.Text.Secondary"
+                android:text="@string/compass_calibration_sub_instructions"
+                android:background="@android:color/transparent"
+                android:singleLine="true"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</RelativeLayout>

@@ -41,6 +41,16 @@
                     android:title="@string/pref_ui_realtime_footprints_title" />
             </PreferenceCategory>
 
+            <PreferenceCategory android:title="@string/pref_title_editor">
+
+                <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:key="pref_enable_zoom_to_fit"
+                    android:summary="@string/pref_enable_zoom_to_fit_summary"
+                    android:title="@string/pref_enable_zoom_to_fit_title" />
+
+            </PreferenceCategory>
+
             <PreferenceCategory android:title="@string/pref_title_local">
 
                 <ListPreference
@@ -211,6 +221,16 @@
 
             </PreferenceCategory>
 
+            <PreferenceCategory android:title="@string/pref_speed_title">
+                <EditTextPreference
+                    android:gravity="center"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:key="pref_vehicle_default_speed"
+                    android:persistent="false"
+                    android:selectAllOnFocus="true"
+                    android:title="@string/pref_default_speed_title"/>
+            </PreferenceCategory>
+
             <PreferenceCategory android:title="@string/pref_misc_title">
 
                 <PreferenceScreen
@@ -270,6 +290,26 @@
             android:selectable="false"
             android:shouldDisableView="false"
             android:title="@string/vehicle_type" />
+
+        <PreferenceScreen
+            android:title="Credits">
+            <PreferenceCategory android:title="@string/project_creator">
+                <Preference
+                    android:key="pref_project_creator"
+                    android:title="Arthur Benemann"/>
+            </PreferenceCategory>
+            <PreferenceCategory android:title="@string/project_lead_maintainer">
+                <Preference
+                    android:key="pref_project_lead_maintainer"
+                    android:title="Fredia Huya-Kouadio"/>
+            </PreferenceCategory>
+            <Preference
+                android:key="pref_project_contributors"
+                android:title="@string/project_contributors"
+                android:summary="View project contributors">
+
+            </Preference>
+        </PreferenceScreen>
 
     </PreferenceCategory>
 

@@ -20,6 +20,8 @@ import org.droidplanner.android.fragments.widget.TowerWidget;
 import org.droidplanner.android.fragments.widget.TowerWidgets;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
+import java.util.List;
+
 public class WidgetsListFragment extends Fragment {
 
     private static final IntentFilter filter = new IntentFilter(SettingsFragment.ACTION_WIDGET_PREFERENCE_UPDATED);
@@ -98,7 +100,7 @@ public class WidgetsListFragment extends Fragment {
         if(widget == null)
             return;
 
-        if (!dpPrefs.isWidgetEnabled(widget)) {
+        if (!dpPrefs.isWidgetVisible(widget)) {
             removeWidget(widgetId);
             return;
         }
@@ -149,7 +151,7 @@ public class WidgetsListFragment extends Fragment {
         if (!isAdded())
             return;
 
-        final TowerWidgets[] towerWidgets = TowerWidgets.values();
+        final List<TowerWidgets> towerWidgets = TowerWidgets.enabledWidgets();
         for (TowerWidgets towerWidget : towerWidgets) {
             final @IdRes int widgetId = towerWidget.getIdRes();
             addWidget(widgetId);

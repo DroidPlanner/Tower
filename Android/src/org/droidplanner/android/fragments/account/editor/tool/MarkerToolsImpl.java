@@ -71,7 +71,6 @@ class MarkerToolsImpl extends EditorToolsImpl implements AdapterView.OnItemSelec
         EditorToolsFragment.EditorToolListener listener = editorToolsFragment.listener;
         if (listener != null) {
             listener.enableGestureDetection(false);
-            listener.skipMarkerClickEvents(true);
         }
 
         if (missionProxy != null)

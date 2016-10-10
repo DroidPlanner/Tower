@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?selectableItemBackground"
+    android:orientation="vertical"
+    android:padding="5dp"
+    tools:layout_width="140dp">
+
+    <TextView
+        android:id="@+id/weather_location"
+        style="@style/Widget.Weather.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginStart="6dp"
+        android:gravity="start|center"
+        android:text="@string/label_empty"
+        tools:text="Berkeley, CA"/>
+
+    <TextView
+        android:id="@+id/weather_wind_speed"
+        style="@style/Widget.Weather.Info"
+        android:drawableLeft="@drawable/wind_icon"
+        android:drawableStart="@drawable/wind_icon"
+        android:text="@string/label_empty"
+        tools:text="200 mph NW"/>
+
+    <TextView
+        android:id="@+id/weather_temperature"
+        style="@style/Widget.Weather.Info"
+        android:drawableLeft="@drawable/sun_icon"
+        android:drawableStart="@drawable/sun_icon"
+        android:text="@string/label_empty"
+        tools:text="163 F"/>
+
+    <TextView
+        android:id="@+id/weather_precipitation"
+        style="@style/Widget.Weather.Info"
+        android:drawableLeft="@drawable/rain_icon"
+        android:drawableStart="@drawable/rain_icon"
+        android:text="@string/label_empty"
+        tools:text="0.05 in"/>
+
+</LinearLayout>

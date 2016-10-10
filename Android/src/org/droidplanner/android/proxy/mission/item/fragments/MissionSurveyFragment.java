@@ -7,6 +7,8 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -36,7 +38,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragment implements
-        CardWheelHorizontalView.OnCardWheelScrollListener, Drone.OnMissionItemsBuiltCallback {
+        CardWheelHorizontalView.OnCardWheelScrollListener, Drone.OnMissionItemsBuiltCallback, CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = MissionSurveyFragment.class.getSimpleName();
 
@@ -146,13 +148,26 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
         mSidelapPicker.addScrollListener(this);
         mAltitudePicker.addScrollListener(this);
 
+        CheckBox startCameraBeforeFirstWaypointCheck = (CheckBox) view.findViewById(id.check_start_camera_before_first_waypoint);
+        CheckBox lockCopterYawCheck = (CheckBox) view.findViewById(id.check_lock_copter_yaw);
+
         if(!getMissionItems().isEmpty()) {
             final T referenceItem = getMissionItems().get(0);
             if (referenceItem instanceof SplineSurvey)
                 typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SPLINE_SURVEY));
             else
                 typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
+
+            startCameraBeforeFirstWaypointCheck.setChecked(referenceItem.isStartCameraBeforeFirstWaypoint());
+
+            SurveyDetail surveyDetail = referenceItem.getSurveyDetail();
+            if(surveyDetail != null) {
+                lockCopterYawCheck.setChecked(surveyDetail.getLockOrientation());
+            }
         }
+
+        startCameraBeforeFirstWaypointCheck.setOnCheckedChangeListener(this);
+        lockCopterYawCheck.setOnCheckedChangeListener(this);
 
         getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
     }
@@ -191,6 +206,8 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
                             surveyDetail.setOverlap(mOverlapPicker.getCurrentValue());
                             surveyDetail.setSidelap(mSidelapPicker.getCurrentValue());
                         }
+
+                        getAppPrefs().persistSurveyPreferences(surveyList.get(0));
 
                         final MissionItem.ComplexItem<T>[] surveys = surveyList
                                 .toArray(new MissionItem.ComplexItem[surveyList.size()]);
@@ -317,5 +334,29 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
         }
 
         getMissionProxy().notifyMissionUpdate();
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        final List<T> surveyList = getMissionItems();
+        if(!surveyList.isEmpty()) {
+            int viewId = buttonView.getId();
+            for(T survey : surveyList) {
+                switch(viewId) {
+                    case R.id.check_start_camera_before_first_waypoint:
+                    survey.setStartCameraBeforeFirstWaypoint(isChecked);
+                        break;
+
+                    case id.check_lock_copter_yaw:
+                        SurveyDetail surveyDetail = survey.getSurveyDetail();
+                        if(surveyDetail != null) {
+                            surveyDetail.setLockOrientation(isChecked);
+                        }
+                        break;
+                }
+            }
+
+            getAppPrefs().persistSurveyPreferences(surveyList.get(0));
+        }
     }
 }

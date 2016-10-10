@@ -8,23 +8,51 @@
         chg:changeLogFileResourceId="@raw/custom_changelog"
         in your View component in layout file -->
 
-
-    <changelogversion versionName="3.2.1" changeDate="May 12,2016">
-        <changelogimprovement>[b]UVC[/b] devices support by [i]Guilherme Blanco[/i]</changelogimprovement>
-        <changelogimprovement>Google Cardboard [b]FPV[/b] support thanks to [b]DronePro[/b] by [i]Shawn Fraser[/i]</changelogimprovement>
-        <changelogimprovement>Add ability to set a custom video stream. Check the [i][b]Tower Wiki[/b][/i] for setup instructions</changelogimprovement>
-        <changelogimprovement>Add [i]Reset ROI[/i] mission item</changelogimprovement>
-        <changelogimprovement>Add support for [b]ArcGIS[/b] map tiles</changelogimprovement>
-
-        <changelogtext>Update UX for the telemetry connection preferences</changelogtext>
-        <changelogtext>Remove support for [b]Droneshare[/b] accounts as the site is closing down</changelogtext>
-
-        <changelogtext>Navigation Drawer update to Material Design by [i]jandrop[/i]</changelogtext>
-        <changelogtext>Improve spanish translation</changelogtext>
-        <changelogtext>Improve german translation</changelogtext>
-        <changelogtext>Improve chinese translation</changelogtext>
-        <changelogtext>Improve portuguese translation</changelogtext>
-
+    <!--
+    TODO: enable for version 4.1.0
+    <changelogversion versionName="4.1.0" changeDate="Sept 30, 2016">
+        <changelogimprovement>Add weather widget</changelogimprovement>
     </changelogversion>
+    -->
+
+    <changelogversion versionName="4.0.0" changeDate="Oct 9, 2016">
+        <changelogimprovement>Remove dependency on 3DR Services</changelogimprovement>
+        <changelogimprovement>Support for Baidu Map</changelogimprovement>
+        <changelogimprovement>Support for compass calibration for Solo and ArduCopter v3.4 or higher</changelogimprovement>
+        <changelogimprovement>Improved version of the vehicle history</changelogimprovement>
+        <changelogimprovement>Ability to export the vehicle flight path as a mission</changelogimprovement>
+        <changelogimprovement>Ability to export the vehicle flight history as a mission</changelogimprovement>
+        <changelogimprovement>Deprecate '.dpwp' mission file for '.txt' mission file to improve compatibility with other GCS</changelogimprovement>
+        <changelogimprovement>Ability to lock the copter yaw during a survey mission</changelogimprovement>
+        <changelogimprovement>Ability to start camera trigger after the first waypoint in a survey mission</changelogimprovement>
+
+        <changelogtext>Add Credits page</changelogtext>
+        <changelogtext>Fix mission waypoint reordering</changelogtext>
+        <changelogtext>Autosave last survey preferences</changelogtext>
+        <changelogtext>Fix invalid altitude frame for Follow-Me and Guided mode</changelogtext>
+        <changelogtext>Fix parameters editing for plane vehicles</changelogtext>
+        <changelogtext>Fix Takeoff mission waypoint for plane vehicles</changelogtext>
+        <changelogtext>Improve mission length calculation</changelogtext>
+
+        <changelogtext>Improve portuguese translation</changelogtext>
+    </changelogversion>
+
+    <!--<changelogversion versionName="3.2.1" changeDate="May 12,2016">-->
+        <!--<changelogimprovement>[b]UVC[/b] devices support by [i]Guilherme Blanco[/i]</changelogimprovement>-->
+        <!--<changelogimprovement>Google Cardboard [b]FPV[/b] support thanks to [b]DronePro[/b] by [i]Shawn Fraser[/i]</changelogimprovement>-->
+        <!--<changelogimprovement>Add ability to set a custom video stream. Check the [i][b]Tower Wiki[/b][/i] for setup instructions</changelogimprovement>-->
+        <!--<changelogimprovement>Add [i]Reset ROI[/i] mission item</changelogimprovement>-->
+        <!--<changelogimprovement>Add support for [b]ArcGIS[/b] map tiles</changelogimprovement>-->
+
+        <!--<changelogtext>Update UX for the telemetry connection preferences</changelogtext>-->
+        <!--<changelogtext>Remove support for [b]Droneshare[/b] accounts as the site is closing down</changelogtext>-->
+
+        <!--<changelogtext>Navigation Drawer update to Material Design by [i]jandrop[/i]</changelogtext>-->
+        <!--<changelogtext>Improve spanish translation</changelogtext>-->
+        <!--<changelogtext>Improve german translation</changelogtext>-->
+        <!--<changelogtext>Improve chinese translation</changelogtext>-->
+        <!--<changelogtext>Improve portuguese translation</changelogtext>-->
+
+    <!--</changelogversion>-->
 
 </changelog>

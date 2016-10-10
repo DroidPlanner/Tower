@@ -12,71 +12,72 @@
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
-		<item name="android:gravity">left</item>
-		</style>
+        <item name="android:gravity">left</item>
+    </style>
 
-	<style name="textLabels">
+    <style name="textLabels">
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textColor">#808080</item>
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif</item>
-        </style>
+    </style>
 
-	<style name="RPYtextLabels">
+    <style name="RPYtextLabels">
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textSize">13sp</item>
-      	<item name="android:layout_marginLeft">0dp</item>
-        </style>
+        <item name="android:layout_marginLeft">0dp</item>
+    </style>
 
     <style name="unitText">
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
-		<item name="android:gravity">left</item>
-	</style>
+        <item name="android:gravity">left</item>
+    </style>
 
     <style name="largeTelemetryText">
-        <item name="android:textColor">@color/very_dark_grey</item>
-        <item name="android:textSize">@dimen/largeTelemetryTextSize</item>
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
         <item name="android:gravity">start</item>
-        </style>
+    </style>
 
     <style name="largeMissionDetailText">
         <item name="android:textColor">#ffffff</item>
         <item name="android:textSize">40sp</item>
-	    <item name="android:textStyle">bold</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:gravity">center</item>
-        </style>
+    </style>
 
     <style name="whiteHeaderTitle">
         <item name="android:textColor">#fff</item>
         <item name="android:textSize">24sp</item>
-	    <item name="android:textStyle">bold</item>
-	    <item name="android:layout_alignParentTop">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_alignParentTop">true</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
-        </style>
+    </style>
 
     <style name="missionHeaderTitle">
         <item name="android:textColor">#85daff</item>
         <item name="android:textSize">24sp</item>
-	    <item name="android:textStyle">bold</item>
-	    <item name="android:layout_alignParentTop">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_alignParentTop">true</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
-        </style>
+    </style>
+
     <style name="missionHeaderlabel">
         <item name="android:textColor">#85daff</item>
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
-        </style>
+    </style>
+
     <style name="missionHeaderValue">
         <item name="android:textColor">#cbefff</item>
         <item name="android:textSize">14sp</item>
-	    <item name="android:textStyle">bold</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
-        </style>
+    </style>
 
     <style name="flightControlButton" parent="@android:style/Widget.Holo.Button.Borderless">
         <item name="android:padding">@dimen/flightControlPadding</item>
@@ -96,6 +97,7 @@
         <item name="android:layout_margin">1dp</item>
         <item name="android:padding">1dp</item>
     </style>
+
     <style name="telemButton_top">
         <item name="android:layout_marginTop">16dp</item>
         <item name="android:layout_marginLeft">1dp</item>
@@ -134,137 +136,140 @@
         <item name="android:background">@color/transparent_light_grey</item>
     </style>
 
-	<!-- style the list navigation -->
-	<style name="DropDownItem" parent="Widget.AppCompat.DropDownItem.Spinner">
-		<item name="android:textSize">18sp</item>
-		<item name="android:minWidth">120dp</item>
-	    <item name="android:textStyle">bold</item>
+    <!-- style the list navigation -->
+    <style name="DropDownItem" parent="Widget.AppCompat.DropDownItem.Spinner">
+        <item name="android:textSize">18sp</item>
+        <item name="android:minWidth">120dp</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/greyText</item>
         <item name="android:layout_width">100dp</item>
-	</style>
+    </style>
 
-	<style name="SpinnerItem" parent="@android:style/Widget.Holo.TextView.SpinnerItem">
-		<item name="android:textSize">26sp</item>
-	    <item name="android:textStyle">bold</item>
+    <style name="SpinnerItem" parent="@android:style/Widget.Holo.TextView.SpinnerItem">
+        <item name="android:textSize">26sp</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/greyText</item>
-	</style>
+    </style>
 
-	<style name="SetupSpinnerItem" parent="@android:style/Widget.Holo.Light.TextView">
-		<item name="android:textSize">26sp</item>
-	    <item name="android:textStyle">bold</item>
+    <style name="SetupSpinnerItem" parent="@android:style/Widget.Holo.Light.TextView">
+        <item name="android:textSize">26sp</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textColor">#fff</item>
-	</style>
+    </style>
 
-		<!--  App title style-->
-	<style name="CustomActionBarTheme.ActionBar.TitleTextStyle" parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-	    <item name="android:textColor">#333</item>
-	    <item name="android:textStyle">bold</item>
-	    <item name="android:textSize">16sp</item>
+    <!--  App title style-->
+    <style name="CustomActionBarTheme.ActionBar.TitleTextStyle" parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">#333</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:gravity">left</item>
-	</style>
+    </style>
 
     <style name="CustomActionBarTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
-       <item name="android:popupMenuStyle">@style/MyPopupMenu</item>
+        <item name="android:popupMenuStyle">@style/MyPopupMenu</item>
         <item name="android:itemTextAppearance">@style/myCustomMenuTextApearance</item>
     </style>
 
     <style name="action_text">
         <item name="android:textColor">#ff0000</item>
         <item name="android:textSize">16sp</item>
-	    <item name="android:textStyle">bold</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:gravity">left</item>
-        </style>
+    </style>
 
-	 <!-- Popup Menu Style -->
-	<style name="MyPopupMenu" parent="android:style/Widget.Holo.Light.ListPopupWindow">
-		<item name="android:popupBackground">#ffffff</item>
-	</style>
-	<style name="myCustomMenuTextApearance" parent="@android:style/TextAppearance.Widget.TextView.PopupMenu">
+    <!-- Popup Menu Style -->
+    <style name="MyPopupMenu" parent="android:style/Widget.Holo.Light.ListPopupWindow">
+        <item name="android:popupBackground">#ffffff</item>
+    </style>
+
+    <style name="myCustomMenuTextApearance" parent="@android:style/TextAppearance.Widget.TextView.PopupMenu">
         <item name="android:gravity">left</item>
         <item name="android:textColor">@color/greyText</item>
-	</style>
+    </style>
 
 
-	 <!-- Editor overview info Style -->
+    <!-- Editor overview info Style -->
     <style name="editorMissionOverviewText">
         <item name="android:textColor">#fff</item>
         <item name="android:textSize">20sp</item>
-	    <item name="android:textStyle">bold</item>
-	    <item name="android:layout_centerVertical">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_centerVertical">true</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:gravity">center_vertical|left</item>
         <item name="android:paddingLeft">16dp</item>
         <item name="android:background">@color/bottom_top_bar</item>
-        </style>
+    </style>
 
-	 <!-- Mode info Style -->
+    <!-- Mode info Style -->
     <style name="modeHeaderTitle">
         <item name="android:textColor">#fff</item>
         <item name="android:textSize">20sp</item>
-	    <item name="android:textStyle">bold</item>
-	    <item name="android:layout_alignParentTop">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_alignParentTop">true</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
-        </style>
+    </style>
 
     <style name="modeHeaderOptions">
         <item name="android:textColor">#85daff</item>
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
-        </style>
+    </style>
 
     <style name="ModeDetailText">
         <item name="android:textColor">@color/greyText</item>
         <item name="android:textSize">13sp</item>
-	    <item name="android:textStyle">italic</item>
+        <item name="android:textStyle">italic</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:padding">8dp</item>
-        </style>
+    </style>
 
     <style name="modeControl">
         <item name="android:textColor">#fff</item>
-	    <item name="android:textStyle">bold</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_width">@dimen/setup_action_button_width</item>
-        </style>
+    </style>
 
     <style name="modeLabel">
         <item name="android:textColor">@color/greyText</item>
-	    <item name="android:textStyle">bold|italic</item>
+        <item name="android:textStyle">bold|italic</item>
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
-      	<item name="android:layout_marginTop">4dp</item>
-      	<item name="android:layout_marginBottom">4dp</item>
-        </style>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+    </style>
 
-	 <!-- Mode Spinner Style -->
+    <!-- Mode Spinner Style -->
 
-	<style name="ModeSpinnerText" >
-		<item name="android:textSize">@dimen/setup_title_text_size</item>
-	    <item name="android:textStyle">bold</item>
-	    <item name="android:textColor">#4d4d4d</item>
-	</style>
+    <style name="ModeSpinnerText">
+        <item name="android:textSize">@dimen/setup_title_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#4d4d4d</item>
+    </style>
 
-	 <!-- RC setup screen -->
+    <!-- RC setup screen -->
 
-	<style name="rc_textTitle" >
+    <style name="rc_textTitle">
         <item name="android:textColor">#fff</item>
-		<item name="android:textSize">@dimen/setup_rc_text_title_size</item>
-	    <item name="android:textStyle">bold</item>
-	</style>
-	<style name="rc_textPWM" >
+        <item name="android:textSize">@dimen/setup_rc_text_title_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="rc_textPWM">
         <item name="android:textColor">#fff</item>
-		<item name="android:textSize">16sp</item>
-	</style>
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="SetupTitle">
         <item name="android:textColor">#fff</item>
         <item name="android:textSize">@dimen/setup_title_text_size</item>
-	    <item name="android:textStyle">bold</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:padding">@dimen/setup_title_padding</item>
-        </style>
+    </style>
 
     <!-- Parameters screen -->
     <style name="paramsClickToRefresh">
@@ -274,19 +279,19 @@
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
 
-    <style name="paramRowLabel" />
+    <style name="paramRowLabel"/>
 
     <style name="paramRowLabel.Title">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="paramRowLabel.Text" >
+    <style name="paramRowLabel.Text">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/greyText</item>
     </style>
 
-    <style name="paramValueUnchanged" >
+    <style name="paramValueUnchanged">
         <item name="android:textColor">@android:color/primary_text_light</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textStyle">normal</item>
@@ -394,10 +399,16 @@
     <!-- Number picker widget styles -->
     <style name="missionItemDetailCard">
         <item name="android:background">@drawable/bg_cell_white</item>
-        <item name="android:layout_marginLeft">@dimen/margin_left_right_card_wheel_horizontal_view</item>
-        <item name="android:layout_marginRight">@dimen/margin_left_right_card_wheel_horizontal_view</item>
-        <item name="android:layout_marginTop">@dimen/margin_top_bottom_card_wheel_horizontal_view</item>
-        <item name="android:layout_marginBottom">@dimen/margin_top_bottom_card_wheel_horizontal_view</item>
+        <item name="android:layout_marginLeft">@dimen/margin_left_right_card_wheel_horizontal_view
+        </item>
+        <item name="android:layout_marginRight">
+            @dimen/margin_left_right_card_wheel_horizontal_view
+        </item>
+        <item name="android:layout_marginTop">@dimen/margin_top_bottom_card_wheel_horizontal_view
+        </item>
+        <item name="android:layout_marginBottom">
+            @dimen/margin_top_bottom_card_wheel_horizontal_view
+        </item>
     </style>
 
     <style name="missionItemDetailLayout">
@@ -451,9 +462,9 @@
         <item name="android:layout_centerHorizontal">true</item>
     </style>
 
-    <style name="Telemetry" />
+    <style name="Telemetry"/>
 
-    <style name="Telemetry.Entry" >
+    <style name="Telemetry.Entry">
         <item name="android:textSize">@dimen/info_bar_text_size</item>
         <item name="android:gravity">center</item>
         <item name="android:paddingTop">5dp</item>
@@ -464,7 +475,7 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="AlertMessage" />
+    <style name="AlertMessage"/>
 
     <style name="AlertMessage.Title">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
@@ -478,9 +489,9 @@
         <item name="android:textColor">@android:color/secondary_text_light</item>
     </style>
 
-    <style name="EkfStatus" />
+    <style name="EkfStatus"/>
 
-    <style name="EkfStatus.Flag" >
+    <style name="EkfStatus.Flag">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">start|center_vertical</item>
@@ -498,7 +509,7 @@
         <item name="android:drawableRight">@drawable/ic_help_orange_500_24dp</item>
     </style>
 
-    <style name="Fab" >
+    <style name="Fab">
         <item name="elevation">6dp</item>
         <item name="borderWidth">0dp</item>
     </style>
@@ -539,6 +550,62 @@
     <style name="Divider.Shadow.Below">
         <item name="android:background">@drawable/below_shadow</item>
     </style>
+
+    <style name="Widget.Weather"/>
+
+    <style name="Widget.Weather.Title">
+        <item name="android:gravity">center</item>
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:drawablePadding">20dp</item>
+        <item name="android:layout_marginBottom">3dp</item>
+    </style>
+
+    <style name="Widget.Weather.Info">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingEnd">6dp</item>
+        <item name="android:paddingStart">6dp</item>
+        <item name="android:drawablePadding">6dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+    </style>
+
+    <style name="Settings" />
+
+    <style name="Settings.Text">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Menu</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:background">@drawable/navigation_entry_bg</item>
+    </style>
+
+    <style name="Settings.Text.Primary">
+        <item name="android:textColor">@color/black_text</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="Settings.Text.Secondary">
+        <item name="android:textColor">@color/secondary_text_color</item>
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="Calibration" />
+
+    <style name="Calibration.Button">
+        <item name="android:minHeight">56dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Large</item>
+        <item name="android:background">@drawable/green_clickable_bg</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="CustomActionBarTheme.AppBarOverlay"
+           parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="CustomActionBarTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
 </resources>
 

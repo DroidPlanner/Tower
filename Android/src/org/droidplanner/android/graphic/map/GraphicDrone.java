@@ -13,7 +13,7 @@ import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Attitude;
 import com.o3dr.services.android.lib.drone.property.Gps;
 
-public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
+public class GraphicDrone extends MarkerInfo {
 
 	private Drone drone;
 

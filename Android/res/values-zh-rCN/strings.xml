@@ -147,7 +147,7 @@
     <string name="editor_err_land_rtl_added">在LAND或RTL后无法添加新的航点</string>
     <string name="editor_info_window">距离：0m，飞行时间：0:00</string>
     <string name="editor_info_window_distance">距离：%s</string>
-    <string name="editor_info_window_flight_time">飞行时间：%1$02d:%2$02d</string>
+    <string name="editor_info_window_flight_time">飞行时间：%s</string>
     <string name="editor_info_window_heading">航向：%.0f°</string>
     <string name="distance_to_home">至家的距离</string>
     <string name="loiter_time">留待时间</string>
@@ -364,7 +364,7 @@
     <string name="status_waiting_for_gps">等待GPS...</string>
 
     <!-- Preference dialogs -->
-    <string name="unlock_slider_description">滑到 %s</string>
+    <string name="unlock_slider_description">滑到</string>
     <string name="pref_misc_title">其他设置</string>
     <string name="pref_dialogs_title">首选项</string>
     <string name="pref_auto_insert_mission_takeoff_rtl_land_title">自动载入TakeOff和

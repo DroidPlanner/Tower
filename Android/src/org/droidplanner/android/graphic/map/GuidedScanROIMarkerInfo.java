@@ -8,13 +8,12 @@ import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 
 import org.droidplanner.android.R;
-import org.droidplanner.android.fragments.mode.ModeFollowFragment;
 import org.droidplanner.android.maps.MarkerInfo;
 
 /**
  * Created by Fredia Huya-Kouadio on 1/27/15.
  */
-public class GuidedScanROIMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
+public class GuidedScanROIMarkerInfo extends MarkerInfo {
 
     public static final double DEFAULT_FOLLOW_ROI_ALTITUDE = 10; //meters
     private LatLongAlt roiCoord;

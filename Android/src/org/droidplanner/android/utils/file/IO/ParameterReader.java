@@ -2,6 +2,8 @@ package org.droidplanner.android.utils.file.IO;
 
 import com.o3dr.services.android.lib.drone.property.Parameter;
 
+import org.droidplanner.android.utils.file.FileStream;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,19 +11,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.android.utils.file.DirectoryPath;
-import org.droidplanner.android.utils.file.FileList;
-import org.droidplanner.android.utils.file.FileStream;
-
-public class ParameterReader implements
-		org.droidplanner.android.dialogs.openfile.OpenFileDialog.FileReader {
+public class ParameterReader  {
 	private List<Parameter> parameters;
 
 	public ParameterReader() {
 		this.parameters = new ArrayList<Parameter>();
 	}
 
-	@Override
 	public boolean openFile(String itemList) {
 		if (!FileStream.isExternalStorageAvailable()) {
 			return false;
@@ -76,13 +72,4 @@ public class ParameterReader implements
 		return parameters;
 	}
 
-	@Override
-	public String getPath() {
-		return DirectoryPath.getParametersPath();
-	}
-
-	@Override
-	public String[] getFileList() {
-		return FileList.getParametersFileList();
-	}
 }

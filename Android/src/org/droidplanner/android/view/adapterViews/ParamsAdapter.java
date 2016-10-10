@@ -1,13 +1,5 @@
 package org.droidplanner.android.view.adapterViews;
 
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.droidplanner.android.R;
-
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,6 +11,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.o3dr.services.android.lib.drone.property.Parameter;
+
+import org.droidplanner.android.R;
+
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Date: 2013-12-08 Time: 11:00 PM
@@ -152,6 +152,9 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
         }
 
         notifyDataSetChanged();
+		if(onParametersChangeListener != null) {
+			onParametersChangeListener.onParametersChange(dirtyCount);
+		}
     }
     
 	public void loadParameters(Map<String, Parameter> parameters) {
@@ -160,6 +163,9 @@ public class ParamsAdapter extends FilterableArrayAdapter<ParamsAdapterItem> {
             addParameter(entry.getKey(), entry.getValue());
         }
         dirtyCount = 0;
+		if(onParametersChangeListener != null) {
+			onParametersChangeListener.onParametersChange(dirtyCount);
+		}
 	}
 
     private void addParameter(String name, Parameter parameter) {

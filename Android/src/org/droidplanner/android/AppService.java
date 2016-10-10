@@ -47,7 +47,7 @@ public class AppService extends Service {
                         notificationHandler.init();
 
                     if (NetworkUtils.isOnSoloNetwork(context)) {
-                        bringUpCellularNetwork(context);
+                        bringUpCellularNetwork();
                     }
                     break;
 
@@ -72,6 +72,7 @@ public class AppService extends Service {
 
     private NotificationHandler notificationHandler;
     private DroidPlannerApp dpApp;
+    private Drone drone;
 
     @Override
     public void onCreate() {
@@ -79,11 +80,14 @@ public class AppService extends Service {
 
         dpApp = (DroidPlannerApp) getApplication();
         dpApp.createFileStartLogging();
-        final Drone drone = dpApp.getDrone();
+
+        dpApp.getSoundManager().start();
+
+        drone = dpApp.getDrone();
 
         final Context context = getApplicationContext();
         if (NetworkUtils.isOnSoloNetwork(context)) {
-            bringUpCellularNetwork(context);
+            bringUpCellularNetwork();
         }
 
         GAUtils.initGATracker(dpApp);
@@ -106,6 +110,8 @@ public class AppService extends Service {
         if (notificationHandler != null)
             notificationHandler.terminate();
 
+        dpApp.getSoundManager().stop();
+
         bringDownCellularNetwork();
 
         dpApp.closeLogFile();
@@ -117,12 +123,16 @@ public class AppService extends Service {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void bringUpCellularNetwork(Context context) {
+    private void bringUpCellularNetwork() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
             return;
 
+        // Wait until the drone is connected.
+        if(drone == null || !drone.isConnected())
+            return;
+
         Timber.i("Setting up cellular network request.");
-        final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkRequest networkReq = new NetworkRequest.Builder()
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
                 .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
@@ -132,8 +142,13 @@ public class AppService extends Service {
             @Override
             public void onAvailable(Network network) {
                 Timber.i("Setting up process default network: %s", network);
-                ConnectivityManager.setProcessDefaultNetwork(network);
-                DroidPlannerApp.setCellularNetworkAvailability(true);
+                boolean wasBound;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    wasBound = connMgr.bindProcessToNetwork(network);
+                } else {
+                    wasBound = ConnectivityManager.setProcessDefaultNetwork(network);
+                }
+                DroidPlannerApp.setCellularNetworkAvailability(wasBound);
             }
         });
     }
@@ -144,6 +159,13 @@ public class AppService extends Service {
             return;
 
         Timber.i("Bringing down cellular netowrk access.");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            final ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            connMgr.bindProcessToNetwork(null);
+        } else {
+            ConnectivityManager.setProcessDefaultNetwork(null);
+        }
         ConnectivityManager.setProcessDefaultNetwork(null);
         DroidPlannerApp.setCellularNetworkAvailability(false);
     }

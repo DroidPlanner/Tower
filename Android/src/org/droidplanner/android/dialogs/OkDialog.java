@@ -18,6 +18,7 @@ public class OkDialog extends DialogFragment {
     protected final static String EXTRA_MESSAGE = "message";
     protected final static String EXTRA_BUTTON_LABEL = "button_label";
     protected final static String EXTRA_DISMISS_DIALOG_WITHOUT_CLICKING = "dismiss_dialog_without_clicking";
+    protected final static String EXTRA_SHOW_CANCEL = "show_cancel";
 
     public interface Listener {
         void onOk();
@@ -32,27 +33,32 @@ public class OkDialog extends DialogFragment {
     }
 
     public static OkDialog newInstance(Context context, String title, String msg, Listener listener) {
-        return newInstance(title, msg, DEFAULT_DISMISS_DIALOG_WITHOUT_CLICKING, context.getString(android.R.string.ok), listener);
+        return newInstance(context, title, msg, listener, false);
+    }
+
+    public static OkDialog newInstance(Context context, String title, String msg, Listener listener, boolean showCancel) {
+        return newInstance(title, msg, DEFAULT_DISMISS_DIALOG_WITHOUT_CLICKING, context.getString(android.R.string.ok), listener, showCancel);
     }
 
     public static OkDialog newInstance(String title, String msg, String buttonLabel) {
-        return newInstance(title, msg, DEFAULT_DISMISS_DIALOG_WITHOUT_CLICKING, buttonLabel, null);
+        return newInstance(title, msg, DEFAULT_DISMISS_DIALOG_WITHOUT_CLICKING, buttonLabel, null, false);
     }
 
 
     public static OkDialog newInstance(String title, String msg, boolean dismissDialogWithoutClicking,
                                        String buttonLabel) {
-        return newInstance(title, msg, dismissDialogWithoutClicking, buttonLabel, null);
+        return newInstance(title, msg, dismissDialogWithoutClicking, buttonLabel, null, false);
     }
 
     public static OkDialog newInstance(String title, String msg, boolean dismissDialogWithoutClicking,
-                                       String buttonLabel, Listener listener) {
+                                       String buttonLabel, Listener listener, boolean showCancel) {
         OkDialog fragment = new OkDialog();
         Bundle b = new Bundle();
         b.putString(EXTRA_TITLE, title);
         b.putString(EXTRA_MESSAGE, msg);
         b.putString(EXTRA_BUTTON_LABEL, buttonLabel);
         b.putBoolean(EXTRA_DISMISS_DIALOG_WITHOUT_CLICKING, dismissDialogWithoutClicking);
+        b.putBoolean(EXTRA_SHOW_CANCEL, showCancel);
 
         fragment.setArguments(b);
         fragment.listener = listener;
@@ -71,10 +77,35 @@ public class OkDialog extends DialogFragment {
         final String buttonLabel = args.getString(EXTRA_BUTTON_LABEL, getString(android.R.string.ok));
         dismissDialogWithoutClicking = args.getBoolean(EXTRA_DISMISS_DIALOG_WITHOUT_CLICKING, DEFAULT_DISMISS_DIALOG_WITHOUT_CLICKING);
 
-        return new AlertDialog.Builder(getActivity())
+        boolean showCancel = args.getBoolean(EXTRA_SHOW_CANCEL);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
             .setTitle(title)
             .setMessage(message)
-            .setNeutralButton(buttonLabel,
+            ;
+        if (showCancel) {
+            builder
+                .setPositiveButton(buttonLabel,
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            if (listener != null) {
+                                listener.onOk();
+                            }
+                            dismiss();
+                        }
+                    }
+                )
+                .setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(listener != null){
+                            listener.onCancel();
+                        }
+                        dismiss();
+                    }
+                });
+        } else {
+            builder.setNeutralButton(buttonLabel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         if (listener != null) {
@@ -83,9 +114,10 @@ public class OkDialog extends DialogFragment {
                         dismiss();
                     }
                 }
-            )
-            .create();
+            );
+        }
 
+        return builder.create();
     }
 
     @Override

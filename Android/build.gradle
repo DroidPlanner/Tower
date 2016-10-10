@@ -20,8 +20,11 @@ dependencies {
     // Android library to display the changelog
     compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
 
-    //DroneKit-Android client library.
-    compile 'com.o3dr.android:dronekit-android:2.9.0'
+    //DroneKit-Android client lib
+    compile 'com.o3dr.android:dronekit-android:3.0.2'
+    //Comment line above, and uncomment line below to use your local version of the dronekit-android client lib
+    //Don't forget to uncomment the lines in the settings.gradle file as well.
+//     compile project(':ClientLib')
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')
@@ -31,7 +34,7 @@ dependencies {
     compile files('libs/droneapi-java-0.3-SNAPSHOT.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
     compile files('libs/jeromq-0.3.4.jar')
-    compile files('libs/sius-0.3.0-SNAPSHOT.jar')
+    compile files('libs/sius-0.3.1-SNAPSHOT.jar')
     compile files('libs/BaiduLBS_Android.jar')
 
     compile "com.squareup.okhttp:okhttp:${okhttp_version}"
@@ -45,15 +48,20 @@ dependencies {
 
     //Charts and graph library
     compile 'com.github.lecho:hellocharts-library:1.5.5@aar'
+
+    //Leak canary (https://github.com/square/leakcanary)
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 }
 
 def versionPrefix = "Tower-v"
 
 //Decomposed version name and code (https://plus.google.com/+JakeWharton/posts/6f5TcVPRZij)
-def versionMajor = 3
-def versionMinor = 2
-def versionPatch = 1
-def versionBuild = 8 //bump for dogfood builds, public betas, etc.
+def versionMajor = 4
+def versionMinor = 0
+def versionPatch = 0
+def versionBuild = 10 //bump for dogfood builds, public betas, etc.
 
 //Logging levels
 def logLevelVerbose = 2;
@@ -66,6 +74,10 @@ def logLevelAssert = 7;
 android {
     compileSdkVersion android_build_sdk_version
     buildToolsVersion android_build_tools_version
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 
     defaultConfig {
         applicationId 'org.droidplanner.android'
@@ -102,6 +114,8 @@ android {
             renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
+
+            jniLibs.srcDir "jni/libs"
         }
 
         // Move the build types to build-types/<type>
@@ -175,6 +189,7 @@ android {
         dev {
             applicationIdSuffix ".debug"
             resValue "string", "app_title", "Tower Dev"
+            resValue "string", "baidu_api_key", ""
             versionName generateVersionName(versionPrefix, versionMajor, versionMinor, versionPatch, "debug.${versionBuild}")
 
             //Enable or disable crashlytics based on the availability of the api key
@@ -184,6 +199,7 @@ android {
         beta {
             applicationIdSuffix ".beta"
             resValue "string", "app_title", "Tower Beta"
+            resValue "string", "baidu_api_key", "4x7A3lUHEmzFxosafDa4bLP7yinmEnPh"
             versionName generateVersionName(versionPrefix, versionMajor, versionMinor, versionPatch, "beta.${versionBuild}")
 
             //Enable or disable crashlytics based on the availability of the api key
@@ -192,6 +208,7 @@ android {
 
         prod {
             resValue "string", "app_title", "Tower"
+            resValue "string", "baidu_api_key", "41mPy2URFjOL61GzyWk8U5oLhhwSYGWe"
             buildConfigField "boolean", "WRITE_LOG_FILE", "false"
 
             //Enable or disable crashlytics based on the availability of the api key
@@ -209,6 +226,7 @@ android {
             buildConfigField "boolean", "ENABLE_CRASHLYTICS", "${hasFabricApiKey()}"
         }
     }
+    buildToolsVersion '24.0.1'
 }
 
 /**

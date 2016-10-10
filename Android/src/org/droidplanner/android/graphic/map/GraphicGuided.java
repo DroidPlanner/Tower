@@ -1,24 +1,25 @@
 package org.droidplanner.android.graphic.map;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.droidplanner.android.R;
-import org.droidplanner.android.maps.DPMap.PathSource;
-import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.android.maps.MarkerWithText;
-
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.ControlApi;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.GuidedState;
 
-public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSource {
+import org.droidplanner.android.R;
+import org.droidplanner.android.maps.DPMap.PathSource;
+import org.droidplanner.android.maps.MarkerWithText;
+import org.droidplanner.android.maps.MarkerInfo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class GraphicGuided extends MarkerInfo implements PathSource {
 
 	private final static String TAG = GraphicGuided.class.getSimpleName();
 
@@ -64,10 +65,9 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSo
 		return guidedPoint == null ? null : guidedPoint.getCoordinate();
 	}
 
-	@Override
 	public void setPosition(LatLong coord) {
 		try {
-			drone.sendGuidedPoint(coord, true);
+			ControlApi.getApi(drone).goTo(coord, true, null);
 		} catch (Exception e) {
 			Log.e(TAG, "Unable to update guided point position.", e);
 		}

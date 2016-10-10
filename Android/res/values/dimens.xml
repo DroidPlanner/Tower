@@ -1,8 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <!-- Dimension for the telemetry ui elements -->
-    <dimen name="largeTelemetryTextSize">14sp</dimen>
-
     <!-- Dimension for the flight control buttons -->
     <dimen name="flightControlPadding">4dp</dimen>
     <dimen name="flightControlTextSize">9sp</dimen>
@@ -17,7 +14,7 @@
     <dimen name="editor_list_item_text_size">20sp</dimen>
 
     <!-- Dimension for the editor mission fragment -->
-    <dimen name="editor_mission_fragment_height">60dp</dimen>
+    <dimen name="editor_mission_fragment_height">70dp</dimen>
 
     <!-- Dimension for the setup and calibration screens -->
     <dimen name="setup_title_height">56dp</dimen>
@@ -37,7 +34,7 @@
     <!-- Dimensions for the setup tuning screen -->
     <!-- Dimension for the info bar -->
     <dimen name="info_bar_text_size">11sp</dimen>
-    <dimen name="info_bar_drawable_padding">3dp</dimen>
+    <dimen name="info_bar_drawable_padding">0dp</dimen>
     <dimen name="info_bar_flight_mode_width">110dp</dimen>
 
     <!-- Dimensions for the number picker dialog -->
@@ -60,4 +57,13 @@
     <dimen name="list_item_uvc_height_min">32dp</dimen>
 
     <dimen name="mission_control_bar_height">90dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="appbar_padding_top">8dp</dimen>
+
+    <dimen name="fastscroller_handle_corner">20dp</dimen>
+    <dimen name="fastscroller_handle_size">50dp</dimen>
+    <dimen name="fastscroller_reack_corner">3dp</dimen>
+    <dimen name="fastscroller_track_height">6dp</dimen>
+    <dimen name="fastscroller_track_width">30dp</dimen>
+    <dimen name="fastscroller_track_padding">2dp</dimen>
 </resources>

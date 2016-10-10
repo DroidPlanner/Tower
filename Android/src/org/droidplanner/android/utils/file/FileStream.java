@@ -48,10 +48,6 @@ public class FileStream {
 		return out;
 	}
 
-    public static String getWaypointFilename(String prefix){
-        return prefix + "-" + getTimeStamp() + FileList.WAYPOINT_FILENAME_EXT;
-    }
-
 	/**
 	 * Creates a new .nomedia file on the maps folder
 	 * 

@@ -10,43 +10,42 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.IntDef;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import android.support.annotation.IntDef;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-
-import com.baidu.mapapi.map.SupportMapFragment;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatus;
-import com.baidu.mapapi.map.Polyline;
-import com.baidu.mapapi.map.PolylineOptions;
-import com.baidu.mapapi.map.Polygon;
-import com.baidu.mapapi.map.PolygonOptions;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.Stroke;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.map.UiSettings;
-import com.baidu.mapapi.map.MapPoi;
-import com.baidu.mapapi.map.Projection;
-import com.baidu.mapapi.model.LatLngBounds;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
 import com.baidu.mapapi.map.MyLocationData;
-
+import com.baidu.mapapi.map.Polygon;
+import com.baidu.mapapi.map.PolygonOptions;
+import com.baidu.mapapi.map.Polyline;
+import com.baidu.mapapi.map.PolylineOptions;
+import com.baidu.mapapi.map.Projection;
+import com.baidu.mapapi.map.Stroke;
+import com.baidu.mapapi.map.SupportMapFragment;
+import com.baidu.mapapi.map.UiSettings;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.model.LatLngBounds;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.FootPrint;
@@ -55,45 +54,58 @@ import com.o3dr.services.android.lib.drone.property.Gps;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.SettingsFragment;
+import org.droidplanner.android.graphic.map.GraphicHome;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.maps.PolylineInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
-import org.droidplanner.android.utils.DroneHelper;
-import org.droidplanner.android.utils.collection.HashBiMap;
+import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader;
+import org.droidplanner.android.utils.MapUtils;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class BaiduMapFragment extends SupportMapFragment implements DPMap{
 
     private static final String TAG = BaiduMapFragment.class.getSimpleName();
 
+    private static final int GET_DRAGGABLE_FROM_MARKER_INFO = -1;
+    private static final int IS_DRAGGABLE = 0;
+    private static final int IS_NOT_DRAGGABLE = 1;
+
     private static final IntentFilter mEventFilter = new IntentFilter();
     private LocationClient mBDLocClient;
     public MyBDLocationListenner mBDLocListener = new MyBDLocationListenner();
-    private final HashBiMap<MarkerInfo, Marker> mBiMarkersMap = new HashBiMap<MarkerInfo, Marker>();
+
+    private final Map<Marker, MarkerInfo> markersMap = new HashMap<>();
+    private final Map<Polyline, PolylineInfo> polylinesMap = new HashMap<>();
+
     private DroidPlannerPrefs mAppPrefs;
     private final AtomicReference<AutoPanMode> mPanMode = new AtomicReference<AutoPanMode>(AutoPanMode.DISABLED);
 
     public static final int LEASH_PATH = 0;
     public static final int MISSION_PATH = 1;
     public static final int FLIGHT_PATH = 2;
+    private int baseBottomPadding;
+
     @IntDef({LEASH_PATH, MISSION_PATH, FLIGHT_PATH})
     @Retention(RetentionPolicy.SOURCE)
     private @interface PolyLineType {}
 
-    private int mMaxFlightPathSize;
+    private boolean showFlightPath;
+    private List<LatLng> flightPathPoints = new LinkedList<>();
     private Polyline mFlightPath;
     private Polyline mMissionPath;
     private Polyline mDroneLeashPath;
@@ -103,8 +115,6 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
     private DPMap.OnMarkerClickListener mMarkerClickListener;
     private DPMap.OnMarkerDragListener mMarkerDragListener;
     private android.location.LocationListener mLocationListener;
-
-    protected boolean mUseMarkerClickAsMapClick = false;
 
     protected DroidPlannerApp mDpApp;
     private Polygon mFootprintPoly;
@@ -166,7 +176,7 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
         final BaiduMapPrefFragment provider = (BaiduMapPrefFragment)(getProvider().getMapProviderPreferences());
         final Context context = getActivity().getApplicationContext();
 
-        int mapType =provider.getMapType(context);
+        int mapType = provider.getMapType(context);
         map.setMapType(mapType);
 
         MyLocationData locData = new MyLocationData.Builder()
@@ -187,17 +197,11 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
 			if (map == null || location == null || getActivity() == null)
 				return;
 
-            updateBDMapStatus(location);
+            if (mPanMode.get() == AutoPanMode.USER) {
+                updateBDMapStatus(location);
+            }
             notifyToLocatorActivity(location);
         }
-    }
-
-    private LatLng CoordToLatLng(LatLong coord) {
-        return new LatLng(coord.getLatitude(), coord.getLongitude());
-    }
-
-    private LatLong LatLngToCoord(LatLng point) {
-        return new LatLong((float)point.latitude, (float) point.longitude);
     }
 
     private Drone getDroneApi() { return mDpApp.getDrone(); }
@@ -217,11 +221,12 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
         final Context context = getActivity().getApplicationContext();
         final View view = super.onCreateView(inflater, viewGroup, bundle);
 
+        baseBottomPadding = (int) getResources().getDimension(R.dimen.mission_control_bar_height);
         mAppPrefs = DroidPlannerPrefs.getInstance(context);
 
         final Bundle args = getArguments();
         if (args != null) {
-            mMaxFlightPathSize = args.getInt(EXTRA_MAX_FLIGHT_PATH_SIZE);
+            showFlightPath = args.getBoolean(EXTRA_SHOW_FLIGHT_PATH);
         }
 
         return view;
@@ -250,10 +255,24 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
 
     @Override
     public void clearFlightPath() {
+        flightPathPoints.clear();
         if (mFlightPath != null) {
-            List<LatLng> oldFlightPath = mFlightPath.getPoints();
-            oldFlightPath.clear();
-            mFlightPath.setPoints(oldFlightPath);
+            mFlightPath.remove();
+            mFlightPath = null;
+        }
+    }
+
+    private void clearDroneLeashPath(){
+        if(mDroneLeashPath != null){
+            mDroneLeashPath.remove();
+            mDroneLeashPath = null;
+        }
+    }
+
+    private void clearMissionPath(){
+        if(mMissionPath != null){
+            mMissionPath.remove();
+            mMissionPath = null;
         }
     }
 
@@ -263,7 +282,7 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
 
     @Override
     public LatLong getMapCenter() {
-        return LatLngToCoord(getBaiduMap().getMapStatus().target);
+        return MapUtils.baiduLatLngToCoord(getBaiduMap().getMapStatus().target);
     }
 
     @Override
@@ -284,11 +303,7 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
         final AutoPanMode currentMode = mPanMode.get();
         if (currentMode == target) return;
 
-        setAutoPanMode(currentMode, target);
-    }
-
-    private void setAutoPanMode(AutoPanMode current, AutoPanMode update) {
-        mPanMode.compareAndSet(current, update);
+        mPanMode.compareAndSet(currentMode, target);
     }
 
     @Override
@@ -297,112 +312,187 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
     }
 
     @Override
-    public void addFlightPathPoint(LatLong coord) {
-        final LatLng position = CoordToLatLng(coord);
+    public void addFlightPathPoint(LatLongAlt coord) {
+        final LatLng position = MapUtils.coordToBaiduLatLng(coord);
 
-        if (mMaxFlightPathSize > 0) {
-            if (mFlightPath == null) {
-                PolylineOptions flightPathOptions = new PolylineOptions();
-                flightPathOptions.color(FLIGHT_PATH_DEFAULT_COLOR)
-                        .width(FLIGHT_PATH_DEFAULT_WIDTH).zIndex(1);
-                mFlightPath = (Polyline)getBaiduMap().addOverlay(flightPathOptions);
+        if (showFlightPath) {
+            flightPathPoints.add(position);
+            if (flightPathPoints.size() >= 2) {
+                if (mFlightPath == null) {
+                    PolylineOptions flightPathOptions = new PolylineOptions();
+                    flightPathOptions.color(FLIGHT_PATH_DEFAULT_COLOR)
+                        .width(FLIGHT_PATH_DEFAULT_WIDTH).zIndex(1)
+                    .points(flightPathPoints);
+                    mFlightPath = (Polyline) getBaiduMap().addOverlay(flightPathOptions);
+                } else {
+                    mFlightPath.setPoints(flightPathPoints);
+                }
+            } else {
+                if (mFlightPath != null) {
+                    mFlightPath.remove();
+                    mFlightPath = null;
+                }
             }
+        }
+    }
 
-            List<LatLng> oldFlightPath = mFlightPath.getPoints();
-            while (oldFlightPath.size() > mMaxFlightPathSize) {
-                oldFlightPath.remove(0);
-            }
-            oldFlightPath.add(position);
-            if (oldFlightPath.size() >=2) { // BaiduMap Polyline overlay needs at least 2 points
-                mFlightPath.setPoints(oldFlightPath);
-            }
+    @Override
+    public void clearAll(){
+        clearMarkers();
+        clearPolylines();
+        clearFlightPath();
+        clearMissionPath();
+        clearFootPrints();
+        clearPolygonPaths();
+        clearDroneLeashPath();
+        BaiduMap map = getBaiduMap();
+        if(map != null){
+            map.clear();
         }
     }
 
     @Override
     public void clearMarkers() {
-        for (Marker marker : mBiMarkersMap.valueSet()) {
-            marker.remove();
+        for (MarkerInfo marker : markersMap.values()) {
+            marker.removeProxyMarker();
         }
 
-        mBiMarkersMap.clear();
+        markersMap.clear();
     }
 
     @Override
-    public void updateMarker(MarkerInfo markerInfo) {
-        updateMarker(markerInfo, markerInfo.isDraggable());
+    public void addMarker(final MarkerInfo markerInfo) {
+        if (markerInfo == null || markerInfo.isOnMap()) {
+            return;
+        }
+
+        final MarkerOptions options = fromMarkerInfo(markerInfo);
+        if (options == null) {
+            return;
+        }
+
+        Marker marker = (Marker) getBaiduMap().addOverlay(options);
+        markerInfo.setProxyMarker(new ProxyMapMarker(marker));
+        markersMap.put(marker, markerInfo);
     }
 
     @Override
-    public void updateMarker(MarkerInfo markerInfo, boolean isDraggable) {
+    public void addMarkers(final List<MarkerInfo> markerInfoList){
+        addMarkers(markerInfoList, GET_DRAGGABLE_FROM_MARKER_INFO);
+    }
+
+    @Override
+    public void addMarkers(final List<MarkerInfo> markerInfoList, boolean isDraggable){
+        addMarkers(markerInfoList, isDraggable ? IS_DRAGGABLE : IS_NOT_DRAGGABLE);
+    }
+
+    @Override
+    public void addPolyline(final PolylineInfo polylineInfo) {
+        if (polylineInfo == null || polylineInfo.isOnMap()) {
+            return;
+        }
+
+        final PolylineOptions options = fromPolylineInfo(polylineInfo);
+        if (options == null) {
+            return;
+        }
+
+        Polyline polyline = (Polyline) getBaiduMap().addOverlay(options);
+        polylineInfo.setProxyPolyline(new ProxyMapPolyline(polyline));
+        polylinesMap.put(polyline, polylineInfo);
+    }
+
+    private void addMarkers(final List<MarkerInfo> markerInfoList, int draggableType){
+        if(markerInfoList == null || markerInfoList.isEmpty())
+            return;
+
+        final int infoCount = markerInfoList.size();
+        final MarkerOptions[] optionsSet = new MarkerOptions[infoCount];
+        for(int i = 0; i < infoCount; i++){
+            MarkerInfo markerInfo = markerInfoList.get(i);
+            boolean isDraggable = draggableType == GET_DRAGGABLE_FROM_MARKER_INFO
+                ? markerInfo.isDraggable()
+                : draggableType == IS_DRAGGABLE;
+            optionsSet[i] = markerInfo.isOnMap() ? null : fromMarkerInfo(markerInfo, isDraggable);
+        }
+
+        BaiduMap baiduMap = getBaiduMap();
+        for (int i = 0; i < infoCount; i++) {
+            MarkerOptions options = optionsSet[i];
+            if (options == null) {
+                continue;
+            }
+
+            Marker marker = (Marker) baiduMap.addOverlay(options);
+            MarkerInfo markerInfo = markerInfoList.get(i);
+            markerInfo.setProxyMarker(new ProxyMapMarker(marker));
+            markersMap.put(marker, markerInfo);
+        }
+    }
+
+    private void clearFootPrints(){
+        if(mFootprintPoly != null){
+            mFootprintPoly.remove();
+            mFootprintPoly = null;
+        }
+    }
+
+    private void clearPolygonPaths(){
+        for(Polygon polygon: mPolygonsPaths){
+            polygon.remove();
+        }
+        mPolygonsPaths.clear();
+    }
+
+    @Override
+    public void clearPolylines() {
+        for(PolylineInfo info: polylinesMap.values()){
+            info.removeProxy();
+        }
+
+        polylinesMap.clear();
+    }
+
+    private PolylineOptions fromPolylineInfo(PolylineInfo info) {
+        List<LatLng> points = MapUtils.coordToBaiduLatLng(info.getPoints());
+        if (points.size() <= 1) {
+            return null;
+        }
+
+        return new PolylineOptions()
+            .points(points)
+            .color(info.getColor())
+            .visible(info.isVisible())
+            .width((int) info.getWidth())
+            .zIndex((int) info.getZIndex());
+    }
+
+    private MarkerOptions fromMarkerInfo(MarkerInfo markerInfo, boolean isDraggable) {
         final LatLong coord = markerInfo.getPosition();
         if (coord == null) {
-            return;  // return when the drone hasn't received a gps signal yet
+            return null;
         }
 
-        final LatLng position = CoordToLatLng(coord);
-        Marker marker = mBiMarkersMap.getValue(markerInfo);
-        if (marker == null) {
-            generateMarker(markerInfo, position, isDraggable);
-        } else {
-            updateMarker(marker, markerInfo, position, isDraggable);
-        }
-    }
-
-    private void generateMarker(MarkerInfo markerInfo, LatLng position, boolean isDraggable) {
-		final MarkerOptions markerOptions = new MarkerOptions()
-                .position(position)
-                .draggable(isDraggable)
-                .alpha(markerInfo.getAlpha())
-                .anchor(markerInfo.getAnchorU(), markerInfo.getAnchorV())
-                .title(markerInfo.getTitle())
-                .rotate(markerInfo.getRotation())
-                .flat(markerInfo.isFlat())
-			    .visible(markerInfo.isVisible());
+        final MarkerOptions markerOptions = new MarkerOptions()
+            .position(MapUtils.coordToBaiduLatLng(coord))
+            .draggable(isDraggable)
+            .alpha(markerInfo.getAlpha())
+            .anchor(markerInfo.getAnchorU(), markerInfo.getAnchorV())
+            .rotate(markerInfo.getRotation())
+            .title(markerInfo.getTitle())
+            .flat(markerInfo.isFlat())
+            .visible(markerInfo.isVisible());
 
         final Bitmap markerIcon = markerInfo.getIcon(getResources());
         if (markerIcon != null) {
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerIcon));
         }
 
-		Marker marker = (Marker)getBaiduMap().addOverlay(markerOptions);
-        mBiMarkersMap.put(markerInfo, marker);
+        return markerOptions;
     }
 
-    private void updateMarker(Marker marker, MarkerInfo markerInfo, LatLng position,
-                              boolean isDraggable) {
-        final Bitmap markerIcon = markerInfo.getIcon(getResources());
-        if (markerIcon != null) {
-            marker.setIcon(BitmapDescriptorFactory.fromBitmap(markerIcon));
-        }
-
-        marker.setAlpha(markerInfo.getAlpha());
-        marker.setAnchor(markerInfo.getAnchorU(), markerInfo.getAnchorV());
-        marker.setPosition(position);
-        marker.setRotate(markerInfo.getRotation());
-        marker.setTitle(markerInfo.getTitle());
-        marker.setDraggable(isDraggable);
-        marker.setFlat(markerInfo.isFlat());
-        marker.setVisible(markerInfo.isVisible());
-    }
-
-    @Override
-    public void updateMarkers(List<MarkerInfo> markersInfos) {
-        for (MarkerInfo info : markersInfos) {
-            updateMarker(info);
-        }
-    }
-
-    @Override
-    public void updateMarkers(List<MarkerInfo> markersInfos, boolean isDraggable) {
-        for (MarkerInfo info : markersInfos) {
-            updateMarker(info, isDraggable);
-        }
-    }
-
-    @Override
-    public Set<MarkerInfo> getMarkerInfoList() {
-        return new HashSet<MarkerInfo>(mBiMarkersMap.keySet());
+    private MarkerOptions fromMarkerInfo(MarkerInfo markerInfo){
+        return fromMarkerInfo(markerInfo, markerInfo.isDraggable());
     }
 
     @Override
@@ -413,7 +503,7 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
         for (LatLong point : path) {
             LatLng coord = projection.fromScreenLocation(new Point((int) point
                     .getLatitude(), (int) point.getLongitude()));
-            coords.add(LatLngToCoord(coord));
+            coords.add(MapUtils.baiduLatLngToCoord(coord));
         }
 
         return coords;
@@ -426,17 +516,33 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
         }
 
         for (MarkerInfo markerInfo : markerInfoList) {
-            Marker marker = mBiMarkersMap.getValue(markerInfo);
-            if (marker != null) {
-                marker.remove();
-                mBiMarkersMap.removeKey(markerInfo);
-            }
+            removeMarker(markerInfo);
         }
     }
 
     @Override
+    public void removePolyline(PolylineInfo polylineInfo) {
+        if(polylineInfo == null || !polylineInfo.isOnMap())
+            return;
+
+        ProxyMapPolyline proxy = (ProxyMapPolyline) polylineInfo.getProxyPolyline();
+        polylineInfo.removeProxy();
+        polylinesMap.remove(proxy.polyline);
+    }
+
+    @Override
+    public void removeMarker(MarkerInfo markerInfo){
+        if(markerInfo == null || !markerInfo.isOnMap())
+            return;
+
+        ProxyMapMarker proxyMarker = (ProxyMapMarker) markerInfo.getProxyMarker();
+        markerInfo.removeProxyMarker();
+        markersMap.remove(proxyMarker.marker);
+    }
+
+    @Override
     public void setMapPadding(int left, int top, int right, int bottom) {
-        getBaiduMap().setViewPadding(left, top, right, bottom);
+        getBaiduMap().setViewPadding(left, top, right, bottom + baseBottomPadding);
     }
 
     @Override
@@ -473,7 +579,7 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
 		final BaiduMap map = getBaiduMap();
         if ( map != null && coord != null) {
 			final float zoomLevel = map.getMapStatus().zoom;
-			map.animateMapStatus(MapStatusUpdateFactory.newLatLngZoom(CoordToLatLng(coord), zoomLevel));
+			map.animateMapStatus(MapStatusUpdateFactory.newLatLngZoom(MapUtils.coordToBaiduLatLng(coord), zoomLevel));
 		}
     }
 
@@ -481,7 +587,7 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
     public void updateCamera(final LatLong coord, final float zoomLevel) {
 		final BaiduMap map = getBaiduMap();
         if ( map != null && coord != null) {
-            map.animateMapStatus(MapStatusUpdateFactory.newLatLngZoom(CoordToLatLng(coord), zoomLevel));
+            map.animateMapStatus(MapStatusUpdateFactory.newLatLngZoom(MapUtils.coordToBaiduLatLng(coord), zoomLevel));
         }
     }
 
@@ -502,7 +608,7 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
         List<LatLong> pathCoords = pathSource.getPathPoints();
         final List<LatLng> pathPoints = new ArrayList<LatLng>(pathCoords.size());
         for (LatLong coord : pathCoords) {
-            pathPoints.add(CoordToLatLng(coord));
+            pathPoints.add(MapUtils.coordToBaiduLatLng(coord));
         }
 
         if (pathPoints.size() < 2) { // BaiduMap Polyline overlay needs at least 2 points
@@ -518,7 +624,7 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
 
             if (polyLineType == LEASH_PATH) {
                 pathOptions.color(DRONE_LEASH_DEFAULT_COLOR).width(
-                        DroneHelper.scaleDpToPixels(DRONE_LEASH_DEFAULT_WIDTH,
+                        MapUtils.scaleDpToPixels(DRONE_LEASH_DEFAULT_WIDTH,
                                 getResources())).points(pathPoints);
             }else if (polyLineType == MISSION_PATH) {
                 pathOptions.color(MISSION_PATH_DEFAULT_COLOR).width(
@@ -557,7 +663,7 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
             pathOptions.fillColor(POLYGONS_PATH_DEFAULT_COLOR);
 			final List<LatLng> pathPoints = new ArrayList<LatLng>(contour.size());
             for (LatLong coord : contour) {
-                pathPoints.add(CoordToLatLng(coord));
+                pathPoints.add(MapUtils.coordToBaiduLatLng(coord));
             }
             pathOptions.points(pathPoints);
             mPolygonsPaths.add((Polygon)map.addOverlay(pathOptions));
@@ -576,7 +682,7 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
 
         final List<LatLng> pathPoints = new ArrayList<LatLng>(footprintToBeDraw.getVertexInGlobalFrame().size());
         for (LatLong coord : footprintToBeDraw.getVertexInGlobalFrame()) {
-            pathPoints.add(CoordToLatLng(coord));
+            pathPoints.add(MapUtils.coordToBaiduLatLng(coord));
         }
         pathOptions.points(pathPoints);
 
@@ -638,7 +744,7 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
 		if (!coords.isEmpty()) {
             final List<LatLng> points = new ArrayList<LatLng>();
             for (LatLong coord : coords)
-                points.add(CoordToLatLng(coord));
+                points.add(MapUtils.coordToBaiduLatLng(coord));
 
             final LatLngBounds bounds = getBounds(points);
 
@@ -699,7 +805,7 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
             @Override
             public void onMapClick(LatLng latLng) {
                 if (mMapClickListener != null) {
-                    mMapClickListener.onMapClick(LatLngToCoord(latLng));
+                    mMapClickListener.onMapClick(MapUtils.baiduLatLngToCoord(latLng));
                 }
             }
 
@@ -714,7 +820,7 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
             @Override
             public void onMapLongClick(LatLng latLng) {
                 if (mMapLongClickListener != null) {
-                    mMapLongClickListener.onMapLongClick(LatLngToCoord(latLng));
+                    mMapLongClickListener.onMapLongClick(MapUtils.baiduLatLngToCoord(latLng));
                 }
             }
         });
@@ -723,26 +829,30 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
             @Override
             public void onMarkerDragStart(Marker marker) {
                 if (mMarkerDragListener != null) {
-                    final MarkerInfo markerInfo = mBiMarkersMap.getKey(marker);
-                    markerInfo.setPosition(LatLngToCoord(marker.getPosition()));
-                    mMarkerDragListener.onMarkerDragStart(markerInfo);
+                    final MarkerInfo markerInfo = markersMap.get(marker);
+                    if(!(markerInfo instanceof GraphicHome)) {
+                        markerInfo.setPosition(MapUtils.baiduLatLngToCoord(marker.getPosition()));
+                        mMarkerDragListener.onMarkerDragStart(markerInfo);
+                    }
                 }
             }
 
             @Override
             public void onMarkerDrag(Marker marker) {
                 if (mMarkerDragListener != null) {
-                    final MarkerInfo markerInfo = mBiMarkersMap.getKey(marker);
-                    markerInfo.setPosition(LatLngToCoord(marker.getPosition()));
-                    mMarkerDragListener.onMarkerDrag(markerInfo);
+                    final MarkerInfo markerInfo = markersMap.get(marker);
+                    if(!(markerInfo instanceof GraphicHome)) {
+                        markerInfo.setPosition(MapUtils.baiduLatLngToCoord(marker.getPosition()));
+                        mMarkerDragListener.onMarkerDrag(markerInfo);
+                    }
                 }
             }
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
                 if (mMarkerDragListener != null) {
-                    final MarkerInfo markerInfo = mBiMarkersMap.getKey(marker);
-                    markerInfo.setPosition(LatLngToCoord(marker.getPosition()));
+                    final MarkerInfo markerInfo = markersMap.get(marker);
+                    markerInfo.setPosition(MapUtils.baiduLatLngToCoord(marker.getPosition()));
                     mMarkerDragListener.onMarkerDragEnd(markerInfo);
                 }
             }
@@ -751,13 +861,8 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
         baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if (mUseMarkerClickAsMapClick) {
-                    onMapClickListener.onMapClick(marker.getPosition());
-                    return true;
-                }
-
                 if (mMarkerClickListener != null) {
-                    final MarkerInfo markerInfo = mBiMarkersMap.getKey(marker);
+                    final MarkerInfo markerInfo = markersMap.get(marker);
                     if (markerInfo != null)
                         return mMarkerClickListener.onMarkerClick(markerInfo);
                 }
@@ -773,10 +878,13 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
         mBDLocClient = new LocationClient(getActivity().getApplicationContext());
 		mBDLocClient.registerLocationListener(mBDLocListener);
 
+        // Hide the zoom control
+        map.setViewPadding(0, 0, 0, baseBottomPadding);
         UiSettings mUiSettings = map.getUiSettings();
         mUiSettings.setCompassEnabled(false);
         mUiSettings.setOverlookingGesturesEnabled(false);
-        mUiSettings.setZoomGesturesEnabled(false);
+        mUiSettings.setZoomGesturesEnabled(true);
+        mUiSettings.setRotateGesturesEnabled(mAppPrefs.isMapRotationEnabled());
     }
 
     private void setupMapOverlay(BaiduMap map) {
@@ -815,11 +923,6 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
     }
 
     @Override
-    public void skipMarkerClickEvents(boolean skip) {
-        mUseMarkerClickAsMapClick = skip;
-    }
-
-    @Override
     public void updateRealTimeFootprint(FootPrint footprint) {
         List<LatLong> pathPoints = footprint == null
                 ? Collections.<LatLong>emptyList()
@@ -837,18 +940,156 @@ public class BaiduMapFragment extends SupportMapFragment implements DPMap{
                         .fillColor(FOOTPRINT_FILL_COLOR);
                 List<LatLng> list = new ArrayList<LatLng>();
                 for (LatLong vertex : pathPoints) {
-                    list.add(CoordToLatLng(vertex));
+                    list.add(MapUtils.coordToBaiduLatLng(vertex));
                 }
 				pathOptions.points(list);
                 mFootprintPoly = (Polygon)getBaiduMap().addOverlay(pathOptions);
             } else {
                 List<LatLng> list = new ArrayList<LatLng>();
                 for (LatLong vertex : pathPoints) {
-                    list.add(CoordToLatLng(vertex));
+                    list.add(MapUtils.coordToBaiduLatLng(vertex));
                 }
                 mFootprintPoly.setPoints(list);
             }
         }
 
+    }
+
+    private static class ProxyMapPolyline implements PolylineInfo.ProxyPolyline {
+
+        private final Polyline polyline;
+
+        private ProxyMapPolyline(Polyline polyline) {
+            this.polyline = polyline;
+        }
+
+        @Override
+        public void setPoints(@NotNull List<? extends LatLong> points) {
+            polyline.setPoints(MapUtils.coordToBaiduLatLng(points));
+        }
+
+        @Override
+        public void clickable(boolean clickable) {
+        }
+
+        @Override
+        public void color(int color) {
+            polyline.setColor(color);
+        }
+
+        @Override
+        public void geodesic(boolean geodesic) {
+        }
+
+        @Override
+        public void visible(boolean visible) {
+            polyline.setVisible(visible);
+        }
+
+        @Override
+        public void width(float width) {
+            polyline.setWidth((int) width);
+        }
+
+        @Override
+        public void zIndex(float zIndex) {
+            polyline.setZIndex((int) zIndex);
+        }
+
+        @Override
+        public void remove() {
+            polyline.remove();
+        }
+    }
+
+    /**
+     * BaiduMap implementation of the ProxyMarker interface.
+     */
+    private static class ProxyMapMarker implements MarkerInfo.ProxyMarker {
+
+        private final Marker marker;
+
+        ProxyMapMarker(Marker marker){
+            this.marker = marker;
+        }
+
+        @Override
+        public void setAlpha(float alpha) {
+            marker.setAlpha(alpha);
+        }
+
+        @Override
+        public void setAnchor(float anchorU, float anchorV) {
+            marker.setAnchor(anchorU, anchorV);
+        }
+
+        @Override
+        public void setDraggable(boolean draggable) {
+            marker.setDraggable(draggable);
+        }
+
+        @Override
+        public void setFlat(boolean flat) {
+            marker.setFlat(flat);
+        }
+
+        @Override
+        public void setIcon(Bitmap icon) {
+            if(icon != null) {
+                marker.setIcon(BitmapDescriptorFactory.fromBitmap(icon));
+            }
+        }
+
+        @Override
+        public void setInfoWindowAnchor(float anchorU, float anchorV) {
+        }
+
+        @Override
+        public void setPosition(LatLong coord) {
+            if(coord != null) {
+                marker.setPosition(MapUtils.coordToBaiduLatLng(coord));
+            }
+        }
+
+        @Override
+        public void setRotation(float rotation) {
+            marker.setRotate(rotation);
+        }
+
+        @Override
+        public void setSnippet(String snippet) {
+
+        }
+
+        @Override
+        public void setTitle(String title) {
+            marker.setTitle(title);
+        }
+
+        @Override
+        public void setVisible(boolean visible) {
+            marker.setVisible(visible);
+        }
+
+        @Override
+        public void removeMarker(){
+            marker.remove();
+        }
+
+        @Override
+        public boolean equals(Object other){
+            if(this == other)
+                return true;
+
+            if(!(other instanceof ProxyMapMarker))
+                return false;
+
+            return this.marker.equals(((ProxyMapMarker) other).marker);
+        }
+
+        @Override
+        public int hashCode(){
+            return this.marker.hashCode();
+        }
     }
 }

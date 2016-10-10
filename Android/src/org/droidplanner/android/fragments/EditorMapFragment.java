@@ -15,6 +15,8 @@ import com.o3dr.services.android.lib.drone.property.Home;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.proxy.mission.MissionSelection;
+import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
 import org.droidplanner.android.proxy.mission.item.markers.PolygonMarkerInfo;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
@@ -23,7 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
-		DPMap.OnMarkerDragListener, DPMap.OnMapClickListener, DPMap.OnMarkerClickListener {
+		DPMap.OnMarkerDragListener, DPMap.OnMapClickListener, DPMap.OnMarkerClickListener,
+	 MissionSelection.OnSelectionUpdateListener{
 
 	private OnEditorInteraction editorListener;
 
@@ -86,7 +89,14 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
     @Override
     public void onApiConnected(){
         super.onApiConnected();
+        missionProxy.selection.addSelectionUpdateListener(this);
         zoomToFit();
+    }
+
+    @Override
+    public void onApiDisconnected(){
+        super.onApiDisconnected();
+        missionProxy.selection.removeSelectionUpdateListener(this);
     }
 
 	@Override
@@ -154,4 +164,8 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
         }
     }
 
+    @Override
+    public void onSelectionUpdate(List<MissionItemProxy> selected) {
+        onMissionUpdate();
+    }
 }

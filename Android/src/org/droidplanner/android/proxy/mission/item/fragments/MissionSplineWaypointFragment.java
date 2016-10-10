@@ -33,12 +33,14 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment impleme
         final Context context = getContext();
 
         typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SPLINE_WAYPOINT));
+        SplineWaypoint item = (SplineWaypoint) getMissionItems().get(0);
 
         final NumericWheelAdapter delayAdapter = new NumericWheelAdapter(context, R.layout.wheel_text_centered, 0,
                 60, "%d s");
         CardWheelHorizontalView<Integer> delayPicker = (CardWheelHorizontalView<Integer>) view.findViewById(R.id
                 .waypointDelayPicker);
         delayPicker.setViewAdapter(delayAdapter);
+        delayPicker.setCurrentValue((int) item.getDelay());
         delayPicker.addScrollListener(this);
 
         final LengthUnitProvider lengthUP = getLengthUnitProvider();
@@ -47,11 +49,8 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment impleme
         CardWheelHorizontalView<LengthUnit> altitudePicker = (CardWheelHorizontalView<LengthUnit>) view.findViewById
                 (R.id.altitudePicker);
         altitudePicker.setViewAdapter(altitudeAdapter);
-        altitudePicker.addScrollListener(this);
-
-        SplineWaypoint item = (SplineWaypoint) getMissionItems().get(0);
-        delayPicker.setCurrentValue((int) item.getDelay());
         altitudePicker.setCurrentValue(lengthUP.boxBaseValueToTarget(item.getCoordinate().getAltitude()));
+        altitudePicker.addScrollListener(this);
     }
 
     @Override

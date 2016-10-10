@@ -9,15 +9,14 @@ Used to Style the horizontal list of mission items.
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dragHandler"
     android:layout_width="wrap_content"
-    android:minWidth="60dp"
-    android:minHeight="60dp"
+    android:minWidth="48dp"
+    android:minHeight="48dp"
     android:layout_height="wrap_content"
     android:background="@drawable/ic_mission_button"
-    android:padding="4dp"
-    android:layout_marginTop="1dp"
-    android:layout_marginBottom="1dp"
-    android:layout_marginLeft="2dp"
-    android:layout_marginStart="2dp"
+    android:padding="3dp"
+    android:layout_marginBottom="2dp"
+    android:layout_marginLeft="1dp"
+    android:layout_marginStart="1dp"
     >
 
     <TextView
@@ -26,7 +25,7 @@ Used to Style the horizontal list of mission items.
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="4dp"
         tools:text="44"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/editor_list_item_text_size"
@@ -44,7 +43,7 @@ Used to Style the horizontal list of mission items.
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         android:drawableLeft="@drawable/ic_mission_wp"
-        android:drawablePadding="5dp"
+        android:drawablePadding="2dp"
         />
 
 </RelativeLayout>

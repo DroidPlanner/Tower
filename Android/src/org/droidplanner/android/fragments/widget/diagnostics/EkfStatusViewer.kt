@@ -1,20 +1,14 @@
 package org.droidplanner.android.fragments.widget.diagnostics
 
-import android.graphics.Color
-import android.os.Bundle
 import android.support.annotation.StringRes
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.o3dr.services.android.lib.drone.property.EkfStatus
 import com.o3dr.services.android.lib.util.SpannableUtils
 import lecho.lib.hellocharts.formatter.SimpleAxisValueFormatter
 import lecho.lib.hellocharts.formatter.SimpleColumnChartValueFormatter
-import lecho.lib.hellocharts.model.*
-import lecho.lib.hellocharts.view.ColumnChartView
+import lecho.lib.hellocharts.model.Axis
+import lecho.lib.hellocharts.model.Column
+import lecho.lib.hellocharts.model.Viewport
 import org.droidplanner.android.R
-import org.droidplanner.android.fragments.helpers.ApiListenerFragment
-import org.droidplanner.android.fragments.widget.diagnostics.BaseWidgetDiagnostic
 import java.util.*
 
 /**
@@ -26,6 +20,11 @@ public class EkfStatusViewer : GraphDiagnosticViewer() {
         private val DECIMAL_DIGITS_NUMBER = 1
 
         @StringRes public val LABEL_ID: Int = R.string.title_ekf_status_viewer
+        @StringRes public val LABEL_VEL_ABBREV: Int = R.string.label_velocity_var_abbrev
+        @StringRes public val LABEL_H_POS_ABBREV: Int = R.string.label_horizontal_position_var_abbrev
+        @StringRes public val LABEL_V_POS_ABBREV: Int = R.string.label_vertical_position_var_abbrev
+        @StringRes public val LABEL_MAG_ABBREV: Int = R.string.label_mag_var_abbrev
+        @StringRes public val LABEL_TERRAIN_ABBREV: Int = R.string.label_terrain_var_abbrev
     }
 
     override fun getViewPort(refViewPort: Viewport?): Viewport {
@@ -43,7 +42,8 @@ public class EkfStatusViewer : GraphDiagnosticViewer() {
             .setFormatter(SimpleAxisValueFormatter(DECIMAL_DIGITS_NUMBER))
 
     override fun getXAxis() = Axis.generateAxisFromCollection(listOf(0f, 1f, 2f, 3f, 4f),
-            listOf("vel", "h. pos", "v. pos", "mag", "terrain"))
+            listOf(getString(LABEL_VEL_ABBREV), getString(LABEL_H_POS_ABBREV), getString(LABEL_V_POS_ABBREV),
+                    getString(LABEL_MAG_ABBREV), getString(LABEL_TERRAIN_ABBREV)))
 
     override fun getFormatter() = SimpleColumnChartValueFormatter(DECIMAL_DIGITS_NUMBER)
 

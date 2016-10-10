@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_item_tlog_data_bg"
+                android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/rename_tlog_session"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:scaleType="centerInside"
+        android:background="?selectableItemBackground"
+        android:src="@drawable/ic_edit_grey600_24dp"/>
+
+    <TextView
+        android:id="@+id/tlog_data_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:layout_toEndOf="@+id/rename_tlog_session"
+        android:layout_toRightOf="@+id/rename_tlog_session"
+        android:layout_alignTop="@+id/clear_tlog_session"
+        android:layout_alignBottom="@+id/clear_tlog_session"
+        android:layout_toLeftOf="@+id/clear_tlog_session"
+        android:layout_toStartOf="@+id/clear_tlog_session"
+        android:gravity="center_vertical|start"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        tools:text="10/31/2016 - 10:45:20"/>
+
+    <ImageView
+        android:id="@+id/clear_tlog_session"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:scaleType="centerInside"
+        android:background="?selectableItemBackground"
+        android:src="@drawable/ic_delete_black_24dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_grey"
+        android:layout_below="@+id/tlog_data_label"/>
+</RelativeLayout>

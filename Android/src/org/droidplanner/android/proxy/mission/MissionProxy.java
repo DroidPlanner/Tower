@@ -4,12 +4,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.CircularArray;
 import android.util.Pair;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.MissionApi;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
@@ -18,6 +21,7 @@ import com.o3dr.services.android.lib.drone.mission.Mission;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem.SpatialItem;
+import com.o3dr.services.android.lib.drone.mission.item.command.ChangeSpeed;
 import com.o3dr.services.android.lib.drone.mission.item.command.ReturnToLaunch;
 import com.o3dr.services.android.lib.drone.mission.item.command.Takeoff;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SplineSurvey;
@@ -28,22 +32,20 @@ import com.o3dr.services.android.lib.drone.mission.item.spatial.BaseSpatialItem;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.RegionOfInterest;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.SplineWaypoint;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.Waypoint;
+import com.o3dr.services.android.lib.model.AbstractCommandListener;
 import com.o3dr.services.android.lib.util.MathUtils;
 
+import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.R;
 import org.droidplanner.android.maps.DPMap;
-import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
-import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
-import org.droidplanner.android.proxy.mission.item.markers.PolygonMarkerInfo;
-import org.droidplanner.android.proxy.mission.item.markers.SurveyMarkerInfoProvider;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
-import org.droidplanner.android.utils.file.IO.MissionReader;
-import org.droidplanner.android.utils.file.IO.MissionWriter;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -68,11 +70,13 @@ public class MissionProxy implements DPMap.PathSource {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (AttributeEvent.MISSION_DRONIE_CREATED.equals(action)
-                    || AttributeEvent.MISSION_UPDATED.equals(action)
-                    || AttributeEvent.MISSION_RECEIVED.equals(action)) {
-                Mission droneMission = drone.getAttribute(AttributeType.MISSION);
-                load(droneMission);
+            switch (action) {
+                case AttributeEvent.MISSION_DRONIE_CREATED:
+                case AttributeEvent.MISSION_UPDATED:
+                case AttributeEvent.MISSION_RECEIVED:
+                    Mission droneMission = drone.getAttribute(AttributeType.MISSION);
+                    load(droneMission);
+                    break;
             }
         }
     };
@@ -91,24 +95,24 @@ public class MissionProxy implements DPMap.PathSource {
 
     private final LocalBroadcastManager lbm;
     private final DroidPlannerPrefs dpPrefs;
-    private Drone drone;
+    private final Context context;
+    private final DroidPlannerApp dpApp;
+    private final Drone drone;
 
     private final CircularArray<Mission> undoBuffer = new CircularArray<>(UNDO_BUFFER_SIZE);
 
     private Mission currentMission;
     public MissionSelection selection = new MissionSelection();
 
-    public MissionProxy(Context context, Drone drone) {
+    public MissionProxy(DroidPlannerApp app, Drone drone) {
+        this.dpApp = app;
+        this.context = app.getApplicationContext();
         this.drone = drone;
         this.currentMission = generateMission(true);
         lbm = LocalBroadcastManager.getInstance(context);
         lbm.registerReceiver(eventReceiver, eventFilter);
 
         dpPrefs = DroidPlannerPrefs.getInstance(context);
-    }
-
-    public void setDrone(Drone drone){
-        this.drone = drone;
     }
 
     public void notifyMissionUpdate() {
@@ -154,25 +158,10 @@ public class MissionProxy implements DPMap.PathSource {
     }
 
     /**
-     * @return the map markers corresponding to this mission's command set.
-     */
-    public List<MarkerInfo> getMarkersInfos() {
-        List<MarkerInfo> markerInfos = new ArrayList<MarkerInfo>();
-
-        for (MissionItemProxy itemProxy : missionItemProxies) {
-            List<MarkerInfo> itemMarkerInfos = itemProxy.getMarkerInfos();
-            if (itemMarkerInfos != null && !itemMarkerInfos.isEmpty()) {
-                markerInfos.addAll(itemMarkerInfos);
-            }
-        }
-        return markerInfos;
-    }
-
-    /**
      * Update the state for this object based on the state of the Mission
      * object.
      */
-    public void load(Mission mission) {
+    private void load(Mission mission) {
         load(mission, true);
     }
 
@@ -180,21 +169,23 @@ public class MissionProxy implements DPMap.PathSource {
         if (mission == null)
             return;
 
-        if (isNew) {
-            currentMission = null;
-            clearUndoBuffer();
+        if(!mission.equals(currentMission)) {
+            if (isNew) {
+                currentMission = null;
+                clearUndoBuffer();
+            }
+
+            selection.mSelectedItems.clear();
+            missionItemProxies.clear();
+
+            for (MissionItem item : mission.getMissionItems()) {
+                missionItemProxies.add(new MissionItemProxy(this, item));
+            }
+
+            selection.notifySelectionUpdate();
+
+            notifyMissionUpdate(isNew);
         }
-
-        selection.mSelectedItems.clear();
-        missionItemProxies.clear();
-
-        for (MissionItem item : mission.getMissionItems()) {
-            missionItemProxies.add(new MissionItemProxy(this, item));
-        }
-
-        selection.notifySelectionUpdate();
-
-        notifyMissionUpdate(isNew);
     }
 
     private void clearUndoBuffer(){
@@ -238,6 +229,10 @@ public class MissionProxy implements DPMap.PathSource {
             survey = new Survey();
         }
         survey.setPolygonPoints(points);
+
+        // Load the last survey preferences.
+        dpPrefs.loadSurveyPreferences(drone, survey);
+
         addMissionItem(survey);
     }
 
@@ -289,7 +284,7 @@ public class MissionProxy implements DPMap.PathSource {
         addMissionItems(missionItemsToAdd);
     }
 
-    private void addMissionItems(List<MissionItem> missionItems) {
+    public void addMissionItems(List<MissionItem> missionItems) {
         for (MissionItem missionItem : missionItems) {
             missionItemProxies.add(new MissionItemProxy(this, missionItem));
         }
@@ -353,8 +348,8 @@ public class MissionProxy implements DPMap.PathSource {
     }
 
     public boolean isFirstItemTakeoff() {
-        return !missionItemProxies.isEmpty() && missionItemProxies.get(0).getMissionItem().getType() ==
-                MissionItemType.TAKEOFF;
+        return !missionItemProxies.isEmpty()
+            && missionItemProxies.get(0).getMissionItem().getType() == MissionItemType.TAKEOFF;
     }
 
     public boolean isLastItemLandOrRTL() {
@@ -405,43 +400,21 @@ public class MissionProxy implements DPMap.PathSource {
      * @return The order of the first waypoint.
      */
     public int getFirstWaypoint(){
-        List<MarkerInfo> markerInfos = getMarkersInfos();
+        if(missionItemProxies.isEmpty())
+            return 0;
 
-        if(!markerInfos.isEmpty()) {
-            MarkerInfo markerInfo = markerInfos.get(0);
-            if(markerInfo instanceof MissionItemMarkerInfo){
-                return getOrder(((MissionItemMarkerInfo)markerInfo).getMarkerOrigin());
-            }
-            else if(markerInfo instanceof SurveyMarkerInfoProvider){
-                return getOrder(((SurveyMarkerInfoProvider)markerInfo).getMarkerOrigin());
-            }
-            else if(markerInfo instanceof PolygonMarkerInfo){
-                return getOrder(((PolygonMarkerInfo)markerInfo).getMarkerOrigin());
-            }
-        }
-
-        return 0;
+        return getOrder(missionItemProxies.get(0));
     }
 
     /**
      * @return The order for the last waypoint.
      */
     public int getLastWaypoint(){
-        List<MarkerInfo> markerInfos = getMarkersInfos();
+        int lastIndex = missionItemProxies.size() -1;
+        if(lastIndex < 0)
+            return 0;
 
-        if(!markerInfos.isEmpty()) {
-            MarkerInfo markerInfo = markerInfos.get(markerInfos.size() - 1);
-            if(markerInfo instanceof MissionItemMarkerInfo){
-                return getOrder(((MissionItemMarkerInfo)markerInfo).getMarkerOrigin());
-            }
-            else if(markerInfo instanceof SurveyMarkerInfoProvider){
-                return getOrder(((SurveyMarkerInfoProvider)markerInfo).getMarkerOrigin());
-            }
-            else if(markerInfo instanceof PolygonMarkerInfo){
-                return getOrder(((PolygonMarkerInfo)markerInfo).getMarkerOrigin());
-            }
-        }
-        return 0;
+        return getOrder(missionItemProxies.get(lastIndex));
     }
 
     /**
@@ -502,13 +475,6 @@ public class MissionProxy implements DPMap.PathSource {
         selection.addToSelection(itemsToSelect);
 
         notifyMissionUpdate();
-    }
-
-    /**
-     * Reverse the order of the mission items renders.
-     */
-    public void reverse() {
-        Collections.reverse(missionItemProxies);
     }
 
     public void swap(int fromIndex, int toIndex) {
@@ -756,7 +722,7 @@ public class MissionProxy implements DPMap.PathSource {
     }
 
     public void sendMissionToAPM(Drone drone) {
-        drone.setMission(generateMission(), true);
+        MissionApi.getApi(drone).setMission(generateMission(), true);
 
         int missionItemsCount = missionItemProxies.size();
 
@@ -790,20 +756,94 @@ public class MissionProxy implements DPMap.PathSource {
         GAUtils.sendEvent(eventBuilder);
     }
 
-    public double getMissionLength() {
-        List<LatLong> points = getPathPoints();
-        double length = 0;
-        if (points.size() > 1) {
-            for (int i = 1; i < points.size(); i++) {
-                length += MathUtils.getDistance2D(points.get(i - 1), points.get(i));
+    public Pair<Double, Double> getMissionFlightTime() {
+        if (missionItemProxies.isEmpty()) {
+            return Pair.create(0.0, 0.0);
+        }
+
+        double currentSpeed = dpApp.getVehicleSpeed();
+        double accumulatedDistance = 0;
+        double accumulatedDelay = 0;
+        LatLong lastPoint = null;
+        List<Pair<Double, Double>> speedPerDistance = new LinkedList<>();
+
+        for (MissionItemProxy proxy : missionItemProxies) {
+            final MissionItem missionItem = proxy.getMissionItem();
+            if (!(missionItem instanceof MissionItem.Command)) {
+                // If the mission item has a spatial component, retrieve that component.
+                List<LatLong> path = proxy.getPath(lastPoint);
+                if (!path.isEmpty()) {
+                    for (LatLong point : path) {
+                        if (lastPoint != null) {
+                            // Accumulate the distance between the last point and the current point.
+                            accumulatedDistance += MathUtils.getDistance2D(lastPoint, point);
+                        }
+                        lastPoint = point;
+                    }
+                }
+                if (missionItem instanceof  Waypoint){
+                    accumulatedDelay += ((Waypoint) missionItem).getDelay();
+                }else if (missionItem instanceof  SplineWaypoint){
+                    accumulatedDelay += ((SplineWaypoint) missionItem).getDelay();
+                }
+            } else if (missionItem instanceof ChangeSpeed) {
+                //  We're updating the vehicle speed, so let's store the distance accumulated at
+                // the current speed.
+                if (accumulatedDistance > 0) {
+                    speedPerDistance.add(Pair.create(currentSpeed, accumulatedDistance));
+                    accumulatedDistance = 0;
+                }
+                currentSpeed = ((ChangeSpeed) missionItem).getSpeed();
             }
         }
 
-        return length;
+        if (accumulatedDistance > 0) {
+            speedPerDistance.add(Pair.create(currentSpeed, accumulatedDistance));
+        }
+
+        if (speedPerDistance.isEmpty()) {
+            return Pair.create(0.0, 0.0);
+        } else {
+            double totalFlightDistance = 0;
+            double totalFlightTime = 0;
+            for (Pair<Double, Double> entry : speedPerDistance) {
+                double speed = entry.first;
+                double distance = entry.second;
+
+                totalFlightDistance += distance;
+                if (speed <= 0) {
+                    // No way the vehicle is completing its mission if the speed is less or equal to
+                    // 0.
+                    totalFlightTime += Double.POSITIVE_INFINITY;
+                } else {
+                    totalFlightTime += distance / speed;
+                }
+            }
+            totalFlightTime += accumulatedDelay;
+            return Pair.create(totalFlightDistance, totalFlightTime);
+        }
+    }
+
+    public double getAccumulatedMissionDelay(){
+        double accumulatedDelay = 0; //time in decimal seconds
+        for (MissionItemProxy itemProxy : missionItemProxies) {
+            MissionItem missionItem = itemProxy.getMissionItem();
+            switch (missionItem.getType()) {
+                case WAYPOINT:
+                    accumulatedDelay += ((Waypoint) missionItem).getDelay();
+                    break;
+                case SPLINE_WAYPOINT:
+                    accumulatedDelay += ((SplineWaypoint) missionItem).getDelay();
+                    break;
+                default:
+                    break;
+            }
+        }
+        return accumulatedDelay;
     }
 
     public void makeAndUploadDronie(Drone drone) {
-        drone.generateDronie();
+        MissionApi.getApi(drone).generateDronie();
     }
 
     public List<List<LatLong>> getPolygonsPath() {
@@ -817,18 +857,49 @@ public class MissionProxy implements DPMap.PathSource {
         return polygonPaths;
     }
 
-    public boolean writeMissionToFile(String filename) {
-        return MissionWriter.write(generateMission(), filename);
+    public void writeMissionToFile(Uri saveUri){
+        MissionApi.getApi(drone).saveMission(generateMission(), saveUri, new AbstractCommandListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(context, R.string.file_saved_success, Toast.LENGTH_SHORT)
+                    .show();
+
+                final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                    .setCategory(GAUtils.Category.MISSION_PLANNING)
+                    .setAction("Mission saved to file")
+                    .setLabel("Mission items count");
+                GAUtils.sendEvent(eventBuilder);
+            }
+
+            @Override
+            public void onError(int executionError) {
+                Toast.makeText(context, R.string.file_saved_error, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onTimeout() {
+                Toast.makeText(context, R.string.file_saved_error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    public boolean readMissionFromFile(MissionReader reader) {
-        if (reader == null)
-            return false;
+    public void readMissionFromFile(final Uri fileUri){
+        MissionApi.getApi(drone).loadAndSetMission(fileUri, new MissionApi.LoadingCallback<Mission>() {
+            @Override
+            public void onLoadingStart() {
+                Toast.makeText(context, "Loading mission...", Toast.LENGTH_SHORT).show();
+            }
 
-        Mission mission = reader.getMission();
-        drone.setMission(mission, false);
+            @Override
+            public void onLoadingComplete(Mission loaded) {
+                load(loaded);
+                Toast.makeText(context, "Mission loaded!", Toast.LENGTH_SHORT).show();
+            }
 
-        load(mission);
-        return true;
+            @Override
+            public void onLoadingFailed() {
+                Toast.makeText(context, "Mission loading failed!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

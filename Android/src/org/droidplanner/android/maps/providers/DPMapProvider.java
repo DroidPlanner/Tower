@@ -1,7 +1,7 @@
 package org.droidplanner.android.maps.providers;
 
 import org.droidplanner.android.maps.DPMap;
-import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
+import org.droidplanner.android.maps.GoogleMapFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapPrefFragment;
 
 import org.droidplanner.android.maps.providers.baidu_map.BaiduMapFragment;
@@ -37,6 +37,11 @@ public enum DPMapProvider {
 		}
 	};
 
+	private static DPMapProvider[] ENABLED_PROVIDERS = {
+		GOOGLE_MAP,
+		BAIDU_MAP
+	};
+
 	/**
 	 * @return the fragment implementing the map.
 	 */
@@ -64,6 +69,10 @@ public enum DPMapProvider {
 		} catch (IllegalArgumentException e) {
 			return null;
 		}
+	}
+
+	public static DPMapProvider[] getEnabledProviders(){
+		return ENABLED_PROVIDERS;
 	}
 
 	/**

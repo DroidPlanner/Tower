@@ -28,7 +28,7 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.notifications.TTSNotificationProvider;
 
-public class FragmentSetupIMU extends ApiListenerFragment  {
+public class FragmentSetupIMU extends ApiListenerFragment {
 
 	private final static long TIMEOUT_MAX = 30000l; //ms
     private final static long UPDATE_TIMEOUT_PERIOD = 100l; //ms
@@ -249,20 +249,19 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
 	private void sendAck(int step) {
         Drone dpApi = getDrone();
 		if (dpApi.isConnected()) {
-			dpApi.sendIMUCalibrationAck(step);
+            CalibrationApi.getApi(dpApi).sendIMUAck(step);
 		}
 	}
 
 	private void startCalibration() {
         Drone dpApi = getDrone();
 		if (dpApi.isConnected()) {
-            CalibrationApi.getApi(getDrone()).startIMUCalibration(new SimpleCommandListener(){
+            CalibrationApi.getApi(dpApi).startIMUCalibration(new SimpleCommandListener(){
                 @Override
                 public void onError(int error){
                     Toast.makeText(getActivity(), R.string.imu_calibration_start_error, Toast.LENGTH_LONG).show();
                 }
             });
-			dpApi.startIMUCalibration();
 		}
 	}
 
@@ -351,9 +350,5 @@ public class FragmentSetupIMU extends ApiListenerFragment  {
 		} else {
 			textViewTimeOut.setText(timeLeftStr + "0s");
 		}
-	}
-
-	public static CharSequence getTitle(Context context) {
-		return context.getText(R.string.setup_imu_title);
 	}
 }

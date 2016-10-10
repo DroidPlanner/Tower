@@ -145,7 +145,7 @@
     <string name="editor_err_land_rtl_added">No podemos añadir nuevos waypoints después de un LAND o RTL</string>
     <string name="editor_info_window">Distancia: 0.0m, Tiempo de vuelo: 0:00</string>
     <string name="editor_info_window_distance">Distancia: %s</string>
-    <string name="editor_info_window_flight_time">Tiempo de vuelo: %1$02d:%2$02d</string>
+    <string name="editor_info_window_flight_time">Tiempo de vuelo: %s</string>
     <string name="editor_info_window_heading">Heading: %.0f°</string>
     <string name="distance_to_home">Distancia a casa</string>
     <string name="loiter_time">Tiempo en Loiter</string>
@@ -362,7 +362,7 @@
     <string name="status_waiting_for_gps">Esperando por GPS…</string>
 
     <!-- Preference dialogs -->
-    <string name="unlock_slider_description">Desliza para %s</string>
+    <string name="unlock_slider_description">Desliza</string>
     <string name="pref_misc_title">Varios</string>
     <string name="pref_dialogs_title">Preferencias de los diálogos</string>
     <string name="pref_auto_insert_mission_takeoff_rtl_land_title">Auto insertar \'TakeOff\' y
