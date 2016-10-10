@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.droidplanner.android.utils.ReorderRecyclerView
+<android.support.v7.widget.RecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/editor_bar"
     android:id="@+id/mission_item_recycler_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

@@ -19,4 +19,6 @@ public interface UnitSystem {
 
     SpeedUnitProvider getSpeedUnitProvider();
 
+    int getType();
+
 }

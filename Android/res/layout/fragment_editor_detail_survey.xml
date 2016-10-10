@@ -164,6 +164,22 @@
                     </GridLayout>
                 </HorizontalScrollView>
 
+                <CheckBox
+                    android:id="@+id/check_start_camera_before_first_waypoint"
+                    style="@style/missionItemDetailCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:text="@string/start_camera_before_first_waypoint"/>
+
+                <CheckBox
+                    android:id="@+id/check_lock_copter_yaw"
+                    style="@style/missionItemDetailCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:text="@string/lock_copter_orientation"/>
+
                 <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
                     android:id="@+id/anglePicker"
                     style="@style/missionItemDetailCard"

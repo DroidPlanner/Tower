@@ -1,9 +1,9 @@
 package org.droidplanner.android.proxy.mission;
 
+import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 
 public class MissionSelection {
 	/**
@@ -17,11 +17,12 @@ public class MissionSelection {
 	/**
 	 * Stores the selected mission items renders.
 	 */
-	public final List<MissionItemProxy> mSelectedItems = new ArrayList<MissionItemProxy>();
+	public final List<MissionItemProxy> mSelectedItems = new ArrayList<>();
+
 	/**
 	 * Stores the list of selection update listeners.
 	 */
-	public List<MissionSelection.OnSelectionUpdateListener> mSelectionsListeners = new ArrayList<MissionSelection.OnSelectionUpdateListener>();
+	public List<MissionSelection.OnSelectionUpdateListener> mSelectionsListeners = new ArrayList<>();
 
 	/**
 	 * Removes the given mission item render from the selected list.
@@ -121,8 +122,10 @@ public class MissionSelection {
 	 * Deselects all mission items renders
 	 */
 	public void clearSelection() {
-		mSelectedItems.clear();
-		notifySelectionUpdate();
+		if(!mSelectedItems.isEmpty()) {
+			mSelectedItems.clear();
+			notifySelectionUpdate();
+		}
 	}
 
 	public void notifySelectionUpdate() {

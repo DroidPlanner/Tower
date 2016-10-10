@@ -2,6 +2,7 @@ package org.droidplanner.android.view.adapterViews;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Vibrator;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,16 +30,18 @@ import org.droidplanner.android.R;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
-import org.droidplanner.android.utils.ReorderRecyclerView;
 import org.droidplanner.android.utils.unit.UnitManager;
 import org.droidplanner.android.utils.unit.providers.length.LengthUnitProvider;
 import org.droidplanner.android.utils.unit.providers.speed.SpeedUnitProvider;
 import org.droidplanner.android.utils.unit.systems.UnitSystem;
 
+import java.util.Collections;
+import java.util.Locale;
+
 /**
  * Created by fhuya on 12/9/14.
  */
-public class MissionItemListAdapter extends ReorderRecyclerView.ReorderAdapter<MissionItemListAdapter.ViewHolder> {
+public class MissionItemListAdapter extends RecyclerView.Adapter<MissionItemListAdapter.ViewHolder> {
 
     // Provide a reference to the views for each data item
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -56,10 +59,19 @@ public class MissionItemListAdapter extends ReorderRecyclerView.ReorderAdapter<M
 
     }
 
+    private final View.OnLongClickListener vibrateOnLongPress = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            vibrator.vibrate(10L);
+            return true;
+        }
+    };
+
     private final MissionProxy missionProxy;
     private final OnEditorInteraction editorListener;
     private final LengthUnitProvider lengthUnitProvider;
     private final SpeedUnitProvider speedUnitProvider;
+    private final Vibrator vibrator;
 
     public MissionItemListAdapter(Context context, MissionProxy missionProxy, OnEditorInteraction editorListener) {
         this.missionProxy = missionProxy;
@@ -68,28 +80,13 @@ public class MissionItemListAdapter extends ReorderRecyclerView.ReorderAdapter<M
         final UnitSystem unitSystem = UnitManager.getUnitSystem(context);
         this.lengthUnitProvider = unitSystem.getLengthUnitProvider();
         this.speedUnitProvider = unitSystem.getSpeedUnitProvider();
-        setHasStableIds(true);
-    }
 
-    @Override
-    public long getItemId(int position){
-        return missionProxy.getItems().get(position).getStableId();
+        vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     @Override
     public int getItemCount() {
         return missionProxy.getItems().size();
-    }
-
-    @Override
-    public void swapElements(int fromIndex, int toIndex) {
-        if(isIndexValid(fromIndex) && isIndexValid(toIndex)) {
-            missionProxy.swap(fromIndex, toIndex);
-        }
-    }
-
-    private boolean isIndexValid(int index){
-        return index >= 0 && index < getItemCount();
     }
 
     @Override
@@ -101,6 +98,17 @@ public class MissionItemListAdapter extends ReorderRecyclerView.ReorderAdapter<M
         final TextView altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
 
         return new ViewHolder(view, nameView, altitudeView);
+    }
+
+    public void swap(int fromPosition, int toPosition) {
+        Collections.swap(missionProxy.getItems(), fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    public void dismiss(int deletedPosition) {
+        MissionItemProxy deletedItem = missionProxy.getItems().remove(deletedPosition);
+        missionProxy.selection.getSelected().remove(deletedItem);
+        notifyItemRemoved(deletedPosition);
     }
 
     @Override
@@ -116,14 +124,15 @@ public class MissionItemListAdapter extends ReorderRecyclerView.ReorderAdapter<M
                 editorListener.onItemClick(proxy, true);
             }
         });
+        container.setOnLongClickListener(vibrateOnLongPress);
 
         final TextView nameView = viewHolder.nameView;
         final TextView altitudeView = viewHolder.altitudeView;
 
-        final MissionProxy missionProxy = proxy.getMission();
+        final MissionProxy missionProxy = proxy.getMissionProxy();
         final MissionItem missionItem = proxy.getMissionItem();
 
-        nameView.setText(String.format("%3d", missionProxy.getOrder(proxy)));
+        nameView.setText(String.format(Locale.US, "%3d", missionProxy.getOrder(proxy)));
 
         int leftDrawable;
 

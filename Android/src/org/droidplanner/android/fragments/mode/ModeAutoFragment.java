@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.ControlApi;
 import com.o3dr.android.client.apis.MissionApi;
 import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.coordinate.LatLong;
@@ -31,7 +32,6 @@ import com.o3dr.services.android.lib.util.MathUtils;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.R;
 import org.droidplanner.android.proxy.mission.MissionProxy;
-import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
 import org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView;
 import org.droidplanner.android.view.spinnerWheel.adapters.NumericWheelAdapter;
 
@@ -100,8 +100,6 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener, 
         waypointSelector.addScrollListener(this);
         mission = drone.getAttribute(AttributeType.MISSION);
 
-        final DroidPlannerApp dpApp = (DroidPlannerApp) getActivity().getApplication();
-
         final MissionProxy missionProxy = getMissionProxy();
         waypointSelectorAdapter = new NumericWheelAdapter(getActivity().getApplicationContext(),
                 R.layout.wheel_text_centered,
@@ -124,7 +122,7 @@ public class ModeAutoFragment extends Fragment implements View.OnClickListener, 
         }
 		switch(v.getId()){
 			case R.id.mc_pause: {
-                drone.pauseAtCurrentLocation();
+                ControlApi.getApi(drone).pauseAtCurrentLocation(null);
                 break;
             }
 			case R.id.mc_restart: {

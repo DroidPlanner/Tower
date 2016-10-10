@@ -7,4 +7,5 @@
     <item type="id" name="tower_widget_vehicle_diagnostics" />
     <item type="id" name="tower_widget_flight_timer" />
     <item type="id" name="tower_widget_geo_info" />
+    <item type="id" name="tower_widget_weather_info" />
 </resources>

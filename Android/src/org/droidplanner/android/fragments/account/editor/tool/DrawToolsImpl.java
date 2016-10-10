@@ -55,7 +55,6 @@ class DrawToolsImpl extends EditorToolsImpl implements AdapterView.OnItemSelecte
         EditorToolsFragment.EditorToolListener listener = editorToolsFragment.listener;
         if (listener != null) {
             listener.enableGestureDetection(true);
-            listener.skipMarkerClickEvents(false);
         }
 
         if (missionProxy != null)

@@ -19,7 +19,6 @@ class NoneToolsImpl extends EditorToolsImpl {
         EditorToolsFragment.EditorToolListener listener = editorToolsFragment.listener;
         if (listener != null) {
             listener.enableGestureDetection(false);
-            listener.skipMarkerClickEvents(false);
         }
     }
 }

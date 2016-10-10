@@ -451,7 +451,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             currentView.setText(String.format("C: %2.1f A", droneBattery.getBatteryCurrent()));
 
 
-            update = String.format(Locale.ENGLISH, "%2.1f V", droneBattery.getBatteryVoltage());
+            update = String.format(Locale.ENGLISH, "%2.1fV", droneBattery.getBatteryVoltage());
 
             if (battRemain >= 100) {
                 batteryIcon = R.drawable.ic_battery_circle_8_24dp;

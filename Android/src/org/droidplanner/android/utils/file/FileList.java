@@ -5,7 +5,8 @@ import java.io.FilenameFilter;
 
 public class FileList {
 
-    public static final String WAYPOINT_FILENAME_EXT = ".dpwp";
+    public static final String DEPRECATED_WAYPOINT_FILENAME_EXT = ".dpwp";
+	public static final String WAYPOINT_FILENAME_EXT = ".txt";
 
     public static final String PARAM_FILENAME_EXT = ".param";
 
@@ -13,7 +14,8 @@ public class FileList {
 		FilenameFilter filter = new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String filename) {
-				return filename.contains(WAYPOINT_FILENAME_EXT);
+				return filename.contains(DEPRECATED_WAYPOINT_FILENAME_EXT)
+					|| filename.contains(WAYPOINT_FILENAME_EXT);
 			}
 		};
 		return getFileList(DirectoryPath.getWaypointsPath(), filter);

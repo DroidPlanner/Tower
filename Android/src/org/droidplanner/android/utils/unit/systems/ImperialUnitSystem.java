@@ -30,4 +30,9 @@ public class ImperialUnitSystem implements UnitSystem{
     public SpeedUnitProvider getSpeedUnitProvider() {
         return speedUnitProvider;
     }
+
+    @Override
+    public int getType() {
+        return IMPERIAL;
+    }
 }

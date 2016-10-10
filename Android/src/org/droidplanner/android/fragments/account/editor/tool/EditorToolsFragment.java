@@ -48,8 +48,6 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
         void enableGestureDetection(boolean enable);
 
-        void skipMarkerClickEvents(boolean skip);
-
         void zoomToFitSelected();
     }
 
@@ -243,7 +241,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
     private void hideSubTools() {
         if (editorSubTools != null)
-            editorSubTools.setVisibility(View.GONE);
+            editorSubTools.setVisibility(View.INVISIBLE);
 
         if (selectAll != null)
             selectAll.setVisibility(View.GONE);

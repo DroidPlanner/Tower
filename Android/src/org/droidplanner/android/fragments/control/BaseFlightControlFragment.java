@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.Toast;
@@ -21,6 +23,7 @@ import org.droidplanner.android.fragments.FlightDataFragment;
 import org.droidplanner.android.fragments.SettingsFragment;
 import org.droidplanner.android.fragments.helpers.ApiListenerFragment;
 import org.droidplanner.android.utils.location.CheckLocationSettings;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 /**
  * Created by Fredia Huya-Kouadio on 5/25/15.
@@ -98,7 +101,7 @@ public abstract class BaseFlightControlFragment extends ApiListenerFragment impl
                 new Runnable() {
                     @Override
                     public void run() {
-                        FollowApi.getApi(drone).enableFollowMe(FollowType.LEASH);
+                        FollowApi.getApi(drone).enableFollowMe(getAppPrefs().getLastKnownFollowType());
                     }
                 });
 

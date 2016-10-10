@@ -18,7 +18,7 @@ import org.droidplanner.android.fragments.widget.TowerWidgets
 /**
  * Created by Fredia Huya-Kouadio on 9/20/15.
  */
-public class MiniWidgetGeoInfo : TowerWidget() {
+class MiniWidgetGeoInfo : TowerWidget() {
 
     companion object {
         private val filter = initFilter()

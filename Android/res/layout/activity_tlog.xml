@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/main_content"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                tools:context=".tlog.TLogActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/actionbar_toolbar"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/telem_bar_bg"
+        android:gravity="center_vertical|start"
+        android:minHeight="@dimen/toolbar_min_height"
+        app:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/actionbar_toolbar"
+            android:background="?attr/colorPrimary"
+            app:tabGravity="fill"
+            app:tabMaxWidth="0dp"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/navigation_entry_color"
+            app:tabTextColor="@color/navigation_entry_color"/>
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/actionbar_toolbar"/>
+
+    <TextView
+        android:id="@+id/tlog_session_title"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        tools:text="11/11/2011 12:12:12"
+        android:layout_below="@+id/actionbar_toolbar"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:background="@color/transparent_dark"/>
+
+    <ProgressBar
+        android:id="@+id/progress_bar_container"
+        style="?android:progressBarStyleHorizontal"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_below="@+id/actionbar_toolbar"
+        android:indeterminate="true"/>
+
+
+</RelativeLayout>

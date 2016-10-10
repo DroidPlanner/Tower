@@ -6,4 +6,12 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_folder_open_grey_700_24dp"
         android:title="@string/open_tlog_file"/>
+
+    <item android:id="@+id/menu_rename_tlog_session"
+          app:showAsAction="never"
+          android:title="@string/menu_rename"/>
+
+    <item android:id="@+id/menu_delete_tlog_session"
+          app:showAsAction="never"
+          android:title="@string/menu_delete"/>
 </menu>

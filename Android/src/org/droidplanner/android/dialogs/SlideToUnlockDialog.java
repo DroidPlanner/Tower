@@ -16,27 +16,23 @@ import org.droidplanner.android.view.SlideButton;
 /**
  * Created by Fredia Huya-Kouadio on 4/6/15.
  */
-public abstract class SlideToUnlockDialog extends DialogFragment implements SeekBar.OnSeekBarChangeListener{
+public class SlideToUnlockDialog extends DialogFragment implements SeekBar.OnSeekBarChangeListener{
 
     public static final String EXTRA_UNLOCK_ACTION = "extra_unlock_action";
 
     public static SlideToUnlockDialog newInstance(String unlockDescription, final Runnable unlockAction){
-        final SlideToUnlockDialog unlockDialog = new SlideToUnlockDialog() {
-            @Override
-            public void onSliderUnlocked() {
-                if(unlockAction != null)
-                    unlockAction.run();
-            }
-        };
+        final SlideToUnlockDialog unlockDialog = new SlideToUnlockDialog();
 
         Bundle args = new Bundle();
         args.putString(SlideToUnlockDialog.EXTRA_UNLOCK_ACTION, unlockDescription);
         unlockDialog.setArguments(args);
+        unlockDialog.unlockAction = unlockAction;
         return unlockDialog;
     }
 
     private TextView sliderText;
     private ShimmerFrameLayout shimmerContainer;
+    private Runnable unlockAction;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -73,7 +69,7 @@ public abstract class SlideToUnlockDialog extends DialogFragment implements Seek
         }
 
         sliderText = (TextView) view.findViewById(R.id.slider_text);
-        sliderText.setText(getString(R.string.unlock_slider_description, unlockAction));
+        sliderText.setText(R.string.unlock_slider_description);
 
         final SlideButton slideButton = (SlideButton) view.findViewById(R.id.unlock_slider);
         slideButton.setOnSeekBarChangeListener(this);
@@ -110,5 +106,8 @@ public abstract class SlideToUnlockDialog extends DialogFragment implements Seek
         dismiss();
     }
 
-    public abstract void onSliderUnlocked();
+    public void onSliderUnlocked(){
+        if(unlockAction != null)
+            unlockAction.run();
+    }
 }

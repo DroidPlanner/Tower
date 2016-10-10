@@ -26,7 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ChecklistFragment extends ApiListenerFragment implements OnXmlParserError,
+public class ChecklistFragment extends ApiListenerFragment implements
+	OnXmlParserError,
 		OnCheckListItemUpdateListener {
 
     private final static IntentFilter intentFilter = new IntentFilter();
@@ -175,5 +176,4 @@ public class ChecklistFragment extends ApiListenerFragment implements OnXmlParse
             sysLink.getSystemData(checkListItem, mSysTag);
         }
 	}
-
 }

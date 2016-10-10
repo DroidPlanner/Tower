@@ -82,7 +82,7 @@ public class MissionStructureScannerFragment extends MissionDetailFragment imple
         CardWheelHorizontalView<LengthUnit> radiusPicker = (CardWheelHorizontalView) view
                 .findViewById(R.id.radiusPicker);
         radiusPicker.setViewAdapter(new LengthWheelAdapter(context, R.layout.wheel_text_centered,
-                lengthUP.boxBaseValueToTarget(Utils.MIN_DISTANCE), lengthUP.boxBaseValueToTarget(Utils.MAX_DISTANCE)));
+                lengthUP.boxBaseValueToTarget(Utils.MIN_DISTANCE), lengthUP.boxBaseValueToTarget(Utils.MAX_RADIUS)));
         radiusPicker.addScrollListener(this);
 
         CardWheelHorizontalView<LengthUnit> startAltitudeStepPicker = (CardWheelHorizontalView) view

@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
 
     <!-- Generic strings -->
     <string name="settings">Settings</string>
@@ -27,8 +29,7 @@
     <string name="pref_ui_language_english">English as UI Language</string>
     <string name="pref_ui_language_english_summary">Use English language (instead of system language). Requires app restart.</string>
     <string name="pref_keep_screen_bright">Keep Screen On</string>
-    <string name="pref_keep_screen_bright_summary">Check to keep the screen on and bright (affect
-        battery life)</string>
+    <string name="pref_keep_screen_bright_summary">Check to keep the screen on and bright (affect battery life)</string>
     <string name="pref_lock_screen_orientation">Lock Screen Orientation</string>
     <string name="pref_lock_screen_orientation_summary">Locks screen to the orientation which is present when connecting</string>
     <string name="pref_advanced">Advanced</string>
@@ -148,7 +149,7 @@
     <string name="editor_err_land_rtl_added">One cannot add new waypoints after LAND or RTL</string>
     <string name="editor_info_window">Distance: 0m, Flight time: 0:00</string>
     <string name="editor_info_window_distance">Distance: %s</string>
-    <string name="editor_info_window_flight_time">Flight Time: %1$02d:%2$02d</string>
+    <string name="editor_info_window_flight_time">Flight Time: %s</string>
     <string name="editor_info_window_heading">Heading: %.0f°</string>
     <string name="distance_to_home">Distance to home</string>
     <string name="loiter_time">Loiter Time</string>
@@ -162,7 +163,7 @@
     <string name="structure_scan_step_height">Step height</string>
     <string name="stucture_scanner_cross_hatch">Cross Hatch</string>
 
-    <string name="dlg_clear_mission_title">Clear mission</string>
+    <string name="dlg_clear_mission_title">Mission</string>
     <string name="dlg_clear_mission_confirm">Clear all waypoints from the map?</string>
 
     <!-- Selection of map style -->
@@ -199,6 +200,11 @@
     <!-- Compass Setup Resource Strings -->
     <string name="setup_mag_title">Compass Calibration</string>
     <string name="setup_mag_start">Press Calibrate to start magnetometer calibration. Perform the calibration outdoors away from metal objects.</string>
+    <string name="label_solo_compass_calibration">Calibrate Compass</string>
+    <string name="instruction_compass_begin_calibration">Calibrating the compass ensures Solo can fly accurately.\nCalibrate Solo away from buildings, concrete, and metal structures.</string>
+    <string name="compass_calibration_instructions">Face North and rotate solo multiple times until each bar is green</string>
+    <string name="compass_calibration_sub_instructions">Stay away from metal objects and reinforced concrete.</string>
+    <string name="label_begin_calibration">Begin Calibration</string>
 
     <!-- Accelerometer Setup Resource Strings -->
     <string name="setup_imu_title">Accelerometer Calibration</string>
@@ -331,8 +337,14 @@
     <string name="pref_title_google_maps">Google Maps Preferences</string>
     <string name="pref_title_google_tile_provider">Google Tile Provider</string>
     <string name="activity_title_map_provider_preferences">Map Provider Preferences</string>
+
     <string name="pref_ui_realtime_footprints_title">Realtime camera footprint</string>
     <string name="pref_ui_realtime_footprints_summary">Display the camera projection on the ground in realtime</string>
+
+    <!-- Editor -->
+    <string name="pref_title_editor">Editor</string>
+    <string name="pref_enable_zoom_to_fit_title">Enable zoom to fit</string>
+    <string name="pref_enable_zoom_to_fit_summary">Check to enable the ability to zoom when add an item to mission</string>
 
     <!-- Others (when possible move to a grouping above) -->
     <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
@@ -344,6 +356,9 @@
     <string name="usage_statistics">Usage Statistics</string>
     <string name="pref_usage_statistics_title">Send usage statistics</string>
     <string name="pref_usage_statistics_summary">Help improve Tower by sending usage statistics.</string>
+    <string name="project_creator">Project Creator</string>
+    <string name="project_lead_maintainer">Project Lead Maintainer</string>
+    <string name="project_contributors">Project Contributors</string>
 
     <string name="zoom_fit">Zoom to Fit</string>
     <string name="open_mission_file">Import from file</string>
@@ -366,7 +381,7 @@
     <string name="status_waiting_for_gps">Waiting for GPS…</string>
 
     <!-- Preference dialogs -->
-    <string name="unlock_slider_description">Slide to %s</string>
+    <string name="unlock_slider_description">Slide</string>
     <string name="pref_misc_title">Miscellaneous</string>
     <string name="pref_dialogs_title">Preference Dialogs</string>
     <string name="pref_auto_insert_mission_takeoff_rtl_land_title">Auto insert \'TakeOff\' and
@@ -423,6 +438,10 @@
     <string name="pref_min_alt_title">Min altitude value</string>
     <string name="pref_default_alt_title">Default altitude value</string>
 
+    <!-- Speed preferences -->
+    <string name="pref_speed_title">Speed Preferences</string>
+    <string name="pref_default_speed_title">Mission editor default speed</string>
+
     <!-- Mapbox preferences -->
     <string name="pref_title_mapbox_tile_provider">Mapbox Tile Provider</string>
     <string name="pref_title_mapbox_map_download">Download Offline Map</string>
@@ -463,7 +482,7 @@
     <string name="longitude_empty">Long: —</string>
     <string name="longitude_telem">Long: %s°</string>
     <string name="menu_kill_switch">Kill Switch</string>
-    <string name="label_clear_selected">Clear selected</string>
+    <string name="label_clear_selected">Selected</string>
     <string name="unsaved_param_warning">You have unsaved changes</string>
     <string name="error_kill_switch_unsupported">KILL SWITCH command is not supported!</string>
     <string name="error_kill_switch_failed">KILL SWITCH command failed!</string>
@@ -490,6 +509,8 @@
     <string name="description_widget_flight_timer">Displays the vehicle flight time</string>
     <string name="label_widget_geo_info">Geo Info</string>
     <string name="description_widget_geo_info">Displays vehicle geographical information (Lat/Long)</string>
+    <string name="label_widget_weather_info">Weather</string>
+    <string name="description_widget_weather_info">Displays weather information</string>
     <string name="label_ekf">ekf</string>
     <string name="label_velocity_var_abbrev">vel</string>
     <string name="label_horizontal_position_var_abbrev">h.pos</string>
@@ -597,4 +618,67 @@
     <string name="pref_title_tile_provider_preferences">Tile Provider Preferences</string>
     <string name="pref_advanced_settings_title">Advanced Settings</string>
     <string name="label_fpv">FPV</string>
+
+    <string name="label_empty" translatable="false">--</string>
+
+    <!-- Weather Info -->
+    <string name="wunderground_url" translatable="false">http://api.wunderground.com/api/%1$s/geolookup/conditions/q/%2$s,%3$s.json</string>
+    <string name="label_flight_conditions">Flight Conditions</string>
+    <string name="label_weather_good">Good</string>
+    <string name="weather_wind_velocity_imperial" translatable="false">%1$s mph %2$s</string>
+    <string name="weather_wind_velocity_metric" translatable="false">%1$s kph %2$s</string>
+    <string name="weather_temperature_imperial" translatable="false">%1$sº F</string>
+    <string name="weather_temperature_metric" translatable="false">%1$sº C</string>
+    <string name="weather_rain_imperial" translatable="false">%1$s in</string>
+    <string name="weather_rain_metric" translatable="false">%1$s mm</string>
+
+    <string name="label_try_again">Try Again</string>
+    <string name="label_alright">Alright!</string>
+    <string name="label_compass_calibration_failed">Compass Calibration unsuccessful.\nBe sure to stay away from metal objects and reinforced concrete.</string>
+    <string name="label_ready_to_fly">Go Fly</string>
+
+    <!-- DroneShare strings -->
+    <string name="uploader_success_message">Upload successful! Select to view…</string>
+    <string name="uploader_fail_retry_message">Will try again later</string>
+    <string name="uploader_notification_title">Droneshare upload</string>
+    <string name="label_tlogs_title">Telemetry Logs</string>
+    <string name="no_tlog_data_loaded">No tlog data loaded</string>
+    <string name="no_tlog_position_data">No tlog position data</string>
+    <string name="menu_clear_flight_path">Clear flight path</string>
+    <string name="menu_export_as_mission">Export as mission</string>
+    <string name="menu_export_flight_path_as_mission">Export flight path as mission</string>
+    <string name="error_empty_flight_path">Try flying a bit first :)</string>
+    <string name="start_camera_before_first_waypoint">Start camera before first waypoint</string>
+    <string name="lock_copter_orientation">Lock copter orientation</string>
+
+    <!-- BaiduMap -->
+    <string name="pref_title_baidu_maps">Baidu Maps Preferences</string>
+    <string name="pref_baidu_map_offline_preference_title">Baidu Offline map download</string>
+    <string name="pref_baidu_map_offline_preference_start">Start</string>
+    <string name="pref_baidu_map_offline_preference_stop">Stop</string>
+    <string name="pref_baidu_map_offline_preference_view">View</string>
+    <string name="pref_baidu_map_offline_preference_remove">Remove</string>
+    <string name="pref_baidu_map_offline_preference_search">Search</string>
+    <string name="pref_baidu_map_offline_preference_city_list">City list</string>
+    <string name="pref_baidu_map_offline_preference_download_manage">Download manage</string>
+    <string name="pref_baidu_map_offline_preference_downloaded_label">Downloaded:—</string>
+    <string name="pref_baidu_map_offline_preference_downloaded_cities">Downloaded cities</string>
+    <string name="pref_baidu_map_offline_preference_download_available">Download available</string>
+    <string name="pref_baidu_map_offline_preference_download_latest">Latest</string>
+    <string name="pref_baidu_map_offline_preference_hot_cities">Hot cities</string>
+    <string name="pref_baidu_map_offline_preference_all_cities">All cities</string>
+    <string name="pref_baidu_map_offline_preference_default_city">BeiJing</string>
+    <string name="pref_baidu_map_offline_preference_default_city_id">131</string>
+    <string name="pref_baidu_map_offline_download_start_message">Begin to download offline map. City ID: %d</string>
+    <string name="pref_baidu_map_offline_download_stop_message">Pause downloading offline map. City ID: %d</string>
+    <string name="pref_baidu_map_offline_download_remove_message">Remove offline map. City ID: %d</string>
+    <string name="baidu_map_sdk_initializer_permission_error_message">BaiduMap: API Keycode error, please check the keycode in AndroidManifest.xml!</string>
+    <string name="baidu_map_sdk_initializer_network_error_message">BaiduMap: Network error!</string>
+    <string name="warning_check_exported_mission">Please verify the exported mission!</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_rename">Rename</string>
+    <string name="warning_invalid_session_label_entry">Please enter a valid entry!</string>
+    <string name="warning_unable_to_open_web_url">No app was found to handle this request. Please install a web broawer.</string>
+    <string name="warning_invalid_speed">Invalid speed value</string>
+    <string name="warning_invalid_altitude">Invalid altitude value</string>
 </resources>

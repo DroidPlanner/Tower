@@ -48,7 +48,6 @@ class SelectorToolsImpl extends EditorToolsImpl implements View.OnClickListener 
         EditorToolsFragment.EditorToolListener listener = editorToolsFragment.listener;
         if (listener != null) {
             listener.enableGestureDetection(false);
-            listener.skipMarkerClickEvents(false);
         }
 
         Toast.makeText(editorToolsFragment.getContext(), "Click on mission items to select them.",

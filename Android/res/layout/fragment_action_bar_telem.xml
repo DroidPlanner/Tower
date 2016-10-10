@@ -6,7 +6,7 @@
     android:layout_height="@dimen/action_bar_telem_height"
     android:layout_gravity="center"
     android:gravity="center"
-    tools:layout_margin="10dp">
+    tools:layout_margin="40dp">
 
     <TableRow
         style="?android:attr/buttonBarStyle"
@@ -16,13 +16,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:minHeight="40dp"
-            android:minWidth="90dp">
+            android:minHeight="40dp">
 
             <TextView
                 android:id="@+id/bar_battery"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
+                android:minWidth="85dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:drawableLeft="@drawable/ic_battery_circle_8_24dp"
@@ -36,7 +36,6 @@
         <FrameLayout
             android:layout_width="@dimen/info_bar_flight_mode_width"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:minHeight="40dp">
 
             <TextView
@@ -56,14 +55,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:minHeight="40dp"
-            android:minWidth="75dp">
+            android:minHeight="40dp">
 
             <TextView
                 android:id="@+id/bar_signal"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="75dp"
                 android:layout_gravity="center"
                 android:drawableLeft="@drawable/ic_signal_cellular_null_grey_700_18dp"
                 android:drawablePadding="@dimen/info_bar_drawable_padding"
@@ -80,11 +79,10 @@
         android:gravity="center_vertical">
 
         <FrameLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:minHeight="40dp"
-            android:minWidth="80dp">
+            android:minHeight="40dp">
 
             <TextView
                 android:id="@+id/bar_home"
@@ -100,11 +98,10 @@
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:minHeight="40dp"
-            android:minWidth="80dp">
+            android:minHeight="40dp">
 
             <TextView
                 android:id="@+id/bar_altitude"
@@ -121,11 +118,10 @@
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:minHeight="40dp"
-            android:minWidth="90dp">
+            android:minHeight="40dp">
 
             <TextView
                 android:id="@+id/bar_gps"

@@ -7,7 +7,7 @@ import org.droidplanner.android.utils.prefs.AutoPanMode
 /**
  * Created by Fredia Huya-Kouadio on 6/17/15.
  */
-public class DownloadMapboxMapFragment : DroneMap() {
+class DownloadMapboxMapFragment : DroneMap() {
     override fun isMissionDraggable() = false
 
     override fun setAutoPanMode(target: AutoPanMode?): Boolean {
@@ -18,5 +18,9 @@ public class DownloadMapboxMapFragment : DroneMap() {
                 false
             }
         }
+    }
+
+    override fun shouldUpdateMission(): Boolean {
+        return false
     }
 }

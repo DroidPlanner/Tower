@@ -18,9 +18,7 @@
         <item
             android:id="@+id/navigation_locator"
             android:icon="@drawable/ic_menu_flight_history_grey600_24dp"
-            android:title="@string/locator"
-            android:visible="false"
-            android:enabled="false"/>
+            android:title="@string/locator"/>
 
     </group>
 
@@ -38,20 +36,17 @@
             android:title="@string/screen_checklist" />
 
         <item
-            android:id="@+id/navigation_calibration"
+            android:id="@+id/navigation_imu_calibration"
             android:icon="@drawable/ic_menu_calibration_grey600_24dp"
-            android:title="@string/screen_cal" />
-
-    </group>
-
-    <group
-        android:id="@+id/settings_screen"
-        android:checkableBehavior="single">
+            android:title="@string/setup_imu_title" />
 
         <item
-            android:id="@+id/navigation_settings"
-            android:icon="@drawable/ic_menu_settings_grey600_24dp"
-            android:title="@string/settings" />
+            android:id="@+id/navigation_compass_calibration"
+            android:icon="@drawable/ic_action_compass"
+            android:title="@string/setup_mag_title"
+            android:visible="false"
+            android:enabled="false"/>
+
     </group>
 
 </menu>

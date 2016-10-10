@@ -49,12 +49,22 @@ public class SupportEditInputDialog extends DialogFragment {
         return dialog;
     }
 
+    public static SupportEditInputDialog newInstance(String dialogTag, String title, String hint,
+                                                     boolean hintIsValidEndtry, Listener listener) {
+        SupportEditInputDialog dialog = newInstance(dialogTag, title, hint, hintIsValidEndtry);
+        dialog.mListener = listener;
+        return dialog;
+    }
+
     protected Listener mListener;
     private EditText mEditText;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        if (mListener != null) {
+            return;
+        }
 
         Object parent = getParentFragment();
         if(parent == null)
@@ -95,7 +105,7 @@ public class SupportEditInputDialog extends DialogFragment {
                             input = mEditText.getHint();
                         }
 
-                        String value = null;
+                        String value = "";
                         if (input != null)
                             value = input.toString().trim();
 
@@ -121,9 +131,23 @@ public class SupportEditInputDialog extends DialogFragment {
         if(contentView == null)
             return contentView;
 
+        final Bundle arguments = getArguments();
+        final CharSequence hint = arguments.getString(EXTRA_HINT);
+        final boolean hintIsValidEntry = arguments.getBoolean(EXTRA_HINT_IS_VALID_ENTRY);
         mEditText = (EditText) contentView.findViewById(R.id.dialog_edit_text_content);
-        mEditText.setHint(getArguments().getString(EXTRA_HINT));
+        if(hintIsValidEntry){
+            mEditText.setText(hint);
+        }
+        else {
+            mEditText.setHint(hint);
+        }
 
         return contentView;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        dismissAllowingStateLoss();
     }
 }

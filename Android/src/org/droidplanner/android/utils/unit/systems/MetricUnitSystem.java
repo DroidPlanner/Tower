@@ -30,4 +30,9 @@ public class MetricUnitSystem implements UnitSystem {
     public SpeedUnitProvider getSpeedUnitProvider() {
         return speedUnitProvider;
     }
+
+    @Override
+    public int getType() {
+        return METRIC;
+    }
 }

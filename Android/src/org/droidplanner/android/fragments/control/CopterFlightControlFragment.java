@@ -341,7 +341,7 @@ public class CopterFlightControlFragment extends BaseFlightControlFragment imple
         SlideToUnlockDialog unlockDialog = SlideToUnlockDialog.newInstance("arm", new Runnable() {
             @Override
             public void run() {
-                getDrone().arm(true);
+                VehicleApi.getApi(getDrone()).arm(true);
             }
         });
         unlockDialog.show(getChildFragmentManager(), "Slide To Arm");

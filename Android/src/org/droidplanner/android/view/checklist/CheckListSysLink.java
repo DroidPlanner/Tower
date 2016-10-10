@@ -3,6 +3,7 @@ package org.droidplanner.android.view.checklist;
 import android.content.Context;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.apis.VehicleApi;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.property.Battery;
 import com.o3dr.services.android.lib.drone.property.Gps;
@@ -73,9 +74,9 @@ public class CheckListSysLink {
         final State droneState = drone.getAttribute(AttributeType.STATE);
 		if (droneState.isConnected()) {
 			if (checkListItem.isSys_activated() && !droneState.isArmed()) {
-				drone.arm(true);
+				VehicleApi.getApi(drone).arm(true);
 			} else {
-				drone.arm(false);
+				VehicleApi.getApi(drone).arm(false);
 			}
 		}
 	}

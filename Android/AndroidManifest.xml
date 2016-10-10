@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.droidplanner.android"
-    android:installLocation="auto">
+<manifest package="org.droidplanner.android"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          android:installLocation="auto">
 
-    <supports-screens
-        android:requiresSmallestWidthDp="320"/>
+    <supports-screens android:requiresSmallestWidthDp="320"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
@@ -15,7 +14,12 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- BaiduMap dependencies -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <uses-feature android:name="android.hardware.screen.portrait"/>
 
@@ -50,8 +54,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_title"
         android:theme="@style/CustomActionBarTheme"
-        android:windowSoftInputMode="adjustPan"
-        >
+        android:windowSoftInputMode="adjustPan">
 
         <!-- You must insert your own Google Maps for Android API v2 key in here. -->
         <meta-data
@@ -61,15 +64,19 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"/>
 
+        <!-- BaiduMap key, please replace with your own key -->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="@string/baidu_api_key" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="${fabricApiKey}" />
+            android:value="${fabricApiKey}"/>
 
         <activity
             android:name=".activities.AccountActivity"
-            android:launchMode="singleTop"
-            android:label="@string/account_label"/>
-
+            android:label="@string/account_label"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".activities.FlightActivity"
             android:launchMode="singleTask"
@@ -81,7 +88,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
         </activity>
         <activity
             android:name=".activities.EditorActivity"
@@ -89,6 +95,7 @@
             android:launchMode="singleTop"
             android:theme="@style/CustomActionBarTheme.Transparent"
             android:windowSoftInputMode="adjustNothing">
+
             <!-- Intent for opening mission files -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -100,58 +107,69 @@
         </activity>
         <activity
             android:name=".activities.ConfigurationActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:label="@string/menu_drone_setup"
             android:launchMode="singleTop"
-            android:label="@string/menu_drone_setup"/>
-
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".activities.SettingsActivity"
-            android:launchMode="singleTop"
-            android:label="@string/settings"/>
-
+            android:label="@string/settings"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".activities.helpers.MapPreferencesActivity"
-            android:launchMode="singleTop"
             android:label="@string/activity_title_map_provider_preferences"
+            android:launchMode="singleTop"
             android:parentActivityName=".activities.SettingsActivity">
+
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.SettingsActivity"/>
         </activity>
-
         <activity
-            android:name=".activities.LocatorActivity"
+            android:name=".tlog.TLogActivity"
             android:label="@string/locator"
-            android:launchMode="singleTop"
-            android:theme="@style/CustomActionBarTheme.Transparent"/>
-
+            android:launchMode="singleTop"/>
         <activity
             android:name=".activities.WidgetActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".activities.FlightActivity"
-            >
+            android:parentActivityName=".activities.FlightActivity">
+
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.FlightActivity"/>
         </activity>
-
         <activity
             android:name=".activities.helpers.BluetoothDevicesActivity"
-            android:noHistory="true"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
+            android:noHistory="true"
             android:theme="@style/CustomDialogTheme"/>
-
         <activity
             android:name=".maps.providers.google_map.DownloadMapboxMapActivity"
-            android:noHistory="true"
             android:excludeFromRecents="true"
-            android:theme="@style/CustomActionBarTheme.Transparent"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:theme="@style/CustomActionBarTheme.Transparent"/>
+
+        <receiver
+            android:name=".droneshare.NetworkConnectivityReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+
+        </receiver>
 
         <service android:name=".AppService" />
+        <service android:name=".droneshare.UploaderService" />
+
+        <!-- BaiduMap location service -->
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+        </service>
 
     </application>
 

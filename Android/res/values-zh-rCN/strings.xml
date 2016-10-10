@@ -51,7 +51,7 @@
     <string name="pref_server_port">服务器端口</string>
     <string name="pref_server_udp">UDP连接</string>
     <string name="pref_udp_server_port">UDP服务器端口</string>
-    <string name="about">关于（本地化：APM中文网 四季天书）</string>
+    <string name="about">关于</string>
     <string name="version">版本</string>
     <!-- Toast Message -->
     <string name="user_autopan_long_press">长按图示可以启动地图中使用者位置置中</string>
@@ -147,7 +147,7 @@
     <string name="editor_err_land_rtl_added">在LAND或RTL后无法添加新的航点</string>
     <string name="editor_info_window">距离：0m，飞行时间：0:00</string>
     <string name="editor_info_window_distance">距离：%s</string>
-    <string name="editor_info_window_flight_time">飞行时间：%1$02d:%2$02d</string>
+    <string name="editor_info_window_flight_time">飞行时间：%s</string>
     <string name="editor_info_window_heading">航向：%.0f°</string>
     <string name="distance_to_home">至家的距离</string>
     <string name="loiter_time">留待时间</string>
@@ -364,13 +364,13 @@
     <string name="status_waiting_for_gps">等待GPS...</string>
 
     <!-- Preference dialogs -->
-    <string name="unlock_slider_description">滑到 %s</string>
-    <string name="pref_misc_title">杂项</string>
-    <string name="pref_dialogs_title">偏好对话框</string>
-    <string name="pref_auto_insert_mission_takeoff_rtl_land_title">自动载入\'TakeOff\'; 和
-        \'RTL\';/\';Land\'; 到任务</string>
+    <string name="unlock_slider_description">滑到</string>
+    <string name="pref_misc_title">其他设置</string>
+    <string name="pref_dialogs_title">首选项</string>
+    <string name="pref_auto_insert_mission_takeoff_rtl_land_title">自动载入TakeOff和
+        RTL/Land到任务</string>
     <string name="pref_dialog_entry_always">总是</string>
-    <string name="pref_dialog_entry_never">永不</string>
+    <string name="pref_dialog_entry_never">从不</string>
     <string name="pref_dialog_entry_ask">询问</string>
     <string name="pref_dialog_selection_reset_desc"><![CDATA[通过重新选择：设置->用户界面->选择对话框]]></string>
     <string name="pref_dronie_creation_title">创建自拍？</string>
@@ -471,45 +471,45 @@
     <string name="label_skip">跳过</string>
 
     <!-- Telemetry widget labels -->
-    <string name="label_widget_solo_video">Solo Video</string>
-    <string name="description_widget_solo_video">Displays the video stream from a connected Solo vehicle</string>
-    <string name="label_widget_uvc_video">UVC Video</string>
-    <string name="description_widget_uvc_video">Displays the video stream from a connected UVC device</string>
-    <string name="label_widget_attitude_speed_info">Speed &amp; Attitude Info</string>
-    <string name="description_widget_attitude_speed_info">Displays vehicle speed and attitude data</string>
-    <string name="label_widget_vehicle_diagnostics">Diagnostics</string>
-    <string name="description_widget_vehicle_diagnostics">Displays the vehicle diagnostics stats</string>
-    <string name="pref_tower_widgets_title">Widgets Preferences</string>
-    <string name="pref_tower_widgets_category">Tower Widgets</string>
-    <string name="pref_widgets_list_category">Widgets list</string>
-    <string name="label_widget_flight_timer">Flight Timer</string>
-    <string name="description_reset_flight_timer">Reset flight timer?</string>
-    <string name="description_widget_flight_timer">Displays the vehicle flight time</string>
-    <string name="label_widget_geo_info">Geo Info</string>
-    <string name="description_widget_geo_info">Displays vehicle geographical information (Lat/Long)</string>
+    <string name="label_widget_solo_video">Solo视频</string>
+    <string name="description_widget_solo_video">显示已连接的Solo载具上的视频流</string>
+    <string name="label_widget_uvc_video">UVC视频</string>
+    <string name="description_widget_uvc_video">显示已连接的UVC载具上的视频流</string>
+    <string name="label_widget_attitude_speed_info">速度 &amp; 高度 信息</string>
+    <string name="description_widget_attitude_speed_info">显示载具速度和高度数据</string>
+    <string name="label_widget_vehicle_diagnostics">诊断</string>
+    <string name="description_widget_vehicle_diagnostics">显示载具诊断状态</string>
+    <string name="pref_tower_widgets_title">窗口部件首选项</string>
+    <string name="pref_tower_widgets_category">Tower窗口部件</string>
+    <string name="pref_widgets_list_category">窗口部件列表</string>
+    <string name="label_widget_flight_timer">飞行计时表</string>
+    <string name="description_reset_flight_timer">重置飞行计时表?</string>
+    <string name="description_widget_flight_timer">显示载具飞行时间</string>
+    <string name="label_widget_geo_info">地理信息</string>
+    <string name="description_widget_geo_info">显示载具地理信息 (纬度/精度)</string>
     <string name="label_ekf">ekf</string>
     <string name="label_velocity_var_abbrev">vel</string>
     <string name="label_horizontal_position_var_abbrev">h.pos</string>
     <string name="label_vertical_position_var_abbrev">v.pos</string>
     <string name="label_mag_var_abbrev">mag</string>
     <string name="label_terrain_var_abbrev">ter</string>
-    <string name="label_attitude_estimate">Attitude estimate</string>
+    <string name="label_attitude_estimate">高度估计</string>
     <string name="label_flags">Flags</string>
-    <string name="label_constant_position_mode">Constant position mode</string>
-    <string name="label_velocity">Velocity</string>
-    <string name="label_velocity_estimate">Vertical estimate</string>
-    <string name="label_horizontal_estimate">Horizontal estimate</string>
-    <string name="label_horizontal_position">Horizontal Position</string>
-    <string name="label_relative_estimate">Relative estimate</string>
-    <string name="label_absolute_estimate">Absolute estimate</string>
+    <string name="label_constant_position_mode">固定位置模式</string>
+    <string name="label_velocity">速率</string>
+    <string name="label_velocity_estimate">垂直估计</string>
+    <string name="label_horizontal_estimate">水平估计</string>
+    <string name="label_horizontal_position">水平位置</string>
+    <string name="label_relative_estimate">相对估计</string>
+    <string name="label_absolute_estimate">绝对估计</string>
     <string name="label_above_ground_estimate">Above ground estimate</string>
-    <string name="label_vertical_position">Vertical Position</string>
-    <string name="label_absolute_predicted_estimate">Absolute predicted estimate</string>
-    <string name="label_relative_predicted_estimate">Relative predicted estimate</string>
+    <string name="label_vertical_position">垂直位置</string>
+    <string name="label_absolute_predicted_estimate">绝对预估</string>
+    <string name="label_relative_predicted_estimate">相对预估</string>
     <string name="error_no_video">没有可用的视频</string>
     <string name="label_repeat_indefinitely">Repeat indefinitely</string>
     <string name="title_ekf_status_viewer">EKF</string>
-    <string name="title_vibration_viewer">Vibration</string>
+    <string name="title_vibration_viewer">震动</string>
     <string name="title_ekf_flags_viewer">Flags</string>
     <string name="label_tertiary">Tertiary</string>
     <string name="label_secondary">Secondary</string>
@@ -517,60 +517,60 @@
     <string name="label_clipping">Clipping</string>
     <string name="unset_timer">--:--</string>
 
-    <string name="label_rtl">Return to Launch</string>
-    <string name="label_rtm">Return to Me</string>
-    <string name="pref_vehicle_home_update_warning_title">Vehicle Home Update</string>
-    <string name="pref_vehicle_home_update_warning_summary">Warns about vehicle home location updates while in flight.</string>
-    <string name="label_photo">Photo</string>
-    <string name="label_record">Record</string>
-    <string name="label_widgets_list">Widgets List</string>
-    <string name="label_solo_video_stream">Solo video stream</string>
-    <string name="label_custom_video_stream">Custom video stream</string>
+    <string name="label_rtl">返航至起飞点处</string>
+    <string name="label_rtm">返航至操控人处</string>
+    <string name="pref_vehicle_home_update_warning_title">更新载具Home点位</string>
+    <string name="pref_vehicle_home_update_warning_summary">警告，飞行中更新载具Home点位.</string>
+    <string name="label_photo">照片</string>
+    <string name="label_record">录像</string>
+    <string name="label_widgets_list">窗口小部件列表</string>
+    <string name="label_solo_video_stream">Solo视频流</string>
+    <string name="label_custom_video_stream">Custom视频流</string>
     <string name="hint_custom_video_stream_udp_port">0000</string>
-    <string name="label_udp_port">UDP Port:</string>
+    <string name="label_udp_port">UDP端口:</string>
 
     <!--START TTS Notification Provider Strings-->
-    <string name="toast_mission_sent">Waypoints sent</string>
-    <string name="speak_mission_sent">Waypoints saved to Drone</string>
-    <string name="toast_mission_received">Waypoints received from Drone</string>
-    <string name="speak_mission_received">Waypoints received</string>
-    <string name="speak_heartbeat_first">Connected</string>
-    <string name="speak_heartbeat_timeout">Data link lost, check connection.</string>
-    <string name="speak_heartbeat_restored">Data link restored</string>
-    <string name="speak_mission_item_updated">"Going for waypoint %d"</string>
-    <string name="speak_follow_start">Following</string>
-    <string name="speak_warning_signal_weak">Warning, weak signal</string>
-    <string name="speak_warning_no_gps">Error, no gps lock yet</string>
-    <string name="speak_warning_vehicle_home_updated">Vehicle home updated</string>
-    <string name="speak_warning_max_alt_exceed">Warning, max altitude exceeded!</string>
+    <string name="toast_mission_sent">航点信息已发送</string>
+    <string name="speak_mission_sent">航点信息已保存至无人机</string>
+    <string name="toast_mission_received">从无人机接收到航点信息</string>
+    <string name="speak_mission_received">航点信息已接收</string>
+    <string name="speak_heartbeat_first">已连接</string>
+    <string name="speak_heartbeat_timeout">数据链通讯丢失, 请检查连接.</string>
+    <string name="speak_heartbeat_restored">数据链通讯恢复</string>
+    <string name="speak_mission_item_updated">"飞往航点 %d"</string>
+    <string name="speak_follow_start">跟随</string>
+    <string name="speak_warning_signal_weak">警告, 通讯信号弱</string>
+    <string name="speak_warning_no_gps">错误, GPS尚未锁定</string>
+    <string name="speak_warning_vehicle_home_updated">载具Home点位已更新</string>
+    <string name="speak_warning_max_alt_exceed">警告, 已超过最大飞行高度!</string>
 
     <!-- Periodic Status Preferences -->
-    <string name="periodic_status_bat_volt">"battery %2.1f volts. "</string>
-    <string name="periodic_status_altitude">"altitude, %d meters. "</string>
-    <string name="periodic_status_airspeed">"airspeed, %d meters per second. "</string>
-    <string name="periodic_status_rssi">"r s s i, %d decibels"</string>
+    <string name="periodic_status_bat_volt">"电量 %2.1f c. "</string>
+    <string name="periodic_status_altitude">"高度, %d m. "</string>
+    <string name="periodic_status_airspeed">"空速, %d m/s. "</string>
+    <string name="periodic_status_rssi">"r s s i, %d db"</string>
 
-    <string name="speak_disconected">Disconnected</string>
-    <string name="toast_error_tts_lang">Unable to set \'Text to Speech\' language!</string>
-    <string name="warn_tts_accessibility">Please make sure \'Text to Speech\' is enabled in the system accessibility settings.</string>
+    <string name="speak_disconected">已断开</string>
+    <string name="toast_error_tts_lang">无法设置TTS语言!</string>
+    <string name="warn_tts_accessibility">请确保系统易用性设置中的TTS已设置为有效状态.</string>
     <string name="speak_armed">Armed</string>
     <string name="speak_disarmed">Disarmed</string>
-    <string name="speak_battery_notification">Battery at %d%%</string>
+    <string name="speak_battery_notification">电量 %d%%</string>
     <string name="fly_mode_wire_a">Fly by wire A</string>
     <string name="fly_mode_wire_b">Fly by wire B</string>
-    <string name="fly_mode_acro">Acrobatic</string>
-    <string name="fly_mode_alt_hold">Altitude hold</string>
-    <string name="fly_mode_pos_hold">Position hold</string>
-    <string name="fly_mode_rtl">Return to launch</string>
-    <string name="fly_mode_mode">"Mode "</string>
+    <string name="fly_mode_acro">特技</string>
+    <string name="fly_mode_alt_hold">高度保持</string>
+    <string name="fly_mode_pos_hold">位置保持</string>
+    <string name="fly_mode_rtl">自动返航</string>
+    <string name="fly_mode_mode">"模式 "</string>
 
     <!--Gps modes-->
-    <string name="gps_mode_2d_lock">GPS 2D Lock</string>
-    <string name="gps_mode_3d_lock">GPS 3D Lock</string>
-    <string name="gps_mode_3d_dgps_lock">GPS 3D+DGPS Lock</string>
-    <string name="gps_mode_3d_rtk_lock">GPS 3D+RTK Lock</string>
-    <string name="gps_mode_lost_gps_lock">Lost GPS Lock</string>
-    <string name="speak_connected">Connected</string>
+    <string name="gps_mode_2d_lock">GPS 2D 锁定</string>
+    <string name="gps_mode_3d_lock">GPS 3D 锁定</string>
+    <string name="gps_mode_3d_dgps_lock">GPS 3D+DGPS 锁定</string>
+    <string name="gps_mode_3d_rtk_lock">GPS 3D+RTK 锁定</string>
+    <string name="gps_mode_lost_gps_lock">Lost GPS 锁定</string>
+    <string name="speak_connected">已连接</string>
     <!--END TTS Notification Provider Strings-->
 
     <!-- Selectable values for the period of the speech output. -->
@@ -580,9 +580,41 @@
     <string name="period_60_sec">60秒</string>
     <string name="waypoint_description_reset_roi">重置当前兴趣区域锁定。</string>
 
-    <string name="uvc_device_select">Select UVC device</string>
-    <string name="uvc_device">Device</string>
-    <string name="uvc_device_refresh">Refresh</string>
-    <string name="uvc_device_no_device">No UVC device found</string>
+    <string name="uvc_device_select">选择UVC设备</string>
+    <string name="uvc_device">设备</string>
+    <string name="uvc_device_refresh">刷新</string>
+    <string name="uvc_device_no_device">未发现UVC设备</string>
+    <string name="pref_title_arcgis_tile_provider">ArcGIS瓦片图提供商</string>
 
+    <!-- Arc GIS -->
+    <string name="pref_advanced_settings_title">高级设定</string>
+    <string name="label_world_imagery">世界影像</string>
+    <string name="label_world_street_map">世界街景地图</string>
+    <string name="label_world_topo_map">世界地形地图</string>
+    <string name="pref_title_tile_provider_preferences">瓦片地图提供商</string>
+    <string name="label_fpv">FPV</string>
+
+    <!-- BaiduMap -->
+    <string name="pref_title_baidu_maps">百度地图偏好设置</string>
+    <string name="pref_baidu_map_offline_preference_title">百度离线地图下载</string>
+    <string name="pref_baidu_map_offline_preference_start">开始</string>
+    <string name="pref_baidu_map_offline_preference_stop">停止</string>
+    <string name="pref_baidu_map_offline_preference_view">查看</string>
+    <string name="pref_baidu_map_offline_preference_remove">删除</string>
+    <string name="pref_baidu_map_offline_preference_search">查找</string>
+    <string name="pref_baidu_map_offline_preference_city_list">城市列表</string>
+    <string name="pref_baidu_map_offline_preference_download_manage">下载管理</string>
+    <string name="pref_baidu_map_offline_preference_downloaded_label">已下载:--</string>
+    <string name="pref_baidu_map_offline_preference_downloaded_cities">已下载城市</string>
+    <string name="pref_baidu_map_offline_preference_download_available">有更新</string>
+    <string name="pref_baidu_map_offline_preference_download_latest">最新</string>
+    <string name="pref_baidu_map_offline_preference_hot_cities">热门城市</string>
+    <string name="pref_baidu_map_offline_preference_all_cities">所有城市</string>
+    <string name="pref_baidu_map_offline_preference_default_city">北京</string>
+    <string name="pref_baidu_map_offline_preference_default_city_id">131</string>
+    <string name="pref_baidu_map_offline_download_start_message">开始下载离线地图, City ID: %d</string>
+    <string name="pref_baidu_map_offline_download_stop_message">暂停下载离线地图. City ID: %d</string>
+    <string name="pref_baidu_map_offline_download_remove_message">删除离线地图. City ID: %d</string>
+    <string name="baidu_map_sdk_initializer_permission_error_message">百度地图: API Key错误, 请检查AndroidManifest.xml中百度地图的API Key是否正确!</string>
+    <string name="baidu_map_sdk_initializer_network_error_message">百度地图: 网络错误, 请检查网络连接是否正常!</string>
 </resources>

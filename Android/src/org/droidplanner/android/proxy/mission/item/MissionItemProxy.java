@@ -2,6 +2,7 @@ package org.droidplanner.android.proxy.mission.item;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SplineSurvey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.StructureScanner;
@@ -9,10 +10,7 @@ import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.spatial.Circle;
 import com.o3dr.services.android.lib.util.MathUtils;
 
-import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.MissionProxy;
-import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
-import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +22,6 @@ import java.util.List;
  */
 public class MissionItemProxy {
 
-    private final Drone.OnMissionItemsBuiltCallback missionItemBuiltListener = new Drone.OnMissionItemsBuiltCallback() {
-        @Override
-        public void onMissionItemsBuilt(MissionItem.ComplexItem[] complexItems) {
-            mMission.notifyMissionUpdate(false);
-        }
-    };
-
-
     /**
 	 * This is the mission item object this class is built around.
 	 */
@@ -42,22 +32,17 @@ public class MissionItemProxy {
 	 */
 	private final MissionProxy mMission;
 
-	/**
-	 * This is the marker source for this mission item render.
-	 */
-	private final List<MarkerInfo> mMarkerInfos;
-
-    /**
-     * Used by the mission item list adapter to provide drag and drop support.
-     */
-    private final long stableId;
-
 	public MissionItemProxy(MissionProxy mission, MissionItem missionItem) {
-        this.stableId = System.nanoTime();
 
 		mMission = mission;
 		mMissionItem = missionItem;
-		mMarkerInfos = MissionItemMarkerInfo.newInstance(this);
+
+        final Drone.OnMissionItemsBuiltCallback missionItemBuiltListener = new Drone.OnMissionItemsBuiltCallback() {
+            @Override
+            public void onMissionItemsBuilt(MissionItem.ComplexItem[] complexItems) {
+                mMission.notifyMissionUpdate(false);
+            }
+        };
 
 		if(mMissionItem instanceof SplineSurvey){
 			mMission.getDrone().buildMissionItemsAsync(new SplineSurvey[]{(SplineSurvey) mMissionItem}, missionItemBuiltListener);
@@ -78,8 +63,6 @@ public class MissionItemProxy {
 		return mMission;
 	}
 
-    public MissionProxy getMission(){return mMission;}
-
 	/**
 	 * Provides access to the mission item instance.
 	 * 
@@ -87,14 +70,6 @@ public class MissionItemProxy {
 	 */
 	public MissionItem getMissionItem() {
 		return mMissionItem;
-	}
-
-	public MissionDetailFragment getDetailFragment() {
-		return MissionDetailFragment.newInstance(mMissionItem.getType());
-	}
-
-	public List<MarkerInfo> getMarkerInfos() {
-		return mMarkerInfos;
 	}
 
 	/**
@@ -113,17 +88,17 @@ public class MissionItemProxy {
 				break;
 
 			case CIRCLE:
-				for (int i = 0; i <= 360; i += 10) {
-					Circle circle = (Circle) mMissionItem;
-					double startHeading = 0;
-					if (previousPoint != null) {
-						startHeading = MathUtils.getHeadingFromCoordinates(circle.getCoordinate(),
-								previousPoint);
-					}
-					pathPoints.add(MathUtils.newCoordFromBearingAndDistance(circle.getCoordinate(),
-							startHeading + i, circle.getRadius()));
-				}
-				break;
+                Circle circle = (Circle) mMissionItem;
+                LatLongAlt circleCenter = circle.getCoordinate();
+                double circleRadius = circle.getRadius();
+                double startHeading = previousPoint == null ? 0
+                    : MathUtils.getHeadingFromCoordinates(circleCenter, previousPoint);
+                int circleTurnsAngle = 360 * circle.getTurns();
+                for (int i = 0; i <= circleTurnsAngle; i += 10) {
+                    pathPoints.add(MathUtils.newCoordFromBearingAndDistance(circleCenter,
+                        startHeading + i, circleRadius));
+                }
+                break;
 
 			case SPLINE_SURVEY:
 			case SURVEY:
@@ -145,10 +120,31 @@ public class MissionItemProxy {
 		return pathPoints;
 	}
 
-    /**
-     * @return stable id used by the recycler view adapter to provide drag and drop support.
-     */
-    public long getStableId(){
-        return stableId;
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof MissionItemProxy)) {
+			return false;
+		}
+
+		MissionItemProxy that = (MissionItemProxy) o;
+
+		if (mMissionItem != null ? !mMissionItem.equals(that.mMissionItem) : that.mMissionItem != null) {
+			return false;
+		}
+		if (mMission != null ? !mMission.equals(that.mMission) : that.mMission != null) {
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = mMissionItem != null ? mMissionItem.hashCode() : 0;
+		result = 31 * result + (mMission != null ? mMission.hashCode() : 0);
+		return result;
+	}
 }

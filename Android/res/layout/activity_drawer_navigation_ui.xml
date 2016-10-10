@@ -55,14 +55,26 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:orientation="vertical"
         android:id="@+id/navigation_drawer"
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.NavigationView
             android:id="@+id/navigation_drawer_view"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:headerLayout="@layout/nav_header_main"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             app:menu="@menu/navigation_drawer_items" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/transparent_light_grey"/>
+
+        <android.support.design.widget.NavigationView
+            android:id="@+id/navigation_drawer_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:menu="@menu/navigation_drawer_settings"/>
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

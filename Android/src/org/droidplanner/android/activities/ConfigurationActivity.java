@@ -1,13 +1,14 @@
 package org.droidplanner.android.activities;
 
-import org.droidplanner.android.R;
-import org.droidplanner.android.fragments.ChecklistFragment;
-import org.droidplanner.android.fragments.ParamsFragment;
-import org.droidplanner.android.fragments.SensorSetupFragment;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+
+import org.droidplanner.android.R;
+import org.droidplanner.android.fragments.ChecklistFragment;
+import org.droidplanner.android.fragments.ParamsFragment;
+import org.droidplanner.android.fragments.calibration.compass.FragmentSetupCompass;
+import org.droidplanner.android.fragments.calibration.imu.FragmentSetupIMU;
 
 /**
  * This class implements and handles the various ui used for the drone
@@ -71,15 +72,19 @@ public class ConfigurationActivity extends DrawerNavigationUI {
         }
 	}
 
-    private Fragment getCurrentFragment(){
+    public Fragment getCurrentFragment(){
         return getSupportFragmentManager().findFragmentById(R.id.configuration_screen);
     }
 
     private Fragment getFragmentForId(int fragmentId){
         final Fragment fragment;
         switch(fragmentId){
-            case R.id.navigation_calibration:
-                fragment = new SensorSetupFragment();
+            case R.id.navigation_imu_calibration:
+                fragment = new FragmentSetupIMU();
+                break;
+
+            case R.id.navigation_compass_calibration:
+                fragment = new FragmentSetupCompass();
                 break;
 
             case R.id.navigation_checklist:
@@ -96,8 +101,11 @@ public class ConfigurationActivity extends DrawerNavigationUI {
     }
 
     private int getIdForFragment(Fragment fragment){
-        if(fragment instanceof SensorSetupFragment){
-            return R.id.navigation_calibration;
+        if(fragment instanceof FragmentSetupIMU){
+            return R.id.navigation_imu_calibration;
+        }
+        else if(fragment instanceof FragmentSetupCompass){
+            return R.id.navigation_compass_calibration;
         }
         else if(fragment instanceof ChecklistFragment){
             return R.id.navigation_checklist;
@@ -105,10 +113,5 @@ public class ConfigurationActivity extends DrawerNavigationUI {
         else {
             return R.id.navigation_params;
         }
-    }
-
-    @Override
-    public void onApiConnected() {
-        super.onApiConnected();
     }
 }

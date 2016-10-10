@@ -4,36 +4,39 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.o3dr.android.client.apis.VehicleApi;
+import com.o3dr.android.client.apis.ControlApi;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.property.Gps;
 import com.o3dr.services.android.lib.drone.property.GuidedState;
-import com.o3dr.services.android.lib.drone.property.Home;
 import com.o3dr.services.android.lib.drone.property.State;
-import com.o3dr.services.android.lib.model.AbstractCommandListener;
 
 import org.droidplanner.android.R;
+import org.droidplanner.android.activities.EditorActivity;
 import org.droidplanner.android.dialogs.GuidedDialog;
 import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
 import org.droidplanner.android.graphic.map.GraphicHome;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.android.utils.DroneHelper;
+import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.utils.MapUtils;
+import org.droidplanner.android.utils.SpaceTime;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 
-import timber.log.Timber;
+import java.util.List;
 
 public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
         DPMap.OnMarkerClickListener, DPMap.OnMarkerDragListener, GuidedDialogListener {
@@ -66,7 +69,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
             if (AttributeEvent.STATE_ARMING.equals(action)) {
                 final State droneState = drone.getAttribute(AttributeType.STATE);
                 if (droneState.isArmed()) {
-                    mMapFragment.clearFlightPath();
+                    clearFlightPath();
                 }
             }
         }
@@ -80,6 +83,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
+        setHasOptionsMenu(true);
         View view = super.onCreateView(inflater, viewGroup, bundle);
 
         mMapFragment.setOnMapLongClickListener(this);
@@ -100,15 +104,23 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
     }
 
     @Override
+    protected LatLongAlt getCurrentFlightPoint(){
+        LatLongAlt space = super.getCurrentFlightPoint();
+        if (space != null) {
+            return new SpaceTime(space, System.currentTimeMillis());
+        }
+        return null;
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         mMapFragment.selectAutoPanMode(AutoPanMode.DISABLED);
     }
 
     @Override
-    protected int getMaxFlightPathSize() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return Integer.valueOf(prefs.getString("pref_max_flight_path_size", "0"));
+    protected boolean showFlightPath(){
+        return true;
     }
 
     @Override
@@ -135,6 +147,40 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_flight_map, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menu_map_clear_flight_path:
+                clearFlightPath();
+                return true;
+
+            case R.id.menu_export_flight_path_as_mission:
+                if (flightPathPoints.isEmpty()) {
+                    Toast.makeText(getContext(), R.string.error_empty_flight_path, Toast.LENGTH_LONG).show();
+                    return true;
+                }
+
+                List<MissionItem> exportedMissionItems = MapUtils.exportPathAsMissionItems(flightPathPoints, 0.00012);
+                MissionProxy missionProxy = getMissionProxy();
+                missionProxy.clear();
+                missionProxy.addMissionItems(exportedMissionItems);
+                startActivity(new Intent(getActivity(), EditorActivity.class));
+
+                clearFlightPath();
+                Toast.makeText(getContext(), R.string.warning_check_exported_mission, Toast.LENGTH_LONG).show();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onMapLongClick(LatLong coord) {
         if (drone != null && drone.isConnected()) {
             final GuidedState guidedState = drone.getAttribute(AttributeType.GUIDED_STATE);
@@ -143,7 +189,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
                     guidedClickListener.onGuidedClick(coord);
             } else {
                 GuidedDialog dialog = new GuidedDialog();
-                dialog.setCoord(DroneHelper.CoordToLatLang(coord));
+                dialog.setCoord(MapUtils.coordToLatLng(coord));
                 dialog.setListener(this);
                 dialog.show(getChildFragmentManager(), "GUIDED dialog");
             }
@@ -153,7 +199,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
     @Override
     public void onForcedGuidedPoint(LatLng coord) {
         try {
-            drone.sendGuidedPoint(DroneHelper.LatLngToCoord(coord), true);
+            ControlApi.getApi(drone).goTo(MapUtils.latLngToCoord(coord), true, null);
         } catch (Exception e) {
             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -170,7 +216,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
     @Override
     public void onMarkerDragEnd(MarkerInfo markerInfo) {
         if (!(markerInfo instanceof GraphicHome)) {
-            drone.sendGuidedPoint(markerInfo.getPosition(), false);
+            ControlApi.getApi(drone).goTo(markerInfo.getPosition(), false, null);
         }
     }
 
@@ -178,7 +224,7 @@ public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickL
     public boolean onMarkerClick(MarkerInfo markerInfo) {
         if(markerInfo == null)
             return false;
-        drone.sendGuidedPoint(markerInfo.getPosition(), false);
+        ControlApi.getApi(drone).goTo(markerInfo.getPosition(), false, null);
         return true;
     }
 
