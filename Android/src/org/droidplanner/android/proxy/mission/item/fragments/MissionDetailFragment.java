@@ -166,8 +166,8 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
                                     for (LatLong coordinate : polygonPoints) {
                                         MissionItem newItem = selectedType.getNewItem();
                                         if (newItem instanceof MissionItem.SpatialItem) {
-                                            ((MissionItem.SpatialItem) newItem).setCoordinate(new LatLongAlt(coordinate
-                                                    .getLatitude(), coordinate.getLongitude(), altitude));
+                                            ((MissionItem.SpatialItem) newItem).getCoordinate().set(coordinate);
+                                            ((MissionItem.SpatialItem) newItem).getCoordinate().setAltitude(altitude);
                                         }
 
                                         newItems.add(new MissionItemProxy(mMissionProxy, newItem));
