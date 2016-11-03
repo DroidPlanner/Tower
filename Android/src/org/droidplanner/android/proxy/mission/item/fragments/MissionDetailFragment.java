@@ -12,10 +12,12 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.coordinate.Frame;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
@@ -206,11 +208,49 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
         }
     };
 
+    private final Spinner.OnItemSelectedListener missionFrameListener = new Spinner.OnItemSelectedListener() {
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            if (mSelectedItems.size() == 1) {
+                frameSpinner = (Spinner) view.findViewById(R.id.frameSpinner);
+
+                MissionItemProxy itemProxy = mSelectedProxies.get(0); // There is only 1 item
+                MissionItem currentItem = itemProxy.getMissionItem();
+
+                if(currentItem instanceof MissionItem.SpatialItem) {
+                    // We invented polymorphism to avoid this ;-)
+                    MissionItem.SpatialItem spatialItem = ((MissionItem.SpatialItem)currentItem);
+                    switch (position) {
+                        case 0:
+                            spatialItem.getCoordinate().setFrame(Frame.GLOBAL_ABS);
+                            break;
+                        case 1:
+                            spatialItem.getCoordinate().setFrame(Frame.GLOBAL_RELATIVE);
+                            break;
+                        case 2:
+                            spatialItem.getCoordinate().setFrame(Frame.GLOBAL_TERRAIN);
+                            break;
+                        default:
+                            // Do Nothing
+                            break;
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
+
     protected int getResource() {
         return R.layout.fragment_editor_detail_generic;
     }
 
     protected SpinnerSelfSelect typeSpinner;
+    protected Spinner frameSpinner;
     protected AdapterMissionItems commandAdapter;
     private OnMissionDetailListener mListener;
 
@@ -424,6 +464,8 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
         typeSpinner = (SpinnerSelfSelect) view.findViewById(R.id.spinnerWaypointType);
         typeSpinner.setAdapter(commandAdapter);
         typeSpinner.setOnSpinnerItemSelectedListener(missionItemSpinnerListener);
+
+        setupFrameSpinner(view);
     }
 
     public void onResume(){
@@ -495,6 +537,39 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
         }
 
         return false;
+    }
+
+    private void setupFrameSpinner(View view) {
+
+        if (mSelectedItems.size() == 1) {
+            frameSpinner = (Spinner) view.findViewById(R.id.frameSpinner);
+
+            MissionItemProxy itemProxy = mSelectedProxies.get(0);
+            MissionItem currentItem = itemProxy.getMissionItem();
+
+            if (currentItem instanceof MissionItem.SpatialItem) {
+                Frame frame = ((MissionItem.SpatialItem) currentItem).getCoordinate().getFrame();
+//                List<String> strList = new ArrayList<>("@arrays/")  // TODO !BB! Get List from array string
+                switch (frame) {
+                    case GLOBAL_ABS:
+                        frameSpinner.setSelection(0);
+                        break;
+                    case LOCAL_NED: // TODO !BB! Fix to add NED
+                        break;
+                    case MISSION:  // TODO !BB! Fix to add Mission
+                        break;
+                    case GLOBAL_RELATIVE:
+                        frameSpinner.setSelection(1);
+                        break;
+                    case LOCAL_ENU:  // TODO !BB! Fix to add ENU
+                        break;
+                    case GLOBAL_TERRAIN:
+                        frameSpinner.setSelection(2);
+                        break;
+                }
+            }
+            frameSpinner.setOnItemSelectedListener(missionFrameListener);
+        }
     }
 
     @Override
