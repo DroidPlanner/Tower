@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.o3dr.services.android.lib.coordinate.Frame;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.command.CameraTrigger;
 import com.o3dr.services.android.lib.drone.mission.item.command.ChangeSpeed;
@@ -132,8 +133,6 @@ public class MissionItemListAdapter extends RecyclerView.Adapter<MissionItemList
         final MissionProxy missionProxy = proxy.getMissionProxy();
         final MissionItem missionItem = proxy.getMissionItem();
 
-        nameView.setText(String.format(Locale.US, "%3d", missionProxy.getOrder(proxy)));
-
         int leftDrawable;
 
         // Spatial item's icons
@@ -183,7 +182,8 @@ public class MissionItemListAdapter extends RecyclerView.Adapter<MissionItemList
             leftDrawable = R.drawable.ic_mission_wp;
         }
 
-        altitudeView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, 0, 0, 0);
+        String frameType = "";
+        nameView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, 0, 0, 0);
 
         if (missionItem instanceof MissionItem.SpatialItem) {
             MissionItem.SpatialItem waypoint = (MissionItem.SpatialItem) missionItem;
@@ -196,6 +196,8 @@ public class MissionItemListAdapter extends RecyclerView.Adapter<MissionItemList
                 altitudeView.setTextColor(Color.YELLOW);
             else
                 altitudeView.setTextColor(Color.WHITE);
+
+            frameType =  waypoint.getCoordinate().getFrame().getAbbreviation();
 
         } else if (missionItem instanceof Survey) {
             double altitude = ((Survey) missionItem).getSurveyDetail().getAltitude();
@@ -218,6 +220,7 @@ public class MissionItemListAdapter extends RecyclerView.Adapter<MissionItemList
                 altitudeView.setTextColor(Color.YELLOW);
             else
                 altitudeView.setTextColor(Color.WHITE);
+
         }else if(missionItem instanceof ChangeSpeed){
             final double speed = ((ChangeSpeed) missionItem).getSpeed();
             final SpeedUnit convertedSpeed = speedUnitProvider.boxBaseValueToTarget(speed);
@@ -226,5 +229,7 @@ public class MissionItemListAdapter extends RecyclerView.Adapter<MissionItemList
         else {
             altitudeView.setText("");
         }
+
+        nameView.setText(String.format(Locale.US, "%3d %s", missionProxy.getOrder(proxy), frameType.toUpperCase()));
     }
 }

@@ -16,17 +16,16 @@ Used to Style the horizontal list of mission items.
     android:padding="3dp"
     android:layout_marginBottom="2dp"
     android:layout_marginLeft="1dp"
-    android:layout_marginStart="1dp"
-    >
+    android:layout_marginStart="1dp">
 
     <TextView
-        android:id="@+id/rowNameView"
+        android:id="@+id/rowAltitudeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="4dp"
-        tools:text="44"
+        tools:text="200m"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/editor_list_item_text_size"
         android:textStyle="bold"
@@ -34,16 +33,15 @@ Used to Style the horizontal list of mission items.
         />
 
     <TextView
-        android:id="@+id/rowAltitudeView"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/rowNameView"
+        android:id="@+id/rowNameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="200m"
+        tools:text="2"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
-        android:drawableLeft="@drawable/ic_mission_wp"
+        android:drawableRight="@drawable/ic_mission_wp"
         android:drawablePadding="2dp"
-        />
+        android:layout_below="@+id/rowAltitudeView"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
