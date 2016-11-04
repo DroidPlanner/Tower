@@ -44,6 +44,7 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 
 	@Override
 	public void onMapLongClick(LatLong point) {
+		editorListener.onMapClick(point);
 	}
 
 	@Override
