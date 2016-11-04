@@ -541,8 +541,12 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
 
     private void setupFrameSpinner(View view) {
 
+        frameSpinner = (Spinner) view.findViewById(R.id.frameSpinner);
+
+        if (frameSpinner == null) // no frame option just return
+            return;
+
         if (mSelectedItems.size() == 1) {
-            frameSpinner = (Spinner) view.findViewById(R.id.frameSpinner);
 
             MissionItemProxy itemProxy = mSelectedProxies.get(0);
             MissionItem currentItem = itemProxy.getMissionItem();
