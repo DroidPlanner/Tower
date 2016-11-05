@@ -212,30 +212,50 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            if (mSelectedItems.size() == 1) {
-                frameSpinner = (Spinner) view.findViewById(R.id.frameSpinner);
+            frameSpinner = (Spinner) view.findViewById(R.id.frameSpinner);
 
-                MissionItemProxy itemProxy = mSelectedProxies.get(0); // There is only 1 item
-                MissionItem currentItem = itemProxy.getMissionItem();
+            if (frameSpinner != null && mSelectedProxies.isEmpty())
+                return;
 
-                if(currentItem instanceof MissionItem.SpatialItem) {
-                    // We invented polymorphism to avoid this ;-)
-                    MissionItem.SpatialItem spatialItem = ((MissionItem.SpatialItem)currentItem);
+            MissionItemType selectedType = commandAdapter.getItem(position);
+            List<Pair<MissionItemProxy, List<MissionItemProxy>>> updatedList = new ArrayList<>(
+                    mSelectedProxies.size());
+
+            for (MissionItemProxy missionItemProxy : mSelectedProxies) {
+
+                MissionItem currentItem = missionItemProxy.getMissionItem();
+
+                List<MissionItemProxy> updatedItems = new ArrayList<>();
+
+                if (currentItem instanceof MissionItem.SpatialItem) {
+                    // Only items that have frames need to be updated
+                    MissionItem.SpatialItem spatialItem = ((MissionItem.SpatialItem) currentItem);
+
+                    boolean updated = false;
                     switch (position) {
                         case 0:
-                            spatialItem.getCoordinate().setFrame(Frame.GLOBAL_ABS);
+                            updated = spatialItem.getCoordinate().setFrame(Frame.GLOBAL_ABS);
                             break;
                         case 1:
-                            spatialItem.getCoordinate().setFrame(Frame.GLOBAL_RELATIVE);
+                            updated = spatialItem.getCoordinate().setFrame(Frame.GLOBAL_RELATIVE);
                             break;
                         case 2:
-                            spatialItem.getCoordinate().setFrame(Frame.GLOBAL_TERRAIN);
+                            updated = spatialItem.getCoordinate().setFrame(Frame.GLOBAL_TERRAIN);
                             break;
                         default:
                             // Do Nothing
                             break;
                     }
+
+                    if (updated) {
+                        updatedItems.add(missionItemProxy);
+                        updatedList.add(Pair.create(missionItemProxy, updatedItems));
+                    }
                 }
+            }
+            if (!updatedList.isEmpty()) {
+                mListener.onWaypointTypeChanged(selectedType, updatedList);
+                dismiss(); // TODO:!BB! do we want to dismiss the dialog
             }
         }
 
@@ -546,9 +566,7 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
         if (frameSpinner == null) // no frame option just return
             return;
 
-        if (mSelectedItems.size() == 1) {
-
-            MissionItemProxy itemProxy = mSelectedProxies.get(0);
+        for (MissionItemProxy itemProxy : mSelectedProxies) {
             MissionItem currentItem = itemProxy.getMissionItem();
 
             if (currentItem instanceof MissionItem.SpatialItem) {
