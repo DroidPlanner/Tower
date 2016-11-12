@@ -100,9 +100,9 @@
         style="@style/largeTelemetryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/debug_step_out"
+        android:drawableLeft="@drawable/debug_step_up"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/debug_step_out"
+        android:drawableStart="@drawable/debug_step_up"
         android:singleLine="true"
         android:text="@string/vertical_speed_empty"
         tools:text="vs: 1000 mph" />
