@@ -18,8 +18,6 @@ import org.droidplanner.android.R
 import org.droidplanner.android.fragments.widget.TowerWidget
 import org.droidplanner.android.fragments.widget.TowerWidgets
 import org.droidplanner.android.view.AttitudeIndicator
-import java.math.BigDecimal
-import java.math.RoundingMode
 import java.util.*
 
 /**
@@ -141,15 +139,12 @@ public class MiniWidgetAttitudeSpeedInfo : TowerWidget() {
         horizontalSpeed?.text = getString(R.string.horizontal_speed_telem, speedUnitProvider.boxBaseValueToTarget(groundSpeedValue).toString())
         verticalSpeed?.text = getString(R.string.vertical_speed_telem, speedUnitProvider.boxBaseValueToTarget(verticalSpeedValue).toString())
 
-        var rSpeedValue = BigDecimal(verticalSpeedValue)
-        rSpeedValue = rSpeedValue.setScale(2, RoundingMode.HALF_DOWN)
-
         if (verticalSpeedValue >= MIN_VERTICAL_SPEED){
-            verticalSpeed?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.debug_step_up, 0, 0, 0);
+            verticalSpeed?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_debug_step_up, 0, 0, 0);
         }else if(verticalSpeedValue <= -(MIN_VERTICAL_SPEED)){
-            verticalSpeed?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.debug_step_down, 0, 0, 0);
+            verticalSpeed?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_debug_step_down, 0, 0, 0);
         }else{
-            verticalSpeed?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.debug_step_none, 0, 0, 0);
+            verticalSpeed?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_debug_step_none, 0, 0, 0);
         }
 
     }

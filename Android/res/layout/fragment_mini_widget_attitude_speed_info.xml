@@ -82,9 +82,9 @@
         style="@style/largeTelemetryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/debug_step_over"
+        android:drawableLeft="@drawable/ic_debug_step_over"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/debug_step_over"
+        android:drawableStart="@drawable/ic_debug_step_over"
         android:singleLine="true"
         android:text="@string/horizontal_speed_empty"
         tools:text="hs: 1000 mph" />
@@ -100,9 +100,9 @@
         style="@style/largeTelemetryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/debug_step_up"
+        android:drawableLeft="@drawable/ic_debug_step_none"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/debug_step_up"
+        android:drawableStart="@drawable/ic_debug_step_none"
         android:singleLine="true"
         android:text="@string/vertical_speed_empty"
         tools:text="vs: 1000 mph" />
