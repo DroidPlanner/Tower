@@ -58,7 +58,7 @@ public class MiniWidgetAttitudeSpeedInfo : TowerWidget() {
 
     private var headingModeFPV: Boolean = false
 
-    private val MIN_VERTICAL_SPEED = 0.10
+    private val MIN_VERTICAL_SPEED_MPS = 0.10 //Meters Per Second
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_mini_widget_attitude_speed_info, container, false)
@@ -139,9 +139,9 @@ public class MiniWidgetAttitudeSpeedInfo : TowerWidget() {
         horizontalSpeed?.text = getString(R.string.horizontal_speed_telem, speedUnitProvider.boxBaseValueToTarget(groundSpeedValue).toString())
         verticalSpeed?.text = getString(R.string.vertical_speed_telem, speedUnitProvider.boxBaseValueToTarget(verticalSpeedValue).toString())
 
-        if (verticalSpeedValue >= MIN_VERTICAL_SPEED){
+        if (verticalSpeedValue >= MIN_VERTICAL_SPEED_MPS){
             verticalSpeed?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_debug_step_up, 0, 0, 0);
-        }else if(verticalSpeedValue <= -(MIN_VERTICAL_SPEED)){
+        }else if(verticalSpeedValue <= -(MIN_VERTICAL_SPEED_MPS)){
             verticalSpeed?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_debug_step_down, 0, 0, 0);
         }else{
             verticalSpeed?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_debug_step_none, 0, 0, 0);
