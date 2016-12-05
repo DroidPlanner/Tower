@@ -4,10 +4,12 @@ jdk: oraclejdk8
 
 android:
   components:
-    - platform-tools
     - tools
+    - tools
+    - platform-tools
 
     # The BuildTools version used by your project
+    - build-tools-24.0.1
     - build-tools-23.0.3
 
     # The SDK version used to compile your project
@@ -18,9 +20,6 @@ android:
     - extra-google-m2repository
     - extra-android-m2repository
     - extra-android-support
-
-  licenses:
-    - 'android-sdk-license-.+'
 
 before_script:
     - export GRADLE_OPTS="-XX:MaxPermSize=2048m -Xmx1536m"
