@@ -521,7 +521,7 @@
 
     <style name="Fab.MyLocation">
         <item name="android:layout_marginBottom">-15dp</item>
-        <item name="android:layout_marginTop">-16dp</item>
+        <item name="android:layout_marginTop">-10dp</item>
         <item name="android:layout_marginStart">-12dp</item>
         <item name="backgroundTint">@android:color/white</item>
         <item name="fabSize">mini</item>
