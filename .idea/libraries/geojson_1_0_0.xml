@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="geojson-1.0.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Android/build/intermediates/exploded-aar/com.cocoahero.android/geojson/1.0.0/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/Android/build/intermediates/exploded-aar/com.cocoahero.android/geojson/1.0.0/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Android/Android.iml" filepath="$PROJECT_DIR$/Android/Android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Core/Core.iml" filepath="$PROJECT_DIR$/Core/Core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HorizontalVariableListView/HorizontalVariableListView/HorizontalVariableListView-HorizontalVariableListView.iml" filepath="$PROJECT_DIR$/HorizontalVariableListView/HorizontalVariableListView/HorizontalVariableListView-HorizontalVariableListView.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Mavlink/Mavlink.iml" filepath="$PROJECT_DIR$/Mavlink/Mavlink.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PebbleKit/PebbleKit.iml" filepath="$PROJECT_DIR$/PebbleKit/PebbleKit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/usb-serial-for-android/UsbSerialLibrary/UsbSerialLibrary.iml" filepath="$PROJECT_DIR$/usb-serial-for-android/UsbSerialLibrary/UsbSerialLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/droidplanner.iml" filepath="$PROJECT_DIR$/droidplanner.iml" />
+    </modules>
+  </component>
+</project>
+
