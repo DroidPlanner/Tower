@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Do not translate the following strings -->
+    <string name="app_title">DroidPlanner</string>
+
+    <!-- Generic strings -->
+    <string name="settings">Настройки</string>
+    <string name="help">Справка</string>
+    <string name="menu_drone_setup">Настройка дрона</string>
+    <string name="app_settings">Настройки приложения</string>
+    <string name="flight_data">Полет</string>
+    <string name="editor">Редактор</string>
+    <string name="send_mission">Отправить миссию</string>
+    <string name="load_mission">Загрузить миссию</string>
+
+    <!-- Drone Setup tabs -->
+    <string name="screen_tuning">Регулировка</string>
+    <string name="screen_cal">Калибровка</string>
+    <string name="screen_checklist">Контрольный список</string>
+    <string name="screen_rc">Радио</string>
+    <string name="screen_parameters">Параметры</string>
+    
+    <!-- App Settings/Preferences -->
+    <string name="pref_connection_type">Тип подключения телеметрии</string>
+    <string name="pref_connection_type_summary">Какое соединение использовать для связи с дроном</string>
+    <string name="pref_maps_title">Карты</string>
+    <string name="pref_maps_providers_summary">Какой поставщик карт использовать.</string>
+    <string name="pref_maps_providers_title">Поставщики карт</string>
+    <string name="pref_mavlink">MAVLink</string>
+    <string name="pref_mavlink_rates">Частота потоков данных</string>
+    <string name="pref_mavlink_rates_summary">Частота, с которой полетная информация должна быть получена от дрона (в Гц)</string>
+    <string name="pref_mavlink_stream_rate_ext_stat">Точки маршрута, GPS без обработки, информация о барьерах, текущая точка маршрута и т.д.</string>
+    <string name="pref_mavlink_stream_rate_extra1">Положение в пространстве</string>
+    <string name="pref_mavlink_stream_rate_extra2">VFR_Hud информация</string>
+    <string name="pref_mavlink_stream_rate_extra3">AHRS, состояние оборудования, ветер</string>
+    <string name="pref_mavlink_stream_rate_position">GPS информация</string>
+    <string name="pref_mavlink_stream_rate_RC_override">Перекрытие RC</string>
+    <string name="pref_mavlink_stream_rate_rc_channels">Информация о каналах RC</string>
+    <string name="pref_mavlink_stream_rate_raw_sensors">Сенсоры без обработки</string>
+    <string name="pref_mavlink_stream_rate_raw_controller">Контроллер без обработки</string>
+    <string name="pref_ui">Пользовательский интерфейс</string>
+    <string name="pref_ui_language_english">Английский как язык пользовательского интерфейса</string>
+    <string name="pref_ui_language_english_summary">Использовать английский язык (вместо системного языка). Требуется перезапуск приложения.</string>
+    <string name="pref_connection_actions">Когда подключен к дрону</string>
+    <string name="pref_connection_actions_summary">Выполнить действия во время или после подключения к дрону\nОтключиться или переподключиться</string>
+    <string name="pref_keep_screen_bright">Не выключать экран</string>
+    <string name="pref_keep_screen_bright_summary">Не выключать экран и поддерживать яркость (уменьшает заряд батареи)</string>
+    <string name="pref_lock_screen_orientation">Фиксировать ориентацию экрана</string>
+    <string name="pref_lock_screen_orientation_summary">Фиксировать ориентацию экрана на ту, которая была при подключении</string>
+    <string name="pref_flight_data">Полетная информация</string>
+    <string name="pref_max_flight_path_size">Размер полетного пути</string>
+    <string name="pref_max_flight_path_size_summary">Размер полетного пути (установите ноль для отключения)</string>
+    <string name="pref_guided_mode_on_long_press">Режим Guided при долгом нажатии</string>
+    <string name="pref_guided_mode_on_long_press_summary">Перейти в режим Guided при долгом нажатии на карту</string>
+    <string name="pref_follow_me_mode_enabled">Включить режим FollowMe</string>
+    <string name="pref_follow_me_mode_enabled_summary">В разработке</string>
+    <string name="pref_heading_mode">Включить режим направления FPV</string>
+    <string name="pref_heading_mode_summary">Изменить режим направления на FPV (от -180º до 180º)</string>
+    <string name="pref_pebble">PEBBLE</string>
+    <string name="pref_pebble_install_watchapp">Обновить Pebble</string>
+    <string name="pref_advanced">Дополнительно</string>
+    <string name="pref_advanced_use_offline_maps">Использовать оффлайн карты</string>
+    <string name="pref_advanced_use_offline_maps_summary">Использовать карты из локального хранилища для офлайн просмотра</string>
+    <string name="pref_map_type">Тип карты</string>
+    <string name="pref_map_type_default">Спутник</string>
+    <string name="pref_map_type_summary">Какой тип карты использовать</string>
+    <string name="pref_enable_tts">Включить преобразование текста в речь</string>
+    <string name="pref_enable_tts_summary">Голосовые оповещения о важных событиях</string>
+    <string name="pref_request_max_volume">Максимальный звук при старте</string>
+    <string name="pref_vehicle_type">Тип дрона по умолчанию</string>
+    <string name="pref_vehicle_type_summary">Тип дрона по умолчанию до подключения</string>
+    <string name="pref_rc">Экран RC</string>
+    <string name="pref_rc_general">Общие</string>
+    <string name="pref_rc_mode">Режим RC</string>
+    <string name="pref_rc_mode_summary">Газ на левом или правом стиках</string>
+    <string name="pref_rc_quickmode_left">QuickMode Влево</string>
+    <string name="pref_rc_quickmode_right">QuickMode Вправо</string>
+    <string name="pref_rc_reverse">Обратить</string>
+    <string name="pref_rc_throttle">Газ</string>
+    <string name="pref_rc_throttle_reverse_summary">Обратить направление газа</string>
+    <string name="pref_rc_throttle_returntocenter">Возврат к центру</string>
+    <string name="pref_rc_throttle_returntocenter_summary">Возвращать газ к центру после конца касания</string>
+    <string name="pref_rc_rudder">Рыскание</string>
+    <string name="pref_rc_rudder_reverse_summary">Обратить направление рыскания (направления)</string>
+    <string name="pref_rc_aileron">Элерон</string>
+    <string name="pref_rc_aileron_reverse_summary">Обратить направление (наклона)</string>
+    <string name="pref_rc_elevator">Тангаж</string>
+    <string name="pref_rc_elevator_reverse_summary">Обратить направление тангажа (элеватор)</string>
+    <string name="pref_connection">Настройки соединения</string>
+    <string name="pref_usb">USB соединение</string>
+    <string name="pref_baud_type">Скорость соединения телеметрии</string>
+    <string name="pref_baud_type_summary">Скорость передачи (в бодах) USB соединения</string>
+    <string name="pref_server">TCP соединение</string>
+    <string name="pref_server_ip">IP адрес сервера</string>
+    <string name="pref_server_port">Порт сервера</string>
+    <string name="pref_server_udp">UDP соединение</string>
+    <string name="pref_udp_server_port">Порт сервера UDP</string>
+    <string name="about">О приложении</string>
+    <string name="version">Версия</string>
+    <string name="storage_folder">Папка приложения</string>
+    <string name="pref_live_upload">Включить онлайн мониторинг (Альфа версия)</string>
+    <string name="pref_live_upload_summary">Включить мониторинг дрона на Droneshare в реальном времени</string>
+    
+    <!-- Connection State -->
+    <string name="menu_connect">Соединиться</string>
+    <string name="menu_disconnect">Отсоединиться</string>
+    <string name="connected">Соединено</string>
+    <string name="disconnected">Отсоединено</string>
+
+    <!-- Failsafe Strings -->
+    <string name="RCFailsafe">Внимание! Отказ RC – Возврат домой</string>
+
+    <!-- Common Setup Buttons Resource Strings -->
+    <string name="button_setup_calibrate">Калибровать</string>
+    <string name="button_setup_cancel">Отмена</string>
+    <string name="button_setup_send">Отправить</string>
+    <string name="button_setup_next">Дальше</string>
+    <string name="button_setup_done">Выполнено</string>
+    <string name="Pause">Пауза</string>
+    <string name="dialog_box_btn_txt_ok">ОК</string>
+
+    <!-- File operations -->
+    <string name="select_file_to_open">Выберите файл:</string>
+    <string name="no_files">Файлов нет</string>
+    <string name="error_when_opening_file">Ошибка при открытии файла</string>
+    <string name="save">Сохранить</string>
+    <string name="open">Открыть</string>
+    <string name="write">Записать</string>
+    <string name="refresh">Обновить</string>
+
+    <!-- Survey/Mapping related strings -->
+    <string name="distance_between_lines">Поперечная: </string>
+    <string name="footprint">Покрытие</string>
+    <string name="ground_resolution">GSD</string>
+    <string name="distance_between_pictures">Продольная</string>
+    <string name="area">Площадь</string>
+    <string name="camera_">Камера:</string>
+    <string name="inner_wps">Внутренние путевые точки</string>
+    <string name="hatch_angle">Hatch angle:</string>
+    <string name="flight_altitude">Полетная высота:</string>
+    <string name="overlap">Перекрытие:</string>
+    <string name="sidelap">Sidelap:</string>
+    <string name="mission_length">Длина сетки</string>
+    <string name="pictures">Изображения</string>
+    <string name="number_of_strips">Кол-во полосок</string>
+    <string name="exception_draw_polygon">Установите многоугольник/путевые точки</string>
+    <string name="exception_draw_2_more_polygon_points">Установите хотя-бы еще 2 точки многоугольника</string>
+    <string name="exception_draw_1_more_polygon_points">Установите хотя-бы еще 1 точку многоугольника</string>
+    <string name="draw_the_survey_region">Установите регион съемки</string>
+    <string name="mission_is_too_lengthy">Миссия слишком длинная</string>
+
+    <!-- Flight Mode information -->
+    <string name="mode_acro">Режим «Acro» позволяет пилоту контролировать частоту вращения напрямую.</string>
+    <string name="mode_althold">Режим «Alt Hold» контролирует газ и поддерживает высоту автоматически. GPS не требуется.</string>
+    <string name="mode_auto">Режим «Auto» выполняет миссию загруженную на дрон.</string>
+    <string name="mode_circle">Режим «Circle» вращает дрон по окружности вокруг точки интереса. Дрон будет направлен на центр. Требуется сигнал GPS</string>
+    <string name="mode_drift">Режим «Drift» комбинирует наклон и рыскание для более естесственного полета. Требуется сигнал GPS.</string>
+    <string name="mode_guided">Режим «Guided» позволяет контролировать позицию дрона с наземной станции. Требуется сигнал GPS.</string>
+    <string name="mode_land">Посадка на текущую позицию. Требуется сигнал GPS.</string>
+    <string name="mode_loiter">Режим «Loiter» позволяет пилоту летать полностью по GPS</string>
+    <string name="mode_ofloiter">Режим «Loiter» дополненный Optical Flow держит позицию и высоту с помощью сенсоров оптического потока.</string>
+    <string name="mode_position">Режим «Position» позволяет пилоту летать по GPS, но с ручным контролем газа.</string>
+    <string name="mode_rtl">Режим «RTL» поднимает дрон на минимальную высоту, возвращает его домой и садит. Требуется сигнал GPS.</string>
+    <string name="mode_sport">Режим «Sport» позволяет пилоту контролировать частоту вращения напрямую и с автоматическим выравниванием</string>
+    <string name="mode_stabilize">Режим «Stabilize» выравнивает дрон в полете.</string>
+    <string name="mode_hybrid">Режим «Hybrid» держит позицию и реагирует на управление пилота</string>
+
+    <!-- Waypoint types -->
+    <string name="waypointType_Waypoint">Путевая точка</string>
+    <string name="waypointType_SplineWaypoint">Плавная точка</string>
+    <string name="waypointType_TakeOff">Взлет</string>
+    <string name="waypointType_RTL">Домой</string>
+    <string name="waypointType_Land">Посадка</string>
+    <string name="waypointType_Circle">Орбита</string>
+    <string name="waypointType_Loiter">Loiter</string>
+    <string name="waypointType_ROI">Регион интереса</string>
+    <string name="waypointType_Survey">Регион съемки</string>
+
+    <!-- Waypoint info -->
+    <string name="waypointInfo_Land">Посадить дрон на текущую позицию. Вы должны вручную выйти из режима «Auto» для того, чтобы задизармить моторы.</string>
+    <string name="waypointInfo_Generic">Неопределенная путевая точка</string>
+    <string name="waypointInfo_Loiter">не использовано.</string>
+    <string name="waypointInfo_LoiterN">Вращаться вокруг текущего положения указанное кол-во раз</string>
+    <string name="waypointInfo_LoiterT">Держать текущую позицию указанное кол-во секунд или до конца миссии.</string>
+    <string name="waypointInfo_RTL">Отправить дрон домой (установлено во время арминга моторов). Если указать высоту 0, то дрон установит высоту, которая указана в параметре высоты RTL.</string>
+    <string name="waypointInfo_TakeOff">Взлететь и подняться на указанную высоту прежде чем перейти к следующей путевой точке.</string>
+    <string name="waypointInfo_Waypoint">Переместиться на позицию в 3D пространстве. Опциональная задержка (в секундах) для задержки позиции.</string>
+    <string name="waypointInfo_CondAlt">Подъем/спуск с указанной частотой. Приостановить миссию до набора указанной высоты.</string>
+    <string name="waypointInfo_CondYaw">Установить условие набора указанного курсового угла цели.</string>
+    <string name="waypointInfo_CondDistance">Приостановить миссию до того, как дрон будет находится на указанной от следующей путевой точки дистанции</string>
+    <string name="waypointInfo_SetHome">Меняет местоположение дома на текущую или указанную позицию.</string>
+    <string name="waypointInfo_SetSpeed">Изменить указанное значение скорости и/или газа. Установить -1 для скорости и газа, если изменение не требуется</string>
+    <string name="waypointInfo_ROI">Установить позицию и высоту точки, к которой постоянно будет повернут дрон и на которую наведена опциональная камера.</string>
+    <string name="waypointInfo_SetJump">Повторить путевую точку</string>
+
+    <!-- Waypoint editor -->
+    <string name="editor_info_window">Дистанция: 200 м, Полетное время: 03:30 мин</string>
+    <string name="distance_to_home">Дистанция до дома</string>
+    <string name="loiter_time">Loiter Time</string>
+    <string name="waypoint_delay">Пауза перед следующей путевой точкой</string>
+    <string name="loiter_radius">Loiter Radius</string>
+    <string name="loiter_ccw">CCW</string>
+    <string name="waypoint_altitude">Высота</string>
+    <string name="waypoint_angle">Yaw Angle</string>
+    <string name="waypoint_finalaltitude">Target Altitude</string>
+    <string name="waypoint_altrate">Climb/descend Rate</string>
+    <string name="waypoint_yawrate">Темп рыскания</string>
+    <string name="waypoint_yawdir">Установить направление рыскания на CCW</string>
+    <string name="waypoint_yawoffset">Использовать относительное смещение</string>
+    <string name="waypoint_distance">Дистанция</string>
+    <string name="waypoint_homecurrent">Установить дом на текущую позицию</string>
+    <string name="waypoint_longitude">Долгота:</string>
+    <string name="waypoint_latitude">Широта:</string>
+    <string name="waypoint_speed">Целевая скорость</string>
+    <string name="waypoint_throttle">Газ</string>
+    <string name="waypoint_speedtype">Тип скорости</string>
+    <string name="waypoint_airspeed">Воздушная скорость</string>
+    <string name="waypoint_groundspeed">Наземная скорость</string>
+    <string name="selectCoodSource">Выберите источник данных о положении</string>
+    <string name="waypoint_coordsrc">Источник данных:</string>
+    <string name="waypoint_jumpto">Перейти к путевой точке:</string>
+    <string name="waypoint_repeat">Повторить путевую точку</string>
+    <string name="Orbits">Кол-во орбит:</string>
+
+    <string name="dlg_clear_mission_title">Очистить миссию</string>
+    <string name="dlg_clear_mission_confirm">Удалить все путевые точки на карте?</string>
+
+    <!-- Selection of map style -->
+    <string name="menu_map_type">Тип карты</string>
+    <string name="menu_map_type_satellite">Спутник</string>
+    <string name="menu_map_type_hybrid">Гибридная</string>
+    <string name="menu_map_type_normal">Обычная</string>
+    <string name="menu_map_type_terrain">Рельеф</string>
+
+    <!-- Parameters screen -->
+    <string name="params_click_to_refresh">Коснитесь для обновления параметров дрона</string>
+    <string name="refreshing_parameters">Обновление параметров…</string>
+    <string name="parameters_saved">Параметры сохранены</string>
+    <string name="msg_parameters_written_to_drone">Параметры записаны в дрон</string>
+    <string name="metadata_value">Значение:</string>
+    <string name="metadata_custom_value">** Пользовательское значение **</string>
+    <string name="metadata_values">Значения:</string>
+    <string name="metadata_units">Единицы:</string>
+    <string name="metadata_range">Интервал:</string>
+    <string name="lst_note_hint">Чтобы добавить линию, нажмите Enter</string>
+    <string name="set_to_zero_to_disable">(установите ноль для отключения).</string>
+
+    <!-- Calibration data progress -->
+    <string name="progress_title_uploading">Отправляю калибровочную информацию</string>
+    <string name="progress_desc_uploading">DroidPlanner загружает калибровочную информацию на дрон</string>
+    <string name="progress_title_downloading">Загружаю калибровочную информацию</string>
+    <string name="progress_desc_downloading">DroidPlanner загружает калибровочную информацию из дрона. Если дрон не подключен, нажмите Отмена.</string>
+
+    <!-- Radio Setup Resource Strings -->
+    <string name="setup_radio_title">Калибровка радиоканала</string>
+    <string name="setup_radio_cal_title">Начать калибровку</string>
+    <string name="setup_radio_cal_desc">Нажмите Калибровать, чтобы начать калибровку радио. Удостоверьтесь, что радиопередатчик включен (\'ON\') и передает</string>
+    <string name="setup_radio_title_minmax">Установить мин. и макс. значения</string>
+    <string name="setup_radio_title_middle">Установить центральные значения</string>
+    <string name="setup_radio_title_complete">Калибровка выполнена</string>
+    <string name="setup_radio_desc_minmax">Подвигайте стики во все положения несколько раз и попереключайте все рычажки, ручки и переключатели во все возможные положения</string>
+    <string name="setup_radio_desc_middle">Установить стик газа в наименьшее значение, а другие стики, переключатели, рычажки и ручки – в центральное положение</string>
+    <string name="setup_radio_desc_complete">Калибровка RC выполнена. Нажмите \'Сохранить\' для отправки данных на дрон.</string>
+
+    <!-- Compass Setup Resource Strings -->
+    <string name="setup_mag_title">Калибровка компаса</string>
+
+    <!-- Accelerometer Setup Resource Strings -->
+    <string name="setup_imu_title">Калибровка акселерометра</string>
+    <string name="setup_imu_start">Нажмите Калибровать для того, чтобы начать калибровку IMU. Удостоверьтесь, что дрон находится на ровной поверхности прежде чем начинать процесс калибровки</string>
+    <string name="setup_imu_normal">Установите дрон в нормальное для него положение и удостоверьтесь, что он немного двигается. После этого нажмите Дальше</string>
+    <string name="setup_imu_left">Установите дрон на его левую поверхность и удостоверьтесь, что он минимально двигается и нажмите Дальше</string>
+    <string name="setup_imu_right"> Установите дрон на его правую поверхность и удостоверьтесь, что он минимально двигается и нажмите Дальше </string>
+    <string name="setup_imu_nosedown"> Установите дрон носом вниз и удостоверьтесь, что он минимально двигается и нажмите Дальше </string>
+    <string name="setup_imu_noseup"> Установите дрон носом вверх и удостоверьтесь, что он минимально двигается и нажмите Дальше.</string>
+    <string name="setup_imu_back"> Установите дрон на его нижнюю поверхность и удостоверьтесь, что он минимально двигается и нажмите Дальше</string>
+    <string name="setup_imu_completed">Калибровка акселерометра выполнена. Если она была выполнена неправильно, сделайте калибровку еще раз.</string>
+    <string name="setup_imu_step">Чтобы начать калибровку, нажмите Старт.</string>
+    <string name="setup_imu_timeleft">Время до следующей смены положения:</string>
+
+    <!-- Flight Setup Resource Strings -->
+    <string name="setup_fm_title">Конфигурация полетного режима</string>
+    <string name="setup_fm_side_title">Обновить полетную информацию</string>
+    <string name="setup_fm_side_desc">Нажмите \'Отправить\' чтобы обновить новый полетный режим на дроне.</string>
+    <string name="setup_fm_desc_uploading">Загружаю данные конфигурации полетного режима</string>
+    <string name="setup_fm_desc_downloading">Загружаю данные конфигурации полетного режима </string>
+    <string name="setup_fm_mode1">1.</string>
+    <string name="setup_fm_mode2">2.</string>
+    <string name="setup_fm_mode3">3.</string>
+    <string name="setup_fm_mode4">4.</string>
+    <string name="setup_fm_mode5">5.</string>
+    <string name="setup_fm_mode6">6.</string>
+    <string name="setup_fm_simple">Простой режим</string>
+    <string name="setup_fm_super">Супер простой режим</string>
+
+    <!-- Channel Options Setup Resource Strings -->
+    <string name="setup_ch_title">Конфигурация настроек каналов</string>
+    <string name="setup_ch_side_title">Обновить настройки канала</string>
+    <string name="setup_ch_side_desc">Нажмите \'Отправить\' чтобы обновить новую функцию сервомотора на дроне.</string>
+    <string name="setup_ch_tune_title">Канал 6 – функция регулировки</string>
+    <string name="setup_ch_options_title">Настройки каналов - CH7 &amp; CH8</string>
+    <string name="setup_ch_CH7_options">Настройки канала 7:</string>
+    <string name="setup_ch_CH6_options">Регулировка канала 6:</string>
+    <string name="setup_ch_CH8_options">Регулировка канала 8:</string>
+    <string name="setup_ch_tune_low">Значение регулировки - низкое:</string>
+    <string name="setup_ch_tune_high">Значение регулировки - высокое:</string>
+
+    <!-- Servo functions Setup Resource Strings -->
+    <string name="setup_sf_title">Конфигурация функций сервоприводов</string>
+    <string name="setup_sf_side_title">Обновить функцию сервопривода</string>
+    <string name="setup_sf_side_desc">Нажмите \'Отправить\' чтобы обновитьновую функцию сервопривода на дроне.</string>
+    <string name="setup_sf_desc_uploading">Отправка конфигурационных данных сервоприводов на дрон</string>
+    <string name="setup_sf_desc_downloading">Загрузка конфигурационных данных сервоприводов с дрона</string>
+    <string name="setup_sf_servo_title">Конфигурация функций сервоприводов</string>
+    <string name="setup_sf_servo5">Сервопривод 5:</string>
+    <string name="setup_sf_servo6">Сервопривод 6:</string>
+    <string name="setup_sf_servo7">Сервопривод 7:</string>
+    <string name="setup_sf_servo8">Сервопривод 8:</string>
+    <string name="setup_sf_servo9">Сервопривод 9:</string>
+    <string name="setup_sf_servo10">Сервопривод 10:</string>
+
+    <!-- Main Screen and Telemetry -->
+    <string name="telemetry_default_value">0.0</string>
+    <string name="climb_rate_label">Скорость подъма</string>
+    <string name="altitude_label">Высота</string>
+    <string name="meter_unit">м</string>
+    <string name="speed_unit">м/с</string>
+    <string name="ground_speed_label">Наземная скорость</string>
+    <string name="air_speed_label">Воздушная скорость</string>
+    <string name="default_angle_value">--°</string>
+    <string name="mission_control_control">Управление</string>
+    <string name="mission_control_edit">Редактор</string>
+    <string name="mission_control_home">Домой</string>
+    <string name="mission_control_land">Посадка</string>
+    <string name="mission_control_takeoff">Взлет</string>
+    <string name="mission_control_loiter">Loiter</string>
+    <string name="mission_control_follow">Следовать</string>
+    <string name="telemetry_label">Телеметрия</string>
+    <string name="flight_modes_label">Режимы полета</string>
+    <string name="menu_info_bar">Информационная строка</string>
+    <string name="drawer_open">Открыть навигационную панель</string>
+    <string name="drawer_close">Закрыть навигационную панель</string>
+    <string name="guided_mode_warning">"Нажмите ОК, чтобы перейти в режим «Guided». \nЧтобы изменить положение, нажмите и удерживайте карту.</string>
+
+    <!-- Bluetooth device selection strings -->
+    <string name="select_device">Выбрать устройство для подсоединения</string>
+    <string name="none_paired">Нет соединенных устройств</string>
+    <string name="none_found">Устройства не обнаружены</string>
+    <string name="title_paired_devices">Соединенные устройства</string>
+    <string name="title_other_devices">Другие доступные устройства</string>
+    <string name="button_scan">Сканировать</string>
+    <string name="scanning">Идет сканирование</string>
+
+    <!-- Content description -->
+    <string name="expandable_listview_icon_desc">Expandable listview icon</string>
+
+    <!-- Google Analytics -->
+    <string name="ga_mode_details_open_panel">Panel Open Time</string>
+    <string name="ga_mode_details_close_panel">Panel Close Time</string>
+
+    <!-- Others (when possible move to a grouping above) -->
+    <string name="tune_roll">Ручная настройка наклона и тангажа. Rate_P – основное значение для настройки.</string>
+    <string name="dialog_box_title_altitude">Высота</string>
+    <string name="mode_switch">Назначьте радиоканал 5 на тумблер на пульте, чтобы менять режимы полета. Передвиньте тумблер в каждую позицию и выберите нужный полетный режим ниже.</string>
+    <string name="MAVLinkError">MAVLink ошибка:</string>
+    <string name="msg_connect_first">Пожалуйста, подсоединитесь</string>
+    <string name="mode1_throttle_on_right_stick">Режим 1: Газ на правом стике</string>
+    <string name="mode2_throttle_on_left_stick">Режим 2: Газ на левом стике</string>
+    <string name="pref_map_provider_settings_summary">Настройте выбранный поставщик карт</string>
+    <string name="pref_map_provider_settings_title">Настройки поставщика карт</string>
+    <string name="pref_title_google_map">Настройки Google Map</string>
+    <string name="pref_title_osm">Настройки Open Street Map</string>
+    <string name="activity_title_map_provider_preferences">Настройки поставщика карт</string>
+    <string name="pref_title_language">Язык</string>
+    <string name="pref_title_screen">Экран</string>
+    <string name="pref_title_notifications">Уведомления</string>
+    <string name="normal_waypoint_toggle">Обычная</string>
+    <string name="spline_waypoint_toggle">Плавная</string>
+    <string name="mavlink_version">Версия MAVLink:</string>
+    <string name="empty_content">--</string>
+    <string name="usage_statistics">Статистика использования</string>
+    <string name="pref_usage_statistics_title">Отправить статистику использования</string>
+    <string name="pref_usage_statistics_summary">Помогите сделать DroidPlanner еще лучше, отправляя статистику использования.</string>
+
+    <string name="pref_permanent_notification_title">Включить постоянное уведомление</string>
+    <string name="pref_permanent_notification_summary">Включите, чтобы постоянно видеть уведомление, когда подключен дрон</string>
+
+    <string name="pref_bluetooth">BLUETOOTH соединение</string>
+    <string name="pref_bluetooth_device_address">Устройства Bluetooth</string>
+    <string name="pref_forget_bluetooth_device_address">Забыть устройства по умолчанию</string>
+    <string name="pref_forget_bluetooth_device_address_confirm">Вы уверены?</string>
+    <string name="pref_bluetooth_forget">Забыть</string>
+    <string name="pref_ui_gps_hdop_summary">Показывать HDOP вместо FIX в пункте меню состояния GPS</string>
+    <string name="pref_ui_gps_hdop_title">Показать HDOP спутника</string>
+</resources>
+
