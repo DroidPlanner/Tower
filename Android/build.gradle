@@ -50,9 +50,9 @@ dependencies {
     compile 'com.github.lecho:hellocharts-library:1.5.5@aar'
 
     //Leak canary (https://github.com/square/leakcanary)
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
 }
 
 def versionPrefix = "Tower-v"
@@ -60,8 +60,8 @@ def versionPrefix = "Tower-v"
 //Decomposed version name and code (https://plus.google.com/+JakeWharton/posts/6f5TcVPRZij)
 def versionMajor = 4
 def versionMinor = 0
-def versionPatch = 0
-def versionBuild = 10 //bump for dogfood builds, public betas, etc.
+def versionPatch = 1
+def versionBuild = 1 //bump for dogfood builds, public betas, etc.
 
 //Logging levels
 def logLevelVerbose = 2;
@@ -226,7 +226,7 @@ android {
             buildConfigField "boolean", "ENABLE_CRASHLYTICS", "${hasFabricApiKey()}"
         }
     }
-    buildToolsVersion '24.0.1'
+    buildToolsVersion '25.0.3'
 }
 
 /**
