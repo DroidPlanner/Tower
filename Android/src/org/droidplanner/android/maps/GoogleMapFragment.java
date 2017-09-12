@@ -95,7 +95,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import timber.log.Timber;
 
 public class GoogleMapFragment extends SupportMapFragment implements DPMap,
-        GoogleApiClientManager.ManagerListener {
+    GoogleApiClientManager.ManagerListener {
 
     private static final long USER_LOCATION_UPDATE_INTERVAL = 30000; // ms
     private static final long USER_LOCATION_UPDATE_FASTEST_INTERVAL = 5000; // ms
@@ -409,7 +409,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
                 .getMapTileProvider(context);
 
         return (GoogleMapPrefConstants.MAPBOX_TILE_PROVIDER.equals(tileProvider)
-                || GoogleMapPrefConstants.ARC_GIS_TILE_PROVIDER.equals(tileProvider))
+            || GoogleMapPrefConstants.ARC_GIS_TILE_PROVIDER.equals(tileProvider))
                 && GoogleMapPrefFragment.PrefManager.addDownloadMenuOption(context);
     }
 
@@ -577,13 +577,13 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
     private PolylineOptions fromPolylineInfo(PolylineInfo info){
         return new PolylineOptions()
-                .addAll(MapUtils.coordToLatLng(info.getPoints()))
-                .clickable(info.isClickable())
-                .color(info.getColor())
-                .geodesic(info.isGeodesic())
-                .visible(info.isVisible())
-                .width(info.getWidth())
-                .zIndex(info.getZIndex());
+            .addAll(MapUtils.coordToLatLng(info.getPoints()))
+            .clickable(info.isClickable())
+            .color(info.getColor())
+            .geodesic(info.isGeodesic())
+            .visible(info.isVisible())
+            .width(info.getWidth())
+            .zIndex(info.getZIndex());
     }
 
     private MarkerOptions fromMarkerInfo(MarkerInfo markerInfo, boolean isDraggable){
@@ -593,16 +593,16 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
         }
 
         final MarkerOptions markerOptions = new MarkerOptions()
-                .position(MapUtils.coordToLatLng(coord))
-                .draggable(isDraggable)
-                .alpha(markerInfo.getAlpha())
-                .anchor(markerInfo.getAnchorU(), markerInfo.getAnchorV())
-                .infoWindowAnchor(markerInfo.getInfoWindowAnchorU(), markerInfo.getInfoWindowAnchorV())
-                .rotation(markerInfo.getRotation())
-                .snippet(markerInfo.getSnippet())
-                .title(markerInfo.getTitle())
-                .flat(markerInfo.isFlat())
-                .visible(markerInfo.isVisible());
+            .position(MapUtils.coordToLatLng(coord))
+            .draggable(isDraggable)
+            .alpha(markerInfo.getAlpha())
+            .anchor(markerInfo.getAnchorU(), markerInfo.getAnchorV())
+            .infoWindowAnchor(markerInfo.getInfoWindowAnchorU(), markerInfo.getInfoWindowAnchorV())
+            .rotation(markerInfo.getRotation())
+            .snippet(markerInfo.getSnippet())
+            .title(markerInfo.getTitle())
+            .flat(markerInfo.isFlat())
+            .visible(markerInfo.isVisible());
 
         final Bitmap markerIcon = markerInfo.getIcon(getResources());
         if (markerIcon != null) {
@@ -667,8 +667,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
         for (int i = 0; i < infoCount; i++) {
             MarkerInfo markerInfo = markerInfoList.get(i);
             boolean isDraggable = draggableType == GET_DRAGGABLE_FROM_MARKER_INFO
-                    ? markerInfo.isDraggable()
-                    : draggableType == IS_DRAGGABLE;
+                ? markerInfo.isDraggable()
+                : draggableType == IS_DRAGGABLE;
             optionsSet[i] = markerInfo.isOnMap() ? null : fromMarkerInfo(markerInfo, isDraggable);
         }
 
@@ -1195,7 +1195,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
         String selectedMap = prefManager.getArcGISMapType(context);
 
         if(!(tileProviderManager instanceof ArcGISTileProviderManager)
-                || !selectedMap.equals(((ArcGISTileProviderManager) tileProviderManager).getSelectedMap())){
+            || !selectedMap.equals(((ArcGISTileProviderManager) tileProviderManager).getSelectedMap())){
 
             //Setup the online tile overlay
             if(onlineTileOverlay != null){
@@ -1205,8 +1205,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
             tileProviderManager = new ArcGISTileProviderManager(context, selectedMap);
             TileOverlayOptions options = new TileOverlayOptions()
-                    .tileProvider(tileProviderManager.getOnlineTileProvider())
-                    .zIndex(ONLINE_TILE_PROVIDER_Z_INDEX);
+                .tileProvider(tileProviderManager.getOnlineTileProvider())
+                .zIndex(ONLINE_TILE_PROVIDER_Z_INDEX);
 
             onlineTileOverlay = map.addTileOverlay(options);
 
@@ -1218,8 +1218,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
             if(prefManager.isOfflineMapLayerEnabled(context)){
                 options = new TileOverlayOptions()
-                        .tileProvider(tileProviderManager.getOfflineTileProvider())
-                        .zIndex(OFFLINE_TILE_PROVIDER_Z_INDEX);
+                    .tileProvider(tileProviderManager.getOfflineTileProvider())
+                    .zIndex(OFFLINE_TILE_PROVIDER_Z_INDEX);
 
                 offlineTileOverlay = map.addTileOverlay(options);
             }
@@ -1238,8 +1238,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
         final int maxZoomLevel = (int) map.getMaxZoomLevel();
 
         if (!(tileProviderManager instanceof MapboxTileProviderManager)
-                || !mapboxId.equals(((MapboxTileProviderManager) tileProviderManager).getMapboxId())
-                || !mapboxAccessToken.equals(((MapboxTileProviderManager) tileProviderManager).getMapboxAccessToken())) {
+            || !mapboxId.equals(((MapboxTileProviderManager) tileProviderManager).getMapboxId())
+            || !mapboxAccessToken.equals(((MapboxTileProviderManager) tileProviderManager).getMapboxAccessToken())) {
 
             //Setup the online tile overlay
             if (onlineTileOverlay != null) {
@@ -1262,8 +1262,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
             if(prefManager.isOfflineMapLayerEnabled(context)){
                 options = new TileOverlayOptions()
-                        .tileProvider(tileProviderManager.getOfflineTileProvider())
-                        .zIndex(OFFLINE_TILE_PROVIDER_Z_INDEX);
+                    .tileProvider(tileProviderManager.getOfflineTileProvider())
+                    .zIndex(OFFLINE_TILE_PROVIDER_Z_INDEX);
 
                 offlineTileOverlay = map.addTileOverlay(options);
             }
