@@ -1249,8 +1249,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
             tileProviderManager = new MapboxTileProviderManager(context, mapboxId, mapboxAccessToken, maxZoomLevel);
             TileOverlayOptions options = new TileOverlayOptions()
-                    .tileProvider(tileProviderManager.getOnlineTileProvider())
-                    .zIndex(ONLINE_TILE_PROVIDER_Z_INDEX);
+                .tileProvider(tileProviderManager.getOnlineTileProvider())
+                .zIndex(ONLINE_TILE_PROVIDER_Z_INDEX);
 
             onlineTileOverlay = map.addTileOverlay(options);
 
