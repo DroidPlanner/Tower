@@ -110,6 +110,8 @@ public class DroidPlannerPrefs {
     public static final String PREF_ENABLE_KILL_SWITCH = "pref_enable_kill_switch";
     private static final boolean DEFAULT_ENABLE_KILL_SWITCH = false;
 
+    public static final String PREF_ENABLE_VEHICLE_SPECIFIC_ICONS = "pref_enable_vehicle_specific_icons";
+
     public static final String PREF_ENABLE_UDP_PING = "pref_enable_udp_server_ping";
     private static final boolean DEFAULT_ENABLE_UDP_PING = false;
 
