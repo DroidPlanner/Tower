@@ -426,6 +426,8 @@
     <string name="pref_advance_menu_title">Advanced Menu Options</string>
     <string name="pref_enable_kill_switch_summary">If enabled, a Kill Switch option will appear in the menu, allowing immediate vehicle disarming. Only supported on multi-rotor vehicles</string>
     <string name="pref_enable_kill_switch_title">Enable Kill Switch</string>
+    <string name="pref_enable_vehicle_specific_icon_title">Enable Vehicle Specific Icons</string>
+    <string name="pref_enable_vehicle_specific_icon_summary">Enable Vehicle Specific Icons for Copter, Plane and Rover</string>
     <string name="pref_enable_udp_server_title">Enable UDP server ping</string>
     <string name="pref_udp_server_ping_summary">Enable to allow the app to periodically ping the udp server.</string>
     <string name="pref_udp_ping_receiver_ip_title">UDP ping receiver ip</string>

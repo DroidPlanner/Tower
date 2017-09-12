@@ -95,7 +95,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     public static final String ACTION_WIDGET_PREFERENCE_UPDATED = PACKAGE_NAME + ".ACTION_WIDGET_PREFERENCE_UPDATED";
     public static final String EXTRA_ADD_WIDGET = "extra_add_widget";
     public static final String EXTRA_WIDGET_PREF_KEY = "extra_widget_pref_key";
-
+    public static final String VEHICLE_SPECIFIC_ICON_PREF_KEY = "vehicle_specific_icon_pref_key";
     private static final IntentFilter intentFilter = new IntentFilter();
 
     static {
@@ -284,6 +284,21 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     lbm.sendBroadcast(new Intent(ACTION_ADVANCED_MENU_UPDATED));
+                    return true;
+                }
+            });
+        }
+
+        final CheckBoxPreference vehicleSpecificIcons = (CheckBoxPreference) findPreference(DroidPlannerPrefs.PREF_ENABLE_VEHICLE_SPECIFIC_ICONS);
+        if(vehicleSpecificIcons != null) {
+            vehicleSpecificIcons.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean showVehicleSpecificIcons = Boolean.valueOf(newValue.toString());
+                    SharedPreferences prefs = getContext().getSharedPreferences("towerPrefsKey", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putBoolean(VEHICLE_SPECIFIC_ICON_PREF_KEY, showVehicleSpecificIcons);
+                    editor.commit();
                     return true;
                 }
             });
