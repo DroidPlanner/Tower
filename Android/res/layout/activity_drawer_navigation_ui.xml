@@ -64,7 +64,9 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            app:menu="@menu/navigation_drawer_items" />
+            app:menu="@menu/navigation_drawer_items"
+            app:itemIconTint="@color/grey"
+            app:itemTextColor="@color/black_text"/>
 
         <View
             android:layout_width="match_parent"
@@ -75,6 +77,8 @@
             android:id="@+id/navigation_drawer_settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:menu="@menu/navigation_drawer_settings"/>
+            app:menu="@menu/navigation_drawer_settings"
+            app:itemIconTint="@color/grey"
+            app:itemTextColor="@color/black_text"/>
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>
