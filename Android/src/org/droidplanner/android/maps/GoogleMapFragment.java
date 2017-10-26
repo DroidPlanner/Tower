@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -76,6 +77,7 @@ import org.droidplanner.android.maps.providers.google_map.tiles.arcgis.ArcGISTil
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.MapboxTileProviderManager;
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.MapboxUtils;
 import org.droidplanner.android.maps.providers.google_map.tiles.mapbox.offline.MapDownloader;
+import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.utils.MapUtils;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -250,9 +252,12 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
     private GoogleApiClientManager mGApiClientMgr;
 
     private Marker userMarker;
+    private Marker loopMarker;
+    private int loopCount;
 
     private Polyline flightPath;
     private Polyline missionPath;
+    private Polyline loopPath;
     private Polyline mDroneLeashPath;
     private boolean showFlightPath;
 
@@ -488,10 +493,12 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
     @Override
     public void clearAll(){
         clearUserMarker();
+        clearLoopMarker();
         clearMarkers();
         clearPolylines();
         clearFlightPath();
         clearMissionPath();
+        clearLoopPath();
         clearFootPrints();
         clearPolygonPaths();
         clearDroneLeashPath();
@@ -505,6 +512,13 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
         if(userMarker != null){
             userMarker.remove();
             userMarker = null;
+        }
+    }
+
+    private void clearLoopMarker(){
+        if(loopMarker != null){
+            loopMarker.remove();
+            loopMarker = null;
         }
     }
 
@@ -545,6 +559,12 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
         }
     }
 
+    private void clearLoopPath(){
+        if(loopPath != null){
+            loopPath.remove();
+            loopPath = null;
+        }
+    }
 
     @Override
     public void clearPolylines() {
@@ -810,6 +830,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
     public void updateMissionPath(PathSource pathSource) {
         List<LatLong> pathCoords = pathSource.getPathPoints();
         final List<LatLng> pathPoints = new ArrayList<>(pathCoords.size());
+        final List<LatLng> LoopPathPoints = new ArrayList<>(2);
         for (LatLong coord : pathCoords) {
             pathPoints.add(MapUtils.coordToLatLng(coord));
         }
@@ -828,8 +849,82 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
         else {
             missionPath.setPoints(pathPoints);
         }
+
+        if(isLoop() && pathSource.getPathPoints().size() > 1) {
+            LoopPathPoints.add(MapUtils.coordToLatLng(pathSource.getPathPoints().get(pathPoints.size() - 1)));
+            LoopPathPoints.add(MapUtils.coordToLatLng(pathSource.getPathPoints().get(0)));
+
+            if (loopPath == null) {
+                final PolylineOptions pathLoopOptions = new PolylineOptions();
+                final MarkerOptions pathLoopMarkerOptions = new MarkerOptions();
+                pathLoopOptions.color(MISSION_PATH_LOOP_DEFAULT_COLOR).width(MISSION_PATH_LOOP_DEFAULT_WIDTH);
+                pathLoopMarkerOptions.position(midPoint(LoopPathPoints.get(0), LoopPathPoints.get(1)))
+                        .draggable(false)
+                        .flat(true)
+                        .visible(true)
+                        .title(String.valueOf(loopCount==-1?"Unlimited":loopCount))
+                        .anchor(0f,0.5f)
+                        .alpha(0.2f)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_info_white_24dp));
+                getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(GoogleMap googleMap) {
+                        if(loopPath == null) {
+                            loopPath = getMap().addPolyline(pathLoopOptions);
+                            loopPath.setPoints(LoopPathPoints);
+                            loopMarker = googleMap.addMarker(pathLoopMarkerOptions);
+                        }
+                    }
+                });
+            } else {
+                loopPath.setPoints(LoopPathPoints);
+                loopMarker.setTitle(String.valueOf(loopCount==-1?"Unlimited":loopCount));
+                loopMarker.setPosition(midPoint(LoopPathPoints.get(0), LoopPathPoints.get(1)));
+            }
+        } else {
+            clearLoopPath();
+            clearLoopPath();
+            clearLoopMarker();
+            clearLoopMarker();
+        }
     }
 
+    /**
+     * https://stackoverflow.com/questions/4656802/midpoint-between-two-latitude-and-longitude
+     */
+    public LatLng midPoint(LatLng p1, LatLng p2){
+        double lat1 = p1.latitude;
+        double lon1 = p1.longitude;
+        double lat2 = p2.latitude;
+        double lon2 = p2.longitude;
+
+        double dLon = Math.toRadians(lon2 - lon1);
+
+        //convert to radians
+        lat1 = Math.toRadians(lat1);
+        lat2 = Math.toRadians(lat2);
+        lon1 = Math.toRadians(lon1);
+
+        double Bx = Math.cos(lat2) * Math.cos(dLon);
+        double By = Math.cos(lat2) * Math.sin(dLon);
+        double lat3 = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + Bx) * (Math.cos(lat1) + Bx) + By * By));
+        double lon3 = lon1 + Math.atan2(By, Math.cos(lat1) + Bx);
+
+        LatLng location = new LatLng(Math.toDegrees(lat3), Math.toDegrees(lon3));
+
+        return location;
+    }
+
+    private Boolean isLoop() {
+        for (MissionItemProxy missionItemProxy : dpApp.getMissionProxy().getItems()) {
+            if (missionItemProxy.getMissionItem().getType().getLabel().equals("Do Jump")) {
+                loopCount = Integer.parseInt(missionItemProxy.getMissionItem().toString()
+                        .split(",")[0].split("=")[1]);
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public void updatePolygonsPaths(List<List<LatLong>> paths) {
