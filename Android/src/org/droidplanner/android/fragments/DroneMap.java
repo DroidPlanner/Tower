@@ -188,7 +188,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 		home = new GraphicHome(drone, getContext());
 		mMapFragment.addMarker(home);
 
-		graphicDrone = new GraphicDrone(drone);
+		graphicDrone = new GraphicDrone(drone, context);
 		mMapFragment.addMarker(graphicDrone);
 
 		guided = new GraphicGuided(drone);
