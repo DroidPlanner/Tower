@@ -18,7 +18,6 @@ import org.droidplanner.android.R
 import org.droidplanner.android.fragments.widget.TowerWidget
 import org.droidplanner.android.fragments.widget.TowerWidgets
 import org.droidplanner.android.view.AttitudeIndicator
-import java.lang.String
 import java.util.*
 
 /**
@@ -34,6 +33,7 @@ public class MiniWidgetAttitudeSpeedInfo : TowerWidget() {
             temp.addAction(AttributeEvent.ATTITUDE_UPDATED)
             temp.addAction(AttributeEvent.SPEED_UPDATED)
             temp.addAction(AttributeEvent.GPS_POSITION)
+            temp.addAction(AttributeEvent.ALTITUDE_UPDATED)
             temp.addAction(AttributeEvent.HOME_UPDATED)
             return temp
         }
@@ -43,7 +43,7 @@ public class MiniWidgetAttitudeSpeedInfo : TowerWidget() {
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action) {
                 AttributeEvent.ATTITUDE_UPDATED -> onOrientationUpdate()
-                AttributeEvent.SPEED_UPDATED -> onSpeedUpdate()
+                AttributeEvent.SPEED_UPDATED, AttributeEvent.ALTITUDE_UPDATED -> onSpeedUpdate()
             }
         }
     }
@@ -57,6 +57,8 @@ public class MiniWidgetAttitudeSpeedInfo : TowerWidget() {
     private var verticalSpeed: TextView? = null
 
     private var headingModeFPV: Boolean = false
+
+    private val MIN_VERTICAL_SPEED_MPS = 0.10 //Meters Per Second
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_mini_widget_attitude_speed_info, container, false)
@@ -136,5 +138,14 @@ public class MiniWidgetAttitudeSpeedInfo : TowerWidget() {
 
         horizontalSpeed?.text = getString(R.string.horizontal_speed_telem, speedUnitProvider.boxBaseValueToTarget(groundSpeedValue).toString())
         verticalSpeed?.text = getString(R.string.vertical_speed_telem, speedUnitProvider.boxBaseValueToTarget(verticalSpeedValue).toString())
+
+        if (verticalSpeedValue >= MIN_VERTICAL_SPEED_MPS){
+            verticalSpeed?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_debug_step_up, 0, 0, 0);
+        }else if(verticalSpeedValue <= -(MIN_VERTICAL_SPEED_MPS)){
+            verticalSpeed?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_debug_step_down, 0, 0, 0);
+        }else{
+            verticalSpeed?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_debug_step_none, 0, 0, 0);
+        }
+
     }
 }

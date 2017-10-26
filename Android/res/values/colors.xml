@@ -5,6 +5,7 @@
     <color name="transparent_light">#90ffffff</color>
     <color name="opaque_white">#fff</color>
     <color name="greyText">#5d5d5d</color>
+    <color name="grey">#5d5d5d</color>
     <color name="dark_grey">#9E9E9E</color>
     <color name="transparent_light_grey">#d0EFEFEF</color>
     <color name="light_grey">#EFEFEF</color>
