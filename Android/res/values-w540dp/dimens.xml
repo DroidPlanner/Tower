@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="action_bar_telem_height">56dp</dimen>
+    <dimen name="action_bar_telem_height">32dp</dimen>
 </resources>
