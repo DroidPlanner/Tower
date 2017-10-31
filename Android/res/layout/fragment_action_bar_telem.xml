@@ -14,7 +14,7 @@
 
         <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/info_bar_height"
             android:layout_weight="1"
             android:minHeight="40dp">
 
@@ -23,7 +23,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:minWidth="85dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/info_bar_height"
                 android:layout_gravity="center"
                 android:drawableLeft="@drawable/ic_battery_circle_8_24dp"
                 android:drawablePadding="@dimen/info_bar_drawable_padding"
@@ -35,14 +35,14 @@
 
         <FrameLayout
             android:layout_width="@dimen/info_bar_flight_mode_width"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/info_bar_height"
             android:minHeight="40dp">
 
             <TextView
                 android:id="@+id/bar_flight_mode"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/info_bar_height"
                 android:layout_gravity="center"
                 android:drawableLeft="@drawable/ic_navigation_grey_700_18dp"
                 android:drawableStart="@drawable/ic_navigation_grey_700_18dp"
@@ -53,7 +53,7 @@
 
         <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/info_bar_height"
             android:layout_weight="1"
             android:minHeight="40dp">
 
@@ -61,7 +61,7 @@
                 android:id="@+id/bar_signal"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/info_bar_height"
                 android:minWidth="75dp"
                 android:layout_gravity="center"
                 android:drawableLeft="@drawable/ic_signal_cellular_null_grey_700_18dp"
@@ -80,7 +80,7 @@
 
         <FrameLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/info_bar_height"
             android:layout_weight="1"
             android:minHeight="40dp">
 
@@ -88,7 +88,7 @@
                 android:id="@+id/bar_home"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/info_bar_height"
                 android:layout_gravity="center"
                 android:drawableLeft="@drawable/ic_home_grey_700_18dp"
                 android:drawableStart="@drawable/ic_home_grey_700_18dp"
@@ -99,7 +99,7 @@
 
         <FrameLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/info_bar_height"
             android:layout_weight="1"
             android:minHeight="40dp">
 
@@ -107,7 +107,7 @@
                 android:id="@+id/bar_altitude"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/info_bar_height"
                 android:layout_gravity="center"
                 android:drawableLeft="@drawable/ic_file_upload_grey_700_18dp"
                 android:drawablePadding="@dimen/info_bar_drawable_padding"
@@ -119,7 +119,7 @@
 
         <FrameLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/info_bar_height"
             android:layout_weight="1"
             android:minHeight="40dp">
 
@@ -127,7 +127,7 @@
                 android:id="@+id/bar_gps"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/info_bar_height"
                 android:layout_gravity="center"
                 android:drawableLeft="@drawable/ic_gps_off_grey_700_18dp"
                 android:drawablePadding="@dimen/info_bar_drawable_padding"
