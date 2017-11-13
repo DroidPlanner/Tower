@@ -21,10 +21,12 @@ dependencies {
     compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
 
     //DroneKit-Android client lib
+    // Tower requires 3.0.4+ library (it requires dronekit-android to be checked out)
+//    compile 'com.o3dr.android:dronekit-android:3.0.4-beta1' // Not released yet
     compile 'com.o3dr.android:dronekit-android:3.0.2'
-    //Comment line above, and uncomment line below to use your local version of the dronekit-android client lib
-    //Don't forget to uncomment the lines in the settings.gradle file as well.
-//     compile project(':ClientLib')
+//     Comment line above, and uncomment line below to use your local version of the dronekit-android client lib
+    // Don't forget to uncomment the lines in the settings.gradle file as well.
+//    compile project(':ClientLib')
 
     compile 'me.grantland:autofittextview:0.2.1'
     compile(name:'shimmer-android-release', ext:'aar')
@@ -50,18 +52,18 @@ dependencies {
     compile 'com.github.lecho:hellocharts-library:1.5.5@aar'
 
     //Leak canary (https://github.com/square/leakcanary)
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 }
 
 def versionPrefix = "Tower-v"
 
 //Decomposed version name and code (https://plus.google.com/+JakeWharton/posts/6f5TcVPRZij)
 def versionMajor = 4
-def versionMinor = 0
+def versionMinor = 1
 def versionPatch = 0
-def versionBuild = 10 //bump for dogfood builds, public betas, etc.
+def versionBuild = 1 //bump for dogfood builds, public betas, etc.
 
 //Logging levels
 def logLevelVerbose = 2;
@@ -226,7 +228,7 @@ android {
             buildConfigField "boolean", "ENABLE_CRASHLYTICS", "${hasFabricApiKey()}"
         }
     }
-    buildToolsVersion '24.0.1'
+    buildToolsVersion '25.0.3'
 }
 
 /**
