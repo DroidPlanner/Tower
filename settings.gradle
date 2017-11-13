@@ -3,6 +3,8 @@ include ':Android'
 
 //Uncomment block below to link to your local version of the dronekit-android client lib.
 //Don't forget to uncomment the lines in the Android/build.gradle file as well.
+// !BB! Only supporting in-place compilation at the moment
+// until new release of dronekit-android done.
 /*
 //Linking to the dronekit-android project to improve development flow
 include ':ClientLib'
