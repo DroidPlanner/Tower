@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.coordinate.Frame;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
@@ -217,7 +218,7 @@ public abstract class DroneMap extends ApiListenerFragment {
         if (droneGps != null && droneGps.isValid()) {
             Altitude droneAltitude = drone.getAttribute(AttributeType.ALTITUDE);
             LatLongAlt point = new LatLongAlt(droneGps.getPosition(),
-                droneAltitude.getAltitude());
+                droneAltitude.getAltitude(), Frame.GLOBAL_RELATIVE);
             return point;
         }
         return null;

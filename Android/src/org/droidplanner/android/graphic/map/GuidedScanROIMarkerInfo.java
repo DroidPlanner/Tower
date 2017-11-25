@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.o3dr.services.android.lib.coordinate.Frame;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 
@@ -28,7 +29,7 @@ public class GuidedScanROIMarkerInfo extends MarkerInfo {
             if(roiCoord != null)
                 defaultHeight = roiCoord.getAltitude();
 
-            this.roiCoord = new LatLongAlt(coord.getLatitude(), coord.getLongitude(), defaultHeight);
+            this.roiCoord = new LatLongAlt(coord, defaultHeight, Frame.GLOBAL_RELATIVE);
         }
     }
 

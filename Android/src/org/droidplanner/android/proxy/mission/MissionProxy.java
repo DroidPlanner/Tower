@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.o3dr.android.client.Drone;
 import com.o3dr.android.client.apis.MissionApi;
+import com.o3dr.services.android.lib.coordinate.Frame;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
@@ -245,9 +246,10 @@ public class MissionProxy implements DPMap.PathSource {
         double alt = getLastAltitude();
         List<MissionItem> missionItemsToAdd = new ArrayList<MissionItem>(points.size());
         for (LatLong point : points) {
+            // TODO !BB! Make this method the last used frame
             Waypoint waypoint = new Waypoint();
-            waypoint.setCoordinate(new LatLongAlt(point.getLatitude(), point.getLongitude(),
-                    (float) alt));
+            waypoint.getCoordinate().set(point);
+            waypoint.getCoordinate().setAltitude(alt);
             missionItemsToAdd.add(waypoint);
         }
 
@@ -275,9 +277,10 @@ public class MissionProxy implements DPMap.PathSource {
         double alt = getLastAltitude();
         List<MissionItem> missionItemsToAdd = new ArrayList<MissionItem>(points.size());
         for (LatLong point : points) {
+            // TODO !BB! Make this method the last used frame
             SplineWaypoint splineWaypoint = new SplineWaypoint();
-            splineWaypoint.setCoordinate(new LatLongAlt(point.getLatitude(), point.getLongitude(),
-                    (float) alt));
+            splineWaypoint.getCoordinate().set(point);
+            splineWaypoint.getCoordinate().setAltitude(alt);
             missionItemsToAdd.add(splineWaypoint);
         }
 
@@ -294,7 +297,8 @@ public class MissionProxy implements DPMap.PathSource {
 
     public void addSpatialWaypoint(BaseSpatialItem spatialItem, LatLong point) {
         double alt = getLastAltitude();
-        spatialItem.setCoordinate(new LatLongAlt(point.getLatitude(), point.getLongitude(), alt));
+        spatialItem.getCoordinate().set(point);
+        spatialItem.getCoordinate().setAltitude(alt);
         addMissionItem(spatialItem);
     }
 
@@ -304,9 +308,10 @@ public class MissionProxy implements DPMap.PathSource {
      * @param point point used to generate the mission waypoint
      */
     public void addWaypoint(LatLong point) {
-        double alt = getLastAltitude();
+        double alt = getLastAltitude(); // TODO !BB! Make this method the last used frame
         Waypoint waypoint = new Waypoint();
-        waypoint.setCoordinate(new LatLongAlt(point.getLatitude(), point.getLongitude(), alt));
+        waypoint.getCoordinate().set(point);
+        waypoint.getCoordinate().setAltitude(alt);
         addMissionItem(waypoint);
     }
 
@@ -316,9 +321,10 @@ public class MissionProxy implements DPMap.PathSource {
      * @param point point used as location for the spline waypoint.
      */
     public void addSplineWaypoint(LatLong point) {
-        double alt = getLastAltitude();
+        double alt = getLastAltitude(); // TODO !BB! Make this method the last used frame
         SplineWaypoint splineWaypoint = new SplineWaypoint();
-        splineWaypoint.setCoordinate(new LatLongAlt(point.getLatitude(), point.getLongitude(), alt));
+        splineWaypoint.getCoordinate().set(point);
+        splineWaypoint.getCoordinate().setAltitude(alt);
         addMissionItem(splineWaypoint);
     }
 
@@ -659,8 +665,7 @@ public class MissionProxy implements DPMap.PathSource {
         MissionItem missionItem = item.getMissionItem();
         if (missionItem instanceof SpatialItem) {
             SpatialItem spatialItem = (SpatialItem) missionItem;
-            spatialItem.setCoordinate(new LatLongAlt(position.getLatitude(),
-                    position.getLongitude(), spatialItem.getCoordinate().getAltitude()));
+            spatialItem.getCoordinate().set(position);
 
             if (spatialItem instanceof StructureScanner) {
                 this.drone.buildMissionItemsAsync(new StructureScanner[]{(StructureScanner) spatialItem},

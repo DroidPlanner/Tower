@@ -12,10 +12,12 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.o3dr.android.client.Drone;
+import com.o3dr.services.android.lib.coordinate.Frame;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
@@ -166,8 +168,8 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
                                     for (LatLong coordinate : polygonPoints) {
                                         MissionItem newItem = selectedType.getNewItem();
                                         if (newItem instanceof MissionItem.SpatialItem) {
-                                            ((MissionItem.SpatialItem) newItem).setCoordinate(new LatLongAlt(coordinate
-                                                    .getLatitude(), coordinate.getLongitude(), altitude));
+                                            ((MissionItem.SpatialItem) newItem).getCoordinate().set(coordinate);
+                                            ((MissionItem.SpatialItem) newItem).getCoordinate().setAltitude(altitude);
                                         }
 
                                         newItems.add(new MissionItemProxy(mMissionProxy, newItem));
@@ -206,11 +208,69 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
         }
     };
 
+    private final Spinner.OnItemSelectedListener missionFrameListener = new Spinner.OnItemSelectedListener() {
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            frameSpinner = (Spinner) view.findViewById(R.id.frameSpinner);
+
+            if (frameSpinner != null && mSelectedProxies.isEmpty())
+                return;
+
+            MissionItemType selectedType = commandAdapter.getItem(position);
+            List<Pair<MissionItemProxy, List<MissionItemProxy>>> updatedList = new ArrayList<>(
+                    mSelectedProxies.size());
+
+            for (MissionItemProxy missionItemProxy : mSelectedProxies) {
+
+                MissionItem currentItem = missionItemProxy.getMissionItem();
+
+                List<MissionItemProxy> updatedItems = new ArrayList<>();
+
+                if (currentItem instanceof MissionItem.SpatialItem) {
+                    // Only items that have frames need to be updated
+                    MissionItem.SpatialItem spatialItem = ((MissionItem.SpatialItem) currentItem);
+
+                    boolean updated = false;
+                    switch (position) {
+                        case 0:
+                            updated = spatialItem.getCoordinate().setFrame(Frame.GLOBAL_ABS);
+                            break;
+                        case 1:
+                            updated = spatialItem.getCoordinate().setFrame(Frame.GLOBAL_RELATIVE);
+                            break;
+                        case 2:
+                            updated = spatialItem.getCoordinate().setFrame(Frame.GLOBAL_TERRAIN);
+                            break;
+                        default:
+                            // Do Nothing
+                            break;
+                    }
+
+                    if (updated) {
+                        updatedItems.add(missionItemProxy);
+                        updatedList.add(Pair.create(missionItemProxy, updatedItems));
+                    }
+                }
+            }
+            if (!updatedList.isEmpty()) {
+                mListener.onWaypointTypeChanged(selectedType, updatedList);
+                dismiss(); // TODO:!BB! do we want to dismiss the dialog
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
+
     protected int getResource() {
         return R.layout.fragment_editor_detail_generic;
     }
 
     protected SpinnerSelfSelect typeSpinner;
+    protected Spinner frameSpinner;
     protected AdapterMissionItems commandAdapter;
     private OnMissionDetailListener mListener;
 
@@ -424,6 +484,8 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
         typeSpinner = (SpinnerSelfSelect) view.findViewById(R.id.spinnerWaypointType);
         typeSpinner.setAdapter(commandAdapter);
         typeSpinner.setOnSpinnerItemSelectedListener(missionItemSpinnerListener);
+
+        setupFrameSpinner(view);
     }
 
     public void onResume(){
@@ -495,6 +557,41 @@ public class MissionDetailFragment extends ApiListenerDialogFragment {
         }
 
         return false;
+    }
+
+    private void setupFrameSpinner(View view) {
+
+        frameSpinner = (Spinner) view.findViewById(R.id.frameSpinner);
+
+        if (frameSpinner == null) // no frame option just return
+            return;
+
+        for (MissionItemProxy itemProxy : mSelectedProxies) {
+            MissionItem currentItem = itemProxy.getMissionItem();
+
+            if (currentItem instanceof MissionItem.SpatialItem) {
+                Frame frame = ((MissionItem.SpatialItem) currentItem).getCoordinate().getFrame();
+//                List<String> strList = new ArrayList<>("@arrays/")  // TODO !BB! Get List from array string
+                switch (frame) {
+                    case GLOBAL_ABS:
+                        frameSpinner.setSelection(0);
+                        break;
+                    case LOCAL_NED: // TODO !BB! Fix to add NED
+                        break;
+                    case MISSION:  // TODO !BB! Fix to add Mission
+                        break;
+                    case GLOBAL_RELATIVE:
+                        frameSpinner.setSelection(1);
+                        break;
+                    case LOCAL_ENU:  // TODO !BB! Fix to add ENU
+                        break;
+                    case GLOBAL_TERRAIN:
+                        frameSpinner.setSelection(2);
+                        break;
+                }
+            }
+            frameSpinner.setOnItemSelectedListener(missionFrameListener);
+        }
     }
 
     @Override

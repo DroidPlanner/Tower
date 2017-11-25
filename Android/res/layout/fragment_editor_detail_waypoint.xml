@@ -104,6 +104,18 @@
                 android:background="@drawable/mode_desc_rectangle"
                 android:text="@string/waypointInfo_Waypoint"/>
 
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/frameSpinner"
+                android:entries="@array/MissionItemFrame"
+                android:dropDownWidth="match_parent"
+                style="@style/DropDownItem"
+                android:textSize="@+id/textLabels"
+                android:textAlignment="textEnd"
+                android:gravity="end|center_vertical"
+                android:layout_gravity="end|center_vertical" />
+
             <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
                 android:id="@+id/altitudePicker"
                 android:layout_width="match_parent"

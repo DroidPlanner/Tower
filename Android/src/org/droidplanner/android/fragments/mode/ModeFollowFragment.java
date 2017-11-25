@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.android.client.apis.FollowApi;
+import com.o3dr.services.android.lib.coordinate.Frame;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
@@ -252,7 +253,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements OnItemSele
             Toast.makeText(getContext(), R.string.guided_scan_roi_set_message, Toast.LENGTH_LONG).show();
 
             final double roiHeight = roiHeightWheel.getCurrentValue().toBase().getValue();
-            final LatLongAlt roiCoord = new LatLongAlt(coord.getLatitude(), coord.getLongitude(), roiHeight);
+            final LatLongAlt roiCoord = new LatLongAlt(coord, roiHeight, Frame.GLOBAL_RELATIVE);
 
             pushROITargetToVehicle(drone, roiCoord);
             updateROITargetMarker(coord);

@@ -2,13 +2,14 @@ package org.droidplanner.android.utils
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.o3dr.services.android.lib.coordinate.Frame
 import com.o3dr.services.android.lib.coordinate.LatLongAlt
 
 /**
  * @author ne0fhyk (Fredia Huya-Kouadio)
  */
 class SpaceTime(latitude: Double, longitude: Double, altitude: Double, var timeInMs: Long) :
-        LatLongAlt(latitude, longitude, altitude) {
+        LatLongAlt(latitude, longitude, altitude, Frame.GLOBAL_RELATIVE) {
 
     constructor(space: LatLongAlt, timeInMs: Long): this(space.latitude, space.longitude, space.altitude, timeInMs)
 

@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.o3dr.android.client.Drone;
 import com.o3dr.android.client.apis.VehicleApi;
+import com.o3dr.services.android.lib.coordinate.Frame;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
@@ -63,7 +64,7 @@ public class GraphicHome extends MarkerInfo {
 		final LatLongAlt homeCoord = currentHome.getCoordinate();
 		final double homeAlt = homeCoord == null ? 0 : homeCoord.getAltitude();
 
-		final LatLongAlt newHome = new LatLongAlt(position, homeAlt);
+		final LatLongAlt newHome = new LatLongAlt(position, homeAlt, homeCoord.getFrame());
 		VehicleApi.getApi(drone).setVehicleHome(newHome, new AbstractCommandListener() {
 			@Override
 			public void onSuccess() {
