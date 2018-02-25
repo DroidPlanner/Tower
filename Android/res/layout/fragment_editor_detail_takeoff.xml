@@ -5,7 +5,7 @@
     style="@style/missionItemDetailLayout"
     >
 
-    <org.droidplanner.android.view.spinners.SpinnerSelfSelect
+    <co.aerobotics.android.view.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
             android:background="@drawable/mode_desc_rectangle"
             android:text="@string/waypointInfo_TakeOff"/>
 
-        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
+        <co.aerobotics.android.view.spinnerWheel.CardWheelHorizontalView
             android:id="@+id/altitudePicker"
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -106,7 +106,7 @@
             android:text="@string/altitude_label"
             />
 
-        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
+        <co.aerobotics.android.view.spinnerWheel.CardWheelHorizontalView
             android:id="@+id/pitchPicker"
             android:orientation="vertical"
             android:layout_width="match_parent"

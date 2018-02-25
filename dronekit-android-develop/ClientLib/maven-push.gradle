@@ -1,0 +1,128 @@
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+def projectGroupId = 'com.o3dr.android'
+def projectArtifactId = project.PUBLISH_ARTIFACT_ID
+def projectVersion = project.PUBLISH_VERSION
+def projectDescription = project.PROJECT_DESCRIPTION
+def projectLabels = project.PROJECT_LABELS
+def projectLicense = project.PROJECT_LICENSE
+def projectLicenseUrl = project.PROJECT_LICENSE_URL
+def projectLicenseDistribution = project.PROJECT_LICENSE_DISTRIBUTION
+
+def getMavenOrg(){
+    return hasProperty('COM_O3DR_MAVEN_ORG') ? COM_O3DR_MAVEN_ORG : ''
+}
+
+def getMavenPublishUrl(String artifactId){
+    def prefix = hasProperty('COM_O3DR_MAVEN_PUBLISH_URL_PREFIX') ? COM_O3DR_MAVEN_PUBLISH_URL_PREFIX : null
+    if(prefix == null)
+        return null
+
+    return "$prefix/$artifactId/;publish=0;override=1"
+}
+
+def getMavenPomPackaging(){
+    return hasProperty('COM_O3DR_MAVEN_POM_PACKAGING') ? COM_O3DR_MAVEN_POM_PACKAGING : 'aar'
+}
+
+def getDeveloperId(){
+    return hasProperty('DEVELOPER_ID') ? DEVELOPER_ID : ''
+}
+
+def getDeveloperName(){
+    return hasProperty('DEVELOPER_NAME') ? DEVELOPER_NAME : ''
+}
+
+afterEvaluate { project ->
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                pom.groupId = projectGroupId
+                pom.artifactId = projectArtifactId
+                pom.version = projectVersion
+
+                repository(url: getMavenPublishUrl(projectArtifactId)) {
+                    authentication(userName: getMavenUsername(), password: getMavenApiKey())
+                }
+
+                pom.project {
+                    name projectArtifactId
+                    packaging getMavenPomPackaging()
+                    description projectDescription
+
+                    url 'https://github.com/dronekit/dronekit-android'
+                    scm {
+                        url 'https://github.com/dronekit/dronekit-android'
+                        connection 'scm:git:git@github.com:dronekit/dronekit-android.git'
+                        developerConnection 'scm:git:git@github.com:dronekit/dronekit-android.git'
+                    }
+
+                    licenses {
+                        license {
+                            name projectLicense
+                            url projectLicenseUrl
+                            distribution projectLicenseDistribution
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id getDeveloperId()
+                            name getDeveloperName()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    signing {
+        required { gradle.taskGraph.hasTask("uploadArchives") }
+        sign configurations.archives
+    }
+
+    task androidJavadocs(type: Javadoc) {
+        failOnError false
+
+        //Add the project java source directory.
+        def files = [android.sourceSets.main.java.srcDirs]
+
+        //Add the java source directories for the project's dependencies
+        configurations.compile.dependencies.each {
+            if (it instanceof ProjectDependency) {
+                def dependency = it as ProjectDependency
+                def depProj = dependency.getDependencyProject()
+                def projName = depProj.getName()
+                if(projName != "Mavlink") {
+                    files += depProj.android.sourceSets.main.java.srcDirs
+                }
+            }
+        }
+
+        source = files
+        title = projectDescription
+        exclude '**/*.aidl', 'org/droidplanner/services/android/impl/**'
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+        options.links("http://docs.oracle.com/javase/7/docs/api/")
+        options.links("https://developer.android.com/reference/packages.html")
+    }
+
+    task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs){
+        classifier = 'javadoc'
+        from androidJavadocs.destinationDir
+    }
+
+    task androidSourcesJar(type: Jar){
+        classifier = 'sources'
+        from android.sourceSets.main.java.srcDirs
+        exclude 'org/droidplanner/services/android/impl/**'
+    }
+
+    artifacts {
+        archives androidSourcesJar
+        archives androidJavadocsJar
+    }
+}

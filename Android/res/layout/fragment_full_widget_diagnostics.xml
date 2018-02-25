@@ -5,7 +5,7 @@
     android:background="@color/white_grey"
     android:orientation="vertical">
 
-    <org.droidplanner.android.view.viewPager.TabPageIndicator
+    <co.aerobotics.android.view.viewPager.TabPageIndicator
         android:id="@+id/pager_title_strip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -18,11 +18,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:singleLine="true"
         android:text="@string/error_no_video"
         android:textColor="@android:color/white"
         android:background="@android:color/black"
         android:textAllCaps="true"
-        android:visibility="visible"
-        tools:visibility="visible"/>
+        android:visibility="gone"
+        tools:visibility="gone"
+        android:maxLines="1" />
 </FrameLayout>

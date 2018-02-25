@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mission_button_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.github.jorgecastilloprz.FABProgressCircle
+        android:id="@+id/fabProgressCircle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:arcColor="@color/primary_light_blue"
+        app:arcWidth="3dp"
+        app:roundedStroke="true"
+        app:reusable="true"
+        app:circleSize="mini">
+
+        <!-- You can change it with the fab from the library you want to use -->
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:adjustViewBounds="false"
+            android:src="@drawable/ic_sync_black_36dp"
+            app:backgroundTint="@color/white"
+            app:fabSize="mini" />
+
+    </com.github.jorgecastilloprz.FABProgressCircle>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/syncWithAeroViewButton"
+        style="@style/Fab.MyLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:tint="@color/primary_dark_blue"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_sync_black_36dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/search_boundaries"
+        style="@style/Fab.MyLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_search_button" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/drawCustomMission"
+        style="@style/Fab.MyLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_draw_mission" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/generateMission"
+        style="@style/Fab.MyLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:clickable="true"
+        android:tint="@color/success"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_mission_planner_logo_700_24dp"
+        tools:visibility="visible" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/deleteMission"
+        style="@style/Fab.MyLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:clickable="true"
+        android:tint="@color/error"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_delete_grey_700_24dp"
+        tools:visibility="visible" />
+
+
+
+
+
+</LinearLayout>

@@ -1,19 +1,29 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
+    <!-- DJI Mission -->
+
+    <string name="menu_start_mission">Start Mission</string>
+    <string name="menu_stop_mission">Stop Mission</string>
     <!-- Generic strings -->
+    <string name="app_name">Flight Planner for DJI</string>
     <string name="settings">Settings</string>
     <string name="label_general">General</string>
     <string name="label_other">Others</string>
     <string name="menu_drone_setup">Drone Setup</string>
     <string name="app_settings">App Settings</string>
     <string name="flight_data">Vehicle Data</string>
-    <string name="editor">Editor</string>
+    <string name="editor">Mission Planner</string>
     <string name="upload_mission">Upload mission</string>
     <string name="download_mission">Download mission</string>
-
+    <string name="sdk_registration_message">SDK Registration Failed. Please check the bundle ID and your network</string>
+    <string name="logged_in">Login status</string>
+    <string name="log_out">Log Out</string>
+    <string name="json_data">JSON_Data</string>
+    <string name="com_dji_android_PREF_FILE_KEY">Pref file key</string>
+    <string name="client_id">Client_ID</string>
+    <string name="go">Go</string>
+    <string name="aeroview_sync_successful">AeroView sync completed</string>
     <!-- Drone Setup tabs -->
     <string name="screen_cal">Calibration</string>
     <string name="screen_checklist">Checklist</string>
@@ -55,6 +65,10 @@
     <string name="pref_udp_server_port">UDP Server Port</string>
     <string name="about">About</string>
     <string name="version">Version</string>
+    <string name="search_hint">Search boundary names</string>
+    <string name="signUpMessageWithLink">Don\'t have an account? <a href="https://aeroview.aerobotics.co.za/sign-up?src=app">Sign up</a></string>
+    <string name="signUpMessage">Don\'t have an account? Sign up</string>
+
     <!-- Toast Message -->
     <string name="user_autopan_long_press">Long press to activate user auto panning.</string>
     <string name="drone_autopan_long_press">Long press to activate drone auto panning.</string>
@@ -84,13 +98,15 @@
     <string name="distance_between_pictures">Longitudinal</string>
     <string name="area">Area</string>
     <string name="camera_">Camera:</string>
-    <string name="hatch_angle">Hatch angle:</string>
+    <string name="hatch_angle">Hatch Angle:</string>
     <string name="flight_altitude">Flight Altitude:</string>
     <string name="overlap">Overlap:</string>
     <string name="sidelap">Sidelap:</string>
+    <string name="speed">Aircraft Speed:</string>
     <string name="mission_length">Grid Length</string>
     <string name="pictures">Pictures</string>
     <string name="number_of_strips">Number of Strips</string>
+    <string name="flight_time">Flight Time</string>
     <string name="draw_the_survey_region">Draw the survey region</string>
     <!-- Flight Mode information -->
     <string name="mode_acro">Acro allows a pilot to control rate of rotation directly.</string>
@@ -108,6 +124,7 @@
     <string name="mode_follow">The vehicle follows the user based on the device GPS location.</string>
 
     <!-- Waypoint types -->
+    <string name="waypointType_Survey">Survey</string>
     <string name="waypointType_Waypoint">Waypoint</string>
     <string name="waypointType_SplineWaypoint">Spline Waypoint</string>
     <string name="waypointType_TakeOff">Takeoff</string>
@@ -122,7 +139,7 @@
     <string name="waypointType_Loiter">Loiter</string>
     <string name="waypointType_ROI">Region of Interest</string>
     <string name="waypointType_ResetROI">Reset ROI</string>
-    <string name="waypointType_Survey">Survey</string>
+
     <string name="waypointType_Spline_Survey">Spline Survey</string>
     <string name="waypointType_BuildingMapper">Structure Scan</string>
 
@@ -363,6 +380,8 @@
     <string name="zoom_fit">Zoom to Fit</string>
     <string name="open_mission_file">Import from file</string>
     <string name="save_mission_file">Export to file</string>
+    <string name="import_polygon">Import Boundary</string>
+    <string name="sync_with_aeroview">Sync with AeroView</string>
 
     <string name="pref_ui_gps_hdop_summary">Display HDOP instead of FIX in satellite info bar item</string>
     <string name="pref_ui_gps_hdop_title">Display Satellite HDOP</string>
@@ -411,6 +430,12 @@
     <string name="delete_selected_waypoints_confirm">Clear selected waypoints from the map?</string>
     <string name="delete_selected_waypoints_title">Clear selected waypoints</string>
     <string name="label_select_all">Select all</string>
+    <string name="label_import_polygon">Import Boundary</string>
+    <string name="save">Save</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_items_selected">No Boundaries Selected</string>
+    <string name="select_boundary">Select boundary</string>
     <string name="guided_scan_roi_set_message">Targeting selected location.</string>
     <string name="mode_follow_guided_scan">Vehicle follows the user while remaining locked on a point of interest. Long click on the map to select the point of interest.</string>
     <string name="pref_no_saved_bluetooth_device_title">No saved bluetooth device.</string>
@@ -426,8 +451,6 @@
     <string name="pref_advance_menu_title">Advanced Menu Options</string>
     <string name="pref_enable_kill_switch_summary">If enabled, a Kill Switch option will appear in the menu, allowing immediate vehicle disarming. Only supported on multi-rotor vehicles</string>
     <string name="pref_enable_kill_switch_title">Enable Kill Switch</string>
-    <string name="pref_enable_vehicle_specific_icon_title">Enable Vehicle Specific Icons</string>
-    <string name="pref_enable_vehicle_specific_icon_summary">Enable Vehicle Specific Icons for Copter, Plane and Rover</string>
     <string name="pref_enable_udp_server_title">Enable UDP server ping</string>
     <string name="pref_udp_server_ping_summary">Enable to allow the app to periodically ping the udp server.</string>
     <string name="pref_udp_ping_receiver_ip_title">UDP ping receiver ip</string>
@@ -652,6 +675,7 @@
     <string name="error_empty_flight_path">Try flying a bit first :)</string>
     <string name="start_camera_before_first_waypoint">Start camera before first waypoint</string>
     <string name="lock_copter_orientation">Lock copter orientation</string>
+    <string name="flip_mission_waypoints">Flip Start/End Points</string>
 
     <!-- BaiduMap -->
     <string name="pref_title_baidu_maps">Baidu Maps Preferences</string>
@@ -683,4 +707,23 @@
     <string name="warning_unable_to_open_web_url">No app was found to handle this request. Please install a web broawer.</string>
     <string name="warning_invalid_speed">Invalid speed value</string>
     <string name="warning_invalid_altitude">Invalid altitude value</string>
+    <string name="title_activity_login">Login</string>
+
+    <!-- Strings related to login -->
+    <string name="create_account">Create AeroView account</string>
+    <string name="prompt_email">Email Address</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Login</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="app_intro">Intro</string>
+    <string name="error_passwords_not_match">Passwords Do Not Match</string>
+    <string name="terms_and_conditions">By clicking this button you agree to Aerobotics\' \n
+        Terms and Conditions and Privacy Policy</string>
 </resources>

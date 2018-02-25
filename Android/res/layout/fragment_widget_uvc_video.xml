@@ -22,7 +22,7 @@
         android:layout_marginBottom="5dp"
         android:orientation="horizontal"
         android:visibility="gone"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/uvc_take_picture_button"
@@ -56,10 +56,10 @@
         android:layout_centerInParent="true"
         android:background="@android:color/black"
         android:gravity="center"
-        android:singleLine="true"
         android:text="@string/error_no_video"
         android:textAllCaps="true"
         android:textColor="@android:color/white"
-        android:visibility="visible"
-        tools:visibility="visible" />
+        android:visibility="gone"
+        tools:visibility="gone"
+        android:maxLines="1" />
 </RelativeLayout>

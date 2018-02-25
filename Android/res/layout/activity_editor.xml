@@ -5,65 +5,113 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
+    tools:context=".activities.EditorActivity"
     >
 
     <FrameLayout
         android:id="@+id/editor_map_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_gesture_map"/>
+        tools:layout="@layout/fragment_gesture_map">
 
-    <org.droidplanner.android.view.FitsSystemWindowsRelativeLayout
+    </FrameLayout>
+
+
+    <co.aerobotics.android.view.FitsSystemWindowsRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        >
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
-        <fragment
-            android:id="@+id/mission_tools_fragment"
-            android:name="org.droidplanner.android.fragments.account.editor.tool.EditorToolsFragment"
+
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/editorCoordinatorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/actionbar_container"
+            android:layout_below="@+id/fragment_container">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/drone_location_button"
+                style="@style/Fab.MyLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="5dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_navigate" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/my_location_button"
+                style="@style/Fab.MyLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginBottom="60dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_location" />
+
+        </android.support.design.widget.CoordinatorLayout>
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:layout="@layout/fragment_editor_tools"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            />
+            android:gravity="center_vertical|start"
+            android:minHeight="48dp">
 
-        <include
+            <include
+                layout="@layout/action_toolbar_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible" />
+        </FrameLayout>
+
+        <RelativeLayout
+            android:id="@+id/preflightContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            layout="@layout/button_my_location"
-            android:layout_alignLeft="@+id/mission_tools_fragment"
-            android:layout_alignStart="@+id/mission_tools_fragment"
-            android:layout_below="@+id/mission_tools_fragment"
-            android:layout_marginTop="4dp"
-            android:layout_alignWithParentIfMissing="true"/>
+            android:layout_alignStart="@+id/fragment_container"
+            android:layout_below="@+id/fragment_container">
 
-        <TextView
-            android:id="@+id/editorInfoWindow"
-            android:layout_width="match_parent"
-            android:layout_height="24dp"
-            tools:text="@string/editor_info_window"
-            style="@style/editorMissionOverviewText"
-            android:visibility="visible"
-            android:gravity="end"
-            android:layout_above="@+id/actionbar_container"
-            android:layout_alignLeft="@+id/actionbar_container"
-            android:layout_alignStart="@+id/actionbar_container"
-            android:layout_alignRight="@+id/actionbar_container"
-            android:layout_alignEnd="@+id/actionbar_container"
-            android:paddingEnd="5dp"
-            android:paddingStart="5dp"
-            />
+
+            <dji.ui.widget.PreFlightStatusWidget
+                android:id="@+id/status"
+                android:layout_width="238dp"
+                android:layout_height="40dp"
+                android:layout_alignWithParentIfMissing="false"
+                android:layout_centerInParent="false"
+                android:layout_marginTop="10dp">
+
+            </dji.ui.widget.PreFlightStatusWidget>
+        </RelativeLayout>
 
         <include
-            layout="@layout/actionbar_toolbar"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/actionbar_container"
-            />
-    </org.droidplanner.android.view.FitsSystemWindowsRelativeLayout>
+            layout="@layout/actionbar_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
+
+        <include
+            android:id="@+id/missionButtons"
+            layout="@layout/button_mission_options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/fragment_container"
+            android:layout_below="@+id/preflightContainer" />
+
+
+
+
+    </co.aerobotics.android.view.FitsSystemWindowsRelativeLayout>
+
 
 </RelativeLayout>

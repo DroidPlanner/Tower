@@ -1,0 +1,37 @@
+sudo: false
+language: android
+jdk: oraclejdk8
+
+env:
+  global:
+    - MALLOC_ARENA_MAX=2
+    - secure: OTmx8EZyUxB3LHYw9o8XaWmYo4UiZKIG97bgGMXEjkuXDnszcq6hy3o4q+tTbelkdv9NnEbRoIJ3pt2rG4QXPEXCCJkjN7nUq+JvmBXLylwAo5ngyqPqbYGYh7p4eyy473xDh/eLk/hk/WVg8SVS2FcKt3XSqOc66cazGgSBJSM=
+
+android:
+  components:
+    - tools
+    - tools
+    - platform-tools
+
+    # The BuildTools version used by your project
+    - build-tools-24.0.1
+    - build-tools-23.0.3
+
+    # The SDK version used to compile your project
+    - android-23
+
+    # Additional components
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
+    - extra-android-support
+
+before_script:
+    - export GRADLE_OPTS="-XX:MaxPermSize=2048m -Xmx1536m"
+
+script: ./gradlew cleanJar clean testDebug assembleDebug -PdisablePreDex
+
+after_success:
+- chmod a+x .utility/push-docs-to-gh-pages.sh
+- .utility/push-docs-to-gh-pages.sh
+- curl -H "X-CI-Build: $DK_CI_Key" http://dronekit.io/ci?build=android&branch=master

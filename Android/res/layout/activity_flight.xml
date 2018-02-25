@@ -8,15 +8,16 @@
         android:layout_height="match_parent"
         android:id="@+id/flight_data_container"/>
 
-    <org.droidplanner.android.view.FitsSystemWindowsFrameLayout
+
+    <co.aerobotics.android.view.FitsSystemWindowsFrameLayout
         android:layout_gravity="top"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/actionbar_container"
         android:fitsSystemWindows="true">
 
         <include layout="@layout/actionbar_toolbar"/>
-    </org.droidplanner.android.view.FitsSystemWindowsFrameLayout>
+    </co.aerobotics.android.view.FitsSystemWindowsFrameLayout>
 </FrameLayout>

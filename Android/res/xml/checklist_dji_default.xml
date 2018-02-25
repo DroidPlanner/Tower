@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preflightcheck
+    title="Pre-Flight Checklist"
+    type="APM"
+    version="1">
+
+    <category label="User Checklist">
+        <check_item
+            description="Ensure props are securely attached"
+            editable="yes"
+            mandatory="yes"
+            title="Props securely attached and undamaged" />
+        <check_item
+            description="SD Card is in placed in drone and has enough free storage"
+            editable="yes"
+            mandatory="yes"
+            title="SD Card inserted and has storage available" />
+    </category>
+    <category label="Battery Checklist">
+        <check_item
+            description="Drone Battery Level sufficient for flight"
+            editable="yes"
+            mandatory="yes"
+            title="Drone battery level is sufficient" />
+        <check_item
+            description="RC voltage level sufficient"
+            editable="yes"
+            mandatory="yes"
+            title="Remote Controller is charged" />
+        <check_item
+            description="Parrot Sequoia battery charged"
+            editable="yes"
+            mandatory="yes"
+            title="Parrot Sequoia battery is fully charged" />
+    </category>
+    <category label="Camera">
+        <check_item
+            description="Camera white-balance is set correctly"
+            editable="yes"
+            mandatory="yes"
+            title="Camera white-balance set to a fixed value" />
+        <check_item
+            description="Sequoia started triggering"
+            editable="yes"
+            mandatory="yes"
+            title="Parrot Sequoia turned on and capturing images" />
+    </category>
+    <category label="Calibration Checklist">
+        <check_item
+            description="Drone compass is calibrated"
+            editable="yes"
+            mandatory="yes"
+            title="Drone compass is calibrated"/>
+        <check_item
+            description="Parrot Sequoia is calibrated"
+            editable="yes"
+            mandatory="yes"
+            title="Parrot Sequoia is calibrated"/>
+    </category>
+
+</preflightcheck>

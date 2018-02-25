@@ -63,7 +63,7 @@
 
         </LinearLayout>
 
-        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
+        <co.aerobotics.android.view.spinnerWheel.CardWheelHorizontalView
             android:id="@+id/waypoint_selector"
             style="@style/missionItemDetailCard"
             android:layout_width="match_parent"

@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
+        <co.aerobotics.android.view.spinnerWheel.CardWheelHorizontalView
             android:id="@+id/altitude_spinner"
             style="@style/missionItemDetailCard"
             android:layout_width="match_parent"
@@ -31,7 +31,7 @@
             android:orientation="horizontal"
             android:text="@string/altitude_label"/>
 
-        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
+        <co.aerobotics.android.view.spinnerWheel.CardWheelHorizontalView
             android:id="@+id/radius_spinner"
             style="@style/missionItemDetailCard"
             android:layout_width="match_parent"
@@ -39,7 +39,7 @@
             android:orientation="horizontal"
             android:text="@string/radius_label"/>
 
-        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
+        <co.aerobotics.android.view.spinnerWheel.CardWheelHorizontalView
             android:id="@+id/roi_height_spinner"
             style="@style/missionItemDetailCard"
             android:layout_width="match_parent"

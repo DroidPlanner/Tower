@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/dialog_uvc_horizontal_margin"
     android:paddingRight="@dimen/dialog_uvc_horizontal_margin"
     android:paddingTop="@dimen/dialog_uvc_vertical_margin"
-    tools:context="org.droidplanner.android.dialogs.UVCDialog" >
+    tools:context="co.aerobotics.android.co.dji.android.dialogs.UVCDialog" >
 
     <TextView
         android:id="@+id/textView1"

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Configuration parameters for the google analytics tracker.
+    Reference: https://developers.google.com/analytics/devguides/collection/android/v4/parameters
+-->
+<resources xmlns:tools="http://schemas.android.com/tools"
+           tools:ignore="TypographyDashes">
+
+    <!-- Google Analytics tracking id -->
+    <string name="ga_trackingId">UA-51862927-3</string>
+
+    <!-- Frequency of automatic dispatch in seconds -->
+    <integer name="ga_dispatchPeriod">600</integer>
+
+    <!-- Amount of time the app can stay in background before the session is ended -->
+    <integer name="ga_sessionTimeout">300</integer>
+
+    <!-- Enable automatic Activity measurement -->
+    <bool name="ga_autoActivityTracking">true</bool>
+
+    <!-- Enable uncaught exception tracking -->
+    <bool name="ga_reportUncaughtExceptions">true</bool>
+
+    <!-- The screen names that will show up in the report -->
+    <screenName name="org.droidplanner.services.activities.FlightActivity">
+        Flight Screen
+    </screenName>
+
+    <screenName name="org.droidplanner.services.activities.EditorActivity">
+        Editor Screen
+    </screenName>
+
+    <screenName name="org.droidplanner.services.activities.ConfigurationActivity">
+        Configuration Screen
+    </screenName>
+
+    <screenName name="org.droidplanner.services.activities.SettingsActivity">
+        Settings Screen
+    </screenName>
+
+    <screenName name="org.droidplanner.services.activities.helpers.MapPreferencesActivity">
+        Map Preferences Screen
+    </screenName>
+</resources>

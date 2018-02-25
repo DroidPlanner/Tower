@@ -2,10 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
+     <item
         android:id="@+id/menu_connect"
         app:showAsAction="never"
         android:title="@string/menu_disconnect"/>
+
 
     <group
         android:id="@+id/menu_group_connected"
@@ -13,15 +14,13 @@
         android:visible="false">
 
         <item
-            android:id="@+id/menu_upload_mission"
+            android:id="@+id/menu_start_mission"
             app:showAsAction="never"
-            android:icon="@drawable/ic_cloud_upload_grey_700_24dp"
-            android:title="@string/upload_mission"/>
+            android:title="@string/menu_start_mission"/>
         <item
-            android:id="@+id/menu_download_mission"
+            android:id="@+id/menu_stop_mission"
             app:showAsAction="never"
-            android:icon="@drawable/ic_cloud_download_grey_700_24dp"
-            android:title="@string/download_mission"/>
+            android:title="@string/menu_stop_mission"/>
         <item
             android:id="@+id/menu_kill_switch"
             app:showAsAction="never"

@@ -1,94 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="org.droidplanner.android"
-          xmlns:android="http://schemas.android.com/apk/res/android"
-          android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="co.aerobotics.android"
+    android:installLocation="auto">
 
-    <supports-screens android:requiresSmallestWidthDp="320"/>
+    <supports-screens android:requiresSmallestWidthDp="320" />
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
     <!-- BaiduMap dependencies -->
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <uses-feature android:name="android.hardware.screen.portrait"/>
+    <uses-feature android:name="android.hardware.screen.portrait" />
 
     <!-- Support devices without Bluetooth since there are other connection types -->
     <uses-feature
         android:name="android.hardware.bluetooth"
-        android:required="false"/>
+        android:required="false" />
 
     <!-- Support devices without USB host mode since there are other connection types -->
     <uses-feature
         android:name="android.hardware.usb.host"
-        android:required="false"/>
+        android:required="false" />
 
     <!-- Support devices that don't have location services -->
     <uses-feature
         android:name="android.hardware.location.gps"
-        android:required="false"/>
+        android:required="false" />
     <uses-feature
         android:name="android.hardware.location.network"
-        android:required="false"/>
+        android:required="false" />
     <uses-feature
         android:name="android.hardware.location"
-        android:required="false"/>
+        android:required="false" />
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true"/>
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.usb.accessory"
+        android:required="true" />
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
-        android:name=".DroidPlannerApp"
+        android:name=".MApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_title"
+        android:supportsRtl="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
         android:theme="@style/CustomActionBarTheme"
-        android:windowSoftInputMode="adjustPan">
+        android:windowSoftInputMode="adjustPan"
+        tools:replace="android:label">
+        <uses-library android:name="com.android.future.usb.accessory" />
+
+        <meta-data
+            android:name="com.dji.sdk.API_KEY"
+            android:value="${djiApiKey}" />
+
+        <activity
+            android:name="dji.sdk.sdkmanager.DJIAoaControllerActivity"
+            android:theme="@android:style/Theme.Translucent">
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
+                android:resource="@xml/accessory_filter" />
+        </activity>
+        <service android:name="dji.sdk.sdkmanager.DJIGlobalService" >
+        </service>
+
+        <!-- <service android:name="dji.sdk.sdkmanager.DJIGlobalService" /> -->
+
 
         <!-- You must insert your own Google Maps for Android API v2 key in here. -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyA2oC6zsx-Ir4be8bWFWrAej7FcKdrWGdA"/>
+            android:value="${googleMapsKey}" />
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
+            android:value="@integer/google_play_services_version" />
 
         <!-- BaiduMap key, please replace with your own key -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="@string/baidu_api_key" />
-
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="${fabricApiKey}"/>
+            android:value="${fabricApiKey}" />
+        <meta-data
+            android:name="android.app.default_searchable"
+            android:value=".activities.SearchableActivity" />
 
+        <activity android:name=".activities.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.LoginActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/label_login"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden">
+
+        </activity>
         <activity
             android:name=".activities.AccountActivity"
             android:label="@string/account_label"
-            android:launchMode="singleTop"/>
-        <activity
-            android:name=".activities.FlightActivity"
-            android:launchMode="singleTask"
-            android:theme="@style/CustomActionBarTheme.Transparent">
+            android:launchMode="singleTop" />
 
-            <!-- Launcher Intent -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
         <activity
             android:name=".activities.EditorActivity"
             android:label="@string/editor"
@@ -98,22 +143,35 @@
 
             <!-- Intent for opening mission files -->
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="text/plain"/>
+                <data android:mimeType="text/plain" />
             </intent-filter>
+            <!--
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
+                android:resource="@xml/accessory_filter" />
+            -->
+
         </activity>
+        <activity
+            android:name=".activities.CameraActivity"
+            android:launchMode="singleTop" />
         <activity
             android:name=".activities.ConfigurationActivity"
             android:label="@string/menu_drone_setup"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/settings"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name=".activities.helpers.MapPreferencesActivity"
             android:label="@string/activity_title_map_provider_preferences"
@@ -123,54 +181,55 @@
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.SettingsActivity"/>
-        </activity>
-        <activity
-            android:name=".tlog.TLogActivity"
-            android:label="@string/locator"
-            android:launchMode="singleTop"/>
-        <activity
-            android:name=".activities.WidgetActivity"
-            android:launchMode="singleTop"
-            android:parentActivityName=".activities.FlightActivity">
-
-            <!-- Parent activity meta-data to support API level 7+ -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.FlightActivity"/>
+                android:value="co.aerobotics.android.activities.SettingsActivity" />
         </activity>
         <activity
             android:name=".activities.helpers.BluetoothDevicesActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:noHistory="true"
-            android:theme="@style/CustomDialogTheme"/>
+            android:theme="@style/CustomDialogTheme" />
         <activity
             android:name=".maps.providers.google_map.DownloadMapboxMapActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:noHistory="true"
-            android:theme="@style/CustomActionBarTheme.Transparent"/>
+            android:theme="@style/CustomActionBarTheme.Transparent" />
 
         <receiver
             android:name=".droneshare.NetworkConnectivityReceiver"
             android:enabled="false">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
-
         </receiver>
 
         <service android:name=".AppService" />
-        <service android:name=".droneshare.UploaderService" />
 
         <!-- BaiduMap location service -->
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote" >
-        </service>
+            android:process=":remote" />
 
+        <activity
+            android:name=".activities.IntroActivity"
+            android:label="@string/app_intro">
+        </activity>
+        <activity
+            android:name=".activities.SignUpActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden">
+
+        </activity>
+        <activity
+            android:name=".activities.ForgotPasswordActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

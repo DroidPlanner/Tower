@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/missionItemDetailLayout" >
 
-    <org.droidplanner.android.view.spinners.SpinnerSelfSelect
+    <co.aerobotics.android.view.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
             android:padding="12dp"
             android:text="@string/waypointInfo_CondYaw" />
 
-        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
+        <co.aerobotics.android.view.spinnerWheel.CardWheelHorizontalView
             android:id="@+id/picker1"
             style="@style/missionItemDetailCard"
             android:layout_width="match_parent"
@@ -96,7 +96,7 @@
             android:orientation="vertical"
             android:text="@string/mission_control_condition_yaw_angle" >
 
-        </org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView>
+        </co.aerobotics.android.view.spinnerWheel.CardWheelHorizontalView>
 
         <CheckBox
             android:id="@+id/checkBox1"

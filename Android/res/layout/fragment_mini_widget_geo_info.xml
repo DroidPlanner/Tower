@@ -14,9 +14,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawablePadding="10dp"
-        android:singleLine="true"
         android:text="@string/latitude_empty"
-        tools:text="Lat: " />
+        tools:text="Lat: "
+        android:maxLines="1" />
 
     <View
         android:layout_width="match_parent"
@@ -30,8 +30,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawablePadding="10dp"
-        android:singleLine="true"
         android:text="@string/longitude_empty"
-        tools:text="Long: " />
+        tools:text="Long: "
+        android:maxLines="1" />
 
 </LinearLayout>

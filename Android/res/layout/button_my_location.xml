@@ -21,21 +21,5 @@
         android:scaleType="centerInside"
         android:src="@drawable/ic_navigate" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/zoom_to_fit_button"
-        style="@style/Fab.MyLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_expand"
-        android:visibility="gone"
-        tools:visibility="visible" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/toggle_action_drawer"
-        style="@style/Fab.MyLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_flip"
-        android:visibility="gone"
-        tools:visibility="visible" />
 </LinearLayout>

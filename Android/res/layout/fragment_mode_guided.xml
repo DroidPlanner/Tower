@@ -19,7 +19,7 @@
             android:background="@drawable/mode_desc_rectangle"
             android:text="@string/mode_guided"/>
 
-        <org.droidplanner.android.view.spinnerWheel.CardWheelHorizontalView
+        <co.aerobotics.android.view.spinnerWheel.CardWheelHorizontalView
             android:id="@+id/altitude_spinner"
             style="@style/missionItemDetailCard"
             android:layout_width="match_parent"

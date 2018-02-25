@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#000000"
+    android:background="@color/light"
     android:orientation="horizontal"
     android:padding="8dp" >
 
@@ -13,15 +13,14 @@
         android:layout_marginLeft="10dp"
         android:layout_weight="1"
         android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:textColor="#f9f93d"
-        android:textSize="17sp" />
+        android:textAppearance="@style/AeroboticsTextAppearance.Dark"/>
 
     <TextView
         android:id="@+id/lblChkRatio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="10/10"
-        android:textColor="#09f93d"
+        android:textColor="@color/error"
         android:textSize="17sp" />
 
 </LinearLayout>

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:background="@color/header_background"
+    android:background="@color/primary_dark_blue"
     android:gravity="center"
     android:orientation="horizontal"
     android:padding="16dp"
@@ -12,12 +12,13 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher" />
+        android:src="@mipmap/ic_launcher2" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:text="@string/app_name"
+        android:textAppearance="@style/AeroboticsTextAppearance" />
+        <!--android:textAppearance="@style/TextAppearance.AppCompat.Body1" /> -->
 
 </LinearLayout>

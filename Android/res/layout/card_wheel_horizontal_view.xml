@@ -7,22 +7,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <org.droidplanner.android.view.spinnerWheel.WheelHorizontalView
+    <co.aerobotics.android.view.spinnerWheel.WheelHorizontalView
         android:id="@+id/horizontalSpinnerWheel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        tools:layout_width="100dp"
-        tools:layout_height="match_parent"
-        app:visibleItems="3"
         app:isAllVisible="false"
         app:isCyclic="false"
         app:itemsDimmedAlpha="150"
-        app:selectionDivider="@android:color/holo_blue_light"
-        app:selectionDividerWidth="2dp"
+        app:selectionDivider="@color/secondary_dark_blue"
         app:selectionDividerActiveAlpha="100"
         app:selectionDividerDimmedAlpha="255"
-        />
+        app:selectionDividerWidth="2dp"
+        app:visibleItems="3"
+        tools:layout_height="match_parent"
+        tools:layout_width="100dp" />
 
     <EditText
         android:id="@+id/numberInputText"

@@ -17,13 +17,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <org.droidplanner.android.view.FitsSystemWindowsFrameLayout
+        <co.aerobotics.android.view.FitsSystemWindowsFrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:fitsSystemWindows="true">
 
-            <org.droidplanner.android.view.SlidingDrawer
+            <co.aerobotics.android.view.SlidingDrawer
                 android:id="@+id/action_drawer_container"
                 android:layout_width="@dimen/action_drawer_width"
                 android:layout_height="wrap_content"
@@ -47,8 +47,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
-            </org.droidplanner.android.view.SlidingDrawer>
-        </org.droidplanner.android.view.FitsSystemWindowsFrameLayout>
+            </co.aerobotics.android.view.SlidingDrawer>
+        </co.aerobotics.android.view.FitsSystemWindowsFrameLayout>
     </FrameLayout>
 
     <LinearLayout
@@ -64,9 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            app:menu="@menu/navigation_drawer_items"
-            app:itemIconTint="@color/grey"
-            app:itemTextColor="@color/black_text"/>
+            app:menu="@menu/navigation_drawer_items" />
 
         <View
             android:layout_width="match_parent"
@@ -77,8 +75,6 @@
             android:id="@+id/navigation_drawer_settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:menu="@menu/navigation_drawer_settings"
-            app:itemIconTint="@color/grey"
-            app:itemTextColor="@color/black_text"/>
+            app:menu="@menu/navigation_drawer_settings"/>
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

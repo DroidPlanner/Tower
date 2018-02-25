@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context=".activities.EditorActivity"
+    >
+
+    <FrameLayout
+        android:id="@+id/editor_map_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_gesture_map"/>
+
+
+    <co.aerobotics.android.view.FitsSystemWindowsRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+
+        <include
+            layout="@layout/button_my_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/actionbar_container"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_alignParentEnd="true"/>
+
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/editorCoordinatorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/actionbar_container">
+
+        </android.support.design.widget.CoordinatorLayout>
+
+        <include
+            layout="@layout/button_mission_options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/fragment_container"
+            android:layout_below="@+id/preflightWidget" />
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center_vertical|start"
+            android:minHeight="48dp">
+
+            <include
+                layout="@layout/action_toolbar_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible" />
+        </FrameLayout>
+
+        <include
+            android:id="@+id/actionbar_container"
+            layout="@layout/actionbar_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
+
+        <RelativeLayout
+            android:id="@+id/preflightWidget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/fragment_container"
+            android:layout_below="@+id/fragment_container">
+
+            <dji.ui.widget.PreFlightStatusWidget
+                android:id="@+id/status"
+                android:layout_width="238dp"
+                android:layout_height="40dp"
+                android:layout_alignWithParentIfMissing="false"
+                android:layout_centerInParent="false"
+                android:layout_marginTop="10dp" />
+        </RelativeLayout>
+
+
+    </co.aerobotics.android.view.FitsSystemWindowsRelativeLayout>
+
+
+</RelativeLayout>

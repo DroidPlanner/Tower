@@ -96,8 +96,8 @@
                 android:text="@string/compass_calibration_instructions"
                 android:layout_marginBottom="5dp"
                 android:background="@android:color/transparent"
-                android:singleLine="true"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:maxLines="1" />
 
             <me.grantland.widget.AutofitTextView
                 android:layout_width="match_parent"
@@ -105,8 +105,8 @@
                 style="@style/Settings.Text.Secondary"
                 android:text="@string/compass_calibration_sub_instructions"
                 android:background="@android:color/transparent"
-                android:singleLine="true"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:maxLines="1" />
 
         </LinearLayout>
 

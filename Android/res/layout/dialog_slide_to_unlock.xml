@@ -28,7 +28,7 @@
             android:layout_marginEnd="10dp"
             android:scaleType="center"/>
 
-        <org.droidplanner.android.view.SlideButton
+        <co.aerobotics.android.view.SlideButton
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
@@ -49,8 +49,8 @@
             android:layout_gravity="center"
             tools:text="Slide to unlock"
             android:textColor="@android:color/black"
-            android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:maxLines="1" />
 
     </com.facebook.shimmer.ShimmerFrameLayout>
 </android.support.v7.widget.CardView>

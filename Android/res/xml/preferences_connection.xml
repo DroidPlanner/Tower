@@ -62,7 +62,7 @@
     <PreferenceCategory
         android:key="pref_bluetooth"
         android:title="@string/pref_bluetooth">
-        <org.droidplanner.android.dialogs.ClearBTDialogPreference
+        <co.aerobotics.android.dialogs.ClearBTDialogPreference
             android:defaultValue=""
             android:dialogMessage="@string/pref_forget_bluetooth_device_address_confirm"
             android:gravity="center"

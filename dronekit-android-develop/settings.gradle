@@ -1,0 +1,11 @@
+//Library projects
+include ':Mavlink'
+
+//Android library projects
+include ':ClientLib'
+
+//Android projects
+include ':StarterApp'
+
+project(':Mavlink').projectDir = new File('dependencyLibs/Mavlink')
+project(':StarterApp').projectDir = new File('samples/StarterApp')

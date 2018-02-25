@@ -1,0 +1,72 @@
+<resources>
+    <string name="error_no_error">No error!</string>
+    <string name="error_throttle_below_failsafe">Throttle below failsafe</string>
+    <string name="error_gyro_calibration_failed">Gyro calibration failed</string>
+    <string name="error_mode_not_armable">Mode not armable</string>
+    <string name="error_rotor_not_spinning">Rotor not spinning</string>
+    <string name="error_vehicle_leaning">Vehicle is leaning</string>
+    <string name="error_throttle_too_high">Throttle too high</string>
+    <string name="error_safety_switch">Safety switch</string>
+    <string name="error_compass_calibration_running">Compass calibration running</string>
+    <string name="error_rc_not_calibrated">RC not calibrated</string>
+    <string name="error_barometer_not_healthy">Barometer not healthy</string>
+    <string name="error_compass_not_healthy">Compass not healthy</string>
+    <string name="error_compass_not_calibrated">Compass not calibrated</string>
+    <string name="error_compass_offsets_too_high">Compass offsets too high</string>
+    <string name="error_check_magnetic_field">Check magnetic field</string>
+    <string name="error_inconsistent_compass">Inconsistent compass</string>
+    <string name="error_check_geo_fence">Check geo fence</string>
+    <string name="error_ins_not_calibrated">Inertial Navigation System not calibrated</string>
+    <string name="error_accelerometers_not_healthy">Accelerometers not healthy</string>
+    <string name="error_inconsistent_accelerometers">Inconsistent accelerometers</string>
+    <string name="error_gyros_not_healthy">Gyros not healthy</string>
+    <string name="error_inconsistent_gyros">Inconsistent gyros</string>
+    <string name="error_check_board_voltage">Check board voltage</string>
+    <string name="error_duplicate_aux_switch_options">Duplicate aux switch options</string>
+    <string name="error_check_failsafe_threshold">Check failsafe threshold</string>
+    <string name="error_check_angle_max">Check max angle</string>
+    <string name="error_acro_bal_roll_pitch">Acro bal roll/pitch</string>
+    <string name="error_need_gps_lock">Need GPS lock</string>
+    <string name="error_ekf_home_variance">EKF Home variance</string>
+    <string name="error_high_gps_hdop">High GPS hdop</string>
+    <string name="error_gps_glitch">GPS glitch</string>
+    <string name="error_waiting_for_navigation_alignment">Waiting for navigation alignment</string>
+    <string name="error_altitude_disparity">Altitude disparity</string>
+    <string name="error_low_battery">Low battery!</string>
+    <string name="error_auto_tune_failed">Auto-tune failed!</string>
+    <string name="error_crash">Vehicle crash</string>
+    <string name="error_parachute_too_low">Parachute too low</string>
+    <string name="error_ekf_variance">EKF Variance</string>
+    <string name="error_no_dataflash">No inserted dataflash</string>
+    <string name="error_rc_failsafe">RC Failsafe</string>
+
+    <string name="label_free_flight">Free Flight</string>
+    <string name="label_selfie">Selfie</string>
+    <string name="label_cable_cam">Cable Cam</string>
+    <string name="label_preset_cable_cam">Cable Cam</string>
+    <string name="label_preset_orbit">Orbit</string>
+    <string name="label_orbit">Orbit</string>
+    <string name="label_preset_selfie">Selfie</string>
+    <string name="label_follow">Follow</string>
+    <string name="label_inspect">Inspect</string>
+    <string name="label_survey">Survey</string>
+    <string name="label_scan">Scan</string>
+    <string name="label_pano">Pano</string>
+    <string name="label_zipline">Zipline</string>
+    <string name="label_rewind">Rewind</string>
+    <string name="label_return_home">Return Home</string>
+    <string name="label_transect">Transect</string>
+
+    <!-- Shot type indicator -->
+    <string name="copter_alt_hold_label">FLY: Manual</string>
+    <string name="copter_loiter_label">FLY</string>
+    <string name="copter_rtl_label">Return Home</string>
+    <string name="copter_guided_label">Take off</string>
+    <string name="copter_auto_tune_label">Auto-tune</string>
+    <string name="copter_pos_hold_label">Position Hold</string>
+    <string name="copter_auto_label">Mission</string>
+
+    <string name="label_tlog_title">Telemetry Log Files</string>
+    <string name="tlog_selector_label">Telemetry Logs File Selector</string>
+    <string name="loading_data">Loading data...</string>
+</resources>

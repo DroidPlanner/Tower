@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context=".MainActivity">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/connection_type_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+
+                <Button
+                    android:id="@+id/btnConnect"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/connectionTypeLabel"
+                    android:onClick="onBtnConnectTap"
+                    android:text="Connect" />
+
+                <Spinner
+                    android:id="@+id/selectConnectionType"
+                    android:layout_width="120dp"
+                    android:layout_height="44dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/connectionTypeLabel"
+                    android:layout_toLeftOf="@+id/btnConnect"
+                    android:entries="@array/drone_connection_types"
+                    android:spinnerMode="dropdown" />
+
+                <TextView
+                    android:id="@+id/connectionTypeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="10dp"
+                    android:text="Connection Type"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/telemetryLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:text="Vehicle Telemetry"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TableLayout
+                    android:id="@+id/telemetryInfo"
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/telemetryLabel"
+                    android:layout_marginTop="10dp">
+
+                    <TableRow
+                        android:id="@+id/vehTelemRow1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <TextView
+                            android:id="@+id/vehicleModeLabelTextView"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_column="0"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:text="Mode:"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <Spinner
+                            android:id="@+id/modeSelect"
+                            android:layout_width="fill_parent"
+                            android:layout_height="44dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/connectionTypeLabel"
+                            android:layout_column="1"
+                            android:layout_toLeftOf="@+id/btnConnect"
+                            android:spinnerMode="dropdown" />
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/vehTelemRow2"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <TextView
+                            android:id="@+id/altitudeLabelTextView"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_column="0"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:text="Altitude:"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <TextView
+                            android:id="@+id/altitudeValueTextView"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_column="1"
+                            android:layout_gravity="left"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:text="0m"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/vehTelemRow3"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <TextView
+                            android:id="@+id/speedLabelTextView"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_column="0"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:text="Speed:"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <TextView
+                            android:id="@+id/speedValueTextView"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_column="1"
+                            android:layout_gravity="left"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:text="0m/s"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/vehTelemRow4"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <TextView
+                            android:id="@+id/distanceLabelTextView"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_column="0"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:text="Distance:"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <TextView
+                            android:id="@+id/distanceValueTextView"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_column="1"
+                            android:layout_gravity="left"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:text="0m"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <Button
+                            android:id="@+id/btnArmTakeOff"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_below="@+id/connectionTypeLabel"
+                            android:layout_column="1"
+                            android:onClick="onArmButtonTap"
+                            android:visibility="invisible" />
+                    </TableRow>
+
+                </TableLayout>
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/take_photo_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="Take a picture" />
+
+                    <Button
+                        android:id="@+id/toggle_video_recording"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="Toggle video " />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/start_video_stream"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="Start streaming"/>
+
+                    <Button
+                        android:id="@+id/stop_video_stream"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="Stop streaming"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/start_video_stream_using_observer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="Start streaming using observer"/>
+
+                    <Button
+                        android:id="@+id/stop_video_stream_using_observer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="Stop streaming useing observer"/>
+
+                </LinearLayout>
+
+                <TextureView
+                    android:id="@+id/video_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="380dp"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+    </LinearLayout>
+</ScrollView>

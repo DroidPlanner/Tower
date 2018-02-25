@@ -60,7 +60,7 @@
             android:orientation="vertical"
             >
 
-            <org.droidplanner.android.view.FitsSystemWindowsFrameLayout
+            <co.aerobotics.android.view.FitsSystemWindowsFrameLayout
                 android:id="@+id/flightActionsFragment"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/mission_control_bar_height"

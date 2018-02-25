@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light">
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="120dp"
+        android:gravity="center_horizontal"
+        android:text="Map your farm"
+        android:textAppearance="@style/AeroboticsTextAppearance.Dark"
+        android:textSize="36sp" />
+
+
+    <ImageView
+        android:id="@+id/suveryImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/ic_quad_blue" />
+
+    <TextView
+        android:id="@+id/desc_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/suveryImage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="50dp"
+        android:gravity="center_horizontal"
+        android:text="Use Aerobotics DJI Ground Station to plan and execute your surveys"
+        android:textAppearance="@style/AeroboticsTextAppearance.Dark"
+        android:textSize="18sp" />
+
+    <ImageView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:scaleType="fitStart"
+        app:srcCompat="@drawable/aerobotics_logo_transparent" />
+
+
+</RelativeLayout>

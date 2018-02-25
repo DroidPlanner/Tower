@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light">
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_above="@+id/droneImage"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_below="@+id/header"
+        android:gravity="center"
+        android:text="Fly With Ease"
+        android:textAppearance="@style/AeroboticsTextAppearance.Dark"
+        android:textSize="36sp" />
+
+
+    <ImageView
+        android:id="@+id/droneImage"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:tint="@color/primary_dark_blue"
+        app:srcCompat="@drawable/ic_drone" />
+
+    <TextView
+        android:id="@+id/desc_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/droneImage"
+        android:layout_marginBottom="45dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginStart="60dp"
+        android:gravity="center"
+        android:text="Autonomous surveys make data collection as easy as a click of a button."
+        android:textAppearance="@style/AeroboticsTextAppearance.Dark"
+        android:textSize="18sp" />
+
+
+</RelativeLayout>

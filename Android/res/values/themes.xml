@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Aerobotics theme -->
+    <style name="AeroboticsCustomTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+    </style>
     <!-- the theme applied to the application or activity -->
     <style name="CustomActionBarTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@android:color/white</item>
@@ -22,6 +26,7 @@
         <item name="vpiTabPageIndicatorStyle">@style/Widget.TabPageIndicator</item>
 
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="colorAccent">@color/secondary_dark_blue</item>
 
     </style>
 

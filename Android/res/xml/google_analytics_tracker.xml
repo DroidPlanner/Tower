@@ -23,23 +23,23 @@
     <bool name="ga_reportUncaughtExceptions">true</bool>
 
     <!-- The screen names that will show up in the report -->
-    <screenName name="org.droidplanner.android.activities.FlightActivity">
+    <screenName name="co.aerobotics.android.activities.FlightActivity">
         Flight Screen
     </screenName>
 
-    <screenName name="org.droidplanner.android.activities.EditorActivity">
+    <screenName name="co.aerobotics.android.activities.EditorActivity">
         Editor Screen
     </screenName>
 
-    <screenName name="org.droidplanner.android.activities.ConfigurationActivity">
+    <screenName name="co.aerobotics.android.activities.ConfigurationActivity">
         Configuration Screen
     </screenName>
 
-    <screenName name="org.droidplanner.android.activities.SettingsActivity">
+    <screenName name="co.aerobotics.android.activities.SettingsActivity">
         Settings Screen
     </screenName>
 
-    <screenName name="org.droidplanner.android.activities.helpers.MapPreferencesActivity">
+    <screenName name="co.aerobotics.android.activities.helpers.MapPreferencesActivity">
         Map Preferences Screen
     </screenName>
 </resources>

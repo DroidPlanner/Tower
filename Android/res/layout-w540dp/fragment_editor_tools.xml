@@ -10,27 +10,14 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="48dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_weight="1.5"
         android:background="@drawable/telem_bar_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="2dp"
-        android:layout_weight="1.5"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp">
+        android:padding="2dp">
 
-        <fragment
-            android:id="@+id/vehicle_status_fragment"
-            android:name="org.droidplanner.android.fragments.actionbar.VehicleStatusFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            />
-
-        <View
-            android:id="@+id/drone_connected_icon_separator"
-            android:layout_width="1dp"
-            android:layout_height="30dp"
-            android:layout_margin="2dp"
-            android:background="@color/light_grey"/>
 
         <RadioGroup
             android:id="@+id/editor_tools_layout"
@@ -39,30 +26,15 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <org.droidplanner.android.view.button.RadioButtonCenter
-                android:id="@+id/editor_tools_marker"
-                style="@style/editorButton"
-                android:button="@drawable/ic_pin_drop_grey_700_24dp"/>
-
-            <org.droidplanner.android.view.button.RadioButtonCenter
+            <co.aerobotics.android.view.button.RadioButtonCenter
                 android:id="@+id/editor_tools_draw"
                 style="@style/editorButton"
-                android:button="@drawable/ic_gesture_grey_700_24dp"/>
+                android:button="@drawable/ic_menu_editor_grey600_24dp" />
 
-            <org.droidplanner.android.view.button.RadioButtonCenter
-                android:id="@+id/editor_tools_selector"
+            <co.aerobotics.android.view.button.RadioButtonCenter
+                android:id="@+id/editor_tools_import"
                 style="@style/editorButton"
-                android:button="@drawable/ic_tab_unselected_grey_700_24dp"/>
-
-            <org.droidplanner.android.view.button.RadioButtonCenter
-                android:id="@+id/editor_tools_trash"
-                style="@style/editorButton.Trash"
-                android:button="@drawable/ic_delete_grey_700_24dp"/>
-
-            <ImageButton
-                android:id="@+id/editor_tools_undo"
-                style="@style/editorButton"
-                android:src="@drawable/ic_undo_grey_700_24dp"/>
+                android:button="@drawable/ic_mission_planner_logo_700_24dp" />
 
         </RadioGroup>
     </LinearLayout>
@@ -113,13 +85,13 @@
                 android:layout_weight="1"
                 android:background="?selectableItemBackground"
                 android:gravity="center"
+                android:maxLines="1"
                 android:minHeight="36dp"
                 android:padding="5dp"
-                android:singleLine="true"
                 android:text="@string/label_clear_selected"
                 android:textAllCaps="true"
                 android:textColor="@android:color/black"
-                android:textStyle="normal"/>
+                android:textStyle="normal" />
 
             <View
                 android:layout_width="1dp"
@@ -136,12 +108,13 @@
                 android:gravity="center"
                 android:minHeight="36dp"
                 android:padding="5dp"
-                android:singleLine="true"
                 android:text="@string/dlg_clear_mission_title"
                 android:textAllCaps="true"
                 android:textColor="@android:color/black"
-                android:textStyle="normal"/>
+                android:textStyle="normal"
+                android:maxLines="1" />
         </LinearLayout>
+
 
         <TextView
             android:id="@+id/select_all_button"
@@ -152,11 +125,20 @@
             android:gravity="center"
             android:minHeight="36dp"
             android:padding="5dp"
-            android:singleLine="true"
             android:text="@string/label_select_all"
             android:textColor="@android:color/black"
             android:textStyle="normal"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:maxLines="1" />
+
 
     </FrameLayout>
+
+    <co.aerobotics.android.view.button.RadioButtonCenter
+        android:id="@+id/editor_tools_trash"
+        style="@style/editorButton.Trash"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:button="@drawable/ic_delete_grey_700_24dp" />
 </LinearLayout>

@@ -1,0 +1,117 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+
+    ext {
+        play_services_version = '8.4.0'
+
+        android_build_sdk_version = 23
+        android_build_tools_version = '23.0.3'
+        android_build_target_sdk_version = 22
+        android_build_min_sdk_version = 14
+    }
+
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+
+        //Dexcount gradle plugin
+        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.4.4'
+    }
+}
+
+def computeVersionCode(int versionMajor, int versionMinor, int versionPatch, int versionBuild = 0){
+    return versionMajor * 100000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+}
+
+def generateVersionName(String versionPrefix, int versionMajor, int versionMinor, int versionPatch, String versionSuffix = ""){
+    def versionName = "${versionPrefix}${versionMajor}.${versionMinor}.${versionPatch}"
+
+    if(versionSuffix != null && !versionSuffix.isEmpty() && versionSuffix != "release"){
+        versionName += "-${versionSuffix}"
+    }
+
+    return versionName
+}
+
+def generateVersionNameSuffix(int versionBuild, String releaseType, boolean includeHash = false){
+    def versionNameSuffix = "${releaseType}.${versionBuild}"
+    if(includeHash){
+        versionNameSuffix += " (${getGitShortHash()})"
+    }
+    return versionNameSuffix
+}
+
+/**
+ * @return The most recent git tag to be used as version name for the app.
+ */
+def getGitVersion() {
+    def cmd = "git describe --tag"
+    try {
+        def proc = cmd.execute()
+        return proc.text.trim()
+    } catch (IOException e) {
+        //Unable to find 'git'
+        return "please update version name manually"
+    }
+}
+
+def getGitShortHash(){
+    def cmd = "git rev-parse --short HEAD"
+    try{
+        def proc = cmd.execute()
+        return proc.text.trim()
+    } catch(IOException e){
+        //Unable to find git
+        return ""
+    }
+}
+
+def getMavenUsername(){
+    return hasProperty('COM_O3DR_MAVEN_USERNAME') ? COM_O3DR_MAVEN_USERNAME : ''
+}
+
+def getMavenApiKey(){
+    return hasProperty('COM_O3DR_MAVEN_APIKEY') ? COM_O3DR_MAVEN_APIKEY : ''
+}
+
+def getMavenRepo(){
+    return hasProperty('COM_O3DR_MAVEN_REPO') ? COM_O3DR_MAVEN_REPO : ''
+}
+
+def getMavenRepoUrl(){
+    return hasProperty('COM_O3DR_MAVEN_REPO_URL') ? COM_O3DR_MAVEN_REPO_URL : 'https://dl.bintray.com/3d-robotics/maven'
+}
+
+/**
+ * Improve build server performance by allowing disabling of pre-dexing
+ * (see http://tools.android.com/tech-docs/new-build-system/tips#TOC-Improving-Build-Server-performance.)
+ */
+project.ext.preDexLibs = !project.hasProperty('disablePreDex')
+
+subprojects {
+    project.plugins.whenPluginAdded { plugin ->
+        if ("com.android.build.gradle.AppPlugin".equals(plugin.class.name)) {
+            project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
+        } else if ("com.android.build.gradle.LibraryPlugin".equals(plugin.class.name)) {
+            project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
+        }
+    }
+}
+
+
+allprojects {
+    repositories {
+        jcenter()
+
+        maven {
+            url getMavenRepoUrl()
+            credentials {
+                username getMavenUsername()
+                password getMavenApiKey()
+            }
+        }
+    }
+}

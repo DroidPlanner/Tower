@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="64dp"
+            android:alpha="0.4"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/banner" />
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/imageView3"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="45dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="45dp"
+        app:srcCompat="@drawable/logo_no_slogan_dark" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/inspire_drone_flying" />
+
+    <TextView
+        android:id="@+id/desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/imageView3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="63dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginStart="45dp"
+        android:gravity="center"
+        android:text="We turn information from drones into actionable data for your farm."
+        android:textAppearance="@style/AeroboticsTextAppearance.Dark"
+        android:textSize="24sp" />
+
+
+</RelativeLayout>

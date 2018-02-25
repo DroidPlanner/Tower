@@ -7,6 +7,15 @@
         <item
             android:id="@+id/navigation_settings"
             android:icon="@drawable/ic_menu_settings_grey600_24dp"
+            android:visible="false"
             android:title="@string/settings" />
+        <item
+            android:id="@+id/navigation_tour"
+            android:icon="@drawable/ic_explore_black_24dp"
+            android:title="Take a Tour"/>
+        <item
+            android:id="@+id/navigation_log_out"
+            android:icon="@drawable/ic_exit_to_app_grey_700_24dp"
+            android:title="@string/log_out"/>
     </group>
 </menu>

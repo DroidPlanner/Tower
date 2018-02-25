@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/light">
+
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:scaleType="fitStart"
+        app:srcCompat="@drawable/aerobotics_logo_transparent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_above="@+id/suveryImage"
+        android:layout_below="@+id/imageView5"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="30dp"
+        android:gravity="center"
+        android:text="Powerful analytics tools"
+        android:textAppearance="@style/AeroboticsTextAppearance.Dark"
+        android:textSize="36sp" />
+
+
+    <ImageView
+        android:id="@+id/suveryImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/laptop_image" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/suveryImage"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="50dp"
+        android:gravity="center_horizontal"
+        android:text="Aeroview helps you farm better by allowing you to track important crop metrics"
+        android:textAppearance="@style/AeroboticsTextAppearance.Dark"
+        android:textSize="18sp" />
+
+</RelativeLayout>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_blue"
+    tools:context="co.aerobotics.android.co.dji.android.activities.CameraActivity">
+
+    <dji.ui.widget.FPVWidget
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:id="@+id/camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/dark_gray"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
+
+        <dji.ui.widget.AutoExposureLockWidget
+            android:layout_width="25dp"
+            android:layout_height="50dp" />
+
+        <dji.ui.widget.FocusExposureSwitchWidget
+            android:layout_width="25dp"
+            android:layout_height="50dp" />
+
+        <dji.ui.widget.FocusModeWidget
+            android:layout_width="25dp"
+            android:layout_height="50dp" />
+
+        <dji.ui.widget.config.CameraConfigISOWidget
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+
+        <dji.ui.widget.config.CameraConfigShutterWidget
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+
+        <dji.ui.widget.config.CameraConfigApertureWidget
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+
+        <dji.ui.widget.config.CameraConfigEVWidget
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+
+        <dji.ui.widget.config.CameraConfigWBWidget
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+
+    </LinearLayout>
+
+    <dji.ui.widget.controls.CameraControlsWidget
+        android:id="@+id/CameraCapturePanel"
+        android:layout_width="50dp"
+        android:layout_height="213dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true" />
+
+    <dji.ui.panel.CameraSettingExposurePanel
+        android:id="@+id/CameraExposureMode"
+        android:layout_width="180dp"
+        android:background="@color/transparent"
+        android:gravity="center"
+        android:layout_height="263dp"
+        android:visibility="invisible"
+        android:layout_alignTop="@+id/CameraCapturePanel"
+        android:layout_toStartOf="@+id/CameraCapturePanel" />
+
+
+</RelativeLayout>

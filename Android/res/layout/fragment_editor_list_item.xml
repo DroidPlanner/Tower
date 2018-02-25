@@ -4,20 +4,18 @@
 Used to Style the horizontal list of mission items.
 -->
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dragHandler"
     android:layout_width="wrap_content"
-    android:minWidth="48dp"
-    android:minHeight="48dp"
     android:layout_height="wrap_content"
-    android:background="@drawable/ic_mission_button"
-    android:padding="3dp"
     android:layout_marginBottom="2dp"
     android:layout_marginLeft="1dp"
     android:layout_marginStart="1dp"
-    >
+    android:background="@drawable/ic_mission_button"
+    android:minHeight="28dp"
+    android:minWidth="28dp"
+    android:padding="3dp">
 
     <TextView
         android:id="@+id/rowNameView"
@@ -25,25 +23,23 @@ Used to Style the horizontal list of mission items.
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="4dp"
-        tools:text="44"
-        android:textColor="#FFFFFF"
-        android:textSize="@dimen/editor_list_item_text_size"
-        android:textStyle="bold"
+        android:textColor="@color/light"
+        android:textSize="14sp"
 
-        />
+        android:textStyle="bold"
+        tools:text="44" />
 
     <TextView
         android:id="@+id/rowAltitudeView"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/rowNameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="200m"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/rowNameView"
         android:drawableLeft="@drawable/ic_mission_wp"
         android:drawablePadding="2dp"
-        />
+        android:textColor="@color/light"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        tools:text="200m" />
 
 </RelativeLayout>

@@ -11,7 +11,7 @@
             android:summary="@string/pref_map_type_summary"
             android:title="@string/pref_map_type"/>
 
-        <org.droidplanner.android.maps.providers.baidu_map.BaiduMapOfflineMapPreference
+        <co.aerobotics.android.maps.providers.baidu_map.BaiduMapOfflineMapPreference
             android:title="@string/pref_baidu_map_offline_preference_title" />
 
     </PreferenceCategory>

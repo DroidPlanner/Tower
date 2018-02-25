@@ -1,0 +1,141 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.getkeepsafe.dexcount'
+
+ext {
+    VERSION_MAJOR = 3
+    VERSION_MINOR = 0
+    VERSION_PATCH = 2
+    VERSION_SUFFIX = "release"
+
+    PUBLISH_ARTIFACT_ID = 'dronekit-android'
+    PUBLISH_VERSION = generateVersionName("", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH, VERSION_SUFFIX)
+    PUBLISH_VERSION_CODE = computeVersionCode(VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH)
+    PROJECT_DESCRIPTION = "Android DroneKit client library."
+    PROJECT_LABELS = ['DroneCode', '3DR', 'Tower', 'DroneAPI', 'Android', 'DroneKit', '3DR Services']
+    PROJECT_LICENSE = 'The Apache Software License, Version 2.0'
+    PROJECT_LICENSE_URL = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    PROJECT_LICENSE_DISTRIBUTION = 'repo'
+}
+
+//Log levels values
+def logLevelVerbose = 2;
+def logLevelDebug = 3;
+def logLevelInfo = 4;
+def logLevelWarn = 5;
+def logLevelError = 6;
+def logLevelAssert = 7;
+
+android {
+    compileSdkVersion android_build_sdk_version
+    buildToolsVersion android_build_tools_version
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
+    defaultConfig {
+        minSdkVersion android_build_min_sdk_version
+        targetSdkVersion android_build_target_sdk_version
+
+        versionCode PUBLISH_VERSION_CODE
+        versionName PUBLISH_VERSION
+
+        //Build config fields
+        buildConfigField "boolean", "SITL_DEBUG", "false"
+        buildConfigField "String", "SOLO_LINK_IP", getSoloLinkIp()
+        buildConfigField "boolean", "WRITE_LOG_FILE", "false"
+        buildConfigField "int", "LOG_FILE_LEVEL", "$logLevelDebug"
+    }
+
+    sourceSets {
+        main {
+            aidl.srcDirs = ['src/main/java']
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    android.libraryVariants.all { variant ->
+        variant.outputs.each { output ->
+            def file = output.outputFile
+            if (file != null && file.name.endsWith('.aar')) {
+                output.outputFile = new File(file.parent, "${PUBLISH_ARTIFACT_ID}.${PUBLISH_VERSION}.aar")
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            buildConfigField "boolean", "WRITE_LOG_FILE", "true"
+        }
+
+        sitl {
+            debuggable true
+            buildConfigField "String", "SOLO_LINK_IP", getLocalIp()
+            buildConfigField "boolean", "SITL_DEBUG", "true"
+        }
+
+        release {
+        }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+    buildToolsVersion '25.0.2'
+}
+
+dependencies {
+    compile 'com.jakewharton.timber:timber:3.1.0'
+
+    compile "com.google.android.gms:play-services-base:${play_services_version}"
+    compile "com.google.android.gms:play-services-location:${play_services_version}"
+
+    //Java semver library
+    compile 'com.github.zafarkhaja:java-semver:0.9.0'
+
+    compile 'com.jcraft:jsch:0.1.51'
+
+    //MP4 generation library
+    compile 'com.googlecode.mp4parser:isoparser:1.1.7'
+
+    compile 'org.droidplanner.android:usb-serial-android:0.1.0'
+
+    debugCompile project(':Mavlink')
+//    sitlCompile project(':Mavlink')
+
+    compile files('libs/Mavlink.jar')
+    compile files('libs/d2xx.jar')
+
+    androidTestCompile 'junit:junit:4.12'
+    androidTestCompile "org.robolectric:robolectric:3.0"
+}
+
+def getSoloLinkIp() {
+    return '\"10.1.1.10\"'
+}
+
+def getLocalIp() {
+    try {
+        return '\"' + InetAddress.getLocalHost().getCanonicalHostName() + '\"'
+    }catch(Exception e){
+        return '\"\"'
+    }
+}
+
+evaluationDependsOn ':Mavlink'
+assemble.dependsOn ':Mavlink:jar'
+
+apply from: "$projectDir/maven-push.gradle"

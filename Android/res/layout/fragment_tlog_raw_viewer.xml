@@ -11,7 +11,7 @@
         android:visibility="gone"
         android:scrollbars="none"/>
 
-    <org.droidplanner.android.view.FastScroller
+    <co.aerobotics.android.view.FastScroller
         android:id="@+id/raw_fastscroller"
         android:orientation="vertical"
         android:layout_width="wrap_content"

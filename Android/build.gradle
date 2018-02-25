@@ -1,14 +1,25 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 
 dependencies {
-    compile 'com.android.support:multidex:1.0.1'
-
     compile "com.google.android.gms:play-services-maps:${play_services_version}"
     compile "com.google.android.gms:play-services-location:${play_services_version}"
     compile "com.google.android.gms:play-services-analytics:${play_services_version}"
-
     compile "com.android.support:support-v4:${support_lib_version}"
     compile "com.android.support:appcompat-v7:${support_lib_version}"
     compile "com.android.support:preference-v7:${support_lib_version}"
@@ -16,52 +27,88 @@ dependencies {
     compile "com.android.support:cardview-v7:${support_lib_version}"
     compile "com.android.support:recyclerview-v7:${support_lib_version}"
     compile "com.android.support:design:${support_lib_version}"
+    compile 'com.mixpanel.android:mixpanel-android:5.+'
+    compile 'com.google.code.gson:gson:2.8.1'
 
     // Android library to display the changelog
-    compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
 
     //DroneKit-Android client lib
-    compile 'com.o3dr.android:dronekit-android:3.0.2'
+
+    //compile 'com.o3dr.android:dronekit-android:3.0.2'
+
     //Comment line above, and uncomment line below to use your local version of the dronekit-android client lib
+
     //Don't forget to uncomment the lines in the settings.gradle file as well.
-//     compile project(':ClientLib')
 
-    compile 'me.grantland:autofittextview:0.2.1'
-    compile(name:'shimmer-android-release', ext:'aar')
-    compile(name:'libuvccamera-release', ext:'aar')
-    compile(name:'sliding-up-panel-3.3.0', ext:'aar')
-
+    //compile 'com.vividsolutions:jts:1.13'
+    compile project(':ClientLib')
+    compileOnly 'com.dji:dji-sdk:4.4.1'
+    provided 'com.dji:dji-sdk-provided:4.4.1'
+    compile 'com.dji:dji-uilibrary:4.4.1'
+    compile(name: 'shimmer-android-release', ext: 'aar')
+    compile(name: 'libuvccamera-release', ext: 'aar')
+    compile(name: 'sliding-up-panel-3.3.0', ext: 'aar')
     compile files('libs/droneapi-java-0.3-SNAPSHOT.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
     compile files('libs/jeromq-0.3.4.jar')
     compile files('libs/sius-0.3.1-SNAPSHOT.jar')
     compile files('libs/BaiduLBS_Android.jar')
-
     compile "com.squareup.okhttp:okhttp:${okhttp_version}"
     compile "com.squareup.okhttp:okhttp-urlconnection:${okhttp_version}"
-
-    compile 'com.jakewharton.timber:timber:3.1.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
 
+    //compile 'com.squareup:otto:+'
+
     //Charts and graph library
-    compile 'com.github.lecho:hellocharts-library:1.5.5@aar'
 
     //Leak canary (https://github.com/square/leakcanary)
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+
+    //compile 'com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1'
+
+    //compile 'com.dmitrymalkovich.android:progress-fab:1.6'
+    compile 'com.github.jorgecastilloprz:fabprogresscircle:1.01@aar'
+    compile 'mbanje.kurt:fabbutton:1.2.4@aar'
+    compile 'org.apache.commons:commons-lang3:3.5'
+    compile 'com.github.andremion:counterfab:1.0.1'
+    compile 'com.github.apl-devs:appintro:v4.2.2'
+    compile 'com.goebl:simplify:1.0.0'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
+    compile 'me.grantland:autofittextview:0.2.1'
+    compile 'com.jakewharton.timber:timber:3.1.0'
+    compile 'com.github.lecho:hellocharts-library:1.5.5@aar'
+    compile 'com.android.volley:volley:1.0.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    compile project(':searchablespinnerlibrary')
+    compile('com.crashlytics.sdk.android:crashlytics-ndk:1.1.6@aar') {
+        transitive = true
+    }
+    compile('com.crashlytics.sdk.android:answers:1.4.1@aar') {
+        transitive = true
+    }
+    compile('com.github.worker8:tourguide:1.0.17-SNAPSHOT@aar') {
+        transitive = true
+    }
+    compile 'com.getkeepsafe.taptargetview:taptargetview:1.10.0'
 }
 
-def versionPrefix = "Tower-v"
+configurations {
+    all*.exclude group: 'com.nineoldandroids', module: 'library'
+}
+
+def versionPrefix = "flight_planner_for_dji"
 
 //Decomposed version name and code (https://plus.google.com/+JakeWharton/posts/6f5TcVPRZij)
-def versionMajor = 4
-def versionMinor = 0
-def versionPatch = 0
-def versionBuild = 10 //bump for dogfood builds, public betas, etc.
+def versionMajor = 1
+def versionMinor = 4
+def versionPatch = 2
+def versionBuild = 0 //bump for dogfood builds, public betas, etc.
 
 //Logging levels
 def logLevelVerbose = 2;
@@ -71,33 +118,48 @@ def logLevelWarn = 5;
 def logLevelError = 6;
 def logLevelAssert = 7;
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
-    compileSdkVersion android_build_sdk_version
-    buildToolsVersion android_build_tools_version
+    compileSdkVersion 25
+    buildToolsVersion '26.0.2'
 
     dexOptions {
         javaMaxHeapSize "4g"
     }
 
     defaultConfig {
-        applicationId 'org.droidplanner.android'
-        minSdkVersion android_build_min_sdk_version
-        targetSdkVersion android_build_target_sdk_version
+        applicationId 'co.aerobotics.android'
+        minSdkVersion 21
+        targetSdkVersion 25
         versionCode computeVersionCode(versionMajor, versionMinor, versionPatch, versionBuild)
         versionName generateVersionName(versionPrefix, versionMajor, versionMinor, versionPatch)
-
         buildConfigField "boolean", "WRITE_LOG_FILE", "true"
         buildConfigField "int", "LOG_FILE_LEVEL", "$logLevelDebug"
         buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
-
         //Manifest placeholders (http://tools.android.com/tech-docs/new-build-system/user-guide/manifest-merger#TOC-Placeholder-support)
         manifestPlaceholders = [
-            fabricApiKey:getFabricApiKey()
+                fabricApiKey: keystoreProperties['fabricApiKey'],
+                djiApiKey: keystoreProperties['djiApiKey'],
+                googleMapsKey: keystoreProperties['googleMapsKey']
         ]
-
         // Enabling multidex support.
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+    }
 
+    packagingOptions{
+        doNotStrip "*/*/libdjivideo.so"
+        doNotStrip "*/*/libSDKRelativeJNI.so"
+        doNotStrip "*/*/libFlyForbid.so"
+        doNotStrip "*/*/libduml_vision_bokeh.so"
+        doNotStrip "*/*/libyuv2.so"
+        doNotStrip "*/*/libGroudStation.so"
+        doNotStrip "*/*/libFRCorkscrew.so"
+        doNotStrip "*/*/libUpgradeVerify.so"
+        doNotStrip "*/*/libFR.so"
     }
 
     compileOptions {
@@ -135,21 +197,21 @@ android {
 
     signingConfigs {
         release {
-            storeFile getAppKeystoreFile()
-            storePassword getAppKeystorePassword()
-            keyAlias getAppKey()
-            keyPassword getAppKeyPassword()
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
     }
 
     android.applicationVariants.all { variant ->
-        variant.outputs.each { output ->
+        variant.outputs.all { output ->
             def file = output.outputFile
             if (file != null && file.name.endsWith('.apk')) {
                 def buildType = variant.buildType.getName()
                 def flavorName = variant.getFlavorName()
                 def versionCode = defaultConfig.versionCode
-                output.outputFile = new File(file.parent, "tower-${flavorName}-${buildType}.${versionCode}.apk")
+                output.outputFileName = new File(file.parent, "aerobotics-flight-planner-${flavorName}-${buildType}.${versionCode}.apk")
             }
         }
     }
@@ -185,34 +247,36 @@ android {
         }
     }
 
+    flavorDimensions "default"
     productFlavors {
         dev {
+            dimension "default"
             applicationIdSuffix ".debug"
             resValue "string", "app_title", "Tower Dev"
             resValue "string", "baidu_api_key", ""
             versionName generateVersionName(versionPrefix, versionMajor, versionMinor, versionPatch, "debug.${versionBuild}")
-
             //Enable or disable crashlytics based on the availability of the api key
             ext.enableCrashlytics = false
         }
-
         beta {
+            dimension "default"
             applicationIdSuffix ".beta"
-            resValue "string", "app_title", "Tower Beta"
+            resValue "string", "app_title", "Aerobotics DJI Ground Station"
             resValue "string", "baidu_api_key", "4x7A3lUHEmzFxosafDa4bLP7yinmEnPh"
             versionName generateVersionName(versionPrefix, versionMajor, versionMinor, versionPatch, "beta.${versionBuild}")
-
             //Enable or disable crashlytics based on the availability of the api key
             ext.enableCrashlytics = hasFabricApiKey()
         }
-
         prod {
-            resValue "string", "app_title", "Tower"
+            dimension "default"
+            resValue "string", "app_title", "Flight Planner for DJI"
             resValue "string", "baidu_api_key", "41mPy2URFjOL61GzyWk8U5oLhhwSYGWe"
             buildConfigField "boolean", "WRITE_LOG_FILE", "false"
-
             //Enable or disable crashlytics based on the availability of the api key
             ext.enableCrashlytics = hasFabricApiKey()
+            minSdkVersion 21
+            signingConfig signingConfigs.release
+            targetSdkVersion 25
         }
     }
 
@@ -226,18 +290,18 @@ android {
             buildConfigField "boolean", "ENABLE_CRASHLYTICS", "${hasFabricApiKey()}"
         }
     }
-    buildToolsVersion '24.0.1'
+    buildToolsVersion '26.0.2'
 }
 
 /**
  * @return The most recent git tag to be used as version name for the app.
  */
-def getGitVersion(){
+def getGitVersion() {
     def cmd = "git describe --tag"
     try {
         def proc = cmd.execute()
         return proc.text.trim()
-    }catch(IOException e){
+    } catch (IOException e) {
         //Unable to find 'git'
         return "please update version name manually"
     }
@@ -248,7 +312,7 @@ def getAppKeystoreFile() {
     return filePath ? file(filePath) : null
 }
 
-def getAppKeystorePassword(){
+def getAppKeystorePassword() {
     return hasProperty('ORG_DROIDPLANNER_ANDROID_KEYSTORE_PWD') ? ORG_DROIDPLANNER_ANDROID_KEYSTORE_PWD : ''
 }
 
@@ -260,10 +324,15 @@ def getAppKey() {
     return hasProperty('ORG_DROIDPLANNER_ANDROID_KEY_ALIAS') ? ORG_DROIDPLANNER_ANDROID_KEY_ALIAS : ''
 }
 
-def getFabricApiKey(){
-    return hasFabricApiKey() ? COM_O3DR_FABRIC_API_KEY : ''
+def getFabricApiKey() {
+    return null
 }
 
-def hasFabricApiKey(){
-    return hasProperty('COM_O3DR_FABRIC_API_KEY')
+def hasFabricApiKey() {
+    return true
+}
+crashlytics {
+    enableNdk true
+    androidNdkOut 'src/main/obj'
+    androidNdkLibsOut 'src/main/libs'
 }

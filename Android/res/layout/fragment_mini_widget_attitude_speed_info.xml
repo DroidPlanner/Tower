@@ -59,7 +59,7 @@
             android:gravity="start|center_vertical"
             android:text="@string/default_angle_value" />
 
-        <org.droidplanner.android.view.AttitudeIndicator
+        <co.aerobotics.android.view.AttitudeIndicator
             android:id="@+id/aiView"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -82,12 +82,12 @@
         style="@style/largeTelemetryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_debug_step_over"
+        android:drawableLeft="@drawable/debug_step_over"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/ic_debug_step_over"
-        android:singleLine="true"
+        android:drawableStart="@drawable/debug_step_over"
         android:text="@string/horizontal_speed_empty"
-        tools:text="hs: 1000 mph" />
+        tools:text="hs: 1000 mph"
+        android:maxLines="1" />
 
     <View
         android:layout_width="match_parent"
@@ -100,11 +100,11 @@
         style="@style/largeTelemetryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_debug_step_none"
+        android:drawableLeft="@drawable/debug_step_out"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/ic_debug_step_none"
-        android:singleLine="true"
+        android:drawableStart="@drawable/debug_step_out"
         android:text="@string/vertical_speed_empty"
-        tools:text="vs: 1000 mph" />
+        tools:text="vs: 1000 mph"
+        android:maxLines="1" />
 
 </LinearLayout>
