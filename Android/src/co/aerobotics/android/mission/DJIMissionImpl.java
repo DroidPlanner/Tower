@@ -32,6 +32,7 @@ import dji.common.camera.WhiteBalance;
 import dji.common.error.DJIError;
 import dji.common.gimbal.Rotation;
 import dji.common.gimbal.RotationMode;
+import dji.common.mission.MissionState;
 import dji.common.mission.waypoint.Waypoint;
 import dji.common.mission.waypoint.WaypointMission;
 import dji.common.mission.waypoint.WaypointMissionDownloadEvent;
@@ -131,18 +132,23 @@ public class DJIMissionImpl {
 
         @Override
         public void onExecutionStart() {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
             rotateGimbal(-90.0f, 0.1);
             if (isTimelineMission) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor = sharedPreferences.edit();
                 editor.putInt(context.getString(R.string.survey_index), MissionControl.getInstance().getCurrentTimelineMarker());
                 editor.apply();
                 if (MissionControl.getInstance().getCurrentTimelineMarker() == 0) {
                     intent = new Intent(DJIMissionImpl.MISSION_START);
                     mainHandler.post(notifyStatus);
+                    editor.putBoolean(context.getString(R.string.mission_aborted), false);
+                    editor.apply();
                 }
             } else {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor = sharedPreferences.edit();
                 editor.putInt(context.getString(R.string.survey_index), 0);
+                editor.putBoolean(context.getString(R.string.mission_aborted), false);
                 editor.apply();
                 intent = new Intent(DJIMissionImpl.MISSION_START);
                 mainHandler.post(notifyStatus);
@@ -427,7 +433,6 @@ public class DJIMissionImpl {
                 .headingMode(WaypointMissionHeadingMode.AUTO)
                 .autoFlightSpeed(flightSpeed)
                 .maxFlightSpeed(flightSpeed);
-
         //shootPhotoTimeInterval not supported on older firmware versions
         if (DroidPlannerApp.isFirmwareNewVersion() != null && DroidPlannerApp.isFirmwareNewVersion()){
             waypointMissionBuilder.setGimbalPitchRotationEnabled(true);
@@ -518,6 +523,9 @@ public class DJIMissionImpl {
             public void onResult(DJIError error) {
                 if (error == null){
                     returnToLaunch();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean(context.getString(R.string.mission_aborted), true);
+                    editor.apply();
                     intent = new Intent(MiSSION_STOP);
                     mainHandler.post(notifyStatus);
                     getWaypointMissionOperator().removeListener(waypointMissionOperatorListener);
@@ -544,8 +552,6 @@ public class DJIMissionImpl {
         /**
          * Command aircraft to return to home position
          */
-        Toast.makeText(context, "RTL", Toast.LENGTH_LONG).show();
-
         KeyManager.getInstance().performAction(goHomeKey, new ActionCallback() {
             @Override
             public void onSuccess() {

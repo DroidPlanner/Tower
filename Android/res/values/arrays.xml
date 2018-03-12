@@ -4,7 +4,7 @@
     tools:ignore="MissingTranslation">
 
     <string-array name="MissionOptions">
-        <item name="Resume=">Resume previous mission</item>
+        <item name="Resume=">Resume last mission</item>
     </string-array>
 
     <!-- Do not change the names here, instead extract the strings -->
