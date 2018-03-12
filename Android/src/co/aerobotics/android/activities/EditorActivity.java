@@ -445,7 +445,6 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
             if (missingPermission.isEmpty()) {
                 DroidPlannerApp.getInstance().registerSDK();
             } else {
-                showToast("Missing permissions!!!");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE)) {
                         OkDialog dialog = OkDialog.newInstance(getApplicationContext(),
@@ -461,8 +460,6 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
 
                                     @Override
                                     public void onCancel() {
-                                        Toast.makeText(getApplicationContext(), "READ_PHONE_STATE Denied", Toast.LENGTH_SHORT)
-                                                .show();
                                     }
 
                                     @Override
