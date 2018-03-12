@@ -108,6 +108,10 @@
     <string name="number_of_strips">Number of Strips</string>
     <string name="flight_time">Flight Time</string>
     <string name="draw_the_survey_region">Draw the survey region</string>
+    <string name="mission_waypoints">Mission waypoints</string>
+    <string name="last_waypoint_index">Last waypoint index</string>
+    <string name="last_drone_location">Last drone location</string>
+    <string name="survey_index">Survey index</string>
     <!-- Flight Mode information -->
     <string name="mode_acro">Acro allows a pilot to control rate of rotation directly.</string>
     <string name="mode_althold">Alt Hold automatically controls throttle and maintains altitude. Does not require GPS.</string>

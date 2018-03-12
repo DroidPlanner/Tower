@@ -118,9 +118,7 @@ public class AeroviewPolygons {
             JSONArray array = json.getJSONArray("farms");
             for (int i = 0; i < array.length(); i++){
                 JSONObject dict = array.getJSONObject(i);
-                sqLiteDatabaseHandler.createFarmName(dict.getString("name"),
-                        dict.getInt("id"),
-                        sharedPref.getInt(context.getResources().getString(R.string.client_id), -1));
+                sqLiteDatabaseHandler.createFarmName(dict.getString("name"), dict.getInt("id"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -135,9 +133,7 @@ public class AeroviewPolygons {
             JSONArray array = json.getJSONArray("farms");
             for (int i = 0; i < array.length(); i++){
                 JSONObject dict = array.getJSONObject(i);
-                sqLiteDatabaseHandler.updateFarmNameId(dict.getString("name"),
-                        dict.getInt("id"),
-                        sharedPref.getInt(context.getResources().getString(R.string.client_id), -1));
+                sqLiteDatabaseHandler.updateFarmNameId(dict.getString("name"), dict.getInt("id"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
