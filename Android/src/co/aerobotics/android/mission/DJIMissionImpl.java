@@ -99,6 +99,7 @@ public class DJIMissionImpl implements WaypointMissionOperatorListener{
         if (missionProxy.getItems().isEmpty()){
             return;
         }
+        DroidPlannerApp.getInstance().getFirmwareVersion();
         surveyDetail= ((Survey) missionProxy.getItems().get(0).getMissionItem()).getSurveyDetail();
         if(!isValidTriggerSpeed()){
             intent = new Intent(ERROR_CAMERA);
@@ -405,8 +406,7 @@ public class DJIMissionImpl implements WaypointMissionOperatorListener{
 
     void stopCamera(){
         final Camera camera = DroidPlannerApp.getCameraInstance();
-        if (cameraStarted) {
-            if (camera != null && !DroidPlannerApp.isFirmwareNewVersion()) {
+            if (camera != null) {
                 camera.stopShootPhoto(new CommonCallbacks.CompletionCallback() {
                     @Override
                     public void onResult(DJIError djiError) {
@@ -419,7 +419,6 @@ public class DJIMissionImpl implements WaypointMissionOperatorListener{
                     }
                 });
             }
-        }
     }
 
     public void rotateGimbal(float pitchAngle, double rotateTime){

@@ -56,8 +56,8 @@ public class TimelineMissionImpl extends DJIMissionImpl {
 
     public void run(MissionProxy missionProxy) {
         this.missionProxy = missionProxy;
+        DroidPlannerApp.getInstance().getFirmwareVersion();
         if (!missionProxy.getItems().isEmpty()) {
-
             buildMultiBoundaryMission();
             SurveyDetail surveyDetail = ((Survey) missionProxy.getItems().get(0).getMissionItem()).getSurveyDetail();
             setCameraWhiteBalance(surveyDetail);
@@ -221,7 +221,7 @@ public class TimelineMissionImpl extends DJIMissionImpl {
                 .maxFlightSpeed((float) surveyDetail.getSpeed());
 
         //shootPhotoTimeInterval not supported on older firmware versions
-        if (DroidPlannerApp.isFirmwareNewVersion()) {
+        if (DroidPlannerApp.isFirmwareNewVersion() != null && DroidPlannerApp.isFirmwareNewVersion()) {
             waypointMissionBuilder.setGimbalPitchRotationEnabled(true);
             if (waypointMissionBuilder.getWaypointList().size() > 0) {
                 for (int i = 0; i < waypointMissionBuilder.getWaypointList().size(); i++) {
