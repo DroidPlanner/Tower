@@ -30,6 +30,10 @@ import co.aerobotics.android.proxy.mission.item.MissionItemProxy;
 import dji.common.camera.SettingsDefinitions;
 import dji.common.camera.WhiteBalance;
 import dji.common.error.DJIError;
+import dji.common.flightcontroller.FlightControlState;
+import dji.common.flightcontroller.FlightControllerState;
+import dji.common.flightcontroller.GoHomeAssessment;
+import dji.common.flightcontroller.SmartRTHState;
 import dji.common.gimbal.Rotation;
 import dji.common.gimbal.RotationMode;
 import dji.common.mission.MissionState;
@@ -48,6 +52,7 @@ import dji.keysdk.KeyManager;
 import dji.keysdk.callback.ActionCallback;
 import dji.sdk.camera.Camera;
 import dji.sdk.flightcontroller.FlightAssistant;
+import dji.sdk.flightcontroller.FlightController;
 import dji.sdk.gimbal.Gimbal;
 import dji.sdk.mission.MissionControl;
 import dji.sdk.mission.timeline.Mission;
@@ -83,7 +88,7 @@ public class DJIMissionImpl {
     private Context context;
     private SharedPreferences sharedPreferences;
     private boolean isTimelineMission = false;
-
+    private SmartRTHState rthState;
     private MissionControl.Listener timelineListener = new MissionControl.Listener() {
         @Override
         public void onEvent(@Nullable TimelineElement element, TimelineEvent event, DJIError error) {
@@ -132,7 +137,7 @@ public class DJIMissionImpl {
 
         @Override
         public void onExecutionStart() {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+            SharedPreferences.Editor editor;
 
             rotateGimbal(-90.0f, 0.1);
             if (isTimelineMission) {
@@ -165,6 +170,13 @@ public class DJIMissionImpl {
                 mainHandler.post(notifyStatus);
                 getWaypointMissionOperator().removeListener(waypointMissionOperatorListener);
             }
+            // check if mission was ended due to smart return to launch
+            if (rthState != null && rthState.equals(SmartRTHState.EXECUTED)) {
+                SharedPreferences.Editor editor;
+                editor = sharedPreferences.edit();
+                editor.putBoolean(context.getString(R.string.mission_aborted), false);
+                editor.apply();
+            }
         }
     };
 
@@ -190,6 +202,14 @@ public class DJIMissionImpl {
         if (DroidPlannerApp.isFirmwareNewVersion() == null) {
             DroidPlannerApp.getInstance().getFirmwareVersion();
         }
+        FlightController flightController = ((Aircraft) DroidPlannerApp.getProductInstance()).getFlightController();
+        flightController.setStateCallback(new FlightControllerState.Callback() {
+            @Override
+            public void onUpdate(FlightControllerState flightControllerState) {
+                rthState = flightControllerState.getGoHomeAssessment().getSmartRTHState();
+            }
+        });
+
         this.context = context;
         sharedPreferences = context.getSharedPreferences(context.getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
         List<MissionDetails> missionsToSurvey;
