@@ -72,6 +72,9 @@ import dji.keysdk.callback.KeyListener;
 import dji.sdk.base.BaseProduct;
 import dji.sdk.sdkmanager.DJISDKManager;
 
+import static com.google.android.gms.common.GooglePlayServicesUtil.getErrorDialog;
+import static com.google.android.gms.common.GooglePlayServicesUtil.isGooglePlayServicesAvailable;
+
 public abstract class DroneMap extends ApiListenerFragment {
     private static final String TAG = "dronemap";
     private static final String EXTRA_DRONE_FLIGHT_PATH = "extra_drone_flight_path";
@@ -299,19 +302,17 @@ public abstract class DroneMap extends ApiListenerFragment {
 	@Override
 	public void onApiConnected() {
 		getBroadcastManager().registerReceiver(eventReceiver, eventFilter);
+
 		if (mMapFragment != null)
 			mMapFragment.clearAll();
 
 		drone = getDrone();
 		missionProxy = getMissionProxy();
-
 		home = new GraphicHome();
-		mMapFragment.addMarker(home);
-
 		graphicDrone = new GraphicDrone();
-		mMapFragment.addMarker(graphicDrone);
-
 		guided = new GraphicGuided(drone);
+		mMapFragment.addMarker(home);
+		mMapFragment.addMarker(graphicDrone);
 		mMapFragment.addMarker(guided);
 
         for(LatLongAlt point : flightPathPoints) {

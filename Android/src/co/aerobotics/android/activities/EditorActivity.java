@@ -75,6 +75,7 @@ import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.github.jorgecastilloprz.FABProgressCircle;
 import com.github.jorgecastilloprz.listeners.FABProgressListener;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.o3dr.android.client.utils.FileUtils;
 import com.o3dr.services.android.lib.coordinate.LatLong;
@@ -302,7 +303,6 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         // When the compile and target version is higher than 22, please request the following permission at runtime to ensure the SDK works well.
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkAndRequestPermissions();
         } else {

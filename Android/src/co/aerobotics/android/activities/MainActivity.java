@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 import co.aerobotics.android.DroidPlannerApp;
 import co.aerobotics.android.R;
+
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 
@@ -18,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         MixpanelAPI mMixpanel = MixpanelAPI.getInstance(this, DroidPlannerApp.getInstance().getMixpanelToken());
         mMixpanel.track("FPA: AppLaunched");
-
         SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
         boolean isFirstLaunch = sharedPref.getBoolean("firstLaunch", true);
         boolean loggedIn = sharedPref.getBoolean(getString(R.string.logged_in), false);
