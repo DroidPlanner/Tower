@@ -24,6 +24,7 @@
     <string name="client_id">Client_ID</string>
     <string name="go">Go</string>
     <string name="aeroview_sync_successful">AeroView sync completed</string>
+    <string name="aeroview_sync_error">Failed to fetch data: check internet connection</string>
     <!-- Drone Setup tabs -->
     <string name="screen_cal">Calibration</string>
     <string name="screen_checklist">Checklist</string>

@@ -174,7 +174,7 @@ public class DJIMissionImpl {
             if (rthState != null && rthState.equals(SmartRTHState.EXECUTED)) {
                 SharedPreferences.Editor editor;
                 editor = sharedPreferences.edit();
-                editor.putBoolean(context.getString(R.string.mission_aborted), false);
+                editor.putBoolean(context.getString(R.string.mission_aborted), true);
                 editor.apply();
             }
         }
@@ -207,6 +207,7 @@ public class DJIMissionImpl {
             @Override
             public void onUpdate(FlightControllerState flightControllerState) {
                 rthState = flightControllerState.getGoHomeAssessment().getSmartRTHState();
+                Log.i(TAG, rthState.toString());
             }
         });
 

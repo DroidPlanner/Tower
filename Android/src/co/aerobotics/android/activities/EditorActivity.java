@@ -164,7 +164,7 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
                     fabProgressCircle.hide();
                     fabProgressCircle.setClickable(true);
                     final View view = findViewById(R.id.editorCoordinatorLayout);
-                    Snackbar snack = Snackbar.make(view, "Server Error", Snackbar.LENGTH_LONG)
+                    Snackbar snack = Snackbar.make(view, getString(R.string.aeroview_sync_error), Snackbar.LENGTH_LONG)
                             .setAction("Action", null);
                     View snackBarView = snack.getView();
                     snackBarView.setBackgroundColor(getResources().getColor(R.color.primary_dark_blue));
