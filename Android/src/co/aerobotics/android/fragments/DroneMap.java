@@ -113,6 +113,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 					} else {
 						setInitialDronePosition();
 						setInitialHomePosition();
+						removeListeners();
 						addListeners();
 					}
 					break;
@@ -317,6 +318,8 @@ public abstract class DroneMap extends ApiListenerFragment {
 		if (isConnected()){
 			setInitialDronePosition();
 			setInitialHomePosition();
+			removeListeners();
+			addListeners();
 		}
 	}
 
