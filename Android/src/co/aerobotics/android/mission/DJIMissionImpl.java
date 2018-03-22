@@ -16,6 +16,7 @@ import co.aerobotics.android.data.SQLiteDatabaseHandler;
 import co.aerobotics.android.media.ImageImpl;
 import co.aerobotics.android.proxy.mission.MissionProxy;
 
+import com.getkeepsafe.taptargetview.TapTarget;
 import com.google.android.gms.maps.model.LatLng;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
@@ -163,17 +164,12 @@ public class DJIMissionImpl {
         @Override
         public void onExecutionFinish(DJIError djiError) {
             Log.d(TAG, "onFinish");
-            // check if mission was ended due to smart return to launch
-            if (rthState != null && rthState.equals(SmartRTHState.EXECUTED)) {
-                SharedPreferences.Editor editor;
-                editor = sharedPreferences.edit();
-                editor.putBoolean(context.getString(R.string.mission_aborted), true);
-                editor.apply();
-            }
+            Log.i(TAG, "RTH " + rthState.toString());
             if (!isTimelineMission) {
                 rotateGimbal(0, 0.5);
                 stopCamera();
                 intent = new Intent(MiSSION_STOP);
+                intent.putExtra("rth_state", rthState.toString());
                 mainHandler.post(notifyStatus);
                 getWaypointMissionOperator().removeListener(waypointMissionOperatorListener);
             }
@@ -198,16 +194,21 @@ public class DJIMissionImpl {
     Mission Operations
      */
 
-    public void initializeMission(MissionProxy missionProxy, Context context, boolean resume) {
+    public void initializeMission(MissionProxy missionProxy, final Context context, boolean resume) {
         if (DroidPlannerApp.isFirmwareNewVersion() == null) {
             DroidPlannerApp.getInstance().getFirmwareVersion();
         }
-        FlightController flightController = ((Aircraft) DroidPlannerApp.getProductInstance()).getFlightController();
+        final FlightController flightController = ((Aircraft) DroidPlannerApp.getProductInstance()).getFlightController();
         flightController.setStateCallback(new FlightControllerState.Callback() {
             @Override
             public void onUpdate(FlightControllerState flightControllerState) {
                 rthState = flightControllerState.getGoHomeAssessment().getSmartRTHState();
-                Log.i(TAG, rthState.toString());
+                if (rthState != null && (rthState.equals(SmartRTHState.EXECUTED))) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean(context.getString(R.string.mission_aborted), true);
+                    editor.apply();
+                    flightController.setStateCallback(null);
+                }
             }
         });
 
