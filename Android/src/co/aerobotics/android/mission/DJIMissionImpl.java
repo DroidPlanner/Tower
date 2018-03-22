@@ -163,19 +163,19 @@ public class DJIMissionImpl {
         @Override
         public void onExecutionFinish(DJIError djiError) {
             Log.d(TAG, "onFinish");
-            if (!isTimelineMission) {
-                rotateGimbal(0, 0.5);
-                stopCamera();
-                intent = new Intent(MiSSION_STOP);
-                mainHandler.post(notifyStatus);
-                getWaypointMissionOperator().removeListener(waypointMissionOperatorListener);
-            }
             // check if mission was ended due to smart return to launch
             if (rthState != null && rthState.equals(SmartRTHState.EXECUTED)) {
                 SharedPreferences.Editor editor;
                 editor = sharedPreferences.edit();
                 editor.putBoolean(context.getString(R.string.mission_aborted), true);
                 editor.apply();
+            }
+            if (!isTimelineMission) {
+                rotateGimbal(0, 0.5);
+                stopCamera();
+                intent = new Intent(MiSSION_STOP);
+                mainHandler.post(notifyStatus);
+                getWaypointMissionOperator().removeListener(waypointMissionOperatorListener);
             }
         }
     };

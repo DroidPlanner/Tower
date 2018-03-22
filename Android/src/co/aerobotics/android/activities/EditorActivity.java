@@ -650,12 +650,9 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
     @Override
     public void onApiDisconnected() {
         super.onApiDisconnected();
-
         if (missionProxy != null)
             missionProxy.selection.removeSelectionUpdateListener(this);
-
         getBroadcastManager().unregisterReceiver(eventReceiver);
-
     }
 
     @Override
@@ -682,7 +679,7 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
                     if (DroidPlannerApp.isProductConnected()) {
                         confirmMissionStart(EditorActivity.this);
                     } else {
-                        //setResultToToast("Disconnected");
+                        setResultToToast("Drone disconnected");
                     }
                 } else {
                     mMixpanel.track("FPA: TapStopMission");
