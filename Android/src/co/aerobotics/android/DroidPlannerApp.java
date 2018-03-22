@@ -34,6 +34,7 @@ import co.aerobotics.android.utils.file.IO.ExceptionWriter;
 import co.aerobotics.android.utils.prefs.DroidPlannerPrefs;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.ndk.CrashlyticsNdk;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.o3dr.android.client.ControlTower;
@@ -155,7 +156,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
     @Override
     public void onTowerConnected() {
         Timber.d("Connecting to the control tower.");
-
         drone.unregisterDroneListener(this);
 
         controlTower.registerDrone(drone, handler);

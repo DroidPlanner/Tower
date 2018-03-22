@@ -695,7 +695,11 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
         final Bitmap markerIcon = markerInfo.getIcon(getResources());
         if (markerIcon != null) {
-            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerIcon));
+            try {
+                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerIcon));
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
 
         return markerOptions;
