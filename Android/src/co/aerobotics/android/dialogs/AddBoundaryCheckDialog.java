@@ -69,6 +69,7 @@ public class AddBoundaryCheckDialog extends DialogFragment {
     private String newCropType;
     private String newFarmName;
     private SearchableSpinner searchableSpinnerFarmName;
+    private Integer clientId;
 
 
     @NonNull
@@ -80,6 +81,7 @@ public class AddBoundaryCheckDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_add_boundary, null);
         builder.setView(view);
         sharedPref = getActivity().getSharedPreferences(getActivity().getResources().getString(R.string.com_dji_android_PREF_FILE_KEY), Context.MODE_PRIVATE);
+        clientId = sharedPref.getInt(getActivity().getResources().getString(R.string.client_id), -1);
         sqLiteDatabaseHandler = new SQLiteDatabaseHandler(this.getContext());
 
         mBoundaryNameView = (EditText) view.findViewById(R.id.boundary_name);
@@ -90,7 +92,7 @@ public class AddBoundaryCheckDialog extends DialogFragment {
         searchableSpinnerFarmName.setFocusable(true);
         searchableSpinnerFarmName.setFocusableInTouchMode(true);
 
-        List<String> sortedFarms = sqLiteDatabaseHandler.getAllFarmNames();
+        List<String> sortedFarms = sqLiteDatabaseHandler.getAllFarmNames(clientId);
         Collections.sort(sortedFarms, String.CASE_INSENSITIVE_ORDER);
 
         if (sortedFarms.isEmpty()){
@@ -118,7 +120,7 @@ public class AddBoundaryCheckDialog extends DialogFragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 if(newFarmName!=null && !Objects.equals(newFarmName, "")){
                     String newFarmNameCaps = WordUtils.capitalizeFully(newFarmName);
-                    sqLiteDatabaseHandler.createFarmName(newFarmNameCaps, null);
+                    sqLiteDatabaseHandler.createFarmName(newFarmNameCaps, null, clientId);
                     farmAdapter.add(newFarmNameCaps);
                     farmAdapter.sort(String.CASE_INSENSITIVE_ORDER);
                     int position = farmAdapter.getPosition(newFarmNameCaps);
@@ -294,7 +296,7 @@ public class AddBoundaryCheckDialog extends DialogFragment {
     }
 
     private Integer getFarmId(){
-        return sqLiteDatabaseHandler.getFarmNameId(selectedFarm);
+        return sqLiteDatabaseHandler.getFarmNameId(selectedFarm, clientId);
     }
 
     private Integer getCropTypeId(){
@@ -302,7 +304,7 @@ public class AddBoundaryCheckDialog extends DialogFragment {
     }
 
     private JSONArray getFarmArray (){
-        return sqLiteDatabaseHandler.getLocalFarmNames();
+        return sqLiteDatabaseHandler.getLocalFarmNames(clientId);
     }
 
     private JSONArray getCropTypeArray(){

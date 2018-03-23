@@ -70,30 +70,6 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
 
             switch (intent.getAction()) {
                 case DroidPlannerApp.FLAG_CONNECTION_CHANGE:
-                    /*
-                    updateAllTelem();
-                    BaseProduct mProduct = DroidPlannerApp.getProductInstance();
-                    if (mProduct != null && mProduct.isConnected()){
-                        showTelemBar();
-                        updateAllTelem();
-                        if (loadBatteryThread == null || !loadBatteryThread.isAlive()){
-                            loadBatteryThread = new Thread(batteryThread);
-                            loadBatteryThread.start();
-                        }
-                        if (loadSignalThread == null || !loadSignalThread.isAlive()){
-                            loadSignalThread = new Thread(signalThread);
-                            loadSignalThread.start();
-                        }
-                        djiFlightControllerState = DJIFlightControllerState.getInstance();
-                        if (djiFlightControllerState.getFlightControllerState() != null) {
-                            updateAllTelem();
-                        }
-                    }
-                    else{
-                        updateAllTelem();
-                        clearFields();
-                    } */
-
                     BaseProduct mProduct = DJISDKManager.getInstance().getProduct();
                     if (mProduct != null && mProduct.isConnected()){
                         setInitialValues();
@@ -127,7 +103,8 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
 
     private Double aircraftLatitude;
     private Double aircraftLongitude;
-    private LatLong homePosition;
+    private Double homeLatitude;
+    private Double homeLongitude;
     private Boolean isHomeLocationSet;
 
     // DJI KEYS
@@ -142,6 +119,8 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
     private FlightControllerKey isHomeLocationSetKey = FlightControllerKey.create(FlightControllerKey.IS_HOME_LOCATION_SET);
     private FlightControllerKey aircraftLatitudeKey = FlightControllerKey.create(FlightControllerKey.AIRCRAFT_LOCATION_LATITUDE);
     private FlightControllerKey aircraftLongitudeKey = FlightControllerKey.create(FlightControllerKey.AIRCRAFT_LOCATION_LONGITUDE);
+    private FlightControllerKey homeLatitudeKey = FlightControllerKey.create(FlightControllerKey.HOME_LOCATION_LATITUDE);
+    private FlightControllerKey homeLongitudeKey = FlightControllerKey.create(FlightControllerKey.HOME_LOCATION_LONGITUDE);
     private FlightControllerKey altitudeKey = FlightControllerKey.create(FlightControllerKey.ALTITUDE);
 
     //Key Listeners
@@ -199,28 +178,36 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         }
     };
 
-    KeyListener homeLocationListener = new KeyListener() {
+    KeyListener homeLatitudeListener = new KeyListener() {
         @Override
         public void onValueChange(Object o, Object o1) {
-            if (o1 instanceof LocationCoordinate2D) {
-                Double homeLatitude = ((LocationCoordinate2D) o1).getLatitude();
-                Double homeLongitude = ((LocationCoordinate2D) o1).getLongitude();
-                if (checkGpsCoordination(homeLatitude, homeLongitude)) {
-                    homePosition = new LatLong(homeLatitude, homeLongitude);
-                    setHomeDistanceView();
-                }
+            if (o1 instanceof Double) {
+                homeLatitude = (Double) o1;
+                setHomeDistanceView();
             }
         }
     };
 
+    KeyListener homeLongitudeListener = new KeyListener() {
+        @Override
+        public void onValueChange(Object o, Object o1) {
+            if (o1 instanceof Double) {
+                homeLongitude = (Double) o1;
+                setHomeDistanceView();
+            }
+        }
+    };
+
+    /**
+     * Listener for home position set
+     */
     KeyListener homeLocationSetListener = new KeyListener() {
         @Override
         public void onValueChange(Object o, Object o1) {
             if (o1 instanceof Boolean) {
                 isHomeLocationSet = (Boolean) o1;
                 if (isHomeLocationSet) {
-                    getHomePosition();
-                    setHomeDistanceView();
+                    //setHomeDistanceView();
                 }
             }
         }
@@ -231,7 +218,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         public void onValueChange(Object o, Object o1) {
             if (o1 instanceof Double) {
                 aircraftLatitude = (Double) o1;
-                setHomeDistanceView();
+                getHomeLatLong();
             }
         }
     };
@@ -241,7 +228,7 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         public void onValueChange(Object o, Object o1) {
             if (o1 instanceof Double) {
                 aircraftLongitude = (Double) o1;
-                setHomeDistanceView();
+                getHomeLatLong();
             }
         }
     };
@@ -355,12 +342,13 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         KeyManager.getInstance().addListener(batteryChargeKey, batteryChargeListener);
         KeyManager.getInstance().addListener(altitudeKey, altitudeListener);
         KeyManager.getInstance().addListener(flightModeKey, flightModeListener);
-        KeyManager.getInstance().addListener(homeLocationKey, homeLocationListener);
         KeyManager.getInstance().addListener(isHomeLocationSetKey, homeLocationSetListener);
         KeyManager.getInstance().addListener(aircraftLatitudeKey, aircraftLatitudeListener);
         KeyManager.getInstance().addListener(aircraftLongitudeKey, aircraftLongitudeListener);
         KeyManager.getInstance().addListener(gpsSignalKey, gpsSignalListener);
         KeyManager.getInstance().addListener(satelliteCountKey, satelliteCountListener);
+        KeyManager.getInstance().addListener(homeLatitudeKey, homeLatitudeListener);
+        KeyManager.getInstance().addListener(homeLocationKey, homeLongitudeListener);
     }
 
     private void tearDownKeys() {
@@ -370,12 +358,13 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         KeyManager.getInstance().removeListener(batteryCurrentListener);
         KeyManager.getInstance().removeListener(altitudeListener);
         KeyManager.getInstance().removeListener(flightModeListener);
-        KeyManager.getInstance().removeListener(homeLocationListener);
         KeyManager.getInstance().removeListener(homeLocationSetListener);
         KeyManager.getInstance().removeListener(aircraftLatitudeListener);
         KeyManager.getInstance().removeListener(aircraftLongitudeListener);
         KeyManager.getInstance().removeListener(gpsSignalListener);
         KeyManager.getInstance().removeListener(satelliteCountListener);
+        KeyManager.getInstance().removeListener(homeLongitudeListener);
+        KeyManager.getInstance().removeListener(homeLatitudeListener);
     }
 
     //Populate telemetry with initial values
@@ -451,23 +440,32 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
            }
        });
 
-       KeyManager.getInstance().getValue(homeLocationKey, new GetCallback() {
+       KeyManager.getInstance().getValue(homeLatitudeKey, new GetCallback() {
            @Override
            public void onSuccess(Object o) {
-               LocationCoordinate2D homeLocation = (LocationCoordinate2D) o;
-               if (homeLocation.isValid()) {
-                   Double homeLatitude = ((LocationCoordinate2D) o).getLatitude();
-                   Double homeLongitude = ((LocationCoordinate2D) o).getLongitude();
-                   if (checkGpsCoordination(homeLatitude, homeLongitude)) {
-                       homePosition = new LatLong(homeLatitude, homeLongitude);
-                       setHomeDistanceView();
-                   }
+               if (o instanceof Double) {
+                   homeLatitude = (Double) o;
+                   setHomeDistanceView();
                }
            }
 
            @Override
            public void onFailure(DJIError djiError) {
-               Log.d(TAG, djiError.getDescription());
+
+           }
+       });
+
+       KeyManager.getInstance().getValue(homeLongitudeKey, new GetCallback() {
+           @Override
+           public void onSuccess(Object o) {
+                if (o instanceof Double) {
+                    homeLongitude = (Double) o;
+                    setHomeDistanceView();
+                }
+           }
+
+           @Override
+           public void onFailure(DJIError djiError) {
 
            }
        });
@@ -477,8 +475,9 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
            public void onSuccess(Object o) {
                if (o instanceof Boolean) {
                    isHomeLocationSet = (Boolean) o;
+                   Log.i(TAG, "HOME POSITION SET:" + String.valueOf(isHomeLocationSet) );
                    if (isHomeLocationSet) {
-                       getHomePosition();
+                       getHomeLatLong();
                        setHomeDistanceView();
                    }
                }
@@ -553,7 +552,6 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
            public void onSuccess(Object o) {
                if (o instanceof Integer) {
                    setSatelliteCountView((Integer) o);
-
                }
            }
 
@@ -564,24 +562,32 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
        });
     }
 
-    private void getHomePosition() {
-        KeyManager.getInstance().getValue(homeLocationKey, new GetCallback() {
+    private synchronized void getHomeLatLong() {
+        KeyManager.getInstance().getValue(homeLatitudeKey, new GetCallback() {
             @Override
             public void onSuccess(Object o) {
-                LocationCoordinate2D homeLocation = (LocationCoordinate2D) o;
-                if (homeLocation.isValid()) {
-                    Double homeLatitude = ((LocationCoordinate2D) o).getLatitude();
-                    Double homeLongitude = ((LocationCoordinate2D) o).getLongitude();
-                    if (checkGpsCoordination(homeLatitude, homeLongitude)) {
-                        homePosition = new LatLong(homeLatitude, homeLongitude);
-                    }
+                if (o instanceof Double) {
+                    homeLatitude = (Double) o;
+                    setHomeDistanceView();
                 }
             }
 
             @Override
             public void onFailure(DJIError djiError) {
-                Log.d(TAG, djiError.getDescription());
+            }
+        });
 
+        KeyManager.getInstance().getValue(homeLongitudeKey, new GetCallback() {
+            @Override
+            public void onSuccess(Object o) {
+                if (o instanceof Double) {
+                    homeLongitude = (Double) o;
+                    setHomeDistanceView();
+                }
+            }
+
+            @Override
+            public void onFailure(DJIError djiError) {
             }
         });
     }
@@ -657,18 +663,6 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
                 flightModeTelem.setCompoundDrawablesWithIntrinsicBounds(navIcon, 0, 0, 0);
             }
         });
-
-        /*
-        if (drone != null && drone.isConnected()) {
-            navIcon = R.drawable.ic_navigation_light_blue_a400_18dp;
-            flightModeTelem.setText(flightMode);
-            flightModeTelem.setCompoundDrawablesWithIntrinsicBounds(navIcon, 0, 0, 0);
-
-        } else {
-            navIcon = R.drawable.ic_navigation_grey_700_18dp;
-            flightModeTelem.setText(emptyString);
-            flightModeTelem.setCompoundDrawablesWithIntrinsicBounds(navIcon, 0, 0, 0);
-        }*/
     }
 
     private synchronized void setHomeDistanceView() {
@@ -676,22 +670,21 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
             @Override
             public void run() {
                 int drawableResId = R.drawable.ic_home_grey_700_18dp;
-                if (homePosition != null && aircraftLatitude != null && aircraftLongitude != null) {
-                    if (true) {
-                        LatLong aircraftPosition = new LatLong(aircraftLatitude, aircraftLongitude);
-                        LengthUnit distanceToHome = getLengthUnitProvider().boxBaseValueToTarget
-                                (MathUtils.getDistance2D(homePosition, aircraftPosition));
-                        String update = String.format("%s", distanceToHome);
-                        homeTelem.setCompoundDrawablesWithIntrinsicBounds(drawableResId, 0, 0, 0);
-                        homeTelem.setText(update);
-                    }
+                Log.i(TAG, "HOME POSITION lat long: " + String.valueOf(homeLatitude) + " " + String.valueOf(homeLongitude));
+                if (homeLongitude != null && homeLatitude != null && aircraftLatitude != null && aircraftLongitude != null && checkGpsCoordination(homeLatitude, homeLongitude)) {
+                    LatLong aircraftPosition = new LatLong(aircraftLatitude, aircraftLongitude);
+                    LatLong homePosition = new LatLong(homeLatitude, homeLongitude);
+                    LengthUnit distanceToHome = getLengthUnitProvider().boxBaseValueToTarget
+                            (MathUtils.getDistance2D(homePosition, aircraftPosition));
+                    String update = String.format("%s", distanceToHome);
+                    homeTelem.setCompoundDrawablesWithIntrinsicBounds(drawableResId, 0, 0, 0);
+                    homeTelem.setText(update);
                 } else {
                     homeTelem.setCompoundDrawablesWithIntrinsicBounds(drawableResId, 0, 0, 0);
                     homeTelem.setText(emptyString);
                 }
             }
         });
-
     }
 
     private synchronized void setAltitudeView(Object o1) {
@@ -893,9 +886,9 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
         }
     }
 
-    private static boolean checkGpsCoordination(double latitude, double longitude) {
+    private static boolean checkGpsCoordination(Double latitude, Double longitude) {
         if (!Double.isNaN(latitude) && !Double.isNaN(longitude)){
-            return (latitude > -90 && latitude < 90 && longitude > -180 && longitude < 180) && (latitude != 0f && longitude != 0f);
+            return (latitude > -90f && latitude < 90f && longitude > -180f && longitude < 180f) && (latitude != 0f && longitude != 0f);
         }
         else{
             return false;
