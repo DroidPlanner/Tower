@@ -98,6 +98,7 @@ public class PostBoundary implements APIContract{
         private BoundaryDetail boundaryDetail;
 
         public AddBoundaryTask(BoundaryDetail boundaryDetail){
+
             this.boundaryDetail = boundaryDetail;
         }
 
@@ -125,6 +126,8 @@ public class PostBoundary implements APIContract{
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+
                 return true;
             }
         }
@@ -133,16 +136,19 @@ public class PostBoundary implements APIContract{
             if(success){
 
                 try {
-                    SQLiteDatabaseHandler db_handler = new SQLiteDatabaseHandler(context);
                     JSONObject json = jsonObject;
                     String name = json.getString("name");
                     String polygon = json.getString("polygon");
                     String id = json.getString("id");
-
+                    //List<BoundaryDetail> boundariesList = new ArrayList<>();
                     if (!polygon.equals("")) {
                         boundaryDetail.setName(name);
                         boundaryDetail.setBoundaryId(id);
                         boundaryDetail.setPoints(polygon);
+                        //BoundaryDetail boundaryDetail = new BoundaryDetail(name,id, polygon);
+                        //boundariesList.add(new BoundaryDetail(name,id, polygon));
+                        //aeroviewPolygons.addBoundaryDetailsToDB(boundariesList);
+                        SQLiteDatabaseHandler db_handler = new SQLiteDatabaseHandler(context);
                         db_handler.addBoundaryDetail(boundaryDetail);
                         AeroviewPolygons aeroviewPolygons = new AeroviewPolygons(context);
                         aeroviewPolygons.executeAeroViewSync();
@@ -151,7 +157,10 @@ public class PostBoundary implements APIContract{
                 }  catch (JSONException e) {
                     e.printStackTrace();
                 }
+
             }
         }
+
     }
+
 }

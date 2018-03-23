@@ -796,12 +796,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
         }
     }
 
-    public void removeCameraMarkers(MarkerInfo markerInfo){
-        if(markerInfo == null || !markerInfo.isOnMap())
-            return;
-
-
-    }
 
     @Override
     public List<LatLong> projectPathIntoMap(List<LatLong> path) {
@@ -1016,10 +1010,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
     /**
      * Save the map camera state on a preference file
-     * http://stackoverflow.com/questions
+     *http://stackoverflow.com/questions
      * /16697891/google-maps-android-api-v2-restoring
      * -map-state/16698624#16698624
-     */
+     **/
     @Override
     public void saveCameraPosition() {
         final GoogleMap googleMap = getMap();

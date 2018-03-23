@@ -116,6 +116,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 					} else {
 						setInitialDronePosition();
 						setInitialHomePosition();
+						removeListeners();
 						addListeners();
 					}
 					break;
@@ -201,8 +202,6 @@ public abstract class DroneMap extends ApiListenerFragment {
 
 	private Double aircraftLatitude;
 	private Double aircraftLongitude;
-	private Double homeLatitude;
-	private Double homeLongitude;
 	private Double aircraftYaw;
 	private LatLong homePosition;
 	private Boolean isHomeLocationSet;
@@ -210,8 +209,6 @@ public abstract class DroneMap extends ApiListenerFragment {
 	private FlightControllerKey aircraftLatitudeKey = FlightControllerKey.create(FlightControllerKey.AIRCRAFT_LOCATION_LATITUDE);
 	private FlightControllerKey aircraftLongitudeKey = FlightControllerKey.create(FlightControllerKey.AIRCRAFT_LOCATION_LONGITUDE);
 	private FlightControllerKey aircraftYawKey = FlightControllerKey.create(FlightControllerKey.ATTITUDE_YAW);
-	private FlightControllerKey homeLatitudeKey = FlightControllerKey.create(FlightControllerKey.HOME_LOCATION_LATITUDE);
-	private FlightControllerKey homeLongitudeKey = FlightControllerKey.create(FlightControllerKey.HOME_LOCATION_LONGITUDE);
 	private FlightControllerKey homeLocationKey = FlightControllerKey.create(FlightControllerKey.HOME_LOCATION);
 	private FlightControllerKey isHomeLocationSetKey = FlightControllerKey.create(FlightControllerKey.IS_HOME_LOCATION_SET);
 
@@ -245,33 +242,26 @@ public abstract class DroneMap extends ApiListenerFragment {
 		}
 	};
 
-	KeyListener homeLatitudeListener = new KeyListener() {
+	KeyListener homeLocationListener = new KeyListener() {
 		@Override
 		public void onValueChange(Object o, Object o1) {
-			if (o1 instanceof Double) {
-				homeLatitude = (Double) o1;
-				updateHomeMarker();
+			if (o1 instanceof LocationCoordinate2D) {
+				Double homeLatitude = ((LocationCoordinate2D) o1).getLatitude();
+				Double homeLongitude = ((LocationCoordinate2D) o1).getLongitude();
+				if (checkGpsCoordination(homeLatitude, homeLongitude)) {
+					homePosition = new LatLong(homeLatitude, homeLongitude);
+					updateHomeMarker();
+				}
 			}
 		}
 	};
-
-	KeyListener homeLongitudeListener = new KeyListener() {
-		@Override
-		public void onValueChange(Object o, Object o1) {
-			if (o1 instanceof Double) {
-				homeLongitude = (Double) o1;
-				updateHomeMarker();
-			}
-		}
-	};
-
 
 	KeyListener homeLocationSetListener = new KeyListener() {
 		@Override
 		public void onValueChange(Object o, Object o1) {
 			if (o1 instanceof Boolean) {
 				if ((Boolean) o1){
-					getHomeLatLong();
+					getHomePosition();
 				}
 			}
 		}
@@ -329,6 +319,8 @@ public abstract class DroneMap extends ApiListenerFragment {
 		if (isConnected()){
 			setInitialDronePosition();
 			setInitialHomePosition();
+			removeListeners();
+			addListeners();
 		}
 	}
 
@@ -336,18 +328,16 @@ public abstract class DroneMap extends ApiListenerFragment {
 		KeyManager.getInstance().addListener(aircraftLatitudeKey, aircraftLatitudeListener);
 		KeyManager.getInstance().addListener(aircraftLongitudeKey, aircraftLongitudeListener);
 		KeyManager.getInstance().addListener(aircraftYawKey, aircraftYawListener);
+		KeyManager.getInstance().addListener(homeLocationKey, homeLocationListener);
 		KeyManager.getInstance().addListener(isHomeLocationSetKey, homeLocationSetListener);
-		KeyManager.getInstance().addListener(homeLatitudeKey, homeLatitudeListener);
-		KeyManager.getInstance().addListener(homeLocationKey, homeLongitudeListener);
 	}
 
 	private void removeListeners() {
+		KeyManager.getInstance().removeListener(homeLocationListener);
 		KeyManager.getInstance().removeListener(homeLocationSetListener);
 		KeyManager.getInstance().removeListener(aircraftLatitudeListener);
 		KeyManager.getInstance().removeListener(aircraftLongitudeListener);
 		KeyManager.getInstance().removeListener(aircraftYawListener);
-		KeyManager.getInstance().removeListener(homeLongitudeListener);
-		KeyManager.getInstance().removeListener(homeLatitudeListener);
 	}
 
 	private void setInitialDronePosition() {
@@ -405,7 +395,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 			public void onSuccess(Object o) {
 				if (o instanceof Boolean) {
 					if ((Boolean) o) {
-						getHomeLatLong();
+						getHomePosition();
 					}
 				}
 			}
@@ -418,38 +408,28 @@ public abstract class DroneMap extends ApiListenerFragment {
 	}
 
 
-	private void getHomeLatLong() {
-		KeyManager.getInstance().getValue(homeLatitudeKey, new GetCallback() {
+	private void getHomePosition() {
+		KeyManager.getInstance().getValue(homeLocationKey, new GetCallback() {
 			@Override
 			public void onSuccess(Object o) {
-				if (o instanceof Double) {
-					homeLatitude = (Double) o;
-					updateHomeMarker();
+				LocationCoordinate2D homeLocation = (LocationCoordinate2D) o;
+				if (homeLocation.isValid()) {
+					Double homeLatitude = ((LocationCoordinate2D) o).getLatitude();
+					Double homeLongitude = ((LocationCoordinate2D) o).getLongitude();
+					if (checkGpsCoordination(homeLatitude, homeLongitude)) {
+						homePosition = new LatLong(homeLatitude, homeLongitude);
+						updateHomeMarker();
+					}
 				}
 			}
 
 			@Override
 			public void onFailure(DJIError djiError) {
-
-			}
-		});
-
-		KeyManager.getInstance().getValue(homeLongitudeKey, new GetCallback() {
-			@Override
-			public void onSuccess(Object o) {
-				if (o instanceof Double) {
-					homeLongitude = (Double) o;
-					updateHomeMarker();
-				}
-			}
-
-			@Override
-			public void onFailure(DJIError djiError) {
+				Log.d(TAG, djiError.getDescription());
 
 			}
 		});
 	}
-
 
 	protected synchronized void updateDroneMarker() {
 		Log.i(TAG, "update drone marker");
@@ -469,12 +449,12 @@ public abstract class DroneMap extends ApiListenerFragment {
 	}
 
     private synchronized void updateHomeMarker(){
-		if (homeLatitude != null && homeLongitude != null && checkGpsCoordination(homeLatitude, homeLongitude)) {
+		if (homePosition != null) {
 			Handler handler = new Handler(Looper.getMainLooper());
 			handler.postDelayed(new Runnable() {
 				@Override
 				public void run() {
-					home.setHomePosition(homeLatitude, homeLongitude);
+					home.setHomePosition(homePosition.getLatitude(), homePosition.getLongitude());
 					home.updateMarker(DroneMap.this);
 				}
 			}, 100);

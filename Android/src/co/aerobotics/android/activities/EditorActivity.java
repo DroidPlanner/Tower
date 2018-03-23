@@ -28,21 +28,45 @@ import android.util.Log;
 import android.util.Pair;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Toast;
+
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.github.jorgecastilloprz.FABProgressCircle;
+import com.github.jorgecastilloprz.listeners.FABProgressListener;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.o3dr.android.client.utils.FileUtils;
+import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
+import com.o3dr.services.android.lib.drone.mission.MissionItemType;
+import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
+import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
+
+import org.beyene.sius.unit.length.LengthUnit;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import co.aerobotics.android.DroidPlannerApp;
 import co.aerobotics.android.R;
 import co.aerobotics.android.activities.interfaces.OnEditorInteraction;
+import co.aerobotics.android.data.AeroviewPolygons;
 import co.aerobotics.android.data.DJIFlightControllerState;
 import co.aerobotics.android.dialogs.AddBoundaryCheckDialog;
 import co.aerobotics.android.dialogs.OkDialog;
@@ -55,7 +79,6 @@ import co.aerobotics.android.fragments.account.editor.tool.EditorToolsFragment;
 import co.aerobotics.android.fragments.account.editor.tool.EditorToolsImpl;
 import co.aerobotics.android.fragments.actionbar.ActionBarTelemFragment;
 import co.aerobotics.android.fragments.helpers.GestureMapFragment;
-import co.aerobotics.android.data.AeroviewPolygons;
 import co.aerobotics.android.mission.DJIMissionImpl;
 import co.aerobotics.android.mission.TimelineMissionImpl;
 import co.aerobotics.android.proxy.mission.MissionProxy;
@@ -166,7 +189,7 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
                     fabProgressCircle.hide();
                     fabProgressCircle.setClickable(true);
                     final View view = findViewById(R.id.editorCoordinatorLayout);
-                    Snackbar snack = Snackbar.make(view, "Server Error", Snackbar.LENGTH_LONG)
+                    Snackbar snack = Snackbar.make(view, getString(R.string.aeroview_sync_error), Snackbar.LENGTH_LONG)
                             .setAction("Action", null);
                     View snackBarView = snack.getView();
                     snackBarView.setBackgroundColor(getResources().getColor(R.color.primary_dark_blue));
@@ -273,6 +296,7 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
     private MixpanelAPI mMixpanel;
     private String clientEmail;
     private Boolean isOnTour = false;
+    private Boolean resumePreviousMission = false;
 
     private static final String[] REQUIRED_PERMISSION_LIST = new String[]{
             Manifest.permission.VIBRATE,
@@ -445,6 +469,7 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
             if (missingPermission.isEmpty()) {
                 DroidPlannerApp.getInstance().registerSDK();
             } else {
+                showToast("Missing permissions!!!");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE)) {
                         OkDialog dialog = OkDialog.newInstance(getApplicationContext(),
@@ -460,6 +485,8 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
 
                                     @Override
                                     public void onCancel() {
+                                        Toast.makeText(getApplicationContext(), "READ_PHONE_STATE Denied", Toast.LENGTH_SHORT)
+                                                .show();
                                     }
 
                                     @Override
@@ -498,11 +525,33 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
             public void onSuccess(Object value) {
                 if (value instanceof Long){
                     if ((Long) value > getNumberofSurveyImages()) {
-                        if (missionProxy.getItems().size() > 1) {
-                            timelineMission.run(missionProxy);
+                        SharedPreferences sharedPreferences = EditorActivity.this.getSharedPreferences(EditorActivity.this.getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(EditorActivity.this.getString(R.string.mission_aborted), false);
+                        editor.apply();
+                        missionControl.initializeMission(missionProxy, getApplicationContext(), resumePreviousMission);
+                        resumePreviousMission = false;
+
+                        /*
+                        ]
+'                        if (resumePreviousMission) {
+                            showToast("resuming");
+                            // check number of missions saved in database
+                            SQLiteDatabaseHandler db = new SQLiteDatabaseHandler(getApplicationContext());
+                            List<MissionDetails> missionDetailsList = db.getAllMissionDetails();
+                            if (missionDetailsList.size() > 1) {
+                                timelineMission.runTimelineMission(missionProxy, getApplicationContext(), resumePreviousMission);
+                            } else {
+                                missionControl.run(missionProxy, getApplicationContext(), resumePreviousMission);
+                            }
+                            resumePreviousMission = false;
                         } else {
-                            missionControl.run(missionProxy);
-                        }
+                            if (missionProxy.getItems().size() > 1) {
+                                timelineMission.runTimelineMission(missionProxy, getApplicationContext(), resumePreviousMission);
+                            } else {
+                                missionControl.run(missionProxy, getApplicationContext(), resumePreviousMission);
+                            }
+                        }*/
                     } else {
                         showSnackBar("Error: SD card memory is full", "");
                     }
@@ -625,12 +674,9 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
     @Override
     public void onApiDisconnected() {
         super.onApiDisconnected();
-
         if (missionProxy != null)
             missionProxy.selection.removeSelectionUpdateListener(this);
-
         getBroadcastManager().unregisterReceiver(eventReceiver);
-
     }
 
     @Override
@@ -647,12 +693,17 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
             case R.id.start_mission_button:
                 final int status = (Integer) v.getTag();
                 if (status == 0) {
-                    //confirmMissionStart(EditorActivity.this);
                     mMixpanel.track("FPA: TapStartMission");
+                    //TODO: REMOVE THIS, TESTING ONLY
+                    //timelineMission.runTimelineMission(missionProxy, getApplicationContext(), true);
+                    //confirmMissionStart(EditorActivity.this);
+                    //missionControl.run(missionProxy, getApplicationContext(), false);
+                    //new DJIMissionImpl().initializeMission(missionProxy, getApplicationContext(), resumePreviousMission);
+                    //resumePreviousMission = false;
                     if (DroidPlannerApp.isProductConnected()) {
                         confirmMissionStart(EditorActivity.this);
                     } else {
-                        setResultToToast("Disconnected");
+                        setResultToToast("Drone disconnected");
                     }
                 } else {
                     mMixpanel.track("FPA: TapStopMission");
@@ -915,43 +966,48 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
         gestureMapFragment.getMapFragment().zoomToFit(points);
     }
 
-    private void confirmMissionStart(Context context) {
+    private void confirmMissionStart(final Context context) {
+        LayoutInflater inflater = getLayoutInflater();
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(context);
-        builder.setTitle("Confirm Mission Start")
-                .setMessage("Are you sure you want to start the mission?")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (!missionProxy.getItems().isEmpty()) {
-                            checkSdCardInserted();
-                        } else {
-                            setResultToToast("Please create a survey mission");
-                        }
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
-                .setIcon(R.drawable.ic_warning_dark_blue_36dp)
-                .show();
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
+        boolean previousMissionAborted = sharedPreferences.getBoolean(context.getString(R.string.mission_aborted), false);
+        builder.setTitle("Start Mission");
+        if (previousMissionAborted) {
+            View dialogView = inflater.inflate(R.layout.dialog_resume_mission, null);
+            CheckBox resumeCheck = (CheckBox) dialogView.findViewById(R.id.resumeMissionCheckBox);
+            resumeCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    resumePreviousMission = b;
+                }
+            });
+            builder.setView(dialogView);
+        } else {
+            builder.setMessage("Are you sure you want to start the mission?");
+        }
+
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                checkSdCardInserted();
+            }
+        })
+        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // do nothing
+            }
+        })
+        .show();
     }
 
     private void confirmMissionStop(Context context) {
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(context);
         builder.setTitle("Abort Mission")
-                .setMessage("Would you like to abort the current mission?")
+                .setMessage("Would you like to abort the current mission and return to launch?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if (DJISDKManager.getInstance().getMissionControl().isTimelineRunning()) {
-                            timelineMission.stopTimelineMission();
-                        } else {
-                            if (missionControl != null) {
-                                missionControl.stopWaypointMission();
-                            }
-                        }
+                        missionControl.stopWaypointMission();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

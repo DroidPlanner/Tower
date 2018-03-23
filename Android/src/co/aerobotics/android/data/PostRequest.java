@@ -2,7 +2,6 @@ package co.aerobotics.android.data;
 
 import android.util.Log;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -43,10 +42,6 @@ public class PostRequest {
                     Log.d("Response", error.toString());
                 }
             });
-            postRequest.setRetryPolicy(new DefaultRetryPolicy(
-                    30000,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             VolleyRequest.getInstance().getRequestQueue().add(postRequest);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -71,10 +66,6 @@ public class PostRequest {
                 Log.d("Post.Response", error.toString());
             }
         });
-        postRequest.setRetryPolicy(new DefaultRetryPolicy(
-                30000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         VolleyRequest.getInstance().getRequestQueue().add(postRequest);
     }
 
