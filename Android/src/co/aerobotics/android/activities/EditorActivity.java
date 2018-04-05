@@ -443,7 +443,7 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
         if (missingPermission.isEmpty()) {
             DroidPlannerApp.getInstance().registerSDK();
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            showToast("Need to grant the permissions!");
+            // showToast("Need to grant the permissions!");
             ActivityCompat.requestPermissions(this,
                     missingPermission.toArray(new String[missingPermission.size()]),
                     REQUEST_PERMISSION_CODE);
@@ -550,7 +550,7 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
                             }
                         }*/
                     } else {
-                        showSnackBar("Error: SD card memory is full", "");
+                        showSnackBar("Error: SD card is full", "");
                     }
                 }
             }
