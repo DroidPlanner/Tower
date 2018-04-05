@@ -44,7 +44,7 @@ public class PostRequest {
                 }
             });
             postRequest.setRetryPolicy(new DefaultRetryPolicy(
-                    30000,
+                    60000,
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             VolleyRequest.getInstance().getRequestQueue().add(postRequest);
@@ -72,7 +72,7 @@ public class PostRequest {
             }
         });
         postRequest.setRetryPolicy(new DefaultRetryPolicy(
-                30000,
+                60000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         VolleyRequest.getInstance().getRequestQueue().add(postRequest);
