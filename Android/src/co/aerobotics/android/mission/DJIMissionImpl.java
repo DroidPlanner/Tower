@@ -467,7 +467,8 @@ public class DJIMissionImpl {
                 }
             }
         } else {
-            initCamera((int) getCameraTriggerSpeed());
+            float triggerSpeed = imageDistance/flightSpeed;
+            initCamera((int) triggerSpeed);
         }
 
         DJIError check = waypointMissionBuilder.checkParameters();
