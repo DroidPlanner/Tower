@@ -146,23 +146,6 @@ public class AddBoundaryCheckDialog extends DialogFragment {
 
         searchableSpinnerCropType.setAdapter(cropTypeAdapter);
         searchableSpinnerCropType.setTitle("Select Crop Type");
-        searchableSpinnerCropType.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (newCropType!=null && !Objects.equals(newCropType, "")) {
-                            String newCroptypeCaps = WordUtils.capitalizeFully(newCropType);
-                            sqLiteDatabaseHandler.createCropType(newCroptypeCaps, null);
-                            if(sqLiteDatabaseHandler.isCropTypeInTable(newCroptypeCaps)) {
-                                cropTypeAdapter.add(newCroptypeCaps);
-                                cropTypeAdapter.sort(String.CASE_INSENSITIVE_ORDER);
-                                int position = cropTypeAdapter.getPosition(newCroptypeCaps);
-                                cropTypeAdapter.notifyDataSetChanged();
-                                searchableSpinnerCropType.setSelection(position);
-                            }
-                        }
-                        //cropTypeAdapter.notifyDataSetChanged();
-                    }
-                });
 
         searchableSpinnerCropType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
