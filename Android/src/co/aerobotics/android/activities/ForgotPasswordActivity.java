@@ -101,7 +101,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             String jsonStr = String.format("{\"email\":\"%s\"}",email);
 
             PostRequest postRequest = new PostRequest();
-            postRequest.post(jsonStr, APIContract.AEROVIEW_RESET);
+            postRequest.post(jsonStr, APIContract.AEROVIEW_RESET, "token");
 
             do {
                 try {

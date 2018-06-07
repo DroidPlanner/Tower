@@ -42,11 +42,18 @@ import co.aerobotics.android.R;
 import co.aerobotics.android.activities.interfaces.APIContract;
 import co.aerobotics.android.data.PostRequest;
 import co.aerobotics.android.data.AeroviewPolygons;
+import co.aerobotics.android.data.SQLiteDatabaseHandler;
+
+import com.google.gson.Gson;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -61,11 +68,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
+    private static final int DRONE_DEMO_ACCOUNT_ID = 247;
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    private UserAuthTask mAuthTask = null;
 
     // UI references.
     private EditText mEmailView;
@@ -276,7 +284,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserAuthTask(email, password);
             mAuthTask.execute((Void) null);
         }
     }
@@ -361,7 +369,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             emails.add(cursor.getString(ProfileQuery.ADDRESS));
             cursor.moveToNext();
         }
-
         addEmailsToAutoComplete(emails);
     }
 
@@ -397,6 +404,109 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
     }
+
+    public class UserAuthTask extends AsyncTask<Void, Void, Boolean> implements APIContract {
+
+        private final String mEmail;
+        private final String mPassword;
+        private boolean serverError = false;
+
+        UserAuthTask(String email, String password) {
+            mEmail = email;
+            mPassword = password;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            String url = APIContract.USER_AUTH_GET_TOKEN;
+            String jsonStr = String.format("{\"username\":\"%s\",\"password\":\"%s\"}",mEmail,mPassword);
+            Log.d("JsonStr", jsonStr);
+
+            PostRequest postRequest = new PostRequest();
+            postRequest.login(jsonStr, url);
+
+            do {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } while (!postRequest.isServerResponseReceived());
+
+            if (postRequest.isServerError()){
+                serverError = true;
+                return false;
+            }
+
+            SQLiteDatabaseHandler sqLiteDatabaseHandler = new SQLiteDatabaseHandler(LoginActivity.this.getApplicationContext());
+            SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences(getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            try {
+                editor.putBoolean(getString(R.string.logged_in), true);
+                editor.putString(getString(R.string.user_auth_token), postRequest.getResponseData().getString("token"));
+                JSONObject user = postRequest.getResponseData().getJSONObject("user");
+                int userId = user.getInt("id");
+                JSONArray clients = user.getJSONArray("clients");
+                int activeClientId = -1;
+                List<Integer> allClientsIds = new ArrayList<>();
+                for (int i = 0; i < clients.length(); i++) {
+                    JSONObject client = clients.getJSONObject(i);
+                    int clientUserId = client.getInt("user_id");
+                    int clientId = client.getInt("id");
+                    // if not drone demo account
+                    if (clientId != DRONE_DEMO_ACCOUNT_ID) {
+                        allClientsIds.add(clientId);
+                        JSONArray farmsArray = client.getJSONArray("farms");
+                        for (int j = 0; j < farmsArray.length(); j++){
+                            JSONObject dict = farmsArray.getJSONObject(j);
+                            sqLiteDatabaseHandler.createFarmName(dict.getString("name"),
+                                    dict.getInt("id"), clientId);
+                        }
+                    }
+                    if (userId == clientUserId) {
+                        activeClientId = clientId;
+                    }
+                }
+                editor.putString(getString(R.string.all_client_ids), new Gson().toJson(allClientsIds));
+                editor.putInt(getString(R.string.client_id), activeClientId);
+                editor.apply();
+
+                MixpanelAPI mixpanelAPI = MixpanelAPI.getInstance(getApplicationContext(), DroidPlannerApp.getInstance().getMixpanelToken());
+                mixpanelAPI.identify(mEmail);
+                mixpanelAPI.getPeople().identify(mEmail);
+                mixpanelAPI.getPeople().set("Email", mEmail);
+                mixpanelAPI.track("FPA: UserLoginSuccess", null);
+                mixpanelAPI.flush();
+                return true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mAuthTask = null;
+            showProgress(false);
+
+            if (success) {
+                AeroviewPolygons aeroviewPolygons = new AeroviewPolygons(LoginActivity.this);
+                aeroviewPolygons.executeGetCropTypesTask();
+                aeroviewPolygons.executeGetFarmOrchardsTask();
+                finish();
+                Intent intent = new Intent(LoginActivity.this, FarmManagerActivity.class);
+                LoginActivity.this.startActivity(intent);
+            } else {
+                if(serverError){
+                    setResultToToast("Error: No network connection found");
+                } else {
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.requestFocus();
+                }
+
+            }
+        }
+    }
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -420,7 +530,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             Log.d("JsonStr", jsonStr);
 
             PostRequest postRequest = new PostRequest();
-            postRequest.post(jsonStr, url);
+            postRequest.post(jsonStr, url, "token");
 
             do {
                 try {

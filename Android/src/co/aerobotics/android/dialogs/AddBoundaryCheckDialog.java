@@ -32,7 +32,6 @@ import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.apache.commons.lang3.text.WordUtils;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -218,7 +217,6 @@ public class AddBoundaryCheckDialog extends DialogFragment {
                                         mBoundaryNameView.getText().toString(),
                                         getFarmId(), getCropTypeId(), getClientId(),
                                         getEmail(), getPassword(), getFarmArray(), getCropTypeArray(), null);
-
                                 if (isNetworkAvailable()) {
                                     postBoundary.post(buildBoundaryDetail(mission));
                                     mMixpanel.track("FPA: BoundarySaved");
@@ -232,7 +230,7 @@ public class AddBoundaryCheckDialog extends DialogFragment {
                                             getFarmId(), getCropTypeId(), getClientId(),
                                             getEmail(), getPassword(), getFarmArray(), getCropTypeArray(), tempId);
 
-                                    JSONObject jsonObject = postOfflineBoundary.generateJson();
+                                    JSONObject jsonObject = postOfflineBoundary.getNewBoundaryParamsAsJson();
                                     sqLiteDatabaseHandler.addRequestToOfflineBoundary(tempId, jsonObject.toString());
 
                                     PolygonData polygonData = new PolygonData(boundaryName, getPolygonPoints(), false, tempId);
@@ -267,15 +265,15 @@ public class AddBoundaryCheckDialog extends DialogFragment {
     }
 
     private Integer getClientId(){
-        String jsonString = sharedPref.getString(getActivity().getResources().getString(R.string.json_data), "");
-        Integer clientId = null;
-        try {
-            JSONObject json = new JSONObject(jsonString);
-            clientId = (Integer) json.get("id");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return clientId;
+        Integer jsonString = sharedPref.getInt(getActivity().getResources().getString(R.string.client_id), -1);
+//        Integer clientId = null;
+//        try {
+//            JSONObject json = new JSONObject(jsonString);
+//            clientId = (Integer) json.get("id");
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+        return jsonString;
     }
 
     private Integer getFarmId(){

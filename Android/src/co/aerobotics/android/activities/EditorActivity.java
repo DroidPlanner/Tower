@@ -585,25 +585,6 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
     }
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case co.aerobotics.android.R.id.menu_open_mission:
-                mMixpanel.track("FPA: TapOpenMissionFile");
-                openMissionFile();
-                return true;
-
-            case co.aerobotics.android.R.id.menu_save_mission:
-                mMixpanel.track("FPA: TapSaveMission");
-                saveMissionFile();
-                return true;
-
-            case R.id.menu_sync_boundaries:
-                mMixpanel.track("FPA: TapSyncWithAeroView");
-                new AeroviewPolygons(this).executeClientDataTask();
-                DroidPlannerApp.getInstance().selectedPolygons.clear();
-                break;
-            default:
-                break;
-        }
         return false;
     }
 
@@ -754,10 +735,10 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
                 break;
 
             case R.id.syncWithAeroViewButton:
-                mMixpanel.track("FPA: TapSyncWithAeroView");
-
-                new AeroviewPolygons(this).executeClientDataTask();
-                DroidPlannerApp.getInstance().selectedPolygons.clear();
+//                mMixpanel.track("FPA: TapSyncWithAeroView");
+//
+//                new AeroviewPolygons(this).executeGetFarmsTask();
+//                DroidPlannerApp.getInstance().selectedPolygons.clear();
                 break;
 
             case R.id.fabProgressCircle:
@@ -767,7 +748,9 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
 
                 AeroviewPolygons aeroviewPolygons = new AeroviewPolygons(this);
                 aeroviewPolygons.setOnSyncFinishedListener(this);
-                aeroviewPolygons.executeClientDataTask();
+                aeroviewPolygons.executeGetFarmsTask();
+                aeroviewPolygons.executeGetCropTypesTask();
+                aeroviewPolygons.executeGetFarmOrchardsTask();
 
                 break;
 
@@ -1548,8 +1531,8 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
         } else {
             isOnTour = false;
         }
-
     }
+
 
 
 }

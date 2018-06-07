@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/add_boundary_fragment"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@color/light">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/add_boundary_title"
@@ -15,7 +14,7 @@
         android:layout_marginTop="15dp"
         android:gravity="center|start"
         android:paddingStart="30dp"
-        android:text="Add Boundary"
+        android:text="Save new boundary"
         android:textAppearance="@style/CustomActionBarTheme.ActionBar.TitleTextStyle"
         android:textColor="@color/primary_dark_blue"
         android:textSize="20sp" />
@@ -66,6 +65,7 @@
         android:layout_alignStart="@+id/crop_type_text"
         android:layout_below="@+id/crop_type_text"
         android:layout_gravity="center"
+        android:layout_marginTop="10dp"
         android:minWidth="200dp"
         android:spinnerMode="dialog" />
 
@@ -75,7 +75,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/searchable_spinner_croptype"
-        android:layout_marginBottom="5dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
         android:text="Select Farm Name"
@@ -86,9 +85,10 @@
         android:id="@+id/searchable_spinner_farmname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/crop_type_text"
+        android:layout_alignStart="@+id/farm_name_text"
         android:layout_below="@+id/farm_name_text"
         android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:minWidth="200dp"
         android:spinnerMode="dialog" />

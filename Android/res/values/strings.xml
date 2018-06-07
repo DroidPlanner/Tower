@@ -25,11 +25,17 @@
     <string name="go">Go</string>
     <string name="aeroview_sync_successful">AeroView sync completed</string>
     <string name="aeroview_sync_error">Failed to fetch data: check internet connection</string>
+    <string name="user_auth_token">User auth token for aeroview</string>
+    <string name="boundary_data">Boundary data of the user</string>
+    <string name="croptypes">Crop types from Aeroview</string>
+    <string name="farms">Client farms from Aeroview</string>
+    <string name="active_farms">Farms selected by client to fly</string>
     <!-- Drone Setup tabs -->
     <string name="screen_cal">Calibration</string>
     <string name="screen_checklist">Checklist</string>
     <string name="screen_parameters">Parameters</string>
-
+    <string name="switch_farm">Manage farms</string>
+    <string name="all_client_ids">All client ids</string>
     <!-- App Settings/Preferences -->
     <string name="pref_connection_type">Telemetry Connection Type</string>
     <string name="pref_connection_type_summary">Which link to use to connect to the drone</string>

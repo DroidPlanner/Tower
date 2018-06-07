@@ -299,7 +299,7 @@ public class SignUpActivity extends AppCompatActivity {
                     lastName,
                     password);
             PostRequest postRequest = new PostRequest();
-            postRequest.post(jsonStr, APIContract.USER_SIGNUP_URL);
+            postRequest.post(jsonStr, APIContract.USER_SIGNUP_URL, "token");
             do {
                 try {
                     Thread.sleep(10);

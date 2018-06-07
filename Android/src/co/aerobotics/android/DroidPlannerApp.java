@@ -369,7 +369,9 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         DJISDKManager.getInstance().getProduct();
         AeroviewPolygons aeroviewPolygons = new AeroviewPolygons(context);
         if(isNetworkAvailable()) {
-            aeroviewPolygons.executeAeroViewSync();
+            aeroviewPolygons.executeGetFarmsTask();
+            aeroviewPolygons.executeGetCropTypesTask();
+            aeroviewPolygons.executeGetFarmOrchardsTask();
         } else {
             aeroviewPolygons.addPolygonsToMap();
         }
@@ -411,7 +413,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         return token;
     }
 
-    private boolean isNetworkAvailable() {
+    public boolean isNetworkAvailable() {
         final Context context = getApplicationContext();
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

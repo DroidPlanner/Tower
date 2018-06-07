@@ -10,6 +10,10 @@
             android:id="@+id/navigation_editor"
             android:icon="@drawable/ic_menu_editor_grey600_24dp"
             android:title="@string/editor" />
+        <item
+            android:id="@+id/navigation_farms"
+            android:icon="@drawable/ic_home_grey_700_24dp"
+            android:title="@string/switch_farm" />
 
     </group>
 

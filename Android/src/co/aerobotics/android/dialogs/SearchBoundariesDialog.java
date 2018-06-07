@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import com.baidu.platform.comapi.map.N;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
@@ -25,7 +24,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -86,7 +84,10 @@ public class SearchBoundariesDialog extends DialogFragment {
 
         builder.setNegativeButton(R.string.cancel, null);
 
-        List<BoundaryDetail> boundaryDetailList = sqLiteDatabaseHandler.getAllBoundaryDetail(sharedPref.getInt(getActivity().getResources().getString(R.string.client_id), -1));
+        List<BoundaryDetail> boundaryDetailList = sqLiteDatabaseHandler
+                .getBoundaryDetailsForFarmIds(sharedPref.getString(getActivity().getApplicationContext().getResources()
+                        .getString(R.string.active_farms), "[]")
+                        .replaceAll("\\[", "").replaceAll("\\]",""));
         ArrayList<NameWithId> nameWithIds = new ArrayList<NameWithId>();
 
         for (BoundaryDetail boundaryDetail : boundaryDetailList){

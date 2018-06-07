@@ -96,6 +96,7 @@ dependencies {
         transitive = true
     }
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.10.0'
+    compile 'com.squareup.okhttp3:okhttp:3.10.0'
 }
 
 configurations {
@@ -141,8 +142,8 @@ android {
         buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
         //Manifest placeholders (http://tools.android.com/tech-docs/new-build-system/user-guide/manifest-merger#TOC-Placeholder-support)
         manifestPlaceholders = [
-                fabricApiKey: keystoreProperties['fabricApiKey'],
-                djiApiKey: keystoreProperties['djiApiKey'],
+                fabricApiKey : keystoreProperties['fabricApiKey'],
+                djiApiKey    : keystoreProperties['djiApiKey'],
                 googleMapsKey: keystoreProperties['googleMapsKey']
         ]
         // Enabling multidex support.
@@ -150,7 +151,7 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
-    packagingOptions{
+    packagingOptions {
         doNotStrip "*/*/libdjivideo.so"
         doNotStrip "*/*/libSDKRelativeJNI.so"
         doNotStrip "*/*/libFlyForbid.so"
@@ -331,6 +332,7 @@ def getFabricApiKey() {
 def hasFabricApiKey() {
     return true
 }
+
 crashlytics {
     enableNdk true
     androidNdkOut 'src/main/obj'

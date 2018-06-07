@@ -325,7 +325,9 @@ public abstract class DrawerNavigationUI extends SuperUI implements
                 mNavigationIntent = new Intent(this, ConfigurationActivity.class)
                         .putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_ID, id);
                 break;
-
+            case R.id.navigation_farms:
+                mNavigationIntent = new Intent(this, FarmManagerActivity.class);
+                break;
             case co.aerobotics.android.R.id.navigation_settings:
                 mNavigationIntent = new Intent(this, SettingsActivity.class);
                 break;

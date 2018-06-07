@@ -20,17 +20,19 @@ public class BoundaryDetail {
     private String camera = "";
 
     private boolean display;
+    private int farmId;
 
     public BoundaryDetail(){
 
     }
 
-    public BoundaryDetail(String name, String boundary_id, String points, int clientId,  boolean display) {
+    public BoundaryDetail(String name, String boundary_id, String points, int clientId,  boolean display, int farmId) {
         this.name = name;
         this.boundary_id = boundary_id;
         this.points = points;
         this.clientId = clientId;
         this.display = display;
+        this.farmId = farmId;
     }
 /*
     public BoundaryDetail(String name, int boundary_id, double altitude, double angle, double overlap, double sidelap, double speed) {
@@ -148,5 +150,13 @@ public class BoundaryDetail {
         } else {
             return null;
         }
+    }
+
+    public int getFarmId() {
+        return farmId;
+    }
+
+    public void setFarmId(int farmId) {
+        this.farmId = farmId;
     }
 }
