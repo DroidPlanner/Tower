@@ -90,8 +90,9 @@ public class AddBoundaryCheckDialog extends DialogFragment {
 
         searchableSpinnerFarmName.setFocusable(true);
         searchableSpinnerFarmName.setFocusableInTouchMode(true);
-
-        List<String> sortedFarms = sqLiteDatabaseHandler.getAllFarmNames(clientId);
+        String allClientIds = sharedPref.getString(this.getResources().getString(R.string.all_client_ids), "")
+                .replaceAll("\\[", "").replaceAll("]","");
+        List<String> sortedFarms = sqLiteDatabaseHandler.getAllFarmNames(allClientIds);
         Collections.sort(sortedFarms, String.CASE_INSENSITIVE_ORDER);
 
         if (sortedFarms.isEmpty()){

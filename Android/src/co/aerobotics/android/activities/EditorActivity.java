@@ -747,6 +747,7 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
                 fabProgressCircle.setClickable(false);
 
                 AeroviewPolygons aeroviewPolygons = new AeroviewPolygons(this);
+                aeroviewPolygons.postOfflineFarms();
                 aeroviewPolygons.setOnSyncFinishedListener(this);
                 aeroviewPolygons.executeGetFarmsTask();
                 aeroviewPolygons.executeGetCropTypesTask();

@@ -33,7 +33,7 @@ import java.util.List;
  * Created by michaelwootton on 8/2/17.
  */
 
-public class AeroviewPolygons {
+public class AeroviewPolygons implements APIContract{
 
     private Context context;
     public static final String ACTION_POLYGON_UPDATE = "update_polygon";
@@ -83,7 +83,8 @@ public class AeroviewPolygons {
             JSONArray array = new JSONArray(jsonString);
             for (int i = 0; i < array.length(); i++){
                 JSONObject dict = array.getJSONObject(i);
-                sqLiteDatabaseHandler.createFarmName(dict.getString("name"),
+                sqLiteDatabaseHandler.createFarmName(
+                        dict.getString("name"),
                         dict.getInt("id"),
                         dict.getInt("client_id"));
             }
@@ -92,19 +93,19 @@ public class AeroviewPolygons {
         }
     }
 
-    private void updateFarmNamesInDB(String jsonString){
-        try {
-            JSONArray array = new JSONArray(jsonString);
-            for (int i = 0; i < array.length(); i++){
-                JSONObject dict = array.getJSONObject(i);
-                sqLiteDatabaseHandler.updateFarmNameId(dict.getString("name"),
-                        dict.getInt("id"),
-                        dict.getInt("client_id"));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void updateFarmNamesInDB(String jsonString){
+//        try {
+//            JSONArray array = new JSONArray(jsonString);
+//            for (int i = 0; i < array.length(); i++){
+//                JSONObject dict = array.getJSONObject(i);
+//                sqLiteDatabaseHandler.updateFarmNameId(dict.getString("name"),
+//                        dict.getInt("id"),
+//                        dict.getInt("client_id"));
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private void updateExistingCropTypesInDB(String jsonString) {
         try {
@@ -155,6 +156,63 @@ public class AeroviewPolygons {
         return new ArrayList<>(Arrays.asList(simplified));
     }
 
+    public void postOfflineFarms() {
+        String token = sharedPref.getString(context.getResources().getString(R.string.user_auth_token), "");
+        Integer clientId = sharedPref.getInt(context.getResources().getString(R.string.client_id), -1);
+        JSONArray farmsToSync = sqLiteDatabaseHandler.getLocalFarmNames(clientId);
+        if (farmsToSync.length() > 0) {
+            for (int i = 0; i < farmsToSync.length(); i++) {
+                try {
+                    OfflineFarmPostHandler offlineFarmPostHandler = new OfflineFarmPostHandler(farmsToSync.getJSONObject(i), token);
+                    offlineFarmPostHandler.syncFarmWithServer();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private class OfflineFarmPostHandler {
+
+        private JSONObject farmDetails;
+        private String token;
+
+        OfflineFarmPostHandler(JSONObject farmDetails, String token) {
+            this.farmDetails = farmDetails;
+            this.token = token;
+        }
+
+        void syncFarmWithServer() {
+            final PostRequest postRequest = new PostRequest();
+            postRequest.setOnPostReturnedListener(new PostRequest.OnPostReturnedListener() {
+                @Override
+                public void onSuccessfulResponse() {
+                    updateLocalDatabase(postRequest.getResponseData());
+                }
+
+                @Override
+                public void onErrorResponse() {
+
+                }
+            });
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    postRequest.postJSONObject(farmDetails, APIContract.GATEWAY_FARMS, token);
+                }
+            });
+        }
+
+        private void updateLocalDatabase(JSONObject returnData) {
+            try {
+                final int primaryKey = farmDetails.getInt("primary_key_id");
+                int farmId = returnData.getInt("id");
+                sqLiteDatabaseHandler.updateFarmNameId(farmId, primaryKey);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public void executeAeroViewSync(){
         SharedPreferences sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
@@ -502,7 +560,6 @@ public class AeroviewPolygons {
         private void handleReturnData() {
             getReturnData();
             addFarmNamesToDB(farms);
-            updateFarmNamesInDB(farms);
         }
 
         private void getReturnData() {

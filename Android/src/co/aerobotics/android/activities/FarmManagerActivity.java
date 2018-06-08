@@ -20,13 +20,15 @@ import android.widget.ListView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import co.aerobotics.android.DroidPlannerApp;
 import co.aerobotics.android.R;
@@ -46,7 +48,7 @@ public class FarmManagerActivity extends DrawerNavigationUI implements APIContra
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fragmentManager = getSupportFragmentManager();
+        initializeFragmentManager();
         setContentView(R.layout.activity_farm_manager);
         initializeSharedPrefs();
         getCurrentlySelectedFarmIds();
@@ -55,6 +57,10 @@ public class FarmManagerActivity extends DrawerNavigationUI implements APIContra
         setupEditTextViewAsSearchInputForListView();
         initializeButtonOnClickListener();
         initializeOnAddNewFarmButtonClickListener();
+    }
+
+    private void initializeFragmentManager() {
+        fragmentManager = getSupportFragmentManager();
     }
 
     private void initializeOnAddNewFarmButtonClickListener() {
@@ -93,10 +99,17 @@ public class FarmManagerActivity extends DrawerNavigationUI implements APIContra
         SQLiteDatabaseHandler sqLiteDatabaseHandler = new SQLiteDatabaseHandler(this.getApplicationContext());
         String allClientIds = sharedPref.getString(this.getResources().getString(R.string.all_client_ids), "")
                 .replaceAll("\\[", "").replaceAll("]","");
-        Map<String, Integer> farmNameIdMap = sqLiteDatabaseHandler.getFarmNamesAndIdJsonArray(allClientIds);
-        for (Map.Entry<String, Integer> farm: farmNameIdMap.entrySet()) {
-            Farm farmObj = new Farm(farm.getKey(), farm.getValue());
-            farms.add(farmObj);
+        List<JSONObject> farmNameIdMap = sqLiteDatabaseHandler.getFarmNamesAndIdJsonArray(allClientIds);
+        for (JSONObject farm: farmNameIdMap) {
+            try {
+                String farmName = farm.getString("name");
+                Integer id = farm.getInt("farm_id");
+                Farm farmObj = new Farm(farmName, id);
+                farms.add(farmObj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 

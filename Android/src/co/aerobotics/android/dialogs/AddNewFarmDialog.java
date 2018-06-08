@@ -76,7 +76,7 @@ public class AddNewFarmDialog extends DialogFragment implements APIContract {
                             });
                             postRequest.postJSONObject(getPostParams(), APIContract.GATEWAY_FARMS, getToken());
                         } else {
-                            sqLiteDatabaseHandler.addOfflineFarm(getFarmNameFromView(), getClientId());
+                            sqLiteDatabaseHandler.createFarmName(getFarmNameFromView(), null, getClientId());
                             dialog.dismiss();
                         }
                     }

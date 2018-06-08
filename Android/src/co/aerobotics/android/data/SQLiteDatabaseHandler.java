@@ -28,7 +28,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
     private Context context;
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 8;
     private static final String DATABASE_NAME = "BoundariesDB";
     private static final String TABLE_BOUNDARIES = "Boundaries";
     private static final String TABLE_REQUESTS = "Requests";
@@ -62,7 +62,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_FARMNAMES = "farmnames";
     private static final String KEY_FARMNAME = "farmname";
     private static final String KEY_FARMNAME_ID = "farmname_id";
-    private static final String[] FARMNAME_COLUMNS = {KEY_ID, KEY_FARMNAME, KEY_FARMNAME_ID};
+    private static final String[] FARMNAME_COLUMNS = {KEY_ID, KEY_FARMNAME, KEY_FARMNAME_ID, KEY_CLIENT_ID};
 
     private static final String TABLE_MISSION_DETAILS = "mission_details";
     private static final String KEY_MISSION_WAYPOINTS = "mission_details_waypoints";
@@ -77,7 +77,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
             KEY_CROPTYPE + " TEXT NOT NULL, " + KEY_CROPTYPE_ID + " INTEGER, " + "UNIQUE(" + KEY_CROPTYPE + ")" +  " ON CONFLICT IGNORE)";
 
     private static final String CREATE_FARMNAME_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_FARMNAMES + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-            KEY_FARMNAME + " TEXT NOT NULL, " + KEY_FARMNAME_ID + " INTEGER, " + KEY_CLIENT_ID + " INTEGER, "  + "UNIQUE(" + KEY_FARMNAME + ")" +  " ON CONFLICT IGNORE)";
+            KEY_FARMNAME + " TEXT NOT NULL, " + KEY_FARMNAME_ID + " INTEGER, " + KEY_CLIENT_ID + " INTEGER, "  + "UNIQUE(" + KEY_FARMNAME_ID + ")" +  " ON CONFLICT IGNORE)";
 
     private static final String CREATE_BOUNDARY_TABLE = "CREATE TABLE IF NOT EXISTS Boundaries (" + KEY_ID +  " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
             "boundary_id TEXT, " + KEY_POINTS + " TEXT, " + "name TEXT, " + "angle INTEGER, " + "overlap INTEGER, " + "sidelap INTEGER, "
@@ -133,6 +133,10 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
             upgradeVersion7(db);
         }
 
+        if (oldVersion < 8) {
+            upgradeVersion8(db);
+        }
+
     }
 
     private void upgradeVersion2(SQLiteDatabase db){
@@ -164,6 +168,11 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
 //        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOUNDARIES);
 //        db.execSQL(CREATE_BOUNDARY_TABLE);
         db.execSQL("ALTER TABLE " + TABLE_BOUNDARIES + " ADD COLUMN " + KEY_BOUNDARY_FARM_ID + " INTEGER");
+    }
+
+    private void upgradeVersion8(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FARMNAMES);
+        db.execSQL(CREATE_FARMNAME_TABLE);
     }
 
 
@@ -236,9 +245,9 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
      * @return List<String> farmNames</>
      */
 
-    public List<String> getAllFarmNames(Integer clientId){
+    public List<String> getAllFarmNames(String clientIds){
         List<String> farmNames = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + TABLE_FARMNAMES + " WHERE " + KEY_CLIENT_ID + " = " + clientId;
+        String selectQuery = "SELECT * FROM " + TABLE_FARMNAMES + " WHERE " + KEY_CLIENT_ID + " IN (" + clientIds + "); ";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
@@ -278,15 +287,23 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         return id;
     }
 
-    public Map<String, Integer> getFarmNamesAndIdJsonArray(String clientIds) {
+    public List<JSONObject> getFarmNamesAndIdJsonArray(String clientIds) {
         // JSONArray farms = new JSONArray();
-        Map<String, Integer> farms = new HashMap<>();
-        String selectQuery = "SELECT * FROM " + TABLE_FARMNAMES + " WHERE " + KEY_CLIENT_ID + " IN (" + clientIds + ") ";
+        // Map<String, Integer> farms = new HashMap<>();
+        List<JSONObject> farms = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TABLE_FARMNAMES + " WHERE " + KEY_CLIENT_ID + " IN (" + clientIds + "); ";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
             do {
-                    farms.put( c.getString(c.getColumnIndex(KEY_FARMNAME)), c.getInt(c.getColumnIndex(KEY_FARMNAME_ID)));
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("name", c.getString(c.getColumnIndex(KEY_FARMNAME)));
+                    json.put("farm_id", c.getInt(c.getColumnIndex(KEY_FARMNAME_ID)));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                farms.add(json);
             } while (c.moveToNext());
         }
         c.close();
@@ -327,16 +344,16 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+
     /**
      * Update the farm id in local database
-     * @param farmname String name of farm
      * @param id Int new farm id
      */
-    public void updateFarmNameId(String farmname, Integer id, Integer clientId) {
+    public void updateFarmNameId(Integer id, Integer primaryKey) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_FARMNAME_ID, id);
-        db.update(TABLE_FARMNAMES, values, KEY_FARMNAME + " = ? AND " + KEY_CLIENT_ID + " = " + clientId , new String[]{farmname});
+        db.update(TABLE_FARMNAMES, values, KEY_ID + " = ? ", new String[]{primaryKey.toString()});
         db.close();
     }
 
@@ -345,19 +362,20 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
      * @return JSONArray [{name:"", id:""}, ...]
      */
 
-    public JSONArray getLocalFarmNames(Integer clientId){
+    public JSONArray getLocalFarmNames(Integer clientId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query(TABLE_FARMNAMES, FARMNAME_COLUMNS,
                 KEY_FARMNAME_ID + " IS NULL AND " + KEY_CLIENT_ID + " = " + clientId,
                 new String[]{}, null, null, null, null);
         JSONArray array = new JSONArray();
-        if(c.moveToFirst()){
+        if (c.moveToFirst()) {
             do{
-                JSONObject nameIdPair = new JSONObject();
+                JSONObject farm = new JSONObject();
                 try {
-                    nameIdPair.put("name", c.getString(c.getColumnIndex(KEY_FARMNAME)));
-                    nameIdPair.put("id", c.getInt(c.getColumnIndex(KEY_ID)));
-                    array.put(nameIdPair);
+                    farm.put("name", c.getString(c.getColumnIndex(KEY_FARMNAME)));
+                    farm.put("primary_key_id", c.getInt(c.getColumnIndex(KEY_ID)));
+                    farm.put("client_id", c.getInt(c.getColumnIndex(KEY_CLIENT_ID)));
+                    array.put(farm);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
