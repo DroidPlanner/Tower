@@ -27,25 +27,23 @@ import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
-import com.toptoche.searchablespinnerlibrary.SearchableListDialog;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
-
-import org.apache.commons.lang3.text.WordUtils;
-import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import co.aerobotics.android.DroidPlannerApp;
 import co.aerobotics.android.R;
+import co.aerobotics.android.activities.interfaces.APIContract;
 import co.aerobotics.android.data.AeroviewPolygons;
 import co.aerobotics.android.data.BoundaryDetail;
-import co.aerobotics.android.data.PostBoundary;
+import co.aerobotics.android.data.Farm;
+import co.aerobotics.android.data.PostRequest;
 import co.aerobotics.android.data.SQLiteDatabaseHandler;
 import co.aerobotics.android.graphic.map.PolygonData;
 import co.aerobotics.android.proxy.mission.item.MissionItemProxy;
@@ -54,59 +52,293 @@ import co.aerobotics.android.proxy.mission.item.MissionItemProxy;
  * Created by michaelwootton on 9/18/17.
  */
 
-public class AddBoundaryCheckDialog extends DialogFragment {
+public class AddBoundaryCheckDialog extends DialogFragment implements APIContract {
 
-    private Map<String, Integer> cropTypeMap = new HashMap<>();
-    private Map<String, Integer> farmMap = new HashMap<>();
     private String selectedCropType;
-    private String selectedFarm;
+    private Farm selectedFarm;
     private SharedPreferences sharedPref;
-    private EditText mBoundaryNameView;
-    private EditText mCropTypeView;
-    private Button mAddNewCropTypeButton;
     private SQLiteDatabaseHandler sqLiteDatabaseHandler;
-    private String newCropType;
-    private String newFarmName;
     private SearchableSpinner searchableSpinnerFarmName;
-    private Integer clientId;
+    private ArrayAdapter<Farm> farmAdapter;
+    private ArrayAdapter<String> cropTypeAdapter;
+    private View view;
+    private List<Farm> sortedFarms = new ArrayList<>();
+    private List<String> sortedCropTypes;
+    private Context context;
 
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         final MixpanelAPI mMixpanel = MixpanelAPI.getInstance(this.getActivity(), DroidPlannerApp.getInstance().getMixpanelToken());
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_add_boundary, null);
-        builder.setView(view);
+        view = inflater.inflate(R.layout.dialog_add_boundary, null);
         sharedPref = getActivity().getSharedPreferences(getActivity().getResources().getString(R.string.com_dji_android_PREF_FILE_KEY), Context.MODE_PRIVATE);
-        clientId = sharedPref.getInt(getActivity().getResources().getString(R.string.client_id), -1);
         sqLiteDatabaseHandler = new SQLiteDatabaseHandler(this.getContext());
+        context = getActivity().getApplicationContext();
+        getAllFarmsAccessibleToActiveClient();
+        sortFarmNamesAlphabetically();
+        getCropTypes();
+        initializeFarmAdapter();
+        initializeFarmNameSpinner();
+        initializeCropTypeAdapter();
+        initializeCropTypeSpinner();
+        final AlertDialog dialog = buildDialog();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button button = (dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    private boolean formInvalid = false;
+                    private View focusView = null;
+                    private EditText mBoundaryNameView;
+                    @Override
+                    public void onClick(View view) {
+                        initializeBoundaryNameView();
+                        String boundaryName = getBoundaryNameFromView(mBoundaryNameView);
+                        if (isBoundaryNameTextEmpty(boundaryName)) {
+                            setBoundaryViewErrorMessage(mBoundaryNameView);
+                            invalidateForm();
+                        }
 
-        mBoundaryNameView = (EditText) view.findViewById(R.id.boundary_name);
+                        if(isSelectedFarmEmpty()){
+                            setFarmNameErrorMessage();
+                            setFocusOnFarmSpinner();
+                            invalidateForm();
+                        }
 
-        searchableSpinnerFarmName = (SearchableSpinner) view.findViewById(R.id.searchable_spinner_farmname);
-        final SearchableSpinner searchableSpinnerCropType = (SearchableSpinner) view.findViewById(R.id.searchable_spinner_croptype);
+                        if (formInvalid) {
+                            focusView.requestFocus();
+                        } else {
+                            if(missionItemExists()) {
+                                JSONObject postParams = getBoundaryPostParams();
+//                                PostBoundary postBoundary = new PostBoundary(
+//                                        getContext(),
+//                                        getSurvey(),
+//                                        getBoundaryNameFromView(mBoundaryNameView),
+//                                        getFarmId(),
+//                                        getCropTypeId(),
+//                                        getClientId(),
+//                                        null);
+                                if (isNetworkAvailable()) {
+                                    makePostRequest(postParams);
+                                    mMixpanel.track("FPA: BoundarySaved");
+                                    // new AeroviewPolygons(getActivity()).executeClientDataTask();
+                                } else {
+                                    String tempId = sqLiteDatabaseHandler.addOfflineBoundaryDetail(buildBoundaryDetail(boundaryName, getFarmId()));
+//                                    PostBoundary postOfflineBoundary = new PostBoundary(
+//                                            getContext(),
+//                                            getSurvey(),
+//                                            getBoundaryNameFromView(mBoundaryNameView),
+//                                            getFarmId(),
+//                                            getCropTypeId(),
+//                                            getClientId(),
+//                                            null);
+                                    // JSONObject jsonObject = postOfflineBoundary.getNewBoundaryParamsAsJson();
+                                    try {
+                                        postParams.put("temp_id", tempId);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    sqLiteDatabaseHandler.addRequestToOfflineBoundary(tempId, postParams.toString());
+                                    PolygonData polygonData = new PolygonData(boundaryName, getPolygonPoints(), false, tempId);
+                                    if (DroidPlannerApp.getInstance().polygonMap.get(tempId) == null) {
+                                        DroidPlannerApp.getInstance().polygonMap.put(tempId, polygonData);
+                                    }
+                                    mMixpanel.track("FPA: OfflineBoundary");
+                                }
+                            }
+                            Intent intent = new Intent(AeroviewPolygons.ACTION_POLYGON_UPDATE);
+                            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+                            //Dismiss once everything is OK.
+                            dialog.dismiss();
+                        }
+                    }
 
-        searchableSpinnerFarmName.setFocusable(true);
-        searchableSpinnerFarmName.setFocusableInTouchMode(true);
+//                    private void saveBoundaryDetailToLocalDb() {
+//                        sqLiteDatabaseHandler.addBoundaryDetail();
+//                    }
+
+                    private boolean missionItemExists() {
+                        List<MissionItemProxy> selectedMissionItems = DroidPlannerApp.getInstance().getMissionProxy().selection.getSelected();
+                        return !selectedMissionItems.isEmpty();
+                    }
+
+                    private void makePostRequest(JSONObject postParams) {
+                        String token = sharedPref.getString(getContext().getResources().getString(R.string.user_auth_token), "");
+                        final PostRequest postRequest = new PostRequest();
+                        postRequest.setOnPostReturnedListener(new PostRequest.OnPostReturnedListener() {
+                            @Override
+                            public void onSuccessfulResponse() {
+                                JSONObject json = postRequest.getResponseData();
+                                try {
+                                    String name = json.getString("name");
+                                    String id = json.getString("id");
+                                    Integer farmId = json.getInt("farm_id");
+                                    BoundaryDetail boundaryDetail = buildBoundaryDetail(name, farmId);
+                                    boundaryDetail.setBoundaryId(id);
+                                    sqLiteDatabaseHandler.addBoundaryDetail(boundaryDetail);
+                                    new AeroviewPolygons(context).addPolygonsToMap();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onErrorResponse() {
+
+                            }
+                        });
+                        postRequest.postJSONObject(postParams, GATEWAY_ORCHARDS, token);
+                    }
+
+                    private void initializeBoundaryNameView() {
+                        mBoundaryNameView = (EditText) view.findViewById(R.id.boundary_name);
+                        mBoundaryNameView.setError(null);
+                    }
+
+                    private String getPolygonCoords(){
+                        MissionItemProxy mission = DroidPlannerApp.getInstance().getMissionProxy().selection.getSelected().get(0);
+                        Survey survey = (Survey) mission.getMissionItem();
+                        List<LatLong> points = survey.getPolygonPoints();
+                        StringBuilder pointListAsString = new StringBuilder();
+                        for (LatLong point : points){
+                            pointListAsString.append(String.format("%s,%s ", String.valueOf(point.getLongitude()),
+                                    String.valueOf(point.getLatitude())));
+                        }
+                        return pointListAsString.toString().trim();
+                    }
+
+                    private Context getContext() {
+                        return AddBoundaryCheckDialog.this.getContext();
+                    }
+
+                    private void setFocusOnFarmSpinner() {
+                        focusView = searchableSpinnerFarmName;
+                    }
+
+                    private void setBoundaryViewErrorMessage(EditText editTextView) {
+                        displayErrorMessage(editTextView);
+                        setFocusView(editTextView);
+                    }
+
+                    private void setFocusView(EditText editTextView) {
+                        focusView = editTextView;
+                    }
+
+                    private void invalidateForm() {
+                        formInvalid = true;
+                    }
+
+                    private boolean isSelectedFarmEmpty() {
+                        return Objects.equals(selectedFarm, "");
+                    }
+
+                    private void setFarmNameErrorMessage() {
+                        TextView errorText = (TextView) searchableSpinnerFarmName.getSelectedView();
+                        errorText.setError("");
+                        errorText.setTextColor(Color.RED);//just to highlight that this is an error
+                        errorText.setText("Add New Farm");
+                    }
+
+                    private void displayErrorMessage(EditText editTextView) {
+                        editTextView.setError(getString(R.string.error_field_required));
+                    }
+
+                    private boolean isBoundaryNameTextEmpty(String boundaryName) {
+                        return TextUtils.isEmpty(boundaryName);
+                    }
+
+                    private String getBoundaryNameFromView(EditText mBoundaryNameView) {
+                        return mBoundaryNameView.getText().toString();
+                    }
+
+                    private JSONObject getBoundaryPostParams() {
+                        JSONObject params = new JSONObject();
+                        try {
+                            params.put("name", getBoundaryNameFromView(mBoundaryNameView));
+                            params.put("polygon", getPolygonCoords());
+                            params.put("client_id", getClientId());
+                            params.put("farm_id", getFarmId());
+                            params.put("crop_type_id", getCropTypeId());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        return params;
+                    }
+
+                });
+            }
+        });
+        return dialog;
+    }
+
+    private AlertDialog buildDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(view);
+        builder.setPositiveButton(R.string.save, null);
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        return builder.create();
+    }
+
+    private void initializeCropTypeAdapter() {
+        cropTypeAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_add_boundary,sortedCropTypes);
+        cropTypeAdapter.setDropDownViewResource(R.layout.spinner_add_boundary_drop_down);
+    }
+
+    private void getCropTypes() {
+        sortedCropTypes = sqLiteDatabaseHandler.getAllCropTypes();
+        Collections.sort(sortedCropTypes, String.CASE_INSENSITIVE_ORDER);
+    }
+
+    private void getAllFarmsAccessibleToActiveClient() {
+        SQLiteDatabaseHandler sqLiteDatabaseHandler = new SQLiteDatabaseHandler(context);
         String allClientIds = sharedPref.getString(this.getResources().getString(R.string.all_client_ids), "")
                 .replaceAll("\\[", "").replaceAll("]","");
-        List<String> sortedFarms = sqLiteDatabaseHandler.getAllFarmNames(allClientIds);
-        Collections.sort(sortedFarms, String.CASE_INSENSITIVE_ORDER);
-
-        if (sortedFarms.isEmpty()){
-            sortedFarms.add("");
+        List<JSONObject> farmNameIdMap = sqLiteDatabaseHandler.getFarmNamesAndIdList(allClientIds);
+        for (JSONObject farm: farmNameIdMap) {
+            try {
+                String farmName = farm.getString("name");
+                Integer id = farm.getInt("farm_id");
+                Farm farmObj = new Farm(farmName, id);
+                sortedFarms.add(farmObj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
+    }
 
-        final ArrayAdapter<String> farmAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_add_boundary, sortedFarms);
+    private void sortFarmNamesAlphabetically() {
+        if (sortedFarms.size() > 0) {
+            Collections.sort(sortedFarms, new Comparator<Farm>() {
+                @Override
+                public int compare(Farm farmA, Farm farmB) {
+                    return farmA.getName().toLowerCase().compareTo(farmB.getName().toLowerCase());
+                }
+            });
+        }
+    }
+
+    private void initializeFarmAdapter() {
+        farmAdapter = new ArrayAdapter<Farm>(getActivity(), R.layout.spinner_add_boundary, sortedFarms);
         farmAdapter.setDropDownViewResource(R.layout.spinner_add_boundary_drop_down);
+    }
+
+    private void initializeFarmNameSpinner() {
+        searchableSpinnerFarmName = (SearchableSpinner) view.findViewById(R.id.searchable_spinner_farmname);
+        searchableSpinnerFarmName.setFocusable(true);
+        searchableSpinnerFarmName.setFocusableInTouchMode(true);
         searchableSpinnerFarmName.setAdapter(farmAdapter);
         searchableSpinnerFarmName.setTitle("Select Farm Name");
         searchableSpinnerFarmName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedFarm = (String) searchableSpinnerFarmName.getSelectedItem();
+                selectedFarm = (Farm) searchableSpinnerFarmName.getSelectedItem();
             }
 
             @Override
@@ -114,39 +346,32 @@ public class AddBoundaryCheckDialog extends DialogFragment {
 
             }
         });
+//        searchableSpinnerFarmName.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                if(newFarmName!=null && !Objects.equals(newFarmName, "")){
+//                    String newFarmNameCaps = WordUtils.capitalizeFully(newFarmName);
+//                    sqLiteDatabaseHandler.createFarmName(newFarmNameCaps, null, clientId);
+//                    farmAdapter.add(newFarmNameCaps);
+//                    farmAdapter.sort(String.CASE_INSENSITIVE_ORDER);
+//                    int position = farmAdapter.getPosition(newFarmNameCaps);
+//                    farmAdapter.notifyDataSetChanged();
+//                    searchableSpinnerFarmName.setSelection(position);
+//                }
+//            }
+//        });
+//        searchableSpinnerFarmName.setOnSearchTextChangedListener(new SearchableListDialog.OnSearchTextChanged() {
+//            @Override
+//            public void onSearchTextChanged(String strText) {
+//                newFarmName = strText.trim();
+//            }
+//        });
+    }
 
-        searchableSpinnerFarmName.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if(newFarmName!=null && !Objects.equals(newFarmName, "")){
-                    String newFarmNameCaps = WordUtils.capitalizeFully(newFarmName);
-                    sqLiteDatabaseHandler.createFarmName(newFarmNameCaps, null, clientId);
-                    farmAdapter.add(newFarmNameCaps);
-                    farmAdapter.sort(String.CASE_INSENSITIVE_ORDER);
-                    int position = farmAdapter.getPosition(newFarmNameCaps);
-                    farmAdapter.notifyDataSetChanged();
-                    searchableSpinnerFarmName.setSelection(position);
-                }
-            }
-        });
-
-        searchableSpinnerFarmName.setOnSearchTextChangedListener(new SearchableListDialog.OnSearchTextChanged() {
-            @Override
-            public void onSearchTextChanged(String strText) {
-                newFarmName = strText.trim();
-            }
-        });
-
-        //getDataForSpinner("crop_types");
-        List<String> sortedCropTypes = sqLiteDatabaseHandler.getAllCropTypes();
-        Collections.sort(sortedCropTypes, String.CASE_INSENSITIVE_ORDER);
-
-        final ArrayAdapter<String> cropTypeAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_add_boundary,sortedCropTypes);
-        cropTypeAdapter.setDropDownViewResource(R.layout.spinner_add_boundary_drop_down);
-
+    private void initializeCropTypeSpinner() {
+        final SearchableSpinner searchableSpinnerCropType = (SearchableSpinner) view.findViewById(R.id.searchable_spinner_croptype);
         searchableSpinnerCropType.setAdapter(cropTypeAdapter);
         searchableSpinnerCropType.setTitle("Select Crop Type");
-
         searchableSpinnerCropType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -158,111 +383,12 @@ public class AddBoundaryCheckDialog extends DialogFragment {
 
             }
         });
-
-        searchableSpinnerCropType.setOnSearchTextChangedListener(new SearchableListDialog.OnSearchTextChanged() {
-            @Override
-            public void onSearchTextChanged(String strText) {
-                newCropType = strText.trim();
-
-            }
-        });
-
-
-        builder.setPositiveButton(R.string.save, null);
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-        final AlertDialog dialog = builder.create();
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-                button.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-                        mBoundaryNameView.setError(null);
-                        String boundaryName = mBoundaryNameView.getText().toString();
-
-                        boolean cancel = false;
-                        View focusView = null;
-
-                        if (TextUtils.isEmpty(boundaryName)) {
-                            mBoundaryNameView.setError(getString(R.string.error_field_required));
-                            focusView = mBoundaryNameView;
-                            cancel = true;
-                        }
-
-                        if(Objects.equals(selectedFarm, "")){
-                            //searchableSpinnerFarmName.setError("Select a Farm Name or create a new one");
-                            TextView errorText = (TextView) searchableSpinnerFarmName.getSelectedView();
-                            errorText.setError("");
-                            errorText.setTextColor(Color.RED);//just to highlight that this is an error
-                            errorText.setText("Add New Farm");
-                            focusView = searchableSpinnerFarmName;
-                            cancel = true;
-                        }
-                        if (cancel) {
-                            // There was an error; don't attempt login and focus the first
-                            // form field with an error.
-                            focusView.requestFocus();
-                        } else {
-                            List<MissionItemProxy> selectedMissionItems = DroidPlannerApp.getInstance().getMissionProxy().selection.getSelected();
-                            if(!selectedMissionItems.isEmpty()) {
-                                MissionItemProxy mission = DroidPlannerApp.getInstance().getMissionProxy().selection.getSelected().get(0);
-                                PostBoundary postBoundary = new PostBoundary(AddBoundaryCheckDialog.this.getContext(),
-                                        (Survey) mission.getMissionItem(),
-                                        mBoundaryNameView.getText().toString(),
-                                        getFarmId(), getCropTypeId(), getClientId(),
-                                        getEmail(), getPassword(), getFarmArray(), getCropTypeArray(), null);
-                                if (isNetworkAvailable()) {
-                                    postBoundary.post(buildBoundaryDetail(mission));
-                                    mMixpanel.track("FPA: BoundarySaved");
-                                    //new AeroviewPolygons(getActivity()).executeClientDataTask();
-                                } else {
-
-                                    String tempId = sqLiteDatabaseHandler.addOfflineBoundaryDetail(buildBoundaryDetail(mission));
-                                    PostBoundary postOfflineBoundary = new PostBoundary(getContext().getApplicationContext(),
-                                            (Survey) mission.getMissionItem(),
-                                            mBoundaryNameView.getText().toString(),
-                                            getFarmId(), getCropTypeId(), getClientId(),
-                                            getEmail(), getPassword(), getFarmArray(), getCropTypeArray(), tempId);
-
-                                    JSONObject jsonObject = postOfflineBoundary.getNewBoundaryParamsAsJson();
-                                    sqLiteDatabaseHandler.addRequestToOfflineBoundary(tempId, jsonObject.toString());
-
-                                    PolygonData polygonData = new PolygonData(boundaryName, getPolygonPoints(), false, tempId);
-                                    if (DroidPlannerApp.getInstance().polygonMap.get(tempId) == null) {
-                                        DroidPlannerApp.getInstance().polygonMap.put(tempId, polygonData);
-                                    }
-                                    mMixpanel.track("FPA: OfflineBoundary");
-
-                                }
-                            }
-
-                            Intent intent = new Intent(AeroviewPolygons.ACTION_POLYGON_UPDATE);
-                            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
-
-                            //Dismiss once everything is OK.
-                            dialog.dismiss();
-                        }
-                    }
-                });
-            }
-        });
-        return dialog;
-    }
-
-
-    private String getEmail(){
-       return sharedPref.getString(getActivity().getResources().getString(R.string.username), "");
-    }
-
-    private String getPassword(){
-        return sharedPref.getString(getActivity().getResources().getString(R.string.password), "");
+//        searchableSpinnerCropType.setOnSearchTextChangedListener(new SearchableListDialog.OnSearchTextChanged() {
+//            @Override
+//            public void onSearchTextChanged(String strText) {
+//                newCropType = strText.trim();
+//            }
+//        });
     }
 
     private Integer getClientId(){
@@ -278,30 +404,11 @@ public class AddBoundaryCheckDialog extends DialogFragment {
     }
 
     private Integer getFarmId(){
-        return sqLiteDatabaseHandler.getFarmNameId(selectedFarm, clientId);
+        return selectedFarm.getId();
     }
 
     private Integer getCropTypeId(){
         return sqLiteDatabaseHandler.getCropTypeId(selectedCropType);
-    }
-
-    private JSONArray getFarmArray (){
-        return sqLiteDatabaseHandler.getLocalFarmNames(clientId);
-    }
-
-    private JSONArray getCropTypeArray(){
-        return sqLiteDatabaseHandler.getLocalCropTypes();
-    }
-
-    private String getPolygonCoords(){
-        Survey survey = (Survey) DroidPlannerApp.getInstance().getMissionProxy().selection.getSelected().get(0).getMissionItem();
-        List<LatLong> points = survey.getPolygonPoints();
-        StringBuilder pointListAsString = new StringBuilder();
-        for (LatLong point : points){
-            pointListAsString.append(String.format("%s,%s ", String.valueOf(point.getLongitude()),
-                    String.valueOf(point.getLatitude())));
-        }
-        return pointListAsString.toString().trim();
     }
 
     private List<LatLng> getPolygonPoints(){
@@ -329,23 +436,25 @@ public class AddBoundaryCheckDialog extends DialogFragment {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private BoundaryDetail buildBoundaryDetail(MissionItemProxy mission){
-        SharedPreferences sharedPref = getContext().getApplicationContext().getSharedPreferences(getContext().getApplicationContext().getResources().getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
-
-        BoundaryDetail boundaryDetail = new BoundaryDetail();
-        boundaryDetail.setName(mBoundaryNameView.getText().toString());
-        boundaryDetail.setBoundaryId(null);
-        boundaryDetail.setPoints(convertPolyListToString(getPolygonPoints()));
+    private BoundaryDetail buildBoundaryDetail(String boundaryName, Integer farmId) {
+        MissionItemProxy mission = DroidPlannerApp.getInstance().getMissionProxy().selection.getSelected().get(0);
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
         SurveyDetail surveyDetail = ((Survey) mission.getMissionItem()).getSurveyDetail();
+        BoundaryDetail boundaryDetail = new BoundaryDetail();
+        boundaryDetail.setFarmId(farmId);
+        boundaryDetail.setName(boundaryName);
+        boundaryDetail.setBoundaryId(null);
+        List<LatLng> polyPoints = getPolygonPoints();
+        String polyPointsString = convertPolyListToString(polyPoints);
+        boundaryDetail.setPoints(polyPointsString);
         boundaryDetail.setAngle(surveyDetail.getAngle());
         boundaryDetail.setAltitude(surveyDetail.getAltitude());
         boundaryDetail.setOverlap(surveyDetail.getOverlap());
         boundaryDetail.setSidelap(surveyDetail.getSidelap());
         boundaryDetail.setSpeed(surveyDetail.getSpeed());
         boundaryDetail.setCamera(surveyDetail.getCameraDetail().toString());
-        boundaryDetail.setClientId(sharedPref.getInt(getContext().getApplicationContext().getResources().getString(R.string.client_id), -1));
+        boundaryDetail.setClientId(sharedPref.getInt(context.getResources().getString(R.string.client_id), -1));
         boundaryDetail.setDisplay(true);
         return boundaryDetail;
-
     }
 }

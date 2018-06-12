@@ -34,6 +34,7 @@ import co.aerobotics.android.DroidPlannerApp;
 import co.aerobotics.android.R;
 import co.aerobotics.android.activities.interfaces.APIContract;
 import co.aerobotics.android.data.AeroviewPolygons;
+import co.aerobotics.android.data.Farm;
 import co.aerobotics.android.data.SQLiteDatabaseHandler;
 import co.aerobotics.android.dialogs.AddNewFarmDialog;
 
@@ -99,7 +100,7 @@ public class FarmManagerActivity extends DrawerNavigationUI implements APIContra
         SQLiteDatabaseHandler sqLiteDatabaseHandler = new SQLiteDatabaseHandler(this.getApplicationContext());
         String allClientIds = sharedPref.getString(this.getResources().getString(R.string.all_client_ids), "")
                 .replaceAll("\\[", "").replaceAll("]","");
-        List<JSONObject> farmNameIdMap = sqLiteDatabaseHandler.getFarmNamesAndIdJsonArray(allClientIds);
+        List<JSONObject> farmNameIdMap = sqLiteDatabaseHandler.getFarmNamesAndIdList(allClientIds);
         for (JSONObject farm: farmNameIdMap) {
             try {
                 String farmName = farm.getString("name");
@@ -135,7 +136,7 @@ public class FarmManagerActivity extends DrawerNavigationUI implements APIContra
             Collections.sort(farms, new Comparator<Farm>() {
                 @Override
                 public int compare(Farm farmA, Farm farmB) {
-                    return farmA.getName().compareTo(farmB.getName());
+                    return farmA.getName().toLowerCase().compareTo(farmB.getName().toLowerCase());
                 }
             });
         }
@@ -246,37 +247,6 @@ public class FarmManagerActivity extends DrawerNavigationUI implements APIContra
         Intent intent = new Intent(FarmManagerActivity.this, EditorActivity.class);
         FarmManagerActivity.this.startActivity(intent);
         finish();
-    }
-
-    private class Farm {
-        private String name;
-        private Integer id;
-
-        Farm(String name, Integer id){
-            this.name = name;
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public Integer getId() {
-            return id;
-        }
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
-
-        @Override
-        public String toString() {
-            return this.name;
-        }
     }
 
     @Override

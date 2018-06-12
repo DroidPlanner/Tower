@@ -76,7 +76,7 @@ public class AddNewFarmDialog extends DialogFragment implements APIContract {
                             });
                             postRequest.postJSONObject(getPostParams(), APIContract.GATEWAY_FARMS, getToken());
                         } else {
-                            sqLiteDatabaseHandler.createFarmName(getFarmNameFromView(), null, getClientId());
+                            sqLiteDatabaseHandler.addOfflineFarm(getFarmNameFromView(), getClientId());
                             dialog.dismiss();
                         }
                     }
@@ -94,7 +94,6 @@ public class AddNewFarmDialog extends DialogFragment implements APIContract {
         int clientId = getClientId();
         String farmName = getFarmNameFromView();
         JSONObject jsonObject = new JSONObject();
-        // String params = String.format("{\"name\":\"%s\",\"client_id\":\"%s\"}",farmName, clientId);
         try {
             jsonObject.put("name", farmName);
             jsonObject.put("client_id", clientId);

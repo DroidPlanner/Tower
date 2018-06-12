@@ -51,9 +51,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -457,10 +455,27 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     if (clientId != DRONE_DEMO_ACCOUNT_ID) {
                         allClientsIds.add(clientId);
                         JSONArray farmsArray = client.getJSONArray("farms");
+                        List<Integer> farmIdsFromServer = new ArrayList<>();
                         for (int j = 0; j < farmsArray.length(); j++){
                             JSONObject dict = farmsArray.getJSONObject(j);
+                            farmIdsFromServer.add(dict.getInt("id"));
                             sqLiteDatabaseHandler.createFarmName(dict.getString("name"),
                                     dict.getInt("id"), clientId);
+                        }
+                        String allClientIds = allClientsIds.toString().replaceAll("\\[", "").replaceAll("]","");
+                        List<JSONObject> farmJsonList = sqLiteDatabaseHandler.getFarmNamesAndIdList(allClientIds);
+                        List<Integer> localFarmIds = new ArrayList<>();
+                        for (int k = 0; k < farmJsonList.size(); k++) {
+                            JSONObject farm = farmJsonList.get(k);
+                            Integer farmId = farm.getInt("farm_id");
+                            localFarmIds.add(farmId);
+                        }
+
+                        for (Integer farmId: localFarmIds) {
+                            if (!farmIdsFromServer.contains(farmId)) {
+                                sqLiteDatabaseHandler.deleteFarm(farmId);
+                                sqLiteDatabaseHandler.deleteAllBoundariesThatBelongToFarm(farmId);
+                            }
                         }
                     }
                     if (userId == clientUserId) {

@@ -159,7 +159,7 @@ public class AeroviewPolygons implements APIContract{
     public void postOfflineFarms() {
         String token = sharedPref.getString(context.getResources().getString(R.string.user_auth_token), "");
         Integer clientId = sharedPref.getInt(context.getResources().getString(R.string.client_id), -1);
-        JSONArray farmsToSync = sqLiteDatabaseHandler.getLocalFarmNames(clientId);
+        JSONArray farmsToSync = sqLiteDatabaseHandler.getOfflineFarms(clientId);
         if (farmsToSync.length() > 0) {
             for (int i = 0; i < farmsToSync.length(); i++) {
                 try {
@@ -205,9 +205,10 @@ public class AeroviewPolygons implements APIContract{
 
         private void updateLocalDatabase(JSONObject returnData) {
             try {
-                final int primaryKey = farmDetails.getInt("primary_key_id");
-                int farmId = returnData.getInt("id");
+                Integer primaryKey = farmDetails.getInt("primary_key_id");
+                Integer farmId = returnData.getInt("id");
                 sqLiteDatabaseHandler.updateFarmNameId(farmId, primaryKey);
+                sqLiteDatabaseHandler.replaceFarmTempIdInBoundaryTable(farmId.toString(), primaryKey.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -328,6 +329,7 @@ public class AeroviewPolygons implements APIContract{
             if(requestReturnedSuccessfully){
                 setTaskCompleteFlag();
                 handleAsyncRequestReturns();
+                addPolygonsToMap();
             } else{
                 displayErrorMessage();
             }
@@ -396,27 +398,46 @@ public class AeroviewPolygons implements APIContract{
             if(!requests.isEmpty()) {
                 for (String request : requests) {
                     try {
-                        JSONObject jsonObject = new JSONObject(request);
-                        PostRequest postRequest = new PostRequest();
+                        final JSONObject jsonObject = new JSONObject(request);
+                        final PostRequest postRequest = new PostRequest();
                         postRequest.postJSONObject(jsonObject, APIContract.GATEWAY_ORCHARDS, mToken);
-
-                        do {
-                            try {
-                                Thread.sleep(10);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                        postRequest.setOnPostReturnedListener(new PostRequest.OnPostReturnedListener() {
+                            @Override
+                            public void onSuccessfulResponse() {
+                                JSONObject returnData = postRequest.getResponseData();
+                                try {
+                                    String id = returnData.getString("id");
+                                    String tempId = jsonObject.getString("temp_id");
+                                    sqLiteDatabaseHandler.removeRequest(tempId);
+                                    sqLiteDatabaseHandler.updateBoundaryId(tempId, id);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        } while (!postRequest.isServerResponseReceived());
 
-                        if (!postRequest.isServerError()) {
-                            String tempId = postRequest.getResponseData().getString("tempId");
-                            if(tempId!=null) {
-                                JSONObject boundaryAdded = postRequest.getResponseData().getJSONObject("boundaryAdded");
-                                String aeroviewId = String.valueOf(boundaryAdded.get("id"));
-                                sqLiteDatabaseHandler.removeRequest(tempId);
-                                sqLiteDatabaseHandler.updateBoundaryId(tempId, aeroviewId);
+                            @Override
+                            public void onErrorResponse() {
+
                             }
-                        }
+                        });
+
+//                        do {
+//                            try {
+//                                Thread.sleep(10);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//                        } while (!postRequest.isServerResponseReceived());
+//
+//                        if (!postRequest.isServerError()) {
+//                            String tempId = postRequest.getResponseData().getString("tempId");
+//                            if(tempId!=null) {
+//                                JSONObject boundaryAdded = postRequest.getResponseData().getJSONObject("boundaryAdded");
+//                                String aeroviewId = String.valueOf(boundaryAdded.get("id"));
+//                                sqLiteDatabaseHandler.removeRequest(tempId);
+//                                sqLiteDatabaseHandler.updateBoundaryId(tempId, aeroviewId);
+//                            }
+//                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -560,6 +581,7 @@ public class AeroviewPolygons implements APIContract{
         private void handleReturnData() {
             getReturnData();
             addFarmNamesToDB(farms);
+            deleteFarms(farms);
         }
 
         private void getReturnData() {
@@ -583,6 +605,29 @@ public class AeroviewPolygons implements APIContract{
         private void displayErrorMessage() {
             Intent intent = new Intent(ACTION_ERROR_MSG);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        }
+    }
+
+    private void deleteFarms(String farmsFromServer) {
+        String allClientIds = sharedPref.getString(context.getString(R.string.all_client_ids), "")
+                .replaceAll("\\[", "").replaceAll("]","");
+        List<Integer> allFarmIdsLocal = sqLiteDatabaseHandler.getFarmsIds(allClientIds);
+        List<Integer> farmsIdsFromServer = new ArrayList<>();
+        try {
+            JSONArray array = new JSONArray(farmsFromServer);
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject farm = array.getJSONObject(i);
+                farmsIdsFromServer.add(farm.getInt("id"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        for (Integer localFarmId: allFarmIdsLocal) {
+            if (!farmsIdsFromServer.contains(localFarmId)) {
+                sqLiteDatabaseHandler.deleteFarm(localFarmId);
+                sqLiteDatabaseHandler.deleteAllBoundariesThatBelongToFarm(localFarmId);
+            }
         }
     }
 

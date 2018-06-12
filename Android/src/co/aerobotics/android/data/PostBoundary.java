@@ -32,8 +32,8 @@ public class PostBoundary implements APIContract{
     private Context context;
 
     public PostBoundary(Context context, Survey survey, String boundaryName, Integer farmID,
-                        Integer cropTypeID, Integer clientID, String email, String password,
-                        JSONArray farmArray, JSONArray cropTypeArray, String tempId) {
+                        Integer cropTypeID, Integer clientID,
+                        JSONArray farmArray) {
         this.survey = survey;
         this.boundaryName = boundaryName;
         this.farmID = farmID;
@@ -64,9 +64,7 @@ public class PostBoundary implements APIContract{
                 AddNewFarmTask mAddNewFarmTask= new AddNewFarmTask(boundaryDetail, farmName, this.clientID, token);
                 mAddNewFarmTask.execute((Void) null);
             }
-
         }
-
     }
 
     private String getPolygonCoords(){

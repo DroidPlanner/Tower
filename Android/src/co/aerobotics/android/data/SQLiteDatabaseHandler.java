@@ -13,9 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import co.aerobotics.android.mission.MissionDetails;
 
@@ -175,7 +173,6 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_FARMNAME_TABLE);
     }
 
-
     public List<MissionDetails> getAllMissionDetails(){
         SQLiteDatabase db = this.getReadableDatabase();
         List<MissionDetails> missionDetailsList = new ArrayList<>();
@@ -230,7 +227,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(query, null);
         if(c.moveToFirst()){
-            do{
+            do {
                 requests.add(c.getString(c.getColumnIndex(KEY_REQUEST)));
             } while (c.moveToNext());
         }
@@ -287,7 +284,21 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         return id;
     }
 
-    public List<JSONObject> getFarmNamesAndIdJsonArray(String clientIds) {
+    public List<Integer> getFarmsIds(String clientIds) {
+        List<Integer> farmIds = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TABLE_FARMNAMES + " WHERE " + KEY_CLIENT_ID + " IN (" + clientIds + "); ";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c.moveToFirst()) {
+            do {
+                farmIds.add(c.getInt(c.getColumnIndex(KEY_FARMNAME_ID)));
+            } while (c.moveToNext());
+        }
+        c.close();
+        return farmIds;
+    }
+
+    public List<JSONObject> getFarmNamesAndIdList(String clientIds) {
         // JSONArray farms = new JSONArray();
         // Map<String, Integer> farms = new HashMap<>();
         List<JSONObject> farms = new ArrayList<>();
@@ -319,16 +330,40 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
      */
 
     public long createFarmName(String farmname, Integer id, Integer clientId){
-        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_FARMNAME, farmname);
         values.put(KEY_CLIENT_ID, clientId);
         if(id!=null) {
             values.put(KEY_FARMNAME_ID, id);
         }
-        long farm_id = db.insert(TABLE_FARMNAMES, null, values);
+        SQLiteDatabase db = this.getWritableDatabase();
+        long farm_id = -1;
+        if (!isFarmInDB(id, db)) {
+            farm_id = db.insert(TABLE_FARMNAMES, null, values);
+        } else {
+            farm_id = db.update(TABLE_FARMNAMES, values,  KEY_FARMNAME_ID + " = ?", new String[]{id.toString()});
+        }
         db.close();
         return farm_id;
+    }
+
+    public void deleteFarm(Integer id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_FARMNAMES, KEY_FARMNAME_ID + " = ?", new String[]{id.toString()});
+        db.close();
+    }
+
+    public void deleteAllBoundariesThatBelongToFarm(Integer id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_BOUNDARIES, KEY_BOUNDARY_FARM_ID + " = ?", new String[]{id.toString()});
+        db.close();
+    }
+    private boolean isFarmInDB(Integer id, SQLiteDatabase db){
+        String sql ="SELECT * FROM " + TABLE_FARMNAMES + " WHERE " + KEY_FARMNAME_ID + " LIKE " + id.toString();
+        Cursor cursor= db.rawQuery(sql,null);
+        boolean found = cursor.getCount()>0;
+        cursor.close();
+        return found;
     }
 
     public void addOfflineFarm(String farmName, int clientId) {
@@ -344,7 +379,37 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public JSONArray getOfflineFarms(int clientId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.query(TABLE_FARMNAMES, FARMNAME_COLUMNS,
+                KEY_FARMNAME_ID + " < 0 AND " + KEY_CLIENT_ID + " = " + clientId,
+                new String[]{}, null, null, null, null);
+        JSONArray array = new JSONArray();
+        if (c.moveToFirst()) {
+            do{
+                JSONObject farm = new JSONObject();
+                try {
+                    farm.put("name", c.getString(c.getColumnIndex(KEY_FARMNAME)));
+                    farm.put("primary_key_id", c.getInt(c.getColumnIndex(KEY_ID)));
+                    farm.put("client_id", c.getInt(c.getColumnIndex(KEY_CLIENT_ID)));
+                    array.put(farm);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } while ( c.moveToNext());
+        }
+        c.close();
+        db.close();
+        return array;
+    }
 
+    public void replaceFarmTempIdInBoundaryTable(String id, String tempId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_BOUNDARY_FARM_ID, id);
+        db.update(TABLE_BOUNDARIES, values, KEY_FARMNAME_ID + " = ? ", new String[]{tempId});
+        db.close();
+    }
     /**
      * Update the farm id in local database
      * @param id Int new farm id
@@ -425,23 +490,19 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         c.close();
         db.close();
         return id;
-
     }
 
     /**
      * Check if crop type of given name is currently in the database
-     * @param croptype String name of crop type
+     * @param croptypeId String id of crop type
      * @return Boolean True if in database
      */
 
-    public boolean isCropTypeInTable(String croptype){
-        SQLiteDatabase db = this.getReadableDatabase();
-        String selectQuery = "SELECT COUNT(" + KEY_CROPTYPE + ") " + "FROM " + TABLE_CROPTYPES +
-                " WHERE " + KEY_CROPTYPE + " LIKE " + "'" + croptype + "'";
-        Cursor cursor= db.rawQuery(selectQuery,null);
+    private boolean isCropTypeInDb(Integer croptypeId, SQLiteDatabase db){
+        String sql ="SELECT * FROM " + TABLE_CROPTYPES + " WHERE " + KEY_CROPTYPE_ID + " LIKE " + croptypeId.toString();
+        Cursor cursor= db.rawQuery(sql,null);
         boolean found = cursor.getCount()>0;
         cursor.close();
-        db.close();
         return found;
     }
 
@@ -459,7 +520,10 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         if(id!=null) {
             values.put(KEY_ID, id);
         }
-        long croptype_id = db.insert(TABLE_CROPTYPES, null, values);
+        long croptype_id = -1;
+        if (!isCropTypeInDb(id, db)) {
+            croptype_id = db.insert(TABLE_CROPTYPES, null, values);
+        }
         db.close();
         return croptype_id;
     }
@@ -578,7 +642,6 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_BOUNDARIES + " WHERE " + KEY_BOUNDARY_FARM_ID + " IN (" + activeFarmIds + ") ";
 
         Cursor cursor = db.rawQuery(query, null);
-        int found = cursor.getCount();
         if (cursor.moveToFirst()) {
             do {
                 BoundaryDetail boundaryDetail = new BoundaryDetail();
@@ -645,7 +708,6 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
 
     }
 
-
     private int updateBoundaryDetail(BoundaryDetail boundaryDetail, SQLiteDatabase db){
 
         ContentValues values = new ContentValues();
@@ -701,7 +763,6 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         db.update(TABLE_BOUNDARIES, values, KEY_BOUNDARY_ID + " = ?", new String[] {id} );
         db.close();
     }
-
 
     public void updateBoundaryId(String tempId, String aeroviewId){
         SQLiteDatabase db = SQLiteDatabaseHandler.this.getWritableDatabase();
