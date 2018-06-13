@@ -195,12 +195,15 @@ public class AeroviewPolygons implements APIContract{
 
                 }
             });
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    postRequest.postJSONObject(farmDetails, APIContract.GATEWAY_FARMS, token);
-                }
-            });
+
+            postRequest.postJSONObject(farmDetails, APIContract.GATEWAY_FARMS, token);
+
+//            AsyncTask.execute(new Runnable() {
+//                @Override
+//                public void run() {
+//                    postRequest.postJSONObject(farmDetails, APIContract.GATEWAY_FARMS, token);
+//                }
+//            });
         }
 
         private void updateLocalDatabase(JSONObject returnData) {
@@ -215,11 +218,11 @@ public class AeroviewPolygons implements APIContract{
         }
     }
 
-    public void executeAeroViewSync(){
+    public void executeOfflineBoundariesSync(){
         SharedPreferences sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
         String token = sharedPref.getString(context.getResources().getString(R.string.user_auth_token), "");
-        List<String> requests = sqLiteDatabaseHandler.getAllRequests();
-        PostOfflineDataTask mPostTask = new PostOfflineDataTask(requests, token);
+        JSONArray requestParams = sqLiteDatabaseHandler.getOfflineBoundaries();
+        PostOfflineBoundariesTask mPostTask = new PostOfflineBoundariesTask(requestParams, token);
         mPostTask.execute((Void) null);
     }
 
@@ -356,8 +359,9 @@ public class AeroviewPolygons implements APIContract{
                         String id = jsonObject.getString("id");
                         int farmId = jsonObject.getInt("farm_id");
                         int clientId = jsonObject.getInt("client_id");
+                        int cropTypeId = jsonObject.getInt("crop_type_id");
                         if (!polygon.equals("") && clientId != DRONE_DEMO_ACCOUNT_ID) {
-                            boundariesList.add(new BoundaryDetail(name,id, polygon, clientId , true, farmId));
+                            boundariesList.add(new BoundaryDetail(name,id, polygon, clientId , cropTypeId, true, farmId));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -382,23 +386,22 @@ public class AeroviewPolygons implements APIContract{
      * Send the offline post requests that were saved in the database
      */
 
-    private class PostOfflineDataTask extends AsyncTask<Void, Void, Boolean> implements APIContract{
+    private class PostOfflineBoundariesTask extends AsyncTask<Void, Void, Boolean> implements APIContract{
 
-        private List<String> requests;
+        private JSONArray requests;
         private String mToken;
 
-
-        private PostOfflineDataTask(List<String> requests, String mToken){
+        private PostOfflineBoundariesTask(JSONArray requests, String mToken){
             this.requests = requests;
             this.mToken = mToken;
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            if(!requests.isEmpty()) {
-                for (String request : requests) {
+            if(requests.length() > 0) {
+                for (int i = 0; i < requests.length(); i++) {
                     try {
-                        final JSONObject jsonObject = new JSONObject(request);
+                        final JSONObject jsonObject = requests.getJSONObject(i);
                         final PostRequest postRequest = new PostRequest();
                         postRequest.postJSONObject(jsonObject, APIContract.GATEWAY_ORCHARDS, mToken);
                         postRequest.setOnPostReturnedListener(new PostRequest.OnPostReturnedListener() {

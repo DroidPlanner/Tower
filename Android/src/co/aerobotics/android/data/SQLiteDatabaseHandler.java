@@ -47,10 +47,11 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_DISPLAY = "display";
     private static final String KEY_CAMERA = "camera";
     private static final String KEY_BOUNDARY_FARM_ID = "farm_id";
+    private static final String KEY_BOUNDARY_CROPTYPE_ID = "crop_type_id";
 
     private static final String[] BOUNDARY_TABLE_COLUMNS = {KEY_NAME, KEY_BOUNDARY_ID, KEY_POINTS,
             KEY_ANGLE, KEY_OVERLAP, KEY_SIDELAP, KEY_ALTITUDE, KEY_SPEED, KEY_REQUEST, KEY_CLIENT_ID,
-            KEY_DISPLAY, KEY_CAMERA, KEY_BOUNDARY_FARM_ID};
+            KEY_DISPLAY, KEY_CAMERA, KEY_BOUNDARY_FARM_ID, KEY_BOUNDARY_CROPTYPE_ID};
 
     private static final String TABLE_CROPTYPES = "croptypes";
     private static final String KEY_CROPTYPE = "croptype";
@@ -79,7 +80,8 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
 
     private static final String CREATE_BOUNDARY_TABLE = "CREATE TABLE IF NOT EXISTS Boundaries (" + KEY_ID +  " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
             "boundary_id TEXT, " + KEY_POINTS + " TEXT, " + "name TEXT, " + "angle INTEGER, " + "overlap INTEGER, " + "sidelap INTEGER, "
-            + "altitude INTEGER, " + "speed INTEGER, request TEXT, client_id INTEGER, display INTEGER, camera TEXT, farm_id INTEGER, UNIQUE(" + KEY_BOUNDARY_ID + ")" + " ON CONFLICT IGNORE)";
+            + "altitude INTEGER, " + "speed INTEGER, request TEXT, client_id INTEGER, display INTEGER, camera TEXT, farm_id INTEGER," +
+            " crop_type_id INTEGER, UNIQUE(" + KEY_BOUNDARY_ID + ")" + " ON CONFLICT IGNORE)";
 
     private static final String CREATE_MISSION_DETAILS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_MISSION_DETAILS + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
             KEY_MISSION_WAYPOINTS + " TEXT NOT NULL, " + KEY_MISSION_ALTITUDE + " REAL, " + KEY_MISSION_IMAGE_DISTANCE + " REAL, " + KEY_MISSION_SPEED + " REAL) ";
@@ -171,6 +173,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     private void upgradeVersion8(SQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FARMNAMES);
         db.execSQL(CREATE_FARMNAME_TABLE);
+        db.execSQL("ALTER TABLE " + TABLE_BOUNDARIES + " ADD COLUMN " + KEY_BOUNDARY_CROPTYPE_ID + " INTEGER");
     }
 
     public List<MissionDetails> getAllMissionDetails(){
@@ -235,6 +238,33 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         c.close();
         db.close();
         return requests;
+    }
+
+    public JSONArray getOfflineBoundaries() {
+        JSONArray params = new JSONArray();
+        String query = "SELECT * FROM " + TABLE_BOUNDARIES + " WHERE " + KEY_BOUNDARY_ID + " LIKE '%_temp';";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+        if (c != null) {
+            c.moveToFirst();
+            do {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("name", c.getString(c.getColumnIndex(KEY_NAME)));
+                    jsonObject.put("polygon", c.getString(c.getColumnIndex(KEY_POINTS)));
+                    jsonObject.put("client_id", c.getString(c.getColumnIndex(KEY_CLIENT_ID)));
+                    jsonObject.put("farm_id", c.getString(c.getColumnIndex(KEY_BOUNDARY_FARM_ID)));
+                    jsonObject.put("crop_type_id", c.getString(c.getColumnIndex(KEY_BOUNDARY_CROPTYPE_ID)));
+                    jsonObject.put("temp_id", c.getString(c.getColumnIndex(KEY_BOUNDARY_ID)));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                params.put(jsonObject);
+            } while (c.moveToNext());
+            c.close();
+        }
+        db.close();
+        return params;
     }
 
     /**
@@ -358,6 +388,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         db.delete(TABLE_BOUNDARIES, KEY_BOUNDARY_FARM_ID + " = ?", new String[]{id.toString()});
         db.close();
     }
+
     private boolean isFarmInDB(Integer id, SQLiteDatabase db){
         String sql ="SELECT * FROM " + TABLE_FARMNAMES + " WHERE " + KEY_FARMNAME_ID + " LIKE " + id.toString();
         Cursor cursor= db.rawQuery(sql,null);
@@ -420,6 +451,20 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_FARMNAME_ID, id);
         db.update(TABLE_FARMNAMES, values, KEY_ID + " = ? ", new String[]{primaryKey.toString()});
         db.close();
+    }
+
+
+    public int getFarmClientId(Integer farmId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql ="SELECT " + KEY_CLIENT_ID +  " FROM " + TABLE_FARMNAMES + " WHERE " + KEY_FARMNAME_ID + " LIKE " + farmId.toString();
+        Cursor c = db.rawQuery(sql,null);
+        int client_id = -1;
+        if (c.moveToFirst()) {
+            client_id = c.getInt(c.getColumnIndex(KEY_CLIENT_ID));
+        }
+        c.close();
+        db.close();
+        return client_id;
     }
 
     /**
@@ -681,6 +726,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_CLIENT_ID, boundaryDetail.getClientId());
         values.put(KEY_DISPLAY, boundaryDetail.isDisplay() ? 1 : 0);
         values.put(KEY_BOUNDARY_FARM_ID, boundaryDetail.getFarmId());
+        values.put(KEY_BOUNDARY_CROPTYPE_ID, boundaryDetail.getCropTypeId());
         long primary_key = db.insert(TABLE_BOUNDARIES, null, values);
 
         String temp_id = (String.valueOf(primary_key) + "_temp");

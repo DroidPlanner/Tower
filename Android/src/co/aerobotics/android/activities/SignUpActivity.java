@@ -29,7 +29,7 @@ import co.aerobotics.android.R;
 import co.aerobotics.android.activities.interfaces.APIContract;
 import co.aerobotics.android.data.AeroviewPolygons;
 import co.aerobotics.android.data.PostRequest;
-import co.aerobotics.android.fragments.widget.TowerWidget;
+
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONException;
@@ -274,7 +274,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     private class UserSignUpTask extends AsyncTask<Void, Void, Boolean> implements APIContract{
 
-
         private String email;
         private String firstName;
         private String lastName;
@@ -351,14 +350,14 @@ public class SignUpActivity extends AppCompatActivity {
             if (success) {
                 //setResultToToast("sign up success");
                 AeroviewPolygons aeroviewPolygons = new AeroviewPolygons(SignUpActivity.this);
-                aeroviewPolygons.executeAeroViewSync();
+                aeroviewPolygons.executeOfflineBoundariesSync();
                 Intent intent = new Intent(SignUpActivity.this, EditorActivity.class);
                 SignUpActivity.this.startActivity(intent);
                 finish();
             }
-
         }
     }
+
     private void setResultToToast(final String string) {
         SignUpActivity.this.runOnUiThread(new Runnable() {
             @Override

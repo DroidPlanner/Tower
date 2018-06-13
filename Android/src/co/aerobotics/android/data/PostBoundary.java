@@ -155,7 +155,7 @@ public class PostBoundary implements APIContract{
                         db_handler.addBoundaryDetail(boundaryDetail);
                         //TODO: add boundaries to map
 //                        AeroviewPolygons aeroviewPolygons = new AeroviewPolygons(context);
-//                        aeroviewPolygons.executeAeroViewSync();
+//                        aeroviewPolygons.executeOfflineBoundariesSync();
                     }
 
                 }  catch (JSONException e) {

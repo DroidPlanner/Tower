@@ -17,4 +17,5 @@ public interface APIContract {
     String GATEWAY_ORCHARDS = server + "gateway/orchards/";
     String GATEWAY_FARMS = server + "gateway/farms/";
     String GATEWAY_CROPTYPES = server + "gateway/croptypes/";
+    String GATEWAY_USERS = server + "gateway/users/";
 }

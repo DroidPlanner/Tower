@@ -92,30 +92,6 @@ import co.aerobotics.android.utils.file.FileStream;
 import co.aerobotics.android.utils.prefs.AutoPanMode;
 import co.aerobotics.android.utils.prefs.DroidPlannerPrefs;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
-import com.getkeepsafe.taptargetview.TapTarget;
-import com.getkeepsafe.taptargetview.TapTargetSequence;
-import com.github.jorgecastilloprz.FABProgressCircle;
-import com.github.jorgecastilloprz.listeners.FABProgressListener;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.mixpanel.android.mpmetrics.MixpanelAPI;
-import com.o3dr.android.client.utils.FileUtils;
-import com.o3dr.services.android.lib.coordinate.LatLong;
-import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
-import com.o3dr.services.android.lib.drone.mission.MissionItemType;
-import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
-import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
-
-import org.beyene.sius.unit.length.LengthUnit;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import dji.common.error.DJIError;
 import dji.keysdk.CameraKey;
 import dji.keysdk.callback.GetCallback;
@@ -748,6 +724,7 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
 
                 AeroviewPolygons aeroviewPolygons = new AeroviewPolygons(this);
                 aeroviewPolygons.postOfflineFarms();
+                aeroviewPolygons.executeOfflineBoundariesSync();
                 aeroviewPolygons.setOnSyncFinishedListener(this);
                 aeroviewPolygons.executeGetFarmsTask();
                 aeroviewPolygons.executeGetCropTypesTask();

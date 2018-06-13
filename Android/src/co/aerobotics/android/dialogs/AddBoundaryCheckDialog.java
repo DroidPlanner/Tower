@@ -112,29 +112,12 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
                         } else {
                             if(missionItemExists()) {
                                 JSONObject postParams = getBoundaryPostParams();
-//                                PostBoundary postBoundary = new PostBoundary(
-//                                        getContext(),
-//                                        getSurvey(),
-//                                        getBoundaryNameFromView(mBoundaryNameView),
-//                                        getFarmId(),
-//                                        getCropTypeId(),
-//                                        getClientId(),
-//                                        null);
                                 if (isNetworkAvailable()) {
                                     makePostRequest(postParams);
                                     mMixpanel.track("FPA: BoundarySaved");
                                     // new AeroviewPolygons(getActivity()).executeClientDataTask();
                                 } else {
                                     String tempId = sqLiteDatabaseHandler.addOfflineBoundaryDetail(buildBoundaryDetail(boundaryName, getFarmId()));
-//                                    PostBoundary postOfflineBoundary = new PostBoundary(
-//                                            getContext(),
-//                                            getSurvey(),
-//                                            getBoundaryNameFromView(mBoundaryNameView),
-//                                            getFarmId(),
-//                                            getCropTypeId(),
-//                                            getClientId(),
-//                                            null);
-                                    // JSONObject jsonObject = postOfflineBoundary.getNewBoundaryParamsAsJson();
                                     try {
                                         postParams.put("temp_id", tempId);
                                     } catch (JSONException e) {
@@ -392,15 +375,8 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
     }
 
     private Integer getClientId(){
-        Integer jsonString = sharedPref.getInt(getActivity().getResources().getString(R.string.client_id), -1);
-//        Integer clientId = null;
-//        try {
-//            JSONObject json = new JSONObject(jsonString);
-//            clientId = (Integer) json.get("id");
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-        return jsonString;
+        int farmId = getFarmId();
+        return sqLiteDatabaseHandler.getFarmClientId(farmId);
     }
 
     private Integer getFarmId(){
@@ -453,8 +429,9 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
         boundaryDetail.setSidelap(surveyDetail.getSidelap());
         boundaryDetail.setSpeed(surveyDetail.getSpeed());
         boundaryDetail.setCamera(surveyDetail.getCameraDetail().toString());
-        boundaryDetail.setClientId(sharedPref.getInt(context.getResources().getString(R.string.client_id), -1));
+        boundaryDetail.setClientId(getClientId());
         boundaryDetail.setDisplay(true);
+        boundaryDetail.setCropTypeId(getCropTypeId());
         return boundaryDetail;
     }
 }
