@@ -196,22 +196,33 @@ public class AeroviewPolygons implements APIContract{
                 }
             });
 
-            postRequest.postJSONObject(farmDetails, APIContract.GATEWAY_FARMS, token);
-
-//            AsyncTask.execute(new Runnable() {
-//                @Override
-//                public void run() {
-//                    postRequest.postJSONObject(farmDetails, APIContract.GATEWAY_FARMS, token);
-//                }
-//            });
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    postRequest.postJSONObject(farmDetails, APIContract.GATEWAY_FARMS, token);
+                }
+            });
         }
 
         private void updateLocalDatabase(JSONObject returnData) {
             try {
+                Integer tempFarmId = farmDetails.getInt("temp_id");
                 Integer primaryKey = farmDetails.getInt("primary_key_id");
                 Integer farmId = returnData.getInt("id");
                 sqLiteDatabaseHandler.updateFarmNameId(farmId, primaryKey);
-                sqLiteDatabaseHandler.replaceFarmTempIdInBoundaryTable(farmId.toString(), primaryKey.toString());
+
+                String activeFarms = sharedPref.getString(context.getResources().getString(R.string.active_farms), "[]");
+                List<Integer> activeFarmIds = parseStringToListIntegerObject(activeFarms);
+                if (activeFarmIds.contains(tempFarmId)) {
+                    activeFarmIds.remove(tempFarmId);
+                    activeFarmIds.add(farmId);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(context.getResources().getString(R.string.active_farms), new Gson().toJson(activeFarmIds)).apply();
+                }
+
+                JSONArray offlineBoundariesForFarm = sqLiteDatabaseHandler.getOfflineBoundariesForFarm(tempFarmId, farmId);
+                PostOfflineBoundariesTask mPostTask = new PostOfflineBoundariesTask(offlineBoundariesForFarm, token);
+                mPostTask.execute((Void) null);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -221,7 +232,7 @@ public class AeroviewPolygons implements APIContract{
     public void executeOfflineBoundariesSync(){
         SharedPreferences sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
         String token = sharedPref.getString(context.getResources().getString(R.string.user_auth_token), "");
-        JSONArray requestParams = sqLiteDatabaseHandler.getOfflineBoundaries();
+        JSONArray requestParams = sqLiteDatabaseHandler.getOfflineBoundariesForSyncedFarms();
         PostOfflineBoundariesTask mPostTask = new PostOfflineBoundariesTask(requestParams, token);
         mPostTask.execute((Void) null);
     }
@@ -249,6 +260,13 @@ public class AeroviewPolygons implements APIContract{
         String token = sharedPref.getString(context.getResources().getString(R.string.user_auth_token), "");
         String activeFarms = sharedPref.getString(context.getResources().getString(R.string.active_farms), "[]");
         List<Integer> farmIds = parseStringToListIntegerObject(activeFarms);
+        List<Integer> tempFarmIds = new ArrayList<>();
+        for(Integer farmId: farmIds) {
+            if(farmId < 0) {
+                tempFarmIds.add(farmId);
+            }
+        }
+        farmIds.removeAll(tempFarmIds);
         getFarmOrchardsTask getFarmOrchardsTask = new getFarmOrchardsTask(token, farmIds);
         getFarmOrchardsTask.execute((Void) null);
     }
@@ -410,9 +428,10 @@ public class AeroviewPolygons implements APIContract{
                                 JSONObject returnData = postRequest.getResponseData();
                                 try {
                                     String id = returnData.getString("id");
+                                    String farmId = returnData.getString("farm_id");
                                     String tempId = jsonObject.getString("temp_id");
                                     sqLiteDatabaseHandler.removeRequest(tempId);
-                                    sqLiteDatabaseHandler.updateBoundaryId(tempId, id);
+                                    sqLiteDatabaseHandler.updateOfflineBoundary(tempId, id, farmId);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -557,7 +576,6 @@ public class AeroviewPolygons implements APIContract{
             makeGetRequestForFarms();
             waitForRequestToReturnData();
             if (!isServerError()) {
-                handleReturnData();
                 return true;
             }
             return false;
@@ -594,6 +612,7 @@ public class AeroviewPolygons implements APIContract{
         @Override
         protected void onPostExecute(final Boolean requestReturnedSuccessfully) {
             if(requestReturnedSuccessfully){
+                handleReturnData();
                 setTaskCompleteFlag();
                 handleAsyncRequestReturns();
             } else{

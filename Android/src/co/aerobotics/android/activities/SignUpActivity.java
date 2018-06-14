@@ -28,6 +28,7 @@ import co.aerobotics.android.DroidPlannerApp;
 import co.aerobotics.android.R;
 import co.aerobotics.android.activities.interfaces.APIContract;
 import co.aerobotics.android.data.AeroviewPolygons;
+import co.aerobotics.android.data.Authentication;
 import co.aerobotics.android.data.PostRequest;
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
@@ -51,7 +52,6 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText mLastNameView;
     private Button mSignUpButton;
     private View mSignUpForm;
-    private TextView mTermsText;
     private View mProgressView;
 
     private MixpanelAPI mixpanel;
@@ -289,55 +289,9 @@ public class SignUpActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-
-            String jsonStr = String.format("{\"email\":\"%s\"," +
-                            "\"firstName\":\"%s\"," + "\"lastName\":\"%s\","
-                            + "\"password\":\"%s\",\"app\":\"flight\"}",
-                    email,
-                    firstName,
-                    lastName,
-                    password);
-            PostRequest postRequest = new PostRequest();
-            postRequest.post(jsonStr, APIContract.USER_SIGNUP_URL, "token");
-            do {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            } while (!postRequest.isServerResponseReceived());
-
-            if (postRequest.isServerError()){
-                //TODO handle error message better
-                setResultToToast("Server error: Please try again");
-                return false;
-            }
-
-            try {
-                int rc = postRequest.getResponseData().getInt("rc");
-                if (rc == 0){
-                    SharedPreferences sharedPref = SignUpActivity.this.getSharedPreferences(getString(R.string.com_dji_android_PREF_FILE_KEY), Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString(getString(R.string.username), email);
-                    editor.putString(getString(R.string.password), password);
-                    editor.putBoolean(getString(R.string.logged_in), true);
-                    JSONObject signedUpData = postRequest.getResponseData().getJSONObject("signedUpData");
-                    editor.putInt(getString(R.string.client_id), signedUpData.getInt("id"));
-                    editor.putString(getString(R.string.json_data), postRequest.getResponseData().toString());
-
-                    editor.apply();
-                    mixpanel.identify(email);
-                    mixpanel.getPeople().identify(email);
-                    mixpanel.getPeople().set("Email", email);
-                    mixpanel.track("FPA: UserSignUpSuccess", null);
-                    mixpanel.flush();
-                    return true;
-                } else{
-                    setResultToToast("An account with this email address already exists");
-                    return false;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+            Authentication authentication = new Authentication(SignUpActivity.this.getApplicationContext());
+            if (authentication.createUser(firstName, lastName, email, email, password)) {
+                return authentication.authenticateUser(email, password);
             }
             return false;
         }
@@ -348,24 +302,10 @@ public class SignUpActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                //setResultToToast("sign up success");
-                AeroviewPolygons aeroviewPolygons = new AeroviewPolygons(SignUpActivity.this);
-                aeroviewPolygons.executeOfflineBoundariesSync();
-                Intent intent = new Intent(SignUpActivity.this, EditorActivity.class);
+                Intent intent = new Intent(SignUpActivity.this, FarmManagerActivity.class);
                 SignUpActivity.this.startActivity(intent);
                 finish();
             }
         }
     }
-
-    private void setResultToToast(final String string) {
-        SignUpActivity.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(SignUpActivity.this, string, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-
 }

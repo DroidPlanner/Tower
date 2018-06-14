@@ -729,7 +729,6 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
                 aeroviewPolygons.executeGetFarmsTask();
                 aeroviewPolygons.executeGetCropTypesTask();
                 aeroviewPolygons.executeGetFarmOrchardsTask();
-
                 break;
 
             case R.id.search_boundaries:

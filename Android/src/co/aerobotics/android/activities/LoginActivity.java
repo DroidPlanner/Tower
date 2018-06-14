@@ -40,6 +40,7 @@ import android.widget.Toast;
 import co.aerobotics.android.DroidPlannerApp;
 import co.aerobotics.android.R;
 import co.aerobotics.android.activities.interfaces.APIContract;
+import co.aerobotics.android.data.Authentication;
 import co.aerobotics.android.data.PostRequest;
 import co.aerobotics.android.data.AeroviewPolygons;
 import co.aerobotics.android.data.SQLiteDatabaseHandler;
@@ -416,87 +417,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            String url = APIContract.USER_AUTH_GET_TOKEN;
-            String jsonStr = String.format("{\"username\":\"%s\",\"password\":\"%s\"}",mEmail,mPassword);
-            Log.d("JsonStr", jsonStr);
-
-            PostRequest postRequest = new PostRequest();
-            postRequest.login(jsonStr, url);
-
-            do {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            } while (!postRequest.isServerResponseReceived());
-
-            if (postRequest.isServerError()){
-                serverError = true;
-                return false;
-            }
-
-            SQLiteDatabaseHandler sqLiteDatabaseHandler = new SQLiteDatabaseHandler(LoginActivity.this.getApplicationContext());
-            SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences(getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            try {
-                editor.putBoolean(getString(R.string.logged_in), true);
-                editor.putString(getString(R.string.user_auth_token), postRequest.getResponseData().getString("token"));
-                JSONObject user = postRequest.getResponseData().getJSONObject("user");
-                int userId = user.getInt("id");
-                JSONArray clients = user.getJSONArray("clients");
-                int activeClientId = -1;
-                List<Integer> allClientsIds = new ArrayList<>();
-                for (int i = 0; i < clients.length(); i++) {
-                    JSONObject client = clients.getJSONObject(i);
-                    int clientUserId = client.getInt("user_id");
-                    int clientId = client.getInt("id");
-                    // if not drone demo account
-                    if (clientId != DRONE_DEMO_ACCOUNT_ID) {
-                        allClientsIds.add(clientId);
-                        JSONArray farmsArray = client.getJSONArray("farms");
-                        List<Integer> farmIdsFromServer = new ArrayList<>();
-                        for (int j = 0; j < farmsArray.length(); j++){
-                            JSONObject dict = farmsArray.getJSONObject(j);
-                            farmIdsFromServer.add(dict.getInt("id"));
-                            sqLiteDatabaseHandler.createFarmName(dict.getString("name"),
-                                    dict.getInt("id"), clientId);
-                        }
-                        String allClientIds = allClientsIds.toString().replaceAll("\\[", "").replaceAll("]","");
-                        List<JSONObject> farmJsonList = sqLiteDatabaseHandler.getFarmNamesAndIdList(allClientIds);
-                        List<Integer> localFarmIds = new ArrayList<>();
-                        for (int k = 0; k < farmJsonList.size(); k++) {
-                            JSONObject farm = farmJsonList.get(k);
-                            Integer farmId = farm.getInt("farm_id");
-                            localFarmIds.add(farmId);
-                        }
-
-                        for (Integer farmId: localFarmIds) {
-                            if (!farmIdsFromServer.contains(farmId)) {
-                                sqLiteDatabaseHandler.deleteFarm(farmId);
-                                sqLiteDatabaseHandler.deleteAllBoundariesThatBelongToFarm(farmId);
-                            }
-                        }
-                    }
-                    if (userId == clientUserId) {
-                        activeClientId = clientId;
-                    }
-                }
-                editor.putString(getString(R.string.all_client_ids), new Gson().toJson(allClientsIds));
-                editor.putInt(getString(R.string.client_id), activeClientId);
-                editor.apply();
-
-                MixpanelAPI mixpanelAPI = MixpanelAPI.getInstance(getApplicationContext(), DroidPlannerApp.getInstance().getMixpanelToken());
-                mixpanelAPI.identify(mEmail);
-                mixpanelAPI.getPeople().identify(mEmail);
-                mixpanelAPI.getPeople().set("Email", mEmail);
-                mixpanelAPI.track("FPA: UserLoginSuccess", null);
-                mixpanelAPI.flush();
-                return true;
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return false;
+            Authentication authentication = new Authentication(LoginActivity.this.getApplicationContext());
+            return authentication.authenticateUser(mEmail, mPassword);
         }
 
         @Override

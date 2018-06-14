@@ -240,13 +240,37 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         return requests;
     }
 
-    public JSONArray getOfflineBoundaries() {
+    public JSONArray getOfflineBoundariesForFarm(Integer tempFarmId, Integer farmId) {
         JSONArray params = new JSONArray();
-        String query = "SELECT * FROM " + TABLE_BOUNDARIES + " WHERE " + KEY_BOUNDARY_ID + " LIKE '%_temp';";
+        String query = "SELECT * FROM " + TABLE_BOUNDARIES + " WHERE " + KEY_BOUNDARY_ID + " LIKE '%_temp' AND " + KEY_BOUNDARY_FARM_ID + " = " + tempFarmId.toString();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(query, null);
-        if (c != null) {
-            c.moveToFirst();
+        if (c.moveToFirst()) {
+            do {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("name", c.getString(c.getColumnIndex(KEY_NAME)));
+                    jsonObject.put("polygon", c.getString(c.getColumnIndex(KEY_POINTS)));
+                    jsonObject.put("client_id", c.getString(c.getColumnIndex(KEY_CLIENT_ID)));
+                    jsonObject.put("farm_id", farmId);
+                    jsonObject.put("crop_type_id", c.getString(c.getColumnIndex(KEY_BOUNDARY_CROPTYPE_ID)));
+                    jsonObject.put("temp_id", c.getString(c.getColumnIndex(KEY_BOUNDARY_ID)));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                params.put(jsonObject);
+            } while (c.moveToNext());
+            c.close();
+        }
+        db.close();
+        return params;
+    }
+    public JSONArray getOfflineBoundariesForSyncedFarms() {
+        JSONArray params = new JSONArray();
+        String query = "SELECT * FROM " + TABLE_BOUNDARIES + " WHERE " + KEY_BOUNDARY_ID + " LIKE '%_temp' AND " + KEY_BOUNDARY_FARM_ID + " > 0";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
             do {
                 JSONObject jsonObject = new JSONObject();
                 try {
@@ -423,6 +447,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
                     farm.put("name", c.getString(c.getColumnIndex(KEY_FARMNAME)));
                     farm.put("primary_key_id", c.getInt(c.getColumnIndex(KEY_ID)));
                     farm.put("client_id", c.getInt(c.getColumnIndex(KEY_CLIENT_ID)));
+                    farm.put("temp_id", c.getInt(c.getColumnIndex(KEY_FARMNAME_ID)));
                     array.put(farm);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -438,7 +463,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_BOUNDARY_FARM_ID, id);
-        db.update(TABLE_BOUNDARIES, values, KEY_FARMNAME_ID + " = ? ", new String[]{tempId});
+        db.update(TABLE_BOUNDARIES, values, KEY_BOUNDARY_FARM_ID + " = ? ", new String[]{tempId});
         db.close();
     }
     /**
@@ -452,7 +477,6 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         db.update(TABLE_FARMNAMES, values, KEY_ID + " = ? ", new String[]{primaryKey.toString()});
         db.close();
     }
-
 
     public int getFarmClientId(Integer farmId) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -815,6 +839,15 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_BOUNDARY_ID, aeroviewId);
         db.update(TABLE_BOUNDARIES, values, KEY_BOUNDARY_ID + " = ?", new String[] {tempId});
+        db.close();
+    }
+
+    public void updateOfflineBoundary(String boundaryTempId, String boundaryId, String farmId) {
+        SQLiteDatabase db = SQLiteDatabaseHandler.this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_BOUNDARY_ID, boundaryId);
+        values.put(KEY_BOUNDARY_FARM_ID, farmId);
+        db.update(TABLE_BOUNDARIES, values, KEY_BOUNDARY_ID + " = ?", new String[] {boundaryTempId});
         db.close();
     }
 
