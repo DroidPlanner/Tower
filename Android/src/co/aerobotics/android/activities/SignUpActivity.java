@@ -29,6 +29,7 @@ import co.aerobotics.android.R;
 import co.aerobotics.android.activities.interfaces.APIContract;
 import co.aerobotics.android.data.AeroviewPolygons;
 import co.aerobotics.android.data.Authentication;
+import co.aerobotics.android.data.Login;
 import co.aerobotics.android.data.PostRequest;
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
@@ -62,7 +63,6 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         mixpanel = MixpanelAPI.getInstance(this, DroidPlannerApp.getInstance().getMixpanelToken());
         mSignUpForm = findViewById(R.id.signup_form);
-        //mTermsText = (TextView) findViewById(R.id.terms);
         mProgressView = findViewById(R.id.signup_progress_bar);
 
         mEmailView = (EditText) findViewById(R.id.signup_email);
@@ -97,8 +97,6 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-
-
         ClickableSpan onTermsCLicked = new ClickableSpan() {
             @Override
             public void onClick(View view) {
@@ -108,8 +106,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         SpannableString terms = new SpannableString(getString(R.string.terms_and_conditions));
         terms.setSpan(onTermsCLicked, 47, 67, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-
     }
 
     @Override
@@ -196,7 +192,6 @@ public class SignUpActivity extends AppCompatActivity {
         }else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            //mPasswordView.clearFocus();
             View view = this.getCurrentFocus();
             if (view != null) {
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -253,16 +248,6 @@ public class SignUpActivity extends AppCompatActivity {
                     mProgressView.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
                 }
             });
-/*
-            mTermsText.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
-            mTermsText.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mTermsText.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
-                }
-            });
-            */
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
@@ -291,7 +276,8 @@ public class SignUpActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... voids) {
             Authentication authentication = new Authentication(SignUpActivity.this.getApplicationContext());
             if (authentication.createUser(firstName, lastName, email, email, password)) {
-                return authentication.authenticateUser(email, password);
+                Login login = new Login(SignUpActivity.this.getApplicationContext(), email, password);
+                return login.authenticateUser();
             }
             return false;
         }

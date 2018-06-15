@@ -557,32 +557,32 @@ public class AeroviewPolygons implements APIContract{
     public void executeGetFarmsTask() {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
         String token = sharedPref.getString(context.getResources().getString(R.string.user_auth_token), "");
-        getFarmsTask getFarmsTask = new getFarmsTask(token);
+        Integer userId = sharedPref.getInt(context.getResources().getString(R.string.user_id), -1);
+        getFarmsTask getFarmsTask = new getFarmsTask(token, userId);
         getFarmsTask.execute((Void) null);
     }
 
     private class getFarmsTask extends AsyncTask<Void, Void, Boolean> implements APIContract {
 
         private String token;
+        private Integer userId;
         private PostRequest farmsRequest = new PostRequest();
-        private String farms;
+        private String user;
 
-        private getFarmsTask(String token) {
+        private getFarmsTask(String token, Integer userId) {
             this.token = token;
+            this.userId = userId;
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
             makeGetRequestForFarms();
             waitForRequestToReturnData();
-            if (!isServerError()) {
-                return true;
-            }
-            return false;
+            return !isServerError();
         }
 
         private void makeGetRequestForFarms() {
-            farmsRequest.get(APIContract.GATEWAY_FARMS, token);
+            farmsRequest.get(APIContract.GATEWAY_USERS + userId.toString() + "/", token);
         }
 
         private void waitForRequestToReturnData() {
@@ -599,14 +599,9 @@ public class AeroviewPolygons implements APIContract{
             return farmsRequest.isServerError();
         }
 
-        private void handleReturnData() {
-            getReturnData();
-            addFarmNamesToDB(farms);
-            deleteFarms(farms);
-        }
 
         private void getReturnData() {
-            farms = farmsRequest.getReturnDataString();
+            user = farmsRequest.getReturnDataString();
         }
 
         @Override
@@ -620,6 +615,17 @@ public class AeroviewPolygons implements APIContract{
             }
         }
 
+        private void handleReturnData() {
+            getReturnData();
+            try {
+                JSONObject user = new JSONObject(this.user);
+                FarmDataHandler farmDataHandler = new FarmDataHandler(context, user);
+                farmDataHandler.parseUsersFarms();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         private void setTaskCompleteFlag() {
             isGetFarmsTaskExecuted = true;
         }
@@ -627,29 +633,6 @@ public class AeroviewPolygons implements APIContract{
         private void displayErrorMessage() {
             Intent intent = new Intent(ACTION_ERROR_MSG);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-        }
-    }
-
-    private void deleteFarms(String farmsFromServer) {
-        String allClientIds = sharedPref.getString(context.getString(R.string.all_client_ids), "")
-                .replaceAll("\\[", "").replaceAll("]","");
-        List<Integer> allFarmIdsLocal = sqLiteDatabaseHandler.getFarmsIds(allClientIds);
-        List<Integer> farmsIdsFromServer = new ArrayList<>();
-        try {
-            JSONArray array = new JSONArray(farmsFromServer);
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject farm = array.getJSONObject(i);
-                farmsIdsFromServer.add(farm.getInt("id"));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        for (Integer localFarmId: allFarmIdsLocal) {
-            if (!farmsIdsFromServer.contains(localFarmId)) {
-                sqLiteDatabaseHandler.deleteFarm(localFarmId);
-                sqLiteDatabaseHandler.deleteAllBoundariesThatBelongToFarm(localFarmId);
-            }
         }
     }
 

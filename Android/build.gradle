@@ -56,8 +56,8 @@ dependencies {
     compile "com.squareup.okhttp:okhttp:${okhttp_version}"
     compile "com.squareup.okhttp:okhttp-urlconnection:${okhttp_version}"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
-        transitive = true;
+    compile('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
+        transitive = true
     }
 
     //compile 'com.squareup:otto:+'

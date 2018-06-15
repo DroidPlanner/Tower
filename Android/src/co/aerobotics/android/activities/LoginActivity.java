@@ -41,6 +41,7 @@ import co.aerobotics.android.DroidPlannerApp;
 import co.aerobotics.android.R;
 import co.aerobotics.android.activities.interfaces.APIContract;
 import co.aerobotics.android.data.Authentication;
+import co.aerobotics.android.data.Login;
 import co.aerobotics.android.data.PostRequest;
 import co.aerobotics.android.data.AeroviewPolygons;
 import co.aerobotics.android.data.SQLiteDatabaseHandler;
@@ -417,8 +418,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            Authentication authentication = new Authentication(LoginActivity.this.getApplicationContext());
-            return authentication.authenticateUser(mEmail, mPassword);
+            // Authentication authentication = new Authentication(LoginActivity.this.getApplicationContext());
+            Login login = new Login(LoginActivity.this.getApplicationContext(), mEmail, mPassword);
+            return login.authenticateUser();
         }
 
         @Override

@@ -738,4 +738,5 @@
     <string name="error_passwords_not_match">Passwords Do Not Match</string>
     <string name="terms_and_conditions">By clicking this button you agree to Aerobotics\' \n
         Terms and Conditions and Privacy Policy</string>
+    <string name="user_id">User ID</string>
 </resources>
