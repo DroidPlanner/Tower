@@ -1,6 +1,7 @@
 package co.aerobotics.android.activities;
 
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +18,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -58,7 +61,9 @@ public class FarmManagerActivity extends DrawerNavigationUI implements APIContra
         setupEditTextViewAsSearchInputForListView();
         initializeButtonOnClickListener();
         initializeOnAddNewFarmButtonClickListener();
+        shouldShowFarmPrompt();
     }
+
 
     private void initializeFragmentManager() {
         fragmentManager = getSupportFragmentManager();
@@ -69,18 +74,21 @@ public class FarmManagerActivity extends DrawerNavigationUI implements APIContra
         addNewFarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment dialogFragment = new AddNewFarmDialog();
-                dialogFragment.show(fragmentManager, null);
-                fragmentManager.executePendingTransactions();
-                dialogFragment.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        getAllFarmsAccessibleToActiveClient();
-                        sortFarmNamesAlphabetically();
-                        listAdapter.notifyDataSetChanged();
-                    }
-                });
+                openAddNewFarmDialog();
+            }
+        });
+    }
 
+    private void openAddNewFarmDialog() {
+        DialogFragment dialogFragment = new AddNewFarmDialog();
+        dialogFragment.show(fragmentManager, null);
+        fragmentManager.executePendingTransactions();
+        dialogFragment.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                getAllFarmsAccessibleToActiveClient();
+                sortFarmNamesAlphabetically();
+                listAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -247,6 +255,50 @@ public class FarmManagerActivity extends DrawerNavigationUI implements APIContra
         Intent intent = new Intent(FarmManagerActivity.this, EditorActivity.class);
         FarmManagerActivity.this.startActivity(intent);
         finish();
+    }
+
+    private void shouldShowFarmPrompt() {
+        if (farms.size() == 0) {
+            promptUserToAddNewFarm();
+        }
+    }
+
+    private void promptUserToAddNewFarm() {
+        final TapTargetSequence targetSequence = new TapTargetSequence(this).targets(
+                TapTarget.forView(findViewById(R.id.addNewFarm), "Getting started", "Create a new farm. You will able be save mission boundaries to this farm")
+                        // All options below are optional
+                        .outerCircleColor(R.color.primary_dark_blue)      // Specify a color for the outer circle
+                        .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                        .targetCircleColor(R.color.white)   // Specify a color for the target circle
+                        .titleTextSize(24)                  // Specify the size (in sp) of the title text
+                        .titleTextColor(R.color.white)      // Specify the color of the title text
+                        .descriptionTextSize(16)            // Specify the size (in sp) of the description text
+                        .descriptionTextColor(R.color.white)  // Specify the color of the description text
+                        .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+                        .dimColor(R.color.primary_dark_blue) // If set, will dim behind the view with 30% opacity of the given color
+                        .drawShadow(true)                   // Whether to draw a drop shadow or not
+                        .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+                        .tintTarget(true)                   // Whether to tint the target view's color
+                        .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
+                        .targetRadius(28)                  // Specify the target radius (in dp)
+                        .id(1)).listener(new TapTargetSequence.Listener() {
+            @Override
+            public void onSequenceFinish() {
+                openAddNewFarmDialog();
+            }
+
+            @Override
+            public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+            }
+
+            @Override
+            public void onSequenceCanceled(TapTarget lastTarget) {
+
+            }
+        });
+
+        targetSequence.start();
     }
 
     @Override
