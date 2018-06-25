@@ -418,7 +418,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            // Authentication authentication = new Authentication(LoginActivity.this.getApplicationContext());
             Login login = new Login(LoginActivity.this.getApplicationContext(), mEmail, mPassword);
             return login.authenticateUser();
         }

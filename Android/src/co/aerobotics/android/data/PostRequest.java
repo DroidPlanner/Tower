@@ -129,7 +129,6 @@ public class PostRequest {
                     @Override
                     public void onResponse(String response) {
                         getRequestResponseData = response;
-                        Log.d("Response", response);
                         responseReceived = true;
                     }
             },

@@ -49,10 +49,10 @@ public class Login {
             // parseUsersFarms(user);
             String authToken = returnData.getString("token");
             writeValuesToSharedPrefs(farmDataHandler.getAllClientsIds(), authToken, farmDataHandler.getActiveClientId(), farmDataHandler.getUserId());
+            setupMixpanel(farmDataHandler.getUserId().toString());
         } catch (JSONException e) {
             return false;
         }
-        setupMixpanel();
         return true;
     }
 
@@ -81,10 +81,10 @@ public class Login {
         return !postRequest.isServerError();
     }
 
-    private void setupMixpanel() {
-        mixpanelAPI.identify(mEmail);
-        mixpanelAPI.getPeople().identify(mEmail);
-        mixpanelAPI.getPeople().set("Email", mEmail);
+    private void setupMixpanel(String userId) {
+        mixpanelAPI.identify(userId);
+        mixpanelAPI.getPeople().identify(userId);
+        mixpanelAPI.getPeople().set("UserId", userId);
         mixpanelAPI.track("FPA: UserLoginSuccess", null);
         mixpanelAPI.flush();
     }

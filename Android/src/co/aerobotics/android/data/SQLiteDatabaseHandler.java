@@ -181,7 +181,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FARMNAMES);
         db.execSQL(CREATE_FARMNAME_TABLE);
         db.execSQL("ALTER TABLE " + TABLE_BOUNDARIES + " ADD COLUMN " + KEY_BOUNDARY_CROPTYPE_ID + " INTEGER");
-        db.execSQL("ALTER TABLE " + TABLE_FARMNAMES + " ADD COLUMN " + KEY_FARMNAME_CROP_FAMILY_ID + " TEXT");
+        // db.execSQL("ALTER TABLE " + TABLE_FARMNAMES + " ADD COLUMN " + KEY_FARMNAME_CROP_FAMILY_ID + " TEXT");
         db.execSQL(CREATE_CROP_FAMILIES_TABLE);
     }
 

@@ -44,7 +44,6 @@ public class Authentication implements APIContract{
         } while (!postRequest.isServerResponseReceived());
 
         if (postRequest.isServerError()){
-            //TODO handle error message better
             setResultToToast("Error: Email address already exists for a user");
             return false;
         }
