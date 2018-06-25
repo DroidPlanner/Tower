@@ -288,6 +288,9 @@ public class SignUpActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
+                AeroviewPolygons aeroviewPolygons = new AeroviewPolygons(SignUpActivity.this);
+                aeroviewPolygons.executeGetCropTypesTask();
+                aeroviewPolygons.executeGetCropFamiliesTask();
                 Intent intent = new Intent(SignUpActivity.this, FarmManagerActivity.class);
                 SignUpActivity.this.startActivity(intent);
                 finish();

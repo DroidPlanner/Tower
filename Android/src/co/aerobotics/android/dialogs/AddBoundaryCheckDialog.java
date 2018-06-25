@@ -329,26 +329,6 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
 
             }
         });
-//        searchableSpinnerFarmName.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                if(newFarmName!=null && !Objects.equals(newFarmName, "")){
-//                    String newFarmNameCaps = WordUtils.capitalizeFully(newFarmName);
-//                    sqLiteDatabaseHandler.createFarmName(newFarmNameCaps, null, clientId);
-//                    farmAdapter.add(newFarmNameCaps);
-//                    farmAdapter.sort(String.CASE_INSENSITIVE_ORDER);
-//                    int position = farmAdapter.getPosition(newFarmNameCaps);
-//                    farmAdapter.notifyDataSetChanged();
-//                    searchableSpinnerFarmName.setSelection(position);
-//                }
-//            }
-//        });
-//        searchableSpinnerFarmName.setOnSearchTextChangedListener(new SearchableListDialog.OnSearchTextChanged() {
-//            @Override
-//            public void onSearchTextChanged(String strText) {
-//                newFarmName = strText.trim();
-//            }
-//        });
     }
 
     private void initializeCropTypeSpinner() {
@@ -366,12 +346,6 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
 
             }
         });
-//        searchableSpinnerCropType.setOnSearchTextChangedListener(new SearchableListDialog.OnSearchTextChanged() {
-//            @Override
-//            public void onSearchTextChanged(String strText) {
-//                newCropType = strText.trim();
-//            }
-//        });
     }
 
     private Integer getClientId(){
@@ -414,7 +388,6 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
 
     private BoundaryDetail buildBoundaryDetail(String boundaryName, Integer farmId) {
         MissionItemProxy mission = DroidPlannerApp.getInstance().getMissionProxy().selection.getSelected().get(0);
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
         SurveyDetail surveyDetail = ((Survey) mission.getMissionItem()).getSurveyDetail();
         BoundaryDetail boundaryDetail = new BoundaryDetail();
         boundaryDetail.setFarmId(farmId);

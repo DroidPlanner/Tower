@@ -78,35 +78,6 @@ public class AeroviewPolygons implements APIContract{
         }
     }
 
-    private void addFarmNamesToDB(String jsonString){
-        try {
-            JSONArray array = new JSONArray(jsonString);
-            for (int i = 0; i < array.length(); i++){
-                JSONObject dict = array.getJSONObject(i);
-                sqLiteDatabaseHandler.createFarmName(
-                        dict.getString("name"),
-                        dict.getInt("id"),
-                        dict.getInt("client_id"));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-//    private void updateFarmNamesInDB(String jsonString){
-//        try {
-//            JSONArray array = new JSONArray(jsonString);
-//            for (int i = 0; i < array.length(); i++){
-//                JSONObject dict = array.getJSONObject(i);
-//                sqLiteDatabaseHandler.updateFarmNameId(dict.getString("name"),
-//                        dict.getInt("id"),
-//                        dict.getInt("client_id"));
-//            }
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     private void updateExistingCropTypesInDB(String jsonString) {
         try {
             JSONArray array = new JSONArray(jsonString);
@@ -122,7 +93,7 @@ public class AeroviewPolygons implements APIContract{
     /**
      * Adds new boundary details to the local database
      */
-    public void addBoundaryDetailsToDB(List<BoundaryDetail> boundaryDetailList){
+    private void addBoundaryDetailsToDB(List<BoundaryDetail> boundaryDetailList){
         SQLiteDatabaseHandler dbHandler = new SQLiteDatabaseHandler(context);
         dbHandler.addBoundaryDetailList(boundaryDetailList);
     }
@@ -599,7 +570,6 @@ public class AeroviewPolygons implements APIContract{
             return farmsRequest.isServerError();
         }
 
-
         private void getReturnData() {
             user = farmsRequest.getReturnDataString();
         }
@@ -628,6 +598,88 @@ public class AeroviewPolygons implements APIContract{
 
         private void setTaskCompleteFlag() {
             isGetFarmsTaskExecuted = true;
+        }
+
+        private void displayErrorMessage() {
+            Intent intent = new Intent(ACTION_ERROR_MSG);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        }
+    }
+
+    public void executeGetCropFamiliesTask () {
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
+        String token = sharedPref.getString(context.getResources().getString(R.string.user_auth_token), "");
+        GetCropFamilies getCropFamilies = new GetCropFamilies(token);
+        getCropFamilies.execute((Void) null);
+    }
+
+    private class GetCropFamilies extends AsyncTask<Void,Void, Boolean> implements APIContract {
+
+        private String mToken;
+        PostRequest cropFamiliesRequest = new PostRequest();
+        String cropFamilies;
+
+        private GetCropFamilies(String mToken) {
+            this.mToken = mToken;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            makeGetRequestForCropFamilies();
+            waitForRequestToReturnData();
+            if (!isServerError()) {
+                handleReturnData();
+                return true;
+            }
+            return false;
+        }
+
+        private void makeGetRequestForCropFamilies() {
+            cropFamiliesRequest.get(APIContract.GATEWAY_CROPFAMILIES, mToken);
+        }
+
+        private void waitForRequestToReturnData() {
+            do {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } while (!cropFamiliesRequest.isServerResponseReceived());
+        }
+
+        private boolean isServerError() {
+            return cropFamiliesRequest.isServerError();
+        }
+
+        private void handleReturnData() {
+            getReturnData();
+            addNewCropFamiliesToDB(cropFamilies);
+        }
+
+        private void addNewCropFamiliesToDB(String cropFamilies) {
+            try {
+                JSONArray array = new JSONArray(cropFamilies);
+                for (int i = 0; i < array.length(); i++){
+                    JSONObject dict = array.getJSONObject(i);
+                    sqLiteDatabaseHandler.createCropFamily(dict.getString("name"), dict.getInt("id"));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void getReturnData() {
+            cropFamilies = cropFamiliesRequest.getReturnDataString();
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean requestReturnedSuccessfully) {
+            if(requestReturnedSuccessfully){
+                handleAsyncRequestReturns();
+            } else{
+                displayErrorMessage();
+            }
         }
 
         private void displayErrorMessage() {

@@ -118,8 +118,10 @@ public class FarmDataHandler {
             try {
                 String name = farm.getString("name");
                 Integer farmId = farm.getInt("id");
-                Integer client_id = farm.getInt("client_id");
-                sqLiteDatabaseHandler.createFarmName(name, farmId, client_id);
+                Integer clientId = farm.getInt("client_id");
+                JSONArray cropFamilyIds = farm.getJSONArray("crop_family_ids");
+                String cropFamilyIdsString = cropFamilyIds.toString().replaceAll("\\[", "").replaceAll("]","");
+                sqLiteDatabaseHandler.createFarmName(name, farmId, clientId, cropFamilyIdsString);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -130,9 +132,11 @@ public class FarmDataHandler {
         try {
             String farmName = farmObject.getString("name");
             Integer farmId = farmObject.getInt("id");
+            JSONArray cropFamilyIds = farmObject.getJSONArray("crop_family_ids");
             farm.put("name", farmName);
             farm.put("id", farmId);
             farm.put("client_id", clientId);
+            farm.put("crop_family_ids", cropFamilyIds);
         } catch (JSONException e) {
             e.printStackTrace();
         }

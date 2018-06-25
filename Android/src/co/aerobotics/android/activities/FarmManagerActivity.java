@@ -80,7 +80,7 @@ public class FarmManagerActivity extends DrawerNavigationUI implements APIContra
     }
 
     private void openAddNewFarmDialog() {
-        DialogFragment dialogFragment = new AddNewFarmDialog();
+        final DialogFragment dialogFragment = new AddNewFarmDialog();
         dialogFragment.show(fragmentManager, null);
         fragmentManager.executePendingTransactions();
         dialogFragment.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -89,6 +89,7 @@ public class FarmManagerActivity extends DrawerNavigationUI implements APIContra
                 getAllFarmsAccessibleToActiveClient();
                 sortFarmNamesAlphabetically();
                 listAdapter.notifyDataSetChanged();
+                dialogFragment.dismissAllowingStateLoss();
             }
         });
     }

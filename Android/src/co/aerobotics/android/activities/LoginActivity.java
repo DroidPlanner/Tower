@@ -432,6 +432,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 AeroviewPolygons aeroviewPolygons = new AeroviewPolygons(LoginActivity.this);
                 aeroviewPolygons.executeGetCropTypesTask();
                 aeroviewPolygons.executeGetFarmOrchardsTask();
+                aeroviewPolygons.executeGetCropFamiliesTask();
                 finish();
                 Intent intent = new Intent(LoginActivity.this, FarmManagerActivity.class);
                 LoginActivity.this.startActivity(intent);
