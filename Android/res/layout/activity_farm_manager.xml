@@ -62,7 +62,7 @@
         android:layout_marginTop="16dp"
         android:background="@color/success"
         android:elevation="0dp"
-        android:text="Go"
+        android:text="Go fly "
         android:textAppearance="@style/CustomActionBarTheme.ActionBar.TitleTextStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
