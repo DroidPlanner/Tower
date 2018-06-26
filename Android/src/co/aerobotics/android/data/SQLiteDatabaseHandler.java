@@ -695,6 +695,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_CLIENT_ID, boundaryDetail.getClientId());
         values.put(KEY_POINTS, boundaryDetail.getPoints());
         values.put(KEY_DISPLAY, boundaryDetail.isDisplay() ? 1 : 0);
+        values.put(KEY_BOUNDARY_FARM_ID, boundaryDetail.getFarmId());
 
         int i = db.update(TABLE_BOUNDARIES, // table
                 values, // column/value
