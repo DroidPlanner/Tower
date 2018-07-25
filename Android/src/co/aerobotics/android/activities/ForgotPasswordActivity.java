@@ -101,7 +101,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             String jsonStr = String.format("{\"email\":\"%s\"}",email);
 
             PostRequest postRequest = new PostRequest();
-            postRequest.post(jsonStr, APIContract.AEROVIEW_RESET, "token");
+            postRequest.post(jsonStr, APIContract.GATEWAY_PASSWORD_RESET, "null");
 
             do {
                 try {
@@ -111,21 +111,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 }
             } while (!postRequest.isServerResponseReceived());
 
-            if (postRequest.isServerError()){
-                //TODO handle error message better
-                return false;
-            }
-            try {
-                int rc = postRequest.getResponseData().getInt("rc");
-
-                if (rc == 0){
-                    return true;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return false;
+            return !postRequest.isServerError();
         }
 
         @Override

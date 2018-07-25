@@ -19,4 +19,5 @@ public interface APIContract {
     String GATEWAY_CROPTYPES = server + "gateway/croptypes/";
     String GATEWAY_USERS = server + "gateway/users/";
     String GATEWAY_CROPFAMILIES = server + "gateway/cropfamilies/";
+    String GATEWAY_PASSWORD_RESET = server + "gateway/users/reset_password/";
 }

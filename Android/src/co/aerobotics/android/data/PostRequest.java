@@ -5,9 +5,12 @@ import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
@@ -15,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,7 +91,9 @@ public class PostRequest {
                 @Override
                 public void onResponse(JSONObject response) {
                     responseData = response;
-                    Log.d("Response", response.toString());
+                    if (responseData != null) {
+                        Log.d("Response", response.toString());
+                    }
                     responseReceived = true;
                 }
             }, new Response.ErrorListener() {
@@ -102,10 +108,31 @@ public class PostRequest {
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> headers = new HashMap<String, String>();
-                    headers.put("Content-Type", "application/json; charset=UTF-8");
+                    headers.put("Content-Type", "application/json");
                     headers.put("Authorization", token);
                     return headers;
                 }
+
+                @Override
+                protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                    try {
+                        String jsonString = new String(response.data,
+                                HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
+
+                        JSONObject result = null;
+
+                        if (jsonString != null && jsonString.length() > 0)
+                            result = new JSONObject(jsonString);
+
+                        return Response.success(result,
+                                HttpHeaderParser.parseCacheHeaders(response));
+                    } catch (UnsupportedEncodingException e) {
+                        return Response.error(new ParseError(e));
+                    } catch (JSONException je) {
+                        return Response.error(new ParseError(je));
+                    }
+                }
+
             };
 
             postRequest.setRetryPolicy(new DefaultRetryPolicy(
@@ -184,6 +211,25 @@ public class PostRequest {
                 headers.put("Authorization", token);
                 return headers;
             }
+
+            @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                try {
+                    String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
+
+                    JSONObject result = null;
+
+                    if (jsonString != null && jsonString.length() > 0)
+                        result = new JSONObject(jsonString);
+
+                    return Response.success(result,
+                            HttpHeaderParser.parseCacheHeaders(response));
+                } catch (UnsupportedEncodingException e) {
+                    return Response.error(new ParseError(e));
+                } catch (JSONException je) {
+                    return Response.error(new ParseError(je));
+                }
+            }
         };
         postRequest.setRetryPolicy(new DefaultRetryPolicy(
                 60000,
@@ -244,6 +290,5 @@ public class PostRequest {
         return errorMessage;
     }
 
-
-
 }
+
