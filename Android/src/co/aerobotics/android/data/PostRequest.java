@@ -158,8 +158,7 @@ public class PostRequest {
                         getRequestResponseData = response;
                         responseReceived = true;
                     }
-            },
-                new Response.ErrorListener() {
+                }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                 responseReceived = true;

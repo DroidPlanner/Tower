@@ -367,13 +367,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         mHandler = new Handler(Looper.getMainLooper());
         instance = this;
         DJISDKManager.getInstance().getProduct();
-        AeroviewPolygons aeroviewPolygons = new AeroviewPolygons(context);
-        if(isNetworkAvailable()) {
-            aeroviewPolygons.executeGetFarmsTask();
-            aeroviewPolygons.executeGetFarmOrchardsTask();
-        } else {
-            aeroviewPolygons.addPolygonsToMap();
-        }
 
         mDJIBaseProductListener = new BaseProduct.BaseProductListener() {
             @Override

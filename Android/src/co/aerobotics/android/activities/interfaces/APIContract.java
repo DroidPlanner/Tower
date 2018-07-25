@@ -20,4 +20,6 @@ public interface APIContract {
     String GATEWAY_USERS = server + "gateway/users/";
     String GATEWAY_CROPFAMILIES = server + "gateway/cropfamilies/";
     String GATEWAY_PASSWORD_RESET = server + "gateway/users/reset_password/";
+    String GATEWAY_CONFIRM_TOKEN = server + "gateway/auth/confirm_token/";
+
 }

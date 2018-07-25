@@ -9,6 +9,7 @@ import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import co.aerobotics.android.DroidPlannerApp;
 import co.aerobotics.android.activities.interfaces.APIContract;
+import co.aerobotics.android.proxy.mission.item.markers.StructureScannerMarkerInfoProvider;
 
 /**
  * Created by michaelwootton on 6/13/18.
@@ -26,7 +27,8 @@ public class Authentication implements APIContract{
     public boolean createUser(String firstName, String lastName, String username, String email, String password) {
         String jsonStr = String.format("{\"email\":\"%s\"," + "\"username\":\"%s\"," +
                         "\"first_name\":\"%s\"," +
-                        "\"last_name\":\"%s\"," + "\"password\":\"%s\"," + "\"from_app\":\"flight\"," + "\"app\":\"flight\"}",
+                        "\"last_name\":\"%s\"," + "\"password\":\"%s\"," +
+                        "\"from_app\":\"flight\"," + "\"app\":\"flight\"}",
                 email,
                 username,
                 firstName,
@@ -53,6 +55,20 @@ public class Authentication implements APIContract{
         mixpanelAPI.track("FPA: UserSignUpSuccess", null);
         mixpanelAPI.flush();
         return true;
+    }
+
+    public boolean checkTokenExistsOnServer(String token) {
+        PostRequest postRequest = new PostRequest();
+        postRequest.get(APIContract.GATEWAY_CONFIRM_TOKEN, token);
+        do {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } while (!postRequest.isServerResponseReceived());
+
+        return !postRequest.isServerError();
     }
 
     private void setResultToToast(final String string) {
