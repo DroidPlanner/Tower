@@ -19,7 +19,8 @@ apply plugin: 'kotlin-android'
 dependencies {
     compile "com.google.android.gms:play-services-maps:${play_services_version}"
     compile "com.google.android.gms:play-services-location:${play_services_version}"
-    compile "com.google.android.gms:play-services-analytics:${play_services_version}"
+    compile "com.google.android.gms:play-services-analytics:16.0.1"
+
     compile "com.android.support:support-v4:${support_lib_version}"
     compile "com.android.support:appcompat-v7:${support_lib_version}"
     compile "com.android.support:preference-v7:${support_lib_version}"
@@ -339,4 +340,15 @@ crashlytics {
     enableNdk true
     androidNdkOut 'src/main/obj'
     androidNdkLibsOut 'src/main/libs'
+}
+
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '25.3.1'
+            }
+        }
+    }
 }

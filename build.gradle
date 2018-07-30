@@ -5,7 +5,7 @@ buildscript {
     ext {
         kotlin_version = '1.2.51'
 
-        play_services_version = '15.0.0'
+        play_services_version = '15.0.1'
         support_lib_version = '25.3.1'
         okhttp_version = '2.5.0'
 

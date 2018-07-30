@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import co.aerobotics.android.DroidPlannerApp;
 import co.aerobotics.android.data.DJIFlightControllerState;
@@ -27,7 +26,6 @@ import co.aerobotics.android.media.ImageImpl;
 import co.aerobotics.android.proxy.mission.item.MissionItemProxy;
 import co.aerobotics.android.proxy.mission.item.markers.LastWaypointMarkerInfo;
 import co.aerobotics.android.utils.prefs.DroidPlannerPrefs;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.coordinate.LatLong;
@@ -59,21 +57,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import javax.xml.transform.dom.DOMLocator;
-
-import co.aerobotics.android.maps.PolylineInfo;
 import dji.common.error.DJIError;
-import dji.common.model.LocationCoordinate2D;
 import dji.keysdk.FlightControllerKey;
 import dji.keysdk.KeyManager;
 import dji.keysdk.callback.GetCallback;
 import dji.keysdk.callback.KeyListener;
 import dji.sdk.base.BaseProduct;
 import dji.sdk.sdkmanager.DJISDKManager;
-
-import static com.google.android.gms.common.GooglePlayServicesUtil.getErrorDialog;
-import static com.google.android.gms.common.GooglePlayServicesUtil.isGooglePlayServicesAvailable;
 
 public abstract class DroneMap extends ApiListenerFragment {
     private static final String TAG = "dronemap";
@@ -322,7 +312,7 @@ public abstract class DroneMap extends ApiListenerFragment {
 
         if(aeroviewPolygons == null) {
 			aeroviewPolygons = new AeroviewPolygons(getActivity());
-			//aeroviewPolygons.extractPolygons();
+			aeroviewPolygons.addPolygonsToMap();
 		}
 
 		onPolygonUpdate();
