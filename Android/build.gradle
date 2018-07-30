@@ -125,7 +125,7 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '27.0.3'
 
     dexOptions {
         javaMaxHeapSize "4g"
@@ -212,7 +212,9 @@ android {
                 def buildType = variant.buildType.getName()
                 def flavorName = variant.getFlavorName()
                 def versionCode = defaultConfig.versionCode
-                output.outputFileName = new File(file.parent, "aerobotics-flight-planner-${flavorName}-${buildType}.${versionCode}.apk")
+                def relativeRootDir = output.packageApplication.outputDirectory.toPath()
+                        .relativize(rootDir.toPath()).toFile()
+                output.outputFileName = new File("$relativeRootDir", "aerobotics-flight-planner-${flavorName}-${buildType}.${versionCode}.apk")
             }
         }
     }
@@ -291,7 +293,7 @@ android {
             buildConfigField "boolean", "ENABLE_CRASHLYTICS", "${hasFabricApiKey()}"
         }
     }
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '27.0.3'
 }
 
 /**
