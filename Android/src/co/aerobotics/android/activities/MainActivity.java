@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import co.aerobotics.android.DroidPlannerApp;
 import co.aerobotics.android.R;
@@ -20,20 +23,24 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences sharedPref;
     MixpanelAPI mMixpanel;
+    private ProgressBar spinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(co.aerobotics.android.R.layout.activity_main);
+        spinner = (ProgressBar)findViewById(R.id.progressBar2);
         mMixpanel = MixpanelAPI.getInstance(this, DroidPlannerApp.getInstance().getMixpanelToken());
         mMixpanel.track("FPA: AppLaunched");
         sharedPref = MainActivity.this.getSharedPreferences(getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
         boolean isFirstLaunch = sharedPref.getBoolean("firstLaunch", true);
         boolean loggedIn = sharedPref.getBoolean(getString(R.string.logged_in), false);
-        if (isFirstLaunch){
+        if (isFirstLaunch) {
             sharedPref.edit().putBoolean("firstLaunch", false).apply();
             navigateToActivity(IntroActivity.class);
-        } else if (loggedIn){
+        } else if (loggedIn) {
             String token = getAuthToken();
-            if (tokenExistsOnDevice(token)) {
+            if (!tokenExistsOnDevice(token)) {
                 clearSharedPrefs();
                 navigateToActivity(LoginActivity.class);
             } else {
@@ -60,12 +67,14 @@ public class MainActivity extends AppCompatActivity {
         mMixpanel.getPeople().identify(userId.toString());
         mMixpanel.getPeople().set("UserId", userId.toString());
     }
+
     private void clearSharedPrefs() {
         sharedPref.edit().clear().apply();
+        sharedPref.edit().putBoolean("firstLaunch", false).apply();
     }
 
     private boolean tokenExistsOnDevice(String token) {
-       return Objects.equals(token, "");
+       return !Objects.equals(token, "");
     }
 
     private String getAuthToken() {

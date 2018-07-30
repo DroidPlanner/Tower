@@ -424,6 +424,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements
 
         SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
         sharedPref.edit().clear().apply();
+        sharedPref.edit().putBoolean("firstLaunch", false).apply();
         DroidPlannerApp.getInstance().polygonMap.clear();
         DroidPlannerApp.getInstance().selectedPolygons.clear();
         DroidPlannerPrefs.getInstance(this).prefs.edit().clear().apply();
