@@ -24,16 +24,18 @@ public class Authentication implements APIContract{
         mixpanelAPI = MixpanelAPI.getInstance(context, DroidPlannerApp.getInstance().getMixpanelToken());
     }
 
-    public boolean createUser(String firstName, String lastName, String username, String email, String password) {
+    public boolean createUser(String firstName, String lastName, String username, String email, String password, String phoneNumber) {
         String jsonStr = String.format("{\"email\":\"%s\"," + "\"username\":\"%s\"," +
                         "\"first_name\":\"%s\"," +
                         "\"last_name\":\"%s\"," + "\"password\":\"%s\"," +
+                        "\"phone_number\":\"%s\"," +
                         "\"from_app\":\"flight\"," + "\"app\":\"flight\"}",
                 email,
                 username,
                 firstName,
                 lastName,
-                password);
+                password,
+                phoneNumber);
         PostRequest postRequest = new PostRequest();
         postRequest.login(jsonStr, APIContract.GATEWAY_USERS);
 
