@@ -61,11 +61,30 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <ScrollView
+    <LinearLayout
+        android:id="@+id/boundary_rect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title_rect"
-         >
+        android:orientation="vertical"
+        android:paddingBottom="2dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="2dp">
+
+        <TextView
+            android:id="@+id/TextBoundaryName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="boundary name"
+            android:textAllCaps="true" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/boundary_rect">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -91,11 +110,28 @@
                 android:layout_toRightOf="@id/staticText"
                 android:entries="@array/ExampleCameraArray" />
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/cameraFileSpinner"
                 android:orientation="vertical" >
+
+                <!--
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/TextBoundaryName_"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:text="yahhh2"
+                        android:textAllCaps="true" />
+
+                </LinearLayout> -->
 
                 <HorizontalScrollView
                     style="@style/missionItemDetailCard"
