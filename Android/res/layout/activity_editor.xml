@@ -81,7 +81,7 @@
             android:layout_below="@+id/fragment_container">
 
 
-            <dji.ui.widget.PreFlightStatusWidget
+            <dji.ux.widget.PreFlightStatusWidget
                 android:id="@+id/status"
                 android:layout_width="238dp"
                 android:layout_height="40dp"
@@ -89,7 +89,7 @@
                 android:layout_centerInParent="false"
                 android:layout_marginTop="10dp">
 
-            </dji.ui.widget.PreFlightStatusWidget>
+            </dji.ux.widget.PreFlightStatusWidget>
         </RelativeLayout>
 
         <include

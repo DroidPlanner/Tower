@@ -17,9 +17,16 @@ apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 
 dependencies {
-    compile "com.google.android.gms:play-services-maps:${play_services_version}"
-    compile "com.google.android.gms:play-services-location:${play_services_version}"
-    compile "com.google.android.gms:play-services-analytics:16.0.1"
+//    compile "com.google.android.gms:play-services-maps:${play_services_version}"
+//    compile "com.google.android.gms:play-services-location:${play_services_version}"
+//    compile "com.google.android.gms:play-services-analytics:${play_services_version}"
+
+    compile 'com.google.android.gms:play-services-maps:15.0.1'
+    compile 'com.google.android.gms:play-services-location:15.0.1'
+    compile 'com.google.android.gms:play-services-analytics:16.0.1'
+
+//    compile 'com.google.android.gms:play-services-auth:10.2.0'
+
 
     compile "com.android.support:support-v4:${support_lib_version}"
     compile "com.android.support:appcompat-v7:${support_lib_version}"
@@ -30,6 +37,7 @@ dependencies {
     compile "com.android.support:design:${support_lib_version}"
     compile 'com.mixpanel.android:mixpanel-android:5.+'
     compile 'com.google.code.gson:gson:2.8.1'
+
 
     // Android library to display the changelog
 
@@ -42,10 +50,12 @@ dependencies {
     //Don't forget to uncomment the lines in the settings.gradle file as well.
 
     //compile 'com.vividsolutions:jts:1.13'
+    //compile 'com.dji:dji-uilibrary:4.4.1'
     compile project(':ClientLib')
-    compileOnly 'com.dji:dji-sdk:4.4.1'
-    provided 'com.dji:dji-sdk-provided:4.4.1'
-    compile 'com.dji:dji-uilibrary:4.4.1'
+    compile 'com.dji:dji-sdk:4.6'
+    provided 'com.dji:dji-sdk-provided:4.6'
+    compile 'com.dji:dji-uxsdk:4.6'
+
     compile(name: 'shimmer-android-release', ext: 'aar')
     compile(name: 'libuvccamera-release', ext: 'aar')
     compile(name: 'sliding-up-panel-3.3.0', ext: 'aar')
@@ -98,10 +108,23 @@ dependencies {
     }
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.10.0'
     compile 'com.squareup.okhttp3:okhttp:3.10.0'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 configurations {
     all*.exclude group: 'com.nineoldandroids', module: 'library'
+}
+
+//Temporary fix for mission slide issue
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '25.3.1' //25.3.0
+            }
+        }
+    }
 }
 
 def versionPrefix = "flight_planner_for_dji"
@@ -126,7 +149,7 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '26.0.2'
 
     dexOptions {
         javaMaxHeapSize "4g"
@@ -162,6 +185,16 @@ android {
         doNotStrip "*/*/libFRCorkscrew.so"
         doNotStrip "*/*/libUpgradeVerify.so"
         doNotStrip "*/*/libFR.so"
+
+        pickFirst 'lib/*/libstlport_shared.so'
+        pickFirst 'lib/*/libRoadLineRebuildAPI.so'
+        pickFirst 'lib/*/libGNaviUtils.so'
+        pickFirst 'lib/*/libGNaviMapex.so'
+        pickFirst 'lib/*/libGNaviData.so'
+        pickFirst 'lib/*/libGNaviMap.so'
+        pickFirst 'lib/*/libGNaviSearch.so'
+
+        exclude 'META-INF/rxjava.properties'
     }
 
     compileOptions {
@@ -213,9 +246,7 @@ android {
                 def buildType = variant.buildType.getName()
                 def flavorName = variant.getFlavorName()
                 def versionCode = defaultConfig.versionCode
-                def relativeRootDir = output.packageApplication.outputDirectory.toPath()
-                        .relativize(rootDir.toPath()).toFile()
-                output.outputFileName = new File("$relativeRootDir", "aerobotics-flight-planner-${flavorName}-${buildType}.${versionCode}.apk")
+                output.outputFileName = new File(file.parent, "aerobotics-flight-planner-${flavorName}-${buildType}.${versionCode}.apk")
             }
         }
     }
@@ -294,7 +325,7 @@ android {
             buildConfigField "boolean", "ENABLE_CRASHLYTICS", "${hasFabricApiKey()}"
         }
     }
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '26.0.2'
 }
 
 /**
@@ -340,15 +371,4 @@ crashlytics {
     enableNdk true
     androidNdkOut 'src/main/obj'
     androidNdkLibsOut 'src/main/libs'
-}
-
-configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        def requested = details.requested
-        if (requested.group == 'com.android.support') {
-            if (!requested.name.startsWith("multidex")) {
-                details.useVersion '25.3.1'
-            }
-        }
-    }
 }
