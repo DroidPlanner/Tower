@@ -9,7 +9,7 @@ include ':ClientLib'
 include ':Mavlink'
 
 //Edit this value to point to your 'dronekit-android' project directory
-def dkAndroidLibPath = '/Users/michaelwootton/Documents/Android_Studio/dronekit-DJI'
+def dkAndroidLibPath = '/Users/dikennaogbo/Drone-Kit'
 
 project(':ClientLib').projectDir = new File("$dkAndroidLibPath/ClientLib")
 project(':Mavlink').projectDir = new File("$dkAndroidLibPath/dependencyLibs/Mavlink")

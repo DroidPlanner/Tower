@@ -1,4 +1,4 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+  // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
 
@@ -62,6 +62,7 @@ def generateVersionName(String versionPrefix, int versionMajor, int versionMinor
 
 allprojects {
     repositories {
+        google()
         jcenter()
         mavenCentral()
 
@@ -73,9 +74,9 @@ allprojects {
             }
         }
 
+        maven { url 'https://maven.google.com' }
         maven { url 'https://maven.fabric.io/public' }
         maven { url 'https://jitpack.io' }
-        maven { url 'https://maven.google.com' }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 
         flatDir {
