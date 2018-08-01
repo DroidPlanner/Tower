@@ -70,7 +70,7 @@
         android:paddingBottom="2dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="2dp">
+        android:paddingTop="7dp">
 
         <TextView
             android:id="@+id/TextBoundaryName"
