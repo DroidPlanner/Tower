@@ -76,8 +76,7 @@
             android:id="@+id/TextBoundaryName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="boundary name"
-            android:textAllCaps="true" />
+            android:text="Boundary name"/>
 
     </LinearLayout>
 
