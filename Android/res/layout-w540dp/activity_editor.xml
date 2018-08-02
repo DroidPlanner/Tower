@@ -80,7 +80,7 @@
             android:layout_alignStart="@+id/fragment_container"
             android:layout_below="@+id/fragment_container">
 
-            <dji.ui.widget.PreFlightStatusWidget
+            <dji.ux.widget.PreFlightStatusWidget
                 android:id="@+id/status"
                 android:layout_width="238dp"
                 android:layout_height="40dp"

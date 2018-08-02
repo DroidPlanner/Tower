@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    tools:context=".activities.EditorActivity"
-    >
+    tools:context=".activities.EditorActivity">
 
     <FrameLayout
         android:id="@+id/editor_map_fragment"
@@ -107,9 +106,6 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/fragment_container"
             android:layout_below="@+id/preflightContainer" />
-
-
-
 
     </co.aerobotics.android.view.FitsSystemWindowsRelativeLayout>
 
