@@ -8,7 +8,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import co.aerobotics.android.fragments.widget.video.WidgetVideoPreferences;
-import co.aerobotics.android.tlog.TLogActivity;
 import com.o3dr.android.client.Drone;
 import com.o3dr.services.android.lib.drone.attribute.AttributeType;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
@@ -698,10 +697,6 @@ public class DroidPlannerPrefs {
 
     public void saveVehicleHistorySessionId(long sessionId) {
         prefs.edit().putLong(PREF_VEHICLE_HISTORY_SESSION_ID, sessionId).apply();
-    }
-
-    public long getVehicleHistorySessionId(){
-        return prefs.getLong(PREF_VEHICLE_HISTORY_SESSION_ID, TLogActivity.INVALID_SESSION_ID);
     }
 
     /**
