@@ -443,6 +443,8 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         @Override
         public void onRegister(DJIError error) {
             if(error == DJISDKError.REGISTRATION_SUCCESS) {
+                Toast.makeText(getApplicationContext(), "REGISTRATION SUCCESS", Toast.LENGTH_SHORT).show();
+
                 DJISDKManager.getInstance().startConnectionToProduct();
                 // DJISDKManager.getInstance().enableBridgeModeWithBridgeAppIP("192.168.100.165");
                 Handler handler = new Handler(Looper.getMainLooper());
@@ -453,6 +455,8 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
                     }
                 });
             } else {
+                Toast.makeText(getApplicationContext(), "REGISTRATION FAIL", Toast.LENGTH_SHORT).show();
+
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(new Runnable() {
                     @Override
@@ -486,8 +490,10 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
             mProduct = baseProduct;
             if(mProduct!=null){
                 mixpanelInstance.track("FPA: ConnectedToDrone");
+                Toast.makeText(getApplicationContext(), "product connected", Toast.LENGTH_SHORT).show();
                 //add listener to the next product?
                 getFirmwareVersion();
+
             }
             notifyStatusChange();
         }
