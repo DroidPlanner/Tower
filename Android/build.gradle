@@ -17,16 +17,9 @@ apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 
 dependencies {
-//    compile "com.google.android.gms:play-services-maps:${play_services_version}"
-//    compile "com.google.android.gms:play-services-location:${play_services_version}"
-//    compile "com.google.android.gms:play-services-analytics:${play_services_version}"
-
-    compile 'com.google.android.gms:play-services-maps:15.0.1'
-    compile 'com.google.android.gms:play-services-location:15.0.1'
-    compile 'com.google.android.gms:play-services-analytics:16.0.1'
-
-//    compile 'com.google.android.gms:play-services-auth:10.2.0'
-
+    compile "com.google.android.gms:play-services-maps:${play_services_version}"
+    compile "com.google.android.gms:play-services-location:${play_services_version}"
+    compile "com.google.android.gms:play-services-analytics:16.0.1"
 
     compile "com.android.support:support-v4:${support_lib_version}"
     compile "com.android.support:appcompat-v7:${support_lib_version}"
@@ -246,7 +239,9 @@ android {
                 def buildType = variant.buildType.getName()
                 def flavorName = variant.getFlavorName()
                 def versionCode = defaultConfig.versionCode
-                output.outputFileName = new File(file.parent, "aerobotics-flight-planner-${flavorName}-${buildType}.${versionCode}.apk")
+                def relativeRootDir = output.packageApplication.outputDirectory.toPath()
+                        .relativize(rootDir.toPath()).toFile()
+                output.outputFileName = new File("$relativeRootDir", "aerobotics-flight-planner-${flavorName}-${buildType}.${versionCode}.apk")
             }
         }
     }
