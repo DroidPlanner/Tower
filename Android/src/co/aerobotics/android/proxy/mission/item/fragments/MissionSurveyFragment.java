@@ -435,7 +435,12 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
                 numberOfStripsView.setText(String.format(Locale.ENGLISH, "%s: %d", getString(R.string.number_of_strips),
                         survey.getNumberOfLines()));
 
-                boundaryName.setText("Boundary Name: "+boundaryDetail.getName());
+                if (boundaryDetail.getName() == null) {
+                    boundaryName.setVisibility(View.GONE);
+                } else {
+                    boundaryName.setVisibility(View.VISIBLE);
+                    boundaryName.setText("Boundary Name: " + boundaryDetail.getName());
+                }
 
                 setDefault = false;
             } catch (Exception e) {

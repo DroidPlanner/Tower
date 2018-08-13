@@ -30,6 +30,7 @@ public class FarmDataHandler {
     }
 
     public void parseUsersFarms() throws JSONException {
+        allClientsIds.clear();
         JSONArray clients = user.getJSONArray("clients");
         List<JSONObject> farms = new ArrayList<>();
         userId = user.getInt("id");
