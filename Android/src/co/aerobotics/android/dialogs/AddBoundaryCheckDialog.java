@@ -23,6 +23,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
@@ -31,6 +33,7 @@ import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -76,10 +79,12 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
         sharedPref = getActivity().getSharedPreferences(getActivity().getResources().getString(R.string.com_dji_android_PREF_FILE_KEY), Context.MODE_PRIVATE);
         sqLiteDatabaseHandler = new SQLiteDatabaseHandler(this.getContext());
         context = getActivity().getApplicationContext();
+        //sortFarmNamesAlphabetically();
+        //initializeFarmAdapter();
         getAllFarmsAccessibleToActiveClient();
-        sortFarmNamesAlphabetically();
         getCropTypes();
-        initializeFarmAdapter();
+        getFarmsSelectedbyClient();
+        initializeSelectedFarmAdapter();
         initializeFarmNameSpinner();
         initializeCropTypeAdapter();
         initializeCropTypeSpinner();
@@ -278,6 +283,38 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
         sortedCropTypes = sqLiteDatabaseHandler.getAllCropTypes();
         Collections.sort(sortedCropTypes, String.CASE_INSENSITIVE_ORDER);
     }
+
+
+
+
+
+
+    private List<Integer> selectedFarmIds = new ArrayList<>();
+    private List<Farm> sortedSelectedFarms = new ArrayList<>();
+    private void getFarmsSelectedbyClient(){
+        String activeFarmsString = sharedPref.getString(this.getResources().getString(R.string.active_farms), "[]");
+        Type type = new TypeToken<ArrayList<Integer>>() { }.getType();
+        selectedFarmIds = new Gson().fromJson(activeFarmsString, type);
+        for(Farm farm : sortedFarms) {
+            if (selectedFarmIds.contains(farm.getId()))
+                sortedSelectedFarms.add(farm);
+        }
+    }
+    private void sortSelectedFarmNamesAlphabetically() {
+        if (sortedSelectedFarms.size() > 0) {
+            Collections.sort(sortedSelectedFarms, new Comparator<Farm>() {
+                @Override
+                public int compare(Farm farmA, Farm farmB) {
+                    return farmA.getName().toLowerCase().compareTo(farmB.getName().toLowerCase());
+                }
+            });
+        }
+    }
+    private void initializeSelectedFarmAdapter() {
+        farmAdapter = new ArrayAdapter<Farm>(getActivity(), R.layout.spinner_add_boundary, sortedSelectedFarms);
+        farmAdapter.setDropDownViewResource(R.layout.spinner_add_boundary_drop_down);
+    }
+
 
     private void getAllFarmsAccessibleToActiveClient() {
         SQLiteDatabaseHandler sqLiteDatabaseHandler = new SQLiteDatabaseHandler(context);

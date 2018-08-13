@@ -56,7 +56,7 @@ import dji.sdk.flightcontroller.FlightAssistant;
 import dji.sdk.flightcontroller.FlightController;
 import dji.sdk.gimbal.Gimbal;
 import dji.sdk.mission.MissionControl;
-import dji.sdk.mission.timeline.Mission;
+import dji.sdk.mission.timeline.TimelineMission;
 import dji.sdk.mission.timeline.TimelineElement;
 import dji.sdk.mission.timeline.TimelineEvent;
 import dji.sdk.mission.waypoint.WaypointMissionOperator;
@@ -279,7 +279,7 @@ public class DJIMissionImpl {
     private List<TimelineElement> getTimelineElements(List<WaypointMission> waypointMissions) {
         List<TimelineElement> elements = new ArrayList<>();
         for (WaypointMission mission : waypointMissions) {
-            elements.add(Mission.elementFromWaypointMission(mission));
+            elements.add(TimelineMission.elementFromWaypointMission(mission));
         }
         return elements;
     }

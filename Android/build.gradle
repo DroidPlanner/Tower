@@ -43,9 +43,11 @@ dependencies {
 
     //compile 'com.vividsolutions:jts:1.13'
     compile project(':ClientLib')
-    compileOnly 'com.dji:dji-sdk:4.4.1'
-    provided 'com.dji:dji-sdk-provided:4.4.1'
-    compile 'com.dji:dji-uilibrary:4.4.1'
+    compile 'com.dji:dji-sdk:4.6'
+    provided 'com.dji:dji-sdk-provided:4.6'
+    implementation ('com.dji:dji-uxsdk:4.6'){
+        transitive = false
+    }
     compile(name: 'shimmer-android-release', ext: 'aar')
     compile(name: 'libuvccamera-release', ext: 'aar')
     compile(name: 'sliding-up-panel-3.3.0', ext: 'aar')
@@ -162,6 +164,8 @@ android {
         doNotStrip "*/*/libFRCorkscrew.so"
         doNotStrip "*/*/libUpgradeVerify.so"
         doNotStrip "*/*/libFR.so"
+        exclude 'META-INF/rxjava.properties'
+
     }
 
     compileOptions {

@@ -36,9 +36,10 @@ import dji.common.mission.waypoint.WaypointMissionHeadingMode;
 import dji.common.mission.waypoint.WaypointMissionState;
 import dji.common.mission.waypoint.WaypointMissionUploadEvent;
 import dji.sdk.mission.MissionControl;
-import dji.sdk.mission.timeline.Mission;
+import dji.sdk.mission.timeline.TimelineMission;
 import dji.sdk.mission.timeline.TimelineElement;
 import dji.sdk.mission.timeline.TimelineEvent;
+import dji.sdk.mission.timeline.TimelineMission;
 import dji.sdk.mission.waypoint.WaypointMissionOperatorListener;
 import dji.sdk.sdkmanager.DJISDKManager;
 
@@ -219,7 +220,7 @@ public class TimelineMissionImpl extends DJIMissionImpl {
     private List<TimelineElement> getTimelineElements(List<WaypointMission> waypointMissions) {
         List<TimelineElement> elements = new ArrayList<>();
         for (WaypointMission mission : waypointMissions) {
-            elements.add(Mission.elementFromWaypointMission(mission));
+            elements.add(TimelineMission.elementFromWaypointMission(mission));
         }
         return elements;
     }
