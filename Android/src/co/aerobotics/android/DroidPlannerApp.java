@@ -378,22 +378,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
             aeroviewPolygons.addPolygonsToMap();
         }
 
-//        mDJIBaseProductListener = new BaseProduct.BaseProductListener() {
-//            @Override
-//            public void onComponentChange(BaseProduct.ComponentKey key, BaseComponent oldComponent, BaseComponent newComponent) {
-//                if(newComponent != null) {
-//                    newComponent.setComponentListener(mDJIComponentListener);
-//                    getFirmwareVersion();
-//                }
-//                notifyStatusChange();
-//            }
-//            @Override
-//            public void onConnectivityChange(boolean isConnected) {
-//                mixpanelInstance.track("FPA: ConnectedToDrone");
-//                notifyStatusChange();
-//            }
-//        };
-
         mDJIComponentListener = new BaseComponent.ComponentListener() {
             @Override
             public void onConnectivityChange(boolean isConnected) {
@@ -443,8 +427,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         @Override
         public void onRegister(DJIError error) {
             if(error == DJISDKError.REGISTRATION_SUCCESS) {
-                Toast.makeText(getApplicationContext(), "REGISTRATION SUCCESS", Toast.LENGTH_SHORT).show();
-
                 DJISDKManager.getInstance().startConnectionToProduct();
                 // DJISDKManager.getInstance().enableBridgeModeWithBridgeAppIP("192.168.100.165");
                 Handler handler = new Handler(Looper.getMainLooper());
@@ -455,30 +437,16 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
                     }
                 });
             } else {
-                Toast.makeText(getApplicationContext(), "REGISTRATION FAIL", Toast.LENGTH_SHORT).show();
-
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
                         mixpanelInstance.track("FPA: DjiSdkRegisterFailed");
-                        Toast.makeText(getApplicationContext(), "Register Failed, check network is available", Toast.LENGTH_LONG).show();
                     }
                 });
             }
             Log.e("TAG", error.toString());
         }
-        //Listens to the connected product changing, including two parts, component changing or product connection changing.
-//        @Override
-//        public void onProductChange(BaseProduct oldProduct, BaseProduct newProduct) {
-//            mProduct = newProduct;
-//            if(mProduct != null) {
-//                mixpanelInstance.track("FPA: ConnectedToDrone");
-//                mProduct.setBaseProductListener(mDJIBaseProductListener);
-//                getFirmwareVersion();
-//            }
-//            notifyStatusChange();
-//        }
 
         @Override
         public void onProductDisconnect() {
@@ -490,7 +458,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
             mProduct = baseProduct;
             if(mProduct!=null){
                 mixpanelInstance.track("FPA: ConnectedToDrone");
-                Toast.makeText(getApplicationContext(), "product connected", Toast.LENGTH_SHORT).show();
                 //add listener to the next product?
                 getFirmwareVersion();
 
@@ -512,13 +479,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         if (!DJISDKManager.getInstance().hasSDKRegistered()) {
             DJISDKManager.getInstance().registerApp(getApplicationContext(), mDJISDKManagerCallback);
         }
-/*
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                DJISDKManager.getInstance().registerApp(getApplicationContext(), mDJISDKManagerCallback);
-            }
-        }); */
     }
 
 

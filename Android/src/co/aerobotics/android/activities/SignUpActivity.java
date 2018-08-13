@@ -56,13 +56,10 @@ public class SignUpActivity extends AppCompatActivity {
     private View mSignUpForm;
     private View mProgressView;
 
-    private MixpanelAPI mixpanel;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        mixpanel = MixpanelAPI.getInstance(this, DroidPlannerApp.getInstance().getMixpanelToken());
         mSignUpForm = findViewById(R.id.signup_form);
         mProgressView = findViewById(R.id.signup_progress_bar);
 
@@ -168,11 +165,11 @@ public class SignUpActivity extends AppCompatActivity {
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(phoneNumber)) {
-            mPhoneNumberView.setError(getString(R.string.error_field_required));
-            focusView = mPhoneNumberView;
-            cancel = true;
-        }
+//        if (TextUtils.isEmpty(phoneNumber)) {
+//            mPhoneNumberView.setError(getString(R.string.error_field_required));
+//            focusView = mPhoneNumberView;
+//            cancel = true;
+//        }
 
         if (TextUtils.isEmpty(firstName)){
             mFirstNameView.setError(getString(R.string.error_field_required));

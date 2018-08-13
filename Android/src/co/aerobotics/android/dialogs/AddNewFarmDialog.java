@@ -45,6 +45,7 @@ public class AddNewFarmDialog extends DialogFragment implements APIContract {
     private ArrayAdapter<NameWithId> cropFamiliesAdapter;
     private Spinner cropFamilySpinner;
     private NameWithId selectedCropFamily = new NameWithId("Select crop type", "-1");
+    private Integer newFarmId = null;
 
     @NonNull
     @Override
@@ -114,6 +115,7 @@ public class AddNewFarmDialog extends DialogFragment implements APIContract {
                                         try {
                                             String cropFamilyIds = returnData.getJSONArray("crop_family_ids").toString().replaceAll("\\[", "").replaceAll("]","");
                                             sqLiteDatabaseHandler.createFarmName(returnData.getString("name"), returnData.getInt("id"), returnData.getInt("client_id"), cropFamilyIds);
+                                            newFarmId = returnData.getInt("id");
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -173,5 +175,9 @@ public class AddNewFarmDialog extends DialogFragment implements APIContract {
     private int getClientId() {
         Context context = this.getActivity();
         return sharedPreferences.getInt(context.getResources().getString(R.string.client_id), -1);
+    }
+
+    public Integer getNewFarmId () {
+        return newFarmId;
     }
 }
