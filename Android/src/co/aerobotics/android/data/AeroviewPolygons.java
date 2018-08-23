@@ -239,15 +239,17 @@ public class AeroviewPolygons implements APIContract{
         String token = sharedPref.getString(context.getResources().getString(R.string.user_auth_token), "");
         String activeFarms = sharedPref.getString(context.getResources().getString(R.string.active_farms), "[]");
         List<Integer> farmIds = parseStringToListIntegerObject(activeFarms);
-        List<Integer> tempFarmIds = new ArrayList<>();
-        for(Integer farmId: farmIds) {
-            if(farmId < 0) {
-                tempFarmIds.add(farmId);
+        if (farmIds != null && farmIds.size() > 0) {
+            List<Integer> tempFarmIds = new ArrayList<>();
+            for(Integer farmId: farmIds) {
+                if(farmId < 0) {
+                    tempFarmIds.add(farmId);
+                }
             }
+            farmIds.removeAll(tempFarmIds);
+            getFarmOrchardsTask getFarmOrchardsTask = new getFarmOrchardsTask(token, farmIds);
+            getFarmOrchardsTask.execute((Void) null);
         }
-        farmIds.removeAll(tempFarmIds);
-        getFarmOrchardsTask getFarmOrchardsTask = new getFarmOrchardsTask(token, farmIds);
-        getFarmOrchardsTask.execute((Void) null);
     }
 
     private List<Integer> parseStringToListIntegerObject(String activeFarmsString) {

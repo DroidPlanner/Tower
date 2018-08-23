@@ -111,7 +111,7 @@ def versionPrefix = "flight_planner_for_dji"
 //Decomposed version name and code (https://plus.google.com/+JakeWharton/posts/6f5TcVPRZij)
 def versionMajor = 2
 def versionMinor = 0
-def versionPatch = 0
+def versionPatch = 1
 def versionBuild = 0 //bump for dogfood builds, public betas, etc.
 
 //Logging levels
