@@ -335,12 +335,14 @@ public abstract class DroneMap extends ApiListenerFragment {
 	}
 
 	private void removeListeners() {
-		KeyManager.getInstance().removeListener(homeLocationSetListener);
-		KeyManager.getInstance().removeListener(aircraftLatitudeListener);
-		KeyManager.getInstance().removeListener(aircraftLongitudeListener);
-		KeyManager.getInstance().removeListener(aircraftYawListener);
-		KeyManager.getInstance().removeListener(homeLongitudeListener);
-		KeyManager.getInstance().removeListener(homeLatitudeListener);
+		if (KeyManager.getInstance() != null) {
+			KeyManager.getInstance().removeListener(homeLocationSetListener);
+			KeyManager.getInstance().removeListener(aircraftLatitudeListener);
+			KeyManager.getInstance().removeListener(aircraftLongitudeListener);
+			KeyManager.getInstance().removeListener(aircraftYawListener);
+			KeyManager.getInstance().removeListener(homeLongitudeListener);
+			KeyManager.getInstance().removeListener(homeLatitudeListener);
+		}
 	}
 
 	private void setInitialDronePosition() {
