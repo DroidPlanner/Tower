@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -239,6 +240,9 @@ public class AeroviewPolygons implements APIContract{
         String token = sharedPref.getString(context.getResources().getString(R.string.user_auth_token), "");
         String activeFarms = sharedPref.getString(context.getResources().getString(R.string.active_farms), "[]");
         List<Integer> farmIds = parseStringToListIntegerObject(activeFarms);
+        farmIds.removeAll(Collections.singleton(null));
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(context.getString(R.string.active_farms), new Gson().toJson(farmIds)).apply();
         if (farmIds != null && farmIds.size() > 0) {
             List<Integer> tempFarmIds = new ArrayList<>();
             for(Integer farmId: farmIds) {
@@ -251,6 +255,7 @@ public class AeroviewPolygons implements APIContract{
             getFarmOrchardsTask.execute((Void) null);
         }
     }
+
 
     private List<Integer> parseStringToListIntegerObject(String activeFarmsString) {
         Type type = new TypeToken<ArrayList<Integer>>() { }.getType();

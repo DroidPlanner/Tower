@@ -88,9 +88,11 @@ public class FarmManagerActivity extends DrawerNavigationUI implements APIContra
             public void onDismiss(DialogInterface dialogInterface) {
                 getAllFarmsAccessibleToActiveClient();
                 sortFarmNamesAlphabetically();
-                selectedFarmIds.add(dialogFragment.getNewFarmId());
-                setCurrentlySelectedFarmsAsChecked();
-                listAdapter.notifyDataSetChanged();
+                if (dialogFragment.getNewFarmId() != null) {
+                    selectedFarmIds.add(dialogFragment.getNewFarmId());
+                    setCurrentlySelectedFarmsAsChecked();
+                    listAdapter.notifyDataSetChanged();
+                }
                 dialogFragment.dismissAllowingStateLoss();
             }
         });
@@ -218,8 +220,10 @@ public class FarmManagerActivity extends DrawerNavigationUI implements APIContra
     }
 
     private void writeSelectedFarmsToSharedPrefs() {
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(getString(R.string.active_farms), new Gson().toJson(selectedFarmIds)).apply();
+        if (selectedFarmIds != null) {
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.active_farms), new Gson().toJson(selectedFarmIds)).apply();
+        }
     }
 
     private void addSelectedFarmBoundariesToMap() {
