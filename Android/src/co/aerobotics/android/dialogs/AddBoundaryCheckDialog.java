@@ -68,6 +68,7 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
     private List<Farm> sortedFarms = new ArrayList<>();
     private List<String> sortedCropTypes;
     private Context context;
+    private List<Farm> sortedSelectedFarms = new ArrayList<>();
 
 
     @NonNull
@@ -219,14 +220,14 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
                     }
 
                     private boolean isSelectedFarmEmpty() {
-                        return Objects.equals(selectedFarm, "");
+                        return Objects.equals(selectedFarm, "") || selectedFarm.getName().equals("");
                     }
 
                     private void setFarmNameErrorMessage() {
                         TextView errorText = (TextView) searchableSpinnerFarmName.getSelectedView();
                         errorText.setError("");
                         errorText.setTextColor(Color.RED);//just to highlight that this is an error
-                        errorText.setText("Add New Farm");
+                        errorText.setText("Farm name required");
                     }
 
                     private void displayErrorMessage(EditText editTextView) {
@@ -284,22 +285,16 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
         Collections.sort(sortedCropTypes, String.CASE_INSENSITIVE_ORDER);
     }
 
-
-
-
-
-
-    private List<Integer> selectedFarmIds = new ArrayList<>();
-    private List<Farm> sortedSelectedFarms = new ArrayList<>();
     private void getFarmsSelectedbyClient(){
         String activeFarmsString = sharedPref.getString(this.getResources().getString(R.string.active_farms), "[]");
         Type type = new TypeToken<ArrayList<Integer>>() { }.getType();
-        selectedFarmIds = new Gson().fromJson(activeFarmsString, type);
+        List<Integer> selectedFarmIds = new Gson().fromJson(activeFarmsString, type);
         for(Farm farm : sortedFarms) {
             if (selectedFarmIds.contains(farm.getId()))
                 sortedSelectedFarms.add(farm);
         }
     }
+
     private void sortSelectedFarmNamesAlphabetically() {
         if (sortedSelectedFarms.size() > 0) {
             Collections.sort(sortedSelectedFarms, new Comparator<Farm>() {
@@ -310,8 +305,16 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
             });
         }
     }
+
     private void initializeSelectedFarmAdapter() {
-        farmAdapter = new ArrayAdapter<Farm>(getActivity(), R.layout.spinner_add_boundary, sortedSelectedFarms);
+        if (sortedSelectedFarms.size() > 0) {
+            farmAdapter = new ArrayAdapter<Farm>(getActivity(), R.layout.spinner_add_boundary, sortedSelectedFarms);
+        } else {
+            Farm dummyFarm = new Farm("", -1);
+            ArrayList<Farm> dummyFarmList = new ArrayList<>();
+            dummyFarmList.add(dummyFarm);
+            farmAdapter = new ArrayAdapter<Farm>(getActivity(), R.layout.spinner_add_boundary, dummyFarmList);
+        }
         farmAdapter.setDropDownViewResource(R.layout.spinner_add_boundary_drop_down);
     }
 
