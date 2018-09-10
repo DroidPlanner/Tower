@@ -253,6 +253,8 @@ public class AeroviewPolygons implements APIContract{
             farmIds.removeAll(tempFarmIds);
             getFarmOrchardsTask getFarmOrchardsTask = new getFarmOrchardsTask(token, farmIds);
             getFarmOrchardsTask.execute((Void) null);
+        } else {
+            isGetFarmOrchardsTaskExecuted = true;
         }
     }
 
@@ -525,7 +527,7 @@ public class AeroviewPolygons implements APIContract{
             if(requestReturnedSuccessfully){
                 setTaskCompleteFlag();
                 handleAsyncRequestReturns();
-            } else{
+            } else {
                 displayErrorMessage();
             }
         }
@@ -713,7 +715,7 @@ public class AeroviewPolygons implements APIContract{
 
     private void handleAsyncRequestReturns() {
         if (isGetCropTypesTaskExecuted && isGetFarmOrchardsTaskExecuted && isGetFarmsTaskExecuted) {
-            if(onSyncFinishedListener!=null) {
+            if(onSyncFinishedListener != null) {
                 onSyncFinishedListener.onSyncFinished();
             }
         }

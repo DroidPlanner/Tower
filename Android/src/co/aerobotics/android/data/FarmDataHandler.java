@@ -74,7 +74,7 @@ public class FarmDataHandler {
 
     private List<Integer> getSharedFarmIds(JSONObject user) {
         List<Integer> sharedFarmIds = new ArrayList<>();
-        JSONArray shareStatuses = null;
+        JSONArray shareStatuses;
         try {
             shareStatuses = user.getJSONArray("share_statuses");
             if (shareStatuses.length() > 0) {
