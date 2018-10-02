@@ -84,7 +84,7 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
         //initializeFarmAdapter();
         getAllFarmsAccessibleToActiveClient();
         getCropTypes();
-        getFarmsSelectedbyClient();
+        getFarmsSelectedByClient();
         initializeSelectedFarmAdapter();
         initializeFarmNameSpinner();
         initializeCropTypeAdapter();
@@ -285,7 +285,7 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
         Collections.sort(sortedCropTypes, String.CASE_INSENSITIVE_ORDER);
     }
 
-    private void getFarmsSelectedbyClient(){
+    private void getFarmsSelectedByClient(){
         String activeFarmsString = sharedPref.getString(this.getResources().getString(R.string.active_farms), "[]");
         Type type = new TypeToken<ArrayList<Integer>>() { }.getType();
         List<Integer> selectedFarmIds = new Gson().fromJson(activeFarmsString, type);
@@ -324,12 +324,17 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
         String allClientIds = sharedPref.getString(this.getResources().getString(R.string.all_client_ids), "")
                 .replaceAll("\\[", "").replaceAll("]","");
         List<JSONObject> farmNameIdMap = sqLiteDatabaseHandler.getFarmNamesAndIdList(allClientIds);
+        String serviceProviderFarmIdsString = sharedPref.getString(this.getResources().getString(R.string.service_provider_farms), "[]");
+        Type type = new TypeToken<ArrayList<Integer>>() { }.getType();
+        List<Integer> serviceProviderFarmIds= new Gson().fromJson(serviceProviderFarmIdsString, type);
         for (JSONObject farm: farmNameIdMap) {
             try {
                 String farmName = farm.getString("name");
                 Integer id = farm.getInt("farm_id");
-                Farm farmObj = new Farm(farmName, id);
-                sortedFarms.add(farmObj);
+                if (!serviceProviderFarmIds.contains(id)) {
+                    Farm farmObj = new Farm(farmName, id);
+                    sortedFarms.add(farmObj);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -443,7 +448,6 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
         boundaryDetail.setSpeed(surveyDetail.getSpeed());
         boundaryDetail.setCamera(surveyDetail.getCameraDetail().toString());
         boundaryDetail.setClientId(getClientId());
-        boundaryDetail.setDisplay(true);
         boundaryDetail.setCropTypeId(getCropTypeId());
         return boundaryDetail;
     }

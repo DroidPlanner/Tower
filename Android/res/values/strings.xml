@@ -30,6 +30,7 @@
     <string name="croptypes">Crop types from Aeroview</string>
     <string name="farms">Client farms from Aeroview</string>
     <string name="active_farms">Farms selected by client to fly</string>
+    <string name="service_provider_farms">List of service provider farm ids</string>
     <!-- Drone Setup tabs -->
     <string name="screen_cal">Calibration</string>
     <string name="screen_checklist">Checklist</string>
