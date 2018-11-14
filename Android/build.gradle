@@ -135,7 +135,7 @@ android {
     defaultConfig {
         applicationId 'co.aerobotics.android'
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 28
         versionCode computeVersionCode(versionMajor, versionMinor, versionPatch, versionBuild)
         versionName generateVersionName(versionPrefix, versionMajor, versionMinor, versionPatch)
         buildConfigField "boolean", "WRITE_LOG_FILE", "true"
