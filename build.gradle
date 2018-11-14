@@ -11,15 +11,16 @@ buildscript {
 
         android_build_sdk_version = 25
         android_build_tools_version = '27.0.3'
-        android_build_target_sdk_version = 25
+        android_build_target_sdk_version = 28
         android_build_min_sdk_version = 21
     }
 
     repositories {
-        jcenter()
+
         mavenCentral()
         maven { url 'https://maven.fabric.io/public' }
         google()
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.3'
@@ -62,7 +63,7 @@ def generateVersionName(String versionPrefix, int versionMajor, int versionMinor
 
 allprojects {
     repositories {
-        jcenter()
+
         mavenCentral()
 
         maven {
@@ -82,6 +83,7 @@ allprojects {
             dirs 'libs'
         }
         google()
+        jcenter()
     }
 }
 
