@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class AeroviewPolygons implements APIContract{
     public static final String ACTION_POLYGON_UPDATE = "update_polygon";
     public static final String ACTION_ERROR_MSG = "server_error";
     public static final String SYNC_COMPLETE = "sync_successful";
+    public static final String ACTION_VIEW_FARM = "zoom_to_farm";
     private SQLiteDatabaseHandler sqLiteDatabaseHandler;
     private OnSyncFinishedListener onSyncFinishedListener;
     private static final int DRONE_DEMO_ACCOUNT_ID = 247;
@@ -46,6 +48,7 @@ public class AeroviewPolygons implements APIContract{
     private boolean isGetFarmOrchardsTaskExecuted = false;
     private boolean isGetFarmsTaskExecuted = false;
     private SharedPreferences sharedPref;
+    private ArrayList<String> farmPointStrings;
 
     private static PointExtractor<LatLng> latLngPointExtractor = new PointExtractor<LatLng>() {
         @Override
@@ -102,13 +105,17 @@ public class AeroviewPolygons implements APIContract{
         String activeFarmIds = getActiveFarmsString();
         List<BoundaryDetail> boundaryDetails = sqLiteDatabaseHandler.getBoundaryDetailsForFarmIds(activeFarmIds);
         DroidPlannerApp.getInstance().polygonMap.clear();
+        farmPointStrings = new ArrayList<>();
+
         for (BoundaryDetail boundaryDetail : boundaryDetails) {
-            if (boundaryDetail.isDisplay()) {
-                PolygonData polygonData = new PolygonData(boundaryDetail.getName(), convertStringToLatLngList(boundaryDetail.getPoints()), false, boundaryDetail.getBoundaryId());
-                DroidPlannerApp.getInstance().polygonMap.put(boundaryDetail.getBoundaryId(), polygonData);
-            }
+            PolygonData polygonData = new PolygonData(boundaryDetail.getName(), convertStringToLatLngList(boundaryDetail.getPoints()), false, boundaryDetail.getBoundaryId());
+            DroidPlannerApp.getInstance().polygonMap.put(boundaryDetail.getBoundaryId(), polygonData);
+
+            for(LatLng point: polygonData.getPoints())
+                farmPointStrings.add(point.latitude + " " + point.longitude);
         }
         Intent intent = new Intent(ACTION_POLYGON_UPDATE);
+        if(farmPointStrings!=null) intent.putStringArrayListExtra("farm_points", farmPointStrings);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
@@ -231,16 +238,24 @@ public class AeroviewPolygons implements APIContract{
         String token = sharedPref.getString(context.getResources().getString(R.string.user_auth_token), "");
         String activeFarms = sharedPref.getString(context.getResources().getString(R.string.active_farms), "[]");
         List<Integer> farmIds = parseStringToListIntegerObject(activeFarms);
-        List<Integer> tempFarmIds = new ArrayList<>();
-        for(Integer farmId: farmIds) {
-            if(farmId < 0) {
-                tempFarmIds.add(farmId);
+        farmIds.removeAll(Collections.singleton(null));
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(context.getString(R.string.active_farms), new Gson().toJson(farmIds)).apply();
+        if (farmIds != null && farmIds.size() > 0) {
+            List<Integer> tempFarmIds = new ArrayList<>();
+            for(Integer farmId: farmIds) {
+                if(farmId < 0) {
+                    tempFarmIds.add(farmId);
+                }
             }
+            farmIds.removeAll(tempFarmIds);
+            getFarmOrchardsTask getFarmOrchardsTask = new getFarmOrchardsTask(token, farmIds);
+            getFarmOrchardsTask.execute((Void) null);
+        } else {
+            isGetFarmOrchardsTaskExecuted = true;
         }
-        farmIds.removeAll(tempFarmIds);
-        getFarmOrchardsTask getFarmOrchardsTask = new getFarmOrchardsTask(token, farmIds);
-        getFarmOrchardsTask.execute((Void) null);
     }
+
 
     private List<Integer> parseStringToListIntegerObject(String activeFarmsString) {
         Type type = new TypeToken<ArrayList<Integer>>() { }.getType();
@@ -350,7 +365,7 @@ public class AeroviewPolygons implements APIContract{
                         int clientId = jsonObject.getInt("client_id");
                         int cropTypeId = jsonObject.getInt("crop_type_id");
                         if (!polygon.equals("") && clientId != DRONE_DEMO_ACCOUNT_ID) {
-                            boundariesList.add(new BoundaryDetail(name,id, polygon, clientId , cropTypeId, true, farmId));
+                            boundariesList.add(new BoundaryDetail(name,id, polygon, clientId , cropTypeId, farmId));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -510,7 +525,7 @@ public class AeroviewPolygons implements APIContract{
             if(requestReturnedSuccessfully){
                 setTaskCompleteFlag();
                 handleAsyncRequestReturns();
-            } else{
+            } else {
                 displayErrorMessage();
             }
         }
@@ -698,7 +713,7 @@ public class AeroviewPolygons implements APIContract{
 
     private void handleAsyncRequestReturns() {
         if (isGetCropTypesTaskExecuted && isGetFarmOrchardsTaskExecuted && isGetFarmsTaskExecuted) {
-            if(onSyncFinishedListener!=null) {
+            if(onSyncFinishedListener != null) {
                 onSyncFinishedListener.onSyncFinished();
             }
         }

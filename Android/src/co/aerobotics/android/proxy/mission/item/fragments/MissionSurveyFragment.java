@@ -94,6 +94,7 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
     public TextView numberOfStripsView;
     public TextView lengthView;
     public TextView flightTime;
+    public TextView boundaryName;
     public TextView cameraTriggerTimeTextView;
     private CamerasAdapter cameraAdapter;
     private SpinnerSelfSelect cameraSpinner;
@@ -182,6 +183,7 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
         lengthView = (TextView) view.findViewById(id.lengthTextView);
         flightTime = (TextView) view.findViewById(id.flightTimeTextView);
         cameraTriggerTimeTextView = (TextView) view.findViewById(id.cameraTriggerTextView);
+        boundaryName = (TextView) view.findViewById(id.TextBoundaryName);
 
         updateViews();
         updateCamera();
@@ -432,6 +434,13 @@ public class MissionSurveyFragment<T extends Survey> extends MissionDetailFragme
 
                 numberOfStripsView.setText(String.format(Locale.ENGLISH, "%s: %d", getString(R.string.number_of_strips),
                         survey.getNumberOfLines()));
+
+                if (boundaryDetail.getName() == null) {
+                    boundaryName.setVisibility(View.GONE);
+                } else {
+                    boundaryName.setVisibility(View.VISIBLE);
+                    boundaryName.setText("Boundary Name: " + boundaryDetail.getName());
+                }
 
                 setDefault = false;
             } catch (Exception e) {

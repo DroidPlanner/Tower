@@ -86,3 +86,18 @@ allprojects {
         jcenter()
     }
 }
+
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion "${supportLibVersion}"
+            }
+        } else if (requested.group == 'com.google.android.gms') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion "${playServicesVersion}"
+            }
+        }
+    }
+}

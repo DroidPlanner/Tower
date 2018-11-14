@@ -352,19 +352,21 @@ public class ActionBarTelemFragment extends ApiListenerFragment {
     }
 
     private void tearDownKeys() {
-        KeyManager.getInstance().removeListener(batteryPercentageListener);
-        KeyManager.getInstance().removeListener(batteryChargeListener);
-        KeyManager.getInstance().removeListener(batteryVoltageListener);
-        KeyManager.getInstance().removeListener(batteryCurrentListener);
-        KeyManager.getInstance().removeListener(altitudeListener);
-        KeyManager.getInstance().removeListener(flightModeListener);
-        KeyManager.getInstance().removeListener(homeLocationSetListener);
-        KeyManager.getInstance().removeListener(aircraftLatitudeListener);
-        KeyManager.getInstance().removeListener(aircraftLongitudeListener);
-        KeyManager.getInstance().removeListener(gpsSignalListener);
-        KeyManager.getInstance().removeListener(satelliteCountListener);
-        KeyManager.getInstance().removeListener(homeLongitudeListener);
-        KeyManager.getInstance().removeListener(homeLatitudeListener);
+        if (KeyManager.getInstance() != null) {
+            KeyManager.getInstance().removeListener(batteryPercentageListener);
+            KeyManager.getInstance().removeListener(batteryChargeListener);
+            KeyManager.getInstance().removeListener(batteryVoltageListener);
+            KeyManager.getInstance().removeListener(batteryCurrentListener);
+            KeyManager.getInstance().removeListener(altitudeListener);
+            KeyManager.getInstance().removeListener(flightModeListener);
+            KeyManager.getInstance().removeListener(homeLocationSetListener);
+            KeyManager.getInstance().removeListener(aircraftLatitudeListener);
+            KeyManager.getInstance().removeListener(aircraftLongitudeListener);
+            KeyManager.getInstance().removeListener(gpsSignalListener);
+            KeyManager.getInstance().removeListener(satelliteCountListener);
+            KeyManager.getInstance().removeListener(homeLongitudeListener);
+            KeyManager.getInstance().removeListener(homeLatitudeListener);
+        }
     }
 
     //Populate telemetry with initial values

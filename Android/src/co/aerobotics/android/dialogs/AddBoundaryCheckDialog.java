@@ -23,6 +23,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
@@ -31,6 +33,7 @@ import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -65,6 +68,7 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
     private List<Farm> sortedFarms = new ArrayList<>();
     private List<String> sortedCropTypes;
     private Context context;
+    private List<Farm> sortedSelectedFarms = new ArrayList<>();
 
 
     @NonNull
@@ -76,10 +80,12 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
         sharedPref = getActivity().getSharedPreferences(getActivity().getResources().getString(R.string.com_dji_android_PREF_FILE_KEY), Context.MODE_PRIVATE);
         sqLiteDatabaseHandler = new SQLiteDatabaseHandler(this.getContext());
         context = getActivity().getApplicationContext();
+        //sortFarmNamesAlphabetically();
+        //initializeFarmAdapter();
         getAllFarmsAccessibleToActiveClient();
-        sortFarmNamesAlphabetically();
         getCropTypes();
-        initializeFarmAdapter();
+        getFarmsSelectedByClient();
+        initializeSelectedFarmAdapter();
         initializeFarmNameSpinner();
         initializeCropTypeAdapter();
         initializeCropTypeSpinner();
@@ -214,14 +220,14 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
                     }
 
                     private boolean isSelectedFarmEmpty() {
-                        return Objects.equals(selectedFarm, "");
+                        return Objects.equals(selectedFarm, "") || selectedFarm.getName().equals("");
                     }
 
                     private void setFarmNameErrorMessage() {
                         TextView errorText = (TextView) searchableSpinnerFarmName.getSelectedView();
                         errorText.setError("");
                         errorText.setTextColor(Color.RED);//just to highlight that this is an error
-                        errorText.setText("Add New Farm");
+                        errorText.setText("Farm name required");
                     }
 
                     private void displayErrorMessage(EditText editTextView) {
@@ -279,17 +285,56 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
         Collections.sort(sortedCropTypes, String.CASE_INSENSITIVE_ORDER);
     }
 
+    private void getFarmsSelectedByClient(){
+        String activeFarmsString = sharedPref.getString(this.getResources().getString(R.string.active_farms), "[]");
+        Type type = new TypeToken<ArrayList<Integer>>() { }.getType();
+        List<Integer> selectedFarmIds = new Gson().fromJson(activeFarmsString, type);
+        for(Farm farm : sortedFarms) {
+            if (selectedFarmIds.contains(farm.getId()))
+                sortedSelectedFarms.add(farm);
+        }
+    }
+
+    private void sortSelectedFarmNamesAlphabetically() {
+        if (sortedSelectedFarms.size() > 0) {
+            Collections.sort(sortedSelectedFarms, new Comparator<Farm>() {
+                @Override
+                public int compare(Farm farmA, Farm farmB) {
+                    return farmA.getName().toLowerCase().compareTo(farmB.getName().toLowerCase());
+                }
+            });
+        }
+    }
+
+    private void initializeSelectedFarmAdapter() {
+        if (sortedSelectedFarms.size() > 0) {
+            farmAdapter = new ArrayAdapter<Farm>(getActivity(), R.layout.spinner_add_boundary, sortedSelectedFarms);
+        } else {
+            Farm dummyFarm = new Farm("", -1);
+            ArrayList<Farm> dummyFarmList = new ArrayList<>();
+            dummyFarmList.add(dummyFarm);
+            farmAdapter = new ArrayAdapter<Farm>(getActivity(), R.layout.spinner_add_boundary, dummyFarmList);
+        }
+        farmAdapter.setDropDownViewResource(R.layout.spinner_add_boundary_drop_down);
+    }
+
+
     private void getAllFarmsAccessibleToActiveClient() {
         SQLiteDatabaseHandler sqLiteDatabaseHandler = new SQLiteDatabaseHandler(context);
         String allClientIds = sharedPref.getString(this.getResources().getString(R.string.all_client_ids), "")
                 .replaceAll("\\[", "").replaceAll("]","");
         List<JSONObject> farmNameIdMap = sqLiteDatabaseHandler.getFarmNamesAndIdList(allClientIds);
+        String serviceProviderFarmIdsString = sharedPref.getString(this.getResources().getString(R.string.service_provider_farms), "[]");
+        Type type = new TypeToken<ArrayList<Integer>>() { }.getType();
+        List<Integer> serviceProviderFarmIds= new Gson().fromJson(serviceProviderFarmIdsString, type);
         for (JSONObject farm: farmNameIdMap) {
             try {
                 String farmName = farm.getString("name");
                 Integer id = farm.getInt("farm_id");
-                Farm farmObj = new Farm(farmName, id);
-                sortedFarms.add(farmObj);
+                if (!serviceProviderFarmIds.contains(id)) {
+                    Farm farmObj = new Farm(farmName, id);
+                    sortedFarms.add(farmObj);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -403,7 +448,6 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
         boundaryDetail.setSpeed(surveyDetail.getSpeed());
         boundaryDetail.setCamera(surveyDetail.getCameraDetail().toString());
         boundaryDetail.setClientId(getClientId());
-        boundaryDetail.setDisplay(true);
         boundaryDetail.setCropTypeId(getCropTypeId());
         return boundaryDetail;
     }

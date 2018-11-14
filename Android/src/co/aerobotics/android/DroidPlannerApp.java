@@ -19,6 +19,7 @@ import android.support.multidex.MultiDexApplication;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.text.method.BaseKeyListener;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -75,7 +76,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import dji.common.camera.SDCardState;
+//import dji.common.camera.SDCardState;
+import dji.common.camera.SSDState;
+
 import dji.common.error.DJIError;
 import dji.common.error.DJISDKError;
 import dji.common.util.CommonCallbacks;
@@ -136,7 +139,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
                         disconnectFromDrone();
                     break;
 
-
             }
         }
     };
@@ -181,7 +183,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
                 }
 
                 Toast.makeText(getApplicationContext(), "Connection failed: " + errorMsg,
-                    Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();
                 break;
         }
     }
@@ -340,7 +342,8 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
     private RefWatcher refWatcher;
 
     public Handler mHandler;
-    private BaseProduct.BaseProductListener mDJIBaseProductListener;
+    //private BaseProduct.BaseProductListener mDJIBaseProductListener;
+
     private BaseComponent.ComponentListener mDJIComponentListener;
     private static BaseProduct mProduct;
     @Override
@@ -367,22 +370,13 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         mHandler = new Handler(Looper.getMainLooper());
         instance = this;
         DJISDKManager.getInstance().getProduct();
-
-        mDJIBaseProductListener = new BaseProduct.BaseProductListener() {
-            @Override
-            public void onComponentChange(BaseProduct.ComponentKey key, BaseComponent oldComponent, BaseComponent newComponent) {
-                if(newComponent != null) {
-                    newComponent.setComponentListener(mDJIComponentListener);
-                    getFirmwareVersion();
-                }
-                notifyStatusChange();
-            }
-            @Override
-            public void onConnectivityChange(boolean isConnected) {
-                mixpanelInstance.track("FPA: ConnectedToDrone");
-                notifyStatusChange();
-            }
-        };
+        AeroviewPolygons aeroviewPolygons = new AeroviewPolygons(context);
+        if(isNetworkAvailable()) {
+            aeroviewPolygons.executeGetFarmsTask();
+            aeroviewPolygons.executeGetFarmOrchardsTask();
+        } else {
+            aeroviewPolygons.addPolygonsToMap();
+        }
 
         mDJIComponentListener = new BaseComponent.ComponentListener() {
             @Override
@@ -448,19 +442,33 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
                     @Override
                     public void run() {
                         mixpanelInstance.track("FPA: DjiSdkRegisterFailed");
-                        Toast.makeText(getApplicationContext(), "Register Failed, check network is available", Toast.LENGTH_LONG).show();
                     }
                 });
             }
             Log.e("TAG", error.toString());
         }
-        //Listens to the connected product changing, including two parts, component changing or product connection changing.
+
         @Override
-        public void onProductChange(BaseProduct oldProduct, BaseProduct newProduct) {
-            mProduct = newProduct;
-            if(mProduct != null) {
+        public void onProductDisconnect() {
+
+        }
+
+        @Override
+        public void onProductConnect(BaseProduct baseProduct) {
+            mProduct = baseProduct;
+            if(mProduct!=null){
                 mixpanelInstance.track("FPA: ConnectedToDrone");
-                mProduct.setBaseProductListener(mDJIBaseProductListener);
+                //add listener to the next product?
+                getFirmwareVersion();
+
+            }
+            notifyStatusChange();
+        }
+
+        @Override
+        public void onComponentChange(BaseProduct.ComponentKey componentKey, BaseComponent baseComponent, BaseComponent baseComponent1) {
+            if(baseComponent1 != null) {
+                baseComponent1.setComponentListener(mDJIComponentListener);
                 getFirmwareVersion();
             }
             notifyStatusChange();
@@ -471,13 +479,6 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         if (!DJISDKManager.getInstance().hasSDKRegistered()) {
             DJISDKManager.getInstance().registerApp(getApplicationContext(), mDJISDKManagerCallback);
         }
-/*
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                DJISDKManager.getInstance().registerApp(getApplicationContext(), mDJISDKManagerCallback);
-            }
-        }); */
     }
 
 
@@ -558,8 +559,9 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
 
         handler.removeCallbacks(disconnectionTask);
         boolean isTowerConnected = controlTower.isTowerConnected();
-        if (isTowerConnected)
+        if (isTowerConnected) {
             listener.onApiConnected();
+        }
 
         if (!isTowerConnected) {
             try {
@@ -653,35 +655,35 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
 
         // Generate the uri for logging the tlog data for this session.
         Uri tlogLoggingUri = TLogUtils.getTLogLoggingUri(getApplicationContext(),
-            connectionType, System.currentTimeMillis());
+                connectionType, System.currentTimeMillis());
 
         ConnectionParameter connParams;
         switch (connectionType) {
             case ConnectionType.TYPE_USB:
                 connParams = ConnectionParameter.newUsbConnection(dpPrefs.getUsbBaudRate(),
-                    tlogLoggingUri, EVENTS_DISPATCHING_PERIOD);
+                        tlogLoggingUri, EVENTS_DISPATCHING_PERIOD);
                 break;
 
             case ConnectionType.TYPE_UDP:
                 if (dpPrefs.isUdpPingEnabled()) {
                     connParams = ConnectionParameter.newUdpWithPingConnection(
-                        dpPrefs.getUdpServerPort(),
-                        dpPrefs.getUdpPingReceiverIp(),
-                        dpPrefs.getUdpPingReceiverPort(),
-                        "Hello".getBytes(),
-                        ConnectionType.DEFAULT_UDP_PING_PERIOD,
-                        tlogLoggingUri,
-                        EVENTS_DISPATCHING_PERIOD);
+                            dpPrefs.getUdpServerPort(),
+                            dpPrefs.getUdpPingReceiverIp(),
+                            dpPrefs.getUdpPingReceiverPort(),
+                            "Hello".getBytes(),
+                            ConnectionType.DEFAULT_UDP_PING_PERIOD,
+                            tlogLoggingUri,
+                            EVENTS_DISPATCHING_PERIOD);
                 }
                 else{
                     connParams = ConnectionParameter.newUdpConnection(dpPrefs.getUdpServerPort(),
-                        tlogLoggingUri, EVENTS_DISPATCHING_PERIOD);
+                            tlogLoggingUri, EVENTS_DISPATCHING_PERIOD);
                 }
                 break;
 
             case ConnectionType.TYPE_TCP:
                 connParams = ConnectionParameter.newTcpConnection(dpPrefs.getTcpServerIp(),
-                    dpPrefs.getTcpServerPort(), tlogLoggingUri, EVENTS_DISPATCHING_PERIOD);
+                        dpPrefs.getTcpServerPort(), tlogLoggingUri, EVENTS_DISPATCHING_PERIOD);
                 break;
 
             case ConnectionType.TYPE_BLUETOOTH:
@@ -694,7 +696,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
 
                 } else {
                     connParams = ConnectionParameter.newBluetoothConnection(btAddress,
-                        tlogLoggingUri, EVENTS_DISPATCHING_PERIOD);
+                            tlogLoggingUri, EVENTS_DISPATCHING_PERIOD);
                 }
                 break;
 

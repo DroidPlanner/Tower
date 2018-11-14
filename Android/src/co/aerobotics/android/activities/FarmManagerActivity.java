@@ -80,7 +80,7 @@ public class FarmManagerActivity extends DrawerNavigationUI implements APIContra
     }
 
     private void openAddNewFarmDialog() {
-        final DialogFragment dialogFragment = new AddNewFarmDialog();
+        final AddNewFarmDialog dialogFragment = new AddNewFarmDialog();
         dialogFragment.show(fragmentManager, null);
         fragmentManager.executePendingTransactions();
         dialogFragment.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -88,7 +88,11 @@ public class FarmManagerActivity extends DrawerNavigationUI implements APIContra
             public void onDismiss(DialogInterface dialogInterface) {
                 getAllFarmsAccessibleToActiveClient();
                 sortFarmNamesAlphabetically();
-                listAdapter.notifyDataSetChanged();
+                if (dialogFragment.getNewFarmId() != null) {
+                    selectedFarmIds.add(dialogFragment.getNewFarmId());
+                    setCurrentlySelectedFarmsAsChecked();
+                    listAdapter.notifyDataSetChanged();
+                }
                 dialogFragment.dismissAllowingStateLoss();
             }
         });
@@ -216,8 +220,10 @@ public class FarmManagerActivity extends DrawerNavigationUI implements APIContra
     }
 
     private void writeSelectedFarmsToSharedPrefs() {
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(getString(R.string.active_farms), new Gson().toJson(selectedFarmIds)).apply();
+        if (selectedFarmIds != null) {
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.active_farms), new Gson().toJson(selectedFarmIds)).apply();
+        }
     }
 
     private void addSelectedFarmBoundariesToMap() {
@@ -266,7 +272,7 @@ public class FarmManagerActivity extends DrawerNavigationUI implements APIContra
 
     private void promptUserToAddNewFarm() {
         final TapTargetSequence targetSequence = new TapTargetSequence(this).targets(
-                TapTarget.forView(findViewById(R.id.addNewFarm), "Getting started", "Create a new farm. You will able be save mission boundaries to this farm")
+                TapTarget.forView(findViewById(R.id.addNewFarm), "Getting started", "Add a farm name.")
                         // All options below are optional
                         .outerCircleColor(R.color.primary_dark_blue)      // Specify a color for the outer circle
                         .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle

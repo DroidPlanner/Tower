@@ -31,13 +31,10 @@ import co.aerobotics.android.proxy.mission.item.MissionItemProxy;
 import dji.common.camera.SettingsDefinitions;
 import dji.common.camera.WhiteBalance;
 import dji.common.error.DJIError;
-import dji.common.flightcontroller.FlightControlState;
 import dji.common.flightcontroller.FlightControllerState;
-import dji.common.flightcontroller.GoHomeAssessment;
 import dji.common.flightcontroller.SmartRTHState;
 import dji.common.gimbal.Rotation;
 import dji.common.gimbal.RotationMode;
-import dji.common.mission.MissionState;
 import dji.common.mission.waypoint.Waypoint;
 import dji.common.mission.waypoint.WaypointMission;
 import dji.common.mission.waypoint.WaypointMissionDownloadEvent;
@@ -56,7 +53,7 @@ import dji.sdk.flightcontroller.FlightAssistant;
 import dji.sdk.flightcontroller.FlightController;
 import dji.sdk.gimbal.Gimbal;
 import dji.sdk.mission.MissionControl;
-import dji.sdk.mission.timeline.Mission;
+import dji.sdk.mission.timeline.TimelineMission;
 import dji.sdk.mission.timeline.TimelineElement;
 import dji.sdk.mission.timeline.TimelineEvent;
 import dji.sdk.mission.waypoint.WaypointMissionOperator;
@@ -279,7 +276,7 @@ public class DJIMissionImpl {
     private List<TimelineElement> getTimelineElements(List<WaypointMission> waypointMissions) {
         List<TimelineElement> elements = new ArrayList<>();
         for (WaypointMission mission : waypointMissions) {
-            elements.add(Mission.elementFromWaypointMission(mission));
+            elements.add(TimelineMission.elementFromWaypointMission(mission));
         }
         return elements;
     }

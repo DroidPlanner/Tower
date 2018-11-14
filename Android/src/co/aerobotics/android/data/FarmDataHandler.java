@@ -1,6 +1,9 @@
 package co.aerobotics.android.data;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -8,6 +11,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import co.aerobotics.android.R;
 
 /**
  * Created by michaelwootton on 6/15/18.
@@ -22,14 +27,19 @@ public class FarmDataHandler {
     private List<Integer> allClientsIds = new ArrayList<>();
     private List<Integer> farmIdsFromServer = new ArrayList<>();
     private SQLiteDatabaseHandler sqLiteDatabaseHandler;
-
+    private List<BoundaryDetail> serviceProviderBoundaries = new ArrayList<>();
+    private SharedPreferences sharedPref;
+    private Context context;
 
     public FarmDataHandler(Context context, JSONObject user) {
+        this.context = context;
         this.user = user;
         sqLiteDatabaseHandler = new SQLiteDatabaseHandler(context);
+        sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
     }
 
     public void parseUsersFarms() throws JSONException {
+        allClientsIds.clear();
         JSONArray clients = user.getJSONArray("clients");
         List<JSONObject> farms = new ArrayList<>();
         userId = user.getInt("id");
@@ -65,15 +75,68 @@ public class FarmDataHandler {
                 }
             }
         }
+        List<JSONObject> serviceProviderFarms = getDroneServiceFarmsAndOrchards(user);
+        if (serviceProviderFarms.size() > 0) {
 
+            farms.addAll(serviceProviderFarms);
+        }
         farms.removeAll(invalidFarms);
         checkForDeletedFarms();
         addFarmsToDb(farms);
+        addServiceProviderBoundariesToLocalDatabase();
+        setServiceProviderFarmIds();
+        setAllClientsIds();
+    }
+
+    private List<JSONObject> getDroneServiceFarmsAndOrchards(JSONObject user) {
+        try {
+            JSONObject serviceProvider = user.getJSONObject("service_provider");
+            if (serviceProvider != null) {
+                JSONArray droneServices = serviceProvider.getJSONArray("drone_services");
+                List<JSONObject> serviceProviderFarms = new ArrayList<>();
+                for (int i = 0; i < droneServices.length(); i++) {
+                    JSONObject droneService = droneServices.getJSONObject(i);
+                    JSONArray orchards = droneService.getJSONArray("orchards");
+                    Integer farmId = droneService.getInt("farm_id");
+                    int clientId = droneService.getInt("client_id");
+                    String farmName = droneService.getString("farm_name");
+                    for (int j = 0; j < orchards.length(); j++) {
+                        JSONObject orchard = orchards.getJSONObject(j);
+                        String name = orchard.getString("name");
+                        String polygon = orchard.getString("polygon");
+                        String id = orchard.getString("id");
+                        int cropTypeId = orchard.getInt("crop_type_id");
+                        serviceProviderBoundaries.add(new BoundaryDetail(name, id, polygon, clientId, cropTypeId, farmId));
+                    }
+                    JSONObject farm = new JSONObject();
+                    farm.put("name", farmName);
+                    farm.put("id", farmId);
+                    farm.put("client_id", clientId);
+                    farm.put("crop_family_ids", new JSONArray());
+                    serviceProviderFarms.add(farm);
+                    allClientsIds.add(clientId);
+                }
+                return serviceProviderFarms;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+        return new ArrayList<>();
+    }
+
+    private void setServiceProviderFarmIds() {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        List<Integer> serviceProviderFarmIds = new ArrayList<>();
+        for (int i = 0; i < serviceProviderBoundaries.size(); i++) {
+            serviceProviderFarmIds.add(serviceProviderBoundaries.get(i).getFarmId());
+        }
+        editor.putString(context.getResources().getString(R.string.service_provider_farms), new Gson().toJson(serviceProviderFarmIds)).apply();
     }
 
     private List<Integer> getSharedFarmIds(JSONObject user) {
         List<Integer> sharedFarmIds = new ArrayList<>();
-        JSONArray shareStatuses = null;
+        JSONArray shareStatuses;
         try {
             shareStatuses = user.getJSONArray("share_statuses");
             if (shareStatuses.length() > 0) {
@@ -127,6 +190,7 @@ public class FarmDataHandler {
             }
         }
     }
+
     private JSONObject extractFarmData(JSONObject farmObject, Integer clientId) {
         JSONObject farm = new JSONObject();
         try {
@@ -142,6 +206,7 @@ public class FarmDataHandler {
         }
         return farm;
     }
+
     private String convertListToString(List<Integer> intList) {
         return intList.toString().replaceAll("\\[", "").replaceAll("]","");
     }
@@ -150,6 +215,10 @@ public class FarmDataHandler {
         return allClientsIds;
     }
 
+    private void setAllClientsIds() {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(context.getString(R.string.all_client_ids), new Gson().toJson(allClientsIds)).apply();
+    }
     public Integer getActiveClientId() {
         return activeClientId;
     }
@@ -158,6 +227,11 @@ public class FarmDataHandler {
         return userId;
     }
 
+    private void addServiceProviderBoundariesToLocalDatabase() {
+        if(!serviceProviderBoundaries.isEmpty()) {
+            sqLiteDatabaseHandler.addBoundaryDetailList(serviceProviderBoundaries);
+        }
+    }
 
 
 }

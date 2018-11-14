@@ -43,9 +43,15 @@ dependencies {
 
     //compile 'com.vividsolutions:jts:1.13'
     compile project(':ClientLib')
-    compileOnly 'com.dji:dji-sdk:4.4.1'
-    provided 'com.dji:dji-sdk-provided:4.4.1'
-    compile 'com.dji:dji-uilibrary:4.4.1'
+    compile ('com.dji:dji-sdk:4.7', {
+        // if your app needn't support Mavic 2 Pro and Mavic 2 Zoom, please exclude the library-anti-distortion module
+        // like following:
+        exclude module: 'library-anti-distortion'
+    })
+    provided 'com.dji:dji-sdk-provided:4.7'
+    implementation ('com.dji:dji-uxsdk:4.7'){
+        transitive = false
+    }
     compile(name: 'shimmer-android-release', ext: 'aar')
     compile(name: 'libuvccamera-release', ext: 'aar')
     compile(name: 'sliding-up-panel-3.3.0', ext: 'aar')
@@ -107,8 +113,8 @@ configurations {
 def versionPrefix = "flight_planner_for_dji"
 
 //Decomposed version name and code (https://plus.google.com/+JakeWharton/posts/6f5TcVPRZij)
-def versionMajor = 1
-def versionMinor = 4
+def versionMajor = 2
+def versionMinor = 0
 def versionPatch = 4
 def versionBuild = 0 //bump for dogfood builds, public betas, etc.
 
@@ -150,9 +156,15 @@ android {
         // Enabling multidex support.
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
+
+        ndk {
+            // On x86 devices that run Android API 23 or above, if the application is targeted with API 23 or
+            // above, FFmpeg lib might lead to runtime crashes or warnings.
+            abiFilters 'armeabi-v7a', 'x86', 'arm64-v8a'
+        }
     }
 
-    packagingOptions {
+    packagingOptions{
         doNotStrip "*/*/libdjivideo.so"
         doNotStrip "*/*/libSDKRelativeJNI.so"
         doNotStrip "*/*/libFlyForbid.so"
@@ -162,6 +174,7 @@ android {
         doNotStrip "*/*/libFRCorkscrew.so"
         doNotStrip "*/*/libUpgradeVerify.so"
         doNotStrip "*/*/libFR.so"
+        exclude 'META-INF/rxjava.properties'
     }
 
     compileOptions {

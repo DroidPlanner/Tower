@@ -138,6 +138,7 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
         eventFilter.addAction(DJIMissionImpl.MISSION_START);
         eventFilter.addAction(DJIMissionImpl.MiSSION_STOP);
         eventFilter.addAction(DJIMissionImpl.ERROR_CAMERA);
+        eventFilter.addAction(AeroviewPolygons.ACTION_POLYGON_UPDATE);
         eventFilter.addAction(DJIMissionImpl.ERROR_SD_CARD);
         eventFilter.addAction(DrawerNavigationUI.TOGGLE_TELEMETRY);
         eventFilter.addAction(DJIMissionImpl.ERROR_MISSION_START);
@@ -148,7 +149,13 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
+            Bundle extras = intent.getExtras();
+
             switch (action) {
+                case AeroviewPolygons.ACTION_POLYGON_UPDATE:
+                    if(extras!=null)
+                        OnGoToFarmSelected(convertStringPointsToLatLongs(extras.getStringArrayList("farm_points")));
+
                 case MissionProxy.ACTION_MISSION_PROXY_UPDATE:
                     if (mAppPrefs.isZoomToFitEnable()) {
                         gestureMapFragment.getMapFragment().zoomToFit();
@@ -537,6 +544,14 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
             }
         });
     }
+
+    private List<LatLong> convertStringPointsToLatLongs(ArrayList<String> pointStrings){
+        List <LatLong> pointLatLngs = new ArrayList<>();
+        for(String pointString : pointStrings)
+            pointLatLngs.add(new LatLong(Double.valueOf(pointString.split(" ")[0]), Double.valueOf(pointString.split(" ")[1]) ));
+        return pointLatLngs;
+    }
+
 
     private long getNumberofSurveyImages() {
         List<Survey> surveyList = new ArrayList<>();
@@ -1293,6 +1308,11 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
                 showItemDetail(selectMissionDetailType(selected));
             }
         }
+    }
+
+    public void OnGoToFarmSelected(List<LatLong> farmPoints){
+        final EditorMapFragment planningMapFragment = gestureMapFragment.getMapFragment();
+        planningMapFragment.zoomToFit(farmPoints);
     }
 
     @Override
