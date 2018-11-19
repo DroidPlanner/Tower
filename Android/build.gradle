@@ -87,7 +87,7 @@ dependencies {
     compile 'me.grantland:autofittextview:0.2.1'
     compile 'com.jakewharton.timber:timber:3.1.0'
     compile 'com.github.lecho:hellocharts-library:1.5.5@aar'
-    compile 'com.android.volley:volley:1.0.0'
+    compile 'com.android.volley:volley:1.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
@@ -151,7 +151,8 @@ android {
         manifestPlaceholders = [
                 fabricApiKey : keystoreProperties['fabricApiKey'],
                 djiApiKey    : keystoreProperties['djiApiKey'],
-                googleMapsKey: keystoreProperties['googleMapsKey']
+                googleMapsKey: keystoreProperties['googleMapsKey'],
+                googleElevationKey: keystoreProperties['googleElevationKey']
         ]
         // Enabling multidex support.
         multiDexEnabled true

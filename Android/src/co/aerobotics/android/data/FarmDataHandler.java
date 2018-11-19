@@ -3,16 +3,20 @@ package co.aerobotics.android.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import co.aerobotics.android.R;
+
+import co.aerobotics.android.data.AeroviewPolygons;
 
 /**
  * Created by michaelwootton on 6/15/18.
@@ -89,6 +93,7 @@ public class FarmDataHandler {
     }
 
     private List<JSONObject> getDroneServiceFarmsAndOrchards(JSONObject user) {
+        AeroviewPolygons aeroviewPolygons = new AeroviewPolygons(this.context );
         try {
             JSONObject serviceProvider = user.getJSONObject("service_provider");
             if (serviceProvider != null) {
@@ -102,11 +107,20 @@ public class FarmDataHandler {
                     String farmName = droneService.getString("farm_name");
                     for (int j = 0; j < orchards.length(); j++) {
                         JSONObject orchard = orchards.getJSONObject(j);
+                        String id = orchard.getString("id");
                         String name = orchard.getString("name");
                         String polygon = orchard.getString("polygon");
-                        String id = orchard.getString("id");
+                        String altitudes = orchard.getString("polygon_altitudes");
+                        if (aeroviewPolygons.polygonPointsAltered(id, polygon) || altitudes.equals("")) {
+                            List<LatLng> pointList = aeroviewPolygons.convertStringToLatLngList(polygon);
+                            try {
+                                altitudes = aeroviewPolygons.fetchPointAltitudes(pointList);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         int cropTypeId = orchard.getInt("crop_type_id");
-                        serviceProviderBoundaries.add(new BoundaryDetail(name, id, polygon, clientId, cropTypeId, farmId));
+                        serviceProviderBoundaries.add(new BoundaryDetail(name, id, polygon, altitudes, clientId, cropTypeId, farmId));
                     }
                     JSONObject farm = new JSONObject();
                     farm.put("name", farmName);

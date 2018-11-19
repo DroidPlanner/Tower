@@ -672,11 +672,16 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
                     //missionControl.run(missionProxy, getApplicationContext(), false);
                     //new DJIMissionImpl().initializeMission(missionProxy, getApplicationContext(), resumePreviousMission);
                     //resumePreviousMission = false;
+
+                    //FOR DEBUGGING WITHOUT DRONE
+//                    missionControl.initializeMission(missionProxy, getApplicationContext(), false);
+
                     if (DroidPlannerApp.isProductConnected()) {
                         confirmMissionStart(EditorActivity.this);
                     } else {
                         setResultToToast("Drone disconnected");
                     }
+
                 } else {
                     mMixpanel.track("FPA: TapStopMission");
                     confirmMissionStop(EditorActivity.this);

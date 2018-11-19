@@ -195,6 +195,8 @@ public class DJIMissionImpl {
         if (DroidPlannerApp.isFirmwareNewVersion() == null) {
             DroidPlannerApp.getInstance().getFirmwareVersion();
         }
+
+        // COMMENT OUT FOR DEBUGGING WITHOUT DRONE
         final FlightController flightController = ((Aircraft) DroidPlannerApp.getProductInstance()).getFlightController();
         flightController.setStateCallback(new FlightControllerState.Callback() {
             @Override
@@ -286,6 +288,9 @@ public class DJIMissionImpl {
     }
 
     private List<MissionDetails> getMissionDetailsFromMissionProxyItems(MissionProxy missionProxy) {
+        // COMMENT OUT FOR DEBUGGING WITHOUT DRONE
+        final FlightController flightController = ((Aircraft) DroidPlannerApp.getProductInstance()).getFlightController();
+
         /**
          * Return list of MissionDetails objects from mission proxy
          */
@@ -294,12 +299,57 @@ public class DJIMissionImpl {
         for (MissionItemProxy itemProxy : items) {
             MissionItem item = itemProxy.getMissionItem();
             if (item instanceof Survey) {
-                List<LatLong> points = ((Survey) item).getGridPoints();
+                List<LatLong> gridPoints = ((Survey) item).getGridPoints();
+                List<LatLong> polygonPoints = ((Survey) item).getPolygonPoints();
+                List<Double> polygonPointAltitudes = ((Survey) item).getPolygonPointAltitudes();
                 float altitude = (float) ((Survey) item).getSurveyDetail().getAltitude();
                 float speed = (float) ((Survey) item).getSurveyDetail().getSpeed();
                 float imageDistance = (float) ((Survey) item).getSurveyDetail().getLongitudinalPictureDistance();
+
+                /*
+                 *  Add offset to flight altitude to allow for terrain irregularity.
+                 *  Requires polygonPointAltitudes to exist in survey object
+                 */
+                if (polygonPointAltitudes != null && polygonPointAltitudes.size() != 0) {
+                    // Get current GPS location - assume this to be takeoff location
+
+                    double currentLat = flightController.getState().getAircraftLocation().getLatitude();
+                    double currentLong = flightController.getState().getAircraftLocation().getLongitude();
+
+// FOR TESTING WITHOUT DRONE (COORDS ON TOP OF TABLE MOUNTAIN
+//                    double currentLat = -33.959094;
+//                    double currentLong = 18.403713;
+
+                    LatLong currentCoords = new LatLong(currentLat, currentLong);
+
+                    // Find polygonPoint closest to current GPS location (to be used to approximate takeoff altitude)
+                    int i = 0;
+                    int closestPointIndex = 0;
+                    double distToClosestPoint = distanceBetweenCoords(currentCoords, polygonPoints.get(0));
+                    for (LatLong polygonPoint : polygonPoints) {
+                        double distToPoint = distanceBetweenCoords(polygonPoint, currentCoords);
+                        if (distToPoint < distToClosestPoint) {
+                            distToClosestPoint = distToPoint;
+                            closestPointIndex = i;
+                        }
+                        i += 1;
+                    }
+
+                    // Find highest polygonPoint - the point for where worst-case overlap will happen
+                    Double highestAlt = polygonPointAltitudes.get(0);
+                    for (Double polygonPointAlt : polygonPointAltitudes) {
+                        highestAlt = Math.max(highestAlt, polygonPointAlt);
+                    }
+
+                    double startingAlt = polygonPointAltitudes.get(closestPointIndex); // could use Google Elevation API to get altitude at currentCoords
+
+                    // Add offset to ensure drone maintains sufficient alitude throughout mission
+                    double altitudeOffset = highestAlt - startingAlt;
+                    altitude += altitudeOffset;
+                }
+
                 if (isValidTriggerSpeed(imageDistance, speed)) {
-                    MissionDetails missionDetails = getCurrentMissionDetails(points, speed, imageDistance, altitude);
+                    MissionDetails missionDetails = getCurrentMissionDetails(gridPoints, speed, imageDistance, altitude);
                     missionsToSurvey.add(missionDetails);
                 } else {
                     return null;
@@ -308,6 +358,19 @@ public class DJIMissionImpl {
             }
         }
         return missionsToSurvey;
+    }
+
+    // Could be put somewhere else as a general public helper - Dev
+    private double distanceBetweenCoords(LatLong coordA, LatLong coordB) {
+        /*
+         * Returns distance between two LatLong pairs, in degrees
+         * sqrt( (ax-bx)^2 + (ay-by)^2 )
+         */
+
+        double latdiff = coordA.getLatitude() - coordB.getLatitude();
+        double longdiff = coordA.getLongitude() - coordB.getLongitude();
+
+        return Math.sqrt(Math.pow(latdiff,2) + Math.pow(longdiff,2));
     }
 
     private List<MissionDetails> getMissionDetailsFromDb(Context context, SharedPreferences sharedPreferences) {

@@ -441,6 +441,7 @@ public class AddBoundaryCheckDialog extends DialogFragment implements APIContrac
         List<LatLng> polyPoints = getPolygonPoints();
         String polyPointsString = convertPolyListToString(polyPoints);
         boundaryDetail.setPoints(polyPointsString);
+        boundaryDetail.setPointAltitudes(null);
         boundaryDetail.setAngle(surveyDetail.getAngle());
         boundaryDetail.setAltitude(surveyDetail.getAltitude());
         boundaryDetail.setOverlap(surveyDetail.getOverlap());

@@ -276,6 +276,8 @@ public class MissionProxy implements DPMap.PathSource {
         SQLiteDatabaseHandler dbHandler = new SQLiteDatabaseHandler(context);
         BoundaryDetail boundaryDetail = dbHandler.getBoundaryDetail(id);
 
+        survey.setPolygonPointAltitudes(boundaryDetail.getPointAltitudesAsList());
+
         SurveyDetail surveyDetail = new SurveyDetail();
         {
             surveyDetail.setAngle(boundaryDetail.getAngle());

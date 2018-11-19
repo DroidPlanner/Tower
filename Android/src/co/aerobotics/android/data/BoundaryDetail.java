@@ -1,6 +1,12 @@
 package co.aerobotics.android.data;
 
+import com.goebl.simplify.Simplify;
+import com.google.android.gms.maps.model.LatLng;
 import com.o3dr.services.android.lib.drone.mission.item.complex.CameraDetail;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by michaelwootton on 8/23/17.
@@ -16,6 +22,7 @@ public class BoundaryDetail {
     private double speed = 10;
     private String name;
     private String points = "";
+    private String pointAltitudes = "";
     private int clientId;
     private String camera = "";
     private Integer cropTypeId;
@@ -26,10 +33,11 @@ public class BoundaryDetail {
 
     }
 
-    public BoundaryDetail(String name, String boundary_id, String points, int clientId, Integer cropTypeId, int farmId) {
+    public BoundaryDetail(String name, String boundary_id, String points, String pointAltitudes, int clientId, Integer cropTypeId, int farmId) {
         this.name = name;
         this.boundary_id = boundary_id;
         this.points = points;
+        this.pointAltitudes = pointAltitudes;
         this.clientId = clientId;
         this.cropTypeId = cropTypeId;
         this.farmId = farmId;
@@ -109,6 +117,23 @@ public class BoundaryDetail {
     public void setPoints(String points) {
         this.points = points;
     }
+
+    public String getPointAltitudes() { return pointAltitudes; }
+
+    public List<Double> getPointAltitudesAsList() {
+        if (this.pointAltitudes != null && !this.pointAltitudes.equals("")) {
+            String[] pointAltitudeStrings = this.pointAltitudes.split(",");
+            ArrayList<Double> outputDoubles = new ArrayList<Double>();
+            for (String item : pointAltitudeStrings) {
+                outputDoubles.add(Double.parseDouble(item));
+            }
+            return outputDoubles;
+        } else {
+            return null;
+            }
+    }
+
+    public void setPointAltitudes(String pointAltitudes) { this.pointAltitudes = pointAltitudes; }
 
     public int getClientId() {
         return clientId;
