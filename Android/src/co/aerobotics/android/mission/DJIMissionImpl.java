@@ -19,6 +19,7 @@ import co.aerobotics.android.proxy.mission.MissionProxy;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.google.android.gms.maps.model.LatLng;
 import com.o3dr.services.android.lib.coordinate.LatLong;
+import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
@@ -197,19 +198,19 @@ public class DJIMissionImpl {
         }
 
         // COMMENT OUT FOR DEBUGGING WITHOUT DRONE
-        final FlightController flightController = ((Aircraft) DroidPlannerApp.getProductInstance()).getFlightController();
-        flightController.setStateCallback(new FlightControllerState.Callback() {
-            @Override
-            public void onUpdate(FlightControllerState flightControllerState) {
-                rthState = flightControllerState.getGoHomeAssessment().getSmartRTHState();
-                if (rthState != null && (rthState.equals(SmartRTHState.EXECUTED))) {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean(context.getString(R.string.mission_aborted), true);
-                    editor.apply();
-                    flightController.setStateCallback(null);
-                }
-            }
-        });
+//        final FlightController flightController = ((Aircraft) DroidPlannerApp.getProductInstance()).getFlightController();
+//        flightController.setStateCallback(new FlightControllerState.Callback() {
+//            @Override
+//            public void onUpdate(FlightControllerState flightControllerState) {
+//                rthState = flightControllerState.getGoHomeAssessment().getSmartRTHState();
+//                if (rthState != null && (rthState.equals(SmartRTHState.EXECUTED))) {
+//                    SharedPreferences.Editor editor = sharedPreferences.edit();
+//                    editor.putBoolean(context.getString(R.string.mission_aborted), true);
+//                    editor.apply();
+//                    flightController.setStateCallback(null);
+//                }
+//            }
+//        });
 
         this.context = context;
         sharedPreferences = context.getSharedPreferences(context.getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
@@ -235,7 +236,7 @@ public class DJIMissionImpl {
         //build waypoint missions
         List<WaypointMission> waypointMissions = getWaypointMissionList(missionsToSurvey);
         //if more than one mission then setup timeline mission
-        if (waypointMissions.size() > 0) {
+        if (waypointMissions.size() > 1) {
             isTimelineMission = true;
             //Schedule timeline elements in mission control
             List<TimelineElement> elements = getTimelineElements(waypointMissions);
@@ -289,7 +290,7 @@ public class DJIMissionImpl {
 
     private List<MissionDetails> getMissionDetailsFromMissionProxyItems(MissionProxy missionProxy) {
         // COMMENT OUT FOR DEBUGGING WITHOUT DRONE
-        final FlightController flightController = ((Aircraft) DroidPlannerApp.getProductInstance()).getFlightController();
+        //final FlightController flightController = ((Aircraft) DroidPlannerApp.getProductInstance()).getFlightController();
 
         /**
          * Return list of MissionDetails objects from mission proxy
@@ -312,13 +313,13 @@ public class DJIMissionImpl {
                  */
                 if (polygonPointAltitudes != null && polygonPointAltitudes.size() != 0) {
                     // Get current GPS location - assume this to be takeoff location
-
-                    double currentLat = flightController.getState().getAircraftLocation().getLatitude();
-                    double currentLong = flightController.getState().getAircraftLocation().getLongitude();
+//
+//                    double currentLat = flightController.getState().getAircraftLocation().getLatitude();
+//                    double currentLong = flightController.getState().getAircraftLocation().getLongitude();
 
 // FOR TESTING WITHOUT DRONE (COORDS ON TOP OF TABLE MOUNTAIN
-//                    double currentLat = -33.959094;
-//                    double currentLong = 18.403713;
+                    double currentLat = -33.959094;
+                    double currentLong = 18.403713;
 
                     LatLong currentCoords = new LatLong(currentLat, currentLong);
 
@@ -371,6 +372,33 @@ public class DJIMissionImpl {
         double longdiff = coordA.getLongitude() - coordB.getLongitude();
 
         return Math.sqrt(Math.pow(latdiff,2) + Math.pow(longdiff,2));
+    }
+
+    private double altitudeOnBoundary(LatLong pointOfInterest, LatLongAlt pointA, LatLongAlt pointB) {
+        /*
+         * returns the estimated altitude of a point - assuming it lies on the line between point A and point B
+         */
+
+        double diffX = Math.abs(pointA.getLongitude() - pointB.getLongitude());
+        double diffY = Math.abs(pointA.getLatitude() - pointB.getLatitude());
+        double diffZ = Math.abs(pointA.getAltitude() - pointB.getAltitude());
+        double alt;
+        double m = 0;
+
+        // z = m(x-x0) + z0
+
+        if (diffX != 0) {
+            m = diffZ/diffX;
+            alt = m * (pointOfInterest.getLongitude() - pointA.getLongitude()) + pointA.getAltitude();
+        } else if (diffY != 0) {
+            m = diffZ/diffY;
+            alt = m * (pointOfInterest.getLatitude() - pointA.getLatitude()) + pointA.getAltitude();
+        } else { // pointA and point B are at the same place...
+            alt = pointA.getAltitude();
+            return alt;
+        }
+
+        return alt;
     }
 
     private List<MissionDetails> getMissionDetailsFromDb(Context context, SharedPreferences sharedPreferences) {
@@ -495,6 +523,8 @@ public class DJIMissionImpl {
 */
     public WaypointMission buildMission(MissionDetails missionDetails, List<LatLong> points, WaypointMissionFinishedAction action){
         WaypointMission.Builder waypointMissionBuilder = new WaypointMission.Builder();
+        // anticipating waypoint points, not polygon vertices
+
         //get mission parameters
         float flightSpeed = missionDetails.getSpeed();
         float imageDistance = missionDetails.getImageDistance();
@@ -709,6 +739,7 @@ public class DJIMissionImpl {
     }
 
     public MissionDetails getCurrentMissionDetails(List<LatLong> points, float speed, float imageDistance, float altitude) {
+        // points here are waypoints to be flown to, not polygon vertices
         MissionDetails missionDetails = new MissionDetails();
         missionDetails.setSpeed(speed);
         missionDetails.setWaypoints(convertWaypointToString(points));
