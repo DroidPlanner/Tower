@@ -242,7 +242,16 @@ public class TimelineMissionImpl extends DJIMissionImpl {
                 float altitude = (float) ((Survey) item).getSurveyDetail().getAltitude();
                 float speed = (float) ((Survey) item).getSurveyDetail().getSpeed();
                 float imageDistance = (float) ((Survey) item).getSurveyDetail().getLongitudinalPictureDistance();
-                MissionDetails missionDetails = getCurrentMissionDetails(points, speed, imageDistance, altitude);
+
+                List<Double> pointHeights = new ArrayList<Double>();
+
+                // Big fail if this is actually used. Code for point height calculations all in DJIMissionImpl.java
+
+                for (int i = 0; i < points.size(); i++) {
+                    pointHeights.add(0.0);
+                }
+
+                MissionDetails missionDetails = getCurrentMissionDetails(points, speed, imageDistance, altitude, pointHeights);
                 missionsToSurvey.add(missionDetails);
             }
         }
@@ -270,10 +279,12 @@ public class TimelineMissionImpl extends DJIMissionImpl {
             if (i == missionsToSurvey.size() - 1) {
                 waypointMissions.add(buildMission(missionsToSurvey.get(i),
                         getWaypointsFromString(missionsToSurvey.get(i).getWaypoints(), 0),
+                        getWaypointsAltitudesFromString(missionsToSurvey.get(i).getWaypointAltitudes(), 0),
                         WaypointMissionFinishedAction.GO_HOME));
             } else {
                 waypointMissions.add(buildMission(missionsToSurvey.get(i),
                         getWaypointsFromString(missionsToSurvey.get(i).getWaypoints(), 0),
+                        getWaypointsAltitudesFromString(missionsToSurvey.get(i).getWaypointAltitudes(), 0),
                         WaypointMissionFinishedAction.NO_ACTION));
             }
         }

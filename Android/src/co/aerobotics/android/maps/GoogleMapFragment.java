@@ -135,6 +135,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
     final public static String ACTION_POLYGON_CLICKED = "polygon clicked";
     private Double aircraftLatitude;
     private Double aircraftLongitude;
+    public static Location location = null;
 
     private FlightControllerKey aircraftLatitudeKey = FlightControllerKey.create(FlightControllerKey.AIRCRAFT_LOCATION_LATITUDE);
     private FlightControllerKey aircraftLongitudeKey = FlightControllerKey.create(FlightControllerKey.AIRCRAFT_LOCATION_LONGITUDE);
@@ -231,7 +232,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
         public void onLocationResult(LocationResult result) {
             super.onLocationResult(result);
 
-            final Location location = result.getLastLocation();
+            //final Location
+            location = result.getLastLocation();
             if (location == null)
                 return;
 
@@ -266,6 +268,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
         }
     };
 
+    public Location getLocation() {
+        return this.location;
+    }
 
     private final GoogleApiClientTask mGoToMyLocationTask = new GoogleApiClientTask() {
         @Override

@@ -9,15 +9,17 @@ public class MissionDetails {
     private float imageDistance;
     private float altitude;
     private float speed;
+    private String waypointAltitudes;
 
     public MissionDetails(){
 
     }
-    public MissionDetails(String waypoints, float altitude, float imageDistance, float speed) {
+    public MissionDetails(String waypoints, float altitude, float imageDistance, float speed, String waypointAltitudes) {
         this.waypoints = waypoints;
         this.altitude = altitude;
         this.imageDistance = imageDistance;
         this.speed = speed;
+        this.waypointAltitudes = waypointAltitudes;
     }
 
     public String getWaypoints() {
@@ -51,4 +53,8 @@ public class MissionDetails {
     public void setSpeed(float speed) {
         this.speed = speed;
     }
+
+    public String getWaypointAltitudes() { return waypointAltitudes; }
+
+    public void setWaypointAltitudes(String waypointAltitudes) { this.waypointAltitudes = waypointAltitudes; }
 }
