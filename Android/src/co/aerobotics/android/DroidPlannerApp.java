@@ -428,7 +428,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         public void onRegister(DJIError error) {
             if(error == DJISDKError.REGISTRATION_SUCCESS) {
                 DJISDKManager.getInstance().startConnectionToProduct();
-                // DJISDKManager.getInstance().enableBridgeModeWithBridgeAppIP("192.168.100.165");
+                //DJISDKManager.getInstance().enableBridgeModeWithBridgeAppIP("192.168.100.181");
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(new Runnable() {
                     @Override

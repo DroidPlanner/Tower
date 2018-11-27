@@ -1,13 +1,9 @@
 package co.aerobotics.android.mission;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.GpsStatus;
 import android.location.Location;
-import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
@@ -22,14 +18,13 @@ import co.aerobotics.android.maps.GoogleMapFragment;
 import co.aerobotics.android.media.ImageImpl;
 import co.aerobotics.android.proxy.mission.MissionProxy;
 
-import com.getkeepsafe.taptargetview.TapTarget;
-import com.google.android.gms.maps.model.LatLng;
+import com.o3dr.android.client.Drone;
+import com.o3dr.android.client.interfaces.DroneListener;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.coordinate.LatLongAlt;
 import com.o3dr.services.android.lib.drone.mission.item.MissionItem;
 import com.o3dr.services.android.lib.drone.mission.item.complex.Survey;
 import com.o3dr.services.android.lib.drone.mission.item.complex.SurveyDetail;
-import com.squareup.okhttp.internal.Platform;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,7 +33,6 @@ import java.util.Locale;
 
 import co.aerobotics.android.proxy.mission.item.MissionItemProxy;
 import co.aerobotics.android.utils.location.EGM96;
-import co.aerobotics.android.utils.location.gov.nasa.worldwind.geom.Angle;
 import co.aerobotics.android.utils.location.gov.nasa.worldwind.geom.LatLon;
 import dji.common.camera.SettingsDefinitions;
 import dji.common.camera.WhiteBalance;
@@ -204,26 +198,28 @@ public class DJIMissionImpl {
      */
 
     public void initializeMission(MissionProxy missionProxy, final Context context, boolean resume) {
+        this.context = context;
+
         if (DroidPlannerApp.isFirmwareNewVersion() == null) {
             DroidPlannerApp.getInstance().getFirmwareVersion();
         }
 
-        // COMMENT OUT FOR DEBUGGING WITHOUT DRONE
-        final FlightController flightController = ((Aircraft) DroidPlannerApp.getProductInstance()).getFlightController();
-        flightController.setStateCallback(new FlightControllerState.Callback() {
-            @Override
-            public void onUpdate(FlightControllerState flightControllerState) {
-                rthState = flightControllerState.getGoHomeAssessment().getSmartRTHState();
-                if (rthState != null && (rthState.equals(SmartRTHState.EXECUTED))) {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean(context.getString(R.string.mission_aborted), true);
-                    editor.apply();
-                    flightController.setStateCallback(null);
+        if (!DroneListener.debuggingWithoutDrone) {
+            final FlightController flightController = ((Aircraft) DroidPlannerApp.getProductInstance()).getFlightController();
+            flightController.setStateCallback(new FlightControllerState.Callback() {
+                @Override
+                public void onUpdate(FlightControllerState flightControllerState) {
+                    rthState = flightControllerState.getGoHomeAssessment().getSmartRTHState();
+                    if (rthState != null && (rthState.equals(SmartRTHState.EXECUTED))) {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(context.getString(R.string.mission_aborted), true);
+                        editor.apply();
+                        flightController.setStateCallback(null);
+                    }
                 }
-            }
-        });
+            });
+        }
 
-        this.context = context;
         sharedPreferences = context.getSharedPreferences(context.getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
         List<MissionDetails> missionsToSurvey;
         if (resume) {
@@ -269,8 +265,9 @@ public class DJIMissionImpl {
             uploadMission();
         }
 
-        // UNCOMMENT FOR DEPLOYMENT WITH DRONE
-        turnOffObstacleAvoidance();
+        if (!DroneListener.debuggingWithoutDrone) {
+            turnOffObstacleAvoidance();
+        }
     }
 
     private void setCameraParameters(MissionProxy missionProxy) {
@@ -302,10 +299,27 @@ public class DJIMissionImpl {
     }
 
     private List<MissionDetails> getMissionDetailsFromMissionProxyItems(MissionProxy missionProxy) {
-        // COMMENT OUT FOR DEBUGGING WITHOUT DRONE
-        final FlightController flightController = ((Aircraft) DroidPlannerApp.getProductInstance()).getFlightController();
-        flightController.setMaxFlightHeight(499, null);
-        flightController.setMaxFlightRadius(7999, null);
+        LatLong currentCoords;
+        final FlightController flightController;
+
+        if (DroneListener.debuggingWithoutDrone) {
+         // FOR TESTING WITHOUT DRONE
+         // close to lower block on lower slopes farm
+            //            double currentLat = -33.94825;
+            //            double currentLong = 18.408898;
+         // Aerobotics
+            double currentLat = -33.930212;
+            double currentLong = 18.443295;
+
+            currentCoords = new LatLong(currentLat, currentLong);
+            flightController = null;
+        } else {
+            flightController = ((Aircraft) DroidPlannerApp.getProductInstance()).getFlightController();
+            flightController.setMaxFlightHeight(499, null);
+            flightController.setMaxFlightRadius(7999, null);
+
+            currentCoords = new LatLong(flightController.getState().getAircraftLocation().getLatitude(), flightController.getState().getAircraftLocation().getLongitude());
+        }
 
         /**
          * Return list of MissionDetails objects from mission proxy
@@ -313,19 +327,10 @@ public class DJIMissionImpl {
         List<MissionItemProxy> items = missionProxy.getItems();
         List<MissionDetails> missionsToSurvey = new ArrayList<>();
 
-        // FOR TESTING WITHOUT DRONE
-        // close to lower block on lower slopes farm
-//            double currentLat = -33.94825;
-//            double currentLong = 18.408898;
-        // Aerobotics
-//            double currentLat = -33.930212;
-//            double currentLong = 18.443295;
-
-        LatLong currentCoords = new LatLong(flightController.getState().getAircraftLocation().getLatitude(), flightController.getState().getAircraftLocation().getLongitude());
-
         double takeoffAltitude = getTakeOffAltitude(items, currentCoords);
         double returnToLaunchAlt = 20;
 
+        int itemindex = 0;
         for (MissionItemProxy itemProxy : items) {
             MissionItem item = itemProxy.getMissionItem();
             // List of takeoff-referenced heights for each waypoint on the ground (i.e. takeoff is 0, not 0 + altitude)
@@ -333,6 +338,7 @@ public class DJIMissionImpl {
 
             if (item instanceof Survey) {
                 List<LatLong> gridPoints = ((Survey) item).getGridPoints();
+                LatLong lastPoint = gridPoints.get(gridPoints.size() - 1);
                 List<LatLong> polygonPoints = ((Survey) item).getPolygonPoints();
                 List<Double> polygonPointAltitudes = ((Survey) item).getPolygonPointAltitudes();
                 float altitude = (float) ((Survey) item).getSurveyDetail().getAltitude();
@@ -365,10 +371,67 @@ public class DJIMissionImpl {
                     MissionDetails missionDetails = getCurrentMissionDetails(gridPoints, speed, imageDistance, altitude, gridPointHeights);
 
                     returnToLaunchAlt = Math.max(getHighestWaypoint(missionDetails), returnToLaunchAlt);
-                    // COMMENT OUT FOR TESTING WITHOUT DRONE
-                    flightController.setGoHomeHeightInMeters((int) Math.ceil(returnToLaunchAlt), null);
+                    returnToLaunchAlt = Math.max(20, Math.min(500, (int) Math.ceil(returnToLaunchAlt))); // Must be between 20m & 500m
+
+                    if (!DroneListener.debuggingWithoutDrone && flightController != null) {
+                        flightController.setGoHomeHeightInMeters((int) returnToLaunchAlt, null);
+//                        flightController.setGoHomeHeightInMeters(80, new CommonCallbacks.CompletionCallback() {
+//                            @Override
+//                            public void onResult(DJIError djiError) {
+//                                Toast.makeText(context,djiError.toString(), Toast.LENGTH_LONG).show();
+//                            }
+//                        });
+                    }
 
                     missionsToSurvey.add(missionDetails);
+
+             // Ensure that if the next item is lower than the current one it maintains current altitude until it gets there,
+             // but if next if higher than current, it adjusts first and then flies to the next item.
+
+                    double flyToNextAlt = altitude;
+                    for (double ppa : polygonPointAltitudes) {
+                        flyToNextAlt = Math.max(flyToNextAlt, ppa);
+                    }
+
+                    List<LatLong> fixerGridPoints = new ArrayList<LatLong>();
+                    List<Double> fixerGridAltitudes = new ArrayList<Double>();
+
+                    if (itemindex < items.size() - 1) { // not last mission to be added - must go to next orchard's altitude if higher than current
+                        MissionItemProxy nextItemProxy = items.get(itemindex + 1);
+                        MissionItem nextItem = nextItemProxy.getMissionItem();
+                        List<Double> nextPolygonPointAltitudes = ((Survey) nextItem).getPolygonPointAltitudes();
+                        List<LatLong> nextGridPoints = ((Survey) nextItem).getGridPoints();
+                        LatLong firstNextWaypoint = nextGridPoints.get(0);
+
+                        for (double nextPPA : nextPolygonPointAltitudes) {
+                            flyToNextAlt = Math.max(flyToNextAlt, nextPPA);
+                        }
+
+                        flyToNextAlt -= takeoffAltitude;
+
+                        fixerGridAltitudes.add(flyToNextAlt);
+                        fixerGridAltitudes.add(flyToNextAlt);
+                        fixerGridAltitudes.add(flyToNextAlt);
+
+                        fixerGridPoints.add(gridPoints.get(gridPoints.size()-1));
+                        fixerGridPoints.add(firstNextWaypoint);
+
+                    }
+
+                    if (itemindex == items.size() - 1) { // last mission to be added - go to return to home altitude
+
+                        fixerGridAltitudes.add(returnToLaunchAlt);
+                        fixerGridAltitudes.add(returnToLaunchAlt);
+                        fixerGridAltitudes.add(returnToLaunchAlt);
+
+                        fixerGridPoints.add(gridPoints.get(gridPoints.size()-1));
+                        fixerGridPoints.add(currentCoords);
+
+                    }
+
+                    MissionDetails altitudeFixer = getCurrentMissionDetails(fixerGridPoints, speed, 10000, altitude, fixerGridAltitudes);
+                    missionsToSurvey.add(altitudeFixer);
+                    itemindex += 1;
                 } else {
                     return null;
                 }
@@ -473,6 +536,11 @@ public class DJIMissionImpl {
     }
 
     private List<Double> findAltitudesOnBoundary(List<LatLong> gridPoints, List<LatLong> polygonPoints, List<Double> polygonPointAltitudes) {
+        /*
+         * Takes in a list of points (gridPoints) which are assumed to lie on the edges of the 3D polygon created by polygonPoints & polygonPointAltitudes
+         * and returns the estimated altitude of each gridPoint
+         */
+
         List<Double> altitudes = new ArrayList<Double>();
 
         for (LatLong gridPoint : gridPoints) {
@@ -530,9 +598,9 @@ public class DJIMissionImpl {
          * returns the estimated altitude of a point - assuming it lies on the line between point A and point B
          */
 
-        double diffX = Math.abs(pointA.getLongitude() - pointB.getLongitude());
-        double diffY = Math.abs(pointA.getLatitude() - pointB.getLatitude());
-        double diffZ = Math.abs(pointA.getAltitude() - pointB.getAltitude());
+        double diffX = pointA.getLongitude() - pointB.getLongitude();
+        double diffY = pointA.getLatitude() - pointB.getLatitude();
+        double diffZ = pointA.getAltitude() - pointB.getAltitude();
         double alt;
         double m = 0;
 
@@ -598,7 +666,9 @@ public class DJIMissionImpl {
                 // null element refers to global event
                 if (element == null) {
                     imageImpl = new ImageImpl();
-                    rotateGimbal(-90, 0.1);
+                    if (!DroneListener.debuggingWithoutDrone) {
+                        rotateGimbal(-90, 0.1);
+                    }
                 }
                 break;
             case STOPPED:

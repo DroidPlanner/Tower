@@ -47,6 +47,7 @@ import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.github.jorgecastilloprz.FABProgressCircle;
 import com.github.jorgecastilloprz.listeners.FABProgressListener;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.o3dr.android.client.interfaces.DroneListener;
 import com.o3dr.android.client.utils.FileUtils;
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.attribute.AttributeEvent;
@@ -673,13 +674,14 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
                     //new DJIMissionImpl().initializeMission(missionProxy, getApplicationContext(), resumePreviousMission);
                     //resumePreviousMission = false;
 
-                    //FOR DEBUGGING WITHOUT DRONE
-//                    missionControl.initializeMission(missionProxy, getApplicationContext(), false);
-
-                    if (DroidPlannerApp.isProductConnected()) {
-                        confirmMissionStart(EditorActivity.this);
+                    if (DroneListener.debuggingWithoutDrone) {
+                        missionControl.initializeMission(missionProxy, getApplicationContext(), false);
                     } else {
-                        setResultToToast("Drone disconnected");
+                        if (DroidPlannerApp.isProductConnected()) {
+                            confirmMissionStart(EditorActivity.this);
+                        } else {
+                            setResultToToast("Drone disconnected");
+                        }
                     }
 
                 } else {
