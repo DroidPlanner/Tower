@@ -81,6 +81,8 @@
     <string name="user_autopan_long_press">Long press to activate user auto panning.</string>
     <string name="drone_autopan_long_press">Long press to activate drone auto panning.</string>
     <string name="drone_no_location">No drone location available</string>
+    <string name="nav_to_one_farm">You have selected multiple farms. Please only select one farm to navigate to.</string>
+    <string name="confirm_nav_to_farm">This will open your maps application to navigate to the selected farm. Continue?</string>
 
     <!-- Connection State -->
     <string name="menu_connect">Connect</string>

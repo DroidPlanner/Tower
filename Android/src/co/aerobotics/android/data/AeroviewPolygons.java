@@ -18,6 +18,7 @@ import com.goebl.simplify.Simplify;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.o3dr.services.android.lib.coordinate.LatLong;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -729,6 +730,20 @@ public class AeroviewPolygons implements APIContract{
             Intent intent = new Intent(ACTION_ERROR_MSG);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         }
+    }
+
+    //Returns the first polygon vertex location from the first selected farm
+    public LatLng getFarmLocation(String farmId) {
+        List<BoundaryDetail> boundaryDetails = sqLiteDatabaseHandler.getBoundaryDetailsForFarmIds(farmId);
+
+        for (BoundaryDetail boundaryDetail : boundaryDetails) {
+            PolygonData polygonData = new PolygonData(boundaryDetail.getName(), convertStringToLatLngList(boundaryDetail.getPoints()), false, boundaryDetail.getBoundaryId());
+
+            for(LatLng point: polygonData.getPoints())
+                return point;
+        }
+
+        return null;
     }
 
     public void executeGetCropFamiliesTask () {
