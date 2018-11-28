@@ -87,6 +87,7 @@ public class DJIMissionImpl {
     public ImageImpl imageImpl;
     private SurveyDetail surveyDetail;
     private FlightControllerKey goHomeKey = FlightControllerKey.create(FlightControllerKey.START_GO_HOME);
+    public static boolean useTerrainFollowing = false;
 
     private Handler mainHandler = new Handler(Looper.getMainLooper());
     private Context context;
@@ -307,7 +308,7 @@ public class DJIMissionImpl {
          // close to lower block on lower slopes farm
             //            double currentLat = -33.94825;
             //            double currentLong = 18.408898;
-         // Aerobotics
+         // Aerobotics offices
             double currentLat = -33.930212;
             double currentLong = 18.443295;
 
@@ -375,12 +376,6 @@ public class DJIMissionImpl {
 
                     if (!DroneListener.debuggingWithoutDrone && flightController != null) {
                         flightController.setGoHomeHeightInMeters((int) returnToLaunchAlt, null);
-//                        flightController.setGoHomeHeightInMeters(80, new CommonCallbacks.CompletionCallback() {
-//                            @Override
-//                            public void onResult(DJIError djiError) {
-//                                Toast.makeText(context,djiError.toString(), Toast.LENGTH_LONG).show();
-//                            }
-//                        });
                     }
 
                     missionsToSurvey.add(missionDetails);
@@ -411,7 +406,6 @@ public class DJIMissionImpl {
 
                         fixerGridAltitudes.add(flyToNextAlt);
                         fixerGridAltitudes.add(flyToNextAlt);
-                        fixerGridAltitudes.add(flyToNextAlt);
 
                         fixerGridPoints.add(gridPoints.get(gridPoints.size()-1));
                         fixerGridPoints.add(firstNextWaypoint);
@@ -422,7 +416,6 @@ public class DJIMissionImpl {
 
                         fixerGridAltitudes.add(returnToLaunchAlt);
                         fixerGridAltitudes.add(returnToLaunchAlt);
-                        fixerGridAltitudes.add(returnToLaunchAlt);
 
                         fixerGridPoints.add(gridPoints.get(gridPoints.size()-1));
                         fixerGridPoints.add(currentCoords);
@@ -430,7 +423,9 @@ public class DJIMissionImpl {
                     }
 
                     MissionDetails altitudeFixer = getCurrentMissionDetails(fixerGridPoints, speed, 10000, altitude, fixerGridAltitudes);
-                    missionsToSurvey.add(altitudeFixer);
+                    if (useTerrainFollowing) {
+                        missionsToSurvey.add(altitudeFixer);
+                    }
                     itemindex += 1;
                 } else {
                     return null;
@@ -759,6 +754,12 @@ public class DJIMissionImpl {
             double lat = points.get(i).getLatitude();
             double lng = points.get(i).getLongitude();
             float alt = pointAltitudes.get(i).floatValue();
+
+            // control whether drone altitude is set dynamically in flight or not
+            if (!useTerrainFollowing) {
+                alt = 0;
+            }
+
             Waypoint mWaypoint = new Waypoint(lat, lng, alt + altitude);
             waypointList.add(mWaypoint);
         }
@@ -1093,7 +1094,6 @@ public class DJIMissionImpl {
             });
         }
     }
-
 
     /*
     Gimbal controls

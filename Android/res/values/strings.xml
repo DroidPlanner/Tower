@@ -192,6 +192,8 @@
     <string name="structure_scan_start_alt">Start altitude</string>
     <string name="structure_scan_step_height">Step height</string>
     <string name="stucture_scanner_cross_hatch">Cross Hatch</string>
+    <string name="yes_without_terrain_follow">Yes, without Terrain Following</string>
+    <string name="yes_with_terrain_follow">Yes, with Terrain Following</string>
 
     <string name="dlg_clear_mission_title">Mission</string>
     <string name="dlg_clear_mission_confirm">Clear all waypoints from the map?</string>

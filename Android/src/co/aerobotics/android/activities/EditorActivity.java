@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -38,6 +39,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.crashlytics.android.answers.Answers;
@@ -952,21 +954,43 @@ public class EditorActivity extends DrawerNavigationUI implements GestureMapFrag
         LayoutInflater inflater = getLayoutInflater();
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(context);
-        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.com_dji_android_PREF_FILE_KEY),Context.MODE_PRIVATE);
         boolean previousMissionAborted = sharedPreferences.getBoolean(context.getString(R.string.mission_aborted), false);
         builder.setTitle("Start Mission");
+
         if (previousMissionAborted) {
+
             View dialogView = inflater.inflate(R.layout.dialog_resume_mission, null);
             CheckBox resumeCheck = (CheckBox) dialogView.findViewById(R.id.resumeMissionCheckBox);
+
             resumeCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     resumePreviousMission = b;
                 }
             });
+
             builder.setView(dialogView);
+
         } else {
-            builder.setMessage("Are you sure you want to start the mission?");
+
+            View dialogView = inflater.inflate(R.layout.dialog_start_mission, null);
+
+            Switch useTerrainFollowSwitch = (Switch) dialogView.findViewById(R.id.useTerrainFollowSwitch);
+            DJIMissionImpl.useTerrainFollowing = sharedPreferences.getBoolean("use_terrain_following", false);
+            useTerrainFollowSwitch.setChecked(DJIMissionImpl.useTerrainFollowing);
+
+            useTerrainFollowSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    DJIMissionImpl.useTerrainFollowing = b;
+                    sharedPreferences.edit().putBoolean("use_terrain_following", DJIMissionImpl.useTerrainFollowing).apply();
+                }
+            });
+
+            builder.setView(dialogView);
+
+            sharedPreferences.edit().putBoolean("use_terrain_following", DJIMissionImpl.useTerrainFollowing).apply();
         }
 
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
