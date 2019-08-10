@@ -123,7 +123,7 @@ public class MapboxTileProviderManager extends TileProviderManager {
             maxY = Double.valueOf(Math.floor((1.0 - (Math.log(Math.tan(minLat * Math.PI / 180.0) + 1.0 / Math.cos(minLat * Math.PI / 180.0)) / Math.PI)) / 2.0 * tilesPerSide)).intValue();
             for (int x = minX; x <= maxX; x++) {
                 for (int y = minY; y <= maxY; y++) {
-                    urls.add(MapboxUtils.getMapTileURL(mapId, accessToken, zoom, x, y));
+                    urls.add(MapboxUtils.getMapTileURL(userId, mapId, accessToken, zoom, x, y));
                 }
             }
         }

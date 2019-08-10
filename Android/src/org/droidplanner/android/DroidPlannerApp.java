@@ -26,7 +26,6 @@ import com.o3dr.services.android.lib.drone.connection.ConnectionParameter;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 import com.o3dr.services.android.lib.gcs.link.LinkConnectionStatus;
 import com.o3dr.services.android.lib.model.AbstractCommandListener;
-import com.squareup.leakcanary.LeakCanary;
 
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
 import org.droidplanner.android.droneshare.UploaderService;

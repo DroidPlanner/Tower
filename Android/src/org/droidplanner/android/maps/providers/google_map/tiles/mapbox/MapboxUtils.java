@@ -30,13 +30,13 @@ public class MapboxUtils {
                 userId, mapID, zoom, x, y, "@2x", accessToken);
     }
 
-    public static int fetchReferenceTileUrl(Context context, String mapId, String accessToken){
+    public static int fetchReferenceTileUrl(Context context, String userId, String mapId, String accessToken){
         if(!NetworkUtils.isNetworkAvailable(context)){
             Timber.d("Network is not available. Aborting reference tile fetching.");
             return -1;
         }
 
-        final String referenceUrl = getMapTileURL(mapId, accessToken, 0, 0, 0);
+        final String referenceUrl = getMapTileURL(userId, mapId, accessToken, 0, 0, 0);
 
         HttpURLConnection conn = null;
         try{
