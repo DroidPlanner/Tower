@@ -162,11 +162,12 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         lbm = LocalBroadcastManager.getInstance(context);
         soundManager = new SoundManager(context);
 
-        initLoggingAndAnalytics();
+        /*initLoggingAndAnalytics();*/
         initDronekit();
         initDatabases();
     }
 
+    /*
     private void initLoggingAndAnalytics(){
         //Init leak canary
         LeakCanary.install(this);
@@ -195,6 +196,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
             Fabric.with(context, new Crashlytics());
         }
     }
+    */
 
     private void initDronekit(){
         Context context = getApplicationContext();
