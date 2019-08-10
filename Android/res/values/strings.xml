@@ -448,9 +448,12 @@
     <string name="pref_title_mapbox_tile_provider">Mapbox Tile Provider</string>
     <string name="pref_title_mapbox_map_download">Download Offline Map</string>
     <string name="pref_summary_mapbox_map_download">Click to cache map for use while offline</string>
+    <string name="pref_title_mapbox_Userid">Mapbox UserId</string>
+    <string name="pref_hint_mapbox_Userid">Mapbox user id</string>
+    <string name="pref_summary_mapbox_Userid">Enter your mapbox user id</string>
     <string name="pref_title_mapbox_id">Mapbox Id</string>
     <string name="pref_hint_mapbox_id">Mapbox map id</string>
-    <string name="pref_summary_mapbox_id">Enter your mapbox map id</string>
+    <string name="pref_summary_mapbox_id">Enter your mapbox styled map id</string>
     <string name="pref_title_mapbox_access_token">Mapbox Access Token</string>
     <string name="pref_hint_mapbox_access_token">Mapbox access token</string>
     <string name="pref_summary_mapbox_access_token">Enter your mapbox access token</string>
@@ -461,6 +464,7 @@
     <string name="instructions_map_download_selection">Pan and zoom to adjust the map area to save</string>
     <string name="instructions_tap_to_save_map">Tap to save the map</string>
     <string name="label_map_saved">Map area saved!</string>
+    <string name="label_invalid_mapbox_userid">Invalid mapbox user id</string>
     <string name="label_invalid_mapbox_id">Invalid mapbox id</string>
     <string name="label_invalid_mapbox_access_token">Invalid mapbox access token</string>
     <string name="alert_invalid_mapbox_credentials">Invalid mapbox credentials! Please update your mapbox settings.</string>

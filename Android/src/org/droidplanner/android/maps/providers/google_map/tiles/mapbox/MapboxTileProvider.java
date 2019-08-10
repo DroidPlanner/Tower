@@ -14,12 +14,14 @@ public class MapboxTileProvider extends UrlTileProvider {
 
     private final static String TAG = MapboxTileProvider.class.getSimpleName();
 
+    private final String mapboxUserId;
     private final String mapboxId;
     private final String mapboxAccessToken;
     private final int maxZoomLevel;
 
-    public MapboxTileProvider(String mapboxId, String mapboxAccessToken, int maxZoomLevel) {
+    public MapboxTileProvider(String mapboxUserId, String mapboxId, String mapboxAccessToken, int maxZoomLevel) {
         super(MapboxUtils.TILE_WIDTH, MapboxUtils.TILE_HEIGHT);
+        this.mapboxUserId = mapboxUserId;
         this.mapboxId = mapboxId;
         this.mapboxAccessToken = mapboxAccessToken;
         this.maxZoomLevel = maxZoomLevel;
@@ -28,7 +30,7 @@ public class MapboxTileProvider extends UrlTileProvider {
     @Override
     public URL getTileUrl(int x, int y, int zoom) {
         if (zoom <= maxZoomLevel) {
-            final String tileUrl = MapboxUtils.getMapTileURL(mapboxId, mapboxAccessToken, zoom, x, y);
+            final String tileUrl = MapboxUtils.getMapTileURL(mapboxUserId, mapboxId, mapboxAccessToken, zoom, x, y);
             try {
                 return new URL(tileUrl);
             } catch (MalformedURLException e) {
@@ -44,5 +46,9 @@ public class MapboxTileProvider extends UrlTileProvider {
 
     public String getMapboxId() {
         return mapboxId;
+    }
+
+    public String getMapboxUserId() {
+        return mapboxUserId;
     }
 }

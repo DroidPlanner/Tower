@@ -1233,11 +1233,13 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         final GoogleMapPrefFragment.PrefManager prefManager = GoogleMapPrefFragment.PrefManager;
+        final String mapboxUserId = prefManager.getMapboxUserId(context);
         final String mapboxId = prefManager.getMapboxId(context);
         final String mapboxAccessToken = prefManager.getMapboxAccessToken(context);
         final int maxZoomLevel = (int) map.getMaxZoomLevel();
 
         if (!(tileProviderManager instanceof MapboxTileProviderManager)
+                || !mapboxUserId.equals(((MapboxTileProviderManager) tileProviderManager).getMapboxUserId())
             || !mapboxId.equals(((MapboxTileProviderManager) tileProviderManager).getMapboxId())
             || !mapboxAccessToken.equals(((MapboxTileProviderManager) tileProviderManager).getMapboxAccessToken())) {
 
@@ -1247,7 +1249,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
                 onlineTileOverlay = null;
             }
 
-            tileProviderManager = new MapboxTileProviderManager(context, mapboxId, mapboxAccessToken, maxZoomLevel);
+            tileProviderManager = new MapboxTileProviderManager(context, mapboxUserId, mapboxId, mapboxAccessToken, maxZoomLevel);
             TileOverlayOptions options = new TileOverlayOptions()
                 .tileProvider(tileProviderManager.getOnlineTileProvider())
                 .zIndex(ONLINE_TILE_PROVIDER_Z_INDEX);
@@ -1275,7 +1277,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
             @Override
             protected Integer doInBackground(Void... params) {
                 final Context context = getContext();
-                return MapboxUtils.fetchReferenceTileUrl(context, mapboxId, mapboxAccessToken);
+                return MapboxUtils.fetchReferenceTileUrl(context, mapboxUserId, mapboxId, mapboxAccessToken);
             }
 
             @Override

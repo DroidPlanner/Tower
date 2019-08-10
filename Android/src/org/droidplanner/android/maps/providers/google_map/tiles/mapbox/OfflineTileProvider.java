@@ -15,12 +15,14 @@ public class OfflineTileProvider implements TileProvider {
     private static final String TAG = OfflineTileProvider.class.getSimpleName();
 
     private final Context context;
+    private final String mapboxUserId;
     private final String mapboxId;
     private final String mapboxAccessToken;
     private final int maxZoomLevel;
 
-    public OfflineTileProvider(Context context, String mapboxId, String mapboxAccessToken, int maxZoomLevel) {
+    public OfflineTileProvider(Context context, String mapboxUserId, String mapboxId, String mapboxAccessToken, int maxZoomLevel) {
         this.context = context;
+        this.mapboxUserId = mapboxUserId;
         this.mapboxId = mapboxId;
         this.mapboxAccessToken = mapboxAccessToken;
         this.maxZoomLevel = maxZoomLevel;
@@ -32,7 +34,7 @@ public class OfflineTileProvider implements TileProvider {
             return TileProvider.NO_TILE;
         }
 
-        final String tileUri = MapboxUtils.getMapTileURL(mapboxId, mapboxAccessToken, zoom, x, y);
+        final String tileUri = MapboxUtils.getMapTileURL(mapboxUserId, mapboxId, mapboxAccessToken, zoom, x, y);
         byte[] data = DatabaseState.getOfflineDatabaseHandlerForMapId(context, mapboxId).dataForURL(tileUri);
         if (data == null || data.length == 0)
             return TileProvider.NO_TILE;
