@@ -37,16 +37,22 @@ public class MapboxTileProviderManager extends TileProviderManager {
     private final Handler handler = new Handler();
 
     private final Context context;
+    private final String mapboxUserId;
     private final String mapboxId;
     private final String mapboxAccessToken;
 
-    public MapboxTileProviderManager(Context context, String mapboxId, String mapboxAccessToken, int maxZoomLevel) {
-        super(new MapboxTileProvider(mapboxId, mapboxAccessToken, maxZoomLevel),
-            new OfflineTileProvider(context, mapboxId, mapboxAccessToken, maxZoomLevel));
+    public MapboxTileProviderManager(Context context, String mapboxUserId, String mapboxId, String mapboxAccessToken, int maxZoomLevel) {
+        super(new MapboxTileProvider(mapboxUserId, mapboxId, mapboxAccessToken, maxZoomLevel),
+            new OfflineTileProvider(context, mapboxUserId, mapboxId, mapboxAccessToken, maxZoomLevel));
 
         this.context = context;
+        this.mapboxUserId = mapboxUserId;
         this.mapboxId = mapboxId;
         this.mapboxAccessToken = mapboxAccessToken;
+    }
+
+    public String getMapboxUserId() {
+        return mapboxUserId;
     }
 
     public String getMapboxAccessToken() {
@@ -60,15 +66,15 @@ public class MapboxTileProviderManager extends TileProviderManager {
     @Override
     public void downloadMapTiles(MapDownloader mapDownloader, DPMap.VisibleMapArea mapRegion, int
         minimumZ, int maximumZ) {
-        beginDownloadingMapID(mapDownloader, this.mapboxId, this.mapboxAccessToken, mapRegion, minimumZ, maximumZ);
+        beginDownloadingMapID(mapDownloader, this.mapboxUserId, this.mapboxId, this.mapboxAccessToken, mapRegion, minimumZ, maximumZ);
     }
 
-    private void beginDownloadingMapID(final MapDownloader mapDownloader, final String mapId, final String accessToken, DPMap.VisibleMapArea mapRegion, int
+    private void beginDownloadingMapID(final MapDownloader mapDownloader, final String userId, final String mapId, final String accessToken, DPMap.VisibleMapArea mapRegion, int
         minimumZ, int maximumZ) {
-        beginDownloadingMapID(mapDownloader, mapId, accessToken, mapRegion, minimumZ, maximumZ, true, true);
+        beginDownloadingMapID(mapDownloader, userId, mapId, accessToken, mapRegion, minimumZ, maximumZ, true, true);
     }
 
-    private void beginDownloadingMapID(final MapDownloader mapDownloader, final String mapId, final String accessToken, DPMap.VisibleMapArea mapRegion, int
+    private void beginDownloadingMapID(final MapDownloader mapDownloader, final String userId, final String mapId, final String accessToken, DPMap.VisibleMapArea mapRegion, int
         minimumZ, int maximumZ, boolean includeMetadata,
                                       boolean includeMarkers) {
 
@@ -76,11 +82,11 @@ public class MapboxTileProviderManager extends TileProviderManager {
         String dataName = "features.json";    // Only using API V4 for now
 
         // Include URLs for the metadata and markers json if applicable
-        if (includeMetadata) {
+        if (false) {
             urls.add(String.format(Locale.US, MapboxUtils.MAPBOX_BASE_URL_V4 + "%s.json?secure&access_token=%s",
                 mapId, accessToken));
         }
-        if (includeMarkers) {
+        if (false) {
             urls.add(String.format(Locale.US, MapboxUtils.MAPBOX_BASE_URL_V4 + "%s/%s?access_token=%s", mapId,
                 dataName, accessToken));
         }
@@ -117,7 +123,7 @@ public class MapboxTileProviderManager extends TileProviderManager {
             maxY = Double.valueOf(Math.floor((1.0 - (Math.log(Math.tan(minLat * Math.PI / 180.0) + 1.0 / Math.cos(minLat * Math.PI / 180.0)) / Math.PI)) / 2.0 * tilesPerSide)).intValue();
             for (int x = minX; x <= maxX; x++) {
                 for (int y = minY; y <= maxY; y++) {
-                    urls.add(MapboxUtils.getMapTileURL(mapId, accessToken, zoom, x, y));
+                    urls.add(MapboxUtils.getMapTileURL(userId, mapId, accessToken, zoom, x, y));
                 }
             }
         }

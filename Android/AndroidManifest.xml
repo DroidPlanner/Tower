@@ -59,7 +59,7 @@
         <!-- You must insert your own Google Maps for Android API v2 key in here. -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyA2oC6zsx-Ir4be8bWFWrAej7FcKdrWGdA"/>
+            android:value="AddYourOwnKeyFromGoogleCloudPlatformHere"/>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"/>

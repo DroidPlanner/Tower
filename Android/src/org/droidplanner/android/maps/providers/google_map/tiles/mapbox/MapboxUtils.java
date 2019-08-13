@@ -25,18 +25,18 @@ public class MapboxUtils {
 
     public static final String MAPBOX_BASE_URL_V4 = "https://a.tiles.mapbox.com/v4/";
 
-    public static String getMapTileURL(String mapID, String accessToken, int zoom, int x, int y) {
-        return String.format(Locale.US, "https://a.tiles.mapbox.com/v4/%s/%d/%d/%d%s.%s?access_token=%s",
-                mapID, zoom, x, y, "@2x", "png", accessToken);
+    public static String getMapTileURL(String userId, String mapID, String accessToken, int zoom, int x, int y) {
+        return String.format(Locale.US, "https://api.mapbox.com/styles/v1/%s/%s/tiles/%d/%d/%d%s?access_token=%s",
+                userId, mapID, zoom, x, y, "@2x", accessToken);
     }
 
-    public static int fetchReferenceTileUrl(Context context, String mapId, String accessToken){
+    public static int fetchReferenceTileUrl(Context context, String userId, String mapId, String accessToken){
         if(!NetworkUtils.isNetworkAvailable(context)){
             Timber.d("Network is not available. Aborting reference tile fetching.");
             return -1;
         }
 
-        final String referenceUrl = getMapTileURL(mapId, accessToken, 0, 0, 0);
+        final String referenceUrl = getMapTileURL(userId, mapId, accessToken, 0, 0, 0);
 
         HttpURLConnection conn = null;
         try{

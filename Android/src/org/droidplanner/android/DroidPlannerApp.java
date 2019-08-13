@@ -26,7 +26,6 @@ import com.o3dr.services.android.lib.drone.connection.ConnectionParameter;
 import com.o3dr.services.android.lib.drone.connection.ConnectionType;
 import com.o3dr.services.android.lib.gcs.link.LinkConnectionStatus;
 import com.o3dr.services.android.lib.model.AbstractCommandListener;
-import com.squareup.leakcanary.LeakCanary;
 
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
 import org.droidplanner.android.droneshare.UploaderService;
@@ -162,11 +161,12 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
         lbm = LocalBroadcastManager.getInstance(context);
         soundManager = new SoundManager(context);
 
-        initLoggingAndAnalytics();
+        /*initLoggingAndAnalytics();*/
         initDronekit();
         initDatabases();
     }
 
+    /*
     private void initLoggingAndAnalytics(){
         //Init leak canary
         LeakCanary.install(this);
@@ -195,6 +195,7 @@ public class DroidPlannerApp extends MultiDexApplication implements DroneListene
             Fabric.with(context, new Crashlytics());
         }
     }
+    */
 
     private void initDronekit(){
         Context context = getApplicationContext();

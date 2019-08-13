@@ -49,10 +49,10 @@ dependencies {
     //Charts and graph library
     compile 'com.github.lecho:hellocharts-library:1.5.5@aar'
 
-    //Leak canary (https://github.com/square/leakcanary)
+    /*Leak canary (https://github.com/square/leakcanary)
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2' */
 }
 
 def versionPrefix = "Tower-v"

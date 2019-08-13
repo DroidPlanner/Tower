@@ -78,6 +78,14 @@
 
             <EditTextPreference
                 android:gravity="center"
+                android:hint="@string/pref_hint_mapbox_Userid"
+                android:key="pref_mapbox_userid"
+                android:selectAllOnFocus="true"
+                android:summary="@string/pref_summary_mapbox_Userid"
+                android:title="@string/pref_title_mapbox_Userid"/>
+
+            <EditTextPreference
+                android:gravity="center"
                 android:hint="@string/pref_hint_mapbox_id"
                 android:key="pref_mapbox_id"
                 android:selectAllOnFocus="true"
