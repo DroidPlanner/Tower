@@ -25,6 +25,10 @@ The next version of Tower is under development, and we would love your help with
  1. Access and download the beta through https://play.google.com/store/apps/details?id=org.droidplanner.android.beta.
  2. Post your feedback in the [Tower Discuss forum](http://discuss.ardupilot.org/c/ground-control-software/tower). We want to hear what you think!
 
+### Donloading Tower Apk File
+
+To download *Tower Apk*, visit the [Tower Releases Page](https://github.com/DroidPlanner/Tower/releases).
+
 ### Contributing
 
 Tower is in active development. If you would like to contribute to the project,
