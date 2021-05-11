@@ -10,7 +10,7 @@ import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 
 /**
  * Created by Jeon-Sunghwan on 5/10/21.
- * give me a coordinate .
+ * give me a coordinate . funtion
  */
 class CoordinateToolsImpl extends EditorToolsImpl implements View.OnClickListener {
 
