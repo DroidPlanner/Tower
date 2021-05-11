@@ -51,16 +51,17 @@ class DrawToolsImpl extends EditorToolsImpl implements AdapterView.OnItemSelecte
     }
 
     @Override
-    public void setup() {
+    public void setup()
+    {
         EditorToolsFragment.EditorToolListener listener = editorToolsFragment.listener;
         if (listener != null) {
             listener.enableGestureDetection(true);
         }
 
-        if (missionProxy != null)
-            missionProxy.selection.clearSelection();
+        if (missionProxy != null) //미션이 있으면
+            missionProxy.selection.clearSelection(); //선택된 것을 초기화
 
-        if (selectedType == MissionItemType.SURVEY) {
+        if (selectedType == MissionItemType.SURVEY) {//선택된 스피너 대화상자가 survey 경우
             Toast.makeText(editorToolsFragment.getContext(), R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
         }
     }

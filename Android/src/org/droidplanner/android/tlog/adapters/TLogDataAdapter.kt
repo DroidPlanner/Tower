@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import org.droidplanner.android.DroidPlannerApp
@@ -96,11 +97,11 @@ class TLogDataAdapter(val app: DroidPlannerApp, val fragmentMgr: FragmentManager
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder? {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val containerView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_tlog_data, parent, false)
         val dataLabel = containerView.findViewById(R.id.tlog_data_label) as TextView
-        val clearSession = containerView.findViewById(R.id.clear_tlog_session)
-        val editLabel = containerView.findViewById(R.id.rename_tlog_session)
+        val clearSession = containerView.findViewById<ImageView>(R.id.clear_tlog_session)
+        val editLabel = containerView.findViewById<ImageView>(R.id.rename_tlog_session)
         return ViewHolder(containerView, dataLabel, clearSession, editLabel)
     }
 

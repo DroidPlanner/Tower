@@ -172,6 +172,7 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
         gestureMapFragment.setOnPathFinishedListener(this);
         openActionDrawer();
+
     }
 
     @Override
@@ -400,15 +401,15 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
             Pair<Double, Double> distanceAndTime = missionProxy.getMissionFlightTime();
             LengthUnit convertedMissionLength = unitSystem.getLengthUnitProvider()
-                .boxBaseValueToTarget(distanceAndTime.first);
+                    .boxBaseValueToTarget(distanceAndTime.first);
 
             double time = distanceAndTime.second;
             String infoString = getString(R.string.editor_info_window_distance,
-                convertedMissionLength.toString()) +
-                ", " +
-                getString(R.string.editor_info_window_flight_time, time == Double.POSITIVE_INFINITY
-                    ? time
-                    : String.format(Locale.US, "%1$02d:%2$02d", ((int) time / 60), ((int) time % 60)));
+                    convertedMissionLength.toString()) +
+                    ", " +
+                    getString(R.string.editor_info_window_flight_time, time == Double.POSITIVE_INFINITY
+                            ? time
+                            : String.format(Locale.US, "%1$02d:%2$02d", ((int) time / 60), ((int) time % 60)));
 
             infoView.setText(infoString);
 
@@ -583,10 +584,13 @@ public class EditorActivity extends DrawerNavigationUI implements OnPathFinished
 
         final boolean isEmpty = selected.isEmpty();
 
-        if (isEmpty) {
+        if (isEmpty)
+        {
             itemDetailToggle.setVisibility(View.GONE);
             removeItemDetail();
-        } else {
+        }
+        else
+            {
             itemDetailToggle.setVisibility(View.VISIBLE);
             if (getTool() == EditorTools.SELECTOR)
                 removeItemDetail();

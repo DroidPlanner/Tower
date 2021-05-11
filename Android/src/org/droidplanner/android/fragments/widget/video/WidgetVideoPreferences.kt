@@ -27,7 +27,9 @@ class WidgetVideoPreferences : DialogFragment() {
         const val CUSTOM_VIDEO_TYPE = 1
     }
 
-    @IntDef(SOLO_VIDEO_TYPE.toLong(), CUSTOM_VIDEO_TYPE.toLong())
+    // MSz
+    //@IntDef(SOLO_VIDEO_TYPE.toLong(), CUSTOM_VIDEO_TYPE.toLong())
+    @IntDef(SOLO_VIDEO_TYPE.toInt(), CUSTOM_VIDEO_TYPE.toInt())
     @Retention(AnnotationRetention.SOURCE)
     annotation class VideoType
 
@@ -93,7 +95,7 @@ class WidgetVideoPreferences : DialogFragment() {
 
                 R.id.custom_video_stream_check -> {
                     udpPortView?.isEnabled = true
-                    appPrefs.videoWidgetType = CUSTOM_VIDEO_TYPE
+                    appPrefs.videoWidgetType = CUSTOM_VIDEO_TYPE.toInt()
                 }
             }
         }

@@ -67,9 +67,15 @@ public class VehicleStatusFragment : ApiListenerFragment() {
 
     private var titleView: TextView? = null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?{
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        return super.onCreateView(inflater, container, savedInstanceState)
         return inflater?.inflate(R.layout.fragment_vehicle_status, container, false)
     }
+
+    // MSz
+//    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?{
+//        return inflater?.inflate(R.layout.fragment_vehicle_status, container, false)
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)

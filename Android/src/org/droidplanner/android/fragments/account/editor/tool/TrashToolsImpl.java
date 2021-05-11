@@ -22,15 +22,16 @@ class TrashToolsImpl extends EditorToolsImpl implements View.OnClickListener {
     }
 
     @Override
-    public void onListItemClick(MissionItemProxy item) {
+    public void onListItemClick(MissionItemProxy item)
+    {
         if (missionProxy == null)
             return;
-
-
+        //맵에서나 컨테이너 클릭시
         missionProxy.selection.clearSelection();
-        missionProxy.removeItem(item);
+        missionProxy.removeItem(item); //한개씩 삭제
 
-        if (missionProxy.getItems().size() <= 0) {
+        if (missionProxy.getItems().size() <= 0)//아이템 숫자가 없으면 탈출
+        {
             editorToolsFragment.setTool(EditorToolsFragment.EditorTools.NONE);
         }
     }
@@ -47,16 +48,20 @@ class TrashToolsImpl extends EditorToolsImpl implements View.OnClickListener {
     }
 
     @Override
-    public void setup() {
+    public void setup()
+    {
         EditorToolsFragment.EditorToolListener listener = editorToolsFragment.listener;
-        if (listener != null) {
+        if (listener != null)
+         {
             listener.enableGestureDetection(false);
         }
 
-        if (missionProxy != null) {
+        if (missionProxy != null)
+        {    //선택된 것을 가져와서 선택된거 삭제
             List<MissionItemProxy> selected = missionProxy.selection.getSelected();
             editorToolsFragment.clearSelected.setEnabled(!selected.isEmpty());
 
+            //미션 모드들을 가져와서 미션 삭제시 전체 삭제
             final List<MissionItemProxy> missionItems = missionProxy.getItems();
             editorToolsFragment.clearMission.setEnabled(!missionItems.isEmpty());
         }
@@ -120,7 +125,8 @@ class TrashToolsImpl extends EditorToolsImpl implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v)
+    {
         switch (v.getId()) {
             case R.id.clear_mission_button:
                 doClearMissionConfirmation();

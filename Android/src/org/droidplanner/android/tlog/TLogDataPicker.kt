@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import org.droidplanner.android.DroidPlannerApp
 import org.droidplanner.android.R
 import org.droidplanner.android.droneshare.data.SessionContract
@@ -21,7 +22,7 @@ import org.droidplanner.android.tlog.adapters.TLogDataAdapter.Listener
 class TLogDataPicker : DialogFragment(){
 
     private val noTLogMessageView by lazy {
-        getView()?.findViewById(R.id.no_tlogs_message)
+        getView()?.findViewById<TextView>(R.id.no_tlogs_message)
     }
 
     private var selectionListener : TLogDataAdapter.Listener? = null
@@ -77,7 +78,7 @@ class TLogDataPicker : DialogFragment(){
         val layoutMgr = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         tlogsView?.setLayoutManager(layoutMgr)
 
-        val adapter = TLogDataAdapter(activity.getApplication() as DroidPlannerApp, childFragmentManager, currentSessionId)
+        val adapter = TLogDataAdapter(activity?.getApplication() as DroidPlannerApp, childFragmentManager, currentSessionId)
         adapter.setTLogSelectionListener(selectionListenerWrapper)
         tlogsView?.adapter = adapter
 

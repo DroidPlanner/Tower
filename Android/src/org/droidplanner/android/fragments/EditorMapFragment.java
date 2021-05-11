@@ -135,6 +135,10 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 		}
 	}
 
+	public void onCoordbtnClick(LatLong point) {
+		editorListener.onMapClick(point);//맵에 좌표 입력
+
+	}
 	@Override
 	protected boolean isMissionDraggable() {
 		return true;

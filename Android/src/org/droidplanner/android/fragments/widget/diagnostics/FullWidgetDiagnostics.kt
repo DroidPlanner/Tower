@@ -34,14 +34,20 @@ import kotlin.properties.Delegates
 public class FullWidgetDiagnostics : TowerWidget(){
 
     private val viewAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        DiagnosticViewAdapter(context, childFragmentManager)
+        // MSz
+        DiagnosticViewAdapter(context!!, childFragmentManager)
     }
 
     private var tabPageIndicator: TabPageIndicator? = null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        return super.onCreateView(inflater, container, savedInstanceState)
         return inflater?.inflate(R.layout.fragment_full_widget_diagnostics, container, false)
     }
+
+//    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        return inflater?.inflate(R.layout.fragment_full_widget_diagnostics, container, false)
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)

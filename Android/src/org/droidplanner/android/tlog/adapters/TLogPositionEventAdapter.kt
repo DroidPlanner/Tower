@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.MAVLink.common.msg_global_position_int
 import com.o3dr.android.client.utils.data.tlog.TLogParser
@@ -102,7 +103,7 @@ class TLogPositionEventAdapter(context : Context, recyclerView: RecyclerView) :
 
     override fun onCreateBasicItemViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val container = LayoutInflater.from(parent.context).inflate(R.layout.list_item_tlog_position_event, parent, false)
-        val thumbnail = container.findViewById(R.id.event_thumbnail)
+        val thumbnail = container.findViewById<RelativeLayout>(R.id.event_thumbnail)
         val timestamp = container.findViewById(R.id.event_timestamp) as TextView
         val altitude = container.findViewById(R.id.event_altitude) as TextView
         return ViewHolder(container, thumbnail, timestamp, altitude)

@@ -21,7 +21,7 @@ class TLogRawViewer : TLogViewer() {
     private var tlogEventsAdapter : TLogRawEventAdapter? = null
 
     private val loadingData by lazy {
-        getView()?.findViewById(R.id.loading_tlog_data)
+        getView()?.findViewById<TextView>(R.id.loading_tlog_data)
     }
 
     private val noTLogView by lazy {

@@ -34,3 +34,5 @@ proguard/
 
 # Mac OSX files
 .DS_Store
+
+apikey

@@ -3,14 +3,17 @@ apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 
 dependencies {
-    compile 'com.android.support:multidex:1.0.1'
+    //compile 'com.android.support:multidex:1.0.1'
+    compile 'com.android.support:multidex:1.0.3'
 
     compile "com.google.android.gms:play-services-maps:${play_services_version}"
     compile "com.google.android.gms:play-services-location:${play_services_version}"
     compile "com.google.android.gms:play-services-analytics:${play_services_version}"
 
-    compile "com.android.support:support-v4:${support_lib_version}"
-    compile "com.android.support:appcompat-v7:${support_lib_version}"
+    implementation "com.android.support:support-v4:${support_lib_version}"
+    //implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    implementation "com.android.support:appcompat-v7:27.0.0"
     compile "com.android.support:preference-v7:${support_lib_version}"
     compile "com.android.support:preference-v14:${support_lib_version}"
     compile "com.android.support:cardview-v7:${support_lib_version}"
@@ -75,11 +78,17 @@ android {
     compileSdkVersion android_build_sdk_version
     buildToolsVersion android_build_tools_version
 
+    // MSz
+    flavorDimensions "default"
+
     dexOptions {
         javaMaxHeapSize "4g"
     }
 
     defaultConfig {
+
+        vectorDrawables.useSupportLibrary = true
+
         applicationId 'org.droidplanner.android'
         minSdkVersion android_build_min_sdk_version
         targetSdkVersion android_build_target_sdk_version
@@ -149,7 +158,7 @@ android {
                 def buildType = variant.buildType.getName()
                 def flavorName = variant.getFlavorName()
                 def versionCode = defaultConfig.versionCode
-                output.outputFile = new File(file.parent, "tower-${flavorName}-${buildType}.${versionCode}.apk")
+                //output.outputFile = new File(file.parent, "tower-${flavorName}-${buildType}.${versionCode}.apk")
             }
         }
     }

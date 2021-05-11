@@ -8,6 +8,7 @@ import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.o3dr.android.client.utils.data.tlog.TLogParser
@@ -45,7 +46,7 @@ class TLogActivity : DrawerNavigationUI(), TLogDataAdapter.Listener, TLogDataPro
     private var currentSessionData: SessionData? = null
 
     private val loadingProgress by lazy {
-        findViewById(R.id.progress_bar_container)
+        findViewById<ProgressBar>(R.id.progress_bar_container)
     }
 
     private val sessionTitleView by lazy {

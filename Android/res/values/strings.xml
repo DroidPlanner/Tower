@@ -112,6 +112,7 @@
     <string name="waypointType_SplineWaypoint">Spline Waypoint</string>
     <string name="waypointType_TakeOff">Takeoff</string>
     <string name="waypointType_RTL">Return To Launch</string>
+    <string name="waypointType_coord">Coordinate</string>
     <string name="waypointType_Land">Land</string>
     <string name="waypointType_Change_Speed">Change Speed</string>
     <string name="waypointType_Condition_Yaw">Set Yaw</string>
@@ -131,6 +132,7 @@
     <string name="waypointInfo_LoiterN">Orbit the current location for the desired number of turns.</string>
     <string name="waypointInfo_LoiterT">Hold the current location for the desired number of seconds or indefinitely to end the mission.</string>
     <string name="waypointInfo_RTL">Send the vehicle to the home location set when armed. An altitude of 0 will return to home at the RTL altitude parameter.</string>
+    <string name="waypointInfo_coord">Enter coordinates here.</string>
     <string name="waypointInfo_TakeOff">Lift off from the ground to the specified altitude before proceeding to the next waypoint.</string>
     <string name="waypointInfo_Waypoint">Travel to a position in 3D space. Optional delay (in seconds) to hold position.</string>
     <string name="waypointInfo_CondYaw">Set condition to reach a certain target angle.</string>
@@ -411,6 +413,9 @@
     <string name="delete_selected_waypoints_confirm">Clear selected waypoints from the map?</string>
     <string name="delete_selected_waypoints_title">Clear selected waypoints</string>
     <string name="label_select_all">Select all</string>
+    <string name="label_enter_coordinate">Enter</string>
+    <string name="label_Lon">경도</string>
+    <string name="label_Lat">위도</string>
     <string name="guided_scan_roi_set_message">Targeting selected location.</string>
     <string name="mode_follow_guided_scan">Vehicle follows the user while remaining locked on a point of interest. Long click on the map to select the point of interest.</string>
     <string name="pref_no_saved_bluetooth_device_title">No saved bluetooth device.</string>
@@ -532,7 +537,7 @@
     <string name="label_vertical_position">Vertical Position</string>
     <string name="label_absolute_predicted_estimate">Absolute predicted estimate</string>
     <string name="label_relative_predicted_estimate">Relative predicted estimate</string>
-    <string name="error_no_video">no video available</string>
+    <string name="error_no_video">nop video available</string>
     <string name="label_repeat_indefinitely">Repeat indefinitely</string>
     <string name="title_ekf_status_viewer">EKF</string>
     <string name="title_vibration_viewer">Vibration</string>

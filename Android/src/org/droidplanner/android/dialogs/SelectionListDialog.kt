@@ -31,9 +31,14 @@ abstract class SelectionListDialog : DialogFragment(), SelectionListAdapter.Sele
         isCancelable = true
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        //return super.onCreateView(inflater, container, savedInstanceState)
         return inflater?.inflate(R.layout.dialog_selection_list, container, false)
     }
+
+//    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        return inflater?.inflate(R.layout.dialog_selection_list, container, false)
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

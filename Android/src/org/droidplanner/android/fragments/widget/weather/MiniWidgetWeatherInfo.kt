@@ -98,9 +98,14 @@ class MiniWidgetWeatherInfo : TowerWidget() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        //return super.onCreateView(inflater, container, savedInstanceState)
         return inflater?.inflate(R.layout.fragment_mini_widget_weather_info, container, false)
     }
+
+//    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        return inflater?.inflate(R.layout.fragment_mini_widget_weather_info, container, false)
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)
@@ -111,14 +116,14 @@ class MiniWidgetWeatherInfo : TowerWidget() {
         super.onStart()
         gapiClientManager.start()
         processWeatherInfo()
-        context.registerReceiver(receiver, filter)
+        context?.registerReceiver(receiver, filter)
     }
 
     override fun onStop(){
         super.onStop()
         weatherAsyncTask?.cancel(true)
 
-        context.unregisterReceiver(receiver)
+        context?.unregisterReceiver(receiver)
         gapiClientManager.stopSafely()
     }
 
@@ -131,7 +136,9 @@ class MiniWidgetWeatherInfo : TowerWidget() {
     override fun getWidgetType() = TowerWidgets.WEATHER_INFO
 
     private fun getWeatherUrlPath(location: Location): String {
-        return getString(R.string.wunderground_url, WEATHER_API_TOKEN, location.latitude, location.longitude)
+        // MSz problem
+        //return getString(R.string.wunderground_url, WEATHER_API_TOKEN, location.latitude, location.longitude)
+        return "problem solve later"
     }
 
     private fun fetchWeatherInformationFromServer() {

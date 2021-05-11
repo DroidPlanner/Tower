@@ -10,7 +10,11 @@ import android.graphics.SurfaceTexture
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.support.design.widget.FloatingActionButton
+import android.support.v7.widget.RecyclerView
 import android.view.*
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.o3dr.android.client.apis.GimbalApi
 import com.o3dr.android.client.apis.solo.SoloCameraApi
@@ -25,6 +29,8 @@ import com.o3dr.services.android.lib.model.AbstractCommandListener
 import org.droidplanner.android.R
 import org.droidplanner.android.dialogs.LoadingDialog
 import timber.log.Timber
+
+//import kotlinx.android.synthetic.main.frag
 
 /**
  * Created by Fredia Huya-Kouadio on 7/19/15.
@@ -85,23 +91,25 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
     }
 
     private val widgetButtonBar by lazy(LazyThreadSafetyMode.NONE) {
-        view?.findViewById(R.id.widget_button_bar)
+        view?.findViewById<LinearLayout>(R.id.widget_button_bar)
     }
 
     private val takePhotoButton by lazy(LazyThreadSafetyMode.NONE) {
-        view?.findViewById(R.id.sololink_take_picture_button)
+        //view?.wid
+        view?.findViewById<FloatingActionButton>(R.id.sololink_take_picture_button)
     }
 
     private val recordVideo by lazy(LazyThreadSafetyMode.NONE) {
-        view?.findViewById(R.id.sololink_record_video_button)
+        view?.findViewById<FloatingActionButton>(R.id.sololink_record_video_button)
     }
 
     private val fpvVideo by lazy(LazyThreadSafetyMode.NONE) {
-        view?.findViewById(R.id.sololink_vr_video_button)
+        //view?.
+        view?.findViewById<FloatingActionButton>(R.id.sololink_vr_video_button)
     }
 
     private val touchCircleImage by lazy(LazyThreadSafetyMode.NONE) {
-        view?.findViewById(R.id.sololink_gimbal_joystick)
+        view?.findViewById<ImageView>(R.id.sololink_gimbal_joystick)
     }
 
     private val orientationListener = object : GimbalApi.GimbalOrientationListener {
@@ -113,9 +121,14 @@ public class FullWidgetSoloLinkVideo : BaseVideoWidget() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        return super.onCreateView(inflater, container, savedInstanceState)
         return inflater?.inflate(R.layout.fragment_widget_sololink_video, container, false)
     }
+
+//    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        return inflater?.inflate(R.layout.fragment_widget_sololink_video, container, false)
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

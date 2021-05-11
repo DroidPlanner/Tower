@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -40,7 +41,12 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
     private static final String STATE_SELECTED_TOOL = "selected_tool";
 
     public enum EditorTools {
-        MARKER, DRAW, TRASH, SELECTOR, NONE
+        MARKER,
+        DRAW,
+        COORDINATE,
+        TRASH,
+        SELECTOR,
+        NONE
     }
 
     public interface EditorToolListener {
@@ -80,6 +86,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         editorToolsImpls[EditorTools.MARKER.ordinal()] = new MarkerToolsImpl(this);
         editorToolsImpls[EditorTools.DRAW.ordinal()] = new DrawToolsImpl(this);
         editorToolsImpls[EditorTools.TRASH.ordinal()] = new TrashToolsImpl(this);
+        editorToolsImpls[EditorTools.COORDINATE.ordinal()] = new CoordinateToolsImpl(this);
         editorToolsImpls[EditorTools.SELECTOR.ordinal()] = new SelectorToolsImpl(this);
         editorToolsImpls[EditorTools.NONE.ordinal()] = new NoneToolsImpl(this);
     }
@@ -98,7 +105,15 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
     TextView clearMission;
     TextView clearSelected;
 
-     TextView selectAll;
+    TextView selectAll;
+
+    private View EnterCoordinateSubOptions;
+    EditText lat ;
+    EditText lon;
+
+    TextView EnterCoordinate;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -106,7 +121,8 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
 
         if (savedInstanceState != null) {
@@ -123,6 +139,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         mEditorRadioGroup = (RadioGroup) view.findViewById(R.id.editor_tools_layout);
         editorSubTools = view.findViewById(R.id.editor_sub_tools);
 
+        //draw
         final DrawToolsImpl drawToolImpl = (DrawToolsImpl) editorToolsImpls[EditorTools.DRAW.ordinal()];
         final RadioButtonCenter buttonDraw = (RadioButtonCenter) view.findViewById(R.id.editor_tools_draw);
         final AdapterMissionItems drawItemsAdapter = new AdapterMissionItems(context,
@@ -132,6 +149,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         drawItemsSpinner.setSelection(drawItemsAdapter.getPosition(drawToolImpl.getSelected()));
         drawItemsSpinner.setOnItemSelectedListener(drawToolImpl);
 
+        //marker pin
         final MarkerToolsImpl markerToolImpl = (MarkerToolsImpl) editorToolsImpls[EditorTools.MARKER.ordinal()];
         final RadioButtonCenter buttonMarker = (RadioButtonCenter) view.findViewById(R.id.editor_tools_marker);
         final AdapterMissionItems markerItemsAdapter = new AdapterMissionItems(context,
@@ -140,6 +158,21 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         markerItemsSpinner.setAdapter(markerItemsAdapter);
         markerItemsSpinner.setSelection(markerItemsAdapter.getPosition(markerToolImpl.getSelected()));
         markerItemsSpinner.setOnItemSelectedListener(markerToolImpl);
+
+        //coordinate
+        final RadioButtonCenter buttonCoordinate = (RadioButtonCenter) view.findViewById(R.id.editor_tools_coordinate);
+        final CoordinateToolsImpl coordinateToolImpl = (CoordinateToolsImpl) editorToolsImpls[EditorTools.COORDINATE.ordinal()];
+
+        EnterCoordinateSubOptions = view.findViewById(R.id.enter_coordinate_sub_options);
+
+        lat = (EditText) view.findViewById(R.id.input_Latitude);
+        lon = (EditText) view.findViewById(R.id.input_Longitude);
+
+
+        //button
+        EnterCoordinate = (TextView) view.findViewById(R.id.enter_coordinate);
+
+        //here
 
         final RadioButtonCenter buttonTrash = (RadioButtonCenter) view.findViewById(R.id.editor_tools_trash);
         final TrashToolsImpl trashToolImpl = (TrashToolsImpl) editorToolsImpls[EditorTools.TRASH.ordinal()];
@@ -157,7 +190,9 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
         selectAll = (TextView) view.findViewById(R.id.select_all_button);
         selectAll.setOnClickListener(selectorToolImpl);
 
-        for (View vv : new View[]{buttonDraw, buttonMarker, buttonTrash, buttonSelector}) {
+
+
+        for (View vv : new View[]{buttonDraw, buttonMarker,buttonCoordinate, buttonTrash, buttonSelector}) {
             vv.setOnClickListener(this);
         }
     }
@@ -232,10 +267,10 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
     @Override
     public void onClick(View v) {
+
         EditorTools newTool = getToolForView(v.getId());
         if (this.tool == newTool)
             newTool = EditorTools.NONE;
-
         setTool(newTool);
     }
 
@@ -251,6 +286,9 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
         if (markerItemsSpinner != null)
             markerItemsSpinner.setVisibility(View.GONE);
+
+        if (EnterCoordinateSubOptions != null)
+            EnterCoordinateSubOptions.setVisibility(View.GONE);
 
         if (drawItemsSpinner != null)
             drawItemsSpinner.setVisibility(View.GONE);
@@ -275,7 +313,8 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
      * @param tool            selected tool.
      * @param notifyListeners true to notify listeners, false otherwise.
      */
-    private void setTool(EditorTools tool, boolean notifyListeners) {
+    private void setTool(EditorTools tool, boolean notifyListeners)
+    {
         if (mMissionProxy != null && mMissionProxy.getItems().size() > 0
                 && tool != EditorTools.TRASH
                 && tool != EditorTools.SELECTOR
@@ -326,6 +365,11 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
                 drawItemsSpinner.setVisibility(View.VISIBLE);
                 break;
 
+            case COORDINATE:
+                editorSubTools.setVisibility(View.VISIBLE);
+                EnterCoordinateSubOptions.setVisibility(View.VISIBLE);
+                break;
+
             case MARKER:
                 editorSubTools.setVisibility(View.VISIBLE);
                 markerItemsSpinner.setVisibility(View.VISIBLE);
@@ -361,6 +405,9 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
             case R.id.editor_tools_draw:
                 return EditorTools.DRAW;
 
+            case R.id.editor_tools_coordinate:
+                return EditorTools.COORDINATE;
+
             case R.id.editor_tools_trash:
                 return EditorTools.TRASH;
 
@@ -385,6 +432,9 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
             case DRAW:
                 return R.id.editor_tools_draw;
+
+            case COORDINATE:
+               return R.id.editor_tools_coordinate;
 
             case TRASH:
                 return R.id.editor_tools_trash;

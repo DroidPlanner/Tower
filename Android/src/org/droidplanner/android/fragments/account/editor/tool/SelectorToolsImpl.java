@@ -18,23 +18,27 @@ class SelectorToolsImpl extends EditorToolsImpl implements View.OnClickListener 
 
     @Override
     public void onListItemClick(MissionItemProxy item) {
-        if (missionProxy == null)
+        if (missionProxy == null)//미션이 빈거라면
             return;
 
-        if (missionProxy.selection.selectionContains(item)) {
-            missionProxy.selection.removeItemFromSelection(item);
-        } else {
-            missionProxy.selection.addToSelection(item);
+        if (missionProxy.selection.selectionContains(item))//포함되어 있는것에 있다면
+        {
+            missionProxy.selection.removeItemFromSelection(item);//지우기
+        }
+        else
+        {
+            missionProxy.selection.addToSelection(item);//더하기
         }
     }
 
-    private void selectAll() {
+    private void selectAll()
+    {
         if (missionProxy == null)
             return;
 
         missionProxy.selection.setSelectionTo(missionProxy.getItems());
         EditorToolsFragment.EditorToolListener listener = editorToolsFragment.listener;
-        if (listener != null)
+        if (listener != null) //select click start zoom to fit
             listener.zoomToFitSelected();
     }
 
@@ -53,8 +57,8 @@ class SelectorToolsImpl extends EditorToolsImpl implements View.OnClickListener 
         Toast.makeText(editorToolsFragment.getContext(), "Click on mission items to select them.",
                 Toast.LENGTH_SHORT).show();
 
-        if (missionProxy != null) {
-            missionProxy.selection.clearSelection();
+        if (missionProxy != null) {//미션이 있으면
+            missionProxy.selection.clearSelection();//선택된것을 초기화
             final List<MissionItemProxy> missionItems = missionProxy.getItems();
             editorToolsFragment.selectAll.setEnabled(!missionItems.isEmpty());
         }
@@ -62,6 +66,7 @@ class SelectorToolsImpl extends EditorToolsImpl implements View.OnClickListener 
 
     @Override
     public void onClick(View v) {
+        //클릭했을때 동작하려는 함수 등등
         selectAll();
     }
 }

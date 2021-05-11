@@ -30,9 +30,14 @@ public class VibrationViewer : GraphDiagnosticViewer() {
     private val lastClippingValues = arrayOf(-1L, -1L, -1L)
     private val clippingViews: Array<TextView?> = arrayOf(null, null, null)
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?{
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        return super.onCreateView(inflater, container, savedInstanceState)
         return inflater?.inflate(R.layout.fragment_vibration_viewer, container, false)
     }
+
+//    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?{
+//        return inflater?.inflate(R.layout.fragment_vibration_viewer, container, false)
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)
@@ -147,7 +152,9 @@ public class VibrationViewer : GraphDiagnosticViewer() {
         fun disableClippingValue(index: Int){
             val clippingView = clippingViews.get(index)
             clippingView?.setText(R.string.empty_content)
-            clippingView?.background = null
+
+            // MSz problem
+            //clippingView?.background = null
 
             lastClippingValues.set(index, -1L)
         }

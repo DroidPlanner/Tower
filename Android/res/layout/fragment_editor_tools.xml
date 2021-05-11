@@ -43,6 +43,15 @@
                 android:button="@drawable/ic_pin_drop_grey_700_24dp"/>
 
             <org.droidplanner.android.view.button.RadioButtonCenter
+                android:id="@+id/editor_tools_coordinate"
+                style="@style/editorButton"
+                android:button="@drawable/ic_coord_drop_grey_700_24dp"/>
+            <org.droidplanner.android.view.button.RadioButtonCenter
+                android:id="@+id/editor_tools_adr"
+                style="@style/editorButton"
+                android:button="@drawable/ic_adr_grey_700_24dp"/>
+
+            <org.droidplanner.android.view.button.RadioButtonCenter
                 android:id="@+id/editor_tools_draw"
                 style="@style/editorButton"
                 android:button="@drawable/ic_gesture_grey_700_24dp"/>
@@ -80,7 +89,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:spinnerMode="dropdown"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <Spinner
             android:id="@+id/marker_items_spinner"
@@ -93,13 +102,51 @@
             android:visibility="gone"/>
 
         <LinearLayout
+            android:id="@+id/enter_coordinate_sub_options"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/input_Latitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="6"
+                android:hint="@string/label_Lat"
+                android:inputType="number|numberDecimal" />
+
+            <EditText
+                android:id="@+id/input_Longitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="6"
+                android:hint="@string/label_Lon"
+                android:inputType="number|numberDecimal" />
+
+            <TextView
+                android:id="@+id/enter_coordinate"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:minHeight="36dp"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:text="@string/label_enter_coordinate"
+                android:textColor="@android:color/black"
+                android:textStyle="normal" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/clear_sub_options"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
             android:orientation="horizontal"
-            android:visibility="gone"
             tools:visibility="visible">
 
             <TextView
@@ -116,13 +163,13 @@
                 android:text="@string/label_clear_selected"
                 android:textAllCaps="true"
                 android:textColor="@android:color/black"
-                android:textStyle="normal"/>
+                android:textStyle="normal" />
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
-                android:background="@color/light_grey"/>
+                android:background="@color/light_grey" />
 
             <TextView
                 android:id="@+id/clear_mission_button"
@@ -137,7 +184,7 @@
                 android:text="@string/dlg_clear_mission_title"
                 android:textAllCaps="true"
                 android:textColor="@android:color/black"
-                android:textStyle="normal"/>
+                android:textStyle="normal" />
         </LinearLayout>
 
         <TextView
@@ -156,4 +203,5 @@
             android:visibility="gone"/>
 
     </FrameLayout>
+
 </LinearLayout>

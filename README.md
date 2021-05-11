@@ -2,7 +2,7 @@
 [![Issue Stats](http://issuestats.com/github/DroidPlanner/Tower/badge/pr)](http://issuestats.com/github/DroidPlanner/Tower)
 [![Issue Stats](http://issuestats.com/github/DroidPlanner/Tower/badge/issue)](http://issuestats.com/github/DroidPlanner/Tower)
 
-# Tower
+# Tower - Test Mode
 
 [![Join the chat at https://gitter.im/DroidPlanner/Tower](https://badges.gitter.im/DroidPlanner/Tower.svg)](https://gitter.im/DroidPlanner/Tower?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 

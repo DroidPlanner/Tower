@@ -29,7 +29,7 @@ public interface DPMap {
 	int FLIGHT_PATH_DEFAULT_COLOR = 0xfffd693f;
 	int FLIGHT_PATH_DEFAULT_WIDTH = 6;
 
-	int MISSION_PATH_DEFAULT_COLOR = Color.WHITE;
+	int MISSION_PATH_DEFAULT_COLOR = Color.GRAY;
 	int MISSION_PATH_DEFAULT_WIDTH = 4;
 
 	int MISSION_PATH_LOOP_DEFAULT_COLOR = Color.GREEN;
@@ -40,11 +40,11 @@ public interface DPMap {
 
 	int POLYGONS_PATH_DEFAULT_COLOR = Color.RED;
 	int POLYGONS_PATH_DEFAULT_WIDTH = 4;
-	
+
 	int FOOTPRINT_DEFAULT_COLOR = 0;
 	int FOOTPRINT_DEFAULT_WIDTH = 2;
 	int FOOTPRINT_FILL_COLOR = Color.argb(80, 0, 0, 200);
-	
+
 	String PREF_LAT = "pref_map_lat";
 	float DEFAULT_LATITUDE = 37.8575523f;
 
@@ -62,7 +62,7 @@ public interface DPMap {
 
 	/**
 	 * Adds a coordinate to the drone's flight path.
-	 * 
+	 *
 	 * @param coord
 	 *            drone's coordinate
 	 */
@@ -184,7 +184,7 @@ public interface DPMap {
 
 	/**
 	 * Remove the markers whose info is in the list from the map.
-	 * 
+	 *
 	 * @param markerInfoList
 	 *            list of markers to remove.
 	 */
@@ -203,7 +203,7 @@ public interface DPMap {
 
 	/**
 	 * Enable map auto panning on the passed target type.
-	 * 
+	 *
 	 * @param mode
 	 *            auto pan target (user / drone / disabled).
 	 */
@@ -211,7 +211,7 @@ public interface DPMap {
 
 	/**
 	 * Adds padding around the edges of the map.
-	 * 
+	 *
 	 * @param left
 	 *            the number of pixels of padding to be added on the left of the
 	 *            map.
@@ -229,7 +229,7 @@ public interface DPMap {
 
 	/**
 	 * Sets a callback that's invoked when the map is tapped.
-	 * 
+	 *
 	 * @param listener
 	 *            The callback that's invoked when the map is tapped. To unset
 	 *            the callback, use null.
@@ -238,7 +238,7 @@ public interface DPMap {
 
 	/**
 	 * Sets a callback that's invoked when the map is long pressed.
-	 * 
+	 *
 	 * @param listener
 	 *            The callback that's invoked when the map is long pressed. To
 	 *            unset the callback, use null.
@@ -247,7 +247,7 @@ public interface DPMap {
 
 	/**
 	 * Sets a callback that's invoked when a marker is clicked.
-	 * 
+	 *
 	 * @param listener
 	 *            The callback that's invoked when a marker is clicked. To unset
 	 *            the callback, use null.
@@ -256,7 +256,7 @@ public interface DPMap {
 
 	/**
 	 * Sets a callback that's invoked when a marker is dragged.
-	 * 
+	 *
 	 * @param listener
 	 *            The callback that's invoked on marker drag events. To unset
 	 *            the callback, use null.
@@ -271,7 +271,7 @@ public interface DPMap {
 
 	/**
 	 * Updates the map's center, and zoom level.
-	 * 
+	 *
 	 * @param coord
 	 *            location for the map center
 	 * @param zoomLevel
@@ -287,7 +287,7 @@ public interface DPMap {
 
 	/**
 	 * Updates the drone leash path on the map.
-	 * 
+	 *
 	 * @param pathSource
 	 *            source to use to generate the drone leash path.
 	 */
@@ -295,21 +295,21 @@ public interface DPMap {
 
 	/**
 	 * Updates the mission path on the map.
-	 * 
+	 *
 	 * @param pathSource
 	 *            source to use to draw the mission path
 	 */
 	void updateMissionPath(PathSource pathSource);
-	
+
 	/**
 	 * Updates the polygons on the map.
-	 * 
+	 *
 	 */
 	void updatePolygonsPaths(List<List<LatLong>> paths);
 
 	/**
 	 * Zoom to fit coordinates on map
-	 * 
+	 *
 	 * @param coords
 	 *            to be displayed
 	 */
@@ -320,7 +320,7 @@ public interface DPMap {
      * @param coords
      */
 	void zoomToFitMyLocation(List<LatLong> coords);
-    
+
 	void updateRealTimeFootprint(FootPrint footprint);
 
 	interface PathSource {
@@ -445,5 +445,5 @@ public interface DPMap {
 			}
 		};
 	}
-    
+
 }

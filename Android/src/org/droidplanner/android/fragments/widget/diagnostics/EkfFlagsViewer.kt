@@ -36,9 +36,14 @@ public class EkfFlagsViewer : BaseWidgetDiagnostic() {
         resources?.getDrawable(R.drawable.ic_help_orange_500_24dp)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        return super.onCreateView(inflater, container, savedInstanceState)
         return inflater?.inflate(R.layout.fragment_ekf_flags_viewer, container, false)
     }
+
+//    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        return inflater?.inflate(R.layout.fragment_ekf_flags_viewer, container, false)
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)

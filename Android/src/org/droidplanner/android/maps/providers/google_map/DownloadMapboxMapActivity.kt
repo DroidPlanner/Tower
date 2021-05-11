@@ -1,6 +1,7 @@
 package org.droidplanner.android.maps.providers.google_map
 
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ProgressBar
@@ -119,14 +120,14 @@ class DownloadMapboxMapActivity : AppCompatActivity() {
 
         downloadProgressBar = findViewById(R.id.map_download_progress_bar) as ProgressBar?
 
-        val goToMyLocation = findViewById(R.id.my_location_button)
+        val goToMyLocation = findViewById<FloatingActionButton>(R.id.my_location_button)
         goToMyLocation?.setOnClickListener { downloadMapFragment?.goToMyLocation() }
         goToMyLocation?.setOnLongClickListener {
             downloadMapFragment?.setAutoPanMode(AutoPanMode.USER)
             true
         }
 
-        val goToDroneLocation = findViewById(R.id.drone_location_button)
+        val goToDroneLocation = findViewById<FloatingActionButton>(R.id.drone_location_button)
         goToDroneLocation?.setOnClickListener { downloadMapFragment?.goToDroneLocation() }
         goToDroneLocation?.setOnLongClickListener {
             downloadMapFragment?.setAutoPanMode(AutoPanMode.DRONE)
