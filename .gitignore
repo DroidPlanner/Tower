@@ -35,4 +35,5 @@ proguard/
 # Mac OSX files
 .DS_Store
 
+# api google key
 apikey
