@@ -5,23 +5,20 @@ import android.widget.Toast;
 
 import com.o3dr.services.android.lib.coordinate.LatLong;
 import com.o3dr.services.android.lib.drone.mission.MissionItemType;
-
-import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
+import com.o3dr.services.android.lib.drone.mission.item.spatial.BaseSpatialItem;
 
 /**
  * Created by Jeon-Sunghwan on 5/10/21.
- * give me a coordinate . funtion
  */
 class CoordinateToolsImpl extends EditorToolsImpl implements View.OnClickListener {
 
-    private OnEditorInteraction editorListener;
     static final MissionItemType[] MARKER_ITEMS_TYPE = {
             MissionItemType.WAYPOINT
             //, MissionItemType.SPLINE_WAYPOINT,
-      //    MissionItemType.CIRCLE,
-        //    MissionItemType.LAND,
-          //  MissionItemType.REGION_OF_INTEREST,
-           // MissionItemType.STRUCTURE_SCANNER
+            //MissionItemType.CIRCLE,
+            //  MissionItemType.LAND,
+            //  MissionItemType.REGION_OF_INTEREST,
+            // MissionItemType.STRUCTURE_SCANNER
     };
 
 
@@ -34,20 +31,16 @@ class CoordinateToolsImpl extends EditorToolsImpl implements View.OnClickListene
     }
 
 
-
     @Override
-    public EditorToolsFragment.EditorTools getEditorTools()
-    {
+    public EditorToolsFragment.EditorTools getEditorTools() {
         return EditorToolsFragment.EditorTools.COORDINATE;
     }
 
 
     @Override
-    public void setup()
-    {
+    public void setup() {
         EditorToolsFragment.EditorToolListener listener = editorToolsFragment.listener;
-        if (listener != null)
-        {
+        if (listener != null) {
             listener.enableGestureDetection(false);
         }
         Toast.makeText(editorToolsFragment.getContext(), "Give me a Destination Coordinates",
@@ -56,25 +49,20 @@ class CoordinateToolsImpl extends EditorToolsImpl implements View.OnClickListene
             missionProxy.selection.clearSelection();
     }
 
-    public void pin(LatLong point) {
-        editorListener.onMapClick(point);//맵에 좌표 입력
-
-    }
-
     @Override
-    public void onClick(View view)
-    {
-        /*Toast.makeText(editorToolsFragment.getContext(), "0",
+    public void onClick(View view) {
+        Toast.makeText(editorToolsFragment.getContext(), "click",
                 Toast.LENGTH_SHORT).show();
 
-        EditText lat = findViewById(R.id.input_Latitude);
-        EditText lon = findViewById(R.id.input_Longitude);
+        // If an mission item is selected, unselect it.
+        missionProxy.selection.clearSelection(); // real?
 
-        double latValue = 39.12435;//Double.parseDouble(lat.getText().toString());
-        double lotValue = 129.12435;//Double.parseDouble(lon.getText().toString());
-        LatLong text_coordinate = new LatLong(latValue,lotValue);
-        pin(text_coordinate);*/
-
+        double latValue = Double.parseDouble(editorToolsFragment.lat.getText().toString());
+        double lotValue = Double.parseDouble(editorToolsFragment.lon.getText().toString());
+        LatLong text_coordinate = new LatLong(latValue, lotValue);
+        BaseSpatialItem spatialItem = (BaseSpatialItem) selectedType.getNewItem();
+        missionProxy.addSpatialWaypoint(spatialItem, text_coordinate);
     }
+
 
 }

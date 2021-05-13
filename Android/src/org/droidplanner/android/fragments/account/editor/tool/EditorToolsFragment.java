@@ -81,7 +81,6 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
     private static final EditorTools DEFAULT_TOOL = EditorTools.MARKER;
 
     private final EditorToolsImpl[] editorToolsImpls = new EditorToolsImpl[EditorTools.values().length];
-
     {
         editorToolsImpls[EditorTools.MARKER.ordinal()] = new MarkerToolsImpl(this);
         editorToolsImpls[EditorTools.DRAW.ordinal()] = new DrawToolsImpl(this);
@@ -108,7 +107,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
     TextView selectAll;
 
     private View EnterCoordinateSubOptions;
-    EditText lat ;
+    EditText lat;
     EditText lon;
 
     TextView EnterCoordinate;
@@ -171,7 +170,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
 
         //button
         EnterCoordinate = (TextView) view.findViewById(R.id.enter_coordinate);
-
+        EnterCoordinate.setOnClickListener(coordinateToolImpl);
         //here
 
         final RadioButtonCenter buttonTrash = (RadioButtonCenter) view.findViewById(R.id.editor_tools_trash);
@@ -313,8 +312,7 @@ public class EditorToolsFragment extends ApiListenerFragment implements OnClickL
      * @param tool            selected tool.
      * @param notifyListeners true to notify listeners, false otherwise.
      */
-    private void setTool(EditorTools tool, boolean notifyListeners)
-    {
+    private void setTool(EditorTools tool, boolean notifyListeners) {
         if (mMissionProxy != null && mMissionProxy.getItems().size() > 0
                 && tool != EditorTools.TRASH
                 && tool != EditorTools.SELECTOR
