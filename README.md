@@ -4,6 +4,8 @@
 
 # Tower - Test Mode
 
+version : https://drive.google.com/file/d/1eqawQQTmZTcFzbeJd6REjpk8lJ_KBtN2/view?usp=sharing
+
 [![Join the chat at https://gitter.im/DroidPlanner/Tower](https://badges.gitter.im/DroidPlanner/Tower.svg)](https://gitter.im/DroidPlanner/Tower?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Tower is a Ground Control Station (GCS) Android app built atop [DroneKit-Android](https://github.com/dronekit/dronekit-android), for UAVs
